@@ -1,0 +1,43 @@
+<?php
+
+namespace FluentCalendar\App\Models;
+
+use FluentCalendar\Framework\Database\Orm\Model as BaseModel;
+
+class Model extends BaseModel
+{
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
+    public function scopeLatest($query, $field = 'created_at')
+    {
+        return $query->orderBy($field, 'DESC');
+    }
+
+    public function scopeNewest($query, $field = 'created_at')
+    {
+        return $query->orderBy($field, 'ASC');
+    }
+
+    public function getPerPage()
+    {
+        return (isset($_REQUEST['per_page'])) ? intval($_REQUEST['per_page']) : 15;
+    }
+
+    /**
+     * Get a fresh timestamp for the model.
+     *
+     * @return \DateTime
+     */
+    public function freshTimestamp()
+    {
+        return new \DateTime(date('Y-m-d H:i:s'));
+    }
+
+    public function getTimezone()
+    {
+        return new \DateTimeZone('UTC');
+    }
+}
