@@ -1,0 +1,31 @@
+<?php
+
+namespace FluentCalendar\Database\Migrations;
+
+class BookingUserMigrator
+{
+    static $tableName = 'fcal_booking_users';
+
+    public static function migrate()
+    {
+        global $wpdb;
+
+        $charsetCollate = $wpdb->get_charset_collate();
+        $table = $wpdb->prefix . static::$tableName;
+
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+            $sql = "CREATE TABLE $table (
+                `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `booking_id` BIGINT(20) UNSIGNED NOT NULL,
+                `user_id` BIGINT(20) UNSIGNED NOT NULL,
+                `status` VARCHAR(20) NOT NULL DEFAULT 'confirmed',
+                `created_at` TIMESTAMP NULL,
+                `updated_at` TIMESTAMP NULL,
+                KEY `fcal_bu_booking_id` (`booking_id`),
+                KEY `fcal_bu_user_id` (`user_id`),
+                KEY `fcal_bu_status` (`status`)
+            ) $charsetCollate;";
+            dbDelta($sql);
+        }
+    }
+}

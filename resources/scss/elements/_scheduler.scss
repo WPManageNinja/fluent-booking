@@ -1,0 +1,190 @@
+.fcal_cal_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+
+  .fcal_cal_title {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    img {
+      max-width: 44px;
+      border-radius: 50%;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+
+.fcal_each_cal {
+  margin-bottom: 20px;
+}
+
+.fcal_cal_slots {
+  background: #f8fafc;
+  display: flex;
+  padding: 20px;
+  column-gap: 20px;
+
+  .fcal_cal_slot {
+    min-width: 300px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(0 0 0 / 10%);
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
+
+    .fcal_slot_body {
+      padding: 15px;
+    }
+
+    .fcal_slot_footer {
+      border-top: 1px solid rgba(26, 26, 26, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+
+      h3 {
+        margin: 0;
+      }
+    }
+
+    &:hover {
+      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
+    }
+  }
+}
+
+
+.fcal_head_nav {
+  margin: -15px 0;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: inline-block;
+      padding: 15px 20px;
+      margin: 0;
+      cursor: pointer;
+
+      &.fcal_active {
+        border-bottom: 2px solid rgb(0, 105, 255);
+        color: rgb(0, 105, 255);
+      }
+    }
+  }
+}
+
+
+.fcal_spot_line {
+  display: flex;
+  column-gap: 15px;
+  margin-bottom: 10px;
+  padding: 15px;
+  cursor: pointer;
+  position: relative;
+  .fcal_spot_desc {
+    flex: 4;
+  }
+
+  .fcal_spot_happening {
+    display: block;
+    width: 100%;
+    span {
+      padding: 3px 10px;
+      font-size: 10px;
+      background: black;
+      color: white;
+      border-radius: 3px;
+      &.fcal_happening_now {
+        background: red;
+      }
+    }
+  }
+
+}
+.fcal_schedule {
+  margin: 0 -15px;
+}
+
+.fcal_each_spot {
+  border-top: 2px solid #e3e8ee;
+  &:last-child {
+    border-bottom: 2px solid #e3e8ee;
+  }
+}
+
+.fcal_schedule_header {
+  padding: 15px;
+  background: #FAFAFA;
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
+}
+.fcal_schedule_wrapper {
+  margin-top: -15px;
+}
+
+.fcal_spot_color {
+  span {
+    width: 20px;
+    height: 20px;
+    display: block;
+    border-radius: 50%;
+    background: #1a1a1a;
+    &.fcal_scheduled {
+      background: #673ab7;
+    }
+    &.fcal_cancelled {
+      background: #ff5722;
+    }
+    &.fcal_no_show {
+      background: #ffc107;
+    }
+  }
+}
+
+.fcal_spot_details {
+  padding: 20px;
+  background: #f8fafc;
+  .fcal_spot_details_row {
+    margin-bottom: 20px;
+    .fcal_spot_details_label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  }
+  .fcal_spot_input {
+    margin-bottom: 15px;
+  }
+}
+
+.fcal_spoot_status_cancelled * {
+  text-decoration: line-through;
+}
+
+.fcal_spot_actions {
+  height: 100%;
+  background: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+}

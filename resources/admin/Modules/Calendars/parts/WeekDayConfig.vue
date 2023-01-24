@@ -1,0 +1,68 @@
+<template>
+    <div class="fcal_week_day_config">
+        <div class="fcal_day_status">
+            <el-switch @change="statusUpdated" v-model="config.enabled" :active-value="true" :inactive-value="false" />
+            <span style="text-transform: uppercase; margin-left: 10px;">{{week_day}}</span>
+        </div>
+        <div class="fcal_day_slots">
+            <div v-if="config.slots.length && config.enabled" class="fcal_slot" v-for="(slot, index) in config.slots" :key="index">
+                <el-time-select v-model="slot.start"
+                                start="00:00"
+                                step="00:15"
+                                end="23:45"
+                                :max-time="slot.end"
+                                placeholder="Start" />
+                <span class="fcal_sep">-</span>
+                <el-time-select v-model="slot.end"
+                                start="00:00"
+                                step="00:15"
+                                :min-time="slot.start"
+                                end="23:45"
+                                placeholder="End" />
+
+                <el-button v-if="config.slots.length > 1" type="text" :icon="DeleteIcon" @click="removeSlot(index)" />
+            </div>
+            <div v-else>Unavailable</div>
+        </div>
+        <div v-if="config.enabled" class="fcal_add_slot">
+            <el-button type="text" :icon="PlusIcon" @click="addSlot" />
+        </div>
+    </div>
+</template>
+
+<script type="text/babel">
+import {
+    Delete,
+    Plus
+} from '@element-plus/icons-vue'
+import {markRaw} from "vue";
+export default {
+    name: 'WeekDayConfig',
+    props: ['week_day', 'config'],
+    components: {
+
+    },
+    data() {
+        return {
+            DeleteIcon: markRaw(Delete),
+            PlusIcon: markRaw(Plus)
+        }
+    },
+    methods: {
+        removeSlot(index) {
+            this.config.slots.splice(index, 1);
+        },
+        addSlot() {
+            this.config.slots.push({
+                start: '',
+                end: ''
+            });
+        },
+        statusUpdated() {
+            if (this.config.enabled && !this.config.slots.length) {
+                this.addSlot();
+            }
+        }
+    }
+}
+</script>
