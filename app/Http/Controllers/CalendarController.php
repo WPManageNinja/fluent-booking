@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Http\Controllers;
 
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\Helper;
 use FluentCalendar\App\Services\SanitizeService;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
@@ -16,10 +17,28 @@ class CalendarController extends Controller
 
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
+            foreach ($calendar->slots as $slot) {
+                $slot->public_url = site_url($calendar->slug . '/' . $slot->slug);
+            }
         }
 
         return [
             'calendars' => $calendars
+        ];
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = sanitize_text_field(trim($request->get('slug')));
+
+        if (!Helper::isCalendarSlugAvailable($slug, true)) {
+            return $this->sendError([
+                'message' => 'The provided slug is not available. Please choose a different one'
+            ], 423);
+        }
+
+        return [
+            'status' => true
         ];
     }
 
@@ -28,41 +47,70 @@ class CalendarController extends Controller
         $data = $request->get('calendar');
 
         $this->validate($data, apply_filters('fluent_calendar/create_calender_validation_rule', [
-            'title'                 => 'required|unique:fcal_calendars',
             'author_timezone'       => 'required',
             'slot.duration'         => 'required|int',
             'slot.schedule_type'    => 'required',
+            'slot.title'            => 'required',
             'slot.weekly_schedules' => 'required_if:slot.schedule_type,weekly_schedules',
         ], $data));
 
-        $calendarData = [
-            'title'           => sanitize_text_field($data['title']),
-            'slug'            => sanitize_title($data['title'], 'calendar', 'display'),
-            'author_timezone' => sanitize_text_field($data['author_timezone']),
-        ];
+        $user = get_user_by('ID', get_current_user_id());
 
-        $calendar = Calendar::create($calendarData);
+        if (!empty($data['slug'])) {
+            $slug = trim(sanitize_text_field($data['slug']));
+            if (!Helper::isCalendarSlugAvailable($slug, true)) {
+                return $this->sendError([
+                    'message' => 'The provided slug is not available. Please choose a different one'
+                ], 423);
+            }
+
+            $calendarData = [
+                'user_id' => $user->ID,
+                'title'   => sprintf('Booking schedule with %s', trim($user->first_name . ' ' . $user->last_name)),
+                'slug'    => $slug
+            ];
+
+            $calendar = Calendar::create($calendarData);
+        } else {
+            $calendar = Calendar::where('user_id', $user->ID)->first();
+        }
+
+        if (!$calendar) {
+            return $this->sendError([
+                'message' => 'Calendar could not be found. Please try again'
+            ], 423);
+        }
+
+        if (!empty($data['author_timezone'])) {
+            $calendar->author_timezone = sanitize_text_field($data['author_timezone']);
+            $calendar->save();
+        }
+
 
         $slot = $data['slot'];
+        $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $slotData = [
-            'title'         => $slot['duration'] . ' Minute Meeting',
-            'slug'          => sanitize_title($slot['duration'] . ' Minute Meeting', $slot['duration'] . '-minute-meeting', 'display'),
-            'calendar_id'   => $calendar->id,
-            'duration'      => (int)$slot['duration'],
-            'settings'      => [
+            'title'            => $title,
+            'slug'             => sanitize_title($slot['duration'] . ' Minutes Meeting', $slot['duration'] . '-minutes-meeting', 'display'),
+            'calendar_id'      => $calendar->id,
+            'duration'         => (int)$slot['duration'],
+            'settings'         => [
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC'),
             ],
-            'status'        => 'active',
-            'location_type' => 'online'
+            'status'           => 'active',
+            'location_type'    => sanitize_text_field(Arr::get($slot, 'location_type')),
+            'location_heading' => sanitize_text_field(Arr::get($slot, 'location_heading')),
+            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
         $slot = CalendarSlot::create($slotData);
 
         return [
-            'calendar' => $calendar,
-            'slot'     => $slot
+            'calendar'     => $calendar,
+            'slot'         => $slot,
+            'redirect_url' => Helper::getAppBaseUrl('calendars')
         ];
     }
 
@@ -151,8 +199,9 @@ class CalendarController extends Controller
         $data = $request->all();
 
         $this->validate($data, [
-            'title'    => 'required',
-            'duration' => 'required|int'
+            'title'         => 'required',
+            'duration'      => 'required|int',
+            'location_type' => 'required'
         ]);
 
         $slot->settings = [
@@ -161,7 +210,10 @@ class CalendarController extends Controller
         ];
 
         $slot->title = sanitize_text_field($data['title']);
-        $slot->description = sanitize_text_field(Arr::get($data, 'description'));
+        $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
+        $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
+        $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
+        $slot->location_settings = wp_kses_post_deep(Arr::get($data, 'location_settings', []));
         $slot->save();
 
         return [

@@ -4,7 +4,7 @@ namespace FluentCalendar\App\Models;
 
 use FluentCalendar\App\Models\Model;
 
-class Author extends Model
+class User extends Model
 {
     protected $table = 'users';
 

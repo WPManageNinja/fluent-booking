@@ -11,16 +11,19 @@
             </div>
             <div v-loading="loading" class="fcal_section_body">
                 <div class="fcal_schedule_wrapper">
-                    <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
-                        <div class="fcal_schedule_header">
-                            <h3 class="fcal_schedule_data">{{scheduleDate}}</h3>
-                        </div>
-                        <div class="fcal_schedule_items">
-                            <div v-for="spot in schedules" :key="spot.id" class="fcal_each_spot">
-                                <schedule-spot :spot="spot" />
+                    <template v-if="schedules.length">
+                        <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
+                            <div class="fcal_schedule_header">
+                                <h3 class="fcal_schedule_data">{{scheduleDate}}</h3>
+                            </div>
+                            <div class="fcal_schedule_items">
+                                <div v-for="spot in schedules" :key="spot.id" class="fcal_each_spot">
+                                    <schedule-spot :spot="spot" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
+                    <el-empty v-else description="No schedules based on your filter" />
                 </div>
                 <div class="fcal_right fcal_tm20">
                     <pagination :pagination="pagination" @fetch="fetchSchedules"/>
@@ -50,7 +53,7 @@ export default {
             pagination: {
                 total: 0,
                 current_page: 1,
-                per_page: 15
+                per_page: 20
             }
         }
     },

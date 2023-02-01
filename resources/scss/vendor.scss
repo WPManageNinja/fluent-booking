@@ -198,6 +198,11 @@ input.el-input__inner {
     font-weight: 500;
 }
 
+
+.el-form-item {
+    margin-bottom: 10px;
+}
+
 .el-pager li {
     margin-bottom: 0 !important;
 }
@@ -210,4 +215,29 @@ input.el-input__inner {
 .el-popconfirm__main {
     word-break: break-word;
     line-height: 120%;
+}
+
+
+.el-select-dropdown.fcal_location_selector li {
+    line-height: 16px;
+    padding: 8px 20px;
+    height: auto;
+}
+
+
+.el-radio-group.radio_desc_group {
+    display: block;
+    position: relative;
+    margin-top: 20px;
+    > label {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        height: auto;
+        line-height: 14px;
+        margin-bottom: 15px;
+        p {
+            margin: 0;
+        }
+    }
 }

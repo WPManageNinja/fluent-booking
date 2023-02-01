@@ -27,6 +27,7 @@ class CalendarMigrator
                 `settings` LONGTEXT NULL,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'active',
                 `type` VARCHAR(20) NOT NULL DEFAULT 'simple',
+                `account_type` VARCHAR(20) NOT NULL DEFAULT 'free',
                 `author_timezone` VARCHAR(192) NULL DEFAULT 'UTC',
                 `max_book_per_slot` INT(10) UNSIGNED NOT NULL DEFAULT 1,
                 `created_at` TIMESTAMP NULL,

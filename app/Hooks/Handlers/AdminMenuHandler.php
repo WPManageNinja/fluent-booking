@@ -3,7 +3,9 @@
 namespace FluentCalendar\App\Hooks\Handlers;
 
 use FluentCalendar\App\App;
+use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Services\DateTimeHelper;
+use FluentCalendar\App\Services\Helper;
 
 class AdminMenuHandler
 {
@@ -32,25 +34,37 @@ class AdminMenuHandler
 
         $slug = $config->get('app.slug');
 
-	    $baseUrl = apply_filters('fluent_connector_base_url', admin_url('admin.php?page=' . $slug . '#/'));
+	    $baseUrl = Helper::getAppBaseUrl();
 
-	    $menuItems = [
-		    [
-			    'key'       => 'dashboard',
-			    'label'     => __('Dashboard', 'fluent-calendar'),
-			    'permalink' => $baseUrl
-		    ],
-            [
-                'key'       => 'calendars',
-                'label'     => __('Event Schedulers', 'fluent-calendar'),
-                'permalink' => $baseUrl.'calendars'
-            ],
-            [
-                'key'       => 'scheduled_events',
-                'label'     => __('Scheduled Events', 'fluent-calendar'),
-                'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
-            ]
-	    ];
+        if($this->isNew()) {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Getting Started', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+            ];
+        } else {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Dashboard', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+                [
+                    'key'       => 'calendars',
+                    'label'     => __('Booking Types', 'fluent-calendar'),
+                    'permalink' => $baseUrl.'calendars'
+                ],
+                [
+                    'key'       => 'scheduled_events',
+                    'label'     => __('Scheduled Events', 'fluent-calendar'),
+                    'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
+                ]
+            ];
+        }
+
+
 
 	    $app = App::getInstance();
 	    $assets = $app['url.assets'];
@@ -96,6 +110,16 @@ class AdminMenuHandler
 
 	    $currentUser = get_user_by('ID', get_current_user_id());
 
+        $isNew = $this->isNew();
+
+        $requireSlug = false;
+        if($isNew) {
+            $result = $this->maybeAutoCreateCalendar($currentUser);
+            if(!$result) {
+                $requireSlug = true;
+            }
+        }
+
 	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', [
 		    'slug'  => $slug = $app->config->get('app.slug'),
 		    'nonce' => wp_create_nonce($slug),
@@ -107,6 +131,9 @@ class AdminMenuHandler
 			    'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
 			    'email'     => $currentUser->user_email
 		    ],
+            'is_new' => $isNew,
+            'require_slug' => $requireSlug,
+            'site_url' => site_url('/'),
             'timezones' => DateTimeHelper::getTimeZones(true),
             'supported_features' => apply_filters('fluent_calendar/supported_featured', [
                 'multi_users' => false
@@ -131,6 +158,38 @@ class AdminMenuHandler
     protected function getMenuIcon()
     {
         return 'dashicons-wordpress-alt';
+    }
+
+    protected function isNew()
+    {
+        $userId = get_current_user_id();
+        return ! Calendar::where('user_id', $userId)->first();
+    }
+
+    /**
+     * @param $user \WP_User
+     * @return bool | Calendar
+     */
+    protected function maybeAutoCreateCalendar($user)
+    {
+        $userName = $user->user_login;
+
+        if(is_email($userName)) {
+            $userName = explode('@', $userName);
+            $userName = $userName[0];
+        }
+
+        if(!Helper::isCalendarSlugAvailable($userName, true)) {
+            return false;
+        }
+
+        $data = [
+            'user_id' => $user->ID,
+            'title' => sprintf('Booking schedule with %s', trim($user->first_name.' '.$user->last_name)),
+            'slug' => $userName
+        ];
+
+        return Calendar::create($data);
     }
 }
 

@@ -20,12 +20,12 @@
                                 end="23:45"
                                 placeholder="End" />
 
-                <el-button v-if="config.slots.length > 1" type="text" :icon="DeleteIcon" @click="removeSlot(index)" />
+                <el-button v-if="config.slots.length > 1" text :icon="DeleteIcon" @click="removeSlot(index)" />
             </div>
             <div v-else>Unavailable</div>
         </div>
         <div v-if="config.enabled" class="fcal_add_slot">
-            <el-button type="text" :icon="PlusIcon" @click="addSlot" />
+            <el-button text :icon="PlusIcon" @click="addSlot" />
         </div>
     </div>
 </template>

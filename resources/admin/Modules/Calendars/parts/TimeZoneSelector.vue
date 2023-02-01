@@ -44,7 +44,7 @@ export default {
     },
     mounted() {
         if(!this.value) {
-            this.selected = this.dayjs.tz.guess();
+            this.selected = window.dayjs.tz.guess();
             this.timeZoneChanged();
         } else {
             this.setCurrentTime();

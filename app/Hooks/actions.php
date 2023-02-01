@@ -23,3 +23,10 @@ $app->addAction('admin_menu', 'AdminMenuHandler@add');
 
 // $app->addAction('init', 'CPTHandler@registerPostTypes');
 
+
+if(isset($_GET['cal'])) {
+    add_action('init', function () {
+        $booking = \FluentCalendar\App\Models\Booking::with('users')->findOrFail(10);
+        dd($booking);
+    });
+}

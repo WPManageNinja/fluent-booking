@@ -24,7 +24,6 @@ class BookingMigrator
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_contact_id` BIGINT(20) UNSIGNED NULL,
                 `person_time_zone` VARCHAR(100) NULL,
-                `start_date` DATE NOT NULL,
                 `start_time` TIMESTAMP NULL,
                 `end_time` TIMESTAMP NULL,
                 `slot_minutes` INT(11) UNSIGNED NOT NULL,

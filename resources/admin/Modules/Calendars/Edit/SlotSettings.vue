@@ -3,8 +3,7 @@
         <div v-if="slot" class="fcal_section_header">
             <div class="fcal_title">
                 <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ name: 'calendars' }">Event Schedulers</el-breadcrumb-item>
-                    <el-breadcrumb-item>{{ slot.calendar.title }}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ name: 'calendars' }">Booking Types</el-breadcrumb-item>
                     <el-breadcrumb-item>Edit {{ slot.title }}</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
@@ -60,7 +59,10 @@ export default {
                 title: this.slot.title,
                 description: this.slot.description,
                 duration: this.slot.duration,
-                settings: this.slot.settings
+                settings: this.slot.settings,
+                location_type: this.slot.location_type,
+                location_heading: this.slot.location_heading,
+                location_settings: this.slot.location_settings
             })
                 .then(response => {
                     this.$notify.success(response.message);

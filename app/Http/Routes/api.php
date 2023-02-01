@@ -9,6 +9,7 @@ $router->get('/welcome', 'WelcomeController@index');
 $router->prefix('calendars')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('/', 'CalendarController@index');
     $router->post('/', 'CalendarController@create');
+    $router->post('check-slug', 'CalendarController@checkSlug');
 
     $router->get('/{id}', 'CalendarController@getCalendar')->int('id');
 

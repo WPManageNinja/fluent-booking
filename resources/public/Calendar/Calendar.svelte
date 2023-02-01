@@ -36,7 +36,7 @@
     .calendar {
         display: grid;
         width: 100%;
-        grid-template-columns: repeat(7, minmax(60px, 6px));
+        grid-template-columns: repeat(7, minmax(50px, 6px));
         grid-template-rows: 50px;
         grid-auto-rows: 50px;
         overflow: auto;

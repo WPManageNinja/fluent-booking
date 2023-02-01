@@ -36,6 +36,10 @@ class FrontEndHandler
 
         $this->loadGlobalVars();
 
+        $slot->location_settings = (object)[];
+
+        $slot->description = wpautop($slot->description);
+
         wp_localize_script('fluent-calendar-public', 'fcal_public_vars_' . $calendar->id . '_'.$slot->id, [
             'slot'           => $slot,
             'calendar'       => $calendar,

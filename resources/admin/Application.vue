@@ -1,14 +1,25 @@
 <template>
     <div class="fl_app">
-        <router-view></router-view>
+        <on-board v-if="is_new" />
+        <router-view v-else></router-view>
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'DashboardApplication',
-        mounted() {
-            jQuery('.notice-warning, .notice-error').remove();
+<script type="text/babel">
+import OnBoard from './Components/OnBoard';
+export default {
+    name: 'DashboardApplication',
+    components: {
+        OnBoard
+    },
+    data() {
+        return {
+            is_new: false
         }
-    };
+    },
+    mounted() {
+        this.is_new = this.appVars.is_new;
+        jQuery('.notice-warning, .notice-error').remove();
+    }
+};
 </script>
