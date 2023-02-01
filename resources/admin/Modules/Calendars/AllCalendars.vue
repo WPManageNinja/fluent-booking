@@ -2,7 +2,7 @@
     <div class="fcal_create_calendar fcal_section fcal_section_narrow">
         <div style="padding:15px;" class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Event Schedulers</h3>
+                <h3>Booking Types</h3>
             </div>
             <div v-if="hasSupport('multi_users')" class="fcal_actions">
                 <el-button @click="$router.push({name: 'create_calendar'})" type="default">Create New</el-button>
@@ -14,6 +14,10 @@
                     <calendar-event-block :calendar="calendar" />
                 </div>
             </div>
+            <template v-if="loading">
+                <el-skeleton :animated="true" :rows="1" />
+                <el-skeleton :animated="true" :rows="4" />
+            </template>
 
             <div class="fcal_right fcal_tm20">
                 <pagination :pagination="pagination" @fetch="getCalendars"/>

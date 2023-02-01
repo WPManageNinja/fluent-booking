@@ -1,0 +1,72 @@
+<?php
+namespace FluentCalendar\App\Services;
+
+use FluentCalendar\App\Models\Booking;
+use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\Framework\Support\Arr;
+
+class BookingService
+{
+    public static function createBooking($data = [], $calendarSlot = null)
+    {
+        if(empty($data['email']) || empty($data['start_time'])) {
+            throw new \Exception('Email and Start Time are required to create a booking', 423);
+        }
+
+        if(!$calendarSlot) {
+            $calendarSlot = CalendarSlot::findOrFail($data['slot_id']);
+        }
+
+        if(empty($data['first_name']) && !empty($data['name'])) {
+            $nameArray = explode(' ', trim($data['name']));
+            $data['first_name'] = array_shift($nameArray);
+            $data['last_name'] = implode(' ', $nameArray);
+        }
+
+        $defaults = [
+            'slot_id' => $calendarSlot->id,
+            'calendar_id' => $calendarSlot->calendar_id
+        ];
+
+        if(empty($data['slot_minutes'])) {
+            $defaults['slot_minutes'] = $calendarSlot->duration;
+        }
+
+        if(empty($data['end_time'])) {
+            $defaults['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($calendarSlot->duration * 60));
+        }
+
+        if(!isset($data['person_user_id'])) {
+            $userId = get_current_user_id();
+
+            if($userId) {
+                $user = get_user_by('ID', $userId);
+            } else {
+                $user = get_user_by('email', $data['email']);
+            }
+
+            if($user) {
+                $data['person_user_id'] = $userId;
+                $data['email'] = $user->user_email;
+
+                if(empty($data['first_name'])) {
+                    $data['first_name'] = $user->first_name;
+                    $data['last_name'] = $user->last_name;
+                }
+            }
+        }
+
+        $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
+        do_action('fluent_calendar/before_booking', $data, $calendarSlot);
+        $booking = Booking::create($bookingData);
+
+        $booking->users()->attach($calendarSlot->user_id, [
+            'status' => 'confirmed'
+        ]);
+
+        do_action('fluent_calendar/after_booking', $bookingData, $calendarSlot);
+
+        return $booking;
+    }
+
+}

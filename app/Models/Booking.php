@@ -12,10 +12,45 @@ class Booking extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'calendar_id',
+        'slot_id',
+        'parent_id',
+        'person_user_id',
+        'person_contact_id',
+        'hash',
+        'person_time_zone',
+        'start_time',
+        'end_time',
+        'slot_minutes',
+        'first_name',
+        'last_name',
+        'email',
+        'message',
+        'internal_note',
+        'phone',
+        'country',
+        'ip_address',
+        'browser',
+        'device',
+        'other_info',
+        'booking_instructions',
+        'reminder_stage',
+        'last_reminder_sent',
+        'next_reminder',
+        'status',
+        'source',
+        'source_id',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term'
+    ];
+
     public static function boot()
     {
         static::creating(function ($model) {
-            if (empty($model->person_user_id) && $userId = get_current_user_id()) {
+            if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
             }
 
@@ -38,6 +73,20 @@ class Booking extends Model
     public function slot()
     {
         return $this->belongsTo(CalendarSlot::class, 'slot_id');
+    }
+
+    public function users()
+    {
+        $class = __NAMESPACE__ . '\User';
+
+        return $this->belongsToMany(
+            $class,
+            'fcal_booking_users',
+            'booking_id',
+            'user_id'
+        )
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function scopeUpcoming($query)

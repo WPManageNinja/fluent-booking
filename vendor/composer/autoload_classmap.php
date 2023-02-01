@@ -13,4 +13,5 @@ return array(
     'FluentCalendar\\Database\\Migrations\\BookingUserMigrator' => $baseDir . '/database/Migrations/BookingUserMigrator.php',
     'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',
     'FluentCalendar\\Database\\Migrations\\CalendarSlotsMigrator' => $baseDir . '/database/Migrations/CalendarSlotsMigrator.php',
+    'FluentCalendar\\Database\\Migrations\\MetaMigrator' => $baseDir . '/database/Migrations/MetaMigrator.php',
 );

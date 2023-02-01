@@ -164,7 +164,7 @@ class TimeSlotService
         $books = [];
 
         foreach ($bookings as $booking) {
-            $date = $booking->start_date;
+            $date = date('Y-m-d', strtotime($booking->start_time));
 
             if (!isset($books[$date])) {
                 $books[$date] = [];

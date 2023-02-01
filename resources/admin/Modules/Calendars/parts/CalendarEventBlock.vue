@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id } })" type="primary">+ New Event Type</el-button>
+                <el-button @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id } })" type="primary">+ New Booking Type</el-button>
             </div>
         </div>
         <div class="fcal_cal_slots">
@@ -20,7 +20,11 @@
                     </div>
                     <div class="fcal_slot_footer">
                         <div v-if="slot.status == 'active'" class="fcal_shortcode">
-                            <el-button text>Share</el-button>
+                            <el-button @click="copyTo(slot.public_url)" text>
+                                <el-icon><CopyDocument /></el-icon>
+                                <span v-if="isCopied">Copied</span>
+                                <span v-else>Copy Link</span>
+                            </el-button>
                         </div>
                         <div v-else>
                             <el-button v-loading="working" :disabled="working" @click="activateSlot(slot)" text>Turn On</el-button>
@@ -36,12 +40,19 @@
 </template>
 
 <script type="text/babel">
+import {copyToClipBoard} from '@/Bits/data_config.js';
+import {CopyDocument} from '@element-plus/icons-vue';
+
 export default {
     name: 'CalendarEventBlock',
     props: ['calendar'],
+    components: {
+        CopyDocument
+    },
     data() {
         return {
-            working: false
+            working: false,
+            isCopied: false
         }
     },
     methods: {
@@ -60,6 +71,15 @@ export default {
                 .finally(() => {
                     this.working = false;
                 });
+        },
+        copyTo(text) {
+            copyToClipBoard(text);
+            this.isCopied = true;
+            this.$notify.success('URL has been copied to your clipboard');
+
+            setTimeout(() => {
+                this.isCopied = false;
+            }, 8000);
         }
     }
 }

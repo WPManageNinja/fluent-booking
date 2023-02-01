@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Http\Controllers;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
@@ -58,7 +59,6 @@ class BookingController extends Controller
     public function bookSlot(Request $request, $slotId)
     {
         $calendarSlot = CalendarSlot::findOrfail($slotId);
-        $calendar = $calendarSlot->calendar;
 
         $postedData = Arr::only($request->all(), [
             'name', 'email', 'message', 'timezone', 'start_date'
@@ -72,40 +72,24 @@ class BookingController extends Controller
             'start_date' => 'required'
         ], $postedData);
 
-        $userId = get_current_user_id();
-
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
 
-        $nameArray = explode(' ', trim($postedData['name']));
-        $firstName = array_shift($nameArray);
-        $lastName = implode(' ', $nameArray);
-
         $bookingData = [
-            'slot_id' => $calendarSlot->id,
-            'calendar_id' => $calendar->id,
             'person_time_zone'  => sanitize_text_field($postedData['timezone']),
-            'start_date' => date('Y-m-d', strtotime($startDateTime)),
             'start_time' => $startDateTime,
-            'end_time' => date('Y-m-d H:i:s', strtotime($startDateTime) + $calendarSlot->duration * 60),
-            'slot_minutes' => $calendarSlot->duration,
-            'first_name' => sanitize_text_field($firstName),
-            'last_name' => sanitize_text_field($lastName),
+            'name' => sanitize_text_field($postedData['name']),
             'email' => sanitize_email($postedData['email']),
             'message' => sanitize_textarea_field( Arr::get($postedData, 'message', '')),
             'ip_address' => $request->getIp()
         ];
 
-        if($userId) {
-            $bookingData['person_user_id'] = $userId;
-            $user = get_user_by('ID', $userId);
-            $bookingData['email'] = $user->user_email;
+        try {
+            $booking = BookingService::createBooking($bookingData, $calendarSlot);
+        } catch (\Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage()
+            ]);
         }
-
-        do_action('fluent_calendar/before_booking', $bookingData, $calendarSlot);
-
-        $booking = Booking::create($bookingData);
-
-        do_action('fluent_calendar/after_booking', $bookingData, $calendarSlot);
 
         $author = $calendarSlot->getAuthorProfile(true);
 

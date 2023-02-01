@@ -10,6 +10,22 @@ class Calendar extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'hash',
+        'user_id',
+        'account_id',
+        'title',
+        'slug',
+        'media_id',
+        'description',
+        'settings',
+        'status',
+        'type',
+        'account_type',
+        'author_timezone',
+        'max_book_per_slot'
+    ];
+
     public static function boot()
     {
         static::creating(function ($model) {
@@ -31,6 +47,10 @@ class Calendar extends Model
     public function slots()
     {
         return $this->hasMany(CalendarSlot::class, 'calendar_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function bookings()

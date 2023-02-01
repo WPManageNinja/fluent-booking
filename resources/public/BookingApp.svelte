@@ -12,13 +12,25 @@
     let appReady = false;
     let isBookingDone = false;
     let bookingConfirmationHtml = '';
+    let component = null;
+    let isMobile = false;
+    let isXsDevice = false;
 
     onMount(() => {
         timezone = util.dayjs.tz.guess();
         appReady = true;
+        if(window.outerWidth <= 767) {
+            isMobile = true;
+        }
+        if (window.outerWidth < 400) {
+            isXsDevice = true;
+        }
+
     });
 
     function spotSelected(spot) {
+        component.parentNode.classList.remove("f_cal_day_selected");
+        component.parentNode.classList.add("f_cal_spot_selected");
         selectedDate = spot;
     }
 
@@ -27,9 +39,19 @@
         isBookingDone = true;
     }
 
+    function dayClicked(day) {
+        component.parentNode.classList.add("f_cal_day_selected");
+    }
+
+    function resetSelection() {
+        selectedDate = false;
+        component.parentNode.classList.remove("f_cal_day_selected");
+        component.parentNode.classList.remove("f_cal_spot_selected");
+    }
+
 </script>
 
-<div class="fcal_calendar_inner">
+<div bind:this={component} class="fcal_calendar_inner { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
     {#if isBookingDone}
         <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
     {:else}
@@ -38,7 +60,7 @@
                 <div class="fcal_author">
                     {#if selectedDate}
                         <div class="fcal_author_avatar">
-                            <div aria-label="Back to Date Selection" on:click={(e) => { selectedDate = false }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                            <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
                                 <i class="fcal_svg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                                         <path fill="none" d="M0 0h24v24H0V0z"/>
@@ -65,12 +87,22 @@
                             <g stroke-width="0"/>
                             <g stroke-linecap="round" stroke-linejoin="round"/>
                             <g>
-                                <path
-                                    d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"/>
+                                <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"/>
                             </g>
                         </svg>
                         <span>{slot.duration} minutes</span>
                     </div>
+                    {#if slot.location_type == 'phone'}
+                        <div class="slot_location fcal_icon_item">
+                            <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" data-testid="phone-call-icon" data-id="details-item-icon"><title>Phone call</title><path d="M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z" fill="currentColor"></path></svg>
+                            <span>Phone Call</span>
+                        </div>
+                    {:else if slot.location_type == 'in_person'}
+                        <div class="slot_location fcal_icon_item">
+                            <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
+                            <span>{slot.location_heading}</span>
+                        </div>
+                    {/if}
                     {#if selectedDate}
                         <div class="slot_time_range fcal_icon_item">
                             <svg height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +144,7 @@
         <div class="fcal_date_wrapper">
             {#if appReady}
                 {#if !selectedDate}
-                    <DayPickerApp bind:timezone="{timezone}" on:spotSelected={(e) => {spotSelected(e.detail)}}
+                    <DayPickerApp on:resetSelection={(e) => { resetSelection() }} on:timezoneChanged={ (e) => {resetSelection()} } bind:timezone="{timezone}" on:dayClicked={(e) => {dayClicked(e.detail)}} on:spotSelected={(e) => {spotSelected(e.detail)}}
                                   slot="{slot}"/>
                 { :else }
                     <h2>Enter Details</h2>

@@ -1,3 +1,5 @@
+$breakpoint-tablet: 767px;
+
 .fcal_calendar_inner {
   display: flex;
   border: 1px solid rgba(26, 26, 26, 0.1);
@@ -5,11 +7,15 @@
   box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
 
   .fcal_side {
-    max-width: 45%;
+    width: 45%;
     min-width: 300px;
     border-right: 1px solid var(--text-color-level3, rgba(26, 26, 26, 0.1));
     transition: all .22s ease-out;
     padding: 20px;
+    max-width: 360px;
+    max-height: 80vh;
+    overflow: auto;
+    min-height: 500px;
 
     .fcal_author_avatar img {
       max-width: 64px;
@@ -18,7 +24,7 @@
 
     .fcal_author_name {
       margin-top: 20px;
-      color: rgba(26,26,26,0.61);
+      color: rgba(26, 26, 26, 0.61);
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
@@ -38,6 +44,7 @@
   .fcal_date_wrapper {
     width: auto;
     padding: 20px;
+
     h2 {
       font-size: 26px;
       margin: 0 0 20px;
@@ -64,13 +71,16 @@
 }
 
 
+
 .fcal_slot_items {
-  max-height: 365px;
-  overflow: scroll;
+  max-height: 315px;
+  overflow: auto;
   padding-right: 20px;
+
   .fcal_spot_lists {
     margin: 0;
     padding: 0;
+
     .fcal_spot {
       display: flex;
       justify-content: space-between;
@@ -81,10 +91,11 @@
         padding: 5px 7px;
         border-radius: 4px;
         margin-bottom: 15px;
-        border: 1px solid rgba(0,105,255,0.5);
-        color: rgb(0,105,255);
+        border: 1px solid rgba(0, 105, 255, 0.5);
+        color: rgb(0, 105, 255);
         cursor: pointer;
         box-sizing: border-box;
+
         &:hover {
           padding: 4px 7px;
           border-width: 2px;
@@ -92,12 +103,14 @@
           border-color: #0169ff;
         }
       }
+
       &.fcal_spot_selected {
         .fcal_spot_name {
           width: auto;
           background-color: rgb(0 0 0/60%);
-          color: rgba(255,255,255,1);
+          color: rgba(255, 255, 255, 1);
           border: 1px solid transparent;
+
           &:hover {
             border-color: transparent;
           }
@@ -121,6 +134,7 @@
 
 .fcal_slot_picker {
   min-width: 200px;
+
   .fcal_slot_picker_header {
     height: 38px;
     margin-top: 0;
@@ -138,6 +152,7 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
+
   .fcal_loading_dates_inner {
     display: flex;
     height: 100%;
@@ -146,38 +161,42 @@
   }
 }
 
-.fcal_day_picker_head h3 {
-  color: rgb(84 82 82);
-  font-size: 17px;
-  margin-bottom: 15px !important;
+.fcal_sec_heading {
+  h3 {
+    color: rgb(84 82 82);
+    font-size: 17px;
+    margin-bottom: 15px !important;
+  }
 }
-
 
 .fcal_back i.fcal_svg {
   width: 64px;
   height: 64px;
-  border: 1px solid  rgba(0,105,255,0.15);
+  border: 1px solid rgba(0, 105, 255, 0.15);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
   svg {
-    fill: rgb(0,105,255);
+    fill: rgb(0, 105, 255);
   }
+
   &:hover {
-    background-color: rgba(0,105,255,0.15);
+    background-color: rgba(0, 105, 255, 0.15);
     outline: none;
-    border: 1px solid rgba(26,26,26,0.1);
+    border: 1px solid rgba(26, 26, 26, 0.1);
     border-radius: 50%;
     background-clip: padding-box;
-    color: rgb(0,105,255);
+    color: rgb(0, 105, 255);
   }
 }
 
 .fcal_timezone_select {
   max-width: 300px;
   margin-top: 30px;
+
   label {
     font-weight: 500;
     display: block;
@@ -189,6 +208,7 @@
   display: block;
   width: 100%;
   margin-bottom: 12px;
+
   .fcal_input_label {
     font-weight: 500;
     display: block;
@@ -196,6 +216,7 @@
     margin-bottom: 7px;
     line-height: 100%;
   }
+
   .fcal_input {
     width: 100%;
     padding: 8px 10px;
@@ -215,15 +236,18 @@
   max-width: 700px;
   margin: 50px auto;
   padding: 20px;
+
   .fcal_confirm_header {
     text-align: center;
   }
+
   ul.fcal_conform_items {
     list-style: none;
     margin: 20px 0;
     padding: 20px 0;
-    border-top: 2px solid rgba(26,26,26,0.1);
-    border-bottom: 2px solid rgba(26,26,26,0.1);
+    border-top: 2px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
+
     li {
       margin-bottom: 10px;
     }
@@ -253,12 +277,95 @@
   color: white;
   cursor: pointer;
   box-sizing: border-box;
+
   &:hover {
     background: rgb(4 76 177);
   }
+
   &.fcal_btn_submitting {
     background: rgb(0 105 255 / 50%);
     border-color: transparent;
     cursor: progress;
+  }
+}
+
+
+.fcal_back.fcal_go_back {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  i.fcal_svg {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/*
+* Responsive CSS
+ */
+.fcal_time_picker_head {
+  display: none;
+}
+
+.f_cal_day_selected {
+  .fcal_on_mobile {
+    .fcal_calendar_slot_wrap {
+      flex-direction: column;
+
+      .calendar-container {
+        display: none;
+      }
+
+      .fcal_slot_picker {
+        width: 100%;
+
+        .fcal_spot_selected {
+          justify-content: space-between;
+          column-gap: 15px;
+
+          > div {
+            flex: 1;
+          }
+        }
+      }
+    }
+
+    .fcal_day_picker_head {
+      display: none;
+    }
+
+    .fcal_time_picker_head {
+      display: block;
+      position: relative;
+      h3 {
+        margin-bottom: 0 !important;
+      }
+      p {
+        margin-top: 0;
+        color: rgb(84, 82, 82);
+      }
+    }
+    
+  }
+}
+
+.fcal_on_mobile {
+  .fcal_slot_picker_header {
+    text-align: center;
+    border-bottom: 1px solid #c8c7c7;
+  }
+  &.fcal_calendar_inner {
+    flex-direction: column;
+    .fcal_side {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      border-right: none;
+      max-height: 100%;
+      min-height: auto;
+    }
+  }
+  .fcal_sec_heading {
+    text-align: center;
   }
 }

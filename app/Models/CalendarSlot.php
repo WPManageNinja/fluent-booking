@@ -28,6 +28,16 @@ class CalendarSlot extends Model
         return \maybe_unserialize($settings);
     }
 
+    public function setLocationSettingsAttribute($locationSettings)
+    {
+        $this->attributes['location_settings'] = \maybe_serialize($locationSettings);
+    }
+
+    public function getLocationSettingsAttribute($locationSettings)
+    {
+        return \maybe_unserialize($locationSettings);
+    }
+
     public function calendar()
     {
         return $this->belongsTo(Calendar::class, 'calendar_id');
@@ -36,6 +46,10 @@ class CalendarSlot extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'slot_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function getAuthorProfile($public = true)
