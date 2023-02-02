@@ -6,6 +6,7 @@ namespace FluentCalendar\App\Saas\Hooks\Handlers;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
 
 class SaasHandler
@@ -38,6 +39,8 @@ class SaasHandler
             return;
         }
 
+        $formFields = BookingService::getBookingFields($slot);
+
         $authorProfile = $slot->getAuthorProfile(true);
 
         $slot->location_settings = (object)[];
@@ -60,7 +63,8 @@ class SaasHandler
                 'fcal_public_vars_'.$calendar->id . '_'.$slot->id => [
                     'slot'           => $slot,
                     'calendar'       => $calendar,
-                    'author_profile' => $authorProfile
+                    'author_profile' => $authorProfile,
+                    'form_fields' => $formFields
                 ],
                 'fluentCalendarPublicVars' => $this->getGlobalVars()
             ]

@@ -25,8 +25,16 @@
         if (window.outerWidth < 400) {
             isXsDevice = true;
         }
-
     });
+
+    window.onresize = function () {
+        if(window.outerWidth <= 767) {
+            isMobile = true;
+        }
+        if (window.outerWidth < 400) {
+            isXsDevice = true;
+        }
+    };
 
     function spotSelected(spot) {
         component.parentNode.classList.remove("f_cal_day_selected");
@@ -123,7 +131,7 @@
                                     <path style="fill:#010002;"
                                           d="M21.899,5.303h1.388c0.164,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.132-0.297-0.296-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C21.603,5.17,21.735,5.303,21.899,5.303z"></path> </g> </g> </g></svg>
                             <span>{util.toDate(selectedDate.start, 'hh:mma')} - {util.toDate(selectedDate.end, 'hh:mma')}
-                                , {util.toDate(selectedDate.start, 'dddd, MMMM MM, YYYY')}</span>
+                                , {util.toDate(selectedDate.start, 'dddd, MMMM DD, YYYY')}</span>
                         </div>
                         <div class="slot_time_range fcal_icon_item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
@@ -148,7 +156,7 @@
                                   slot="{slot}"/>
                 { :else }
                     <h2>Enter Details</h2>
-                    <BookingForm on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }} {slot} {timezone} bind:spot="{selectedDate}" />
+                    <BookingForm on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }} {slot} bind:formFields={appData.form_fields} {timezone} bind:spot="{selectedDate}" />
                 {/if}
             {/if}
         </div>

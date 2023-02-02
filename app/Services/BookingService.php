@@ -57,16 +57,67 @@ class BookingService
         }
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
+
         do_action('fluent_calendar/before_booking', $data, $calendarSlot);
+
         $booking = Booking::create($bookingData);
 
         $booking->users()->attach($calendarSlot->user_id, [
             'status' => 'confirmed'
         ]);
 
-        do_action('fluent_calendar/after_booking', $bookingData, $calendarSlot);
+        do_action('fluent_calendar/after_booking', $booking, $data, $calendarSlot);
 
         return $booking;
+    }
+
+    public static function getBookingFields($slot)
+    {
+        $fields = [
+            [
+                'type' => 'text',
+                'name' => 'name',
+                'label' => __('Your Name', 'fluent-calendar'),
+                'required' => true,
+                'placeholder' => __('Your Full Name', 'fluent-calendar'),
+                'input_class' => 'fcal_input'
+            ],
+            [
+                'type' => 'email',
+                'name' => 'email',
+                'label' => __('Your Email Address', 'fluent-calendar'),
+                'required' => true,
+                'placeholder' => __('Your Email Address', 'fluent-calendar'),
+                'input_class' => 'fcal_input',
+                'disabled' => is_user_logged_in()
+            ]
+        ];
+
+        if(self::isPhoneRequired($slot)) {
+            $fields[] = [
+                'type' => 'tel',
+                'name' => 'phone',
+                'label' => __('Your Phone Number', 'fluent-calendar'),
+                'required' => true,
+                'placeholder' => esc_attr__('Phone Number with country code', 'fluent-calendar'),
+                'input_class' => 'fcal_input'
+            ];
+        }
+
+        $fields[] = [
+            'type' => 'textarea',
+            'data_type' => 'textarea',
+            'name' => 'message',
+            'label' => __('Please share anything that will help prepare for our meeting.', 'fluent-calendar'),
+            'placeholder' => __('Note about this meeting', 'fluent-calendar'),
+            'input_class' => 'fcal_input fcal_textarea'
+        ];
+
+        return $fields;
+    }
+
+    public static function isPhoneRequired($slot) {
+        return $slot->location_type == 'phone' && $slot->location_settings['call_type'] == 'outbound';
     }
 
 }

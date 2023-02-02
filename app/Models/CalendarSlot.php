@@ -10,6 +10,7 @@ class CalendarSlot extends Model
 
     protected $guarded = ['id'];
 
+
     public static function boot()
     {
         static::creating(function ($model) {
