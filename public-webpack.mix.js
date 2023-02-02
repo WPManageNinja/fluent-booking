@@ -3,7 +3,10 @@ require('laravel-mix-svelte');
 
 mix.js('resources/public/app.js', 'assets/public/js')
     .svelte({
-        dev: true
+        dev: true,
+        compilerOptions: {
+            dev: true
+        }
     })
     .options({ autoprefixer: false });
 

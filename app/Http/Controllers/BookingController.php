@@ -16,13 +16,13 @@ class BookingController extends Controller
     {
         $slot = CalendarSlot::findOrfail($slotId);
         $startDate = $request->get('start_date', date('Y-m-d H:i:s', current_time('timestamp')));
-        $timeZone  = $request->get('timezone', 'UTC');
+        $timeZone = $request->get('timezone', 'UTC');
 
-        if(!$timeZone) {
+        if (!$timeZone) {
             $timeZone = 'UTC';
         }
 
-        if(strtotime($startDate) < time()) {
+        if (strtotime($startDate) < time()) {
             $startDate = date('Y-m-d H:i:s');
         }
 
@@ -31,20 +31,20 @@ class BookingController extends Controller
         $slots = $service->getDates($startDate);
         $convertedSpots = [];
 
-        if($timeZone == 'UTC') {
+        if ($timeZone == 'UTC') {
             $convertedSpots = $slots;
         } else {
             foreach ($slots as $slot) {
                 foreach ($slot as $spot) {
                     $startDate = DateTimeHelper::convertFromUtc($spot['start'], $timeZone, 'Y-m-d');
 
-                    if(!isset($convertedSpots[$startDate])) {
+                    if (!isset($convertedSpots[$startDate])) {
                         $convertedSpots[$startDate] = [];
                     }
 
                     $convertedSpots[$startDate][] = [
                         'start' => DateTimeHelper::convertFromUtc($spot['start'], $timeZone),
-                        'end'   =>  DateTimeHelper::convertFromUtc($spot['end'], $timeZone),
+                        'end'   => DateTimeHelper::convertFromUtc($spot['end'], $timeZone),
                     ];
                 }
             }
@@ -52,7 +52,7 @@ class BookingController extends Controller
 
         return [
             'available_slots' => $convertedSpots,
-            'timezone' => $timeZone
+            'timezone'        => $timeZone
         ];
     }
 
@@ -64,24 +64,36 @@ class BookingController extends Controller
             'name', 'email', 'message', 'timezone', 'start_date'
         ]);
 
-        $this->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'message' => 'required',
-            'timezone' => 'required',
+        $rules = [
+            'name'       => 'required',
+            'email'      => 'required|email',
+            'message'    => 'required',
+            'timezone'   => 'required',
             'start_date' => 'required'
-        ], $postedData);
+        ];
+
+        $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
+        if ($isPhoneRequired) {
+            $rules['phone'] = 'required';
+            $postedData['phone'] = $request->get('phone');
+        }
+
+        $this->validate($rules, $postedData);
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
 
         $bookingData = [
-            'person_time_zone'  => sanitize_text_field($postedData['timezone']),
-            'start_time' => $startDateTime,
-            'name' => sanitize_text_field($postedData['name']),
-            'email' => sanitize_email($postedData['email']),
-            'message' => sanitize_textarea_field( Arr::get($postedData, 'message', '')),
-            'ip_address' => $request->getIp()
+            'person_time_zone' => sanitize_text_field($postedData['timezone']),
+            'start_time'       => $startDateTime,
+            'name'             => sanitize_text_field($postedData['name']),
+            'email'            => sanitize_email($postedData['email']),
+            'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'ip_address'       => $request->getIp()
         ];
+
+        if ($isPhoneRequired) {
+            $bookingData['phone'] = sanitize_text_field($postedData['phone']);
+        }
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot);
@@ -90,21 +102,23 @@ class BookingController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-
+        
         $author = $calendarSlot->getAuthorProfile(true);
 
         $confirmationData = [
             'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
-            'slot' => $calendarSlot,
-            'booking' => $booking,
-            'message' => 'A confirmation has been sent to your email address.'
+            'slot'        => $calendarSlot,
+            'booking'     => $booking,
+            'message'     => 'A confirmation has been sent to your email address.'
         ];
 
-        $responseHtml = App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $confirmationData = apply_filters('fluent_calendar/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
-        return [
-            'message' => 'Booking has been confirmed',
-            'response_html' => (string) $responseHtml
-        ];
+        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+
+        return apply_filters('fluent_calendar/booking_confirmation', [
+            'message'       => 'Booking has been confirmed',
+            'response_html' => $responseHtml
+        ]);
     }
 }

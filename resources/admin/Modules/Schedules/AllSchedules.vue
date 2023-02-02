@@ -61,7 +61,7 @@ export default {
         formattedSchedules() {
             const items = {};
             this.schedules.forEach(schedule => {
-                const date = this.toCurrentTimezone(schedule.start_date, 'MMMM D, YYYY');
+                const date = this.toCurrentTimezone(schedule.start_time, 'MMMM D, YYYY');
                 if (!items[date]) {
                     items[date] = [];
                 }
