@@ -38,7 +38,7 @@ class BookingMigrator
                 `browser` VARCHAR(192) NULL,
                 `device` VARCHAR(192) NULL,
                 `other_info` LONGTEXT NULL,
-                `booking_instructions` LONGTEXT NULL,
+                `location_details` LONGTEXT NULL,
                 `reminder_stage` VARCHAR(192) NULL DEFAULT 'init',
                 `last_reminder_sent` TIMESTAMP NULL,
                 `next_reminder` TIMESTAMP NULL,

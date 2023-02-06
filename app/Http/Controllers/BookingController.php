@@ -3,7 +3,6 @@
 namespace FluentCalendar\App\Http\Controllers;
 
 use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
@@ -60,14 +59,11 @@ class BookingController extends Controller
     {
         $calendarSlot = CalendarSlot::findOrfail($slotId);
 
-        $postedData = Arr::only($request->all(), [
-            'name', 'email', 'message', 'timezone', 'start_date'
-        ]);
+        $postedData = $request->all();
 
         $rules = [
             'name'       => 'required',
             'email'      => 'required|email',
-            'message'    => 'required',
             'timezone'   => 'required',
             'start_date' => 'required'
         ];
@@ -75,10 +71,9 @@ class BookingController extends Controller
         $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
         if ($isPhoneRequired) {
             $rules['phone'] = 'required';
-            $postedData['phone'] = $request->get('phone');
         }
 
-        $this->validate($rules, $postedData);
+        $this->validate($postedData, $rules);
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
 
@@ -102,14 +97,14 @@ class BookingController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-        
+
         $author = $calendarSlot->getAuthorProfile(true);
 
         $confirmationData = [
             'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
             'slot'        => $calendarSlot,
             'booking'     => $booking,
-            'message'     => 'A confirmation has been sent to your email address.'
+            'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
         ];
 
         $confirmationData = apply_filters('fluent_calendar/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);

@@ -11,7 +11,6 @@
 
     <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>" />
 
-
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo esc_url($url); ?>">
@@ -28,11 +27,9 @@
 </head>
 <body>
 
-<div class="calendar_wrap">
-    <div class="fcal_cal_wrap">
-        <div class="fluent_calendar_app" data-calendar_id="<?php echo (int) $calendar->id; ?>" data-slot_id="<?php echo (int) $slot->id; ?>">
-            <h3>Loading...</h3>
-        </div>
+<div class="confirmation_page">
+    <div class="fcal_conf_wrap">
+        <?php echo $body; ?>
     </div>
 </div>
 

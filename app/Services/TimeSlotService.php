@@ -18,14 +18,14 @@ class TimeSlotService
         $this->calenderSlot = $calenderSlot;
     }
 
-    function getDates($fromDate = false, $toDate = false)
+    public function getDates($fromDate = false, $toDate = false)
     {
         $period = $this->calenderSlot->duration;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d');
         $toDate = $toDate ? $toDate : date('Y-m-t', strtotime($fromDate));
 
-        $ranges = $this->getCurrentDateRange($fromDate);
+        $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
         $weekends = $this->getWeekends();
         $holidays = $this->getPublicHolidays();
@@ -71,7 +71,6 @@ class TimeSlotService
                     'end'   => $date . ' ' . $end . ':00'
                 ];
 
-
                 if ($isToday && strtotime($slot['start']) < $fromValidTimeStamp) {
                     continue;
                 }
@@ -104,10 +103,55 @@ class TimeSlotService
                     $validSlots[] = $slot;
                 }
             }
+
             $rangedValidSlots[$date] = $validSlots;
         }
 
         return $rangedValidSlots;
+    }
+
+    public function isSpotAvailable($fromDate, $toDate)
+    {
+        $slots = $this->getDates($fromDate, $toDate);
+
+        $start = null;
+        $end = null;
+
+        foreach ($slots as $spots) {
+
+            if(!$spots) {
+                continue;
+            }
+
+            $first  = array_shift($spots);
+            $start = $first['start'];
+            $end = $first['end'];
+
+            if(!$spots) {
+                if(strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
+                    return true;
+                }
+                continue;
+            }
+
+            foreach ($spots as $spot) {
+                if($spot['start'] == $end) {
+                    $end = $spot['end'];
+                } else {
+                    if(strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
+                        return true;
+                    }
+                    $start = $spot['start'];
+                    $end = $spot['end'];
+                }
+            }
+        }
+
+        if ($start && $end && strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function getWeekends()
@@ -221,4 +265,6 @@ class TimeSlotService
 
         return $formattedSlots;
     }
+
+
 }

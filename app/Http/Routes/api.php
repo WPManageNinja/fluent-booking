@@ -25,6 +25,7 @@ $router->prefix('calendars')->withPolicy('AdminPolicy')->group(function ($router
 $router->prefix('schedules')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index');
 
+    $router->get('spot/{spot_id}', 'SchedulesController@getSpot')->int('spot_id');
     $router->put('spot/{spot_id}', 'SchedulesController@patchSpot')->int('spot_id');
 });
 
