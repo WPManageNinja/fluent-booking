@@ -2,8 +2,8 @@
 
 namespace FluentCalendar\App\Saas\Hooks\Handlers;
 
-
 use FluentCalendar\App\App;
+use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\BookingService;
@@ -13,7 +13,26 @@ class SaasHandler
 {
     public function register()
     {
-        add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
+      //  add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
+
+        add_action('init', [$this, 'registerDashboardRoute'], 1);
+
+    }
+
+    public function registerDashboardRoute()
+    {
+        if(!defined('FLUENT_ADMIN_PAGE_ID')) {
+            return;
+        }
+
+      //  add_rewrite_tag( '%board_hash%', '([^&]+)');
+        add_rewrite_tag( '%is_cal_page%', '([^&]+)');
+
+        //add rewrite rule that matches /boards
+        add_rewrite_rule('^calendar/?','index.php?page_id='.FLUENT_ADMIN_PAGE_ID.'&is_cal_page=1','top');
+
+        //add endpoint, in this case 'blog' to satisfy our rewrite rule /blog, /blog/page/ etc..
+        add_rewrite_endpoint( 'calendar', EP_PERMALINK | EP_PAGES );
     }
 
     public function maybeCalendarView()
@@ -39,6 +58,16 @@ class SaasHandler
             return;
         }
 
+        if(!empty($_REQUEST['booking_id'])) {
+            $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
+            $booking = Booking::where('hash', $bookingHash)
+                ->where('slot_id', $slot->id)
+                ->first();
+            if($booking) {
+                $this->showBookingConfimationPage($booking, $slot);
+            }
+        }
+
         $formFields = BookingService::getBookingFields($slot);
 
         $authorProfile = $slot->getAuthorProfile(true);
@@ -51,7 +80,7 @@ class SaasHandler
             'slot' => $slot,
             'author' => $authorProfile,
             'title' => $slot->title . ' with ' . $authorProfile['name'],
-            'description' => $slot->description,
+            'description' => substr(strip_shortcodes( strip_tags( str_replace(PHP_EOL, ' ', $slot->description) ) ), 0, 300).'...',
             'url' => home_url($wp->request),
             'css_files' => [
                 App::getInstance('url.assets') . 'public/saas.css'
@@ -75,6 +104,30 @@ class SaasHandler
         exit(200);
     }
 
+    private function showBookingConfimationPage($booking, $slot)
+    {
+        global $wp;
+        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $slot, true);
+
+        $authorProfile = $slot->getAuthorProfile(true);
+
+        status_header( 200 );
+        $this->render('confirmation_page', [
+            'title' => 'Confirmation: '.$slot->title . ' with ' . $authorProfile['name'],
+            'body' => $responseHtml,
+            'description' => substr(strip_shortcodes( strip_tags( str_replace(PHP_EOL, ' ', $slot->description) ) ), 0, 300).'...',
+            'css_files' => [
+                App::getInstance('url.assets') . 'public/saas_public.css'
+            ],
+            'js_files' => [],
+            'js_vars' => [],
+            'author' => $authorProfile,
+            'slot' => $slot,
+            'url' => home_url($wp->request),
+        ]);
+        exit(200);
+
+    }
 
     private function getGlobalVars()
     {

@@ -22,7 +22,10 @@ class SchedulesController extends Controller
         if ($author == 'me') {
             $author = get_current_user_id();
         } else {
-            $author = (int)$author;
+            $author = (int) $author;
+        }
+        if(!current_user_can('manage_options')) {
+            $author = get_current_user_id();
         }
 
         if ($author) {
@@ -48,6 +51,7 @@ class SchedulesController extends Controller
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
+            $schedule->author = $schedule->slot->getAuthorProfile(false);
         }
 
 
@@ -84,5 +88,33 @@ class SchedulesController extends Controller
         return [
             'message' => sprintf(__('%s has been updated', 'fluent-calendar'), $column)
         ];
+    }
+
+    public function getSpot(Request $request, $spot_id)
+    {
+        $isAdmin = current_user_can('manage_options');
+
+        $spot = Booking::with('slot');
+
+        if(!$isAdmin) {
+            $spot->whereHas('calendar', function ($q) {
+                $q->where('user_id', get_current_user_id());
+            });
+        }
+
+        $schedule = $spot->findOrFail($spot_id);
+
+        if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
+            $schedule->status = 'completed';
+            $schedule->save();
+        }
+
+        $schedule->happening_status = $schedule->getOngoingStatus();
+        $schedule->author = $schedule->slot->getAuthorProfile(false);
+
+        return [
+            'spot' => $schedule
+        ];
+
     }
 }

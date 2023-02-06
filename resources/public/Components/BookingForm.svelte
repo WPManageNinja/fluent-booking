@@ -31,11 +31,16 @@
                 Schedule Meeting
             </button>
         </div>
+        {#if errors}
+            <div class="fcal_errors">
+                {@html errors}
+            </div>
+        {/if}
     </div>
 </div>
 
 <script>
-    import {util} from '../util.js';
+    import {util, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
 
     export let timezone;
@@ -48,6 +53,8 @@
     let submitting = false;
 
     let dispatch = createEventDispatcher();
+
+    let errors = '';
 
     function submitForm() {
 
@@ -62,12 +69,14 @@
 
         submitting = true;
 
+        errors = '';
+
         util.$post(`slots/${slot.id}/schedule`, postdata)
             .then(res => {
                 dispatch('bookingConfirmed', res);
             })
             .catch(err => {
-                console.log(err);
+                errors = getErrorText(err.response);
             })
             .finally(() => {
                 submitting = false;

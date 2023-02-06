@@ -76,6 +76,7 @@ app.mixin({
             if (!errorMessage) {
                 errorMessage = 'Something is wrong!';
             }
+
             this.$notify({
                 type: 'error',
                 title: 'Error',

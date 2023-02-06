@@ -21,6 +21,7 @@ import {EditPen} from "@element-plus/icons-vue";
 
 export default {
     name: 'EditableSpotData',
+    $emits: ['dataUpdated'],
     components: {
         EditPen
     },
@@ -43,6 +44,10 @@ export default {
                     this.$notify.success(response.message);
                     this.value = this.spot[this.data_key];
                     this.editing = false;
+                    this.$emit('dataUpdated', {
+                        key: this.data_key,
+                        value: this.spot[this.data_key]
+                    });
                 })
                 .catch((errors) => {
                     this.$handleError(errors);

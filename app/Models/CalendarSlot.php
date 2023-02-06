@@ -66,10 +66,18 @@ class CalendarSlot extends Model
             $name = $author->display_name;
         }
 
-        return [
+        $data = [
             'name'   => $name,
             'avatar' => get_avatar_url($author->ID)
         ];
+
+        if(!$public) {
+            $data['email'] = $author->user_email;
+        }
+
+        $data['ID'] = $author->ID;
+
+        return $data;
     }
 
     public function getSlotSettingsSchema()

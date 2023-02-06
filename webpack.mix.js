@@ -35,5 +35,6 @@ mix.js('resources/admin/app.js', 'assets/admin').vue({version: 3})
     .js('resources/admin/global_admin', 'assets/admin')
     .sass('resources/scss/admin.scss', 'admin/admin.css')
     .sass('resources/scss/saas.scss', 'public/saas.css')
+    .sass('resources/scss/saas_public.scss', 'public/saas_public.css')
     .copy('resources/images', 'assets/images')
     .setPublicPath('assets');

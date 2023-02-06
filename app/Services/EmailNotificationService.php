@@ -1,0 +1,83 @@
+<?php
+namespace FluentCalendar\App\Services;
+
+use FluentCalendar\App\App;
+use FluentCalendar\App\Models\Booking;
+use FluentCalendar\App\Models\CalendarSlot;
+
+class EmailNotificationService
+{
+    /**
+     * @param $booking Booking
+     * @param $slot CalendarSlot
+     * @return void
+     */
+    public static function emailToGuestOnBooked($booking, $slot = null)
+    {
+        if (!$slot) {
+            $slot = $booking->slot;
+        }
+
+        $author = $slot->getAuthorProfile(false);
+
+        $data = [
+            'event_name'     => sprintf('%1s meeting with %2s', $slot->title, $author['name']),
+            'event_date'     => $booking->getFullBookingDateTimeText($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')',
+            'event_location' => $booking->getLocationDetailsHtml(),
+            'author_email'   => $author['email'],
+            'booking'        => $booking,
+        ];
+
+        $data = apply_filters('fluent_calendar/booking_confirmation_email_data', $data, $booking, $slot);
+
+        $html = (string) App::make('view')->make('emails.confirmation_to_user', $data);
+        $subject = sprintf(__('Invitation: %1s and %2s @ %3s (%4s)', 'fluent-calendar'), $booking->first_name, $author['name'], $booking->getShortBookingDateTime($booking->person_time_zone), $booking->email);
+
+        $body = (string) App::make('view')->make('emails.template', [
+            'email_body' => $html,
+            'wrapper_heading' => 'Booking Confirmation'
+        ]);
+
+        $emogrifier = new \FluentCrm\App\Services\Libs\Emogrifier\Emogrifier($body);
+        $emogrifier->disableInvisibleNodeRemoval();
+        $body = (string) $emogrifier->emogrify();
+
+        return Mailer::send($booking->email, $subject, $body, $author['name']);
+    }
+
+    public static function emailToAdminOnBooked($booking, $slot = null)
+    {
+        if(!$slot) {
+            $slot = $booking->slot;
+        }
+
+        $author = $slot->getAuthorProfile(false);
+
+        $calendar = $slot->calendar;
+
+        $data = [
+            'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
+            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ')',
+            'event_location' => $booking->getLocationDetailsHtml(),
+            'author_email'   => $author['email'],
+            'booking'        => $booking,
+        ];
+
+        $data = apply_filters('fluent_calendar/booking_confirmation_email_data', $data, $booking, $slot);
+
+        $html = (string) App::make('view')->make('emails.confirmation_to_admin', $data);
+        $subject = sprintf(__('New Booking: %1s @ %2s (%3s)', 'fluent-calendar'), trim($booking->first_name.' '.$booking->last_name), $booking->getShortBookingDateTime($booking->person_time_zone), $booking->email);
+
+        $body = (string) App::make('view')->make('emails.template', [
+            'email_body' => $html,
+            'wrapper_heading' => 'New Booking Confirmed'
+        ]);
+
+        $emogrifier = new \FluentCrm\App\Services\Libs\Emogrifier\Emogrifier($body);
+        $emogrifier->disableInvisibleNodeRemoval();
+        $body = (string) $emogrifier->emogrify();
+
+        return Mailer::send($author['email'], $subject, $body);
+    }
+
+}

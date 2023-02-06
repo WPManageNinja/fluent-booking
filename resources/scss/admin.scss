@@ -12,6 +12,7 @@
 .fcal_section {
   display: block;
   width: 100%;
+
   &.fcal_section_narrow {
     max-width: 1100px;
     margin: 0 auto;
@@ -36,6 +37,7 @@
     overflow: hidden;
     padding: 15px;
     width: auto;
+
     h3 {
       margin: 0;
       padding: 0;
@@ -71,5 +73,52 @@
     }
   }
 }
+
+
+.fcal_all_schediles {
+  display: flex;
+
+  .fcal_schedules {
+    flex: 1;
+  }
+
+  .fcal_spot_details {
+    flex: 3;
+    margin: 0;
+  }
+
+  &.fcal_showing_details {
+    .fcal_spot_actions {
+      display: none;
+    }
+
+    .fcal_spot_color {
+      display: none;
+    }
+
+    .fcal_spot_line {
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+
+    .fcal_schedule {
+      margin: 0;
+    }
+
+    .fcal_schedules {
+      flex: 1;
+      max-height: 85vh;
+      overflow-y: scroll;
+    }
+  }
+
+  .fcal_is_current.fcal_each_spot {
+    background: #f8fafc;
+    .fcal_spot_wrapper {
+      border-left: 4px solid #0169ff;
+    }
+  }
+}
+
 
 

@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Models;
 use FluentCalendar\App\Models\Model;
 use FluentCalendar\App\Services\DateTimeHelper;
 use FluentCalendar\Framework\Database\Orm\DateTime;
+use FluentCalendar\Framework\Support\Arr;
 
 class Booking extends Model
 {
@@ -34,7 +35,7 @@ class Booking extends Model
         'browser',
         'device',
         'other_info',
-        'booking_instructions',
+        'location_details',
         'reminder_stage',
         'last_reminder_sent',
         'next_reminder',
@@ -105,6 +106,63 @@ class Booking extends Model
         $html .= ' - '.DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia').', ';
         $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
         return $html;
+    }
+
+    public function getShortBookingDateTime($timeZone = 'UTC')
+    {
+        // date format for Fri Feb 10, 2023
+        $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'D M d, Y');
+        $html .= ' '.DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
+
+        return $html;
+    }
+
+    public function getLocationDetailsHtml()
+    {
+        $details = $this->location_details;
+
+        if(empty($details['location_type'])) {
+            return 'n/a';
+        }
+
+        $locationType = $details['location_type'];
+
+        if($locationType == 'in_person') {
+            $html = '<b>'.$details['location_heading'].'</b>';
+            if($description = Arr::get($details, 'location_settings.description')) {
+                $html .= wpautop($description);
+            }
+            return $html;
+        }
+
+        if($locationType == 'phone') {
+            $html = '<b>Phone Call: </b>';
+            if(Arr::get($details, 'location_settings.call_type') == 'outbound') {
+                $html .= $this->phone;
+            } else {
+                $html .=  Arr::get($details, 'location_settings.host_phone_number'). ' (Host phone number)';
+            }
+            return $html;
+        }
+
+        if($locationType == 'custom') {
+            $html = '<b>'.Arr::get($details, 'location_heading').'</b>';
+            $html .= wpautop(Arr::get($details, 'location_settings.description'));
+
+            return $html;
+        }
+
+        return '';
+    }
+
+    public function setLocationDetailsAttribute($locationDetails)
+    {
+        $this->attributes['location_details'] = \maybe_serialize($locationDetails);
+    }
+
+    public function getLocationDetailsAttribute($locationDetails)
+    {
+        return \maybe_unserialize($locationDetails);
     }
 
     public function getOngoingStatus()
