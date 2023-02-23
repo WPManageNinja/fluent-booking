@@ -40,4 +40,56 @@ class SanitizeService
 
         return $schedules;
     }
+
+    public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $slot = false)
+    {
+
+        $todayTimeStamp = strtotime(date('Y-m-d'));
+
+        $validOverrides = [];
+        $updatedOverRides = [];
+
+        $isSkipped = false;
+
+        foreach($overrides as $date => $slots) {
+            if(strtotime($date) < $todayTimeStamp) {
+                $isSkipped = true;
+                continue;
+            }
+
+            $utcSlots = [];
+            foreach ($slots as $index => $slot) {
+                $slot['start'] = sanitize_text_field($slot['start']);
+                $slot['end'] = sanitize_text_field($slot['end']);
+
+                if(empty($slot['start']) || empty($slot['end'])) {
+                    unset($slots[$index]);
+                    continue;
+                }
+
+                $utcSlots[] = $slot;
+                if($toTimeZone && $fromTimeZone) {
+                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                }
+
+                $slots[$index] = $slot;
+            }
+
+            if($utcSlots) {
+                $updatedOverRides[$date] = $utcSlots;
+            }
+
+            if($slots) {
+                $validOverrides[$date] = array_values($slots);
+            }
+        }
+
+        if($isSkipped && $fromTimeZone == 'UTC' && $slot) {
+            $slot->settings['date_overrides'] = $updatedOverRides;
+            $slot->save();
+        }
+
+        return $validOverrides;
+    }
 }

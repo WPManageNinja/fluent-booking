@@ -1,0 +1,40 @@
+<?php
+
+namespace FluentCalendar\App\Models;
+class Availability extends Model
+{
+    protected $table = 'fcal_meta';
+
+    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'object_type',
+        'object_id',
+        'key',
+        'value'
+    ];
+
+    public static function boot()
+    {
+        static::creating(function ($model) {
+            $model->object_type = 'availability';
+            $model->key = 'slot_availability';
+        });
+
+        static::updating(function ($model) {
+            $model->object_type = 'availability';
+            $model->key = 'slot_availability';
+        });
+    }
+
+    public function setValueAttribute($value)
+    {
+        $this->attributes['value'] = \maybe_serialize($value);
+    }
+
+    public function getValueAttribute($value)
+    {
+        return \maybe_unserialize($value);
+    }
+
+}

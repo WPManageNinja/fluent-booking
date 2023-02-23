@@ -23,7 +23,7 @@ class TimeSlotService
         $period = $this->calenderSlot->duration;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d');
-        $toDate = $toDate ? $toDate : date('Y-m-t', strtotime($fromDate));
+        $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate));
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 

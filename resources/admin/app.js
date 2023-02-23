@@ -87,6 +87,9 @@ app.mixin({
         toCurrentTimezone(date, format) {
             return dayjs(date).utc('z').local().tz(this.currentTimezone).format(format);
         },
+        toDateFormat(date, format) {
+            return dayjs(date).format(format);
+        },
         getTextFromSlug(slug) {
             return slug.split(/-|_/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         },

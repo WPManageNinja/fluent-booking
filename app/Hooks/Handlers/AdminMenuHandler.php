@@ -64,8 +64,6 @@ class AdminMenuHandler
             ];
         }
 
-
-
 	    $app = App::getInstance();
 	    $assets = $app['url.assets'];
 
@@ -108,7 +106,14 @@ class AdminMenuHandler
 		    true
 	    );
 
-	    $currentUser = get_user_by('ID', get_current_user_id());
+	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
+    }
+
+
+    public function getDashboardVars($app)
+    {
+        $assets = $app['url.assets'];
+        $currentUser = get_user_by('ID', get_current_user_id());
 
         $isNew = $this->isNew();
 
@@ -120,17 +125,17 @@ class AdminMenuHandler
             }
         }
 
-	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', [
-		    'slug'  => $slug = $app->config->get('app.slug'),
-		    'nonce' => wp_create_nonce($slug),
-		    'rest'  => $this->getRestInfo($app),
-		    'brand_logo' => $this->getMenuIcon(),
-		    'asset_url' => $assets,
-		    'me'          => [
-			    'id'        => $currentUser->ID,
-			    'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
-			    'email'     => $currentUser->user_email
-		    ],
+        return [
+            'slug'  => $slug = $app->config->get('app.slug'),
+            'nonce' => wp_create_nonce($slug),
+            'rest'  => $this->getRestInfo($app),
+            'brand_logo' => $this->getMenuIcon(),
+            'asset_url' => $assets,
+            'me'          => [
+                'id'        => $currentUser->ID,
+                'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
+                'email'     => $currentUser->user_email
+            ],
             'is_new' => $isNew,
             'require_slug' => $requireSlug,
             'site_url' => site_url('/'),
@@ -138,7 +143,7 @@ class AdminMenuHandler
             'supported_features' => apply_filters('fluent_calendar/supported_featured', [
                 'multi_users' => false
             ])
-	    ]);
+        ];
     }
 
     protected function getRestInfo($app)

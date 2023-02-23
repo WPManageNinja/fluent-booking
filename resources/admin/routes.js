@@ -4,6 +4,7 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
+import Availabilities from "./Modules/Availability/Availabilities.vue";
 
 export var routes = [
     {
@@ -54,6 +55,14 @@ export var routes = [
         component: AllSchedules,
         meta: {
             active_menu: 'scheduled_events'
+        }
+    },
+    {
+        path: '/availability',
+        name: 'availability',
+        component: Availabilities,
+        meta: {
+            active_menu: 'availability'
         }
     }
 ];

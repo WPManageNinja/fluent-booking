@@ -3,6 +3,7 @@
 namespace FluentCalendar\App\Services;
 
 use FluentCalendar\App\Models\Calendar;
+use FluentCalendar\App\Models\Meta;
 
 class Helper
 {
@@ -613,20 +614,20 @@ class Helper
             'yourusername'
         ];
 
-        if(in_array($slug, $reserved)) {
+        if (in_array($slug, $reserved)) {
             return false;
         }
 
-        if(strlen($slug) < 4) {
+        if (strlen($slug) < 4) {
             return false;
         }
 
-        if($checkDb && Calendar::where('slug', $slug)->first()) {
+        if ($checkDb && Calendar::where('slug', $slug)->first()) {
             return false;
         }
 
 
-        if(is_numeric($slug)) {
+        if (is_numeric($slug)) {
             return false;
         }
 
@@ -634,7 +635,52 @@ class Helper
         return preg_match('/^[a-zA-Z0-9_-]+$/', $slug);
     }
 
-    public static function getAppBaseUrl($extension = '') {
-        return apply_filters('fluent_calendar/admin_base_url', admin_url('admin.php?page=fluent-calendar#/'.$extension));
+    public static function getAppBaseUrl($extension = '')
+    {
+        return apply_filters('fluent_calendar/admin_base_url', admin_url('admin.php?page=fluent-calendar#/' . $extension));
+    }
+
+    public static function getMeta($group, $objectId, $key, $withModel = false)
+    {
+        $meta = Meta::where('object_type', $group)
+            ->where('object_id', $objectId)
+            ->where('key', $key)
+            ->first();
+
+        if ($meta) {
+            if ($withModel) {
+                return $meta;
+            }
+
+            return $meta->value;
+        }
+
+        return null;
+    }
+
+    public static function updateMeta($group, $objectId, $key, $value)
+    {
+        $meta = self::getMeta($group, $objectId, $key, true);
+
+        if ($meta) {
+            $meta->value = $value;
+            $meta->save();
+            return $meta;
+        }
+
+        return Meta::create([
+            'object_type' => $group,
+            'key'         => $key,
+            'object_id'   => $objectId,
+            'value'       => $value
+        ]);
+    }
+
+    public static function deleteMeta($group, $objectId, $key)
+    {
+        return Meta::where('object_type', $group)
+            ->where('object_id', $objectId)
+            ->where('key', $key)
+            ->delete();
     }
 }
