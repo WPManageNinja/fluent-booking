@@ -8,12 +8,23 @@
                 </el-breadcrumb>
             </div>
             <div class="fcal_actions">
-                <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Save Event Settings</el-button>
             </div>
         </div>
         <div v-if="slot" class="fcal_section_body">
-            <slot-settings-from :slot="slot" />
-            <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Save Event Settings</el-button>
+
+            <el-tabs v-model="activeTab">
+                <el-tab-pane name="info" label="Event Information">
+                    <basic-info :slot="slot" />
+                    <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Save Event Settings</el-button>
+                </el-tab-pane>
+                <el-tab-pane name="schedule" label="Scheduling Settings">
+                    <slot-settings-from :slot="slot" />
+                    <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Save Event Settings</el-button>
+                </el-tab-pane>
+                <el-tab-pane name="notification" label="Notification Settings">
+                    <notification-settings v-if="activeTab == 'notification'" :slot="slot" />
+                </el-tab-pane>
+            </el-tabs>
         </div>
         <div class="fcal_section_body" v-else-if="loading">
             <el-skeleton :rows="1" animated />
@@ -25,18 +36,23 @@
 
 <script type="text/babel">
 import SlotSettingsFrom from './_SlotSettingsForm.vue';
+import BasicInfo from './_BasicInfo.vue'
+import NotificationSettings from './_NotificationSettings.vue'
 
 export default {
     name: 'SlotSettings',
     props: ['slot_id', 'calendar_id'],
     components: {
-        SlotSettingsFrom
+        SlotSettingsFrom,
+        BasicInfo,
+        NotificationSettings
     },
     data() {
         return {
             slot: null,
             loading: true,
-            saving: false
+            saving: false,
+            activeTab: 'schedule'
         }
     },
     methods: {

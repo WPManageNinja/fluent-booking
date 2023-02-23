@@ -1,0 +1,242 @@
+<template>
+    <div>
+        <p v-if="!overrides.length">Add dates when your availability changes from your weekly hours</p>
+        <el-button @click="showModal()" plain type="primary">Add a date override</el-button>
+        <table style="font-size: 85%; margin-top: 20px;" class="fcal_table fcal_table_compact fcal_table_stripe">
+            <tbody>
+                <tr v-for="item in overrides" style="cursor: pointer;">
+                    <td @click="showSlotEdit(item)">{{item.label}}</td>
+                    <td @click="showSlotEdit(item)" style="text-align: right;">
+                        <ul class="fcal_slots_list">
+                            <li v-for="slot in item.slots">
+                                {{toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')}}
+                            </li>
+                        </ul>
+                    </td>
+                    <td style="width: 20px; padding: 5px 0;"><el-button @click="deleteOverRide(item)" size="small" :icon="DeleteIcon" text></el-button></td>
+                </tr>
+            </tbody>
+        </table>
+        <el-dialog width="50%" v-model="modal_visible" :append-to-body="true" title="Select the date(s) you want to assign specific hours">
+            <div v-if="modal_visible" class="fcal_cal_wrapper">
+                <el-calendar v-model="current_date" ref="calendar">
+                    <template #header="{ date }">
+                        <span>{{ date }}</span>
+                        <el-button-group>
+                            <el-button size="small" @click="selectDate('prev-month')">
+                                <el-icon><ArrowLeft /></el-icon>
+                            </el-button>
+                            <el-button size="small" @click="selectDate('next-month')">
+                                <el-icon><ArrowRight /></el-icon>
+                            </el-button>
+                        </el-button-group>
+                    </template>
+                    <template #date-cell="{ data }">
+                        <p @click="toggleSelect(data)" :class="{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }">
+                            {{ data.date.getDate() }}
+                            {{ (current_selects.indexOf(data.day) > -1) ? '✔️' : '' }}
+                        </p>
+                    </template>
+                </el-calendar>
+            </div>
+            <div v-if="current_selects.length">
+                <h3>What hours are you available?</h3>
+                <div class="fcal_weekly_schedules">
+                    <DayOverRideConfig day_label="" :slots="slots" />
+                </div>
+            </div>
+
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="modal_visible = false">Cancel</el-button>
+                    <el-button :disabled="!current_selects.length" type="primary" @click="addOverRides()">Add</el-button>
+                </span>
+            </template>
+        </el-dialog>
+    </div>
+</template>
+
+<script type="text/babel">
+import {ArrowRight, ArrowLeft } from '@element-plus/icons-vue';
+import DayOverRideConfig from './__DayOverRideConfig.vue';
+import each from 'lodash/each';
+import {
+    Delete
+} from '@element-plus/icons-vue'
+import {markRaw} from "vue";
+
+
+export default {
+    name: 'DateOverRides',
+    props: ['settings'],
+    components: {
+        ArrowRight,
+        ArrowLeft,
+        DayOverRideConfig
+    },
+    data() {
+        return {
+            current_selects: [],
+            modal_visible: false,
+            slots: [{
+                start: '',
+                end: ''
+            }],
+            DeleteIcon: markRaw(Delete),
+            current_date: '',
+            existing_dates: []
+        }
+    },
+    computed: {
+        overrides() {
+            const overrides = JSON.parse(JSON.stringify(this.settings.date_overrides));
+            const formatted = [];
+            let firstDay = false;
+
+            let dateGroups = [];
+
+            // group the overrides by consecutive days and if the values are same. The keys are date like 2021-01-01
+            each(overrides, (slot, day) => {
+                if(!firstDay) {
+                    firstDay = day;
+                }
+
+                dateGroups.push(day);
+
+                let nextDay = new Date(day);
+                nextDay.setDate(nextDay.getDate() + 1);
+
+                nextDay = nextDay.toISOString().slice(0, 10);
+
+                if(JSON.stringify(overrides[day]) === JSON.stringify(overrides[nextDay])) {
+                    return;
+                }
+
+                let label = this.toDateFormat(day, 'D MMM, YYYY ');
+
+                if(firstDay != day) {
+                    label = this.toDateFormat(firstDay, 'D MMM ') + ' - ' + label;
+                }
+
+                formatted.push({
+                    dates: dateGroups,
+                    label: label,
+                    slots: overrides[day]
+                });
+                firstDay = false;
+                dateGroups = [];
+            });
+
+            return formatted;
+        }
+    },
+    methods: {
+        showModal() {
+            this.slots = [{
+                start: '',
+                end: ''
+            }];
+            this.current_selects = [];
+            this.existing_dates = [];
+            this.current_date = '';
+            this.modal_visible = true;
+        },
+        toggleSelect(data) {
+            const day = data.day
+            if (this.isPastDate(data.date)) {
+                return;
+            }
+            const index = this.current_selects.indexOf(day);
+            if (index > -1) {
+                this.current_selects.splice(index, 1);
+            } else {
+                this.current_selects.push(day);
+            }
+        },
+        isPastDate(date) {
+            // check if it's yesterday or earlier
+            return date < new Date(new Date().setDate(new Date().getDate() - 1));
+        },
+        selectDate(val) {
+            this.$refs.calendar.selectDate(val);
+        },
+        addOverRides() {
+            if (!this.current_selects.length) {
+                this.$notify.error('Please select a date first');
+                return;
+            }
+
+            console.log(this.existing_dates);
+
+            each(this.existing_dates, (date) => {
+                delete this.settings.date_overrides[date];
+            });
+
+            each(this.current_selects, (day) => {
+                this.settings.date_overrides[day] = JSON.parse(JSON.stringify(this.slots));
+            });
+
+            this.settings.date_overrides = Object.keys(this.settings.date_overrides).sort().reduce(
+                (obj, key) => {
+                    obj[key] = this.settings.date_overrides[key];
+                    return obj;
+                },
+                {}
+            );
+
+            this.modal_visible = false;
+            this.current_selects = [];
+            this.slots = [{
+                start: '',
+                end: ''
+            }];
+        },
+        deleteOverRide(item) {
+            each(item.dates, (date) => {
+               delete this.settings.date_overrides[date];
+            });
+        },
+        showSlotEdit(item) {
+            this.current_selects = JSON.parse(JSON.stringify(item.dates));
+            this.existing_dates = JSON.parse(JSON.stringify(item.dates));
+            this.slots = JSON.parse(JSON.stringify(item.slots));
+            this.modal_visible = true;
+            this.current_date = this.current_selects[0];
+        }
+    }
+}
+</script>
+
+<style lang="scss">
+
+.fcal_cal_wrapper {
+    max-width: 100%;
+    width: 500px;
+    .el-calendar-table .el-calendar-day {
+        height: 40px;
+    }
+}
+
+.el-calendar-day:has(>.fcal_date_disabled) {
+    color: #b8b6b6;
+    cursor: not-allowed !important;
+}
+.el-calendar-day {
+    position: relative;
+    > p {
+        position: absolute;
+        margin: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding-top: 10px;
+        &.is-selected {
+            background-color: #5092e9;
+            color: white;
+        }
+    }
+}
+</style>

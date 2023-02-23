@@ -132,6 +132,8 @@ class CalendarController extends Controller
 
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
 
+        $slotSettings['date_overrides'] = (object) SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
+
         $slot->settings = $slotSettings;
 
         return [
@@ -207,6 +209,7 @@ class CalendarController extends Controller
         $slot->settings = [
             'schedule_type'    => sanitize_text_field($data['settings']['schedule_type']),
             'weekly_schedules' => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $slot->calendar->author_timezone, 'UTC'),
+            'date_overrides' => SanitizeService::slotDateOverrides($data['settings']['date_overrides'], $slot->calendar->author_timezone, 'UTC')
         ];
 
         $slot->title = sanitize_text_field($data['title']);
@@ -238,5 +241,44 @@ class CalendarController extends Controller
             'message' => 'Data has been updated'
         ];
 
+    }
+
+    public function getSlotNotifications(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        /*
+         * Confirmation Email to Attendee
+         * Confirmation Email to Organizer
+         * Reminder Email to Attendee [before 1 day, 1 hour, 30 minutes, 5 minutes]
+         * Cancelled By Organizer to Attendee
+         * Cancelled By Attendee to Organizer
+         */
+
+        return [
+            'notifications' => $slot->getNotifications()
+        ];
+    }
+
+    public function saveSlotNotifications(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $notifications = $request->get('notifications');
+
+        $formattedNotifications = [];
+
+        foreach ($notifications as $key => $value) {
+            $formattedNotifications[$key] = [
+                'title' => sanitize_text_field($value['title']),
+                'enabled' => Arr::isTrue($value, 'enabled'),
+            ];
+        }
+
+        $slot->setNotifications($formattedNotifications);
+
+        return [
+            'message' => 'Notifications has been saved'
+        ];
     }
 }

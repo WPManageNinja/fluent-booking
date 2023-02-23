@@ -22,8 +22,7 @@
                         <div v-if="slot.status == 'active'" class="fcal_shortcode">
                             <el-button @click="copyTo(slot.public_url)" text>
                                 <el-icon><CopyDocument /></el-icon>
-                                <span v-if="isCopied">Copied</span>
-                                <span v-else>Copy Link</span>
+                                <span>Copy Link</span>
                             </el-button>
                         </div>
                         <div v-else>

@@ -42,6 +42,7 @@ class BookingMigrator
                 `reminder_stage` VARCHAR(192) NULL DEFAULT 'init',
                 `last_reminder_sent` TIMESTAMP NULL,
                 `next_reminder` TIMESTAMP NULL,
+                `last_admin_reminder_sent` TIMESTAMP NULL,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'scheduled',
                 `source` VARCHAR(20) NOT NULL DEFAULT 'web',
                 `source_id` BIGINT(20) UNSIGNED NULL,

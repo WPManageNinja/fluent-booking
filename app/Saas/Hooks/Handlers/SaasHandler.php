@@ -8,31 +8,33 @@ use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
+use FluentCalendar\App\Services\Helper;
 
 class SaasHandler
 {
     public function register()
     {
-      //  add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
+        add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
 
         add_action('init', [$this, 'registerDashboardRoute'], 1);
+
+        add_shortcode('fluent_calendar_dashboard', [$this, 'renderDashboard']);
 
     }
 
     public function registerDashboardRoute()
     {
-        if(!defined('FLUENT_ADMIN_PAGE_ID')) {
+        if (!defined('FLUENT_ADMIN_PAGE_ID')) {
             return;
         }
 
-      //  add_rewrite_tag( '%board_hash%', '([^&]+)');
-        add_rewrite_tag( '%is_cal_page%', '([^&]+)');
+        add_rewrite_tag('%is_cal_page%', '([^&]+)');
 
         //add rewrite rule that matches /boards
-        add_rewrite_rule('^calendar/?','index.php?page_id='.FLUENT_ADMIN_PAGE_ID.'&is_cal_page=1','top');
+        add_rewrite_rule('^calendar/?', 'index.php?page_id=' . FLUENT_ADMIN_PAGE_ID . '&is_cal_page=1', 'top');
 
         //add endpoint, in this case 'blog' to satisfy our rewrite rule /blog, /blog/page/ etc..
-        add_rewrite_endpoint( 'calendar', EP_PERMALINK | EP_PAGES );
+        add_rewrite_endpoint('calendar', EP_PERMALINK | EP_PAGES);
     }
 
     public function maybeCalendarView()
@@ -41,6 +43,11 @@ class SaasHandler
         // remove starting / and end / from $uri
         $uri = trim($wp->request, '/');
         $urlParts = explode('/', $uri);
+
+        if ($urlParts[0] == 'calendar') {
+            $this->renderDashboard();
+        }
+
         if (count($urlParts) < 2) {
             return;
         }
@@ -58,12 +65,12 @@ class SaasHandler
             return;
         }
 
-        if(!empty($_REQUEST['booking_id'])) {
+        if (!empty($_REQUEST['booking_id'])) {
             $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
             $booking = Booking::where('hash', $bookingHash)
                 ->where('slot_id', $slot->id)
                 ->first();
-            if($booking) {
+            if ($booking) {
                 $this->showBookingConfimationPage($booking, $slot);
             }
         }
@@ -76,30 +83,30 @@ class SaasHandler
         $slot->description = wpautop($slot->description);
 
         $data = [
-            'calendar' => $calendar,
-            'slot' => $slot,
-            'author' => $authorProfile,
-            'title' => $slot->title . ' with ' . $authorProfile['name'],
-            'description' => substr(strip_shortcodes( strip_tags( str_replace(PHP_EOL, ' ', $slot->description) ) ), 0, 300).'...',
-            'url' => home_url($wp->request),
-            'css_files' => [
+            'calendar'    => $calendar,
+            'slot'        => $slot,
+            'author'      => $authorProfile,
+            'title'       => $slot->title . ' with ' . $authorProfile['name'],
+            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $slot->description))), 0, 300) . '...',
+            'url'         => home_url($wp->request),
+            'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
-            'js_files' => [
+            'js_files'    => [
                 App::getInstance('url.assets') . 'public/js/app.js'
             ],
-            'js_vars' => [
-                'fcal_public_vars_'.$calendar->id . '_'.$slot->id => [
+            'js_vars'     => [
+                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => [
                     'slot'           => $slot,
                     'calendar'       => $calendar,
                     'author_profile' => $authorProfile,
-                    'form_fields' => $formFields
+                    'form_fields'    => $formFields
                 ],
-                'fluentCalendarPublicVars' => $this->getGlobalVars()
+                'fluentCalendarPublicVars'                            => $this->getGlobalVars()
             ]
         ];
 
-        status_header( 200 );
+        status_header(200);
         $this->render('booking', $data);
         exit(200);
     }
@@ -111,19 +118,19 @@ class SaasHandler
 
         $authorProfile = $slot->getAuthorProfile(true);
 
-        status_header( 200 );
+        status_header(200);
         $this->render('confirmation_page', [
-            'title' => 'Confirmation: '.$slot->title . ' with ' . $authorProfile['name'],
-            'body' => $responseHtml,
-            'description' => substr(strip_shortcodes( strip_tags( str_replace(PHP_EOL, ' ', $slot->description) ) ), 0, 300).'...',
-            'css_files' => [
+            'title'       => 'Confirmation: ' . $slot->title . ' with ' . $authorProfile['name'],
+            'body'        => $responseHtml,
+            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $slot->description))), 0, 300) . '...',
+            'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
-            'js_files' => [],
-            'js_vars' => [],
-            'author' => $authorProfile,
-            'slot' => $slot,
-            'url' => home_url($wp->request),
+            'js_files'    => [],
+            'js_vars'     => [],
+            'author'      => $authorProfile,
+            'slot'        => $slot,
+            'url'         => home_url($wp->request),
         ]);
         exit(200);
 
@@ -138,34 +145,128 @@ class SaasHandler
 
         $rest = [
             'base_url'  => esc_url_raw(rest_url()),
-            'url'       => rest_url($ns . '/' . $ver).'/public',
+            'url'       => rest_url($ns . '/' . $ver) . '/public',
             'nonce'     => wp_create_nonce('wp_rest'),
             'namespace' => $ns,
             'version'   => $ver
         ];
 
         $currentPerson = [
-            'name' => '',
+            'name'  => '',
             'email' => ''
         ];
 
-        if(is_user_logged_in()) {
+        if (is_user_logged_in()) {
             $currentUser = wp_get_current_user();
             $name = trim($currentUser->first_name . ' ' . $currentUser->last_name);
             $currentPerson = [
-                'name' => $name ? $name : $currentUser->display_name,
-                'email' => $currentUser->user_email,
+                'name'    => $name ? $name : $currentUser->display_name,
+                'email'   => $currentUser->user_email,
                 'user_id' => $currentUser->ID
             ];
         }
 
         return [
-            'rest' => $rest,
-            'timezones' => DateTimeHelper::getFlatGroupedTimeZones(),
+            'rest'           => $rest,
+            'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson
         ];
     }
 
+    public function renderDashboard()
+    {
+
+        $userId = get_current_user_id();
+
+        if(!$userId) {
+            wp_redirect(site_url('login'));
+            exit();
+        }
+
+        $config = App::getInstance('config');
+
+        $name = 'ConvertLeap';
+
+        $slug = $config->get('app.slug');
+
+        $baseUrl = Helper::getAppBaseUrl();
+
+        if ($this->isNew()) {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Getting Started', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+            ];
+        } else {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Dashboard', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+                [
+                    'key'       => 'calendars',
+                    'label'     => __('Booking Types', 'fluent-calendar'),
+                    'permalink' => $baseUrl . 'calendars'
+                ],
+                [
+                    'key'       => 'scheduled_events',
+                    'label'     => __('Scheduled Events', 'fluent-calendar'),
+                    'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me'
+                ]
+            ];
+        }
+
+        $app = App::getInstance();
+        $assets = $app['url.assets'];
+
+        $body = App::make('view')->make('admin.menu', [
+            'name'      => $name,
+            'slug'      => $slug,
+            'menuItems' => $menuItems,
+            'baseUrl'   => $baseUrl,
+            'logo'      => $assets . 'images/logo.svg',
+        ]);
+
+        $calendar = Calendar::where('user_id', get_current_user_id())->first();
+
+        $authorProfile = $calendar->getAuthorProfile(true);
+
+        $appVars = (new \FluentCalendar\App\Hooks\Handlers\AdminMenuHandler)->getDashboardVars($app);
+
+        $appVars['name'] = 'ConvertLeap';
+
+        status_header(200);
+        $this->render('dashboard_app', [
+            'title'       => $name,
+            'body'        => $body,
+            'description' => '',
+            'author'      => $authorProfile,
+            'url'         => $baseUrl,
+            'css_files'   => [
+                $assets . 'admin/admin.css',
+                $assets . 'public/saas_admin.css'
+            ],
+            'js_vars'     => [
+                'fluentFrameworkAdmin' => $appVars
+            ],
+            'js_files'    => [
+                //'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
+                site_url('wp-includes/js/jquery/jquery.min.js'),
+                $assets . 'admin/app.js'
+            ]
+        ]);
+        exit(200);
+
+    }
+
+    protected function isNew()
+    {
+        $userId = get_current_user_id();
+        return !Calendar::where('user_id', $userId)->first();
+    }
 
     public function render($file, $data = [])
     {

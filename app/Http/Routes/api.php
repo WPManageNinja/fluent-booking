@@ -20,6 +20,10 @@ $router->prefix('calendars')->withPolicy('AdminPolicy')->group(function ($router
     $router->post('/{id}/slots/{slot_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('slot_id');
     $router->put('/{id}/slots/{slot_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('slot_id');
 
+    $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
+    $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
+
+
 });
 
 $router->prefix('schedules')->withPolicy('AdminPolicy')->group(function ($router) {

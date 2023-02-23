@@ -36,6 +36,12 @@ body * {
   box-sizing: border-box;
 }
 
+p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 1em 0;
+}
+
 .fluent_calendar_app {
   max-width: 800px;
   margin: 66px auto 30px;

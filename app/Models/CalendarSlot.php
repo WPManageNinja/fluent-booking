@@ -3,6 +3,7 @@
 namespace FluentCalendar\App\Models;
 
 use FluentCalendar\App\Models\Model;
+use FluentCalendar\App\Services\Helper;
 
 class CalendarSlot extends Model
 {
@@ -123,8 +124,59 @@ class CalendarSlot extends Model
                     'enabled' => false,
                     'slots'   => []
                 ],
-            ]
+            ],
+            'date_overrides'   => [],
         ];
     }
 
+    public function getNotifications($isView = false)
+    {
+        $statuses = Helper::getMeta('calendar_slot', $this->id, 'notification_statuses');
+
+        $defaults = [
+            'booking_conf_attendee' => [
+                'enabled' => true,
+                'title' => 'Booking Confirmation to Attendee'
+            ],
+            'booking_conf_host' => [
+                'enabled' => true,
+                'title' => 'Booking Confirmation to Organizer (You)'
+            ],
+            'reminder_1_hour_attendee' => [
+                'enabled' => true,
+                'title' => 'Reminder 1 Hour Before to Attendee'
+            ],
+            'reminder_15_min_attendee' => [
+                'enabled' => false,
+                'title' => 'Reminder 15 Minutes Before to Attendee'
+            ],
+            'reminder_1_hour_host' => [
+                'enabled' => true,
+                'title' => 'Reminder 1 Hour Before to Organizer (You)'
+            ],
+            'reminder_15_min_host' => [
+                'enabled' => false,
+                'title' => 'Reminder 15 Minutes Before to Organizer (You)'
+            ],
+            'cancelled_by_attendee' => [
+                'enabled' => true,
+                'title' => 'Booking Cancelled by Attendee (email to Organizer)'
+            ],
+            'cancelled_by_host' => [
+                'enabled' => true,
+                'title' => 'Booking Cancelled by Organizer (email to Attendee)'
+            ]
+        ];
+
+        if(!$statuses) {
+            return $defaults;
+        }
+
+        return wp_parse_args($statuses, $defaults);
+    }
+
+    public function setNotifications($notifications)
+    {
+        $statuses = Helper::updateMeta('calendar_slot', $this->id, 'notification_statuses', $notifications);
+    }
 }
