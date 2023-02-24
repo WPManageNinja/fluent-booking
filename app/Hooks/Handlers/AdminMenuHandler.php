@@ -58,7 +58,7 @@ class AdminMenuHandler
                 ],
                 [
                     'key'       => 'scheduled_events',
-                    'label'     => __('Scheduled Events', 'fluent-calendar'),
+                    'label'     => __('Scheduled Meetings', 'fluent-calendar'),
                     'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
                 ]
             ];
