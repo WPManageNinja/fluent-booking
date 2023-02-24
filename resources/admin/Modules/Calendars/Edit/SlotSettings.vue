@@ -52,7 +52,7 @@ export default {
             slot: null,
             loading: true,
             saving: false,
-            activeTab: 'schedule'
+            activeTab: 'info'
         }
     },
     methods: {

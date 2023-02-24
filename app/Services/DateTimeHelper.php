@@ -82,4 +82,11 @@ class DateTimeHelper
         return $dateTime->format($format);
     }
 
+    public static function getTimestamp($timezone = 'UTC')
+    {
+        $dateTime = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
+        $dateTime->setTimezone(new \DateTimeZone($timezone));
+        $date = $dateTime->format('Y-m-d H:i:s');
+        return strtotime($date);
+    }
 }
