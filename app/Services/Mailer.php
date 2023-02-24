@@ -8,6 +8,6 @@ class Mailer
     {
         $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
-        return wp_mail($to, $subject, $body, $headers);
+        return wp_mail($to, $subject, $body, $headers, $attachments);
     }
 }
