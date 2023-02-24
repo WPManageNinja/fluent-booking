@@ -16,25 +16,7 @@ class SaasHandler
     {
         add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
 
-        add_action('init', [$this, 'registerDashboardRoute'], 1);
-
         add_shortcode('fluent_calendar_dashboard', [$this, 'renderDashboard']);
-
-    }
-
-    public function registerDashboardRoute()
-    {
-        if (!defined('FLUENT_ADMIN_PAGE_ID')) {
-            return;
-        }
-
-        add_rewrite_tag('%is_cal_page%', '([^&]+)');
-
-        //add rewrite rule that matches /boards
-        add_rewrite_rule('^calendar/?', 'index.php?page_id=' . FLUENT_ADMIN_PAGE_ID . '&is_cal_page=1', 'top');
-
-        //add endpoint, in this case 'blog' to satisfy our rewrite rule /blog, /blog/page/ etc..
-        add_rewrite_endpoint('calendar', EP_PERMALINK | EP_PAGES);
     }
 
     public function maybeCalendarView()
