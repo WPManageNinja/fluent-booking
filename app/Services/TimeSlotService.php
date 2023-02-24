@@ -123,7 +123,7 @@ class TimeSlotService
         $start = null;
         $end = null;
 
-        $cutoutTime = strtotime($fromDate) + $this->calenderSlot->getCutoutSeconds();
+        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calenderSlot->getCutoutSeconds();
 
         foreach ($slots as $spots) {
 

@@ -34,12 +34,8 @@ class BookingService
             $defaults['slot_minutes'] = $calendarSlot->duration;
         }
 
-        $data['start_time'] = DateTimeHelper::convertToUtc($data['start_time'], $data['person_time_zone']);
-
         if (empty($data['end_time'])) {
             $defaults['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($calendarSlot->duration * 60));
-        } else {
-            $defaults['end_time'] = DateTimeHelper::convertToUtc($data['end_time'], $data['person_time_zone']);
         }
 
         if (!isset($data['person_user_id'])) {
