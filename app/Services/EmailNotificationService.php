@@ -42,7 +42,25 @@ class EmailNotificationService
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string) $emogrifier->emogrify();
 
-        return Mailer::send($booking->email, $subject, $body, $author['name']);
+        $to = $booking->email;
+
+        if($booking->first_name && $booking->last_name) {
+            $to = sprintf('%1s %2s <%3s>', $booking->first_name, $booking->last_name, $booking->email);
+        } else if($booking->first_name) {
+            $to = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
+        }
+
+        // add reply to header
+        $replyTo = $author['email'];
+        if($author['name']) {
+            $replyTo = sprintf('%1s <%2s>', $author['name'], $author['email']);
+        }
+
+        $headers = [
+            'Reply-To: ' . $replyTo
+        ];
+
+        return Mailer::send($to, $subject, $body, $headers);
     }
 
     public static function emailToAdminOnBooked($booking, $slot = null)
@@ -77,7 +95,25 @@ class EmailNotificationService
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string) $emogrifier->emogrify();
 
-        return Mailer::send($author['email'], $subject, $body);
+        // add reply to header
+        $replyTo = $booking->email;
+        if($booking->first_name && $booking->last_name) {
+            $replyTo = sprintf('%1s %2s <%3s>', $booking->first_name, $booking->last_name, $booking->email);
+        } else if($booking->first_name) {
+            $replyTo = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
+        }
+
+        $headers = [
+            'Reply-To: ' . $replyTo
+        ];
+
+        $to = $author['email'];
+
+        if($author['name']) {
+            $to = sprintf('%1s <%2s>', $author['name'], $author['email']);
+        }
+
+        return Mailer::send($to, $subject, $body, $headers);
     }
 
 }
