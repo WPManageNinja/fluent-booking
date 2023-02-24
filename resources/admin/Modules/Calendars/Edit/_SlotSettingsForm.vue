@@ -25,6 +25,40 @@
                         </el-col>
                     </el-row>
                 </template>
+                <h3 style="margin-top: 20px;">Date Range</h3>
+                <el-form-item label="Invitees can schedule...">
+                    <el-radio-group v-model="slot.settings.range_type">
+                        <el-radio-button label="range_days">
+                            Within future days
+                        </el-radio-button>
+                        <el-radio-button label="range_date_between">
+                            Within a Date Range
+                        </el-radio-button>
+                        <el-radio-button label="range_indefinite">
+                            Indefinitely into the future
+                        </el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="slot.settings.range_type == 'range_days'">
+                    <div style="max-width: 500px;">
+                        <el-input placeholder="ex: 60" type="number" v-model="slot.settings.range_days">
+                            <template #append>days into the future</template>
+                        </el-input>
+                    </div>
+                </el-form-item>
+                <el-form-item label="Select the available date range" v-else-if="slot.settings.range_type == 'range_date_between'">
+                    <div style="max-width: 500px;">
+                        <el-date-picker
+                            v-model="slot.settings.range_date_between"
+                            type="daterange"
+                            value-format="YYYY-MM-DD"
+                            range-separator="To"
+                            :disabled-date="disabledDate"
+                            start-placeholder="Start date"
+                            end-placeholder="End date"
+                        />
+                    </div>
+                </el-form-item>
             </el-form>
         </div>
     </div>
@@ -51,6 +85,11 @@ export default {
                     author_timezone: ''
                 }
             }
+        }
+    },
+    methods: {
+        disabledDate(time) {
+            return (time.getTime() + 86400000) <= Date.now();
         }
     }
 }

@@ -6,7 +6,7 @@ use FluentCalendar\Framework\Support\Arr;
 
 class SanitizeService
 {
-    public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false)
+    public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = true)
     {
         foreach ($schedules as &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
@@ -19,8 +19,10 @@ class SanitizeService
             $schedule['enabled'] = true;
 
             foreach ($schedule['slots'] as $index => $slot) {
-                $slot['start'] = sanitize_text_field($slot['start']);
-                $slot['end'] = sanitize_text_field($slot['end']);
+                if($fromUser) {
+                    $slot['start'] = sanitize_text_field($slot['start']);
+                    $slot['end'] = sanitize_text_field($slot['end']);
+                }
 
                 if(!$slot['start'] || ! $slot['end']) {
                     unset($schedule['slots'][$index]);
@@ -68,7 +70,7 @@ class SanitizeService
                 }
 
                 $utcSlots[] = $slot;
-                if($toTimeZone && $fromTimeZone) {
+                if($toTimeZone && $fromTimeZone && $toTimeZone != $fromTimeZone) {
                     $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
                     $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
                 }
@@ -91,5 +93,21 @@ class SanitizeService
         }
 
         return $validOverrides;
+    }
+
+
+    public static function rangeDateBetween($range)
+    {
+        $range = array_filter($range);
+        if( !$range || count($range) != 2 ) {
+            return ['', ''];
+        }
+
+        $range = array_values($range);
+
+        $range[0] = date('Y-m-d H:i:s', strtotime(sanitize_text_field($range[0])));
+        $range[1] = date('Y-m-d H:i:s', strtotime(sanitize_text_field($range[1])));
+
+        return $range;
     }
 }

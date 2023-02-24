@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Services;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\Framework\Support\Arr;
 
 class TimeSlotService
 {
@@ -27,33 +28,33 @@ class TimeSlotService
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
-        $weekends = $this->getWeekends();
-        $holidays = $this->getPublicHolidays();
-
-        if ($weekends && $holidays) {
-            $ranges = array_filter($ranges, function ($date) use ($weekends, $holidays) {
-                $day = strtolower(date('D', strtotime($date)));
-                return !in_array($day, $weekends) && !in_array($date, $holidays);
-            });
-
-            $ranges = array_values($ranges);
-        }
-
         $daySlots = $this->getWeekDaySlots();
-        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate]);
+        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone);
 
         $rangedValidSlots = [];
 
         $fromValidTimeStamp = time() + 60 * 60 * 3; // 3 hours after now
 
+        $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
+
+        $overrides = Arr::get($this->calenderSlot->settings, 'date_overrides', []);
+
         foreach ($ranges as $date) {
 
-            $day = strtolower(date('D', strtotime($date)));
-            if (empty($daySlots[$day])) {
-                continue;
+            if($overrides && isset($overrides[$date])) {
+                $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
+            } else {
+                $day = strtolower(date('D', strtotime($date)));
+                if (empty($daySlots[$day])) {
+                    continue;
+                }
+
+                $availableSlots = $daySlots[$day];
             }
 
-            $availableSlots = $daySlots[$day];
+            if(!$availableSlots) {
+                continue;
+            }
 
             $currentBookedSlots = [];
 
@@ -61,7 +62,7 @@ class TimeSlotService
                 $currentBookedSlots = $bookedSlots[$date];
             }
 
-            $isToday = $date === date('Y-m-d');
+            $isToday = $date === $todayDate;
 
             $validSlots = [];
             foreach ($availableSlots as $start) {
@@ -104,7 +105,9 @@ class TimeSlotService
                 }
             }
 
-            $rangedValidSlots[$date] = $validSlots;
+            if($validSlots) {
+                $rangedValidSlots[$date] = $validSlots;
+            }
         }
 
         return $rangedValidSlots;
@@ -112,6 +115,9 @@ class TimeSlotService
 
     public function isSpotAvailable($fromDate, $toDate)
     {
+        $fromDate = DateTimeHelper::convertToTimeZone($fromDate, 'UTC', $this->calendar->author_timezone);
+        $toDate = DateTimeHelper::convertToTimeZone($toDate, 'UTC', $this->calendar->author_timezone);
+
         $slots = $this->getDates($fromDate, $toDate);
 
         $start = null;
@@ -154,29 +160,6 @@ class TimeSlotService
         return false;
     }
 
-    private function getWeekends()
-    {
-        return ['sat', 'sun'];
-    }
-
-    private function getPublicHolidays()
-    {
-        return [
-            '2023-01-01',
-            '2023-01-18',
-            '2023-02-15',
-            '2023-04-02',
-            '2023-04-05',
-            '2023-05-13',
-            '2023-05-24',
-            '2023-09-06',
-            '2023-10-04',
-            '2023-11-01',
-            '2023-12-25',
-            '2023-12-26'
-        ];
-    }
-
     protected function getCurrentDateRange($startDate = false, $endDate = false)
     {
         $today = new \DateTime($startDate);
@@ -197,7 +180,7 @@ class TimeSlotService
         return $date_array;
     }
 
-    protected function getBookedSlots($dateRange)
+    protected function getBookedSlots($dateRange, $toTimeZone = false)
     {
         $bookings = Booking::where('slot_id', $this->calenderSlot->id)
             ->whereBetween('start_time', $dateRange)
@@ -208,6 +191,9 @@ class TimeSlotService
         $books = [];
 
         foreach ($bookings as $booking) {
+            $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
+            $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
+
             $date = date('Y-m-d', strtotime($booking->start_time));
 
             if (!isset($books[$date])) {
@@ -227,7 +213,7 @@ class TimeSlotService
     {
         $period = $this->calenderSlot->duration;
 
-        $weeklySlots = $this->calenderSlot->settings['weekly_schedules'];
+        $weeklySlots = SanitizeService::weeklySchedules($this->calenderSlot->settings['weekly_schedules'], 'UTC', $this->calendar->author_timezone, false);
 
         $items = [];
 
@@ -266,5 +252,31 @@ class TimeSlotService
         return $formattedSlots;
     }
 
+    protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false)
+    {
+        $period = $this->calenderSlot->duration;
+
+        $formattedSlots = [];
+
+
+        foreach ($slotSets as $slot) {
+
+            if($toTimeZone) {
+                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $toTimeZone, 'H:i');
+                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone, 'H:i');
+            }
+
+            $start = strtotime($slot['start'] );
+            $end = strtotime($slot['end']);
+
+            while ($start < $end) {
+                $formattedSlots[] = date('H:i', $start);
+                $start += $period * 60;
+            }
+        }
+
+        return $formattedSlots;
+
+    }
 
 }

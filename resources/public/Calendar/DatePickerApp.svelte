@@ -24,14 +24,37 @@
     let daySlots = [];
     let selectedDate = '';
     let selectedDateTime = {};
+    let nextDisabled = false;
+
+    if(slot.pre_selects) {
+        month = slot.pre_selects.month - 1;
+        year = slot.pre_selects.year;
+    }
 
     var days = [];	//	The days to display in each box
 
-    $: month, year, availableDates, initContent();
+    $: month, year, availableDates, initContent(), maybeMaxDateDisabled();
 
     $: timezone, maybeTimeZoneChanged();
 
     let lastTimeZone = timezone;
+
+
+    $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
+
+    function maybeMaxDateDisabled() {
+        let result = false;
+        if (slot.max_lookup_date) {
+            let nextMonth = month + 1;
+            let nextYear = year;
+            if (nextMonth == 12) {
+                nextYear++;
+                nextMonth = 0;
+            }
+            result = (new Date(nextYear, nextMonth, 0)).getTime() > (new Date(slot.max_lookup_date)).getTime();
+        }
+        nextDisabled = result;
+    }
 
     function maybeTimeZoneChanged() {
         if(lastTimeZone != timezone) {
@@ -108,6 +131,9 @@
     }
 
     function next() {
+        if(nextDisabled) {
+            return;
+        }
         month++;
         if (month == 12) {
             year++;
@@ -117,6 +143,11 @@
     }
 
     function prev() {
+        // create date from month and year
+        if(prevDisabled) {
+            return;
+        }
+
         if (month == 0) {
             month = 11;
             year--;
@@ -151,8 +182,7 @@
             <i class="fcal_svg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                     <path fill="none" d="M0 0h24v24H0V0z"/>
-                    <path
-                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                    <path d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
                 </svg>
             </i>
         </div>
@@ -174,8 +204,12 @@
                     <h3>{monthNames[month]} {year}</h3>
                 </div>
                 <div class="calendar_nav">
-                    <button on:click={()=>prev()}>&lt;</button>
-                    <button on:click={()=>next()}>&gt;</button>
+                    <button class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path></svg>
+                    </button>
+                    <button class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path></svg>
+                    </button>
                 </div>
             </div>
             <Calendar
