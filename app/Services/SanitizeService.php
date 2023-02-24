@@ -10,7 +10,7 @@ class SanitizeService
     {
         foreach ($schedules as &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
-            if(!$schedule['enabled'] || empty($schedule['slots'] )) {
+            if (!$schedule['enabled'] || empty($schedule['slots'])) {
                 $schedule['slots'] = [];
                 $schedule['enabled'] = false;
                 continue;
@@ -19,17 +19,17 @@ class SanitizeService
             $schedule['enabled'] = true;
 
             foreach ($schedule['slots'] as $index => $slot) {
-                if($fromUser) {
+                if ($fromUser) {
                     $slot['start'] = sanitize_text_field($slot['start']);
                     $slot['end'] = sanitize_text_field($slot['end']);
                 }
 
-                if(!$slot['start'] || ! $slot['end']) {
+                if (!$slot['start'] || !$slot['end']) {
                     unset($schedule['slots'][$index]);
                     continue;
                 }
 
-                if($toTimeZone && $fromTimeZone) {
+                if ($toTimeZone && $fromTimeZone) {
                     $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
                     $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
                 }
@@ -53,8 +53,8 @@ class SanitizeService
 
         $isSkipped = false;
 
-        foreach($overrides as $date => $slots) {
-            if(strtotime($date) < $todayTimeStamp) {
+        foreach ($overrides as $date => $slots) {
+            if (strtotime($date) < $todayTimeStamp) {
                 $isSkipped = true;
                 continue;
             }
@@ -64,13 +64,13 @@ class SanitizeService
                 $slot['start'] = sanitize_text_field($slot['start']);
                 $slot['end'] = sanitize_text_field($slot['end']);
 
-                if(empty($slot['start']) || empty($slot['end'])) {
+                if (empty($slot['start']) || empty($slot['end'])) {
                     unset($slots[$index]);
                     continue;
                 }
 
                 $utcSlots[] = $slot;
-                if($toTimeZone && $fromTimeZone && $toTimeZone != $fromTimeZone) {
+                if ($toTimeZone && $fromTimeZone && $toTimeZone != $fromTimeZone) {
                     $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
                     $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
                 }
@@ -78,16 +78,16 @@ class SanitizeService
                 $slots[$index] = $slot;
             }
 
-            if($utcSlots) {
+            if ($utcSlots) {
                 $updatedOverRides[$date] = $utcSlots;
             }
 
-            if($slots) {
+            if ($slots) {
                 $validOverrides[$date] = array_values($slots);
             }
         }
 
-        if($isSkipped && $fromTimeZone == 'UTC' && $slot) {
+        if ($isSkipped && $fromTimeZone == 'UTC' && $slot) {
             $slot->settings['date_overrides'] = $updatedOverRides;
             $slot->save();
         }
@@ -99,7 +99,7 @@ class SanitizeService
     public static function rangeDateBetween($range)
     {
         $range = array_filter($range);
-        if( !$range || count($range) != 2 ) {
+        if (!$range || count($range) != 2) {
             return ['', ''];
         }
 
@@ -109,5 +109,20 @@ class SanitizeService
         $range[1] = date('Y-m-d H:i:s', strtotime(sanitize_text_field($range[1])));
 
         return $range;
+    }
+
+    public static function scheduleConditions($conditions)
+    {
+        if (!$conditions) {
+            return [
+                'value' => 4,
+                'unit' => 'hours'
+            ];
+        }
+
+        return [
+            'value' => (int) Arr::get($conditions, 'value', 4),
+            'unit' => sanitize_text_field(Arr::get($conditions, 'unit', 'hours'))
+        ];
     }
 }
