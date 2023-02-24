@@ -65,6 +65,9 @@ class SaasHandler
             return;
         }
 
+        $slot->max_lookup_date = $slot->getMaxLookUpDate();
+        $slot->min_lookup_date = $slot->getMinLookUpDate();
+
         if (!empty($_REQUEST['booking_id'])) {
             $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
             $booking = Booking::where('hash', $bookingHash)
@@ -81,6 +84,29 @@ class SaasHandler
 
         $slot->location_settings = (object)[];
         $slot->description = wpautop($slot->description);
+
+        $slot->pre_selects = false;
+
+        if (date('m') != date('m', strtotime($slot->min_lookup_date))) {
+            $slot->pre_selects = [
+                'month' => date('m', strtotime($slot->min_lookup_date)),
+                'year'  => date('Y', strtotime($slot->min_lookup_date))
+            ];
+        }
+
+        if(isset($_GET['month'])) {
+            $selectedMonth = sanitize_text_field($_GET['month']);
+            $selectedMonth = explode('-', $selectedMonth);
+            if(count($selectedMonth) == 2) {
+                if($selectedMonth[1] < 13 && $selectedMonth[1] > 0 && is_numeric($selectedMonth[0]) && $selectedMonth[0] >= date('Y')) {
+                    $slot->pre_selects = [
+                        'month' => $selectedMonth[1],
+                        'year'  => (int) $selectedMonth[0]
+                    ];
+                }
+
+            }
+        }
 
         $data = [
             'calendar'    => $calendar,
@@ -178,7 +204,7 @@ class SaasHandler
 
         $userId = get_current_user_id();
 
-        if(!$userId) {
+        if (!$userId) {
             wp_redirect(site_url('login'));
             exit();
         }

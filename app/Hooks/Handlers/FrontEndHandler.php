@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Hooks\Handlers;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
 
 class FrontEndHandler
@@ -28,6 +29,15 @@ class FrontEndHandler
         $calendar = Calendar::find($atts['id']);
         $slot = CalendarSlot::find($atts['slot_id']);
 
+        if($slot) {
+            return ;
+        }
+
+        $slot->max_lookup_date =  $slot->getMaxLookUpDate();
+        $slot->min_lookup_date = $slot->getMinLookUpDate();
+
+        $formFields = BookingService::getBookingFields($slot);
+
         if (!$slot || !$calendar) {
             return 'Calendar not found';
         }
@@ -43,7 +53,8 @@ class FrontEndHandler
         wp_localize_script('fluent-calendar-public', 'fcal_public_vars_' . $calendar->id . '_'.$slot->id, [
             'slot'           => $slot,
             'calendar'       => $calendar,
-            'author_profile' => $slot->getAuthorProfile(true)
+            'author_profile' => $slot->getAuthorProfile(true),
+            'form_fields'    => $formFields
         ]);
 
         return App::make('view')->make('public.calendar', [

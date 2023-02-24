@@ -374,3 +374,15 @@ $breakpoint-tablet: 767px;
     text-align: center;
   }
 }
+
+.calendar_nav {
+  svg {
+    height: 1em;
+    width: 1em;
+  }
+  .fcal_nav_active {
+    svg {
+      color: rgb(3 96 230);
+    }
+  }
+}

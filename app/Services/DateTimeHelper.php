@@ -73,6 +73,10 @@ class DateTimeHelper
 
     public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s')
     {
+        if($fromTimeZone == $toTimeZone) {
+            return date($format, strtotime($dateTime));
+        }
+
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
         $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
         return $dateTime->format($format);

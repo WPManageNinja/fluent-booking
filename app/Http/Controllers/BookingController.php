@@ -6,6 +6,7 @@ use FluentCalendar\App\App;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
+use FluentCalendar\App\Services\TimeSlotService;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
 
@@ -14,7 +15,8 @@ class BookingController extends Controller
     public function getSlots(Request $request, $slotId)
     {
         $slot = CalendarSlot::findOrfail($slotId);
-        $startDate = $request->get('start_date', date('Y-m-d H:i:s', current_time('timestamp')));
+        $calendar = $slot->calendar;
+        $startDate = $request->get('start_date', date('Y-m-d H:i:s'));
         $timeZone = $request->get('timezone', 'UTC');
 
         if (!$timeZone) {
@@ -25,33 +27,52 @@ class BookingController extends Controller
             $startDate = date('Y-m-d H:i:s');
         }
 
-        $service = new \FluentCalendar\App\Services\TimeSlotService($slot->calendar, $slot);
+        $endDate = $slot->getMaxBookableDateTime($startDate);
+        $startDate = $slot->getMinBookableDateTime($startDate);
 
-        $slots = $service->getDates($startDate);
+        if(strtotime($startDate) > strtotime($endDate)) {
+            return [
+                'available_slots' => [],
+                'timezone' => $timeZone,
+                'invalid_dates' => true,
+                'max_lookup_date' => $slot->getMaxLookUpDate(),
+            ];
+        }
+
+        $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
+        $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
+
+        $slotService = new TimeSlotService($calendar, $slot);
+
+        $slots = $slotService->getDates($startDate, $endDate);
         $convertedSpots = [];
 
-        if ($timeZone == 'UTC') {
-            $convertedSpots = $slots;
-        } else {
-            foreach ($slots as $slot) {
-                foreach ($slot as $spot) {
-                    $startDate = DateTimeHelper::convertFromUtc($spot['start'], $timeZone, 'Y-m-d');
+        $cutOutTimeStamp = strtotime(DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone)) + 60 * 60 * 4; // 4 hours after now
 
-                    if (!isset($convertedSpots[$startDate])) {
-                        $convertedSpots[$startDate] = [];
-                    }
+        foreach ($slots as $spots) {
+            foreach ($spots as $spot) {
 
-                    $convertedSpots[$startDate][] = [
-                        'start' => DateTimeHelper::convertFromUtc($spot['start'], $timeZone),
-                        'end'   => DateTimeHelper::convertFromUtc($spot['end'], $timeZone),
-                    ];
+                if($cutOutTimeStamp > strtotime($spot['start'])) {
+                    continue;
                 }
+
+                $startDate = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone, 'Y-m-d');
+
+                if (!isset($convertedSpots[$startDate])) {
+                    $convertedSpots[$startDate] = [];
+                }
+
+                $convertedSpots[$startDate][] = [
+                    'start' => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
+                    'end'   => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                ];
             }
         }
 
         return [
-            'available_slots' => $convertedSpots,
-            'timezone'        => $timeZone
+            'available_slots' => array_filter($convertedSpots),
+            'timezone'        => $timeZone,
+            'max_lookup_date' => $slot->getMaxLookUpDate(),
         ];
     }
 

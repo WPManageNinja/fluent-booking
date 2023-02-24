@@ -34,6 +34,7 @@
                 </div>
                 <el-empty v-else description="No schedules based on your filter" />
             </div>
+            <p>All dates are shown in {{currentTimezone}} timezone</p>
         </div>
     </div>
 </template>

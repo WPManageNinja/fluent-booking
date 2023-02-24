@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Models;
 
 use FluentCalendar\App\Models\Model;
 use FluentCalendar\App\Services\Helper;
+use FluentCalendar\Framework\Support\Arr;
 
 class CalendarSlot extends Model
 {
@@ -178,5 +179,94 @@ class CalendarSlot extends Model
     public function setNotifications($notifications)
     {
         $statuses = Helper::updateMeta('calendar_slot', $this->id, 'notification_statuses', $notifications);
+    }
+
+    public function getMaxBookableDateTime($startDate)
+    {
+        $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
+
+        if($rangeType == 'range_indefinite') {
+            return date('Y-m-t 23:59:59', strtotime($startDate));
+        }
+
+        $maxDate = date('Y-m-t 23:59:59', strtotime($startDate));
+
+        if($rangeType == 'range_date_between') {
+            $range = Arr::get($this->settings, 'range_date_between', []);
+            if(is_array($range) && count(array_filter($range)) == 2) {
+                if(strtotime($maxDate) > strtotime($range[1])) {
+                    $maxDate = date('Y-m-d 23:59:59', strtotime($range[1]));
+                }
+            }
+        } else {
+            $rangeDays = Arr::get($this->settings, 'range_days', 60);
+            if(!$rangeDays) {
+                $rangeDays = 60;
+            }
+            $maxDate = date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS);
+        }
+
+        if(strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) {
+            return date('Y-m-t 23:59:59', strtotime($startDate));
+        }
+
+        return $maxDate;
+    }
+
+    public function getMinBookableDateTime($startDate)
+    {
+        $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
+
+        if($rangeType == 'range_indefinite') {
+            return $startDate;
+        }
+
+        if($rangeType == 'range_date_between') {
+            $range = Arr::get($this->settings, 'range_date_between', []);
+            if(is_array($range) && count(array_filter($range)) == 2) {
+                if(strtotime($range[0]) >= strtotime($startDate)) {
+                    return date('Y-m-d H:i:s', strtotime($range[0]));
+                }
+            }
+        }
+
+        return $startDate;
+    }
+
+    public function getMaxLookUpDate()
+    {
+        $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
+
+        if($rangeType == 'range_indefinite') {
+            return false;
+        }
+
+        if($rangeType == 'range_date_between') {
+            $range = Arr::get($this->settings, 'range_date_between', []);
+            if(is_array($range) && count(array_filter($range)) == 2) {
+                return date('Y-m-d 23:59:59', strtotime($range[1]));
+            }
+        }
+
+        $rangeDays = Arr::get($this->settings, 'range_days', 60);
+        if(!$rangeDays) {
+            $rangeDays = 60;
+        }
+
+        return date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS);
+    }
+
+    public function getMinLookUpDate()
+    {
+        $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
+
+        if($rangeType == 'range_date_between') {
+            $range = Arr::get($this->settings, 'range_date_between', []);
+            if(is_array($range) && count(array_filter($range)) == 2) {
+                return date('Y-m-d H:i:s', strtotime($range[0]));
+            }
+        }
+
+        return date('Y-m-d H:i:s');
     }
 }

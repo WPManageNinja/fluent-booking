@@ -209,10 +209,14 @@ class CalendarController extends Controller
         $slot->settings = [
             'schedule_type'    => sanitize_text_field($data['settings']['schedule_type']),
             'weekly_schedules' => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $slot->calendar->author_timezone, 'UTC'),
-            'date_overrides' => SanitizeService::slotDateOverrides($data['settings']['date_overrides'], $slot->calendar->author_timezone, 'UTC')
+            'date_overrides' => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $slot->calendar->author_timezone, 'UTC'),
+            'range_type' => sanitize_text_field(Arr::get($data['settings'], 'range_type')),
+            'range_days' => (int) (Arr::get($data['settings'], 'range_days', 60)) ?: 60,
+            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', '']))
         ];
 
         $slot->title = sanitize_text_field($data['title']);
+        $slot->duration = (int) $data['duration'];
         $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
         $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
         $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
@@ -223,7 +227,6 @@ class CalendarController extends Controller
             'message' => 'Data has been updated',
             'slot'    => $slot
         ];
-
     }
 
     public function patchCalendarSlot(Request $request, $calendarId, $slotId)
