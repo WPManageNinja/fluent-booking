@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Services;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\Libs\Emogrifier\Emogrifier;
 
 class EmailNotificationService
 {
@@ -38,7 +39,7 @@ class EmailNotificationService
             'wrapper_heading' => 'Booking Confirmation'
         ]);
 
-        $emogrifier = new \FluentCrm\App\Services\Libs\Emogrifier\Emogrifier($body);
+        $emogrifier = new Emogrifier($body);
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string) $emogrifier->emogrify();
 
@@ -91,7 +92,7 @@ class EmailNotificationService
             'wrapper_heading' => 'New Booking Confirmed'
         ]);
 
-        $emogrifier = new \FluentCrm\App\Services\Libs\Emogrifier\Emogrifier($body);
+        $emogrifier = new Emogrifier($body);
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string) $emogrifier->emogrify();
 
