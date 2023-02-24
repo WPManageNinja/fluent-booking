@@ -11,8 +11,8 @@ class BookingService
 {
     public static function createBooking($data = [], $calendarSlot = null)
     {
-        if (empty($data['email']) || empty($data['start_time'])) {
-            throw new \Exception('Email and Start Time are required to create a booking', 423);
+        if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
+            throw new \Exception('Email, Start Time and timezone are required to create a booking', 423);
         }
 
         if (!$calendarSlot) {
@@ -34,8 +34,12 @@ class BookingService
             $defaults['slot_minutes'] = $calendarSlot->duration;
         }
 
+        $data['start_time'] = DateTimeHelper::convertToUtc($data['start_time'], $data['person_time_zone']);
+
         if (empty($data['end_time'])) {
             $defaults['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($calendarSlot->duration * 60));
+        } else {
+            $defaults['end_time'] = DateTimeHelper::convertToUtc($data['end_time'], $data['person_time_zone']);
         }
 
         if (!isset($data['person_user_id'])) {

@@ -47,7 +47,7 @@ class BookingController extends Controller
         $slots = $slotService->getDates($startDate, $endDate);
         $convertedSpots = [];
 
-        $cutOutTimeStamp = strtotime(DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone)) + 60 * 60 * 4; // 4 hours after now
+        $cutOutTimeStamp = strtotime(DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone)) + $slot->getCutoutSeconds(); // 4 hours after now
 
         foreach ($slots as $spots) {
             foreach ($spots as $spot) {

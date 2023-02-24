@@ -212,7 +212,8 @@ class CalendarController extends Controller
             'date_overrides' => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $slot->calendar->author_timezone, 'UTC'),
             'range_type' => sanitize_text_field(Arr::get($data['settings'], 'range_type')),
             'range_days' => (int) (Arr::get($data['settings'], 'range_days', 60)) ?: 60,
-            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', '']))
+            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
+            'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
         ];
 
         $slot->title = sanitize_text_field($data['title']);

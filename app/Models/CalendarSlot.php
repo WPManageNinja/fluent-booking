@@ -269,4 +269,15 @@ class CalendarSlot extends Model
 
         return date('Y-m-d H:i:s');
     }
+
+    public function getCutoutSeconds()
+    {
+        $conditions = Arr::get($this->settings, 'schedule_conditions', []);
+
+        if(!$conditions || empty($conditions['unit'])) {
+            return 0;
+        }
+
+        return strtotime('+' . $conditions['value'] . ' ' . $conditions['unit'], 0) - strtotime('+0 seconds', 0);
+    }
 }

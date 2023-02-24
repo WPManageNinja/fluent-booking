@@ -123,6 +123,8 @@ class TimeSlotService
         $start = null;
         $end = null;
 
+        $cutoutTime = strtotime($fromDate) + $this->calenderSlot->getCutoutSeconds();
+
         foreach ($slots as $spots) {
 
             if(!$spots) {
@@ -132,6 +134,10 @@ class TimeSlotService
             $first  = array_shift($spots);
             $start = $first['start'];
             $end = $first['end'];
+
+            if(strtotime($start) < $cutoutTime) {
+                 continue;
+            }
 
             if(!$spots) {
                 if(strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
