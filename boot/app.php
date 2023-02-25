@@ -26,4 +26,20 @@ return function ($file) {
 
         do_action('fluent_calendar_loaded', $app);
     });
+
+
+    add_filter('cron_schedules', function ($schedules) {
+        if (!is_array($schedules)) {
+            $schedules = [];
+        }
+
+        if (!isset($schedules['fluent_cal_every_minute'])) {
+            $schedules['fluent_cal_every_minute'] = array(
+                'interval' => 60,
+                'display'  => esc_html__('Every Minute (Fluent Calendar)', 'fluent-Calendar'),
+            );
+        }
+
+        return $schedules;
+    }, 11);
 };

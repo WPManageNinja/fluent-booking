@@ -86,7 +86,7 @@ class BookingService
             'status' => 'confirmed'
         ]);
 
-        do_action('fluent_calendar/after_booking_scheduled', $booking, $bookingData, $calendarSlot);
+        do_action('fluent_calendar/after_booking_scheduled', $booking, $calendarSlot, $bookingData);
 
         return $booking;
     }
