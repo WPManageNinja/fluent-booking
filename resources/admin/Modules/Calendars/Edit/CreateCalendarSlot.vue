@@ -8,13 +8,15 @@
                     <el-breadcrumb-item>Create new event type</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
-            <div class="fcal_actions">
-                <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Create</el-button>
-            </div>
         </div>
         <div v-if="slot" class="fcal_section_body">
+            <h3>Event Information</h3>
+            <basic-info :slot="slot" />
+
+            <h3>Scheduling Settings</h3>
             <slot-settings-from :slot="slot" />
-            <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Create</el-button>
+
+            <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Create a new scheduling form</el-button>
         </div>
         <div class="fcal_section_body" v-else-if="loading">
             <el-skeleton :rows="1" animated />
@@ -26,12 +28,14 @@
 
 <script type="text/babel">
 import SlotSettingsFrom from './_SlotSettingsForm.vue';
+import BasicInfo from './_BasicInfo.vue'
 
 export default {
     name: 'NewSlotEvent',
     props: ['calendar_id'],
     components: {
-        SlotSettingsFrom
+        SlotSettingsFrom,
+        BasicInfo
     },
     data() {
         return {

@@ -1,6 +1,6 @@
 <template>
     <div class="fcal_form_section">
-        <div class="fcal_section_body">
+        <div style="padding: 20px 0;" class="fcal_section_body">
             <el-form :model="slot" label-position="top">
                 <el-form-item label="Event name">
                     <el-input type="text" placeholder="Title of the event slot" v-model="slot.title"/>

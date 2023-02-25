@@ -37,6 +37,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'FluentCalendar\\Database\\DBMigrator' => __DIR__ . '/../..' . '/database/DBMigrator.php',
         'FluentCalendar\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
+        'FluentCalendar\\Database\\Migrations\\BookingActivityMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingActivityMigrator.php',
         'FluentCalendar\\Database\\Migrations\\BookingMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMigrator.php',
         'FluentCalendar\\Database\\Migrations\\BookingUserMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingUserMigrator.php',
         'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarMigrator.php',
