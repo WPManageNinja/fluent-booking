@@ -109,7 +109,7 @@ class SchedulesController extends Controller
         if($column === 'status') {
             do_action('fluent_calendar/schedule_'.$value, $spot);
         }
-        
+
         do_action('fluent_calendar/after_patch_schedule', $spot, $oldSpot);
 
         return [

@@ -15,6 +15,8 @@ class DeactivationHandler
     
     public function handle()
     {
-        // ...
+        wp_clear_scheduled_hook('fluent_calendar_minute_tasks');
+        wp_clear_scheduled_hook('fluent_calendar_hourly_tasks');
     }
+
 }

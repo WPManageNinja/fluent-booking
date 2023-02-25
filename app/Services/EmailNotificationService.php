@@ -61,10 +61,18 @@ class EmailNotificationService
             'Reply-To: ' . $replyTo
         ];
 
-        return Mailer::send($to, $subject, $body, $headers);
+        $result = Mailer::send($to, $subject, $body, $headers);
+
+        do_action('fluent_calendar/booking_confirmation_email_sent_to_guest', $booking, $slot, [
+            'subject' => $subject,
+            'body' => $body,
+            'to' => $to
+        ]);
+
+        return $result;
     }
 
-    public static function emailToAdminOnBooked($booking, $slot = null)
+    public static function emailToHostOnBooked($booking, $slot = null)
     {
         if(!$slot) {
             $slot = $booking->slot;
@@ -114,7 +122,53 @@ class EmailNotificationService
             $to = sprintf('%1s <%2s>', $author['name'], $author['email']);
         }
 
-        return Mailer::send($to, $subject, $body, $headers);
+        $result = Mailer::send($to, $subject, $body, $headers);
+
+        do_action('fluent_calendar/booking_confirmation_email_sent_to_host', $booking, $slot, [
+            'subject' => $subject,
+            'body' => $body,
+            'to' => $to
+        ]);
+
+        return $result;
+    }
+
+    public static function emailToGuestOnOneHourReminder($booking, $slot = null)
+    {
+        if (!$slot) {
+            $slot = $booking->slot;
+        }
+
+        
+
+        return true;
+    }
+
+    public static function emailToHostOnOneHourReminder($booking, $slot = null)
+    {
+        if (!$slot) {
+            $slot = $booking->slot;
+        }
+
+        return true;
+    }
+
+    public static function emailToGuest15MinutesReminder($booking, $slot = null)
+    {
+        if (!$slot) {
+            $slot = $booking->slot;
+        }
+
+        return true;
+    }
+
+    public static function emailToHostOn15MinutesReminder($booking, $slot = null)
+    {
+        if (!$slot) {
+            $slot = $booking->slot;
+        }
+
+        return true;
     }
 
 }
