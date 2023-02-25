@@ -238,9 +238,15 @@ class SaasHandler
             'logo'      => $assets . 'images/logo.svg',
         ]);
 
+
         $calendar = Calendar::where('user_id', get_current_user_id())->first();
 
-        $authorProfile = $calendar->getAuthorProfile(true);
+        if($calendar) {
+            $authorProfile = $calendar->getAuthorProfile(true);
+        } else {
+            $authorProfile = false;
+        }
+
 
         $appVars = (new \FluentCalendar\App\Hooks\Handlers\AdminMenuHandler)->getDashboardVars($app);
 
