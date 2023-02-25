@@ -64,6 +64,10 @@ class Booking extends Model
 
             $model->hash = md5(wp_generate_uuid4() . time());
         });
+
+        static::deleting(function($model) { // before delete() method call this
+            $model->users()->delete();
+        });
     }
 
     public function calendar()
