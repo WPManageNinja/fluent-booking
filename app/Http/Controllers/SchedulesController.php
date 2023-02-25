@@ -49,6 +49,7 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
+                do_action('fluent_calendar/schedule_completed', $schedule);
                 continue;
             }
 
@@ -68,18 +69,35 @@ class SchedulesController extends Controller
 
         $data = $request->all();
         $this->validate($data, [
-            'column' => 'required|in:internal_note,email,phone,first_name,last_name',
+            'column' => 'required',
         ]);
 
         do_action('fluent_calendar/before_patch_schedule', $spot, $data);
 
         $value = $request->get('value');
         $column = $data['column'];
+
+
+        $validColumns = [
+            'internal_note',
+            'email',
+            'phone',
+            'first_name',
+            'last_name',
+            'status'
+        ];
+
+        if(!in_array($column, $validColumns)) {
+            return $this->sendError(['message' => 'Invalid column']);
+        }
+
         if ($column === 'email') {
             if (!$value || !is_email($value)) {
                 return $this->sendError(['message' => 'Invalid email address']);
             }
             $value = sanitize_email($value);
+        } else if($column === 'internal_note') {
+            $value = sanitize_textarea_field($value);
         } else {
             $value = sanitize_textarea_field($value);
         }
@@ -88,6 +106,10 @@ class SchedulesController extends Controller
         $spot->fill($updateData);
         $spot->save();
 
+        if($column === 'status') {
+            do_action('fluent_calendar/schedule_'.$value, $spot);
+        }
+        
         do_action('fluent_calendar/after_patch_schedule', $spot, $oldSpot);
 
         return [
@@ -112,6 +134,7 @@ class SchedulesController extends Controller
         if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
             $schedule->status = 'completed';
             $schedule->save();
+            do_action('fluent_calendar/schedule_completed', $schedule);
         }
 
         $schedule->happening_status = $schedule->getOngoingStatus();
