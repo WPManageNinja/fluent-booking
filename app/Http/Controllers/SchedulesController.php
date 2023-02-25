@@ -24,6 +24,7 @@ class SchedulesController extends Controller
         } else {
             $author = (int) $author;
         }
+
         if(!current_user_can('manage_options')) {
             $author = get_current_user_id();
         }
@@ -34,6 +35,8 @@ class SchedulesController extends Controller
             });
         }
 
+        do_action_ref_array('fluent_calendar/schedules_query', [&$query]);
+
         if ($period == 'upcoming') {
             $query = $query->orderBy('start_time', 'ASC')->upcoming();
         } else {
@@ -41,7 +44,6 @@ class SchedulesController extends Controller
         }
 
         $schedules = $query->paginate();
-
 
         foreach ($schedules as $schedule) {
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
@@ -54,7 +56,6 @@ class SchedulesController extends Controller
             $schedule->author = $schedule->slot->getAuthorProfile(false);
         }
 
-
         return [
             'schedules' => $schedules,
             'timezone'  => 'UTC'
@@ -63,12 +64,14 @@ class SchedulesController extends Controller
 
     public function patchSpot(Request $request, $spot_id)
     {
-        $spot = Booking::findOrFail($spot_id);
+        $oldSpot = $spot = Booking::findOrFail($spot_id);
 
         $data = $request->all();
         $this->validate($data, [
             'column' => 'required|in:internal_note,email,phone,first_name,last_name',
         ]);
+
+        do_action('fluent_calendar/before_patch_schedule', $spot, $data);
 
         $value = $request->get('value');
         $column = $data['column'];
@@ -84,6 +87,8 @@ class SchedulesController extends Controller
         $updateData[$column] = $value;
         $spot->fill($updateData);
         $spot->save();
+
+        do_action('fluent_calendar/after_patch_schedule', $spot, $oldSpot);
 
         return [
             'message' => sprintf(__('%s has been updated', 'fluent-calendar'), $column)
@@ -115,6 +120,5 @@ class SchedulesController extends Controller
         return [
             'spot' => $schedule
         ];
-
     }
 }

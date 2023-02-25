@@ -4,10 +4,11 @@
  * @var $router FluentCalendar\Framework\Http\Router
  */
 
-$router->get('/welcome', 'WelcomeController@index');
 
-$router->prefix('calendars')->withPolicy('AdminPolicy')->group(function ($router) {
+$router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($router) {
+
     $router->get('/', 'CalendarController@index');
+    
     $router->post('/', 'CalendarController@create');
     $router->post('check-slug', 'CalendarController@checkSlug');
 
@@ -24,12 +25,10 @@ $router->prefix('calendars')->withPolicy('AdminPolicy')->group(function ($router
     $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
 
-
 });
 
-$router->prefix('schedules')->withPolicy('AdminPolicy')->group(function ($router) {
+$router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index');
-
     $router->get('spot/{spot_id}', 'SchedulesController@getSpot')->int('spot_id');
     $router->put('spot/{spot_id}', 'SchedulesController@patchSpot')->int('spot_id');
 });

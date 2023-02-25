@@ -14,7 +14,12 @@ class CalendarController extends Controller
 {
     public function index(Request $request)
     {
-        $calendars = Calendar::with(['slots'])->latest()->paginate();
+
+        if(current_user_can('manage_options')) {
+            $calendars = Calendar::with(['slots'])->latest()->paginate();
+        } else {
+            $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
+        }
 
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
@@ -54,6 +59,8 @@ class CalendarController extends Controller
             'slot.title'            => 'required',
             'slot.weekly_schedules' => 'required_if:slot.schedule_type,weekly_schedules',
         ], $data));
+
+        do_action('fluent_calendar/before_create_calendar', $data);
 
         $user = get_user_by('ID', get_current_user_id());
 
@@ -111,11 +118,14 @@ class CalendarController extends Controller
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
 
         $slot = CalendarSlot::create($slotData);
+        do_action('fluent_calendar/after_create_calendar_slot', $slot, $calendar);
+
+        do_action('fluent_calendar/after_create_calendar', $calendar);
 
         return [
             'calendar'     => $calendar,
             'slot'         => $slot,
-            'redirect_url' => Helper::getAppBaseUrl('calendars')
+            'redirect_url' => Helper::getAppBaseUrl('calendars/'.$calendar->id.'/slot-settings/'.$slot->id)
         ];
     }
 
