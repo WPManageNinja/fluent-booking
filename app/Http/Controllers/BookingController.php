@@ -15,6 +15,13 @@ class BookingController extends Controller
     public function getSlots(Request $request, $slotId)
     {
         $slot = CalendarSlot::findOrfail($slotId);
+
+        if($slot->status != 'active') {
+            return $this->sendError([
+                'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
+            ]);
+        }
+
         $calendar = $slot->calendar;
         $startDate = $request->get('start_date', date('Y-m-d H:i:s'));
         $timeZone = $request->get('timezone', 'UTC');
@@ -79,6 +86,12 @@ class BookingController extends Controller
     public function bookSlot(Request $request, $slotId)
     {
         $calendarSlot = CalendarSlot::findOrfail($slotId);
+
+        if($calendarSlot->status != 'active') {
+            return $this->sendError([
+                'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
+            ]);
+        }
 
         $postedData = $request->all();
 

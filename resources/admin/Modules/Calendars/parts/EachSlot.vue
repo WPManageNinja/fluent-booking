@@ -3,6 +3,22 @@
         <div class="fcal_slot_body">
             <h3>{{ slot.title }}</h3>
             <p class="fcal_slot_meta">{{ slot.duration }} mins, One-on-One</p>
+
+            <div class="fcal_slot_config">
+                <el-dropdown @command="handleCommand" trigger="click">
+                    <el-button size="small" text>
+                        <el-icon><Tools /></el-icon>
+                    </el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="edit">Edit Booking Type Details</el-dropdown-item>
+                            <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
+                            <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
+                            <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
         </div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
@@ -15,14 +31,14 @@
                 </el-button>
             </div>
             <div v-else>
-                <el-button v-loading="working" :disabled="working" @click="activateSlot(slot)" text>Turn
-                    On
+                <el-button v-loading="working" :disabled="working" @click="updateStatus('active')" text>
+                    Turn On
                 </el-button>
             </div>
             <div class="fcal_slot_actions">
                 <el-button
                     @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"
-                    type="default">Settings
+                    type="default">edit
                 </el-button>
             </div>
         </div>
@@ -31,12 +47,15 @@
 
 <script type="text/babel">
 import {copyToClipBoard} from '@/Bits/data_config.js';
-import {CopyDocument} from '@element-plus/icons-vue';
+import {CopyDocument, Tools, ArrowDown} from '@element-plus/icons-vue';
 export default {
     name: 'EachSlot',
     props: ['slot'],
+    $emits: ['slotDeleted'],
     components: {
-        CopyDocument
+        CopyDocument,
+        Tools,
+        ArrowDown
     },
     data() {
         return {
@@ -54,14 +73,14 @@ export default {
                 this.isCopied = false;
             }, 5000);
         },
-        activateSlot(slot) {
+        updateStatus(newStatus) {
             this.working = true;
-            this.$put('calendars/' + this.calendar.id + '/slots/' + slot.id, {
-                status: 'active'
+            this.$put('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id, {
+                status: newStatus
             })
                 .then(response => {
-                    slot.status = 'active';
-                    this.$notify.success('Slot has been activated successfully');
+                    this.slot.status = newStatus;
+                    this.$notify.success(response.message);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -69,6 +88,43 @@ export default {
                 .finally(() => {
                     this.working = false;
                 });
+        },
+        handleCommand(command) {
+            if(command == 'edit') {
+                this.$router.push({ name: 'slot_settings', params: { calendar_id: this.slot.calendar_id, slot_id: this.slot.id } });
+                return;
+            }
+
+            if(command == 'enable') {
+                this.updateStatus('active');
+                return;
+            }
+            if(command == 'disable') {
+                this.updateStatus('draft');
+                return;
+            }
+
+            if(command == 'delete') {
+                this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted', 'Delete Booking Type', {
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    this.$del('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id)
+                        .then(response => {
+                            this.$notify.success(response.message);
+                            this.$emit('slotDeleted');
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        });
+                }).catch(() => {
+
+                });
+                return;
+            }
+
+            console.log(command);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace FluentCalendar\App\Http\Controllers;
 
+use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\Helper;
@@ -294,6 +295,22 @@ class CalendarController extends Controller
 
         return [
             'message' => 'Notifications has been saved'
+        ];
+    }
+
+    public function deleteCalendarSlot(Request $request, $calendarId, $slotId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $slot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+        // Let's delete all the events related to this slot
+        Booking::where('slot_id', $slot->id)
+            ->where('calendar_id', $calendar->id)
+            ->delete();
+
+        $slot->delete();
+
+        return [
+            'message' => 'Slot has been deleted'
         ];
     }
 }

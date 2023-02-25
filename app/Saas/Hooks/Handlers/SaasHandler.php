@@ -34,16 +34,28 @@ class SaasHandler
             return;
         }
 
-        $slug = $urlParts[0];
+        $slug = sanitize_text_field($urlParts[0]);
         $calendar = Calendar::where('slug', $slug)->first();
 
         if (!$calendar) {
             return;
         }
 
-        $slot = CalendarSlot::where('calendar_id', $calendar->id)->where('slug', $urlParts[1])->first();
+        $slot = CalendarSlot::where('calendar_id', $calendar->id)
+            ->where('slug', $urlParts[1])
+            ->first();
 
         if (!$slot) {
+            $this->showErrorPage('404', 'This URL is not valid');
+            return;
+        }
+
+        if($slot->status != 'active') {
+            $message = '<p>Sorry, this host is not accepting any new bookings at the moment.</p>';
+            if($slot->user_id == get_current_user_id()) {
+                $message .= '<p>Looks like you are the owner of this calendar event. To enable this schedule event please go to your events dashboard and enable this.</p>';
+            }
+            $this->showErrorPage('This URL is not valid', $message);
             return;
         }
 
@@ -76,14 +88,14 @@ class SaasHandler
             ];
         }
 
-        if(isset($_GET['month'])) {
+        if (isset($_GET['month'])) {
             $selectedMonth = sanitize_text_field($_GET['month']);
             $selectedMonth = explode('-', $selectedMonth);
-            if(count($selectedMonth) == 2) {
-                if($selectedMonth[1] < 13 && $selectedMonth[1] > 0 && is_numeric($selectedMonth[0]) && $selectedMonth[0] >= date('Y')) {
+            if (count($selectedMonth) == 2) {
+                if ($selectedMonth[1] < 13 && $selectedMonth[1] > 0 && is_numeric($selectedMonth[0]) && $selectedMonth[0] >= date('Y')) {
                     $slot->pre_selects = [
                         'month' => $selectedMonth[1],
-                        'year'  => (int) $selectedMonth[0]
+                        'year'  => (int)$selectedMonth[0]
                     ];
                 }
 
@@ -241,7 +253,7 @@ class SaasHandler
 
         $calendar = Calendar::where('user_id', get_current_user_id())->first();
 
-        if($calendar) {
+        if ($calendar) {
             $authorProfile = $calendar->getAuthorProfile(true);
         } else {
             $authorProfile = false;
@@ -288,6 +300,22 @@ class SaasHandler
         extract($data, EXTR_SKIP);
 
         include FLUENT_CALENDAR_DIR . 'app/Saas/Views/' . $file . '.php';
+    }
+
+
+    public function showErrorPage($title, $description = '')
+    {
+        $data = [
+            'title' => $title,
+            'description' => $description,
+            'css_files'   => [
+                App::getInstance('url.assets') . 'public/saas_public.css'
+            ],
+        ];
+
+        status_header(200);
+        $this->render('error', $data);
+        exit(200);
     }
 
 }

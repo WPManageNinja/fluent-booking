@@ -15,8 +15,8 @@
         </div>
         <div class="fcal_cal_slots">
             <el-row :gutter="30">
-                <el-col v-for="slot in calendar.slots" :key="slot.id" :sm="12" :md="8">
-                    <each-slot :slot="slot" />
+                <el-col v-for="(slot, slotIndex) in calendar.slots" :key="slot.id" :sm="12" :md="8">
+                    <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" />
                 </el-col>
             </el-row>
         </div>
@@ -30,6 +30,11 @@ export default {
     props: ['calendar'],
     components: {
         EachSlot
+    },
+    methods: {
+        slotDeleted(slotIndex) {
+            this.calendar.slots.splice(slotIndex, 1);
+        }
     }
 }
 </script>
