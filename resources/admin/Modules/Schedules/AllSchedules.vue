@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_schedlues">
+    <div :class="{ fcal_showing_details: spot_id }" class="fcal_schedlues">
         <div class="fcal_create_calendar fcal_section_narrow fcal_section">
             <div class="fcal_section_header">
                 <div class="fcal_head_nav">
