@@ -9,6 +9,7 @@ return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'FluentCalendar\\Database\\DBMigrator' => $baseDir . '/database/DBMigrator.php',
     'FluentCalendar\\Database\\DBSeeder' => $baseDir . '/database/DBSeeder.php',
+    'FluentCalendar\\Database\\Migrations\\BookingActivityMigrator' => $baseDir . '/database/Migrations/BookingActivityMigrator.php',
     'FluentCalendar\\Database\\Migrations\\BookingMigrator' => $baseDir . '/database/Migrations/BookingMigrator.php',
     'FluentCalendar\\Database\\Migrations\\BookingUserMigrator' => $baseDir . '/database/Migrations/BookingUserMigrator.php',
     'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',

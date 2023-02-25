@@ -127,6 +127,13 @@ class CalendarSlot extends Model
                 ],
             ],
             'date_overrides'   => [],
+            'range_type' => 'range_days',
+            'range_days' => 60,
+            'range_date_between' => ['', ''],
+            'schedule_conditions' => [
+                'value' => 4,
+                'unit' => 'hours'
+            ]
         ];
     }
 

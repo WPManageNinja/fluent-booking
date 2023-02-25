@@ -45,6 +45,7 @@ class BookingMigrator
                 `last_admin_reminder_sent` TIMESTAMP NULL,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'scheduled',
                 `source` VARCHAR(20) NOT NULL DEFAULT 'web',
+                `booking_type` VARCHAR(20) NOT NULL DEFAULT 'scheduling',
                 `source_id` BIGINT(20) UNSIGNED NULL,
                 `utm_source` VARCHAR(192) NULL DEFAULT '',
                 `utm_medium` VARCHAR(192) NULL DEFAULT '',
@@ -58,6 +59,7 @@ class BookingMigrator
                 KEY `fcal_b_slot_id` (`slot_id`),
                 KEY `fcal_b_reminder_stage` (`reminder_stage`),
                 KEY `fcal_b_next_reminder` (`next_reminder`),
+                KEY `fcal_b_booking_type` (`booking_type`),
                 KEY `fcal_b_start_time` (`start_time`)
             ) $charsetCollate;";
             dbDelta($sql);

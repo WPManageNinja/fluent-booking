@@ -32,21 +32,16 @@
 }
 
 .fcal_cal_slots {
-  background: #f8fafc;
-  display: flex;
-  padding: 20px;
-  column-gap: 20px;
-
+  margin-top: 20px;
   .fcal_cal_slot {
-    min-width: 300px;
     margin-bottom: 20px;
+    background: #f8fafc;
     border: 1px solid rgb(0 0 0 / 10%);
     border-radius: 4px;
-    background-color: rgba(255, 255, 255, 1);
     box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
 
     .fcal_slot_body {
-      padding: 15px;
+      padding: 10px 15px;
     }
 
     .fcal_slot_footer {

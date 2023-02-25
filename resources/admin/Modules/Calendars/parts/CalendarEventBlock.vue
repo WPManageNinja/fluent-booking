@@ -12,28 +12,32 @@
             </div>
         </div>
         <div class="fcal_cal_slots">
-            <div v-for="slot in calendar.slots" :key="slot.id" class="fcal_cal_slot">
-                <div class="fcal_slot_card">
-                    <div class="fcal_slot_body">
-                        <h3>{{slot.title}}</h3>
-                        <p class="fcal_slot_meta">{{slot.duration}} mins, One-on-One</p>
+            <el-row :gutter="30">
+                <el-col v-for="slot in calendar.slots" :key="slot.id" :sm="12" :md="8">
+                    <div class="fcal_cal_slot">
+                        <div class="fcal_slot_card">
+                            <div class="fcal_slot_body">
+                                <h3>{{slot.title}}</h3>
+                                <p class="fcal_slot_meta">{{slot.duration}} mins, One-on-One</p>
+                            </div>
+                            <div class="fcal_slot_footer">
+                                <div v-if="slot.status == 'active'" class="fcal_shortcode">
+                                    <el-button @click="copyTo(slot.public_url)" text>
+                                        <el-icon><CopyDocument /></el-icon>
+                                        <span>Copy Link</span>
+                                    </el-button>
+                                </div>
+                                <div v-else>
+                                    <el-button v-loading="working" :disabled="working" @click="activateSlot(slot)" text>Turn On</el-button>
+                                </div>
+                                <div class="fcal_slot_actions">
+                                    <el-button @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })" type="default">Settings</el-button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="fcal_slot_footer">
-                        <div v-if="slot.status == 'active'" class="fcal_shortcode">
-                            <el-button @click="copyTo(slot.public_url)" text>
-                                <el-icon><CopyDocument /></el-icon>
-                                <span>Copy Link</span>
-                            </el-button>
-                        </div>
-                        <div v-else>
-                            <el-button v-loading="working" :disabled="working" @click="activateSlot(slot)" text>Turn On</el-button>
-                        </div>
-                        <div class="fcal_slot_actions">
-                            <el-button @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })" type="default">Settings</el-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </el-col>
+            </el-row>
         </div>
     </div>
 </template>
