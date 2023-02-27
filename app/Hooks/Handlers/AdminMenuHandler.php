@@ -109,7 +109,6 @@ class AdminMenuHandler
 	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
     }
 
-
     public function getDashboardVars($app)
     {
         $assets = $app['url.assets'];
@@ -177,6 +176,10 @@ class AdminMenuHandler
      */
     protected function maybeAutoCreateCalendar($user)
     {
+        if(!apply_filters('fluent_calendar/auto_create_calendar', false, $user)) {
+            return false;
+        }
+
         $userName = $user->user_login;
 
         if(is_email($userName)) {

@@ -127,6 +127,7 @@ class CalendarController extends Controller
         return [
             'calendar'     => $calendar,
             'slot'         => $slot,
+            'force_reload' => true,
             'redirect_url' => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/slot-settings/' . $slot->id)
         ];
     }

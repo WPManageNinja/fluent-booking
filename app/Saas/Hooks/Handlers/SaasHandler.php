@@ -39,6 +39,114 @@ class SaasHandler
         $this->maybeRenderBookingView($urlParts);
     }
 
+    public function renderDashboard()
+    {
+
+        $userId = get_current_user_id();
+
+        if (!$userId) {
+            wp_redirect(site_url('login'));
+            exit();
+        }
+
+        $config = App::getInstance('config');
+
+        $name = 'ConvertLeap';
+
+        $slug = $config->get('app.slug');
+
+        $baseUrl = Helper::getAppBaseUrl();
+
+        if ($this->isNew()) {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Getting Started', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+            ];
+        } else {
+            $menuItems = [
+                [
+                    'key'       => 'dashboard',
+                    'label'     => __('Dashboard', 'fluent-calendar'),
+                    'permalink' => $baseUrl
+                ],
+                [
+                    'key'       => 'calendars',
+                    'label'     => __('Booking Types', 'fluent-calendar'),
+                    'permalink' => $baseUrl . 'calendars'
+                ],
+                [
+                    'key'       => 'scheduled_events',
+                    'label'     => __('Scheduled Meetings', 'fluent-calendar'),
+                    'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me'
+                ]
+            ];
+        }
+
+        $app = App::getInstance();
+        $assets = $app['url.assets'];
+
+        $body = App::make('view')->make('admin.menu', [
+            'name'      => $name,
+            'slug'      => $slug,
+            'menuItems' => $menuItems,
+            'baseUrl'   => $baseUrl,
+            'logo'      => $assets . 'images/logo.svg',
+            'rightItems' => [
+                [
+                    'key' => 'logout',
+                    'label' => __('Logout', 'fluent-calendar'),
+                    'permalink'   => wp_logout_url(site_url())
+                ]
+            ]
+        ]);
+
+        $calendar = Calendar::where('user_id', get_current_user_id())->first();
+
+        if ($calendar) {
+            $authorProfile = $calendar->getAuthorProfile(true);
+        } else {
+            $authorProfile = false;
+        }
+
+        $appVars = (new \FluentCalendar\App\Hooks\Handlers\AdminMenuHandler)->getDashboardVars($app);
+
+        $appVars['name'] = 'ConvertLeap';
+
+        if($this->isNew()) {
+            $user = get_user_by('ID', get_current_user_id());
+            $userName = $user->user_login;
+            if(!is_email($userName) && Helper::isCalendarSlugAvailable($userName)) {
+                $appVars['intended_username'] = $userName;
+            }
+        }
+
+        nocache_headers();
+        status_header(200);
+        $this->render('dashboard_app', [
+            'title'       => $name,
+            'body'        => $body,
+            'description' => '',
+            'author'      => $authorProfile,
+            'url'         => $baseUrl,
+            'css_files'   => [
+                $assets . 'admin/admin.css',
+                $assets . 'public/saas_admin.css'
+            ],
+            'js_vars'     => [
+                'fluentFrameworkAdmin' => $appVars
+            ],
+            'js_files'    => [
+                //'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
+                site_url('wp-includes/js/jquery/jquery.min.js'),
+                $assets . 'admin/app.js'
+            ]
+        ]);
+        exit(200);
+    }
+
     private function renderCalendarView($calendar)
     {
         global $wp;
@@ -240,108 +348,6 @@ class SaasHandler
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson
         ];
-    }
-
-    public function renderDashboard()
-    {
-
-        $userId = get_current_user_id();
-
-        if (!$userId) {
-            wp_redirect(site_url('login'));
-            exit();
-        }
-
-        $config = App::getInstance('config');
-
-        $name = 'ConvertLeap';
-
-        $slug = $config->get('app.slug');
-
-        $baseUrl = Helper::getAppBaseUrl();
-
-        if ($this->isNew()) {
-            $menuItems = [
-                [
-                    'key'       => 'dashboard',
-                    'label'     => __('Getting Started', 'fluent-calendar'),
-                    'permalink' => $baseUrl
-                ],
-            ];
-        } else {
-            $menuItems = [
-                [
-                    'key'       => 'dashboard',
-                    'label'     => __('Dashboard', 'fluent-calendar'),
-                    'permalink' => $baseUrl
-                ],
-                [
-                    'key'       => 'calendars',
-                    'label'     => __('Booking Types', 'fluent-calendar'),
-                    'permalink' => $baseUrl . 'calendars'
-                ],
-                [
-                    'key'       => 'scheduled_events',
-                    'label'     => __('Scheduled Meetings', 'fluent-calendar'),
-                    'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me'
-                ]
-            ];
-        }
-
-        $app = App::getInstance();
-        $assets = $app['url.assets'];
-
-        $body = App::make('view')->make('admin.menu', [
-            'name'      => $name,
-            'slug'      => $slug,
-            'menuItems' => $menuItems,
-            'baseUrl'   => $baseUrl,
-            'logo'      => $assets . 'images/logo.svg',
-            'rightItems' => [
-                [
-                    'key' => 'logout',
-                    'label' => __('Logout', 'fluent-calendar'),
-                    'permalink'   => wp_logout_url(site_url())
-                ]
-            ]
-        ]);
-
-
-        $calendar = Calendar::where('user_id', get_current_user_id())->first();
-
-        if ($calendar) {
-            $authorProfile = $calendar->getAuthorProfile(true);
-        } else {
-            $authorProfile = false;
-        }
-
-
-        $appVars = (new \FluentCalendar\App\Hooks\Handlers\AdminMenuHandler)->getDashboardVars($app);
-
-        $appVars['name'] = 'ConvertLeap';
-
-        status_header(200);
-        $this->render('dashboard_app', [
-            'title'       => $name,
-            'body'        => $body,
-            'description' => '',
-            'author'      => $authorProfile,
-            'url'         => $baseUrl,
-            'css_files'   => [
-                $assets . 'admin/admin.css',
-                $assets . 'public/saas_admin.css'
-            ],
-            'js_vars'     => [
-                'fluentFrameworkAdmin' => $appVars
-            ],
-            'js_files'    => [
-                //'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
-                site_url('wp-includes/js/jquery/jquery.min.js'),
-                $assets . 'admin/app.js'
-            ]
-        ]);
-        exit(200);
-
     }
 
     protected function isNew()
