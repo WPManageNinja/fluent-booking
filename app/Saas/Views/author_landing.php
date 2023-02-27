@@ -50,14 +50,11 @@
         }
         .cal_slot {
             flex: 0 calc(50% - 40px);
-            min-height: 180px;
             margin: 20px;
-            padding: 20px;
             background: #f8fafc;
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 4px;
             box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
-            cursor: pointer;
         }
         .cal_slot h2 {
             font-size: 18px;
@@ -74,6 +71,9 @@
         .cal_slot a {
             color: initial;
             text-decoration: none;
+            min-height: 180px;
+            padding: 20px;
+            display: block;
         }
 
         .fluent_calendar_app {
