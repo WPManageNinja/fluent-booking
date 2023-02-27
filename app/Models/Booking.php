@@ -55,7 +55,7 @@ class Booking extends Model
                 $model->person_user_id = $userId;
             }
 
-            if (defined('FLUENTCRM') && !empty($model->email)) {
+            if (defined('FLUENTCRM') && !empty($model->email) && apply_filters('fluent_calender/auto_booking_fluent_crm_sync', true)) {
                 $contact = FluentCrmApi('contacts')->getContact($model->email);
                 if ($contact) {
                     $model->person_contact_id = $contact->id;

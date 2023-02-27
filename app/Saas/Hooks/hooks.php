@@ -1,6 +1,7 @@
 <?php
 
 (new \FluentCalendar\App\Saas\Hooks\Handlers\SaasHandler)->register();
+(new \FluentCalendar\App\Saas\Hooks\Handlers\FluentCRMConnector())->register();
 
 add_filter('fluent_calendar/admin_base_url', function ($url, $extension) {
     return site_url('calendar/#/'.$extension);
@@ -80,3 +81,18 @@ add_action('fluent_calendar/before_update_calendar', function ($calendar, $data)
 add_filter('fluent_calendar/has_all_calendar_access', function ($result) {
     return false;
 });
+
+add_action('fluent_calendar/booking_confirmation_footer', function ($booking) {
+    ?>
+    <div class="book_up">
+        <h3>Make your online scheduling Easy . Simple . Automated</h3>
+        <a target="_blank" rel="noopener" href="<?php echo site_url('login/?register=1'); ?>">Get Started with ConvertLeap (free)</a>
+    </div>
+    <?php
+});
+
+
+/*
+ * Disable FluentCRM Auto Booking Contact Syncing
+ */
+add_filter('fluent_calender/auto_booking_fluent_crm_sync', '__return_false');

@@ -77,3 +77,27 @@ p {
     font-size: 110%;
   }
 }
+
+
+.book_up {
+  margin: 30px 0;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 2px solid #f0f0f0;
+  h3 {
+    font-size: 23px;
+    text-transform: capitalize;
+  }
+  a {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 20px;
+    padding: 13px 20px;
+    border-radius: 4px;
+    background-color: rgb(0,105,255);
+    color: white;
+    &:hover {
+      background: rgb(47 131 252);
+    }
+  }
+}
