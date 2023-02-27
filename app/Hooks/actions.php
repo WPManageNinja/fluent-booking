@@ -13,13 +13,13 @@
  * @var $app FluentCalendar\Framework\Foundation\Application
  */
 
-(new \FluentCalendar\App\Hooks\Handlers\FrontEndHandler())->register();
-
-$app->addAction('admin_menu', 'AdminMenuHandler@add');
-
-
 /*
  * Register all the grouped action handlers
  */
+(new \FluentCalendar\App\Hooks\Handlers\FrontEndHandler())->register();
+(new \FluentCalendar\App\Hooks\Handlers\CleanupHandler())->register();
 (new \FluentCalendar\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentCalendar\App\Hooks\Handlers\JobRunner())->register();
+
+
+$app->addAction('admin_menu', 'AdminMenuHandler@add');

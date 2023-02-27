@@ -163,7 +163,9 @@ export default {
                         window.location.href = response.redirect_url;
                     }
 
-                    window.location.reload(true);
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 500);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -212,6 +214,13 @@ export default {
         }
     },
     mounted() {
+        if(this.appVars.intended_username) {
+            this.calendar.slug = this.appVars.intended_username;
+            this.form_step = 'general';
+            this.require_slug = true;
+            return;
+        }
+
         this.require_slug = true;
         this.form_step = 'slug';
     }

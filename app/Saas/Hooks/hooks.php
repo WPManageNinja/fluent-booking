@@ -2,9 +2,9 @@
 
 (new \FluentCalendar\App\Saas\Hooks\Handlers\SaasHandler)->register();
 
-add_filter('fluent_calendar/admin_base_url', function ($url) {
-    return site_url('calendar/#/');
-});
+add_filter('fluent_calendar/admin_base_url', function ($url, $extension) {
+    return site_url('calendar/#/'.$extension);
+}, 10, 2);
 
 add_filter('fluent_calendar/verify_calendar_api', function ($can, $request) {
     if ($can) {
