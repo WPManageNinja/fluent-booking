@@ -7,7 +7,9 @@
                     <span>beta</span>
                 </a>
             </div>
-            <div class="fframe_handheld"><span class="dashicons dashicons-menu-alt3"></span></div>
+            <div class="fframe_handheld">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M20 5V2H0v3h20zm0 6V8H0v3h20zm0 6v-3H0v3h20z"/></svg>
+            </div>
 
             <ul class="fframe_menu">
 				<?php foreach ($menuItems as $item): ?>

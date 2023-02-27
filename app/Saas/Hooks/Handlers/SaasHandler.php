@@ -68,11 +68,6 @@ class SaasHandler
         } else {
             $menuItems = [
                 [
-                    'key'       => 'dashboard',
-                    'label'     => __('Dashboard', 'fluent-calendar'),
-                    'permalink' => $baseUrl
-                ],
-                [
                     'key'       => 'calendars',
                     'label'     => __('Booking Types', 'fluent-calendar'),
                     'permalink' => $baseUrl . 'calendars'
@@ -139,9 +134,10 @@ class SaasHandler
                 'fluentFrameworkAdmin' => $appVars
             ],
             'js_files'    => [
-                //'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
-                site_url('wp-includes/js/jquery/jquery.min.js'),
-                $assets . 'admin/app.js'
+                'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
+//                site_url('wp-includes/js/jquery/jquery.min.js'),
+                $assets . 'admin/app.js',
+                $assets.'admin/global_admin.js'
             ]
         ]);
         exit(200);

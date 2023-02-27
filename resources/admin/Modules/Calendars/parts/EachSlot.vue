@@ -5,7 +5,7 @@
             <p style="margin-top: 0" class="fcal_slot_meta">{{ slot.duration }} mins, One-on-One</p>
             <p v-if="slot.public_url" class="fcal_slot_meta">
                 <span v-if="slot.status == 'draft'">View Booking Page</span>
-                <a :href="slot.public_url" target="_blank" rel="noopener" else>View Booking Page</a>
+                <a :href="slot.public_url" target="_blank" rel="noopener" v-else>View Booking Page</a>
             </p>
             <div class="fcal_slot_config">
                 <el-dropdown @command="handleCommand" trigger="click">

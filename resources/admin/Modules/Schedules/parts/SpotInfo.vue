@@ -72,13 +72,23 @@
                                 </div>
                             </div>
                         </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div v-if="showing_spot.phone" class="fcal_spot_details_row">
+                        <el-col v-if="showing_spot.phone" :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
                                 <div class="fcal_spot_details_label">
                                     Phone
                                 </div>
                                 <div class="fcal_spot_details_value">
                                     {{ showing_spot.phone }}
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Location
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <div class="fcal_location" v-html="showing_spot.location"></div>
                                 </div>
                             </div>
                         </el-col>

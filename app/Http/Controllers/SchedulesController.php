@@ -57,6 +57,7 @@ class SchedulesController extends Controller
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->author = $schedule->slot->getAuthorProfile(false);
+            $schedule->location = $schedule->getLocationDetailsHtml();
         }
 
         return [
@@ -155,6 +156,7 @@ class SchedulesController extends Controller
 
         $booking->happening_status = $booking->getOngoingStatus();
         $booking->author = $booking->slot->getAuthorProfile(false);
+        $booking->location = $booking->getLocationDetailsHtml();
 
         return [
             'schedule' => $booking
