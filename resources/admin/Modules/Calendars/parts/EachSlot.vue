@@ -1,9 +1,12 @@
 <template>
     <div :class="'fcal_status_'+slot.status" class="fcal_slot_card fcal_cal_slot">
         <div class="fcal_slot_body">
-            <h3>{{ slot.title }}</h3>
-            <p class="fcal_slot_meta">{{ slot.duration }} mins, One-on-One</p>
-
+            <h3 style="margin: 0">{{ slot.title }}</h3>
+            <p style="margin-top: 0" class="fcal_slot_meta">{{ slot.duration }} mins, One-on-One</p>
+            <p v-if="slot.public_url" class="fcal_slot_meta">
+                <span v-if="slot.status == 'draft'">View Booking Page</span>
+                <a :href="slot.public_url" target="_blank" rel="noopener" else>View Booking Page</a>
+            </p>
             <div class="fcal_slot_config">
                 <el-dropdown @command="handleCommand" trigger="click">
                     <el-button size="small" text>
