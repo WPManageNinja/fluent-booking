@@ -133,7 +133,7 @@
         .#{$slug}handheld {
             display: none;
         }
-        @media all and (max-width: 1024px) {
+        @media all and (max-width: 679px) {
             margin-right: 10px;
             ul.#{$slug}menu {
                 display: none;
@@ -145,6 +145,7 @@
                 li.#{$slug}menu_item {
                     display: block;
                     width: 100%;
+                    text-align: right;
                 }
 
                 .#{$slug}menu_primary span {

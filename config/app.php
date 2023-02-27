@@ -9,7 +9,7 @@
   'domain_path' => '/language',
   'text_domain' => 'fluent-calendar',
   'hook_prefix' => 'fluent-calendar',
-  'rest_namespace' => 'fluent-calendar',
+  'rest_namespace' => defined('FCAL_API_NAMESPACE') ? FCAL_API_NAMESPACE : 'fluent-calendar',
   'rest_version' => 'v2',
   'env' => 'dev',
 );
