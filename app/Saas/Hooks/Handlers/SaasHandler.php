@@ -15,8 +15,6 @@ class SaasHandler
     public function register()
     {
         add_action('template_redirect', [$this, 'maybeCalendarView'], 1);
-
-        add_shortcode('fluent_calendar_dashboard', [$this, 'renderDashboard']);
     }
 
     public function maybeCalendarView()
@@ -299,6 +297,13 @@ class SaasHandler
             'menuItems' => $menuItems,
             'baseUrl'   => $baseUrl,
             'logo'      => $assets . 'images/logo.svg',
+            'rightItems' => [
+                [
+                    'key' => 'logout',
+                    'label' => __('Logout', 'fluent-calendar'),
+                    'permalink'   => wp_logout_url(site_url())
+                ]
+            ]
         ]);
 
 

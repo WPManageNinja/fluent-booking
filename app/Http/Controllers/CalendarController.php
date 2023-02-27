@@ -6,6 +6,7 @@ use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\Helper;
+use FluentCalendar\App\Services\PermissionManager;
 use FluentCalendar\App\Services\SanitizeService;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
@@ -14,8 +15,7 @@ class CalendarController extends Controller
 {
     public function index(Request $request)
     {
-
-        if (current_user_can('manage_options')) {
+        if (PermissionManager::hasAllCalendarAccess()) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
         } else {
             $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();

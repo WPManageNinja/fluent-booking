@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Http\Controllers;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Services\Helper;
+use FluentCalendar\App\Services\PermissionManager;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
 
@@ -26,7 +27,7 @@ class SchedulesController extends Controller
             $author = (int)$author;
         }
 
-        if (!current_user_can('manage_options')) {
+        if (!PermissionManager::hasAllCalendarAccess()) {
             $author = get_current_user_id();
         }
 

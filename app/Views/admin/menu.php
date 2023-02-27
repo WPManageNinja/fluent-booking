@@ -28,6 +28,28 @@
                     </li>
 				<?php endforeach; ?>
             </ul>
+
+            <?php if(!empty($rightItems)): ?>
+                <ul class="fframe_menu fcal_secondary_menu">
+                    <?php foreach ($rightItems as $item): ?>
+                        <?php $hasSubMenu = !empty($item['sub_items']); ?>
+                        <li data-key="<?php echo esc_attr($item['key']); ?>" class="fframe_menu_item <?php echo ($hasSubMenu) ? 'fframe_has_sub_items' : ''; ?> fframe_item_<?php echo esc_attr($item['key']); ?>">
+                            <a class="fframe_menu_primary" href="<?php echo esc_url($item['permalink']); ?>">
+                                <?php echo sanitize_text_field($item['label']); ?>
+                                <?php if($hasSubMenu){ ?>
+                                    <span class="dashicons dashicons-arrow-down-alt2"></span>
+                                <?php } ?></a>
+                            <?php if($hasSubMenu): ?>
+                                <div class="fframe_submenu_items">
+                                    <?php foreach ($item['sub_items'] as $sub_item): ?>
+                                        <a href="<?php echo esc_url($sub_item['permalink']); ?>"><?php echo esc_attr($sub_item['label']); ?></a>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
         <div class="fframe_body">
             <div id="fluent-framework-app" class="fs_route_wrapper"></div>
