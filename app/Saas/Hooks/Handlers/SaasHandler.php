@@ -45,6 +45,10 @@ class SaasHandler
     {
         global $wp;
 
+        if($calendar->visibility != 'public') {
+            $this->showErrorPage('Invalid Calendar URL', 'This calendar is not public');
+        }
+        
         $activeSlots = CalendarSlot::where('calendar_id', $calendar->id)
             ->where('status', 'active')
             ->get();
