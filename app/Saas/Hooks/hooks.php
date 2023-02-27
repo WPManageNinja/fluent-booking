@@ -27,7 +27,7 @@ add_filter('fluent_calendar/verify_calendar_api', function ($can, $request) {
 
 }, 10, 2);
 
-add_action('fluent_calendar/before_patch_schedule', function ($spot) {
+add_action('fluent_calendar/before_patch_booking_schedule', function ($spot) {
     if($spot->calendar->user_id != get_current_user_id()) {
         throw new \Exception('You are not allowed to edit this schedule');
     }
@@ -40,3 +40,7 @@ add_action('fluent_calendar/before_create_calendar', function ($data) {
     }
 });
 
+
+add_action('fluent_calendar/calendar', function ($calendar) {
+    $calendar->public_url = site_url($calendar->slug);
+});

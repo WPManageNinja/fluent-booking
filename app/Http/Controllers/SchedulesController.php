@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Http\Controllers;
 
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
+use FluentCalendar\App\Services\Helper;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
 
@@ -22,10 +23,10 @@ class SchedulesController extends Controller
         if ($author == 'me') {
             $author = get_current_user_id();
         } else {
-            $author = (int) $author;
+            $author = (int)$author;
         }
 
-        if(!current_user_can('manage_options')) {
+        if (!current_user_can('manage_options')) {
             $author = get_current_user_id();
         }
 
@@ -63,16 +64,17 @@ class SchedulesController extends Controller
         ];
     }
 
-    public function patchSpot(Request $request, $spot_id)
+    public function patchBooking(Request $request, $bookingId)
     {
-        $oldSpot = $spot = Booking::findOrFail($spot_id);
+        $booking = Booking::findOrFail($bookingId);
+        $oldSBooking = clone $booking;
 
         $data = $request->all();
         $this->validate($data, [
             'column' => 'required',
         ]);
 
-        do_action('fluent_calendar/before_patch_schedule', $spot, $data);
+        do_action('fluent_calendar/before_patch_booking_schedule', $booking, $data);
 
         $value = $request->get('value');
         $column = $data['column'];
@@ -87,7 +89,7 @@ class SchedulesController extends Controller
             'status'
         ];
 
-        if(!in_array($column, $validColumns)) {
+        if (!in_array($column, $validColumns)) {
             return $this->sendError(['message' => 'Invalid column']);
         }
 
@@ -96,52 +98,84 @@ class SchedulesController extends Controller
                 return $this->sendError(['message' => 'Invalid email address']);
             }
             $value = sanitize_email($value);
-        } else if($column === 'internal_note') {
+        } else if ($column === 'internal_note') {
             $value = sanitize_textarea_field($value);
         } else {
             $value = sanitize_textarea_field($value);
         }
 
-        $updateData[$column] = $value;
-        $spot->fill($updateData);
-        $spot->save();
-
-        if($column === 'status') {
-            do_action('fluent_calendar/schedule_'.$value, $spot);
+        if ($column == 'status') {
+            $value = sanitize_text_field($value);
+            if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'no_show'])) {
+                return $this->sendError(['message' => 'Invalid status']);
+            }
         }
 
-        do_action('fluent_calendar/after_patch_schedule', $spot, $oldSpot);
+        $updateData[$column] = $value;
+        $booking->fill($updateData);
+        $booking->save();
+
+        if ($column === 'status' && $oldSBooking->status != $booking->status) {
+
+            if ($value == 'cancelled') {
+                $title = sprintf(__('Cancelled By %s', 'fluent-calendar'), Helper::getUserDisplayName());
+                $booking->addCancelReason($title, sanitize_textarea_field($request->get('cancel_reason')));
+            }
+
+            do_action('fluent_calendar/booking_schedule_' . $value, $booking);
+        }
+
+        do_action('fluent_calendar/after_patch_booking_schedule', $booking, $oldSBooking);
 
         return [
             'message' => sprintf(__('%s has been updated', 'fluent-calendar'), $column)
         ];
     }
 
-    public function getSpot(Request $request, $spot_id)
+    public function getBooking(Request $request, $bookingId)
     {
         $isAdmin = current_user_can('manage_options');
 
-        $spot = Booking::with('slot');
+        $booking = Booking::with('slot');
 
-        if(!$isAdmin) {
-            $spot->whereHas('calendar', function ($q) {
+        if (!$isAdmin) {
+            $booking->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
         }
 
-        $schedule = $spot->findOrFail($spot_id);
+        $booking = $booking->findOrFail($bookingId);
 
-        if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
-            $schedule->status = 'completed';
-            $schedule->save();
-            do_action('fluent_calendar/schedule_completed', $schedule);
+        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
+            $booking->status = 'completed';
+            $booking->save();
+            do_action('fluent_calendar/booking_schedule_completed', $booking);
         }
 
-        $schedule->happening_status = $schedule->getOngoingStatus();
-        $schedule->author = $schedule->slot->getAuthorProfile(false);
+        $booking->happening_status = $booking->getOngoingStatus();
+        $booking->author = $booking->slot->getAuthorProfile(false);
 
         return [
-            'spot' => $schedule
+            'schedule' => $booking
         ];
     }
+
+    public function getBookingActivities(Request $request, $bookingId)
+    {
+        $isAdmin = current_user_can('manage_options');
+
+        if ($isAdmin) {
+            $booking = Booking::findOrFail($bookingId);
+
+        } else {
+            $booking = Booking::whereHas('calendar', function ($q) {
+                $q->where('user_id', get_current_user_id());
+            })->findOrFail($bookingId);
+        }
+
+        return [
+            'activities' => $booking->getActivities()
+        ];
+    }
+
 }

@@ -26,6 +26,8 @@ class CalendarController extends Controller
             foreach ($calendar->slots as $slot) {
                 $slot->public_url = site_url($calendar->slug . '/' . $slot->slug);
             }
+
+            do_action_ref_array('fluent_calendar/calendar', [&$calendar]);
         }
 
         return [

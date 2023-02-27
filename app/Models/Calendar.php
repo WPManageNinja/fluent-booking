@@ -60,23 +60,23 @@ class Calendar extends Model
 
     public function getAuthorProfile($public = true)
     {
-        $author = get_user_by('id', $this->user_id);
-        if(!$author) {
+        $user = get_user_by('id', $this->user_id);
+        if(!$user) {
             return [
                 'avatar' => '',
                 'name' => 'Unknown'
             ];
         }
 
-        $name = trim($author->first_name.' '.$author->last_name);
+        $name = trim($user->first_name.' '.$user->last_name);
 
         if(!$name) {
-            $name = $author->display_name;
+            $name = $user->display_name;
         }
 
         return [
             'name' => $name,
-            'avatar' => get_avatar_url($author->ID)
+            'avatar' => apply_filters('fluent_calendar/author_photo', get_avatar_url($user->ID), $user)
         ];
     }
     

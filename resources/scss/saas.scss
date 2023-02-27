@@ -37,7 +37,7 @@ body * {
 }
 
 p {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   margin: 1em 0;
 }
@@ -46,6 +46,7 @@ p {
   max-width: 800px;
   margin: 66px auto 30px;
   background: white;
+  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
   &.f_cal_day_selected, &.f_cal_spot_selected {
     max-width: 1000px;
   }

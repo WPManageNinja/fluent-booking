@@ -31,9 +31,56 @@ class SaasHandler
         }
 
         if (count($urlParts) < 2) {
+            $calendar = Calendar::where('slug', $urlParts[0])->first();
+            if($calendar) {
+                $this->renderCalendarView($calendar);
+            }
             return;
         }
 
+        $this->maybeRenderBookingView($urlParts);
+    }
+
+    private function renderCalendarView($calendar)
+    {
+        global $wp;
+
+        $activeSlots = CalendarSlot::where('calendar_id', $calendar->id)
+            ->where('status', 'active')
+            ->get();
+
+        foreach ($activeSlots as $activeSlot) {
+            $activeSlot->public_url = site_url($calendar->slug . '/' . $activeSlot->slug);
+            $activeSlot->description = Helper::excerpt($activeSlot->description);
+        }
+
+        $metaDescription = Helper::excerpt($calendar->description);
+
+        $calendar->description = wpautop($calendar->description);
+
+        $authorProfile = $calendar->getAuthorProfile(true);
+
+        $data = [
+            'calendar' => $calendar,
+            'slots' => $activeSlots,
+            'author' => $authorProfile,
+            'title' => $authorProfile['name'],
+            'description' => $metaDescription,
+            'url'         => home_url($wp->request),
+            'css_files'   => [
+                App::getInstance('url.assets') . 'public/saas.css'
+            ],
+        ];
+
+        status_header(200);
+        $this->render('author_landing', $data);
+        exit(200);
+    }
+
+
+    private function maybeRenderBookingView($urlParts)
+    {
+        global $wp;
         $slug = sanitize_text_field($urlParts[0]);
         $calendar = Calendar::where('slug', $slug)->first();
 
