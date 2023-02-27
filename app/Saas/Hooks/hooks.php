@@ -40,18 +40,15 @@ add_action('fluent_calendar/before_create_calendar', function ($data) {
     }
 });
 
-
 add_action('fluent_calendar/calendar', function ($calendar) {
     $calendar->public_url = site_url($calendar->slug);
 });
-
 
 add_filter('fluent_calendar/supported_featured', function ($features) {
     $features['multi_users'] = false;
     $features['is_hosted'] = true;
     return $features;
 });
-
 
 add_action('fluent_calendar/before_update_calendar', function ($calendar, $data) {
 
@@ -79,3 +76,7 @@ add_action('fluent_calendar/before_update_calendar', function ($calendar, $data)
     }
 
 }, 10, 2);
+
+add_filter('fluent_calendar/has_all_calendar_access', function ($result) {
+    return false;
+});

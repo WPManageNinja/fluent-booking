@@ -62,7 +62,7 @@ app.mixin({
             return new Intl.NumberFormat('en-US').format(amount)
         },
         $changeTitle(title) {
-            jQuery('head title').text(title + ' - FluentCal');
+            jQuery('head title').text(title + ' - ConvertLeap');
         },
         $handleError(response) {
             let errorMessage = '';

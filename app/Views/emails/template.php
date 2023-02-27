@@ -48,7 +48,7 @@
     <tr>
         <td>
             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: center; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; margin: 0 0 15px 0;">
-                Powered By FluentCal
+                <a href="https://convertleap.com">Powered By ConvertLeap</a>
             </p>
         </td>
     </tr>
