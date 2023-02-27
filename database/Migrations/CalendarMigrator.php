@@ -30,6 +30,7 @@ class CalendarMigrator
                 `type` VARCHAR(20) NOT NULL DEFAULT 'simple',
                 `event_type` VARCHAR(20) NOT NULL DEFAULT 'scheduling',
                 `account_type` VARCHAR(20) NOT NULL DEFAULT 'free',
+                `visibility` VARCHAR(20) NOT NULL DEFAULT 'public',
                 `author_timezone` VARCHAR(192) NULL DEFAULT 'UTC',
                 `max_book_per_slot` INT(10) UNSIGNED NOT NULL DEFAULT 1,
                 `created_at` TIMESTAMP NULL,

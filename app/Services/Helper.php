@@ -3,11 +3,12 @@
 namespace FluentCalendar\App\Services;
 
 use FluentCalendar\App\Models\Calendar;
+use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Models\Meta;
 
 class Helper
 {
-    public static function isCalendarSlugAvailable($slug, $checkDb = true)
+    public static function isCalendarSlugAvailable($slug, $checkDb = true, $exceptId = false)
     {
         $reserved = [
             '0',
@@ -622,8 +623,17 @@ class Helper
             return false;
         }
 
-        if ($checkDb && Calendar::where('slug', $slug)->first()) {
-            return false;
+        if ($checkDb) {
+
+            if($exceptId) {
+                $exist = Calendar::where('slug', $slug)->where('id', '!=', $exceptId)->first();
+            } else {
+                $exist = Calendar::where('slug', $slug)->first();
+            }
+
+            if($exist) {
+                return false;
+            }
         }
 
 
@@ -720,5 +730,20 @@ class Helper
         }
 
         return $text;
+    }
+
+    public static function generateSlotSlug($default, $calendar)
+    {
+        $original = sanitize_title($default, $default, 'display');
+
+        $default = $original;
+
+        $counter = 1;
+
+        while(CalendarSlot::where('calendar_id', $calendar->id)->where('slug', $default)->first()) {
+            $default = $original . '-' . $counter;
+        }
+
+        return apply_filters('fluent_calendar/slot_slug', $default, $original);
     }
 }

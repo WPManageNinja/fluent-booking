@@ -13,6 +13,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('check-slug', 'CalendarController@checkSlug');
 
     $router->get('/{id}', 'CalendarController@getCalendar')->int('id');
+    $router->post('/{id}', 'CalendarController@updateCalendar')->int('id');
 
     $router->post('/{id}/slots', 'CalendarController@createCalendarSlot')->int('id');
     $router->get('/{id}/slot-schema', 'CalendarController@getSlotSchema')->int('id');

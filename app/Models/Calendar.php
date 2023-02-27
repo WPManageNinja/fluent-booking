@@ -21,9 +21,11 @@ class Calendar extends Model
         'settings',
         'status',
         'type',
+        'event_type',
         'account_type',
         'author_timezone',
-        'max_book_per_slot'
+        'max_book_per_slot',
+        'visibility'
     ];
 
     public static function boot()
@@ -76,6 +78,8 @@ class Calendar extends Model
 
         return [
             'name' => $name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'avatar' => apply_filters('fluent_calendar/author_photo', get_avatar_url($user->ID), $user)
         ];
     }

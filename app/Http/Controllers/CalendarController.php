@@ -15,7 +15,7 @@ class CalendarController extends Controller
     public function index(Request $request)
     {
 
-        if(current_user_can('manage_options')) {
+        if (current_user_can('manage_options')) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
         } else {
             $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
@@ -103,17 +103,17 @@ class CalendarController extends Controller
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $slotData = [
-            'title'            => $title,
-            'slug'             => sanitize_title($slot['duration'] . ' Minutes Meeting', $slot['duration'] . '-minutes-meeting', 'display'),
-            'calendar_id'      => $calendar->id,
-            'duration'         => (int)$slot['duration'],
-            'settings'         => [
+            'title'             => $title,
+            'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
+            'calendar_id'       => $calendar->id,
+            'duration'          => (int)$slot['duration'],
+            'settings'          => [
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],
-            'status'           => 'active',
-            'location_type'    => sanitize_text_field(Arr::get($slot, 'location_type')),
-            'location_heading' => sanitize_text_field(Arr::get($slot, 'location_heading')),
+            'status'            => 'active',
+            'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
+            'location_heading'  => sanitize_text_field(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
@@ -127,7 +127,7 @@ class CalendarController extends Controller
         return [
             'calendar'     => $calendar,
             'slot'         => $slot,
-            'redirect_url' => Helper::getAppBaseUrl('calendars/'.$calendar->id.'/slot-settings/'.$slot->id)
+            'redirect_url' => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/slot-settings/' . $slot->id)
         ];
     }
 
@@ -140,6 +140,28 @@ class CalendarController extends Controller
         ];
     }
 
+    public function updateCalendar(Request $request, $id)
+    {
+        $data = $request->all();
+
+        $calendar = Calendar::findOrFail($id);
+
+        do_action_ref_array('fluent_calendar/before_update_calendar', [&$calendar, $data]);
+
+        $calendar->description = wp_kses_post($request->get('description'));
+        $calendar->save();
+        do_action('fluent_calendar/after_update_calendar', $calendar, $data);
+
+        $calendar->author_profile = $calendar->getAuthorProfile();
+
+        do_action_ref_array('fluent_calendar/calendar', [&$calendar]);
+
+        return [
+            'calendar' => $calendar,
+            'message'  => __('Calendar has been updated successfully', 'fluent-calendar')
+        ];
+    }
+
     public function getSlot(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar'])->findOrFail($slotId);
@@ -149,7 +171,7 @@ class CalendarController extends Controller
 
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
 
-        $slotSettings['date_overrides'] = (object) SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
+        $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
 
         $slot->settings = $slotSettings;
 
@@ -190,23 +212,23 @@ class CalendarController extends Controller
         ]);
 
         $slotData = [
-            'title'         => $slot['duration'] . ' Minute Meeting',
-            'slug'          => sanitize_title($slot['duration'] . ' Minute Meeting', $slot['duration'] . '-minute-meeting', 'display'),
-            'calendar_id'   => $calendar->id,
-            'duration'      => (int)$slot['duration'],
-            'description'   => sanitize_textarea_field(Arr::get($slot, 'description')),
-            'settings'      => [
-                'schedule_type'    => sanitize_text_field($slot['settings']['schedule_type']),
-                'weekly_schedules' => SanitizeService::weeklySchedules($slot['settings']['weekly_schedules'], $calendar->author_timezone, 'UTC'),
-                'date_overrides' => SanitizeService::slotDateOverrides(Arr::get($slot['settings'], 'date_overrides', []), $calendar->author_timezone, 'UTC'),
-                'range_type' => sanitize_text_field(Arr::get($slot['settings'], 'range_type')),
-                'range_days' => (int) (Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
-                'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
+            'title'             => $slot['duration'] . ' Minute Meeting',
+            'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
+            'calendar_id'       => $calendar->id,
+            'duration'          => (int)$slot['duration'],
+            'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
+            'settings'          => [
+                'schedule_type'       => sanitize_text_field($slot['settings']['schedule_type']),
+                'weekly_schedules'    => SanitizeService::weeklySchedules($slot['settings']['weekly_schedules'], $calendar->author_timezone, 'UTC'),
+                'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($slot['settings'], 'date_overrides', []), $calendar->author_timezone, 'UTC'),
+                'range_type'          => sanitize_text_field(Arr::get($slot['settings'], 'range_type')),
+                'range_days'          => (int)(Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
+                'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
             ],
-            'status'        => 'active',
-            'location_type' => sanitize_text_field(Arr::get($slot, 'location_type')),
-            'location_heading' => wp_kses_post(Arr::get($slot, 'location_heading')),
+            'status'            => 'active',
+            'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
+            'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', []))
         ];
 
@@ -231,17 +253,17 @@ class CalendarController extends Controller
         ]);
 
         $slot->settings = [
-            'schedule_type'    => sanitize_text_field($data['settings']['schedule_type']),
-            'weekly_schedules' => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $slot->calendar->author_timezone, 'UTC'),
-            'date_overrides' => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $slot->calendar->author_timezone, 'UTC'),
-            'range_type' => sanitize_text_field(Arr::get($data['settings'], 'range_type')),
-            'range_days' => (int) (Arr::get($data['settings'], 'range_days', 60)) ?: 60,
-            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
+            'schedule_type'       => sanitize_text_field($data['settings']['schedule_type']),
+            'weekly_schedules'    => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $slot->calendar->author_timezone, 'UTC'),
+            'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $slot->calendar->author_timezone, 'UTC'),
+            'range_type'          => sanitize_text_field(Arr::get($data['settings'], 'range_type')),
+            'range_days'          => (int)(Arr::get($data['settings'], 'range_days', 60)) ?: 60,
+            'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
         ];
 
         $slot->title = sanitize_text_field($data['title']);
-        $slot->duration = (int) $data['duration'];
+        $slot->duration = (int)$data['duration'];
         $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
         $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
         $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
@@ -298,7 +320,7 @@ class CalendarController extends Controller
 
         foreach ($notifications as $key => $value) {
             $formattedNotifications[$key] = [
-                'title' => sanitize_text_field($value['title']),
+                'title'   => sanitize_text_field($value['title']),
                 'enabled' => Arr::isTrue($value, 'enabled'),
             ];
         }

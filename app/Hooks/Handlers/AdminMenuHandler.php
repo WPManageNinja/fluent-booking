@@ -141,7 +141,7 @@ class AdminMenuHandler
             'site_url' => site_url('/'),
             'timezones' => DateTimeHelper::getTimeZones(true),
             'supported_features' => apply_filters('fluent_calendar/supported_featured', [
-                'multi_users' => false
+                'multi_users' => true
             ])
         ];
     }
