@@ -84,7 +84,7 @@ class EmailNotificationService
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ')',
+            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $calendar->author_timezone . ')',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
@@ -93,7 +93,7 @@ class EmailNotificationService
         $data = apply_filters('fluent_calendar/booking_confirmation_email_data', $data, $booking, $slot);
 
         $html = (string) App::make('view')->make('emails.confirmation_to_admin', $data);
-        $subject = sprintf(__('New Booking: %1s @ %2s (%3s)', 'fluent-calendar'), trim($booking->first_name.' '.$booking->last_name), $booking->getShortBookingDateTime($booking->person_time_zone), $booking->email);
+        $subject = sprintf(__('New Booking: %1s @ %2s (%3s)', 'fluent-calendar'), trim($booking->first_name.' '.$booking->last_name), $booking->getShortBookingDateTime($calendar->author_timezone), $booking->email);
 
         $body = (string) App::make('view')->make('emails.template', [
             'email_body' => $html,
@@ -204,7 +204,7 @@ class EmailNotificationService
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ') - in 1 hour',
+            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $calendar->author_timezone . ') - in 1 hour',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
@@ -324,7 +324,7 @@ class EmailNotificationService
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ') - in 1 hour',
+            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $calendar->author_timezone . ') - in 1 hour',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
@@ -380,13 +380,11 @@ class EmailNotificationService
 
         $author = $slot->getAuthorProfile(false);
 
-        $calendar = $slot->calendar;
-
         $cancelReason = $booking->getCancelReason();
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ')',
+            'event_date'     => $booking->getFullBookingDateTimeText($booking->person_timezone) . ' (' . $booking->person_timezone . ')',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
@@ -451,7 +449,7 @@ class EmailNotificationService
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $booking->author_timezone . ') - in 1 hour',
+            'event_date'     => $booking->getFullBookingDateTimeText($calendar->author_timezone) . ' (' . $calendar->author_timezone . ') - in 1 hour',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
