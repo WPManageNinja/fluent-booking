@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_slot_card fcal_cal_slot">
+    <div :class="'fcal_status_'+slot.status" class="fcal_slot_card fcal_cal_slot">
         <div class="fcal_slot_body">
             <h3>{{ slot.title }}</h3>
             <p class="fcal_slot_meta">{{ slot.duration }} mins, One-on-One</p>

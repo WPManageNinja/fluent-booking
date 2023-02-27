@@ -9,8 +9,9 @@
     <meta name="description" content="<?php echo esc_attr($description); ?>">
     <meta name="robots" content="noindex">
 
+    <?php if(!empty($author['avatar'])): ?>
     <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>" />
-
+    <?php endif; ?>
 
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:type" content="website">
