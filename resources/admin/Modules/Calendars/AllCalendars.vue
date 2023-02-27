@@ -1,10 +1,10 @@
 <template>
     <div class="fcal_create_calendar fcal_section fcal_section_narrow">
-        <div style="padding:15px;" class="fcal_section_header">
+        <div v-if="hasSupport('multi_users')" style="padding:15px;" class="fcal_section_header">
             <div class="fcal_title">
                 <h3>Booking Types</h3>
             </div>
-            <div v-if="hasSupport('multi_users')" class="fcal_actions">
+            <div class="fcal_actions">
                 <el-button @click="$router.push({name: 'create_calendar'})" type="default">Create New</el-button>
             </div>
         </div>

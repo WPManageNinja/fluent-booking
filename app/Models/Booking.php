@@ -191,4 +191,42 @@ class Booking extends Model
         return '';
     }
 
+    public function getCancelReason()
+    {
+        return BookingActivity::where('booking_id', $this->id)
+            ->where('type', 'cancel_reason')
+            ->first();
+    }
+
+    public function addCancelReason($title, $reason)
+    {
+        if(!$reason && !$title) {
+            return null;
+        }
+
+        $exist = $this->getCancelReason();
+
+        if($exist) {
+            $exist->title = $title;
+            $exist->description = $reason;
+            $exist->save();
+            return $exist;
+        }
+
+        return BookingActivity::create([
+            'booking_id' => $this->id,
+            'type' => 'cancel_reason',
+            'title' => $title,
+            'description' => $reason
+        ]);
+
+    }
+
+    public function getActivities()
+    {
+        return BookingActivity::where('booking_id', $this->id)
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
 }

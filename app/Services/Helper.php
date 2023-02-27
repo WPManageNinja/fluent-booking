@@ -683,4 +683,42 @@ class Helper
             ->where('key', $key)
             ->delete();
     }
+
+    public static function getUserDisplayName($userId = null)
+    {
+        if (!$userId) {
+            $userId = get_current_user_id();
+        }
+
+        if (!$userId) {
+            return '';
+        }
+
+        $user = get_user_by('ID', $userId);
+
+
+        $name = trim($user->first_name . ' ' . $user->last_name);
+
+        if ($name) {
+            return $name;
+        }
+
+        return $user->display_name;
+    }
+
+    public static function excerpt($text, $max_length = 160)
+    {
+        // Strip HTML tags and convert entities to their corresponding characters
+        $text = html_entity_decode(strip_tags($text));
+
+        // Remove any line breaks, tabs, or extra whitespace
+        $text = preg_replace('/\s+/', ' ', trim($text));
+
+        if (mb_strlen($text) > $max_length) {
+            $text = mb_substr($text, 0, $max_length);
+            $text = preg_replace('/\s+\S+$/', '', $text) . '...';
+        }
+
+        return $text;
+    }
 }

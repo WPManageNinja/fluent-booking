@@ -1,10 +1,11 @@
 <template>
     <div class="fcal_event_block">
-        <div class="fcal_cal_header">
+        <div class="fcal_cal_header fcal_section_header">
             <div class="fcal_cal_title">
                 <img :src="calendar.author_profile.avatar"/>
                 <div class="fcal_cal_info">
                     <h3>{{ calendar.author_profile.name }}</h3>
+                    <p v-if="calendar.public_url" class="fcal_profile_link"><a target="_blank" rel="noopener" :href="calendar.public_url">{{calendar.public_url}}</a></p>
                 </div>
             </div>
             <div class="fcal_cal_actions">

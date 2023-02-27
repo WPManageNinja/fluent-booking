@@ -121,3 +121,29 @@ table.fcal_table {
     margin-bottom: 10px;
     color: #595959;
 }
+
+h3.fcal_section_title {
+    font-size: 20px;
+    margin: 15px 0;
+    font-weight: 500;
+}
+
+.fcal_booking_header {
+    padding: 12px 40px;
+    background: #e3e8ee;
+    margin: -40px -40px 30px;
+    border-bottom: 2px solid #e3e8ee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 58px;
+}
+
+.fcal_status_cancelled * {
+    text-decoration: line-through;
+}
+
+p.fcal_profile_link a {
+    text-decoration: none;
+    font-weight: 500;
+}

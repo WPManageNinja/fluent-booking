@@ -28,9 +28,12 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 });
 
 $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
+
     $router->get('/', 'SchedulesController@index');
-    $router->get('spot/{spot_id}', 'SchedulesController@getSpot')->int('spot_id');
-    $router->put('spot/{spot_id}', 'SchedulesController@patchSpot')->int('spot_id');
+    $router->get('/{booking_id}', 'SchedulesController@getBooking')->int('booking_id');
+    $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
+    $router->get('/{booking_id}/activities', 'SchedulesController@getBookingActivities')->int('booking_id');
+
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {

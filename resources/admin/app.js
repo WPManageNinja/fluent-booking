@@ -87,6 +87,9 @@ app.mixin({
         toCurrentTimezone(date, format) {
             return dayjs(date).utc('z').local().tz(this.currentTimezone).format(format);
         },
+        isToday(date) {
+            return dayjs(date).isSame(dayjs(), 'day');
+        },
         toDateFormat(date, format) {
             return dayjs(date).format(format);
         },

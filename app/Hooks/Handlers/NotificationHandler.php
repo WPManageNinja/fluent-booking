@@ -16,18 +16,20 @@ class NotificationHandler
 
         add_action('fluent_calendar/booking_reminder_one_hour', [$this, 'maybeOneHourReminder']);
         add_action('fluent_calendar/booking_reminder_15_minutes', [$this, 'maybe15MinReminder']);
+
+        add_action('fluent_calendar/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
     }
 
-    public function pushBookingScheduledToQueue($booking, $slot )
+    public function pushBookingScheduledToQueue($booking, $slot)
     {
 
         $reminders = $slot->getNotifications();
 
-        if(Arr::isTrue($reminders, 'booking_conf_attendee.enabled') || (Arr::isTrue($reminders, 'booking_conf_host.enabled'))) {
-            as_enqueue_async_action( 'fluent_calendar/after_booking_scheduled_async', [
+        if (Arr::isTrue($reminders, 'booking_conf_attendee.enabled') || (Arr::isTrue($reminders, 'booking_conf_host.enabled'))) {
+            as_enqueue_async_action('fluent_calendar/after_booking_scheduled_async', [
                 $booking->id,
                 $slot->id
-            ], 'fluent-calendar' );
+            ], 'fluent-calendar');
         }
     }
 
@@ -36,14 +38,14 @@ class NotificationHandler
         $booking = Booking::find($bookingId);
         $slot = CalendarSlot::find($slotId);
 
-        if($booking && $slot) {
+        if ($booking && $slot) {
             $reminders = $slot->getNotifications();
 
-            if(Arr::isTrue($reminders, 'booking_conf_attendee.enabled')) {
+            if (Arr::isTrue($reminders, 'booking_conf_attendee.enabled')) {
                 EmailNotificationService::emailToGuestOnBooked($booking, $slot);
             }
 
-            if(Arr::isTrue($reminders, 'booking_conf_host.enabled')) {
+            if (Arr::isTrue($reminders, 'booking_conf_host.enabled')) {
                 EmailNotificationService::emailToHostOnBooked($booking, $slot);
             }
         }
@@ -58,20 +60,20 @@ class NotificationHandler
     public function maybeOneHourReminder($booking)
     {
         $slot = $booking->slot;
-        if(!$slot) {
+        if (!$slot) {
             return;
         }
         $notifications = $slot->getNotifications();
 
-        if(!$notifications) {
+        if (!$notifications) {
             return;
         }
 
-        if(Arr::isTrue($notifications, 'reminder_1_hour_attendee.enabled')) {
+        if (Arr::isTrue($notifications, 'reminder_1_hour_attendee.enabled')) {
             EmailNotificationService::emailToGuestOnOneHourReminder($booking, $slot);
         }
 
-        if(Arr::isTrue($notifications, 'reminder_1_hour_host.enabled')) {
+        if (Arr::isTrue($notifications, 'reminder_1_hour_host.enabled')) {
             EmailNotificationService::emailToHostOnOneHourReminder($booking, $slot);
         }
 
@@ -80,21 +82,32 @@ class NotificationHandler
     public function maybe15MinReminder($booking)
     {
         $slot = $booking->slot;
-        if(!$slot) {
+        if (!$slot) {
             return;
         }
         $notifications = $slot->getNotifications();
 
-        if(!$notifications) {
+        if (!$notifications) {
             return;
         }
 
-        if(Arr::isTrue($notifications, 'reminder_15_min_attendee.enabled')) {
+        if (Arr::isTrue($notifications, 'reminder_15_min_attendee.enabled')) {
             EmailNotificationService::emailToGuest15MinutesReminder($booking, $slot);
         }
 
-        if(Arr::isTrue($notifications, 'reminder_15_min_host.enabled')) {
+        if (Arr::isTrue($notifications, 'reminder_15_min_host.enabled')) {
             EmailNotificationService::emailToHostOn15MinutesReminder($booking, $slot);
         }
+    }
+
+    public function emailOnBookingCancelled($booking)
+    {
+        $slot = $booking->slot;
+        if (!$slot) {
+            return;
+        }
+
+        EmailNotificationService::bookingCancelledEmailToUser($booking, $slot);
+        EmailNotificationService::bookingCancelledEmailToUser($booking, $slot);
     }
 }
