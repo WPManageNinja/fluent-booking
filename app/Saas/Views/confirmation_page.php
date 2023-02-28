@@ -18,6 +18,9 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
     <meta property="og:author" content="<?php echo $author['name']; ?>">
 
+    <meta property="og:image" content="<?php echo FLUENT_CALENDAR_URL; ?>assets/images/default-featured.png" />
+
+
     <?php foreach ($css_files as $css_file): ?>
     <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen" />
     <?php endforeach; ?>

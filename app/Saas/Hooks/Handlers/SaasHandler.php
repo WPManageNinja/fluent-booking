@@ -169,8 +169,6 @@ class SaasHandler
 
         $calendar->description = wpautop($calendar->description);
 
-
-
         $authorProfile = $calendar->getAuthorProfile(true);
 
         $data = [
