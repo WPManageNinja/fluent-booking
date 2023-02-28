@@ -10,7 +10,7 @@
 
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="FluentHub">
+    <meta property="og:site_name" content="ConvertLeap">
 
     <?php foreach ($css_files as $css_file): ?>
         <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen" />
