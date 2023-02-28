@@ -256,7 +256,6 @@ class SaasHandler
                         'year'  => (int)$selectedMonth[0]
                     ];
                 }
-
             }
         }
 

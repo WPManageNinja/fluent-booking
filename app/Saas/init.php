@@ -1,5 +1,9 @@
 <?php
 
+if(!defined('FLUENT_CALENDER_IS_SAAS')) {
+    return;
+}
+
 if(!defined('FLUENT_CALENDAR_SASS')) {
     define('FLUENT_CALENDAR_SASS', true);
 }
