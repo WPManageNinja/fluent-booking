@@ -13,6 +13,7 @@ Domain Path: /language
 */
 
 define('FLUENT_CALENDAR_DIR', plugin_dir_path(__FILE__));
+define('FLUENT_CALENDAR_URL', plugin_dir_url(__FILE__));
 
 require __DIR__.'/vendor/autoload.php';
 

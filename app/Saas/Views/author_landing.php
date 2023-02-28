@@ -7,16 +7,19 @@
     <meta content='width=device-width, initial-scale=1' name='viewport'>
     <meta content='yes' name='apple-mobile-web-app-capable'>
     <meta name="description" content="<?php echo esc_attr($description); ?>">
-    <meta name="robots" content="noindex">
+    <meta name="robots" content="noindex"/>
 
-    <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>" />
+    <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>">
 
-    <meta property="og:title" content="<?php echo esc_attr($title); ?>">
+    <meta property="og:title" content="<?php echo esc_attr($title); ?>" />
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<?php echo esc_url($url); ?>">
+    <meta property="og:url" content="<?php echo esc_url($url); ?>"/>
     <meta property="og:site_name" content="ConvertLeap">
-    <meta property="og:description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:author" content="<?php echo $author['name']; ?>">
+    <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
+    <meta property="og:author" content="<?php echo $author['name']; ?>"/>
+
+    <meta property="og:image" content="<?php echo FLUENT_CALENDAR_URL; ?>assets/images/default-featured.png" />
+
 
     <?php foreach ($css_files as $css_file): ?>
         <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen"/>

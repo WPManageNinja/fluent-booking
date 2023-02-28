@@ -10,3 +10,5 @@
 
 - For Dev: `npx mix --mix-config=public-webpack.mix.js watch`
 - For Production: `npx mix --mix-config=public-webpack.mix.js --production`
+
+
