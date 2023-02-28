@@ -96,3 +96,4 @@ add_action('fluent_calendar/booking_confirmation_footer', function ($booking) {
  * Disable FluentCRM Auto Booking Contact Syncing
  */
 add_filter('fluent_calender/auto_booking_fluent_crm_sync', '__return_false');
+
