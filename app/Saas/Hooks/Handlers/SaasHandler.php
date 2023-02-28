@@ -157,12 +157,19 @@ class SaasHandler
 
         foreach ($activeSlots as $activeSlot) {
             $activeSlot->public_url = site_url($calendar->slug . '/' . $activeSlot->slug);
-            $activeSlot->description = Helper::excerpt($activeSlot->description);
+            if($activeSlot->description) {
+                $activeSlot->description = Helper::excerpt($activeSlot->description);
+            } else {
+                $activeSlot->description = sprintf('Book a meeting with me for %d minutes', $activeSlot->duration);
+            }
         }
 
         $metaDescription = Helper::excerpt($calendar->description);
 
+
         $calendar->description = wpautop($calendar->description);
+
+
 
         $authorProfile = $calendar->getAuthorProfile(true);
 
