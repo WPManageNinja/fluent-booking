@@ -11,16 +11,12 @@
 
     <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>" />
 
-
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo esc_url($url); ?>">
-    <meta property="og:site_name" content="FluentHub">
+    <meta property="og:site_name" content="ConvertLeap">
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:author" content="Md Shahjahan">
-    <meta property="og:image" content="">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:author" content="<?php echo $author['name']; ?>">
 
     <?php foreach ($css_files as $css_file): ?>
     <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen" />
