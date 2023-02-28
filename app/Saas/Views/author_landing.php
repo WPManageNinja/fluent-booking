@@ -63,15 +63,23 @@
         .cal_slot .cal_description {
             font-size: 14px;
             color: #666;
+            min-height: 80px;
         }
+
+        .cal_slot button {
+            border: 1px solid #666;
+            padding: 5px 15px;
+            background: white;
+            cursor: pointer;
+        }
+
         .cal_slot:hover {
             box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
         }
 
-        .cal_slot a {
+        .cal_slot > a.cal_card {
             color: initial;
             text-decoration: none;
-            min-height: 180px;
             padding: 20px;
             display: block;
         }
@@ -102,6 +110,9 @@
                     <a href="<?php echo $slot->public_url; ?>" class="cal_card">
                         <h2><?php echo $slot->title; ?></h2>
                         <div class="cal_description"><?php echo $slot->description; ?></div>
+                        <button class="book_now">
+                            Book Now
+                        </button>
                     </a>
                 </div>
                 <?php endforeach; ?>
