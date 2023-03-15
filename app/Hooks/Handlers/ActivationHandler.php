@@ -19,6 +19,8 @@ class ActivationHandler
     {
         DBMigrator::run($network_wide);
         DBSeeder::run();
+
+        $this->registerWpCron();
     }
 
 

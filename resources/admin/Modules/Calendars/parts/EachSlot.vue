@@ -25,13 +25,21 @@
         </div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
-                <el-button @click="copyTo(slot.public_url)" text>
+                <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" text>
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
                     <span v-if="!isCopied">Copy Link</span>
                     <span v-else>Copied</span>
                 </el-button>
+                <el-button v-else-if="slot.shortcode" @click="copyTo(slot.shortcode)" text>
+                    <el-icon>
+                        <CopyDocument/>
+                    </el-icon>
+                    <span v-if="!isCopied">Copy Shorcode</span>
+                    <span v-else>Copied</span>
+                </el-button>
+
             </div>
             <div v-else>
                 <el-button v-loading="working" :disabled="working" @click="updateStatus('active')" text>
@@ -70,7 +78,12 @@ export default {
         copyTo(text) {
             copyToClipBoard(text);
             this.isCopied = true;
-            this.$notify.success('URL has been copied to your clipboard');
+
+            if(this.slot.public_url) {
+                this.$notify.success('URL has been copied to your clipboard');
+            } else {
+                this.$notify.success('Shortcode has been copied to your clipboard');
+            }
 
             setTimeout(() => {
                 this.isCopied = false;
