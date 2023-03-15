@@ -4,7 +4,6 @@ namespace FluentCalendar\App\Models;
 
 use FluentCalendar\App\Models\Model;
 use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\Framework\Database\Orm\DateTime;
 use FluentCalendar\Framework\Support\Arr;
 
 class Booking extends Model

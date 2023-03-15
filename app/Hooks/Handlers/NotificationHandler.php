@@ -12,6 +12,7 @@ class NotificationHandler
     public function register()
     {
         add_action('fluent_calendar/after_booking_scheduled', array($this, 'pushBookingScheduledToQueue'), 10, 2);
+
         add_action('fluent_calendar/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
 
         add_action('fluent_calendar/booking_reminder_one_hour', [$this, 'maybeOneHourReminder']);

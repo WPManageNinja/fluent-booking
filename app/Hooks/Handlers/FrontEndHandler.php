@@ -12,28 +12,28 @@ class FrontEndHandler
 {
     public function register()
     {
-        add_shortcode('fluent_calendar', [$this, 'handleShortcode']);
+        add_shortcode('fluent_calendar_booking', [$this, 'handleShortcode']);
     }
 
     public function handleShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'id'      => 0,
-            'slot_id' => ''
+            'id'             => 0,
+            'disable_author' => 'no'
         ], $atts);
 
-        if (!$atts['id'] || !$atts['slot_id']) {
+        if (!$atts['id']) {
             return '';
         }
 
-        $calendar = Calendar::find($atts['id']);
-        $slot = CalendarSlot::find($atts['slot_id']);
+        $slot = CalendarSlot::find($atts['id']);
+        $calendar = $slot->calendar;
 
-        if($slot) {
-            return ;
+        if (!$slot) {
+            return;
         }
 
-        $slot->max_lookup_date =  $slot->getMaxLookUpDate();
+        $slot->max_lookup_date = $slot->getMaxLookUpDate();
         $slot->min_lookup_date = $slot->getMinLookUpDate();
 
         $formFields = BookingService::getBookingFields($slot);
@@ -50,11 +50,12 @@ class FrontEndHandler
 
         $slot->description = wpautop($slot->description);
 
-        wp_localize_script('fluent-calendar-public', 'fcal_public_vars_' . $calendar->id . '_'.$slot->id, [
+        wp_localize_script('fluent-calendar-public', 'fcal_public_vars_' . $calendar->id . '_' . $slot->id, [
             'slot'           => $slot,
             'calendar'       => $calendar,
             'author_profile' => $slot->getAuthorProfile(true),
-            'form_fields'    => $formFields
+            'form_fields'    => $formFields,
+            'disable_author' => $atts['disable_author'] == 'yes',
         ]);
 
         return App::make('view')->make('public.calendar', [
@@ -79,30 +80,30 @@ class FrontEndHandler
 
         $rest = [
             'base_url'  => esc_url_raw(rest_url()),
-            'url'       => rest_url($ns . '/' . $ver).'/public',
+            'url'       => rest_url($ns . '/' . $ver) . '/public',
             'nonce'     => wp_create_nonce('wp_rest'),
             'namespace' => $ns,
             'version'   => $ver
         ];
 
         $currentPerson = [
-            'name' => '',
+            'name'  => '',
             'email' => ''
         ];
 
-        if(is_user_logged_in()) {
+        if (is_user_logged_in()) {
             $currentUser = wp_get_current_user();
             $name = trim($currentUser->first_name . ' ' . $currentUser->last_name);
             $currentPerson = [
-                'name' => $name ? $name : $currentUser->display_name,
-                'email' => $currentUser->user_email,
+                'name'    => $name ? $name : $currentUser->display_name,
+                'email'   => $currentUser->user_email,
                 'user_id' => $currentUser->ID
             ];
         }
 
         wp_localize_script('fluent-calendar-public', 'fluentCalendarPublicVars', [
-            'rest' => $rest,
-            'timezones' => DateTimeHelper::getFlatGroupedTimeZones(),
+            'rest'           => $rest,
+            'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson
         ]);
     }

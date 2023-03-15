@@ -45,6 +45,10 @@ add_action('fluent_calendar/calendar', function ($calendar) {
     $calendar->public_url = site_url($calendar->slug);
 });
 
+add_action('fluent_calendar/calendar_slot', function ($slot) {
+    $slot->public_url = site_url($slot->calendar->slug . '/' . $slot->slug);
+});
+
 add_filter('fluent_calendar/supported_featured', function ($features) {
     $features['multi_users'] = false;
     $features['is_hosted'] = true;

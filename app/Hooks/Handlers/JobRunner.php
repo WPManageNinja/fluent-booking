@@ -27,7 +27,7 @@ class JobRunner
         return [
             'one_hour'        => $this->oneHourDones,
             'fifteen_minutes' => $this->fifteenMinutesDones,
-            'time_took' => time() - $this->startedAt
+            'time_took'       => time() - $this->startedAt
         ];
     }
 
@@ -37,12 +37,13 @@ class JobRunner
             return false;
         }
 
-        $fromDate = date('Y-m-d H:i:s', strtotime('-1 hour'));
-        $toDate = date('Y-m-d H:i:s', strtotime('-45 minutes'));
+        $fromDate = date('Y-m-d H:i:s', strtotime('+40 minutes'));
+        $toDate = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         $bookings = Booking::where('status', 'scheduled')
             ->with(['slot'])
             ->whereBetween('next_reminder', [$fromDate, $toDate])
+            ->where('reminder_stage', '!=', 'one_hour')
             ->limit(30)
             ->get();
 
@@ -69,16 +70,18 @@ class JobRunner
             return false;
         }
 
-        $fromDate = date('Y-m-d H:i:s', strtotime('-15 minutes'));
-        $toDate = date('Y-m-d H:i:s', strtotime('-5 minutes'));
+        $fromDate = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+        $toDate = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
         $bookings = Booking::where('status', 'scheduled')
             ->with(['slot'])
             ->whereBetween('start_time', [$fromDate, $toDate])
+            ->where('reminder_stage', '!=', '15_minutes')
             ->limit(30)
             ->get();
 
         if ($bookings->isEmpty()) {
+            error_log('No bookings found for 15 minutes reminder ' . $fromDate . ' - ' . $toDate);
             return true;
         }
 
@@ -88,6 +91,9 @@ class JobRunner
             $booking->reminder_stage = '15_minutes';
             $booking->save();
             do_action('fluent_calendar/booking_reminder_15_minutes', $booking);
+
+            error_log('fluent_calendar/booking_reminder_15_minutes ' . $booking->id);
+
             $this->fifteenMinutesDones++;
         }
 
@@ -107,7 +113,7 @@ class JobRunner
 
     private function checkForCompletedBookings()
     {
-        if(!$this->willRun()) {
+        if (!$this->willRun()) {
             return false;
         }
 

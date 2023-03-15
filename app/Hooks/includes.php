@@ -7,6 +7,6 @@
  */
 
 /**
- * @var $app WPFluent\Foundation\Application
+ * @var $app FluentCalendar\Framework\Foundation\Application
  */
 

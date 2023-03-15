@@ -62,7 +62,8 @@
 <div bind:this={component} class="fcal_calendar_inner { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
     {#if isBookingDone}
         <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
-    {:else}
+    {:else }
+        {#if !appData.disable_author}
         <div class="fcal_side">
             <div class="fcal_slot_wrapper">
                 <div class="fcal_author">
@@ -149,6 +150,7 @@
                 {/if}
             </div>
         </div>
+        {/if}
         <div class="fcal_date_wrapper">
             {#if appReady}
                 {#if !selectedDate}

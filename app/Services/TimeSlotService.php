@@ -33,7 +33,7 @@ class TimeSlotService
 
         $rangedValidSlots = [];
 
-        $fromValidTimeStamp = time() + 60 * 60 * 3; // 3 hours after now
+        $fromValidTimeStamp = time() + $this->calenderSlot->getCutoutSeconds();
 
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
 
@@ -41,7 +41,7 @@ class TimeSlotService
 
         foreach ($ranges as $date) {
 
-            if($overrides && isset($overrides[$date])) {
+            if ($overrides && isset($overrides[$date])) {
                 $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
             } else {
                 $day = strtolower(date('D', strtotime($date)));
@@ -52,7 +52,7 @@ class TimeSlotService
                 $availableSlots = $daySlots[$day];
             }
 
-            if(!$availableSlots) {
+            if (!$availableSlots) {
                 continue;
             }
 
@@ -105,7 +105,7 @@ class TimeSlotService
                 }
             }
 
-            if($validSlots) {
+            if ($validSlots) {
                 $rangedValidSlots[$date] = $validSlots;
             }
         }
@@ -118,39 +118,39 @@ class TimeSlotService
         $fromDate = DateTimeHelper::convertToTimeZone($fromDate, 'UTC', $this->calendar->author_timezone);
         $toDate = DateTimeHelper::convertToTimeZone($toDate, 'UTC', $this->calendar->author_timezone);
 
+        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calenderSlot->getCutoutSeconds();
+        if ($cutoutTime > strtotime($fromDate)) {
+            return false;
+        }
+
         $slots = $this->getDates($fromDate, $toDate);
 
         $start = null;
         $end = null;
 
-        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calenderSlot->getCutoutSeconds();
 
         foreach ($slots as $spots) {
 
-            if(!$spots) {
+            if (!$spots) {
                 continue;
             }
 
-            $first  = array_shift($spots);
+            $first = array_shift($spots);
             $start = $first['start'];
             $end = $first['end'];
 
-            if(strtotime($start) < $cutoutTime) {
-                 continue;
-            }
-
-            if(!$spots) {
-                if(strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
+            if (!$spots) {
+                if (strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
                     return true;
                 }
                 continue;
             }
 
             foreach ($spots as $spot) {
-                if($spot['start'] == $end) {
+                if ($spot['start'] == $end) {
                     $end = $spot['end'];
                 } else {
-                    if(strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
+                    if (strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
                         return true;
                     }
                     $start = $spot['start'];
@@ -188,6 +188,11 @@ class TimeSlotService
 
     protected function getBookedSlots($dateRange, $toTimeZone = false)
     {
+        if ($toTimeZone) {
+            $dateRange[0] = DateTimeHelper::convertToTimeZone($dateRange[0], $toTimeZone, 'UTC');
+            $dateRange[1] = DateTimeHelper::convertToTimeZone($dateRange[1], $toTimeZone, 'UTC');
+        }
+
         $bookings = Booking::where('slot_id', $this->calenderSlot->id)
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
@@ -267,12 +272,12 @@ class TimeSlotService
 
         foreach ($slotSets as $slot) {
 
-            if($toTimeZone) {
+            if ($toTimeZone) {
                 $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $toTimeZone, 'H:i');
                 $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone, 'H:i');
             }
 
-            $start = strtotime($slot['start'] );
+            $start = strtotime($slot['start']);
             $end = strtotime($slot['end']);
 
             while ($start < $end) {

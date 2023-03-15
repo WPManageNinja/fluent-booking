@@ -30,7 +30,7 @@ class SaasHandler
 
         if (count($urlParts) < 2) {
             $calendar = Calendar::where('slug', $urlParts[0])->first();
-            if($calendar) {
+            if ($calendar) {
                 $this->renderCalendarView($calendar);
             }
             return;
@@ -84,16 +84,16 @@ class SaasHandler
         $assets = $app['url.assets'];
 
         $body = App::make('view')->make('admin.menu', [
-            'name'      => $name,
-            'slug'      => $slug,
-            'menuItems' => $menuItems,
-            'baseUrl'   => $baseUrl,
-            'logo'      => $assets . 'images/logo.svg',
+            'name'       => $name,
+            'slug'       => $slug,
+            'menuItems'  => $menuItems,
+            'baseUrl'    => $baseUrl,
+            'logo'       => $assets . 'images/logo.svg',
             'rightItems' => [
                 [
-                    'key' => 'logout',
-                    'label' => __('Logout', 'fluent-calendar'),
-                    'permalink'   => wp_logout_url(site_url())
+                    'key'       => 'logout',
+                    'label'     => __('Logout', 'fluent-calendar'),
+                    'permalink' => wp_logout_url(site_url())
                 ]
             ]
         ]);
@@ -110,10 +110,10 @@ class SaasHandler
 
         $appVars['name'] = 'ConvertLeap';
 
-        if($this->isNew()) {
+        if ($this->isNew()) {
             $user = get_user_by('ID', get_current_user_id());
             $userName = $user->user_login;
-            if(!is_email($userName) && Helper::isCalendarSlugAvailable($userName)) {
+            if (!is_email($userName) && Helper::isCalendarSlugAvailable($userName)) {
                 $appVars['intended_username'] = $userName;
             }
         }
@@ -137,7 +137,7 @@ class SaasHandler
                 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
 //                site_url('wp-includes/js/jquery/jquery.min.js'),
                 $assets . 'admin/app.js',
-                $assets.'admin/global_admin.js'
+                $assets . 'admin/global_admin.js'
             ]
         ]);
         exit(200);
@@ -147,7 +147,7 @@ class SaasHandler
     {
         global $wp;
 
-        if($calendar->visibility != 'public') {
+        if ($calendar->visibility != 'public') {
             $this->showErrorPage('Invalid Calendar URL', 'This calendar is not public');
         }
 
@@ -157,7 +157,7 @@ class SaasHandler
 
         foreach ($activeSlots as $activeSlot) {
             $activeSlot->public_url = site_url($calendar->slug . '/' . $activeSlot->slug);
-            if($activeSlot->description) {
+            if ($activeSlot->description) {
                 $activeSlot->description = Helper::excerpt($activeSlot->description);
             } else {
                 $activeSlot->description = sprintf('Book a meeting with me for %d minutes', $activeSlot->duration);
@@ -172,10 +172,10 @@ class SaasHandler
         $authorProfile = $calendar->getAuthorProfile(true);
 
         $data = [
-            'calendar' => $calendar,
-            'slots' => $activeSlots,
-            'author' => $authorProfile,
-            'title' => $authorProfile['name'],
+            'calendar'    => $calendar,
+            'slots'       => $activeSlots,
+            'author'      => $authorProfile,
+            'title'       => $authorProfile['name'],
             'description' => $metaDescription,
             'url'         => home_url($wp->request),
             'css_files'   => [
@@ -208,9 +208,9 @@ class SaasHandler
             return;
         }
 
-        if($slot->status != 'active') {
+        if ($slot->status != 'active') {
             $message = '<p>Sorry, this host is not accepting any new bookings at the moment.</p>';
-            if($slot->user_id == get_current_user_id()) {
+            if ($slot->user_id == get_current_user_id()) {
                 $message .= '<p>Looks like you are the owner of this calendar event. To enable this schedule event please go to your events dashboard and enable this.</p>';
             }
             $this->showErrorPage('This URL is not valid', $message);
@@ -279,7 +279,7 @@ class SaasHandler
                     'author_profile' => $authorProfile,
                     'form_fields'    => $formFields
                 ],
-                'fluentCalendarPublicVars'                            => $this->getGlobalVars()
+                'fluentCalendarPublicVars' => $this->getGlobalVars()
             ]
         ];
 
@@ -368,7 +368,7 @@ class SaasHandler
     public function showErrorPage($title, $description = '')
     {
         $data = [
-            'title' => $title,
+            'title'       => $title,
             'description' => $description,
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
