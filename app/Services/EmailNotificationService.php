@@ -384,7 +384,7 @@ class EmailNotificationService
 
         $data = [
             'event_name'     => sprintf('%1s meeting with %2s', $slot->title, trim($booking->first_name.' '.$booking->last_name)),
-            'event_date'     => $booking->getFullBookingDateTimeText($booking->person_timezone) . ' (' . $booking->person_timezone . ')',
+            'event_date'     => $booking->getFullBookingDateTimeText($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')',
             'event_location' => $booking->getLocationDetailsHtml(),
             'author_email'   => $author['email'],
             'booking'        => $booking,
