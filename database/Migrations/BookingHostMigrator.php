@@ -2,9 +2,9 @@
 
 namespace FluentCalendar\Database\Migrations;
 
-class BookingUserMigrator
+class BookingHostMigrator
 {
-    static $tableName = 'fcal_booking_users';
+    static $tableName = 'fcal_booking_hosts';
 
     public static function migrate()
     {

@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Hooks\Handlers;
 
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Calendar;
+use FluentCalendar\App\Models\User;
 use FluentCalendar\App\Services\DateTimeHelper;
 use FluentCalendar\App\Services\Helper;
 
@@ -117,6 +118,7 @@ class AdminMenuHandler
         $isNew = $this->isNew();
 
         $requireSlug = false;
+
         if($isNew) {
             $result = $this->maybeAutoCreateCalendar($currentUser);
             if(!$result) {
@@ -124,7 +126,10 @@ class AdminMenuHandler
             }
         }
 
-        return [
+        $user = User::find($currentUser->ID);
+
+
+        return apply_filters('fluent_calendar/admin_vars', [
             'slug'  => $slug = $app->config->get('app.slug'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
@@ -142,7 +147,7 @@ class AdminMenuHandler
             'supported_features' => apply_filters('fluent_calendar/supported_featured', [
                 'multi_users' => true
             ])
-        ];
+        ]);
     }
 
     protected function getRestInfo($app)
@@ -166,8 +171,7 @@ class AdminMenuHandler
 
     protected function isNew()
     {
-        $userId = get_current_user_id();
-        return ! Calendar::where('user_id', $userId)->first();
+        return apply_filters('fluent_calendar/is_new', ! Calendar::first());
     }
 
     /**

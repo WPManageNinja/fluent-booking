@@ -82,7 +82,7 @@ class BookingService
 
         $booking = Booking::create($bookingData);
 
-        $booking->users()->attach($calendarSlot->user_id, [
+        $booking->hosts()->attach($calendarSlot->user_id, [
             'status' => 'confirmed'
         ]);
 

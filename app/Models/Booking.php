@@ -65,7 +65,7 @@ class Booking extends Model
         });
 
         static::deleting(function($model) { // before delete() method call this
-            $model->users()->delete();
+            $model->hosts()->delete();
         });
     }
 
@@ -79,13 +79,13 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'slot_id');
     }
 
-    public function users()
+    public function hosts()
     {
         $class = __NAMESPACE__ . '\User';
 
         return $this->belongsToMany(
             $class,
-            'fcal_booking_users',
+            'fcal_booking_hosts',
             'booking_id',
             'user_id'
         )
@@ -218,7 +218,6 @@ class Booking extends Model
             'title' => $title,
             'description' => $reason
         ]);
-
     }
 
     public function getActivities()
