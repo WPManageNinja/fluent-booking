@@ -12,7 +12,6 @@ class CalendarSlot extends Model
 
     protected $guarded = ['id'];
 
-
     public static function boot()
     {
         static::creating(function ($model) {
@@ -286,5 +285,17 @@ class CalendarSlot extends Model
         }
 
         return strtotime('+' . $conditions['value'] . ' ' . $conditions['unit'], 0) - strtotime('+0 seconds', 0);
+    }
+
+    public function getHostIds()
+    {
+        return [
+            $this->user_id
+        ];
+    }
+
+    public function getMaxBookingPerSlot()
+    {
+        return 2;
     }
 }

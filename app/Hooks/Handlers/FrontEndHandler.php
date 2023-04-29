@@ -27,11 +27,12 @@ class FrontEndHandler
         }
 
         $slot = CalendarSlot::find($atts['id']);
-        $calendar = $slot->calendar;
 
         if (!$slot) {
-            return;
+            return '';
         }
+
+        $calendar = $slot->calendar;
 
         $slot->max_lookup_date = $slot->getMaxLookUpDate();
         $slot->min_lookup_date = $slot->getMinLookUpDate();

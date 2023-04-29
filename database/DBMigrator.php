@@ -4,7 +4,7 @@ namespace FluentCalendar\Database;
 
 use FluentCalendar\Database\Migrations\BookingActivityMigrator;
 use FluentCalendar\Database\Migrations\BookingMigrator;
-use FluentCalendar\Database\Migrations\BookingUserMigrator;
+use FluentCalendar\Database\Migrations\BookingHostMigrator;
 use FluentCalendar\Database\Migrations\CalendarMigrator;
 use FluentCalendar\Database\Migrations\CalendarSlotsMigrator;
 use FluentCalendar\Database\Migrations\MetaMigrator;
@@ -33,7 +33,7 @@ class DBMigrator
         CalendarMigrator::migrate();
         CalendarSlotsMigrator::migrate();
         BookingMigrator::migrate();
-        BookingUserMigrator::migrate();
+        BookingHostMigrator::migrate();
         MetaMigrator::migrate();
         BookingActivityMigrator::migrate();
     }

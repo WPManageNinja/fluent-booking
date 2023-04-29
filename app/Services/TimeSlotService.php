@@ -9,19 +9,19 @@ use FluentCalendar\Framework\Support\Arr;
 
 class TimeSlotService
 {
-    protected $calenderSlot;
+    protected $calendarSlot;
 
     protected $calendar;
 
-    public function __construct(Calendar $calendar, CalendarSlot $calenderSlot)
+    public function __construct(Calendar $calendar, CalendarSlot $calendarSlot)
     {
         $this->calendar = $calendar;
-        $this->calenderSlot = $calenderSlot;
+        $this->calendarSlot = $calendarSlot;
     }
 
     public function getDates($fromDate = false, $toDate = false)
     {
-        $period = $this->calenderSlot->duration;
+        $period = $this->calendarSlot->duration;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d');
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate));
@@ -33,11 +33,11 @@ class TimeSlotService
 
         $rangedValidSlots = [];
 
-        $fromValidTimeStamp = time() + $this->calenderSlot->getCutoutSeconds();
+        $fromValidTimeStamp = time() + $this->calendarSlot->getCutoutSeconds();
 
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
 
-        $overrides = Arr::get($this->calenderSlot->settings, 'date_overrides', []);
+        $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
 
         foreach ($ranges as $date) {
 
@@ -48,7 +48,6 @@ class TimeSlotService
                 if (empty($daySlots[$day])) {
                     continue;
                 }
-
                 $availableSlots = $daySlots[$day];
             }
 
@@ -118,7 +117,7 @@ class TimeSlotService
         $fromDate = DateTimeHelper::convertToTimeZone($fromDate, 'UTC', $this->calendar->author_timezone);
         $toDate = DateTimeHelper::convertToTimeZone($toDate, 'UTC', $this->calendar->author_timezone);
 
-        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calenderSlot->getCutoutSeconds();
+        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calendarSlot->getCutoutSeconds();
         if ($cutoutTime > strtotime($fromDate)) {
             return false;
         }
@@ -193,7 +192,11 @@ class TimeSlotService
             $dateRange[1] = DateTimeHelper::convertToTimeZone($dateRange[1], $toTimeZone, 'UTC');
         }
 
-        $bookings = Booking::where('slot_id', $this->calenderSlot->id)
+        $hostIds = $this->calendarSlot->getHostIds();
+
+        $bookings = Booking::whereHas('hosts', function ($query) use ($hostIds) {
+            $query->whereIn('user_id', $hostIds);
+        })
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', ['pending', 'approved', 'scheduled', 'completed'])
@@ -201,9 +204,31 @@ class TimeSlotService
 
         $books = [];
 
+        $maxBookingPerSlot = $this->calendarSlot->getMaxBookingPerSlot();
+
+        $isMulti = $maxBookingPerSlot > 1;
+
+        $slotBookingItems = [];
+        if ($isMulti) {
+            foreach ($bookings as $booking) {
+                $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
+                $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
+                if ($booking->slot_id == $this->calendarSlot->id) {
+                    if (empty($slotBookingItems[$booking->start_time])) {
+                        $slotBookingItems[$booking->start_time] = 1;
+                    } else {
+                        $slotBookingItems[$booking->start_time]++;
+                    }
+                }
+            }
+        }
+
         foreach ($bookings as $booking) {
-            $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
-            $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
+
+            if (!$isMulti) {
+                $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
+                $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
+            }
 
             $date = date('Y-m-d', strtotime($booking->start_time));
 
@@ -211,10 +236,27 @@ class TimeSlotService
                 $books[$date] = [];
             }
 
-            $books[$date][] = [
-                'start' => $booking->start_time,
-                'end'   => $booking->end_time,
-            ];
+            $isSameBooking = $booking->slot_id == $this->calendarSlot->id;
+
+            $booked = 1;
+            if ($isMulti && $isSameBooking && !empty($slotBookingItems[$booking->start_time])) {
+                $booked = $slotBookingItems[$booking->start_time];
+            }
+
+            $remaining = $maxBookingPerSlot - $booked;
+
+            if (!$isSameBooking) {
+                $remaining = 0;
+            }
+
+            if(!$remaining) {
+                $books[$date][] = [
+                    'slot_id'   => $booking->slot_id,
+                    'start'     => $booking->start_time,
+                    'end'       => $booking->end_time,
+                    'remaining' => $maxBookingPerSlot - $booked,
+                ];
+            }
         }
 
         return $books;
@@ -222,9 +264,9 @@ class TimeSlotService
 
     protected function getWeekDaySlots()
     {
-        $period = $this->calenderSlot->duration;
+        $period = $this->calendarSlot->duration;
 
-        $weeklySlots = SanitizeService::weeklySchedules($this->calenderSlot->settings['weekly_schedules'], 'UTC', $this->calendar->author_timezone, false);
+        $weeklySlots = SanitizeService::weeklySchedules($this->calendarSlot->settings['weekly_schedules'], 'UTC', $this->calendar->author_timezone, false);
 
         $items = [];
 
@@ -265,7 +307,7 @@ class TimeSlotService
 
     protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false)
     {
-        $period = $this->calenderSlot->duration;
+        $period = $this->calendarSlot->duration;
 
         $formattedSlots = [];
 

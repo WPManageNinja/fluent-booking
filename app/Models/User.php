@@ -27,12 +27,16 @@ class User extends Model
      */
     public function booings()
     {
-        return $this->belongsToMany(CalendarSlot::class, 'fcal_booking_users', 'user_id', 'booking_id')
+        return $this->belongsToMany(CalendarSlot::class, 'fcal_booking_hosts', 'user_id', 'booking_id')
             ->withPivot('status');
     }
 
     public function user() {
         return get_user_by('ID', $this->ID);
+    }
+
+    public function staff() {
+        return $this->hasOne(Staff::class, 'object_id');
     }
 
 }
