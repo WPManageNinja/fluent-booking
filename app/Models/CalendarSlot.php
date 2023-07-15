@@ -50,7 +50,8 @@ class CalendarSlot extends Model
         return $this->hasMany(Booking::class, 'slot_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
@@ -72,7 +73,7 @@ class CalendarSlot extends Model
             'avatar' => apply_filters('fluent_calendar/author_photo', get_avatar_url($user->ID), $user)
         ];
 
-        if(!$public) {
+        if (!$public) {
             $data['email'] = $user->user_email;
         }
 
@@ -84,8 +85,8 @@ class CalendarSlot extends Model
     public function getSlotSettingsSchema()
     {
         return [
-            'schedule_type'    => 'weekly_schedules',
-            'weekly_schedules' => [
+            'schedule_type'       => 'weekly_schedules',
+            'weekly_schedules'    => [
                 'sun' => [
                     'enabled' => false,
                     'slots'   => []
@@ -125,13 +126,13 @@ class CalendarSlot extends Model
                     'slots'   => []
                 ],
             ],
-            'date_overrides'   => [],
-            'range_type' => 'range_days',
-            'range_days' => 60,
-            'range_date_between' => ['', ''],
+            'date_overrides'      => [],
+            'range_type'          => 'range_days',
+            'range_days'          => 60,
+            'range_date_between'  => ['', ''],
             'schedule_conditions' => [
                 'value' => 4,
-                'unit' => 'hours'
+                'unit'  => 'hours'
             ]
         ];
     }
@@ -141,41 +142,41 @@ class CalendarSlot extends Model
         $statuses = Helper::getMeta('calendar_slot', $this->id, 'notification_statuses');
 
         $defaults = [
-            'booking_conf_attendee' => [
+            'booking_conf_attendee'    => [
                 'enabled' => true,
-                'title' => 'Booking Confirmation to Attendee'
+                'title'   => 'Booking Confirmation to Attendee'
             ],
-            'booking_conf_host' => [
+            'booking_conf_host'        => [
                 'enabled' => true,
-                'title' => 'Booking Confirmation to Organizer (You)'
+                'title'   => 'Booking Confirmation to Organizer (You)'
             ],
             'reminder_1_hour_attendee' => [
                 'enabled' => true,
-                'title' => 'Reminder 1 Hour Before to Attendee'
+                'title'   => 'Reminder 1 Hour Before to Attendee'
             ],
             'reminder_15_min_attendee' => [
                 'enabled' => false,
-                'title' => 'Reminder 15 Minutes Before to Attendee'
+                'title'   => 'Reminder 15 Minutes Before to Attendee'
             ],
-            'reminder_1_hour_host' => [
+            'reminder_1_hour_host'     => [
                 'enabled' => true,
-                'title' => 'Reminder 1 Hour Before to Organizer (You)'
+                'title'   => 'Reminder 1 Hour Before to Organizer (You)'
             ],
-            'reminder_15_min_host' => [
+            'reminder_15_min_host'     => [
                 'enabled' => false,
-                'title' => 'Reminder 15 Minutes Before to Organizer (You)'
+                'title'   => 'Reminder 15 Minutes Before to Organizer (You)'
             ],
-            'cancelled_by_attendee' => [
+            'cancelled_by_attendee'    => [
                 'enabled' => true,
-                'title' => 'Booking Cancelled by Attendee (email to Organizer)'
+                'title'   => 'Booking Cancelled by Attendee (email to Organizer)'
             ],
-            'cancelled_by_host' => [
+            'cancelled_by_host'        => [
                 'enabled' => true,
-                'title' => 'Booking Cancelled by Organizer (email to Attendee)'
+                'title'   => 'Booking Cancelled by Organizer (email to Attendee)'
             ]
         ];
 
-        if(!$statuses) {
+        if (!$statuses) {
             return $defaults;
         }
 
@@ -191,28 +192,28 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
-        if($rangeType == 'range_indefinite') {
+        if ($rangeType == 'range_indefinite') {
             return date('Y-m-t 23:59:59', strtotime($startDate));
         }
 
         $maxDate = date('Y-m-t 23:59:59', strtotime($startDate));
 
-        if($rangeType == 'range_date_between') {
+        if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
-            if(is_array($range) && count(array_filter($range)) == 2) {
-                if(strtotime($maxDate) > strtotime($range[1])) {
+            if (is_array($range) && count(array_filter($range)) == 2) {
+                if (strtotime($maxDate) > strtotime($range[1])) {
                     $maxDate = date('Y-m-d 23:59:59', strtotime($range[1]));
                 }
             }
         } else {
             $rangeDays = Arr::get($this->settings, 'range_days', 60);
-            if(!$rangeDays) {
+            if (!$rangeDays) {
                 $rangeDays = 60;
             }
             $maxDate = date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS);
         }
 
-        if(strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) {
+        if (strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) {
             return date('Y-m-t 23:59:59', strtotime($startDate));
         }
 
@@ -223,14 +224,14 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
-        if($rangeType == 'range_indefinite') {
+        if ($rangeType == 'range_indefinite') {
             return $startDate;
         }
 
-        if($rangeType == 'range_date_between') {
+        if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
-            if(is_array($range) && count(array_filter($range)) == 2) {
-                if(strtotime($range[0]) >= strtotime($startDate)) {
+            if (is_array($range) && count(array_filter($range)) == 2) {
+                if (strtotime($range[0]) >= strtotime($startDate)) {
                     return date('Y-m-d H:i:s', strtotime($range[0]));
                 }
             }
@@ -243,19 +244,19 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
-        if($rangeType == 'range_indefinite') {
+        if ($rangeType == 'range_indefinite') {
             return false;
         }
 
-        if($rangeType == 'range_date_between') {
+        if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
-            if(is_array($range) && count(array_filter($range)) == 2) {
+            if (is_array($range) && count(array_filter($range)) == 2) {
                 return date('Y-m-d 23:59:59', strtotime($range[1]));
             }
         }
 
         $rangeDays = Arr::get($this->settings, 'range_days', 60);
-        if(!$rangeDays) {
+        if (!$rangeDays) {
             $rangeDays = 60;
         }
 
@@ -266,9 +267,9 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
-        if($rangeType == 'range_date_between') {
+        if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
-            if(is_array($range) && count(array_filter($range)) == 2) {
+            if (is_array($range) && count(array_filter($range)) == 2) {
                 return date('Y-m-d H:i:s', strtotime($range[0]));
             }
         }
@@ -280,7 +281,7 @@ class CalendarSlot extends Model
     {
         $conditions = Arr::get($this->settings, 'schedule_conditions', []);
 
-        if(!$conditions || empty($conditions['unit'])) {
+        if (!$conditions || empty($conditions['unit'])) {
             return 0;
         }
 
@@ -296,6 +297,6 @@ class CalendarSlot extends Model
 
     public function getMaxBookingPerSlot()
     {
-        return 2;
+        return 1;
     }
 }

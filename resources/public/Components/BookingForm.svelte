@@ -12,7 +12,7 @@
                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                     {:else if field.type === 'email'}
                         <input disabled="{field.disabled}" class="{field.input_class}" type="email"
-                                   placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                     {:else if field.type === 'number'}
                         <input disabled="{field.disabled}" class="{field.input_class}" type="number"
                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
@@ -20,7 +20,8 @@
                         <input disabled="{field.disabled}" class="{field.input_class}" type="tel"
                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                     {:else if field.type === 'textarea'}
-                        <textarea  placeholder="{field.placeholder}"  disabled="{field.disabled}" class="{field.input_class}" bind:value={form[field.name]}/>
+                        <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
+                                  class="{field.input_class}" bind:value={form[field.name]}/>
                     {/if}
                 </label>
             </div>
@@ -56,13 +57,17 @@
 
     let errors = '';
 
+    const currentUrl = window.location.href;
+
     function submitForm() {
 
         const postdata = {
             ...form,
             timezone,
             start_date: spot.start,
-            slot_id: slot.id
+            slot_id: slot.id,
+            source_url: currentUrl,
+            action: 'fluent_cal_schedule_meeting'
         }
 
         if (submitting) return;
@@ -71,7 +76,7 @@
 
         errors = '';
 
-        util.$post(`slots/${slot.id}/schedule`, postdata)
+        util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
                 dispatch('bookingConfirmed', res);
             })

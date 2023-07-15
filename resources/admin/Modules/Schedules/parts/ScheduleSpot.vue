@@ -5,7 +5,7 @@
                 <span :class="'fcal_'+spot.status"></span>
             </div>
             <div class="fcal_spot_timing">
-                {{ toCurrentTimezone(spot.start_time, 'hh:mma') }} - {{ toCurrentTimezone(spot.end_time, 'HH:mma') }}
+                {{ toCurrentTimezone(spot.start_time, 'hh:mma') }} - {{ toCurrentTimezone(spot.end_time, 'hh:mma') }}
                 <div v-if="spot.happening_status" class="fcal_spot_happening">
                     <span :class="'fcal_'+spot.happening_status">{{ getTextFromSlug(spot.happening_status) }}</span>
                 </div>

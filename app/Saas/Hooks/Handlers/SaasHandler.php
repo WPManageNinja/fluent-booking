@@ -3,6 +3,7 @@
 namespace FluentCalendar\App\Saas\Hooks\Handlers;
 
 use FluentCalendar\App\App;
+use FluentCalendar\App\Hooks\Handlers\FrontEndHandler;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
@@ -279,7 +280,7 @@ class SaasHandler
                     'author_profile' => $authorProfile,
                     'form_fields'    => $formFields
                 ],
-                'fluentCalendarPublicVars' => $this->getGlobalVars()
+                'fluentCalendarPublicVars' => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
 
@@ -316,18 +317,6 @@ class SaasHandler
     private function getGlobalVars()
     {
 
-        $config = App::make('config');
-        $ns = $config->get('app.rest_namespace');
-        $ver = $config->get('app.rest_version');
-
-        $rest = [
-            'base_url'  => esc_url_raw(rest_url()),
-            'url'       => rest_url($ns . '/' . $ver) . '/public',
-            'nonce'     => wp_create_nonce('wp_rest'),
-            'namespace' => $ns,
-            'version'   => $ver
-        ];
-
         $currentPerson = [
             'name'  => '',
             'email' => ''
@@ -344,7 +333,7 @@ class SaasHandler
         }
 
         return [
-            'rest'           => $rest,
+            'ajaxurl' => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson
         ];

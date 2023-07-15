@@ -52,7 +52,6 @@ class SchedulesController extends Controller
                 $schedule->status = 'completed';
                 $schedule->save();
                 do_action('fluent_calendar/schedule_completed', $schedule);
-                continue;
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
@@ -110,6 +109,10 @@ class SchedulesController extends Controller
             $value = sanitize_text_field($value);
             if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'no_show'])) {
                 return $this->sendError(['message' => 'Invalid status']);
+            }
+
+            if ($value == 'cancelled') {
+                $updateData['cancelled_by'] = get_current_user_id();
             }
         }
 

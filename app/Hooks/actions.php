@@ -19,7 +19,8 @@
 (new \FluentCalendar\App\Hooks\Handlers\FrontEndHandler())->register();
 (new \FluentCalendar\App\Hooks\Handlers\CleanupHandler())->register();
 (new \FluentCalendar\App\Hooks\Handlers\NotificationHandler())->register();
-(new \FluentCalendar\App\Hooks\Handlers\JobRunner())->register();
+(new \FluentCalendar\App\Hooks\Handlers\LogHandler())->register();
 
 
 $app->addAction('admin_menu', 'AdminMenuHandler@add');
+

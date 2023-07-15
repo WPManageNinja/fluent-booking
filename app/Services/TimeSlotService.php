@@ -249,7 +249,7 @@ class TimeSlotService
                 $remaining = 0;
             }
 
-            if(!$remaining) {
+            if (!$remaining) {
                 $books[$date][] = [
                     'slot_id'   => $booking->slot_id,
                     'start'     => $booking->start_time,
@@ -330,6 +330,54 @@ class TimeSlotService
 
         return $formattedSlots;
 
+    }
+
+    public function getAvailableSpots($startDate, $timeZone = 'utc')
+    {
+        $slot = $this->calendarSlot;
+        $calendar = $this->calendar;
+
+        if (strtotime($startDate) < time()) {
+            $startDate = date('Y-m-d H:i:s');
+        }
+
+        $endDate = $slot->getMaxBookableDateTime($startDate);
+        $startDate = $slot->getMinBookableDateTime($startDate);
+
+        if (strtotime($startDate) > strtotime($endDate)) {
+            return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-calendar'));
+        }
+
+        $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
+        $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
+
+        $slotService = new TimeSlotService($calendar, $slot);
+
+        $slots = $slotService->getDates($startDate, $endDate);
+        $convertedSpots = [];
+
+        $cutOutTimeStamp = DateTimeHelper::getTimestamp($calendar->author_timezone) + $slot->getCutoutSeconds();
+
+        foreach ($slots as $spots) {
+            foreach ($spots as $spot) {
+                if ($cutOutTimeStamp > strtotime($spot['start'])) {
+                    continue;
+                }
+
+                $startDate = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone, 'Y-m-d');
+
+                if (!isset($convertedSpots[$startDate])) {
+                    $convertedSpots[$startDate] = [];
+                }
+
+                $convertedSpots[$startDate][] = [
+                    'start' => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
+                    'end'   => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                ];
+            }
+        }
+
+        return $convertedSpots;
     }
 
 }
