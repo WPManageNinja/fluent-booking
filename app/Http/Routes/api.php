@@ -40,4 +40,5 @@ $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router)
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
     $router->get('slots/{slot_id}', 'BookingController@getSlots')->int('slot_id');
     $router->post('slots/{slot_id}/schedule', 'BookingController@bookSlot')->int('slot_id');
+    $router->get('public_vars', 'WidgetController@getPublicVars');
 });

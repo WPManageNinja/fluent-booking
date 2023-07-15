@@ -35,12 +35,11 @@ class Booking extends Model
         'device',
         'other_info',
         'location_details',
-        'reminder_stage',
-        'last_reminder_sent',
-        'next_reminder',
+        'cancelled_by',
         'status',
         'source',
         'source_id',
+        'source_url',
         'utm_source',
         'utm_medium',
         'utm_campaign',
@@ -64,7 +63,7 @@ class Booking extends Model
             $model->hash = md5(wp_generate_uuid4() . time());
         });
 
-        static::deleting(function($model) { // before delete() method call this
+        static::deleting(function ($model) { // before delete() method call this
             $model->hosts()->delete();
         });
     }
@@ -106,7 +105,7 @@ class Booking extends Model
     public function getFullBookingDateTimeText($timeZone = 'UTC')
     {
         $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
-        $html .= ' - '.DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia').', ';
+        $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
         $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
         return $html;
     }
@@ -115,7 +114,7 @@ class Booking extends Model
     {
         // date format for Fri Feb 10, 2023
         $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'D M d, Y');
-        $html .= ' '.DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
+        $html .= ' ' . DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
 
         return $html;
     }
@@ -124,32 +123,32 @@ class Booking extends Model
     {
         $details = $this->location_details;
 
-        if(empty($details['location_type'])) {
+        if (empty($details['location_type'])) {
             return 'n/a';
         }
 
         $locationType = $details['location_type'];
 
-        if($locationType == 'in_person') {
-            $html = '<b>'.$details['location_heading'].'</b>';
-            if($description = Arr::get($details, 'location_settings.description')) {
+        if ($locationType == 'in_person') {
+            $html = '<b>' . $details['location_heading'] . '</b>';
+            if ($description = Arr::get($details, 'location_settings.description')) {
                 $html .= wpautop($description);
             }
             return $html;
         }
 
-        if($locationType == 'phone') {
+        if ($locationType == 'phone') {
             $html = '<b>Phone Call: </b>';
-            if(Arr::get($details, 'location_settings.call_type') == 'outbound') {
+            if (Arr::get($details, 'location_settings.call_type') == 'outbound') {
                 $html .= $this->phone;
             } else {
-                $html .=  Arr::get($details, 'location_settings.host_phone_number'). ' (Host phone number)';
+                $html .= Arr::get($details, 'location_settings.host_phone_number') . ' (Host phone number)';
             }
             return $html;
         }
 
-        if($locationType == 'custom') {
-            $html = '<b>'.Arr::get($details, 'location_heading').'</b>';
+        if ($locationType == 'custom') {
+            $html = '<b>' . Arr::get($details, 'location_heading') . '</b>';
             $html .= wpautop(Arr::get($details, 'location_settings.description'));
 
             return $html;
@@ -170,20 +169,15 @@ class Booking extends Model
 
     public function getOngoingStatus()
     {
-
-        if($this->status != 'scheduled') {
-            return '';
-        }
-
         $currentTime = time();
         $startTime = strtotime($this->start_time);
         $endTime = strtotime($this->end_time);
 
-        if($currentTime > $startTime && $currentTime < $endTime) {
+        if ($currentTime > $startTime && $currentTime < $endTime) {
             return 'happening_now';
-        } elseif(($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
+        } elseif (($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
             return 'starting_soon';
-        } else if (($endTime - $currentTime ) > -3600 && ($endTime - $currentTime) < 0) {
+        } else if (($endTime - $currentTime) > -3600 && ($endTime - $currentTime) < 0) {
             return 'recently_happened';
         }
 
@@ -199,13 +193,13 @@ class Booking extends Model
 
     public function addCancelReason($title, $reason)
     {
-        if(!$reason && !$title) {
+        if (!$reason && !$title) {
             return null;
         }
 
         $exist = $this->getCancelReason();
 
-        if($exist) {
+        if ($exist) {
             $exist->title = $title;
             $exist->description = $reason;
             $exist->save();
@@ -213,9 +207,9 @@ class Booking extends Model
         }
 
         return BookingActivity::create([
-            'booking_id' => $this->id,
-            'type' => 'cancel_reason',
-            'title' => $title,
+            'booking_id'  => $this->id,
+            'type'        => 'cancel_reason',
+            'title'       => $title,
             'description' => $reason
         ]);
     }

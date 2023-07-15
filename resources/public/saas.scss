@@ -1,0 +1,25 @@
+.fcal_wrap {
+  display: flex;
+  flex-direction: column;
+
+  .fcal_holder {
+    flex: 1 1 auto;
+    padding-right: 5%;
+    padding-left: 5%;
+    display: flex;
+    justify-content: center;
+    transition: all .22s ease-out;
+  }
+
+  .fcal_calendar_inner {
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 1px 8px 0 rgb(0 0 0/8%);
+    transition: all .22s ease-out;
+
+    .fcal_side {
+      width: auto;
+      transition: all .22s ease-out;
+    }
+  }
+}

@@ -7,12 +7,22 @@ use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\BookingService;
 use FluentCalendar\App\Services\DateTimeHelper;
+use FluentCalendar\App\Services\Helper;
+use FluentCalendar\App\Services\TimeSlotService;
+use FluentCalendar\Framework\Support\Arr;
+use FluentCalendar\Framework\Validator\ValidationException;
 
 class FrontEndHandler
 {
     public function register()
     {
         add_shortcode('fluent_calendar_booking', [$this, 'handleShortcode']);
+
+        add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
+        add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
+
+        add_action('wp_ajax_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
+        add_action('wp_ajax_nopriv_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
     }
 
     public function handleShortcode($atts, $content)
@@ -75,18 +85,11 @@ class FrontEndHandler
 
         $loaded = true;
 
-        $config = App::make('config');
-        $ns = $config->get('app.rest_namespace');
-        $ver = $config->get('app.rest_version');
+        wp_localize_script('fluent-calendar-public', 'fluentCalendarPublicVars', $this->getGlobalVars());
+    }
 
-        $rest = [
-            'base_url'  => esc_url_raw(rest_url()),
-            'url'       => rest_url($ns . '/' . $ver) . '/public',
-            'nonce'     => wp_create_nonce('wp_rest'),
-            'namespace' => $ns,
-            'version'   => $ver
-        ];
-
+    public function getGlobalVars()
+    {
         $currentPerson = [
             'name'  => '',
             'email' => ''
@@ -102,11 +105,137 @@ class FrontEndHandler
             ];
         }
 
-        wp_localize_script('fluent-calendar-public', 'fluentCalendarPublicVars', [
-            'rest'           => $rest,
+        return [
+            'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson
+        ];
+    }
+
+    public function ajaxScheduleMeeting()
+    {
+        $app = App::getInstance();
+
+        $slotId = (int)$_REQUEST['slot_id'];
+
+        $calendarSlot = CalendarSlot::find($slotId);
+
+        if (!$calendarSlot || $calendarSlot->status != 'active') {
+            wp_send_json([
+                'message' => 'Sorry, this host is not accepting any new bookings at the moment'
+            ], 423);
+        }
+
+        $postedData = $_REQUEST;
+
+        $rules = [
+            'name'       => 'required',
+            'email'      => 'required|email',
+            'timezone'   => 'required',
+            'start_date' => 'required'
+        ];
+
+        $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
+        if ($isPhoneRequired) {
+            $rules['phone'] = 'required';
+        }
+
+        $validator = $app->validator->make($postedData, $rules, []);
+        if ($validator->validate()->fails()) {
+            wp_send_json([
+                'message' => 'Please fill up the required data',
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+        $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
+
+        $bookingData = [
+            'person_time_zone' => sanitize_text_field($postedData['timezone']),
+            'start_time'       => $startDateTime,
+            'name'             => sanitize_text_field($postedData['name']),
+            'email'            => sanitize_email($postedData['email']),
+            'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'ip_address'       => Helper::getIp()
+        ];
+
+        $sourceUrl = Arr::get($postedData, 'source_url', '');
+
+        if ($sourceUrl) {
+            $bookingData['source_url'] = sanitize_url($sourceUrl);
+        }
+
+        if ($isPhoneRequired) {
+            $bookingData['phone'] = sanitize_text_field($postedData['phone']);
+        }
+
+        try {
+            $booking = BookingService::createBooking($bookingData, $calendarSlot);
+        } catch (\Exception $e) {
+            wp_send_json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+
+        $author = $calendarSlot->getAuthorProfile(true);
+
+        $confirmationData = [
+            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
+            'slot'        => $calendarSlot,
+            'booking'     => $booking,
+            'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
+        ];
+
+        $confirmationData = apply_filters('fluent_calendar/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
+
+        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+
+        wp_send_json([
+            'message'       => 'Booking has been confirmed',
+            'response_html' => $responseHtml
         ]);
     }
 
+    public function ajaxGetAvailableDates()
+    {
+        $slotId = (int)$_REQUEST['slot_id'];
+        $slot = CalendarSlot::findOrfail($slotId);
+
+        if (!$slot || $slot->status != 'active') {
+            wp_send_json([
+                'message' => 'Sorry, the host is not accepting any new bookings at the moment.'
+            ], 423);
+        }
+
+        $calendar = $slot->calendar;
+        $startDate = Arr::get($_REQUEST, 'start_date');
+
+        if (!$startDate) {
+            $startDate = date('Y-m-d H:i:s');
+        }
+
+        $timeZone = Arr::get($_REQUEST, 'timezone');
+        if (!$timeZone) {
+            $timeZone = 'UTC';
+        }
+
+        $timeSlotService = new TimeSlotService($calendar, $slot);
+
+        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
+
+        if (is_wp_error($availableSpots)) {
+            wp_send_json([
+                'available_slots' => [],
+                'timezone'        => $timeZone,
+                'invalid_dates'   => true,
+                'max_lookup_date' => $slot->getMaxLookUpDate(),
+            ], 200);
+        }
+
+        wp_send_json([
+            'available_slots' => array_filter($availableSpots),
+            'timezone'        => $timeZone,
+            'max_lookup_date' => $slot->getMaxLookUpDate(),
+        ], 200);
+    }
 }

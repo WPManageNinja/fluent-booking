@@ -107,6 +107,15 @@
                                 input_type="textarea"
                                 input_label="Internal Note"></editable-spot-data>
 
+            <div v-if="showing_spot.source_url" class="fcal_spot_details_row">
+                <div class="fcal_spot_details_label">
+                    Booking URL
+                </div>
+                <div class="fcal_spot_details_value">
+                    <a target="_blank" rel="nofollow" :href="showing_spot.source_url">{{showing_spot.source_url}}</a>
+                </div>
+            </div>
+
             <hr/>
             <h3 class="fcal_section_title">Meeting Activities</h3>
 

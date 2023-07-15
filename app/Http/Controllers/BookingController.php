@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         $slot = CalendarSlot::findOrfail($slotId);
 
-        if($slot->status != 'active') {
+        if ($slot->status != 'active') {
             return $this->sendError([
                 'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
             ]);
@@ -30,54 +30,21 @@ class BookingController extends Controller
             $timeZone = 'UTC';
         }
 
-        if (strtotime($startDate) < time()) {
-            $startDate = date('Y-m-d H:i:s');
-        }
+        $timeSlotService = new TimeSlotService($calendar, $slot);
 
-        $endDate = $slot->getMaxBookableDateTime($startDate);
-        $startDate = $slot->getMinBookableDateTime($startDate);
+        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
 
-        if(strtotime($startDate) > strtotime($endDate)) {
+        if(is_wp_error($availableSpots)) {
             return [
                 'available_slots' => [],
-                'timezone' => $timeZone,
-                'invalid_dates' => true,
+                'timezone'        => $timeZone,
+                'invalid_dates'   => true,
                 'max_lookup_date' => $slot->getMaxLookUpDate(),
             ];
         }
 
-        $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
-        $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
-
-        $slotService = new TimeSlotService($calendar, $slot);
-
-        $slots = $slotService->getDates($startDate, $endDate);
-        $convertedSpots = [];
-
-        $cutOutTimeStamp = DateTimeHelper::getTimestamp($calendar->author_timezone) + $slot->getCutoutSeconds();
-
-        foreach ($slots as $spots) {
-            foreach ($spots as $spot) {
-
-                if($cutOutTimeStamp > strtotime($spot['start'])) {
-                    continue;
-                }
-
-                $startDate = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone, 'Y-m-d');
-
-                if (!isset($convertedSpots[$startDate])) {
-                    $convertedSpots[$startDate] = [];
-                }
-
-                $convertedSpots[$startDate][] = [
-                    'start' => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
-                    'end'   => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
-                ];
-            }
-        }
-
         return [
-            'available_slots' => array_filter($convertedSpots),
+            'available_slots' => array_filter($availableSpots),
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ];
@@ -87,7 +54,7 @@ class BookingController extends Controller
     {
         $calendarSlot = CalendarSlot::findOrfail($slotId);
 
-        if($calendarSlot->status != 'active') {
+        if ($calendarSlot->status != 'active') {
             return $this->sendError([
                 'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
             ]);
@@ -107,6 +74,8 @@ class BookingController extends Controller
             $rules['phone'] = 'required';
         }
 
+
+
         $this->validate($postedData, $rules);
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
@@ -117,8 +86,14 @@ class BookingController extends Controller
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
-            'ip_address'       => $request->getIp()
+            'ip_address'       => $request->getIp(),
         ];
+
+        $sourceUrl = Arr::get($postedData, 'source_url', '');
+
+        if ($sourceUrl) {
+            $bookingData['source_url'] = sanitize_url($sourceUrl);
+        }
 
         if ($isPhoneRequired) {
             $bookingData['phone'] = sanitize_text_field($postedData['phone']);

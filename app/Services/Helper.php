@@ -625,13 +625,13 @@ class Helper
 
         if ($checkDb) {
 
-            if($exceptId) {
+            if ($exceptId) {
                 $exist = Calendar::where('slug', $slug)->where('id', '!=', $exceptId)->first();
             } else {
                 $exist = Calendar::where('slug', $slug)->first();
             }
 
-            if($exist) {
+            if ($exist) {
                 return false;
             }
         }
@@ -740,10 +740,24 @@ class Helper
 
         $counter = 1;
 
-        while(CalendarSlot::where('calendar_id', $calendar->id)->where('slug', $default)->first()) {
+        while (CalendarSlot::where('calendar_id', $calendar->id)->where('slug', $default)->first()) {
             $default = $original . '-' . $counter;
         }
 
         return apply_filters('fluent_calendar/slot_slug', $default, $original);
+    }
+
+    public static function getIp()
+    {
+        $server = $_SERVER;
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+
+        return sanitize_text_field($ip);
     }
 }

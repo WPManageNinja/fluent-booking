@@ -8,15 +8,21 @@ if (calendarApps.length) {
         const elem = calendarApps[index];
         let calendarId = elem.dataset.calendar_id;
         let slot_id = elem.dataset.slot_id;
+        if (elem.dataset.app_booted) {
+            console.log('App already booted');
+            return;
+        }
         if (calendarId && slot_id) {
             elem.innerHTML = '';
 
             new BookingApp({
                 target: elem,
                 props: {
-                    appData: window['fcal_public_vars_'+calendarId + '_' + slot_id],
+                    appData: window['fcal_public_vars_' + calendarId + '_' + slot_id],
                 }
             });
+
+            elem.dataset.app_booted = true;
         }
     });
 }
