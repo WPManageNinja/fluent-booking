@@ -17,13 +17,8 @@ return function ($file) {
     });
 
     require_once( FLUENT_CALENDAR_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
-
+ 
     add_action('plugins_loaded', function () use ($app) {
-
-        if (file_exists(FLUENT_CALENDAR_DIR . 'app/Saas/init.php')) {
-            require_once FLUENT_CALENDAR_DIR . 'app/Saas/init.php';
-        }
-
         do_action('fluent_calendar_loaded', $app);
     });
 };

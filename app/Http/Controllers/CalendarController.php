@@ -24,7 +24,7 @@ class CalendarController extends Controller
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
             foreach ($calendar->slots as $slot) {
-                $slot->shortcode = '[fluent_calendar_booking id="'.$slot->id.'"]';
+                $slot->shortcode = '[fluent_calendar_booking id="' . $slot->id . '"]';
 
                 do_action_ref_array('fluent_calendar/calendar_slot', [&$slot]);
             }
@@ -62,11 +62,28 @@ class CalendarController extends Controller
             'slot.schedule_type'    => 'required',
             'slot.title'            => 'required',
             'slot.weekly_schedules' => 'required_if:slot.schedule_type,weekly_schedules',
+            'user_id'               => 'required|int'
         ], $data));
 
-        do_action('fluent_calendar/before_create_calendar', $data);
+        do_action('fluent_calendar/before_create_calendar', $data, $this);
 
-        $user = get_user_by('ID', get_current_user_id());
+        if (!empty($data['user_id'])) {
+            $user = get_user_by('ID', $data['user_id']);
+
+            $userName = $user->user_login;
+            if (is_email($userName)) {
+                $userName = explode('@', $userName);
+                $userName = $userName[0] . '-' . time();
+            }
+            $data['slug'] = sanitize_title($userName, '', 'display');
+
+            if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
+                $data['slug'] .= '-'.time();
+            }
+
+        } else {
+            $user = get_user_by('ID', get_current_user_id());
+        }
 
         if (!empty($data['slug'])) {
             $slug = trim(sanitize_text_field($data['slug']));
@@ -167,7 +184,7 @@ class CalendarController extends Controller
 
     public function getSlot(Request $request, $calendarId, $slotId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar'])->findOrFail($slotId);
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar.user'])->findOrFail($slotId);
         $slot->author_profile = $slot->getAuthorProfile();
 
         $slotSettings = $slot->settings;

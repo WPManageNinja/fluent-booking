@@ -60,64 +60,56 @@ p {
 
 .fluent_calendar_app {
   margin: 66px auto 30px;
-
-  &.f_cal_day_selected, &.f_cal_spot_selected {
-    max-width: 1000px;
-  }
-
-  .fcal_form_item .fcal_input {
-    width: 100%;
-    display: block;
-    box-sizing: border-box;
-    min-height: 46px;
-    padding: 10px 14px;
-    border: 1px solid #B2B2B2;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 1);
-    color: #1a1a1a;
-    font-size: 16px;
-    line-height: 1.5;
-    overflow-wrap: normal;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    &:disabled {
-      background: #f7f7f7 !important;
-    }
-  }
-
-  .fcal_btn_submit {
-    line-height: 22px;
-    font-size: 110%;
-  }
 }
-
+.fluent_calendar_app.f_cal_day_selected, .fluent_calendar_app.f_cal_spot_selected {
+  max-width: 1000px;
+}
+.fluent_calendar_app .fcal_form_item .fcal_input {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid #B2B2B2;
+  border-radius: 4px;
+  background: rgb(255, 255, 255);
+  color: #1a1a1a;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: normal;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.fluent_calendar_app .fcal_form_item .fcal_input:disabled {
+  background: #f7f7f7 !important;
+}
+.fluent_calendar_app .fcal_btn_submit {
+  line-height: 22px;
+  font-size: 110%;
+}
 
 .book_up {
   margin: 30px 0;
   text-align: center;
   padding: 20px 0;
   border-top: 2px solid #f0f0f0;
-
-  h3 {
-    font-size: 23px;
-    text-transform: capitalize;
-  }
-
-  a {
-    display: inline-block;
-    text-decoration: none;
-    margin-top: 20px;
-    padding: 13px 20px;
-    border-radius: 4px;
-    background-color: rgb(0, 105, 255);
-    color: white;
-
-    &:hover {
-      background: rgb(47 131 252);
-    }
-  }
+}
+.book_up h3 {
+  font-size: 23px;
+  text-transform: capitalize;
+}
+.book_up a {
+  display: inline-block;
+  text-decoration: none;
+  margin-top: 20px;
+  padding: 13px 20px;
+  border-radius: 4px;
+  background-color: rgb(0, 105, 255);
+  color: white;
+}
+.book_up a:hover {
+  background: rgb(47, 131, 252);
 }
 
 .menu_logo_holder img {
@@ -126,6 +118,23 @@ p {
 
 .fcal_calendar_inner {
   border-radius: 8px;
-  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.08);
   background: #fff;
+}
+
+body {
+  background: #fafafa;
+}
+
+.dashboard_warp .fl_app {
+  margin-right: 0;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.fcal_cal_header.fcal_section_header {
+  margin: -15px -16px 0;
 }

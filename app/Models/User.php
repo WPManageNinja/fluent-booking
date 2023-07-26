@@ -12,6 +12,8 @@ class User extends Model
 
     protected $hidden = ['user_pass', 'user_activation_key'];
 
+    protected $appends = ['full_name'];
+
     protected $primaryKey = 'ID';
 
     /**
@@ -33,6 +35,15 @@ class User extends Model
 
     public function user() {
         return get_user_by('ID', $this->ID);
+    }
+
+    public function getFullNameAttribute() {
+        $user = $this->user();
+        $name =  trim($user->first_name . ' ' . $user->last_name);
+        if(!$name) {
+            $name = $user->display_name;
+        }
+        return $name;
     }
 
     public function staff() {
