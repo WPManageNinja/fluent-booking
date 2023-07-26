@@ -24,3 +24,6 @@
 
 $app->addAction('admin_menu', 'AdminMenuHandler@add');
 
+
+// Load Integrations
+require_once FLUENT_CALENDAR_DIR . 'app/Services/Integrations/index.php';
