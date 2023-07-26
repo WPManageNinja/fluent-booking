@@ -20,8 +20,7 @@
 
     export var headers = [];
     export let days = [];
-
-    let selectedDate = null;
+    export let selectedDate = null;
 
     let dispatch = createEventDispatcher();
 

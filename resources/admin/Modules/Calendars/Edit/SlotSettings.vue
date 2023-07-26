@@ -4,6 +4,7 @@
             <div class="fcal_title">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item :to="{ name: 'calendars' }">Booking Types</el-breadcrumb-item>
+                    <el-breadcrumb-item v-if="appVars.supported_features.multi_users">{{ slot.calendar?.user.full_name }}</el-breadcrumb-item>
                     <el-breadcrumb-item>Edit {{ slot.title }}</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
@@ -15,7 +16,7 @@
             <el-tabs v-model="activeTab">
                 <el-tab-pane name="info" label="Event Information">
                     <basic-info :slot="slot" />
-                    <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Save Event Settings</el-button>
+                    <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Update Event Settings</el-button>
                 </el-tab-pane>
                 <el-tab-pane name="schedule" label="Scheduling Settings">
                     <slot-settings-from :slot="slot" />

@@ -31,7 +31,9 @@ class Calendar extends Model
     public static function boot()
     {
         static::creating(function ($model) {
-            $model->user_id = get_current_user_id();
+            if(empty($model->user_id)) {
+                $model->user_id = get_current_user_id();
+            }
             $model->hash = md5(wp_generate_uuid4().time());
         });
     }

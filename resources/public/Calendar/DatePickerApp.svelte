@@ -72,6 +72,8 @@
         initMonth();
     }
 
+    let firstLoading = true;
+
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
@@ -84,12 +86,22 @@
             .then(response => {
                 timezone = response.timezone;
                 availableDates = response.available_slots;
+
+                if(firstLoading && slot.pre_selects.day) {
+                    selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
+                    dayClick({
+                        date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day
+                    });
+                } else {
+                    selectedDate = '';
+                }
             })
             .catch(errors => {
                 console.log(errors);
             })
             .finally(() => {
                 isLoadingDates = false;
+                firstLoading = false;
             });
     }
 
@@ -224,6 +236,7 @@
             </div>
             <Calendar
                 isLoadingDates="{true}"
+                selectedDate="{selectedDate}"
                 {headers}
                 {days}
                 on:dayClick={(e)=>dayClick(e.detail)}

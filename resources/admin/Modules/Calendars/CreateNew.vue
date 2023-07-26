@@ -1,7 +1,8 @@
 <template>
     <div class="fcal_create_calendar fcal_section fcal_section_narrow">
         <div class="fcal_section_header">
-            <h3>Let's create your first booking form</h3>
+            <h3 v-if="appVars.is_new">Let's create your first booking form</h3>
+            <h3 v-else>Create a new booking calendar</h3>
         </div>
         <div class="fcal_section_body">
             <div style="max-width: 600px; margin: 0 auto;" v-if="form_step == 'slug'">
@@ -13,6 +14,9 @@
             </div>
             <div v-else>
                 <el-form :model="calendar" label-position="top">
+                    <el-form-item label="Select Host">
+                        <host-selector v-model="calendar.user_id" />
+                    </el-form-item>
                     <el-form-item label="Title of the booking">
                         <el-input type="text" placeholder="eg: 15 minutes meeting" v-model="calendar.slot.title"/>
                     </el-form-item>
@@ -63,16 +67,19 @@
 import WeeklySchedules from './parts/WeeklySchedules.vue';
 import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import LocationSelector from './Edit/_LocationSelector.vue';
+import HostSelector from '../../Pieces/HostSelector.vue';
 
 export default {
     name: 'NewCalender',
     components: {
         WeeklySchedules,
         TimeZoneSelector,
-        LocationSelector
+        LocationSelector,
+        HostSelector
     },
     data() {
         return {
+            user_id: '',
             require_slug: false,
             form_step: 'general',
             checking_slug: false,
@@ -214,6 +221,13 @@ export default {
         }
     },
     mounted() {
+
+        if(!this.hasSupport('is_hosted')) {
+            this.form_step = 'general';
+            this.require_slug = false;
+            return;
+        }
+
         if(this.appVars.intended_username) {
             this.calendar.slug = this.appVars.intended_username;
             this.form_step = 'general';
