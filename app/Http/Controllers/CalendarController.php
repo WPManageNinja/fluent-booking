@@ -78,7 +78,7 @@ class CalendarController extends Controller
             $data['slug'] = sanitize_title($userName, '', 'display');
 
             if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
-                $data['slug'] .= '-'.time();
+                $data['slug'] .= '-' . time();
             }
 
         } else {
@@ -125,6 +125,7 @@ class CalendarController extends Controller
             'title'             => $title,
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
             'calendar_id'       => $calendar->id,
+            'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
             'settings'          => [
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),

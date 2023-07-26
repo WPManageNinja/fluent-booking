@@ -14,7 +14,7 @@
             </div>
             <div v-else>
                 <el-form :model="calendar" label-position="top">
-                    <el-form-item label="Select Host">
+                    <el-form-item v-if="!this.hasSupport('is_hosted')" label="Select Host">
                         <host-selector v-model="calendar.user_id" />
                     </el-form-item>
                     <el-form-item label="Title of the booking">

@@ -8,6 +8,13 @@
                         <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past</li>
                     </ul>
                 </div>
+                <div v-if="all_hosts" class="fcal_head_actions">
+                    <el-select size="small" @change="fetchSchedules()" v-model="filters.author">
+                        <el-option value="me" label="My Meetings"></el-option>
+                        <el-option value="all" label="All Meetings"></el-option>
+                        <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
+                    </el-select>
+                </div>
             </div>
             <div style="padding: 0;" v-loading="loading" class="fcal_section_body">
                 <div v-if="schedules.length" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
@@ -19,7 +26,7 @@
                                 </div>
                                 <div class="fcal_schedule_items">
                                     <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.id == spot_id }" class="fcal_each_spot">
-                                        <schedule-spot @showDetails="showDetails(spot)" :spot="spot" />
+                                        <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot" />
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +72,9 @@ export default {
                 per_page: 20
             },
             spot_id: false,
-            current_spot: null
+            current_spot: null,
+            loadingHosts: false,
+            all_hosts: null
         }
     },
     computed: {
@@ -106,6 +115,13 @@ export default {
                     this.loading = false;
                 });
         },
+        fetchHosts() {
+            this.loadingHosts = true;
+            this.$get('admin/other-hosts')
+                .then(response => {
+                    this.all_hosts = response.hosts;
+                });
+        },
         changePeriod(period) {
             if(this.filters.period != period) {
                 this.$router.push({query: {period}});
@@ -127,6 +143,10 @@ export default {
         this.fetchSchedules();
         if (this.$route.query.spot_id) {
             this.spot_id = this.$route.query.spot_id;
+        }
+
+        if(this.hasSupport('multi_users')) {
+            this.fetchHosts();
         }
     }
 }

@@ -29,15 +29,14 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('remaining-hosts', 'AdminController@getRemainingHosts');
+    $router->get('other-hosts', 'AdminController@getOtherHosts');
 });
 
 $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
-
     $router->get('/', 'SchedulesController@index');
     $router->get('/{booking_id}', 'SchedulesController@getBooking')->int('booking_id');
     $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
     $router->get('/{booking_id}/activities', 'SchedulesController@getBookingActivities')->int('booking_id');
-
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {

@@ -15,8 +15,8 @@ class AdminController extends Controller
                 'hosts' => [
                     [
                         'is_own' => true,
-                        'id'    => $user->ID,
-                        'label' => $user->display_name . ' (' . $user->user_email . ')'
+                        'id'     => $user->ID,
+                        'label'  => $user->display_name . ' (' . $user->user_email . ')'
                     ]
                 ]
             ];
@@ -57,6 +57,44 @@ class AdminController extends Controller
 
         return [
             'hosts' => $hosts
+        ];
+    }
+
+    public function getOtherHosts(Request $request)
+    {
+
+        if (!current_user_can('list_users')) {
+            return [
+                'hosts' => []
+            ];
+        }
+
+        $currentUserId = get_current_user_id();
+
+        $calendars = Calendar::with(['user'])
+            ->where('user_id', '!=', $currentUserId)
+            ->get();
+
+        $allHosts = [];
+
+        foreach ($calendars as $calendar) {
+            $userName = 'Deleted User';
+            if ($calendar->user) {
+                $userName = $calendar->user->full_name;
+            }
+
+            if ($currentUserId == $calendar->user_id) {
+                $userName = __('My Meetings', 'fluent-calendar');
+            }
+
+            $allHosts[] = [
+                'id'    => (int) $calendar->user_id,
+                'label' => $userName
+            ];
+        }
+
+        return [
+            'hosts' => $allHosts
         ];
     }
 }
