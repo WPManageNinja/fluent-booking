@@ -23,7 +23,7 @@ class SchedulesController extends Controller
 
         if ($author == 'me') {
             $author = get_current_user_id();
-        } else {
+        } else if ($author !== 'all') {
             $author = (int)$author;
         }
 
@@ -31,7 +31,7 @@ class SchedulesController extends Controller
             $author = get_current_user_id();
         }
 
-        if ($author) {
+        if ($author && $author !== 'all') {
             $query->whereHas('calendar', function ($q) use ($author) {
                 $q->where('user_id', $author);
             });

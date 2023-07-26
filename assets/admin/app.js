@@ -60494,7 +60494,9 @@ __webpack_require__.r(__webpack_exports__);
         per_page: 20
       },
       spot_id: false,
-      current_spot: null
+      current_spot: null,
+      loadingHosts: false,
+      all_hosts: null
     };
   },
   computed: {
@@ -60533,6 +60535,13 @@ __webpack_require__.r(__webpack_exports__);
         _this2.loading = false;
       });
     },
+    fetchHosts: function fetchHosts() {
+      var _this3 = this;
+      this.loadingHosts = true;
+      this.$get('admin/other-hosts').then(function (response) {
+        _this3.all_hosts = response.hosts;
+      });
+    },
     changePeriod: function changePeriod(period) {
       if (this.filters.period != period) {
         this.$router.push({
@@ -60563,6 +60572,9 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchSchedules();
     if (this.$route.query.spot_id) {
       this.spot_id = this.$route.query.spot_id;
+    }
+    if (this.hasSupport('multi_users')) {
+      this.fetchHosts();
     }
   }
 });
@@ -60635,7 +60647,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* unplugin-vue-components disabled *//* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ScheduleSpot',
-  props: ['spot'],
+  props: ['spot', 'multi_host'],
   $emits: ['showDetails'],
   data: function data() {
     return {
@@ -61229,6 +61241,7 @@ var _hoisted_8 = {
   key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _this = this;
   var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElInput;
   var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElButton;
   var _component_host_selector = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("host-selector");
@@ -61275,7 +61288,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "label-position": "top"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
+      return [!_this.hasSupport('is_hosted') ? ((0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createBlock)(_component_el_form_item, {
+        key: 0,
         label: "Select Host"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
@@ -61287,7 +61301,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8 /* PROPS */, ["modelValue"])];
         }),
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
+      })) : (0,vue__WEBPACK_IMPORTED_MODULE_8__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
         label: "Title of the booking"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
@@ -61402,7 +61416,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         _: 1 /* STABLE */
       }), $data.calendar.slot.schedule_type == 'weekly_schedules' ? ((0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createBlock)(_component_el_form_item, {
-        key: 0,
+        key: 1,
         label: "Weekly Hours Schedules"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
@@ -63615,10 +63629,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/empty/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/empty/index.mjs");
 /* harmony import */ var element_plus_es_components_empty_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/empty/style/css */ "./node_modules/element-plus/es/components/empty/style/css.mjs");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/select/index.mjs");
+/* harmony import */ var element_plus_es_components_select_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/select/style/css */ "./node_modules/element-plus/es/components/select/style/css.mjs");
+/* harmony import */ var element_plus_es_components_option_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/option/style/css */ "./node_modules/element-plus/es/components/option/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
+
+
 
 var _hoisted_1 = {
   "class": "fcal_create_calendar fcal_section_narrow fcal_section"
@@ -63633,92 +63652,126 @@ var _hoisted_4 = {
   "class": "fcal_secendary_nav_items"
 };
 var _hoisted_5 = {
+  key: 0,
+  "class": "fcal_head_actions"
+};
+var _hoisted_6 = {
   style: {
     "padding": "0"
   },
   "class": "fcal_section_body"
 };
-var _hoisted_6 = {
+var _hoisted_7 = {
   "class": "fcal_schedules"
 };
-var _hoisted_7 = {
+var _hoisted_8 = {
   "class": "fcal_schedule_wrapper"
 };
-var _hoisted_8 = {
+var _hoisted_9 = {
   "class": "fcal_schedule_header"
 };
-var _hoisted_9 = {
+var _hoisted_10 = {
   "class": "fcal_schedule_data"
 };
-var _hoisted_10 = {
+var _hoisted_11 = {
   "class": "fcal_schedule_items"
 };
-var _hoisted_11 = {
+var _hoisted_12 = {
   "class": "fcal_right fcal_tm20"
 };
-var _hoisted_12 = {
+var _hoisted_13 = {
   key: 0,
   "class": "fcal_spot_details"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_schedule_spot = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveComponent)("schedule-spot");
-  var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveComponent)("pagination");
-  var _component_spot_info = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveComponent)("spot-info");
-  var _component_el_empty = element_plus_es__WEBPACK_IMPORTED_MODULE_2__.ElEmpty;
-  var _directive_loading = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveDirective)("loading");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", {
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)([{
+  var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElOption;
+  var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElSelect;
+  var _component_schedule_spot = (0,vue__WEBPACK_IMPORTED_MODULE_3__.resolveComponent)("schedule-spot");
+  var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_3__.resolveComponent)("pagination");
+  var _component_spot_info = (0,vue__WEBPACK_IMPORTED_MODULE_3__.resolveComponent)("spot-info");
+  var _component_el_empty = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElEmpty;
+  var _directive_loading = (0,vue__WEBPACK_IMPORTED_MODULE_3__.resolveDirective)("loading");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_3__.normalizeClass)([{
       fcal_showing_details: $data.spot_id
     }, "fcal_schedlues"])
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("ul", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("li", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("ul", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("li", {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.changePeriod('upcoming');
     }),
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)({
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_3__.normalizeClass)({
       fcal_active: $data.filters.period == 'upcoming'
     })
-  }, "Upcoming", 2 /* CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("li", {
+  }, "Upcoming", 2 /* CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("li", {
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return $options.changePeriod('past');
     }),
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)({
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_3__.normalizeClass)({
       fcal_active: $data.filters.period == 'past'
     })
-  }, "Past", 2 /* CLASS */)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_5, [$data.schedules.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", {
+  }, "Past", 2 /* CLASS */)])]), $data.all_hosts ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_select, {
+    size: "small",
+    onChange: _cache[2] || (_cache[2] = function ($event) {
+      return $options.fetchSchedules();
+    }),
+    modelValue: $data.filters.author,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.filters.author = $event;
+    })
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_3__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_option, {
+        value: "me",
+        label: "My Meetings"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_option, {
+        value: "all",
+        label: "All Meetings"
+      }), ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_3__.renderList)($data.all_hosts, function (host) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createBlock)(_component_el_option, {
+          key: host.id,
+          value: host.id,
+          label: host.label
+        }, null, 8 /* PROPS */, ["value", "label"]);
+      }), 128 /* KEYED_FRAGMENT */))];
+    }),
+
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_6, [$data.schedules.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", {
     key: 0,
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)([{
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_3__.normalizeClass)([{
       fcal_showing_details: $data.spot_id
     }, "fcal_all_schediles"])
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_1__.renderList)($options.formattedSchedules, function (schedules, scheduleDate) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_3__.renderList)($options.formattedSchedules, function (schedules, scheduleDate) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", {
       key: scheduleDate,
       "class": "fcal_schedule"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("h3", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(scheduleDate), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_10, [((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_1__.renderList)(schedules, function (spot) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("h3", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_3__.toDisplayString)(scheduleDate), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_11, [((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_3__.renderList)(schedules, function (spot) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", {
         key: spot.id,
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)([{
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_3__.normalizeClass)([{
           fcal_is_current: spot.id == $data.spot_id
         }, "fcal_each_spot"])
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_schedule_spot, {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_schedule_spot, {
+        multi_host: $data.filters.author != 'me',
         onShowDetails: function onShowDetails($event) {
           return $options.showDetails(spot);
         },
         spot: spot
-      }, null, 8 /* PROPS */, ["onShowDetails", "spot"])], 2 /* CLASS */);
+      }, null, 8 /* PROPS */, ["multi_host", "onShowDetails", "spot"])], 2 /* CLASS */);
     }), 128 /* KEYED_FRAGMENT */))])]);
-  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_pagination, {
+  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_pagination, {
     pagination: $data.pagination,
     onFetch: $options.fetchSchedules
-  }, null, 8 /* PROPS */, ["pagination", "onFetch"])])]), $data.spot_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_spot_info, {
-    onSpotFetched: _cache[2] || (_cache[2] = function (data) {
+  }, null, 8 /* PROPS */, ["pagination", "onFetch"])])]), $data.spot_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_spot_info, {
+    onSpotFetched: _cache[4] || (_cache[4] = function (data) {
       $data.current_spot = data;
     }),
     spot: $data.current_spot,
     spot_id: $data.spot_id
-  }, null, 8 /* PROPS */, ["spot", "spot_id"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("v-if", true)], 2 /* CLASS */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createBlock)(_component_el_empty, {
+  }, null, 8 /* PROPS */, ["spot", "spot_id"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true)], 2 /* CLASS */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createBlock)(_component_el_empty, {
     key: 1,
     description: "No schedules based on your filter"
-  }))])), [[_directive_loading, $data.loading]]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("p", null, "All dates are shown in " + (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(_ctx.currentTimezone) + " timezone", 1 /* TEXT */)])], 2 /* CLASS */);
+  }))])), [[_directive_loading, $data.loading]]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("p", null, "All dates are shown in " + (0,vue__WEBPACK_IMPORTED_MODULE_3__.toDisplayString)(_ctx.currentTimezone) + " timezone", 1 /* TEXT */)])], 2 /* CLASS */);
 }
 
 /***/ }),
@@ -63846,6 +63899,9 @@ var _hoisted_6 = {
   "class": "fcal_spot_desc_text"
 };
 var _hoisted_7 = {
+  key: 0
+};
+var _hoisted_8 = {
   "class": "fcal_spot_actions"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -63861,7 +63917,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)('fcal_' + $props.spot.status)
   }, null, 2 /* CLASS */)]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(_ctx.toCurrentTimezone($props.spot.start_time, 'hh:mma')) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(_ctx.toCurrentTimezone($props.spot.end_time, 'hh:mma')) + " ", 1 /* TEXT */), $props.spot.happening_status ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("span", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_1__.normalizeClass)('fcal_' + $props.spot.happening_status)
-  }, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(_ctx.getTextFromSlug($props.spot.happening_status)), 3 /* TEXT, CLASS */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createTextVNode)(" Event: "), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.slot.title), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_el_button, {
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)(_ctx.getTextFromSlug($props.spot.happening_status)), 3 /* TEXT, CLASS */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createTextVNode)(" Event: "), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.slot.title), 1 /* TEXT */)]), $props.multi_host ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createTextVNode)(" Host: "), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.spot.author.name), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_el_button, {
     text: ""
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_1__.withCtx)(function () {

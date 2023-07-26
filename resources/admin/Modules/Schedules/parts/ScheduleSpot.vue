@@ -17,6 +17,9 @@
                 <div class="fcal_spot_desc_text">
                     Event: <b>{{ spot.slot.title }}</b>
                 </div>
+                <div v-if="multi_host">
+                   Host: <b>{{spot.author.name}}</b>
+                </div>
             </div>
             <div class="fcal_spot_actions">
                 <el-button text>Details</el-button>
@@ -28,7 +31,7 @@
 <script type="text/babel">
 export default {
     name: 'ScheduleSpot',
-    props: ['spot'],
+    props: ['spot', 'multi_host'],
     $emits: ['showDetails'],
     data() {
         return {

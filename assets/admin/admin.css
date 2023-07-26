@@ -316,6 +316,10 @@ p.fcal_profile_link a {
   opacity: 0.6;
 }
 
+.fcal_head_actions {
+  margin: -15px 0;
+}
+
 .fframe_main-menu-items {
   display: block;
   position: relative;
