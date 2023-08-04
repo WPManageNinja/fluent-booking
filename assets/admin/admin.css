@@ -320,6 +320,125 @@ p.fcal_profile_link a {
   margin: -15px 0;
 }
 
+.el-dropdown-list-wrapper.el-popover {
+  z-index: 9999999999999 !important;
+}
+
+.el-dropdown-menu {
+  left: unset;
+  max-width: 270px;
+}
+
+.el-popper.el-dropdown-list-wrapper .el-dropdown-menu {
+  width: 100%;
+}
+
+.el-dropdown-list-wrapper {
+  padding: 0;
+}
+.el-dropdown-list-wrapper .group-title {
+  display: block;
+  padding: 5px 10px;
+  background-color: #909399;
+  color: #fff;
+}
+
+.el-dropdown-list {
+  border: 0;
+  margin: 0;
+  box-shadow: none;
+  padding: 0;
+  z-index: 10;
+  position: static;
+  min-width: auto;
+  max-height: 280px;
+  overflow-y: scroll;
+}
+.el-dropdown-list .el-dropdown-menu__item {
+  font-size: 13px;
+  line-height: 18px;
+  padding: 4px 10px;
+  border-bottom: 1px solid #f1f1f1;
+}
+.el-dropdown-list .el-dropdown-menu__item:last-of-type {
+  border-bottom: 0;
+}
+.el-dropdown-list .el-dropdown-menu__item:hover {
+  background-color: #e8f2ff;
+  color: #4898fc;
+}
+
+.wp_vue_editor {
+  width: 100%;
+  min-height: 100px;
+}
+
+.wp_vue_editor_wrapper {
+  border: 1px solid #DCDFE6;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+}
+.wp_vue_editor_wrapper .popover-wrapper {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+.wp_vue_editor_wrapper .popover-wrapper-plaintext {
+  left: auto;
+  right: 0;
+  top: -32px;
+}
+.wp_vue_editor_wrapper .wp-editor-container {
+  border: 0;
+}
+.wp_vue_editor_wrapper .wp-editor-tabs {
+  float: none;
+  padding: 8px;
+}
+.wp_vue_editor_wrapper .wp-switch-editor {
+  height: auto;
+  margin: 0 0 0 4px;
+  background-color: transparent;
+  padding: 2px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  line-height: inherit;
+  border-color: transparent;
+  float: none;
+  font-weight: 500;
+}
+.wp_vue_editor_wrapper .html-active .switch-html,
+.wp_vue_editor_wrapper .tmce-active .switch-tmce,
+.wp_vue_editor_wrapper .editor-add-shortcode {
+  background-color: #f5f7fa;
+  border-color: #DCDFE6;
+  color: #1E1F21;
+}
+.wp_vue_editor_wrapper .switch-html {
+  margin-left: 0;
+}
+.wp_vue_editor_wrapper .mce-top-part::before {
+  box-shadow: none;
+}
+.wp_vue_editor_wrapper div.mce-toolbar-grp,
+.wp_vue_editor_wrapper .quicktags-toolbar {
+  border-bottom: 0;
+  background: #f5f7fa;
+}
+.wp_vue_editor_wrapper .mce-toolbar .mce-btn-group .mce-btn.mce-listbox {
+  border: 0;
+  box-shadow: none;
+  border-radius: 4px;
+}
+.wp_vue_editor_wrapper textarea {
+  border: 0;
+  padding-top: 15px;
+}
+
 .fframe_main-menu-items {
   display: block;
   position: relative;
@@ -659,6 +778,59 @@ p.fcal_profile_link a {
   position: absolute;
   top: 4px;
   right: 4px;
+}
+
+.fcal_notification_container {
+  padding: 1rem;
+  border-bottom: 1px solid #ebeef5;
+  border-radius: 4px;
+}
+.fcal_notification_container .fcal_notification_header {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+.fcal_notification_container .fcal_notification_header .header_left {
+  flex: 50%;
+  font-size: 14px;
+  font-weight: 500;
+}
+.fcal_notification_container .fcal_notification_header .header_left.active {
+  font-size: 20px;
+}
+.fcal_notification_container .fcal_notification_header .header_right {
+  flex: 50%;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  gap: 1rem;
+}
+.fcal_notification_container .fcal_notification_header .header_right span {
+  display: flex;
+  justify-content: center;
+  width: 13%;
+}
+.fcal_notification_container .fcal_section_body .el-form-item__content {
+  display: block;
+}
+.fcal_notification_container .fcal_section_body .fcal_reminder_timing {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.fcal_notification_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper {
+  padding: 1px 8px;
+}
+.fcal_notification_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper .el-input__inner {
+  text-align: center;
+}
+.fcal_notification_container .fcal_section_body .fcal_add_reminder .el-icon {
+  margin-right: 2px;
+}
+
+.fcal_notification_btn {
+  margin: 0 1rem;
+  padding: 1rem 1rem 0 1rem;
 }
 
 #wpbody .menu_logo_holder img {

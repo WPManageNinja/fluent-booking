@@ -107,6 +107,11 @@ class AdminMenuHandler
 		    true
 	    );
 
+        if (function_exists('wp_enqueue_editor')) {
+            add_filter('user_can_richedit', '__return_true');
+            wp_enqueue_editor();
+        }
+
 	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
     }
 
