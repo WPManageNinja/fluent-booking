@@ -1,26 +1,33 @@
 <template>
     <div v-if="!loading">
-        <table style="margin: 20px 0px;" class="fcal_table fcal_stripe fcal_horizontal">
-            <thead>
-                <tr>
-                    <th>Notification Type</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(notification, index) in notifications" :key="index">
-                    <td>{{notification.title}}</td>
-                    <td>
-                        <el-switch v-model="notification.enabled"></el-switch>
-                        <span style="margin-left: 10px;">
-                            <span v-if="notification.enabled">Enabled</span>
-                            <span style="color: red;" v-else>Disabled</span>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <el-button @click="save()" type="success" :disabled="saving" v-loading="saving">Update Notification Settings</el-button>
+        <div class="fcal_notification_container" v-for="(notification, index) in notifications" :key="index">
+            <div class="fcal_notification_header">
+                <span :class="['header_left', {active: isEditOpen[index]}]">
+                    {{ notification.title }}
+                </span>
+                <div class="header_right">
+                    <span v-if="notification.enabled">
+                        <el-link @click="toggleEdit(index)" type="primary">
+                            {{ editButtonText(index) }}
+                        </el-link>
+                    </span>
+                    <span style="color: red;" v-else>Disabled</span>
+                    <el-switch v-model="notification.enabled" @click="closeEdit(index)"></el-switch>
+                </div>
+            </div>
+            <div v-if="isEditOpen[index] && notification.enabled">
+                <EditNotificationSettings :email="notification.email"/>
+            </div>
+        </div>
+        <div class="fcal_notification_btn">
+            <el-button
+                type="success"
+                @click="save()"
+                :disabled="saving"
+                v-loading="saving">
+                Update Notification Settings
+            </el-button>
+        </div>
     </div>
     <div class="fcal_section_body" v-else>
         <el-skeleton :rows="1" animated />
@@ -29,15 +36,26 @@
 </template>
 
 <script type="text/babel">
+import EditNotificationSettings from './__EditNotificationSettings.vue';
+
 export default {
     name: 'NotificationSettings',
     props: ['slot'],
+    components: {
+        EditNotificationSettings
+    },
     data() {
         return {
             notifications: {},
             loading: false,
-            saving: false
+            saving: false,
+            isEditOpen: []
         }
+    },
+    computed: {
+        editButtonText() {
+            return (index) => this.isEditOpen[index] ? 'Close' : 'Edit';
+        },
     },
     methods: {
         fetch() {
@@ -67,6 +85,14 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        toggleEdit(index) {
+            const value = this.isEditOpen[index];
+            this.isEditOpen = [];
+            this.isEditOpen[index] = !value;
+        },
+        closeEdit(index) {
+            this.isEditOpen[index] = false;
         }
     },
     mounted() {

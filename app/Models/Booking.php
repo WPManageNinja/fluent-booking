@@ -157,6 +157,14 @@ class Booking extends Model
         return '';
     }
 
+    public function getMessage()
+    {
+        if (empty($this->message)) {
+            return 'n/a';
+        }
+        return $this->message;
+    }
+
     public function setLocationDetailsAttribute($locationDetails)
     {
         $this->attributes['location_details'] = \maybe_serialize($locationDetails);
@@ -189,6 +197,17 @@ class Booking extends Model
         return BookingActivity::where('booking_id', $this->id)
             ->where('type', 'cancel_reason')
             ->first();
+    }
+
+    public function getCancelReasonDescription()
+    {
+        $cancelReason = $this->getCancelReason();
+        
+        if ($cancelReason) {
+            return $cancelReason->description;
+        }
+
+        return '';
     }
 
     public function addCancelReason($title, $reason)

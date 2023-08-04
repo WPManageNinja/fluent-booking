@@ -314,6 +314,11 @@ class CalendarController extends Controller
 
     }
 
+    public function getShortcodes()
+    {
+        return Helper::getEditorShortCodes();
+    }
+    
     public function getSlotNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
@@ -343,6 +348,7 @@ class CalendarController extends Controller
             $formattedNotifications[$key] = [
                 'title'   => sanitize_text_field($value['title']),
                 'enabled' => Arr::isTrue($value, 'enabled'),
+                'email'=> $this->sanitize_data($value['email'])
             ];
         }
 
@@ -367,5 +373,17 @@ class CalendarController extends Controller
         return [
             'message' => 'Slot has been deleted'
         ];
+    }
+
+    private function sanitize_data( $settings ) {
+
+        $sanitizerMap = [
+            'value'                      => 'intval',
+            'unit'                       => 'sanitize_text_field',
+            'subject'                    => 'sanitize_text_field',
+            'body'                       => 'fcal_sanitize_html',
+        ];
+
+        return fcal_backend_sanitizer($settings, $sanitizerMap);
     }
 }
