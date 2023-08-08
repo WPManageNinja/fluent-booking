@@ -324,13 +324,14 @@ p.fcal_profile_link a {
   z-index: 9999999999999 !important;
 }
 
-.el-dropdown-menu {
-  left: unset;
-  max-width: 270px;
+.el-popper.el-dropdown-list-wrapper {
+  padding: 0;
 }
-
 .el-popper.el-dropdown-list-wrapper .el-dropdown-menu {
   width: 100%;
+}
+.el-popper.el-dropdown-list-wrapper .el-dropdown-menu li {
+  margin: 0;
 }
 
 .el-dropdown-list-wrapper {
@@ -338,8 +339,8 @@ p.fcal_profile_link a {
 }
 .el-dropdown-list-wrapper .group-title {
   display: block;
-  padding: 5px 10px;
-  background-color: #909399;
+  padding: 0.5rem 1rem;
+  background-color: #4B4C4D;
   color: #fff;
 }
 
@@ -356,8 +357,8 @@ p.fcal_profile_link a {
 }
 .el-dropdown-list .el-dropdown-menu__item {
   font-size: 13px;
-  line-height: 18px;
-  padding: 4px 10px;
+  line-height: 1rem;
+  padding: 0.5rem 1rem;
   border-bottom: 1px solid #f1f1f1;
 }
 .el-dropdown-list .el-dropdown-menu__item:last-of-type {
