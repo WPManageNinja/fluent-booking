@@ -145,7 +145,7 @@ class CalendarSlot extends Model
 
         $defaults = Helper::getDefaultNotificationSettings();
 
-        if (!$statuses || isset($statuses['reminder_1_hour_host'])) {
+        if (!$statuses || !isset($statuses['reminder_to_host'])) {
             return $defaults;
         }
 
