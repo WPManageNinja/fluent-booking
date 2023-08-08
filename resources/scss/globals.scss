@@ -167,14 +167,13 @@ p.fcal_profile_link a {
     }
 }
 
-.el-dropdown-menu {
-    left: unset;
-    max-width: 270px;
-}
-
 .el-popper.el-dropdown-list-wrapper {
+    padding: 0;
     .el-dropdown-menu {
         width: 100%;
+        li {
+            margin: 0;
+        }
     }
 }
 
@@ -182,8 +181,8 @@ p.fcal_profile_link a {
     padding: 0;
     .group-title {
         display: block;
-        padding: 5px 10px;
-        background-color: #909399;
+        padding: 0.5rem 1rem;
+        background-color: #4B4C4D;
         color: #fff;
     }
 }
@@ -201,8 +200,8 @@ p.fcal_profile_link a {
 
     .el-dropdown-menu__item {
         font-size: 13px;
-        line-height: 18px;
-        padding: 4px 10px;
+        line-height: 1rem;
+        padding: 0.5rem 1rem;
         border-bottom: 1px solid #f1f1f1;
 
         &:last-of-type {
