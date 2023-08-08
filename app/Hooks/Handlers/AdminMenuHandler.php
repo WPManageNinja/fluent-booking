@@ -132,6 +132,7 @@ class AdminMenuHandler
         }
 
         $user = User::find($currentUser->ID);
+        $editorShortcodes = Helper::getEditorShortCodes();
 
 
         return apply_filters('fluent_calendar/admin_vars', [
@@ -140,6 +141,7 @@ class AdminMenuHandler
             'rest'  => $this->getRestInfo($app),
             'brand_logo' => $this->getMenuIcon(),
             'asset_url' => $assets,
+            'editor_shortcodes' => $editorShortcodes,
             'me'          => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
