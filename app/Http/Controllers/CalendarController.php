@@ -313,11 +313,6 @@ class CalendarController extends Controller
         ];
 
     }
-
-    public function getShortcodes()
-    {
-        return Helper::getEditorShortCodes();
-    }
     
     public function getSlotNotifications(Request $request, $calendarId, $slotId)
     {
@@ -384,6 +379,6 @@ class CalendarController extends Controller
             'body'                       => 'fcal_sanitize_html',
         ];
 
-        return fcal_backend_sanitizer($settings, $sanitizerMap);
+        return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);
     }
 }

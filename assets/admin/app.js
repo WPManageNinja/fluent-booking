@@ -60744,10 +60744,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      editorShortcodes: [],
       subjectPopupVisible: false,
       bodyPopupVisible: false,
       hasWpEditor: !!window.wp.editor,
+      editorShortcodes: this.appVars.editor_shortcodes,
       PlusIcon: (0,vue__WEBPACK_IMPORTED_MODULE_0__.markRaw)(_element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.Plus),
       MoreIcon: (0,vue__WEBPACK_IMPORTED_MODULE_0__.markRaw)(_element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.More),
       CloseBoldIcon: (0,vue__WEBPACK_IMPORTED_MODULE_0__.markRaw)(_element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.CloseBold),
@@ -60760,14 +60760,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    fetchShortcodes: function fetchShortcodes() {
-      var _this = this;
-      this.$get('calendars/shortcodes').then(function (response) {
-        _this.editorShortcodes = response;
-      })["catch"](function (errors) {
-        _this.$handleError(errors);
-      });
-    },
     initEditor: function initEditor() {
       wp.editor.remove(this.editor_id);
       var that = this;
@@ -60831,7 +60823,6 @@ __webpack_require__.r(__webpack_exports__);
     if (this.hasWpEditor) {
       this.initEditor();
     }
-    this.fetchShortcodes();
   }
 });
 

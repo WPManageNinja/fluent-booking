@@ -108,10 +108,10 @@ export default {
     },
     data() {
         return {
-            editorShortcodes: [],
             subjectPopupVisible: false,
             bodyPopupVisible: false,
             hasWpEditor: !!window.wp.editor,
+            editorShortcodes: this.appVars.editor_shortcodes,
             PlusIcon: markRaw(Plus),
             MoreIcon: markRaw(More),
             CloseBoldIcon: markRaw(CloseBold),
@@ -124,15 +124,6 @@ export default {
         }
     },
     methods: {
-        fetchShortcodes() {
-            this.$get('calendars/shortcodes')
-                .then(response => {
-                    this.editorShortcodes = response;
-                })
-                .catch(errors => {
-                    this.$handleError(errors);
-                })
-        },
         initEditor() {
             wp.editor.remove(this.editor_id);
             const that = this;
@@ -197,7 +188,6 @@ export default {
         if (this.hasWpEditor) {
             this.initEditor();
         }
-        this.fetchShortcodes();
     }
 }
 </script>
