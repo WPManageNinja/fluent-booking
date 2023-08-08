@@ -1,6 +1,6 @@
 <template>
     <div v-if="!loading">
-        <div class="fcal_notification_container" v-for="(notification, index) in notifications" :key="index">
+        <div :class="['fcal_notification_container', {disabled: !notification.enabled}]" v-for="(notification, index) in notifications" :key="index">
             <div class="fcal_notification_header">
                 <span :class="['header_left', {active: isEditOpen[index]}]">
                     {{ notification.title }}

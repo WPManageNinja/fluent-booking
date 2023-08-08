@@ -59881,9 +59881,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @element-plus/icons-vue */ "./node_modules/@element-plus/icons-vue/dist/index.js");
-/* unplugin-vue-components disabled */
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* unplugin-vue-components disabled *//* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'popoverDropdown',
   props: {
     data: Object,
@@ -59893,9 +59891,6 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       "default": 'right-start'
     }
-  },
-  components: {
-    ArrowDown: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_0__.ArrowDown
   },
   methods: {
     insertValue: function insertValue(code) {
@@ -63187,7 +63182,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _directive_loading = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveDirective)("loading");
   return !$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_4__.renderList)($data.notifications, function (notification, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", {
-      "class": "fcal_notification_container",
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_4__.normalizeClass)(['fcal_notification_container', {
+        disabled: !notification.enabled
+      }]),
       key: index
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("span", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_4__.normalizeClass)(['header_left', {
@@ -63214,7 +63211,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }
     }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "onClick"])])]), $data.isEditOpen[index] && notification.enabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_EditNotificationSettings, {
       email: notification.email
-    }, null, 8 /* PROPS */, ["email"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)]);
+    }, null, 8 /* PROPS */, ["email"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
   }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createBlock)(_component_el_button, {
     type: "success",
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -63711,8 +63708,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1 /* STABLE */
       }), $props.email.times ? ((0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createBlock)(_component_el_col, {
         key: 0,
-        sm: 24,
-        md: 5
+        sm: 14,
+        md: 10,
+        lg: 7
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
@@ -63740,7 +63738,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }),
                   _: 2 /* DYNAMIC */
                 }, 1024 /* DYNAMIC_SLOTS */), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_col, {
-                  span: 18
+                  span: 15
                 }, {
                   "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
                     return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_select, {
@@ -63770,7 +63768,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }),
                   _: 2 /* DYNAMIC */
                 }, 1024 /* DYNAMIC_SLOTS */), $options.isRemovable ? ((0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createBlock)(_component_el_col, {
-                  key: 0
+                  key: 0,
+                  span: 3
                 }, {
                   "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
                     return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_link, {

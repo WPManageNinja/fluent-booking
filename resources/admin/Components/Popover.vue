@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { ArrowDown } from '@element-plus/icons-vue';
 export default {
     name: 'popoverDropdown',
     props: {
@@ -36,9 +35,6 @@ export default {
             type: String,
             default: 'right-start'
         },
-    },
-    components: {
-        ArrowDown
     },
     methods: {
         insertValue(code) {

@@ -49,20 +49,20 @@
                         </div>
                     </el-form-item>
                 </el-col>
-                <el-col v-if="email.times" :sm="24" :md="5">
+                <el-col v-if="email.times" :sm="14" :md="10" :lg="7">
                     <el-form-item label="Timing">
                         <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
                             <el-col :span="6">
                                 <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
                             </el-col>
-                            <el-col :span="18">
+                            <el-col :span="15">
                                 <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit">
                                     <el-option value="minutes" label="Minutes Before"></el-option>
                                     <el-option value="hours" label="Hours Before"></el-option>
                                     <el-option value="days" label="Days Before"></el-option>
                                 </el-select>
                             </el-col>
-                            <el-col v-if="isRemovable">
+                            <el-col :span="3" v-if="isRemovable">
                                 <el-link type="danger" title="Remove" 
                                     :icon="CloseBoldIcon" 
                                     :underline="false"
