@@ -266,6 +266,6 @@ class CalendarSlot extends Model
 
     public function getMaxBookingPerSlot()
     {
-        return 1;
+        return $this->max_book_per_slot;
     }
 }
