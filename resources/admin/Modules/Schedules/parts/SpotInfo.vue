@@ -1,22 +1,22 @@
 <template>
     <div class="fcal_spot_details">
-        <div v-if="showing_spot">
-            <div :class="'fcal_status_' + showing_spot.status" class="fcal_booking_header">
+        <div v-if="showing_spots">
+            <div :class="'fcal_status_' + showing_spots[0].status" class="fcal_booking_header">
                 <div class="fcal_head_title">
-                    {{ showing_spot.slot_minutes }} minutes meeting with {{ showing_spot.first_name }}
-                    {{ showing_spot.last_name }} @ {{ toCurrentTimezone(showing_spot.start_time, 'DD MMM YYYY, hh:mma') }}
+                    {{ showing_spots[0].slot_minutes }} minutes meeting with {{ showing_spots[0].first_name }}
+                    {{ showing_spots[0].last_name }} @ {{ toCurrentTimezone(showing_spots[0].start_time, 'DD MMM YYYY, hh:mma') }}
                 </div>
 
                 <div class="fcal_item_actions">
                     <el-button
-                        v-if="showing_spot.status != 'cancelled' && showing_spot.status != 'completed'"
+                        v-if="showing_spots[0].status != 'cancelled' && showing_spots[0].status != 'completed'"
                         @click="cancelDialog = true"
                         :disabled="updating"
                         type="danger">
                         Cancel Booking
                     </el-button>
                     <confirm message="Are you sure you want to change the status?"
-                             v-if="(showing_spot.status == 'completed' || showing_spot.happening_status) && showing_spot.status != 'no_show'"
+                             v-if="(showing_spots[0].status == 'completed' || showing_spots[0].happening_status) && showing_spots[0].status != 'no_show'"
                              placement="top-start" @yes="updateScheduleStatus('no_show')">
                         <template #reference>
                             <el-button
@@ -35,30 +35,10 @@
                         <el-col :md="8" :sm="12">
                             <div class="fcal_spot_details_row">
                                 <div class="fcal_spot_details_label">
-                                    Email
+                                    Location
                                 </div>
                                 <div class="fcal_spot_details_value">
-                                    {{ showing_spot.email }}
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Invitee Time Zone
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    {{ showing_spot.person_time_zone }}
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Status
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    <span :class="'fcal_'+showing_spot.status">{{ showing_spot.status }}</span>
+                                    <div class="fcal_location" v-html="showing_spots[0].location"></div>
                                 </div>
                             </div>
                         </el-col>
@@ -68,7 +48,43 @@
                                     Booked at
                                 </div>
                                 <div class="fcal_spot_details_value">
-                                    <span>{{ toCurrentTimezone(showing_spot.created_at, 'DD MMM YYYY, hh:mma') }}</span>
+                                    <span>{{ toCurrentTimezone(showing_spots[0].created_at, 'DD MMM YYYY, hh:mma') }}</span>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Status
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <span :class="'fcal_'+showing_spots[0].status">{{ showing_spots[0].status }}</span>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div v-if="showing_spots[0].source_url" class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Booking URL
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <a target="_blank" rel="nofollow" :href="showing_spots[0].source_url">{{showing_spots[0].source_url}}</a>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <hr v-if="showing_spots[0].slot.event_type === 'group'"/>
+                    <el-row :gutter="30" v-for="(showing_spot, index) in showing_spots" :key="index">
+                        <el-col v-if="showing_spot.slot?.event_type === 'group'">
+                            <h3>{{ guestName(showing_spot, index+1) }}</h3>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Email
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    {{ showing_spot.email }}
                                 </div>
                             </div>
                         </el-col>
@@ -85,50 +101,47 @@
                         <el-col :md="8" :sm="12">
                             <div class="fcal_spot_details_row">
                                 <div class="fcal_spot_details_label">
-                                    Location
+                                    Invitee Time Zone
                                 </div>
                                 <div class="fcal_spot_details_value">
-                                    <div class="fcal_location" v-html="showing_spot.location"></div>
+                                    {{ showing_spot.person_time_zone }}
                                 </div>
                             </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12" v-if="showing_spot.message" class="fcal_spot_details_row">
+                            <div class="fcal_spot_details_label">
+                                Comments by Invitee
+                            </div>
+                            <div class="fcal_spot_details_value">
+                                {{ showing_spot.message || 'N/A' }}
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <editable-spot-data 
+                                input_type="textarea"
+                                input_label="Internal Note"
+                                data_key="internal_note"
+                                @dataUpdated="handleDataUpdated"
+                                :spot="showing_spot">
+                            </editable-spot-data>
                         </el-col>
                     </el-row>
                 </el-col>
             </el-row>
-            <div v-if="showing_spot.message" class="fcal_spot_details_row">
-                <div class="fcal_spot_details_label">
-                    Comments by Invitee
-                </div>
-                <div class="fcal_spot_details_value">
-                    {{ showing_spot.message || 'N/A' }}
-                </div>
-            </div>
-            <editable-spot-data @dataUpdated="handleDataUpdated" :spot="showing_spot" data_key="internal_note"
-                                input_type="textarea"
-                                input_label="Internal Note"></editable-spot-data>
-
-            <div v-if="showing_spot.source_url" class="fcal_spot_details_row">
-                <div class="fcal_spot_details_label">
-                    Booking URL
-                </div>
-                <div class="fcal_spot_details_value">
-                    <a target="_blank" rel="nofollow" :href="showing_spot.source_url">{{showing_spot.source_url}}</a>
-                </div>
-            </div>
 
             <hr/>
             <h3 class="fcal_section_title">Meeting Activities</h3>
 
-            <booking-activities :booking_id="showing_spot.id"/>
+            <booking-activities :booking_id="spot_id"/>
 
         </div>
         <el-skeleton v-if="fetching_spot"></el-skeleton>
         <el-dialog width="30%" title="Cancel Meeting" v-model="cancelDialog">
             <div style="text-align: center;">
-                <h3>{{ showing_spot.slot.title }}</h3>
-                <p>with <b>{{ showing_spot.first_name }} {{ showing_spot.last_name }}</b></p>
-                <p>{{ toCurrentTimezone(showing_spot.start_time, 'MMMM D, YYYY hh:mma') }} -
-                    {{ toCurrentTimezone(showing_spot.end_time, 'MMMM D, YYYY hh:mma') }}</p>
+                <h3>{{ showing_spots[0].slot.title }}</h3>
+                <p>with <b>{{ showing_spots[0].first_name }} {{ showing_spots[0].last_name }}</b></p>
+                <p>{{ toCurrentTimezone(showing_spots[0].start_time, 'MMMM D, YYYY hh:mma') }} -
+                    {{ toCurrentTimezone(showing_spots[0].end_time, 'MMMM D, YYYY hh:mma') }}</p>
 
                 <p style="text-align: left;">Please confirm that you would like to cancel this event. A cancellation
                     email will also go out to the invitee.</p>
@@ -162,23 +175,30 @@ export default {
         Confirm,
         BookingActivities
     },
-    watch: {
-        spot_id() {
-            this.showing_spot = null;
-            this.fetching_spot = true;
-            setTimeout(() => {
-                this.showing_spot = this.spot;
-                this.fetching_spot = false;
-            }, 150);
-        }
-    },
     data() {
         return {
             updating: false,
             fetching_spot: false,
-            showing_spot: this.spot,
+            showing_spots: this.spot,
             cancelDialog: false,
             cancel_reason: ''
+        }
+    },
+    watch: {
+        spot_id() {
+            this.showing_spots = null;
+            this.fetching_spot = true;
+            setTimeout(() => {
+                this.showing_spots = this.spot;
+                this.fetching_spot = false;
+            }, 150);
+        }
+    },
+    computed: {
+        guestName() {
+            return (spot, index) => {
+                return spot.first_name + ' ' + spot.last_name + ' (guest #' + index + ')';
+            }
         }
     },
     methods: {
@@ -196,15 +216,15 @@ export default {
                 data.cancel_reason = this.cancel_reason;
             }
 
-            this.$put(`schedules/${this.showing_spot.id}`, data)
+            this.$put(`schedules/${this.showing_spots[0].id}`, data)
                 .then(response => {
                     this.$notify.success(response.message);
-                    this.showing_spot.status = new_status;
-                    this.showing_spot.happening_status = '';
+                    this.showing_spots[0].status = new_status;
+                    this.showing_spots[0].happening_status = '';
 
                     if (this.spot) {
-                        this.spot.status = new_status;
-                        this.spot.happening_status = '';
+                        this.spot[0].status = new_status;
+                        this.spot[0].happening_status = '';
                     }
 
                     this.cancelDialog = false;
@@ -220,7 +240,7 @@ export default {
             this.fetching_spot = true;
             this.$get(`schedules/${this.spot_id}`)
                 .then(response => {
-                    this.showing_spot = response.schedule;
+                    this.showing_spots = response.schedule;
                     this.$emit('spotFetched', response.schedule);
                 })
                 .catch((errors) => {

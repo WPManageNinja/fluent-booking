@@ -161,10 +161,17 @@ input.el-input__inner:focus {
   line-height: 120%;
 }
 
-.el-select-dropdown.fcal_location_selector li {
+.el-select-dropdown.fcal_selector_with_submenu li {
   line-height: 16px;
   padding: 8px 20px;
   height: auto;
+}
+.el-select-dropdown.fcal_selector_with_submenu li span {
+  display: block;
+  color: var(--el-text-color-secondary);
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
 }
 
 .el-radio-group.radio_desc_group {

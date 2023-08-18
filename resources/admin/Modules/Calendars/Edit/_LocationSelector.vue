@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-select @change="locationChanged()" :disabled="!!location_details.location_type" popper-class="fcal_location_selector" v-model="location_details.location_type" placeholder="Select Location">
+        <el-select @change="locationChanged()" :disabled="!!location_details.location_type" popper-class="fcal_selector_with_submenu" v-model="location_details.location_type" placeholder="Select Location">
             <el-option
                 v-for="(location, locationKey) in locations"
                 :key="locationKey"
@@ -8,9 +8,7 @@
                 :value="locationKey"
             >
                 <b>{{ location.title }}</b>
-                <span style="display: block;color: var(--el-text-color-secondary);padding:0; margin:0; font-size: 12px;">
-                    {{ location.subtitle }}
-                </span>
+                <span>{{ location.subtitle }}</span>
             </el-option>
             <template #prefix>
                 <el-button class="location_edit_btn" v-if="location_details.location_type" @click="showModal = true;">Edit</el-button>
@@ -23,7 +21,7 @@
             max-width="300px">
             <el-form v-if="showModal" :model="location_details" label-position="top" >
                 <el-form-item label="Location">
-                    <el-select @change="locationChanged()" popper-class="fcal_location_selector" v-model="location_details.location_type" placeholder="Select Location">
+                    <el-select @change="locationChanged()" popper-class="fcal_selector_with_submenu" v-model="location_details.location_type" placeholder="Select Location">
                         <el-option
                             v-for="(location, locationKey) in locations"
                             :key="locationKey"

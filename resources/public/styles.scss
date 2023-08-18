@@ -93,6 +93,18 @@ $breakpoint-tablet: 767px;
         cursor: pointer;
         box-sizing: border-box;
 
+        .fcal_spot_time {
+          line-height: normal;
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        .fcal_spot_remaining {
+          line-height: normal;
+          font-size: 0.8rem;
+          font-weight: 300;
+        }
+
         &:hover {
           padding: 4px 7px;
           border-width: 2px;

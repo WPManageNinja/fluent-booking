@@ -850,6 +850,20 @@ class Helper
         return apply_filters('fluent_calendar/backend_sanitized_values', $inputs, $originalValues);
     }
 
+    public static function getEventTypesSchema()
+    {
+        return apply_filters('fluent_calendar/event_types_schema', [
+            'single' => [
+                'title'     => 'One-on-One', 
+                'subtitle'  => 'Meeting with a single person'
+            ],
+            'group' => [
+                'title'     => 'Group Meeting',
+                'subtitle'  => 'Meeting with multiple guests'
+            ]
+        ]);
+    }
+
     public static function getDefaultNotificationSettings()
     {
         $defaults = apply_filters('fluent_calendar/default_notification_settings', [
@@ -858,7 +872,7 @@ class Helper
                 'title'   => 'Booking Confirmation to Attendee',
                 'email'   => [
                     'subject' => 'Booking Confirmation with {host.name} {event.datetime}',
-                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - organizer</li><li>{guest.email} - you</li></ul>'
+                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
                 ],
             ],
             'booking_conf_host' => [
@@ -866,7 +880,7 @@ class Helper
                 'title'   => 'Booking Confirmation to Organizer (You)',
                 'email'   => [
                     'subject' => 'New Booking: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
-                    'body'    => '<h2 class="p1" style="text-align: center;">New Booking Confirmed</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - you</li><li>{guest.email} - guest</li></ul>'
+                    'body'    => '<h2 class="p1" style="text-align: center;">New Booking Confirmed</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>'
                 ],
             ],
             'reminder_to_attendee' => [
@@ -874,7 +888,7 @@ class Helper
                 'title'   => 'Reminder Before Meeting to Attendee',
                 'email'   => [
                     'subject' => 'Meeting Reminder: {host.name} {event.datetime}',
-                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - organizer</li><li>{guest.email} - you</li></ul>',
+                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>',
                     'times'   => [
                         [
                             'unit' => 'minutes',
@@ -888,7 +902,7 @@ class Helper
                 'title'   => 'Reminder Before Meeting to Organizer (You)',
                 'email'   => [
                     'subject' => 'Meeting Reminder: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
-                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - you</li><li>{guest.email} - guest</li></ul>',
+                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>',
                     'times'   => [
                         [
                             'unit' => 'minutes',

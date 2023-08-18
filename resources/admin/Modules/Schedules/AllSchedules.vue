@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div style="padding: 0;" v-loading="loading" class="fcal_section_body">
-                <div v-if="schedules.length" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
+                <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
                     <div class="fcal_schedules">
                         <div class="fcal_schedule_wrapper">
                             <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="fcal_schedule_items">
                                     <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.id == spot_id }" class="fcal_each_spot">
-                                        <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot" />
+                                        <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot"/>
                                     </div>
                                 </div>
                             </div>
@@ -50,6 +50,7 @@
 import Pagination from "../../Pieces/Pagination.vue";
 import ScheduleSpot from "./parts/ScheduleSpot.vue";
 import SpotInfo from './parts/SpotInfo.vue';
+import each from 'lodash/each';
 
 export default {
     name: 'AllSchedules',
@@ -61,6 +62,7 @@ export default {
     data() {
         return {
             schedules: [],
+            schedulesLength: 0,
             loading: true,
             filters: {
                 period: 'upcoming',
@@ -80,10 +82,15 @@ export default {
     computed: {
         formattedSchedules() {
             const items = {};
-            this.schedules.forEach(schedule => {
-                let date = this.toCurrentTimezone(schedule.start_time, 'MMMM D, YYYY');
-                if(this.isToday(schedule.start_time)) {
+            each(this.schedules, (schedule) => {
+                const startTime = schedule[0].start_time;
+                let date = this.toCurrentTimezone(startTime, 'MMMM D, YYYY');
+                if (this.isToday(startTime)) {
                     date = 'Today';
+                } else if (this.isYesterday(startTime)) {
+                    date = 'Yesterday';
+                } else if (this.isTomorrow(startTime)) {
+                    date = 'Tomorrow';
                 }
                 if (!items[date]) {
                     items[date] = [];
@@ -130,9 +137,9 @@ export default {
             }
         },
         showDetails(spot) {
-            this.$router.push({query: { period: this.filters.period, spot_id: spot.id }});
+            this.$router.push({query: { period: this.filters.period, spot_id: spot[0].id }});
             this.current_spot = spot;
-            this.spot_id = spot.id;
+            this.spot_id = spot[0].id;
         }
     },
     mounted() {

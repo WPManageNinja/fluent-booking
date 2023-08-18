@@ -16,6 +16,7 @@ class Booking extends Model
         'calendar_id',
         'slot_id',
         'parent_id',
+        'event_id',
         'hash',
         'person_user_id',
         'person_contact_id',
@@ -51,6 +52,12 @@ class Booking extends Model
         static::creating(function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
+            }
+
+            if (is_null($model->event_id)) {
+                $lastEvent = static::orderBy('event_id', 'desc')->first(['event_id']);
+                $nextEventId = $lastEvent ? $lastEvent->event_id + 1 : 1;
+                $model->event_id = $nextEventId;
             }
 
             if (defined('FLUENTCRM') && !empty($model->email) && apply_filters('fluent_calender/auto_booking_fluent_crm_sync', true)) {
