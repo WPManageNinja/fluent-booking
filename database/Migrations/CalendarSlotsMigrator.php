@@ -34,6 +34,8 @@ class CalendarSlotsMigrator
                 `location_type` VARCHAR(100) NOT NULL DEFAULT '',
                 `location_heading` TEXT NULL,
                 `location_settings` LONGTEXT NULL,
+                `event_type` VARCHAR(20) NOT NULL DEFAULT 'single',
+                `is_display_spots` BOOLEAN NOT NULL DEFAULT 0,
                 `max_book_per_slot` INT(10) UNSIGNED NOT NULL DEFAULT 1,
                 `created_at` TIMESTAMP NULL,
                 `updated_at` TIMESTAMP NULL,

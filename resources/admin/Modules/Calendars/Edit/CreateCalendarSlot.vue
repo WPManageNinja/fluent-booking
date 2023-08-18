@@ -64,7 +64,11 @@ export default {
                 title: this.slot.title,
                 description: this.slot.description,
                 duration: this.slot.duration,
-                settings: this.slot.settings
+                settings: this.slot.settings,
+                location_type: this.slot.location_type,
+                location_heading: this.slot.location_heading,
+                location_settings: this.slot.location_settings,
+                event_type: this.slot.event_type
             })
                 .then(response => {
                     this.$notify.success(response.message);

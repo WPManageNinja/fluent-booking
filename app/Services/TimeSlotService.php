@@ -84,6 +84,7 @@ class TimeSlotService
                 $endTimeStamp = strtotime($date . ' ' . $end);
 
                 $isBooked = false;
+                $isSpotAvailable = false;
                 foreach ($currentBookedSlots as $bookedSlot) {
                     if (
                         (
@@ -95,11 +96,16 @@ class TimeSlotService
                         )
                     ) {
                         $isBooked = true;
+
+                        if ($bookedSlot['remaining'] > 0) {
+                            $isSpotAvailable = true;
+                            $slot['remaining'] = $bookedSlot['remaining'];
+                        }
                         break;
                     }
                 }
 
-                if (!$isBooked) {
+                if (!$isBooked || $isSpotAvailable) {
                     $validSlots[] = $slot;
                 }
             }
@@ -256,6 +262,13 @@ class TimeSlotService
                     'end'       => $booking->end_time,
                     'remaining' => $maxBookingPerSlot - $booked,
                 ];
+            } elseif($isMulti && $remaining > 0) {
+                $books[$date][] = [
+                    'slot_id'   => $booking->slot_id,
+                    'start'     => $booking->start_time,
+                    'end'       => $booking->end_time,
+                    'remaining' => $maxBookingPerSlot - $booked,
+                ];
             }
         }
 
@@ -343,6 +356,8 @@ class TimeSlotService
 
         $endDate = $slot->getMaxBookableDateTime($startDate);
         $startDate = $slot->getMinBookableDateTime($startDate);
+        $eventType = $slot->event_type;
+        $isDisplaySpots = $slot->is_display_spots;
 
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-calendar'));
@@ -370,9 +385,18 @@ class TimeSlotService
                     $convertedSpots[$startDate] = [];
                 }
 
+                $remainingSlots = false;
+                if ($isDisplaySpots && $eventType == 'group') {
+                    $remainingSlots = Arr::get($spot, 'remaining', 0);
+                    if (!$remainingSlots) {
+                        $remainingSlots = $this->calendarSlot->getMaxBookingPerSlot();
+                    }
+                }
+
                 $convertedSpots[$startDate][] = [
-                    'start' => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
-                    'end'   => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                    'start'     => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
+                    'end'       => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                    'remaining' => $remainingSlots,
                 ];
             }
         }

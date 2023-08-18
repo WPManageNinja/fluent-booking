@@ -77,6 +77,8 @@ export default {
                 description: this.slot.description,
                 duration: this.slot.duration,
                 settings: this.slot.settings,
+                max_book_per_slot: this.slot.max_book_per_slot,
+                is_display_spots: this.slot.is_display_spots,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings

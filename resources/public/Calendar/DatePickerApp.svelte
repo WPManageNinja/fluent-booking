@@ -254,7 +254,14 @@
                                 class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
                                 <div aria-label="Select Time" on:click="{(e) => {selectedDateTime = day}}"
                                      on:keypress="{(e) => {selectedDateTime = day}}"
-                                     class="fcal_spot_name">{util.dayjs(day.start).format('hh:mm A')}</div>
+                                     class="fcal_spot_name">
+                                     <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
+                                        {util.dayjs(day.start).format('hh:mm A')}
+                                    </div>
+                                    {#if day.remaining && selectedDateTime != day }
+                                        <div class="fcal_spot_remaining">{day.remaining} spots left</div>
+                                    {/if}
+                                </div>
                                 {#if selectedDateTime && selectedDateTime.start == day.start}
                                     <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
                                          on:click={slotSpotConfirmed} class="fcal_spot_confirm">Confirm

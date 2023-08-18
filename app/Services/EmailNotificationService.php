@@ -16,7 +16,7 @@ class EmailNotificationService
      * @param $slot CalendarSlot
      * @return void
      */
-    public static function emailOnBooked($booking, $slot = null, $email, $emailTo)
+    public static function emailOnBooked($booking, $slot, $email, $emailTo)
     {
         if (!$slot) {
             $slot = $booking->slot;
@@ -38,6 +38,7 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
         }
 
+        // Assign-To & Reply-To
         if ('host' == $emailTo) {
             $to = $hostAddress;
             $replyTo = $guestAddress;
@@ -72,7 +73,7 @@ class EmailNotificationService
         return $result;
     }
 
-    public static function reminderEmail($booking, $slot = null, $email, $time, $emailTo)
+    public static function reminderEmail($booking, $slot, $email, $time, $emailTo)
     {
         if (!$slot) {
             $slot = $booking->slot;
@@ -136,7 +137,7 @@ class EmailNotificationService
         return $result;
     }
 
-    public static function bookingCancelledEmail($booking, $slot = null, $email, $emailTo)
+    public static function bookingCancelledEmail($booking, $slot, $email, $emailTo)
     {
         if (!$slot) {
             $slot = $booking->slot;

@@ -17,6 +17,19 @@
                     <el-form-item v-if="!this.hasSupport('is_hosted')" label="Select Host">
                         <host-selector v-model="calendar.user_id" />
                     </el-form-item>
+                    <el-form-item label="Event Type">
+                    <el-select popper-class="fcal_selector_with_submenu" v-model="calendar.slot.event_type" placeholder="Select Event Type">
+                        <el-option
+                            v-for="(type, typeKey) in eventTypes"
+                            :key="typeKey"
+                            :label="type.title"
+                            :value="typeKey"
+                        >
+                            <b>{{ type.title }}</b>
+                            <span>{{ type.subtitle }}</span>
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                     <el-form-item label="Title of the booking">
                         <el-input type="text" placeholder="eg: 15 minutes meeting" v-model="calendar.slot.title"/>
                     </el-form-item>
@@ -83,6 +96,7 @@ export default {
             require_slug: false,
             form_step: 'general',
             checking_slug: false,
+            eventTypes: this.appVars.event_types,
             calendar: {
                 slug: '',
                 title: '',
@@ -147,6 +161,7 @@ export default {
                             slots: []
                         }
                     },
+                    event_type: 'single',
                     location_type: '',
                     location_heading: '',
                     location_settings: {
