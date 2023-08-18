@@ -20,6 +20,7 @@ class BookingMigrator
                 `hash` VARCHAR(192) NULL,
                 `calendar_id` BIGINT(20) UNSIGNED NOT NULL,
                 `slot_id` BIGINT(20) UNSIGNED NOT NULL,
+                `event_id` BIGINT(20) UNSIGNED NULL,
                 `parent_id` BIGINT(20) UNSIGNED NULL,
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_contact_id` BIGINT(20) UNSIGNED NULL,
