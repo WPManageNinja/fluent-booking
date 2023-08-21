@@ -216,20 +216,21 @@ export default {
                 data.cancel_reason = this.cancel_reason;
             }
 
-            this.$put(`schedules/${this.showing_spots[0].id}`, data)
-                .then(response => {
-                    this.$notify.success(response.message);
-                    this.showing_spots[0].status = new_status;
-                    this.showing_spots[0].happening_status = '';
+            const updatePromises = this.showing_spots.map(spot => {
+                return this.$put(`schedules/${spot.id}`, data)
+                    .then(response => {
+                        data.message = response.message;
+                        spot.status = new_status;
+                        spot.happening_status = '';
+                        this.cancelDialog = false;
+                    })
+            });
 
-                    if (this.spot) {
-                        this.spot[0].status = new_status;
-                        this.spot[0].happening_status = '';
-                    }
-
-                    this.cancelDialog = false;
+            Promise.all(updatePromises)
+                .then(() => {
+                    this.$notify.success(data.message);
                 })
-                .catch((errors) => {
+                .catch(errors => {
                     this.$handleError(errors);
                 })
                 .finally(() => {
