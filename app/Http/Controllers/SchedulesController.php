@@ -96,7 +96,6 @@ class SchedulesController extends Controller
         $value = $request->get('value');
         $column = $data['column'];
 
-
         $validColumns = [
             'internal_note',
             'email',

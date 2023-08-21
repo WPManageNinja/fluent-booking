@@ -62456,15 +62456,16 @@ __webpack_require__.r(__webpack_exports__);
       if (new_status == 'cancelled') {
         data.cancel_reason = this.cancel_reason;
       }
-      this.$put("schedules/".concat(this.showing_spots[0].id), data).then(function (response) {
-        _this2.$notify.success(response.message);
-        _this2.showing_spots[0].status = new_status;
-        _this2.showing_spots[0].happening_status = '';
-        if (_this2.spot) {
-          _this2.spot[0].status = new_status;
-          _this2.spot[0].happening_status = '';
-        }
-        _this2.cancelDialog = false;
+      var updatePromises = this.showing_spots.map(function (spot) {
+        return _this2.$put("schedules/".concat(spot.id), data).then(function (response) {
+          data.message = response.message;
+          spot.status = new_status;
+          spot.happening_status = '';
+          _this2.cancelDialog = false;
+        });
+      });
+      Promise.all(updatePromises).then(function () {
+        _this2.$notify.success(data.message);
       })["catch"](function (errors) {
         _this2.$handleError(errors);
       })["finally"](function () {
@@ -65000,7 +65001,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       })];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createTextVNode)(" of even start time ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true);
+  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createTextVNode)(" of an event start time ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
