@@ -79,7 +79,7 @@
         availableDates = {};
         util.$get(window.fluentCalendarPublicVars.ajaxurl, {
             slot_id: slot.id,
-            timezone: timezone,
+            timezone: timezone || '',
             action: 'fluent_cal_get_available_dates',
             start_date: util.dayjs(year + '-' + (month + 1) + '-', '01').format('YYYY-MM-DD'),
         })
