@@ -18,6 +18,7 @@
 
     onMount(() => {
         timezone = util.dayjs.tz.guess();
+
         appReady = true;
         if(window.outerWidth <= 767) {
             isMobile = true;

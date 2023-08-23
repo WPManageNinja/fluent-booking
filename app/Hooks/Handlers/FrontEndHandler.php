@@ -215,7 +215,12 @@ class FrontEndHandler
         }
 
         $timeZone = Arr::get($_REQUEST, 'timezone');
+
         if (!$timeZone) {
+            $timeZone = wp_timezone_string();
+        }
+
+        if (!in_array($timeZone, \DateTimeZone::listIdentifiers() )) {
             $timeZone = 'UTC';
         }
 
