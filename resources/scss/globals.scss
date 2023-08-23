@@ -159,3 +159,130 @@ p.fcal_profile_link a {
 .fcal_head_actions {
     margin: -15px 0;
 }
+
+// el-popover-dropdown
+.el-dropdown-list-wrapper {
+    &.el-popover {
+        z-index: 9999999999999 !important;
+    }
+}
+
+.el-popper.el-dropdown-list-wrapper {
+    padding: 0;
+    .el-dropdown-menu {
+        width: 100%;
+        li {
+            margin: 0;
+        }
+    }
+}
+
+.el-dropdown-list-wrapper {
+    padding: 0;
+    .group-title {
+        display: block;
+        padding: 0.5rem 1rem;
+        background-color: #4B4C4D;
+        color: #fff;
+    }
+}
+
+.el-dropdown-list {
+    border: 0;
+    margin: 0;
+    box-shadow: none;
+    padding: 0;
+    z-index: 10;
+    position: static;
+    min-width: auto;
+    max-height: 280px;
+    overflow-y: scroll;
+
+    .el-dropdown-menu__item {
+        font-size: 13px;
+        line-height: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #f1f1f1;
+
+        &:last-of-type {
+            border-bottom: 0;
+        }
+
+        &:hover {
+            background-color: #e8f2ff;
+            color: #4898fc;
+        }
+    }
+}
+
+// wp vue editorx
+.wp_vue_editor {
+    width: 100%;
+    min-height: 100px;
+}
+.wp_vue_editor_wrapper {
+    border: 1px solid #DCDFE6;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+
+    .popover-wrapper {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        &-plaintext {
+            left: auto;
+            right: 0;
+            top: -32px;
+        }
+    }
+    .wp-editor-container{
+        border: 0;
+    }
+    .wp-editor-tabs{
+        float: none;
+        padding: 8px;
+    }
+    .wp-switch-editor{
+        height: auto;
+        margin: 0 0 0 4px;
+        background-color: transparent;
+        padding: 2px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+        line-height: inherit;
+        border-color: transparent;
+        float: none;
+        font-weight: 500;
+    }
+    .html-active .switch-html,
+    .tmce-active .switch-tmce,
+    .editor-add-shortcode {
+        background-color: #f5f7fa;
+        border-color: #DCDFE6;
+        color: #1E1F21;
+    }
+    .switch-html{
+        margin-left: 0;
+    }
+    .mce-top-part::before{
+        box-shadow: none;
+    }
+    div.mce-toolbar-grp,
+    .quicktags-toolbar {
+        border-bottom: 0;
+        background: #f5f7fa;
+    }
+    .mce-toolbar .mce-btn-group .mce-btn.mce-listbox{
+        border: 0;
+        box-shadow: none;
+        border-radius: 4px;
+    }
+    textarea{
+        border: 0;
+        padding-top: 15px;
+    }
+}

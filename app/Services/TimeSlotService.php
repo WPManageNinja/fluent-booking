@@ -24,20 +24,20 @@ class TimeSlotService
         $period = $this->calendarSlot->duration;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d');
-        $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate));
+        $toDate   = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate));
 
-        $ranges = $this->getCurrentDateRange($fromDate, $toDate);
-
-        $daySlots = $this->getWeekDaySlots();
+        $ranges      = $this->getCurrentDateRange($fromDate, $toDate);
+        $daySlots    = $this->getWeekDaySlots();
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone);
 
-        $rangedValidSlots = [];
-
-        $fromValidTimeStamp = time() + $this->calendarSlot->getCutoutSeconds();
-
+        $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
+        $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
+        
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
-
+        
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
+        
+        $rangedValidSlots = [];
 
         foreach ($ranges as $date) {
 
@@ -55,15 +55,12 @@ class TimeSlotService
                 continue;
             }
 
-            $currentBookedSlots = [];
-
-            if (!empty($bookedSlots[$date])) {
-                $currentBookedSlots = $bookedSlots[$date];
-            }
+            $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
 
             $validSlots = [];
+
             foreach ($availableSlots as $start) {
                 $end = date('H:i', strtotime($start) + 60 * $period);
                 $slot = [
@@ -71,7 +68,7 @@ class TimeSlotService
                     'end'   => $date . ' ' . $end . ':00'
                 ];
 
-                if ($isToday && strtotime($slot['start']) < $fromValidTimeStamp) {
+                if ($isToday && strtotime($slot['start']) < $cutOutTimeStamp) {
                     continue;
                 }
 
@@ -81,25 +78,29 @@ class TimeSlotService
                 }
 
                 $startTimeStamp = strtotime($date . ' ' . $start);
-                $endTimeStamp = strtotime($date . ' ' . $end);
+                $endTimeStamp   = strtotime($date . ' ' . $end);
 
-                $isBooked = false;
+                $isSpotAvailable = true;
+
                 foreach ($currentBookedSlots as $bookedSlot) {
+                    $bookedStart = strtotime($bookedSlot['start']);
+                    $bookedEnd   = strtotime($bookedSlot['end']);
+
                     if (
-                        (
-                            $startTimeStamp >= strtotime($bookedSlot['start']) && $startTimeStamp < strtotime($bookedSlot['end'])
-                        )
-                        ||
-                        (
-                            $endTimeStamp > strtotime($bookedSlot['start']) && $endTimeStamp <= strtotime($bookedSlot['end'])
-                        )
+                        ($startTimeStamp >= $bookedStart && $startTimeStamp < $bookedEnd) ||
+                        ($endTimeStamp > $bookedStart && $endTimeStamp <= $bookedEnd) ||
+                        ($startTimeStamp <= $bookedStart && $endTimeStamp > $bookedStart) ||
+                        ($startTimeStamp < $bookedEnd && $endTimeStamp >= $bookedEnd)
                     ) {
-                        $isBooked = true;
-                        break;
+                        if (!$bookedSlot['remaining']) {
+                            $isSpotAvailable = false;
+                            break;
+                        }
+                        $slot['remaining'] = $bookedSlot['remaining'];
                     }
                 }
 
-                if (!$isBooked) {
+                if ($isSpotAvailable) {
                     $validSlots[] = $slot;
                 }
             }
@@ -112,54 +113,39 @@ class TimeSlotService
         return $rangedValidSlots;
     }
 
-    public function isSpotAvailable($fromDate, $toDate)
+    public function isSpotAvailable($fromTime, $toTime)
     {
-        $fromDate = DateTimeHelper::convertToTimeZone($fromDate, 'UTC', $this->calendar->author_timezone);
-        $toDate = DateTimeHelper::convertToTimeZone($toDate, 'UTC', $this->calendar->author_timezone);
+        $fromTime = DateTimeHelper::convertToTimeZone($fromTime, 'UTC', $this->calendar->author_timezone);
+        $toTime   = DateTimeHelper::convertToTimeZone($toTime, 'UTC', $this->calendar->author_timezone);
 
-        $cutoutTime = DateTimeHelper::getTimestamp($this->calendar->author_timezone) + $this->calendarSlot->getCutoutSeconds();
-        if ($cutoutTime > strtotime($fromDate)) {
-            return false;
-        }
+        $fromTimeStamp = strtotime($fromTime);
+        $toTimeStamp   = strtotime($toTime);
 
-        $slots = $this->getDates($fromDate, $toDate);
+        $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp);
+        $toTime   = date('Y-m-d 23:59:59', $toTimeStamp);
 
-        $start = null;
-        $end = null;
+        $slots = $this->getDates($fromTime, $toTime);
 
+        $date = date('Y-m-d', $fromTimeStamp);
 
-        foreach ($slots as $spots) {
+        $availableSlots = $slots[$date] ?? [];
 
-            if (!$spots) {
-                continue;
+        $left  = 0;
+        $right = count($availableSlots) - 1;
+
+        while ($left <= $right) {
+            $mid = $left + (($right - $left) >> 1);
+
+            $midStartTime = strtotime($availableSlots[$mid]['start']);
+            $midEndTime   = strtotime($availableSlots[$mid]['end']);
+
+            if ($fromTimeStamp >= $midStartTime && $toTimeStamp <= $midEndTime) {
+                return true;
+            } elseif ($fromTimeStamp > $midStartTime) {
+                $left = $mid + 1;
+            } else {
+                $right = $mid - 1;
             }
-
-            $first = array_shift($spots);
-            $start = $first['start'];
-            $end = $first['end'];
-
-            if (!$spots) {
-                if (strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
-                    return true;
-                }
-                continue;
-            }
-
-            foreach ($spots as $spot) {
-                if ($spot['start'] == $end) {
-                    $end = $spot['end'];
-                } else {
-                    if (strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
-                        return true;
-                    }
-                    $start = $spot['start'];
-                    $end = $spot['end'];
-                }
-            }
-        }
-
-        if ($start && $end && strtotime($fromDate) >= strtotime($start) && strtotime($toDate) <= strtotime($end)) {
-            return true;
         }
 
         return false;
@@ -167,19 +153,23 @@ class TimeSlotService
 
     protected function getCurrentDateRange($startDate = false, $endDate = false)
     {
-        $today = new \DateTime($startDate);
+        if (!$startDate) {
+            $startDate = date('Y-m-d');
+        }
 
         if (!$endDate) {
             $endDate = date('Y-m-t 23:59:59', strtotime($startDate));
         }
 
-        $end_of_month = new \DateTime($endDate);
+        $currentDate = strtotime($startDate);
+        $endDate     = strtotime($endDate);
+        $oneDay      = 24 * 60 * 60;
+        
+        $date_array = [];
 
-        $interval = new \DateInterval('P1D'); // P1D means a period of 1 day
-        $date_range = new \DatePeriod($today, $interval, $end_of_month);
-        $date_array = array();
-        foreach ($date_range as $date) {
-            $date_array[] = $date->format('Y-m-d');
+        while ($currentDate <= $endDate) {
+            $date_array[] = date('Y-m-d', $currentDate);
+            $currentDate += $oneDay;
         }
 
         return $date_array;
@@ -193,70 +183,45 @@ class TimeSlotService
         }
 
         $hostIds = $this->calendarSlot->getHostIds();
+        $status  = ['pending', 'approved', 'scheduled'];
 
         $bookings = Booking::whereHas('hosts', function ($query) use ($hostIds) {
             $query->whereIn('user_id', $hostIds);
         })
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
-            ->whereIn('status', ['pending', 'approved', 'scheduled', 'completed'])
-            ->get();
+            ->whereIn('status', $status)
+            ->get()
+            ->groupBy('event_id');
 
+        $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
+        
         $books = [];
-
-        $maxBookingPerSlot = $this->calendarSlot->getMaxBookingPerSlot();
-
-        $isMulti = $maxBookingPerSlot > 1;
-
-        $slotBookingItems = [];
-        if ($isMulti) {
-            foreach ($bookings as $booking) {
-                $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
-                $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
-                if ($booking->slot_id == $this->calendarSlot->id) {
-                    if (empty($slotBookingItems[$booking->start_time])) {
-                        $slotBookingItems[$booking->start_time] = 1;
-                    } else {
-                        $slotBookingItems[$booking->start_time]++;
-                    }
-                }
-            }
-        }
-
+        
         foreach ($bookings as $booking) {
 
-            if (!$isMulti) {
-                $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
-                $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
-            }
+            $booked  = $booking->count();
+            $booking = $booking[0];
+
+            $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
+            $booking->end_time   = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
 
             $date = date('Y-m-d', strtotime($booking->start_time));
 
-            if (!isset($books[$date])) {
-                $books[$date] = [];
+            $books[$date] = $books[$date] ?? [];
+
+            $remaining = 0;
+
+            if ($this->calendarSlot->id == $booking->slot_id) {
+                $remaining = $maxBooking - $booked;
             }
 
-            $isSameBooking = $booking->slot_id == $this->calendarSlot->id;
-
-            $booked = 1;
-            if ($isMulti && $isSameBooking && !empty($slotBookingItems[$booking->start_time])) {
-                $booked = $slotBookingItems[$booking->start_time];
-            }
-
-            $remaining = $maxBookingPerSlot - $booked;
-
-            if (!$isSameBooking) {
-                $remaining = 0;
-            }
-
-            if (!$remaining) {
-                $books[$date][] = [
-                    'slot_id'   => $booking->slot_id,
-                    'start'     => $booking->start_time,
-                    'end'       => $booking->end_time,
-                    'remaining' => $maxBookingPerSlot - $booked,
-                ];
-            }
+            $books[$date][] = [
+                'slot_id'   => $booking->slot_id,
+                'start'     => $booking->start_time,
+                'end'       => $booking->end_time,
+                'remaining' => $remaining,
+            ];
         }
 
         return $books;
@@ -288,7 +253,7 @@ class TimeSlotService
 
             foreach ($slots as $slot) {
                 $start = strtotime($slot['start']);
-                $end = strtotime($slot['end']);
+                $end   = strtotime($slot['end']);
 
                 while ($start < $end) {
                     $daySlots[] = date('H:i', $start);
@@ -311,16 +276,15 @@ class TimeSlotService
 
         $formattedSlots = [];
 
-
         foreach ($slotSets as $slot) {
 
             if ($toTimeZone) {
                 $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $toTimeZone, 'H:i');
-                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone, 'H:i');
+                $slot['end']   = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone, 'H:i');
             }
 
             $start = strtotime($slot['start']);
-            $end = strtotime($slot['end']);
+            $end   = strtotime($slot['end']);
 
             while ($start < $end) {
                 $formattedSlots[] = date('H:i', $start);
@@ -334,45 +298,48 @@ class TimeSlotService
 
     public function getAvailableSpots($startDate, $timeZone = 'utc')
     {
-        $slot = $this->calendarSlot;
+        $slot     = $this->calendarSlot;
         $calendar = $this->calendar;
 
         if (strtotime($startDate) < time()) {
             $startDate = date('Y-m-d H:i:s');
         }
 
-        $endDate = $slot->getMaxBookableDateTime($startDate);
-        $startDate = $slot->getMinBookableDateTime($startDate);
+        $eventType      = $slot->event_type;
+        $isDisplaySpots = $slot->is_display_spots;
+        $maxBooking     = $slot->getMaxBookingPerSlot();
+        $endDate        = $slot->getMaxBookableDateTime($startDate);
+        $startDate      = $slot->getMinBookableDateTime($startDate);
 
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-calendar'));
         }
 
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
-        $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
+        $endDate   = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
 
-        $slotService = new TimeSlotService($calendar, $slot);
+        $slots = $this->getDates($startDate, $endDate);
 
-        $slots = $slotService->getDates($startDate, $endDate);
         $convertedSpots = [];
 
-        $cutOutTimeStamp = DateTimeHelper::getTimestamp($calendar->author_timezone) + $slot->getCutoutSeconds();
-
         foreach ($slots as $spots) {
+
             foreach ($spots as $spot) {
-                if ($cutOutTimeStamp > strtotime($spot['start'])) {
-                    continue;
-                }
 
                 $startDate = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone, 'Y-m-d');
 
-                if (!isset($convertedSpots[$startDate])) {
-                    $convertedSpots[$startDate] = [];
+                $convertedSpots[$startDate] = $convertedSpots[$startDate] ?? [];
+
+                $remainingSlots = false;
+
+                if ($isDisplaySpots && $eventType == 'group') {
+                    $remainingSlots = Arr::get($spot, 'remaining', $maxBooking);
                 }
 
                 $convertedSpots[$startDate][] = [
-                    'start' => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
-                    'end'   => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                    'start'     => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
+                    'end'       => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
+                    'remaining' => $remainingSlots,
                 ];
             }
         }

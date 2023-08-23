@@ -5,9 +5,10 @@ namespace FluentCalendar\App\Http\Controllers;
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Services\Helper;
-use FluentCalendar\App\Services\PermissionManager;
-use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Support\Arr;
+use FluentCalendar\Framework\Request\Request;
+use FluentCalendar\App\Services\PermissionManager;
+use FluentCalendar\Framework\Pagination\LengthAwarePaginator;
 
 class SchedulesController extends Controller
 {
@@ -45,7 +46,7 @@ class SchedulesController extends Controller
             $query = $query->orderBy('start_time', 'DESC')->past();
         }
 
-        $schedules = $query->paginate();
+        $schedules = $query->get();
 
         foreach ($schedules as $schedule) {
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
@@ -55,12 +56,27 @@ class SchedulesController extends Controller
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
-            $schedule->author = $schedule->slot->getAuthorProfile(false);
             $schedule->location = $schedule->getLocationDetailsHtml();
+            $schedule->author = $schedule->slot->getAuthorProfile(false);
         }
 
+        $groupedSchedules = $schedules->groupBy('event_id');
+
+        $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+        $total = $groupedSchedules->count();
+
+        $filteredSchedules = [];
+
+        if ($total) {
+            $chunkedSchedules = $groupedSchedules->chunk($perPage);
+            $filteredSchedules = $chunkedSchedules->get($page - 1, []);
+        }
+        
+        $paginatedSchedules = new LengthAwarePaginator($filteredSchedules, $total, $perPage, $page);
+
         return [
-            'schedules' => $schedules,
+            'schedules' => $paginatedSchedules,
             'timezone'  => 'UTC'
         ];
     }
@@ -79,7 +95,6 @@ class SchedulesController extends Controller
 
         $value = $request->get('value');
         $column = $data['column'];
-
 
         $validColumns = [
             'internal_note',
@@ -162,7 +177,7 @@ class SchedulesController extends Controller
         $booking->location = $booking->getLocationDetailsHtml();
 
         return [
-            'schedule' => $booking
+            'schedule' => [$booking]
         ];
     }
 

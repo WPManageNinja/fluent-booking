@@ -76,6 +76,14 @@ class BookingService
 
         $bookingData['location_details'] = $locationData;
 
+        $event = Booking::select('event_id')
+                    ->where('slot_id', $calendarSlot->id)
+                    ->where('calendar_id', $calendarSlot->calendar_id)
+                    ->where('start_time', $bookingData['start_time'])
+                    ->first();
+
+        $bookingData['event_id'] = $event ? $event->event_id : null;
+
         $bookingData = apply_filters('fluent_calendar/booking_data', $bookingData, $calendarSlot);
 
         do_action('fluent_calendar/before_booking', $bookingData, $calendarSlot);

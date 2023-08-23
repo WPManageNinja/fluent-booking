@@ -8,7 +8,7 @@
                 <el-option value="minutes" label="Minutes"></el-option>
                 <el-option value="hours" label="Hours"></el-option>
                 <el-option value="days" label="Days"></el-option>
-            </el-select> of even start time
+            </el-select> of an event start time
         </div>
     </div>
 </template>
