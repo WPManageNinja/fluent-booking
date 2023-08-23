@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Services;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Models\Meta;
+use FluentCalendar\Framework\Support\Arr;
 
 class Helper
 {
@@ -759,5 +760,207 @@ class Helper
         }
 
         return sanitize_text_field($ip);
+    }
+
+    public static function fcal_sanitize_html($html)
+    {
+        if (!$html) {
+            return $html;
+        }
+
+        // Return $html if it's just a plain text
+        if (!preg_match('/<[^>]*>/', $html)) {
+            return $html;
+        }
+
+        $tags = wp_kses_allowed_html('post');
+        $tags['style'] = [
+            'types' => [],
+        ];
+        // iframe
+        $tags['iframe'] = [
+            'width'           => [],
+            'height'          => [],
+            'src'             => [],
+            'srcdoc'          => [],
+            'title'           => [],
+            'frameborder'     => [],
+            'allow'           => [],
+            'class'           => [],
+            'id'              => [],
+            'allowfullscreen' => [],
+            'style'           => [],
+        ];
+        //button
+        $tags['button']['onclick'] = [];
+
+        //svg
+        if (empty($tags['svg'])) {
+            $svg_args = [
+                'svg' => [
+                    'class'           => true,
+                    'aria-hidden'     => true,
+                    'aria-labelledby' => true,
+                    'role'            => true,
+                    'xmlns'           => true,
+                    'width'           => true,
+                    'height'          => true,
+                    'viewbox'         => true,
+                ],
+                'g'     => ['fill' => true],
+                'title' => ['title' => true],
+                'path'  => [
+                    'd'         => true,
+                    'fill'      => true,
+                    'transform' => true,
+                ],
+            ];
+            $tags = array_merge($tags, $svg_args);
+        }
+
+        $tags = apply_filters('fluent_calendar/allowed_html_tags', $tags);
+
+        return wp_kses($html, $tags);
+    }
+
+    /**
+     * Sanitize inputs recursively.
+     *
+     * @param array $input
+     * @param array $sanitizeMap
+     *
+     * @return array $input
+     */
+    public static function fcal_backend_sanitizer($inputs, $sanitizeMap = [])
+    {
+        $originalValues = $inputs;
+        foreach ($inputs as $key => &$value) {
+            if (is_array($value)) {
+                $value = self::fcal_backend_sanitizer($value, $sanitizeMap);
+            } else {
+                $method = Arr::get($sanitizeMap, $key);
+                if (is_callable($method)) {
+                    $value = call_user_func($method, $value);
+                } elseif (method_exists(self::class, $method)) {
+                    $value = call_user_func([self::class, $method], $value);
+                }
+            }
+        }
+
+        return apply_filters('fluent_calendar/backend_sanitized_values', $inputs, $originalValues);
+    }
+
+    public static function getEventTypesSchema()
+    {
+        return apply_filters('fluent_calendar/event_types_schema', [
+            'single' => [
+                'title'     => 'One-on-One', 
+                'subtitle'  => 'Meeting with a single person'
+            ],
+            'group' => [
+                'title'     => 'Group Meeting',
+                'subtitle'  => 'Meeting with multiple guests'
+            ]
+        ]);
+    }
+
+    public static function getDefaultNotificationSettings()
+    {
+        $defaults = apply_filters('fluent_calendar/default_notification_settings', [
+            'booking_conf_attendee' => [
+                'enabled' => true,
+                'title'   => 'Booking Confirmation to Attendee',
+                'email'   => [
+                    'subject' => 'Booking Confirmation with {host.name} {event.datetime}',
+                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
+                ],
+            ],
+            'booking_conf_host' => [
+                'enabled' => true,
+                'title'   => 'Booking Confirmation to Organizer (You)',
+                'email'   => [
+                    'subject' => 'New Booking: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
+                    'body'    => '<h2 class="p1" style="text-align: center;">New Booking Confirmed</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>'
+                ],
+            ],
+            'reminder_to_attendee' => [
+                'enabled' => true,
+                'title'   => 'Reminder Before Meeting to Attendee',
+                'email'   => [
+                    'subject' => 'Meeting Reminder: {host.name} {event.datetime}',
+                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>',
+                    'times'   => [
+                        [
+                            'unit' => 'minutes',
+                            'value'=> 15,
+                        ]
+                    ]
+                ],
+            ],
+            'reminder_to_host' => [
+                'enabled' => true,
+                'title'   => 'Reminder Before Meeting to Organizer (You)',
+                'email'   => [
+                    'subject' => 'Meeting Reminder: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
+                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>',
+                    'times'   => [
+                        [
+                            'unit' => 'minutes',
+                            'value'=> 15,
+                        ]
+                    ]
+                ],
+            ],
+            'cancelled_by_attendee' => [
+                'enabled' => true,
+                'title'   => 'Booking Cancelled by Attendee (email to Organizer)',
+                'email'   => [
+                    'subject' => 'Your booking was cancelled with {guest.first_name} {guest.last_name}',
+                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><p>Your booking has been cancelled.</p><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.first_name} {guest.last_name}</p><h3><strong>Date &amp; Time</strong></h3><p>{event.full_datetime} ({host.timezone})</p><h3>Cancellation Reason</h3><p>{event.cancel_reason}</p>'
+                ],
+            ],
+            'cancelled_by_host' => [
+                'enabled' => true,
+                'title'   => 'Booking Cancelled by Organizer (email to Attendee)',
+                'email'   => [
+                    'subject' => 'Your booking was cancelled with {host.name}',
+                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><p>Your booking has been cancelled.</p><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>Date &amp; Time</strong></h3><p>{event.full_datetime} ({guest.timezone})</p><h3>Cancellation Reason</h3><p>{event.cancel_reason}</p>'
+                ],
+            ]
+        ]);
+
+        return $defaults;
+    }
+
+    public static function getEditorShortCodes()
+    {
+        $shortcodes = apply_filters('fluent_calendar/editor_shortcodes', [
+            '{event.name}'                => 'Event Name',
+            '{event.datetime}'            => 'Event Date',
+            '{event.full_datetime}'       => 'Event Full Date',
+            '{event.location}'            => 'Event Location',
+            '{event.description}'         => 'Event Description',
+            '{event.reminder_time}'       => 'Event Reminder Time',
+            '{even.cancel_reason}'        => 'Event Cancel Reason',
+            '{host.timezone}'             => 'Host Timezone',
+            '{host.name}'                 => 'Host Name',
+            '{host.email}'                => 'Host Email',
+            '{guest.timezone}'            => 'Guest Timezone',
+            '{guest.first_name}'          => 'Guest First Name',
+            '{guest.last_name}'           => 'Guest Last Name',
+            '{guest.full_name}'           => 'Guest Full Name',
+            '{guest.email}'               => 'Guest Email',
+            '{guest.note}'                => 'Guest Note',
+            '{wp.admin_email}'            => 'Admin Email',
+            '{wp.site_url}'               => 'Site URL',
+            '{wp.site_title}'             => 'Site Title',
+            '{date.m/d/Y}'                => 'Date (mm/dd/yyyy)',
+            '{date.d/m/Y}'                => 'Date (dd/mm/yyyy)',
+            '{user.display_name}'         => 'User Display Name',
+            '{user.user_email}'           => 'User Email',
+            '{user.user_login}'           => 'User Username',
+        ]);
+
+        return $shortcodes;
     }
 }

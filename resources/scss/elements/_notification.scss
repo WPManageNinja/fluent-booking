@@ -1,0 +1,67 @@
+.fcal_notification_container {
+    padding: 1rem;
+    border-bottom: 1px solid #ebeef5;
+    border-radius: 4px;
+    &.disabled {
+        opacity: 0.6;
+    }
+
+    .fcal_notification_header {
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        .header_left {
+            flex: 50%;
+            font-size: 14px;
+            font-weight: 500;
+            &.active {
+                font-size: 20px;
+            }
+        }
+        .header_right {
+            flex: 50%;
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header_right span {
+            display: flex;
+            justify-content: center;
+            width: 13%;
+        }
+    }
+
+    .fcal_section_body {
+        .el-form-item__content {
+            display: block;
+        }
+        .fcal_reminder_timing {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+            .el-input__wrapper {
+                padding: 1px 8px;
+                .el-input__inner {
+                    text-align: center;
+                }
+            }
+        }
+        .fcal_add_reminder {
+            .el-icon {
+                margin-right: 2px;
+            }
+        }
+    }
+}
+
+.fcal_notification_btn {
+    margin: 0 1rem; 
+    padding: 1rem 1rem 0 1rem;
+}
+
+@media (max-width: 992px) {
+    .header_right {
+        justify-content: flex-end;
+    }
+}

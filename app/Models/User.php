@@ -27,7 +27,7 @@ class User extends Model
     /**
      * @return \FluentCalendar\Framework\Database\Orm\Relations\BelongsToMany
      */
-    public function booings()
+    public function bookings()
     {
         return $this->belongsToMany(CalendarSlot::class, 'fcal_booking_hosts', 'user_id', 'booking_id')
             ->withPivot('status');

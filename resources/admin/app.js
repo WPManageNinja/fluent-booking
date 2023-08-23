@@ -90,6 +90,12 @@ app.mixin({
         isToday(date) {
             return dayjs(date).isSame(dayjs(), 'day');
         },
+        isYesterday(date) {
+            return dayjs(date).isSame(dayjs().subtract(1, 'day'), 'day');
+        },
+        isTomorrow(date) {
+            return dayjs(date).isSame(dayjs().add(1, 'day'), 'day');
+        },
         toDateFormat(date, format) {
             return dayjs(date).format(format);
         },

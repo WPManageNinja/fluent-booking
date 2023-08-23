@@ -143,42 +143,9 @@ class CalendarSlot extends Model
     {
         $statuses = Helper::getMeta('calendar_slot', $this->id, 'notification_statuses');
 
-        $defaults = [
-            'booking_conf_attendee'    => [
-                'enabled' => true,
-                'title'   => 'Booking Confirmation to Attendee'
-            ],
-            'booking_conf_host'        => [
-                'enabled' => true,
-                'title'   => 'Booking Confirmation to Organizer (You)'
-            ],
-            'reminder_1_hour_attendee' => [
-                'enabled' => true,
-                'title'   => 'Reminder 1 Hour Before to Attendee'
-            ],
-            'reminder_15_min_attendee' => [
-                'enabled' => false,
-                'title'   => 'Reminder 15 Minutes Before to Attendee'
-            ],
-            'reminder_1_hour_host'     => [
-                'enabled' => true,
-                'title'   => 'Reminder 1 Hour Before to Organizer (You)'
-            ],
-            'reminder_15_min_host'     => [
-                'enabled' => false,
-                'title'   => 'Reminder 15 Minutes Before to Organizer (You)'
-            ],
-            'cancelled_by_attendee'    => [
-                'enabled' => true,
-                'title'   => 'Booking Cancelled by Attendee (email to Organizer)'
-            ],
-            'cancelled_by_host'        => [
-                'enabled' => true,
-                'title'   => 'Booking Cancelled by Organizer (email to Attendee)'
-            ]
-        ];
+        $defaults = Helper::getDefaultNotificationSettings();
 
-        if (!$statuses) {
+        if (!$statuses || !isset($statuses['reminder_to_host'])) {
             return $defaults;
         }
 
@@ -299,6 +266,6 @@ class CalendarSlot extends Model
 
     public function getMaxBookingPerSlot()
     {
-        return 1;
+        return $this->max_book_per_slot;
     }
 }
