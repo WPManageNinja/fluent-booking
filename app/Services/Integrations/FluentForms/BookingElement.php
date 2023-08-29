@@ -31,6 +31,10 @@ class BookingElement extends BaseFieldManager
         );
         add_filter('fluentform/response_render_fcal_booking', array($this, 'renderResponse'), 10, 3);
         add_filter('fluentform/select_group_component_ajax_options', array($this, 'getCalendarOptions'));
+
+        add_action('fluentform/loading_editor_assets', function () {
+            wp_enqueue_script('fluentcal_ff_editor_extended', FLUENT_CALENDAR_URL . 'assets/admin/fluentform.js', [], '1.0.0', true);
+        });
     }
     
     function getComponent()
@@ -49,13 +53,16 @@ class BookingElement extends BaseFieldManager
                 'booking_calendar'   => '',
                 'conditional_logics' => array(),
                 'container_class'    => '',
+                'cal_guest_fields' => [
+                    'email_field' => '',
+                    'name_field' => ''
+                ],
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
                         'message' => __('This field is required', 'fluent-calendar'),
                     ],
                 ),
-            
             ),
             'editor_options' => array(
                 'title'      => __('Calendar Booking Field', 'fluent-calendar'),
@@ -73,6 +80,7 @@ class BookingElement extends BaseFieldManager
             'label_placement',
             'admin_field_label',
             'slot_id',
+            'cal_guest_fields',
             'validation_rules',
         ];
     }
@@ -92,6 +100,11 @@ class BookingElement extends BaseFieldManager
             'slot_id' => [
                 'template' => 'selectGroup',
                 'label'    => __('Select Calendar', 'fluentform'),
+            ],
+            'cal_guest_fields' => [
+                'template' => 'CustomSettingsField',
+                'label'    => __('Guest Fields', 'fluentform'),
+                'componentName' => 'FluentCalNameEmailChoiceComponent'
             ],
         ];
     }
