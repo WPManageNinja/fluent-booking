@@ -707,7 +707,6 @@ class Helper
 
         $user = get_user_by('ID', $userId);
 
-
         $name = trim($user->first_name . ' ' . $user->last_name);
 
         if ($name) {
@@ -715,6 +714,19 @@ class Helper
         }
 
         return $user->display_name;
+    }
+
+    public static function getUserEmail($userId = null)
+    {
+        $userId = $userId ?: get_current_user_id();
+
+        if (!$userId) {
+            return '';
+        }
+
+        $user = get_user_by('ID', $userId);
+
+        return $user->user_email;
     }
 
     public static function excerpt($text, $max_length = 160)

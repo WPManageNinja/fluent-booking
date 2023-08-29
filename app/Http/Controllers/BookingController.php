@@ -74,11 +74,10 @@ class BookingController extends Controller
             $rules['phone'] = 'required';
         }
 
-
-
         $this->validate($postedData, $rules);
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
+        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -99,12 +98,22 @@ class BookingController extends Controller
             $bookingData['phone'] = sanitize_text_field($postedData['phone']);
         }
 
+        // Check if the time is available or not for this slot
+        $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
+        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
+
+        if (!$isSpotAvailable) {
+            wp_send_json([
+                'message' => 'This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.'
+            ], 423);
+        }
+
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot);
         } catch (\Exception $e) {
-            return $this->sendError([
+            wp_send_json([
                 'message' => $e->getMessage()
-            ]);
+            ], $e->getCode());
         }
 
         $author = $calendarSlot->getAuthorProfile(true);

@@ -60,14 +60,6 @@ class BookingService
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
-        // check if the time is available or not for this slot
-
-        $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
-
-        if(!$timeSlotService->isSpotAvailable($bookingData['start_time'], $bookingData['end_time'])) {
-            throw new \Exception('This selected time slot is not available. Maybe someone booked the spot just few seconds ago.', 423);
-        }
-
         $locationData = [
             'location_type' => $calendarSlot->location_type,
             'location_heading' => $calendarSlot->location_heading,
