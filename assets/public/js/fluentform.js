@@ -20775,9 +20775,9 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!*********************************!*\
-  !*** ./resources/public/app.js ***!
-  \*********************************/
+/*!****************************************!*\
+  !*** ./resources/public/fluentform.js ***!
+  \****************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BookingApp_svelte__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BookingApp.svelte */ "./resources/public/BookingApp.svelte");
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles.scss */ "./resources/public/styles.scss");
@@ -20785,48 +20785,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var calendarApps = document.querySelectorAll('.fluent_calendar_app');
-
-// get month get parameter from url
-var preSelects = null;
-var urlParams = new URLSearchParams(window.location.search);
-var monthYear = urlParams.get('month');
-var fullDate = urlParams.get('date');
-if (fullDate && fullDate.length >= 10) {
-  preSelects = {
-    year: fullDate.substr(0, 4),
-    month: fullDate.substr(5, 2),
-    day: fullDate.substr(8, 2)
-  };
-} else if (monthYear && monthYear.length >= 7) {
-  preSelects = {
-    year: monthYear.substr(0, 4),
-    month: monthYear.substr(5, 2)
-  };
-}
+var calendarApps = document.querySelectorAll('.fluentform_calendar_app');
 if (calendarApps.length) {
-  calendarApps.forEach(function (item, index) {
-    var elem = calendarApps[index];
-    var calendarId = elem.dataset.calendar_id;
-    var slot_id = elem.dataset.slot_id;
+  calendarApps.forEach(function (item) {
+    var elem = item;
+    var formId = elem.dataset.form_id;
     if (elem.dataset.app_booted) {
-      console.log('App already booted');
       return;
     }
-    if (calendarId && slot_id) {
+    if (formId) {
       elem.innerHTML = '';
-      var appData = window['fcal_public_vars_' + calendarId + '_' + slot_id];
-      if (preSelects) {
-        appData.slot.pre_selects = preSelects;
-      }
+      var appData = window['fcal_public_vars_' + formId];
+      appData.is_fluentform = true;
+      appData.form_id = formId;
       new _BookingApp_svelte__WEBPACK_IMPORTED_MODULE_0__["default"]({
         target: elem,
         props: {
           appData: appData
         }
       });
-
-      // remove css class fcal_loading from elem
       elem.classList.remove('fcal_loading');
       elem.dataset.app_booted = true;
     }

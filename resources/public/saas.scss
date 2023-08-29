@@ -1,6 +1,7 @@
 .fcal_wrap {
   display: flex;
   flex-direction: column;
+  margin: 1rem auto;
 
   .fcal_holder {
     flex: 1 1 auto;
@@ -14,6 +15,11 @@
     border-radius: 8px;
     box-shadow: 0 1px 8px 0 rgb(0 0 0/8%);
     transition: all .22s ease-out;
+
+    &.fcal_form_calendar {
+      width: 100%;
+      box-shadow: none;
+    }
 
     .fcal_side {
       width: auto;

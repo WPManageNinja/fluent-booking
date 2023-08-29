@@ -4,6 +4,7 @@
     import TimeZoneSelector from "./TimezoneSelector.svelte";
 
     export let slot;
+    export let label;
     export let timezone;
 
     import Calendar from "./Calendar.svelte";
@@ -18,7 +19,6 @@
     let now = new Date();
     let year = now.getFullYear();		//	this is the month & year displayed
     let month = now.getMonth();
-    let eventText = "";
     let isLoadingDates = false;
     let availableDates = {};
     let daySlots = [];
@@ -38,7 +38,6 @@
     $: timezone, maybeTimeZoneChanged();
 
     let lastTimeZone = timezone;
-
 
     $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
 
@@ -189,7 +188,11 @@
 
 <div class="fcal_day_picker">
     <div class="fcal_day_picker_head fcal_sec_heading">
-        <h3>Select a Date & Time</h3>
+        {#if label != undefined}
+            <h3>{ label }</h3>
+        {:else}
+            <h3>Select a Date & Time</h3>
+        {/if}
     </div>
     <div class="fcal_time_picker_head fcal_sec_heading">
         <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }}
@@ -220,13 +223,13 @@
                     <h3>{monthNames[month]} {year}</h3>
                 </div>
                 <div class="calendar_nav">
-                    <button class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
+                    <button type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                         </svg>
                     </button>
-                    <button class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
+                    <button type="button" class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
@@ -264,7 +267,7 @@
                                 </div>
                                 {#if selectedDateTime && selectedDateTime.start == day.start}
                                     <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                         on:click={slotSpotConfirmed} class="fcal_spot_confirm">Confirm
+                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Confirm
                                     </div>
                                 {/if}
                             </div>

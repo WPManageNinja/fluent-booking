@@ -42,6 +42,7 @@ $breakpoint-tablet: 767px;
   .fcal_date_wrapper {
     width: auto;
     padding: 20px;
+    margin: 0 auto;
 
     h2 {
       font-size: 26px;
@@ -55,6 +56,17 @@ $breakpoint-tablet: 767px;
     align-items: center;
     color: #737373;
     column-gap: 7px;
+  }
+
+  .fcal_author {
+    .fcal_author_name {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: rgba(26, 26, 26, 0.61);
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 24px;
+    }
   }
 
 }
@@ -200,6 +212,11 @@ $breakpoint-tablet: 767px;
     background-clip: padding-box;
     color: rgb(0, 105, 255);
   }
+
+  &.ff_svg {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .fcal_timezone_select {
@@ -227,7 +244,7 @@ $breakpoint-tablet: 767px;
   }
 
   .fcal_input {
-    width: 100%;
+    width: 90%;
     padding: 8px 10px;
   }
 }
@@ -312,6 +329,13 @@ $breakpoint-tablet: 767px;
 .fcal_errors {
   padding: 10px;
   background: #ffff95;
+}
+
+.fcal_error_text {
+    color: #F56C6C;
+    font-size: 14px;
+    margin-top: 4px;
+    line-height: 1.7;
 }
 
 /*

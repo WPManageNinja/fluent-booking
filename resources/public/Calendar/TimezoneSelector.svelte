@@ -1,10 +1,10 @@
 <script>
     import Select from 'svelte-select';
-    const timezones = window.fluentCalendarPublicVars.timezones;
-
+    
     export let timezone;
-
+    
     const optionIdentifier = 'value';
+    const timezones = window.fluentCalendarPublicVars.timezones;
 
     const groupBy = (item) => item.group;
 
@@ -22,4 +22,10 @@
 
 </script>
 
-<Select {floatingConfig} {optionIdentifier} clearable={false} on:input={handleTimeZoneChange} value={timezone} items={timezones} {groupBy} />
+<Select on:input={handleTimeZoneChange} {groupBy}
+    {floatingConfig}
+    {optionIdentifier}
+    clearable={false}
+    value={timezone}
+    items={timezones}
+/>

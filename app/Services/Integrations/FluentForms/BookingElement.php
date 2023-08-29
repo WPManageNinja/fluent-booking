@@ -3,10 +3,15 @@
 namespace FluentCalendar\App\Services\Integrations\FluentForms;
 
 
-use FluentForm\App\Services\FormBuilder\BaseFieldManager;
-use FluentForm\Framework\Helpers\ArrayHelper;
+use FluentCalendar\App\App;
+use FluentCalendar\Framework\Support\Arr;
+use FluentCalendar\App\Models\Booking;
 use FluentCalendar\App\Models\Calendar;
+use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\DateTimeHelper;
 use FluentCalendar\App\Services\PermissionManager;
+use FluentCalendar\App\Hooks\Handlers\FrontEndHandler;
+use FluentForm\App\Services\FormBuilder\BaseFieldManager;
 
 class BookingElement extends BaseFieldManager
 {
@@ -19,12 +24,12 @@ class BookingElement extends BaseFieldManager
     public function __construct()
     {
         parent::__construct(
-            'fcal_booking_field',
+            'fcal_booking',
             'Calendar Booking',
             ['booking', 'calendar'],
             'advanced'
         );
-        add_filter('fluentform/response_render_fcal_booking_field', array($this, 'renderResponse'), 10, 3);
+        add_filter('fluentform/response_render_fcal_booking', array($this, 'renderResponse'), 10, 3);
         add_filter('fluentform/select_group_component_ajax_options', array($this, 'getCalendarOptions'));
     }
     
@@ -32,10 +37,10 @@ class BookingElement extends BaseFieldManager
     {
         return [
             'index'          => 20,
-            'element'        => 'fcal_booking_field',
+            'element'        => 'fcal_booking',
             'attributes'     => array(
-                'name'      => 'fcal_booking_field',
-                'data-type' => 'fcal_booking_field'
+                'name'      => 'fcal_booking',
+                'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
                 'label'              => __('Fluent Calendar Field', 'fluent-calendar'),
@@ -84,7 +89,7 @@ class BookingElement extends BaseFieldManager
     public function getEditorCustomizationSettings()
     {
         return [
-            'booking_calendar' => [
+            'slot_id' => [
                 'template' => 'selectGroup',
                 'label'    => __('Select Calendar', 'fluentform'),
             ],
@@ -99,15 +104,83 @@ class BookingElement extends BaseFieldManager
      */
     public function render($data, $form)
     {
-        echo '<pre>';
-        print_r($data);
-        echo 'Booking Form';
-        echo '</pre>';
+        $form_id = $this->makeElementId($data, $form);
+
+        $slot_id = (int)Arr::get($data, 'settings.slot_id');
+        
+        $slot = CalendarSlot::find($slot_id);
+        
+        if (!$slot) {
+            return 'Slot Not Found';
+        }
+        
+        $calendar = $slot->calendar;
+
+        if (!$slot->calendar) {
+            return 'Calendar Not Found';
+        }
+
+        $slot->max_lookup_date = $slot->getMaxLookUpDate();
+
+        $slot->min_lookup_date = $slot->getMinLookUpDate();
+
+        $slot->location_settings = (object)[];
+
+        $slot->description = wpautop($slot->description);
+
+        $label = Arr::get($data, 'settings.label');
+
+        $name = Arr::get($data, 'attributes.name');
+
+        wp_enqueue_script(
+            'fluentform-calendar-public',
+            App::getInstance('url.assets') . 'public/js/fluentform.js', [],
+            App::getInstance('config')->get('app.version'), true
+        );
+
+        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $form_id, [
+            'name'           => $name,
+            'slot'           => $slot,
+            'calendar'       => $calendar,
+            'label'          => $label,
+            'author_profile' => $slot->getAuthorProfile(true),
+            'disable_author' => true,
+        ]);
+
+        wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars', 
+            (new FrontEndHandler())->getGlobalVars()
+        );
+
+        App::make('view')->render('public.fluentform.calendar', [
+            'form_id'       => $form_id,
+            'calendar_app'  => 'fluentform_calendar_app'
+        ]);
     }
     
     public function renderResponse($response, $field, $form_id)
     {
-        return 'hello There';
+        $data = json_decode($response, true);
+
+        $slot_id = Arr::get($field, 'raw.settings.slot_id');
+        
+        $startTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
+
+        $booking = Booking::select('id')
+        ->where('slot_id', $slot_id)
+        ->where('start_time', $startTime)
+        ->first();
+
+        if (!$booking) {
+            return '';
+        }
+
+        $date = date('j M Y, g:i A', strtotime($data['start_time']));
+
+        $url = admin_url('admin.php?page=fluent-calendar#/scheduled-events?spot_id=' . $booking->id);
+
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($date) . '</a>';
+        
+        return $link;
     }
     
     protected function getResponseHtml($response, $fields, $columns)
@@ -129,18 +202,18 @@ class BookingElement extends BaseFieldManager
         }
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {
-            $slots = ArrayHelper::get($calendar, 'slots');
+            $slots = Arr::get($calendar, 'slots');
             if (!empty($slots)) {
                 $options = [];
                 foreach ($slots as $slot) {
                     $options[] = [
-                        'label' => ArrayHelper::get($slot, 'title'),
-                        'value' => ArrayHelper::get($slot, 'id')
+                        'label' => Arr::get($slot, 'title'),
+                        'value' => Arr::get($slot, 'id')
                     ];
                 }
                 if (!empty($options)) {
                     $formattedCalendars[$index] = [
-                        'label'   => ArrayHelper::get($calendar, 'title'),
+                        'label'   => Arr::get($calendar, 'title'),
                         'options' => $options
                     ];
                 }
