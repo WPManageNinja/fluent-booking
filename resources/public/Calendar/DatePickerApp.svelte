@@ -4,7 +4,7 @@
     import TimeZoneSelector from "./TimezoneSelector.svelte";
 
     export let slot;
-    export let label;
+    export let settings;
     export let timezone;
 
     import Calendar from "./Calendar.svelte";
@@ -188,8 +188,10 @@
 
 <div class="fcal_day_picker">
     <div class="fcal_day_picker_head fcal_sec_heading">
-        {#if label != undefined}
-            <h3>{ label }</h3>
+        {#if settings?.label != undefined}
+            <h3 class="{settings.validation_rules?.required?.value ? 'fcal_label_required' : ''}">
+                { settings.label }
+            </h3>
         {:else}
             <h3>Select a Date & Time</h3>
         {/if}

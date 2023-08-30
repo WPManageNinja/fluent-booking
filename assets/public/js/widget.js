@@ -10496,7 +10496,7 @@ function create_else_block(ctx) {
   var div;
   var current;
   var if_block0 = ! /*appData*/ctx[0].disable_author && create_if_block_5(ctx);
-  var if_block1 = /*appReady*/ctx[3] && create_if_block_2(ctx);
+  var if_block1 = /*appReady*/ctx[3] && create_if_block_1(ctx);
   var block = {
     c: function create() {
       if (if_block0) if_block0.c();
@@ -10504,7 +10504,7 @@ function create_else_block(ctx) {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       if (if_block1) if_block1.c();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_date_wrapper");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 172, 16, 12976);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 172, 16, 12998);
     },
     m: function mount(target, anchor) {
       if (if_block0) if_block0.m(target, anchor);
@@ -10533,7 +10533,7 @@ function create_else_block(ctx) {
             (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block1, 1);
           }
         } else {
-          if_block1 = create_if_block_2(ctx);
+          if_block1 = create_if_block_1(ctx);
           if_block1.c();
           (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block1, 1);
           if_block1.m(div, null);
@@ -10573,13 +10573,13 @@ function create_else_block(ctx) {
 }
 
 // (70:12) {#if isBookingDone}
-function create_if_block_1(ctx) {
+function create_if_block(ctx) {
   var div;
   var block = {
     c: function create() {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_booking_confirmed");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 70, 16, 2121);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 70, 16, 2143);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -10597,7 +10597,7 @@ function create_if_block_1(ctx) {
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
-    id: create_if_block_1.name,
+    id: create_if_block.name,
     type: "if",
     source: "(70:12) {#if isBookingDone}",
     ctx: ctx
@@ -10629,7 +10629,7 @@ function create_if_block_5(ctx) {
   var t10;
   function select_block_type_1(ctx, dirty) {
     if ( /*selectedDate*/ctx[1]) return create_if_block_10;
-    return create_else_block_2;
+    return create_else_block_1;
   }
   var current_block_type = select_block_type_1(ctx, -1);
   var if_block0 = current_block_type(ctx);
@@ -10671,35 +10671,35 @@ function create_if_block_5(ctx) {
       t10 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       if (if_block3) if_block3.c();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_author_name");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 93, 32, 3832);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 93, 32, 3854);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 75, 28, 2390);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 75, 28, 2412);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h2, "class", "fcal_slot_heading");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 98, 32, 4076);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 98, 32, 4098);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 102, 40, 4434);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 102, 40, 4456);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linejoin", "round");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 103, 40, 4496);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 103, 40, 4518);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 105, 44, 4636);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 104, 40, 4588);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 105, 44, 4658);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 104, 40, 4610);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "#000000");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "stroke", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 100, 36, 4233);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 108, 36, 4871);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 100, 36, 4255);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 108, 36, 4893);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "slot_timing fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 99, 32, 4156);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 99, 32, 4178);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "fcal_slot_info");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 97, 28, 4015);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 97, 28, 4037);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div4, "class", "fcal_slot_wrapper");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 74, 24, 2330);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 74, 24, 2352);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "fcal_side");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 73, 20, 2282);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 73, 20, 2304);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div5, anchor);
@@ -10785,7 +10785,7 @@ function create_if_block_5(ctx) {
 }
 
 // (89:32) {:else}
-function create_else_block_2(ctx) {
+function create_else_block_1(ctx) {
   var div;
   var img;
   var img_src_value;
@@ -10795,9 +10795,9 @@ function create_else_block_2(ctx) {
       img = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("img");
       if (!(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.src_url_equal)(img.src, img_src_value = /*author*/ctx[11].avatar)) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "src", img_src_value);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "alt", "Author Avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(img, file, 90, 40, 3671);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(img, file, 90, 40, 3693);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_author_avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 89, 36, 3598);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 89, 36, 3620);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -10810,7 +10810,7 @@ function create_else_block_2(ctx) {
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
-    id: create_else_block_2.name,
+    id: create_else_block_1.name,
     type: "else",
     source: "(89:32) {:else}",
     ctx: ctx
@@ -10838,21 +10838,21 @@ function create_if_block_10(ctx) {
       path1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("path");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M0 0h24v24H0V0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 81, 52, 2970);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 81, 52, 2992);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 82, 52, 3062);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 82, 52, 3084);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "width", "32");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "32");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 80, 48, 2834);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 80, 48, 2856);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(i, "class", "fcal_svg");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 79, 44, 2765);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 79, 44, 2787);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "aria-label", "Back to Date Selection");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_back");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 78, 40, 2576);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 78, 40, 2598);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author_avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 77, 36, 2503);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 77, 36, 2525);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div1, anchor);
@@ -10902,10 +10902,10 @@ function create_if_block_9(ctx) {
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       span = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       span.textContent = "".concat( /*slot*/ctx[9].location_heading);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 117, 202, 6164);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 117, 202, 6186);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "fill", "currentColor");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 117, 234, 6196);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 117, 234, 6218);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
@@ -10913,10 +10913,10 @@ function create_if_block_9(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-testid", "location-marker-icon");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-id", "details-item-icon");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 117, 40, 6002);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 118, 40, 6560);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 117, 40, 6024);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 118, 40, 6582);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "slot_location fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 116, 36, 5919);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 116, 36, 5941);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -10961,10 +10961,10 @@ function create_if_block_8(ctx) {
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       span = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       span.textContent = "Phone Call";
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 112, 197, 5291);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 112, 197, 5313);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "fill", "currentColor");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 112, 222, 5316);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 112, 222, 5338);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
@@ -10972,10 +10972,10 @@ function create_if_block_8(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-testid", "phone-call-icon");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-id", "details-item-icon");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 112, 40, 5134);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 113, 40, 5739);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 112, 40, 5156);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 113, 40, 5761);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "slot_location fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 111, 36, 5051);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 111, 36, 5073);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -11064,35 +11064,35 @@ function create_if_block_7(ctx) {
       t8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)( /*timezone*/ctx[2]);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "id", "SVGRepo_bgCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 126, 44, 7183);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 126, 44, 7205);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "id", "SVGRepo_tracerCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linejoin", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke", "#CCCCCC");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-width", "0.05847399999999999");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 127, 44, 7275);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 127, 44, 7297);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path0, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M7.685,24.819H8.28v-2.131h3.688v2.131h0.596v-2.131h3.862v2.131h0.597v-2.131h4.109v2.131h0.595 v-2.131h3.417v-0.594h-3.417v-3.861h3.417v-0.596h-3.417v-3.519h3.417v-0.594h-3.417v-2.377h-0.595v2.377h-4.109v-2.377h-0.597 v2.377h-3.862v-2.377h-0.596v2.377H8.279v-2.377H7.685v2.377H3.747v0.594h3.938v3.519H3.747v0.596h3.938v3.861H3.747v0.594h3.938 V24.819z M12.563,22.094v-3.861h3.862v3.861H12.563z M21.132,22.094h-4.109v-3.861h4.109V22.094z M21.132,14.118v3.519h-4.109 v-3.519C17.023,14.119,21.132,14.119,21.132,14.118z M16.426,14.118v3.519h-3.862v-3.519 C12.564,14.119,16.426,14.119,16.426,14.118z M8.279,14.118h3.688v3.519H8.279V14.118z M8.279,18.233h3.688v3.861H8.279V18.233z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 129, 48, 7539);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 129, 48, 7561);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path1, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M29.207,2.504l-4.129,0.004L24.475,2.51v2.448c0,0.653-0.534,1.187-1.188,1.187h-1.388 c-0.656,0-1.188-0.533-1.188-1.187V2.514l-1.583,0.002v2.442c0,0.653-0.535,1.187-1.191,1.187h-1.388 c-0.655,0-1.188-0.533-1.188-1.187V2.517l-1.682,0.004v2.438c0,0.653-0.534,1.187-1.189,1.187h-1.389 c-0.653,0-1.188-0.533-1.188-1.187V2.525H8.181v2.434c0,0.653-0.533,1.187-1.188,1.187H5.605c-0.656,0-1.189-0.533-1.189-1.187 V2.53L0,2.534v26.153h2.09h25.06l2.087-0.006L29.207,2.504z M27.15,26.606H2.09V9.897h25.06V26.606z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 132, 48, 8402);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 132, 48, 8424);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path2, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path2, "d", "M5.605,5.303h1.388c0.163,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.133-0.297-0.296-0.297H5.605 c-0.165,0-0.298,0.132-0.298,0.297v4.16C5.307,5.17,5.44,5.303,5.605,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 135, 48, 9091);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 135, 48, 9113);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path3, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path3, "d", "M11.101,5.303h1.389c0.164,0,0.297-0.133,0.297-0.297v-4.16c-0.001-0.165-0.134-0.297-0.298-0.297 H11.1c-0.163,0-0.296,0.132-0.296,0.297v4.16C10.805,5.17,10.938,5.303,11.101,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 138, 48, 9449);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 138, 48, 9471);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path4, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path4, "d", "M16.549,5.303h1.388c0.166,0,0.299-0.133,0.299-0.297v-4.16c-0.001-0.165-0.133-0.297-0.299-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C16.252,5.17,16.385,5.303,16.549,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 141, 48, 9816);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 141, 48, 9838);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path5, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path5, "d", "M21.899,5.303h1.388c0.164,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.132-0.297-0.296-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C21.603,5.17,21.735,5.303,21.899,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 144, 48, 10185);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 128, 77, 7486);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 128, 73, 7482);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 144, 48, 10207);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 128, 77, 7508);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 128, 73, 7504);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "id", "SVGRepo_iconCarrier");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 128, 44, 7453);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 128, 44, 7475);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "version", "1.1");
@@ -11102,20 +11102,20 @@ function create_if_block_7(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "viewBox", "0 0 29.237 29.237");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "xml:space", "preserve");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "fill", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 123, 40, 6850);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 149, 40, 10647);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 123, 40, 6872);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 149, 40, 10669);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 122, 36, 6765);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 122, 36, 6787);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path6, "fill", "#444");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path6, "d", "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm5.2 5.3c.4 0 .7.3 1.1.3-.3.4-1.6.4-2-.1.3-.1.5-.2.9-.2zM1 8c0-.4 0-.8.1-1.3.1 0 .2.1.3.1 0 0 .1.1.1.2 0 .3.3.5.5.5.8.1 1.1.8 1.8 1 .2.1.1.3 0 .5-.6.8-.1 1.4.4 1.9.5.4.5.8.6 1.4 0 .7.1 1.5.4 2.2C2.7 13.3 1 10.9 1 8zm7 7c-.7 0-1.5-.1-2.1-.3-.1-.2-.1-.4 0-.6.4-.8.8-1.5 1.3-2.2.2-.2.4-.4.4-.7 0-.2.1-.5.2-.7.3-.5.2-.8-.2-.9-.8-.2-1.2-.9-1.8-1.2s-1.2-.5-1.7-.2c-.2.1-.5.2-.5-.1 0-.4-.5-.7-.4-1.1-.1 0-.2 0-.3.1s-.2.2-.4.1c-.2-.2-.1-.4-.1-.6.1-.2.2-.3.4-.4.4-.1.8-.1 1 .4.3-.9.9-1.4 1.5-1.8 0 0 .8-.7.9-.7s.2.2.4.3c.2 0 .3 0 .3-.2.1-.5-.2-1.1-.6-1.2 0-.1.1-.1.1-.1.3-.1.7-.3.6-.6 0-.4-.4-.6-.8-.6-.2 0-.4 0-.6.1-.4.2-.9.4-1.5.4C5.2 1.4 6.6 1 8 1h.8c-.6.1-1.2.3-1.6.5.6.1.7.4.5.9-.1.2 0 .4.2.5s.4.1.5-.1c.2-.3.6-.4.9-.5.4-.1.7-.3 1-.7 0-.1.1-.1.2-.2.6.2 1.2.6 1.8 1-.1 0-.1.1-.2.1-.2.2-.5.3-.2.7.1.2 0 .3-.1.4-.2.1-.3 0-.4-.1s-.1-.3-.4-.3c-.1.2-.4.3-.4.6.5 0 .4.4.5.7-.6.1-.8.4-.5.9.1.2-.1.3-.2.4-.4.6-.8 1-.8 1.7s.5 1.4 1.3 1.3c.9-.1.9-.1 1.2.7 0 .1.1.2.1.3.1.2.2.4.1.6-.3.8.1 1.4.4 2 .1.2.2.3.3.4-1.3 1.4-3 2.2-5 2.2z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 156, 44, 11208);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 156, 44, 11230);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "width", "16");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "height", "16");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 155, 40, 11100);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 160, 40, 12484);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 155, 40, 11122);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 160, 40, 12506);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 154, 36, 11015);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 154, 36, 11037);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div0, anchor);
@@ -11176,7 +11176,7 @@ function create_if_block_6(ctx) {
     c: function create() {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_slot_description");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 165, 32, 12704);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 165, 32, 12726);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -11198,69 +11198,111 @@ function create_if_block_6(ctx) {
 }
 
 // (174:20) {#if appReady}
-function create_if_block_2(ctx) {
+function create_if_block_1(ctx) {
+  var t;
   var current_block_type_index;
-  var if_block;
-  var if_block_anchor;
+  var if_block1;
+  var if_block1_anchor;
   var current;
-  var if_block_creators = [create_if_block_3, create_if_block_4, create_else_block_1];
+  var if_block0 = ! /*selectedDate*/ctx[1] && create_if_block_4(ctx);
+  var if_block_creators = [create_if_block_2, create_if_block_3];
   var if_blocks = [];
   function select_block_type_3(ctx, dirty) {
-    if (! /*selectedDate*/ctx[1]) return 0;
-    if ( /*isFluentform*/ctx[12]) return 1;
-    return 2;
+    if ( /*isFluentform*/ctx[12]) return 0;
+    if ( /*selectedDate*/ctx[1]) return 1;
+    return -1;
   }
-  current_block_type_index = select_block_type_3(ctx, -1);
-  if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  if (~(current_block_type_index = select_block_type_3(ctx, -1))) {
+    if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  }
   var block = {
     c: function create() {
-      if_block.c();
-      if_block_anchor = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.empty)();
+      if (if_block0) if_block0.c();
+      t = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      if (if_block1) if_block1.c();
+      if_block1_anchor = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.empty)();
     },
     m: function mount(target, anchor) {
-      if_blocks[current_block_type_index].m(target, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, if_block_anchor, anchor);
+      if (if_block0) if_block0.m(target, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t, anchor);
+      if (~current_block_type_index) {
+        if_blocks[current_block_type_index].m(target, anchor);
+      }
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, if_block1_anchor, anchor);
       current = true;
     },
     p: function update(ctx, dirty) {
+      if (! /*selectedDate*/ctx[1]) {
+        if (if_block0) {
+          if_block0.p(ctx, dirty);
+          if (dirty & /*selectedDate*/2) {
+            (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block0, 1);
+          }
+        } else {
+          if_block0 = create_if_block_4(ctx);
+          if_block0.c();
+          (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block0, 1);
+          if_block0.m(t.parentNode, t);
+        }
+      } else if (if_block0) {
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.group_outros)();
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block0, 1, 1, function () {
+          if_block0 = null;
+        });
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.check_outros)();
+      }
       var previous_block_index = current_block_type_index;
       current_block_type_index = select_block_type_3(ctx, dirty);
       if (current_block_type_index === previous_block_index) {
-        if_blocks[current_block_type_index].p(ctx, dirty);
-      } else {
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.group_outros)();
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_blocks[previous_block_index], 1, 1, function () {
-          if_blocks[previous_block_index] = null;
-        });
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.check_outros)();
-        if_block = if_blocks[current_block_type_index];
-        if (!if_block) {
-          if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-          if_block.c();
-        } else {
-          if_block.p(ctx, dirty);
+        if (~current_block_type_index) {
+          if_blocks[current_block_type_index].p(ctx, dirty);
         }
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block, 1);
-        if_block.m(if_block_anchor.parentNode, if_block_anchor);
+      } else {
+        if (if_block1) {
+          (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.group_outros)();
+          (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_blocks[previous_block_index], 1, 1, function () {
+            if_blocks[previous_block_index] = null;
+          });
+          (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.check_outros)();
+        }
+        if (~current_block_type_index) {
+          if_block1 = if_blocks[current_block_type_index];
+          if (!if_block1) {
+            if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+            if_block1.c();
+          } else {
+            if_block1.p(ctx, dirty);
+          }
+          (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block1, 1);
+          if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+        } else {
+          if_block1 = null;
+        }
       }
     },
     i: function intro(local) {
       if (current) return;
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block1);
       current = true;
     },
     o: function outro(local) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block1);
       current = false;
     },
     d: function destroy(detaching) {
-      if_blocks[current_block_type_index].d(detaching);
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(if_block_anchor);
+      if (if_block0) if_block0.d(detaching);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t);
+      if (~current_block_type_index) {
+        if_blocks[current_block_type_index].d(detaching);
+      }
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(if_block1_anchor);
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
-    id: create_if_block_2.name,
+    id: create_if_block_1.name,
     type: "if",
     source: "(174:20) {#if appReady}",
     ctx: ctx
@@ -11268,152 +11310,8 @@ function create_if_block_2(ctx) {
   return block;
 }
 
-// (192:24) { :else }
-function create_else_block_1(ctx) {
-  var h2;
-  var t1;
-  var bookingform;
-  var updating_spot;
-  var updating_formFields;
-  var current;
-  function bookingform_spot_binding(value) {
-    /*bookingform_spot_binding*/ctx[25](value);
-  }
-  function bookingform_formFields_binding(value) {
-    /*bookingform_formFields_binding*/ctx[26](value);
-  }
-  var bookingform_props = {
-    slot: /*slot*/ctx[9],
-    timezone: /*timezone*/ctx[2]
-  };
-  if ( /*selectedDate*/ctx[1] !== void 0) {
-    bookingform_props.spot = /*selectedDate*/ctx[1];
-  }
-  if ( /*appData*/ctx[0].form_fields !== void 0) {
-    bookingform_props.formFields = /*appData*/ctx[0].form_fields;
-  }
-  bookingform = new _Components_BookingForm_svelte__WEBPACK_IMPORTED_MODULE_4__["default"]({
-    props: bookingform_props,
-    $$inline: true
-  });
-  svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
-    return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(bookingform, 'spot', bookingform_spot_binding);
-  });
-  svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
-    return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(bookingform, 'formFields', bookingform_formFields_binding);
-  });
-  bookingform.$on("bookingConfirmed", /*bookingConfirmed_handler*/ctx[27]);
-  var block = {
-    c: function create() {
-      h2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h2");
-      h2.textContent = "Enter Details";
-      t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingform.$$.fragment);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 192, 28, 14016);
-    },
-    m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, h2, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t1, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingform, target, anchor);
-      current = true;
-    },
-    p: function update(ctx, dirty) {
-      var bookingform_changes = {};
-      if (dirty & /*timezone*/4) bookingform_changes.timezone = /*timezone*/ctx[2];
-      if (!updating_spot && dirty & /*selectedDate*/2) {
-        updating_spot = true;
-        bookingform_changes.spot = /*selectedDate*/ctx[1];
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_flush_callback)(function () {
-          return updating_spot = false;
-        });
-      }
-      if (!updating_formFields && dirty & /*appData*/1) {
-        updating_formFields = true;
-        bookingform_changes.formFields = /*appData*/ctx[0].form_fields;
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_flush_callback)(function () {
-          return updating_formFields = false;
-        });
-      }
-      bookingform.$set(bookingform_changes);
-    },
-    i: function intro(local) {
-      if (current) return;
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(bookingform.$$.fragment, local);
-      current = true;
-    },
-    o: function outro(local) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(bookingform.$$.fragment, local);
-      current = false;
-    },
-    d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(h2);
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t1);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingform, detaching);
-    }
-  };
-  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
-    block: block,
-    id: create_else_block_1.name,
-    type: "else",
-    source: "(192:24) { :else }",
-    ctx: ctx
-  });
-  return block;
-}
-
-// (185:49) 
-function create_if_block_4(ctx) {
-  var bookingdetails;
-  var current;
-  bookingdetails = new _Fluentform_BookingDetails_svelte__WEBPACK_IMPORTED_MODULE_5__["default"]({
-    props: {
-      appData: /*appData*/ctx[0],
-      timezone: /*timezone*/ctx[2],
-      selectedDate: /*selectedDate*/ctx[1]
-    },
-    $$inline: true
-  });
-  bookingdetails.$on("resetSelection", /*resetSelection_handler_1*/ctx[24]);
-  var block = {
-    c: function create() {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingdetails.$$.fragment);
-    },
-    m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingdetails, target, anchor);
-      current = true;
-    },
-    p: function update(ctx, dirty) {
-      var bookingdetails_changes = {};
-      if (dirty & /*appData*/1) bookingdetails_changes.appData = /*appData*/ctx[0];
-      if (dirty & /*timezone*/4) bookingdetails_changes.timezone = /*timezone*/ctx[2];
-      if (dirty & /*selectedDate*/2) bookingdetails_changes.selectedDate = /*selectedDate*/ctx[1];
-      bookingdetails.$set(bookingdetails_changes);
-    },
-    i: function intro(local) {
-      if (current) return;
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(bookingdetails.$$.fragment, local);
-      current = true;
-    },
-    o: function outro(local) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(bookingdetails.$$.fragment, local);
-      current = false;
-    },
-    d: function destroy(detaching) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingdetails, detaching);
-    }
-  };
-  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
-    block: block,
-    id: create_if_block_4.name,
-    type: "if",
-    source: "(185:49) ",
-    ctx: ctx
-  });
-  return block;
-}
-
 // (175:24) {#if !selectedDate}
-function create_if_block_3(ctx) {
+function create_if_block_4(ctx) {
   var daypickerapp;
   var updating_timezone;
   var current;
@@ -11422,7 +11320,7 @@ function create_if_block_3(ctx) {
   }
   var daypickerapp_props = {
     slot: /*slot*/ctx[9],
-    label: /*label*/ctx[10]
+    settings: /*settings*/ctx[10]
   };
   if ( /*timezone*/ctx[2] !== void 0) {
     daypickerapp_props.timezone = /*timezone*/ctx[2];
@@ -11472,7 +11370,7 @@ function create_if_block_3(ctx) {
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
-    id: create_if_block_3.name,
+    id: create_if_block_4.name,
     type: "if",
     source: "(175:24) {#if !selectedDate}",
     ctx: ctx
@@ -11480,34 +11378,145 @@ function create_if_block_3(ctx) {
   return block;
 }
 
-// (207:4) {#if isFluentform}
-function create_if_block(ctx) {
-  var div;
-  var div_id_value;
+// (193:48) 
+function create_if_block_3(ctx) {
+  var h2;
+  var t1;
+  var bookingform;
+  var updating_spot;
+  var updating_formFields;
+  var current;
+  function bookingform_spot_binding(value) {
+    /*bookingform_spot_binding*/ctx[25](value);
+  }
+  function bookingform_formFields_binding(value) {
+    /*bookingform_formFields_binding*/ctx[26](value);
+  }
+  var bookingform_props = {
+    slot: /*slot*/ctx[9],
+    timezone: /*timezone*/ctx[2]
+  };
+  if ( /*selectedDate*/ctx[1] !== void 0) {
+    bookingform_props.spot = /*selectedDate*/ctx[1];
+  }
+  if ( /*appData*/ctx[0].form_fields !== void 0) {
+    bookingform_props.formFields = /*appData*/ctx[0].form_fields;
+  }
+  bookingform = new _Components_BookingForm_svelte__WEBPACK_IMPORTED_MODULE_4__["default"]({
+    props: bookingform_props,
+    $$inline: true
+  });
+  svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
+    return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(bookingform, 'spot', bookingform_spot_binding);
+  });
+  svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
+    return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(bookingform, 'formFields', bookingform_formFields_binding);
+  });
+  bookingform.$on("bookingConfirmed", /*bookingConfirmed_handler*/ctx[27]);
   var block = {
     c: function create() {
-      div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_error_text");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "id", div_id_value = "fcal_error_".concat( /*appData*/ctx[0].form_id));
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 207, 8, 14576);
+      h2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h2");
+      h2.textContent = "Enter Details";
+      t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingform.$$.fragment);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 193, 28, 14080);
     },
     m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, h2, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t1, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingform, target, anchor);
+      current = true;
     },
     p: function update(ctx, dirty) {
-      if (dirty & /*appData*/1 && div_id_value !== (div_id_value = "fcal_error_".concat( /*appData*/ctx[0].form_id))) {
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "id", div_id_value);
+      var bookingform_changes = {};
+      if (dirty & /*timezone*/4) bookingform_changes.timezone = /*timezone*/ctx[2];
+      if (!updating_spot && dirty & /*selectedDate*/2) {
+        updating_spot = true;
+        bookingform_changes.spot = /*selectedDate*/ctx[1];
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_flush_callback)(function () {
+          return updating_spot = false;
+        });
       }
+      if (!updating_formFields && dirty & /*appData*/1) {
+        updating_formFields = true;
+        bookingform_changes.formFields = /*appData*/ctx[0].form_fields;
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_flush_callback)(function () {
+          return updating_formFields = false;
+        });
+      }
+      bookingform.$set(bookingform_changes);
+    },
+    i: function intro(local) {
+      if (current) return;
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(bookingform.$$.fragment, local);
+      current = true;
+    },
+    o: function outro(local) {
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(bookingform.$$.fragment, local);
+      current = false;
     },
     d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(h2);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingform, detaching);
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
-    id: create_if_block.name,
+    id: create_if_block_3.name,
     type: "if",
-    source: "(207:4) {#if isFluentform}",
+    source: "(193:48) ",
+    ctx: ctx
+  });
+  return block;
+}
+
+// (186:24) {#if isFluentform }
+function create_if_block_2(ctx) {
+  var bookingdetails;
+  var current;
+  bookingdetails = new _Fluentform_BookingDetails_svelte__WEBPACK_IMPORTED_MODULE_5__["default"]({
+    props: {
+      appData: /*appData*/ctx[0],
+      timezone: /*timezone*/ctx[2],
+      selectedDate: /*selectedDate*/ctx[1]
+    },
+    $$inline: true
+  });
+  bookingdetails.$on("resetSelection", /*resetSelection_handler_1*/ctx[24]);
+  var block = {
+    c: function create() {
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingdetails.$$.fragment);
+    },
+    m: function mount(target, anchor) {
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingdetails, target, anchor);
+      current = true;
+    },
+    p: function update(ctx, dirty) {
+      var bookingdetails_changes = {};
+      if (dirty & /*appData*/1) bookingdetails_changes.appData = /*appData*/ctx[0];
+      if (dirty & /*timezone*/4) bookingdetails_changes.timezone = /*timezone*/ctx[2];
+      if (dirty & /*selectedDate*/2) bookingdetails_changes.selectedDate = /*selectedDate*/ctx[1];
+      bookingdetails.$set(bookingdetails_changes);
+    },
+    i: function intro(local) {
+      if (current) return;
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(bookingdetails.$$.fragment, local);
+      current = true;
+    },
+    o: function outro(local) {
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(bookingdetails.$$.fragment, local);
+      current = false;
+    },
+    d: function destroy(detaching) {
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingdetails, detaching);
+    }
+  };
+  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
+    block: block,
+    id: create_if_block_2.name,
+    type: "if",
+    source: "(186:24) {#if isFluentform }",
     ctx: ctx
   });
   return block;
@@ -11517,33 +11526,31 @@ function create_fragment(ctx) {
   var div1;
   var div0;
   var current_block_type_index;
-  var if_block0;
+  var if_block;
   var div0_class_value;
-  var t;
+  var div1_id_value;
   var current;
-  var if_block_creators = [create_if_block_1, create_else_block];
+  var if_block_creators = [create_if_block, create_else_block];
   var if_blocks = [];
   function select_block_type(ctx, dirty) {
     if ( /*isBookingDone*/ctx[4]) return 0;
     return 1;
   }
   current_block_type_index = select_block_type(ctx, -1);
-  if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-  var if_block1 = /*isFluentform*/ctx[12] && create_if_block(ctx);
+  if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
   var block = {
     c: function create() {
       div2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      if_block0.c();
-      t = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      if (if_block1) if_block1.c();
+      if_block.c();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", div0_class_value = "fcal_calendar_inner " + ( /*isFluentform*/ctx[12] ? 'fcal_form_calendar' : '') + " " + ( /*isXsDevice*/ctx[8] ? 'fcal_on_xs' : '') + " " + ( /*isMobile*/ctx[7] ? 'fcal_on_mobile' : 'fcal_on_desktop'));
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 68, 8, 1886);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 68, 8, 1908);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_holder");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 67, 4, 1852);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "id", div1_id_value = /*appData*/ctx[0].id);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 67, 4, 1858);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_wrap");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 66, 0, 1824);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 66, 0, 1830);
     },
     l: function claim(nodes) {
       throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -11555,8 +11562,6 @@ function create_fragment(ctx) {
       if_blocks[current_block_type_index].m(div0, null);
       /*div0_binding*/
       ctx[28](div0);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, t);
-      if (if_block1) if_block1.m(div2, null);
       current = true;
     },
     p: function update(ctx, _ref) {
@@ -11572,28 +11577,30 @@ function create_fragment(ctx) {
           if_blocks[previous_block_index] = null;
         });
         (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.check_outros)();
-        if_block0 = if_blocks[current_block_type_index];
-        if (!if_block0) {
-          if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-          if_block0.c();
+        if_block = if_blocks[current_block_type_index];
+        if (!if_block) {
+          if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+          if_block.c();
         } else {
-          if_block0.p(ctx, dirty);
+          if_block.p(ctx, dirty);
         }
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block0, 1);
-        if_block0.m(div0, null);
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block, 1);
+        if_block.m(div0, null);
       }
       if (!current || dirty & /*isXsDevice, isMobile*/384 && div0_class_value !== (div0_class_value = "fcal_calendar_inner " + ( /*isFluentform*/ctx[12] ? 'fcal_form_calendar' : '') + " " + ( /*isXsDevice*/ctx[8] ? 'fcal_on_xs' : '') + " " + ( /*isMobile*/ctx[7] ? 'fcal_on_mobile' : 'fcal_on_desktop'))) {
         (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", div0_class_value);
       }
-      if ( /*isFluentform*/ctx[12]) if_block1.p(ctx, dirty);
+      if (!current || dirty & /*appData*/1 && div1_id_value !== (div1_id_value = /*appData*/ctx[0].id)) {
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "id", div1_id_value);
+      }
     },
     i: function intro(local) {
       if (current) return;
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block);
       current = true;
     },
     o: function outro(local) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_out)(if_block);
       current = false;
     },
     d: function destroy(detaching) {
@@ -11601,7 +11608,6 @@ function create_fragment(ctx) {
       if_blocks[current_block_type_index].d();
       /*div0_binding*/
       ctx[28](null);
-      if (if_block1) if_block1.d();
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
@@ -11620,7 +11626,7 @@ function instance($$self, $$props, $$invalidate) {
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.validate_slots)('BookingApp', slots, []);
   var appData = $$props.appData;
   var slot = appData.slot;
-  var label = appData.label;
+  var settings = appData.settings;
   var author = appData.author_profile;
   var isFluentform = appData.is_fluentform;
   var selectedDate = false;
@@ -11731,7 +11737,7 @@ function instance($$self, $$props, $$invalidate) {
       BookingDetails: _Fluentform_BookingDetails_svelte__WEBPACK_IMPORTED_MODULE_5__["default"],
       appData: appData,
       slot: slot,
-      label: label,
+      settings: settings,
       author: author,
       isFluentform: isFluentform,
       selectedDate: selectedDate,
@@ -11762,7 +11768,7 @@ function instance($$self, $$props, $$invalidate) {
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
   }
-  return [appData, selectedDate, timezone, appReady, isBookingDone, bookingConfirmationHtml, component, isMobile, isXsDevice, slot, label, author, isFluentform, spotSelected, handleBookingConfirmation, dayClicked, resetSelection, click_handler, keypress_handler, daypickerapp_timezone_binding, dayClicked_handler, spotSelected_handler, timezoneChanged_handler, resetSelection_handler, resetSelection_handler_1, bookingform_spot_binding, bookingform_formFields_binding, bookingConfirmed_handler, div0_binding];
+  return [appData, selectedDate, timezone, appReady, isBookingDone, bookingConfirmationHtml, component, isMobile, isXsDevice, slot, settings, author, isFluentform, spotSelected, handleBookingConfirmation, dayClicked, resetSelection, click_handler, keypress_handler, daypickerapp_timezone_binding, dayClicked_handler, spotSelected_handler, timezoneChanged_handler, resetSelection_handler, resetSelection_handler_1, bookingform_spot_binding, bookingform_formFields_binding, bookingConfirmed_handler, div0_binding];
 }
 var BookingApp = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(BookingApp, _SvelteComponentDev);
@@ -12274,7 +12280,7 @@ var console_1 = svelte_internal__WEBPACK_IMPORTED_MODULE_0__.globals.console;
 
 var file = "resources/public/Calendar/DatePickerApp.svelte";
 function add_css(target) {
-  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_styles)(target, "svelte-1dvf05e", ".calendar-container.svelte-1dvf05e.svelte-1dvf05e{width:fit-content;overflow:auto;box-shadow:0 2px 20px rgba(0, 0, 0, 0.1);border-radius:10px;background:#fff;max-width:1200px}.calendar-header.svelte-1dvf05e.svelte-1dvf05e{display:flex;align-items:center;justify-content:space-between;padding:5px 15px;background:#eef;border-bottom:1px solid rgba(166, 168, 179, 0.12)}.calendar-header.svelte-1dvf05e button.svelte-1dvf05e{background:#eef;border:1px;padding:6px;color:rgba(81, 86, 93, 0.7);cursor:pointer;outline:0}.calendar-header.svelte-1dvf05e h3.svelte-1dvf05e{margin:0;font-size:18px}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGF0ZVBpY2tlckFwcC5zdmVsdGUiLCJzb3VyY2VzIjpbIkRhdGVQaWNrZXJBcHAuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG4gICAgaW1wb3J0IHt1dGlsfSBmcm9tICcuLi91dGlsJztcbiAgICBpbXBvcnQge1B1bHNlfSBmcm9tICdzdmVsdGUtbG9hZGluZy1zcGlubmVycyc7XG4gICAgaW1wb3J0IFRpbWVab25lU2VsZWN0b3IgZnJvbSBcIi4vVGltZXpvbmVTZWxlY3Rvci5zdmVsdGVcIjtcblxuICAgIGV4cG9ydCBsZXQgc2xvdDtcbiAgICBleHBvcnQgbGV0IGxhYmVsO1xuICAgIGV4cG9ydCBsZXQgdGltZXpvbmU7XG5cbiAgICBpbXBvcnQgQ2FsZW5kYXIgZnJvbSBcIi4vQ2FsZW5kYXIuc3ZlbHRlXCI7XG4gICAgaW1wb3J0IHtjcmVhdGVFdmVudERpc3BhdGNoZXIsIG9uTW91bnR9IGZyb20gJ3N2ZWx0ZSc7XG5cbiAgICBsZXQgZGlzcGF0Y2ggPSBjcmVhdGVFdmVudERpc3BhdGNoZXIoKTtcblxuICAgIHZhciBkYXlOYW1lcyA9IFtcIlN1blwiLCBcIk1vblwiLCBcIlR1ZVwiLCBcIldlZFwiLCBcIlRodVwiLCBcIkZyaVwiLCBcIlNhdFwiXTtcbiAgICBsZXQgbW9udGhOYW1lcyA9IFtcIkphbnVhcnlcIiwgXCJGZWJydWFyeVwiLCBcIk1hcmNoXCIsIFwiQXByaWxcIiwgXCJNYXlcIiwgXCJKdW5lXCIsIFwiSnVseVwiLCBcIkF1Z3VzdFwiLCBcIlNlcHRlbWJlclwiLCBcIk9jdG9iZXJcIiwgXCJOb3ZlbWJlclwiLCBcIkRlY2VtYmVyXCJdO1xuXG4gICAgbGV0IGhlYWRlcnMgPSBbXTtcbiAgICBsZXQgbm93ID0gbmV3IERhdGUoKTtcbiAgICBsZXQgeWVhciA9IG5vdy5nZXRGdWxsWWVhcigpO1x0XHQvL1x0dGhpcyBpcyB0aGUgbW9udGggJiB5ZWFyIGRpc3BsYXllZFxuICAgIGxldCBtb250aCA9IG5vdy5nZXRNb250aCgpO1xuICAgIGxldCBpc0xvYWRpbmdEYXRlcyA9IGZhbHNlO1xuICAgIGxldCBhdmFpbGFibGVEYXRlcyA9IHt9O1xuICAgIGxldCBkYXlTbG90cyA9IFtdO1xuICAgIGxldCBzZWxlY3RlZERhdGUgPSAnJztcbiAgICBsZXQgc2VsZWN0ZWREYXRlVGltZSA9IHt9O1xuICAgIGxldCBuZXh0RGlzYWJsZWQgPSBmYWxzZTtcblxuICAgIGlmIChzbG90LnByZV9zZWxlY3RzKSB7XG4gICAgICAgIG1vbnRoID0gc2xvdC5wcmVfc2VsZWN0cy5tb250aCAtIDE7XG4gICAgICAgIHllYXIgPSBzbG90LnByZV9zZWxlY3RzLnllYXI7XG4gICAgfVxuXG4gICAgdmFyIGRheXMgPSBbXTtcdC8vXHRUaGUgZGF5cyB0byBkaXNwbGF5IGluIGVhY2ggYm94XG5cbiAgICAkOiBtb250aCwgeWVhciwgYXZhaWxhYmxlRGF0ZXMsIGluaXRDb250ZW50KCksIG1heWJlTWF4RGF0ZURpc2FibGVkKCk7XG5cbiAgICAkOiB0aW1lem9uZSwgbWF5YmVUaW1lWm9uZUNoYW5nZWQoKTtcblxuICAgIGxldCBsYXN0VGltZVpvbmUgPSB0aW1lem9uZTtcblxuICAgICQ6IHByZXZEaXNhYmxlZCA9IChuZXcgRGF0ZSh5ZWFyLCBtb250aCwgMSkpLmdldFRpbWUoKSA8IChuZXcgRGF0ZSgpKS5nZXRUaW1lKCk7XG5cbiAgICBmdW5jdGlvbiBtYXliZU1heERhdGVEaXNhYmxlZCgpIHtcbiAgICAgICAgbGV0IHJlc3VsdCA9IGZhbHNlO1xuICAgICAgICBpZiAoc2xvdC5tYXhfbG9va3VwX2RhdGUpIHtcbiAgICAgICAgICAgIGxldCBuZXh0TW9udGggPSBtb250aCArIDE7XG4gICAgICAgICAgICBsZXQgbmV4dFllYXIgPSB5ZWFyO1xuICAgICAgICAgICAgaWYgKG5leHRNb250aCA9PSAxMikge1xuICAgICAgICAgICAgICAgIG5leHRZZWFyKys7XG4gICAgICAgICAgICAgICAgbmV4dE1vbnRoID0gMDtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIHJlc3VsdCA9IChuZXcgRGF0ZShuZXh0WWVhciwgbmV4dE1vbnRoLCAwKSkuZ2V0VGltZSgpID4gKG5ldyBEYXRlKHNsb3QubWF4X2xvb2t1cF9kYXRlKSkuZ2V0VGltZSgpO1xuICAgICAgICB9XG4gICAgICAgIG5leHREaXNhYmxlZCA9IHJlc3VsdDtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBtYXliZVRpbWVab25lQ2hhbmdlZCgpIHtcbiAgICAgICAgaWYgKGxhc3RUaW1lWm9uZSAhPSB0aW1lem9uZSkge1xuICAgICAgICAgICAgbGFzdFRpbWVab25lID0gdGltZXpvbmU7XG4gICAgICAgICAgICBzZWxlY3RlZERhdGUgPSAnJztcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZVRpbWUgPSB7fTtcbiAgICAgICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgICAgICAgICAgZGlzcGF0Y2goJ3RpbWV6b25lQ2hhbmdlZCcsIHRpbWV6b25lKTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIC8vIGNob29zZSB3aGF0IGRhdGUvZGF5IGdldHMgZGlzcGxheWVkIGluIGVhY2ggZGF0ZSBib3guXG4gICAgZnVuY3Rpb24gaW5pdENvbnRlbnQoKSB7XG4gICAgICAgIGhlYWRlcnMgPSBkYXlOYW1lcztcbiAgICAgICAgaW5pdE1vbnRoKCk7XG4gICAgfVxuXG4gICAgbGV0IGZpcnN0TG9hZGluZyA9IHRydWU7XG5cbiAgICBmdW5jdGlvbiBsb2FkQXZhaWxhYmxlRGF0ZXMoKSB7XG4gICAgICAgIGlzTG9hZGluZ0RhdGVzID0gdHJ1ZTtcbiAgICAgICAgYXZhaWxhYmxlRGF0ZXMgPSB7fTtcbiAgICAgICAgdXRpbC4kZ2V0KHdpbmRvdy5mbHVlbnRDYWxlbmRhclB1YmxpY1ZhcnMuYWpheHVybCwge1xuICAgICAgICAgICAgc2xvdF9pZDogc2xvdC5pZCxcbiAgICAgICAgICAgIHRpbWV6b25lOiB0aW1lem9uZSB8fCAnJyxcbiAgICAgICAgICAgIGFjdGlvbjogJ2ZsdWVudF9jYWxfZ2V0X2F2YWlsYWJsZV9kYXRlcycsXG4gICAgICAgICAgICBzdGFydF9kYXRlOiB1dGlsLmRheWpzKHllYXIgKyAnLScgKyAobW9udGggKyAxKSArICctJywgJzAxJykuZm9ybWF0KCdZWVlZLU1NLUREJyksXG4gICAgICAgIH0pXG4gICAgICAgICAgICAudGhlbihyZXNwb25zZSA9PiB7XG4gICAgICAgICAgICAgICAgdGltZXpvbmUgPSByZXNwb25zZS50aW1lem9uZTtcbiAgICAgICAgICAgICAgICBhdmFpbGFibGVEYXRlcyA9IHJlc3BvbnNlLmF2YWlsYWJsZV9zbG90cztcblxuICAgICAgICAgICAgICAgIGlmKGZpcnN0TG9hZGluZyAmJiBzbG90LnByZV9zZWxlY3RzLmRheSkge1xuICAgICAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGUgPSBzbG90LnByZV9zZWxlY3RzLnllYXIgKyAnLScgKyBzbG90LnByZV9zZWxlY3RzLm1vbnRoICsgJy0nICsgc2xvdC5wcmVfc2VsZWN0cy5kYXk7XG4gICAgICAgICAgICAgICAgICAgIGRheUNsaWNrKHtcbiAgICAgICAgICAgICAgICAgICAgICAgIGRhdGU6IHNsb3QucHJlX3NlbGVjdHMueWVhciArICctJyArIHNsb3QucHJlX3NlbGVjdHMubW9udGggKyAnLScgKyBzbG90LnByZV9zZWxlY3RzLmRheVxuICAgICAgICAgICAgICAgICAgICB9KTtcbiAgICAgICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGUgPSAnJztcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9KVxuICAgICAgICAgICAgLmNhdGNoKGVycm9ycyA9PiB7XG4gICAgICAgICAgICAgICAgY29uc29sZS5sb2coZXJyb3JzKTtcbiAgICAgICAgICAgIH0pXG4gICAgICAgICAgICAuZmluYWxseSgoKSA9PiB7XG4gICAgICAgICAgICAgICAgaXNMb2FkaW5nRGF0ZXMgPSBmYWxzZTtcbiAgICAgICAgICAgICAgICBmaXJzdExvYWRpbmcgPSBmYWxzZTtcbiAgICAgICAgICAgIH0pO1xuICAgIH1cblxuICAgIG9uTW91bnQoKCkgPT4ge1xuICAgICAgICBsb2FkQXZhaWxhYmxlRGF0ZXMoKTtcbiAgICB9KTtcblxuICAgIGZ1bmN0aW9uIGluaXRNb250aCgpIHtcbiAgICAgICAgZGF5cyA9IFtdO1xuICAgICAgICAvL1x0ZmluZCB0aGUgbGFzdCBNb25kYXkgb2YgdGhlIHByZXZpb3VzIG1vbnRoXG4gICAgICAgIGNvbnN0IGZpcnN0RGF5ID0gbmV3IERhdGUoeWVhciwgbW9udGgsIDEpLmdldERheSgpO1xuXG4gICAgICAgIGNvbnN0IGRheXNJblRoaXNNb250aCA9IG5ldyBEYXRlKHllYXIsIG1vbnRoICsgMSwgMCkuZ2V0RGF0ZSgpO1xuICAgICAgICBjb25zdCBkYXlzSW5MYXN0TW9udGggPSBuZXcgRGF0ZSh5ZWFyLCBtb250aCwgMCkuZ2V0RGF0ZSgpO1xuICAgICAgICBjb25zdCBwcmV2TW9udGggPSBtb250aCA9PT0gMCA/IDExIDogbW9udGggLSAxO1xuXG4gICAgICAgIC8vXHRzaG93IHRoZSBkYXlzIGJlZm9yZSB0aGUgc3RhcnQgb2YgdGhpcyBtb250aCAoZGlzYWJsZWQpIC0gYWx3YXlzIGxlc3MgdGhhbiA3XG4gICAgICAgIGZvciAobGV0IGkgPSBkYXlzSW5MYXN0TW9udGggLSBmaXJzdERheTsgaSA8IGRheXNJbkxhc3RNb250aDsgaSsrKSB7XG4gICAgICAgICAgICBsZXQgZCA9IG5ldyBEYXRlKHByZXZNb250aCA9PSAxMSA/IHllYXIgLSAxIDogeWVhciwgcHJldk1vbnRoLCBpICsgMSk7XG4gICAgICAgICAgICBkYXlzLnB1c2goe25hbWU6ICcnLCBlbmFibGVkOiBmYWxzZSwgZGF0ZTogZH0pO1xuICAgICAgICB9XG5cbiAgICAgICAgLy9cdHNob3cgdGhlIGRheXMgaW4gdGhpcyBtb250aCAoZW5hYmxlZCkgLSBhbHdheXMgMjggLSAzMVxuICAgICAgICBmb3IgKGxldCBpID0gMDsgaSA8IGRheXNJblRoaXNNb250aDsgaSsrKSB7XG4gICAgICAgICAgICBsZXQgZCA9IG5ldyBEYXRlKHllYXIsIG1vbnRoLCBpICsgMSk7XG4gICAgICAgICAgICBjb25zdCBkYXRlID0gdXRpbC5kYXlqcyhkKS5mb3JtYXQoJ1lZWVktTU0tREQnKTtcbiAgICAgICAgICAgIGNvbnN0IGVuYWJsZWQgPSAhIWF2YWlsYWJsZURhdGVzW2RhdGVdO1xuICAgICAgICAgICAgZGF5cy5wdXNoKHtuYW1lOiAnJyArIChpICsgMSksIGVuYWJsZWQ6IGVuYWJsZWQsIGRhdGU6IGRhdGV9KTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIGZ1bmN0aW9uIGRheUNsaWNrKGRheSkge1xuICAgICAgICBpZiAoYXZhaWxhYmxlRGF0ZXNbZGF5LmRhdGVdKSB7XG4gICAgICAgICAgICBkYXlTbG90cyA9IGF2YWlsYWJsZURhdGVzW2RheS5kYXRlXTtcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZSA9IGRheS5kYXRlO1xuICAgICAgICAgICAgZGlzcGF0Y2goJ2RheUNsaWNrZWQnLCBzZWxlY3RlZERhdGUpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgZGF5U2xvdHMgPSBbXTtcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZSA9ICcnO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gbmV4dCgpIHtcbiAgICAgICAgaWYgKG5leHREaXNhYmxlZCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG4gICAgICAgIG1vbnRoKys7XG4gICAgICAgIGlmIChtb250aCA9PSAxMikge1xuICAgICAgICAgICAgeWVhcisrO1xuICAgICAgICAgICAgbW9udGggPSAwO1xuICAgICAgICB9XG4gICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHByZXYoKSB7XG4gICAgICAgIC8vIGNyZWF0ZSBkYXRlIGZyb20gbW9udGggYW5kIHllYXJcbiAgICAgICAgaWYgKHByZXZEaXNhYmxlZCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKG1vbnRoID09IDApIHtcbiAgICAgICAgICAgIG1vbnRoID0gMTE7XG4gICAgICAgICAgICB5ZWFyLS07XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBtb250aC0tO1xuICAgICAgICB9XG4gICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHNsb3RTcG90Q29uZmlybWVkKCkge1xuICAgICAgICBkaXNwYXRjaCgnc3BvdFNlbGVjdGVkJywgc2VsZWN0ZWREYXRlVGltZSk7XG4gICAgICAgIHNldFRpbWVvdXQoKCkgPT4ge1xuICAgICAgICAgICAgc2VsZWN0ZWREYXRlVGltZSA9IHt9O1xuICAgICAgICB9LCAxMDAwKTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiByZXNldFNlbGVjdGlvbigpIHtcbiAgICAgICAgc2VsZWN0ZWREYXRlID0gJyc7XG4gICAgICAgIHNlbGVjdGVkRGF0ZVRpbWUgPSB7fTtcbiAgICAgICAgZGlzcGF0Y2goJ3Jlc2V0U2VsZWN0aW9uJyk7XG4gICAgfVxuXG5cbjwvc2NyaXB0PlxuXG48ZGl2IGNsYXNzPVwiZmNhbF9kYXlfcGlja2VyXCI+XG4gICAgPGRpdiBjbGFzcz1cImZjYWxfZGF5X3BpY2tlcl9oZWFkIGZjYWxfc2VjX2hlYWRpbmdcIj5cbiAgICAgICAgeyNpZiBsYWJlbCAhPSB1bmRlZmluZWR9XG4gICAgICAgICAgICA8aDM+eyBsYWJlbCB9PC9oMz5cbiAgICAgICAgezplbHNlfVxuICAgICAgICAgICAgPGgzPlNlbGVjdCBhIERhdGUgJiBUaW1lPC9oMz5cbiAgICAgICAgey9pZn1cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF90aW1lX3BpY2tlcl9oZWFkIGZjYWxfc2VjX2hlYWRpbmdcIj5cbiAgICAgICAgPGRpdiBhcmlhLWxhYmVsPVwiQmFjayB0byBEYXRlIFNlbGVjdGlvblwiIG9uOmNsaWNrPXsoZSkgPT4geyByZXNldFNlbGVjdGlvbigpIH19XG4gICAgICAgICAgICAgb246a2V5cHJlc3M9eyhlKSA9PiB7IHJlc2V0U2VsZWN0aW9uKCkgfX0gY2xhc3M9XCJmY2FsX2JhY2sgZmNhbF9nb19iYWNrXCI+XG4gICAgICAgICAgICA8aSBjbGFzcz1cImZjYWxfc3ZnXCI+XG4gICAgICAgICAgICAgICAgPHN2ZyB4bWxucz1cImh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnXCIgd2lkdGg9XCIzMlwiIGhlaWdodD1cIjMyXCIgdmlld0JveD1cIjAgMCAyNCAyNFwiPlxuICAgICAgICAgICAgICAgICAgICA8cGF0aCBmaWxsPVwibm9uZVwiIGQ9XCJNMCAwaDI0djI0SDBWMHpcIi8+XG4gICAgICAgICAgICAgICAgICAgIDxwYXRoXG4gICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTE5IDExSDcuODNsNC44OC00Ljg4Yy4zOS0uMzkuMzktMS4wMyAwLTEuNDItLjM5LS4zOS0xLjAyLS4zOS0xLjQxIDBsLTYuNTkgNi41OWMtLjM5LjM5LS4zOSAxLjAyIDAgMS40MWw2LjU5IDYuNTljLjM5LjM5IDEuMDIuMzkgMS40MSAwIC4zOS0uMzkuMzktMS4wMiAwLTEuNDFMNy44MyAxM0gxOWMuNTUgMCAxLS40NSAxLTFzLS40NS0xLTEtMXpcIi8+XG4gICAgICAgICAgICAgICAgPC9zdmc+XG4gICAgICAgICAgICA8L2k+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICA8aDM+U2VsZWN0IGEgVGltZTwvaDM+XG4gICAgICAgIDxwPntzbG90LmR1cmF0aW9ufSBtaW51dGVzPC9wPlxuICAgICAgICA8cD5UaW1lem9uZToge3RpbWV6b25lfTwvcD5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF9jYWxlbmRhcl9zbG90X3dyYXBcIj5cbiAgICAgICAgeyNpZiBpc0xvYWRpbmdEYXRlc31cbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJmY2FsX2xvYWRpbmdfZGF0ZXNcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzPVwiZmNhbF9sb2FkaW5nX2RhdGVzX2lubmVyXCI+XG4gICAgICAgICAgICAgICAgICAgIDxQdWxzZSBjb2xvcj1cIiMwMDYwZTZcIi8+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgey9pZn1cbiAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyLWNvbnRhaW5lclwiPlxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyLWhlYWRlclwiPlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJjYWxlbmRhci1tb250aC15ZWFyXCI+XG4gICAgICAgICAgICAgICAgICAgIDxoMz57bW9udGhOYW1lc1ttb250aF19IHt5ZWFyfTwvaDM+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyX25hdlwiPlxuICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBjbGFzczpmY2FsX25hdl9hY3RpdmU9eyFwcmV2RGlzYWJsZWR9IG9uOmNsaWNrPXsoKT0+cHJldigpfT5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxzdmcgdmlld0JveD1cIjAgMCAxMDI0IDEwMjRcIiB4bWxucz1cImh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnXCIgZGF0YS12LTAyOTc0N2FhPVwiXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZmlsbD1cImN1cnJlbnRDb2xvclwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZD1cIk02ODUuMjQ4IDEwNC43MDRhNjQgNjQgMCAwIDEgMCA5MC40OTZMMzY4LjQ0OCA1MTJsMzE2LjggMzE2LjhhNjQgNjQgMCAwIDEtOTAuNDk2IDkwLjQ5NkwyMzIuNzA0IDU1Ny4yNDhhNjQgNjQgMCAwIDEgMC05MC40OTZsMzYyLjA0OC0zNjIuMDQ4YTY0IDY0IDAgMCAxIDkwLjQ5NiAwelwiPjwvcGF0aD5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPlxuICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M6ZmNhbF9uYXZfYWN0aXZlPXshbmV4dERpc2FibGVkfSBvbjpjbGljaz17KCk9Pm5leHQoKX0+XG4gICAgICAgICAgICAgICAgICAgICAgICA8c3ZnIHZpZXdCb3g9XCIwIDAgMTAyNCAxMDI0XCIgeG1sbnM9XCJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Z1wiIGRhdGEtdi0wMjk3NDdhYT1cIlwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGZpbGw9XCJjdXJyZW50Q29sb3JcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGQ9XCJNMzM4Ljc1MiAxMDQuNzA0YTY0IDY0IDAgMCAwIDAgOTAuNDk2bDMxNi44IDMxNi44LTMxNi44IDMxNi44YTY0IDY0IDAgMCAwIDkwLjQ5NiA5MC40OTZsMzYyLjA0OC0zNjIuMDQ4YTY0IDY0IDAgMCAwIDAtOTAuNDk2TDQyOS4yNDggMTA0LjcwNGE2NCA2NCAwIDAgMC05MC40OTYgMHpcIj48L3BhdGg+XG4gICAgICAgICAgICAgICAgICAgICAgICA8L3N2Zz5cbiAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxDYWxlbmRhclxuICAgICAgICAgICAgICAgIGlzTG9hZGluZ0RhdGVzPVwie3RydWV9XCJcbiAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGU9XCJ7c2VsZWN0ZWREYXRlfVwiXG4gICAgICAgICAgICAgICAge2hlYWRlcnN9XG4gICAgICAgICAgICAgICAge2RheXN9XG4gICAgICAgICAgICAgICAgb246ZGF5Q2xpY2s9eyhlKT0+ZGF5Q2xpY2soZS5kZXRhaWwpfVxuICAgICAgICAgICAgLz5cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIHsjaWYgc2VsZWN0ZWREYXRlfVxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc2xvdF9waWNrZXJcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzPVwiZmNhbF9zbG90X3BpY2tlcl9oZWFkZXJcIj5cbiAgICAgICAgICAgICAgICAgICAgeyB1dGlsLmRheWpzKHNlbGVjdGVkRGF0ZSkuZm9ybWF0KCdkZGRkLCBNTU1NIEREJykgfVxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJmY2FsX3Nsb3RfaXRlbXNcIj5cbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc3BvdF9saXN0c1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgeyNlYWNoIGRheVNsb3RzIGFzIGRheX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzPVwiZmNhbF9zcG90IHsgc2VsZWN0ZWREYXRlVGltZSAmJiBzZWxlY3RlZERhdGVUaW1lLnN0YXJ0ID09IGRheS5zdGFydCA/ICdmY2FsX3Nwb3Rfc2VsZWN0ZWQnIDogJycgfVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGFyaWEtbGFiZWw9XCJTZWxlY3QgVGltZVwiIG9uOmNsaWNrPVwieyhlKSA9PiB7c2VsZWN0ZWREYXRlVGltZSA9IGRheX19XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbjprZXlwcmVzcz1cInsoZSkgPT4ge3NlbGVjdGVkRGF0ZVRpbWUgPSBkYXl9fVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3M9XCJmY2FsX3Nwb3RfbmFtZVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJ7IGRheS5yZW1haW5pbmcgJiYgc2VsZWN0ZWREYXRlVGltZSAhPSBkYXkgPyAnZmNhbF9zcG90X3RpbWUnIDogJycgfVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHt1dGlsLmRheWpzKGRheS5zdGFydCkuZm9ybWF0KCdoaDptbSBBJyl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsjaWYgZGF5LnJlbWFpbmluZyAmJiBzZWxlY3RlZERhdGVUaW1lICE9IGRheSB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc3BvdF9yZW1haW5pbmdcIj57ZGF5LnJlbWFpbmluZ30gc3BvdHMgbGVmdDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey9pZn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsjaWYgc2VsZWN0ZWREYXRlVGltZSAmJiBzZWxlY3RlZERhdGVUaW1lLnN0YXJ0ID09IGRheS5zdGFydH1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgYXJpYS1sYWJlbD1cIkNvbmZpcm0gVGltZVwiIG9uOmtleXByZXNzPVwieyhlKSA9PiB7c2VsZWN0ZWREYXRlVGltZSA9IGRheX19XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbjpjbGljaz17c2xvdFNwb3RDb25maXJtZWR9IGNsYXNzPVwiZmNhbF9zcG90X2NvbmZpcm1cIj5Db25maXJtXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey9pZn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIHsvZWFjaH1cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgey9pZn1cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF90aW1lem9uZV9zZWxlY3RcIj5cbiAgICAgICAgPGxhYmVsIGZvcj1cImZjYWxfdGltZXpvbmVfc2VsZWN0b3JcIj5UaW1lem9uZTwvbGFiZWw+XG4gICAgICAgIDxUaW1lWm9uZVNlbGVjdG9yIHBsYWNlaG9sZGVyPVwiU2VsZWN0IFRpbWV6b25lXCIgYmluZDp0aW1lem9uZT17dGltZXpvbmV9Lz5cbiAgICA8L2Rpdj5cbjwvZGl2PlxuXG48c3R5bGU+XG4gICAgLmNhbGVuZGFyLWNvbnRhaW5lciB7XG4gICAgICAgIHdpZHRoOiBmaXQtY29udGVudDtcbiAgICAgICAgb3ZlcmZsb3c6IGF1dG87XG4gICAgICAgIGJveC1zaGFkb3c6IDAgMnB4IDIwcHggcmdiYSgwLCAwLCAwLCAwLjEpO1xuICAgICAgICBib3JkZXItcmFkaXVzOiAxMHB4O1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZmZmO1xuICAgICAgICBtYXgtd2lkdGg6IDEyMDBweDtcbiAgICB9XG5cbiAgICAuY2FsZW5kYXItaGVhZGVyIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgICAgICBwYWRkaW5nOiA1cHggMTVweDtcbiAgICAgICAgYmFja2dyb3VuZDogI2VlZjtcbiAgICAgICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkIHJnYmEoMTY2LCAxNjgsIDE3OSwgMC4xMik7XG4gICAgfVxuXG4gICAgLmNhbGVuZGFyLWhlYWRlciBidXR0b24ge1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZWVmO1xuICAgICAgICBib3JkZXI6IDFweDtcbiAgICAgICAgcGFkZGluZzogNnB4O1xuICAgICAgICBjb2xvcjogcmdiYSg4MSwgODYsIDkzLCAwLjcpO1xuICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgICAgIG91dGxpbmU6IDA7XG4gICAgfVxuXG4gICAgLmNhbGVuZGFyLWhlYWRlciBoMyB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgIH1cbjwvc3R5bGU+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBOFJJLG1CQUFtQiw4QkFBQyxDQUFDLEFBQ2pCLEtBQUssQ0FBRSxXQUFXLENBQ2xCLFFBQVEsQ0FBRSxJQUFJLENBQ2QsVUFBVSxDQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQ3pDLGFBQWEsQ0FBRSxJQUFJLENBQ25CLFVBQVUsQ0FBRSxJQUFJLENBQ2hCLFNBQVMsQ0FBRSxNQUFNLEFBQ3JCLENBQUMsQUFFRCxnQkFBZ0IsOEJBQUMsQ0FBQyxBQUNkLE9BQU8sQ0FBRSxJQUFJLENBQ2IsV0FBVyxDQUFFLE1BQU0sQ0FDbkIsZUFBZSxDQUFFLGFBQWEsQ0FDOUIsT0FBTyxDQUFFLEdBQUcsQ0FBQyxJQUFJLENBQ2pCLFVBQVUsQ0FBRSxJQUFJLENBQ2hCLGFBQWEsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLEtBQUssR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLEFBQ3RELENBQUMsQUFFRCwrQkFBZ0IsQ0FBQyxNQUFNLGVBQUMsQ0FBQyxBQUNyQixVQUFVLENBQUUsSUFBSSxDQUNoQixNQUFNLENBQUUsR0FBRyxDQUNYLE9BQU8sQ0FBRSxHQUFHLENBQ1osS0FBSyxDQUFFLEtBQUssRUFBRSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQzVCLE1BQU0sQ0FBRSxPQUFPLENBQ2YsT0FBTyxDQUFFLENBQUMsQUFDZCxDQUFDLEFBRUQsK0JBQWdCLENBQUMsRUFBRSxlQUFDLENBQUMsQUFDakIsTUFBTSxDQUFFLENBQUMsQ0FDVCxTQUFTLENBQUUsSUFBSSxBQUNuQixDQUFDIn0= */");
+  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_styles)(target, "svelte-1dvf05e", ".calendar-container.svelte-1dvf05e.svelte-1dvf05e{width:fit-content;overflow:auto;box-shadow:0 2px 20px rgba(0, 0, 0, 0.1);border-radius:10px;background:#fff;max-width:1200px}.calendar-header.svelte-1dvf05e.svelte-1dvf05e{display:flex;align-items:center;justify-content:space-between;padding:5px 15px;background:#eef;border-bottom:1px solid rgba(166, 168, 179, 0.12)}.calendar-header.svelte-1dvf05e button.svelte-1dvf05e{background:#eef;border:1px;padding:6px;color:rgba(81, 86, 93, 0.7);cursor:pointer;outline:0}.calendar-header.svelte-1dvf05e h3.svelte-1dvf05e{margin:0;font-size:18px}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRGF0ZVBpY2tlckFwcC5zdmVsdGUiLCJzb3VyY2VzIjpbIkRhdGVQaWNrZXJBcHAuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG4gICAgaW1wb3J0IHt1dGlsfSBmcm9tICcuLi91dGlsJztcbiAgICBpbXBvcnQge1B1bHNlfSBmcm9tICdzdmVsdGUtbG9hZGluZy1zcGlubmVycyc7XG4gICAgaW1wb3J0IFRpbWVab25lU2VsZWN0b3IgZnJvbSBcIi4vVGltZXpvbmVTZWxlY3Rvci5zdmVsdGVcIjtcblxuICAgIGV4cG9ydCBsZXQgc2xvdDtcbiAgICBleHBvcnQgbGV0IHNldHRpbmdzO1xuICAgIGV4cG9ydCBsZXQgdGltZXpvbmU7XG5cbiAgICBpbXBvcnQgQ2FsZW5kYXIgZnJvbSBcIi4vQ2FsZW5kYXIuc3ZlbHRlXCI7XG4gICAgaW1wb3J0IHtjcmVhdGVFdmVudERpc3BhdGNoZXIsIG9uTW91bnR9IGZyb20gJ3N2ZWx0ZSc7XG5cbiAgICBsZXQgZGlzcGF0Y2ggPSBjcmVhdGVFdmVudERpc3BhdGNoZXIoKTtcblxuICAgIHZhciBkYXlOYW1lcyA9IFtcIlN1blwiLCBcIk1vblwiLCBcIlR1ZVwiLCBcIldlZFwiLCBcIlRodVwiLCBcIkZyaVwiLCBcIlNhdFwiXTtcbiAgICBsZXQgbW9udGhOYW1lcyA9IFtcIkphbnVhcnlcIiwgXCJGZWJydWFyeVwiLCBcIk1hcmNoXCIsIFwiQXByaWxcIiwgXCJNYXlcIiwgXCJKdW5lXCIsIFwiSnVseVwiLCBcIkF1Z3VzdFwiLCBcIlNlcHRlbWJlclwiLCBcIk9jdG9iZXJcIiwgXCJOb3ZlbWJlclwiLCBcIkRlY2VtYmVyXCJdO1xuXG4gICAgbGV0IGhlYWRlcnMgPSBbXTtcbiAgICBsZXQgbm93ID0gbmV3IERhdGUoKTtcbiAgICBsZXQgeWVhciA9IG5vdy5nZXRGdWxsWWVhcigpO1x0XHQvL1x0dGhpcyBpcyB0aGUgbW9udGggJiB5ZWFyIGRpc3BsYXllZFxuICAgIGxldCBtb250aCA9IG5vdy5nZXRNb250aCgpO1xuICAgIGxldCBpc0xvYWRpbmdEYXRlcyA9IGZhbHNlO1xuICAgIGxldCBhdmFpbGFibGVEYXRlcyA9IHt9O1xuICAgIGxldCBkYXlTbG90cyA9IFtdO1xuICAgIGxldCBzZWxlY3RlZERhdGUgPSAnJztcbiAgICBsZXQgc2VsZWN0ZWREYXRlVGltZSA9IHt9O1xuICAgIGxldCBuZXh0RGlzYWJsZWQgPSBmYWxzZTtcblxuICAgIGlmIChzbG90LnByZV9zZWxlY3RzKSB7XG4gICAgICAgIG1vbnRoID0gc2xvdC5wcmVfc2VsZWN0cy5tb250aCAtIDE7XG4gICAgICAgIHllYXIgPSBzbG90LnByZV9zZWxlY3RzLnllYXI7XG4gICAgfVxuXG4gICAgdmFyIGRheXMgPSBbXTtcdC8vXHRUaGUgZGF5cyB0byBkaXNwbGF5IGluIGVhY2ggYm94XG5cbiAgICAkOiBtb250aCwgeWVhciwgYXZhaWxhYmxlRGF0ZXMsIGluaXRDb250ZW50KCksIG1heWJlTWF4RGF0ZURpc2FibGVkKCk7XG5cbiAgICAkOiB0aW1lem9uZSwgbWF5YmVUaW1lWm9uZUNoYW5nZWQoKTtcblxuICAgIGxldCBsYXN0VGltZVpvbmUgPSB0aW1lem9uZTtcblxuICAgICQ6IHByZXZEaXNhYmxlZCA9IChuZXcgRGF0ZSh5ZWFyLCBtb250aCwgMSkpLmdldFRpbWUoKSA8IChuZXcgRGF0ZSgpKS5nZXRUaW1lKCk7XG5cbiAgICBmdW5jdGlvbiBtYXliZU1heERhdGVEaXNhYmxlZCgpIHtcbiAgICAgICAgbGV0IHJlc3VsdCA9IGZhbHNlO1xuICAgICAgICBpZiAoc2xvdC5tYXhfbG9va3VwX2RhdGUpIHtcbiAgICAgICAgICAgIGxldCBuZXh0TW9udGggPSBtb250aCArIDE7XG4gICAgICAgICAgICBsZXQgbmV4dFllYXIgPSB5ZWFyO1xuICAgICAgICAgICAgaWYgKG5leHRNb250aCA9PSAxMikge1xuICAgICAgICAgICAgICAgIG5leHRZZWFyKys7XG4gICAgICAgICAgICAgICAgbmV4dE1vbnRoID0gMDtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIHJlc3VsdCA9IChuZXcgRGF0ZShuZXh0WWVhciwgbmV4dE1vbnRoLCAwKSkuZ2V0VGltZSgpID4gKG5ldyBEYXRlKHNsb3QubWF4X2xvb2t1cF9kYXRlKSkuZ2V0VGltZSgpO1xuICAgICAgICB9XG4gICAgICAgIG5leHREaXNhYmxlZCA9IHJlc3VsdDtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBtYXliZVRpbWVab25lQ2hhbmdlZCgpIHtcbiAgICAgICAgaWYgKGxhc3RUaW1lWm9uZSAhPSB0aW1lem9uZSkge1xuICAgICAgICAgICAgbGFzdFRpbWVab25lID0gdGltZXpvbmU7XG4gICAgICAgICAgICBzZWxlY3RlZERhdGUgPSAnJztcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZVRpbWUgPSB7fTtcbiAgICAgICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgICAgICAgICAgZGlzcGF0Y2goJ3RpbWV6b25lQ2hhbmdlZCcsIHRpbWV6b25lKTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIC8vIGNob29zZSB3aGF0IGRhdGUvZGF5IGdldHMgZGlzcGxheWVkIGluIGVhY2ggZGF0ZSBib3guXG4gICAgZnVuY3Rpb24gaW5pdENvbnRlbnQoKSB7XG4gICAgICAgIGhlYWRlcnMgPSBkYXlOYW1lcztcbiAgICAgICAgaW5pdE1vbnRoKCk7XG4gICAgfVxuXG4gICAgbGV0IGZpcnN0TG9hZGluZyA9IHRydWU7XG5cbiAgICBmdW5jdGlvbiBsb2FkQXZhaWxhYmxlRGF0ZXMoKSB7XG4gICAgICAgIGlzTG9hZGluZ0RhdGVzID0gdHJ1ZTtcbiAgICAgICAgYXZhaWxhYmxlRGF0ZXMgPSB7fTtcbiAgICAgICAgdXRpbC4kZ2V0KHdpbmRvdy5mbHVlbnRDYWxlbmRhclB1YmxpY1ZhcnMuYWpheHVybCwge1xuICAgICAgICAgICAgc2xvdF9pZDogc2xvdC5pZCxcbiAgICAgICAgICAgIHRpbWV6b25lOiB0aW1lem9uZSB8fCAnJyxcbiAgICAgICAgICAgIGFjdGlvbjogJ2ZsdWVudF9jYWxfZ2V0X2F2YWlsYWJsZV9kYXRlcycsXG4gICAgICAgICAgICBzdGFydF9kYXRlOiB1dGlsLmRheWpzKHllYXIgKyAnLScgKyAobW9udGggKyAxKSArICctJywgJzAxJykuZm9ybWF0KCdZWVlZLU1NLUREJyksXG4gICAgICAgIH0pXG4gICAgICAgICAgICAudGhlbihyZXNwb25zZSA9PiB7XG4gICAgICAgICAgICAgICAgdGltZXpvbmUgPSByZXNwb25zZS50aW1lem9uZTtcbiAgICAgICAgICAgICAgICBhdmFpbGFibGVEYXRlcyA9IHJlc3BvbnNlLmF2YWlsYWJsZV9zbG90cztcblxuICAgICAgICAgICAgICAgIGlmKGZpcnN0TG9hZGluZyAmJiBzbG90LnByZV9zZWxlY3RzLmRheSkge1xuICAgICAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGUgPSBzbG90LnByZV9zZWxlY3RzLnllYXIgKyAnLScgKyBzbG90LnByZV9zZWxlY3RzLm1vbnRoICsgJy0nICsgc2xvdC5wcmVfc2VsZWN0cy5kYXk7XG4gICAgICAgICAgICAgICAgICAgIGRheUNsaWNrKHtcbiAgICAgICAgICAgICAgICAgICAgICAgIGRhdGU6IHNsb3QucHJlX3NlbGVjdHMueWVhciArICctJyArIHNsb3QucHJlX3NlbGVjdHMubW9udGggKyAnLScgKyBzbG90LnByZV9zZWxlY3RzLmRheVxuICAgICAgICAgICAgICAgICAgICB9KTtcbiAgICAgICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGUgPSAnJztcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9KVxuICAgICAgICAgICAgLmNhdGNoKGVycm9ycyA9PiB7XG4gICAgICAgICAgICAgICAgY29uc29sZS5sb2coZXJyb3JzKTtcbiAgICAgICAgICAgIH0pXG4gICAgICAgICAgICAuZmluYWxseSgoKSA9PiB7XG4gICAgICAgICAgICAgICAgaXNMb2FkaW5nRGF0ZXMgPSBmYWxzZTtcbiAgICAgICAgICAgICAgICBmaXJzdExvYWRpbmcgPSBmYWxzZTtcbiAgICAgICAgICAgIH0pO1xuICAgIH1cblxuICAgIG9uTW91bnQoKCkgPT4ge1xuICAgICAgICBsb2FkQXZhaWxhYmxlRGF0ZXMoKTtcbiAgICB9KTtcblxuICAgIGZ1bmN0aW9uIGluaXRNb250aCgpIHtcbiAgICAgICAgZGF5cyA9IFtdO1xuICAgICAgICAvL1x0ZmluZCB0aGUgbGFzdCBNb25kYXkgb2YgdGhlIHByZXZpb3VzIG1vbnRoXG4gICAgICAgIGNvbnN0IGZpcnN0RGF5ID0gbmV3IERhdGUoeWVhciwgbW9udGgsIDEpLmdldERheSgpO1xuXG4gICAgICAgIGNvbnN0IGRheXNJblRoaXNNb250aCA9IG5ldyBEYXRlKHllYXIsIG1vbnRoICsgMSwgMCkuZ2V0RGF0ZSgpO1xuICAgICAgICBjb25zdCBkYXlzSW5MYXN0TW9udGggPSBuZXcgRGF0ZSh5ZWFyLCBtb250aCwgMCkuZ2V0RGF0ZSgpO1xuICAgICAgICBjb25zdCBwcmV2TW9udGggPSBtb250aCA9PT0gMCA/IDExIDogbW9udGggLSAxO1xuXG4gICAgICAgIC8vXHRzaG93IHRoZSBkYXlzIGJlZm9yZSB0aGUgc3RhcnQgb2YgdGhpcyBtb250aCAoZGlzYWJsZWQpIC0gYWx3YXlzIGxlc3MgdGhhbiA3XG4gICAgICAgIGZvciAobGV0IGkgPSBkYXlzSW5MYXN0TW9udGggLSBmaXJzdERheTsgaSA8IGRheXNJbkxhc3RNb250aDsgaSsrKSB7XG4gICAgICAgICAgICBsZXQgZCA9IG5ldyBEYXRlKHByZXZNb250aCA9PSAxMSA/IHllYXIgLSAxIDogeWVhciwgcHJldk1vbnRoLCBpICsgMSk7XG4gICAgICAgICAgICBkYXlzLnB1c2goe25hbWU6ICcnLCBlbmFibGVkOiBmYWxzZSwgZGF0ZTogZH0pO1xuICAgICAgICB9XG5cbiAgICAgICAgLy9cdHNob3cgdGhlIGRheXMgaW4gdGhpcyBtb250aCAoZW5hYmxlZCkgLSBhbHdheXMgMjggLSAzMVxuICAgICAgICBmb3IgKGxldCBpID0gMDsgaSA8IGRheXNJblRoaXNNb250aDsgaSsrKSB7XG4gICAgICAgICAgICBsZXQgZCA9IG5ldyBEYXRlKHllYXIsIG1vbnRoLCBpICsgMSk7XG4gICAgICAgICAgICBjb25zdCBkYXRlID0gdXRpbC5kYXlqcyhkKS5mb3JtYXQoJ1lZWVktTU0tREQnKTtcbiAgICAgICAgICAgIGNvbnN0IGVuYWJsZWQgPSAhIWF2YWlsYWJsZURhdGVzW2RhdGVdO1xuICAgICAgICAgICAgZGF5cy5wdXNoKHtuYW1lOiAnJyArIChpICsgMSksIGVuYWJsZWQ6IGVuYWJsZWQsIGRhdGU6IGRhdGV9KTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIGZ1bmN0aW9uIGRheUNsaWNrKGRheSkge1xuICAgICAgICBpZiAoYXZhaWxhYmxlRGF0ZXNbZGF5LmRhdGVdKSB7XG4gICAgICAgICAgICBkYXlTbG90cyA9IGF2YWlsYWJsZURhdGVzW2RheS5kYXRlXTtcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZSA9IGRheS5kYXRlO1xuICAgICAgICAgICAgZGlzcGF0Y2goJ2RheUNsaWNrZWQnLCBzZWxlY3RlZERhdGUpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgZGF5U2xvdHMgPSBbXTtcbiAgICAgICAgICAgIHNlbGVjdGVkRGF0ZSA9ICcnO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gbmV4dCgpIHtcbiAgICAgICAgaWYgKG5leHREaXNhYmxlZCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG4gICAgICAgIG1vbnRoKys7XG4gICAgICAgIGlmIChtb250aCA9PSAxMikge1xuICAgICAgICAgICAgeWVhcisrO1xuICAgICAgICAgICAgbW9udGggPSAwO1xuICAgICAgICB9XG4gICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHByZXYoKSB7XG4gICAgICAgIC8vIGNyZWF0ZSBkYXRlIGZyb20gbW9udGggYW5kIHllYXJcbiAgICAgICAgaWYgKHByZXZEaXNhYmxlZCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKG1vbnRoID09IDApIHtcbiAgICAgICAgICAgIG1vbnRoID0gMTE7XG4gICAgICAgICAgICB5ZWFyLS07XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBtb250aC0tO1xuICAgICAgICB9XG4gICAgICAgIGxvYWRBdmFpbGFibGVEYXRlcygpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHNsb3RTcG90Q29uZmlybWVkKCkge1xuICAgICAgICBkaXNwYXRjaCgnc3BvdFNlbGVjdGVkJywgc2VsZWN0ZWREYXRlVGltZSk7XG4gICAgICAgIHNldFRpbWVvdXQoKCkgPT4ge1xuICAgICAgICAgICAgc2VsZWN0ZWREYXRlVGltZSA9IHt9O1xuICAgICAgICB9LCAxMDAwKTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiByZXNldFNlbGVjdGlvbigpIHtcbiAgICAgICAgc2VsZWN0ZWREYXRlID0gJyc7XG4gICAgICAgIHNlbGVjdGVkRGF0ZVRpbWUgPSB7fTtcbiAgICAgICAgZGlzcGF0Y2goJ3Jlc2V0U2VsZWN0aW9uJyk7XG4gICAgfVxuXG5cbjwvc2NyaXB0PlxuXG48ZGl2IGNsYXNzPVwiZmNhbF9kYXlfcGlja2VyXCI+XG4gICAgPGRpdiBjbGFzcz1cImZjYWxfZGF5X3BpY2tlcl9oZWFkIGZjYWxfc2VjX2hlYWRpbmdcIj5cbiAgICAgICAgeyNpZiBzZXR0aW5ncz8ubGFiZWwgIT0gdW5kZWZpbmVkfVxuICAgICAgICAgICAgPGgzIGNsYXNzPVwie3NldHRpbmdzLnZhbGlkYXRpb25fcnVsZXM/LnJlcXVpcmVkPy52YWx1ZSA/ICdmY2FsX2xhYmVsX3JlcXVpcmVkJyA6ICcnfVwiPlxuICAgICAgICAgICAgICAgIHsgc2V0dGluZ3MubGFiZWwgfVxuICAgICAgICAgICAgPC9oMz5cbiAgICAgICAgezplbHNlfVxuICAgICAgICAgICAgPGgzPlNlbGVjdCBhIERhdGUgJiBUaW1lPC9oMz5cbiAgICAgICAgey9pZn1cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF90aW1lX3BpY2tlcl9oZWFkIGZjYWxfc2VjX2hlYWRpbmdcIj5cbiAgICAgICAgPGRpdiBhcmlhLWxhYmVsPVwiQmFjayB0byBEYXRlIFNlbGVjdGlvblwiIG9uOmNsaWNrPXsoZSkgPT4geyByZXNldFNlbGVjdGlvbigpIH19XG4gICAgICAgICAgICAgb246a2V5cHJlc3M9eyhlKSA9PiB7IHJlc2V0U2VsZWN0aW9uKCkgfX0gY2xhc3M9XCJmY2FsX2JhY2sgZmNhbF9nb19iYWNrXCI+XG4gICAgICAgICAgICA8aSBjbGFzcz1cImZjYWxfc3ZnXCI+XG4gICAgICAgICAgICAgICAgPHN2ZyB4bWxucz1cImh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnXCIgd2lkdGg9XCIzMlwiIGhlaWdodD1cIjMyXCIgdmlld0JveD1cIjAgMCAyNCAyNFwiPlxuICAgICAgICAgICAgICAgICAgICA8cGF0aCBmaWxsPVwibm9uZVwiIGQ9XCJNMCAwaDI0djI0SDBWMHpcIi8+XG4gICAgICAgICAgICAgICAgICAgIDxwYXRoXG4gICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTE5IDExSDcuODNsNC44OC00Ljg4Yy4zOS0uMzkuMzktMS4wMyAwLTEuNDItLjM5LS4zOS0xLjAyLS4zOS0xLjQxIDBsLTYuNTkgNi41OWMtLjM5LjM5LS4zOSAxLjAyIDAgMS40MWw2LjU5IDYuNTljLjM5LjM5IDEuMDIuMzkgMS40MSAwIC4zOS0uMzkuMzktMS4wMiAwLTEuNDFMNy44MyAxM0gxOWMuNTUgMCAxLS40NSAxLTFzLS40NS0xLTEtMXpcIi8+XG4gICAgICAgICAgICAgICAgPC9zdmc+XG4gICAgICAgICAgICA8L2k+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICA8aDM+U2VsZWN0IGEgVGltZTwvaDM+XG4gICAgICAgIDxwPntzbG90LmR1cmF0aW9ufSBtaW51dGVzPC9wPlxuICAgICAgICA8cD5UaW1lem9uZToge3RpbWV6b25lfTwvcD5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF9jYWxlbmRhcl9zbG90X3dyYXBcIj5cbiAgICAgICAgeyNpZiBpc0xvYWRpbmdEYXRlc31cbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJmY2FsX2xvYWRpbmdfZGF0ZXNcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzPVwiZmNhbF9sb2FkaW5nX2RhdGVzX2lubmVyXCI+XG4gICAgICAgICAgICAgICAgICAgIDxQdWxzZSBjb2xvcj1cIiMwMDYwZTZcIi8+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgey9pZn1cbiAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyLWNvbnRhaW5lclwiPlxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyLWhlYWRlclwiPlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJjYWxlbmRhci1tb250aC15ZWFyXCI+XG4gICAgICAgICAgICAgICAgICAgIDxoMz57bW9udGhOYW1lc1ttb250aF19IHt5ZWFyfTwvaDM+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImNhbGVuZGFyX25hdlwiPlxuICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBjbGFzczpmY2FsX25hdl9hY3RpdmU9eyFwcmV2RGlzYWJsZWR9IG9uOmNsaWNrPXsoKT0+cHJldigpfT5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxzdmcgdmlld0JveD1cIjAgMCAxMDI0IDEwMjRcIiB4bWxucz1cImh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnXCIgZGF0YS12LTAyOTc0N2FhPVwiXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZmlsbD1cImN1cnJlbnRDb2xvclwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZD1cIk02ODUuMjQ4IDEwNC43MDRhNjQgNjQgMCAwIDEgMCA5MC40OTZMMzY4LjQ0OCA1MTJsMzE2LjggMzE2LjhhNjQgNjQgMCAwIDEtOTAuNDk2IDkwLjQ5NkwyMzIuNzA0IDU1Ny4yNDhhNjQgNjQgMCAwIDEgMC05MC40OTZsMzYyLjA0OC0zNjIuMDQ4YTY0IDY0IDAgMCAxIDkwLjQ5NiAwelwiPjwvcGF0aD5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPlxuICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M6ZmNhbF9uYXZfYWN0aXZlPXshbmV4dERpc2FibGVkfSBvbjpjbGljaz17KCk9Pm5leHQoKX0+XG4gICAgICAgICAgICAgICAgICAgICAgICA8c3ZnIHZpZXdCb3g9XCIwIDAgMTAyNCAxMDI0XCIgeG1sbnM9XCJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Z1wiIGRhdGEtdi0wMjk3NDdhYT1cIlwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGZpbGw9XCJjdXJyZW50Q29sb3JcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGQ9XCJNMzM4Ljc1MiAxMDQuNzA0YTY0IDY0IDAgMCAwIDAgOTAuNDk2bDMxNi44IDMxNi44LTMxNi44IDMxNi44YTY0IDY0IDAgMCAwIDkwLjQ5NiA5MC40OTZsMzYyLjA0OC0zNjIuMDQ4YTY0IDY0IDAgMCAwIDAtOTAuNDk2TDQyOS4yNDggMTA0LjcwNGE2NCA2NCAwIDAgMC05MC40OTYgMHpcIj48L3BhdGg+XG4gICAgICAgICAgICAgICAgICAgICAgICA8L3N2Zz5cbiAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxDYWxlbmRhclxuICAgICAgICAgICAgICAgIGlzTG9hZGluZ0RhdGVzPVwie3RydWV9XCJcbiAgICAgICAgICAgICAgICBzZWxlY3RlZERhdGU9XCJ7c2VsZWN0ZWREYXRlfVwiXG4gICAgICAgICAgICAgICAge2hlYWRlcnN9XG4gICAgICAgICAgICAgICAge2RheXN9XG4gICAgICAgICAgICAgICAgb246ZGF5Q2xpY2s9eyhlKT0+ZGF5Q2xpY2soZS5kZXRhaWwpfVxuICAgICAgICAgICAgLz5cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIHsjaWYgc2VsZWN0ZWREYXRlfVxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc2xvdF9waWNrZXJcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzPVwiZmNhbF9zbG90X3BpY2tlcl9oZWFkZXJcIj5cbiAgICAgICAgICAgICAgICAgICAgeyB1dGlsLmRheWpzKHNlbGVjdGVkRGF0ZSkuZm9ybWF0KCdkZGRkLCBNTU1NIEREJykgfVxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJmY2FsX3Nsb3RfaXRlbXNcIj5cbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc3BvdF9saXN0c1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgeyNlYWNoIGRheVNsb3RzIGFzIGRheX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzPVwiZmNhbF9zcG90IHsgc2VsZWN0ZWREYXRlVGltZSAmJiBzZWxlY3RlZERhdGVUaW1lLnN0YXJ0ID09IGRheS5zdGFydCA/ICdmY2FsX3Nwb3Rfc2VsZWN0ZWQnIDogJycgfVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGFyaWEtbGFiZWw9XCJTZWxlY3QgVGltZVwiIG9uOmNsaWNrPVwieyhlKSA9PiB7c2VsZWN0ZWREYXRlVGltZSA9IGRheX19XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbjprZXlwcmVzcz1cInsoZSkgPT4ge3NlbGVjdGVkRGF0ZVRpbWUgPSBkYXl9fVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3M9XCJmY2FsX3Nwb3RfbmFtZVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJ7IGRheS5yZW1haW5pbmcgJiYgc2VsZWN0ZWREYXRlVGltZSAhPSBkYXkgPyAnZmNhbF9zcG90X3RpbWUnIDogJycgfVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHt1dGlsLmRheWpzKGRheS5zdGFydCkuZm9ybWF0KCdoaDptbSBBJyl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsjaWYgZGF5LnJlbWFpbmluZyAmJiBzZWxlY3RlZERhdGVUaW1lICE9IGRheSB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz1cImZjYWxfc3BvdF9yZW1haW5pbmdcIj57ZGF5LnJlbWFpbmluZ30gc3BvdHMgbGVmdDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey9pZn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsjaWYgc2VsZWN0ZWREYXRlVGltZSAmJiBzZWxlY3RlZERhdGVUaW1lLnN0YXJ0ID09IGRheS5zdGFydH1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgYXJpYS1sYWJlbD1cIkNvbmZpcm0gVGltZVwiIG9uOmtleXByZXNzPVwieyhlKSA9PiB7c2VsZWN0ZWREYXRlVGltZSA9IGRheX19XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbjpjbGljaz17c2xvdFNwb3RDb25maXJtZWR9IGNsYXNzPVwiZmNhbF9zcG90X2NvbmZpcm1cIj5Db25maXJtXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey9pZn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIHsvZWFjaH1cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgey9pZn1cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwiZmNhbF90aW1lem9uZV9zZWxlY3RcIj5cbiAgICAgICAgPGxhYmVsIGZvcj1cImZjYWxfdGltZXpvbmVfc2VsZWN0b3JcIj5UaW1lem9uZTwvbGFiZWw+XG4gICAgICAgIDxUaW1lWm9uZVNlbGVjdG9yIHBsYWNlaG9sZGVyPVwiU2VsZWN0IFRpbWV6b25lXCIgYmluZDp0aW1lem9uZT17dGltZXpvbmV9Lz5cbiAgICA8L2Rpdj5cbjwvZGl2PlxuXG48c3R5bGU+XG4gICAgLmNhbGVuZGFyLWNvbnRhaW5lciB7XG4gICAgICAgIHdpZHRoOiBmaXQtY29udGVudDtcbiAgICAgICAgb3ZlcmZsb3c6IGF1dG87XG4gICAgICAgIGJveC1zaGFkb3c6IDAgMnB4IDIwcHggcmdiYSgwLCAwLCAwLCAwLjEpO1xuICAgICAgICBib3JkZXItcmFkaXVzOiAxMHB4O1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZmZmO1xuICAgICAgICBtYXgtd2lkdGg6IDEyMDBweDtcbiAgICB9XG5cbiAgICAuY2FsZW5kYXItaGVhZGVyIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgICAgICBwYWRkaW5nOiA1cHggMTVweDtcbiAgICAgICAgYmFja2dyb3VuZDogI2VlZjtcbiAgICAgICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkIHJnYmEoMTY2LCAxNjgsIDE3OSwgMC4xMik7XG4gICAgfVxuXG4gICAgLmNhbGVuZGFyLWhlYWRlciBidXR0b24ge1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZWVmO1xuICAgICAgICBib3JkZXI6IDFweDtcbiAgICAgICAgcGFkZGluZzogNnB4O1xuICAgICAgICBjb2xvcjogcmdiYSg4MSwgODYsIDkzLCAwLjcpO1xuICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgICAgIG91dGxpbmU6IDA7XG4gICAgfVxuXG4gICAgLmNhbGVuZGFyLWhlYWRlciBoMyB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgIH1cbjwvc3R5bGU+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBZ1NJLG1CQUFtQiw4QkFBQyxDQUFDLEFBQ2pCLEtBQUssQ0FBRSxXQUFXLENBQ2xCLFFBQVEsQ0FBRSxJQUFJLENBQ2QsVUFBVSxDQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQ3pDLGFBQWEsQ0FBRSxJQUFJLENBQ25CLFVBQVUsQ0FBRSxJQUFJLENBQ2hCLFNBQVMsQ0FBRSxNQUFNLEFBQ3JCLENBQUMsQUFFRCxnQkFBZ0IsOEJBQUMsQ0FBQyxBQUNkLE9BQU8sQ0FBRSxJQUFJLENBQ2IsV0FBVyxDQUFFLE1BQU0sQ0FDbkIsZUFBZSxDQUFFLGFBQWEsQ0FDOUIsT0FBTyxDQUFFLEdBQUcsQ0FBQyxJQUFJLENBQ2pCLFVBQVUsQ0FBRSxJQUFJLENBQ2hCLGFBQWEsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLEtBQUssR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLEFBQ3RELENBQUMsQUFFRCwrQkFBZ0IsQ0FBQyxNQUFNLGVBQUMsQ0FBQyxBQUNyQixVQUFVLENBQUUsSUFBSSxDQUNoQixNQUFNLENBQUUsR0FBRyxDQUNYLE9BQU8sQ0FBRSxHQUFHLENBQ1osS0FBSyxDQUFFLEtBQUssRUFBRSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQzVCLE1BQU0sQ0FBRSxPQUFPLENBQ2YsT0FBTyxDQUFFLENBQUMsQUFDZCxDQUFDLEFBRUQsK0JBQWdCLENBQUMsRUFBRSxlQUFDLENBQUMsQUFDakIsTUFBTSxDQUFFLENBQUMsQ0FDVCxTQUFTLENBQUUsSUFBSSxBQUNuQixDQUFDIn0= */");
 }
 function get_each_context(ctx, list, i) {
   var child_ctx = ctx.slice();
@@ -12282,14 +12288,14 @@ function get_each_context(ctx, list, i) {
   return child_ctx;
 }
 
-// (193:8) {:else}
+// (195:8) {:else}
 function create_else_block(ctx) {
   var h3;
   var block = {
     c: function create() {
       h3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h3");
       h3.textContent = "Select a Date & Time";
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h3, file, 193, 12, 5803);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h3, file, 195, 12, 5937);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, h3, anchor);
@@ -12303,28 +12309,36 @@ function create_else_block(ctx) {
     block: block,
     id: create_else_block.name,
     type: "else",
-    source: "(193:8) {:else}",
+    source: "(195:8) {:else}",
     ctx: ctx
   });
   return block;
 }
 
-// (191:8) {#if label != undefined}
+// (191:8) {#if settings?.label != undefined}
 function create_if_block_4(ctx) {
   var h3;
+  var t_value = /*settings*/ctx[2].label + "";
   var t;
+  var h3_class_value;
   var block = {
     c: function create() {
+      var _ctx$2$validation_rul, _ctx$2$validation_rul2;
       h3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h3");
-      t = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)( /*label*/ctx[2]);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h3, file, 191, 12, 5756);
+      t = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t_value);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h3, "class", h3_class_value = /*settings*/(_ctx$2$validation_rul = ctx[2].validation_rules) !== null && _ctx$2$validation_rul !== void 0 && (_ctx$2$validation_rul2 = _ctx$2$validation_rul.required) !== null && _ctx$2$validation_rul2 !== void 0 && _ctx$2$validation_rul2.value ? 'fcal_label_required' : '');
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h3, file, 191, 12, 5769);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, h3, anchor);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(h3, t);
     },
     p: function update(ctx, dirty) {
-      if (dirty[0] & /*label*/4) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t, /*label*/ctx[2]);
+      var _ctx$2$validation_rul3, _ctx$2$validation_rul4;
+      if (dirty[0] & /*settings*/4 && t_value !== (t_value = /*settings*/ctx[2].label + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t, t_value);
+      if (dirty[0] & /*settings*/4 && h3_class_value !== (h3_class_value = /*settings*/(_ctx$2$validation_rul3 = ctx[2].validation_rules) !== null && _ctx$2$validation_rul3 !== void 0 && (_ctx$2$validation_rul4 = _ctx$2$validation_rul3.required) !== null && _ctx$2$validation_rul4 !== void 0 && _ctx$2$validation_rul4.value ? 'fcal_label_required' : '')) {
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h3, "class", h3_class_value);
+      }
     },
     d: function destroy(detaching) {
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(h3);
@@ -12334,13 +12348,13 @@ function create_if_block_4(ctx) {
     block: block,
     id: create_if_block_4.name,
     type: "if",
-    source: "(191:8) {#if label != undefined}",
+    source: "(191:8) {#if settings?.label != undefined}",
     ctx: ctx
   });
   return block;
 }
 
-// (213:8) {#if isLoadingDates}
+// (215:8) {#if isLoadingDates}
 function create_if_block_3(ctx) {
   var div1;
   var div0;
@@ -12358,9 +12372,9 @@ function create_if_block_3(ctx) {
       div0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(pulse.$$.fragment);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_loading_dates_inner");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 214, 16, 6841);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 216, 16, 6975);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_loading_dates");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 213, 12, 6792);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 215, 12, 6926);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div1, anchor);
@@ -12386,13 +12400,13 @@ function create_if_block_3(ctx) {
     block: block,
     id: create_if_block_3.name,
     type: "if",
-    source: "(213:8) {#if isLoadingDates}",
+    source: "(215:8) {#if isLoadingDates}",
     ctx: ctx
   });
   return block;
 }
 
-// (248:8) {#if selectedDate}
+// (250:8) {#if selectedDate}
 function create_if_block(ctx) {
   var div3;
   var div0;
@@ -12419,13 +12433,13 @@ function create_if_block(ctx) {
         each_blocks[_i].c();
       }
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_slot_picker_header");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 249, 16, 8675);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 251, 16, 8809);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_spot_lists");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 253, 20, 8875);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 255, 20, 9009);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_slot_items");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 252, 16, 8825);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 254, 16, 8959);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "fcal_slot_picker");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 248, 12, 8628);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 250, 12, 8762);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div3, anchor);
@@ -12469,13 +12483,13 @@ function create_if_block(ctx) {
     block: block,
     id: create_if_block.name,
     type: "if",
-    source: "(248:8) {#if selectedDate}",
+    source: "(250:8) {#if selectedDate}",
     ctx: ctx
   });
   return block;
 }
 
-// (264:36) {#if day.remaining && selectedDateTime != day }
+// (266:36) {#if day.remaining && selectedDateTime != day }
 function create_if_block_2(ctx) {
   var div;
   var t0_value = /*day*/ctx[39].remaining + "";
@@ -12487,7 +12501,7 @@ function create_if_block_2(ctx) {
       t0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t0_value);
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(" spots left");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_spot_remaining");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 264, 40, 9747);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 266, 40, 9881);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -12505,13 +12519,13 @@ function create_if_block_2(ctx) {
     block: block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(264:36) {#if day.remaining && selectedDateTime != day }",
+    source: "(266:36) {#if day.remaining && selectedDateTime != day }",
     ctx: ctx
   });
   return block;
 }
 
-// (268:32) {#if selectedDateTime && selectedDateTime.start == day.start}
+// (270:32) {#if selectedDateTime && selectedDateTime.start == day.start}
 function create_if_block_1(ctx) {
   var div;
   var mounted;
@@ -12530,7 +12544,7 @@ function create_if_block_1(ctx) {
       div.textContent = "Confirm";
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "aria-label", "Confirm Time");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_spot_confirm");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 268, 36, 10024);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 270, 36, 10158);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -12552,13 +12566,13 @@ function create_if_block_1(ctx) {
     block: block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(268:32) {#if selectedDateTime && selectedDateTime.start == day.start}",
+    source: "(270:32) {#if selectedDateTime && selectedDateTime.start == day.start}",
     ctx: ctx
   });
   return block;
 }
 
-// (255:24) {#each daySlots as day}
+// (257:24) {#each daySlots as day}
 function create_each_block(ctx) {
   var div2;
   var div1;
@@ -12602,12 +12616,12 @@ function create_each_block(ctx) {
       if (if_block1) if_block1.c();
       t3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", div0_class_value = /*day*/ctx[39].remaining && /*selectedDateTime*/ctx[9] != /*day*/ctx[39] ? 'fcal_spot_time' : '');
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 260, 37, 9415);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 262, 37, 9549);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "aria-label", "Select Time");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_spot_name");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 257, 32, 9157);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 259, 32, 9291);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", div2_class_value = "fcal_spot " + ( /*selectedDateTime*/ctx[9] && /*selectedDateTime*/ctx[9].start == /*day*/ctx[39].start ? 'fcal_spot_selected' : ''));
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 255, 28, 8981);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 257, 28, 9115);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div2, anchor);
@@ -12670,7 +12684,7 @@ function create_each_block(ctx) {
     block: block,
     id: create_each_block.name,
     type: "each",
-    source: "(255:24) {#each daySlots as day}",
+    source: "(257:24) {#each daySlots as day}",
     ctx: ctx
   });
   return block;
@@ -12721,7 +12735,7 @@ function create_fragment(ctx) {
   var t17;
   var t18;
   var div8;
-  var label_1;
+  var label;
   var t20;
   var timezoneselector;
   var updating_timezone;
@@ -12729,7 +12743,8 @@ function create_fragment(ctx) {
   var mounted;
   var dispose;
   function select_block_type(ctx, dirty) {
-    if ( /*label*/ctx[2] != undefined) return create_if_block_4;
+    var _ctx$;
+    if ( /*settings*/((_ctx$ = ctx[2]) === null || _ctx$ === void 0 ? void 0 : _ctx$.label) != undefined) return create_if_block_4;
     return create_else_block;
   }
   var current_block_type = select_block_type(ctx, [-1, -1]);
@@ -12811,72 +12826,72 @@ function create_fragment(ctx) {
       if (if_block2) if_block2.c();
       t18 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       div8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      label_1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("label");
-      label_1.textContent = "Timezone";
+      label = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("label");
+      label.textContent = "Timezone";
       t20 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(timezoneselector.$$.fragment);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_day_picker_head fcal_sec_heading");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 189, 4, 5659);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 189, 4, 5662);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M0 0h24v24H0V0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 201, 20, 6243);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 203, 20, 6377);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 202, 20, 6303);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 204, 20, 6437);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "width", "32");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "height", "32");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "viewBox", "0 0 24 24");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 200, 16, 6139);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 202, 16, 6273);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(i, "class", "fcal_svg");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 199, 12, 6102);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 201, 12, 6236);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "aria-label", "Back to Date Selection");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_back fcal_go_back");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 197, 8, 5923);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h30, file, 207, 8, 6600);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(p0, file, 208, 8, 6631);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(p1, file, 209, 8, 6670);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 199, 8, 6057);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h30, file, 209, 8, 6734);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(p0, file, 210, 8, 6765);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(p1, file, 211, 8, 6804);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_time_picker_head fcal_sec_heading");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 196, 4, 5862);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 198, 4, 5996);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h31, "class", "svelte-1dvf05e");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h31, file, 222, 20, 7134);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h31, file, 224, 20, 7268);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "calendar-month-year");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 221, 16, 7080);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 223, 16, 7214);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path2, "fill", "currentColor");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path2, "d", "M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 227, 28, 7475);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 229, 28, 7609);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "viewBox", "0 0 1024 1024");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "data-v-029747aa", "");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 226, 24, 7363);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 228, 24, 7497);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(button0, "type", "button");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(button0, "class", "svelte-1dvf05e");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.toggle_class)(button0, "fcal_nav_active", ! /*prevDisabled*/ctx[12]);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(button0, file, 225, 20, 7256);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(button0, file, 227, 20, 7390);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path3, "fill", "currentColor");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path3, "d", "M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 233, 28, 8010);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 235, 28, 8144);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "viewBox", "0 0 1024 1024");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "data-v-029747aa", "");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg2, file, 232, 24, 7898);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg2, file, 234, 24, 8032);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(button1, "type", "button");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(button1, "class", "svelte-1dvf05e");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.toggle_class)(button1, "fcal_nav_active", ! /*nextDisabled*/ctx[10]);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(button1, file, 231, 20, 7791);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(button1, file, 233, 20, 7925);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div4, "class", "calendar_nav");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 224, 16, 7209);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 226, 16, 7343);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "calendar-header svelte-1dvf05e");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 220, 12, 7034);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 222, 12, 7168);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div6, "class", "calendar-container svelte-1dvf05e");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 219, 8, 6989);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 221, 8, 7123);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div7, "class", "fcal_calendar_slot_wrap");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div7, file, 211, 4, 6713);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(label_1, "for", "fcal_timezone_selector");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(label_1, file, 280, 8, 10495);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div7, file, 213, 4, 6847);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(label, "for", "fcal_timezone_selector");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(label, file, 282, 8, 10629);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div8, "class", "fcal_timezone_select");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div8, file, 279, 4, 10452);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div8, file, 281, 4, 10586);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div9, "class", "fcal_day_picker");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div9, file, 188, 0, 5625);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div9, file, 188, 0, 5628);
     },
     l: function claim(nodes) {
       throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -12928,7 +12943,7 @@ function create_fragment(ctx) {
       if (if_block2) if_block2.m(div7, null);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, t18);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, div8);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, label_1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, label);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, t20);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(timezoneselector, div8, null);
       current = true;
@@ -13043,7 +13058,7 @@ function instance($$self, $$props, $$invalidate) {
     $$scope = $$props.$$scope;
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.validate_slots)('DatePickerApp', slots, []);
   var slot = $$props.slot;
-  var label = $$props.label;
+  var settings = $$props.settings;
   var timezone = $$props.timezone;
   var dispatch = (0,svelte__WEBPACK_IMPORTED_MODULE_5__.createEventDispatcher)();
   var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -13202,14 +13217,14 @@ function instance($$self, $$props, $$invalidate) {
     if (slot === undefined && !('slot' in $$props || $$self.$$.bound[$$self.$$.props['slot']])) {
       console_1.warn("<DatePickerApp> was created without expected prop 'slot'");
     }
-    if (label === undefined && !('label' in $$props || $$self.$$.bound[$$self.$$.props['label']])) {
-      console_1.warn("<DatePickerApp> was created without expected prop 'label'");
+    if (settings === undefined && !('settings' in $$props || $$self.$$.bound[$$self.$$.props['settings']])) {
+      console_1.warn("<DatePickerApp> was created without expected prop 'settings'");
     }
     if (timezone === undefined && !('timezone' in $$props || $$self.$$.bound[$$self.$$.props['timezone']])) {
       console_1.warn("<DatePickerApp> was created without expected prop 'timezone'");
     }
   });
-  var writable_props = ['slot', 'label', 'timezone'];
+  var writable_props = ['slot', 'settings', 'timezone'];
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn("<DatePickerApp> was created with unknown prop '".concat(key, "'"));
   });
@@ -13243,7 +13258,7 @@ function instance($$self, $$props, $$invalidate) {
   }
   $$self.$$set = function ($$props) {
     if ('slot' in $$props) $$invalidate(1, slot = $$props.slot);
-    if ('label' in $$props) $$invalidate(2, label = $$props.label);
+    if ('settings' in $$props) $$invalidate(2, settings = $$props.settings);
     if ('timezone' in $$props) $$invalidate(0, timezone = $$props.timezone);
   };
   $$self.$capture_state = function () {
@@ -13252,7 +13267,7 @@ function instance($$self, $$props, $$invalidate) {
       Pulse: svelte_loading_spinners__WEBPACK_IMPORTED_MODULE_2__.Pulse,
       TimeZoneSelector: _TimezoneSelector_svelte__WEBPACK_IMPORTED_MODULE_3__["default"],
       slot: slot,
-      label: label,
+      settings: settings,
       timezone: timezone,
       Calendar: _Calendar_svelte__WEBPACK_IMPORTED_MODULE_4__["default"],
       createEventDispatcher: svelte__WEBPACK_IMPORTED_MODULE_5__.createEventDispatcher,
@@ -13288,7 +13303,7 @@ function instance($$self, $$props, $$invalidate) {
   };
   $$self.$inject_state = function ($$props) {
     if ('slot' in $$props) $$invalidate(1, slot = $$props.slot);
-    if ('label' in $$props) $$invalidate(2, label = $$props.label);
+    if ('settings' in $$props) $$invalidate(2, settings = $$props.settings);
     if ('timezone' in $$props) $$invalidate(0, timezone = $$props.timezone);
     if ('dispatch' in $$props) dispatch = $$props.dispatch;
     if ('dayNames' in $$props) dayNames = $$props.dayNames;
@@ -13322,7 +13337,7 @@ function instance($$self, $$props, $$invalidate) {
       $: $$invalidate(12, prevDisabled = new Date(year, month, 1).getTime() < new Date().getTime());
     }
   };
-  return [timezone, slot, label, year, month, headers, isLoadingDates, daySlots, selectedDate, selectedDateTime, nextDisabled, days, prevDisabled, monthNames, dayClick, next, prev, slotSpotConfirmed, resetSelection, availableDates, click_handler, keypress_handler, click_handler_1, click_handler_2, dayClick_handler, click_handler_3, keypress_handler_1, keypress_handler_2, timezoneselector_timezone_binding];
+  return [timezone, slot, settings, year, month, headers, isLoadingDates, daySlots, selectedDate, selectedDateTime, nextDisabled, days, prevDisabled, monthNames, dayClick, next, prev, slotSpotConfirmed, resetSelection, availableDates, click_handler, keypress_handler, click_handler_1, click_handler_2, dayClick_handler, click_handler_3, keypress_handler_1, keypress_handler_2, timezoneselector_timezone_binding];
 }
 var DatePickerApp = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(DatePickerApp, _SvelteComponentDev);
@@ -13333,7 +13348,7 @@ var DatePickerApp = /*#__PURE__*/function (_SvelteComponentDev) {
     _this = _super.call(this, options);
     (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.init)(_assertThisInitialized(_this), options, instance, create_fragment, svelte_internal__WEBPACK_IMPORTED_MODULE_0__.safe_not_equal, {
       slot: 1,
-      label: 2,
+      settings: 2,
       timezone: 0
     }, add_css, [-1, -1]);
     (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterComponent", {
@@ -13353,7 +13368,7 @@ var DatePickerApp = /*#__PURE__*/function (_SvelteComponentDev) {
       throw new Error("<DatePickerApp>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     }
   }, {
-    key: "label",
+    key: "settings",
     get: function get() {
       throw new Error("<DatePickerApp>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     },
@@ -14369,7 +14384,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var file = "resources/public/Fluentform/BookingDetails.svelte";
-function create_fragment(ctx) {
+
+// (28:0) {#if selectedDate}
+function create_if_block(ctx) {
   var div2;
   var div0;
   var i;
@@ -14428,10 +14445,6 @@ function create_fragment(ctx) {
   var t16;
   var span2;
   var t17;
-  var t18;
-  var div7;
-  var input;
-  var input_name_value;
   var mounted;
   var dispose;
   var block = {
@@ -14479,7 +14492,7 @@ function create_fragment(ctx) {
       t10 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t10_value);
       t11 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(" - ");
       t12 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t12_value);
-      t13 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(",\n        ");
+      t13 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(",\n            ");
       t14 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t14_value);
       t15 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       div6 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
@@ -14488,81 +14501,78 @@ function create_fragment(ctx) {
       t16 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       span2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       t17 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)( /*timezone*/ctx[2]);
-      t18 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div7 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      input = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("input");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M0 0h24v24H0V0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 29, 16, 1014);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 32, 20, 1016);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 30, 16, 1070);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 33, 20, 1076);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "width", "24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "height", "24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "viewBox", "0 0 24 24");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 28, 12, 914);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 31, 16, 912);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(i, "class", "fcal_svg ff_svg");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 27, 8, 874);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 30, 12, 868);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "aria-label", "Back to Date Selection");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_back");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 26, 4, 725);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 29, 8, 715);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author_name");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 36, 4, 1370);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 39, 8, 1400);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_author");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 25, 0, 695);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 28, 4, 681);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h2, "class", "fcal_slot_heading");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 41, 4, 1490);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 44, 8, 1540);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 45, 12, 1744);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 48, 16, 1809);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linejoin", "round");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 46, 12, 1778);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 49, 16, 1847);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path2, "d", "M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 48, 16, 1862);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 47, 12, 1842);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 51, 20, 1939);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 50, 16, 1915);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "fill", "#000000");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "viewBox", "0 0 24 24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "stroke", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 43, 8, 1599);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 51, 8, 2013);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 46, 12, 1657);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 54, 12, 2102);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "slot_timing fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 42, 4, 1550);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 45, 8, 1604);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div4, "class", "fcal_slot_info");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 40, 0, 1457);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 43, 4, 1503);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g3, "id", "SVGRepo_bgCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g3, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 58, 8, 2350);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 61, 12, 2467);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "id", "SVGRepo_tracerCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "stroke-linejoin", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "stroke", "#CCCCCC");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "stroke-width", "0.05847399999999999");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 59, 8, 2406);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 62, 12, 2527);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path3, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path3, "d", "M7.685,24.819H8.28v-2.131h3.688v2.131h0.596v-2.131h3.862v2.131h0.597v-2.131h4.109v2.131h0.595 v-2.131h3.417v-0.594h-3.417v-3.861h3.417v-0.596h-3.417v-3.519h3.417v-0.594h-3.417v-2.377h-0.595v2.377h-4.109v-2.377h-0.597 v2.377h-3.862v-2.377h-0.596v2.377H8.279v-2.377H7.685v2.377H3.747v0.594h3.938v3.519H3.747v0.596h3.938v3.861H3.747v0.594h3.938 V24.819z M12.563,22.094v-3.861h3.862v3.861H12.563z M21.132,22.094h-4.109v-3.861h4.109V22.094z M21.132,14.118v3.519h-4.109 v-3.519C17.023,14.119,21.132,14.119,21.132,14.118z M16.426,14.118v3.519h-3.862v-3.519 C12.564,14.119,16.426,14.119,16.426,14.118z M8.279,14.118h3.688v3.519H8.279V14.118z M8.279,18.233h3.688v3.861H8.279V18.233z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 61, 12, 2598);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 64, 16, 2727);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path4, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path4, "d", "M29.207,2.504l-4.129,0.004L24.475,2.51v2.448c0,0.653-0.534,1.187-1.188,1.187h-1.388 c-0.656,0-1.188-0.533-1.188-1.187V2.514l-1.583,0.002v2.442c0,0.653-0.535,1.187-1.191,1.187h-1.388 c-0.655,0-1.188-0.533-1.188-1.187V2.517l-1.682,0.004v2.438c0,0.653-0.534,1.187-1.189,1.187h-1.389 c-0.653,0-1.188-0.533-1.188-1.187V2.525H8.181v2.434c0,0.653-0.533,1.187-1.188,1.187H5.605c-0.656,0-1.189-0.533-1.189-1.187 V2.53L0,2.534v26.153h2.09h25.06l2.087-0.006L29.207,2.504z M27.15,26.606H2.09V9.897h25.06V26.606z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 64, 12, 3353);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 67, 16, 3494);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path5, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path5, "d", "M5.605,5.303h1.388c0.163,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.133-0.297-0.296-0.297H5.605 c-0.165,0-0.298,0.132-0.298,0.297v4.16C5.307,5.17,5.44,5.303,5.605,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 67, 12, 3934);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 70, 16, 4087);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path6, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path6, "d", "M11.101,5.303h1.389c0.164,0,0.297-0.133,0.297-0.297v-4.16c-0.001-0.165-0.134-0.297-0.298-0.297 H11.1c-0.163,0-0.296,0.132-0.296,0.297v4.16C10.805,5.17,10.938,5.303,11.101,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 70, 12, 4184);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 73, 16, 4349);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path7, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path7, "d", "M16.549,5.303h1.388c0.166,0,0.299-0.133,0.299-0.297v-4.16c-0.001-0.165-0.133-0.297-0.299-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C16.252,5.17,16.385,5.303,16.549,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path7, file, 73, 12, 4443);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path7, file, 76, 16, 4620);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path8, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path8, "d", "M21.899,5.303h1.388c0.164,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.132-0.297-0.296-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C21.603,5.17,21.735,5.303,21.899,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path8, file, 76, 12, 4704);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g5, file, 60, 41, 2581);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g6, file, 60, 37, 2577);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path8, file, 79, 16, 4893);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g5, file, 63, 45, 2706);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g6, file, 63, 41, 2702);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g7, "id", "SVGRepo_iconCarrier");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g7, file, 60, 8, 2548);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g7, file, 63, 12, 2673);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "version", "1.1");
@@ -14572,28 +14582,20 @@ function create_fragment(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "viewBox", "0 0 29.237 29.237");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "xml:space", "preserve");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg2, "fill", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg2, file, 55, 4, 2125);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 81, 4, 4986);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg2, file, 58, 8, 2230);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 84, 8, 5195);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 54, 0, 2076);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 57, 4, 2177);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path9, "fill", "#444");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path9, "d", "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm5.2 5.3c.4 0 .7.3 1.1.3-.3.4-1.6.4-2-.1.3-.1.5-.2.9-.2zM1 8c0-.4 0-.8.1-1.3.1 0 .2.1.3.1 0 0 .1.1.1.2 0 .3.3.5.5.5.8.1 1.1.8 1.8 1 .2.1.1.3 0 .5-.6.8-.1 1.4.4 1.9.5.4.5.8.6 1.4 0 .7.1 1.5.4 2.2C2.7 13.3 1 10.9 1 8zm7 7c-.7 0-1.5-.1-2.1-.3-.1-.2-.1-.4 0-.6.4-.8.8-1.5 1.3-2.2.2-.2.4-.4.4-.7 0-.2.1-.5.2-.7.3-.5.2-.8-.2-.9-.8-.2-1.2-.9-1.8-1.2s-1.2-.5-1.7-.2c-.2.1-.5.2-.5-.1 0-.4-.5-.7-.4-1.1-.1 0-.2 0-.3.1s-.2.2-.4.1c-.2-.2-.1-.4-.1-.6.1-.2.2-.3.4-.4.4-.1.8-.1 1 .4.3-.9.9-1.4 1.5-1.8 0 0 .8-.7.9-.7s.2.2.4.3c.2 0 .3 0 .3-.2.1-.5-.2-1.1-.6-1.2 0-.1.1-.1.1-.1.3-.1.7-.3.6-.6 0-.4-.4-.6-.8-.6-.2 0-.4 0-.6.1-.4.2-.9.4-1.5.4C5.2 1.4 6.6 1 8 1h.8c-.6.1-1.2.3-1.6.5.6.1.7.4.5.9-.1.2 0 .4.2.5s.4.1.5-.1c.2-.3.6-.4.9-.5.4-.1.7-.3 1-.7 0-.1.1-.1.2-.2.6.2 1.2.6 1.8 1-.1 0-.1.1-.2.1-.2.2-.5.3-.2.7.1.2 0 .3-.1.4-.2.1-.3 0-.4-.1s-.1-.3-.4-.3c-.1.2-.4.3-.4.6.5 0 .4.4.5.7-.6.1-.8.4-.5.9.1.2-.1.3-.2.4-.4.6-.8 1-.8 1.7s.5 1.4 1.3 1.3c.9-.1.9-.1 1.2.7 0 .1.1.2.1.3.1.2.2.4.1.6-.3.8.1 1.4.4 2 .1.2.2.3.3.4-1.3 1.4-3 2.2-5 2.2z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path9, file, 88, 8, 5295);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path9, file, 91, 12, 5532);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg3, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg3, "width", "16");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg3, "height", "16");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg3, file, 87, 4, 5223);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span2, file, 92, 4, 6427);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg3, file, 90, 8, 5456);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span2, file, 95, 8, 6680);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div6, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 86, 0, 5174);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "type", "hidden");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "name", input_name_value = /*appData*/ctx[1].name);
-      input.value = /*bookings*/ctx[3];
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(input, file, 95, 4, 6468);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div7, file, 94, 0, 6458);
-    },
-    l: function claim(nodes) {
-      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 89, 4, 5403);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div2, anchor);
@@ -14648,17 +14650,12 @@ function create_fragment(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, t16);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, span2);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(span2, t17);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t18, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div7, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, input);
       if (!mounted) {
-        dispose = [(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "click", /*click_handler*/ctx[5], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "keypress", /*keypress_handler*/ctx[6], false, false, false)];
+        dispose = [(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "click", /*click_handler*/ctx[6], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "keypress", /*keypress_handler*/ctx[7], false, false, false)];
         mounted = true;
       }
     },
-    p: function update(ctx, _ref) {
-      var _ref2 = _slicedToArray(_ref, 1),
-        dirty = _ref2[0];
+    p: function update(ctx, dirty) {
       if (dirty & /*appData*/2 && t1_value !== (t1_value = /*appData*/ctx[1].author_profile.name + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t1, t1_value);
       if (dirty & /*appData*/2 && t3_value !== (t3_value = /*appData*/ctx[1].slot.title + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t3, t3_value);
       if (dirty & /*appData*/2 && t6_value !== (t6_value = /*appData*/ctx[1].slot.duration + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t6, t6_value);
@@ -14666,12 +14663,7 @@ function create_fragment(ctx) {
       if (dirty & /*selectedDate*/1 && t12_value !== (t12_value = _util_js__WEBPACK_IMPORTED_MODULE_1__.util.toDate( /*selectedDate*/ctx[0].end, 'hh:mma') + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t12, t12_value);
       if (dirty & /*selectedDate*/1 && t14_value !== (t14_value = _util_js__WEBPACK_IMPORTED_MODULE_1__.util.toDate( /*selectedDate*/ctx[0].start, 'dddd, MMMM DD, YYYY') + "")) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t14, t14_value);
       if (dirty & /*timezone*/4) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_data_dev)(t17, /*timezone*/ctx[2]);
-      if (dirty & /*appData*/2 && input_name_value !== (input_name_value = /*appData*/ctx[1].name)) {
-        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "name", input_name_value);
-      }
     },
-    i: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
-    o: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
     d: function destroy(detaching) {
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div2);
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t2);
@@ -14680,10 +14672,83 @@ function create_fragment(ctx) {
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div5);
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t15);
       if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div6);
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t18);
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div7);
       mounted = false;
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.run_all)(dispose);
+    }
+  };
+  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
+    block: block,
+    id: create_if_block.name,
+    type: "if",
+    source: "(28:0) {#if selectedDate}",
+    ctx: ctx
+  });
+  return block;
+}
+function create_fragment(ctx) {
+  var t;
+  var div;
+  var input;
+  var input_name_value;
+  var input_value_value;
+  var if_block = /*selectedDate*/ctx[0] && create_if_block(ctx);
+  var block = {
+    c: function create() {
+      if (if_block) if_block.c();
+      t = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      input = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("input");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "type", "hidden");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "name", input_name_value = /*appData*/ctx[1].name);
+      input.value = input_value_value = JSON.stringify({
+        id: /*id*/ctx[4],
+        timezone: /*timezone*/ctx[2],
+        start_time: /*start_time*/ctx[3]
+      });
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(input, file, 99, 4, 6731);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 98, 0, 6721);
+    },
+    l: function claim(nodes) {
+      throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    },
+    m: function mount(target, anchor) {
+      if (if_block) if_block.m(target, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div, input);
+    },
+    p: function update(ctx, _ref) {
+      var _ref2 = _slicedToArray(_ref, 1),
+        dirty = _ref2[0];
+      if ( /*selectedDate*/ctx[0]) {
+        if (if_block) {
+          if_block.p(ctx, dirty);
+        } else {
+          if_block = create_if_block(ctx);
+          if_block.c();
+          if_block.m(t.parentNode, t);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
+      if (dirty & /*appData*/2 && input_name_value !== (input_name_value = /*appData*/ctx[1].name)) {
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(input, "name", input_name_value);
+      }
+      if (dirty & /*timezone, start_time*/12 && input_value_value !== (input_value_value = JSON.stringify({
+        id: /*id*/ctx[4],
+        timezone: /*timezone*/ctx[2],
+        start_time: /*start_time*/ctx[3]
+      }))) {
+        (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.prop_dev)(input, "value", input_value_value);
+      }
+    },
+    i: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
+    o: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
+    d: function destroy(detaching) {
+      if (if_block) if_block.d(detaching);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div);
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
@@ -14703,19 +14768,15 @@ function instance($$self, $$props, $$invalidate) {
   var appData = $$props.appData,
     timezone = $$props.timezone,
     selectedDate = $$props.selectedDate;
-  var start_time = selectedDate.start;
-  var bookings = JSON.stringify({
-    timezone: timezone,
-    start_time: start_time
-  });
+  var id = appData.id;
+  var start_time;
   var dispatch = (0,svelte__WEBPACK_IMPORTED_MODULE_2__.createEventDispatcher)();
   function resetSelection() {
-    var elem = document.getElementById("fcal_error_".concat(appData.form_id));
-    elem.textContent = '';
-    var parentElem = elem.previousElementSibling;
-    var childElem = parentElem.firstElementChild;
-    childElem.style.borderColor = '';
     $$invalidate(0, selectedDate = '');
+    $$invalidate(3, start_time = undefined);
+    var el = jQuery('#' + id);
+    el.removeClass('ff-el-is-error').find(':first-child').removeClass('border-danger');
+    el.nextAll('.text-danger').remove();
     dispatch('resetSelection');
   }
   $$self.$$.on_mount.push(function () {
@@ -14751,8 +14812,8 @@ function instance($$self, $$props, $$invalidate) {
       appData: appData,
       timezone: timezone,
       selectedDate: selectedDate,
+      id: id,
       start_time: start_time,
-      bookings: bookings,
       dispatch: dispatch,
       resetSelection: resetSelection
     };
@@ -14761,12 +14822,20 @@ function instance($$self, $$props, $$invalidate) {
     if ('appData' in $$props) $$invalidate(1, appData = $$props.appData);
     if ('timezone' in $$props) $$invalidate(2, timezone = $$props.timezone);
     if ('selectedDate' in $$props) $$invalidate(0, selectedDate = $$props.selectedDate);
+    if ('start_time' in $$props) $$invalidate(3, start_time = $$props.start_time);
     if ('dispatch' in $$props) dispatch = $$props.dispatch;
   };
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
   }
-  return [selectedDate, appData, timezone, bookings, resetSelection, click_handler, keypress_handler];
+  $$self.$$.update = function () {
+    if ($$self.$$.dirty & /*selectedDate*/1) {
+      $: if (selectedDate) {
+        $$invalidate(3, start_time = selectedDate.start);
+      }
+    }
+  };
+  return [selectedDate, appData, timezone, start_time, id, resetSelection, click_handler, keypress_handler];
 }
 var BookingDetails = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(BookingDetails, _SvelteComponentDev);
@@ -14961,7 +15030,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fcal_wrap {\n  display: flex;\n  flex-direction: column;\n  margin: 1rem auto;\n}\n.fcal_wrap .fcal_holder {\n  flex: 1 1 auto;\n  display: flex;\n  justify-content: center;\n  transition: all 0.22s ease-out;\n}\n.fcal_wrap .fcal_calendar_inner {\n  border: 1px solid rgba(26, 26, 26, 0.1);\n  border-radius: 8px;\n  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.08);\n  transition: all 0.22s ease-out;\n}\n.fcal_wrap .fcal_calendar_inner.fcal_form_calendar {\n  width: 100%;\n  box-shadow: none;\n}\n.fcal_wrap .fcal_calendar_inner .fcal_side {\n  width: auto;\n  transition: all 0.22s ease-out;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fcal_wrap {\n  display: flex;\n  flex-direction: column;\n  margin: 1rem auto;\n}\n.fcal_wrap .fcal_holder {\n  flex: 1 1 auto;\n  display: flex;\n  justify-content: center;\n  transition: all 0.22s ease-out;\n}\n.fcal_wrap .fcal_calendar_inner {\n  border: 1px solid rgba(26, 26, 26, 0.1);\n  border-radius: 8px;\n  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.08);\n  transition: all 0.22s ease-out;\n}\n.fcal_wrap .fcal_calendar_inner.fcal_form_calendar {\n  width: 100%;\n  box-shadow: none;\n}\n.fcal_wrap .fcal_calendar_inner .fcal_side {\n  width: auto;\n  transition: all 0.22s ease-out;\n}\n.fcal_wrap .text-danger {\n  color: #F56C6C;\n  font-size: 14px;\n  margin-top: 4px;\n  line-height: 1.7;\n}\n.fcal_wrap .border-danger {\n  border-color: #F56C6C;\n}\n.fcal_wrap .fcal_label_required::after {\n  content: \" *\";\n  color: #F56C6C;\n  margin-left: 3px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -14985,7 +15054,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fcal_calendar_inner {\n  display: flex;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_calendar_inner .fcal_side {\n  width: 45%;\n  min-width: 300px;\n  border-right: 1px solid var(--text-color-level3, rgba(26, 26, 26, 0.1));\n  transition: all 0.22s ease-out;\n  padding: 20px;\n  max-width: 360px;\n  max-height: 80vh;\n  overflow: auto;\n  min-height: 500px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar img {\n  max-width: 64px;\n  border-radius: 50%;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_name {\n  margin-top: 20px;\n  color: rgba(26, 26, 26, 0.61);\n  font-weight: 700;\n  font-size: 16px;\n  line-height: 24px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_heading {\n  margin-bottom: 0;\n  font-size: 24px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_description {\n  margin-top: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper {\n  width: auto;\n  padding: 20px;\n  margin: 0 auto;\n}\n.fcal_calendar_inner .fcal_date_wrapper h2 {\n  font-size: 26px;\n  margin: 0 0 20px;\n  padding: 0;\n}\n.fcal_calendar_inner .fcal_icon_item {\n  display: flex;\n  align-items: center;\n  color: #737373;\n  column-gap: 7px;\n}\n.fcal_calendar_inner .fcal_author .fcal_author_name {\n  margin-top: 20px;\n  margin-bottom: 20px;\n  color: rgba(26, 26, 26, 0.61);\n  font-weight: 700;\n  font-size: 16px;\n  line-height: 24px;\n}\n\n.fcal_calendar_slot_wrap {\n  display: flex;\n  column-gap: 20px;\n  align-items: flex-start;\n  position: relative;\n}\n\n.fcal_slot_items {\n  max-height: 315px;\n  overflow: auto;\n  padding-right: 20px;\n}\n.fcal_slot_items .fcal_spot_lists {\n  margin: 0;\n  padding: 0;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot {\n  display: flex;\n  justify-content: space-between;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name {\n  width: 100%;\n  text-align: center;\n  padding: 5px 7px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: rgb(0, 105, 255);\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_time {\n  line-height: normal;\n  font-size: 1rem;\n  font-weight: 700;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_remaining {\n  line-height: normal;\n  font-size: 0.8rem;\n  font-weight: 300;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name:hover {\n  padding: 4px 7px;\n  border-width: 2px;\n  color: #0169ff;\n  border-color: #0169ff;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name {\n  width: auto;\n  background-color: rgba(0, 0, 0, 0.6);\n  color: rgb(255, 255, 255);\n  border: 1px solid transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name:hover {\n  border-color: transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_confirm {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 5px 8px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.fcal_slot_picker {\n  min-width: 200px;\n}\n.fcal_slot_picker .fcal_slot_picker_header {\n  height: 38px;\n  margin-top: 0;\n  margin-bottom: 10px;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 38px;\n}\n\n.fcal_loading_dates {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 9999;\n}\n.fcal_loading_dates .fcal_loading_dates_inner {\n  display: flex;\n  height: 100%;\n  align-items: center;\n  justify-content: center;\n}\n\n.fcal_sec_heading h3 {\n  color: rgb(84, 82, 82);\n  font-size: 17px;\n  margin-bottom: 15px !important;\n}\n\n.fcal_back i.fcal_svg {\n  width: 64px;\n  height: 64px;\n  border: 1px solid rgba(0, 105, 255, 0.15);\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.fcal_back i.fcal_svg svg {\n  fill: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg:hover {\n  background-color: rgba(0, 105, 255, 0.15);\n  outline: none;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n  border-radius: 50%;\n  background-clip: padding-box;\n  color: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg.ff_svg {\n  width: 48px;\n  height: 48px;\n}\n\n.fcal_timezone_select {\n  max-width: 300px;\n  margin-top: 30px;\n}\n.fcal_timezone_select label {\n  font-weight: 500;\n  display: block;\n  margin-bottom: 5px;\n}\n\n.fcal_form_item {\n  display: block;\n  width: 100%;\n  margin-bottom: 12px;\n}\n.fcal_form_item .fcal_input_label {\n  font-weight: 500;\n  display: block;\n  width: 100%;\n  margin-bottom: 7px;\n  line-height: 100%;\n}\n.fcal_form_item .fcal_input {\n  width: 90%;\n  padding: 8px 10px;\n}\n\n.fcal_date_wrapper {\n  min-width: 40%;\n}\n\n/*\n* Booking confirmation\n */\n.fcal_booking_confirmed {\n  max-width: 700px;\n  margin: 50px auto;\n  padding: 20px;\n}\n.fcal_booking_confirmed .fcal_confirm_header {\n  text-align: center;\n}\n.fcal_booking_confirmed ul.fcal_conform_items {\n  list-style: none;\n  margin: 20px 0;\n  padding: 20px 0;\n  border-top: 2px solid rgba(26, 26, 26, 0.1);\n  border-bottom: 2px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_booking_confirmed ul.fcal_conform_items li {\n  margin-bottom: 10px;\n}\n.fcal_booking_confirmed span.fcal_slot_name_icon {\n  width: 18px;\n  height: 18px;\n  background-color: rgb(130, 71, 245);\n  border-radius: 50%;\n}\n.fcal_booking_confirmed li.fcal_conform_slot_name {\n  display: flex;\n  column-gap: 10px;\n  align-items: center;\n}\n\n.fcal_btn_submit {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 10px 15px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_btn_submit:hover {\n  background: rgb(4, 76, 177);\n}\n.fcal_btn_submit.fcal_btn_submitting {\n  background: rgba(0, 105, 255, 0.5);\n  border-color: transparent;\n  cursor: progress;\n}\n\n.fcal_back.fcal_go_back {\n  position: absolute;\n  left: 0;\n  top: 30px;\n}\n.fcal_back.fcal_go_back i.fcal_svg {\n  width: 44px;\n  height: 44px;\n}\n\n.fcal_errors {\n  padding: 10px;\n  background: #ffff95;\n}\n\n.fcal_error_text {\n  color: #F56C6C;\n  font-size: 14px;\n  margin-top: 4px;\n  line-height: 1.7;\n}\n\n/*\n* Responsive CSS\n */\n.fcal_time_picker_head {\n  display: none;\n}\n\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap {\n  flex-direction: column;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .calendar-container {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker {\n  width: 100%;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected {\n  justify-content: space-between;\n  column-gap: 15px;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected > div {\n  flex: 1;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_day_picker_head {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head {\n  display: block;\n  position: relative;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head h3 {\n  margin-bottom: 0 !important;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head p {\n  margin-top: 0;\n  color: rgb(84, 82, 82);\n}\n\n.fcal_on_mobile .fcal_slot_picker_header {\n  text-align: center;\n  border-bottom: 1px solid #c8c7c7;\n}\n.fcal_on_mobile.fcal_calendar_inner {\n  flex-direction: column;\n}\n.fcal_on_mobile.fcal_calendar_inner .fcal_side {\n  width: 100%;\n  max-width: 100%;\n  min-width: 100%;\n  border-right: none;\n  max-height: 100%;\n  min-height: auto;\n}\n.fcal_on_mobile .fcal_sec_heading {\n  text-align: center;\n}\n\n.calendar_nav svg {\n  height: 1em;\n  width: 1em;\n}\n.calendar_nav .fcal_nav_active svg {\n  color: rgb(3, 96, 230);\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fcal_calendar_inner {\n  display: flex;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_calendar_inner .fcal_side {\n  width: 45%;\n  min-width: 300px;\n  border-right: 1px solid var(--text-color-level3, rgba(26, 26, 26, 0.1));\n  transition: all 0.22s ease-out;\n  padding: 20px;\n  max-width: 360px;\n  max-height: 80vh;\n  overflow: auto;\n  min-height: 500px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar img {\n  max-width: 64px;\n  border-radius: 50%;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_name {\n  margin-top: 20px;\n  color: rgba(26, 26, 26, 0.61);\n  font-weight: 700;\n  font-size: 16px;\n  line-height: 24px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_heading {\n  margin-bottom: 0;\n  font-size: 24px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_description {\n  margin-top: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper {\n  width: auto;\n  padding: 20px;\n  margin: 0 auto;\n}\n.fcal_calendar_inner .fcal_date_wrapper h2 {\n  font-size: 26px;\n  margin: 0 0 20px;\n  padding: 0;\n}\n.fcal_calendar_inner .fcal_icon_item {\n  display: flex;\n  align-items: center;\n  color: #737373;\n  column-gap: 7px;\n}\n.fcal_calendar_inner .fcal_author .fcal_author_name {\n  margin-top: 20px;\n  margin-bottom: 20px;\n  color: rgba(26, 26, 26, 0.61);\n  font-weight: 700;\n  font-size: 16px;\n  line-height: 24px;\n}\n\n.fcal_calendar_slot_wrap {\n  display: flex;\n  column-gap: 20px;\n  align-items: flex-start;\n  position: relative;\n}\n\n.fcal_slot_items {\n  max-height: 315px;\n  overflow: auto;\n  padding-right: 20px;\n}\n.fcal_slot_items .fcal_spot_lists {\n  margin: 0;\n  padding: 0;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot {\n  display: flex;\n  justify-content: space-between;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name {\n  width: 100%;\n  text-align: center;\n  padding: 5px 7px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: rgb(0, 105, 255);\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_time {\n  line-height: normal;\n  font-size: 1rem;\n  font-weight: 700;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_remaining {\n  line-height: normal;\n  font-size: 0.8rem;\n  font-weight: 300;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name:hover {\n  padding: 4px 7px;\n  border-width: 2px;\n  color: #0169ff;\n  border-color: #0169ff;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name {\n  width: auto;\n  background-color: rgba(0, 0, 0, 0.6);\n  color: rgb(255, 255, 255);\n  border: 1px solid transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name:hover {\n  border-color: transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_confirm {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 5px 8px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.fcal_slot_picker {\n  min-width: 200px;\n}\n.fcal_slot_picker .fcal_slot_picker_header {\n  height: 38px;\n  margin-top: 0;\n  margin-bottom: 10px;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 38px;\n}\n\n.fcal_loading_dates {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 9999;\n}\n.fcal_loading_dates .fcal_loading_dates_inner {\n  display: flex;\n  height: 100%;\n  align-items: center;\n  justify-content: center;\n}\n\n.fcal_sec_heading h3 {\n  color: rgb(84, 82, 82);\n  font-size: 17px;\n  margin-bottom: 15px !important;\n}\n\n.fcal_back i.fcal_svg {\n  width: 64px;\n  height: 64px;\n  border: 1px solid rgba(0, 105, 255, 0.15);\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.fcal_back i.fcal_svg svg {\n  fill: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg:hover {\n  background-color: rgba(0, 105, 255, 0.15);\n  outline: none;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n  border-radius: 50%;\n  background-clip: padding-box;\n  color: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg.ff_svg {\n  width: 48px;\n  height: 48px;\n}\n\n.fcal_timezone_select {\n  max-width: 300px;\n  margin-top: 30px;\n}\n.fcal_timezone_select label {\n  font-weight: 500;\n  display: block;\n  margin-bottom: 5px;\n}\n\n.fcal_form_item {\n  display: block;\n  width: 100%;\n  margin-bottom: 12px;\n}\n.fcal_form_item .fcal_input_label {\n  font-weight: 500;\n  display: block;\n  width: 100%;\n  margin-bottom: 7px;\n  line-height: 100%;\n}\n.fcal_form_item .fcal_input {\n  width: 90%;\n  padding: 8px 10px;\n}\n\n.fcal_date_wrapper {\n  min-width: 40%;\n}\n\n/*\n* Booking confirmation\n */\n.fcal_booking_confirmed {\n  max-width: 700px;\n  margin: 50px auto;\n  padding: 20px;\n}\n.fcal_booking_confirmed .fcal_confirm_header {\n  text-align: center;\n}\n.fcal_booking_confirmed ul.fcal_conform_items {\n  list-style: none;\n  margin: 20px 0;\n  padding: 20px 0;\n  border-top: 2px solid rgba(26, 26, 26, 0.1);\n  border-bottom: 2px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_booking_confirmed ul.fcal_conform_items li {\n  margin-bottom: 10px;\n}\n.fcal_booking_confirmed span.fcal_slot_name_icon {\n  width: 18px;\n  height: 18px;\n  background-color: rgb(130, 71, 245);\n  border-radius: 50%;\n}\n.fcal_booking_confirmed li.fcal_conform_slot_name {\n  display: flex;\n  column-gap: 10px;\n  align-items: center;\n}\n\n.fcal_btn_submit {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 10px 15px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_btn_submit:hover {\n  background: rgb(4, 76, 177);\n}\n.fcal_btn_submit.fcal_btn_submitting {\n  background: rgba(0, 105, 255, 0.5);\n  border-color: transparent;\n  cursor: progress;\n}\n\n.fcal_back.fcal_go_back {\n  position: absolute;\n  left: 0;\n  top: 30px;\n}\n.fcal_back.fcal_go_back i.fcal_svg {\n  width: 44px;\n  height: 44px;\n}\n\n.fcal_errors {\n  padding: 10px;\n  background: #ffff95;\n}\n\n/*\n* Responsive CSS\n */\n.fcal_time_picker_head {\n  display: none;\n}\n\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap {\n  flex-direction: column;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .calendar-container {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker {\n  width: 100%;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected {\n  justify-content: space-between;\n  column-gap: 15px;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected > div {\n  flex: 1;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_day_picker_head {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head {\n  display: block;\n  position: relative;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head h3 {\n  margin-bottom: 0 !important;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head p {\n  margin-top: 0;\n  color: rgb(84, 82, 82);\n}\n\n.fcal_on_mobile .fcal_slot_picker_header {\n  text-align: center;\n  border-bottom: 1px solid #c8c7c7;\n}\n.fcal_on_mobile.fcal_calendar_inner {\n  flex-direction: column;\n}\n.fcal_on_mobile.fcal_calendar_inner .fcal_side {\n  width: 100%;\n  max-width: 100%;\n  min-width: 100%;\n  border-right: none;\n  max-height: 100%;\n  min-height: auto;\n}\n.fcal_on_mobile .fcal_sec_heading {\n  text-align: center;\n}\n\n.calendar_nav svg {\n  height: 1em;\n  width: 1em;\n}\n.calendar_nav .fcal_nav_active svg {\n  color: rgb(3, 96, 230);\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

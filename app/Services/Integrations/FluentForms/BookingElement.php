@@ -104,7 +104,7 @@ class BookingElement extends BaseFieldManager
      */
     public function render($data, $form)
     {
-        $form_id = $this->makeElementId($data, $form);
+        $id = $this->makeElementId($data, $form);
 
         $slot_id = (int)Arr::get($data, 'settings.slot_id');
         
@@ -128,7 +128,7 @@ class BookingElement extends BaseFieldManager
 
         $slot->description = wpautop($slot->description);
 
-        $label = Arr::get($data, 'settings.label');
+        $settings = Arr::get($data, 'settings');
 
         $name = Arr::get($data, 'attributes.name');
 
@@ -138,21 +138,21 @@ class BookingElement extends BaseFieldManager
             App::getInstance('config')->get('app.version'), true
         );
 
-        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $form_id, [
+        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $id, [
             'name'           => $name,
             'slot'           => $slot,
             'calendar'       => $calendar,
-            'label'          => $label,
+            'settings'       => $settings,
             'author_profile' => $slot->getAuthorProfile(true),
             'disable_author' => true,
         ]);
 
-        wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars', 
+        wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars',
             (new FrontEndHandler())->getGlobalVars()
         );
 
         App::make('view')->render('public.fluentform.calendar', [
-            'form_id'       => $form_id,
+            'form_id'       => $id,
             'calendar_app'  => 'fluentform_calendar_app'
         ]);
     }
@@ -166,9 +166,9 @@ class BookingElement extends BaseFieldManager
         $startTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
 
         $booking = Booking::select('id')
-        ->where('slot_id', $slot_id)
-        ->where('start_time', $startTime)
-        ->first();
+            ->where('slot_id', $slot_id)
+            ->where('start_time', $startTime)
+            ->first();
 
         if (!$booking) {
             return '';
