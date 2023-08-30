@@ -26,4 +26,21 @@
       transition: all .22s ease-out;
     }
   }
+
+  .text-danger {
+    color: #F56C6C;
+    font-size: 14px;
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+
+  .border-danger {
+    border-color: #F56C6C;
+  }
+
+  .fcal_label_required::after {
+    content: " *";
+    color: #F56C6C;
+    margin-left: 3px;
+  }
 }

@@ -15,7 +15,7 @@ if (calendarApps.length) {
             elem.innerHTML = '';
             const appData = window['fcal_public_vars_' + formId];
             appData.is_fluentform = true;
-            appData.form_id = formId;
+            appData.id = formId;
 
             new BookingApp({
                 target: elem,

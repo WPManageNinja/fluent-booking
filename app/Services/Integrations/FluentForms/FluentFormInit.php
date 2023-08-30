@@ -13,30 +13,18 @@ use FluentCalendar\App\Services\Integrations\FluentForms\BookingElement;
 
 class FluentFormInit 
 {
+    private $bookingsData = [];
+
     public function init()
     {
         if (defined('FLUENTFORM')) {
             new BookingElement();
-            add_action('fluentform/after_form_validation', [$this, 'handleBooking'], 10, 3);       
+            add_action('fluentform/before_form_validation', [$this, 'handleValidation'], 10, 3);
+            add_action('fluentform/before_insert_submission', [$this, 'handleBooking'], 10);       
         }
     }
 
-    private function makeElementId($data, $formId)
-    {
-        $instance = \FluentForm\App\Helpers\Helper::$formInstance;
-
-        $name = str_replace(['[', ']', ' '], '_', $data['attributes']['name']);
-
-        $suffix = esc_attr($formId);
-        if($instance > 1) {
-            $suffix = $suffix.'_'.$instance;
-        }
-        $suffix .= '_'.$name;
-
-        return 'ff_' . esc_attr($suffix);
-    }
-
-    private function prepareBookingData($fields, $formData, $formId)
+    private function prepareData($fields, $formData)
     {
         $email     = Arr::get($formData, 'email');
         $firstName = Arr::get($formData, 'names.first_name');
@@ -49,34 +37,29 @@ class FluentFormInit
         if (!$name) {
             $name = Helper::getUserDisplayName();
         }
-        
-        $bookingsData = [];
+
         foreach ($fields as $key => $value) {
             if (preg_match('/fcal_booking(_\d+)?/', $key, $matches)) {
                 $match     = $matches[0];
                 $data      = $formData[$match];
-                $elementId = $this->makeElementId(Arr::get($value, 'raw'), $formId);
 
                 $bookingData = [
                     'email'      => $email,
                     'name'       => $name,
                     'rules'      => Arr::get($value, 'rules'),
-                    'slot_id'    => Arr::get($value, 'raw.settings.slot_id'),
-                    'element_id' => $elementId
+                    'slot_id'    => Arr::get($value, 'raw.settings.slot_id')
                 ];
 
                 $data = json_decode($data, true);
 
-                $bookingsData[$match] = $bookingsData[$match] ?? [];
+                $this->bookingsData[$match] = $this->bookingsData[$match] ?? [];
                 
-                $bookingsData[$match] = array_merge($bookingData, (array)$data);
+                $this->bookingsData[$match] = array_merge($bookingData, (array)$data);
             }
         }
-
-        return $bookingsData;
     }
 
-    private function handleValidation($data = [])
+    private function validateBooking($data = [])
     {
         $app = App::getInstance();
 
@@ -113,8 +96,8 @@ class FluentFormInit
 
         if ($validator->validate()->fails()) {
             wp_send_json([
-                'message' => 'Please fill up the required data',
-                'errors'  => $validator->errors()
+                'id'       => $data['id'],
+                'messages' => $validator->errors()
             ], 422);
         }
 
@@ -153,48 +136,35 @@ class FluentFormInit
         BookingService::createBooking($bookingData, $calendarSlot);
     }
 
-    // Applied Temporary Solution for Updating Errors to Svelte
-    private function setErrorText($formId, $message)
+    public function handleBooking()
     {
-        ?>
-            <script>
-                jQuery(document).ready(function($) {
-                    const elem = $('#fcal_error_ff_3_fcal_booking');
-                    elem.text('<?php echo esc_js($message); ?>');
-                    const parentElem = elem.prev();
-                    const childElem  = parentElem.find(':first-child');
-                    childElem.eq(0).css('border-color', '#F56C6C');
-                });
-            </script>
-        <?php
-    }
+        $bookings = $this->bookingsData;
 
-    public function handleBooking($fields, $formData, $formId)
-    {
-        $bookingsData = $this->prepareBookingData($fields, $formData, $formId);
-
-        $hasError = false;
-        foreach ($bookingsData as $bookingData) {
+        foreach ($bookings as $data) {
             try {
-                $this->handleValidation($bookingData);
-            } catch (\Exception $e) {
-                $hasError = true;
-                $this->setErrorText($bookingData['element_id'], $e->getMessage());
-            }
-        }
-
-        if ($hasError) {
-            wp_send_json([
-                'errors' => 'Invalid Request'
-            ], 422);
-        }
-
-        foreach ($bookingsData as $bookingData) {
-            try {
-                $this->bookSlot($bookingData);
+                $this->bookSlot($data);
             } catch (\Exception $e) {
                 wp_send_json([
                     $e->getMessage()
+                ], $e->getCode());
+            }
+        }
+    }
+
+    public function handleValidation($fields, $formData)
+    {
+        $this->prepareData($fields, $formData);
+
+        $bookings = $this->bookingsData;
+
+        $hasError = false;
+        foreach ($bookings as $data) {
+            try {
+                $this->validateBooking($data);
+            } catch (\Exception $e) {
+                wp_send_json([
+                    'id'       => $data['id'],
+                    'messages' => $e->getMessage(),
                 ], $e->getCode());
             }
         }

@@ -213,7 +213,9 @@ class TimeSlotService
             $remaining = 0;
 
             if ($this->calendarSlot->id == $booking->slot_id) {
-                $remaining = $maxBooking - $booked;
+                if ($maxBooking > $booked) {
+                    $remaining = $maxBooking - $booked;
+                }
             }
 
             $books[$date][] = [

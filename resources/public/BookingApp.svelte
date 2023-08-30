@@ -8,7 +8,7 @@
     export let appData;
 
     const slot = appData.slot;
-    const label = appData.label;
+    const settings = appData.settings;
     const author = appData.author_profile;
     const isFluentform = appData.is_fluentform;
 
@@ -65,7 +65,7 @@
 
 </script>
 <div class="fcal_wrap">
-    <div class="fcal_holder">
+    <div class="fcal_holder" id={appData.id}>
         <div bind:this={component} class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
             {#if isBookingDone}
                 <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
@@ -175,21 +175,22 @@
                         {#if !selectedDate}
                             <DayPickerApp 
                                 {slot}
-                                {label}
+                                {settings}
                                 bind:timezone={timezone}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}} 
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
                                 on:timezoneChanged={(e) => {resetSelection()}}
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
-                        { :else if isFluentform }
+                        {/if}
+                        {#if isFluentform }
                             <BookingDetails
                                 {appData}
                                 {timezone}
                                 {selectedDate}
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
-                        { :else }
+                        { :else if selectedDate}
                             <h2>Enter Details</h2>
                             <BookingForm 
                                 {slot}
@@ -204,7 +205,4 @@
             {/if}
         </div>
     </div>
-    {#if isFluentform}
-        <div class="fcal_error_text" id={`fcal_error_${appData.form_id}`}></div>
-    {/if}
 </div>
