@@ -1,0 +1,74 @@
+<template>
+    <div class="fcal_input_groups">
+        <el-form-item label="Select Guest Email Field">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.email_field" placeholder="Select Guest Email Field">
+                <el-option
+                    v-for="(item, itemName) in dependencies"
+                    :key="itemName"
+                    :label="item"
+                    :value="itemName">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="Select Guest Name Field">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.name_field" placeholder="Select Guest Name Field">
+                <el-option
+                    v-for="(item, itemName) in dependencies"
+                    :key="itemName"
+                    :label="item"
+                    :value="itemName">
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </div>
+</template>
+<script type="text/babel">
+export default {
+    name: 'FluentCalNameEmailChoiceComponent',
+    props: ['listItem', 'editItem', 'form_items'],
+    computed: {
+        dependencies() {
+            const acceptedElements = ['input_text', 'input_name', 'input_email', 'input_hidden'];
+            let dependencies = {};
+            this.mapElements(this.form_items, (formItem) => {
+                if(acceptedElements.indexOf(formItem.element) == -1) {
+                    return;
+                }
+                dependencies[formItem.attributes.name] = formItem.settings.admin_field_label || formItem.settings.label || formItem.attributes.name;
+            });
+
+            return dependencies;
+        }
+    },
+    data() {
+        return {
+            appReady: false,
+        }
+    },
+    methods: {
+        mapElements(allElements, callback) {
+            _ff.map(allElements, (existingItem) => {
+                if (existingItem.element != 'container') {
+                    callback(existingItem);
+                }
+                if (existingItem.element == 'container') {
+                    _ff.map(existingItem.columns, (column) => {
+                        this.mapElements(column.fields, callback);
+                    });
+                }
+            });
+        }
+    },
+    mounted() {
+        if(!this.editItem.settings.cal_guest_fields) {
+            this.editItem.settings.cal_guest_fields = {
+                email_field: '',
+                name_field: ''
+            };
+        }
+        this.$nextTick(() => {
+            this.appReady = true;
+        });
+    }
+}
+</script>
