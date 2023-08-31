@@ -19,33 +19,49 @@ class FluentFormInit
     {
         if (defined('FLUENTFORM')) {
             new BookingElement();
-            add_action('fluentform/before_form_validation', [$this, 'handleValidation'], 10, 3);
+            add_action('fluentform/before_form_validation', [$this, 'handleValidation'], 10, 2);
             add_action('fluentform/before_insert_submission', [$this, 'handleBooking'], 10);       
         }
     }
 
+    private function getName($value)
+    {
+        if (is_array($value) || is_object($value)) {
+            $values = array_filter(array_values((array) $value));
+            $value  = Helper::fcalImplodeRecursive(' ', $values);
+        }
+
+        if (!$value) {
+            $value = Helper::getUserDisplayName();
+        }
+
+        return $value;
+    }
+
+    private function getEmail($value)
+    {
+        if (!$value) {
+            return Helper::getUserEmail();
+        }
+        return $value;
+    }
+
     private function prepareData($fields, $formData)
     {
-        $email     = Arr::get($formData, 'email');
-        $firstName = Arr::get($formData, 'names.first_name');
-        $lastName  = Arr::get($formData, 'names.last_name');
-        $name      = trim($firstName.' '.$lastName);
-
-        if (!$email) {
-            $email = Helper::getUserEmail();
-        }
-        if (!$name) {
-            $name = Helper::getUserDisplayName();
-        }
-
-        foreach ($fields as $key => $value) {
+        foreach ($fields as $key => $value)
+        {
             if (preg_match('/fcal_booking(_\d+)?/', $key, $matches)) {
-                $match     = $matches[0];
-                $data      = $formData[$match];
+                $match = $matches[0];
+                $data  = Arr::get($formData, $match);
+
+                $nameField  = Arr::get($value, 'raw.settings.cal_guest_fields.name_field');
+                $emailField = Arr::get($value, 'raw.settings.cal_guest_fields.email_field');
+                $nameValue  = Arr::get($formData, $nameField);
+                $emailValue = Arr::get($formData, $emailField);
 
                 $bookingData = [
-                    'email'      => $email,
-                    'name'       => $name,
+                    'email'      => $this->getEmail($emailValue),
+                    'name'       => $this->getName($nameValue),
                     'rules'      => Arr::get($value, 'rules'),
                     'slot_id'    => Arr::get($value, 'raw.settings.slot_id')
                 ];
@@ -59,13 +75,14 @@ class FluentFormInit
         }
     }
 
-    private function validateBooking($data = [])
+    private function validateBooking($key, $data = [])
     {
         $app = App::getInstance();
 
         $isRequired = Arr::get($data, 'rules.required.value');
 
         if (!$isRequired && !isset($data['start_time'])) {
+            unset($this->bookingsData[$key]);
             return;
         }
         
@@ -80,24 +97,18 @@ class FluentFormInit
         }
 
         $rules = [
-            'name'       => 'required',
             'email'      => 'required|email',
             'timezone'   => 'required',
             'start_time' => 'required'
         ];
-
-        $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
-
-        if ($isPhoneRequired) {
-            $rules['phone'] = 'required';
-        }
 
         $validator = $app->validator->make($data, $rules, []);
 
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'id'       => $data['id'],
-                'messages' => $validator->errors()
+                'messages' => $validator->errors(),
+                'errors'   => 'Booking Failed'
             ], 422);
         }
 
@@ -116,8 +127,6 @@ class FluentFormInit
     {
         $calendarSlot = CalendarSlot::find($data['slot_id']);
 
-        $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
-
         $startDateTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
 
         $bookingData = [
@@ -128,10 +137,6 @@ class FluentFormInit
             'source'           => 'fluentform',
             'ip_address'       => Helper::getIp()
         ];
-
-        if ($isPhoneRequired) {
-            $bookingData['phone'] = sanitize_text_field($data['phone']);
-        }
 
         BookingService::createBooking($bookingData, $calendarSlot);
     }
@@ -157,14 +162,14 @@ class FluentFormInit
 
         $bookings = $this->bookingsData;
 
-        $hasError = false;
-        foreach ($bookings as $data) {
+        foreach ($bookings as $key => $data) {
             try {
-                $this->validateBooking($data);
+                $this->validateBooking($key, $data);
             } catch (\Exception $e) {
                 wp_send_json([
                     'id'       => $data['id'],
                     'messages' => $e->getMessage(),
+                    'errors'   => 'Booking Failed'
                 ], $e->getCode());
             }
         }

@@ -16,11 +16,13 @@
     function resetSelection() {
         selectedDate = '';
         start_time = undefined;
+
         const el = jQuery('#' + id);
         el.removeClass('ff-el-is-error')
           .find(':first-child')
           .removeClass('border-danger');
         el.nextAll('.text-danger').remove();
+        
         dispatch('resetSelection');
     }
 </script>

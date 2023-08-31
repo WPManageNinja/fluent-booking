@@ -60,7 +60,7 @@ export default {
         }
     },
     mounted() {
-        if(!this.editItem.settings.cal_guest_fields) {
+        if(!this.editItem?.settings?.cal_guest_fields) {
             this.editItem.settings.cal_guest_fields = {
                 email_field: '',
                 name_field: ''
