@@ -117,7 +117,7 @@ class BookingElement extends BaseFieldManager
      */
     public function render($data, $form)
     {
-        $id = $this->makeElementId($data, $form);
+        $element_id = $this->makeElementId($data, $form);
 
         $slot_id = (int)Arr::get($data, 'settings.slot_id');
         
@@ -151,7 +151,8 @@ class BookingElement extends BaseFieldManager
             App::getInstance('config')->get('app.version'), true
         );
 
-        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $id, [
+        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, [
+            'form_id'        => $form->id,
             'name'           => $name,
             'slot'           => $slot,
             'calendar'       => $calendar,
@@ -165,7 +166,7 @@ class BookingElement extends BaseFieldManager
         );
 
         App::make('view')->render('public.fluentform.calendar', [
-            'form_id'       => $id,
+            'element_id'    => $element_id,
             'calendar_app'  => 'fluentform_calendar_app'
         ]);
     }
@@ -174,24 +175,30 @@ class BookingElement extends BaseFieldManager
     {
         $data = json_decode($response, true);
 
-        $slot_id = Arr::get($field, 'raw.settings.slot_id');
+        $slot_id   = Arr::get($field, 'raw.settings.slot_id');
+        $startTime = Arr::get($data, 'start_time');
+        $timezone  = Arr::get($data, 'timezone');
+
+        if (!$startTime || !$timezone) {
+            return '';
+        }
         
-        $startTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
+        $startTimeUtc = DateTimeHelper::convertToUtc($startTime, $timezone);
 
         $booking = Booking::select('id')
             ->where('slot_id', $slot_id)
-            ->where('start_time', $startTime)
+            ->where('start_time', $startTimeUtc)
             ->first();
 
         if (!$booking) {
             return '';
         }
-
-        $date = date('j M Y, g:i A', strtotime($data['start_time']));
+        
+        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $timezone, 'j M Y, g:i A');
 
         $url = admin_url('admin.php?page=fluent-calendar#/scheduled-events?spot_id=' . $booking->id);
 
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($date) . '</a>';
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($formattedTime) . '</a>';
         
         return $link;
     }

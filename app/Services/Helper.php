@@ -862,6 +862,32 @@ class Helper
         return apply_filters('fluent_calendar/backend_sanitized_values', $inputs, $originalValues);
     }
 
+    /**
+     * Recursively implode a multi-dimentional array
+     *
+     * @param string $glue
+     * @param array  $array
+     *
+     * @return string
+     */
+    public static function fcalImplodeRecursive($glue, array $array)
+    {
+        $fn = function ($glue, array $array) use (&$fn) {
+            $result = '';
+            foreach ($array as $item) {
+                if (is_array($item)) {
+                    $result .= $fn($glue, $item);
+                } else {
+                    $result .= $glue . $item;
+                }
+            }
+
+            return $result;
+        };
+
+        return ltrim($fn($glue, $array), $glue);
+    }
+
     public static function getEventTypesSchema()
     {
         return apply_filters('fluent_calendar/event_types_schema', [
