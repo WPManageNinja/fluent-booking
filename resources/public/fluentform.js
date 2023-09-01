@@ -30,8 +30,8 @@ const showErrorMessages = function (res) {
     });
 }
 
-const scrollToFirstError = function (formId, animDuration) {
-    const firstError = $('#fluentform_' + formId).find('.ff-el-is-error').first();
+const scrollToFirstError = function (formInstance, animDuration) {
+    const firstError = $('.' + formInstance).find('.ff-el-is-error').first();
     if (firstError.length) {
         $('html, body').delay(animDuration).animate({
             scrollTop: firstError.offset().top - (!!$('#wpadminbar') ? 32 : 0) - 20
@@ -39,14 +39,13 @@ const scrollToFirstError = function (formId, animDuration) {
     }
 };
 
-const handleSubmissionFailed = function (formId) {
-    $('#fluentform_' + formId).on('fluentform_submission_failed', function(event, data) {
-        $('#fluentform_' + formId + ' div.border-danger').removeClass('border-danger');
+const handleSubmissionFailed = function (formInstance) {
+    $('.' + formInstance).on('fluentform_submission_failed', function(event, data) {
+        $('.' + formInstance + ' div.border-danger').removeClass('border-danger');
         const response = data.response;
-        console.log(response);
         if (response.responseJSON.id) {
             showErrorMessages(response.responseJSON);
-            scrollToFirstError(formId, 150);
+            scrollToFirstError(formInstance, 150);
         }
     });
 }
@@ -75,7 +74,7 @@ if (calendarApps.length) {
             elem.classList.remove('fcal_loading');
             elem.dataset.app_booted = true;
             
-            handleSubmissionFailed(appData.form_id);
+            handleSubmissionFailed(appData.form_instance);
         }
     });
 }

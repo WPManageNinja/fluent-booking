@@ -197,7 +197,13 @@ export default {
     computed: {
         guestName() {
             return (spot, index) => {
-                return spot.first_name + ' ' + spot.last_name + ' (guest #' + index + ')';
+                let guestName = '';
+                if (spot.first_name && spot.last_name) {
+                    guestName = spot.first_name + ' ' + spot.last_name + ' - ';
+                } else if (spot.first_name) {
+                    guestName = spot.first_name + ' - ';
+                }
+                return guestName + ' Guest #' + index;
             }
         }
     },
