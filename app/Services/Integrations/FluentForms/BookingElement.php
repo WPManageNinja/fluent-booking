@@ -152,11 +152,11 @@ class BookingElement extends BaseFieldManager
         );
 
         wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, [
-            'form_id'        => $form->id,
             'name'           => $name,
             'slot'           => $slot,
             'calendar'       => $calendar,
             'settings'       => $settings,
+            'form_instance'  => $form->instance_css_class,
             'author_profile' => $slot->getAuthorProfile(true),
             'disable_author' => true,
         ]);
@@ -185,7 +185,7 @@ class BookingElement extends BaseFieldManager
         
         $startTimeUtc = DateTimeHelper::convertToUtc($startTime, $timezone);
 
-        $booking = Booking::select('id')
+        $booking = Booking::with('calendar')
             ->where('slot_id', $slot_id)
             ->where('start_time', $startTimeUtc)
             ->first();
@@ -194,7 +194,7 @@ class BookingElement extends BaseFieldManager
             return '';
         }
         
-        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $timezone, 'j M Y, g:i A');
+        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $booking->calendar->author_timezone, 'j M Y, g:i A');
 
         $url = admin_url('admin.php?page=fluent-calendar#/scheduled-events?spot_id=' . $booking->id);
 
