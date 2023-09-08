@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Services;
 use FluentCalendar\App\Models\Calendar;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Models\Meta;
+use FluentCalendar\App\Models\BookingMeta;
 use FluentCalendar\Framework\Support\Arr;
 
 class Helper
@@ -692,6 +693,43 @@ class Helper
         return Meta::where('object_type', $group)
             ->where('object_id', $objectId)
             ->where('key', $key)
+            ->delete();
+    }
+
+    public static function getBookingMeta($eventId, $metaKey, $withModel = false)
+    {
+        $bookingMeta = BookingMeta::where('event_id', $eventId)
+            ->where('meta_key', $metaKey)
+            ->first();
+
+        if ($bookingMeta) {
+            return $withModel ? $bookingMeta : $bookingMeta->value;
+        }
+
+        return null;
+    }
+
+    public static function updateBookingMeta($eventId, $metaKey, $value)
+    {
+        $bookingMeta = self::getBookingMeta($eventId, $metaKey, true);
+
+        if ($bookingMeta) {
+            $bookingMeta->value = $value;
+            $bookingMeta->save();
+            return $bookingMeta;
+        }
+
+        return BookingMeta::create([
+            'event_id'    => $eventId,
+            'meta_key'    => $metaKey,
+            'value'       => $value
+        ]);
+    }
+
+    public static function deleteBookingMeta($eventId, $metaKey)
+    {
+        return BookingMeta::where('event_id', $eventId)
+            ->where('meta_key', $metaKey)
             ->delete();
     }
 

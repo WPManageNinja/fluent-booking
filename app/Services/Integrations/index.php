@@ -6,4 +6,5 @@ add_action('init', function () {
         (new \FluentCalendar\App\Services\Integrations\FluentForms\FluentFormInit())->init();
     }
 
+    (new \FluentCalendar\App\Services\Integrations\GoogleCalendar\GoogleCalendar());
 });

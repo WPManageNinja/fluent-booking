@@ -44,3 +44,15 @@ $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) 
     $router->post('slots/{slot_id}/schedule', 'BookingController@bookSlot')->int('slot_id');
     $router->get('public_vars', 'WidgetController@getPublicVars');
 });
+
+$router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'IntegrationController@index');
+    $router->post('/', 'IntegrationController@update');
+    $router->post('disconnect', 'IntegrationController@revoke');
+
+    /* Integration Settings */
+    $router->prefix('{settings}')->group(function ($router) {
+        $router->get('/', 'IntegrationSettingsController@index');
+        $router->post('/', 'IntegrationSettingsController@update');
+    });
+});
