@@ -12,6 +12,7 @@ return array(
     'FluentCalendar\\Database\\Migrations\\BookingActivityMigrator' => $baseDir . '/database/Migrations/BookingActivityMigrator.php',
     'FluentCalendar\\Database\\Migrations\\BookingHostMigrator' => $baseDir . '/database/Migrations/BookingHostMigrator.php',
     'FluentCalendar\\Database\\Migrations\\BookingMigrator' => $baseDir . '/database/Migrations/BookingMigrator.php',
+    'FluentCalendar\\Database\\Migrations\\BookingMetaMigrator' => $baseDir . '/database/Migrations/BookingMetaMigrator.php',
     'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',
     'FluentCalendar\\Database\\Migrations\\CalendarSlotsMigrator' => $baseDir . '/database/Migrations/CalendarSlotsMigrator.php',
     'FluentCalendar\\Database\\Migrations\\MetaMigrator' => $baseDir . '/database/Migrations/MetaMigrator.php',

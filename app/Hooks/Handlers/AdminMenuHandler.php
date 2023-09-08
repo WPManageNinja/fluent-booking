@@ -61,7 +61,17 @@ class AdminMenuHandler
                     'key'       => 'scheduled_events',
                     'label'     => __('Scheduled Meetings', 'fluent-calendar'),
                     'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
-                ]
+                ],
+                [
+                    'key'       => 'configurations',
+                    'label'     => __('Configurations', 'fluent-calendar'),
+                    'permalink' => $baseUrl.'configurations'
+                ],
+                [
+                    'key'       => 'integrations',
+                    'label'     => __('Integrations', 'fluent-calendar'),
+                    'permalink' => $baseUrl.'integrations'
+                ],
             ];
         }
 
@@ -138,6 +148,7 @@ class AdminMenuHandler
 
         return apply_filters('fluent_calendar/admin_vars', [
             'slug'  => $slug = $app->config->get('app.slug'),
+            'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
             'brand_logo'  => $this->getMenuIcon(),
