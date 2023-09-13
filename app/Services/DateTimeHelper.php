@@ -82,6 +82,19 @@ class DateTimeHelper
         return $dateTime->format($format);
     }
 
+    public static function convertToIso($dateTime, $fromTimeZone = 'UTC')
+    {
+        $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
+        return $dateTime->format('Y-m-d\TH:i:s\Z');
+    }
+
+    public static function convertFromIso($dateTime, $toTimeZone = 'UTC')
+    {
+        $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
+        $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
+        return $dateTime->format('Y-m-d H:i:s');
+    }
+
     public static function getTimestamp($timezone = 'UTC')
     {
         $dateTime = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC'));

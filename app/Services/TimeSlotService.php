@@ -226,7 +226,7 @@ class TimeSlotService
             ];
         }
 
-        return $books;
+        return apply_filters('fluent_calendar/booked_events', $books, $this->calendarSlot, $dateRange, $toTimeZone);
     }
 
     protected function getWeekDaySlots()

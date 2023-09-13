@@ -5,6 +5,7 @@ namespace FluentCalendar\App\Services\Integrations\GoogleCalendar;
 use Exception;
 use FluentCalendar\Framework\Support\Arr;
 use FluentCalendar\App\Models\CalendarSlot;
+use FluentCalendar\App\Services\DateTimeHelper;
 use FluentCalendar\App\Services\Integrations\IntegrationManager;
 use FluentCalendar\App\Services\Integrations\GoogleCalendar\Client;
 use FluentCalendar\Framework\Validator\ValidationException;
@@ -40,6 +41,7 @@ class GoogleCalendar extends IntegrationManager
             add_action('template_redirect', [$this, 'init']);
             add_action('fluent_calendar/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
             add_action('fluent_calendar/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
+            add_filter('fluent_calendar/booked_events', [$this, 'getBookedEvents'], 10, 4);
         }
     }
 
@@ -75,13 +77,6 @@ class GoogleCalendar extends IntegrationManager
         $authData['expires_in'] = $authData['expires_in'] + time();
 
         $this->updateAuthDetails($authData);
-    }
-
-    public function isConnected()
-    {
-        $accessToken = $this->getAccessToken();
-
-        return $accessToken ? true : false;
     }
 
     public function enqueueAssets()
@@ -126,6 +121,22 @@ class GoogleCalendar extends IntegrationManager
         }
 
         return $tokens['access_token'];
+    }
+
+    public function isConnected()
+    {
+        $accessToken = $this->getAccessToken();
+
+        return $accessToken ? true : false;
+    }
+
+    protected function getHostEmail($hostId)
+    {
+        $user = get_user_by('id', $hostId);
+        if (!$user) {
+            return '';
+        }
+        return $user->user_email;
     }
 
     public function getClientSettings()
@@ -230,14 +241,14 @@ class GoogleCalendar extends IntegrationManager
 
     public function updateEvent($booking, $calendarSlot = null)
     {
-        $integrationSettings = $this->getIntegrationDetails();
+        if (!$calendarSlot) {
+            $calendarSlot = CalendarSlot::findOrFail($booking->slot_id);
+        }
+
+        $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
 
         if (!Arr::isTrue($integrationSettings, 'add_to_calendar')) {
             return;
-        }
-
-        if (!$calendarSlot) {
-            $calendarSlot = CalendarSlot::findOrFail($booking->slot_id);
         }
 
         $accessToken = $this->getAccessToken($calendarSlot->user_id);
@@ -248,14 +259,16 @@ class GoogleCalendar extends IntegrationManager
         
         $header = static::getStandardHeader($accessToken);
 
+        // If event is already created
         $eventDetails = $this->getResponse($booking->event_id);
-
-        $eventId     = Arr::get($eventDetails, 'id');
-        $meetingLink = Arr::get($eventDetails, 'hangoutLink');
-
+        $eventId      = Arr::get($eventDetails, 'id');
+        $meetingLink  = Arr::get($eventDetails, 'hangoutLink');
+        
         $method = $eventId ? 'PUT' : 'POST';
         
         $url = $this->client->calendarEvent . $eventId;
+
+        $hostEmail = $this->getHostEmail($calendarSlot->user_id);
 
         $locationType = Arr::get($booking, 'location_details.location_type');
 
@@ -266,15 +279,21 @@ class GoogleCalendar extends IntegrationManager
             'location'    => $location,
             'description' => $booking->message,
             'attendees'   => [
-                ['email' => $booking->email]
+                ['email' => $hostEmail],
+                ['email' => $booking->email],
+            ],
+            'extendedProperties' => [
+                'shared' => [
+                    'created_by' => 'fluent_calendar',
+                ],
             ],
         ];
         $events['start'] = [
-            'dateTime' => date(DATE_ISO8601, strtotime($booking->start_time)),
+            'dateTime' => DateTimeHelper::convertToIso($booking->start_time),
             'timeZone' => $booking->person_time_zone,
         ];
         $events['end'] = [
-            'dateTime' => date(DATE_ISO8601, strtotime($booking->end_time)),
+            'dateTime' => DateTimeHelper::convertToIso($booking->end_time),
             'timeZone' => $booking->person_time_zone,
         ];
 
@@ -301,7 +320,7 @@ class GoogleCalendar extends IntegrationManager
 
             $url .= '?' . $query;
         }
-
+        
         $response = static::makeRequest($url, $events, $method, $header);
 
         if (is_wp_error($response)) {
@@ -309,5 +328,65 @@ class GoogleCalendar extends IntegrationManager
         }
 
         $this->updateResponse($booking->event_id, $response);
+    }
+
+    public function getBookedEvents($books, $calendarSlot, $dateRanges, $timeZone)
+    {
+        $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
+
+        if (!Arr::isTrue($integrationSettings, 'check_conflict')) {
+            return $books;
+        }
+
+        $accessToken = $this->getAccessToken($calendarSlot->user_id);
+        
+        if (!$accessToken) {
+            return $books;
+        }
+        
+        $header = static::getStandardHeader($accessToken);
+        
+        $startRange = DateTimeHelper::convertToIso($dateRanges[0]);
+        $endRange   = DateTimeHelper::convertToIso($dateRanges[1]);
+
+        $query = [
+            'timeMin' => $startRange,
+            'timeMax' => $endRange,
+        ];
+
+        $url = $this->client->calendarEvent . '?' . http_build_query($query);
+
+        $response = static::makeRequest($url, '', 'GET', $header);
+
+        if (is_wp_error($response)) {
+            return $books;
+        }
+
+        $bookedEvents = Arr::get($response, 'items');
+
+        foreach ($bookedEvents as $event){
+            
+            if ('fluent_calendar' == Arr::get($event, 'extendedProperties.shared.created_by')) {
+                continue;
+            }
+
+            $startTime = Arr::get($event, 'start.dateTime');
+            $endTime   = Arr::get($event, 'end.dateTime');
+
+            $start = DateTimeHelper::convertFromIso($startTime, $timeZone);
+            $end   = DateTimeHelper::convertFromIso($endTime, $timeZone);
+            
+            $date = date('Y-m-d', strtotime($start));
+
+            $books[$date] = $books[$date] ?? [];
+
+            $books[$date][] = [
+                'start'     => $start,
+                'end'       => $end,
+                'remaining' => 0
+            ];
+        }
+
+        return $books;
     }
 }
