@@ -71,7 +71,7 @@ export default {
                 event_type: this.slot.event_type
             })
                 .then(response => {
-                    this.$notify.success(response.message);
+                    this.$handleSuccess(response);
                     this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id } })
                 })
                 .catch(errors => {

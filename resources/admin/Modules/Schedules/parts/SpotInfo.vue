@@ -31,49 +31,6 @@
             </div>
             <el-row :gutter="30">
                 <el-col :md="24" :sm="24">
-                    <el-row :gutter="30">
-                        <el-col :md="8" :sm="12">
-                            <div class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Location
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    <div class="fcal_location" v-html="showing_spots[0].location"></div>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Booked at
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    <span>{{ toCurrentTimezone(showing_spots[0].created_at, 'DD MMM YYYY, hh:mma') }}</span>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Status
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    <span :class="'fcal_'+showing_spots[0].status">{{ showing_spots[0].status }}</span>
-                                </div>
-                            </div>
-                        </el-col>
-                        <el-col :md="8" :sm="12">
-                            <div v-if="showing_spots[0].source_url" class="fcal_spot_details_row">
-                                <div class="fcal_spot_details_label">
-                                    Booking URL
-                                </div>
-                                <div class="fcal_spot_details_value">
-                                    <a target="_blank" rel="nofollow" :href="showing_spots[0].source_url">{{showing_spots[0].source_url}}</a>
-                                </div>
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <hr v-if="showing_spots[0].slot.event_type === 'group'"/>
                     <el-row :gutter="30" v-for="(showing_spot, index) in showing_spots" :key="index">
                         <el-col v-if="showing_spot.slot?.event_type === 'group'">
                             <h3>{{ guestName(showing_spot, index+1) }}</h3>
@@ -108,7 +65,7 @@
                                 </div>
                             </div>
                         </el-col>
-                        <el-col :md="8" :sm="12" v-if="showing_spot.message" class="fcal_spot_details_row">
+                        <el-col v-if="showing_spot.message" :md="8" :sm="12" class="fcal_spot_details_row">
                             <div class="fcal_spot_details_label">
                                 Comments by Invitee
                             </div>
@@ -125,6 +82,56 @@
                                 :spot="showing_spot">
                             </editable-spot-data>
                         </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Booked at
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <span>{{ toCurrentTimezone(showing_spot.created_at, 'DD MMM YYYY, hh:mma') }}</span>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Status
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <span :class="'fcal_'+showing_spot.status">{{ showing_spot.status }}</span>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Location
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <div class="fcal_location" v-html="showing_spot.location"></div>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col v-if="showing_spot.source_url" :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Booking URL
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    <a target="_blank" rel="nofollow" :href="showing_spot.source_url">{{showing_spot.source_url}}</a>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col v-if="showing_spot.source != 'web'" :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Booked From
+                                </div>
+                                <div class="fcal_spot_details_value">
+                                    {{ showing_spot.source }}
+                                </div>
+                            </div>
+                        </el-col>
                     </el-row>
                 </el-col>
             </el-row>
@@ -132,7 +139,7 @@
             <hr/>
             <h3 class="fcal_section_title">Meeting Activities</h3>
 
-            <booking-activities :booking_id="spot_id"/>
+            <booking-activities :event_id="showing_spots[0].event_id"/>
 
         </div>
         <el-skeleton v-if="fetching_spot"></el-skeleton>
@@ -234,7 +241,7 @@ export default {
 
             Promise.all(updatePromises)
                 .then(() => {
-                    this.$notify.success(data.message);
+                    this.$handleSuccess(data.message);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

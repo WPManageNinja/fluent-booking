@@ -80,7 +80,26 @@ app.mixin({
             this.$notify({
                 type: 'error',
                 title: 'Error',
+                offset: 20,
                 message: errorMessage,
+                dangerouslyUseHTMLString: true
+            });
+        },
+        $handleSuccess(response) {
+            let successMsg = 'Success';
+            if (typeof response === 'string') {
+                successMsg = response;
+            } else if (response && response.message) {
+                successMsg = response.message;
+            } else {
+                successMsg = convertToText(response);
+            }
+
+            this.$notify({
+                type: 'success',
+                title: 'Success',
+                offset: 20,
+                message: successMsg,
                 dangerouslyUseHTMLString: true
             });
         },

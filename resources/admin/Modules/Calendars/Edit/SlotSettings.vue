@@ -84,7 +84,7 @@ export default {
                 location_settings: this.slot.location_settings
             })
                 .then(response => {
-                    this.$notify.success(response.message);
+                    this.$handleSuccess(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

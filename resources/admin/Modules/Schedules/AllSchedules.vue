@@ -22,10 +22,10 @@
                         <div class="fcal_schedule_wrapper">
                             <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
-                                    <h3 class="fcal_schedule_data">{{scheduleDate}}</h3>
+                                    <h3 class="fcal_schedule_data">{{formattedDate(scheduleDate)}}</h3>
                                 </div>
                                 <div class="fcal_schedule_items">
-                                    <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.id == spot_id }" class="fcal_each_spot">
+                                    <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.event_id == spot_id }" class="fcal_each_spot">
                                         <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot"/>
                                     </div>
                                 </div>
@@ -80,24 +80,35 @@ export default {
         }
     },
     computed: {
+        formattedDate() {
+            return (date) => {
+                if (this.isToday(date)) {
+                    return 'Today';
+                } else if (this.isYesterday(date)) {
+                    return 'Yesterday';
+                } else if (this.isTomorrow(date)) {
+                    return 'Tomorrow';
+                }
+                return date;
+            }
+        },
         formattedSchedules() {
             const items = {};
             each(this.schedules, (schedule) => {
                 const startTime = schedule[0].start_time;
                 let date = this.toCurrentTimezone(startTime, 'MMMM D, YYYY');
-                if (this.isToday(startTime)) {
-                    date = 'Today';
-                } else if (this.isYesterday(startTime)) {
-                    date = 'Yesterday';
-                } else if (this.isTomorrow(startTime)) {
-                    date = 'Tomorrow';
-                }
-                if (!items[date]) {
-                    items[date] = [];
-                }
+                items[date] = items[date] || [];
                 items[date].push(schedule);
             });
-            return items;
+
+            const sortedSchedules = {};
+            Object.keys(items)
+                .sort((a, b) => new Date(a) - new Date(b))
+                .forEach((date) => {
+                    sortedSchedules[date] = items[date];
+                });
+
+            return sortedSchedules;
         }
     },
     methods: {
@@ -137,9 +148,9 @@ export default {
             }
         },
         showDetails(spot) {
-            this.$router.push({query: { period: this.filters.period, spot_id: spot[0].id }});
+            this.$router.push({query: { period: this.filters.period, spot_id: spot[0].event_id }});
             this.current_spot = spot;
-            this.spot_id = spot[0].id;
+            this.spot_id = spot[0].event_id;
         }
     },
     mounted() {

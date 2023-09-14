@@ -129,7 +129,7 @@ export default {
                 settings: this.settings
             })
             .then(response => {
-                this.$notify.success(response.message);
+                this.$handleSuccess(response);
             })
             .catch(errors => {
                 this.$handleError(errors);

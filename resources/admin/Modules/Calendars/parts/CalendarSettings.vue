@@ -69,7 +69,7 @@ export default {
                     this.calendar.author_profile = res.calendar.author_profile;
                     this.calendar.public_url = res.calendar.public_url;
                 }
-                this.$notify.success(res.message);
+                this.$handleSuccess(res);
                 this.$emit('calendarUpdated', res);
             })
                 .catch(err => {

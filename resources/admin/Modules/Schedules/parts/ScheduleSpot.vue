@@ -52,9 +52,8 @@ export default {
                 const booked = this.spot.length;
                 const totalSpots = this.spot[0].slot.max_book_per_slot;
                 return booked + ' of ' + totalSpots + ' guests with you';
-            } else {
-                return guestName;
             }
+            return guestName;
         }
     }
 }

@@ -12,9 +12,7 @@
                     <div class="fcal_booking_activity_title">
                         {{ activity.title }}
                     </div>
-                    <div class="fcal_booking_activity_description">
-                        {{ activity.description }}
-                    </div>
+                    <div class="fcal_booking_activity_description" v-html="activity.description"></div>
                 </div>
             </div>
             <div v-else class="fcal_no_activities">
@@ -27,9 +25,9 @@
 <script type="text/babel">
 export default {
     name: 'BookingActivities',
-    props: ['booking_id'],
+    props: ['event_id'],
     watch: {
-        booking_id() {
+        event_id() {
             this.fetchActivities();
         }
     },
@@ -42,7 +40,7 @@ export default {
     methods: {
         fetchActivities() {
             this.loading = true;
-            this.$get(`schedules/${this.booking_id}/activities`)
+            this.$get(`schedules/${this.event_id}/activities`)
                 .then(response => {
                     this.activities = response.activities;
                 })
