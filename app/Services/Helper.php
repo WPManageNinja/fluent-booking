@@ -801,12 +801,16 @@ class Helper
     public static function getIp()
     {
         $server = $_SERVER;
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
+
+        $clientIp   = Arr::get($server, 'HTTP_CLIENT_IP');
+        $xForwarded = Arr::get($server, 'HTTP_X_FORWARDED_FOR');
+
+        if (!empty($clientIp)) {
+            $ip = $clientIp;
+        } elseif (!empty($xForwarded)) {
+            $ip = $clientIp;
         } else {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
+            $ip = $clientIp;
         }
 
         return sanitize_text_field($ip);

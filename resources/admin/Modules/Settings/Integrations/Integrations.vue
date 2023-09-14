@@ -126,7 +126,7 @@ export default {
                 settings_key: this.settingsKey,
             })
             .then(response => {
-                this.$notify.success(response.message);
+                this.$handleSuccess(response);
                 this.integrationVars.connected = false;
             })
             .catch(errors => {
@@ -150,7 +150,7 @@ export default {
                 settings: this.settings
             })
             .then(response => {
-                this.$notify.success(response.message);
+                this.$handleSuccess(response);
             })
             .catch(errors => {
                 this.$handleError(errors);

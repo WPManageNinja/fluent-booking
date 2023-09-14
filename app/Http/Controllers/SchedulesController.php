@@ -4,6 +4,7 @@ namespace FluentCalendar\App\Http\Controllers;
 
 use FluentCalendar\App\App;
 use FluentCalendar\App\Models\Booking;
+use FluentCalendar\App\Models\BookingActivity;
 use FluentCalendar\App\Services\Helper;
 use FluentCalendar\Framework\Support\Arr;
 use FluentCalendar\Framework\Request\Request;
@@ -152,7 +153,7 @@ class SchedulesController extends Controller
         ];
     }
 
-    public function getBooking(Request $request, $bookingId)
+    public function getBooking(Request $request, $eventId)
     {
         $isAdmin = current_user_can('manage_options');
 
@@ -164,38 +165,44 @@ class SchedulesController extends Controller
             });
         }
 
-        $booking = $booking->findOrFail($bookingId);
+        $bookings = $booking->where('event_id', $eventId)->get();
 
-        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
-            $booking->status = 'completed';
-            $booking->save();
-            do_action('fluent_calendar/booking_schedule_completed', $booking);
+        foreach ($bookings as $booking) {
+            if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
+                $booking->status = 'completed';
+                $booking->save();
+                do_action('fluent_calendar/booking_schedule_completed', $booking);
+            }
+        
+            $booking->happening_status = $booking->getOngoingStatus();
+            $booking->author = $booking->slot->getAuthorProfile(false);
+            $booking->location = $booking->getLocationDetailsHtml();
         }
 
-        $booking->happening_status = $booking->getOngoingStatus();
-        $booking->author = $booking->slot->getAuthorProfile(false);
-        $booking->location = $booking->getLocationDetailsHtml();
-
         return [
-            'schedule' => [$booking]
+            'schedule' => $bookings
         ];
     }
 
-    public function getBookingActivities(Request $request, $bookingId)
+    public function getBookingActivities(Request $request, $eventId)
     {
         $isAdmin = current_user_can('manage_options');
 
         if ($isAdmin) {
-            $booking = Booking::findOrFail($bookingId);
-
+            $bookingIds = Booking::where('event_id', $eventId)
+                ->pluck('id')->toArray();
         } else {
-            $booking = Booking::whereHas('calendar', function ($q) {
-                $q->where('user_id', get_current_user_id());
-            })->findOrFail($bookingId);
+            $bookingIds = Booking::where('event_id', $eventId)
+                ->whereHas('calendar', function ($q) {
+                    $q->where('user_id', get_current_user_id());
+                })->pluck('id')->toArray();
         }
 
+        $activities = BookingActivity::whereIn('booking_id', $bookingIds)
+            ->orderBy('id', 'DESC')->get();
+
         return [
-            'activities' => $booking->getActivities()
+            'activities' => $activities
         ];
     }
 

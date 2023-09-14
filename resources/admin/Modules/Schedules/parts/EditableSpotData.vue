@@ -41,7 +41,7 @@ export default {
                 value: this.spot[this.data_key]
             })
                 .then(response => {
-                    this.$notify.success(response.message);
+                    this.$handleSuccess(response);
                     this.value = this.spot[this.data_key];
                     this.editing = false;
                     this.$emit('dataUpdated', {

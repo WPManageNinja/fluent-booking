@@ -83,6 +83,10 @@ export default {
                     title: 'In Person Meeting',
                     subtitle: 'Set an address or place'
                 },
+                google_meet: {
+                    title: 'Google Meet',
+                    subtitle: 'Google Meet link will be shared'
+                },
                 phone: {
                     title: 'Phone Call',
                     subtitle: 'In bound or outbound calls'

@@ -34,9 +34,9 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
 
 $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index');
-    $router->get('/{booking_id}', 'SchedulesController@getBooking')->int('booking_id');
+    $router->get('/{event_id}', 'SchedulesController@getBooking')->int('event_id');
     $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
-    $router->get('/{booking_id}/activities', 'SchedulesController@getBookingActivities')->int('booking_id');
+    $router->get('/{event_id}/activities', 'SchedulesController@getBookingActivities')->int('event_id');
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {

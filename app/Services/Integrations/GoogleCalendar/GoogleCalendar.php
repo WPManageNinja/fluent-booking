@@ -246,13 +246,11 @@ class GoogleCalendar extends IntegrationManager
         }
 
         $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
-
         if (!Arr::isTrue($integrationSettings, 'add_to_calendar')) {
             return;
         }
 
         $accessToken = $this->getAccessToken($calendarSlot->user_id);
-        
         if (!$accessToken) {
             return;
         }
@@ -263,10 +261,12 @@ class GoogleCalendar extends IntegrationManager
         $eventDetails = $this->getResponse($booking->event_id);
         $eventId      = Arr::get($eventDetails, 'id');
         $meetingLink  = Arr::get($eventDetails, 'hangoutLink');
+
+        $isNewEvent = !$eventId;
         
-        $method = $eventId ? 'PUT' : 'POST';
+        $method = $isNewEvent ? 'POST' : 'PUT';
         
-        $url = $this->client->calendarEvent . $eventId;
+        $url = $this->client->calendarEvent . $eventId . '?sendUpdates=all';
 
         $hostEmail = $this->getHostEmail($calendarSlot->user_id);
 
@@ -276,7 +276,6 @@ class GoogleCalendar extends IntegrationManager
 
         $events = [
             'summary'     => $calendarSlot->title,
-            'location'    => $location,
             'description' => $booking->message,
             'attendees'   => [
                 ['email' => $hostEmail],
@@ -296,12 +295,7 @@ class GoogleCalendar extends IntegrationManager
             'dateTime' => DateTimeHelper::convertToIso($booking->end_time),
             'timeZone' => $booking->person_time_zone,
         ];
-
-        if ('cancelled' == $booking->status) {
-            $events['status'] = 'cancelled';
-        } else {
-            $events['status'] = 'confirmed';
-        }
+        $events['status'] = ('cancelled' == $booking->status) ? 'cancelled' : 'confirmed';
 
         if ('google_meet' == $locationType && !$meetingLink) {
             $events['conferenceData'] = [
@@ -312,15 +306,11 @@ class GoogleCalendar extends IntegrationManager
                     ],
                 ],
             ];
-
-            $query = build_query([
-                'conferenceDataVersion' => '1',
-                'sendUpdates' => 'all',
-            ]);
-
-            $url .= '?' . $query;
+            $url .= '&conferenceDataVersion=1';
+        } else {
+            $events['location'] = $location;
         }
-        
+
         $response = static::makeRequest($url, $events, $method, $header);
 
         if (is_wp_error($response)) {
@@ -328,18 +318,18 @@ class GoogleCalendar extends IntegrationManager
         }
 
         $this->updateResponse($booking->event_id, $response);
+
+        $this->logBookingActivity($isNewEvent, $booking->id, $response);
     }
 
     public function getBookedEvents($books, $calendarSlot, $dateRanges, $timeZone)
     {
         $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
-
         if (!Arr::isTrue($integrationSettings, 'check_conflict')) {
             return $books;
         }
 
         $accessToken = $this->getAccessToken($calendarSlot->user_id);
-        
         if (!$accessToken) {
             return $books;
         }
@@ -388,5 +378,22 @@ class GoogleCalendar extends IntegrationManager
         }
 
         return $books;
+    }
+
+    public function logBookingActivity($isNewEvent, $bookingId, $response)
+    {
+        $htmlLink = Arr::get($response, 'htmlLink');
+        if (!$isNewEvent || !$htmlLink) {
+            return;
+        }
+
+        $eventLink = '<a target="_blank" href="' . esc_url($htmlLink) . '">' . esc_html('here') . '</a>';
+
+        do_action('fluent_calendar/log_booking_note', [
+            'title'       => sprintf(__('Event Created in Google Calendar')),
+            'type'        => 'activity',
+            'description' => sprintf(__('Find Event in Google Calendar: %s'), $eventLink),
+            'booking_id'  => $bookingId
+        ]);
     }
 }

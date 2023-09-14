@@ -85,9 +85,9 @@ export default {
             this.isCopied = true;
 
             if(this.slot.public_url) {
-                this.$notify.success('URL has been copied to your clipboard');
+                this.$handleSuccess('URL has been copied to your clipboard');
             } else {
-                this.$notify.success('Shortcode has been copied to your clipboard');
+                this.$handleSuccess('Shortcode has been copied to your clipboard');
             }
 
             setTimeout(() => {
@@ -101,7 +101,7 @@ export default {
             })
                 .then(response => {
                     this.slot.status = newStatus;
-                    this.$notify.success(response.message);
+                    this.$handleSuccess(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -133,7 +133,7 @@ export default {
                 }).then(() => {
                     this.$del('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id)
                         .then(response => {
-                            this.$notify.success(response.message);
+                            this.$handleSuccess(response);
                             this.$emit('slotDeleted');
                         })
                         .catch(errors => {
