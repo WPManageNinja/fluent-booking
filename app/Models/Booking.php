@@ -144,6 +144,14 @@ class Booking extends Model
             return $html;
         }
 
+        if ($locationType == 'google_meet') {
+            $html = '<b>' . $details['location_heading'] . ' </b>';
+            if ($meetingLink = Arr::get($details, 'location_settings.meeting_link')) {
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . esc_html('join now') . '</a>';
+            }
+            return $html;
+        }
+
         if ($locationType == 'phone') {
             $html = '<b>Phone Call: </b>';
             if (Arr::get($details, 'location_settings.call_type') == 'outbound') {
