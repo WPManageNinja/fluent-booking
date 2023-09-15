@@ -148,7 +148,6 @@ class AdminMenuHandler
 
         return apply_filters('fluent_calendar/admin_vars', [
             'slug'  => $slug = $app->config->get('app.slug'),
-            'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
             'brand_logo'  => $this->getMenuIcon(),

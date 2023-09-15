@@ -3,6 +3,7 @@
 namespace FluentCalendar\App\Services\Integrations\GoogleCalendar;
 
 use Exception;
+use FluentCalendar\App\Models\Booking;
 use FluentCalendar\Framework\Support\Arr;
 use FluentCalendar\App\Models\CalendarSlot;
 use FluentCalendar\App\Services\DateTimeHelper;
@@ -77,6 +78,8 @@ class GoogleCalendar extends IntegrationManager
         $authData['expires_in'] = $authData['expires_in'] + time();
 
         $this->updateAuthDetails($authData);
+
+        do_action('fluent_calendar/google_calendar_authenticated', $authData);
     }
 
     public function enqueueAssets()
@@ -319,7 +322,11 @@ class GoogleCalendar extends IntegrationManager
 
         $this->updateResponse($booking->event_id, $response);
 
+        $this->updateEventLink($booking->id, $response);
+
         $this->logBookingActivity($isNewEvent, $booking->id, $response);
+
+        do_action('fluent_calendar/google_calendar_event_updated', $booking, $calendarSlot, $response);
     }
 
     public function getBookedEvents($books, $calendarSlot, $dateRanges, $timeZone)
@@ -378,6 +385,28 @@ class GoogleCalendar extends IntegrationManager
         }
 
         return $books;
+    }
+
+    public function updateEventLink($bookingId, $response)
+    {
+        $meetingLink  = Arr::get($response, 'hangoutLink');
+        if (!$meetingLink) {
+            return;
+        }
+
+        $locationSettings = [
+            'location_type' => 'google_meet',
+            'location_heading' => 'Google Meet',
+            'location_settings' => [
+                'meeting_link'  => $meetingLink,
+            ]
+        ];
+
+        $booking = Booking::findOrFail($bookingId);
+        $booking->location_details = $locationSettings;
+        $booking->save();
+
+        do_action('fluent_calendar/after_event_link_updated', $booking, $response);
     }
 
     public function logBookingActivity($isNewEvent, $bookingId, $response)
