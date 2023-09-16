@@ -97,17 +97,17 @@ class BookingService
             [
                 'type'        => 'text',
                 'name'        => 'name',
-                'label'       => __('Your Name', 'fluent-calendar'),
+                'label'       => __('Your Name', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Your Full Name', 'fluent-calendar'),
+                'placeholder' => __('Your Full Name', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ],
             [
                 'type'        => 'email',
                 'name'        => 'email',
-                'label'       => __('Your Email Address', 'fluent-calendar'),
+                'label'       => __('Your Email Address', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Your Email Address', 'fluent-calendar'),
+                'placeholder' => __('Your Email Address', 'fluent-booking'),
                 'input_class' => 'fcal_input',
                 'disabled'    => is_user_logged_in()
             ]
@@ -117,9 +117,9 @@ class BookingService
             $fields[] = [
                 'type'        => 'tel',
                 'name'        => 'phone',
-                'label'       => __('Your Phone Number', 'fluent-calendar'),
+                'label'       => __('Your Phone Number', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => esc_attr__('Phone Number with country code', 'fluent-calendar'),
+                'placeholder' => esc_attr__('Phone Number with country code', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ];
         }
@@ -128,8 +128,8 @@ class BookingService
             'type'        => 'textarea',
             'data_type'   => 'textarea',
             'name'        => 'message',
-            'label'       => __('Please share anything that will help prepare for our meeting.', 'fluent-calendar'),
-            'placeholder' => __('Note about this meeting', 'fluent-calendar'),
+            'label'       => __('Please share anything that will help prepare for our meeting.', 'fluent-booking'),
+            'placeholder' => __('Note about this meeting', 'fluent-booking'),
             'input_class' => 'fcal_input fcal_textarea'
         ];
 
@@ -151,7 +151,7 @@ class BookingService
 
         $confirmationData = [
             'author'       => $author,
-            'sub_heading'  => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
+            'sub_heading'  => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
             'slot'         => $calendarSlot,
             'booking'      => $booking,
             'message'      => 'A confirmation has been sent to your email address along with meeting location details.',
