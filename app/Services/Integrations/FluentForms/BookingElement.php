@@ -239,6 +239,6 @@ class BookingElement extends BaseFieldManager
                 }
             }
         }
-        return apply_filters('fluent_calendar/ff_editor_calendar_options', $formattedCalendars);
+        return apply_filters('fluent_booking/ff_editor_calendar_options', $formattedCalendars);
     }
 }

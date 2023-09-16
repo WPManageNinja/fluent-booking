@@ -14,6 +14,6 @@ class CalendarPolicy extends Policy
      */
     public function verifyRequest(Request $request)
     {
-        return apply_filters('fluent_calendar/verify_calendar_api', current_user_can('manage_options'), $request);
+        return apply_filters('fluent_booking/verify_calendar_api', current_user_can('manage_options'), $request);
     }
 }

@@ -58,13 +58,13 @@ p {
   transition: all 0.22s ease-out;
 }
 
-.fluent_calendar_app {
+.fluent_booking_app {
   margin: 66px auto 30px;
 }
-.fluent_calendar_app.f_cal_day_selected, .fluent_calendar_app.f_cal_spot_selected {
+.fluent_booking_app.f_cal_day_selected, .fluent_booking_app.f_cal_spot_selected {
   max-width: 1000px;
 }
-.fluent_calendar_app .fcal_form_item .fcal_input {
+.fluent_booking_app .fcal_form_item .fcal_input {
   width: 100%;
   display: block;
   box-sizing: border-box;
@@ -81,10 +81,10 @@ p {
   -moz-appearance: none;
   appearance: none;
 }
-.fluent_calendar_app .fcal_form_item .fcal_input:disabled {
+.fluent_booking_app .fcal_form_item .fcal_input:disabled {
   background: #f7f7f7 !important;
 }
-.fluent_calendar_app .fcal_btn_submit {
+.fluent_booking_app .fcal_btn_submit {
   line-height: 22px;
   font-size: 110%;
 }

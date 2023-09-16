@@ -84,7 +84,7 @@ class Calendar extends Model
             'name' => $name,
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
-            'avatar' => apply_filters('fluent_calendar/author_photo', get_avatar_url($user->ID), $user)
+            'avatar' => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
         ];
     }
     

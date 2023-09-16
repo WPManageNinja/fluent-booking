@@ -76,9 +76,9 @@ class BookingService
 
         $bookingData['event_id'] = $event ? $event->event_id : null;
 
-        $bookingData = apply_filters('fluent_calendar/booking_data', $bookingData, $calendarSlot);
+        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot);
 
-        do_action('fluent_calendar/before_booking', $bookingData, $calendarSlot);
+        do_action('fluent_booking/before_booking', $bookingData, $calendarSlot);
 
         $booking = Booking::create($bookingData);
 
@@ -86,7 +86,7 @@ class BookingService
             'status' => 'confirmed'
         ]);
 
-        do_action('fluent_calendar/after_booking_scheduled', $booking, $calendarSlot, $bookingData);
+        do_action('fluent_booking/after_booking_scheduled', $booking, $calendarSlot, $bookingData);
 
         return $booking;
     }

@@ -64,7 +64,7 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_calendar/booking_confirmation_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_confirmation_email_sent_to_' . $emailTo, $booking, $slot, [
             'subject' => $subject,
             'body'    => $body,
             'to'      => $to
@@ -120,14 +120,14 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_calendar/booking_reminder_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_reminder_email_sent_to_' . $emailTo, $booking, $slot, [
             'subject' => $subject,
             'body'    => $body,
             'time'    => $time,
             'to'      => $to
         ]);
 
-        do_action('fluent_calendar/log_booking_note', [
+        do_action('fluent_booking/log_booking_note', [
             'title'       => $time['value'] . ' ' . $time['unit'] . ' reminder to ' . $emailTo,
             'type'        => 'activity',
             'description' => sprintf(__('%s %s reminder email sent to guest. Email Subject: %s'),$time['value'], $time['unit'], $subject),
@@ -184,13 +184,13 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_calendar/booking_cancelled_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_cancelled_email_sent_to_' . $emailTo, $booking, $slot, [
             'subject' => $subject,
             'body'    => $body,
             'to'      => $to
         ]);
 
-        do_action('fluent_calendar/log_booking_note', [
+        do_action('fluent_booking/log_booking_note', [
             'title'       => 'Cancelled booking email sent to ' . $emailTo,
             'type'        => 'activity',
             'description' => sprintf(__('Cancellation email sent to %s. Email Subject: %s'), $emailTo, $subject),

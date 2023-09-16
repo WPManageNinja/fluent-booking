@@ -24,12 +24,12 @@ class CalendarController extends Controller
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
             foreach ($calendar->slots as $slot) {
-                $slot->shortcode = '[fluent_calendar_booking id="' . $slot->id . '"]';
+                $slot->shortcode = '[fluent_booking_booking id="' . $slot->id . '"]';
 
-                do_action_ref_array('fluent_calendar/calendar_slot', [&$slot]);
+                do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
-            do_action_ref_array('fluent_calendar/calendar', [&$calendar]);
+            do_action_ref_array('fluent_booking/calendar', [&$calendar]);
         }
 
         return [
@@ -56,7 +56,7 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-        $this->validate($data, apply_filters('fluent_calendar/create_calender_validation_rule', [
+        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
             'author_timezone'       => 'required',
             'slot.duration'         => 'required|int',
             'slot.event_type'       => 'required',
@@ -66,7 +66,7 @@ class CalendarController extends Controller
             'user_id'               => 'required|int'
         ], $data));
 
-        do_action('fluent_calendar/before_create_calendar', $data, $this);
+        do_action('fluent_booking/before_create_calendar', $data, $this);
 
         if (!empty($data['user_id'])) {
             $user = get_user_by('ID', $data['user_id']);
@@ -142,9 +142,9 @@ class CalendarController extends Controller
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
 
         $slot = CalendarSlot::create($slotData);
-        do_action('fluent_calendar/after_create_calendar_slot', $slot, $calendar);
+        do_action('fluent_booking/after_create_calendar_slot', $slot, $calendar);
 
-        do_action('fluent_calendar/after_create_calendar', $calendar);
+        do_action('fluent_booking/after_create_calendar', $calendar);
 
         return [
             'calendar'     => $calendar,
@@ -169,15 +169,15 @@ class CalendarController extends Controller
 
         $calendar = Calendar::findOrFail($id);
 
-        do_action_ref_array('fluent_calendar/before_update_calendar', [&$calendar, $data]);
+        do_action_ref_array('fluent_booking/before_update_calendar', [&$calendar, $data]);
 
         $calendar->description = wp_kses_post($request->get('description'));
         $calendar->save();
-        do_action('fluent_calendar/after_update_calendar', $calendar, $data);
+        do_action('fluent_booking/after_update_calendar', $calendar, $data);
 
         $calendar->author_profile = $calendar->getAuthorProfile();
 
-        do_action_ref_array('fluent_calendar/calendar', [&$calendar]);
+        do_action_ref_array('fluent_booking/calendar', [&$calendar]);
 
         return [
             'calendar' => $calendar,

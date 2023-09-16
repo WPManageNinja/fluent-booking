@@ -67863,13 +67863,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Application_vue_vue_type_template_id_f734b430__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Application.vue?vue&type=template&id=f734b430 */ "./resources/admin/Application.vue?vue&type=template&id=f734b430");
 /* harmony import */ var _Application_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Application.vue?vue&type=script&lang=js */ "./resources/admin/Application.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Application_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Application_vue_vue_type_template_id_f734b430__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Application.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Application_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Application_vue_vue_type_template_id_f734b430__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Application.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -67891,13 +67891,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Dashboard_vue_vue_type_template_id_6e5b145a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=template&id=6e5b145a */ "./resources/admin/Components/Dashboard.vue?vue&type=template&id=6e5b145a");
 /* harmony import */ var _Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=script&lang=js */ "./resources/admin/Components/Dashboard.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Dashboard_vue_vue_type_template_id_6e5b145a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/Dashboard.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Dashboard_vue_vue_type_template_id_6e5b145a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/Dashboard.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -67919,13 +67919,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _OnBoard_vue_vue_type_template_id_659abbc6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./OnBoard.vue?vue&type=template&id=659abbc6 */ "./resources/admin/Components/OnBoard.vue?vue&type=template&id=659abbc6");
 /* harmony import */ var _OnBoard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./OnBoard.vue?vue&type=script&lang=js */ "./resources/admin/Components/OnBoard.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_OnBoard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_OnBoard_vue_vue_type_template_id_659abbc6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/OnBoard.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_OnBoard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_OnBoard_vue_vue_type_template_id_659abbc6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/OnBoard.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -67947,13 +67947,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Popover_vue_vue_type_template_id_56e411b8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Popover.vue?vue&type=template&id=56e411b8 */ "./resources/admin/Components/Popover.vue?vue&type=template&id=56e411b8");
 /* harmony import */ var _Popover_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Popover.vue?vue&type=script&lang=js */ "./resources/admin/Components/Popover.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Popover_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Popover_vue_vue_type_template_id_56e411b8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/Popover.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Popover_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Popover_vue_vue_type_template_id_56e411b8__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Components/Popover.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -67975,13 +67975,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Availabilities_vue_vue_type_template_id_4afd29fd__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Availabilities.vue?vue&type=template&id=4afd29fd */ "./resources/admin/Modules/Availability/Availabilities.vue?vue&type=template&id=4afd29fd");
 /* harmony import */ var _Availabilities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Availabilities.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Availability/Availabilities.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Availabilities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Availabilities_vue_vue_type_template_id_4afd29fd__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Availability/Availabilities.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Availabilities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Availabilities_vue_vue_type_template_id_4afd29fd__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Availability/Availabilities.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68003,13 +68003,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _AllCalendars_vue_vue_type_template_id_1abd0ee4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AllCalendars.vue?vue&type=template&id=1abd0ee4 */ "./resources/admin/Modules/Calendars/AllCalendars.vue?vue&type=template&id=1abd0ee4");
 /* harmony import */ var _AllCalendars_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AllCalendars.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/AllCalendars.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AllCalendars_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AllCalendars_vue_vue_type_template_id_1abd0ee4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/AllCalendars.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AllCalendars_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AllCalendars_vue_vue_type_template_id_1abd0ee4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/AllCalendars.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68031,13 +68031,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CreateNew_vue_vue_type_template_id_3acdeb3a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateNew.vue?vue&type=template&id=3acdeb3a */ "./resources/admin/Modules/Calendars/CreateNew.vue?vue&type=template&id=3acdeb3a");
 /* harmony import */ var _CreateNew_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateNew.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/CreateNew.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CreateNew_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CreateNew_vue_vue_type_template_id_3acdeb3a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/CreateNew.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CreateNew_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CreateNew_vue_vue_type_template_id_3acdeb3a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/CreateNew.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68059,13 +68059,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CreateCalendarSlot_vue_vue_type_template_id_1299e0f3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateCalendarSlot.vue?vue&type=template&id=1299e0f3 */ "./resources/admin/Modules/Calendars/Edit/CreateCalendarSlot.vue?vue&type=template&id=1299e0f3");
 /* harmony import */ var _CreateCalendarSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateCalendarSlot.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/CreateCalendarSlot.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CreateCalendarSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CreateCalendarSlot_vue_vue_type_template_id_1299e0f3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/CreateCalendarSlot.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CreateCalendarSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CreateCalendarSlot_vue_vue_type_template_id_1299e0f3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/CreateCalendarSlot.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68087,13 +68087,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SlotSettings_vue_vue_type_template_id_8cf87d08__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SlotSettings.vue?vue&type=template&id=8cf87d08 */ "./resources/admin/Modules/Calendars/Edit/SlotSettings.vue?vue&type=template&id=8cf87d08");
 /* harmony import */ var _SlotSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SlotSettings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/SlotSettings.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SlotSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SlotSettings_vue_vue_type_template_id_8cf87d08__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/SlotSettings.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SlotSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SlotSettings_vue_vue_type_template_id_8cf87d08__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/SlotSettings.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68115,13 +68115,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _BasicInfo_vue_vue_type_template_id_3b1ac838__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_BasicInfo.vue?vue&type=template&id=3b1ac838 */ "./resources/admin/Modules/Calendars/Edit/_BasicInfo.vue?vue&type=template&id=3b1ac838");
 /* harmony import */ var _BasicInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_BasicInfo.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_BasicInfo.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_BasicInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_BasicInfo_vue_vue_type_template_id_3b1ac838__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_BasicInfo.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_BasicInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_BasicInfo_vue_vue_type_template_id_3b1ac838__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_BasicInfo.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68144,7 +68144,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DateOverRides_vue_vue_type_template_id_4da8e896__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_DateOverRides.vue?vue&type=template&id=4da8e896 */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue?vue&type=template&id=4da8e896");
 /* harmony import */ var _DateOverRides_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_DateOverRides.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue?vue&type=script&lang=js");
 /* harmony import */ var _DateOverRides_vue_vue_type_style_index_0_id_4da8e896_lang_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_DateOverRides.vue?vue&type=style&index=0&id=4da8e896&lang=scss */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue?vue&type=style&index=0&id=4da8e896&lang=scss");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
@@ -68152,7 +68152,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_DateOverRides_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DateOverRides_vue_vue_type_template_id_4da8e896__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_DateOverRides.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_DateOverRides_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DateOverRides_vue_vue_type_template_id_4da8e896__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_DateOverRides.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68174,13 +68174,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _LocationSelector_vue_vue_type_template_id_37b385b0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_LocationSelector.vue?vue&type=template&id=37b385b0 */ "./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=template&id=37b385b0");
 /* harmony import */ var _LocationSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_LocationSelector.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_LocationSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_LocationSelector_vue_vue_type_template_id_37b385b0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_LocationSelector.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_LocationSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_LocationSelector_vue_vue_type_template_id_37b385b0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_LocationSelector.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68202,13 +68202,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _NotificationSettings_vue_vue_type_template_id_7fe1bda2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_NotificationSettings.vue?vue&type=template&id=7fe1bda2 */ "./resources/admin/Modules/Calendars/Edit/_NotificationSettings.vue?vue&type=template&id=7fe1bda2");
 /* harmony import */ var _NotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_NotificationSettings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_NotificationSettings.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_NotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_NotificationSettings_vue_vue_type_template_id_7fe1bda2__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_NotificationSettings.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_NotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_NotificationSettings_vue_vue_type_template_id_7fe1bda2__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_NotificationSettings.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68230,13 +68230,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SlotSettingsForm_vue_vue_type_template_id_06b3e2ce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_SlotSettingsForm.vue?vue&type=template&id=06b3e2ce */ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=template&id=06b3e2ce");
 /* harmony import */ var _SlotSettingsForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_SlotSettingsForm.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SlotSettingsForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SlotSettingsForm_vue_vue_type_template_id_06b3e2ce__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SlotSettingsForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SlotSettingsForm_vue_vue_type_template_id_06b3e2ce__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68258,13 +68258,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _DayOverRideConfig_vue_vue_type_template_id_82248b82__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./__DayOverRideConfig.vue?vue&type=template&id=82248b82 */ "./resources/admin/Modules/Calendars/Edit/__DayOverRideConfig.vue?vue&type=template&id=82248b82");
 /* harmony import */ var _DayOverRideConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./__DayOverRideConfig.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/__DayOverRideConfig.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_DayOverRideConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DayOverRideConfig_vue_vue_type_template_id_82248b82__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__DayOverRideConfig.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_DayOverRideConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DayOverRideConfig_vue_vue_type_template_id_82248b82__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__DayOverRideConfig.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68286,13 +68286,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _EditNotificationSettings_vue_vue_type_template_id_1575789a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./__EditNotificationSettings.vue?vue&type=template&id=1575789a */ "./resources/admin/Modules/Calendars/Edit/__EditNotificationSettings.vue?vue&type=template&id=1575789a");
 /* harmony import */ var _EditNotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./__EditNotificationSettings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/__EditNotificationSettings.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EditNotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EditNotificationSettings_vue_vue_type_template_id_1575789a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__EditNotificationSettings.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EditNotificationSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EditNotificationSettings_vue_vue_type_template_id_1575789a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__EditNotificationSettings.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68314,13 +68314,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./__SchedulingConfitions.vue?vue&type=template&id=7846a0c9 */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9");
 /* harmony import */ var _SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./__SchedulingConfitions.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68342,13 +68342,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CalendarEventBlock_vue_vue_type_template_id_6f195eba__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarEventBlock.vue?vue&type=template&id=6f195eba */ "./resources/admin/Modules/Calendars/parts/CalendarEventBlock.vue?vue&type=template&id=6f195eba");
 /* harmony import */ var _CalendarEventBlock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CalendarEventBlock.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/CalendarEventBlock.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CalendarEventBlock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CalendarEventBlock_vue_vue_type_template_id_6f195eba__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/CalendarEventBlock.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CalendarEventBlock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CalendarEventBlock_vue_vue_type_template_id_6f195eba__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/CalendarEventBlock.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68370,13 +68370,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CalendarSettings_vue_vue_type_template_id_7590388a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarSettings.vue?vue&type=template&id=7590388a */ "./resources/admin/Modules/Calendars/parts/CalendarSettings.vue?vue&type=template&id=7590388a");
 /* harmony import */ var _CalendarSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CalendarSettings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/CalendarSettings.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CalendarSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CalendarSettings_vue_vue_type_template_id_7590388a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/CalendarSettings.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_CalendarSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_CalendarSettings_vue_vue_type_template_id_7590388a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/CalendarSettings.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68398,13 +68398,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _EachSlot_vue_vue_type_template_id_176356b0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EachSlot.vue?vue&type=template&id=176356b0 */ "./resources/admin/Modules/Calendars/parts/EachSlot.vue?vue&type=template&id=176356b0");
 /* harmony import */ var _EachSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EachSlot.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/EachSlot.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EachSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EachSlot_vue_vue_type_template_id_176356b0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/EachSlot.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EachSlot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EachSlot_vue_vue_type_template_id_176356b0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/EachSlot.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68426,13 +68426,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _TimeZoneSelector_vue_vue_type_template_id_2b4182a1__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TimeZoneSelector.vue?vue&type=template&id=2b4182a1 */ "./resources/admin/Modules/Calendars/parts/TimeZoneSelector.vue?vue&type=template&id=2b4182a1");
 /* harmony import */ var _TimeZoneSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TimeZoneSelector.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/TimeZoneSelector.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TimeZoneSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TimeZoneSelector_vue_vue_type_template_id_2b4182a1__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/TimeZoneSelector.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TimeZoneSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TimeZoneSelector_vue_vue_type_template_id_2b4182a1__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/TimeZoneSelector.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68454,13 +68454,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _WeekDayConfig_vue_vue_type_template_id_b0856a9e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WeekDayConfig.vue?vue&type=template&id=b0856a9e */ "./resources/admin/Modules/Calendars/parts/WeekDayConfig.vue?vue&type=template&id=b0856a9e");
 /* harmony import */ var _WeekDayConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WeekDayConfig.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/WeekDayConfig.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_WeekDayConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_WeekDayConfig_vue_vue_type_template_id_b0856a9e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/WeekDayConfig.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_WeekDayConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_WeekDayConfig_vue_vue_type_template_id_b0856a9e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/WeekDayConfig.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68482,13 +68482,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _WeeklySchedules_vue_vue_type_template_id_32ad297c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WeeklySchedules.vue?vue&type=template&id=32ad297c */ "./resources/admin/Modules/Calendars/parts/WeeklySchedules.vue?vue&type=template&id=32ad297c");
 /* harmony import */ var _WeeklySchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WeeklySchedules.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/parts/WeeklySchedules.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_WeeklySchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_WeeklySchedules_vue_vue_type_template_id_32ad297c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/WeeklySchedules.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_WeeklySchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_WeeklySchedules_vue_vue_type_template_id_32ad297c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/parts/WeeklySchedules.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68510,13 +68510,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _AllSchedules_vue_vue_type_template_id_2ecb63ee__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AllSchedules.vue?vue&type=template&id=2ecb63ee */ "./resources/admin/Modules/Schedules/AllSchedules.vue?vue&type=template&id=2ecb63ee");
 /* harmony import */ var _AllSchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AllSchedules.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Schedules/AllSchedules.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AllSchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AllSchedules_vue_vue_type_template_id_2ecb63ee__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/AllSchedules.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AllSchedules_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AllSchedules_vue_vue_type_template_id_2ecb63ee__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/AllSchedules.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68538,13 +68538,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _EditableSpotData_vue_vue_type_template_id_ad7d049c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditableSpotData.vue?vue&type=template&id=ad7d049c */ "./resources/admin/Modules/Schedules/parts/EditableSpotData.vue?vue&type=template&id=ad7d049c");
 /* harmony import */ var _EditableSpotData_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditableSpotData.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Schedules/parts/EditableSpotData.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EditableSpotData_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EditableSpotData_vue_vue_type_template_id_ad7d049c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/EditableSpotData.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_EditableSpotData_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_EditableSpotData_vue_vue_type_template_id_ad7d049c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/EditableSpotData.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68566,13 +68566,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ScheduleSpot_vue_vue_type_template_id_6a6f0fca__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ScheduleSpot.vue?vue&type=template&id=6a6f0fca */ "./resources/admin/Modules/Schedules/parts/ScheduleSpot.vue?vue&type=template&id=6a6f0fca");
 /* harmony import */ var _ScheduleSpot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ScheduleSpot.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Schedules/parts/ScheduleSpot.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ScheduleSpot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ScheduleSpot_vue_vue_type_template_id_6a6f0fca__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/ScheduleSpot.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ScheduleSpot_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ScheduleSpot_vue_vue_type_template_id_6a6f0fca__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/ScheduleSpot.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68594,13 +68594,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SpotInfo_vue_vue_type_template_id_7cf46e32__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SpotInfo.vue?vue&type=template&id=7cf46e32 */ "./resources/admin/Modules/Schedules/parts/SpotInfo.vue?vue&type=template&id=7cf46e32");
 /* harmony import */ var _SpotInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SpotInfo.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Schedules/parts/SpotInfo.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SpotInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SpotInfo_vue_vue_type_template_id_7cf46e32__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/SpotInfo.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SpotInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SpotInfo_vue_vue_type_template_id_7cf46e32__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/SpotInfo.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68623,7 +68623,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BookingActivities_vue_vue_type_template_id_3e6987c9__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_BookingActivities.vue?vue&type=template&id=3e6987c9 */ "./resources/admin/Modules/Schedules/parts/_BookingActivities.vue?vue&type=template&id=3e6987c9");
 /* harmony import */ var _BookingActivities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_BookingActivities.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Schedules/parts/_BookingActivities.vue?vue&type=script&lang=js");
 /* harmony import */ var _BookingActivities_vue_vue_type_style_index_0_id_3e6987c9_lang_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_BookingActivities.vue?vue&type=style&index=0&id=3e6987c9&lang=scss */ "./resources/admin/Modules/Schedules/parts/_BookingActivities.vue?vue&type=style&index=0&id=3e6987c9&lang=scss");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
@@ -68631,7 +68631,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_BookingActivities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_BookingActivities_vue_vue_type_template_id_3e6987c9__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/_BookingActivities.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_BookingActivities_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_BookingActivities_vue_vue_type_template_id_3e6987c9__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Schedules/parts/_BookingActivities.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68653,13 +68653,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Configurations_vue_vue_type_template_id_464b0701__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Configurations.vue?vue&type=template&id=464b0701 */ "./resources/admin/Modules/Settings/Integrations/Configurations.vue?vue&type=template&id=464b0701");
 /* harmony import */ var _Configurations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Configurations.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Settings/Integrations/Configurations.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Configurations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Configurations_vue_vue_type_template_id_464b0701__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Integrations/Configurations.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Configurations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Configurations_vue_vue_type_template_id_464b0701__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Integrations/Configurations.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68681,13 +68681,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Integrations_vue_vue_type_template_id_1cebc83a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Integrations.vue?vue&type=template&id=1cebc83a */ "./resources/admin/Modules/Settings/Integrations/Integrations.vue?vue&type=template&id=1cebc83a");
 /* harmony import */ var _Integrations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Integrations.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Settings/Integrations/Integrations.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Integrations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Integrations_vue_vue_type_template_id_1cebc83a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Integrations/Integrations.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Integrations_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Integrations_vue_vue_type_template_id_1cebc83a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Integrations/Integrations.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68709,13 +68709,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Settings_vue_vue_type_template_id_6e8b611f__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Settings.vue?vue&type=template&id=6e8b611f */ "./resources/admin/Modules/Settings/Settings.vue?vue&type=template&id=6e8b611f");
 /* harmony import */ var _Settings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Settings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Settings/Settings.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Settings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Settings_vue_vue_type_template_id_6e8b611f__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Settings.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Settings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Settings_vue_vue_type_template_id_6e8b611f__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Settings/Settings.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68737,13 +68737,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Confirm_vue_vue_type_template_id_17317b6e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Confirm.vue?vue&type=template&id=17317b6e */ "./resources/admin/Pieces/Confirm.vue?vue&type=template&id=17317b6e");
 /* harmony import */ var _Confirm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Confirm.vue?vue&type=script&lang=js */ "./resources/admin/Pieces/Confirm.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Confirm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Confirm_vue_vue_type_template_id_17317b6e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/Confirm.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Confirm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Confirm_vue_vue_type_template_id_17317b6e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/Confirm.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68765,13 +68765,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _HostSelector_vue_vue_type_template_id_15eb4869__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HostSelector.vue?vue&type=template&id=15eb4869 */ "./resources/admin/Pieces/HostSelector.vue?vue&type=template&id=15eb4869");
 /* harmony import */ var _HostSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HostSelector.vue?vue&type=script&lang=js */ "./resources/admin/Pieces/HostSelector.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_HostSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_HostSelector_vue_vue_type_template_id_15eb4869__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/HostSelector.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_HostSelector_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_HostSelector_vue_vue_type_template_id_15eb4869__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/HostSelector.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -68793,13 +68793,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Pagination_vue_vue_type_template_id_3433e948__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Pagination.vue?vue&type=template&id=3433e948 */ "./resources/admin/Pieces/Pagination.vue?vue&type=template&id=3433e948");
 /* harmony import */ var _Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination.vue?vue&type=script&lang=js */ "./resources/admin/Pieces/Pagination.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Pagination_vue_vue_type_template_id_3433e948__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/Pagination.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_jewel_sites_convertleap_assets_modules_fluent_booking_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Pagination_vue_vue_type_template_id_3433e948__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Pieces/Pagination.vue"]])
 /* hot reload */
 if (false) {}
 

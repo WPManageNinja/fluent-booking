@@ -11,10 +11,10 @@ class NotificationHandler
 {
     public function register()
     {
-        add_action('fluent_calendar/after_booking_scheduled', array($this, 'pushBookingScheduledToQueue'), 10, 2);
-        add_action('fluent_calendar/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
-        add_action('fluent_calendar/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 4);
-        add_action('fluent_calendar/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
+        add_action('fluent_booking/after_booking_scheduled', array($this, 'pushBookingScheduledToQueue'), 10, 2);
+        add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
+        add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 4);
+        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
     }
 
     private function getReminderTime($time)
@@ -40,7 +40,7 @@ class NotificationHandler
             
             $bufferTime = 2 * 60; // 2 Minute Buffer Time
             if ($startingTo > ($reminderTimestamp + $bufferTime)) {
-                as_schedule_single_action(($happeningTimestamp - $reminderTimestamp), 'fluent_calendar/booking_schedule_reminder', [
+                as_schedule_single_action(($happeningTimestamp - $reminderTimestamp), 'fluent_booking/booking_schedule_reminder', [
                     $booking->id,
                     $slot->id,
                     $time,
@@ -55,7 +55,7 @@ class NotificationHandler
         $notifications = $slot->getNotifications();
 
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled') || (Arr::isTrue($notifications, 'booking_conf_host.enabled'))) {
-            as_enqueue_async_action('fluent_calendar/after_booking_scheduled_async', [
+            as_enqueue_async_action('fluent_booking/after_booking_scheduled_async', [
                 $booking->id,
                 $slot->id
             ], 'fluent-calendar');

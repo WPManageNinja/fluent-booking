@@ -4132,7 +4132,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles.scss */ "./resources/public/styles.scss");
 
 
-var calendarApps = document.querySelectorAll('.fluent_calendar_app');
+var calendarApps = document.querySelectorAll('.fluent_booking_app');
 if (calendarApps.length) {
   calendarApps.forEach(function (item, index) {
     var elem = calendarApps[index];

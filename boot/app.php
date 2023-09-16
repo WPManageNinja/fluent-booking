@@ -19,6 +19,6 @@ return function ($file) {
     require_once( FLUENT_BOOKING_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
  
     add_action('plugins_loaded', function () use ($app) {
-        do_action('fluent_calendar_loaded', $app);
+        do_action('fluent_booking_loaded', $app);
     });
 };

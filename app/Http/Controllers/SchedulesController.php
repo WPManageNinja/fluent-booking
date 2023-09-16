@@ -39,7 +39,7 @@ class SchedulesController extends Controller
             });
         }
 
-        do_action_ref_array('fluent_calendar/schedules_query', [&$query]);
+        do_action_ref_array('fluent_booking/schedules_query', [&$query]);
 
         if ($period == 'upcoming') {
             $query = $query->orderBy('start_time', 'ASC')->upcoming();
@@ -53,7 +53,7 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
-                do_action('fluent_calendar/schedule_completed', $schedule);
+                do_action('fluent_booking/schedule_completed', $schedule);
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
@@ -92,7 +92,7 @@ class SchedulesController extends Controller
             'column' => 'required',
         ]);
 
-        do_action('fluent_calendar/before_patch_booking_schedule', $booking, $data);
+        do_action('fluent_booking/before_patch_booking_schedule', $booking, $data);
 
         $value = $request->get('value');
         $column = $data['column'];
@@ -143,10 +143,10 @@ class SchedulesController extends Controller
                 $booking->addCancelReason($title, sanitize_textarea_field($request->get('cancel_reason')));
             }
 
-            do_action('fluent_calendar/booking_schedule_' . $value, $booking);
+            do_action('fluent_booking/booking_schedule_' . $value, $booking);
         }
 
-        do_action('fluent_calendar/after_patch_booking_schedule', $booking, $oldSBooking);
+        do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
         return [
             'message' => sprintf(__('%s has been updated', 'fluent-calendar'), $column)
@@ -171,7 +171,7 @@ class SchedulesController extends Controller
             if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
                 $booking->status = 'completed';
                 $booking->save();
-                do_action('fluent_calendar/booking_schedule_completed', $booking);
+                do_action('fluent_booking/booking_schedule_completed', $booking);
             }
         
             $booking->happening_status = $booking->getOngoingStatus();

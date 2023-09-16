@@ -16,7 +16,7 @@ class FrontEndHandler
 {
     public function register()
     {
-        add_shortcode('fluent_calendar_booking', [$this, 'handleShortcode']);
+        add_shortcode('fluent_booking_booking', [$this, 'handleShortcode']);
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
@@ -197,7 +197,7 @@ class FrontEndHandler
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
         ];
 
-        $confirmationData = apply_filters('fluent_calendar/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
+        $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
         $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
 

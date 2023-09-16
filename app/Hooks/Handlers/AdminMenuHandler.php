@@ -146,7 +146,7 @@ class AdminMenuHandler
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
-        return apply_filters('fluent_calendar/admin_vars', [
+        return apply_filters('fluent_booking/admin_vars', [
             'slug'  => $slug = $app->config->get('app.slug'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
@@ -163,7 +163,7 @@ class AdminMenuHandler
             'require_slug' => $requireSlug,
             'site_url' => site_url('/'),
             'timezones' => DateTimeHelper::getTimeZones(true),
-            'supported_features' => apply_filters('fluent_calendar/supported_featured', [
+            'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ])
         ]);
@@ -190,7 +190,7 @@ class AdminMenuHandler
 
     protected function isNew()
     {
-        return apply_filters('fluent_calendar/is_new', ! Calendar::first());
+        return apply_filters('fluent_booking/is_new', ! Calendar::first());
     }
 
     /**
@@ -199,7 +199,7 @@ class AdminMenuHandler
      */
     protected function maybeAutoCreateCalendar($user)
     {
-        if(!apply_filters('fluent_calendar/auto_create_calendar', false, $user)) {
+        if(!apply_filters('fluent_booking/auto_create_calendar', false, $user)) {
             return false;
         }
 
