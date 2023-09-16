@@ -3,6 +3,7 @@
 namespace FluentCalendar\Framework\Request;
 
 use FluentCalendar\Framework\Support\Arr;
+use FluentCalendar\Framework\Support\Helper;
 use FluentCalendar\Framework\Foundation\Application;
 use FluentCalendar\Framework\Validator\ValidationException;
 
@@ -10,17 +11,74 @@ class Request
 {
     use FileHandler, Cleaner, InputHelperMethodsTrait;
 
+    /**
+     * The application instance
+     * @var \FluentCalendar\Framework\Foundation\Application
+     */
     protected $app = null;
-    protected $headers = array();
-    protected $server = array();
-    protected $cookie = array();
-    protected $json = array();
-    protected $get = array();
-    protected $post = array();
-    protected $files = array();
-    protected $request = array();
+
+    /**
+     * PHP header variables
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
+     * PHP server variables
+     * @var array
+     */
+    protected $server = [];
+
+    /**
+     * PHP cookie variables
+     * @var array
+     */
+    protected $cookie = [];
+
+    /**
+     * The JSON payload of the request
+     * @var array
+     */
+    protected $json = [];
+
+    /**
+     * PHP $_GET Superglobal
+     * @var array
+     */
+    protected $get = [];
+
+
+    /**
+     * PHP $_POST Superglobal
+     * @var array
+     */
+    protected $post = [];
+
+    /**
+     * PHP $_FILES Superglobal
+     * @var array
+     */
+    protected $files = [];
+
+    /**
+     * PHP $_GET and $_POST Superglobals
+     * @var array
+     */
+    protected $request = [];
+
+    /**
+     * WP_REST_Request instance
+     * @var WP_REST_Request
+     */
     protected $wpRestRequest = false;
 
+    /**
+     * Construct the request instance
+     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param array/$_GET $get
+     * @param array/$_POST $post
+     * @param array/$_FILES $files
+     */
     public function __construct(Application $app, $get, $post, $files)
     {
         $this->app = $app;
@@ -54,25 +112,46 @@ class Request
         return $this->exists($key) && !empty(Arr::get($this->inputs(), $key));
     }
 
+    /**
+     * Set an item into the request inputs
+     * @param string $key
+     * @param mixed
+     */
     public function set($key, $value)
     {
-        $inputs = $this->inputs();
-
-        Arr::set($inputs, $key, $value);
+        Arr::set($this->request, $key, $value);
 
         return $this;
     }
 
+    /**
+     * Retrive all the items from the request inputs
+     * @return array
+     */
     public function all()
     {
         return $this->get();
     }
 
+    /**
+     * Retrieve an item from the request inputs
+     * @param  string|null $key
+     * @param  mixed $default
+     * @return mixed
+     */
     public function get($key = null, $default = null)
     {
         return Arr::get($this->inputs(), $key, $default);
     }
 
+    /**
+     * Get an item from the request filtering by the callback
+     * 
+     * @param  string|null $key
+     * @param  callable $callback
+     * @param  mixed $default
+     * @return mixed
+     */
     public function getSafe($key = null, $callback = null, $default = null)
     {
         $value = $this->get($key, $default);
@@ -80,6 +159,74 @@ class Request
         $value = $callback ? $callback($value) : $value;
 
         return $value;
+    }
+
+    /**
+     * Check the content-type for JSON
+     * 
+     * @return boolean
+     */
+    public function isJson()
+    {
+        return $this->is_json_content_type();
+    }
+
+    /**
+     * Retrieve an item from the json payload of the request
+     * @param  string $key
+     * @param  string $default
+     * @return mixed
+     */
+    public function json($key = null, $default = null)
+    {
+        if (!$this->isJson()) return;
+        
+        if (!isset($this->json)) {
+            $this->json = (array) json_decode($this->getContent(), true);
+        }
+
+        if (is_null($key)) {
+            return $this->json;
+        }
+
+        return Helper::dataGet($this->json, $key, $default);
+    }
+
+    /**
+     * Retrieve an item from the PHP $_SERVER array
+     * @param  string $key
+     * @param  string $default
+     * @return mixed
+     */
+    public function server($key = null, $default = null)
+    {
+        return $key ? Arr::get($this->server, $key, $default) : $this->server;
+    }
+
+    /**
+     * Retrieve an item from the PHP headers
+     * @param  string $key
+     * @param  string $default
+     * @return mixed
+     */
+    public function header($key = null, $default = null)
+    {
+        if (!$this->headers) {
+            $this->headers = $this->setHeaders();
+        }
+
+        return $key ? Arr::get($this->headers, $key, $default) : $this->headers;
+    }
+
+    /**
+     * Retrieve an item from the cookie
+     * @param  string $key
+     * @param  mixed $default
+     * @return mixed
+     */
+    public function cookie($key = null, $default = null)
+    {
+        return $key ? Arr::get($this->cookie, $key, $default) : $this->cookie;
     }
 
     /**
@@ -92,26 +239,53 @@ class Request
         return $this->files;
     }
 
+    /**
+     * Get an item from the PHP $_GET array
+     * @param  string $key
+     * @param  mixed $default
+     * @return mixed
+     */
     public function query($key = null, $default = null)
     {
         return $key ? Arr::get($this->get, $key, $default) : $this->get;
     }
 
+    /**
+     * Get an item from the PHP $_POST array
+     * @param  string $key
+     * @param  mixed $default
+     * @return mixed
+     */
     public function post($key = null, $default = null)
     {
         return $key ? Arr::get($this->post, $key, $default) : $this->post;
     }
 
+    /**
+     * Return the only items given in the args
+     * @param  array $keys
+     * @return array
+     */
     public function only($keys)
     {
         return Arr::only($this->inputs(), $keys);
     }
 
+    /**
+     * Return a subset of the request inputs except the given args
+     * @param  array $args
+     * @return array
+     */
     public function except($args)
     {
         return Arr::except($this->inputs(), $args);
     }
 
+    /**
+     * Merge array with the request inputs
+     * @param  array  $data
+     * @return self
+     */
     public function merge(array $data = [])
     {
         $this->request = array_replace($this->inputs(), $data);
@@ -120,16 +294,48 @@ class Request
     }
 
     /**
+     * Returns the request body content.
+     *
+     * @param bool $asResource If true, a resource will be returned
+     *
+     * @return string|resource
+     */
+    public function getContent()
+    {
+        if (null === $this->content || false === $this->content) {
+            $this->content = file_get_contents('php://input');
+        }
+
+        return $this->content;
+    }
+
+    public function mergeInputsFromRestRequest($wpRestRequest)
+    {
+        $this->request = array_merge(
+            $this->request, $wpRestRequest->get_params()
+        );
+
+        $this->post = array_merge(
+            $this->post, $this->clean($wpRestRequest->get_body_params())
+        );
+
+        $this->get = array_merge(
+            $this->get, $this->clean($wpRestRequest->get_query_params())
+        );
+
+        $this->wpRestRequest = true;
+    }
+
+    /**
      * Get all inputs
      * @return array $this->request
      */
     protected function inputs()
     {
-        if (!$this->wpRestRequest && $this->app->bound('wprestrequest')) {
-            $this->wpRestRequest = true;
-            $this->request = array_merge(
-                $this->request, $this->app->wprestrequest->get_params()
-            );
+        if (!$this->wpRestRequest) {
+            if ($this->app->bound('wprestrequest')) {
+                $this->mergeInputsFromRestRequest($this->app->wprestrequest);
+            }
         }
 
         return $this->request;
@@ -150,25 +356,6 @@ class Request
         }
 
         return $ip;
-    }
-
-    public function server($key = null, $default = null)
-    {
-        return $key ? Arr::get($this->server, $key, $default) : $this->server;
-    }
-
-    public function header($key = null, $default = null)
-    {
-        if (!$this->headers) {
-            $this->headers = $this->setHeaders();
-        }
-
-        return $key ? Arr::get($this->headers, $key, $default) : $this->headers;
-    }
-
-    public function cookie($key = null, $default = null)
-    {
-        return $key ? Arr::get($this->cookie, $key, $default) : $this->cookie;
     }
 
     /**
@@ -261,7 +448,7 @@ class Request
      */
     public function url()
     {
-        return rtrim(preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']), '/');
+        return get_site_url() . rtrim(preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']), '/');
     }
 
     /**
@@ -305,6 +492,11 @@ class Request
         if ($this->app->bound('wprestrequest')) {
 
             if ($method == 'route') {
+                
+                if ($params) {
+                    return $this->app->route->{$params[0]};
+                }
+
                 return $this->app->route;
             }
             

@@ -21,12 +21,12 @@
         }
     ],
     "require": {
-        "wpfluent/framework": "^1.0"
+        "wpfluent/framework": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "FluentCalendar\\App\\": "app/",
-            "FluentCalendar\\Framework\\": "vendor/wpfluent/framework/src/WPFluent"
+            "FluentBooking\\App\\": "app/",
+            "FluentBooking\\Framework\\": "vendor/wpfluent/framework/src/WPFluent"
         },
         "classmap": [
             "database/"
@@ -35,17 +35,17 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         },
         "wpfluent": {
             "namespace": {
-                "current": "FluentCalendar"
+                "current": "FluentBooking"
             }
         }
     },
     "scripts": {
         "post-update-cmd": [
-            "FluentCalendar\\App\\ComposerScript::postUpdate"
+            "FluentBooking\\App\\ComposerScript::postUpdate"
         ]
     },
     "minimum-stability": "dev",

@@ -19,6 +19,8 @@ class BookingActivity extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
             if (!isset($model->created_by) && $userId = get_current_user_id()) {
                 $model->created_by = $userId;

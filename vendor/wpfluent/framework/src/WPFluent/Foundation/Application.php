@@ -4,7 +4,7 @@ namespace FluentCalendar\Framework\Foundation;
 
 use InvalidArgumentException;
 use FluentCalendar\Framework\Foundation\Config;
-use FluentCalendar\Framework\Foundation\Container;
+use FluentCalendar\Framework\Container\Container;
 use FluentCalendar\Framework\Foundation\ComponentBinder;
 use FluentCalendar\Framework\Foundation\FoundationTrait;
 use FluentCalendar\Framework\Foundation\AsyncRequestTrait;
@@ -16,13 +16,48 @@ class Application extends Container
     use AsyncRequestTrait;
     use CronTaskSchedulerTrait;
 
+    /**
+     * Main plugin file's absolute path
+     * @var string
+     */
     protected $file = null;
+
+    /**
+     * Plugin's base url
+     * @var string
+     */
     protected $baseUrl = null;
+
+    /**
+     * Plugin's base path
+     * @var string
+     */
     protected $basePath = null;
+
+    /**
+     * Default namespace for hook's handlers
+     * @var string
+     */
     protected $handlerNamespace = null;
+
+    /**
+     * Default namespace for controllers
+     * @var string
+     */
     protected $controllerNamespace = null;
+
+    /**
+     * Default namespace for policy handlers
+     * @var string
+     */
     protected $permissionNamespace = null;
 
+    /**
+     * Construct the application instance
+     * 
+     * @param string $file The main plugin file's absolute path
+     * @return null
+     */
     public function __construct($file = null)
     {
         $this->init($file);
@@ -30,20 +65,26 @@ class Application extends Container
         $this->bootstrapApplication();
     }
 
+    /**
+     * Init the application instance
+     * 
+     * @param string $file The main plugin file's absolute path
+     * 
+     * @return null
+     */
     protected function init($file)
     {
-        $this->file = $this->pluginFilePath($file);
+        $this->file = $file;
         $this->basePath = plugin_dir_path($this->file);
         $this->baseUrl = plugin_dir_url($this->file);
     }
 
-    protected function pluginFilePath($file)
-    {
-        $file = $file ?: realpath(__DIR__ . '/../../../plugin.php');
-        
-        return $file;
-    }
-
+    /**
+     * Set the default application level namespaces to resolve
+     * the controllers, policies and various hook handlers.
+     *
+     * @return null
+     */
     protected function setAppLevelNamespace()
     {
         $autoload = $this->getComposer('autoload');
@@ -57,6 +98,13 @@ class Application extends Container
         $this->controllerNamespace = $psr4['app/'] . 'Http\Controllers';
     }
 
+    /**
+     * Get the composer data as an array
+     * 
+     * @param  string $section Specific key
+     * 
+     * @return array partial or full composer data array
+     */
     protected function getComposer($section = null)
     {
         $data = json_decode(
@@ -66,6 +114,11 @@ class Application extends Container
         return $section ? $data[$section] : $data;
     }
 
+    /**
+     * Bootstrap the application.
+     * 
+     * @return null
+     */
     protected function bootstrapApplication()
     {
         $this->bindAppInstance();
@@ -78,6 +131,11 @@ class Application extends Container
         $this->addRestApiInitAction($this);
     }
 
+    /**
+     * Bind application instance in the container.
+     * 
+     * @return null
+     */
     protected function bindAppInstance()
     {
         App::setInstance($this);
@@ -85,17 +143,32 @@ class Application extends Container
         $this->instance(__CLASS__, $this);
     }
 
+    /**
+     * Bind the paths and urls
+     * 
+     * @return null
+     */
     protected function bindPathsAndUrls()
     {
         $this->bindUrls();
         $this->basePaths();
     }
 
+    /**
+     * Bind urls
+     * 
+     * @return null
+     */
     protected function bindUrls()
     {
         $this['url.assets'] = $this->baseUrl . 'assets/';
     }
 
+    /**
+     * Bind paths
+     * 
+     * @return null
+     */
     protected function basePaths()
     {
         $this['path'] = $this->basePath;
@@ -109,6 +182,12 @@ class Application extends Container
         $this['path.views'] = $this['path.app'] . 'Views/';
     }
 
+    /**
+     * Load application's config and set
+     * the data in the Config instance.
+     * 
+     * @return null
+     */
     protected function loadConfigIfExists()
     {
         $data = [];
@@ -122,6 +201,11 @@ class Application extends Container
         $this->instance('config', new Config($data));
     }
 
+    /**
+     * Register plugin's text domain
+     * 
+     * @return null
+     */
     protected function registerTextdomain()
     {
         $this->addAction('init', function() {
@@ -131,16 +215,34 @@ class Application extends Container
         });
     }
 
+    /**
+     * Resolve the text domain path.
+     * 
+     * @return null
+     */
     protected function textDomainPath()
     {
         return basename($this['path']) . $this->config->get('app.domain_path');
     }
 
+    /**
+     * Bind the components of the framework into the container so
+     * they'll be available throughout the application life cycle.
+     * 
+     * @return null
+     */
     protected function bindCoreComponents()
     {
         (new ComponentBinder($this))->bindComponents();
     }
 
+    /**
+     * Load (include) the files where hooks are registered.
+     * 
+     * @param self $app
+     * 
+     * @return null
+     */
     protected function requireCommonFiles($app)
     {
         require_once $this->basePath . 'app/Hooks/actions.php';
@@ -151,6 +253,11 @@ class Application extends Container
         }
     }
 
+    /**
+     * Register the rest api init actions and routes
+     * 
+     * @param self $app
+     */
     protected function addRestApiInitAction($app)
     {
         $this->addAction('rest_api_init', function($wpRestServer) use ($app) {
@@ -164,6 +271,13 @@ class Application extends Container
         });
     }
 
+    /**
+     * Register rest routes.
+     * 
+     * @param \FluentCalendar\Framework\Http\Router $router
+     * 
+     * @return null
+     */
     protected function registerRestRoutes($router)
     {
         $router->registerRoutes(
@@ -171,8 +285,44 @@ class Application extends Container
         );
     }
 
+    /**
+     * Load (include) routes
+     * 
+     * @param \FluentCalendar\Framework\Http\Router $router
+     * @return null
+     */
     protected function requireRouteFile($router)
     {
+        if (file_exists($file = $this['path.http'] . 'Routes/routes.php')) {
+            return require_once $file;
+        }
+
         require_once $this['path.http'] . 'Routes/api.php';
+    }
+
+    /**
+     * Set Application key for encryption/decryption
+     *
+     * @return null
+     */
+    public function setAppKey()
+    {
+        $config = $this->config->get('app');
+
+        if (!isset($config['key'])) {
+            if (!file_exists($configFile = $this->path . '/config/app.php')) {
+                return;
+            }
+
+            $config = require $configFile;
+            
+            $config['key'] = base64_encode($this->app->encrypter->generateKey(
+                $config['cipher']
+            ));
+
+            $content = var_export($config, true);
+            $msg = "// Auto generated by wpfluent Installer.";
+            file_put_contents($configFile, "<?php\n\n $msg\n\n return $content;\n");
+        }
     }
 }

@@ -16,6 +16,8 @@ class Availability extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
             $model->object_type = 'availability';
             $model->key = 'slot_availability';

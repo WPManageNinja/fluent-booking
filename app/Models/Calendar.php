@@ -30,6 +30,8 @@ class Calendar extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
             if(empty($model->user_id)) {
                 $model->user_id = get_current_user_id();

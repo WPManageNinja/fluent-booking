@@ -16,7 +16,7 @@ class Meta extends Model
 
     public static function boot()
     {
-
+        parent::boot();
     }
 
     public function setValueAttribute($value)

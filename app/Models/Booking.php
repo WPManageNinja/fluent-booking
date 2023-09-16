@@ -49,6 +49,8 @@ class Booking extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::creating(function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;

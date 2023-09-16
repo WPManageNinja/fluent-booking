@@ -4,6 +4,7 @@ namespace FluentCalendar\Framework\Validator;
 
 use Countable;
 use InvalidArgumentException;
+use FluentCalendar\Framework\Support\Str;
 use FluentCalendar\Framework\Support\Arr;
 use FluentCalendar\Framework\Validator\Contracts\File;
 
@@ -235,7 +236,7 @@ trait ValidatesAttributes
      */
     protected function validateUrl($attribute, $value)
     {
-        return (bool) wp_http_validate_url($value);
+        return (bool) Str::isUrl($value);
     }
 
     /**
@@ -318,7 +319,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentValidator\Contracts\File
+         * @var $value \FluentCalendar\Framework\Validator\Contracts\File
          */
         return $value->getPath() != '' && in_array($value->guessExtension(), $parameters);
     }
@@ -375,7 +376,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentValidator\Contracts\File
+         * @var $value \FluentCalendar\Framework\Validator\Contracts\File
          */
         return strtolower($value->getClientOriginalExtension()) === 'php';
     }

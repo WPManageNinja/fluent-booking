@@ -2,39 +2,64 @@
 
 namespace FluentCalendar\Framework\Foundation;
 
+use FluentCalendar\Framework\Support\Str;
 use FluentCalendar\Framework\View\View;
+use FluentCalendar\Framework\Http\URL;
 use FluentCalendar\Framework\Http\Router;
+use FluentCalendar\Framework\Support\Facade;
+use FluentCalendar\Framework\Support\Pipeline;
 use FluentCalendar\Framework\Request\Request;
 use FluentCalendar\Framework\Response\Response;
+use FluentCalendar\Framework\Events\Dispatcher;
 use FluentCalendar\Framework\Database\Orm\Model;
 use FluentCalendar\Framework\Validator\Validator;
-use FluentCalendar\Framework\Foundation\Dispatcher;
+use FluentCalendar\Framework\Encryption\Encrypter;
 use FluentCalendar\Framework\Foundation\RequestGuard;
 use FluentCalendar\Framework\Pagination\AbstractPaginator;
 use FluentCalendar\Framework\Database\ConnectionResolver;
 use FluentCalendar\Framework\Database\Query\WPDBConnection;
-use FluentCalendar\Framework\Foundation\UnAuthorizedException;
 
 class ComponentBinder
 {
+    /**
+     * The application instance
+     * @var \FluentCalendar\Framework\Foundation\Application
+     */
     protected $app = null;
 
+    /**
+     * List of bindings
+     * @var array
+     */
     protected $bindables = [
         'Request',
         'Response',
         'Validator',
         'View',
         'Events',
-        'DataBase',
+        'DB',
+        'URL',
         'Router',
-        'Paginator'
+        'Paginator',
+        'Encrypter',
+        'Pipeline',
     ];
 
+    /**
+     * Construct the binder
+     * @param \FluentCalendar\Framework\Foundation\Application $app
+     */
     public function __construct($app)
     {
-        $this->app = $app;
+        $this->registerFacadeResolver(
+            $this->app = $app
+        );
     }
 
+    /**
+     * Bind all the components in to the container.
+     * @return null
+     */
     public function bindComponents()
     {
         foreach ($this->bindables as $value) {
@@ -49,6 +74,11 @@ class ComponentBinder
         $this->registerResolvingEvent($this->app);
     }
 
+    /**
+     * Register resolving event into the container.
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return null
+     */
     protected function registerResolvingEvent($app)
     {
         $app->resolving(RequestGuard::class, function($request) use ($app) {
@@ -61,6 +91,75 @@ class ComponentBinder
         });
     }
 
+    /**
+     * Register the dynamic facade resolver.
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return null
+     */
+    protected function registerFacadeResolver($app)
+    {
+        Facade::setFacadeApplication($app);
+ 
+        spl_autoload_register(function($class) use ($app) {
+
+            $ns = substr(($fqn = __NAMESPACE__), 0, strpos($fqn, '\\'));
+
+            if (Str::contains($class, ($facade = $ns.'\Facade'))) {
+
+                $this->createFacadeFor($facade, $class, $app);
+            }
+        });
+    }
+
+    /**
+     * Create a facade resolver class dynamically
+     * @param  string $facade
+     * @param  string $class
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return null
+     */
+    protected function createFacadeFor($facade, $class, $app)
+    {
+        $facadeAccessor = $this->resolveFacadeAccessor($facade, $class, $app);
+
+        $anonymousClass = new class($facadeAccessor) extends Facade {
+
+            protected static $facadeAccessor;
+
+            public function __construct($facadeAccessor) {
+                static::$facadeAccessor = $facadeAccessor;
+            }
+
+            protected static function getFacadeAccessor() {
+                return static::$facadeAccessor;
+            }
+        };
+
+        class_alias(get_class($anonymousClass), $class, true);
+    }
+
+    /**
+     * Resolve the binding name.
+     * @param  string $facade
+     * @param  string $class
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return string
+     */
+    protected function resolveFacadeAccessor($facade, $class,$app)
+    {
+        $name = strtolower(trim(str_replace($facade, '', $class), '\\'));
+        
+        if ($name == 'route') $name = 'router';
+
+        if ($app->bound($name)) {
+            return $name;
+        }
+    }
+
+    /**
+     * Bind the request instance into the container.
+     * @return null
+     */
     protected function bindRequest()
     {
         $this->app->singleton(Request::class, function ($app) {
@@ -70,6 +169,10 @@ class ComponentBinder
         $this->app->alias(Request::class, 'request');
     }
 
+    /**
+     * Bind the reesponse instance into the container.
+     * @return null
+     */
     protected function bindResponse()
     {
         $this->app->singleton(Response::class, function($app) {
@@ -79,6 +182,10 @@ class ComponentBinder
         $this->app->alias(Response::class, 'response');
     }
 
+    /**
+     * Bind the request validator into the container.
+     * @return null
+     */
     protected function bindValidator()
     {
         $this->app->bind(Validator::class, function($app) {
@@ -88,6 +195,10 @@ class ComponentBinder
         $this->app->alias(Validator::class, 'validator');
     }
 
+    /**
+     * Bind the view instance into the container.
+     * @return null
+     */
     protected function bindView()
     {
         $this->app->bind(View::class, function($app) {
@@ -97,6 +208,10 @@ class ComponentBinder
          $this->app->alias(View::class, 'view');
     }
 
+    /**
+     * Bind the event dispatcher instance into the container.
+     * @return null
+     */
     protected function bindEvents()
     {
         $this->app->singleton(Dispatcher::class, function($app) {
@@ -106,9 +221,13 @@ class ComponentBinder
         $this->app->alias(Dispatcher::class, 'events');
     }
 
-    protected function bindDataBase()
+    /**
+     * Bind the db (query builder) instance into the container.
+     * @return null
+     */
+    protected function bindDB()
     {
-        $this->app->bindShared('db', function($app) {
+        $this->app->singleton('db', function($app) {
             return new WPDBConnection(
                 $GLOBALS['wpdb'], $app->config->get('database')
             );
@@ -119,6 +238,21 @@ class ComponentBinder
         Model::setConnectionResolver(new ConnectionResolver);
     }
 
+    /**
+     * Bind the URL instance into the container.
+     * @return null
+     */
+    protected function bindURL()
+    {
+        $this->app->bind('url', function($app) {
+            return new URL;
+        });
+    }
+
+    /**
+     * Bind the router instance into the container.
+     * @return null
+     */
     protected function bindRouter()
     {
         $this->app->singleton('router', function($app) {
@@ -126,6 +260,10 @@ class ComponentBinder
         });
     }
 
+    /**
+     * Bind the paginator instance into the container.
+     * @return null
+     */
     protected function bindPaginator()
     {
         AbstractPaginator::currentPathResolver(function () {
@@ -143,6 +281,39 @@ class ComponentBinder
         });
     }
 
+    /**
+     * Bind the encrypter instance into the container.
+     * @return null
+     */
+    protected function bindEncrypter()
+    {
+        $this->app->singleton(Encrypter::class, function ($app) {
+            return new Encrypter($app);
+        });
+
+        $this->app->alias(Encrypter::class, 'encrypter');    
+    }
+
+    /**
+     * Bind the pipeline instance into the container.
+     * @return null
+     */
+    protected function bindPipeline()
+    {
+        $this->app->bind(Pipeline::class, function ($app) {
+            return new Pipeline($app);
+        });
+
+        $this->app->alias(Pipeline::class, 'pipeline');    
+    }
+
+    /**
+     * Load other bindings the developers might
+     * have added in the application level.
+     * 
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return null
+     */
     protected function extendBindings($app)
     {
         $bindings = $app['path'] . 'boot/bindings.php';
@@ -152,6 +323,11 @@ class ComponentBinder
         }
     }
 
+    /**
+     * Load the plugin's global functions
+     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @return null
+     */
     protected function loadGlobalFunctions($app)
     {
         $globals = $app['path'] . 'boot/globals.php';

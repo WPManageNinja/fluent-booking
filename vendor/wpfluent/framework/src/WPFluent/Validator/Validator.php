@@ -75,7 +75,7 @@ class Validator
      * @param array $rules
      * @param array $messages
      *
-     * @return \FluentValidator\Validator
+     * @return \FluentCalendar\Framework\Validator\Validator
      */
     public function make(array $data = [], array $rules = [], array $messages = [])
     {
