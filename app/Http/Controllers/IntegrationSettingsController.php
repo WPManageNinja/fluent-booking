@@ -16,7 +16,7 @@ class IntegrationSettingsController extends Controller
         try {
             $settingsKey = sanitize_text_field($this->request->get('settings_key'));
 
-            $settings = apply_filters('fluent_calendar/get_integration_settings_' . $settingsKey, []);
+            $settings = apply_filters('fluent_booking/get_integration_settings_' . $settingsKey, []);
 
             return $this->sendSuccess([
                 'status'   => true,
@@ -37,7 +37,7 @@ class IntegrationSettingsController extends Controller
 
             $settings = wp_unslash($this->request->get('settings'));
 
-            do_action('fluent_calendar/save_integration_settings_' . $settingsKey, $settings);
+            do_action('fluent_booking/save_integration_settings_' . $settingsKey, $settings);
 
         } catch (Exception $e) {
             return $this->sendError([

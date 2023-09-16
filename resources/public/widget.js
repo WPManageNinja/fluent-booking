@@ -3,7 +3,7 @@ import './styles.scss';
 import './saas.scss';
 import {util, getErrorText} from './util.js';
 
-const calendarApps = document.querySelectorAll('.fluent_calendar_app');
+const calendarApps = document.querySelectorAll('.fluent_booking_app');
 
 if (calendarApps.length) {
     calendarApps.forEach((item, index) => {

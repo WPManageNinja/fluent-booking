@@ -649,7 +649,7 @@ class Helper
 
     public static function getAppBaseUrl($extension = '')
     {
-        return apply_filters('fluent_calendar/admin_base_url', admin_url('admin.php?page=fluent-calendar#/' . $extension), $extension);
+        return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-calendar#/' . $extension), $extension);
     }
 
     public static function getMeta($group, $objectId, $key, $withModel = false)
@@ -795,7 +795,7 @@ class Helper
             $default = $original . '-' . $counter;
         }
 
-        return apply_filters('fluent_calendar/slot_slug', $default, $original);
+        return apply_filters('fluent_booking/slot_slug', $default, $original);
     }
 
     public static function getIp()
@@ -872,7 +872,7 @@ class Helper
             $tags = array_merge($tags, $svg_args);
         }
 
-        $tags = apply_filters('fluent_calendar/allowed_html_tags', $tags);
+        $tags = apply_filters('fluent_booking/allowed_html_tags', $tags);
 
         return wp_kses($html, $tags);
     }
@@ -901,7 +901,7 @@ class Helper
             }
         }
 
-        return apply_filters('fluent_calendar/backend_sanitized_values', $inputs, $originalValues);
+        return apply_filters('fluent_booking/backend_sanitized_values', $inputs, $originalValues);
     }
 
     /**
@@ -932,7 +932,7 @@ class Helper
 
     public static function getEventTypesSchema()
     {
-        return apply_filters('fluent_calendar/event_types_schema', [
+        return apply_filters('fluent_booking/event_types_schema', [
             'single' => [
                 'title'     => 'One-on-One', 
                 'subtitle'  => 'Meeting with a single person'
@@ -946,7 +946,7 @@ class Helper
 
     public static function getDefaultNotificationSettings()
     {
-        $defaults = apply_filters('fluent_calendar/default_notification_settings', [
+        $defaults = apply_filters('fluent_booking/default_notification_settings', [
             'booking_conf_attendee' => [
                 'enabled' => true,
                 'title'   => 'Booking Confirmation to Attendee',
@@ -1014,7 +1014,7 @@ class Helper
 
     public static function getEditorShortCodes()
     {
-        $shortcodes = apply_filters('fluent_calendar/editor_shortcodes', [
+        $shortcodes = apply_filters('fluent_booking/editor_shortcodes', [
             '{event.name}'                => 'Event Name',
             '{event.datetime}'            => 'Event Date',
             '{event.full_datetime}'       => 'Event Full Date',

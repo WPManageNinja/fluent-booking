@@ -36,13 +36,13 @@ abstract class IntegrationManager extends IntegrationHelper
 
     public function registerAdminHooks()
     {
-        add_filter('fluent_calendar/get_client_settings_' . $this->integrationKey, [$this, 'getClientSettings'], 10, 1);
-        add_filter('fluent_calendar/get_integration_settings_' . $this->integrationKey, [$this, 'getIntegrationSettings'], 10, 1);
+        add_filter('fluent_booking/get_client_settings_' . $this->integrationKey, [$this, 'getClientSettings'], 10, 1);
+        add_filter('fluent_booking/get_integration_settings_' . $this->integrationKey, [$this, 'getIntegrationSettings'], 10, 1);
 
-        add_action('fluent_calendar/save_client_settings_' . $this->integrationKey, [$this, 'saveClientSettings'], 10, 1);
-        add_action('fluent_calendar/save_integration_settings_' . $this->integrationKey, [$this, 'saveIntegrationSettings'], 10, 1);
+        add_action('fluent_booking/save_client_settings_' . $this->integrationKey, [$this, 'saveClientSettings'], 10, 1);
+        add_action('fluent_booking/save_integration_settings_' . $this->integrationKey, [$this, 'saveIntegrationSettings'], 10, 1);
 
-        add_action('fluent_calendar/disconnect_integration_' . $this->integrationKey, [$this, 'disconnectIntegration'], 10, 0);
+        add_action('fluent_booking/disconnect_integration_' . $this->integrationKey, [$this, 'disconnectIntegration'], 10, 0);
     }
 
     abstract public function getClientSettings();

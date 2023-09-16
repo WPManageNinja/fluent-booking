@@ -2,7 +2,7 @@ import BookingApp from './BookingApp.svelte';
 import './styles.scss';
 import './saas.scss';
 
-const calendarApps = document.querySelectorAll('.fluent_calendar_app');
+const calendarApps = document.querySelectorAll('.fluent_booking_app');
 
 // get month get parameter from url
 let preSelects = null;

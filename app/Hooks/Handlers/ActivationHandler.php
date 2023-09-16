@@ -25,7 +25,7 @@ class ActivationHandler
 
     public function registerWpCron()
     {
-        $dailyHook = 'fluent_calendar_hourly_tasks';
+        $dailyHook = 'fluent_booking_hourly_tasks';
         if (!wp_next_scheduled($dailyHook)) {
             wp_schedule_event(time(), 'hourly', $dailyHook);
         }

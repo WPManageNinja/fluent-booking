@@ -125,11 +125,11 @@ class BookingController extends Controller
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
         ];
 
-        $confirmationData = apply_filters('fluent_calendar/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
+        $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
         $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
 
-        return apply_filters('fluent_calendar/booking_confirmation', [
+        return apply_filters('fluent_booking/booking_confirmation', [
             'message'       => 'Booking has been confirmed',
             'response_html' => $responseHtml
         ]);

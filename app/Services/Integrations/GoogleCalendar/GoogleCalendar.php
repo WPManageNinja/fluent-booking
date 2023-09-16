@@ -40,9 +40,9 @@ class GoogleCalendar extends IntegrationManager
             $this->enqueueAssets();
 
             add_action('template_redirect', [$this, 'init']);
-            add_action('fluent_calendar/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
-            add_action('fluent_calendar/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
-            add_filter('fluent_calendar/booked_events', [$this, 'getBookedEvents'], 10, 4);
+            add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
+            add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
+            add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
         }
     }
 
@@ -58,7 +58,7 @@ class GoogleCalendar extends IntegrationManager
 
         $this->authenticate($code);
 
-        do_action('fluent_calendar/google_calendar_integration', $code, $scope);
+        do_action('fluent_booking/google_calendar_integration', $code, $scope);
 
         wp_redirect(admin_url('admin.php?page=fluent-calendar#/integrations'));
 
@@ -79,7 +79,7 @@ class GoogleCalendar extends IntegrationManager
 
         $this->updateAuthDetails($authData);
 
-        do_action('fluent_calendar/google_calendar_authenticated', $authData);
+        do_action('fluent_booking/google_calendar_authenticated', $authData);
     }
 
     public function enqueueAssets()
@@ -286,7 +286,7 @@ class GoogleCalendar extends IntegrationManager
             ],
             'extendedProperties' => [
                 'shared' => [
-                    'created_by' => 'fluent_calendar',
+                    'created_by' => 'fluent_booking',
                 ],
             ],
         ];
@@ -326,7 +326,7 @@ class GoogleCalendar extends IntegrationManager
 
         $this->logBookingActivity($isNewEvent, $booking->id, $response);
 
-        do_action('fluent_calendar/google_calendar_event_updated', $booking, $calendarSlot, $response);
+        do_action('fluent_booking/google_calendar_event_updated', $booking, $calendarSlot, $response);
     }
 
     public function getBookedEvents($books, $calendarSlot, $dateRanges, $timeZone)
@@ -363,7 +363,7 @@ class GoogleCalendar extends IntegrationManager
 
         foreach ($bookedEvents as $event){
             
-            if ('fluent_calendar' == Arr::get($event, 'extendedProperties.shared.created_by')) {
+            if ('fluent_booking' == Arr::get($event, 'extendedProperties.shared.created_by')) {
                 continue;
             }
 
@@ -406,7 +406,7 @@ class GoogleCalendar extends IntegrationManager
         $booking->location_details = $locationSettings;
         $booking->save();
 
-        do_action('fluent_calendar/after_event_link_updated', $booking, $response);
+        do_action('fluent_booking/after_event_link_updated', $booking, $response);
     }
 
     public function logBookingActivity($isNewEvent, $bookingId, $response)
@@ -418,7 +418,7 @@ class GoogleCalendar extends IntegrationManager
 
         $eventLink = '<a target="_blank" href="' . esc_url($htmlLink) . '">' . esc_html('here') . '</a>';
 
-        do_action('fluent_calendar/log_booking_note', [
+        do_action('fluent_booking/log_booking_note', [
             'title'       => sprintf(__('Event Created in Google Calendar')),
             'type'        => 'activity',
             'description' => sprintf(__('Find Event in Google Calendar: %s'), $eventLink),

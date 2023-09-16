@@ -74,7 +74,7 @@ class CalendarSlot extends Model
 
         $data = [
             'name'   => $name,
-            'avatar' => apply_filters('fluent_calendar/author_photo', get_avatar_url($user->ID), $user)
+            'avatar' => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
         ];
 
         if (!$public) {
