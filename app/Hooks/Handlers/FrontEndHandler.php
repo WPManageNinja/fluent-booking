@@ -16,7 +16,7 @@ class FrontEndHandler
 {
     public function register()
     {
-        add_shortcode('fluent_booking_booking', [$this, 'handleShortcode']);
+        add_shortcode('fluent_booking', [$this, 'handleShortcode']);
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
