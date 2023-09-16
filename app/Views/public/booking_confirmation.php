@@ -1,7 +1,7 @@
 <div class="fcal_confirmation">
     <?php do_action('fluent_booking/booking_confirmation_header', $booking); ?>
     <div class="fcal_confirm_header">
-        <h3><?php echo __('Booking Confirmed', 'fluent-calendar'); ?></h3>
+        <h3><?php echo __('Booking Confirmed', 'fluent-booking'); ?></h3>
         <p><?php echo wp_kses_post($sub_heading); ?></p>
     </div>
     <div class="fcal_confirm_body">

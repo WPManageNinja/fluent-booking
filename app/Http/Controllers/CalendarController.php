@@ -181,7 +181,7 @@ class CalendarController extends Controller
 
         return [
             'calendar' => $calendar,
-            'message'  => __('Calendar has been updated successfully', 'fluent-calendar')
+            'message'  => __('Calendar has been updated successfully', 'fluent-booking')
         ];
     }
 
