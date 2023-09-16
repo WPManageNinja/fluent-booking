@@ -119,7 +119,7 @@ class BookingController extends Controller
         $author = $calendarSlot->getAuthorProfile(true);
 
         $confirmationData = [
-            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
+            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
             'slot'        => $calendarSlot,
             'booking'     => $booking,
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.'

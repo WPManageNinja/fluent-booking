@@ -15,10 +15,10 @@ class AdminMenuHandler
         $capability = 'manage_options';
 
         add_menu_page(
-            __('Fluent Calendar', 'fluent-calendar'),
-            __('Fluent Calendar', 'fluent-calendar'),
+            __('Fluent Booking', 'fluent-booking'),
+            __('Fluent Booking', 'fluent-booking'),
             $capability,
-            'fluent-calendar',
+            'fluent-booking',
             [$this, 'render'],
             $this->getMenuIcon(),
             6
@@ -41,7 +41,7 @@ class AdminMenuHandler
             $menuItems = [
                 [
                     'key'       => 'dashboard',
-                    'label'     => __('Getting Started', 'fluent-calendar'),
+                    'label'     => __('Getting Started', 'fluent-booking'),
                     'permalink' => $baseUrl
                 ],
             ];
@@ -49,27 +49,27 @@ class AdminMenuHandler
             $menuItems = [
                 [
                     'key'       => 'dashboard',
-                    'label'     => __('Dashboard', 'fluent-calendar'),
+                    'label'     => __('Dashboard', 'fluent-booking'),
                     'permalink' => $baseUrl
                 ],
                 [
                     'key'       => 'calendars',
-                    'label'     => __('Booking Types', 'fluent-calendar'),
+                    'label'     => __('Booking Types', 'fluent-booking'),
                     'permalink' => $baseUrl.'calendars'
                 ],
                 [
                     'key'       => 'scheduled_events',
-                    'label'     => __('Scheduled Meetings', 'fluent-calendar'),
+                    'label'     => __('Scheduled Meetings', 'fluent-booking'),
                     'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
                 ],
                 [
                     'key'       => 'configurations',
-                    'label'     => __('Configurations', 'fluent-calendar'),
+                    'label'     => __('Configurations', 'fluent-booking'),
                     'permalink' => $baseUrl.'configurations'
                 ],
                 [
                     'key'       => 'integrations',
-                    'label'     => __('Integrations', 'fluent-calendar'),
+                    'label'     => __('Integrations', 'fluent-booking'),
                     'permalink' => $baseUrl.'integrations'
                 ],
             ];
