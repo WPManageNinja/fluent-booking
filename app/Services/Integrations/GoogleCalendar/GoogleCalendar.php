@@ -60,7 +60,7 @@ class GoogleCalendar extends IntegrationManager
 
         do_action('fluent_booking/google_calendar_integration', $code, $scope);
 
-        wp_redirect(admin_url('admin.php?page=fluent-calendar#/integrations'));
+        wp_redirect(admin_url('admin.php?page=fluent-booking#/integrations'));
 
         exit;
     }
@@ -147,7 +147,7 @@ class GoogleCalendar extends IntegrationManager
         $defaults = [
             'client_id'     => '',
             'client_secret' => '',
-            'redirect_url'  => site_url('/google-calendar-integration/fluent-calendar'),
+            'redirect_url'  => site_url('/google-calendar-integration/fluent-booking'),
         ];
 
         $clientDetails = $this->getClientDetails();

@@ -649,7 +649,7 @@ class Helper
 
     public static function getAppBaseUrl($extension = '')
     {
-        return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-calendar#/' . $extension), $extension);
+        return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
     public static function getMeta($group, $objectId, $key, $withModel = false)
