@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Database\Query\JoinClause;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\CanBeOneOfMany;
-use FluentCalendar\Framework\Database\Orm\SupportsPartialRelations;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\ComparesRelatedModels;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\SupportsDefaultModels;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Query\JoinClause;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\CanBeOneOfMany;
+use FluentBooking\Framework\Database\Orm\SupportsPartialRelations;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\ComparesRelatedModels;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\SupportsDefaultModels;
 
 class HasOne extends HasOneOrMany implements SupportsPartialRelations
 {
@@ -49,7 +49,7 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -63,10 +63,10 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
      *
      * Essentially, these queries compare on column names like "whereColumn".
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -80,7 +80,7 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     /**
      * Add constraints for inner join subselect for one of many relationships.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
      * @param  string|null  $column
      * @param  string|null  $aggregate
      * @return void
@@ -103,7 +103,7 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     /**
      * Add join query constraints for one of many relationships.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\JoinClause  $join
+     * @param  \FluentBooking\Framework\Database\Query\JoinClause  $join
      * @return void
      */
     public function addOneOfManyJoinSubQueryConstraints(JoinClause $join)
@@ -114,8 +114,8 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     /**
      * Make a new related instance for the given model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function newRelatedInstanceFor(Model $parent)
     {
@@ -127,7 +127,7 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     /**
      * Get the value of the model's foreign key.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @return mixed
      */
     protected function getRelatedKeyFrom(Model $model)

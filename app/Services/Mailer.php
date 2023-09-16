@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Services;
+namespace FluentBooking\App\Services;
 
 class Mailer
 {

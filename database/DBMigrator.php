@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\Database;
+namespace FluentBooking\Database;
 
-use FluentCalendar\Database\Migrations\BookingActivityMigrator;
-use FluentCalendar\Database\Migrations\BookingMigrator;
-use FluentCalendar\Database\Migrations\BookingMetaMigrator;
-use FluentCalendar\Database\Migrations\BookingHostMigrator;
-use FluentCalendar\Database\Migrations\CalendarMigrator;
-use FluentCalendar\Database\Migrations\CalendarSlotsMigrator;
-use FluentCalendar\Database\Migrations\MetaMigrator;
+use FluentBooking\Database\Migrations\BookingActivityMigrator;
+use FluentBooking\Database\Migrations\BookingMigrator;
+use FluentBooking\Database\Migrations\BookingMetaMigrator;
+use FluentBooking\Database\Migrations\BookingHostMigrator;
+use FluentBooking\Database\Migrations\CalendarMigrator;
+use FluentBooking\Database\Migrations\CalendarSlotsMigrator;
+use FluentBooking\Database\Migrations\MetaMigrator;
 
 class DBMigrator
 {

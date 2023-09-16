@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Relations\Concerns;
 
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\SupportsPartialRelations;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\SupportsPartialRelations;
 
 trait ComparesRelatedModels
 {
     /**
      * Determine if the model is the related instance of the relationship.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model|null  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model|null  $model
      * @return bool
      */
     public function is($model)
@@ -32,7 +32,7 @@ trait ComparesRelatedModels
     /**
      * Determine if the model is not the related instance of the relationship.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model|null  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model|null  $model
      * @return bool
      */
     public function isNot($model)
@@ -50,7 +50,7 @@ trait ComparesRelatedModels
     /**
      * Get the value of the model's related key.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @return mixed
      */
     abstract protected function getRelatedKeyFrom(Model $model);

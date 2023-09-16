@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\BookingService;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\App\Services\TimeSlotService;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Validator\ValidationException;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingService;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Validator\ValidationException;
 
 class FrontEndHandler
 {

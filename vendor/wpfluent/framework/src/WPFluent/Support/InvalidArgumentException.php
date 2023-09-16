@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use ReflectionClass;
-use FluentCalendar\Framework\Support\ExceptionInterface;
+use FluentBooking\Framework\Support\ExceptionInterface;
 use InvalidArgumentException as BaseInvalidArgumentException;
 
 use function sprintf;

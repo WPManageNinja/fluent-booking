@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Container\Contracts\Psr;
+namespace FluentBooking\Framework\Container\Contracts\Psr;
 
 use Throwable;
 

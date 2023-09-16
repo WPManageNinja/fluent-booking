@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use Countable;
 use ArrayAccess;
 use JsonSerializable;
 use IteratorAggregate;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\JsonableInterface;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Pagination\AbstractPaginator;
-use FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Pagination\AbstractPaginator;
+use FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface;
 
 class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, JsonableInterface, LengthAwarePaginatorInterface
 {
@@ -71,7 +71,7 @@ class LengthAwarePaginator extends AbstractPaginator implements ArrayableInterfa
     /**
      * Get the paginator links as a collection (for JSON responses).
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function linkCollection()
     {

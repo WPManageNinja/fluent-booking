@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Request;
+namespace FluentBooking\Framework\Request;
 
-use FluentCalendar\Framework\Validator\Contracts\File as Contract;
+use FluentBooking\Framework\Validator\Contracts\File as Contract;
 
 class File extends \SplFileInfo implements Contract
 {

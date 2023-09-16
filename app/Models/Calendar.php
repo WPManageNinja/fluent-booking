@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 
-use FluentCalendar\App\Models\Model;
+use FluentBooking\App\Models\Model;
 
 class Calendar extends Model
 {   

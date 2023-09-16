@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\App\Http\Policies;
+namespace FluentBooking\App\Http\Policies;
 
-use FluentCalendar\Framework\Request\Request;
-use FluentCalendar\Framework\Foundation\Policy;
+use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Foundation\Policy;
 
 class CalendarPolicy extends Policy
 {
     /**
      * Check user permission for any method
-     * @param  \FluentCalendar\Framework\Request\Request $request
+     * @param  \FluentBooking\Framework\Request\Request $request
      * @return Boolean
      */
     public function verifyRequest(Request $request)

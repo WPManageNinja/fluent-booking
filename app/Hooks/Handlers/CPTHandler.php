@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\App\App;
+use FluentBooking\App\App;
 
 class CPTHandler
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use Countable;
 use ArrayAccess;
 use JsonSerializable;
 use IteratorAggregate;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\JsonableInterface;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Pagination\PaginatorInterface;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Pagination\PaginatorInterface;
 
 class Paginator extends AbstractPaginator implements ArrayableInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, JsonableInterface, PaginatorInterface
 {

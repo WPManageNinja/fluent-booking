@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fa666fd53857f6b763f94aa1511d345",
+    "content-hash": "216013ada8f77bbfc4494179499bc485",
     "packages": [
         {
             "name": "wpfluent/framework",

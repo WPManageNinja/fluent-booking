@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
-use FluentCalendar\Framework\Database\Query\Builder;
+use FluentBooking\Framework\Database\Query\Builder;
 
 class Processor
 {
     /**
      * Process the results of a "select" query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $results
      * @return array
      */
@@ -21,7 +21,7 @@ class Processor
     /**
      * Process an  "insert get ID" query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $sql
      * @param  array   $values
      * @param  string  $sequence

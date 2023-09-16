@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Container\Contracts;
+namespace FluentBooking\Framework\Container\Contracts;
 
 use Exception;
-use FluentCalendar\Framework\Container\Contracts\Psr\ContainerExceptionInterface;
+use FluentBooking\Framework\Container\Contracts\Psr\ContainerExceptionInterface;
 
 class CircularDependencyException extends Exception implements ContainerExceptionInterface
 {

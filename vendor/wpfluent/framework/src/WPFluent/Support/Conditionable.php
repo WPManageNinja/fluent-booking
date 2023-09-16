@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 trait Conditionable
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
 use InvalidArgumentException;
-use FluentCalendar\Framework\Foundation\Config;
-use FluentCalendar\Framework\Container\Container;
-use FluentCalendar\Framework\Foundation\ComponentBinder;
-use FluentCalendar\Framework\Foundation\FoundationTrait;
-use FluentCalendar\Framework\Foundation\AsyncRequestTrait;
-use FluentCalendar\Framework\Foundation\CronTaskSchedulerTrait;
+use FluentBooking\Framework\Foundation\Config;
+use FluentBooking\Framework\Container\Container;
+use FluentBooking\Framework\Foundation\ComponentBinder;
+use FluentBooking\Framework\Foundation\FoundationTrait;
+use FluentBooking\Framework\Foundation\AsyncRequestTrait;
+use FluentBooking\Framework\Foundation\CronTaskSchedulerTrait;
 
 class Application extends Container
 {
@@ -274,7 +274,7 @@ class Application extends Container
     /**
      * Register rest routes.
      * 
-     * @param \FluentCalendar\Framework\Http\Router $router
+     * @param \FluentBooking\Framework\Http\Router $router
      * 
      * @return null
      */
@@ -288,7 +288,7 @@ class Application extends Container
     /**
      * Load (include) routes
      * 
-     * @param \FluentCalendar\Framework\Http\Router $router
+     * @param \FluentBooking\Framework\Http\Router $router
      * @return null
      */
     protected function requireRouteFile($router)

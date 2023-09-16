@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Concerns;
 
-use FluentCalendar\Framework\Support\Str;
+use FluentBooking\Framework\Support\Str;
 
 trait GuardsAttributes
 {

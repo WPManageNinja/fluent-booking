@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\App\Services\Integrations\FluentForms;
+namespace FluentBooking\App\Services\Integrations\FluentForms;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\BookingService;
-use FluentCalendar\App\Services\TimeSlotService;
-use FluentCalendar\App\Services\Integrations\FluentForms\BookingElement;
+use FluentBooking\App\App;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\BookingService;
+use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\App\Services\Integrations\FluentForms\BookingElement;
 
 class FluentFormInit 
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\BookingService;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\TimeSlotService;
-use FluentCalendar\Framework\Request\Request;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingService;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Support\Arr;
 
 class BookingController extends Controller
 {

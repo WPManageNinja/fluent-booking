@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Relations\Concerns;
 
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Database\Orm\Relations\Pivot;
-use FluentCalendar\Framework\Support\Collection as BaseCollection;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Orm\Relations\Pivot;
+use FluentBooking\Framework\Support\Collection as BaseCollection;
 
 trait InteractsWithPivotTable
 {
@@ -66,7 +66,7 @@ trait InteractsWithPivotTable
     /**
      * Sync the intermediate tables with a list of IDs without detaching.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|\FluentCalendar\Framework\Database\Orm\Model|array  $ids
+     * @param  \FluentBooking\Framework\Support\Collection|\FluentBooking\Framework\Database\Orm\Model|array  $ids
      * @return array
      */
     public function syncWithoutDetaching($ids)
@@ -77,7 +77,7 @@ trait InteractsWithPivotTable
     /**
      * Sync the intermediate tables with a list of IDs or collection of models.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|\FluentCalendar\Framework\Database\Orm\Model|array  $ids
+     * @param  \FluentBooking\Framework\Support\Collection|\FluentBooking\Framework\Database\Orm\Model|array  $ids
      * @param  bool  $detaching
      * @return array
      */
@@ -128,7 +128,7 @@ trait InteractsWithPivotTable
     /**
      * Sync the intermediate tables with a list of IDs or collection of models with the given pivot values.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|\FluentCalendar\Framework\Database\Orm\Model|array  $ids
+     * @param  \FluentBooking\Framework\Support\Collection|\FluentBooking\Framework\Database\Orm\Model|array  $ids
      * @param  array  $values
      * @param  bool  $detaching
      * @return array
@@ -487,7 +487,7 @@ trait InteractsWithPivotTable
     /**
      * Get the pivot models that are currently attached.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     protected function getCurrentlyAttachedPivots()
     {
@@ -505,7 +505,7 @@ trait InteractsWithPivotTable
      *
      * @param  array  $attributes
      * @param  bool  $exists
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Pivot
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Pivot
      */
     public function newPivot(array $attributes = [], $exists = false)
     {
@@ -520,7 +520,7 @@ trait InteractsWithPivotTable
      * Create a new existing pivot model instance.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Pivot
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Pivot
      */
     public function newExistingPivot(array $attributes = [])
     {
@@ -530,7 +530,7 @@ trait InteractsWithPivotTable
     /**
      * Get a new plain query builder for the pivot table.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function newPivotStatement()
     {
@@ -541,7 +541,7 @@ trait InteractsWithPivotTable
      * Get a new pivot statement for a given "other" ID.
      *
      * @param  mixed  $id
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function newPivotStatementForId($id)
     {
@@ -551,7 +551,7 @@ trait InteractsWithPivotTable
     /**
      * Create a new query builder for the pivot table.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function newPivotQuery()
     {

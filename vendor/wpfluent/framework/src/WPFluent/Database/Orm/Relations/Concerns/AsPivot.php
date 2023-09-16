@@ -1,18 +1,18 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Relations\Concerns;
 
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
 
 trait AsPivot
 {
     /**
      * The parent model of the relationship.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     public $pivotParent;
 
@@ -33,7 +33,7 @@ trait AsPivot
     /**
      * Create a new pivot model instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @param  array  $attributes
      * @param  string  $table
      * @param  bool  $exists
@@ -66,7 +66,7 @@ trait AsPivot
     /**
      * Create a new pivot model from raw values returned from a query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @param  array  $attributes
      * @param  string  $table
      * @param  bool  $exists
@@ -86,8 +86,8 @@ trait AsPivot
     /**
      * Set the keys for a select query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSelectQuery($query)
     {
@@ -107,8 +107,8 @@ trait AsPivot
     /**
      * Set the keys for a save update query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSaveQuery($query)
     {
@@ -142,7 +142,7 @@ trait AsPivot
     /**
      * Get the query builder for a delete operation on the pivot.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function getDeleteQuery()
     {
@@ -271,7 +271,7 @@ trait AsPivot
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  int[]|string[]|string  $ids
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQueryForRestoration($ids)
     {
@@ -294,7 +294,7 @@ trait AsPivot
      * Get a new query to restore multiple models by their queueable IDs.
      *
      * @param  int[]|string[]  $ids
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function newQueryForCollectionRestoration(array $ids)
     {

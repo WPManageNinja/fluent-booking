@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 use RuntimeException;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace FluentCalendar\Framework\Request;
+namespace FluentBooking\Framework\Request;
 
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Foundation\Application;
-use FluentCalendar\Framework\Validator\ValidationException;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Foundation\Application;
+use FluentBooking\Framework\Validator\ValidationException;
 
 class Request
 {
@@ -13,7 +13,7 @@ class Request
 
     /**
      * The application instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
 
@@ -74,7 +74,7 @@ class Request
 
     /**
      * Construct the request instance
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      * @param array/$_GET $get
      * @param array/$_POST $post
      * @param array/$_FILES $files

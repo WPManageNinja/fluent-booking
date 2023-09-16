@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
 
 abstract class MorphOneOrMany extends HasOneOrMany
 {
@@ -25,8 +25,8 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Create a new morph one or many relationship instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @param  string  $type
      * @param  string  $id
      * @param  string  $localKey
@@ -71,7 +71,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Set the foreign ID and type for creating a related model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @return void
      */
     protected function setForeignAttributesForCreate(Model $model)
@@ -84,10 +84,10 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Get the relationship query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Container;
+namespace FluentBooking\Framework\Container;
 
 use Closure;
 use Exception;
@@ -10,9 +10,9 @@ use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
-use FluentCalendar\Framework\Container\Contracts\BindingResolutionException;
-use FluentCalendar\Framework\Container\Contracts\CircularDependencyException;
-use FluentCalendar\Framework\Container\Contracts\Container as ContainerContract;
+use FluentBooking\Framework\Container\Contracts\BindingResolutionException;
+use FluentBooking\Framework\Container\Contracts\CircularDependencyException;
+use FluentBooking\Framework\Container\Contracts\Container as ContainerContract;
 
 class Container implements ArrayAccess, ContainerContract
 {
@@ -160,7 +160,7 @@ class Container implements ArrayAccess, ContainerContract
      * Define a contextual binding.
      *
      * @param  array|string  $concrete
-     * @return \FluentCalendar\Framework\Container\Contracts\ContextualBindingBuilder
+     * @return \FluentBooking\Framework\Container\Contracts\ContextualBindingBuilder
      */
     public function when($concrete)
     {
@@ -673,7 +673,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  array  $parameters
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     public function makeWith($abstract, array $parameters = [])
     {
@@ -687,7 +687,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  array  $parameters
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     public function make($abstract, array $parameters = [])
     {
@@ -720,8 +720,8 @@ class Container implements ArrayAccess, ContainerContract
      * @param  bool  $raiseEvents
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
-     * @throws \FluentCalendar\Framework\Container\Contracts\CircularDependencyException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\CircularDependencyException
      */
     protected function resolve($abstract, $parameters = [], $raiseEvents = true)
     {
@@ -861,8 +861,8 @@ class Container implements ArrayAccess, ContainerContract
      * @param  \Closure|string  $concrete
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
-     * @throws \FluentCalendar\Framework\Container\Contracts\CircularDependencyException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\CircularDependencyException
      */
     public function build($concrete)
     {
@@ -923,7 +923,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  \ReflectionParameter[]  $dependencies
      * @return array
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected function resolveDependencies(array $dependencies)
     {
@@ -996,7 +996,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected function resolvePrimitive(ReflectionParameter $parameter)
     {
@@ -1017,7 +1017,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected function resolveClass(ReflectionParameter $parameter)
     {
@@ -1074,7 +1074,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  string  $concrete
      * @return void
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected function notInstantiable($concrete)
     {
@@ -1095,7 +1095,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  \ReflectionParameter  $parameter
      * @return void
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected function unresolvablePrimitive(ReflectionParameter $parameter)
     {
@@ -1387,8 +1387,8 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Set the shared instance of the container.
      *
-     * @param  \FluentCalendar\Framework\Container\Contracts\Container|null  $container
-     * @return \FluentCalendar\Framework\Container\Contracts\Container|static
+     * @param  \FluentBooking\Framework\Container\Contracts\Container|null  $container
+     * @return \FluentBooking\Framework\Container\Contracts\Container|static
      */
     public static function setInstance(ContainerContract $container = null)
     {

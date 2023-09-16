@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Events;
+namespace FluentBooking\Framework\Events;
 
 interface DispatcherInterface
 {

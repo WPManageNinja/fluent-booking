@@ -1,19 +1,19 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
 use Closure;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Database\Orm\ModelNotFoundException;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\AsPivot;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\InteractsWithPivotTable;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\AsPivot;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\InteractsWithPivotTable;
 
 class BelongsToMany extends Relation
 {
@@ -134,8 +134,8 @@ class BelongsToMany extends Relation
     /**
      * Create a new belongs to many relationship instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @param  string  $table
      * @param  string  $foreignPivotKey
      * @param  string  $relatedPivotKey
@@ -199,7 +199,7 @@ class BelongsToMany extends Relation
     /**
      * Set the join clause for the relation query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder|null  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder|null  $query
      * @return $this
      */
     protected function performJoin($query = null)
@@ -269,7 +269,7 @@ class BelongsToMany extends Relation
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -296,7 +296,7 @@ class BelongsToMany extends Relation
     /**
      * Build model dictionary keyed by the relation's foreign key.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @return array
      */
     protected function buildDictionary(Collection $results)
@@ -581,7 +581,7 @@ class BelongsToMany extends Relation
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Support\Collection|\FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Support\Collection|\FluentBooking\Framework\Database\Orm\Model
      */
     public function findOrNew($id, $columns = ['*'])
     {
@@ -596,7 +596,7 @@ class BelongsToMany extends Relation
      * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function firstOrNew(array $attributes)
     {
@@ -613,7 +613,7 @@ class BelongsToMany extends Relation
      * @param  array  $attributes
      * @param  array  $joining
      * @param  bool  $touch
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function firstOrCreate(array $attributes, array $joining = [], $touch = true)
     {
@@ -631,7 +631,7 @@ class BelongsToMany extends Relation
      * @param  array  $values
      * @param  array  $joining
      * @param  bool  $touch
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function updateOrCreate(array $attributes, array $values = [], array $joining = [], $touch = true)
     {
@@ -651,7 +651,7 @@ class BelongsToMany extends Relation
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection|null
      */
     public function find($id, $columns = ['*'])
     {
@@ -667,9 +667,9 @@ class BelongsToMany extends Relation
     /**
      * Find multiple related models by their primary keys.
      *
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $ids
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $ids
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function findMany($ids, $columns = ['*'])
     {
@@ -689,9 +689,9 @@ class BelongsToMany extends Relation
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function findOrFail($id, $columns = ['*'])
     {
@@ -717,7 +717,7 @@ class BelongsToMany extends Relation
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function firstWhere($column, $operator = null, $value = null, $boolean = 'and')
     {
@@ -741,9 +741,9 @@ class BelongsToMany extends Relation
      * Execute the query and get the first result or throw an exception.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function firstOrFail($columns = ['*'])
     {
@@ -759,7 +759,7 @@ class BelongsToMany extends Relation
      *
      * @param  \Closure|array  $columns
      * @param  \Closure|null  $callback
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static|mixed
+     * @return \FluentBooking\Framework\Database\Orm\Model|static|mixed
      */
     public function firstOr($columns = ['*'], Closure $callback = null)
     {
@@ -792,7 +792,7 @@ class BelongsToMany extends Relation
      * Execute the query as a "select" statement.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function get($columns = ['*'])
     {
@@ -857,7 +857,7 @@ class BelongsToMany extends Relation
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\LengthAwarePaginator
+     * @return \FluentBooking\Framework\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -875,7 +875,7 @@ class BelongsToMany extends Relation
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\Paginator
+     * @return \FluentBooking\Framework\Pagination\Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -893,7 +893,7 @@ class BelongsToMany extends Relation
      * @param  array  $columns
      * @param  string  $cursorName
      * @param  string|null  $cursor
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginator
+     * @return \FluentBooking\Framework\Pagination\CursorPaginator
      */
     public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -968,7 +968,7 @@ class BelongsToMany extends Relation
      * Query lazily, by chunks of the given size.
      *
      * @param  int  $chunkSize
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function lazy($chunkSize = 1000)
     {
@@ -985,7 +985,7 @@ class BelongsToMany extends Relation
      * @param  int  $chunkSize
      * @param  string|null  $column
      * @param  string|null  $alias
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function lazyById($chunkSize = 1000, $column = null, $alias = null)
     {
@@ -1005,7 +1005,7 @@ class BelongsToMany extends Relation
     /**
      * Get a lazy collection for the given query.
      *
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function cursor()
     {
@@ -1019,7 +1019,7 @@ class BelongsToMany extends Relation
     /**
      * Prepare the query builder for query execution.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function prepareQueryBuilder()
     {
@@ -1047,7 +1047,7 @@ class BelongsToMany extends Relation
     /**
      * Get the pivot attributes from a model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @return array
      */
     protected function migratePivotAttributes(Model $model)
@@ -1130,7 +1130,7 @@ class BelongsToMany extends Relation
     /**
      * Get all of the IDs for the related models.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function allRelatedIds()
     {
@@ -1140,10 +1140,10 @@ class BelongsToMany extends Relation
     /**
      * Save a new model and attach it to the parent model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @param  array  $pivotAttributes
      * @param  bool  $touch
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function save(Model $model, array $pivotAttributes = [], $touch = true)
     {
@@ -1157,7 +1157,7 @@ class BelongsToMany extends Relation
     /**
      * Save an array of new models and attach them to the parent model.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|array  $models
+     * @param  \FluentBooking\Framework\Support\Collection|array  $models
      * @param  array  $pivotAttributes
      * @return array
      */
@@ -1178,7 +1178,7 @@ class BelongsToMany extends Relation
      * @param  array  $attributes
      * @param  array  $joining
      * @param  bool  $touch
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function create(array $attributes = [], array $joining = [], $touch = true)
     {
@@ -1217,10 +1217,10 @@ class BelongsToMany extends Relation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -1236,10 +1236,10 @@ class BelongsToMany extends Relation
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQueryForSelfJoin(Builder $query, Builder $parentQuery, $columns = ['*'])
     {

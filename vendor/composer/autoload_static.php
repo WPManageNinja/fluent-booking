@@ -13,8 +13,8 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         ),
         'F' => 
         array (
-            'FluentCalendar\\Framework\\' => 25,
-            'FluentCalendar\\App\\' => 19,
+            'FluentBooking\\Framework\\' => 24,
+            'FluentBooking\\App\\' => 18,
         ),
     );
 
@@ -23,11 +23,11 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         array (
             0 => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent',
         ),
-        'FluentCalendar\\Framework\\' => 
+        'FluentBooking\\Framework\\' => 
         array (
             0 => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent',
         ),
-        'FluentCalendar\\App\\' => 
+        'FluentBooking\\App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
@@ -35,15 +35,15 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'FluentCalendar\\Database\\DBMigrator' => __DIR__ . '/../..' . '/database/DBMigrator.php',
-        'FluentCalendar\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
-        'FluentCalendar\\Database\\Migrations\\BookingActivityMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingActivityMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\BookingHostMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingHostMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\BookingMetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMetaMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\BookingMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\CalendarSlotsMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarSlotsMigrator.php',
-        'FluentCalendar\\Database\\Migrations\\MetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/MetaMigrator.php',
+        'FluentBooking\\Database\\DBMigrator' => __DIR__ . '/../..' . '/database/DBMigrator.php',
+        'FluentBooking\\Database\\DBSeeder' => __DIR__ . '/../..' . '/database/DBSeeder.php',
+        'FluentBooking\\Database\\Migrations\\BookingActivityMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingActivityMigrator.php',
+        'FluentBooking\\Database\\Migrations\\BookingHostMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingHostMigrator.php',
+        'FluentBooking\\Database\\Migrations\\BookingMetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMetaMigrator.php',
+        'FluentBooking\\Database\\Migrations\\BookingMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMigrator.php',
+        'FluentBooking\\Database\\Migrations\\CalendarMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarMigrator.php',
+        'FluentBooking\\Database\\Migrations\\CalendarSlotsMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarSlotsMigrator.php',
+        'FluentBooking\\Database\\Migrations\\MetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/MetaMigrator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

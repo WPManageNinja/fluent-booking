@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use RuntimeException;
 use ReflectionFunction;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Reflector;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Reflector;
 
 trait ReflectsClosures
 {

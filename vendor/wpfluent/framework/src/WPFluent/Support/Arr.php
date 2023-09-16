@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use ArrayAccess;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\MacroableTrait;
 
 class Arr
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Concerns;
 
 trait HasTimestamps
 {

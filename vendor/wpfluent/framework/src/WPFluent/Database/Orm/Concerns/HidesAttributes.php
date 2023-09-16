@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Concerns;
 
 use Closure;
-use FluentCalendar\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Helper;
 
 trait HidesAttributes
 {

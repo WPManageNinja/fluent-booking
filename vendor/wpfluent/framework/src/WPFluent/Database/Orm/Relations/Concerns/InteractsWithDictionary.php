@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Relations\Concerns;
 
-use FluentCalendar\Framework\Support\InvalidArgumentException;
+use FluentBooking\Framework\Support\InvalidArgumentException;
 
 trait InteractsWithDictionary
 {
@@ -12,7 +12,7 @@ trait InteractsWithDictionary
      * @param  mixed  $attribute
      * @return mixed
      *
-     * @throws FluentCalendar\Framework\Support\InvalidArgumentException // @need_fix: Need Proper Namespace
+     * @throws FluentBooking\Framework\Support\InvalidArgumentException // @need_fix: Need Proper Namespace
      */
     protected function getDictionaryKey($attribute)
     {

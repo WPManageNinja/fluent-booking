@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 interface SupportsPartialRelations
 {
@@ -24,7 +24,7 @@ interface SupportsPartialRelations
     /**
      * Get the one of many inner join subselect query builder instance.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder|void
+     * @return \FluentBooking\Framework\Database\Orm\Builder|void
      */
     public function getOneOfManySubQuery();
 }

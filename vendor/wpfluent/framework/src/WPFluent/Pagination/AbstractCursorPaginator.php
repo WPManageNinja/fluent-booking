@@ -1,20 +1,20 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use Closure;
 use Exception;
 use ArrayAccess;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Tappable;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Database\Orm\Relations\Pivot;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Tappable;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Database\Orm\Relations\Pivot;
 
 /**
- * @mixin \FluentCalendar\Framework\Support\Collection
+ * @mixin \FluentBooking\Framework\Support\Collection
  */
 abstract class AbstractCursorPaginator
 {
@@ -23,7 +23,7 @@ abstract class AbstractCursorPaginator
     /**
      * All of the items being paginated.
      *
-     * @var \FluentCalendar\Framework\Support\Collection
+     * @var \FluentBooking\Framework\Support\Collection
      */
     protected $items;
 
@@ -65,7 +65,7 @@ abstract class AbstractCursorPaginator
     /**
      * The current cursor.
      *
-     * @var \FluentCalendar\Framework\Pagination\Cursor|null
+     * @var \FluentBooking\Framework\Pagination\Cursor|null
      */
     protected $cursor;
 
@@ -93,7 +93,7 @@ abstract class AbstractCursorPaginator
     /**
      * Get the URL for a given cursor.
      *
-     * @param  \FluentCalendar\Framework\Pagination\Cursor|null  $cursor
+     * @param  \FluentBooking\Framework\Pagination\Cursor|null  $cursor
      * @return string
      */
     public function url($cursor)
@@ -144,7 +144,7 @@ abstract class AbstractCursorPaginator
     /**
      * Get the "cursor" that points to the previous set of items.
      *
-     * @return \FluentCalendar\Framework\Pagination\Cursor|null
+     * @return \FluentBooking\Framework\Pagination\Cursor|null
      */
     public function previousCursor()
     {
@@ -163,7 +163,7 @@ abstract class AbstractCursorPaginator
     /**
      * Get the "cursor" that points to the next set of items.
      *
-     * @return \FluentCalendar\Framework\Pagination\Cursor|null
+     * @return \FluentBooking\Framework\Pagination\Cursor|null
      */
     public function nextCursor()
     {
@@ -184,7 +184,7 @@ abstract class AbstractCursorPaginator
      *
      * @param  \ArrayAccess|\stdClass  $item
      * @param  bool  $isNext
-     * @return \FluentCalendar\Framework\Pagination\Cursor
+     * @return \FluentBooking\Framework\Pagination\Cursor
      */
     public function getCursorForItem($item, $isNext = true)
     {
@@ -414,7 +414,7 @@ abstract class AbstractCursorPaginator
     /**
      * Get the current cursor being paginated.
      *
-     * @return \FluentCalendar\Framework\Pagination\Cursor|null
+     * @return \FluentBooking\Framework\Pagination\Cursor|null
      */
     public function cursor()
     {
@@ -482,7 +482,7 @@ abstract class AbstractCursorPaginator
      * Resolve the current cursor or return the default value.
      *
      * @param  string  $cursorName
-     * @return \FluentCalendar\Framework\Pagination\Cursor|null
+     * @return \FluentBooking\Framework\Pagination\Cursor|null
      */
     public static function resolveCurrentCursor($cursorName = 'cursor', $default = null)
     {
@@ -549,7 +549,7 @@ abstract class AbstractCursorPaginator
     /**
      * Get the paginator's underlying collection.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function getCollection()
     {
@@ -559,7 +559,7 @@ abstract class AbstractCursorPaginator
     /**
      * Set the paginator's underlying collection.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection  $collection
+     * @param  \FluentBooking\Framework\Support\Collection  $collection
      * @return $this
      */
     public function setCollection(Collection $collection)

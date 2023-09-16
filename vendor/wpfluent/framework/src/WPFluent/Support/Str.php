@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Stringable;
-use FluentCalendar\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Stringable;
+use FluentBooking\Framework\Support\MacroableTrait;
 
 class Str
 {
@@ -35,7 +35,7 @@ class Str
      * Get a new stringable object from the given string.
      *
      * @param  string  $string
-     * @return \FluentCalendar\Framework\Support\Stringable
+     * @return \FluentBooking\Framework\Support\Stringable
      */
     public static function of($string)
     {
@@ -693,7 +693,7 @@ class Str
      *
      * @param  string  $pattern
      * @param  string  $subject
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public static function matchAll($pattern, $subject)
     {

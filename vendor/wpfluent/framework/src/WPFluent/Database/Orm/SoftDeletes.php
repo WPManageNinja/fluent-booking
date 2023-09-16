@@ -1,13 +1,13 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
-use FluentCalendar\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Helper;
 
 /**
- * @method static static|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder withTrashed(bool $withTrashed = true)
- * @method static static|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder onlyTrashed()
- * @method static static|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder withoutTrashed()
+ * @method static static|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder withTrashed(bool $withTrashed = true)
+ * @method static static|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder onlyTrashed()
+ * @method static static|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder withoutTrashed()
  */
 trait SoftDeletes
 {

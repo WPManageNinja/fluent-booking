@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Casts;
+namespace FluentBooking\Framework\Database\Orm\Casts;
 
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Database\Orm\Castable;
-use FluentCalendar\Framework\Database\Orm\CastsAttributes;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Database\Orm\Castable;
+use FluentBooking\Framework\Database\Orm\CastsAttributes;
 
 class AsEncryptedArrayObject implements Castable
 {

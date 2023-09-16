@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Database\Orm\SoftDeletes;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Database\Orm\ModelNotFoundException;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Orm\SoftDeletes;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
 
 class HasManyThrough extends Relation
 {
@@ -17,14 +17,14 @@ class HasManyThrough extends Relation
     /**
      * The "through" parent model instance.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     protected $throughParent;
 
     /**
      * The far parent model instance.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     protected $farParent;
 
@@ -59,9 +59,9 @@ class HasManyThrough extends Relation
     /**
      * Create a new has many through relationship instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $farParent
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $throughParent
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $farParent
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $throughParent
      * @param  string  $firstKey
      * @param  string  $secondKey
      * @param  string  $localKey
@@ -99,7 +99,7 @@ class HasManyThrough extends Relation
     /**
      * Set the join clause on the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder|null  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder|null  $query
      * @return void
      */
     protected function performJoin(Builder $query = null)
@@ -184,7 +184,7 @@ class HasManyThrough extends Relation
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -209,7 +209,7 @@ class HasManyThrough extends Relation
     /**
      * Build model dictionary keyed by the relation's foreign key.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @return array
      */
     protected function buildDictionary(Collection $results)
@@ -230,7 +230,7 @@ class HasManyThrough extends Relation
      * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function firstOrNew(array $attributes)
     {
@@ -246,7 +246,7 @@ class HasManyThrough extends Relation
      *
      * @param  array  $attributes
      * @param  array  $values
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
@@ -264,7 +264,7 @@ class HasManyThrough extends Relation
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function firstWhere($column, $operator = null, $value = null, $boolean = 'and')
     {
@@ -288,9 +288,9 @@ class HasManyThrough extends Relation
      * Execute the query and get the first result or throw an exception.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function firstOrFail($columns = ['*'])
     {
@@ -306,7 +306,7 @@ class HasManyThrough extends Relation
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection|null
      */
     public function find($id, $columns = ['*'])
     {
@@ -322,9 +322,9 @@ class HasManyThrough extends Relation
     /**
      * Find multiple related models by their primary keys.
      *
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $ids
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $ids
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function findMany($ids, $columns = ['*'])
     {
@@ -344,9 +344,9 @@ class HasManyThrough extends Relation
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function findOrFail($id, $columns = ['*'])
     {
@@ -381,7 +381,7 @@ class HasManyThrough extends Relation
      * Execute the query as a "select" statement.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function get($columns = ['*'])
     {
@@ -406,7 +406,7 @@ class HasManyThrough extends Relation
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int  $page
-     * @return \FluentCalendar\Framework\Pagination\LengthAwarePaginator
+     * @return \FluentBooking\Framework\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -422,7 +422,7 @@ class HasManyThrough extends Relation
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\Paginator
+     * @return \FluentBooking\Framework\Pagination\Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -438,7 +438,7 @@ class HasManyThrough extends Relation
      * @param  array  $columns
      * @param  string  $cursorName
      * @param  string|null  $cursor
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginator
+     * @return \FluentBooking\Framework\Pagination\CursorPaginator
      */
     public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -524,7 +524,7 @@ class HasManyThrough extends Relation
      * Query lazily, by chunks of the given size.
      *
      * @param  int  $chunkSize
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function lazy($chunkSize = 1000)
     {
@@ -537,7 +537,7 @@ class HasManyThrough extends Relation
      * @param  int  $chunkSize
      * @param  string|null  $column
      * @param  string|null  $alias
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function lazyById($chunkSize = 1000, $column = null, $alias = null)
     {
@@ -552,7 +552,7 @@ class HasManyThrough extends Relation
      * Prepare the query builder for query execution.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function prepareQueryBuilder($columns = ['*'])
     {
@@ -566,10 +566,10 @@ class HasManyThrough extends Relation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -591,10 +591,10 @@ class HasManyThrough extends Relation
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -616,10 +616,10 @@ class HasManyThrough extends Relation
     /**
      * Add the constraints for a relationship query on the same table as the through parent.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQueryForThroughSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {

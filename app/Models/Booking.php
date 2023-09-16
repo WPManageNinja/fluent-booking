@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 
-use FluentCalendar\App\Models\Model;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\Framework\Support\Arr;
 
 class Booking extends Model
 {

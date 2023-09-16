@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 class BookingActivity extends Model
 {
     protected $table = 'fcal_booking_activity';

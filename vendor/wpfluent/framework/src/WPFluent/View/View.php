@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\View;
+namespace FluentBooking\Framework\View;
 
 use Exception;
 
@@ -8,7 +8,7 @@ class View
 {
 	/**
      * Application Instance
-     * @var FluentCalendar\Framework\Foundation\Application
+     * @var FluentBooking\Framework\Foundation\Application
      */
 	protected $app;
 

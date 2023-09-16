@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Response;
+namespace FluentBooking\Framework\Response;
 
 use WP_Error;
 use WP_REST_Response;
@@ -9,14 +9,14 @@ class Response
 {
     /**
      * Application Instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
 
     /**
      * Construct the response instance
      * 
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      */
     public function __construct($app)
     {

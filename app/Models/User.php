@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 
-use FluentCalendar\App\Models\Model;
+use FluentBooking\App\Models\Model;
 
 class User extends Model
 {
@@ -17,7 +17,7 @@ class User extends Model
     protected $primaryKey = 'ID';
 
     /**
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\HasMany
+     * @return \FluentBooking\Framework\Database\Orm\Relations\HasMany
      */
     public function calendars()
     {
@@ -25,7 +25,7 @@ class User extends Model
     }
 
     /**
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\BelongsToMany
+     * @return \FluentBooking\Framework\Database\Orm\Relations\BelongsToMany
      */
     public function bookings()
     {

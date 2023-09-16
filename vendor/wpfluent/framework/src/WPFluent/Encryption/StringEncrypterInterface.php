@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Encryption;
+namespace FluentBooking\Framework\Encryption;
 
 interface StringEncrypterInterface
 {
@@ -10,7 +10,7 @@ interface StringEncrypterInterface
      * @param  string  $value
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Encryption\EncryptException
+     * @throws \FluentBooking\Framework\Encryption\EncryptException
      */
     public function encryptString($value);
 
@@ -20,7 +20,7 @@ interface StringEncrypterInterface
      * @param  string  $payload
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Encryption\DecryptException
+     * @throws \FluentBooking\Framework\Encryption\DecryptException
      */
     public function decryptString($payload);
 }

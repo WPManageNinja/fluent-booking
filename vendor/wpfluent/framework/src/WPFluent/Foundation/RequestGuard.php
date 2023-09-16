@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Validator\Validator;
-use FluentCalendar\Framework\Validator\ValidationException;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Validator\Validator;
+use FluentBooking\Framework\Validator\ValidationException;
 
 abstract class RequestGuard
 {
@@ -46,9 +46,9 @@ abstract class RequestGuard
 
     /**
      * Validate ther request
-     * @param  FluentCalendar\Framework\Validator\Validator $validator
+     * @param  FluentBooking\Framework\Validator\Validator $validator
      * @return array
-     * @throws FluentCalendar\Framework\Validator\ValidationException
+     * @throws FluentBooking\Framework\Validator\ValidationException
      */
     public function validate(Validator $validator)
     {

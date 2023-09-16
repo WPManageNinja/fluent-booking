@@ -7,13 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'FluentCalendar\\Database\\DBMigrator' => $baseDir . '/database/DBMigrator.php',
-    'FluentCalendar\\Database\\DBSeeder' => $baseDir . '/database/DBSeeder.php',
-    'FluentCalendar\\Database\\Migrations\\BookingActivityMigrator' => $baseDir . '/database/Migrations/BookingActivityMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\BookingHostMigrator' => $baseDir . '/database/Migrations/BookingHostMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\BookingMetaMigrator' => $baseDir . '/database/Migrations/BookingMetaMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\BookingMigrator' => $baseDir . '/database/Migrations/BookingMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\CalendarSlotsMigrator' => $baseDir . '/database/Migrations/CalendarSlotsMigrator.php',
-    'FluentCalendar\\Database\\Migrations\\MetaMigrator' => $baseDir . '/database/Migrations/MetaMigrator.php',
+    'FluentBooking\\Database\\DBMigrator' => $baseDir . '/database/DBMigrator.php',
+    'FluentBooking\\Database\\DBSeeder' => $baseDir . '/database/DBSeeder.php',
+    'FluentBooking\\Database\\Migrations\\BookingActivityMigrator' => $baseDir . '/database/Migrations/BookingActivityMigrator.php',
+    'FluentBooking\\Database\\Migrations\\BookingHostMigrator' => $baseDir . '/database/Migrations/BookingHostMigrator.php',
+    'FluentBooking\\Database\\Migrations\\BookingMetaMigrator' => $baseDir . '/database/Migrations/BookingMetaMigrator.php',
+    'FluentBooking\\Database\\Migrations\\BookingMigrator' => $baseDir . '/database/Migrations/BookingMigrator.php',
+    'FluentBooking\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',
+    'FluentBooking\\Database\\Migrations\\CalendarSlotsMigrator' => $baseDir . '/database/Migrations/CalendarSlotsMigrator.php',
+    'FluentBooking\\Database\\Migrations\\MetaMigrator' => $baseDir . '/database/Migrations/MetaMigrator.php',
 );

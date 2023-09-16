@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 /**
- * @mixin \FluentCalendar\Framework\Database\Orm\Builder
+ * @mixin \FluentBooking\Framework\Database\Orm\Builder
  */
 class HigherOrderBuilderProxy
 {
     /**
      * The collection being operated on.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Builder
+     * @var \FluentBooking\Framework\Database\Orm\Builder
      */
     protected $builder;
 
@@ -24,7 +24,7 @@ class HigherOrderBuilderProxy
     /**
      * Create a new proxy instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $builder
      * @param  string  $method
      * @return void
      */

@@ -1,11 +1,11 @@
 <?php
 
-namespace FluentCalendar\App\Services;
+namespace FluentBooking\App\Services;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\Framework\Support\Arr;
 
 class BookingService
 {

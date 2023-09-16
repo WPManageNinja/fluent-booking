@@ -1,8 +1,8 @@
 <?php
 
-use FluentCalendar\Framework\Foundation\Application;
-use FluentCalendar\App\Hooks\Handlers\ActivationHandler;
-use FluentCalendar\App\Hooks\Handlers\DeactivationHandler;
+use FluentBooking\Framework\Foundation\Application;
+use FluentBooking\App\Hooks\Handlers\ActivationHandler;
+use FluentBooking\App\Hooks\Handlers\DeactivationHandler;
 
 return function ($file) {
 
@@ -16,7 +16,7 @@ return function ($file) {
         ($app->make(DeactivationHandler::class))->handle();
     });
 
-    require_once( FLUENT_CALENDAR_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
+    require_once( FLUENT_BOOKING_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
  
     add_action('plugins_loaded', function () use ($app) {
         do_action('fluent_calendar_loaded', $app);

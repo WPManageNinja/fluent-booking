@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Support\HigherOrderTapProxy;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Support\HigherOrderTapProxy;
 
 class Helper
 {
@@ -12,7 +12,7 @@ class Helper
      * Create a collection from the given value.
      *
      * @param  mixed                        $value
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public static function collect($value = null)
     {

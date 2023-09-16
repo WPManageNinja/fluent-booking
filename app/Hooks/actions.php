@@ -10,20 +10,20 @@
  */
 
 /**
- * @var $app FluentCalendar\Framework\Foundation\Application
+ * @var $app FluentBooking\Framework\Foundation\Application
  */
 
 /*
  * Register all the grouped action handlers
  */
-(new \FluentCalendar\App\Hooks\Handlers\FrontEndHandler())->register();
-(new \FluentCalendar\App\Hooks\Handlers\CleanupHandler())->register();
-(new \FluentCalendar\App\Hooks\Handlers\NotificationHandler())->register();
-(new \FluentCalendar\App\Hooks\Handlers\LogHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\CleanupHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 
 
 $app->addAction('admin_menu', 'AdminMenuHandler@add');
 
 
 // Load Integrations
-require_once FLUENT_CALENDAR_DIR . 'app/Services/Integrations/index.php';
+require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';

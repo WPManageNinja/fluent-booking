@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\Framework\Request\Request;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\Framework\Request\Request;
 
 class AdminController extends Controller
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use stdClass;
 use ArrayAccess;
 use ArrayIterator;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\EnumeratesValues;
-use FluentCalendar\Framework\Support\CanBeEscapedWhenCastToString;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\EnumeratesValues;
+use FluentBooking\Framework\Support\CanBeEscapedWhenCastToString;
 
 class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerable
 {
@@ -57,7 +57,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get a lazy collection for the items in this collection.
      *
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function lazy()
     {
@@ -333,7 +333,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get all items except for those with the specified keys.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|mixed  $keys
+     * @param  \FluentBooking\Framework\Support\Collection|mixed  $keys
      * @return static
      */
     public function except($keys)
@@ -1164,8 +1164,8 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
      * @param  mixed  $value
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Support\ItemNotFoundException
-     * @throws \FluentCalendar\Framework\Support\MultipleItemsFoundException
+     * @throws \FluentBooking\Framework\Support\ItemNotFoundException
+     * @throws \FluentBooking\Framework\Support\MultipleItemsFoundException
      */
     public function sole($key = null, $operator = null, $value = null)
     {
@@ -1194,7 +1194,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
      * @param  mixed  $value
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Support\ItemNotFoundException
+     * @throws \FluentBooking\Framework\Support\ItemNotFoundException
      */
     public function firstOrFail($key = null, $operator = null, $value = null)
     {
@@ -1611,7 +1611,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get a base Support collection instance from this collection.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function toBase()
     {

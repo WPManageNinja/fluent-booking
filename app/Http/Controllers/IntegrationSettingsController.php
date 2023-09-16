@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
 class IntegrationSettingsController extends Controller
 {

@@ -1,28 +1,28 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
 use Closure;
 use LogicException;
 use RuntimeException;
 use DateTimeInterface;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Pagination\Paginator;
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Support\LazyCollection;
-use FluentCalendar\Framework\Database\Query\Grammar;
-use FluentCalendar\Framework\Database\Query\Processor;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Database\ConnectionInterface;
-use FluentCalendar\Framework\Database\Concerns\BuildsQueries;
-use FluentCalendar\Framework\Database\Concerns\ExplainsQueries;
-use FluentCalendar\Framework\Database\Orm\Relations\Relation;
-use FluentCalendar\Framework\Database\Orm\Builder as OrmBuilder;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Pagination\Paginator;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Support\LazyCollection;
+use FluentBooking\Framework\Database\Query\Grammar;
+use FluentBooking\Framework\Database\Query\Processor;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Database\ConnectionInterface;
+use FluentBooking\Framework\Database\Concerns\BuildsQueries;
+use FluentBooking\Framework\Database\Concerns\ExplainsQueries;
+use FluentBooking\Framework\Database\Orm\Relations\Relation;
+use FluentBooking\Framework\Database\Orm\Builder as OrmBuilder;
 
 
 
@@ -35,21 +35,21 @@ class Builder
     /**
      * The database connection instance.
      *
-     * @var \FluentCalendar\Framework\Database\ConnectionInterface
+     * @var \FluentBooking\Framework\Database\ConnectionInterface
      */
     public $connection;
 
     /**
      * The database query grammar instance.
      *
-     * @var \FluentCalendar\Framework\Database\Query\Grammar
+     * @var \FluentBooking\Framework\Database\Query\Grammar
      */
     public $grammar;
 
     /**
      * The database query post processor instance.
      *
-     * @var \FluentCalendar\Framework\Database\Query\Processor
+     * @var \FluentBooking\Framework\Database\Query\Processor
      */
     public $processor;
 
@@ -224,9 +224,9 @@ class Builder
     /**
      * Create a new query builder instance.
      *
-     * @param  \FluentCalendar\Framework\Database\ConnectionInterface  $connection
-     * @param  \FluentCalendar\Framework\Database\Query\Grammar|null  $grammar
-     * @param  \FluentCalendar\Framework\Database\Query\Processor|null  $processor
+     * @param  \FluentBooking\Framework\Database\ConnectionInterface  $connection
+     * @param  \FluentBooking\Framework\Database\Query\Grammar|null  $grammar
+     * @param  \FluentBooking\Framework\Database\Query\Processor|null  $processor
      * @return void
      */
     public function __construct(ConnectionInterface $connection,
@@ -264,7 +264,7 @@ class Builder
     /**
      * Add a subselect expression to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Orm\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Orm\Builder|string  $query
      * @param  string  $as
      * @return $this
      *
@@ -300,7 +300,7 @@ class Builder
     /**
      * Makes "from" fetch from a subquery.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $query
      * @param  string  $as
      * @return $this
      *
@@ -332,7 +332,7 @@ class Builder
     /**
      * Creates a subquery and parse it.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $query
      * @return array
      */
     protected function createSub($query)
@@ -439,7 +439,7 @@ class Builder
     /**
      * Set the table which the query is targeting.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $table
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $table
      * @param  string|null  $as
      * @return $this
      */
@@ -512,7 +512,7 @@ class Builder
     /**
      * Add a subquery join clause to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Orm\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Orm\Builder|string  $query
      * @param  string  $as
      * @param  \Closure|string  $first
      * @param  string|null  $operator
@@ -565,7 +565,7 @@ class Builder
     /**
      * Add a subquery left join to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Orm\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Orm\Builder|string  $query
      * @param  string  $as
      * @param  \Closure|string  $first
      * @param  string|null  $operator
@@ -608,7 +608,7 @@ class Builder
     /**
      * Add a subquery right join to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Orm\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Orm\Builder|string  $query
      * @param  string  $as
      * @param  \Closure|string  $first
      * @param  string|null  $operator
@@ -643,7 +643,7 @@ class Builder
     /**
      * Add a subquery cross join to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $query
      * @param  string  $as
      * @return $this
      */
@@ -663,10 +663,10 @@ class Builder
     /**
      * Get a new join clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $parentQuery
      * @param  string  $type
      * @param  string  $table
-     * @return \FluentCalendar\Framework\Database\Query\JoinClause
+     * @return \FluentBooking\Framework\Database\Query\JoinClause
      */
     protected function newJoinClause(self $parentQuery, $type, $table)
     {
@@ -1042,7 +1042,7 @@ class Builder
      * Add a "where in raw" clause for integer values to the query.
      *
      * @param  string  $column
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $values
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $values
      * @param  string  $boolean
      * @param  bool  $not
      * @return $this
@@ -1068,7 +1068,7 @@ class Builder
      * Add an "or where in raw" clause for integer values to the query.
      *
      * @param  string  $column
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $values
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $values
      * @return $this
      */
     public function orWhereIntegerInRaw($column, $values)
@@ -1080,7 +1080,7 @@ class Builder
      * Add a "where not in raw" clause for integer values to the query.
      *
      * @param  string  $column
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $values
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $values
      * @param  string  $boolean
      * @return $this
      */
@@ -1093,7 +1093,7 @@ class Builder
      * Add an "or where not in raw" clause for integer values to the query.
      *
      * @param  string  $column
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $values
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $values
      * @return $this
      */
     public function orWhereIntegerNotInRaw($column, $values)
@@ -1146,7 +1146,7 @@ class Builder
     /**
      * Add a where between statement to the query.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  array  $values
      * @param  string  $boolean
      * @param  bool  $not
@@ -1269,7 +1269,7 @@ class Builder
     /**
      * Add a "where date" statement to the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Expression|string  $column
+     * @param  \FluentBooking\Framework\Database\Query\Expression|string  $column
      * @param  string  $operator
      * @param  \DateTimeInterface|string|null  $value
      * @param  string  $boolean
@@ -1517,7 +1517,7 @@ class Builder
     /**
      * Create a new query instance for nested where condition.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function forNestedWhere()
     {
@@ -1527,7 +1527,7 @@ class Builder
     /**
      * Add another query builder as a nested where to the query builder.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $boolean
      * @return $this
      */
@@ -1629,7 +1629,7 @@ class Builder
     /**
      * Add an exists clause to the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $boolean
      * @param  bool  $not
      * @return $this
@@ -2026,7 +2026,7 @@ class Builder
     /**
      * Add an "order by" clause to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Query\Expression|string  $column
+     * @param  \Closure|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Query\Expression|string  $column
      * @param  string  $direction
      * @return $this
      *
@@ -2059,7 +2059,7 @@ class Builder
     /**
      * Add a descending "order by" clause to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Query\Expression|string  $column
+     * @param  \Closure|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Query\Expression|string  $column
      * @return $this
      */
     public function orderByDesc($column)
@@ -2070,7 +2070,7 @@ class Builder
     /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Query\Expression|string  $column
+     * @param  \Closure|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Query\Expression|string  $column
      * @return $this
      */
     public function latest($column = 'created_at')
@@ -2081,7 +2081,7 @@ class Builder
     /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Orm\Builder|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Query\Expression|string  $column
+     * @param  \Closure|\FluentBooking\Framework\Database\Orm\Builder|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Query\Expression|string  $column
      * @return $this
      */
     public function oldest($column = 'created_at')
@@ -2227,7 +2227,7 @@ class Builder
     /**
      * Remove all existing orders and optionally add a new order.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Query\Expression|string|null  $column
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Query\Expression|string|null  $column
      * @param  string  $direction
      * @return $this
      */
@@ -2263,7 +2263,7 @@ class Builder
     /**
      * Add a union statement to the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder|\Closure  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder|\Closure  $query
      * @param  bool  $all
      * @return $this
      */
@@ -2283,7 +2283,7 @@ class Builder
     /**
      * Add a union all statement to the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder|\Closure  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder|\Closure  $query
      * @return $this
      */
     public function unionAll($query)
@@ -2311,7 +2311,7 @@ class Builder
     /**
      * Lock the selected rows in the table for updating.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function lockForUpdate()
     {
@@ -2321,7 +2321,7 @@ class Builder
     /**
      * Share lock the selected rows in the table.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function sharedLock()
     {
@@ -2396,7 +2396,7 @@ class Builder
      * Execute the query as a "select" statement.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function get($columns = ['*'])
     {
@@ -2424,7 +2424,7 @@ class Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface
+     * @return \FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface
      */
     public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -2449,7 +2449,7 @@ class Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\PaginatorInterface
+     * @return \FluentBooking\Framework\Pagination\PaginatorInterface
      */
     public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -2471,8 +2471,8 @@ class Builder
      * @param  int|null  $perPage
      * @param  array  $columns
      * @param  string  $cursorName
-     * @param  \FluentCalendar\Framework\Pagination\Cursor|string|null  $cursor
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginatorInterface
+     * @param  \FluentBooking\Framework\Pagination\Cursor|string|null  $cursor
+     * @return \FluentBooking\Framework\Pagination\CursorPaginatorInterface
      */
     public function cursorPaginate($perPage = 15, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -2483,7 +2483,7 @@ class Builder
      * Ensure the proper order by required for cursor pagination.
      *
      * @param  bool  $shouldReverse
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     protected function ensureOrderForCursorPagination($shouldReverse = false)
     {
@@ -2580,7 +2580,7 @@ class Builder
     /**
      * Get a lazy collection for the given query.
      *
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function cursor()
     {
@@ -2614,7 +2614,7 @@ class Builder
      *
      * @param  string  $column
      * @param  string|null  $key
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function pluck($column, $key = null)
     {
@@ -2669,7 +2669,7 @@ class Builder
      * @param  array  $queryResult
      * @param  string  $column
      * @param  string  $key
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     protected function pluckFromObjectColumn($queryResult, $column, $key)
     {
@@ -2694,7 +2694,7 @@ class Builder
      * @param  array  $queryResult
      * @param  string  $column
      * @param  string  $key
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     protected function pluckFromArrayColumn($queryResult, $column, $key)
     {
@@ -3034,7 +3034,7 @@ class Builder
      * Insert new records into the table using a subquery.
      *
      * @param  array  $columns
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $query
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $query
      * @return int
      */
     public function insertUsing(array $columns, $query)
@@ -3239,7 +3239,7 @@ class Builder
     /**
      * Get a new instance of the query builder.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function newQuery()
     {
@@ -3249,7 +3249,7 @@ class Builder
     /**
      * Create a new query instance for a sub-query.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     protected function forSubQuery()
     {
@@ -3260,7 +3260,7 @@ class Builder
      * Create a raw database expression.
      *
      * @param  mixed  $value
-     * @return \FluentCalendar\Framework\Database\Query\Expression
+     * @return \FluentBooking\Framework\Database\Query\Expression
      */
     public function raw($value)
     {
@@ -3354,7 +3354,7 @@ class Builder
     /**
      * Merge an array of bindings into our bindings.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return $this
      */
     public function mergeBindings(self $query)
@@ -3405,7 +3405,7 @@ class Builder
     /**
      * Get the database connection instance.
      *
-     * @return \FluentCalendar\Framework\Database\ConnectionInterface
+     * @return \FluentBooking\Framework\Database\ConnectionInterface
      */
     public function getConnection()
     {
@@ -3415,7 +3415,7 @@ class Builder
     /**
      * Get the database query processor instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Processor
+     * @return \FluentBooking\Framework\Database\Query\Processor
      */
     public function getProcessor()
     {
@@ -3425,7 +3425,7 @@ class Builder
     /**
      * Get the query grammar instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Grammar
+     * @return \FluentBooking\Framework\Database\Query\Grammar
      */
     public function getGrammar()
     {

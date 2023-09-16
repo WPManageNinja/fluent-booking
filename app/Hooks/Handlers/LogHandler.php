@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\app\Hooks\Handlers;
+namespace FluentBooking\app\Hooks\Handlers;
 
-use FluentCalendar\App\Models\BookingActivity;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\Framework\Support\Arr;
 
 class LogHandler
 {

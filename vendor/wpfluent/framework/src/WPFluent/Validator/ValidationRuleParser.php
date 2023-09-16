@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Validator;
+namespace FluentBooking\Framework\Validator;
 
 class ValidationRuleParser
 {

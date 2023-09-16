@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Database;
+namespace FluentBooking\Database;
 
 class DBSeeder
 {

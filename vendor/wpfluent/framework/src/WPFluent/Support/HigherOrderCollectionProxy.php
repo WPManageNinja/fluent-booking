@@ -1,18 +1,18 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
-Use FluentCalendar\Framework\Support\Enumerable;
+Use FluentBooking\Framework\Support\Enumerable;
 
 /**
- * @mixin \FluentCalendar\Framework\Support\Enumerable
+ * @mixin \FluentBooking\Framework\Support\Enumerable
  */
 class HigherOrderCollectionProxy
 {
     /**
      * The collection being operated on.
      *
-     * @var \FluentCalendar\Framework\Support\Enumerable
+     * @var \FluentBooking\Framework\Support\Enumerable
      */
     protected $collection;
 
@@ -26,7 +26,7 @@ class HigherOrderCollectionProxy
     /**
      * Create a new proxy instance.
      *
-     * @param  \FluentCalendar\Framework\Support\Enumerable  $collection
+     * @param  \FluentBooking\Framework\Support\Enumerable  $collection
      * @param  string  $method
      * @return void
      */

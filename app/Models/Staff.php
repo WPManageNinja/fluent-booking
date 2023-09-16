@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 class Staff extends Meta
 {
     public static function boot()

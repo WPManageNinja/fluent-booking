@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database;
+namespace FluentBooking\Framework\Database;
 
 use Throwable;
 use PDOException;

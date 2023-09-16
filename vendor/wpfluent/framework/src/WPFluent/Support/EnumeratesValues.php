@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use Exception;
@@ -9,14 +9,14 @@ use CachingIterator;
 use JsonSerializable;
 use UnexpectedValueException;
 
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\Enumerable;
-use FluentCalendar\Framework\Support\JsonableInterface;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Support\HigherOrderWhenProxy;
-use FluentCalendar\Framework\Support\HigherOrderCollectionProxy;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\Enumerable;
+use FluentBooking\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Support\HigherOrderWhenProxy;
+use FluentBooking\Framework\Support\HigherOrderCollectionProxy;
 
 /**
  * @property-read HigherOrderCollectionProxy $average
@@ -829,7 +829,7 @@ trait EnumeratesValues
     /**
      * Collect the values into a collection.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function collect()
     {

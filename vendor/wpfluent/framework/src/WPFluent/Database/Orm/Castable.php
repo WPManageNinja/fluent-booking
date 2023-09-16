@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 interface Castable
 {
@@ -9,7 +9,7 @@ interface Castable
      *
      * @param  array  $arguments
      * @return string
-     * @return string|\FluentCalendar\Framework\Database\Orm\CastsAttributes|\FluentCalendar\Framework\Database\Orm\CastsInboundAttributes
+     * @return string|\FluentBooking\Framework\Database\Orm\CastsAttributes|\FluentBooking\Framework\Database\Orm\CastsInboundAttributes
      */
     public static function castUsing(array $arguments);
 }

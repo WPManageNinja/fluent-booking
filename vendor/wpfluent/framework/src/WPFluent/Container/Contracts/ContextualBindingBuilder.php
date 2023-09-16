@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Container\Contracts;
+namespace FluentBooking\Framework\Container\Contracts;
 
 interface ContextualBindingBuilder
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Validator\Contracts;
+namespace FluentBooking\Framework\Validator\Contracts;
 
 interface File
 {

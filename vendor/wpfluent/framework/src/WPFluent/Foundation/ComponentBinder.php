@@ -1,29 +1,29 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\View\View;
-use FluentCalendar\Framework\Http\URL;
-use FluentCalendar\Framework\Http\Router;
-use FluentCalendar\Framework\Support\Facade;
-use FluentCalendar\Framework\Support\Pipeline;
-use FluentCalendar\Framework\Request\Request;
-use FluentCalendar\Framework\Response\Response;
-use FluentCalendar\Framework\Events\Dispatcher;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Validator\Validator;
-use FluentCalendar\Framework\Encryption\Encrypter;
-use FluentCalendar\Framework\Foundation\RequestGuard;
-use FluentCalendar\Framework\Pagination\AbstractPaginator;
-use FluentCalendar\Framework\Database\ConnectionResolver;
-use FluentCalendar\Framework\Database\Query\WPDBConnection;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\View\View;
+use FluentBooking\Framework\Http\URL;
+use FluentBooking\Framework\Http\Router;
+use FluentBooking\Framework\Support\Facade;
+use FluentBooking\Framework\Support\Pipeline;
+use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Response\Response;
+use FluentBooking\Framework\Events\Dispatcher;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Validator\Validator;
+use FluentBooking\Framework\Encryption\Encrypter;
+use FluentBooking\Framework\Foundation\RequestGuard;
+use FluentBooking\Framework\Pagination\AbstractPaginator;
+use FluentBooking\Framework\Database\ConnectionResolver;
+use FluentBooking\Framework\Database\Query\WPDBConnection;
 
 class ComponentBinder
 {
     /**
      * The application instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
 
@@ -47,7 +47,7 @@ class ComponentBinder
 
     /**
      * Construct the binder
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      */
     public function __construct($app)
     {
@@ -76,7 +76,7 @@ class ComponentBinder
 
     /**
      * Register resolving event into the container.
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return null
      */
     protected function registerResolvingEvent($app)
@@ -93,7 +93,7 @@ class ComponentBinder
 
     /**
      * Register the dynamic facade resolver.
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return null
      */
     protected function registerFacadeResolver($app)
@@ -115,7 +115,7 @@ class ComponentBinder
      * Create a facade resolver class dynamically
      * @param  string $facade
      * @param  string $class
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return null
      */
     protected function createFacadeFor($facade, $class, $app)
@@ -142,7 +142,7 @@ class ComponentBinder
      * Resolve the binding name.
      * @param  string $facade
      * @param  string $class
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return string
      */
     protected function resolveFacadeAccessor($facade, $class,$app)
@@ -311,7 +311,7 @@ class ComponentBinder
      * Load other bindings the developers might
      * have added in the application level.
      * 
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return null
      */
     protected function extendBindings($app)
@@ -325,7 +325,7 @@ class ComponentBinder
 
     /**
      * Load the plugin's global functions
-     * @param  \FluentCalendar\Framework\Foundation\Application $app
+     * @param  \FluentBooking\Framework\Foundation\Application $app
      * @return null
      */
     protected function loadGlobalFunctions($app)
