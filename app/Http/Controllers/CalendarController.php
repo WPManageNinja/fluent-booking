@@ -24,7 +24,7 @@ class CalendarController extends Controller
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
             foreach ($calendar->slots as $slot) {
-                $slot->shortcode = '[fluent_booking_booking id="' . $slot->id . '"]';
+                $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
 
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
