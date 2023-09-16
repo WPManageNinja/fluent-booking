@@ -6,14 +6,35 @@ use Exception;
 
 class View
 {
+	/**
+     * Application Instance
+     * @var FluentCalendar\Framework\Foundation\Application
+     */
 	protected $app;
 
+	/**
+	 * View file path
+	 * 
+	 * @var string
+	 */
 	protected $path;
 
+	/**
+	 * View data
+	 * @var array
+	 */
 	protected $data = [];
 	
+	/**
+	 * Shared data inall the views
+	 * @var array
+	 */
 	protected static $sharedData = [];
 
+	/**
+	 * Construct the view instamce
+	 * @param [type] $app [description]
+	 */
 	public function __construct($app)
 	{
 		$this->app = $app;

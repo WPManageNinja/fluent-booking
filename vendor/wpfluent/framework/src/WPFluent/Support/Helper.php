@@ -3,6 +3,8 @@
 namespace FluentCalendar\Framework\Support;
 
 use Closure;
+use FluentCalendar\Framework\Foundation\App;
+use FluentCalendar\Framework\Support\HigherOrderTapProxy;
 
 class Helper
 {
@@ -162,5 +164,36 @@ class Helper
     public static function value($value, ...$args)
     {
         return $value instanceof Closure ? $value(...$args) : $value;
+    }
+
+    /**
+     * Call the given Closure with the given value then return the value.
+     *
+     * @param  mixed  $value
+     * @param  callable|null  $callback
+     * @return mixed
+     */
+    public static function tap($value, $callback = null)
+    {
+        if (is_null($callback)) {
+            return new HigherOrderTapProxy($value);
+        }
+
+        $callback($value);
+
+        return $value;
+    }
+
+    /**
+     * Dispatch an event and call the listeners.
+     *
+     * @param  string|object  $event
+     * @param  mixed  $payload
+     * @param  bool  $halt
+     * @return array|null
+     */
+    public static function event(...$args)
+    {
+        return App::make('events')->dispatch(...$args);
     }
 }

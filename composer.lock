@@ -4,24 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd99554fe412e1ad9410cbb2c5174a48",
+    "content-hash": "5fa666fd53857f6b763f94aa1511d345",
     "packages": [
         {
             "name": "wpfluent/framework",
-            "version": "1.2.1",
+            "version": "2.0.46",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/framework.git",
-                "reference": "7359c1eba0b440896cef1aa2d6ce89767c5cd96f"
+                "reference": "7ad95cba4a5c019f5936ad6c04db83ae1e95ff15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/7359c1eba0b440896cef1aa2d6ce89767c5cd96f",
-                "reference": "7359c1eba0b440896cef1aa2d6ce89767c5cd96f",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/7ad95cba4a5c019f5936ad6c04db83ae1e95ff15",
+                "reference": "7ad95cba4a5c019f5936ad6c04db83ae1e95ff15",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "php": "^7.3|^8.0"
             },
             "type": "library",
             "extra": {
@@ -45,10 +47,10 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/1.2.1",
+                "source": "https://github.com/wpfluent/framework/tree/2.0.46",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
-            "time": "2022-11-12T01:25:08+00:00"
+            "time": "2023-09-16T15:36:35+00:00"
         }
     ],
     "packages-dev": [],

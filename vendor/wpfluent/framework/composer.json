@@ -9,7 +9,9 @@
         }
     ],
     "require" : {
-        "php": ">=5.5.9"
+        "php": "^7.3|^8.0",
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {

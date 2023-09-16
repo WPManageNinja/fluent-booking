@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App;
+namespace FluentBooking\App;
 
-use FluentCalendar\Framework\Foundation\App as AppFacade;
+use FluentBooking\Framework\Foundation\App as AppFacade;
 
 class App extends AppFacade
 {

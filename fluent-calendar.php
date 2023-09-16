@@ -1,14 +1,14 @@
 <?php defined('ABSPATH') or die;
 
 /*
-Plugin Name: Fluent Calendar
+Plugin Name: Fluent Booking
 Description: Fluent Calendar WordPress Plugin
 Version: 1.0.0
-Author: 
-Author URI: 
-Plugin URI: 
+Author: Meeting scheduling made easy
+Author URI: https://wpmanageninja.com
+Plugin URI: https://fluentbooking.com
 License: GPLv2 or later
-Text Domain: fluent-calendar
+Text Domain: fluent-booking
 Domain Path: /language
 */
 
@@ -20,18 +20,3 @@ require __DIR__.'/vendor/autoload.php';
 call_user_func(function($bootstrap) {
     $bootstrap(__FILE__);
 }, require(__DIR__.'/boot/app.php'));
-
-
-
-register_deactivation_hook(
-    __FILE__,
-    'social_ninja_delete_all_data'
-);
-
-function social_ninja_delete_all_data()
-{
-    global $wpdb;
-    // truncate tables name wpsr_caches
-    $wpdb->query("TRUNCATE TABLE". $wpdb->prefix."wpsr_caches");
-    $wpdb->query("TRUNCATE TABLE". $wpdb->prefix."wpsr_reviews");
-}

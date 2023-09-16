@@ -9,10 +9,27 @@ use FluentCalendar\Framework\Validator\ValidationException;
 
 abstract class Controller
 {
+    /**
+     * Application Instance
+     * @var \FluentCalendar\Framework\Foundation\Application
+     */
     protected $app = null;
+
+    /**
+     * Request Instane
+     * @var \FluentCalendar\Framework\Request\Request
+     */
     protected $request = null;
+
+    /**
+     * Response Instane
+     * @var \FluentCalendar\Framework\Response\Response
+     */
     protected $response = null;
 
+    /**
+     * Construct the controller instance
+     */
     public function __construct()
     {
         $this->app = App::getInstance();
@@ -20,6 +37,13 @@ abstract class Controller
         $this->response = $this->app['response'];
     }
 
+    /**
+     * Validate the request data
+     * @param  array $data
+     * @param  array $rules
+     * @param  array  $messages
+     * @return array     
+     */
     public function validate($data, $rules, $messages = [])
     {
         try {
@@ -43,26 +67,67 @@ abstract class Controller
         }
     }
 
-    public function json($data = null, $code = 200)
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return string|false The JSON encoded string, or false if it cannot be encoded.
+     */
+    public function json($data = [], $code = 200)
     {
         return $this->response->json($data, $code);
     }
 
-    public function send($data = null, $code = 200)
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function response($data = [], $code = 200)
+    {
+        return $this->send($data, $code);
+    }
+
+    /**
+     * Send json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function send($data = [], $code = 200)
     {
         return $this->response->send($data, $code);
     }
 
-    public function sendSuccess($data = null, $code = 200)
+    /**
+     * Send a success json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function sendSuccess($data = [])
     {
-        return $this->response->sendSuccess($data, $code);
+        return $this->response->sendSuccess($data, 200);
     }
 
-    public function sendError($data = null, $code = 423)
+    /**
+     * Send an error json response
+     * @param  array  $data
+     * @param  integer $code
+     * @return \WP_REST_Response
+     */
+    public function sendError($data = [], $code = 422)
     {
         return $this->response->sendError($data, $code);
     }
 
+    /**
+     * Dynamically Access components from container
+     * @param  string $key
+     * @return mixed
+     * @throws ReflectionException
+     */
     public function __get($key)
     {
         try {
@@ -71,10 +136,5 @@ abstract class Controller
             $class = get_class($this);
             wp_die("Undefined property {$key} in $class");
         }
-    }
-
-    public function response($data, $code = 200)
-    {
-        return new WP_REST_Response($data, $code);
     }
 }

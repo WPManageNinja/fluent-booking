@@ -16,6 +16,18 @@ trait InputHelperMethodsTrait
 	}
 
 	/**
+     * Retrieve input as a float value.
+     *
+     * @param  string|null  $key
+     * @param  float  $default
+     * @return float
+     */
+    public function getFloat($key, $default = null)
+    {
+        return floatval($this->get($key, $default));
+    }
+
+	/**
 	 * Returns a sanitized string
 	 * @param  string $key
 	 * @param  string $dafault

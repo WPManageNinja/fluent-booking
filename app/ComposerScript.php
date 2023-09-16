@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App;
+namespace FluentBooking\App;
 
 use Composer\Script\Event;
 use InvalidArgumentException;

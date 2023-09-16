@@ -192,9 +192,10 @@ class CalendarController extends Controller
         $slot->author_profile = $slot->getAuthorProfile();
         
         $slotSettings = $slot->settings;
-        
+
+
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
-        
+
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
         
         $slot->settings = $slotSettings;
@@ -298,6 +299,7 @@ class CalendarController extends Controller
             'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
         ];
+
 
         $slot->title = sanitize_text_field($data['title']);
         $slot->duration = (int)$data['duration'];

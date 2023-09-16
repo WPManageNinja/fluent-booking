@@ -1,10 +1,11 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentCalendar\Framework\Container\Contracts;
 
 use Closure;
+use FluentCalendar\Framework\Container\Contracts\Psr\ContainerInterface;
 
-interface ContainerContract
+interface Container extends ContainerInterface
 {
     /**
      * Determine if the given abstract type has been bound.
@@ -20,6 +21,8 @@ interface ContainerContract
      * @param  string  $abstract
      * @param  string  $alias
      * @return void
+     *
+     * @throws \LogicException
      */
     public function alias($abstract, $alias);
 
@@ -27,7 +30,7 @@ interface ContainerContract
      * Assign a set of tags to a given binding.
      *
      * @param  array|string  $abstracts
-     * @param  array|mixed   ...$tags
+     * @param  array|mixed  ...$tags
      * @return void
      */
     public function tag($abstracts, $tags);
@@ -35,16 +38,16 @@ interface ContainerContract
     /**
      * Resolve all of the bindings for a given tag.
      *
-     * @param  array  $tag
-     * @return array
+     * @param  string  $tag
+     * @return iterable
      */
     public function tagged($tag);
 
     /**
      * Register a binding with the container.
      *
-     * @param  string|array  $abstract
-     * @param  Closure|string|null  $concrete
+     * @param  string  $abstract
+     * @param  \Closure|string|null  $concrete
      * @param  bool  $shared
      * @return void
      */
@@ -54,7 +57,7 @@ interface ContainerContract
      * Register a binding if it hasn't already been registered.
      *
      * @param  string  $abstract
-     * @param  Closure|string|null  $concrete
+     * @param  \Closure|string|null  $concrete
      * @param  bool  $shared
      * @return void
      */
@@ -64,16 +67,25 @@ interface ContainerContract
      * Register a shared binding in the container.
      *
      * @param  string  $abstract
-     * @param  Closure|string|null  $concrete
+     * @param  \Closure|string|null  $concrete
      * @return void
      */
     public function singleton($abstract, $concrete = null);
 
     /**
+     * Register a shared binding if it hasn't already been registered.
+     *
+     * @param  string  $abstract
+     * @param  \Closure|string|null  $concrete
+     * @return void
+     */
+    public function singletonIf($abstract, $concrete = null);
+
+    /**
      * "Extend" an abstract type in the container.
      *
-     * @param  string    $abstract
-     * @param  Closure  $closure
+     * @param  string  $abstract
+     * @param  \Closure  $closure
      * @return void
      *
      * @throws \InvalidArgumentException
@@ -84,26 +96,54 @@ interface ContainerContract
      * Register an existing instance as shared in the container.
      *
      * @param  string  $abstract
-     * @param  mixed   $instance
-     * @return void
+     * @param  mixed  $instance
+     * @return mixed
      */
     public function instance($abstract, $instance);
 
     /**
-     * Define a contextual binding.
+     * Add a contextual binding to the container.
      *
      * @param  string  $concrete
-     * @return ContextualBindingBuilder
+     * @param  string  $abstract
+     * @param  \Closure|string  $implementation
+     * @return void
+     */
+    public function addContextualBinding($concrete, $abstract, $implementation);
+
+    /**
+     * Define a contextual binding.
+     *
+     * @param  string|array  $concrete
+     * @return \FluentCalendar\Framework\Container\Contracts\ContextualBindingBuilder
      */
     public function when($concrete);
+
+    /**
+     * Get a closure to resolve the given type from the container.
+     *
+     * @param  string  $abstract
+     * @return \Closure
+     */
+    public function factory($abstract);
+
+    /**
+     * Flush the container of all bindings and resolved instances.
+     *
+     * @return void
+     */
+    public function flush();
+
     /**
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
+     *
+     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
      */
-    public function make($abstract, $parameters = array());
+    public function make($abstract, array $parameters = []);
 
     /**
      * Call the given Closure / class@method and inject its dependencies.
@@ -113,12 +153,12 @@ interface ContainerContract
      * @param  string|null  $defaultMethod
      * @return mixed
      */
-    public function call($callback, array $parameters = array(), $defaultMethod = null);
+    public function call($callback, array $parameters = [], $defaultMethod = null);
 
     /**
      * Determine if the given abstract type has been resolved.
      *
-     * @param  string $abstract
+     * @param  string  $abstract
      * @return bool
      */
     public function resolved($abstract);
@@ -126,17 +166,17 @@ interface ContainerContract
     /**
      * Register a new resolving callback.
      *
-     * @param  string    $abstract
-     * @param  Closure  $callback
+     * @param  \Closure|string  $abstract
+     * @param  \Closure|null  $callback
      * @return void
      */
     public function resolving($abstract, Closure $callback = null);
-    
+
     /**
      * Register a new after resolving callback.
      *
-     * @param  string    $abstract
-     * @param  Closure  $callback
+     * @param  \Closure|string  $abstract
+     * @param  \Closure|null  $callback
      * @return void
      */
     public function afterResolving($abstract, Closure $callback = null);

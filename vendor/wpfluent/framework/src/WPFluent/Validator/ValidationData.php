@@ -7,6 +7,12 @@ use FluentCalendar\Framework\Support\Helper;
 
 class ValidationData
 {
+    /**
+     * Gather all data
+     * @param  string $attribute
+     * @param  array $masterData
+     * @return array
+     */
     public static function initializeAndGatherData($attribute, $masterData)
     {
         $data = Arr::dot(static::initializeAttributeOnData($attribute, $masterData));
