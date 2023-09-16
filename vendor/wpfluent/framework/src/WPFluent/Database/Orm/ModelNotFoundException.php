@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Database\RecordsNotFoundException;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Database\RecordsNotFoundException;
 
 class ModelNotFoundException extends RecordsNotFoundException
 {

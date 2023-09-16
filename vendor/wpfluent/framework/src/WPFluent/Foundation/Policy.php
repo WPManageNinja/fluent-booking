@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
-use FluentCalendar\Framework\Request\Request;
+use FluentBooking\Framework\Request\Request;
 
 abstract class Policy
 {

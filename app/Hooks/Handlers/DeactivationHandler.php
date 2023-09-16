@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\Framework\Foundation\Application;
+use FluentBooking\Framework\Foundation\Application;
 
 class DeactivationHandler
 {

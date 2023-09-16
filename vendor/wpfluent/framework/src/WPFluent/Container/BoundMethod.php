@@ -1,20 +1,20 @@
 <?php
 
-namespace FluentCalendar\Framework\Container;
+namespace FluentBooking\Framework\Container;
 
 use Closure;
 use ReflectionMethod;
 use ReflectionFunction;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Container\Contracts\BindingResolutionException;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Container\Contracts\BindingResolutionException;
 
 class BoundMethod
 {
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @param  callable|string  $callback
      * @param  array  $parameters
      * @param  string|null  $defaultMethod
@@ -41,7 +41,7 @@ class BoundMethod
     /**
      * Call a string reference to a class using Class@method syntax.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @param  string  $target
      * @param  array  $parameters
      * @param  string|null  $defaultMethod
@@ -71,7 +71,7 @@ class BoundMethod
     /**
      * Call a method that has been bound to the container.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @param  callable  $callback
      * @param  mixed  $default
      * @return mixed
@@ -110,7 +110,7 @@ class BoundMethod
     /**
      * Get all dependencies for a given method.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @param  callable|string  $callback
      * @param  array  $parameters
      * @return array
@@ -163,13 +163,13 @@ class BoundMethod
     /**
      * Get the dependency for the given call parameter.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @param  \ReflectionParameter  $parameter
      * @param  array  $parameters
      * @param  array  $dependencies
      * @return void
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     protected static function addDependencyForCallParameter($container, $parameter,
                                                             array &$parameters, &$dependencies)

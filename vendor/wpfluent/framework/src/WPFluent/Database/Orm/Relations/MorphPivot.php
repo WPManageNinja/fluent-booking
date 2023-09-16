@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
 
 class MorphPivot extends Pivot
 {
@@ -28,8 +28,8 @@ class MorphPivot extends Pivot
     /**
      * Set the keys for a save update query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSaveQuery($query)
     {
@@ -41,8 +41,8 @@ class MorphPivot extends Pivot
     /**
      * Set the keys for a select query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSelectQuery($query)
     {
@@ -102,7 +102,7 @@ class MorphPivot extends Pivot
      * Set the morph class for the pivot.
      *
      * @param  string  $morphClass
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\MorphPivot
+     * @return \FluentBooking\Framework\Database\Orm\Relations\MorphPivot
      */
     public function setMorphClass($morphClass)
     {
@@ -134,7 +134,7 @@ class MorphPivot extends Pivot
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  array|int  $ids
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQueryForRestoration($ids)
     {
@@ -158,7 +158,7 @@ class MorphPivot extends Pivot
      * Get a new query to restore multiple models by their queueable IDs.
      *
      * @param  array  $ids
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function newQueryForCollectionRestoration(array $ids)
     {

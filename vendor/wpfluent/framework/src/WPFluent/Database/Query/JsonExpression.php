@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
 use InvalidArgumentException;
-use FluentCalendar\Framework\Database\Query\Expression;
+use FluentBooking\Framework\Database\Query\Expression;
 
 class JsonExpression extends Expression
 {

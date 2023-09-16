@@ -4,17 +4,17 @@
  * WPDB Connection
  */
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
 use Closure;
 use Exception;
 use DateTimeInterface;
-use FluentCalendar\Framework\Database\QueryException;
-use FluentCalendar\Framework\Database\Query\Processor;
-use FluentCalendar\Framework\Database\Query\Expression;
-use FluentCalendar\Framework\Database\ConnectionInterface;
-use FluentCalendar\Framework\Database\Query\Builder as QueryBuilder;
-use FluentCalendar\Framework\Database\Query\Grammar as QueryGrammar;
+use FluentBooking\Framework\Database\QueryException;
+use FluentBooking\Framework\Database\Query\Processor;
+use FluentBooking\Framework\Database\Query\Expression;
+use FluentBooking\Framework\Database\ConnectionInterface;
+use FluentBooking\Framework\Database\Query\Builder as QueryBuilder;
+use FluentBooking\Framework\Database\Query\Grammar as QueryGrammar;
 
 class WPDBConnection implements ConnectionInterface
 { 
@@ -48,14 +48,14 @@ class WPDBConnection implements ConnectionInterface
     /**
      * The query grammar implementation.
      *
-     * @var \FluentCalendar\Framework\Database\Query\Grammar
+     * @var \FluentBooking\Framework\Database\Query\Grammar
      */
     protected $queryGrammar;
 
     /**
      * The query post processor implementation.
      *
-     * @var \FluentCalendar\Framework\Database\Query\Processor
+     * @var \FluentBooking\Framework\Database\Query\Processor
      */
     protected $postProcessor;
 
@@ -129,7 +129,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the default query grammar instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Grammar
+     * @return \FluentBooking\Framework\Database\Query\Grammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -149,7 +149,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the default post processor instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Processor
+     * @return \FluentBooking\Framework\Database\Query\Processor
      */
     protected function getDefaultPostProcessor()
     {
@@ -159,9 +159,9 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Begin a fluent query against a database table.
      *
-     * @param  \Closure|\FluentCalendar\Framework\Database\Query\Builder|string  $table
+     * @param  \Closure|\FluentBooking\Framework\Database\Query\Builder|string  $table
      * @param  string|null  $as
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function table($table, $as = null)
     {
@@ -171,7 +171,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get a new query builder instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function query()
     {
@@ -505,7 +505,7 @@ class WPDBConnection implements ConnectionInterface
      * Get a new raw query expression.
      *
      * @param  mixed  $value
-     * @return \FluentCalendar\Framework\Database\Query\Expression
+     * @return \FluentBooking\Framework\Database\Query\Expression
      */
     public function raw($value)
     {
@@ -515,7 +515,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the query grammar used by the connection.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Grammar
+     * @return \FluentBooking\Framework\Database\Query\Grammar
      */
     public function getQueryGrammar()
     {
@@ -527,7 +527,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Set the query grammar used by the connection.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Grammar  $grammar
+     * @param  \FluentBooking\Framework\Database\Query\Grammar  $grammar
      * @return $this
      */
     public function setQueryGrammar(Grammar $grammar)
@@ -540,7 +540,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Get the query post processor used by the connection.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Processor
+     * @return \FluentBooking\Framework\Database\Query\Processor
      */
     public function getPostProcessor()
     {
@@ -550,7 +550,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Set the query post processor used by the connection.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Processor  $processor
+     * @param  \FluentBooking\Framework\Database\Query\Processor  $processor
      * @return $this
      */
     public function setPostProcessor(Processor $processor)
@@ -575,7 +575,7 @@ class WPDBConnection implements ConnectionInterface
     /**
      * Return self as PDO, the Processor instance uses it.
      *
-     * @return \FluentCalendar\Framework\Database\Query\WPDBConnection
+     * @return \FluentBooking\Framework\Database\Query\WPDBConnection
      */
     public function getPdo()
     {

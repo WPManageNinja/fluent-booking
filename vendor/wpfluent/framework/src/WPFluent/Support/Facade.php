@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use RuntimeException;
@@ -10,7 +10,7 @@ abstract class Facade
     /**
      * The application instance being facaded.
      *
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected static $app;
 
@@ -107,7 +107,7 @@ abstract class Facade
     /**
      * Get the application instance behind the facade.
      *
-     * @return \FluentCalendar\Framework\Foundation\Application
+     * @return \FluentBooking\Framework\Foundation\Application
      */
     public static function getFacadeApplication()
     {
@@ -117,7 +117,7 @@ abstract class Facade
     /**
      * Set the application instance.
      *
-     * @param  \FluentCalendar\Framework\Foundation\Application  $app
+     * @param  \FluentBooking\Framework\Foundation\Application  $app
      * @return void
      */
     public static function setFacadeApplication($app)

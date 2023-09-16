@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
 trait AsyncRequestTrait
 {

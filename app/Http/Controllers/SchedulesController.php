@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\BookingActivity;
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Request\Request;
-use FluentCalendar\App\Services\PermissionManager;
-use FluentCalendar\Framework\Pagination\LengthAwarePaginator;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Request\Request;
+use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\Framework\Pagination\LengthAwarePaginator;
 
 class SchedulesController extends Controller
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 
-use FluentCalendar\Framework\Database\Orm\Model as BaseModel;
+use FluentBooking\Framework\Database\Orm\Model as BaseModel;
 
 class Model extends BaseModel
 {

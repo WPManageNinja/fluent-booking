@@ -1,22 +1,22 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
-use FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface;
+use FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface;
 
 class UrlWindow
 {
     /**
      * The paginator implementation.
      *
-     * @var \FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface
+     * @var \FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface
      */
     protected $paginator;
 
     /**
      * Create a new URL window instance.
      *
-     * @param  \FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface  $paginator
+     * @param  \FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface  $paginator
      * @return void
      */
     public function __construct(LengthAwarePaginatorInterface $paginator)
@@ -27,7 +27,7 @@ class UrlWindow
     /**
      * Create a new URL window instance.
      *
-     * @param  \FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface  $paginator
+     * @param  \FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface  $paginator
      * @return array
      */
     public static function make(LengthAwarePaginatorInterface $paginator)

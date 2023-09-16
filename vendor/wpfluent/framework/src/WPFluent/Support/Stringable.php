@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use ArrayAccess;
 use JsonSerializable;
-use FluentCalendar\Framework\Support\DateTime;
-use FluentCalendar\Framework\Support\Tappable;
-use FluentCalendar\Framework\Support\Conditionable;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\HelperFunctionsTrait;
+use FluentBooking\Framework\Support\DateTime;
+use FluentBooking\Framework\Support\Tappable;
+use FluentBooking\Framework\Support\Conditionable;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\HelperFunctionsTrait;
 
 class Stringable implements JsonSerializable
 {
@@ -225,7 +225,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if the string is an exact match with the given value.
      *
-     * @param  \FluentCalendar\Framework\Support\Stringable|string  $value
+     * @param  \FluentBooking\Framework\Support\Stringable|string  $value
      * @return bool
      */
     public function exactly($value)
@@ -242,7 +242,7 @@ class Stringable implements JsonSerializable
      *
      * @param  string  $delimiter
      * @param  int  $limit
-     * @return \FluentCalendar\Framework\Support\Collection<int, string>
+     * @return \FluentBooking\Framework\Support\Collection<int, string>
      */
     public function explode($delimiter, $limit = PHP_INT_MAX)
     {
@@ -255,7 +255,7 @@ class Stringable implements JsonSerializable
      * @param  string|int  $pattern
      * @param  int  $limit
      * @param  int  $flags
-     * @return \FluentCalendar\Framework\Support\Collection<int, string>
+     * @return \FluentBooking\Framework\Support\Collection<int, string>
      */
     public function split($pattern, $limit = -1, $flags = 0)
     {
@@ -433,7 +433,7 @@ class Stringable implements JsonSerializable
      * Get the string matching the given pattern.
      *
      * @param  string  $pattern
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function matchAll($pattern)
     {
@@ -645,7 +645,7 @@ class Stringable implements JsonSerializable
      * Parse input from a string to a collection, according to a format.
      *
      * @param  string  $format
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function scan($format)
     {
@@ -875,7 +875,7 @@ class Stringable implements JsonSerializable
     /**
      * Split a string by uppercase characters.
      *
-     * @return \FluentCalendar\Framework\Support\Collection<int, string>
+     * @return \FluentBooking\Framework\Support\Collection<int, string>
      */
     public function ucsplit()
     {
@@ -1165,7 +1165,7 @@ class Stringable implements JsonSerializable
      *
      * @param  string|null  $format
      * @param  string|null  $tz
-     * @return \FluentCalendar\Framework\Support\DateTime
+     * @return \FluentBooking\Framework\Support\DateTime
      *
      * @throws \InvalidArgumentException
      */

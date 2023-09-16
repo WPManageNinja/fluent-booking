@@ -1,10 +1,10 @@
 <?php
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
 
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 
 class CleanupHandler
 {

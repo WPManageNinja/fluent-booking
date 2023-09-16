@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Encryption;
+namespace FluentBooking\Framework\Encryption;
 
 use RuntimeException;
 

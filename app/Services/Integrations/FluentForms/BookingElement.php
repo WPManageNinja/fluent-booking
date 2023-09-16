@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\App\Services\Integrations\FluentForms;
+namespace FluentBooking\App\Services\Integrations\FluentForms;
 
 
-use FluentCalendar\App\App;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\PermissionManager;
-use FluentCalendar\App\Hooks\Handlers\FrontEndHandler;
+use FluentBooking\App\App;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentForm\App\Services\FormBuilder\BaseFieldManager;
 
 class BookingElement extends BaseFieldManager
@@ -33,7 +33,7 @@ class BookingElement extends BaseFieldManager
         add_filter('fluentform/select_group_component_ajax_options', array($this, 'getCalendarOptions'));
 
         add_action('fluentform/loading_editor_assets', function () {
-            wp_enqueue_script('fluentcal_ff_editor_extended', FLUENT_CALENDAR_URL . 'assets/admin/fluentform.js', [], '1.0.0', true);
+            wp_enqueue_script('fluentcal_ff_editor_extended', FLUENT_BOOKING_URL . 'assets/admin/fluentform.js', [], '1.0.0', true);
         });
     }
     

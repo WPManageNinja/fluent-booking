@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Casts;
+namespace FluentBooking\Framework\Database\Orm\Casts;
 
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Database\Orm\Castable;
-use FluentCalendar\Framework\Database\Orm\CastsAttributes;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Database\Orm\Castable;
+use FluentBooking\Framework\Database\Orm\CastsAttributes;
 
 class AsCollection implements Castable
 {

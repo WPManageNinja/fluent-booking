@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 interface UrlRoutable
 {
@@ -23,7 +23,7 @@ interface UrlRoutable
      *
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveRouteBinding($value, $field = null);
 
@@ -33,7 +33,7 @@ interface UrlRoutable
      * @param  string  $childType
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveChildRouteBinding($childType, $value, $field);
 }

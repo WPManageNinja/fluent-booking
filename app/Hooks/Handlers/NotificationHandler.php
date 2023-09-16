@@ -1,11 +1,11 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\EmailNotificationService;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\EmailNotificationService;
+use FluentBooking\Framework\Support\Arr;
 
 class NotificationHandler
 {

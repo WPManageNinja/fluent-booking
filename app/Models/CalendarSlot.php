@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 
-use FluentCalendar\App\Models\Model;
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
 
 class CalendarSlot extends Model
 {

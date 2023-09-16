@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\App\Services\Integrations\GoogleCalendar;
+namespace FluentBooking\App\Services\Integrations\GoogleCalendar;
 
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\App\Services\Integrations\IntegrationHelper;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
 class Client
 {

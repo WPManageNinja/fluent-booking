@@ -1,26 +1,26 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 use ArrayAccess;
 use LogicException;
 use JsonSerializable;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Support\UrlRoutable;
-use FluentCalendar\Framework\Support\JsonableInterface;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Support\HelperFunctionsTrait;
-use FluentCalendar\Framework\Support\CanBeEscapedWhenCastToString;
-use FluentCalendar\Framework\Support\Collection as BaseCollection;
-use FluentCalendar\Framework\Database\Orm\Relations\Pivot;
-use FluentCalendar\Framework\Database\Orm\Relations\BelongsToMany;
-use FluentCalendar\Framework\Database\Orm\Relations\HasManyThrough;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\AsPivot;
-use FluentCalendar\Framework\Database\Orm\Collection as OrmCollection;
-use FluentCalendar\Framework\Database\ConnectionResolverInterface as Resolver;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Support\UrlRoutable;
+use FluentBooking\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Support\HelperFunctionsTrait;
+use FluentBooking\Framework\Support\CanBeEscapedWhenCastToString;
+use FluentBooking\Framework\Support\Collection as BaseCollection;
+use FluentBooking\Framework\Database\Orm\Relations\Pivot;
+use FluentBooking\Framework\Database\Orm\Relations\BelongsToMany;
+use FluentBooking\Framework\Database\Orm\Relations\HasManyThrough;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\AsPivot;
+use FluentBooking\Framework\Database\Orm\Collection as OrmCollection;
+use FluentBooking\Framework\Database\ConnectionResolverInterface as Resolver;
 
 abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhenCastToString, JsonableInterface, JsonSerializable, UrlRoutable
 {
@@ -122,14 +122,14 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * The connection resolver instance.
      *
-     * @var \FluentCalendar\Framework\Database\ConnectionResolverInterface
+     * @var \FluentBooking\Framework\Database\ConnectionResolverInterface
      */
     protected static $resolver;
 
     /**
      * The event dispatcher instance.
      *
-     * @var \FluentCalendar\Framework\Events\Dispatcher
+     * @var \FluentBooking\Framework\Events\Dispatcher
      */
     protected static $dispatcher;
 
@@ -418,7 +418,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * @param  array  $attributes
      * @return $this
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\MassAssignmentException
+     * @throws \FluentBooking\Framework\Database\Orm\MassAssignmentException
      */
     public function fill(array $attributes)
     {
@@ -533,7 +533,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Begin querying the model on a given connection.
      *
      * @param  string|null  $connection
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public static function on($connection = null)
     {
@@ -550,7 +550,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Begin querying the model on the write connection.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public static function onWriteConnection()
     {
@@ -561,7 +561,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Get all of the models from the database.
      *
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection|static[]
+     * @return \FluentBooking\Framework\Database\Orm\Collection|static[]
      */
     public static function all($columns = ['*'])
     {
@@ -574,7 +574,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Begin querying a model with eager loading.
      *
      * @param  array|string  $relations
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public static function with($relations)
     {
@@ -1045,7 +1045,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Perform a model update operation.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
      * @return bool
      */
     protected function performUpdate(Builder $query)
@@ -1083,8 +1083,8 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Set the keys for a select query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSelectQuery($query)
     {
@@ -1106,8 +1106,8 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Set the keys for a save update query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function setKeysForSaveQuery($query)
     {
@@ -1129,7 +1129,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Perform a model insert operation.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
      * @return bool
      */
     protected function performInsert(Builder $query)
@@ -1180,7 +1180,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
      * @param  array  $attributes
      * @return void
      */
@@ -1194,7 +1194,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Destroy the models for the given IDs.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection|array|int|string  $ids
+     * @param  \FluentBooking\Framework\Support\Collection|array|int|string  $ids
      * @return int
      */
     public static function destroy($ids)
@@ -1315,7 +1315,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Begin querying the model.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public static function query()
     {
@@ -1325,7 +1325,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query builder for the model's table.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQuery()
     {
@@ -1335,7 +1335,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query builder that doesn't have any global scopes or eager loading.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder|static
+     * @return \FluentBooking\Framework\Database\Orm\Builder|static
      */
     public function newModelQuery()
     {
@@ -1347,7 +1347,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query builder with no relationships loaded.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQueryWithoutRelationships()
     {
@@ -1357,8 +1357,8 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Register the global scopes for this builder instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $builder
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function registerGlobalScopes($builder)
     {
@@ -1372,7 +1372,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query builder that doesn't have any global scopes.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder|static
+     * @return \FluentBooking\Framework\Database\Orm\Builder|static
      */
     public function newQueryWithoutScopes()
     {
@@ -1384,8 +1384,8 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query instance without a given scope.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|string  $scope
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|string  $scope
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQueryWithoutScope($scope)
     {
@@ -1396,7 +1396,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  array|int  $ids
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function newQueryForRestoration($ids)
     {
@@ -1408,8 +1408,8 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Create a new Orm query builder for the model.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
-     * @return \FluentCalendar\Framework\Database\Orm\Builder|static
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
+     * @return \FluentBooking\Framework\Database\Orm\Builder|static
      */
     public function newOrmBuilder($query)
     {
@@ -1419,7 +1419,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get a new query builder instance for the connection.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     protected function newBaseQueryBuilder()
     {
@@ -1430,7 +1430,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Create a new Orm Collection instance.
      *
      * @param  array  $models
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function newCollection(array $models = [])
     {
@@ -1440,12 +1440,12 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Create a new pivot model instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @param  array  $attributes
      * @param  string  $table
      * @param  bool  $exists
      * @param  string|null  $using
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Pivot
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Pivot
      */
     public function newPivot(self $parent, array $attributes, $table, $exists, $using = null)
     {
@@ -1492,7 +1492,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * @param  int  $options
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\JsonEncodingException
+     * @throws \FluentBooking\Framework\Database\Orm\JsonEncodingException
      */
     public function toJson($options = 0)
     {
@@ -1588,7 +1588,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Determine if two models have the same ID and belong to the same table.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model|null  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model|null  $model
      * @return bool
      */
     public function is($model)
@@ -1602,7 +1602,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Determine if two models are not the same.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model|null  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model|null  $model
      * @return bool
      */
     public function isNot($model)
@@ -1613,7 +1613,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get the database connection for the model.
      *
-     * @return \FluentCalendar\Framework\Database\Query\WPDBConnection
+     * @return \FluentBooking\Framework\Database\Query\WPDBConnection
      */
     public function getConnection()
     {
@@ -1647,7 +1647,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * Resolve a connection instance.
      *
      * @param  string|null  $connection
-     * @return \FluentCalendar\Framework\Database\Query\WPDBConnection
+     * @return \FluentBooking\Framework\Database\Query\WPDBConnection
      */
     public static function resolveConnection($connection = null)
     {
@@ -1657,7 +1657,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Get the connection resolver instance.
      *
-     * @return \FluentCalendar\Framework\Database\ConnectionResolverInterface
+     * @return \FluentBooking\Framework\Database\ConnectionResolverInterface
      */
     public static function getConnectionResolver()
     {
@@ -1667,7 +1667,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Set the connection resolver instance.
      *
-     * @param  \FluentCalendar\Framework\Database\ConnectionResolverInterface  $resolver
+     * @param  \FluentBooking\Framework\Database\ConnectionResolverInterface  $resolver
      * @return void
      */
     public static function setConnectionResolver(Resolver $resolver)
@@ -1862,7 +1862,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      *
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveRouteBinding($value, $field = null)
     {
@@ -1874,7 +1874,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      *
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveSoftDeletableRouteBinding($value, $field = null)
     {
@@ -1887,7 +1887,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * @param  string  $childType
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveChildRouteBinding($childType, $value, $field)
     {
@@ -1900,7 +1900,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * @param  string  $childType
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     public function resolveSoftDeletableChildRouteBinding($childType, $value, $field)
     {
@@ -1913,7 +1913,7 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
      * @param  string  $childType
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Relation
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Relation
      */
     protected function resolveChildRouteBindingQuery($childType, $value, $field)
     {
@@ -1934,10 +1934,10 @@ abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhe
     /**
      * Retrieve the model for a bound value.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Relations\Relation  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Relations\Relation  $query
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Relation
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Relation
      */
     public function resolveRouteBindingQuery($query, $value, $field = null)
     {

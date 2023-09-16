@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
 use Exception;
 use WP_Error;

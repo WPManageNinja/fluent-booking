@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Foundation;
+namespace FluentBooking\Framework\Foundation;
 
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Arr;
 
 class Config
 {

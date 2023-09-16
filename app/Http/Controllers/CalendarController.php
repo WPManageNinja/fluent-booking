@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\App\Services\PermissionManager;
-use FluentCalendar\App\Services\SanitizeService;
-use FluentCalendar\Framework\Request\Request;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\SanitizeService;
+use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Support\Arr;
 
 class CalendarController extends Controller
 {

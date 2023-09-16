@@ -1,11 +1,11 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\SupportsDefaultModels;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\SupportsDefaultModels;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\InteractsWithDictionary;
 
 class HasOneThrough extends HasManyThrough
 {
@@ -41,7 +41,7 @@ class HasOneThrough extends HasManyThrough
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -67,8 +67,8 @@ class HasOneThrough extends HasManyThrough
     /**
      * Make a new related instance for the given model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function newRelatedInstanceFor(Model $parent)
     {

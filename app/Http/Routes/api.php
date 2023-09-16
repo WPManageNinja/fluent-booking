@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $router FluentCalendar\Framework\Http\Router
+ * @var $router FluentBooking\Framework\Http\Router
  */
 
 

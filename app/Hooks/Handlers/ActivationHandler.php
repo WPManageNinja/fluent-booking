@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\Framework\Foundation\Application;
-use FluentCalendar\Database\DBMigrator;
-use FluentCalendar\Database\DBSeeder;
+use FluentBooking\Framework\Foundation\Application;
+use FluentBooking\Database\DBMigrator;
+use FluentBooking\Database\DBSeeder;
 
 class ActivationHandler
 {

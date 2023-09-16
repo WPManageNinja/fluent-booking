@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Services;
+namespace FluentBooking\App\Services;
 
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Arr;
 
 class EditorShortCodeParser
 {

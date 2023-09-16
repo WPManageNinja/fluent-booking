@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database;
+namespace FluentBooking\Framework\Database;
 
 interface ConnectionResolverInterface
 {
@@ -8,7 +8,7 @@ interface ConnectionResolverInterface
      * Get a database connection instance.
      *
      * @param  string|null  $name
-     * @return \FluentCalendar\Framework\Database\ConnectionInterface
+     * @return \FluentBooking\Framework\Database\ConnectionInterface
      */
     public function connection($name = null);
 

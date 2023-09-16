@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Request;
+namespace FluentBooking\Framework\Request;
 
-use FluentCalendar\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Helper;
 
 trait FileHandler
 {
@@ -118,7 +118,7 @@ trait FileHandler
      *
      * @param  string|null  $key
      * @param  mixed  $default
-     * @return \FluentCalendar\Framework\Request\File|array|null
+     * @return \FluentBooking\Framework\Request\File|array|null
      */
     public function file($key = null, $default = null)
     {

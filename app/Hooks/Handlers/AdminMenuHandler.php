@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\App\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\User;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\Helper;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\User;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Helper;
 
 class AdminMenuHandler
 {

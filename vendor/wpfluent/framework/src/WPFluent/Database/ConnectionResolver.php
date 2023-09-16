@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database;
+namespace FluentBooking\Framework\Database;
 
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Database\ConnectionResolverInterface;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Database\ConnectionResolverInterface;
 
 class ConnectionResolver implements ConnectionResolverInterface
 {
@@ -38,7 +38,7 @@ class ConnectionResolver implements ConnectionResolverInterface
      * Get a database connection instance.
      *
      * @param  string|null  $name
-     * @return \FluentCalendar\Framework\Database\ConnectionInterface
+     * @return \FluentBooking\Framework\Database\ConnectionInterface
      */
     public function connection($name = null)
     {
@@ -61,7 +61,7 @@ class ConnectionResolver implements ConnectionResolverInterface
      * Add a connection to the resolver.
      *
      * @param  string  $name
-     * @param  \FluentCalendar\Framework\Database\ConnectionInterface  $connection
+     * @param  \FluentBooking\Framework\Database\ConnectionInterface  $connection
      * @return void
      */
     public function addConnection($name, ConnectionInterface $connection)

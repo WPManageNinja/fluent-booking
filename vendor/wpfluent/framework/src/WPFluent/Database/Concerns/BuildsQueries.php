@@ -1,21 +1,21 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Concerns;
+namespace FluentBooking\Framework\Database\Concerns;
 
 use RuntimeException;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Container\Container;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\Conditionable;
-use FluentCalendar\Framework\Support\LazyCollection;
-use FluentCalendar\Framework\Database\Orm\Builder;
-use FluentCalendar\Framework\Database\RecordsNotFoundException;
-use FluentCalendar\Framework\Database\MultipleRecordsFoundException;
-use FluentCalendar\Framework\Pagination\Cursor;
-use FluentCalendar\Framework\Pagination\Paginator;
-use FluentCalendar\Framework\Pagination\CursorPaginator;
-use FluentCalendar\Framework\Pagination\LengthAwarePaginator;
+use FluentBooking\Framework\Container\Container;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\Conditionable;
+use FluentBooking\Framework\Support\LazyCollection;
+use FluentBooking\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Database\RecordsNotFoundException;
+use FluentBooking\Framework\Database\MultipleRecordsFoundException;
+use FluentBooking\Framework\Pagination\Cursor;
+use FluentBooking\Framework\Pagination\Paginator;
+use FluentBooking\Framework\Pagination\CursorPaginator;
+use FluentBooking\Framework\Pagination\LengthAwarePaginator;
 
 
 trait BuildsQueries
@@ -67,7 +67,7 @@ trait BuildsQueries
      *
      * @param  callable  $callback
      * @param  int  $count
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function chunkMap(callable $callback, $count = 1000)
     {
@@ -180,7 +180,7 @@ trait BuildsQueries
      * Query lazily, by chunks of the given size.
      *
      * @param  int  $chunkSize
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      *
      * @throws \InvalidArgumentException
      */
@@ -215,7 +215,7 @@ trait BuildsQueries
      * @param  int  $chunkSize
      * @param  string|null  $column
      * @param  string|null  $alias
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      *
      * @throws \InvalidArgumentException
      */
@@ -230,7 +230,7 @@ trait BuildsQueries
      * @param  int  $chunkSize
      * @param  string|null  $column
      * @param  string|null  $alias
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      *
      * @throws \InvalidArgumentException
      */
@@ -246,7 +246,7 @@ trait BuildsQueries
      * @param  string|null  $column
      * @param  string|null  $alias
      * @param  bool  $descending
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      *
      * @throws \InvalidArgumentException
      */
@@ -289,7 +289,7 @@ trait BuildsQueries
      * Execute the query and get the first result.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|object|static|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|object|static|null
      */
     public function first($columns = ['*'])
     {
@@ -300,10 +300,10 @@ trait BuildsQueries
      * Execute the query and get the first result if it's the sole matching record.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|object|static|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|object|static|null
      *
-     * @throws \FluentCalendar\Framework\Database\RecordsNotFoundException
-     * @throws \FluentCalendar\Framework\Database\MultipleRecordsFoundException
+     * @throws \FluentBooking\Framework\Database\RecordsNotFoundException
+     * @throws \FluentBooking\Framework\Database\MultipleRecordsFoundException
      */
     public function sole($columns = ['*'])
     {
@@ -326,8 +326,8 @@ trait BuildsQueries
      * @param  int  $perPage
      * @param  array  $columns
      * @param  string  $cursorName
-     * @param  \FluentCalendar\Framework\Pagination\Cursor|string|null  $cursor
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginator
+     * @param  \FluentBooking\Framework\Pagination\Cursor|string|null  $cursor
+     * @return \FluentBooking\Framework\Pagination\CursorPaginator
      */
     protected function paginateUsingCursor($perPage, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -411,7 +411,7 @@ trait BuildsQueries
     /**
      * Get the original column name of the given column, without any aliasing.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder|\FluentCalendar\Framework\Database\Orm\Builder  $builder
+     * @param  \FluentBooking\Framework\Database\Query\Builder|\FluentBooking\Framework\Database\Orm\Builder  $builder
      * @param  string  $parameter
      * @return string
      */
@@ -439,12 +439,12 @@ trait BuildsQueries
     /**
      * Create a new length-aware paginator instance.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection  $items
+     * @param  \FluentBooking\Framework\Support\Collection  $items
      * @param  int  $total
      * @param  int  $perPage
      * @param  int  $currentPage
      * @param  array  $options
-     * @return \FluentCalendar\Framework\Pagination\LengthAwarePaginator
+     * @return \FluentBooking\Framework\Pagination\LengthAwarePaginator
      */
     protected function paginator($items, $total, $perPage, $currentPage, $options)
     {
@@ -456,11 +456,11 @@ trait BuildsQueries
     /**
      * Create a new simple paginator instance.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection  $items
+     * @param  \FluentBooking\Framework\Support\Collection  $items
      * @param  int  $perPage
      * @param  int  $currentPage
      * @param  array  $options
-     * @return \FluentCalendar\Framework\Pagination\Paginator
+     * @return \FluentBooking\Framework\Pagination\Paginator
      */
     protected function simplePaginator($items, $perPage, $currentPage, $options)
     {
@@ -472,11 +472,11 @@ trait BuildsQueries
     /**
      * Create a new cursor paginator instance.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection  $items
+     * @param  \FluentBooking\Framework\Support\Collection  $items
      * @param  int  $perPage
-     * @param  \FluentCalendar\Framework\Pagination\Cursor  $cursor
+     * @param  \FluentBooking\Framework\Pagination\Cursor  $cursor
      * @param  array  $options
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginator
+     * @return \FluentBooking\Framework\Pagination\CursorPaginator
      */
     protected function cursorPaginator($items, $perPage, $cursor, $options)
     {

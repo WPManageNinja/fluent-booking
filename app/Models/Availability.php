@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Models;
+namespace FluentBooking\App\Models;
 class Availability extends Model
 {
     protected $table = 'fcal_meta';

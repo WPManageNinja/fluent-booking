@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Validator;
+namespace FluentBooking\Framework\Validator;
 
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Arr;
 
 class Validator
 {
@@ -75,7 +75,7 @@ class Validator
      * @param array $rules
      * @param array $messages
      *
-     * @return \FluentCalendar\Framework\Validator\Validator
+     * @return \FluentBooking\Framework\Validator\Validator
      */
     public function make(array $data = [], array $rules = [], array $messages = [])
     {

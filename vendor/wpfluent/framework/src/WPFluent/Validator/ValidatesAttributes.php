@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Validator;
+namespace FluentBooking\Framework\Validator;
 
 use Countable;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Validator\Contracts\File;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Validator\Contracts\File;
 
 trait ValidatesAttributes
 {
@@ -319,7 +319,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentCalendar\Framework\Validator\Contracts\File
+         * @var $value \FluentBooking\Framework\Validator\Contracts\File
          */
         return $value->getPath() != '' && in_array($value->guessExtension(), $parameters);
     }
@@ -376,7 +376,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentCalendar\Framework\Validator\Contracts\File
+         * @var $value \FluentBooking\Framework\Validator\Contracts\File
          */
         return strtolower($value->getClientOriginalExtension()) === 'php';
     }

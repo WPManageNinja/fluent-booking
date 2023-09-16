@@ -1,22 +1,22 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
 use Closure;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\HelperFunctionsTrait;
-use FluentCalendar\Framework\Database\MultipleRecordsFoundException;
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Builder;
-use FluentCalendar\Framework\Database\Orm\Collection;
-use FluentCalendar\Framework\Database\Orm\ModelNotFoundException;
-use FluentCalendar\Framework\Database\Query\Expression;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\HelperFunctionsTrait;
+use FluentBooking\Framework\Database\MultipleRecordsFoundException;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Builder;
+use FluentBooking\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
+use FluentBooking\Framework\Database\Query\Expression;
 
 /**
- * @mixin \FluentCalendar\Framework\Database\Orm\Builder
+ * @mixin \FluentBooking\Framework\Database\Orm\Builder
  */
 abstract class Relation
 {
@@ -28,21 +28,21 @@ abstract class Relation
     /**
      * The Orm query builder instance.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Builder
+     * @var \FluentBooking\Framework\Database\Orm\Builder
      */
     protected $query;
 
     /**
      * The parent model instance.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     protected $parent;
 
     /**
      * The related model instance.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     protected $related;
 
@@ -77,8 +77,8 @@ abstract class Relation
     /**
      * Create a new relation instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
      * @return void
      */
     public function __construct(Builder $query, Model $parent)
@@ -140,7 +140,7 @@ abstract class Relation
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -156,7 +156,7 @@ abstract class Relation
     /**
      * Get the relationship for eager loading.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function getEager()
     {
@@ -167,10 +167,10 @@ abstract class Relation
      * Execute the query and get the first result if it's the sole matching record.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
-     * @throws \FluentCalendar\Framework\Database\MultipleRecordsFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\MultipleRecordsFoundException
      */
     public function sole($columns = ['*'])
     {
@@ -191,7 +191,7 @@ abstract class Relation
      * Execute the query as a "select" statement.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function get($columns = ['*'])
     {
@@ -228,9 +228,9 @@ abstract class Relation
     /**
      * Add the constraints for a relationship count query.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceCountQuery(Builder $query, Builder $parentQuery)
     {
@@ -244,10 +244,10 @@ abstract class Relation
      *
      * Essentially, these queries compare on column names like whereColumn.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $query
-     * @param  \FluentCalendar\Framework\Database\Orm\Builder  $parentQuery
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Orm\Builder  $parentQuery
      * @param  array|mixed  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -284,7 +284,7 @@ abstract class Relation
     /**
      * Get the query builder that will contain the relationship constraints.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     protected function getRelationQuery()
     {
@@ -294,7 +294,7 @@ abstract class Relation
     /**
      * Get the underlying query for the relation.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Builder
+     * @return \FluentBooking\Framework\Database\Orm\Builder
      */
     public function getQuery()
     {
@@ -304,7 +304,7 @@ abstract class Relation
     /**
      * Get the base query builder driving the Orm builder.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function getBaseQuery()
     {
@@ -314,7 +314,7 @@ abstract class Relation
     /**
      * Get the parent model of the relation.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function getParent()
     {
@@ -334,7 +334,7 @@ abstract class Relation
     /**
      * Get the related model of the relation.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function getRelated()
     {
@@ -374,7 +374,7 @@ abstract class Relation
     /**
      * Get the name of the "where in" method for eager loading.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @param  string  $key
      * @return string
      */

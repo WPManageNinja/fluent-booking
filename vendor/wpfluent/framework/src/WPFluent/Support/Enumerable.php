@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Countable;
 use JsonSerializable;
 use IteratorAggregate;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Support\JsonableInterface;
 
 interface Enumerable extends ArrayableInterface, Countable, IteratorAggregate, JsonableInterface, JsonSerializable
 {
@@ -996,7 +996,7 @@ interface Enumerable extends ArrayableInterface, Countable, IteratorAggregate, J
     /**
      * Collect the values into a collection.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function collect();
 

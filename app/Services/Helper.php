@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\App\Services;
+namespace FluentBooking\App\Services;
 
-use FluentCalendar\App\Models\Calendar;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Models\Meta;
-use FluentCalendar\App\Models\BookingMeta;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Models\BookingMeta;
+use FluentBooking\Framework\Support\Arr;
 
 class Helper
 {

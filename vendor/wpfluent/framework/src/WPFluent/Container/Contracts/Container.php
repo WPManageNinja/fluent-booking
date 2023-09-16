@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Container\Contracts;
+namespace FluentBooking\Framework\Container\Contracts;
 
 use Closure;
-use FluentCalendar\Framework\Container\Contracts\Psr\ContainerInterface;
+use FluentBooking\Framework\Container\Contracts\Psr\ContainerInterface;
 
 interface Container extends ContainerInterface
 {
@@ -115,7 +115,7 @@ interface Container extends ContainerInterface
      * Define a contextual binding.
      *
      * @param  string|array  $concrete
-     * @return \FluentCalendar\Framework\Container\Contracts\ContextualBindingBuilder
+     * @return \FluentBooking\Framework\Container\Contracts\ContextualBindingBuilder
      */
     public function when($concrete);
 
@@ -141,7 +141,7 @@ interface Container extends ContainerInterface
      * @param  array  $parameters
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Container\Contracts\BindingResolutionException
+     * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
     public function make($abstract, array $parameters = []);
 

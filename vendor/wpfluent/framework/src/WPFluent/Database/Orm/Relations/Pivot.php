@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Database\Orm\Model;
-use FluentCalendar\Framework\Database\Orm\Relations\Concerns\AsPivot;
+use FluentBooking\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Relations\Concerns\AsPivot;
 
 class Pivot extends Model
 {

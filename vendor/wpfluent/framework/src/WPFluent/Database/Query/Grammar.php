@@ -1,14 +1,14 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
 use RuntimeException;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Database\BaseGrammar;
-use FluentCalendar\Framework\Database\Query\Builder;
-use FluentCalendar\Framework\Database\Query\JoinClause;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Database\BaseGrammar;
+use FluentBooking\Framework\Database\Query\Builder;
+use FluentBooking\Framework\Database\Query\JoinClause;
 
 class Grammar extends BaseGrammar
 {
@@ -48,7 +48,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a select query into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     public function compileSelect(Builder $query)
@@ -85,7 +85,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the components necessary for a select clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return array
      */
     protected function compileComponents(Builder $query)
@@ -106,7 +106,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an aggregated select clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $aggregate
      * @return string
      */
@@ -129,7 +129,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "select *" portion of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $columns
      * @return string|null
      */
@@ -154,7 +154,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "from" portion of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $table
      * @return string
      */
@@ -166,7 +166,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "join" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $joins
      * @return string
      */
@@ -186,7 +186,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "where" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     public function compileWheres(Builder $query)
@@ -211,7 +211,7 @@ class Grammar extends BaseGrammar
     /**
      * Get an array of all the where clauses for the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return array
      */
     protected function compileWheresToArray($query)
@@ -224,7 +224,7 @@ class Grammar extends BaseGrammar
     /**
      * Format the where clause statements into one string.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $sql
      * @return string
      */
@@ -238,7 +238,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a raw where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -250,7 +250,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a basic where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -266,7 +266,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a bitwise operator where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -278,7 +278,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where in" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -294,7 +294,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where not in" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -312,7 +312,7 @@ class Grammar extends BaseGrammar
      *
      * For safety, whereIntegerInRaw ensures this method is only used with integer values.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -330,7 +330,7 @@ class Grammar extends BaseGrammar
      *
      * For safety, whereIntegerInRaw ensures this method is only used with integer values.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -346,7 +346,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where null" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -358,7 +358,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where not null" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -370,7 +370,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "between" where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -388,7 +388,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "between" where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -406,7 +406,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where date" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -418,7 +418,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where time" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -430,7 +430,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where day" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -442,7 +442,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where month" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -454,7 +454,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where year" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -467,7 +467,7 @@ class Grammar extends BaseGrammar
      * Compile a date based where clause.
      *
      * @param  string  $type
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -481,7 +481,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where clause comparing two columns.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -493,7 +493,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a nested where clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -510,7 +510,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where condition with a sub-select.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -524,7 +524,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where exists clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -536,7 +536,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where exists clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -548,7 +548,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where row values condition.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -564,7 +564,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where JSON boolean" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -582,7 +582,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where JSON contains" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -624,7 +624,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where JSON length" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -655,7 +655,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where fulltext" clause.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
@@ -667,7 +667,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "group by" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $groups
      * @return string
      */
@@ -679,7 +679,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "having" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $havings
      * @return string
      */
@@ -748,7 +748,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "order by" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $orders
      * @return string
      */
@@ -764,7 +764,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the query orders to an array.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $orders
      * @return array
      */
@@ -789,7 +789,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "limit" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  int  $limit
      * @return string
      */
@@ -801,7 +801,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "offset" portions of the query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  int  $offset
      * @return string
      */
@@ -813,7 +813,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "union" queries attached to the main query.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     protected function compileUnions(Builder $query)
@@ -866,7 +866,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a union aggregate query into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     protected function compileUnionAggregate(Builder $query)
@@ -881,7 +881,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an exists statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     public function compileExists(Builder $query)
@@ -894,7 +894,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -928,7 +928,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert ignore statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      *
@@ -942,7 +942,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert and get ID statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @param  string  $sequence
      * @return string
@@ -955,7 +955,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert statement using a subquery into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $columns
      * @param  string  $sql
      * @return string
@@ -968,7 +968,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -990,7 +990,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the columns for an update statement.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -1004,7 +1004,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an update statement without joins into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $columns
      * @param  string  $where
@@ -1018,7 +1018,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an update statement with joins into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $columns
      * @param  string  $where
@@ -1034,7 +1034,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile an "upsert" statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $values
      * @param  array  $uniqueBy
      * @param  array  $update
@@ -1066,7 +1066,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return string
      */
     public function compileDelete(Builder $query)
@@ -1085,7 +1085,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a delete statement without joins into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $where
      * @return string
@@ -1098,7 +1098,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a delete statement with joins into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $where
      * @return string
@@ -1128,7 +1128,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a truncate table statement into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return array
      */
     public function compileTruncate(Builder $query)
@@ -1139,7 +1139,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the lock into SQL.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  bool|string  $value
      * @return string
      */
@@ -1183,7 +1183,7 @@ class Grammar extends BaseGrammar
     /**
      * Wrap a value in keyword identifiers.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Expression|string  $value
+     * @param  \FluentBooking\Framework\Database\Query\Expression|string  $value
      * @param  bool  $prefixAlias
      * @return string
      */

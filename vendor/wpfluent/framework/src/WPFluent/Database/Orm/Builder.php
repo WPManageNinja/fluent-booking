@@ -1,31 +1,31 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 use Closure;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use BadMethodCallException;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Pagination\Paginator;
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Database\Concerns\BuildsQueries;
-use FluentCalendar\Framework\Database\RecordsNotFoundException;
-use FluentCalendar\Framework\Database\Orm\Relations\Relation;
-use FluentCalendar\Framework\Database\Orm\Relations\BelongsToMany;
-use FluentCalendar\Framework\Database\Orm\RelationNotFoundException;
-use FluentCalendar\Framework\Database\Orm\Concerns\QueriesRelationships;
-use FluentCalendar\Framework\Database\Query\Builder as QueryBuilder;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Pagination\Paginator;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Database\Concerns\BuildsQueries;
+use FluentBooking\Framework\Database\RecordsNotFoundException;
+use FluentBooking\Framework\Database\Orm\Relations\Relation;
+use FluentBooking\Framework\Database\Orm\Relations\BelongsToMany;
+use FluentBooking\Framework\Database\Orm\RelationNotFoundException;
+use FluentBooking\Framework\Database\Orm\Concerns\QueriesRelationships;
+use FluentBooking\Framework\Database\Query\Builder as QueryBuilder;
 
 
 /**
  * @property-read HigherOrderBuilderProxy $orWhere
  *
- * @mixin \FluentCalendar\Framework\Database\Query\Builder
+ * @mixin \FluentBooking\Framework\Database\Query\Builder
  */
 class Builder
 {
@@ -37,14 +37,14 @@ class Builder
     /**
      * The base query builder instance.
      *
-     * @var \FluentCalendar\Framework\Database\Query\Builder
+     * @var \FluentBooking\Framework\Database\Query\Builder
      */
     protected $query;
 
     /**
      * The model being queried.
      *
-     * @var \FluentCalendar\Framework\Database\Orm\Model
+     * @var \FluentBooking\Framework\Database\Orm\Model
      */
     protected $model;
 
@@ -131,7 +131,7 @@ class Builder
     /**
      * Create a new Orm query builder instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return void
      */
     public function __construct(QueryBuilder $query)
@@ -143,7 +143,7 @@ class Builder
      * Create and return an un-saved model instance.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function make(array $attributes = [])
     {
@@ -154,7 +154,7 @@ class Builder
      * Register a new global scope.
      *
      * @param  string  $identifier
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|\Closure  $scope
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|\Closure  $scope
      * @return $this
      */
     public function withGlobalScope($identifier, $scope)
@@ -171,7 +171,7 @@ class Builder
     /**
      * Remove a registered global scope.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|string  $scope
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|string  $scope
      * @return $this
      */
     public function withoutGlobalScope($scope)
@@ -269,7 +269,7 @@ class Builder
     /**
      * Add a basic where clause to the query.
      *
-     * @param  \Closure|string|array|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  \Closure|string|array|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -291,11 +291,11 @@ class Builder
     /**
      * Add a basic where clause to the query, and return the first result.
      *
-     * @param  \Closure|string|array|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  \Closure|string|array|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|static|null
      */
     public function firstWhere($column, $operator = null, $value = null, $boolean = 'and')
     {
@@ -305,7 +305,7 @@ class Builder
     /**
      * Add an "or where" clause to the query.
      *
-     * @param  \Closure|array|string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  \Closure|array|string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -322,7 +322,7 @@ class Builder
     /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @return $this
      */
     public function latest($column = null)
@@ -339,7 +339,7 @@ class Builder
     /**
      * Add an "order by" clause for a timestamp to the query.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @return $this
      */
     public function oldest($column = null)
@@ -357,7 +357,7 @@ class Builder
      * Create a collection of models from plain arrays.
      *
      * @param  array  $items
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function hydrate(array $items)
     {
@@ -379,7 +379,7 @@ class Builder
      *
      * @param  string  $query
      * @param  array  $bindings
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function fromQuery($query, $bindings = [])
     {
@@ -393,7 +393,7 @@ class Builder
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection|static[]|static|null
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection|static[]|static|null
      */
     public function find($id, $columns = ['*'])
     {
@@ -407,9 +407,9 @@ class Builder
     /**
      * Find multiple models by their primary keys.
      *
-     * @param  \FluentCalendar\Framework\Support\ArrayableInterface|array  $ids
+     * @param  \FluentBooking\Framework\Support\ArrayableInterface|array  $ids
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection
+     * @return \FluentBooking\Framework\Database\Orm\Collection
      */
     public function findMany($ids, $columns = ['*'])
     {
@@ -427,9 +427,9 @@ class Builder
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|\FluentCalendar\Framework\Database\Orm\Collection|static|static[]
+     * @return \FluentBooking\Framework\Database\Orm\Model|\FluentBooking\Framework\Database\Orm\Collection|static|static[]
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function findOrFail($id, $columns = ['*'])
     {
@@ -455,7 +455,7 @@ class Builder
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function findOrNew($id, $columns = ['*'])
     {
@@ -471,7 +471,7 @@ class Builder
      *
      * @param  array  $attributes
      * @param  array  $values
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function firstOrNew(array $attributes = [], array $values = [])
     {
@@ -487,7 +487,7 @@ class Builder
      *
      * @param  array  $attributes
      * @param  array  $values
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function firstOrCreate(array $attributes = [], array $values = [])
     {
@@ -505,7 +505,7 @@ class Builder
      *
      * @param  array  $attributes
      * @param  array  $values
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
@@ -518,9 +518,9 @@ class Builder
      * Execute the query and get the first result or throw an exception.
      *
      * @param  array  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function firstOrFail($columns = ['*'])
     {
@@ -536,7 +536,7 @@ class Builder
      *
      * @param  \Closure|array  $columns
      * @param  \Closure|null  $callback
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static|mixed
+     * @return \FluentBooking\Framework\Database\Orm\Model|static|mixed
      */
     public function firstOr($columns = ['*'], Closure $callback = null)
     {
@@ -557,10 +557,10 @@ class Builder
      * Execute the query and get the first result if it's the sole matching record.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
-     * @throws \FluentCalendar\Framework\Database\MultipleRecordsFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\MultipleRecordsFoundException
      */
     public function sole($columns = ['*'])
     {
@@ -574,7 +574,7 @@ class Builder
     /**
      * Get a single column's value from the first result of a query.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @return mixed
      */
     public function value($column)
@@ -587,10 +587,10 @@ class Builder
     /**
      * Get a single column's value from the first result of the query or throw an exception.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\ModelNotFoundException
+     * @throws \FluentBooking\Framework\Database\Orm\ModelNotFoundException
      */
     public function valueOrFail($column)
     {
@@ -601,7 +601,7 @@ class Builder
      * Execute the query as a "select" statement.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Collection|static[]
+     * @return \FluentBooking\Framework\Database\Orm\Collection|static[]
      */
     public function get($columns = ['*'])
     {
@@ -621,7 +621,7 @@ class Builder
      * Get the hydrated models without eager loading.
      *
      * @param  array|string  $columns
-     * @return \FluentCalendar\Framework\Database\Orm\Model[]|static[]
+     * @return \FluentBooking\Framework\Database\Orm\Model[]|static[]
      */
     public function getModels($columns = ['*'])
     {
@@ -682,7 +682,7 @@ class Builder
      * Get the relation instance for the given relation name.
      *
      * @param  string  $name
-     * @return \FluentCalendar\Framework\Database\Orm\Relations\Relation
+     * @return \FluentBooking\Framework\Database\Orm\Relations\Relation
      */
     public function getRelation($name)
     {
@@ -746,7 +746,7 @@ class Builder
     /**
      * Get a lazy collection for the given query.
      *
-     * @return \FluentCalendar\Framework\Support\LazyCollection
+     * @return \FluentBooking\Framework\Support\LazyCollection
      */
     public function cursor()
     {
@@ -770,9 +770,9 @@ class Builder
     /**
      * Get an array with the values of a given column.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  string|null  $key
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function pluck($column, $key = null)
     {
@@ -799,7 +799,7 @@ class Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\LengthAwarePaginatorInterface
+     * @return \FluentBooking\Framework\Pagination\LengthAwarePaginatorInterface
      *
      * @throws \InvalidArgumentException
      */
@@ -826,7 +826,7 @@ class Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \FluentCalendar\Framework\Pagination\PaginatorInterface
+     * @return \FluentBooking\Framework\Pagination\PaginatorInterface
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -851,8 +851,8 @@ class Builder
      * @param  int|null  $perPage
      * @param  array  $columns
      * @param  string  $cursorName
-     * @param  \FluentCalendar\Framework\Pagination\Cursor|string|null  $cursor
-     * @return \FluentCalendar\Framework\Pagination\CursorPaginator
+     * @param  \FluentBooking\Framework\Pagination\Cursor|string|null  $cursor
+     * @return \FluentBooking\Framework\Pagination\CursorPaginator
      */
     public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -865,7 +865,7 @@ class Builder
      * Ensure the proper order by required for cursor pagination.
      *
      * @param  bool  $shouldReverse
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     protected function ensureOrderForCursorPagination($shouldReverse = false)
     {
@@ -892,7 +892,7 @@ class Builder
      * Save a new model and return the instance.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model|$this
+     * @return \FluentBooking\Framework\Database\Orm\Model|$this
      */
     public function create(array $attributes = [])
     {
@@ -905,7 +905,7 @@ class Builder
      * Save a new model and return the instance. Allow mass-assignment.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model|$this
+     * @return \FluentBooking\Framework\Database\Orm\Model|$this
      */
     public function forceCreate(array $attributes)
     {
@@ -957,7 +957,7 @@ class Builder
     /**
      * Increment a column's value by a given amount.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  float|int  $amount
      * @param  array  $extra
      * @return int
@@ -972,7 +972,7 @@ class Builder
     /**
      * Decrement a column's value by a given amount.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @param  float|int  $amount
      * @param  array  $extra
      * @return int
@@ -1226,7 +1226,7 @@ class Builder
     /**
      * Nest where conditions by slicing them at the given where count.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  int  $originalWhereCount
      * @return void
      */
@@ -1251,7 +1251,7 @@ class Builder
     /**
      * Slice where conditions at the given offset and add them to the query as a nested condition.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @param  array  $whereSlice
      * @return void
      */
@@ -1339,7 +1339,7 @@ class Builder
      * Create a new instance of the model being queried.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function newModelInstance($attributes = [])
     {
@@ -1447,7 +1447,7 @@ class Builder
     /**
      * Get the underlying query builder instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function getQuery()
     {
@@ -1457,7 +1457,7 @@ class Builder
     /**
      * Set the underlying query builder instance.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Builder  $query
+     * @param  \FluentBooking\Framework\Database\Query\Builder  $query
      * @return $this
      */
     public function setQuery($query)
@@ -1470,7 +1470,7 @@ class Builder
     /**
      * Get a base query builder instance.
      *
-     * @return \FluentCalendar\Framework\Database\Query\Builder
+     * @return \FluentBooking\Framework\Database\Query\Builder
      */
     public function toBase()
     {
@@ -1513,7 +1513,7 @@ class Builder
     /**
      * Get the model instance being queried.
      *
-     * @return \FluentCalendar\Framework\Database\Orm\Model|static
+     * @return \FluentBooking\Framework\Database\Orm\Model|static
      */
     public function getModel()
     {
@@ -1523,7 +1523,7 @@ class Builder
     /**
      * Set a model instance for the model being queried.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @return $this
      */
     public function setModel(Model $model)
@@ -1538,7 +1538,7 @@ class Builder
     /**
      * Qualify the given column name by the model's table.
      *
-     * @param  string|\FluentCalendar\Framework\Database\Query\Expression  $column
+     * @param  string|\FluentBooking\Framework\Database\Query\Expression  $column
      * @return string
      */
     public function qualifyColumn($column)
@@ -1549,7 +1549,7 @@ class Builder
     /**
      * Qualify the given columns with the model's table.
      *
-     * @param  array|\FluentCalendar\Framework\Database\Query\Expression  $columns
+     * @param  array|\FluentBooking\Framework\Database\Query\Expression  $columns
      * @return array
      */
     public function qualifyColumns($columns)

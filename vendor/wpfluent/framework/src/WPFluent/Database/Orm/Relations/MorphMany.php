@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations;
+namespace FluentBooking\Framework\Database\Orm\Relations;
 
-use FluentCalendar\Framework\Database\Orm\Collection;
+use FluentBooking\Framework\Database\Orm\Collection;
 
 class MorphMany extends MorphOneOrMany
 {
@@ -38,7 +38,7 @@ class MorphMany extends MorphOneOrMany
      * Match the eagerly loaded results to their parents.
      *
      * @param  array  $models
-     * @param  \FluentCalendar\Framework\Database\Orm\Collection  $results
+     * @param  \FluentBooking\Framework\Database\Orm\Collection  $results
      * @param  string  $relation
      * @return array
      */
@@ -51,7 +51,7 @@ class MorphMany extends MorphOneOrMany
      * Create a new instance of the related model. Allow mass-assignment.
      *
      * @param  array  $attributes
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     public function forceCreate(array $attributes = [])
     {

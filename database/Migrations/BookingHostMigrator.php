@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Database\Migrations;
+namespace FluentBooking\Database\Migrations;
 
 class BookingHostMigrator
 {

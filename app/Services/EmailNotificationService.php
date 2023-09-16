@@ -1,13 +1,13 @@
 <?php
 
-namespace FluentCalendar\App\Services;
+namespace FluentBooking\App\Services;
 
-use FluentCalendar\App\App;
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\EditorShortCodeParser;
-use FluentCalendar\App\Services\Libs\Emogrifier\Emogrifier;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\EditorShortCodeParser;
+use FluentBooking\App\Services\Libs\Emogrifier\Emogrifier;
+use FluentBooking\Framework\Support\Arr;
 
 class EmailNotificationService
 {

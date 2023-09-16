@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Query;
+namespace FluentBooking\Framework\Database\Query;
 
 class Expression
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace FluentCalendar\Framework\Events;
+namespace FluentBooking\Framework\Events;
 
 use Closure;
 use Exception;
 use ReflectionClass;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Container\Container;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\ReflectsClosures;
-use FluentCalendar\Framework\Events\DispatcherInterface;
-use FluentCalendar\Framework\Container\Contracts\Container as ContainerContract;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Container\Container;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\ReflectsClosures;
+use FluentBooking\Framework\Events\DispatcherInterface;
+use FluentBooking\Framework\Container\Contracts\Container as ContainerContract;
 
 
 class Dispatcher implements DispatcherInterface
@@ -22,7 +22,7 @@ class Dispatcher implements DispatcherInterface
     /**
      * The IoC container instance.
      *
-     * @var \FluentCalendar\Framework\Container\Contracts\Container
+     * @var \FluentBooking\Framework\Container\Contracts\Container
      */
     protected $container;
 
@@ -50,7 +50,7 @@ class Dispatcher implements DispatcherInterface
     /**
      * Create a new event dispatcher instance.
      *
-     * @param  \FluentCalendar\Framework\Container\Contracts\Container|null  $container
+     * @param  \FluentBooking\Framework\Container\Contracts\Container|null  $container
      * @return void
      */
     public function __construct(ContainerContract $container = null)

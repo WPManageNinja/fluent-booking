@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Casts;
+namespace FluentBooking\Framework\Database\Orm\Casts;
 
 class Attribute
 {

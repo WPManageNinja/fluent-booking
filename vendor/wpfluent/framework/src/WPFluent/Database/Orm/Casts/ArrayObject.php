@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Casts;
+namespace FluentBooking\Framework\Database\Orm\Casts;
 
 use JsonSerializable;
-USE FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\ArrayableInterface;
+USE FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\ArrayableInterface;
 use ArrayObject as BaseArrayObject;
 
 class ArrayObject extends BaseArrayObject implements ArrayableInterface, JsonSerializable
@@ -12,7 +12,7 @@ class ArrayObject extends BaseArrayObject implements ArrayableInterface, JsonSer
     /**
      * Get a collection containing the underlying array.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function collect()
     {

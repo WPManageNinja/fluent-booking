@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Validator;
+namespace FluentBooking\Framework\Validator;
 
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Helper;
 
 class ValidationData
 {

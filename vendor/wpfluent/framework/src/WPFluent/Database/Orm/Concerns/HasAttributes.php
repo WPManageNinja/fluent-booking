@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Concerns;
 
 use LogicException;
 use ReflectionClass;
@@ -8,22 +8,22 @@ use ReflectionMethod;
 use DateTimeInterface;
 use ReflectionNamedType;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\DateTime;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Database\Orm\Casts\Attribute;
-use FluentCalendar\Framework\Database\Orm\Castable;
-use FluentCalendar\Framework\Database\Orm\Casts\AsCollection;
-use FluentCalendar\Framework\Database\Orm\Casts\AsArrayObject;
-use FluentCalendar\Framework\Database\Orm\Relations\Relation;
-use FluentCalendar\Framework\Database\Orm\InvalidCastException;
-use FluentCalendar\Framework\Database\Orm\JsonEncodingException;
-use FluentCalendar\Framework\Database\LazyLoadingViolationException;
-use FluentCalendar\Framework\Database\Orm\CastsInboundAttributes;
-use FluentCalendar\Framework\Support\Collection as BaseCollection;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\DateTime;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Database\Orm\Casts\Attribute;
+use FluentBooking\Framework\Database\Orm\Castable;
+use FluentBooking\Framework\Database\Orm\Casts\AsCollection;
+use FluentBooking\Framework\Database\Orm\Casts\AsArrayObject;
+use FluentBooking\Framework\Database\Orm\Relations\Relation;
+use FluentBooking\Framework\Database\Orm\InvalidCastException;
+use FluentBooking\Framework\Database\Orm\JsonEncodingException;
+use FluentBooking\Framework\Database\LazyLoadingViolationException;
+use FluentBooking\Framework\Database\Orm\CastsInboundAttributes;
+use FluentBooking\Framework\Support\Collection as BaseCollection;
 
 trait HasAttributes
 {
@@ -163,7 +163,7 @@ trait HasAttributes
     /**
      * The encrypter instance that is used to encrypt attributes.
      *
-     * @var \FluentCalendar\Framework\Encryption\Encrypter
+     * @var \FluentBooking\Framework\Encryption\Encrypter
      */
     public static $encrypter;
 
@@ -1214,7 +1214,7 @@ trait HasAttributes
     /**
      * Set the encrypter instance that will be used to encrypt attributes.
      *
-     * @param  \FluentCalendar\Framework\Encryption\Encrypter  $encrypter
+     * @param  \FluentBooking\Framework\Encryption\Encrypter  $encrypter
      * @return void
      */
     public static function encryptUsing($encrypter)
@@ -1258,7 +1258,7 @@ trait HasAttributes
      * Return a timestamp as DateTime object with time set to 00:00:00.
      *
      * @param  mixed  $value
-     * @return \FluentCalendar\Framework\Support\DateTime;
+     * @return \FluentBooking\Framework\Support\DateTime;
      */
     protected function asDate($value)
     {
@@ -1269,7 +1269,7 @@ trait HasAttributes
      * Return a timestamp as DateTime object.
      *
      * @param  mixed  $value
-     * @return \FluentCalendar\Framework\Support\DateTime;
+     * @return \FluentBooking\Framework\Support\DateTime;
      */
     protected function asDateTime($value)
     {
@@ -1479,7 +1479,7 @@ trait HasAttributes
      * @param  string  $key
      * @return bool
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\InvalidCastException
+     * @throws \FluentBooking\Framework\Database\Orm\InvalidCastException
      */
     protected function isClassCastable($key)
     {
@@ -1529,7 +1529,7 @@ trait HasAttributes
      * @param  string  $key
      * @return bool
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\InvalidCastException
+     * @throws \FluentBooking\Framework\Database\Orm\InvalidCastException
      */
     protected function isClassDeviable($key)
     {
@@ -1544,7 +1544,7 @@ trait HasAttributes
      * @param  string  $key
      * @return bool
      *
-     * @throws \FluentCalendar\Framework\Database\Orm\InvalidCastException
+     * @throws \FluentBooking\Framework\Database\Orm\InvalidCastException
      */
     protected function isClassSerializable($key)
     {

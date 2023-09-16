@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\App\Services\Integrations;
+namespace FluentBooking\App\Services\Integrations;
 
-use FluentCalendar\App\Services\Helper;
-use FluentCalendar\Framework\Support\Arr;
+use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
 
 class IntegrationHelper
 {

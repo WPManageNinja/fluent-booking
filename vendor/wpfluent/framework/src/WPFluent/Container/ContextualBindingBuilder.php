@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\Framework\Container;
+namespace FluentBooking\Framework\Container;
 
-use FluentCalendar\Framework\Container\Contracts\Container;
-use FluentCalendar\Framework\Container\Contracts\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use FluentBooking\Framework\Container\Contracts\Container;
+use FluentBooking\Framework\Container\Contracts\ContextualBindingBuilder as ContextualBindingBuilderContract;
 
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {
     /**
      * The underlying container instance.
      *
-     * @var \FluentCalendar\Framework\Container\Contracts\Container
+     * @var \FluentBooking\Framework\Container\Contracts\Container
      */
     protected $container;
 
@@ -31,7 +31,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
     /**
      * Create a new contextual binding builder.
      *
-     * @param  \FluentCalendar\Framework\Container\Contracts\Container  $container
+     * @param  \FluentBooking\Framework\Container\Contracts\Container  $container
      * @param  string|array  $concrete
      * @return void
      */

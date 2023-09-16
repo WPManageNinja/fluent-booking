@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\App\Http\Requests;
+namespace FluentBooking\App\Http\Requests;
 
-use FluentCalendar\Framework\Foundation\RequestGuard;
+use FluentBooking\Framework\Foundation\RequestGuard;
 
 class UserRequest extends RequestGuard
 {

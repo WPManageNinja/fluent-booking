@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\App\Services\Libs\Emogrifier;
+namespace FluentBooking\App\Services\Libs\Emogrifier;
 /**
  * This class provides functions for converting CSS styles into inline style attributes in your HTML code.
  *

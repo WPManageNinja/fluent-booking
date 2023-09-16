@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Container;
+namespace FluentBooking\Framework\Container;
 
 use Countable;
 use IteratorAggregate;

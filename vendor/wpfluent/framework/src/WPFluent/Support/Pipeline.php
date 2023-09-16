@@ -1,18 +1,18 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use Throwable;
 use RuntimeException;
-use FluentCalendar\Framework\Container\Container;
+use FluentBooking\Framework\Container\Container;
 
 class Pipeline
 {
     /**
      * The container implementation.
      *
-     * @var \FluentCalendar\Framework\Container\Container
+     * @var \FluentBooking\Framework\Container\Container
      */
     protected $container;
 
@@ -40,7 +40,7 @@ class Pipeline
     /**
      * Create a new class instance.
      *
-     * @param  \FluentCalendar\Framework\Container\Container|null  $container
+     * @param  \FluentBooking\Framework\Container\Container|null  $container
      * @return void
      */
     public function __construct(Container $container = null)
@@ -205,7 +205,7 @@ class Pipeline
     /**
      * Get the container instance.
      *
-     * @return \FluentCalendar\Framework\Container\Container
+     * @return \FluentBooking\Framework\Container\Container
      *
      * @throws \RuntimeException
      */
@@ -221,7 +221,7 @@ class Pipeline
     /**
      * Set the container instance.
      *
-     * @param  \FluentCalendar\Framework\Container\Container  $container
+     * @param  \FluentBooking\Framework\Container\Container  $container
      * @return $this
      */
     public function setContainer(Container $container)

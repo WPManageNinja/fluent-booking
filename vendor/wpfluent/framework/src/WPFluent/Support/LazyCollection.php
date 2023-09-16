@@ -1,16 +1,16 @@
 <?php
 
-namespace FluentCalendar\Framework\Support;
+namespace FluentBooking\Framework\Support;
 
 use Closure;
 use stdClass;
 use ArrayIterator;
 use DateTimeInterface;
 use IteratorAggregate;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Support\EnumeratesValues;
-use FluentCalendar\Framework\Support\CanBeEscapedWhenCastToString;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Support\EnumeratesValues;
+use FluentBooking\Framework\Support\CanBeEscapedWhenCastToString;
 
 class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
 {
@@ -1091,8 +1091,8 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      * @param  mixed  $value
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Support\ItemNotFoundException
-     * @throws \FluentCalendar\Framework\Support\MultipleItemsFoundException
+     * @throws \FluentBooking\Framework\Support\ItemNotFoundException
+     * @throws \FluentBooking\Framework\Support\MultipleItemsFoundException
      */
     public function sole($key = null, $operator = null, $value = null)
     {
@@ -1116,7 +1116,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      * @param  mixed  $value
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Support\ItemNotFoundException
+     * @throws \FluentBooking\Framework\Support\ItemNotFoundException
      */
     public function firstOrFail($key = null, $operator = null, $value = null)
     {

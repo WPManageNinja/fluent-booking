@@ -1,12 +1,12 @@
 <?php
 
-namespace FluentCalendar\Framework\Http;
+namespace FluentBooking\Framework\Http;
 
 class Router
 {
     /**
      * Application Instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
     
@@ -36,7 +36,7 @@ class Router
 
     /**
      * Construct the routet instance
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      */
     public function __construct($app)
     {
@@ -127,7 +127,7 @@ class Router
      * Declare a GET route endpoint
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function get($uri, $handler)
     {
@@ -142,7 +142,7 @@ class Router
      * Declare a POST route endpoint
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function post($uri, $handler)
     {
@@ -157,7 +157,7 @@ class Router
      * Declare a PUT route endpoint
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function put($uri, $handler)
     {
@@ -172,7 +172,7 @@ class Router
      * Declare a PATCH route endpoint
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function patch($uri, $handler)
     {
@@ -187,7 +187,7 @@ class Router
      * Declare a DELETE route endpoint
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function delete($uri, $handler)
     {
@@ -202,7 +202,7 @@ class Router
      * Declare a route endpoint that matches any HTTP Verb/Method
      * @param  string $uri
      * @param  string|Closure $handler
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     public function any($uri, $handler)
     {
@@ -218,7 +218,7 @@ class Router
      * @param  string $uri
      * @param  string|Closure $handler
      * @param  string $method HTTP Method
-     * @return \FluentCalendar\Framework\Http\Route
+     * @return \FluentBooking\Framework\Http\Route
      */
     protected function newRoute($uri, $handler, $method)
     {

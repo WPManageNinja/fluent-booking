@@ -1,20 +1,20 @@
 <?php
 
-namespace FluentCalendar\Framework\Http;
+namespace FluentBooking\Framework\Http;
 
 use Closure;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Validator\ValidationException;
-use FluentCalendar\Framework\Database\Orm\ModelNotFoundException;
+use FluentBooking\Framework\Validator\ValidationException;
+use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
 
 class Route
 {
     /**
      * Application Instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
 
@@ -104,7 +104,7 @@ class Route
     /**
      * Construct the route instance
      * 
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      * @param string $restNamespace
      * @param string $uri
      * @param string $handler
@@ -122,7 +122,7 @@ class Route
     /**
      * Alternative constructor
      * 
-     * @param \FluentCalendar\Framework\Foundation\Application $app
+     * @param \FluentBooking\Framework\Foundation\Application $app
      * @param string $restNamespace
      * @param string $uri
      * @param string $handler

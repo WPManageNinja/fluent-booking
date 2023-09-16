@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use Countable;
 use ArrayAccess;
 use JsonSerializable;
 use IteratorAggregate;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\JsonableInterface;
-use FluentCalendar\Framework\Support\ArrayableInterface;
-use FluentCalendar\Framework\Pagination\CursorPaginatorInterface;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\JsonableInterface;
+use FluentBooking\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Pagination\CursorPaginatorInterface;
 
 class CursorPaginator extends AbstractCursorPaginator implements ArrayableInterface, ArrayAccess, Countable, IteratorAggregate, JsonableInterface, JsonSerializable, CursorPaginatorInterface
 {
@@ -25,7 +25,7 @@ class CursorPaginator extends AbstractCursorPaginator implements ArrayableInterf
      *
      * @param  mixed  $items
      * @param  int  $perPage
-     * @param  \FluentCalendar\Framework\Pagination\Cursor|null  $cursor
+     * @param  \FluentBooking\Framework\Pagination\Cursor|null  $cursor
      * @param  array  $options  (path, query, fragment, pageName)
      * @return void
      */

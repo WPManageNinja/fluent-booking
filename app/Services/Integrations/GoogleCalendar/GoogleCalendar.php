@@ -1,15 +1,15 @@
 <?php
 
-namespace FluentCalendar\App\Services\Integrations\GoogleCalendar;
+namespace FluentBooking\App\Services\Integrations\GoogleCalendar;
 
 use Exception;
-use FluentCalendar\App\Models\Booking;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\DateTimeHelper;
-use FluentCalendar\App\Services\Integrations\IntegrationManager;
-use FluentCalendar\App\Services\Integrations\GoogleCalendar\Client;
-use FluentCalendar\Framework\Validator\ValidationException;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Integrations\IntegrationManager;
+use FluentBooking\App\Services\Integrations\GoogleCalendar\Client;
+use FluentBooking\Framework\Validator\ValidationException;
 
 class GoogleCalendar extends IntegrationManager
 {

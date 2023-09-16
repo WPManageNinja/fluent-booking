@@ -7,6 +7,6 @@
  */
 
 /**
- * @var $app FluentCalendar\Framework\Foundation\Application
+ * @var $app FluentBooking\Framework\Foundation\Application
  */
 

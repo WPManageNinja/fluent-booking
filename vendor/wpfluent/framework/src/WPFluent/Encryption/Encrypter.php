@@ -1,19 +1,19 @@
 <?php
 
-namespace FluentCalendar\Framework\Encryption;
+namespace FluentBooking\Framework\Encryption;
 
 use RuntimeException;
-use FluentCalendar\Framework\Encryption\EncryptException;
-use FluentCalendar\Framework\Encryption\DecryptException;
-use FluentCalendar\Framework\Encryption\EncrypterInterface;
-use FluentCalendar\Framework\Encryption\StringEncrypterInterface;
+use FluentBooking\Framework\Encryption\EncryptException;
+use FluentBooking\Framework\Encryption\DecryptException;
+use FluentBooking\Framework\Encryption\EncrypterInterface;
+use FluentBooking\Framework\Encryption\StringEncrypterInterface;
 
 class Encrypter implements EncrypterInterface, StringEncrypterInterface
 {
     /**
      * The application instance.
      *
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app;
 
@@ -96,7 +96,7 @@ class Encrypter implements EncrypterInterface, StringEncrypterInterface
      * @param  bool  $serialize
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Encryption\EncryptException
+     * @throws \FluentBooking\Framework\Encryption\EncryptException
      */
     public function encrypt($value, $serialize = true)
     {
@@ -142,7 +142,7 @@ class Encrypter implements EncrypterInterface, StringEncrypterInterface
      * @param  string  $value
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Encryption\EncryptException
+     * @throws \FluentBooking\Framework\Encryption\EncryptException
      */
     public function encryptString($value)
     {
@@ -156,7 +156,7 @@ class Encrypter implements EncrypterInterface, StringEncrypterInterface
      * @param  bool  $unserialize
      * @return mixed
      *
-     * @throws \FluentCalendar\Framework\Encryption\DecryptException
+     * @throws \FluentBooking\Framework\Encryption\DecryptException
      */
     public function decrypt($payload, $unserialize = true)
     {
@@ -190,7 +190,7 @@ class Encrypter implements EncrypterInterface, StringEncrypterInterface
      * @param  string  $payload
      * @return string
      *
-     * @throws \FluentCalendar\Framework\Encryption\DecryptException
+     * @throws \FluentBooking\Framework\Encryption\DecryptException
      */
     public function decryptString($payload)
     {
@@ -215,7 +215,7 @@ class Encrypter implements EncrypterInterface, StringEncrypterInterface
      * @param  string  $payload
      * @return array
      *
-     * @throws \FluentCalendar\Framework\Encryption\DecryptException
+     * @throws \FluentBooking\Framework\Encryption\DecryptException
      */
     protected function getJsonPayload($payload)
     {

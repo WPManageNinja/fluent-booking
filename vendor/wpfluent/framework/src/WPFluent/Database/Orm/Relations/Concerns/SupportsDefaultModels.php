@@ -1,8 +1,8 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Relations\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Relations\Concerns;
 
-use FluentCalendar\Framework\Database\Orm\Model;
+use FluentBooking\Framework\Database\Orm\Model;
 
 trait SupportsDefaultModels
 {
@@ -18,8 +18,8 @@ trait SupportsDefaultModels
     /**
      * Make a new related instance for the given model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
-     * @return \FluentCalendar\Framework\Database\Orm\Model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
+     * @return \FluentBooking\Framework\Database\Orm\Model
      */
     abstract protected function newRelatedInstanceFor(Model $parent);
 
@@ -39,8 +39,8 @@ trait SupportsDefaultModels
     /**
      * Get the default value for this relation.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $parent
-     * @return \FluentCalendar\Framework\Database\Orm\Model|null
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $parent
+     * @return \FluentBooking\Framework\Database\Orm\Model|null
      */
     protected function getDefaultFor(Model $parent)
     {

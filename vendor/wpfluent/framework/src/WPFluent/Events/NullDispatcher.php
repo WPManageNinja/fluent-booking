@@ -1,9 +1,9 @@
 <?php
 
-namespace FluentCalendar\Framework\Events;
+namespace FluentBooking\Framework\Events;
 
-use FluentCalendar\Framework\Support\ForwardsCalls;
-use FluentCalendar\Framework\Events\DispatcherInterface;
+use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Events\DispatcherInterface;
 
 class NullDispatcher implements DispatcherInterface
 {
@@ -12,14 +12,14 @@ class NullDispatcher implements DispatcherInterface
     /**
      * The underlying event dispatcher instance.
      *
-     * @var \FluentCalendar\Framework\Events\DispatcherInterface
+     * @var \FluentBooking\Framework\Events\DispatcherInterface
      */
     protected $dispatcher;
 
     /**
      * Create a new event dispatcher instance that does not fire.
      *
-     * @param  \FluentCalendar\Framework\Events\DispatcherInterface  $dispatcher
+     * @param  \FluentBooking\Framework\Events\DispatcherInterface  $dispatcher
      * @return void
      */
     public function __construct(DispatcherInterface $dispatcher)

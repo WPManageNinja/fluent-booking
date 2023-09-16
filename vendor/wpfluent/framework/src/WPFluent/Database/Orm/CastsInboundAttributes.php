@@ -1,13 +1,13 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm;
+namespace FluentBooking\Framework\Database\Orm;
 
 interface CastsInboundAttributes
 {
     /**
      * Transform the attribute to its underlying model values.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Model  $model
+     * @param  \FluentBooking\Framework\Database\Orm\Model  $model
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes

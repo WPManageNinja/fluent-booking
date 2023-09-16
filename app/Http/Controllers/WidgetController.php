@@ -1,11 +1,11 @@
 <?php
 
-namespace FluentCalendar\App\Http\Controllers;
+namespace FluentBooking\App\Http\Controllers;
 
-use FluentCalendar\App\Hooks\Handlers\FrontEndHandler;
-use FluentCalendar\App\Models\CalendarSlot;
-use FluentCalendar\App\Services\BookingService;
-use FluentCalendar\Framework\Request\Request;
+use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingService;
+use FluentBooking\Framework\Request\Request;
 
 class WidgetController extends Controller
 {

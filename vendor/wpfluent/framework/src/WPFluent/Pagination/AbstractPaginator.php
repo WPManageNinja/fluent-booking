@@ -1,17 +1,17 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use Closure;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Support\Str;
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\Tappable;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\Tappable;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\ForwardsCalls;
 
 /**
- * @mixin \FluentCalendar\Framework\Support\Collection
+ * @mixin \FluentBooking\Framework\Support\Collection
  */
 abstract class AbstractPaginator
 {
@@ -20,7 +20,7 @@ abstract class AbstractPaginator
     /**
      * All of the items being paginated.
      *
-     * @var \FluentCalendar\Framework\Support\Collection
+     * @var \FluentBooking\Framework\Support\Collection
      */
     protected $items;
 
@@ -586,7 +586,7 @@ abstract class AbstractPaginator
     /**
      * Get the paginator's underlying collection.
      *
-     * @return \FluentCalendar\Framework\Support\Collection
+     * @return \FluentBooking\Framework\Support\Collection
      */
     public function getCollection()
     {
@@ -596,7 +596,7 @@ abstract class AbstractPaginator
     /**
      * Set the paginator's underlying collection.
      *
-     * @param  \FluentCalendar\Framework\Support\Collection  $collection
+     * @param  \FluentBooking\Framework\Support\Collection  $collection
      * @return $this
      */
     public function setCollection(Collection $collection)

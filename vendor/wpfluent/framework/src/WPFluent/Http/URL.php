@@ -1,13 +1,13 @@
 <?php
 
-namespace FluentCalendar\Framework\Http;
+namespace FluentBooking\Framework\Http;
 
 use DateInterval;
 use DateTimeInterface;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Support\DateTime;
-use FluentCalendar\Framework\Http\InvalidSignatureOrExpiredException;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Support\DateTime;
+use FluentBooking\Framework\Http\InvalidSignatureOrExpiredException;
 
 class URL
 {

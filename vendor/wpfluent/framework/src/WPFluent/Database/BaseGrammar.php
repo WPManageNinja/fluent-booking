@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Database;
+namespace FluentBooking\Framework\Database;
 
-use FluentCalendar\Framework\Support\Helper;
-use FluentCalendar\Framework\Support\MacroableTrait;
-use FluentCalendar\Framework\Database\Query\Expression;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\MacroableTrait;
+use FluentBooking\Framework\Database\Query\Expression;
 
 abstract class BaseGrammar
 {
@@ -31,7 +31,7 @@ abstract class BaseGrammar
     /**
      * Wrap a table in keyword identifiers.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Expression|string  $table
+     * @param  \FluentBooking\Framework\Database\Query\Expression|string  $table
      * @return string
      */
     public function wrapTable($table)
@@ -62,7 +62,7 @@ abstract class BaseGrammar
     /**
      * Wrap a value in keyword identifiers.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Expression|string  $value
+     * @param  \FluentBooking\Framework\Database\Query\Expression|string  $value
      * @param  bool  $prefixAlias
      * @return string
      */
@@ -195,7 +195,7 @@ abstract class BaseGrammar
     /**
      * Get the value of a raw expression.
      *
-     * @param  \FluentCalendar\Framework\Database\Query\Expression  $expression
+     * @param  \FluentBooking\Framework\Database\Query\Expression  $expression
      * @return mixed
      */
     public function getValue($expression)

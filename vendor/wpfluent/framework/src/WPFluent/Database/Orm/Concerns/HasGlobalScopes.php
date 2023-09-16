@@ -1,18 +1,18 @@
 <?php
 
-namespace FluentCalendar\Framework\Database\Orm\Concerns;
+namespace FluentBooking\Framework\Database\Orm\Concerns;
 
 use Closure;
 use InvalidArgumentException;
-use FluentCalendar\Framework\Support\Arr;
-use FluentCalendar\Framework\Database\Orm\Scope;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Database\Orm\Scope;
 
 trait HasGlobalScopes
 {
     /**
      * Register a new global scope on the model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|\Closure|string  $scope
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|\Closure|string  $scope
      * @param  \Closure|null  $implementation
      * @return mixed
      *
@@ -36,7 +36,7 @@ trait HasGlobalScopes
     /**
      * Determine if a model has a global scope.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|string  $scope
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|string  $scope
      * @return bool
      */
     public static function hasGlobalScope($scope)
@@ -47,8 +47,8 @@ trait HasGlobalScopes
     /**
      * Get a global scope registered with the model.
      *
-     * @param  \FluentCalendar\Framework\Database\Orm\Scope|string  $scope
-     * @return \FluentCalendar\Framework\Database\Orm\Scope|\Closure|null
+     * @param  \FluentBooking\Framework\Database\Orm\Scope|string  $scope
+     * @return \FluentBooking\Framework\Database\Orm\Scope|\Closure|null
      */
     public static function getGlobalScope($scope)
     {

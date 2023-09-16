@@ -7,6 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'WPFluent\\' => array($vendorDir . '/wpfluent/framework/src/WPFluent'),
-    'FluentCalendar\\Framework\\' => array($vendorDir . '/wpfluent/framework/src/WPFluent'),
-    'FluentCalendar\\App\\' => array($baseDir . '/app'),
+    'FluentBooking\\Framework\\' => array($vendorDir . '/wpfluent/framework/src/WPFluent'),
+    'FluentBooking\\App\\' => array($baseDir . '/app'),
 );

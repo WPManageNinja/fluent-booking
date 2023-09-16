@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentCalendar\Framework\Request;
+namespace FluentBooking\Framework\Request;
 
 trait InputHelperMethodsTrait
 {

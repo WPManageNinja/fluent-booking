@@ -1,10 +1,10 @@
 <?php
 
-namespace FluentCalendar\Framework\Pagination;
+namespace FluentBooking\Framework\Pagination;
 
 use UnexpectedValueException;
-use FluentCalendar\Framework\Support\Collection;
-use FluentCalendar\Framework\Support\ArrayableInterface;
+use FluentBooking\Framework\Support\Collection;
+use FluentBooking\Framework\Support\ArrayableInterface;
 
 class Cursor implements ArrayableInterface
 {

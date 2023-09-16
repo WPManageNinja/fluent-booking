@@ -1,29 +1,29 @@
 <?php
 
-namespace FluentCalendar\Framework\Http;
+namespace FluentBooking\Framework\Http;
 
 use WP_REST_Response;
 use ReflectionException;
-use FluentCalendar\Framework\Foundation\App;
-use FluentCalendar\Framework\Validator\ValidationException;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Validator\ValidationException;
 
 abstract class Controller
 {
     /**
      * Application Instance
-     * @var \FluentCalendar\Framework\Foundation\Application
+     * @var \FluentBooking\Framework\Foundation\Application
      */
     protected $app = null;
 
     /**
      * Request Instane
-     * @var \FluentCalendar\Framework\Request\Request
+     * @var \FluentBooking\Framework\Request\Request
      */
     protected $request = null;
 
     /**
      * Response Instane
-     * @var \FluentCalendar\Framework\Response\Response
+     * @var \FluentBooking\Framework\Response\Response
      */
     protected $response = null;
 
