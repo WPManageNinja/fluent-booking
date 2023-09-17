@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Fluent Booking
-Description: Fluent Calendar WordPress Plugin
+Description: Fluent Booking WordPress Plugin
 Version: 1.0.0
 Author: Meeting scheduling made easy
 Author URI: https://wpmanageninja.com

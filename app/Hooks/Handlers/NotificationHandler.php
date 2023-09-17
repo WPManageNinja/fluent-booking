@@ -45,7 +45,7 @@ class NotificationHandler
                     $slot->id,
                     $time,
                     $emailTo
-                ], 'fluent-calendar');
+                ], 'fluent-booking');
             }
         }
     }
@@ -58,7 +58,7 @@ class NotificationHandler
             as_enqueue_async_action('fluent_booking/after_booking_scheduled_async', [
                 $booking->id,
                 $slot->id
-            ], 'fluent-calendar');
+            ], 'fluent-booking');
         }
 
         if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {

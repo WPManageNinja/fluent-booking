@@ -139,7 +139,7 @@ class SchedulesController extends Controller
         if ($column === 'status' && $oldSBooking->status != $booking->status) {
 
             if ($value == 'cancelled') {
-                $title = sprintf(__('Cancelled By %s', 'fluent-calendar'), Helper::getUserDisplayName());
+                $title = sprintf(__('Cancelled By %s', 'fluent-booking'), Helper::getUserDisplayName());
                 $booking->addCancelReason($title, sanitize_textarea_field($request->get('cancel_reason')));
             }
 
@@ -149,7 +149,7 @@ class SchedulesController extends Controller
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
         return [
-            'message' => sprintf(__('%s has been updated', 'fluent-calendar'), $column)
+            'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
         ];
     }
 

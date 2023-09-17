@@ -31,22 +31,30 @@ class GoogleCalendar extends IntegrationManager
         $this->redirectUrl  = Arr::get($credentials, 'redirect_url');
         
         if ($credentials) {
-            $this->client = new Client(
-                $this->clientId,
-                $this->clientSecret,
-                $this->redirectUrl
-            );
-
+            $this->initClient();
             $this->enqueueAssets();
-
-            add_action('template_redirect', [$this, 'init']);
-            add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
-            add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
-            add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
+            $this->initHooks();
         }
     }
 
-    public function init()
+    public function initClient()
+    {
+        $this->client = new Client(
+            $this->clientId,
+            $this->clientSecret,
+            $this->redirectUrl
+        );
+    }
+
+    public function initHooks()
+    {
+        add_action('template_redirect', [$this, 'handleAuthCallback']);
+        add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
+        add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
+        add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
+    }
+
+    public function handleAuthCallback()
     {
         if (!isset($_GET['code'], $_GET['scope'])) {
             return;
@@ -60,7 +68,7 @@ class GoogleCalendar extends IntegrationManager
 
         do_action('fluent_booking/google_calendar_integration', $code, $scope);
 
-        wp_redirect(admin_url('admin.php?page=fluent-calendar#/integrations'));
+        wp_redirect(admin_url('admin.php?page=fluent-booking#/integrations'));
 
         exit;
     }
@@ -142,12 +150,38 @@ class GoogleCalendar extends IntegrationManager
         return $user->user_email;
     }
 
+    protected function getEventLocation($booking)
+    {
+        $locationType = Arr::get($booking, 'location_details.location_type');
+
+        $location = Arr::get($booking, 'location_details.location_heading');
+
+        if ('phone' == $locationType) {
+            $location = 'Phone Call: ' . $booking->phone;
+        } elseif ('google_meet' == $locationType) {
+            $location = 'Google Meet';
+        }
+
+        return $location;
+    }
+
+    protected function getAttendees($email, $attendees)
+    {
+        $emails = array_column($attendees, 'email');
+
+        if (!in_array($email, $emails)) {
+            $attendees[] = ['email' => $email];
+        }
+
+        return $attendees;
+    }
+
     public function getClientSettings()
     {
         $defaults = [
             'client_id'     => '',
             'client_secret' => '',
-            'redirect_url'  => site_url('/google-calendar-integration/fluent-calendar'),
+            'redirect_url'  => site_url('/google-calendar-integration/fluent-booking'),
         ];
 
         $clientDetails = $this->getClientDetails();
@@ -190,8 +224,8 @@ class GoogleCalendar extends IntegrationManager
     public function getIntegrationSettings()
     {
         $defaults = [
-            'check_conflict'  => '',
-            'add_to_calendar' => ''
+            'check_conflict'  => false,
+            'add_to_calendar' => false
         ];
 
         $integrationSettings = $this->getIntegrationDetails();
@@ -242,6 +276,27 @@ class GoogleCalendar extends IntegrationManager
         ], 200);
     }
 
+    protected function getUpdatedResponse($booking, $header)
+    {
+        $eventDetails = $this->getResponse($booking->event_id);
+
+        $eventId = Arr::get($eventDetails, 'id');
+
+        if (!$eventId) {
+            return [];
+        }
+
+        $url = $this->client->calendarEvent . $eventId;
+
+        $response = static::makeRequest($url, '', 'GET', $header);
+
+        if (is_wp_error($response)) {
+            return $eventDetails;
+        }
+
+        return $response;
+    }
+
     public function updateEvent($booking, $calendarSlot = null)
     {
         if (!$calendarSlot) {
@@ -261,46 +316,50 @@ class GoogleCalendar extends IntegrationManager
         $header = static::getStandardHeader($accessToken);
 
         // If event is already created
-        $eventDetails = $this->getResponse($booking->event_id);
+        $eventDetails = $this->getUpdatedResponse($booking, $header);
         $eventId      = Arr::get($eventDetails, 'id');
         $meetingLink  = Arr::get($eventDetails, 'hangoutLink');
+        $attendees    = Arr::get($eventDetails, 'attendees');
 
         $isNewEvent = !$eventId;
-        
-        $method = $isNewEvent ? 'POST' : 'PUT';
+
+        $method = $isNewEvent ? 'POST' : 'PATCH';
         
         $url = $this->client->calendarEvent . $eventId . '?sendUpdates=all';
 
         $hostEmail = $this->getHostEmail($calendarSlot->user_id);
 
-        $locationType = Arr::get($booking, 'location_details.location_type');
-
-        $location = ('phone' ==  $locationType) ? $booking->phone : $locationType;
+        $location = $this->getEventLocation($booking);
 
         $events = [
             'summary'     => $calendarSlot->title,
             'description' => $booking->message,
             'attendees'   => [
                 ['email' => $hostEmail],
-                ['email' => $booking->email],
+                ['email' => $booking->email]
             ],
+            'start' => [
+                'dateTime' => DateTimeHelper::convertToIso($booking->start_time),
+                'timeZone' => $booking->person_time_zone,
+            ],
+            'end' => [
+                'dateTime' => DateTimeHelper::convertToIso($booking->end_time),
+                'timeZone' => $booking->person_time_zone,
+            ],
+            'location' => $location,
+            'status' => ('cancelled' == $booking->status) ? 'cancelled' : 'confirmed',
             'extendedProperties' => [
                 'shared' => [
                     'created_by' => 'fluent_booking',
                 ],
             ],
         ];
-        $events['start'] = [
-            'dateTime' => DateTimeHelper::convertToIso($booking->start_time),
-            'timeZone' => $booking->person_time_zone,
-        ];
-        $events['end'] = [
-            'dateTime' => DateTimeHelper::convertToIso($booking->end_time),
-            'timeZone' => $booking->person_time_zone,
-        ];
-        $events['status'] = ('cancelled' == $booking->status) ? 'cancelled' : 'confirmed';
 
-        if ('google_meet' == $locationType && !$meetingLink) {
+        if (!$isNewEvent) {
+            $events['attendees'] = $this->getAttendees($booking->email, $attendees);
+        }
+
+        if ('Google Meet' == $location && !$meetingLink) {
             $events['conferenceData'] = [
                 'createRequest' => [
                     'requestId' => $booking->hash,
@@ -310,8 +369,6 @@ class GoogleCalendar extends IntegrationManager
                 ],
             ];
             $url .= '&conferenceDataVersion=1';
-        } else {
-            $events['location'] = $location;
         }
 
         $response = static::makeRequest($url, $events, $method, $header);
