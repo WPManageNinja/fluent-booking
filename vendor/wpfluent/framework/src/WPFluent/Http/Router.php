@@ -113,7 +113,7 @@ class Router
     /**
      * Execute the route group callback
      * 
-     * @param  Closure $callback
+     * @param  \Closure $callback
      * @return null
      */
     protected function executeGroupCallback($callback)
