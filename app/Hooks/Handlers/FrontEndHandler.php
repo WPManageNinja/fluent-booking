@@ -53,7 +53,7 @@ class FrontEndHandler
             return 'Calendar not found';
         }
 
-        wp_enqueue_script('fluent-calendar-public', App::getInstance('url.assets') . 'public/js/app.js', [], App::getInstance('config')->get('app.version'), true);
+        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], App::getInstance('config')->get('app.version'), true);
 
         $this->loadGlobalVars();
 
@@ -61,7 +61,7 @@ class FrontEndHandler
 
         $slot->description = wpautop($slot->description);
 
-        wp_localize_script('fluent-calendar-public', 'fcal_public_vars_' . $calendar->id . '_' . $slot->id, [
+        wp_localize_script('fluent-booking-public', 'fcal_public_vars_' . $calendar->id . '_' . $slot->id, [
             'slot'           => $slot,
             'calendar'       => $calendar,
             'author_profile' => $slot->getAuthorProfile(true),
@@ -85,7 +85,7 @@ class FrontEndHandler
 
         $loaded = true;
 
-        wp_localize_script('fluent-calendar-public', 'fluentCalendarPublicVars', $this->getGlobalVars());
+        wp_localize_script('fluent-booking-public', 'fluentCalendarPublicVars', $this->getGlobalVars());
     }
 
     public function getGlobalVars()
@@ -191,7 +191,7 @@ class FrontEndHandler
         $author = $calendarSlot->getAuthorProfile(true);
 
         $confirmationData = [
-            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-calendar'), $author['name']),
+            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
             'slot'        => $calendarSlot,
             'booking'     => $booking,
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.'

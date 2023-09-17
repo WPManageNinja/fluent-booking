@@ -84,7 +84,7 @@ class AdminController extends Controller
             }
 
             if ($currentUserId == $calendar->user_id) {
-                $userName = __('My Meetings', 'fluent-calendar');
+                $userName = __('My Meetings', 'fluent-booking');
             }
 
             $allHosts[] = [

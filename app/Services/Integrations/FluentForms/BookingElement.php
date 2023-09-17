@@ -47,7 +47,7 @@ class BookingElement extends BaseFieldManager
                 'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
-                'label'              => __('Fluent Calendar Field', 'fluent-calendar'),
+                'label'              => __('Fluent Booking Field', 'fluent-booking'),
                 'admin_field_label'  => '',
                 'slot_id'            => '',
                 'booking_calendar'   => '',
@@ -60,12 +60,12 @@ class BookingElement extends BaseFieldManager
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
-                        'message' => __('This field is required', 'fluent-calendar'),
+                        'message' => __('This field is required', 'fluent-booking'),
                     ],
                 ),
             ),
             'editor_options' => array(
-                'title'      => __('Calendar Booking Field', 'fluent-calendar'),
+                'title'      => __('Calendar Booking Field', 'fluent-booking'),
                 'icon_class' => 'ff-edit-repeat',
                 'template'   => 'inputCalendar'
             ),
@@ -196,7 +196,7 @@ class BookingElement extends BaseFieldManager
         
         $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $booking->calendar->author_timezone, 'j M Y, g:i A');
 
-        $url = admin_url('admin.php?page=fluent-calendar#/scheduled-events?spot_id=' . $booking->id);
+        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $booking->event_id);
 
         $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($formattedTime) . '</a>';
         
