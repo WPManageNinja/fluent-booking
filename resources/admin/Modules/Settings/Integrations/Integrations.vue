@@ -28,7 +28,7 @@
                                     </el-button>
                                 </div>
                             </div>
-                            <div class="card_body" v-if="integrationVars.connected">
+                            <div class="card_body" v-if="integrationVars?.connected">
                                 <el-divider/>
                                 <h4>Configuration</h4>
                                 <div class="integration_cards">
@@ -105,7 +105,7 @@ export default {
     },
     computed: {
         buttonAttrs() {
-            const isConnected = this.integrationVars.connected;
+            const isConnected = this.integrationVars?.connected;
             return {
                 label: isConnected ? 'Disconnect' : 'Connect',
                 type: isConnected ? 'danger' : 'primary',
@@ -115,10 +115,10 @@ export default {
     },
     methods: {
         toggleSettings() {
-            if (this.integrationVars.connected) {
+            if (this.integrationVars?.connected) {
                 this.disconnectIntegration();
             } else {
-                window.location.href = this.integrationVars.auth_url;
+                window.location.href = this.integrationVars?.auth_url;
             }
         },
         disconnectIntegration() {
