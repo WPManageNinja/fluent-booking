@@ -1,64 +1,133 @@
-.fcal_cal_header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 10px;
-
-  .fcal_cal_title {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-
-    img {
-      max-width: 44px;
-      border-radius: 50%;
-    }
-
-    h3 {
-      margin: 0;
-      padding: 0;
-      font-size: 18px;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
-}
-
 
 .fcal_each_cal {
-  margin-bottom: 20px;
-}
-
-.fcal_cal_slots {
-  margin-top: 20px;
-  .fcal_cal_slot {
-    margin-bottom: 20px;
-    position: relative;
-    background: #f8fafc;
-    border: 1px solid rgb(0 0 0 / 10%);
-    border-radius: 4px;
-    box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
-
-    .fcal_slot_body {
-      padding: 10px 15px;
-    }
-
-    .fcal_slot_footer {
-      border-top: 1px solid rgba(26, 26, 26, 0.1);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  .fcal_event_block {
+    .fcal_cal_header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px;
+      justify-content: space-between;
+      border-bottom: 1px solid #EAECF0;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
 
-      h3 {
-        margin: 0;
+      .fcal_cal_title {
+        display: flex;
+        align-items: center;
+        column-gap: 16px;
+
+        img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        h3 {
+          margin: 0;
+          padding: 0;
+          font-size: 20px;
+          color: $dark;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .fcal_cal_actions {
+        display: flex;
+        .el-button {
+          + .el-button {
+            margin-left: 8px;
+          }
+        }
       }
     }
 
-    &:hover {
-      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
+    .fcal_cal_slots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+
+      .fcal_cal_slot {
+        position: relative;
+        border-radius: 8px;
+        border: 1px solid #D6DAE1;
+        padding: 24px;
+
+        .fcal_slot_body {
+          h3 {
+            margin: 0 0 24px 0;
+            color: $dark;
+            display: flex;
+            align-items: center;
+            position: relative;
+            gap: 12px;
+            font-size: 18px;
+            .fcal_status_badge {
+              background: #4587EC;
+              border-radius: 4px;
+              height: 28px;
+              width: 14px;
+              display: block;
+            }
+
+            .fcal_slot_config {
+              position: absolute;
+              right: 0;
+              .el-dropdown {
+                .fcal_slog_setting_icon {
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+
+          .fcal_slot_meta {
+            display: flex;
+            align-items: center;
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            font-weight: 300;
+            gap: 32px;
+            line-height: 1;
+            > span {
+              color: #8F97A2;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              i {
+                font-size: 16px;
+              }
+              .icons {
+                gap: 2px;
+              }
+              .right,
+              .icons {
+                display: inline-flex;
+                align-items: center;
+              }
+            }
+          }
+
+        }
+
+        .fcal_slot_footer {
+          border-top: 1px solid rgba(26, 26, 26, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 24px;
+
+          h3 {
+            margin: 0;
+          }
+        }
+      }
     }
   }
 }
@@ -189,10 +258,4 @@
   .fcal_schedules {
     background: #f8fafc;
   }
-}
-
-.fcal_slot_config {
-  position: absolute;
-  top: 4px;
-  right: 4px;
 }
