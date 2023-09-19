@@ -38,7 +38,65 @@
 .clickable {
     cursor: pointer;
 }
+#fluent-booking-app {
+    background: #f5f6f7;
+    margin-left: -20px;
+    padding-left: 24px;
+    box-sizing: border-box;
+    font-family: 'Satoshi', sans-serif;
+    * {
+        box-sizing: border-box;
+    }
+}
+.fcal_primary_btn2,
+.fcal_plain_btn {
+    border: 1px solid #D6DAE1;
+    padding: 8px 16px;
+    color: $dark;
+    border-radius: 8px;
+    height: auto;
+    font-size: 14px;
+    transition: .2s;
+    line-height: 1;
+    > span {
+        gap: 8px;
+        i {
+            font-size: 18px;
+        }
+    }
+    &:hover {
+        background: rgb(38 83 199 / 10%);
+        color: $primaryColor;
+        border-color: rgb(38 83 199 / 20%);
+    }
+}
+.fcal_primary_btn {
+    background: $primaryColor;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 16px 24px;
+    height: auto;
+    font-weight: 400;
+    border: none;
+    > span {
+        gap: 8px;
+    }
+    &:hover {
+        background: #416ddd;
+        color: #ffffff;
+    }
+}
+.fcal_primary_btn2 {
+    border-color: $primaryColor;
+    color: $primaryColor;
 
+    &:hover {
+        border-color: $primaryColor;
+        color: #ffffff;
+        background: $primaryColor;
+    }
+}
 
 .fcal_tm20 {
     margin-top: 20px;
@@ -51,11 +109,6 @@
         text-align: right;
         float: right;
     }
-}
-
-.fcal_section_narrow {
-    max-width: 1100px;
-    margin: 0 auto;
 }
 
 

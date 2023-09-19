@@ -1,6 +1,6 @@
 <template>
     <div class="fcal_event_block">
-        <div class="fcal_cal_header fcal_section_header">
+        <div class="fcal_cal_header">
             <div class="fcal_cal_title">
                 <img :src="calendar.author_profile.avatar"/>
                 <div class="fcal_cal_info">
@@ -9,18 +9,20 @@
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id } })"
-                           type="primary">+ New Booking Type
+                <el-button @click="showSettings = true" class="fcal_plain_btn">
+                    <el-icon><Setting /></el-icon> Settings
                 </el-button>
-                <el-button title="Calendar Settings" @click="showSettings = true" plain text><el-icon><Tools /></el-icon></el-button>
+                <el-button
+                    @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id } })"
+                    class="fcal_primary_btn2">
+                    <span>+</span> Create New Booking Type
+                </el-button>
             </div>
         </div>
         <div class="fcal_cal_slots">
-            <el-row :gutter="30">
-                <el-col v-for="(slot, slotIndex) in calendar.slots" :key="slot.id" :sm="12" :md="8">
-                    <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" />
-                </el-col>
-            </el-row>
+            <div class="fcal_cal_slot" v-for="(slot, slotIndex) in calendar.slots" :key="slot.id">
+                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" />
+            </div>
         </div>
         <el-dialog v-model="showSettings" title="Calendar Settings">
             <calendar-settings @calendarUpdated="() => { showSettings = false; }" :calendar="calendar" />
@@ -30,14 +32,14 @@
 
 <script type="text/babel">
 import EachSlot from "./EachSlot.vue";
-import {Tools} from '@element-plus/icons-vue';
+import { Setting } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings.vue";
 export default {
     name: 'CalendarEventBlock',
     props: ['calendar'],
     components: {
         EachSlot,
-        Tools,
+        Setting,
         CalendarSettings
     },
     data() {

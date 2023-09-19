@@ -1,27 +1,40 @@
 <template>
-    <div :class="'fcal_status_'+slot.status" class="fcal_slot_card fcal_cal_slot">
+    <div :class="'fcal_status_'+slot.status">
         <div class="fcal_slot_body">
-            <h3 style="margin: 0">{{ slot.title }}</h3>
-            <p style="margin-top: 0" class="fcal_slot_meta">{{ slot.duration }} mins, {{ eventTitle }}</p>
+            <h3>
+                <span class="fcal_status_badge"></span> {{ slot.title }}
+                <div class="fcal_slot_config">
+                    <el-dropdown @command="handleCommand" trigger="click">
+                        <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item command="edit">Edit Booking Type Details</el-dropdown-item>
+                                <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
+                                <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
+                                <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+            </h3>
+            <p class="fcal_slot_meta">
+                <span class="fcal_slot_meta_mins"><el-icon><Clock /></el-icon> {{ slot.duration }} minutes</span>
+                <span class="fcal_slog_meta_event">
+                    <span class="icons">
+                        <el-icon><User /></el-icon>
+                        <el-icon><Right /></el-icon>
+                        <span class="right">
+                            <el-icon><User /></el-icon>
+                            <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
+                        </span>
+                    </span> {{ eventTitle }}
+                </span>
+
+            </p>
             <p v-if="slot.public_url" class="fcal_slot_meta">
                 <span v-if="slot.status == 'draft'">View Booking Page</span>
                 <a :href="slot.public_url" target="_blank" rel="noopener" v-else>View Booking Page</a>
             </p>
-            <div class="fcal_slot_config">
-                <el-dropdown @command="handleCommand" trigger="click">
-                    <el-button size="small" text>
-                        <el-icon><Tools /></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item command="edit">Edit Booking Type Details</el-dropdown-item>
-                            <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
-                            <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
-                            <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-            </div>
         </div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
@@ -57,16 +70,19 @@
 </template>
 
 <script type="text/babel">
-import {copyToClipBoard} from '@/Bits/data_config.js';
-import {CopyDocument, Tools, ArrowDown} from '@element-plus/icons-vue';
+import { copyToClipBoard } from '@/Bits/data_config.js';
+import { CopyDocument, More, ArrowDown, User, Clock, Right } from '@element-plus/icons-vue';
 export default {
     name: 'EachSlot',
     props: ['slot'],
     $emits: ['slotDeleted'],
     components: {
         CopyDocument,
-        Tools,
-        ArrowDown
+        More,
+        ArrowDown,
+        User,
+        Clock,
+        Right
     },
     data() {
         return {
