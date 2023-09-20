@@ -229,6 +229,7 @@ ul.fframe_menu.fcal_secondary_menu {
   background: #f5f6f7;
   margin-left: -20px;
   padding-left: 24px;
+  padding-bottom: 24px;
   box-sizing: border-box;
   font-family: "Satoshi", sans-serif;
 }
@@ -505,6 +506,32 @@ p.fcal_profile_link a {
 }
 .el-popper.el-dropdown-list-wrapper .el-dropdown-menu li {
   margin: 0;
+}
+.el-popper.fcal_select {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+}
+.el-popper.fcal_select .el-popper__arrow {
+  display: none;
+}
+.el-popper.fcal_select ul {
+  margin: 0;
+  padding: 0;
+}
+.el-popper.fcal_select ul .el-select-dropdown__item {
+  margin: 0;
+  border-radius: 8px;
+  color: #1B2533;
+  font-weight: 500;
+  padding: 3px 16px;
+  height: auto;
+}
+.el-popper.fcal_select ul .el-select-dropdown__item.selected, .el-popper.fcal_select ul .el-select-dropdown__item:hover {
+  color: #1B2533;
+  background: #f5f6f7;
+  font-weight: 500;
 }
 
 .el-dropdown-list-wrapper {
@@ -1082,68 +1109,248 @@ p.fcal_profile_link a {
     justify-content: flex-end;
   }
 }
-.fcal_settings_container {
-  border-bottom: 1px solid #ebeef5;
-  border-radius: 4px;
+/* Settings */
+.fcal_settings_sidebar {
+  margin: 0;
 }
-.fcal_settings_container.disabled {
+.fcal_settings_sidebar li {
+  display: block;
+  margin-bottom: 0;
+}
+.fcal_settings_sidebar li + li {
+  margin-top: 20px;
+}
+.fcal_settings_sidebar li a {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #445164;
+  gap: 10px;
+  text-decoration: none;
+  position: relative;
+  padding: 0 20px;
+}
+.fcal_settings_sidebar li a:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #2653C7;
+  transition: 0.2s;
+  transform: scale(0);
+}
+.fcal_settings_sidebar li a:focus {
+  outline: none;
+  box-shadow: none;
+}
+.fcal_settings_sidebar li a:hover, .fcal_settings_sidebar li a.router-link-exact-active {
+  color: #2653C7;
+}
+.fcal_settings_sidebar li a.router-link-exact-active::before {
+  transform: scale(1);
+}
+
+.fcal_settings .fcal_settings_body {
+  display: flex;
+  gap: 24px;
+}
+.fcal_settings .fcal_settings_body .el-aside {
+  width: 224px;
+  flex: none;
+}
+.fcal_settings .fcal_settings_body .el-aside .fcal_title h3 {
+  margin: 0 0 24px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #1B2533;
+}
+.fcal_settings .fcal_settings_body .fcal_settings_container {
+  flex: 1;
+}
+.fcal_settings .fcal_settings_body .fcal_settings_container.disabled {
   opacity: 0.6;
 }
-.fcal_settings_container .fcal_config_card .card_top {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top {
   display: flex;
   justify-content: space-between;
 }
-.fcal_settings_container .fcal_config_card .card_top .card_left {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top .card_left {
   display: flex;
   gap: 1rem;
 }
-.fcal_settings_container .fcal_config_card .card_top .card_left .config_icon {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top .card_left .config_icon {
   align-self: center;
   font-size: 2.5rem;
 }
-.fcal_settings_container .fcal_config_card .card_top .card_left .config_content .config_title {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top .card_left .config_content .config_title {
   font-size: 1rem;
   font-weight: 500;
   margin: 0.5rem 0;
 }
-.fcal_settings_container .fcal_config_card .card_top .card_left .config_content .config_subtitle {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top .card_left .config_content .config_subtitle {
   margin: 0.5rem 0;
   font-weight: 300;
 }
-.fcal_settings_container .fcal_config_card .card_top .card_right {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_top .card_right {
   display: flex;
   align-self: center;
   gap: 0.3rem;
   margin-right: 2rem;
 }
-.fcal_settings_container .fcal_config_card .card_body {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_body {
   margin: 1rem 2rem 1rem 0;
 }
-.fcal_settings_container .fcal_config_card .card_body .integration_cards {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_body .integration_cards {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.fcal_settings_container .fcal_config_card .card_body .config_description {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_config_card .card_body .config_description {
   margin-bottom: 1rem;
   font-weight: 300;
 }
-.fcal_settings_container .fcal_section_body .el-form-item__content {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_section_body .el-form-item__content {
   display: block;
 }
-.fcal_settings_container .fcal_section_body .fcal_reminder_timing {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_section_body .fcal_reminder_timing {
   display: flex;
   gap: 5px;
   margin-bottom: 5px;
 }
-.fcal_settings_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper {
   padding: 1px 8px;
 }
-.fcal_settings_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper .el-input__inner {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper .el-input__inner {
   text-align: center;
 }
-.fcal_settings_container .fcal_section_body .fcal_add_reminder .el-icon {
+.fcal_settings .fcal_settings_body .fcal_settings_container .fcal_section_body .fcal_add_reminder .el-icon {
   margin-right: 2px;
+}
+
+.fcal_settings_body_inner {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+}
+.fcal_settings_body_inner .fcal_settings_header {
+  border-bottom: 1px solid #EAECF0;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.fcal_settings_body_inner .fcal_settings_header h3 {
+  margin: 0;
+  color: #1B2533;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item {
+  margin-bottom: 16px;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item:last-child {
+  margin-bottom: 0;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .fcal_settings_footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid #EAECF0;
+  padding-top: 16px;
+  margin-top: 24px;
+}
+
+.fcal_settings_card {
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #D6DAE1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.2s;
+}
+.fcal_settings_card:hover {
+  border-color: transparent;
+  box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+}
+.fcal_settings_card .content h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #1B2533;
+}
+.fcal_settings_card .content p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  color: #445164;
+}
+.fcal_settings_card .content p + p {
+  margin-top: 8px;
+}
+.fcal_settings_card .content .format-date {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+  gap: 8px;
+}
+.fcal_settings_card .content .format-date span {
+  display: block;
+  box-shadow: 2px 2px 2px 0 rgba(24, 13, 84, 0.1019607843) inset;
+  background: #F5F6F7;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 6px 12px;
+}
+.fcal_settings_card .fcal_primary_btn2 {
+  padding: 12px 20px;
+}
+.fcal_settings_card .el-select {
+  width: 320px;
+}
+.fcal_settings_card .el-select .el-input.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none;
+}
+.fcal_settings_card .el-select .el-input .el-input__wrapper {
+  border-radius: 8px;
+  border: 1px solid #D6DAE1;
+  padding: 4px 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #1B2533;
+  font-size: 14px;
+  box-shadow: none;
+}
+.fcal_settings_card .el-select .el-input .el-input__wrapper.is-focus {
+  box-shadow: none !important;
+  outline: none;
+  border-color: #2653C7;
+}
+.fcal_settings_card .el-select .el-input .el-input__wrapper input {
+  margin: 0;
+  padding: 0;
+}
+.fcal_settings_card .el-select .el-input .el-input__wrapper input::-moz-placeholder {
+  color: #1B2533;
+  opacity: 1;
+}
+.fcal_settings_card .el-select .el-input .el-input__wrapper input::placeholder {
+  color: #1B2533;
+  opacity: 1;
 }
 
 .fcal_notification_btn {

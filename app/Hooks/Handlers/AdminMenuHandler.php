@@ -72,6 +72,11 @@ class AdminMenuHandler
                     'label'     => __('Integrations', 'fluent-booking'),
                     'permalink' => $baseUrl.'integrations'
                 ],
+                [
+                    'key'       => 'settings',
+                    'label'     => __('Settings', 'fluent-booking'),
+                    'permalink' => $baseUrl.'settings'
+                ]
             ];
         }
 

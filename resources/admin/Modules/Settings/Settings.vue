@@ -1,17 +1,25 @@
 <template>
     <div class="fcal_settings">
-        <div class="fcal_section_narrow fcal_section">
-            <div style="padding:15px;" class="fcal_section_header">
+        <div class="fcal_settings_body">
+            <el-aside>
                 <div class="fcal_title">
                     <h3>Settings</h3>
                 </div>
-            </div>
+                <ul class="fcal_settings_sidebar">
+                    <li>
+                        <router-link to="/settings">
+                            General
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'profile-settings'}">
+                            Profile
+                        </router-link>
+                    </li>
+                </ul>
+            </el-aside>
             <div v-loading="loading" class="fcal_settings_container">
-                <div class="fcal_section_body">
-                    <div class="fcal_settings_title">
-                        <p>Configure Integration</p>
-                    </div>
-                </div>
+                <router-view/>
             </div>
         </div>
     </div>
