@@ -335,6 +335,114 @@ ul.fframe_menu.fcal_secondary_menu {
   float: right;
 }
 
+.fcal_configure_integrations {
+  border: none;
+}
+.fcal_configure_integrations .fcal_configure_integration_card + .fcal_configure_integration_card {
+  margin-top: 24px;
+}
+
+.fcal_configure_integration_card {
+  margin: 0;
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  padding: 24px;
+}
+.fcal_configure_integration_card.el-collapse-item, .fcal_configure_integration_card:last-child {
+  margin: 0;
+}
+.fcal_configure_integration_card .el-collapse-item__header {
+  height: auto;
+  border: none;
+}
+.fcal_configure_integration_card .el-collapse-item__header.is-active .fcal_configure_integration_card_header .collapse-btn i {
+  transform: rotate(90deg);
+}
+.fcal_configure_integration_card .el-collapse-item__header > .el-collapse-item__arrow {
+  display: none;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .img-box {
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  padding: 12px;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  overflow: hidden;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .img-box img {
+  max-width: 100%;
+  display: block;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .content h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #1B2533;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .content p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+  margin: 0;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #2653C7;
+  gap: 8px;
+}
+.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .collapse-btn i {
+  font-size: 18px;
+  transition: 0.3s;
+}
+.fcal_configure_integration_card .el-collapse-item__wrap {
+  border: none;
+}
+.fcal_configure_integration_card .el-collapse-item__content {
+  padding: 0;
+  border: none;
+}
+.fcal_configure_integration_card .el-collapse-item__content .fcal_configure_integration_body {
+  border-top: 1px solid #EAECF0;
+  padding-top: 24px;
+  margin-top: 24px;
+}
+.fcal_configure_integration_card .el-collapse-item__content .fcal_configure_integration_body .el-form .el-form-item:last-child {
+  margin-top: 24px;
+}
+.fcal_configure_integration_card .el-collapse-item__content .fcal_configure_integration_body p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+  margin: 0 0 24px;
+}
+.fcal_configure_integration_card .el-collapse-item__content .fcal_configure_integration_body p a {
+  text-decoration: none;
+  color: #2653C7;
+  font-weight: 500;
+}
+
 button.el-button.location_edit_btn {
   margin-left: -10px;
 }
@@ -875,7 +983,7 @@ p.fcal_profile_link a {
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 24px;
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot {
@@ -1158,17 +1266,20 @@ p.fcal_profile_link a {
   stroke: #fff;
   fill: #fff;
 }
+.fcal_settings_sidebar li.configure a:hover svg path, .fcal_settings_sidebar li.configure a.router-link-exact-active svg path {
+  fill: #2653C7;
+}
 .fcal_settings_sidebar li a {
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 24px;
   color: #445164;
   gap: 10px;
   text-decoration: none;
   position: relative;
-  padding: 0 20px;
+  padding: 0 16px 0 20px;
 }
 .fcal_settings_sidebar li a:before {
   content: "";
@@ -1197,7 +1308,6 @@ p.fcal_profile_link a {
 .fcal_settings_sidebar li a.router-link-exact-active svg path {
   stroke: #2653C7;
 }
-
 .fcal_settings .fcal_settings_body {
   display: flex;
   gap: 24px;
@@ -1299,9 +1409,10 @@ p.fcal_profile_link a {
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item:last-child {
   margin-bottom: 0;
 }
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-form-item__label,
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .input-label {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 20px;
   color: #445164;
   display: inline-flex;
@@ -1309,6 +1420,7 @@ p.fcal_profile_link a {
   gap: 4px;
   margin-bottom: 8px;
 }
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-form-item__label .help,
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .input-label .help {
   width: 15px;
   height: 15px;
@@ -1318,6 +1430,10 @@ p.fcal_profile_link a {
   line-height: 14px;
   font-size: 10px;
   cursor: default;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input.is-disabled .el-input__inner {
+  color: #637083;
+  -webkit-text-fill-color: #637083;
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper {
   border-radius: 8px;
@@ -1336,6 +1452,28 @@ p.fcal_profile_link a {
   padding: 0;
   margin: 0;
   color: #1B2533;
+  background: transparent;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item.redirect-url-input .el-input .el-input__wrapper {
+  border-radius: 8px 0 0 8px;
+  border: none;
+  background: #F5F6F7;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item.redirect-url-input .el-input .el-input-group__append {
+  padding: 0;
+  box-shadow: none;
+  background: none;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item.redirect-url-input .el-input .el-input-group__append button {
+  margin: 0;
+  background: rgba(38, 83, 199, 0.15);
+  color: #2653C7;
+  padding: 14px 16px;
+  height: auto;
+  border-radius: 0 8px 8px 0;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item.redirect-url-input .el-input .el-input-group__append button > span {
+  gap: 4px;
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .fcal_settings_footer {
   display: flex;

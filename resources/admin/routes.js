@@ -9,7 +9,7 @@ import Settings from "./Modules/Settings/Settings.vue";
 import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";
 import GeneralSettings from "./Modules/Settings/GeneralSettings";
 import Integrations from "./Modules/Settings/Integrations/Integrations.vue";
-import Configurations from "./Modules/Settings/Integrations/Configurations.vue";
+import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 
 export var routes = [
     {
@@ -95,6 +95,15 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Profile'
                 },
+            },
+            {
+                name: 'configure-integrations',
+                path: 'configure-integrations',
+                component: ConfigureIntegrationSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Configure Integrations'
+                },
             }
         ]
     },
@@ -104,14 +113,6 @@ export var routes = [
         component: Integrations,
         meta: {
             active_menu: 'integrations'
-        }
-    },
-    {
-        path: '/configurations',
-        name: 'configurations',
-        component: Configurations,
-        meta: {
-            active_menu: 'configurations'
         }
     }
 ];
