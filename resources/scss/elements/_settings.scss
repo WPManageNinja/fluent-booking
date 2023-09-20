@@ -10,6 +10,22 @@
         + li {
             margin-top: 20px;
         }
+        &.general {
+            a {
+                &:hover,
+                &.router-link-exact-active {
+                    svg {
+                        path {
+                            fill: $primaryColor;
+                            &:last-child {
+                                stroke: #fff;
+                                fill: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         a {
             display: flex;
             align-items: center;
@@ -41,10 +57,20 @@
             &:hover,
             &.router-link-exact-active {
                 color: $primaryColor;
+                svg {
+                    path {
+                        stroke: $primaryColor;
+                    }
+                }
             }
             &.router-link-exact-active {
                 &::before {
                     transform: scale(1);
+                }
+                svg {
+                    path {
+                        stroke: $primaryColor;
+                    }
                 }
             }
         }
@@ -162,6 +188,47 @@
                 margin-bottom: 16px;
                 &:last-child {
                     margin-bottom: 0;
+                }
+                .input-label {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    color: #445164;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-bottom: 8px;
+
+                    .help {
+                        width: 15px;
+                        height: 15px;
+                        border: 1px solid #445164;
+                        border-radius: 50%;
+                        text-align: center;
+                        line-height: 14px;
+                        font-size: 10px;
+                        cursor: default;
+                    }
+                }
+                .el-input {
+                    .el-input__wrapper {
+                        border-radius: 8px;
+                        border: 1px solid #D6DAE1;
+                        font-size: 16px;
+                        font-weight: 400;
+                        line-height: 24px;
+                        box-shadow: none;
+                        color: $dark;
+                        padding: 8px 16px;
+                        &.is-focus {
+                            border-color: $primaryColor;
+                        }
+                        .el-input__inner {
+                            padding: 0;
+                            margin: 0;
+                            color: $dark;
+                        }
+                    }
                 }
             }
         }
