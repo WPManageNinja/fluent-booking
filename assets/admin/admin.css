@@ -291,6 +291,37 @@ ul.fframe_menu.fcal_secondary_menu {
   background: #2653C7;
 }
 
+.fcal_photo_card .fcal_photo_holder {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #f1f1f1;
+}
+.fcal_photo_card .fcal_photo_holder img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+.fcal_photo_card .fcal_photo_holder .el-button {
+  position: absolute;
+  background: #2653C7;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  width: 31px;
+  height: 31px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
 .fcal_tm20 {
   margin-top: 20px;
 }
@@ -1120,6 +1151,13 @@ p.fcal_profile_link a {
 .fcal_settings_sidebar li + li {
   margin-top: 20px;
 }
+.fcal_settings_sidebar li.general a:hover svg path, .fcal_settings_sidebar li.general a.router-link-exact-active svg path {
+  fill: #2653C7;
+}
+.fcal_settings_sidebar li.general a:hover svg path:last-child, .fcal_settings_sidebar li.general a.router-link-exact-active svg path:last-child {
+  stroke: #fff;
+  fill: #fff;
+}
 .fcal_settings_sidebar li a {
   display: flex;
   align-items: center;
@@ -1150,8 +1188,14 @@ p.fcal_profile_link a {
 .fcal_settings_sidebar li a:hover, .fcal_settings_sidebar li a.router-link-exact-active {
   color: #2653C7;
 }
+.fcal_settings_sidebar li a:hover svg path, .fcal_settings_sidebar li a.router-link-exact-active svg path {
+  stroke: #2653C7;
+}
 .fcal_settings_sidebar li a.router-link-exact-active::before {
   transform: scale(1);
+}
+.fcal_settings_sidebar li a.router-link-exact-active svg path {
+  stroke: #2653C7;
 }
 
 .fcal_settings .fcal_settings_body {
@@ -1254,6 +1298,44 @@ p.fcal_profile_link a {
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item:last-child {
   margin-bottom: 0;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .input-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .input-label .help {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #445164;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 14px;
+  font-size: 10px;
+  cursor: default;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper {
+  border-radius: 8px;
+  border: 1px solid #D6DAE1;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  box-shadow: none;
+  color: #1B2533;
+  padding: 8px 16px;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper.is-focus {
+  border-color: #2653C7;
+}
+.fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper .el-input__inner {
+  padding: 0;
+  margin: 0;
+  color: #1B2533;
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .fcal_settings_footer {
   display: flex;
