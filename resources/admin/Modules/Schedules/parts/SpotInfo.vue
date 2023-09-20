@@ -132,6 +132,16 @@
                                 </div>
                             </div>
                         </el-col>
+                        <el-col v-if="showing_spot.crm_profile" :md="8" :sm="12">
+                            <div class="fcal_spot_details_row">
+                                <div class="fcal_spot_details_label">
+                                    Fluent CRM
+                                </div>
+                                <div class="fcal_spot_details_value"
+                                    v-html="showing_spot.crm_profile">
+                                </div>
+                            </div>
+                        </el-col>
                     </el-row>
                 </el-col>
             </el-row>

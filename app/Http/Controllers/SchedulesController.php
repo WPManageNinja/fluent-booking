@@ -53,12 +53,14 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
-                do_action('fluent_booking/schedule_completed', $schedule);
+                do_action('fluent_booking/booking_schedule_completed', $schedule);
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->author = $schedule->slot->getAuthorProfile(false);
+
+            do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
         $groupedSchedules = $schedules->groupBy('event_id');
@@ -177,6 +179,8 @@ class SchedulesController extends Controller
             $booking->happening_status = $booking->getOngoingStatus();
             $booking->author = $booking->slot->getAuthorProfile(false);
             $booking->location = $booking->getLocationDetailsHtml();
+
+            do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
         }
 
         return [
