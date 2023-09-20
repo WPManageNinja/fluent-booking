@@ -1,7 +1,8 @@
 <?php
-namespace FluentBooking\App\Services\Integrations\CRM;
 
-class CrmInit {
+namespace FluentBooking\App\Services\Integrations\FluentCRM;
+
+class FluentCrmInit {
 
 	public function __construct() {
 		$this->registerIntegrations();
@@ -24,7 +25,7 @@ class CrmInit {
 	public function addContactMenuSection()
 	{
 		add_action( 'fluent_crm/global_appjs_loaded', function () {
-			wp_enqueue_script( 'fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/js/fluent-crm-in-calendar.js');
+			wp_enqueue_script( 'fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/admin/fluent-crm-in-calendar.js');
 		});
 	}
 

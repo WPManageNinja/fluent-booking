@@ -3,7 +3,7 @@ import ContactSection from './ContactSection';
 const CRMApp = window.FLUENTCRM;
 
 // add Booking route under contact route of CRM. this will actually trigger the ContactSection component
-CRMApp.addFilter('fluentcrm_profile_routes', 'fluent_pipeline', function (profileRoute) {
+CRMApp.addFilter('fluentcrm_profile_routes', 'fluent_booking', function (profileRoute) {
     profileRoute.children.push({
         name: 'booking',
         path: 'booking',
