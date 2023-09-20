@@ -313,6 +313,111 @@ button.el-button.location_edit_btn {
   font-weight: normal;
 }
 
+.fcal_drawer .el-drawer {
+  min-width: 640px;
+}
+.fcal_drawer .el-drawer .el-drawer__header {
+  font-weight: 500;
+  line-height: 32px;
+  color: #1B2533;
+  padding: 24px;
+  margin: 0;
+}
+.fcal_drawer .el-drawer .el-drawer__header .el-drawer__title {
+  font-size: 24px;
+}
+.fcal_drawer .el-drawer .el-drawer__header .el-drawer__close-btn {
+  border: 1px solid #D6DAE1;
+  color: #1B2533;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.fcal_drawer .el-drawer .el-drawer__header .el-drawer__close-btn:hover {
+  border-color: var(--el-color-danger);
+  color: var(--el-color-danger);
+}
+.fcal_drawer .el-drawer .el-drawer__header .el-drawer__close-btn:hover i {
+  color: var(--el-color-danger);
+}
+
+.fcal_create_new_booking_type_drawer .el-button {
+  position: relative;
+  width: 100%;
+  height: auto;
+  text-align: left;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border: 1px solid #D6DAE1;
+  padding: 24px;
+  border-radius: 8px;
+  margin: 0;
+  transition: 0.2s;
+}
+.fcal_create_new_booking_type_drawer .el-button + .el-button {
+  margin-top: 24px;
+}
+.fcal_create_new_booking_type_drawer .el-button:hover {
+  background: #fafafa;
+  border-color: #2653C7;
+  box-shadow: inset 0 0 0 1px #2653C7;
+}
+.fcal_create_new_booking_type_drawer .el-button > span {
+  gap: 24px;
+  width: 100%;
+}
+.fcal_create_new_booking_type_drawer .el-button .icons-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 76px;
+}
+.fcal_create_new_booking_type_drawer .el-button .icons-wrap i {
+  color: #1B2533;
+  font-size: 18px;
+}
+.fcal_create_new_booking_type_drawer .el-button .content h3 {
+  color: #1B2533;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 4px;
+  line-height: 28px;
+}
+.fcal_create_new_booking_type_drawer .el-button .content h4 {
+  font-size: 14px;
+  color: #445164;
+  font-weight: 300;
+  margin: 0 0 4px;
+  line-height: 20px;
+}
+.fcal_create_new_booking_type_drawer .el-button .content h4 strong {
+  color: #1B2533;
+  font-weight: 600;
+}
+.fcal_create_new_booking_type_drawer .el-button .content h4 span {
+  font-weight: 300;
+}
+.fcal_create_new_booking_type_drawer .el-button .content p {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #445164;
+  margin: 0;
+}
+.fcal_create_new_booking_type_drawer .el-button .content .icon-right {
+  position: absolute;
+  right: 24px;
+  color: #1B2533;
+  font-size: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 table.fcal_table {
   width: 100%;
   text-align: left;
@@ -509,13 +614,14 @@ p.fcal_profile_link a {
 }
 
 .fframe_main-menu-items {
-  display: block;
   position: relative;
   margin-bottom: 20px;
   background: white;
   margin-left: -20px;
   padding-left: 20px;
   overflow: hidden;
+  display: flex;
+  justify-content: space-between;
 }
 .fframe_main-menu-items .menu_logo_holder {
   max-height: 40px;
@@ -559,10 +665,10 @@ p.fcal_profile_link a {
   margin: 0;
 }
 .fframe_main-menu-items ul.fframe_menu li.active_item {
-  border-bottom: 2px solid #9d95d8;
+  border-bottom: 2px solid #2653C7;
 }
 .fframe_main-menu-items ul.fframe_menu li.active_item a {
-  color: black;
+  color: #2653C7;
 }
 .fframe_main-menu-items ul.fframe_menu li a:focus {
   box-shadow: none;
@@ -571,10 +677,11 @@ p.fcal_profile_link a {
 .fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary {
   padding: 20px 20px;
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 100%;
   text-decoration: none;
-  color: #909399;
+  color: #445164;
+  font-weight: 400;
 }
 .fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary span {
   font-size: 14px;
@@ -626,7 +733,7 @@ p.fcal_profile_link a {
 }
 @media all and (max-width: 679px) {
   .fframe_main-menu-items {
-    margin-right: 10px;
+    display: block;
   }
   .fframe_main-menu-items ul.fframe_menu {
     display: none;
@@ -748,7 +855,7 @@ p.fcal_profile_link a {
   align-items: center;
   margin: 0 0 24px 0;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   gap: 32px;
   line-height: 1;
 }
@@ -778,6 +885,20 @@ p.fcal_profile_link a {
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer h3 {
   margin: 0;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button {
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s;
+  line-height: 1;
+  color: #2653C7;
+  font-weight: 400;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button i {
+  font-size: 18px;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button:hover {
+  background: rgba(38, 83, 199, 0.1);
 }
 
 .fcal_head_nav {

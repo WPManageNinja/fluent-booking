@@ -13,8 +13,8 @@
             <h3>Event Information</h3>
             <basic-info :slot="slot" />
 
-<!--            <h3>Scheduling Settings</h3>-->
-<!--            <slot-settings-from :slot="slot" />-->
+            <h3>Scheduling Settings</h3>
+            <slot-settings-from :slot="slot" />
 
             <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Create a new scheduling form</el-button>
         </div>
@@ -28,7 +28,7 @@
 
 <script type="text/babel">
 import SlotSettingsFrom from './_SlotSettingsForm.vue';
-import BasicInfo from './_BasicInfo.vue';
+import BasicInfo from './_BasicInfo.vue'
 
 export default {
     name: 'NewSlotEvent',

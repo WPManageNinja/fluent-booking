@@ -44,7 +44,7 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/:calendar_id/create-event-type',
+        path: '/calendars/:calendar_id/:event_type/create-event-type',
         name: 'create_slot_event',
         component: CreateCalendarSlot,
         props: true,

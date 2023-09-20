@@ -37,20 +37,28 @@
             </p>
         </div>
         <div class="fcal_slot_footer">
+            <div class="fcal_slot_actions">
+                <el-button
+                    @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"
+                    class="fcal_plain_btn">
+                    <el-icon><EditPen /></el-icon> Edit
+                </el-button>
+            </div>
+
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" text>
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
                     <span v-if="!isCopied">Copy Link</span>
-                    <span v-else>Copied</span>
+                    <span v-else>Copied!</span>
                 </el-button>
                 <el-button v-else-if="slot.shortcode" @click="copyTo(slot.shortcode)" text>
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
                     <span v-if="!isCopied">Copy Shorcode</span>
-                    <span v-else>Copied</span>
+                    <span v-else>Copied!</span>
                 </el-button>
 
             </div>
@@ -59,19 +67,13 @@
                     Turn On
                 </el-button>
             </div>
-            <div class="fcal_slot_actions">
-                <el-button
-                    @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"
-                    type="default">edit
-                </el-button>
-            </div>
         </div>
     </div>
 </template>
 
 <script type="text/babel">
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { CopyDocument, More, ArrowDown, User, Clock, Right } from '@element-plus/icons-vue';
+import { CopyDocument, More, ArrowDown, User, Clock, Right, EditPen } from '@element-plus/icons-vue';
 export default {
     name: 'EachSlot',
     props: ['slot'],
@@ -82,7 +84,8 @@ export default {
         ArrowDown,
         User,
         Clock,
-        Right
+        Right,
+        EditPen
     },
     data() {
         return {

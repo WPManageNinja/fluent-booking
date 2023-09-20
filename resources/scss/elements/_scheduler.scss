@@ -92,7 +92,7 @@
             align-items: center;
             margin: 0 0 24px 0;
             font-size: 14px;
-            font-weight: 300;
+            font-weight: 400;
             gap: 32px;
             line-height: 1;
             > span {
@@ -125,6 +125,23 @@
 
           h3 {
             margin: 0;
+          }
+
+          .fcal_shortcode {
+            .el-button {
+              border-radius: 8px;
+              font-size: 14px;
+              transition: 0.2s;
+              line-height: 1;
+              color: $primaryColor;
+              font-weight: 400;
+              i {
+                font-size: 18px;
+              }
+              &:hover {
+                background: rgba(38, 83, 199, 0.1);
+              }
+            }
           }
         }
       }
