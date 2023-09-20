@@ -10,7 +10,8 @@ class FluentCRMInit
 {
     public function init()
     {
-        add_action('fluent_crm/global_appjs_loaded', [$this, 'enqueueAssets'], 1);
+        add_action('fluent_crm/global_appjs_loaded', [$this, 'enqueueAssets'], 10);
+        add_action('fluent_booking/booking_schedule', [$this, 'addProfileLink'], 10, 1);
         add_filter('fluentcrm_profile_sections', [$this, 'addProfileSection'], 10, 1);
         add_filter('fluent_crm/scheduled_meeting_providers', [$this, 'pushProvider'], 10, 1);
         add_filter('fluent_crm/get_scheduled_meetings_fluent_booking', [$this, 'getScheduledMeetings'], 10, 2);      
@@ -19,6 +20,27 @@ class FluentCRMInit
     public function enqueueAssets()
     {
         wp_enqueue_script('fluent_booking_crm_profile_extended', FLUENT_BOOKING_URL . 'assets/admin/fluentcrm.js');
+    }
+
+    private function getSubscriberId($email)
+    {
+        $contact = FluentCrmApi('contacts')->getContact($email);
+        return $contact ? $contact->id : null;
+    }
+
+    public function addProfileLink(&$booking)
+    {
+        $subscriberId = $booking->person_user_id ?: $this->getSubscriberId($booking->email);
+
+        if (!$subscriberId) {
+            return;
+        }
+        
+        $url = admin_url('admin.php?page=fluentcrm-admin#/subscribers/' . $subscriberId);
+
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'profile' . '</a>';
+
+        $booking->crm_profile = $link;
     }
 
     public function addProfileSection($sections)
