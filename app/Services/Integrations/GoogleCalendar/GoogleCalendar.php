@@ -48,10 +48,10 @@ class GoogleCalendar extends IntegrationManager
 
     public function initHooks()
     {
-        add_action('template_redirect', [$this, 'handleAuthCallback']);
         add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
         add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
         add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
+        add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback'] );
     }
 
     public function handleAuthCallback()
@@ -181,7 +181,7 @@ class GoogleCalendar extends IntegrationManager
         $defaults = [
             'client_id'     => '',
             'client_secret' => '',
-            'redirect_url'  => site_url('/google-calendar-integration/fluent-booking'),
+            'redirect_url'  => admin_url('/admin-ajax.php?action=fluent_booking_g_auth'),
         ];
 
         $clientDetails = $this->getClientDetails();
