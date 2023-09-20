@@ -6,5 +6,9 @@ add_action('init', function () {
         (new \FluentBooking\App\Services\Integrations\FluentForms\FluentFormInit())->init();
     }
 
+    if (defined('FLUENTCRM')) {
+        (new \FluentBooking\App\Services\Integrations\FluentCRM\FluentCrmInit());
+    }
+    
     (new \FluentBooking\App\Services\Integrations\GoogleCalendar\GoogleCalendar());
 });

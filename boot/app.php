@@ -19,7 +19,6 @@ return function ($file) {
     require_once( FLUENT_BOOKING_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
  
     add_action('plugins_loaded', function () use ($app) {
-	    new \FluentBooking\App\Services\Integrations\CRM\CrmInit();
         do_action('fluent_booking_loaded', $app);
     });
 };
