@@ -26,17 +26,29 @@
                 }
             }
         }
+        &.configure {
+            a {
+                &:hover,
+                &.router-link-exact-active {
+                    svg {
+                        path {
+                            fill: $primaryColor;
+                        }
+                    }
+                }
+            }
+        }
         a {
             display: flex;
             align-items: center;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 400;
             line-height: 24px;
             color: #445164;
             gap: 10px;
             text-decoration: none;
             position: relative;
-            padding: 0 20px;
+            padding: 0 16px 0 20px;
             &:before {
                 content: '';
                 position: absolute;
@@ -71,6 +83,11 @@
                     path {
                         stroke: $primaryColor;
                     }
+                }
+            }
+            svg {
+                path {
+                    //stroke-width: 1.2px;
                 }
             }
         }
@@ -189,9 +206,10 @@
                 &:last-child {
                     margin-bottom: 0;
                 }
+                .el-form-item__label,
                 .input-label {
                     font-size: 14px;
-                    font-weight: 400;
+                    font-weight: 500;
                     line-height: 20px;
                     color: #445164;
                     display: inline-flex;
@@ -211,6 +229,12 @@
                     }
                 }
                 .el-input {
+                    &.is-disabled {
+                        .el-input__inner {
+                            color: #637083;
+                            -webkit-text-fill-color: #637083;
+                        }
+                    }
                     .el-input__wrapper {
                         border-radius: 8px;
                         border: 1px solid #D6DAE1;
@@ -227,6 +251,32 @@
                             padding: 0;
                             margin: 0;
                             color: $dark;
+                            background: transparent;
+                        }
+                    }
+                }
+                &.redirect-url-input {
+                    .el-input {
+                        .el-input__wrapper {
+                            border-radius: 8px 0 0 8px;
+                            border: none;
+                            background: #F5F6F7;
+                        }
+                        .el-input-group__append {
+                            padding: 0;
+                            box-shadow: none;
+                            background: none;
+                            button {
+                                margin: 0;
+                                background: rgb(38 83 199 / 15%);
+                                color: $primaryColor;
+                                padding: 14px 16px;
+                                height: auto;
+                                border-radius: 0 8px 8px 0;
+                                > span {
+                                    gap: 4px;
+                                }
+                            }
                         }
                     }
                 }
