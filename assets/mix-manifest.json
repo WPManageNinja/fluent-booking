@@ -1,11 +1,3 @@
 {
-    "/admin/app.js": "/admin/app.js",
-    "/admin/global_admin.js": "/admin/global_admin.js",
-    "/admin/admin.css": "/admin/admin.css",
-    "/public/saas_admin.css": "/public/saas_admin.css",
-    "/public/saas_public.css": "/public/saas_public.css",
-    "/public/saas.css": "/public/saas.css",
-    "/images/convertleap-logo.svg": "/images/convertleap-logo.svg",
-    "/images/default-featured.png": "/images/default-featured.png",
-    "/images/logo.svg": "/images/logo.svg"
+    "/js/fluent-crm-in-calendar.js": "/js/fluent-crm-in-calendar.js"
 }
