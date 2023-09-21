@@ -8,7 +8,7 @@ import Availabilities from "./Modules/Availability/Availabilities.vue";
 import Settings from "./Modules/Settings/Settings.vue";
 import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";
 import GeneralSettings from "./Modules/Settings/GeneralSettings";
-import Integrations from "./Modules/Settings/Integrations/Integrations.vue";
+import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 
 export var routes = [
@@ -104,16 +104,17 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Configure Integrations'
                 },
+            },
+            {
+                name: 'integrations',
+                path: 'integrations',
+                component: IntegrationSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Integrations'
+                },
             }
         ]
-    },
-    {
-        path: '/integrations',
-        name: 'integrations',
-        component: Integrations,
-        meta: {
-            active_menu: 'integrations'
-        }
     }
 ];
 

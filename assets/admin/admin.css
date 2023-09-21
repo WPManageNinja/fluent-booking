@@ -361,19 +361,19 @@ ul.fframe_menu.fcal_secondary_menu {
 .fcal_configure_integration_card .el-collapse-item__header > .el-collapse-item__arrow {
   display: none;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header {
+.fcal_configure_integration_card .fcal_configure_integration_card_header {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .img-box {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left .img-box {
   border: 1px solid #D6DAE1;
   border-radius: 8px;
   padding: 12px;
@@ -382,27 +382,38 @@ ul.fframe_menu.fcal_secondary_menu {
   flex: none;
   overflow: hidden;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .img-box img {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left .img-box img {
   max-width: 100%;
   display: block;
   -o-object-fit: cover;
      object-fit: cover;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .content h3 {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left .icon {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #D6DAE1;
+  flex: none;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left .content h3 {
   margin: 0 0 8px;
   font-size: 18px;
   font-weight: 500;
   line-height: 28px;
   color: #1B2533;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .left .content p {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .left .content p {
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
   color: #445164;
   margin: 0;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .collapse-btn {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .collapse-btn {
   display: inline-flex;
   align-items: center;
   font-size: 16px;
@@ -411,9 +422,53 @@ ul.fframe_menu.fcal_secondary_menu {
   color: #2653C7;
   gap: 8px;
 }
-.fcal_configure_integration_card .el-collapse-item__header .fcal_configure_integration_card_header .collapse-btn i {
+.fcal_configure_integration_card .fcal_configure_integration_card_header .collapse-btn i {
   font-size: 18px;
   transition: 0.3s;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .fcal_primary_btn2 {
+  height: auto;
+  padding: 9px 23px;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .fcal_primary_btn2 .icon {
+  font-size: 20px;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .fcal_primary_btn2:hover {
+  background: rgba(38, 83, 199, 0.08);
+  color: #2653C7;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .fcal_primary_btn2.disconnect-btn {
+  color: #b91c1d;
+  border-color: #b91c1d;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .fcal_primary_btn2.disconnect-btn:hover {
+  background: rgba(185, 28, 29, 0.1);
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch.is-checked .el-switch__core {
+  background: #2653C7;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch.is-checked .el-switch__core .el-switch__action {
+  left: calc(100% - 22px);
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch.is-checked .el-switch__core .el-switch__action:hover {
+  box-shadow: 0 0 0 6px rgba(38, 83, 199, 0.2);
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch .el-switch__core {
+  min-width: 44px;
+  height: 24px;
+  border-radius: 30px;
+  background: #CED2DA;
+  border: none;
+  transition: 0.2s;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch .el-switch__core .el-switch__action {
+  width: 20px;
+  height: 20px;
+  transition: 0.2s;
+  left: 2px;
+}
+.fcal_configure_integration_card .fcal_configure_integration_card_header .el-switch .el-switch__core .el-switch__action:hover {
+  box-shadow: 0 0 0 6px rgba(206, 210, 218, 0.3);
 }
 .fcal_configure_integration_card .el-collapse-item__wrap {
   border: none;
@@ -441,6 +496,29 @@ ul.fframe_menu.fcal_secondary_menu {
   text-decoration: none;
   color: #2653C7;
   font-weight: 500;
+}
+
+.fcal_integrations .fcal_configure_integration_card .fcal_configure_integration_body {
+  border-top: 1px solid #EAECF0;
+  padding-top: 16px;
+  margin-top: 16px;
+}
+.fcal_integrations .fcal_configure_integration_card .fcal_configure_integration_body h4 {
+  color: #1B2533;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  margin: 0 0 16px;
+}
+.fcal_integrations .fcal_configure_integration_card .fcal_configure_integration_body .fcal_integration_configuration_items .fcal_configure_integration_card {
+  transition: 0.2s;
+}
+.fcal_integrations .fcal_configure_integration_card .fcal_configure_integration_body .fcal_integration_configuration_items .fcal_configure_integration_card + .fcal_configure_integration_card {
+  margin-top: 16px;
+}
+.fcal_integrations .fcal_configure_integration_card .fcal_configure_integration_body .fcal_integration_configuration_items .fcal_configure_integration_card:hover {
+  border-color: #2653C7;
+  box-shadow: 0 10px 20px rgba(206, 210, 218, 0.2);
 }
 
 button.el-button.location_edit_btn {
