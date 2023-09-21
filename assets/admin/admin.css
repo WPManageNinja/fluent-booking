@@ -335,6 +335,24 @@ ul.fframe_menu.fcal_secondary_menu {
   float: right;
 }
 
+.fcal_back_btn {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #445164;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.fcal_back_btn:hover {
+  color: #2653C7;
+}
+.fcal_back_btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .fcal_configure_integrations {
   border: none;
 }
@@ -523,6 +541,21 @@ ul.fframe_menu.fcal_secondary_menu {
 
 button.el-button.location_edit_btn {
   margin-left: -10px;
+}
+
+.fcal_single_integration_wrap .fcal_single_integration_body {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+}
+.fcal_single_integration_wrap .title {
+  color: #1B2533;
+  border-bottom: 1px solid #EAECF0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
 }
 
 .fcal_sub_title {
@@ -1575,6 +1608,21 @@ p.fcal_profile_link a {
   border-top: 1px solid #EAECF0;
   padding-top: 16px;
   margin-top: 24px;
+}
+
+.fcal_single_integration_wrap {
+  max-width: 985px;
+  margin: auto;
+}
+.fcal_single_integration_wrap .fcal_header {
+  margin-bottom: 24px;
+}
+.fcal_single_integration_wrap .fcal_header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #1B2533;
+  margin: 2px 0 0 0;
 }
 
 .fcal_settings_card {
