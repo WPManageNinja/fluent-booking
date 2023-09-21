@@ -10,6 +10,7 @@ import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";
 import GeneralSettings from "./Modules/Settings/GeneralSettings";
 import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
+import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
 
 export var routes = [
     {
@@ -26,6 +27,15 @@ export var routes = [
         component: AllCalendars,
         meta: {
             active_menu: 'calendars'
+        }
+    },
+    {
+        name: 'single-integration',
+        path: '/calendars/:id/single-integration',
+        component: SingleIntegration,
+        meta: {
+            active_menu: 'calendars',
+            title: 'Single Integrations'
         }
     },
     {

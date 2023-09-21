@@ -293,6 +293,21 @@
     }
 }
 
+.fcal_single_integration_wrap {
+    max-width: 985px;
+    margin: auto;
+    .fcal_header {
+        margin-bottom: 24px;
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 36px;
+            color: $dark;
+            margin: 2px 0 0 0;
+        }
+    }
+}
+
 .fcal_settings_card {
     border-radius: 8px;
     padding: 24px;

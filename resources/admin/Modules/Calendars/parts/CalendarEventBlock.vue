@@ -9,9 +9,10 @@
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button @click="showSettings = true" class="fcal_plain_btn">
+                <el-button @click="$router.push({name: 'single-integration', params: {id: calendar.user_id}})" class="fcal_plain_btn">
                     <el-icon><Setting /></el-icon> Integrations
                 </el-button>
+
                 <el-button
                     @click="isNewBookingOpen = true"
                     class="fcal_primary_btn2">
