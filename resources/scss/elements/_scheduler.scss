@@ -69,8 +69,8 @@
             font-size: 18px;
             .fcal_status_badge {
               background: #4587EC;
-              border-radius: 4px;
-              height: 28px;
+              border-radius: 50%;
+              height: 14px;
               width: 14px;
               display: block;
             }
@@ -135,11 +135,14 @@
               line-height: 1;
               color: $primaryColor;
               font-weight: 400;
+              background: rgb(38 83 199 / 10%);
+              padding: 11px 16px;
+              height: auto;
               i {
                 font-size: 18px;
               }
               &:hover {
-                background: rgba(38, 83, 199, 0.1);
+                background: rgb(38 83 199 / 20%);
               }
             }
           }
