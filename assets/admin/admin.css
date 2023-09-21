@@ -335,6 +335,58 @@ ul.fframe_menu.fcal_secondary_menu {
   float: right;
 }
 
+.fcal_color_select_wrap .el-select:hover .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none !important;
+}
+.fcal_color_select_wrap .el-input .el-input-group__prepend {
+  padding: 0;
+  box-shadow: none;
+  border-radius: 8px 0 0 8px !important;
+  border: 1px solid #D6DAE1;
+  border-right: none;
+  background: #F6F6F7;
+}
+.fcal_color_select_wrap .el-input:hover .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none !important;
+}
+.fcal_color_select_wrap .el-input-group--prepend .el-input-group__prepend .el-select .el-input.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none !important;
+}
+.fcal_color_select_wrap .el-input-group--prepend .el-input-group__prepend .el-select:focus .el-input__wrapper, .fcal_color_select_wrap .el-input-group--prepend .el-input-group__prepend .el-select:hover .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.fcal_color_select {
+  position: relative;
+  padding: 0 20px;
+}
+.fcal_color_select .fcal_color {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  left: 16px;
+  top: 14px;
+}
+.fcal_color_select .el-input .el-input__wrapper {
+  box-shadow: none !important;
+  border: none !important;
+}
+.fcal_color_select .el-input .el-input__wrapper .el-input__inner {
+  color: transparent !important;
+}
+.fcal_color_select .el-input .el-input__wrapper .el-input__inner::-moz-placeholder {
+  color: transparent !important;
+}
+.fcal_color_select .el-input .el-input__wrapper .el-input__inner::placeholder {
+  color: transparent !important;
+}
+
 .fcal_back_btn {
   font-size: 16px;
   font-weight: 500;
@@ -794,6 +846,61 @@ p.fcal_profile_link a {
 .el-popper.fcal_select ul .el-dropdown-menu__item.danger:hover,
 .el-popper.fcal_select ul .el-select-dropdown__item.danger:hover {
   background: var(--el-color-danger-light-9);
+}
+.el-popper.fcal_color_select_popover {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+}
+.el-popper.fcal_color_select_popover .fcal_color_select_popover {
+  min-width: 22px !important;
+}
+.el-popper.fcal_color_select_popover .el-popper__arrow {
+  display: none;
+}
+.el-popper.fcal_color_select_popover ul {
+  margin: 0;
+  padding: 0;
+}
+.el-popper.fcal_color_select_popover ul:hover li span {
+  opacity: 0.5;
+}
+.el-popper.fcal_color_select_popover ul li {
+  margin: 0;
+  padding: 0;
+  height: auto;
+}
+.el-popper.fcal_color_select_popover ul li + li {
+  margin-top: 10px;
+}
+.el-popper.fcal_color_select_popover ul li.selected span {
+  opacity: 1;
+}
+.el-popper.fcal_color_select_popover ul li.selected span:before {
+  content: "";
+  width: 3px;
+  height: 8px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  position: absolute;
+  left: 9px;
+  top: 6px;
+  transform: rotate(45deg);
+}
+.el-popper.fcal_color_select_popover ul li.hover, .el-popper.fcal_color_select_popover ul li.selected, .el-popper.fcal_color_select_popover ul li:hover {
+  background: transparent;
+}
+.el-popper.fcal_color_select_popover ul li.hover > span {
+  opacity: 1;
+}
+.el-popper.fcal_color_select_popover ul li span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: block;
+  transition: 0.2s;
+  position: relative;
 }
 
 .el-dropdown-list-wrapper {
@@ -1311,6 +1418,134 @@ p.fcal_profile_link a {
 
 .fcal_showing_details .fcal_schedules {
   background: #f8fafc;
+}
+
+.fcal_create_calendar_wrap .fcal_create_calendar_header {
+  max-width: 571px;
+  margin: auto;
+  padding-top: 34px;
+  margin-bottom: 30px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_header > h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #1B2533;
+  margin: 0 0 20px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body {
+  box-shadow: 0 4px 16px -2px rgba(27, 37, 51, 0.06);
+  border: 1px solid #EAECF0;
+  border-radius: 8px;
+  padding: 30px 24px;
+  background: #ffffff;
+  max-width: 946px;
+  margin: auto;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item {
+  margin-bottom: 18px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item:last-child {
+  margin-bottom: 0;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-input .el-input__wrapper {
+  padding: 9px 16px;
+  border-radius: 8px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-input .el-input__wrapper .el-input__inner {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-input.el-input-group--prepend.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-input.el-input-group--prepend .el-input__wrapper {
+  padding: 7px 16px;
+  border: 1px solid #D6DAE1;
+  border-radius: 0 8px 8px 0;
+  box-shadow: none;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-input.el-input-group--prepend .el-input__wrapper .el-input__inner {
+  margin: 0;
+  padding: 0;
+  min-height: inherit;
+  height: auto;
+  background: transparent;
+  color: #445164;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.fcal_steps {
+  padding: 0;
+  justify-content: center;
+  gap: 7px;
+}
+.fcal_steps .el-step {
+  display: flex;
+  align-items: center;
+  flex-basis: auto !important;
+}
+.fcal_steps .el-step:last-child {
+  max-width: -moz-max-content !important;
+  max-width: max-content !important;
+}
+.fcal_steps .el-step .el-step__head {
+  width: auto;
+  font-size: 0;
+  padding-right: 10px;
+}
+.fcal_steps .el-step .el-step__head.is-finish .el-step__icon {
+  background: #2653C7;
+  color: #ffffff;
+  border-color: #2653C7;
+}
+.fcal_steps .el-step .el-step__head .el-step__line {
+  display: none;
+}
+.fcal_steps .el-step .el-step__head .el-step__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #D8D8D8;
+  color: #8F97A2;
+  font-size: 16px;
+}
+.fcal_steps .el-step .el-step__head .el-step__icon .el-step__icon-inner {
+  font-weight: 400;
+}
+.fcal_steps .el-step .el-step__main {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  flex-grow: 1;
+  white-space: nowrap;
+}
+.fcal_steps .el-step .el-step__main .el-step__description {
+  display: none;
+}
+.fcal_steps .el-step .el-step__main .el-step__title {
+  width: 100%;
+  cursor: pointer;
+}
+.fcal_steps .el-step .el-step__main .el-step__title.is-finish h3 {
+  color: #2653C7;
+}
+.fcal_steps .el-step .el-step__main .el-step__title h3 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #565865;
+}
+.fcal_steps .el-step .el-step__main .el-step__title h3 i {
+  font-size: 18px;
 }
 
 .fcal_notification_container {

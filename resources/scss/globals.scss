@@ -142,7 +142,80 @@
         float: right;
     }
 }
+.fcal_color_select_wrap {
+    .el-select {
+        &:hover {
+            .el-input__wrapper {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+    }
+    .el-input {
+        .el-input-group__prepend {
+            padding: 0;
+            box-shadow: none;
+            border-radius: 8px 0 0 8px !important;
+            border: 1px solid #D6DAE1;
+            border-right: none;
+            background: #F6F6F7;
+        }
+        &:hover {
+            .el-input__wrapper {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+    }
 
+    .el-input-group--prepend {
+        .el-input-group__prepend {
+            .el-select {
+                .el-input {
+                    &.is-focus {
+                        .el-input__wrapper {
+                            box-shadow: none !important;
+                            outline: none !important;
+                        }
+
+                    }
+                }
+                &:focus,
+                &:hover {
+                    .el-input__wrapper {
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.fcal_color_select {
+    position: relative;
+    padding: 0 20px;
+    .fcal_color {
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        left: 16px;
+        top: 14px;
+    }
+    .el-input {
+        .el-input__wrapper {
+            box-shadow: none !important;
+            border: none !important;
+            .el-input__inner {
+                color: transparent !important;
+                &::placeholder {
+                    color: transparent !important;
+                }
+            }
+        }
+    }
+}
 .fcal_back_btn {
     font-size: 16px;
     font-weight: 500;
@@ -648,6 +721,72 @@ p.fcal_profile_link a {
                     &:hover {
                         background: var(--el-color-danger-light-9);
                     }
+                }
+            }
+        }
+    }
+    &.fcal_color_select_popover {
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
+        .fcal_color_select_popover {
+            min-width: 22px !important;
+        }
+
+        .el-popper__arrow {
+            display: none;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            &:hover {
+                li {
+                    span {
+                        opacity: 0.5;
+                    }
+                }
+            }
+            li {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                + li {
+                    margin-top: 10px;
+                }
+                &.selected {
+                    span {
+                        opacity: 1;
+                        &:before {
+                            content: "";
+                            width: 3px;
+                            height: 8px;
+                            border-right: 1.5px solid #fff;
+                            border-bottom: 1.5px solid #fff;
+                            position: absolute;
+                            left: 9px;
+                            top: 6px;
+                            transform: rotate(45deg);
+                        }
+                    }
+                }
+                &.hover,
+                &.selected,
+                &:hover {
+                    background: transparent;
+                }
+                &.hover {
+                    > span {
+                        opacity: 1;
+                    }
+                }
+                span {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    display: block;
+                    transition: .2s;
+                    position: relative;
                 }
             }
         }

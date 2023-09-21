@@ -1,24 +1,33 @@
 <template>
-    <div style="max-width: 960px; margin: 0 auto;" class="fcal_create_calendar fcal_section">
-        <div v-if="slot" class="fcal_section_header">
-            <div class="fcal_title">
-                <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ name: 'calendars' }">Event Schedulers</el-breadcrumb-item>
-                    <el-breadcrumb-item>{{ slot.calendar.title }}</el-breadcrumb-item>
-                    <el-breadcrumb-item>Create new event type</el-breadcrumb-item>
-                </el-breadcrumb>
+    <div class="fcal_create_calendar_wrap">
+        <div class="fcal_create_calendar_header">
+            <h1>Add One-on-One Booking Type</h1>
+            <el-steps class="fcal_steps" :space="200" :active="stepIndex">
+                <el-step>
+                    <template #title>
+                        <h3 @click="handleSteps(1)">Event Info <el-icon><Right /></el-icon></h3>
+                    </template>
+                </el-step>
+                <el-step>
+                    <template #title>
+                        <h3 @click="handleSteps(2)">Schedule Settings <el-icon><Right /></el-icon></h3>
+                    </template>
+                </el-step>
+                <el-step>
+                    <template #title>
+                        <h3>Notification & Question</h3>
+                    </template>
+                </el-step>
+            </el-steps>
+        </div>
+
+
+        <div v-if="slot" class="fcal_create_calendar_body">
+            <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
+                <basic-info :slot="slot" :event_type="event_type" />
             </div>
         </div>
-        <div v-if="slot" class="fcal_section_body">
-            <h3>Event Information</h3>
-            <basic-info :slot="slot" />
-
-<!--            <h3>Scheduling Settings</h3>-->
-<!--            <slot-settings-from :slot="slot" />-->
-
-            <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="success">Create a new scheduling form</el-button>
-        </div>
-        <div class="fcal_section_body" v-else-if="loading">
+        <div class="fcal_create_calendar_body" v-else-if="loading">
             <el-skeleton :rows="1" animated />
             <el-skeleton :rows="5" animated />
             <el-skeleton :rows="5" animated />
@@ -29,22 +38,28 @@
 <script type="text/babel">
 import SlotSettingsFrom from './_SlotSettingsForm.vue';
 import BasicInfo from './_BasicInfo.vue';
+import { Right } from '@element-plus/icons-vue';
 
 export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
         SlotSettingsFrom,
-        BasicInfo
+        BasicInfo,
+        Right
     },
     data() {
         return {
             slot: null,
             loading: true,
-            saving: false
+            saving: false,
+            stepIndex: 1
         }
     },
     methods: {
+        handleSteps(step) {
+            this.stepIndex = step;
+        },
         getSlotSchema() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/slot-schema')
