@@ -1,13 +1,13 @@
-import ContactSection from './ContactSection';
+import ScheduledMeetigns from './ScheduledMeetigns';
 
 const CRMApp = window.FLUENTCRM;
 
-// add Booking route under contact route of CRM. this will actually trigger the ContactSection component
+// add Booking route under contact route of CRM. this will actually trigger the ScheduledMeetigns component
 CRMApp.addFilter('fluentcrm_profile_routes', 'fluent_booking', function (profileRoute) {
     profileRoute.children.push({
         name: 'booking',
         path: 'booking',
-        component: ContactSection,
+        component: ScheduledMeetigns,
         meta: {
             parent: 'subscribers',
             active_menu: 'contacts',
@@ -15,14 +15,4 @@ CRMApp.addFilter('fluentcrm_profile_routes', 'fluent_booking', function (profile
         }
     });
     return profileRoute;
-}, 1);
-
-// Add Booking section Menu under contact section of CRM
-CRMApp.addFilter('fluentcrm_profile_sections', 'fluent_booking', function (sections) {
-    sections.booking = {
-        title: 'Bookings',
-        name: 'booking', // name of the route which will be used to navigate
-        handler: 'route'
-    };
-    return sections;
 }, 1);
