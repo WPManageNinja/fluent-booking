@@ -176,58 +176,119 @@
         > .el-collapse-item__arrow {
             display: none;
         }
-        .fcal_configure_integration_card_header {
-            width: 100%;
+    }
+    .fcal_configure_integration_card_header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            .left {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 24px;
-                .img-box {
-                    border: 1px solid #D6DAE1;
-                    border-radius: 8px;
-                    padding: 12px;
-                    width: 56px;
-                    height: 56px;
-                    flex: none;
-                    overflow: hidden;
-                    img {
-                        max-width: 100%;
-                        display: block;
-                        object-fit: cover;
-                    }
+            gap: 24px;
+            .img-box {
+                border: 1px solid #D6DAE1;
+                border-radius: 8px;
+                padding: 12px;
+                width: 56px;
+                height: 56px;
+                flex: none;
+                overflow: hidden;
+                img {
+                    max-width: 100%;
+                    display: block;
+                    object-fit: cover;
                 }
-                .content {
-                    h3 {
-                        margin: 0 0 8px;
-                        font-size: 18px;
-                        font-weight: 500;
-                        line-height: 28px;
-                        color: $dark;
-                    }
-                    p {
-                        font-size: 14px;
-                        font-weight: 400;
-                        line-height: 20px;
-                        color: #445164;
-                        margin: 0;
+            }
+            .icon {
+                width: 48px;
+                height: 48px;
+                border: 1px solid #D6DAE1;
+                flex: none;
+                border-radius: 50%;
+                text-align: center;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .content {
+                h3 {
+                    margin: 0 0 8px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 28px;
+                    color: $dark;
+                }
+                p {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    color: #445164;
+                    margin: 0;
+                }
+            }
+        }
+        .collapse-btn {
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            color: $primaryColor;
+            gap: 8px;
+            i {
+                font-size: 18px;
+                transition: .3s;
+            }
+        }
+        .fcal_primary_btn2 {
+            height: auto;
+            padding: 9px 23px;
+            .icon {
+                font-size: 20px;
+            }
+            &:hover {
+                background: rgb(38 83 199 / 8%);
+                color: $primaryColor;
+            }
+            &.disconnect-btn {
+                color: #b91c1d;
+                border-color: #b91c1d;
+                &:hover {
+                    background: rgb(185 28 29 / 10%);
+                }
+            }
+        }
+
+        .el-switch {
+            &.is-checked {
+                .el-switch__core {
+                    background: $primaryColor;
+                    .el-switch__action {
+                        left: calc(100% - 22px);
+                        &:hover {
+                            box-shadow: 0 0 0 6px rgb(38 83 199 / 20%);
+                        }
                     }
                 }
             }
-            .collapse-btn {
-                display: inline-flex;
-                align-items: center;
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 24px;
-                color: $primaryColor;
-                gap: 8px;
-                i {
-                    font-size: 18px;
-                    transition: .3s;
+            .el-switch__core {
+                min-width: 44px;
+                height: 24px;
+                border-radius: 30px;
+                background: #CED2DA;
+                border: none;
+                transition: .2s;
+
+                .el-switch__action {
+                    width: 20px;
+                    height: 20px;
+                    transition: .2s;
+                    left: 2px;
+                    &:hover {
+                        box-shadow: 0 0 0 6px rgb(206 210 218 / 30%);
+                    }
                 }
             }
         }
@@ -265,7 +326,34 @@
         }
     }
 }
-
+.fcal_integrations {
+    .fcal_configure_integration_card {
+        .fcal_configure_integration_body {
+            border-top: 1px solid #EAECF0;
+            padding-top: 16px;
+            margin-top: 16px;
+            h4 {
+                color: $dark;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                margin: 0 0 16px;
+            }
+            .fcal_integration_configuration_items {
+                .fcal_configure_integration_card {
+                    + .fcal_configure_integration_card {
+                        margin-top: 16px;
+                    }
+                    transition: .2s;
+                    &:hover {
+                        border-color: $primaryColor;
+                        box-shadow: 0 10px 20px rgb(206 210 218 / 20%);
+                    }
+                }
+            }
+        }
+    }
+}
 button.el-button.location_edit_btn {
     margin-left: -10px;
 }
