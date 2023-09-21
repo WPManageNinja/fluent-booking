@@ -4,14 +4,14 @@
             <h3>
                 <span class="fcal_status_badge"></span> {{ slot.title }}
                 <div class="fcal_slot_config">
-                    <el-dropdown @command="handleCommand" trigger="click">
+                    <el-dropdown @command="handleCommand" trigger="click" popper-class="fcal_select">
                         <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item command="edit">Edit Booking Type Details</el-dropdown-item>
                                 <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
-                                <el-dropdown-item command="delete" divided>Delete</el-dropdown-item>
+                                <el-dropdown-item command="delete" class="danger">Delete</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -37,13 +37,13 @@
             </p>
         </div>
         <div class="fcal_slot_footer">
-            <div class="fcal_slot_actions">
-                <el-button
-                    @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"
-                    class="fcal_plain_btn">
-                    <el-icon><EditPen /></el-icon> Edit
-                </el-button>
-            </div>
+<!--            <div class="fcal_slot_actions">-->
+<!--                <el-button-->
+<!--                    @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"-->
+<!--                    class="fcal_plain_btn">-->
+<!--                    <el-icon><EditPen /></el-icon> Edit-->
+<!--                </el-button>-->
+<!--            </div>-->
 
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" text>

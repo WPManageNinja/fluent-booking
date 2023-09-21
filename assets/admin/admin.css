@@ -659,6 +659,7 @@ p.fcal_profile_link a {
   margin: 0;
   padding: 0;
 }
+.el-popper.fcal_select ul .el-dropdown-menu__item,
 .el-popper.fcal_select ul .el-select-dropdown__item {
   margin: 0;
   border-radius: 8px;
@@ -666,11 +667,22 @@ p.fcal_profile_link a {
   font-weight: 500;
   padding: 3px 16px;
   height: auto;
+  line-height: 34px;
 }
-.el-popper.fcal_select ul .el-select-dropdown__item.selected, .el-popper.fcal_select ul .el-select-dropdown__item:hover {
+.el-popper.fcal_select ul .el-dropdown-menu__item.selected, .el-popper.fcal_select ul .el-dropdown-menu__item:hover,
+.el-popper.fcal_select ul .el-select-dropdown__item.selected,
+.el-popper.fcal_select ul .el-select-dropdown__item:hover {
   color: #1B2533;
   background: #f5f6f7;
   font-weight: 500;
+}
+.el-popper.fcal_select ul .el-dropdown-menu__item.danger,
+.el-popper.fcal_select ul .el-select-dropdown__item.danger {
+  color: var(--el-color-danger);
+}
+.el-popper.fcal_select ul .el-dropdown-menu__item.danger:hover,
+.el-popper.fcal_select ul .el-select-dropdown__item.danger:hover {
+  background: var(--el-color-danger-light-9);
 }
 
 .el-dropdown-list-wrapper {
@@ -1003,8 +1015,8 @@ p.fcal_profile_link a {
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_body h3 .fcal_status_badge {
   background: #4587EC;
-  border-radius: 4px;
-  height: 28px;
+  border-radius: 50%;
+  height: 14px;
   width: 14px;
   display: block;
 }
@@ -1059,12 +1071,15 @@ p.fcal_profile_link a {
   line-height: 1;
   color: #2653C7;
   font-weight: 400;
+  background: rgba(38, 83, 199, 0.1);
+  padding: 11px 16px;
+  height: auto;
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button i {
   font-size: 18px;
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button:hover {
-  background: rgba(38, 83, 199, 0.1);
+  background: rgba(38, 83, 199, 0.2);
 }
 
 .fcal_head_nav {

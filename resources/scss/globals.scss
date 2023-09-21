@@ -506,6 +506,7 @@ p.fcal_profile_link a {
         ul {
             margin: 0;
             padding: 0;
+            .el-dropdown-menu__item,
             .el-select-dropdown__item {
                 margin: 0;
                 border-radius: 8px;
@@ -513,11 +514,18 @@ p.fcal_profile_link a {
                 font-weight: 500;
                 padding: 3px 16px;
                 height: auto;
+                line-height: 34px;
                 &.selected,
                 &:hover {
                     color: $dark;
                     background: #f5f6f7;
                     font-weight: 500;
+                }
+                &.danger {
+                    color: var(--el-color-danger);
+                    &:hover {
+                        background: var(--el-color-danger-light-9);
+                    }
                 }
             }
         }

@@ -67481,7 +67481,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_Setting)];
         }),
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)(" Settings ")];
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)(" Integrations ")];
     }),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
@@ -67902,25 +67902,22 @@ var _hoisted_12 = {
   "class": "fcal_slot_footer"
 };
 var _hoisted_13 = {
-  "class": "fcal_slot_actions"
-};
-var _hoisted_14 = {
   key: 0,
   "class": "fcal_shortcode"
 };
-var _hoisted_15 = {
+var _hoisted_14 = {
   key: 0
+};
+var _hoisted_15 = {
+  key: 1
 };
 var _hoisted_16 = {
-  key: 1
-};
-var _hoisted_17 = {
   key: 0
 };
-var _hoisted_18 = {
+var _hoisted_17 = {
   key: 1
 };
-var _hoisted_19 = {
+var _hoisted_18 = {
   key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -67932,15 +67929,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Clock = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Clock");
   var _component_User = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("User");
   var _component_Right = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Right");
-  var _component_EditPen = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("EditPen");
-  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElButton;
   var _component_CopyDocument = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("CopyDocument");
+  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElButton;
   var _directive_loading = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveDirective)("loading");
   return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_5__.normalizeClass)('fcal_status_' + $props.slot.status)
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h3", null, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)($props.slot.title) + " ", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dropdown, {
     onCommand: $options.handleCommand,
-    trigger: "click"
+    trigger: "click",
+    "popper-class": "fcal_select"
   }, {
     dropdown: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dropdown_menu, null, {
@@ -67970,7 +67967,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1 /* STABLE */
           })), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dropdown_item, {
             command: "delete",
-            divided: ""
+            "class": "danger"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Delete")];
@@ -68028,30 +68025,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     href: $props.slot.public_url,
     target: "_blank",
     rel: "noopener"
-  }, "View Booking Page", 8 /* PROPS */, _hoisted_11))])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-    onClick: _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.$router.push({
-        name: 'slot_settings',
-        params: {
-          calendar_id: $props.slot.calendar_id,
-          slot_id: $props.slot.id
-        }
-      });
-    }),
-    "class": "fcal_plain_btn"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_EditPen)];
-        }),
-        _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Edit ")];
-    }),
-    _: 1 /* STABLE */
-  })]), $props.slot.status == 'active' ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_14, [$props.slot.public_url ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
+  }, "View Booking Page", 8 /* PROPS */, _hoisted_11))])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("            <div class=\"fcal_slot_actions\">"), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("                <el-button"), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("                    @click=\"$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })\""), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("                    class=\"fcal_plain_btn\">"), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("                    <el-icon><EditPen /></el-icon> Edit"), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("                </el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("            </div>"), $props.slot.status == 'active' ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_13, [$props.slot.public_url ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
     key: 0,
-    onClick: _cache[1] || (_cache[1] = function ($event) {
+    onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.copyTo($props.slot.public_url);
     }),
     text: ""
@@ -68062,12 +68038,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_CopyDocument)];
         }),
         _: 1 /* STABLE */
-      }), !$data.isCopied ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_15, "Copy Link")) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_16, "Copied!"))];
+      }), !$data.isCopied ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_14, "Copy Link")) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_15, "Copied!"))];
     }),
     _: 1 /* STABLE */
   })) : $props.slot.shortcode ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
     key: 1,
-    onClick: _cache[2] || (_cache[2] = function ($event) {
+    onClick: _cache[1] || (_cache[1] = function ($event) {
       return $options.copyTo($props.slot.shortcode);
     }),
     text: ""
@@ -68078,12 +68054,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_CopyDocument)];
         }),
         _: 1 /* STABLE */
-      }), !$data.isCopied ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_17, "Copy Shorcode")) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_18, "Copied!"))];
+      }), !$data.isCopied ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_16, "Copy Shorcode")) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_17, "Copied!"))];
     }),
     _: 1 /* STABLE */
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
     disabled: $data.working,
-    onClick: _cache[3] || (_cache[3] = function ($event) {
+    onClick: _cache[2] || (_cache[2] = function ($event) {
       return $options.updateStatus('active');
     }),
     text: ""
@@ -69111,28 +69087,6 @@ var _hoisted_7 = {
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("p", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you'll get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("a", {
   href: ""
 }, "documentation"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(".")], -1 /* HOISTED */);
-var _hoisted_9 = {
-  "class": "fcal_configure_integration_card_header"
-};
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", {
-  "class": "left"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", {
-  "class": "img-box"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("img", {
-  src: "",
-  alt: "G-Calendar"
-})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", {
-  "class": "content"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("h3", null, "Google Calendar/Meet"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("p", null, "Configure Google Calendar/Meet to sync your events.")])], -1 /* HOISTED */);
-var _hoisted_11 = {
-  "class": "collapse-btn"
-};
-var _hoisted_12 = {
-  "class": "fcal_configure_integration_body"
-};
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("p", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you'll get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("a", {
-  href: ""
-}, "documentation"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(".")], -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_ArrowRight = (0,vue__WEBPACK_IMPORTED_MODULE_7__.resolveComponent)("ArrowRight");
@@ -69237,112 +69191,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
                     "class": "fcal_primary_btn",
                     onClick: _cache[3] || (_cache[3] = function ($event) {
-                      return $options.saveSettings();
-                    })
-                  }, {
-                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Save")];
-                    }),
-                    _: 1 /* STABLE */
-                  })];
-                }),
-
-                _: 1 /* STABLE */
-              })];
-            }),
-
-            _: 1 /* STABLE */
-          }, 8 /* PROPS */, ["modelValue"])])];
-        }),
-        _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_collapse_item, {
-        name: "2",
-        "class": "fcal_configure_integration_card"
-      }, {
-        title: (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("span", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(" Configure "), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_icon, null, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_ArrowRight)];
-            }),
-            _: 1 /* STABLE */
-          })])])];
-        }),
-
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form, {
-            modelValue: $data.settings,
-            "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
-              return $data.settings = $event;
-            }),
-            "label-position": "top"
-          }, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form_item, {
-                label: "Client ID *"
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_input, {
-                    modelValue: $data.settings.client_id,
-                    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-                      return $data.settings.client_id = $event;
-                    }),
-                    type: "text",
-                    placeholder: "Enter Your Client ID"
-                  }, null, 8 /* PROPS */, ["modelValue"])];
-                }),
-                _: 1 /* STABLE */
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form_item, {
-                label: "Client Secret *"
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_input, {
-                    modelValue: $data.settings.client_secret,
-                    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
-                      return $data.settings.client_secret = $event;
-                    }),
-                    type: "text",
-                    placeholder: "Enter Your Secret Key"
-                  }, null, 8 /* PROPS */, ["modelValue"])];
-                }),
-                _: 1 /* STABLE */
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form_item, {
-                label: "Redirect URI *",
-                "class": "redirect-url-input"
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_input, {
-                    modelValue: $data.settings.redirect_url,
-                    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
-                      return $data.settings.redirect_url = $event;
-                    }),
-                    disabled: "",
-                    type: "text"
-                  }, {
-                    append: (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
-                        type: "primary"
-                      }, {
-                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_icon, null, {
-                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                              return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_CopyDocument)];
-                            }),
-                            _: 1 /* STABLE */
-                          }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(" Copy")];
-                        }),
-                        _: 1 /* STABLE */
-                      })];
-                    }),
-
-                    _: 1 /* STABLE */
-                  }, 8 /* PROPS */, ["modelValue"])];
-                }),
-                _: 1 /* STABLE */
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form_item, null, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
-                    "class": "fcal_primary_btn",
-                    onClick: _cache[8] || (_cache[8] = function ($event) {
                       return $options.saveSettings();
                     })
                   }, {

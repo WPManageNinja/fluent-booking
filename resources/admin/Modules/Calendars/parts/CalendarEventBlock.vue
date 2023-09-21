@@ -10,7 +10,7 @@
             </div>
             <div class="fcal_cal_actions">
                 <el-button @click="showSettings = true" class="fcal_plain_btn">
-                    <el-icon><Setting /></el-icon> Settings
+                    <el-icon><Setting /></el-icon> Integrations
                 </el-button>
                 <el-button
                     @click="isNewBookingOpen = true"

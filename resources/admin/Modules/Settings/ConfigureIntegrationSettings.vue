@@ -53,53 +53,6 @@
                         </el-form>
                     </div>
                 </el-collapse-item>
-                <el-collapse-item name="2" class="fcal_configure_integration_card">
-                    <template #title>
-                        <div class="fcal_configure_integration_card_header">
-                            <div class="left">
-                                <div class="img-box">
-                                    <img src="" alt="G-Calendar" />
-                                </div>
-                                <div class="content">
-                                    <h3>Google Calendar/Meet</h3>
-                                    <p>Configure Google Calendar/Meet to sync your events.</p>
-                                </div>
-                            </div>
-                            <span class="collapse-btn">
-                                Configure <el-icon><ArrowRight /></el-icon>
-                            </span>
-                        </div>
-                    </template>
-                    <div class="fcal_configure_integration_body">
-                        <p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you'll get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a href="">documentation</a>.</p>
-                        <el-form v-model="settings" label-position="top">
-                            <el-form-item label="Client ID *">
-                                <el-input
-                                    v-model="settings.client_id"
-                                    type="text"
-                                    placeholder="Enter Your Client ID"
-                                />
-                            </el-form-item>
-                            <el-form-item label="Client Secret *">
-                                <el-input
-                                    v-model="settings.client_secret"
-                                    type="text"
-                                    placeholder="Enter Your Secret Key"
-                                />
-                            </el-form-item>
-                            <el-form-item label="Redirect URI *" class="redirect-url-input">
-                                <el-input v-model="settings.redirect_url" disabled type="text">
-                                    <template #append>
-                                        <el-button type="primary"><el-icon><CopyDocument /></el-icon> Copy</el-button>
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button class="fcal_primary_btn" @click="saveSettings()">Save</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
-                </el-collapse-item>
             </el-collapse>
         </div>
 
