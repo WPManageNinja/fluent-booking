@@ -1383,17 +1383,10 @@ p.fcal_profile_link a {
   margin-bottom: 0;
 }
 .fcal_settings_sidebar li + li {
-  margin-top: 20px;
+  margin-top: 5px;
 }
-.fcal_settings_sidebar li.general a:hover svg path, .fcal_settings_sidebar li.general a.router-link-exact-active svg path {
-  fill: #2653C7;
-}
-.fcal_settings_sidebar li.general a:hover svg path:last-child, .fcal_settings_sidebar li.general a.router-link-exact-active svg path:last-child {
-  stroke: #fff;
-  fill: #fff;
-}
-.fcal_settings_sidebar li.configure a:hover svg path, .fcal_settings_sidebar li.configure a.router-link-exact-active svg path {
-  fill: #2653C7;
+.fcal_settings_sidebar li.configure a.router-link-exact-active svg path {
+  fill: #ffffff;
 }
 .fcal_settings_sidebar li a {
   display: flex;
@@ -1405,49 +1398,42 @@ p.fcal_profile_link a {
   gap: 10px;
   text-decoration: none;
   position: relative;
-  padding: 0 16px 0 20px;
-}
-.fcal_settings_sidebar li a:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background: #2653C7;
-  transition: 0.2s;
-  transform: scale(0);
+  padding: 8px 10px;
+  border-radius: 10px;
 }
 .fcal_settings_sidebar li a:focus {
   outline: none;
   box-shadow: none;
 }
-.fcal_settings_sidebar li a:hover, .fcal_settings_sidebar li a.router-link-exact-active {
-  color: #2653C7;
-}
-.fcal_settings_sidebar li a:hover svg path, .fcal_settings_sidebar li a.router-link-exact-active svg path {
-  stroke: #2653C7;
-}
-.fcal_settings_sidebar li a.router-link-exact-active::before {
-  transform: scale(1);
+.fcal_settings_sidebar li a.router-link-exact-active {
+  background: #2653C7;
+  color: #ffffff;
 }
 .fcal_settings_sidebar li a.router-link-exact-active svg path {
-  stroke: #2653C7;
+  stroke: #ffffff;
+}
+.fcal_settings_sidebar li a.router-link-exact-active svg path {
+  stroke: #ffffff;
+}
+
+.fcal_settings .fcal_settings_header_title h3 {
+  margin: 0 0 24px;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 36px;
+  color: #1B2533;
 }
 .fcal_settings .fcal_settings_body {
   display: flex;
   gap: 24px;
+  align-items: flex-start;
 }
 .fcal_settings .fcal_settings_body .el-aside {
-  width: 224px;
+  width: 324px;
   flex: none;
-}
-.fcal_settings .fcal_settings_body .el-aside .fcal_title h3 {
-  margin: 0 0 24px;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 28px;
-  color: #1B2533;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px 14px;
 }
 .fcal_settings .fcal_settings_body .fcal_settings_container {
   flex: 1;

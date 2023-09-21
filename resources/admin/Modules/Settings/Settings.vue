@@ -1,10 +1,10 @@
 <template>
     <div class="fcal_settings">
+        <div class="fcal_settings_header_title">
+            <h3>Settings</h3>
+        </div>
         <div class="fcal_settings_body">
             <el-aside>
-                <div class="fcal_title">
-                    <h3>Settings</h3>
-                </div>
                 <ul class="fcal_settings_sidebar">
                     <li class="general">
                         <router-link to="/settings">
