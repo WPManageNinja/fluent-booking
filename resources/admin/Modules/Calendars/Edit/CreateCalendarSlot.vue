@@ -26,6 +26,19 @@
             <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
                 <basic-info :slot="slot" :event_type="event_type" />
             </div>
+
+            <div v-if="stepIndex == 2" class="fcal_create_calendar_schedule_setting">
+                <ScheduleSettings :slot="slot" />
+            </div>
+
+            <div class="fcal_create_calendar_form_footer">
+                <el-button v-if="stepIndex != 1" class="fcal_plain_btn" @click="backStep">
+                    Go Back
+                </el-button>
+                <el-button class="fcal_primary_btn" @click="handleSaveContinue">
+                    {{ stepIndex == 1 ? 'Save and ' : null }}Continue
+                </el-button>
+            </div>
         </div>
         <div class="fcal_create_calendar_body" v-else-if="loading">
             <el-skeleton :rows="1" animated />
@@ -36,7 +49,7 @@
 </template>
 
 <script type="text/babel">
-import SlotSettingsFrom from './_SlotSettingsForm.vue';
+import ScheduleSettings from './_ScheduleSettings';
 import BasicInfo from './_BasicInfo.vue';
 import { Right } from '@element-plus/icons-vue';
 
@@ -44,7 +57,7 @@ export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
-        SlotSettingsFrom,
+        ScheduleSettings,
         BasicInfo,
         Right
     },
@@ -95,6 +108,19 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        backStep() {
+            this.stepIndex -= 1;
+            if (this.stepIndex <= 1) {
+                this.stepIndex = 1;
+            }
+        },
+        handleSaveContinue() {
+            this.stepIndex += 1;
+            if (this.stepIndex > 3) {
+                this.stepIndex = 3;
+            }
+            console.log(this.stepIndex);
         }
     },
     mounted() {

@@ -13,10 +13,10 @@
             <el-switch v-model="isEnable" />
         </div>
         <div class="fcal_create_calendar_form_body">
-            <el-form v-model="slot" label-position="top">
+            <el-form v-model="formData" label-position="top">
                 <el-form-item label="Event Name *" class="fcal_color_select_wrap">
                     <el-input
-                        v-model="slot.title"
+                        v-model="formData.title"
                         placeholder="Enter Event Title"
                     >
                         <template #prepend>
@@ -40,7 +40,7 @@
                 </el-form-item>
 
                 <el-form-item label="Meeting Duration *">
-                    <el-select v-model="slot.duration" placeholder="Select" popper-class="fcal_select">
+                    <el-select v-model="formData.duration" placeholder="Select" popper-class="fcal_select">
                         <el-option
                             v-for="item in meetingDuration"
                             :key="item.value"
@@ -48,14 +48,31 @@
                             :value="item.value"
                         />
                     </el-select>
+                    <div v-if="formData.duration == 'custom'" class="custom-duration">
+                        <el-input
+                            v-model="formData.customDuration"
+                        />
+                        <el-select v-model="formData.durationType" popper-class="fcal_select" placeholder="Select">
+                            <el-option
+                                v-for="item in durationTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                    </div>
                 </el-form-item>
 
                 <el-form-item label="Description">
                     <el-input
-                        v-model="slot.description"
+                        v-model="formData.description"
                         type="textarea"
                         placeholder="Enter Description here"
                     />
+                </el-form-item>
+
+                <el-form-item label="Location">
+                    <location-selector :slot="formData"/>
                 </el-form-item>
             </el-form>
         </div>
@@ -100,26 +117,54 @@ export default {
             ],
             meetingDuration: [
                 {
-                    value: '15mins',
+                    value: 15,
                     label: '15 Minutes'
                 },
                 {
-                    value: '30mins',
+                    value: 30,
                     label: '30 Minutes'
                 },
                 {
-                    value: '45mins',
+                    value: 45,
                     label: '45 Minutes'
                 },
                 {
-                    value: '60mins',
+                    value: 60,
                     label: '60 Minutes'
                 },
                 {
                     value: 'custom',
                     label: 'Custom'
                 }
-            ]
+            ],
+            durationTypes: [
+                {
+                    value: 'minutes',
+                    label: 'Minutes'
+                },
+                {
+                    value: 'hours',
+                    label: 'Hours'
+                },
+                {
+                    value: 'days',
+                    label: 'Days'
+                },
+                {
+                    value: 'months',
+                    label: 'Months'
+                }
+            ],
+            formData: {
+                title: '',
+                duration: 30,
+                customDuration: '',
+                durationType: 'minutes',
+                description: '',
+                location_type: '',
+                location_heading: '',
+                location_settings: {},
+            }
         }
     },
     methods: {

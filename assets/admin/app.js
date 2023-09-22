@@ -29401,6 +29401,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".el-calendar{--el-calendar-border:var(
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/element-plus/theme-chalk/el-checkbox.css":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/element-plus/theme-chalk/el-checkbox.css ***!
+  \*************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".el-checkbox{--el-checkbox-font-size:14px;--el-checkbox-font-weight:var(--el-font-weight-primary);--el-checkbox-text-color:var(--el-text-color-regular);--el-checkbox-input-height:14px;--el-checkbox-input-width:14px;--el-checkbox-border-radius:var(--el-border-radius-small);--el-checkbox-bg-color:var(--el-fill-color-blank);--el-checkbox-input-border:var(--el-border);--el-checkbox-disabled-border-color:var(--el-border-color);--el-checkbox-disabled-input-fill:var(--el-fill-color-light);--el-checkbox-disabled-icon-color:var(--el-text-color-placeholder);--el-checkbox-disabled-checked-input-fill:var(--el-border-color-extra-light);--el-checkbox-disabled-checked-input-border-color:var(--el-border-color);--el-checkbox-disabled-checked-icon-color:var(--el-text-color-placeholder);--el-checkbox-checked-text-color:var(--el-color-primary);--el-checkbox-checked-input-border-color:var(--el-color-primary);--el-checkbox-checked-bg-color:var(--el-color-primary);--el-checkbox-checked-icon-color:var(--el-color-white);--el-checkbox-input-border-color-hover:var(--el-color-primary)}.el-checkbox{color:var(--el-checkbox-text-color);font-weight:var(--el-checkbox-font-weight);font-size:var(--el-font-size-base);position:relative;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap;-webkit-user-select:none;user-select:none;margin-right:30px;height:32px}.el-checkbox.is-bordered{padding:0 15px 0 9px;border-radius:var(--el-border-radius-base);border:var(--el-border);box-sizing:border-box}.el-checkbox.is-bordered.is-checked{border-color:var(--el-color-primary)}.el-checkbox.is-bordered.is-disabled{border-color:var(--el-border-color-lighter);cursor:not-allowed}.el-checkbox.is-bordered.el-checkbox--large{padding:0 19px 0 11px;border-radius:var(--el-border-radius-base)}.el-checkbox.is-bordered.el-checkbox--large .el-checkbox__label{font-size:var(--el-font-size-base)}.el-checkbox.is-bordered.el-checkbox--large .el-checkbox__inner{height:14px;width:14px}.el-checkbox.is-bordered.el-checkbox--small{padding:0 11px 0 7px;border-radius:calc(var(--el-border-radius-base) - 1px)}.el-checkbox.is-bordered.el-checkbox--small .el-checkbox__label{font-size:12px}.el-checkbox.is-bordered.el-checkbox--small .el-checkbox__inner{height:12px;width:12px}.el-checkbox.is-bordered.el-checkbox--small .el-checkbox__inner::after{height:6px;width:2px}.el-checkbox input:focus-visible+.el-checkbox__inner{outline:2px solid var(--el-checkbox-input-border-color-hover);outline-offset:1px;border-radius:var(--el-checkbox-border-radius)}.el-checkbox__input{white-space:nowrap;cursor:pointer;outline:0;display:inline-flex;position:relative}.el-checkbox__input.is-disabled .el-checkbox__inner{background-color:var(--el-checkbox-disabled-input-fill);border-color:var(--el-checkbox-disabled-border-color);cursor:not-allowed}.el-checkbox__input.is-disabled .el-checkbox__inner::after{cursor:not-allowed;border-color:var(--el-checkbox-disabled-icon-color)}.el-checkbox__input.is-disabled .el-checkbox__inner+.el-checkbox__label{cursor:not-allowed}.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{background-color:var(--el-checkbox-disabled-checked-input-fill);border-color:var(--el-checkbox-disabled-checked-input-border-color)}.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after{border-color:var(--el-checkbox-disabled-checked-icon-color)}.el-checkbox__input.is-disabled.is-indeterminate .el-checkbox__inner{background-color:var(--el-checkbox-disabled-checked-input-fill);border-color:var(--el-checkbox-disabled-checked-input-border-color)}.el-checkbox__input.is-disabled.is-indeterminate .el-checkbox__inner::before{background-color:var(--el-checkbox-disabled-checked-icon-color);border-color:var(--el-checkbox-disabled-checked-icon-color)}.el-checkbox__input.is-disabled+span.el-checkbox__label{color:var(--el-disabled-text-color);cursor:not-allowed}.el-checkbox__input.is-checked .el-checkbox__inner{background-color:var(--el-checkbox-checked-bg-color);border-color:var(--el-checkbox-checked-input-border-color)}.el-checkbox__input.is-checked .el-checkbox__inner::after{transform:rotate(45deg) scaleY(1)}.el-checkbox__input.is-checked+.el-checkbox__label{color:var(--el-checkbox-checked-text-color)}.el-checkbox__input.is-focus:not(.is-checked) .el-checkbox__original:not(:focus-visible){border-color:var(--el-checkbox-input-border-color-hover)}.el-checkbox__input.is-indeterminate .el-checkbox__inner{background-color:var(--el-checkbox-checked-bg-color);border-color:var(--el-checkbox-checked-input-border-color)}.el-checkbox__input.is-indeterminate .el-checkbox__inner::before{content:\"\";position:absolute;display:block;background-color:var(--el-checkbox-checked-icon-color);height:2px;transform:scale(.5);left:0;right:0;top:5px}.el-checkbox__input.is-indeterminate .el-checkbox__inner::after{display:none}.el-checkbox__inner{display:inline-block;position:relative;border:var(--el-checkbox-input-border);border-radius:var(--el-checkbox-border-radius);box-sizing:border-box;width:var(--el-checkbox-input-width);height:var(--el-checkbox-input-height);background-color:var(--el-checkbox-bg-color);z-index:var(--el-index-normal);transition:border-color .25s cubic-bezier(.71,-.46,.29,1.46),background-color .25s cubic-bezier(.71,-.46,.29,1.46),outline .25s cubic-bezier(.71,-.46,.29,1.46)}.el-checkbox__inner:hover{border-color:var(--el-checkbox-input-border-color-hover)}.el-checkbox__inner::after{box-sizing:content-box;content:\"\";border:1px solid var(--el-checkbox-checked-icon-color);border-left:0;border-top:0;height:7px;left:4px;position:absolute;top:1px;transform:rotate(45deg) scaleY(0);width:3px;transition:transform .15s ease-in 50ms;transform-origin:center}.el-checkbox__original{opacity:0;outline:0;position:absolute;margin:0;width:0;height:0;z-index:-1}.el-checkbox__label{display:inline-block;padding-left:8px;line-height:1;font-size:var(--el-checkbox-font-size)}.el-checkbox.el-checkbox--large{height:40px}.el-checkbox.el-checkbox--large .el-checkbox__label{font-size:14px}.el-checkbox.el-checkbox--large .el-checkbox__inner{width:14px;height:14px}.el-checkbox.el-checkbox--small{height:24px}.el-checkbox.el-checkbox--small .el-checkbox__label{font-size:12px}.el-checkbox.el-checkbox--small .el-checkbox__inner{width:12px;height:12px}.el-checkbox.el-checkbox--small .el-checkbox__input.is-indeterminate .el-checkbox__inner::before{top:4px}.el-checkbox.el-checkbox--small .el-checkbox__inner::after{width:2px;height:6px}.el-checkbox:last-of-type{margin-right:0}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/element-plus/theme-chalk/el-col.css":
 /*!********************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/element-plus/theme-chalk/el-col.css ***!
@@ -30330,7 +30354,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fcal_cal_wrapper {\n  max-width: 100%;\n  width: 500px;\n}\n.fcal_cal_wrapper .el-calendar-table .el-calendar-day {\n  height: 40px;\n}\n.el-calendar-day:has(> .fcal_date_disabled) {\n  color: #b8b6b6;\n  cursor: not-allowed !important;\n}\n.el-calendar-day {\n  position: relative;\n}\n.el-calendar-day > p {\n  position: absolute;\n  margin: 0;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  width: 100%;\n  text-align: center;\n  padding-top: 10px;\n}\n.el-calendar-day > p.is-selected {\n  background-color: #5092e9;\n  color: white;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fcal_cal_wrapper {\n  max-width: 100%;\n  width: 500px;\n}\n.fcal_cal_wrapper .el-calendar-table .el-calendar-day {\n  height: 40px;\n}\n.el-calendar-day:has(> .fcal_date_disabled) {\n  color: #b8b6b6;\n  cursor: not-allowed !important;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32081,6 +32105,906 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _button_group_style_css_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../button-group/style/css.mjs */ "./node_modules/element-plus/es/components/button-group/style/css.mjs");
 
 
+
+
+//# sourceMappingURL=css.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/index.mjs":
+/*!********************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/index.mjs ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ElCheckbox": () => (/* binding */ ElCheckbox),
+/* harmony export */   "ElCheckboxButton": () => (/* binding */ ElCheckboxButton),
+/* harmony export */   "ElCheckboxGroup": () => (/* binding */ ElCheckboxGroup),
+/* harmony export */   "checkboxEmits": () => (/* reexport safe */ _src_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxEmits),
+/* harmony export */   "checkboxGroupEmits": () => (/* reexport safe */ _src_checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_0__.checkboxGroupEmits),
+/* harmony export */   "checkboxGroupProps": () => (/* reexport safe */ _src_checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_0__.checkboxGroupProps),
+/* harmony export */   "checkboxProps": () => (/* reexport safe */ _src_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxProps),
+/* harmony export */   "default": () => (/* binding */ ElCheckbox)
+/* harmony export */ });
+/* harmony import */ var _src_checkbox2_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/checkbox2.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox2.mjs");
+/* harmony import */ var _src_checkbox_button_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/checkbox-button.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox-button.mjs");
+/* harmony import */ var _src_checkbox_group2_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/checkbox-group2.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox-group2.mjs");
+/* harmony import */ var _src_checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/checkbox-group.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox-group.mjs");
+/* harmony import */ var _src_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/checkbox.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox.mjs");
+/* harmony import */ var _utils_vue_install_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/vue/install.mjs */ "./node_modules/element-plus/es/utils/vue/install.mjs");
+
+
+
+
+
+
+
+
+const ElCheckbox = (0,_utils_vue_install_mjs__WEBPACK_IMPORTED_MODULE_2__.withInstall)(_src_checkbox2_mjs__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  CheckboxButton: _src_checkbox_button_mjs__WEBPACK_IMPORTED_MODULE_4__["default"],
+  CheckboxGroup: _src_checkbox_group2_mjs__WEBPACK_IMPORTED_MODULE_5__["default"]
+});
+const ElCheckboxButton = (0,_utils_vue_install_mjs__WEBPACK_IMPORTED_MODULE_2__.withNoopInstall)(_src_checkbox_button_mjs__WEBPACK_IMPORTED_MODULE_4__["default"]);
+const ElCheckboxGroup = (0,_utils_vue_install_mjs__WEBPACK_IMPORTED_MODULE_2__.withNoopInstall)(_src_checkbox_group2_mjs__WEBPACK_IMPORTED_MODULE_5__["default"]);
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/checkbox-button.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/checkbox-button.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CheckboxButton)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkbox.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox.mjs");
+/* harmony import */ var _virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../_virtual/plugin-vue_export-helper.mjs */ "./node_modules/element-plus/es/_virtual/plugin-vue_export-helper.mjs");
+/* harmony import */ var _composables_use_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./composables/use-checkbox.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox.mjs");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../hooks/use-namespace/index.mjs */ "./node_modules/element-plus/es/hooks/use-namespace/index.mjs");
+
+
+
+
+
+
+
+
+
+
+const _hoisted_1 = ["name", "tabindex", "disabled", "true-value", "false-value"];
+const _hoisted_2 = ["name", "tabindex", "disabled", "value"];
+const __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "ElCheckboxButton"
+});
+const _sfc_main = /* @__PURE__ */ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  ...__default__,
+  props: _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxProps,
+  emits: _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxEmits,
+  setup(__props) {
+    const props = __props;
+    const slots = (0,vue__WEBPACK_IMPORTED_MODULE_0__.useSlots)();
+    const {
+      isFocused,
+      isChecked,
+      isDisabled,
+      checkboxButtonSize,
+      model,
+      handleChange
+    } = (0,_composables_use_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__.useCheckbox)(props, slots);
+    const checkboxGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_3__.checkboxGroupContextKey, void 0);
+    const ns = (0,_hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useNamespace)("checkbox");
+    const activeStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      var _a, _b, _c, _d;
+      const fillValue = (_b = (_a = checkboxGroup == null ? void 0 : checkboxGroup.fill) == null ? void 0 : _a.value) != null ? _b : "";
+      return {
+        backgroundColor: fillValue,
+        borderColor: fillValue,
+        color: (_d = (_c = checkboxGroup == null ? void 0 : checkboxGroup.textColor) == null ? void 0 : _c.value) != null ? _d : "",
+        boxShadow: fillValue ? `-1px 0 0 0 ${fillValue}` : void 0
+      };
+    });
+    const lableKls = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      return [
+        ns.b("button"),
+        ns.bm("button", checkboxButtonSize.value),
+        ns.is("disabled", isDisabled.value),
+        ns.is("checked", isChecked.value),
+        ns.is("focus", isFocused.value)
+      ];
+    });
+    return (_ctx, _cache) => {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("label", {
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(lableKls))
+      }, [
+        _ctx.trueLabel || _ctx.falseLabel ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+          key: 0,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.isRef)(model) ? model.value = $event : null),
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).be("button", "original")),
+          type: "checkbox",
+          name: _ctx.name,
+          tabindex: _ctx.tabindex,
+          disabled: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isDisabled),
+          "true-value": _ctx.trueLabel,
+          "false-value": _ctx.falseLabel,
+          onChange: _cache[1] || (_cache[1] = (...args) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange)(...args)),
+          onFocus: _cache[2] || (_cache[2] = ($event) => isFocused.value = true),
+          onBlur: _cache[3] || (_cache[3] = ($event) => isFocused.value = false)
+        }, null, 42, _hoisted_1)), [
+          [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(model)]
+        ]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+          key: 1,
+          "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.isRef)(model) ? model.value = $event : null),
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).be("button", "original")),
+          type: "checkbox",
+          name: _ctx.name,
+          tabindex: _ctx.tabindex,
+          disabled: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isDisabled),
+          value: _ctx.label,
+          onChange: _cache[5] || (_cache[5] = (...args) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange)(...args)),
+          onFocus: _cache[6] || (_cache[6] = ($event) => isFocused.value = true),
+          onBlur: _cache[7] || (_cache[7] = ($event) => isFocused.value = false)
+        }, null, 42, _hoisted_2)), [
+          [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(model)]
+        ]),
+        _ctx.$slots.default || _ctx.label ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+          key: 2,
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).be("button", "inner")),
+          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isChecked) ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(activeStyle) : void 0)
+        }, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default", {}, () => [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.label), 1)
+          ])
+        ], 6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+      ], 2);
+    };
+  }
+});
+var CheckboxButton = /* @__PURE__ */ (0,_virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_5__["default"])(_sfc_main, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/checkbox/src/checkbox-button.vue"]]);
+
+
+//# sourceMappingURL=checkbox-button.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/checkbox-group.mjs":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/checkbox-group.mjs ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkboxGroupEmits": () => (/* binding */ checkboxGroupEmits),
+/* harmony export */   "checkboxGroupProps": () => (/* binding */ checkboxGroupProps)
+/* harmony export */ });
+/* harmony import */ var _utils_vue_props_runtime_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/vue/props/runtime.mjs */ "./node_modules/element-plus/es/utils/vue/props/runtime.mjs");
+/* harmony import */ var _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../hooks/use-common-props/index.mjs */ "./node_modules/element-plus/es/hooks/use-common-props/index.mjs");
+/* harmony import */ var _constants_event_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../constants/event.mjs */ "./node_modules/element-plus/es/constants/event.mjs");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+
+
+
+
+
+
+
+
+const checkboxGroupProps = (0,_utils_vue_props_runtime_mjs__WEBPACK_IMPORTED_MODULE_0__.buildProps)({
+  modelValue: {
+    type: (0,_utils_vue_props_runtime_mjs__WEBPACK_IMPORTED_MODULE_0__.definePropType)(Array),
+    default: () => []
+  },
+  disabled: Boolean,
+  min: Number,
+  max: Number,
+  size: _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_1__.useSizeProp,
+  label: String,
+  fill: String,
+  textColor: String,
+  tag: {
+    type: String,
+    default: "div"
+  },
+  validateEvent: {
+    type: Boolean,
+    default: true
+  }
+});
+const checkboxGroupEmits = {
+  [_constants_event_mjs__WEBPACK_IMPORTED_MODULE_2__.UPDATE_MODEL_EVENT]: (val) => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__.isArray)(val),
+  change: (val) => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__.isArray)(val)
+};
+
+
+//# sourceMappingURL=checkbox-group.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/checkbox-group2.mjs":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/checkbox-group2.mjs ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CheckboxGroup)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var lodash_unified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash-unified */ "./node_modules/lodash-unified/import.js");
+/* harmony import */ var _checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./checkbox-group.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox-group.mjs");
+/* harmony import */ var _virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../_virtual/plugin-vue_export-helper.mjs */ "./node_modules/element-plus/es/_virtual/plugin-vue_export-helper.mjs");
+/* harmony import */ var _hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../hooks/use-namespace/index.mjs */ "./node_modules/element-plus/es/hooks/use-namespace/index.mjs");
+/* harmony import */ var _hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../hooks/use-form-item/index.mjs */ "./node_modules/element-plus/es/hooks/use-form-item/index.mjs");
+/* harmony import */ var _constants_event_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../constants/event.mjs */ "./node_modules/element-plus/es/constants/event.mjs");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _utils_error_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils/error.mjs */ "./node_modules/element-plus/es/utils/error.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "ElCheckboxGroup"
+});
+const _sfc_main = /* @__PURE__ */ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  ...__default__,
+  props: _checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_2__.checkboxGroupProps,
+  emits: _checkbox_group_mjs__WEBPACK_IMPORTED_MODULE_2__.checkboxGroupEmits,
+  setup(__props, { emit }) {
+    const props = __props;
+    const ns = (0,_hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useNamespace)("checkbox");
+    const { formItem } = (0,_hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useFormItem)();
+    const { inputId: groupId, isLabeledByFormItem } = (0,_hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_4__.useFormItemInputId)(props, {
+      formItemContext: formItem
+    });
+    const changeEvent = async (value) => {
+      emit(_constants_event_mjs__WEBPACK_IMPORTED_MODULE_5__.UPDATE_MODEL_EVENT, value);
+      await (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)();
+      emit("change", value);
+    };
+    const modelValue = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)({
+      get() {
+        return props.modelValue;
+      },
+      set(val) {
+        changeEvent(val);
+      }
+    });
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_6__.checkboxGroupContextKey, {
+      ...(0,lodash_unified__WEBPACK_IMPORTED_MODULE_1__.pick)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toRefs)(props), [
+        "size",
+        "min",
+        "max",
+        "disabled",
+        "validateEvent",
+        "fill",
+        "textColor"
+      ]),
+      modelValue,
+      changeEvent
+    });
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => props.modelValue, () => {
+      if (props.validateEvent) {
+        formItem == null ? void 0 : formItem.validate("change").catch((err) => (0,_utils_error_mjs__WEBPACK_IMPORTED_MODULE_7__.debugWarn)(err));
+      }
+    });
+    return (_ctx, _cache) => {
+      var _a;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)(_ctx.tag), {
+        id: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(groupId),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).b("group")),
+        role: "group",
+        "aria-label": !(0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isLabeledByFormItem) ? _ctx.label || "checkbox-group" : void 0,
+        "aria-labelledby": (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isLabeledByFormItem) ? (_a = (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(formItem)) == null ? void 0 : _a.labelId : void 0
+      }, {
+        default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")
+        ]),
+        _: 3
+      }, 8, ["id", "class", "aria-label", "aria-labelledby"]);
+    };
+  }
+});
+var CheckboxGroup = /* @__PURE__ */ (0,_virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_8__["default"])(_sfc_main, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/checkbox/src/checkbox-group.vue"]]);
+
+
+//# sourceMappingURL=checkbox-group2.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/checkbox.mjs":
+/*!***************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/checkbox.mjs ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkboxEmits": () => (/* binding */ checkboxEmits),
+/* harmony export */   "checkboxProps": () => (/* binding */ checkboxProps)
+/* harmony export */ });
+/* harmony import */ var _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../hooks/use-common-props/index.mjs */ "./node_modules/element-plus/es/hooks/use-common-props/index.mjs");
+/* harmony import */ var _constants_event_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../constants/event.mjs */ "./node_modules/element-plus/es/constants/event.mjs");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _vueuse_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vueuse/core */ "./node_modules/@vueuse/shared/index.mjs");
+
+
+
+
+
+
+
+
+const checkboxProps = {
+  modelValue: {
+    type: [Number, String, Boolean],
+    default: void 0
+  },
+  label: {
+    type: [String, Boolean, Number, Object]
+  },
+  indeterminate: Boolean,
+  disabled: Boolean,
+  checked: Boolean,
+  name: {
+    type: String,
+    default: void 0
+  },
+  trueLabel: {
+    type: [String, Number],
+    default: void 0
+  },
+  falseLabel: {
+    type: [String, Number],
+    default: void 0
+  },
+  id: {
+    type: String,
+    default: void 0
+  },
+  controls: {
+    type: String,
+    default: void 0
+  },
+  border: Boolean,
+  size: _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_0__.useSizeProp,
+  tabindex: [String, Number],
+  validateEvent: {
+    type: Boolean,
+    default: true
+  }
+};
+const checkboxEmits = {
+  [_constants_event_mjs__WEBPACK_IMPORTED_MODULE_1__.UPDATE_MODEL_EVENT]: (val) => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.isString)(val) || (0,_vueuse_core__WEBPACK_IMPORTED_MODULE_3__.isNumber)(val) || (0,_vueuse_core__WEBPACK_IMPORTED_MODULE_3__.isBoolean)(val),
+  change: (val) => (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.isString)(val) || (0,_vueuse_core__WEBPACK_IMPORTED_MODULE_3__.isNumber)(val) || (0,_vueuse_core__WEBPACK_IMPORTED_MODULE_3__.isBoolean)(val)
+};
+
+
+//# sourceMappingURL=checkbox.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/checkbox2.mjs":
+/*!****************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/checkbox2.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Checkbox)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkbox.mjs */ "./node_modules/element-plus/es/components/checkbox/src/checkbox.mjs");
+/* harmony import */ var _virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../_virtual/plugin-vue_export-helper.mjs */ "./node_modules/element-plus/es/_virtual/plugin-vue_export-helper.mjs");
+/* harmony import */ var _composables_use_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./composables/use-checkbox.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox.mjs");
+/* harmony import */ var _hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../hooks/use-namespace/index.mjs */ "./node_modules/element-plus/es/hooks/use-namespace/index.mjs");
+
+
+
+
+
+
+
+
+const _hoisted_1 = ["tabindex", "role", "aria-checked"];
+const _hoisted_2 = ["id", "aria-hidden", "name", "tabindex", "disabled", "true-value", "false-value"];
+const _hoisted_3 = ["id", "aria-hidden", "disabled", "value", "name", "tabindex"];
+const __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "ElCheckbox"
+});
+const _sfc_main = /* @__PURE__ */ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  ...__default__,
+  props: _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxProps,
+  emits: _checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxEmits,
+  setup(__props) {
+    const props = __props;
+    const slots = (0,vue__WEBPACK_IMPORTED_MODULE_0__.useSlots)();
+    const {
+      inputId,
+      isLabeledByFormItem,
+      isChecked,
+      isDisabled,
+      isFocused,
+      checkboxSize,
+      hasOwnLabel,
+      model,
+      handleChange,
+      onClickRoot
+    } = (0,_composables_use_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__.useCheckbox)(props, slots);
+    const ns = (0,_hooks_use_namespace_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useNamespace)("checkbox");
+    const compKls = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      return [
+        ns.b(),
+        ns.m(checkboxSize.value),
+        ns.is("disabled", isDisabled.value),
+        ns.is("bordered", props.border),
+        ns.is("checked", isChecked.value)
+      ];
+    });
+    const spanKls = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      return [
+        ns.e("input"),
+        ns.is("disabled", isDisabled.value),
+        ns.is("checked", isChecked.value),
+        ns.is("indeterminate", props.indeterminate),
+        ns.is("focus", isFocused.value)
+      ];
+    });
+    return (_ctx, _cache) => {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)(!(0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(hasOwnLabel) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isLabeledByFormItem) ? "span" : "label"), {
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(compKls)),
+        "aria-controls": _ctx.indeterminate ? _ctx.controls : null,
+        onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(onClickRoot)
+      }, {
+        default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+            class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(spanKls)),
+            tabindex: _ctx.indeterminate ? 0 : void 0,
+            role: _ctx.indeterminate ? "checkbox" : void 0,
+            "aria-checked": _ctx.indeterminate ? "mixed" : void 0
+          }, [
+            _ctx.trueLabel || _ctx.falseLabel ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+              key: 0,
+              id: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(inputId),
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.isRef)(model) ? model.value = $event : null),
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).e("original")),
+              type: "checkbox",
+              "aria-hidden": _ctx.indeterminate ? "true" : "false",
+              name: _ctx.name,
+              tabindex: _ctx.tabindex,
+              disabled: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isDisabled),
+              "true-value": _ctx.trueLabel,
+              "false-value": _ctx.falseLabel,
+              onChange: _cache[1] || (_cache[1] = (...args) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange)(...args)),
+              onFocus: _cache[2] || (_cache[2] = ($event) => isFocused.value = true),
+              onBlur: _cache[3] || (_cache[3] = ($event) => isFocused.value = false)
+            }, null, 42, _hoisted_2)), [
+              [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(model)]
+            ]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("input", {
+              key: 1,
+              id: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(inputId),
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.isRef)(model) ? model.value = $event : null),
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).e("original")),
+              type: "checkbox",
+              "aria-hidden": _ctx.indeterminate ? "true" : "false",
+              disabled: (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(isDisabled),
+              value: _ctx.label,
+              name: _ctx.name,
+              tabindex: _ctx.tabindex,
+              onChange: _cache[5] || (_cache[5] = (...args) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(handleChange)(...args)),
+              onFocus: _cache[6] || (_cache[6] = ($event) => isFocused.value = true),
+              onBlur: _cache[7] || (_cache[7] = ($event) => isFocused.value = false)
+            }, null, 42, _hoisted_3)), [
+              [vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(model)]
+            ]),
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+              class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).e("inner"))
+            }, null, 2)
+          ], 10, _hoisted_1),
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(hasOwnLabel) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+            key: 0,
+            class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(ns).e("label"))
+          }, [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default"),
+            !_ctx.$slots.default ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, { key: 0 }, [
+              (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.label), 1)
+            ], 64)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+          ], 2)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+        ]),
+        _: 3
+      }, 8, ["class", "aria-controls", "onClick"]);
+    };
+  }
+});
+var Checkbox = /* @__PURE__ */ (0,_virtual_plugin_vue_export_helper_mjs__WEBPACK_IMPORTED_MODULE_4__["default"])(_sfc_main, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/checkbox/src/checkbox.vue"]]);
+
+
+//# sourceMappingURL=checkbox2.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-disabled.mjs":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-disabled.mjs ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useCheckboxDisabled": () => (/* binding */ useCheckboxDisabled)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _utils_types_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../utils/types.mjs */ "./node_modules/element-plus/es/utils/types.mjs");
+/* harmony import */ var _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../hooks/use-common-props/index.mjs */ "./node_modules/element-plus/es/hooks/use-common-props/index.mjs");
+
+
+
+
+
+
+
+
+const useCheckboxDisabled = ({
+  model,
+  isChecked
+}) => {
+  const checkboxGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxGroupContextKey, void 0);
+  const isLimitDisabled = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    var _a, _b;
+    const max = (_a = checkboxGroup == null ? void 0 : checkboxGroup.max) == null ? void 0 : _a.value;
+    const min = (_b = checkboxGroup == null ? void 0 : checkboxGroup.min) == null ? void 0 : _b.value;
+    return !(0,_utils_types_mjs__WEBPACK_IMPORTED_MODULE_2__.isUndefined)(max) && model.value.length >= max && !isChecked.value || !(0,_utils_types_mjs__WEBPACK_IMPORTED_MODULE_2__.isUndefined)(min) && model.value.length <= min && isChecked.value;
+  });
+  const isDisabled = (0,_hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_3__.useDisabled)((0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => (checkboxGroup == null ? void 0 : checkboxGroup.disabled.value) || isLimitDisabled.value));
+  return {
+    isDisabled,
+    isLimitDisabled
+  };
+};
+
+
+//# sourceMappingURL=use-checkbox-disabled.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-event.mjs":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-event.mjs ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useCheckboxEvent": () => (/* binding */ useCheckboxEvent)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../hooks/use-form-item/index.mjs */ "./node_modules/element-plus/es/hooks/use-form-item/index.mjs");
+/* harmony import */ var _utils_error_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/error.mjs */ "./node_modules/element-plus/es/utils/error.mjs");
+
+
+
+
+
+
+
+
+const useCheckboxEvent = (props, {
+  model,
+  isLimitExceeded,
+  hasOwnLabel,
+  isDisabled,
+  isLabeledByFormItem
+}) => {
+  const checkboxGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxGroupContextKey, void 0);
+  const { formItem } = (0,_hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_2__.useFormItem)();
+  const { emit } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance)();
+  function getLabeledValue(value) {
+    var _a, _b;
+    return value === props.trueLabel || value === true ? (_a = props.trueLabel) != null ? _a : true : (_b = props.falseLabel) != null ? _b : false;
+  }
+  function emitChangeEvent(checked, e) {
+    emit("change", getLabeledValue(checked), e);
+  }
+  function handleChange(e) {
+    if (isLimitExceeded.value)
+      return;
+    const target = e.target;
+    emit("change", getLabeledValue(target.checked), e);
+  }
+  async function onClickRoot(e) {
+    if (isLimitExceeded.value)
+      return;
+    if (!hasOwnLabel.value && !isDisabled.value && isLabeledByFormItem.value) {
+      const eventTargets = e.composedPath();
+      const hasLabel = eventTargets.some((item) => item.tagName === "LABEL");
+      if (!hasLabel) {
+        model.value = getLabeledValue([false, props.falseLabel].includes(model.value));
+        await (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)();
+        emitChangeEvent(model.value, e);
+      }
+    }
+  }
+  const validateEvent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => (checkboxGroup == null ? void 0 : checkboxGroup.validateEvent) || props.validateEvent);
+  (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => props.modelValue, () => {
+    if (validateEvent.value) {
+      formItem == null ? void 0 : formItem.validate("change").catch((err) => (0,_utils_error_mjs__WEBPACK_IMPORTED_MODULE_3__.debugWarn)(err));
+    }
+  });
+  return {
+    handleChange,
+    onClickRoot
+  };
+};
+
+
+//# sourceMappingURL=use-checkbox-event.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-model.mjs":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-model.mjs ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useCheckboxModel": () => (/* binding */ useCheckboxModel)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _utils_types_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../utils/types.mjs */ "./node_modules/element-plus/es/utils/types.mjs");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _constants_event_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../constants/event.mjs */ "./node_modules/element-plus/es/constants/event.mjs");
+
+
+
+
+
+
+
+
+
+const useCheckboxModel = (props) => {
+  const selfModel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+  const { emit } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance)();
+  const checkboxGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_1__.checkboxGroupContextKey, void 0);
+  const isGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => (0,_utils_types_mjs__WEBPACK_IMPORTED_MODULE_2__.isUndefined)(checkboxGroup) === false);
+  const isLimitExceeded = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+  const model = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)({
+    get() {
+      var _a, _b;
+      return isGroup.value ? (_a = checkboxGroup == null ? void 0 : checkboxGroup.modelValue) == null ? void 0 : _a.value : (_b = props.modelValue) != null ? _b : selfModel.value;
+    },
+    set(val) {
+      var _a, _b;
+      if (isGroup.value && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_3__.isArray)(val)) {
+        isLimitExceeded.value = ((_a = checkboxGroup == null ? void 0 : checkboxGroup.max) == null ? void 0 : _a.value) !== void 0 && val.length > (checkboxGroup == null ? void 0 : checkboxGroup.max.value);
+        isLimitExceeded.value === false && ((_b = checkboxGroup == null ? void 0 : checkboxGroup.changeEvent) == null ? void 0 : _b.call(checkboxGroup, val));
+      } else {
+        emit(_constants_event_mjs__WEBPACK_IMPORTED_MODULE_4__.UPDATE_MODEL_EVENT, val);
+        selfModel.value = val;
+      }
+    }
+  });
+  return {
+    model,
+    isGroup,
+    isLimitExceeded
+  };
+};
+
+
+//# sourceMappingURL=use-checkbox-model.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-status.mjs":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-status.mjs ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useCheckboxStatus": () => (/* binding */ useCheckboxStatus)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var lodash_unified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash-unified */ "./node_modules/lodash-unified/import.js");
+/* harmony import */ var _tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../tokens/checkbox.mjs */ "./node_modules/element-plus/es/tokens/checkbox.mjs");
+/* harmony import */ var _vueuse_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vueuse/core */ "./node_modules/@vueuse/shared/index.mjs");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../hooks/use-common-props/index.mjs */ "./node_modules/element-plus/es/hooks/use-common-props/index.mjs");
+
+
+
+
+
+
+
+
+
+
+const useCheckboxStatus = (props, slots, { model }) => {
+  const checkboxGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(_tokens_checkbox_mjs__WEBPACK_IMPORTED_MODULE_2__.checkboxGroupContextKey, void 0);
+  const isFocused = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+  const isChecked = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    const value = model.value;
+    if ((0,_vueuse_core__WEBPACK_IMPORTED_MODULE_3__.isBoolean)(value)) {
+      return value;
+    } else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_4__.isArray)(value)) {
+      if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_4__.isObject)(props.label)) {
+        return value.map(vue__WEBPACK_IMPORTED_MODULE_0__.toRaw).some((o) => (0,lodash_unified__WEBPACK_IMPORTED_MODULE_1__.isEqual)(o, props.label));
+      } else {
+        return value.map(vue__WEBPACK_IMPORTED_MODULE_0__.toRaw).includes(props.label);
+      }
+    } else if (value !== null && value !== void 0) {
+      return value === props.trueLabel;
+    } else {
+      return !!value;
+    }
+  });
+  const checkboxButtonSize = (0,_hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useSize)((0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    var _a;
+    return (_a = checkboxGroup == null ? void 0 : checkboxGroup.size) == null ? void 0 : _a.value;
+  }), {
+    prop: true
+  });
+  const checkboxSize = (0,_hooks_use_common_props_index_mjs__WEBPACK_IMPORTED_MODULE_5__.useSize)((0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    var _a;
+    return (_a = checkboxGroup == null ? void 0 : checkboxGroup.size) == null ? void 0 : _a.value;
+  }));
+  const hasOwnLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    return !!(slots.default || props.label);
+  });
+  return {
+    checkboxButtonSize,
+    isChecked,
+    isFocused,
+    checkboxSize,
+    hasOwnLabel
+  };
+};
+
+
+//# sourceMappingURL=use-checkbox-status.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox.mjs":
+/*!*******************************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox.mjs ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useCheckbox": () => (/* binding */ useCheckbox)
+/* harmony export */ });
+/* harmony import */ var _use_checkbox_disabled_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./use-checkbox-disabled.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-disabled.mjs");
+/* harmony import */ var _use_checkbox_event_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./use-checkbox-event.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-event.mjs");
+/* harmony import */ var _use_checkbox_model_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./use-checkbox-model.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-model.mjs");
+/* harmony import */ var _use_checkbox_status_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./use-checkbox-status.mjs */ "./node_modules/element-plus/es/components/checkbox/src/composables/use-checkbox-status.mjs");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+/* harmony import */ var _hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../hooks/use-form-item/index.mjs */ "./node_modules/element-plus/es/hooks/use-form-item/index.mjs");
+
+
+
+
+
+
+
+
+
+const setStoreValue = (props, { model }) => {
+  function addToStore() {
+    if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_0__.isArray)(model.value) && !model.value.includes(props.label)) {
+      model.value.push(props.label);
+    } else {
+      model.value = props.trueLabel || true;
+    }
+  }
+  props.checked && addToStore();
+};
+const useCheckbox = (props, slots) => {
+  const { formItem: elFormItem } = (0,_hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_1__.useFormItem)();
+  const { model, isGroup, isLimitExceeded } = (0,_use_checkbox_model_mjs__WEBPACK_IMPORTED_MODULE_2__.useCheckboxModel)(props);
+  const {
+    isFocused,
+    isChecked,
+    checkboxButtonSize,
+    checkboxSize,
+    hasOwnLabel
+  } = (0,_use_checkbox_status_mjs__WEBPACK_IMPORTED_MODULE_3__.useCheckboxStatus)(props, slots, { model });
+  const { isDisabled } = (0,_use_checkbox_disabled_mjs__WEBPACK_IMPORTED_MODULE_4__.useCheckboxDisabled)({ model, isChecked });
+  const { inputId, isLabeledByFormItem } = (0,_hooks_use_form_item_index_mjs__WEBPACK_IMPORTED_MODULE_1__.useFormItemInputId)(props, {
+    formItemContext: elFormItem,
+    disableIdGeneration: hasOwnLabel,
+    disableIdManagement: isGroup
+  });
+  const { handleChange, onClickRoot } = (0,_use_checkbox_event_mjs__WEBPACK_IMPORTED_MODULE_5__.useCheckboxEvent)(props, {
+    model,
+    isLimitExceeded,
+    hasOwnLabel,
+    isDisabled,
+    isLabeledByFormItem
+  });
+  setStoreValue(props, { model });
+  return {
+    inputId,
+    isLabeledByFormItem,
+    isChecked,
+    isDisabled,
+    isFocused,
+    checkboxButtonSize,
+    checkboxSize,
+    hasOwnLabel,
+    model,
+    handleChange,
+    onClickRoot
+  };
+};
+
+
+//# sourceMappingURL=use-checkbox.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/element-plus/es/components/checkbox/style/css.mjs":
+/*!************************************************************************!*\
+  !*** ./node_modules/element-plus/es/components/checkbox/style/css.mjs ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _base_style_css_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../base/style/css.mjs */ "./node_modules/element-plus/es/components/base/style/css.mjs");
+/* harmony import */ var element_plus_theme_chalk_el_checkbox_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/theme-chalk/el-checkbox.css */ "./node_modules/element-plus/theme-chalk/el-checkbox.css");
 
 
 //# sourceMappingURL=css.mjs.map
@@ -57074,6 +57998,25 @@ const buttonGroupContextKey = Symbol("buttonGroupContextKey");
 
 /***/ }),
 
+/***/ "./node_modules/element-plus/es/tokens/checkbox.mjs":
+/*!**********************************************************!*\
+  !*** ./node_modules/element-plus/es/tokens/checkbox.mjs ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkboxGroupContextKey": () => (/* binding */ checkboxGroupContextKey)
+/* harmony export */ });
+const checkboxGroupContextKey = Symbol("checkboxGroupContextKey");
+
+
+//# sourceMappingURL=checkbox.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/element-plus/es/tokens/collapse.mjs":
 /*!**********************************************************!*\
   !*** ./node_modules/element-plus/es/tokens/collapse.mjs ***!
@@ -60124,6 +61067,36 @@ var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMP
 
 /***/ }),
 
+/***/ "./node_modules/element-plus/theme-chalk/el-checkbox.css":
+/*!***************************************************************!*\
+  !*** ./node_modules/element-plus/theme-chalk/el-checkbox.css ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_cjs_js_clonedRuleSet_12_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_el_checkbox_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./el-checkbox.css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/element-plus/theme-chalk/el-checkbox.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_el_checkbox_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_el_checkbox_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/element-plus/theme-chalk/el-col.css":
 /*!**********************************************************!*\
   !*** ./node_modules/element-plus/theme-chalk/el-col.css ***!
@@ -62375,7 +63348,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _SlotSettingsForm_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_SlotSettingsForm.vue */ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue");
+/* harmony import */ var _ScheduleSettings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_ScheduleSettings */ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue");
 /* harmony import */ var _BasicInfo_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_BasicInfo.vue */ "./resources/admin/Modules/Calendars/Edit/_BasicInfo.vue");
 /* harmony import */ var _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @element-plus/icons-vue */ "./node_modules/@element-plus/icons-vue/dist/index.js");
 /* unplugin-vue-components disabled */
@@ -62385,7 +63358,7 @@ __webpack_require__.r(__webpack_exports__);
   name: 'NewSlotEvent',
   props: ['calendar_id', 'event_type'],
   components: {
-    SlotSettingsFrom: _SlotSettingsForm_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ScheduleSettings: _ScheduleSettings__WEBPACK_IMPORTED_MODULE_0__["default"],
     BasicInfo: _BasicInfo_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     Right: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.Right
   },
@@ -62438,6 +63411,19 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {
         _this2.saving = false;
       });
+    },
+    backStep: function backStep() {
+      this.stepIndex -= 1;
+      if (this.stepIndex <= 1) {
+        this.stepIndex = 1;
+      }
+    },
+    handleSaveContinue: function handleSaveContinue() {
+      this.stepIndex += 1;
+      if (this.stepIndex > 3) {
+        this.stepIndex = 3;
+      }
+      console.log(this.stepIndex);
     }
   },
   mounted: function mounted() {
@@ -62672,21 +63658,44 @@ __webpack_require__.r(__webpack_exports__);
         label: ''
       }],
       meetingDuration: [{
-        value: '15mins',
+        value: 15,
         label: '15 Minutes'
       }, {
-        value: '30mins',
+        value: 30,
         label: '30 Minutes'
       }, {
-        value: '45mins',
+        value: 45,
         label: '45 Minutes'
       }, {
-        value: '60mins',
+        value: 60,
         label: '60 Minutes'
       }, {
         value: 'custom',
         label: 'Custom'
-      }]
+      }],
+      durationTypes: [{
+        value: 'minutes',
+        label: 'Minutes'
+      }, {
+        value: 'hours',
+        label: 'Hours'
+      }, {
+        value: 'days',
+        label: 'Days'
+      }, {
+        value: 'months',
+        label: 'Months'
+      }],
+      formData: {
+        title: '',
+        duration: 30,
+        customDuration: '',
+        durationType: 'minutes',
+        description: '',
+        location_type: '',
+        location_heading: '',
+        location_settings: {}
+      }
     };
   },
   methods: {
@@ -62719,7 +63728,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'DateOverRides',
-  props: ['settings'],
+  props: ['settings', 'title'],
   components: {
     ArrowRight: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_3__.ArrowRight,
     ArrowLeft: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_3__.ArrowLeft,
@@ -62996,6 +64005,46 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _parts_WeeklySchedules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../parts/WeeklySchedules */ "./resources/admin/Modules/Calendars/parts/WeeklySchedules.vue");
+/* harmony import */ var _DateOverRides__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_DateOverRides */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue");
+/* harmony import */ var _SchedulingConditions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./__SchedulingConditions */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue");
+/* unplugin-vue-components disabled */
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: '_ScheduleSettings',
+  components: {
+    SchedulingConditions: _SchedulingConditions__WEBPACK_IMPORTED_MODULE_2__["default"],
+    DateOverRides: _DateOverRides__WEBPACK_IMPORTED_MODULE_1__["default"],
+    WeeklySchedules: _parts_WeeklySchedules__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: ['slot'],
+  data: function data() {
+    return {
+      formData: {
+        dateRangeType: 'within_days',
+        within_days: '',
+        within_date: '',
+        availabilityTab: 'setCustomHour',
+        timezone: 'asia/dhaka'
+      }
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=script&lang=js":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=script&lang=js ***!
@@ -63009,7 +64058,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _parts_WeeklySchedules_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../parts/WeeklySchedules.vue */ "./resources/admin/Modules/Calendars/parts/WeeklySchedules.vue");
 /* harmony import */ var _DateOverRides_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_DateOverRides.vue */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue");
-/* harmony import */ var _SchedulingConfitions_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./__SchedulingConfitions.vue */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue");
+/* harmony import */ var _SchedulingConditions_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./__SchedulingConditions.vue */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue");
 /* unplugin-vue-components disabled */
 
 
@@ -63018,7 +64067,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     WeeklySchedules: _parts_WeeklySchedules_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     DateOverRides: _DateOverRides_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    SchedulingConditions: _SchedulingConfitions_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    SchedulingConditions: _SchedulingConditions_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
     slot: {
@@ -63209,9 +64258,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js":
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js ***!
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js ***!
   \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -63221,7 +64270,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* unplugin-vue-components disabled *//* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'SchedulingConditions',
+  name: '__SchedulingConditions',
   props: ['settings'],
   mounted: function mounted() {
     if (!this.settings.schedule_conditions) {
@@ -63542,7 +64591,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     WeekDayConfig: _WeekDayConfig_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['weekly_schedules']
+  props: ['weekly_schedules', 'title']
 });
 
 /***/ }),
@@ -65016,15 +66065,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/skeleton/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/skeleton/index.mjs");
 /* harmony import */ var element_plus_es_components_skeleton_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/skeleton/style/css */ "./node_modules/element-plus/es/components/skeleton/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/steps/index.mjs");
-/* harmony import */ var element_plus_es_components_steps_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/steps/style/css */ "./node_modules/element-plus/es/components/steps/style/css.mjs");
-/* harmony import */ var element_plus_es_components_step_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/step/style/css */ "./node_modules/element-plus/es/components/step/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
-/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
+/* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/steps/index.mjs");
+/* harmony import */ var element_plus_es_components_steps_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/steps/style/css */ "./node_modules/element-plus/es/components/steps/style/css.mjs");
+/* harmony import */ var element_plus_es_components_step_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/step/style/css */ "./node_modules/element-plus/es/components/step/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
+/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
+
 
 
 
@@ -65035,8 +66087,8 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "fcal_create_calendar_header"
 };
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("h1", null, "Add One-on-One Booking Type", -1 /* HOISTED */);
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("h3", null, "Notification & Question", -1 /* HOISTED */);
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h1", null, "Add One-on-One Booking Type", -1 /* HOISTED */);
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h3", null, "Notification & Question", -1 /* HOISTED */);
 var _hoisted_5 = {
   key: 0,
   "class": "fcal_create_calendar_body"
@@ -65047,53 +66099,62 @@ var _hoisted_6 = {
 };
 var _hoisted_7 = {
   key: 1,
+  "class": "fcal_create_calendar_schedule_setting"
+};
+var _hoisted_8 = {
+  "class": "fcal_create_calendar_form_footer"
+};
+var _hoisted_9 = {
+  key: 1,
   "class": "fcal_create_calendar_body"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_Right = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveComponent)("Right");
-  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElIcon;
-  var _component_el_step = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElStep;
-  var _component_el_steps = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElSteps;
-  var _component_basic_info = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveComponent)("basic-info");
-  var _component_el_skeleton = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElSkeleton;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_steps, {
+  var _component_Right = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Right");
+  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElIcon;
+  var _component_el_step = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElStep;
+  var _component_el_steps = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElSteps;
+  var _component_basic_info = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("basic-info");
+  var _component_ScheduleSettings = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("ScheduleSettings");
+  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElButton;
+  var _component_el_skeleton = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElSkeleton;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_steps, {
     "class": "fcal_steps",
     space: 200,
     active: $data.stepIndex
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_step, null, {
-        title: (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("h3", {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_step, null, {
+        title: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h3", {
             onClick: _cache[0] || (_cache[0] = function ($event) {
               return $options.handleSteps(1);
             })
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)("Event Info "), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_icon, null, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_Right)];
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Event Info "), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_Right)];
             }),
             _: 1 /* STABLE */
           })])];
         }),
 
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_step, null, {
-        title: (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("h3", {
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_step, null, {
+        title: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h3", {
             onClick: _cache[1] || (_cache[1] = function ($event) {
               return $options.handleSteps(2);
             })
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)("Schedule Settings "), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_icon, null, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_Right)];
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Schedule Settings "), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_Right)];
             }),
             _: 1 /* STABLE */
           })])];
         }),
 
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_step, null, {
-        title: (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_step, null, {
+        title: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
           return [_hoisted_4];
         }),
         _: 1 /* STABLE */
@@ -65101,19 +66162,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
 
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["active"])]), $data.slot ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_5, [$data.stepIndex == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_basic_info, {
+  }, 8 /* PROPS */, ["active"])]), $data.slot ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_5, [$data.stepIndex == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_basic_info, {
     slot: $data.slot,
     event_type: $props.event_type
-  }, null, 8 /* PROPS */, ["slot", "event_type"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)])) : $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_skeleton, {
+  }, null, 8 /* PROPS */, ["slot", "event_type"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), $data.stepIndex == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_ScheduleSettings, {
+    slot: $data.slot
+  }, null, 8 /* PROPS */, ["slot"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_8, [$data.stepIndex != 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
+    key: 0,
+    "class": "fcal_plain_btn",
+    onClick: $options.backStep
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Go Back ")];
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
+    "class": "fcal_primary_btn",
+    onClick: $options.handleSaveContinue
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)($data.stepIndex == 1 ? 'Save and ' : null) + "Continue ", 1 /* TEXT */)];
+    }),
+
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["onClick"])])])) : $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_skeleton, {
     rows: 1,
     animated: ""
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_skeleton, {
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_skeleton, {
     rows: 5,
     animated: ""
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_skeleton, {
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_skeleton, {
     rows: 5,
     animated: ""
-  })])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)]);
+  })])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -65459,12 +66540,17 @@ var _hoisted_4 = {
 var _hoisted_5 = {
   "class": "fcal_color_select"
 };
+var _hoisted_6 = {
+  key: 0,
+  "class": "custom-duration"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_switch = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElSwitch;
   var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElOption;
   var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElSelect;
   var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElInput;
   var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElFormItem;
+  var _component_location_selector = (0,vue__WEBPACK_IMPORTED_MODULE_6__.resolveComponent)("location-selector");
   var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElForm;
   return (0,vue__WEBPACK_IMPORTED_MODULE_6__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_switch, {
     modelValue: $data.isEnable,
@@ -65472,6 +66558,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.isEnable = $event;
     })
   }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_form, {
+    modelValue: $data.formData,
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+      return $data.formData = $event;
+    }),
     "label-position": "top"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
@@ -65481,9 +66571,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_input, {
-            modelValue: $props.slot.title,
+            modelValue: $data.formData.title,
             "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-              return $props.slot.title = $event;
+              return $data.formData.title = $event;
             }),
             placeholder: "Enter Event Title"
           }, {
@@ -65531,9 +66621,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_select, {
-            modelValue: $props.slot.duration,
+            modelValue: $data.formData.duration,
             "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-              return $props.slot.duration = $event;
+              return $data.formData.duration = $event;
             }),
             placeholder: "Select",
             "popper-class": "fcal_select"
@@ -65549,7 +66639,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }),
 
             _: 1 /* STABLE */
-          }, 8 /* PROPS */, ["modelValue"])];
+          }, 8 /* PROPS */, ["modelValue"]), $data.formData.duration == 'custom' ? ((0,vue__WEBPACK_IMPORTED_MODULE_6__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_input, {
+            modelValue: $data.formData.customDuration,
+            "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+              return $data.formData.customDuration = $event;
+            })
+          }, null, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_select, {
+            modelValue: $data.formData.durationType,
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+              return $data.formData.durationType = $event;
+            }),
+            "popper-class": "fcal_select",
+            placeholder: "Select"
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
+              return [((0,vue__WEBPACK_IMPORTED_MODULE_6__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_6__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_6__.renderList)($data.durationTypes, function (item) {
+                return (0,vue__WEBPACK_IMPORTED_MODULE_6__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createBlock)(_component_el_option, {
+                  key: item.value,
+                  label: item.label,
+                  value: item.value
+                }, null, 8 /* PROPS */, ["label", "value"]);
+              }), 128 /* KEYED_FRAGMENT */))];
+            }),
+
+            _: 1 /* STABLE */
+          }, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_6__.createCommentVNode)("v-if", true)];
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_form_item, {
@@ -65557,20 +66671,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_input, {
-            modelValue: $props.slot.description,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-              return $props.slot.description = $event;
+            modelValue: $data.formData.description,
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+              return $data.formData.description = $event;
             }),
             type: "textarea",
             placeholder: "Enter Description here"
           }, null, 8 /* PROPS */, ["modelValue"])];
         }),
         _: 1 /* STABLE */
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_el_form_item, {
+        label: "Location"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_6__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_6__.createVNode)(_component_location_selector, {
+            slot: $data.formData
+          }, null, 8 /* PROPS */, ["slot"])];
+        }),
+        _: 1 /* STABLE */
       })];
     }),
 
     _: 1 /* STABLE */
-  })])]);
+  }, 8 /* PROPS */, ["modelValue"])])]);
 }
 
 /***/ }),
@@ -65586,180 +66709,138 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/dialog/index.mjs");
-/* harmony import */ var element_plus_es_components_dialog_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/dialog/style/css */ "./node_modules/element-plus/es/components/dialog/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/calendar/index.mjs");
-/* harmony import */ var element_plus_es_components_calendar_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/calendar/style/css */ "./node_modules/element-plus/es/components/calendar/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
-/* harmony import */ var element_plus_es_components_button_group_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/button-group/style/css */ "./node_modules/element-plus/es/components/button-group/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
-/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
-/* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/calendar/index.mjs");
+/* harmony import */ var element_plus_es_components_calendar_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/calendar/style/css */ "./node_modules/element-plus/es/components/calendar/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
+/* harmony import */ var element_plus_es_components_button_group_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/button-group/style/css */ "./node_modules/element-plus/es/components/button-group/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
+/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
+/* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
 
 
 
 
-
 var _hoisted_1 = {
-  key: 0
+  "class": "fcal_override_date"
 };
 var _hoisted_2 = {
-  style: {
-    "font-size": "85%",
-    "margin-top": "20px"
-  },
-  "class": "fcal_table fcal_table_compact fcal_table_stripe"
+  key: 0,
+  "class": "fcal_availability_title"
 };
 var _hoisted_3 = {
+  "class": "fcal_override_date_inner"
+};
+var _hoisted_4 = {
+  key: 0
+};
+var _hoisted_5 = {
+  key: 0,
+  "class": "fcal_override_dropdown"
+};
+var _hoisted_6 = ["onClick"];
+var _hoisted_7 = {
+  key: 0,
+  "class": "check-icon"
+};
+var _hoisted_8 = {
+  "class": "fcal_override_calendar_footer"
+};
+var _hoisted_9 = {
+  key: 0,
+  "class": "fcal_override_calendar_available_hour"
+};
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("h3", null, "What hours are you available?", -1 /* HOISTED */);
+var _hoisted_11 = {
+  "class": "fcal_weekly_schedules"
+};
+var _hoisted_12 = {
+  "class": "fcal_override_calendar_footer_action"
+};
+var _hoisted_13 = {
+  "class": "fcal_override_table"
+};
+var _hoisted_14 = {
+  "class": "fcal_table_compact fcal_table_stripe"
+};
+var _hoisted_15 = {
   style: {
     "cursor": "pointer"
   }
 };
-var _hoisted_4 = ["onClick"];
-var _hoisted_5 = ["onClick"];
-var _hoisted_6 = {
+var _hoisted_16 = ["onClick"];
+var _hoisted_17 = {
+  "class": "date"
+};
+var _hoisted_18 = ["onClick"];
+var _hoisted_19 = {
   "class": "fcal_slots_list"
 };
-var _hoisted_7 = {
-  style: {
-    "width": "20px",
-    "padding": "5px 0"
-  }
-};
-var _hoisted_8 = {
-  key: 0,
-  "class": "fcal_cal_wrapper"
-};
-var _hoisted_9 = ["onClick"];
-var _hoisted_10 = {
-  key: 1
-};
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("h3", null, "What hours are you available?", -1 /* HOISTED */);
-var _hoisted_12 = {
-  "class": "fcal_weekly_schedules"
-};
-var _hoisted_13 = {
-  "class": "dialog-footer"
+var _hoisted_20 = {
+  "class": "action"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElButton;
-  var _component_ArrowLeft = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("ArrowLeft");
-  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElIcon;
-  var _component_ArrowRight = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("ArrowRight");
-  var _component_el_button_group = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElButtonGroup;
-  var _component_el_calendar = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElCalendar;
-  var _component_DayOverRideConfig = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("DayOverRideConfig");
-  var _component_el_dialog = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElDialog;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", null, [!$options.overrides.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("p", _hoisted_1, "Add dates when your availability changes from your weekly hours")) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
+  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElButton;
+  var _component_ArrowLeft = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveComponent)("ArrowLeft");
+  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElIcon;
+  var _component_ArrowRight = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveComponent)("ArrowRight");
+  var _component_el_button_group = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElButtonGroup;
+  var _component_el_calendar = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElCalendar;
+  var _component_DayOverRideConfig = (0,vue__WEBPACK_IMPORTED_MODULE_4__.resolveComponent)("DayOverRideConfig");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_1, [$props.title ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("h2", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)($props.title), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_3, [!$options.overrides.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("p", _hoisted_4, "Add dates when your availability changes from your weekly hours")) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", {
+    "class": "fcal_override_dropdown_wrap",
+    onClick: _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_4__.withModifiers)(function ($event) {
+      return $data.modal_visible = false;
+    }, ["self"]))
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+    "class": "fcal_primary_btn2",
     onClick: _cache[0] || (_cache[0] = function ($event) {
-      return $options.showModal();
-    }),
-    plain: "",
-    type: "primary"
+      return $data.modal_visible = !$data.modal_visible;
+    })
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Add a date override")];
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)(" Add a date override ")];
     }),
     _: 1 /* STABLE */
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("table", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_5__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_5__.renderList)($options.overrides, function (item) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("tr", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("td", {
-      onClick: function onClick($event) {
-        return $options.showSlotEdit(item);
-      }
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)(item.label), 9 /* TEXT, PROPS */, _hoisted_4), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("td", {
-      onClick: function onClick($event) {
-        return $options.showSlotEdit(item);
-      },
-      style: {
-        "text-align": "right"
-      }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("ul", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_5__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_5__.renderList)(item.slots, function (slot) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("li", null, (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)(_ctx.toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)(_ctx.toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')), 1 /* TEXT */);
-    }), 256 /* UNKEYED_FRAGMENT */))])], 8 /* PROPS */, _hoisted_5), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("td", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-      onClick: function onClick($event) {
-        return $options.deleteOverRide(item);
-      },
-      size: "small",
-      icon: $data.DeleteIcon,
-      text: ""
-    }, null, 8 /* PROPS */, ["onClick", "icon"])])]);
-  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dialog, {
-    width: "50%",
-    modelValue: $data.modal_visible,
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
-      return $data.modal_visible = $event;
+  }), $data.modal_visible ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_calendar, {
+    modelValue: $data.current_date,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.current_date = $event;
     }),
-    "append-to-body": true,
-    title: "Select the date(s) you want to assign specific hours"
+    ref: "calendar"
   }, {
-    footer: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("span", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-        onClick: _cache[4] || (_cache[4] = function ($event) {
-          return $data.modal_visible = false;
-        })
-      }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Cancel")];
-        }),
-        _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-        disabled: !$data.current_selects.length,
-        type: "primary",
-        onClick: _cache[5] || (_cache[5] = function ($event) {
-          return $options.addOverRides();
-        })
-      }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Add")];
-        }),
-        _: 1 /* STABLE */
-      }, 8 /* PROPS */, ["disabled"])])];
-    }),
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-      return [$data.modal_visible ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_calendar, {
-        modelValue: $data.current_date,
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-          return $data.current_date = $event;
-        }),
-        ref: "calendar"
-      }, {
-        header: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function (_ref) {
-          var date = _ref.date;
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)(date), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button_group, null, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-                size: "small",
-                onClick: _cache[1] || (_cache[1] = function ($event) {
-                  return $options.selectDate('prev-month');
-                })
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
-                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_ArrowLeft)];
-                    }),
-                    _: 1 /* STABLE */
-                  })];
+    header: (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function (_ref) {
+      var date = _ref.date;
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)(date), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button_group, null, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+            size: "small",
+            onClick: _cache[1] || (_cache[1] = function ($event) {
+              return $options.selectDate('prev-month');
+            })
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_ArrowLeft)];
                 }),
-
                 _: 1 /* STABLE */
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
-                size: "small",
-                onClick: _cache[2] || (_cache[2] = function ($event) {
-                  return $options.selectDate('next-month');
-                })
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
-                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_ArrowRight)];
-                    }),
-                    _: 1 /* STABLE */
-                  })];
-                }),
+              })];
+            }),
 
+            _: 1 /* STABLE */
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+            size: "small",
+            onClick: _cache[2] || (_cache[2] = function ($event) {
+              return $options.selectDate('next-month');
+            })
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_ArrowRight)];
+                }),
                 _: 1 /* STABLE */
               })];
             }),
@@ -65768,26 +66849,70 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           })];
         }),
 
-        "date-cell": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function (_ref2) {
-          var data = _ref2.data;
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("p", {
-            onClick: function onClick($event) {
-              return $options.toggleSelect(data);
-            },
-            "class": (0,vue__WEBPACK_IMPORTED_MODULE_5__.normalizeClass)({
-              'is-selected': $data.current_selects.indexOf(data.day) > -1,
-              'fcal_date_disabled': $options.isPastDate(data.date)
-            })
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)(data.date.getDate()) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_5__.toDisplayString)($data.current_selects.indexOf(data.day) > -1 ? '✔️' : ''), 11 /* TEXT, CLASS, PROPS */, _hoisted_9)];
-        }),
         _: 1 /* STABLE */
-      }, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), $data.current_selects.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_DayOverRideConfig, {
-        day_label: "",
-        slots: $data.slots
-      }, null, 8 /* PROPS */, ["slots"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)];
+      })];
+    }),
+
+    "date-cell": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function (_ref2) {
+      var data = _ref2.data;
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("p", {
+        onClick: function onClick($event) {
+          return $options.toggleSelect(data);
+        },
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_4__.normalizeClass)({
+          'is-selected': $data.current_selects.indexOf(data.day) > -1,
+          'fcal_date_disabled': $options.isPastDate(data.date)
+        })
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)(data.date.getDate()) + " ", 1 /* TEXT */), $data.current_selects.indexOf(data.day) > -1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("span", _hoisted_7)) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)], 10 /* CLASS, PROPS */, _hoisted_6)];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"])]);
+  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_8, [$data.current_selects.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_DayOverRideConfig, {
+    day_label: "",
+    slots: $data.slots
+  }, null, 8 /* PROPS */, ["slots"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+    "class": "fcal_plain_btn",
+    onClick: _cache[4] || (_cache[4] = function ($event) {
+      return $data.modal_visible = false;
+    })
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)(" Cancel ")];
+    }),
+    _: 1 /* STABLE */
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+    disabled: !$data.current_selects.length,
+    "class": "fcal_primary_btn",
+    onClick: _cache[5] || (_cache[5] = function ($event) {
+      return $options.addOverRides();
+    })
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createTextVNode)(" Apply ")];
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["disabled"])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("table", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_4__.renderList)($options.overrides, function (item) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("tr", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("td", {
+      onClick: function onClick($event) {
+        return $options.showSlotEdit(item);
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("span", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)(item.label), 1 /* TEXT */)], 8 /* PROPS */, _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("td", {
+      onClick: function onClick($event) {
+        return $options.showSlotEdit(item);
+      },
+      style: {
+        "text-align": "right"
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("ul", _hoisted_19, [((0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_4__.renderList)(item.slots, function (slot) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_4__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementBlock)("li", null, (0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)(_ctx.toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_4__.toDisplayString)(_ctx.toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')), 1 /* TEXT */);
+    }), 256 /* UNKEYED_FRAGMENT */))])], 8 /* PROPS */, _hoisted_18), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createElementVNode)("td", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_4__.createVNode)(_component_el_button, {
+      onClick: function onClick($event) {
+        return $options.deleteOverRide(item);
+      },
+      size: "small",
+      icon: $data.DeleteIcon,
+      text: ""
+    }, null, 8 /* PROPS */, ["onClick", "icon"])])]);
+  }), 256 /* UNKEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("            <el-dialog width=\"50%\" v-model=\"modal_visible\" :append-to-body=\"true\" title=\"Select the date(s) you want to assign specific hours\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <div v-if=\"modal_visible\" class=\"fcal_cal_wrapper\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <el-calendar v-model=\"current_date\" ref=\"calendar\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <template #header=\"{ date }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <span>{{ date }}</span>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <el-button-group>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                <el-button size=\"small\" @click=\"selectDate('prev-month')\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                    <el-icon><ArrowLeft /></el-icon>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                </el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                <el-button size=\"small\" @click=\"selectDate('next-month')\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                    <el-icon><ArrowRight /></el-icon>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                </el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            </el-button-group>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <template #date-cell=\"{ data }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <p @click=\"toggleSelect(data)\" :class=\"{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                {{ data.date.getDate() }}"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                {{ (current_selects.indexOf(data.day) > -1) ? '✔️' : '' }}"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            </p>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </el-calendar>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <div v-if=\"current_selects.length\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <h3>What hours are you available?</h3>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <div class=\"fcal_weekly_schedules\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <DayOverRideConfig day_label=\"\" :slots=\"slots\" />"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <template #footer>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <span class=\"dialog-footer\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <el-button @click=\"modal_visible = false\">Cancel</el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <el-button :disabled=\"!current_selects.length\" type=\"primary\" @click=\"addOverRides()\">Add</el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </span>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("            </el-dialog>")])]);
 }
 
 /***/ }),
@@ -65830,6 +66955,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var _hoisted_1 = {
+  "class": "fcal_location_selector_wrap"
+};
+var _hoisted_2 = {
   style: {
     "display": "block",
     "color": "var(--el-text-color-secondary)",
@@ -65838,14 +66966,14 @@ var _hoisted_1 = {
     "font-size": "12px"
   }
 };
-var _hoisted_2 = {
+var _hoisted_3 = {
   key: 2
 };
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, "I will call my invitee", -1 /* HOISTED */);
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("p", null, "Invitee will be asked for his/her phone number", -1 /* HOISTED */);
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, "My invitee should call me", -1 /* HOISTED */);
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("p", null, "Invitee can see your phone number after booking", -1 /* HOISTED */);
-var _hoisted_7 = {
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, "I will call my invitee", -1 /* HOISTED */);
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("p", null, "Invitee will be asked for his/her phone number", -1 /* HOISTED */);
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, "My invitee should call me", -1 /* HOISTED */);
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("p", null, "Invitee can see your phone number after booking", -1 /* HOISTED */);
+var _hoisted_8 = {
   "class": "dialog-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -65858,12 +66986,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_radio_group = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElRadioGroup;
   var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_12__.ElForm;
   var _component_el_dialog = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElDialog;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_select, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_select, {
     onChange: _cache[1] || (_cache[1] = function ($event) {
       return $options.locationChanged();
     }),
     disabled: !!$data.location_details.location_type,
-    "popper-class": "fcal_selector_with_submenu",
+    "popper-class": "fcal_selector_with_submenu fcal_select",
     modelValue: $data.location_details.location_type,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $data.location_details.location_type = $event;
@@ -65873,7 +67001,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     prefix: (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
       return [$data.location_details.location_type ? ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createBlock)(_component_el_button, {
         key: 0,
-        "class": "location_edit_btn",
+        "class": "location_edit_btn fcal_plain_btn",
         onClick: _cache[0] || (_cache[0] = function ($event) {
           $data.showModal = true;
         })
@@ -65911,7 +67039,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "max-width": "300px"
   }, {
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
         type: "primary",
         onClick: _cache[9] || (_cache[9] = function ($event) {
           return $options.confirmLocation();
@@ -65954,7 +67082,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       value: locationKey
                     }, {
                       "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
-                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(location.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(location.subtitle), 1 /* TEXT */)];
+                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(location.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(location.subtitle), 1 /* TEXT */)];
                       }),
 
                       _: 2 /* DYNAMIC */
@@ -65996,7 +67124,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, null, 8 /* PROPS */, ["modelValue"])];
             }),
             _: 1 /* STABLE */
-          })) : (0,vue__WEBPACK_IMPORTED_MODULE_9__.createCommentVNode)("v-if", true), $data.location_details.location_type == 'phone' ? ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form_item, null, {
+          })) : (0,vue__WEBPACK_IMPORTED_MODULE_9__.createCommentVNode)("v-if", true), $data.location_details.location_type == 'phone' ? ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form_item, null, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_radio_group, {
                 "class": "radio_desc_group",
@@ -66010,14 +67138,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     label: "outbound"
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
-                      return [_hoisted_3, _hoisted_4];
+                      return [_hoisted_4, _hoisted_5];
                     }),
                     _: 1 /* STABLE */
                   }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_radio, {
                     label: "inbound"
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
-                      return [_hoisted_5, _hoisted_6];
+                      return [_hoisted_6, _hoisted_7];
                     }),
                     _: 1 /* STABLE */
                   })];
@@ -66163,6 +67291,246 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     rows: 5,
     animated: ""
   })]));
+}
+
+/***/ }),
+
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/form/index.mjs");
+/* harmony import */ var element_plus_es_components_form_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/form/style/css */ "./node_modules/element-plus/es/components/form/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/tabs/index.mjs");
+/* harmony import */ var element_plus_es_components_tabs_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/tabs/style/css */ "./node_modules/element-plus/es/components/tabs/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/select/index.mjs");
+/* harmony import */ var element_plus_es_components_select_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/select/style/css */ "./node_modules/element-plus/es/components/select/style/css.mjs");
+/* harmony import */ var element_plus_es_components_option_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/option/style/css */ "./node_modules/element-plus/es/components/option/style/css.mjs");
+/* harmony import */ var element_plus_es_components_tab_pane_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/tab-pane/style/css */ "./node_modules/element-plus/es/components/tab-pane/style/css.mjs");
+/* harmony import */ var element_plus_es_components_form_item_style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es/components/form-item/style/css */ "./node_modules/element-plus/es/components/form-item/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/radio/index.mjs");
+/* harmony import */ var element_plus_es_components_radio_group_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es/components/radio-group/style/css */ "./node_modules/element-plus/es/components/radio-group/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/date-picker/index.mjs");
+/* harmony import */ var element_plus_es_components_date_picker_style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es/components/date-picker/style/css */ "./node_modules/element-plus/es/components/date-picker/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/input/index.mjs");
+/* harmony import */ var element_plus_es_components_input_style_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! element-plus/es/components/input/style/css */ "./node_modules/element-plus/es/components/input/style/css.mjs");
+/* harmony import */ var element_plus_es_components_radio_style_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! element-plus/es/components/radio/style/css */ "./node_modules/element-plus/es/components/radio/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* unplugin-vue-components disabled */
+
+
+
+
+
+
+
+
+
+
+var _hoisted_1 = {
+  "class": "fcal_create_calendar_form"
+};
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_10__.createStaticVNode)("<div class=\"fcal_create_calendar_form_header\"><h2><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M8 2V5\" stroke=\"#1B2533\" stroke-width=\"1.5\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M16 2V5\" stroke=\"#1B2533\" stroke-width=\"1.5\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M7 13H15\" stroke=\"#1B2533\" stroke-width=\"1.5\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M7 17H12\" stroke=\"#1B2533\" stroke-width=\"1.5\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M16 3.5C19.33 3.68 21 4.95 21 9.65V15.83C21 19.95 20 22.01 15 22.01H9C4 22.01 3 19.95 3 15.83V9.65C3 4.95 4.67 3.69 8 3.5H16Z\" stroke=\"#1B2533\" stroke-width=\"1.5\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg> Schedule Settings </h2></div>", 1);
+var _hoisted_3 = {
+  "class": "fcal_create_calendar_form_body"
+};
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("span", {
+  "class": "sub-label"
+}, "Invitees can schedule...", -1 /* HOISTED */);
+var _hoisted_5 = {
+  "class": "fcal_date_range_radio_item"
+};
+var _hoisted_6 = {
+  key: 0,
+  "class": "fcal_date_range_radio_condition"
+};
+var _hoisted_7 = {
+  "class": "fcal_date_range_radio_item"
+};
+var _hoisted_8 = {
+  key: 0,
+  "class": "fcal_date_range_radio_condition"
+};
+var _hoisted_9 = {
+  "class": "fcal_date_range_radio_item"
+};
+var _hoisted_10 = {
+  "class": "fcal_availability_body"
+};
+var _hoisted_11 = {
+  "class": "fcal_availability_setting"
+};
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("span", {
+  "class": "sub-label"
+}, "Invitees can't schedule within...", -1 /* HOISTED */);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_el_radio = element_plus_es__WEBPACK_IMPORTED_MODULE_11__.ElRadio;
+  var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_12__.ElInput;
+  var _component_el_date_picker = element_plus_es__WEBPACK_IMPORTED_MODULE_13__.ElDatePicker;
+  var _component_el_radio_group = element_plus_es__WEBPACK_IMPORTED_MODULE_11__.ElRadioGroup;
+  var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElFormItem;
+  var _component_el_tab_pane = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElTabPane;
+  var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElOption;
+  var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElSelect;
+  var _component_WeeklySchedules = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("WeeklySchedules");
+  var _component_date_over_rides = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("date-over-rides");
+  var _component_el_tabs = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElTabs;
+  var _component_SchedulingConditions = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("SchedulingConditions");
+  var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElForm;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_10__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_form, {
+    modelValue: $data.formData,
+    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+      return $data.formData = $event;
+    }),
+    "label-position": "top"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_form_item, {
+        label: "Date range"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+          return [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_radio_group, {
+            modelValue: $data.formData.dateRangeType,
+            "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+              return $data.formData.dateRangeType = $event;
+            }),
+            "class": "fcal_date_range_radio"
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_radio, {
+                label: "within_days",
+                size: "large"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("Within future days")];
+                }),
+                _: 1 /* STABLE */
+              }), $data.formData.dateRangeType == 'within_days' ? ((0,vue__WEBPACK_IMPORTED_MODULE_10__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_input, {
+                modelValue: $data.formData.within_days,
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+                  return $data.formData.within_days = $event;
+                }),
+                type: "number"
+              }, {
+                append: (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("Days into the future")];
+                }),
+                _: 1 /* STABLE */
+              }, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_10__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_radio, {
+                label: "within_date",
+                size: "large"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("Within a date range")];
+                }),
+                _: 1 /* STABLE */
+              }), $data.formData.dateRangeType == 'within_date' ? ((0,vue__WEBPACK_IMPORTED_MODULE_10__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_date_picker, {
+                modelValue: $data.formData.within_date,
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+                  return $data.formData.within_date = $event;
+                }),
+                type: "daterange",
+                "range-separator": "",
+                "start-placeholder": "Select Date",
+                "end-placeholder": " ",
+                "popper-class": "fcal_daterange_popover"
+              }, null, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_10__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_radio, {
+                label: "indefinitely",
+                size: "large"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("Indefinitely into the future ")];
+                }),
+                _: 1 /* STABLE */
+              })])];
+            }),
+
+            _: 1 /* STABLE */
+          }, 8 /* PROPS */, ["modelValue"])];
+        }),
+        _: 1 /* STABLE */
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_form_item, {
+        label: "How do you want to offer your availability for this event type?"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tabs, {
+            modelValue: $data.formData.availabilityTab,
+            "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+              return $data.formData.availabilityTab = $event;
+            })
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tab_pane, {
+                label: "Use an Existing Schedule",
+                name: "existingSchedule"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("User")];
+                }),
+                _: 1 /* STABLE */
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tab_pane, {
+                label: "Set Custom Hours",
+                name: "setCustomHour"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_select, {
+                    modelValue: $data.formData.timezone,
+                    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+                      return $data.formData.timezone = $event;
+                    }),
+                    placeholder: "Select timezone",
+                    "popper-class": "fcal_select",
+                    "class": "fcal_timezone"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_option, {
+                        label: "Asia/Dhaka",
+                        value: "asia/dhaka"
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_option, {
+                        label: "United State",
+                        value: "us"
+                      })];
+                    }),
+                    _: 1 /* STABLE */
+                  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_WeeklySchedules, {
+                    weekly_schedules: $props.slot.settings.weekly_schedules,
+                    title: "Weekly Hours"
+                  }, null, 8 /* PROPS */, ["weekly_schedules"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_date_over_rides, {
+                    settings: $props.slot.settings,
+                    title: "Add date overrides"
+                  }, null, 8 /* PROPS */, ["settings"])])])];
+                }),
+                _: 1 /* STABLE */
+              })];
+            }),
+
+            _: 1 /* STABLE */
+          }, 8 /* PROPS */, ["modelValue"])];
+        }),
+        _: 1 /* STABLE */
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_form_item, {
+        label: "Scheduling conditions",
+        "class": "fcal_override_scheduling_condition_wrap"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+          return [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_SchedulingConditions, {
+            settings: $props.slot.settings
+          }, null, 8 /* PROPS */, ["settings"])];
+        }),
+        _: 1 /* STABLE */
+      })];
+    }),
+
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["modelValue"])])]);
 }
 
 /***/ }),
@@ -66444,7 +67812,7 @@ var _hoisted_4 = {
 };
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementVNode)("span", {
   "class": "fcal_sep"
-}, "-", -1 /* HOISTED */);
+}, null, -1 /* HOISTED */);
 var _hoisted_6 = {
   "class": "fcal_add_slot"
 };
@@ -66464,7 +67832,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       step: "00:10",
       end: "23:50",
       "max-time": slot.end,
-      placeholder: "Start"
+      placeholder: "Start",
+      "popper-class": "fcal_select"
     }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "max-time"]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_el_time_select, {
       modelValue: slot.end,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
@@ -66474,11 +67843,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       step: "00:10",
       "min-time": slot.start,
       end: "23:50",
-      placeholder: "End"
+      placeholder: "End",
+      "popper-class": "fcal_select"
     }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min-time"]), $props.slots.length > 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(_component_el_button, {
       key: 0,
       text: "",
       icon: $data.DeleteIcon,
+      "class": "fcal_slot_delete",
       onClick: function onClick($event) {
         return $options.removeSlot(index);
       }
@@ -66742,9 +68113,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9":
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9 ***!
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47 ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -66765,23 +68136,24 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = {
   key: 0,
-  style: {
-    "display": "flex"
-  },
   "class": "fcal_inline_items"
 };
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("span", {
+  "class": "help-tx"
+}, "of an event start time", -1 /* HOISTED */);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElInput;
   var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElOption;
   var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElSelect;
-  return $props.settings.schedule_conditions ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_input, {
+  return $props.settings.schedule_conditions ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_input, {
     placeholder: "eg: 4",
     type: "number",
     modelValue: $props.settings.schedule_conditions.value,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $props.settings.schedule_conditions.value = $event;
     })
-  }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_select, {
+  }, null, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_select, {
     modelValue: $props.settings.schedule_conditions.unit,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $props.settings.schedule_conditions.unit = $event;
@@ -66801,7 +68173,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       })];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createTextVNode)(" of an event start time ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true);
+  }, 8 /* PROPS */, ["modelValue"]), _hoisted_2])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -67591,8 +68963,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
 /* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/time-select/index.mjs");
 /* harmony import */ var element_plus_es_components_time_select_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/time-select/style/css */ "./node_modules/element-plus/es/components/time-select/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/switch/index.mjs");
-/* harmony import */ var element_plus_es_components_switch_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/switch/style/css */ "./node_modules/element-plus/es/components/switch/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/checkbox/index.mjs");
+/* harmony import */ var element_plus_es_components_checkbox_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/checkbox/style/css */ "./node_modules/element-plus/es/components/checkbox/style/css.mjs");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
 
@@ -67605,37 +68977,33 @@ var _hoisted_2 = {
   "class": "fcal_day_status"
 };
 var _hoisted_3 = {
-  style: {
-    "text-transform": "uppercase",
-    "margin-left": "10px"
-  }
+  "class": "fcal_day"
 };
 var _hoisted_4 = {
   "class": "fcal_day_slots"
 };
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("span", {
   "class": "fcal_sep"
-}, "-", -1 /* HOISTED */);
+}, null, -1 /* HOISTED */);
 var _hoisted_6 = {
-  key: 1
+  key: 1,
+  "class": "fcal_unavailable_day"
 };
 var _hoisted_7 = {
   key: 0,
   "class": "fcal_add_slot"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_el_switch = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElSwitch;
+  var _component_el_checkbox = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElCheckbox;
   var _component_el_time_select = element_plus_es__WEBPACK_IMPORTED_MODULE_5__.ElTimeSelect;
   var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElButton;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_switch, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_checkbox, {
     onChange: $options.statusUpdated,
     modelValue: $props.config.enabled,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $props.config.enabled = $event;
-    }),
-    "active-value": true,
-    "inactive-value": false
-  }, null, 8 /* PROPS */, ["onChange", "modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("span", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_3__.toDisplayString)($props.week_day), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_4, [$props.config.slots.length && $props.config.enabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
+    })
+  }, null, 8 /* PROPS */, ["onChange", "modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("            <el-switch"), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("                @change=\"statusUpdated\""), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("                v-model=\"config.enabled\""), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("                :active-value=\"true\""), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("                :inactive-value=\"false\" />"), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("span", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_3__.toDisplayString)($props.week_day), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementVNode)("div", _hoisted_4, [$props.config.slots.length && $props.config.enabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
     key: 0
   }, (0,vue__WEBPACK_IMPORTED_MODULE_3__.renderList)($props.config.slots, function (slot, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", {
@@ -67650,7 +69018,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       step: "00:15",
       end: "23:45",
       "max-time": slot.end,
-      placeholder: "Start"
+      placeholder: "Start",
+      "popper-class": "fcal_select"
     }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "max-time"]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_time_select, {
       modelValue: slot.end,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
@@ -67660,16 +69029,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       step: "00:15",
       "min-time": slot.start,
       end: "23:45",
-      placeholder: "End"
+      placeholder: "End",
+      "popper-class": "fcal_select"
     }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min-time"]), $props.config.slots.length > 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createBlock)(_component_el_button, {
       key: 0,
+      "class": "fcal_slot_delete",
       text: "",
       icon: $data.DeleteIcon,
       onClick: function onClick($event) {
         return $options.removeSlot(index);
       }
     }, null, 8 /* PROPS */, ["icon", "onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_3__.createCommentVNode)("v-if", true)]);
-  }), 128 /* KEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_6, "Unavailable"))]), $props.config.enabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_button, {
+  }), 128 /* KEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("span", _hoisted_6, "Unavailable"))]), $props.config.enabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_3__.createVNode)(_component_el_button, {
     text: "",
     icon: $data.PlusIcon,
     onClick: $options.addSlot
@@ -67692,17 +69063,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
 var _hoisted_1 = {
+  "class": "fcal_weekly_schedule_wrap"
+};
+var _hoisted_2 = {
+  key: 0,
+  "class": "fcal_availability_title"
+};
+var _hoisted_3 = {
   "class": "fcal_weekly_schedules"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_week_day_config = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("week-day-config");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.weekly_schedules, function (config, weekDay) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$props.title ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h2", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.title), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.weekly_schedules, function (config, weekDay) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_week_day_config, {
       key: weekDay,
       week_day: weekDay,
       config: config
     }, null, 8 /* PROPS */, ["week_day", "config"]);
-  }), 128 /* KEYED_FRAGMENT */))]);
+  }), 128 /* KEYED_FRAGMENT */))])]);
 }
 
 /***/ }),
@@ -69822,6 +71200,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ScheduleSettings_vue_vue_type_template_id_3aa4f34e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_ScheduleSettings.vue?vue&type=template&id=3aa4f34e */ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e");
+/* harmony import */ var _ScheduleSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_ScheduleSettings.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js");
+/* harmony import */ var _Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* unplugin-vue-components disabled */
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ScheduleSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ScheduleSettings_vue_vue_type_template_id_3aa4f34e__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue":
 /*!**********************************************************************!*\
   !*** ./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue ***!
@@ -69906,9 +71312,9 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue":
+/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue":
 /*!***************************************************************************!*\
-  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue ***!
+  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue ***!
   \***************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -69917,15 +71323,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./__SchedulingConfitions.vue?vue&type=template&id=7846a0c9 */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9");
-/* harmony import */ var _SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./__SchedulingConfitions.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js");
+/* harmony import */ var _SchedulingConditions_vue_vue_type_template_id_4e7d3b47__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./__SchedulingConditions.vue?vue&type=template&id=4e7d3b47 */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47");
+/* harmony import */ var _SchedulingConditions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./__SchedulingConditions.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js");
 /* harmony import */ var _Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 /* unplugin-vue-components disabled */
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SchedulingConditions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SchedulingConditions_vue_vue_type_template_id_4e7d3b47__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -70721,6 +72127,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js":
+/*!**********************************************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScheduleSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScheduleSettings_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./_ScheduleSettings.vue?vue&type=script&lang=js */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=script&lang=js");
+/* unplugin-vue-components disabled */ 
+
+/***/ }),
+
 /***/ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=script&lang=js":
 /*!**********************************************************************************************!*\
   !*** ./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=script&lang=js ***!
@@ -70769,18 +72191,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js":
+/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js":
 /*!***************************************************************************************************!*\
-  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js ***!
+  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js ***!
   \***************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConditions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConfitions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./__SchedulingConfitions.vue?vue&type=script&lang=js */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConditions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./__SchedulingConditions.vue?vue&type=script&lang=js */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=script&lang=js");
 /* unplugin-vue-components disabled */ 
 
 /***/ }),
@@ -71329,6 +72751,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e":
+/*!****************************************************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScheduleSettings_vue_vue_type_template_id_3aa4f34e__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScheduleSettings_vue_vue_type_template_id_3aa4f34e__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./_ScheduleSettings.vue?vue&type=template&id=3aa4f34e */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ScheduleSettings.vue?vue&type=template&id=3aa4f34e");
+/* unplugin-vue-components disabled */
+
+/***/ }),
+
 /***/ "./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=template&id=06b3e2ce":
 /*!****************************************************************************************************!*\
   !*** ./resources/admin/Modules/Calendars/Edit/_SlotSettingsForm.vue?vue&type=template&id=06b3e2ce ***!
@@ -71377,18 +72815,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9":
+/***/ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47":
 /*!*********************************************************************************************************!*\
-  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9 ***!
+  !*** ./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47 ***!
   \*********************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConditions_vue_vue_type_template_id_4e7d3b47__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
-/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConfitions_vue_vue_type_template_id_7846a0c9__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./__SchedulingConfitions.vue?vue&type=template&id=7846a0c9 */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConfitions.vue?vue&type=template&id=7846a0c9");
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SchedulingConditions_vue_vue_type_template_id_4e7d3b47__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./__SchedulingConditions.vue?vue&type=template&id=4e7d3b47 */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue?vue&type=template&id=4e7d3b47");
 /* unplugin-vue-components disabled */
 
 /***/ }),

@@ -79,7 +79,7 @@
 <script type="text/babel">
 import WeeklySchedules from "../parts/WeeklySchedules.vue";
 import DateOverRides from './_DateOverRides.vue';
-import SchedulingConditions from './__SchedulingConfitions.vue';
+import SchedulingConditions from './__SchedulingConditions.vue';
 
 export default {
     name: 'SlotSettingsForm',
