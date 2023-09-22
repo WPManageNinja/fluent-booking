@@ -3,6 +3,8 @@
 namespace FluentBooking\App\Services\Integrations\FluentForms;
 
 use FluentBooking\App\App;
+use FluentForm\App\Models\Submission;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\CalendarSlot;
@@ -13,15 +15,35 @@ use FluentBooking\App\Services\Integrations\FluentForms\BookingElement;
 
 class FluentFormInit 
 {
+    private $bookingIds   = [];
     private $bookingsData = [];
 
     public function init()
     {
         if (defined('FLUENTFORM')) {
             new BookingElement();
-            add_action('fluentform/before_form_validation', [$this, 'handleValidation'], 10, 2);
-            add_action('fluentform/before_insert_submission', [$this, 'handleBooking'], 10);       
+            add_action('fluent_booking/booking_schedule', [$this, 'updateSourceLink'], 10, 1);
+            add_action('fluentform/before_form_validation', [$this, 'handleValidations'], 10, 2);
+            add_action('fluentform/before_insert_submission', [$this, 'handleBookings'], 10);
+            add_action('fluentform/notify_on_form_submit', [$this, 'updateSubmissionId'], 10, 1);  
         }
+    }
+
+    public function updateSourceLink(&$booking)
+    {
+        $submissionId = Arr::get($booking, 'source_id');
+
+        if ('fluentform' != $booking->source || !$submissionId) {
+            return;
+        }
+        
+        $formId = Submission::find($submissionId)->form_id;
+        
+        $url = admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $formId . '#/entries/' . $submissionId);
+
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'fluentform' . '</a>';
+
+        $booking->source = $link;
     }
 
     private function getName($value)
@@ -63,7 +85,8 @@ class FluentFormInit
                     'email'      => $this->getEmail($emailValue),
                     'name'       => $this->getName($nameValue),
                     'rules'      => Arr::get($value, 'rules'),
-                    'slot_id'    => Arr::get($value, 'raw.settings.slot_id')
+                    'slot_id'    => Arr::get($value, 'raw.settings.slot_id'),
+                    'source_url' => site_url(Arr::get($formData, '_wp_http_referer')),
                 ];
 
                 $data = json_decode($data, true);
@@ -135,13 +158,16 @@ class FluentFormInit
             'email'            => sanitize_email($data['email']),
             'person_time_zone' => sanitize_text_field($data['timezone']),
             'source'           => 'fluentform',
+            'source_url'       => sanitize_url($data['source_url']),
             'ip_address'       => Helper::getIp()
         ];
 
-        BookingService::createBooking($bookingData, $calendarSlot);
+        $booking = BookingService::createBooking($bookingData, $calendarSlot);
+
+        $this->bookingIds[] = $booking->id;
     }
 
-    public function handleBooking()
+    public function handleBookings()
     {
         $bookings = $this->bookingsData;
 
@@ -156,7 +182,7 @@ class FluentFormInit
         }
     }
 
-    public function handleValidation($fields, $formData)
+    public function handleValidations($fields, $formData)
     {
         $this->prepareData($fields, $formData);
 
@@ -172,6 +198,19 @@ class FluentFormInit
                     'errors'   => 'Booking Failed'
                 ], $e->getCode());
             }
+        }
+    }
+
+    public function updateSubmissionId($submissionId)
+    {
+        if (!$this->bookingIds) {
+            return;
+        }
+
+        foreach ($this->bookingIds as $bookingId) {
+            Booking::where('id', $bookingId)->update([
+                'source_id' => $submissionId
+            ]);
         }
     }
 }
