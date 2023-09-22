@@ -127,8 +127,8 @@
                                 <div class="fcal_spot_details_label">
                                     Booked From
                                 </div>
-                                <div class="fcal_spot_details_value">
-                                    {{ showing_spot.source }}
+                                <div class="fcal_spot_details_value"
+                                    v-html="showing_spot.source">
                                 </div>
                             </div>
                         </el-col>
