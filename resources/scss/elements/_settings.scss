@@ -1,71 +1,366 @@
-.fcal_settings_container {
-    border-bottom: 1px solid #ebeef5;
-    border-radius: 4px;
-    &.disabled {
-        opacity: 0.6;
-    }
-    .fcal_config_card {
-        .card_top {
-            display: flex;
-            justify-content: space-between;
-            .card_left {
-                display: flex;
-                gap: 1rem;
-                .config_icon {
-                    align-self: center;
-                    font-size: 2.5rem;
-                }
-                .config_content {
-                    .config_title {
-                        font-size: 1rem;
-                        font-weight: 500;
-                        margin: 0.5rem 0;
+
+
+
+/* Settings */
+.fcal_settings_sidebar {
+    margin: 0;
+    li {
+        display: block;
+        margin-bottom: 0;
+        + li {
+            margin-top: 5px;
+        }
+        &.configure {
+            a {
+                &.router-link-exact-active {
+                    svg {
+                        path {
+                            fill: #ffffff;
+                        }
                     }
-                    .config_subtitle {
-                        margin: 0.5rem 0;
+                }
+            }
+        }
+        a {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            color: #445164;
+            gap: 10px;
+            text-decoration: none;
+            position: relative;
+            padding: 8px 10px;
+            border-radius: 10px;
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            &.router-link-exact-active {
+                background: $primaryColor;
+                color: #ffffff;
+                svg {
+                    path {
+                        stroke: #ffffff;
+                    }
+                }
+            }
+            &.router-link-exact-active {
+                svg {
+                    path {
+                        stroke: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+}
+.fcal_settings {
+    .fcal_settings_header_title {
+        h3 {
+            margin: 0 0 24px;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 36px;
+            color: $dark;
+        }
+    }
+    .fcal_settings_body {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        .el-aside {
+            width: 324px;
+            flex: none;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 14px;
+        }
+        .fcal_settings_container {
+            flex: 1;
+            &.disabled {
+                opacity: 0.6;
+            }
+            .fcal_config_card {
+                .card_top {
+                    display: flex;
+                    justify-content: space-between;
+                    .card_left {
+                        display: flex;
+                        gap: 1rem;
+                        .config_icon {
+                            align-self: center;
+                            font-size: 2.5rem;
+                        }
+                        .config_content {
+                            .config_title {
+                                font-size: 1rem;
+                                font-weight: 500;
+                                margin: 0.5rem 0;
+                            }
+                            .config_subtitle {
+                                margin: 0.5rem 0;
+                                font-weight: 300;
+                            }
+                        }
+                    }
+                    .card_right {
+                        display: flex;
+                        align-self: center;
+                        gap: 0.3rem;
+                        margin-right: 2rem;
+                    }
+                }
+                .card_body {
+                    margin: 1rem 2rem 1rem 0;
+                    .integration_cards {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+                    .config_description {
+                        margin-bottom: 1rem;
                         font-weight: 300;
                     }
                 }
             }
-            .card_right {
-                display: flex;
-                align-self: center;
-                gap: 0.3rem;
-                margin-right: 2rem;
-            }
-        }
-        .card_body {
-            margin: 1rem 2rem 1rem 0;
-            .integration_cards {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .config_description {
-                margin-bottom: 1rem;
-                font-weight: 300;
-            }
-        }
-    }
 
-    .fcal_section_body {
-        .el-form-item__content {
-            display: block;
-        }
-        .fcal_reminder_timing {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 5px;
-            .el-input__wrapper {
-                padding: 1px 8px;
-                .el-input__inner {
-                    text-align: center;
+            .fcal_section_body {
+                .el-form-item__content {
+                    display: block;
+                }
+                .fcal_reminder_timing {
+                    display: flex;
+                    gap: 5px;
+                    margin-bottom: 5px;
+                    .el-input__wrapper {
+                        padding: 1px 8px;
+                        .el-input__inner {
+                            text-align: center;
+                        }
+                    }
+                }
+                .fcal_add_reminder {
+                    .el-icon {
+                        margin-right: 2px;
+                    }
                 }
             }
         }
-        .fcal_add_reminder {
-            .el-icon {
-                margin-right: 2px;
+    }
+}
+.fcal_settings_body_inner {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    .fcal_settings_header {
+        border-bottom: 1px solid #EAECF0;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        h3 {
+            margin: 0;
+            color: $dark;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 28px;
+        }
+    }
+    .fcal_settings_content_wrap {
+        .el-form {
+            .el-form-item {
+                margin-bottom: 16px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                .el-form-item__label,
+                .input-label {
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: 20px;
+                    color: #445164;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-bottom: 8px;
+
+                    .help {
+                        width: 15px;
+                        height: 15px;
+                        border: 1px solid #445164;
+                        border-radius: 50%;
+                        text-align: center;
+                        line-height: 14px;
+                        font-size: 10px;
+                        cursor: default;
+                    }
+                }
+                .el-input {
+                    &.is-disabled {
+                        .el-input__inner {
+                            color: #637083;
+                            -webkit-text-fill-color: #637083;
+                        }
+                    }
+                    .el-input__wrapper {
+                        border-radius: 8px;
+                        border: 1px solid #D6DAE1;
+                        font-size: 16px;
+                        font-weight: 400;
+                        line-height: 24px;
+                        box-shadow: none;
+                        color: $dark;
+                        padding: 8px 16px;
+                        &.is-focus {
+                            border-color: $primaryColor;
+                        }
+                        .el-input__inner {
+                            padding: 0;
+                            margin: 0;
+                            color: $dark;
+                            background: transparent;
+                        }
+                    }
+                }
+                &.redirect-url-input {
+                    .el-input {
+                        .el-input__wrapper {
+                            border-radius: 8px 0 0 8px;
+                            border: none;
+                            background: #F5F6F7;
+                        }
+                        .el-input-group__append {
+                            padding: 0;
+                            box-shadow: none;
+                            background: none;
+                            button {
+                                margin: 0;
+                                background: rgb(38 83 199 / 15%);
+                                color: $primaryColor;
+                                padding: 14px 16px;
+                                height: auto;
+                                border-radius: 0 8px 8px 0;
+                                > span {
+                                    gap: 4px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fcal_settings_footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border-top: 1px solid #EAECF0;
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+    }
+}
+
+.fcal_single_integration_wrap {
+    max-width: 985px;
+    margin: auto;
+    .fcal_header {
+        margin-bottom: 24px;
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 36px;
+            color: $dark;
+            margin: 2px 0 0 0;
+        }
+    }
+}
+
+.fcal_settings_card {
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #D6DAE1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: .2s;
+    &:hover {
+        border-color: transparent;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
+    }
+    .content {
+        h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 28px;
+            color: $dark;
+        }
+        p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            margin: 0;
+            color: #445164;
+            + p {
+                margin-top: 8px;
+            }
+        }
+        .format-date {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #445164;
+            gap: 8px;
+            span {
+                display: block;
+                box-shadow: 2px 2px 2px 0 #180D541A inset;
+                background: #F5F6F7;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                padding: 6px 12px;
+            }
+        }
+    }
+    .fcal_primary_btn2 {
+        padding: 12px 20px;
+    }
+    .el-select {
+        width: 320px;
+        .el-input {
+            &.is-focus {
+                .el-input__wrapper {
+                    box-shadow: none !important;
+                    outline: none;
+                }
+            }
+            .el-input__wrapper {
+                border-radius: 8px;
+                border: 1px solid #D6DAE1;
+                padding: 4px 16px;
+                font-weight: 500;
+                line-height: 20px;
+                color: $dark;
+                font-size: 14px;
+                box-shadow: none;
+                &.is-focus {
+                    box-shadow: none !important;
+                    outline: none;
+                    border-color: $primaryColor;
+                }
+                input {
+                    margin: 0;
+                    padding: 0;
+                    &::placeholder {
+                        color: $dark;
+                        opacity: 1;
+                    }
+                }
             }
         }
     }

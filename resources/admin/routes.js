@@ -6,8 +6,11 @@ import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue"
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
 import Availabilities from "./Modules/Availability/Availabilities.vue";
 import Settings from "./Modules/Settings/Settings.vue";
-import Integrations from "./Modules/Settings/Integrations/Integrations.vue";
-import Configurations from "./Modules/Settings/Integrations/Configurations.vue";
+import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";
+import GeneralSettings from "./Modules/Settings/GeneralSettings";
+import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
+import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
+import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
 
 export var routes = [
     {
@@ -24,6 +27,15 @@ export var routes = [
         component: AllCalendars,
         meta: {
             active_menu: 'calendars'
+        }
+    },
+    {
+        name: 'single-integration',
+        path: '/calendars/:id/single-integration',
+        component: SingleIntegration,
+        meta: {
+            active_menu: 'calendars',
+            title: 'Single Integrations'
         }
     },
     {
@@ -44,7 +56,7 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/:calendar_id/create-event-type',
+        path: '/calendars/:calendar_id/:event_type/create-event-type',
         name: 'create_slot_event',
         component: CreateCalendarSlot,
         props: true,
@@ -70,27 +82,49 @@ export var routes = [
     },
     {
         path: '/settings',
-        name: 'settings',
         component: Settings,
+        props: true,
         meta: {
             active_menu: 'settings'
-        }
-    },
-    {
-        path: '/integrations',
-        name: 'integrations',
-        component: Integrations,
-        meta: {
-            active_menu: 'integrations'
-        }
-    },
-    {
-        path: '/configurations',
-        name: 'configurations',
-        component: Configurations,
-        meta: {
-            active_menu: 'configurations'
-        }
+        },
+        children: [
+            {
+                name: 'settings',
+                path: '/settings',
+                component: GeneralSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'General'
+                },
+            },
+            {
+                name: 'profile-settings',
+                path: 'profile-settings',
+                component: ProfileSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Profile'
+                },
+            },
+            {
+                name: 'configure-integrations',
+                path: 'configure-integrations',
+                component: ConfigureIntegrationSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Configure Integrations'
+                },
+            },
+            {
+                name: 'integrations',
+                path: 'integrations',
+                component: IntegrationSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Integrations'
+                },
+            }
+        ]
     }
 ];
 

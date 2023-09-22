@@ -63,15 +63,10 @@ class AdminMenuHandler
                     'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me'
                 ],
                 [
-                    'key'       => 'configurations',
-                    'label'     => __('Configurations', 'fluent-booking'),
-                    'permalink' => $baseUrl.'configurations'
-                ],
-                [
-                    'key'       => 'integrations',
-                    'label'     => __('Integrations', 'fluent-booking'),
-                    'permalink' => $baseUrl.'integrations'
-                ],
+                    'key'       => 'settings',
+                    'label'     => __('Settings', 'fluent-booking'),
+                    'permalink' => $baseUrl.'settings'
+                ]
             ];
         }
 

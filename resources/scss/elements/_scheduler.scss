@@ -1,64 +1,161 @@
-.fcal_cal_header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 10px;
-
-  .fcal_cal_title {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-
-    img {
-      max-width: 44px;
-      border-radius: 50%;
-    }
-
-    h3 {
-      margin: 0;
-      padding: 0;
-      font-size: 18px;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
-}
-
 
 .fcal_each_cal {
-  margin-bottom: 20px;
-}
-
-.fcal_cal_slots {
-  margin-top: 20px;
-  .fcal_cal_slot {
-    margin-bottom: 20px;
-    position: relative;
-    background: #f8fafc;
-    border: 1px solid rgb(0 0 0 / 10%);
-    border-radius: 4px;
-    box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
-
-    .fcal_slot_body {
-      padding: 10px 15px;
-    }
-
-    .fcal_slot_footer {
-      border-top: 1px solid rgba(26, 26, 26, 0.1);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  .fcal_event_block {
+    .fcal_cal_header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px;
+      justify-content: space-between;
+      border-bottom: 1px solid #EAECF0;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
 
-      h3 {
-        margin: 0;
+      .fcal_cal_title {
+        display: flex;
+        align-items: center;
+        column-gap: 16px;
+
+        img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        h3 {
+          margin: 0;
+          padding: 0;
+          font-size: 20px;
+          color: $dark;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .fcal_cal_actions {
+        display: flex;
+        .el-button {
+          + .el-button {
+            margin-left: 8px;
+          }
+        }
       }
     }
 
-    &:hover {
-      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
+    .fcal_cal_slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      @media all and (max-width: 1060px) {
+          grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media all and (max-width: 768px) {
+          grid-template-columns: 1fr;
+      }
+
+      .fcal_cal_slot {
+        position: relative;
+        border-radius: 8px;
+        border: 1px solid #D6DAE1;
+        padding: 24px;
+
+        .fcal_slot_body {
+          h3 {
+            margin: 0 0 24px 0;
+            color: $dark;
+            display: flex;
+            align-items: center;
+            position: relative;
+            gap: 12px;
+            font-size: 18px;
+            .fcal_status_badge {
+              background: #4587EC;
+              border-radius: 50%;
+              height: 14px;
+              width: 14px;
+              display: block;
+            }
+
+            .fcal_slot_config {
+              position: absolute;
+              right: 0;
+              .el-dropdown {
+                .fcal_slog_setting_icon {
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+
+          .fcal_slot_meta {
+            display: flex;
+            align-items: center;
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            font-weight: 400;
+            gap: 32px;
+            line-height: 1;
+            > span {
+              color: #8F97A2;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              i {
+                font-size: 16px;
+              }
+              .icons {
+                gap: 2px;
+              }
+              .right,
+              .icons {
+                display: inline-flex;
+                align-items: center;
+              }
+            }
+          }
+
+        }
+
+        .fcal_slot_footer {
+          border-top: 1px solid rgba(26, 26, 26, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 24px;
+
+          h3 {
+            margin: 0;
+          }
+
+          .fcal_shortcode {
+            .el-button {
+              border-radius: 8px;
+              font-size: 14px;
+              transition: 0.2s;
+              line-height: 1;
+              color: $primaryColor;
+              font-weight: 400;
+              background: rgb(38 83 199 / 10%);
+              padding: 11px 16px;
+              height: auto;
+              i {
+                font-size: 18px;
+              }
+              &:hover {
+                background: rgb(38 83 199 / 20%);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -191,8 +288,148 @@
   }
 }
 
-.fcal_slot_config {
-  position: absolute;
-  top: 4px;
-  right: 4px;
+.fcal_create_calendar_wrap {
+  .fcal_create_calendar_header {
+    max-width: 571px;
+    margin: auto;
+    padding-top: 34px;
+    margin-bottom: 30px;
+    > h1 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 36px;
+      color: $dark;
+      margin: 0 0 20px;
+    }
+  }
+  .fcal_create_calendar_body {
+    box-shadow: 0 4px 16px -2px rgb(27 37 51 / 6%);
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    padding: 30px 24px;
+    background: #ffffff;
+    max-width: 946px;
+    margin: auto;
+    .fcal_create_calendar_form_body {
+      .el-form {
+        .el-form-item {
+          margin-bottom: 18px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          .el-input {
+            .el-input__wrapper {
+              padding: 9px 16px;
+              border-radius: 8px;
+              .el-input__inner {
+                height: auto;
+                margin: 0;
+                padding: 0;
+              }
+            }
+            &.el-input-group--prepend {
+              &.is-focus {
+                .el-input__wrapper {
+                  box-shadow: none !important;
+                }
+              }
+              .el-input__wrapper {
+                padding: 7px 16px;
+                border: 1px solid #D6DAE1;
+                //border-left: none;
+                border-radius: 0 8px 8px 0;
+                box-shadow: none;
+                .el-input__inner {
+                  margin: 0;
+                  padding: 0;
+                  min-height: inherit;
+                  height: auto;
+                  background: transparent;
+                  color: #445164;
+
+                  font-size: 16px;
+                  font-weight: 400;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
+.fcal_steps {
+  padding: 0;
+  justify-content: center;
+  gap: 7px;
+  .el-step {
+    display: flex;
+    align-items: center;
+    flex-basis: auto !important;
+    &:last-child {
+      max-width: max-content !important;
+    }
+    .el-step__head {
+      width: auto;
+      font-size: 0;
+      padding-right: 10px;
+      &.is-finish {
+        .el-step__icon {
+          background: $primaryColor;
+          color: #ffffff;
+          border-color: $primaryColor;
+        }
+      }
+      .el-step__line {
+        display: none;
+      }
+      .el-step__icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #D8D8D8;
+        color: #8F97A2;
+        font-size: 16px;
+        .el-step__icon-inner {
+          font-weight: 400;
+        }
+      }
+    }
+    .el-step__main {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      flex-grow: 1;
+      white-space: nowrap;
+      .el-step__description {
+        display: none;
+      }
+      .el-step__title {
+        width: 100%;
+        cursor: pointer;
+        &.is-finish {
+          h3 {
+            color: $primaryColor;
+          }
+        }
+        h3 {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          margin: 0;
+          justify-content: space-between;
+
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 24px;
+          color: #565865;
+          i {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+
