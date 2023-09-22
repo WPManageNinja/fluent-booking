@@ -3,8 +3,8 @@
 namespace FluentBooking\App\Services\Integrations\FluentCRM;
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Integrations\FluentCRM\NewBookingTrigger;
 
 class FluentCrmInit {
 
@@ -43,9 +43,7 @@ class FluentCrmInit {
 
 	public function addAutomations()
 	{
-		/*
-		 * TODO: You may Register your automations here
-		 */
+        new NewBookingTrigger();
 	}
 
     private function getSubscriberId($email)
