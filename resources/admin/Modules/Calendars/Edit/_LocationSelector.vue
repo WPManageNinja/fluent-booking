@@ -123,7 +123,7 @@ export default {
         },
         confirmLocation() {
 
-            if (this.location_details.location_type != 'phone') {
+            if (this.location_details.location_type != 'phone' && this.location_details.location_type != 'google_meet') {
                 if(!this.location_details.location_heading) {
                     this.$notify.error('Please provide Location heading');
                     return;
