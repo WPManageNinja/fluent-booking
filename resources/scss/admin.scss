@@ -11,42 +11,32 @@
 .fl_app {
   margin-right: 20px;
 }
-
+.fcal_section_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 24px;
+  .fcal_title {
+    h3 {
+      margin: 0;
+      padding: 0;
+      color: $dark;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+  }
+}
 .fcal_section {
   display: block;
   width: 100%;
 
-  &.fcal_section_narrow {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
   .fcal_section_body {
-    padding: 15px;
-    background: white;
-    overflow: hidden;
+    //padding: 15px;
+    //background: white;
+    //overflow: hidden;
   }
 
-  .fcal_section_header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f7fafc;
-    border-bottom: 1px solid #e3e8ee;
-    clear: both;
-    color: #697386;
-    font-weight: 700;
-    margin: 0;
-    overflow: hidden;
-    padding: 15px;
-    width: auto;
-
-    h3 {
-      margin: 0;
-      padding: 0;
-    }
-  }
 }
 
 .fcal_weekly_schedules {

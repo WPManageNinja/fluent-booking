@@ -2,13 +2,14 @@
 
 .#{$slug} {
     &main-menu-items {
-        display: block;
         position: relative;
         margin-bottom: 20px;
         background: white;
         margin-left: -20px;
         padding-left: 20px;
         overflow: hidden;
+        display: flex;
+        justify-content: space-between;
 
         .menu_logo_holder {
             max-height: 40px;
@@ -53,9 +54,9 @@
                 margin: 0;
 
                 &.active_item {
-                    border-bottom: 2px solid #9d95d8;
+                    border-bottom: 2px solid $primaryColor;
                     a {
-                        color: black;
+                        color: $primaryColor;
                     }
                 }
 
@@ -67,10 +68,11 @@
                 .#{$slug}menu_primary {
                     padding: 20px 20px;
                     display: block;
-                    font-size: 14px;
+                    font-size: 16px;
                     line-height: 100%;
                     text-decoration: none;
-                    color: #909399;
+                    color: #445164;
+                    font-weight: 400;
 
                     span {
                         font-size: 14px;
@@ -134,7 +136,7 @@
             display: none;
         }
         @media all and (max-width: 679px) {
-            margin-right: 10px;
+            display: block;
             ul.#{$slug}menu {
                 display: none;
             }
