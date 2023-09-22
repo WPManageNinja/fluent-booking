@@ -1,6 +1,11 @@
 <template>
-    <div>
-        <el-select @change="locationChanged()" :disabled="!!location_details.location_type" popper-class="fcal_selector_with_submenu" v-model="location_details.location_type" placeholder="Select Location">
+    <div class="fcal_location_selector_wrap">
+        <el-select
+            @change="locationChanged()"
+            :disabled="!!location_details.location_type"
+            popper-class="fcal_selector_with_submenu fcal_select"
+            v-model="location_details.location_type"
+            placeholder="Select Location">
             <el-option
                 v-for="(location, locationKey) in locations"
                 :key="locationKey"
@@ -11,7 +16,7 @@
                 <span>{{ location.subtitle }}</span>
             </el-option>
             <template #prefix>
-                <el-button class="location_edit_btn" v-if="location_details.location_type" @click="showModal = true;">Edit</el-button>
+                <el-button class="location_edit_btn fcal_plain_btn" v-if="location_details.location_type" @click="showModal = true;">Edit</el-button>
             </template>
         </el-select>
         <el-dialog

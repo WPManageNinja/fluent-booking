@@ -1,8 +1,16 @@
 <template>
     <div class="fcal_week_day_config">
         <div class="fcal_day_status">
-            <el-switch @change="statusUpdated" v-model="config.enabled" :active-value="true" :inactive-value="false" />
-            <span style="text-transform: uppercase; margin-left: 10px;">{{week_day}}</span>
+            <el-checkbox
+                @change="statusUpdated"
+                v-model="config.enabled"
+            />
+<!--            <el-switch-->
+<!--                @change="statusUpdated"-->
+<!--                v-model="config.enabled"-->
+<!--                :active-value="true"-->
+<!--                :inactive-value="false" />-->
+            <span class="fcal_day">{{week_day}}</span>
         </div>
         <div class="fcal_day_slots">
             <div v-if="config.slots.length && config.enabled" class="fcal_slot" v-for="(slot, index) in config.slots" :key="index">
@@ -11,18 +19,28 @@
                                 step="00:15"
                                 end="23:45"
                                 :max-time="slot.end"
-                                placeholder="Start" />
-                <span class="fcal_sep">-</span>
+                                placeholder="Start"
+                                popper-class="fcal_select"
+                />
+                <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
                                 start="00:00"
                                 step="00:15"
                                 :min-time="slot.start"
                                 end="23:45"
-                                placeholder="End" />
+                                placeholder="End"
+                                popper-class="fcal_select"
+                />
 
-                <el-button v-if="config.slots.length > 1" text :icon="DeleteIcon" @click="removeSlot(index)" />
+                <el-button
+                    class="fcal_slot_delete"
+                    v-if="config.slots.length > 1"
+                    text
+                    :icon="DeleteIcon"
+                    @click="removeSlot(index)"
+                />
             </div>
-            <div v-else>Unavailable</div>
+            <span v-else class="fcal_unavailable_day">Unavailable</span>
         </div>
         <div v-if="config.enabled" class="fcal_add_slot">
             <el-button text :icon="PlusIcon" @click="addSlot" />
