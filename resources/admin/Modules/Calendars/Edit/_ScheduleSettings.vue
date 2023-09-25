@@ -48,7 +48,28 @@
 
                 <el-form-item label="How do you want to offer your availability for this event type?">
                     <el-tabs v-model="formData.availabilityTab">
-                        <el-tab-pane label="Use an Existing Schedule" name="existingSchedule">User</el-tab-pane>
+                        <el-tab-pane label="Use an Existing Schedule" name="existingSchedule">
+                            <div class="fcal_availability_body">
+                                <el-select
+                                    v-model="formData.timezone"
+                                    placeholder="Select timezone"
+                                    popper-class="fcal_select"
+                                    class="fcal_timezone"
+                                >
+                                    <el-option
+                                        label="Asia/Dhaka"
+                                        value="asia/dhaka"
+                                    />
+                                    <el-option
+                                        label="United State"
+                                        value="us"
+                                    />
+                                </el-select>
+
+                                <ExistingSchedule :existing_schedules="slot.settings.weekly_schedules" />
+
+                            </div>
+                        </el-tab-pane>
                         <el-tab-pane label="Set Custom Hours" name="setCustomHour">
                             <div class="fcal_availability_body">
                                 <el-select
@@ -96,9 +117,15 @@
 import WeeklySchedules from "../parts/WeeklySchedules";
 import DateOverRides from "./_DateOverRides";
 import SchedulingConditions from "./__SchedulingConditions";
+import ExistingSchedule from './_ExistingSchedule';
 export default {
     name: '_ScheduleSettings',
-    components: {SchedulingConditions, DateOverRides, WeeklySchedules},
+    components: {
+        SchedulingConditions,
+        DateOverRides,
+        WeeklySchedules,
+        ExistingSchedule
+    },
     props: ['slot'],
     data() {
         return {
