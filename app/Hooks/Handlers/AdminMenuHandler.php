@@ -10,6 +10,14 @@ use FluentBooking\App\Services\Helper;
 
 class AdminMenuHandler
 {
+
+    protected $app;
+
+    public function __construct()
+    {
+        $this->app = App::getInstance();
+    }
+
     public function add()
     {
         $capability = 'manage_options';
@@ -23,14 +31,50 @@ class AdminMenuHandler
             $this->getMenuIcon(),
             6
         );
+
+        add_submenu_page(
+            'fluent-booking',
+            __('Dashboard', 'fluent-booking'),
+            __('Dashboard', 'fluent-booking'),
+            $capability,
+            'fluent-booking',
+            ''
+        );
+
+        add_submenu_page(
+            'fluent-booking',
+            __('Booking Types', 'fluent-booking'),
+            __('Booking Types', 'fluent-booking'),
+            $capability,
+            'admin.php?page=fluent-booking#/calendars',
+            ''
+        );
+
+        add_submenu_page(
+            'fluent-booking',
+            __('Meetings', 'fluent-booking'),
+            __('Meetings', 'fluent-booking'),
+            $capability,
+            'admin.php?page=fluent-booking#/scheduled-events',
+            ''
+        );
+
+        add_submenu_page(
+            'fluent-booking',
+            __('Settings', 'fluent-booking'),
+            __('Settings', 'fluent-booking'),
+            $capability,
+            'admin.php?page=fluent-booking#/settings',
+            ''
+        );
     }
 
     public function render()
     {
         $this->enqueueAssets();
 
-        $config = App::getInstance('config');
-
+        $config = $this->app->config;
+        
         $name = $config->get('app.name');
 
         $slug = $config->get('app.slug');
@@ -70,10 +114,9 @@ class AdminMenuHandler
             ];
         }
 
-	    $app = App::getInstance();
-	    $assets = $app['url.assets'];
+	    $assets = $this->app['url.assets'];
 
-	    App::make('view')->render('admin.menu', [
+	    $this->app->view->render('admin.menu', [
 		    'name'      => $name,
 		    'slug'      => $slug,
 		    'menuItems' => $menuItems,
