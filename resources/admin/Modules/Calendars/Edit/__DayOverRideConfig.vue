@@ -10,16 +10,25 @@
                                 step="00:10"
                                 end="23:50"
                                 :max-time="slot.end"
-                                placeholder="Start" />
-                <span class="fcal_sep">-</span>
+                                placeholder="Start"
+                                popper-class="fcal_select"
+                />
+                <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
                                 start="00:00"
                                 step="00:10"
                                 :min-time="slot.start"
                                 end="23:50"
-                                placeholder="End" />
+                                placeholder="End"
+                                popper-class="fcal_select"
+                />
 
-                <el-button v-if="slots.length > 1" text :icon="DeleteIcon" @click="removeSlot(index)" />
+                <el-button
+                    v-if="slots.length > 1"
+                    text
+                    :icon="DeleteIcon"
+                    class="fcal_slot_delete"
+                    @click="removeSlot(index)" />
             </div>
         </div>
         <div class="fcal_add_slot">
