@@ -82,6 +82,11 @@ class SchedulesController extends Controller
         ];
     }
 
+    public function getScheduleSpot(Request $request, $spot_id) {
+
+
+    }
+
     public function patchBooking(Request $request, $bookingId)
     {
         $booking = Booking::findOrFail($bookingId);

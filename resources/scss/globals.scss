@@ -65,6 +65,7 @@
             font-size: 18px;
         }
     }
+    &:focus,
     &:hover {
         background: rgb(38 83 199 / 10%);
         color: $primaryColor;
@@ -663,11 +664,6 @@ p.fcal_profile_link a {
 .fcal_status_draft {
     opacity: 0.6;
 }
-
-.fcal_head_actions {
-    margin: -15px 0;
-}
-
 // el-popover-dropdown
 .el-dropdown-list-wrapper {
     &.el-popover {

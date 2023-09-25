@@ -1,5 +1,5 @@
 <template>
-    <el-table :data="spots" class="fcal_schedule_meeting_table">
+    <el-table :data="data" class="fcal_schedule_meeting_table">
         <el-table-column label="Invitees" width="200">
             <template #default="scope">
                 <span class="invitees">{{ scope.row.invite }}</span>
@@ -23,7 +23,7 @@
             </template>
         </el-table-column>
         <el-table-column>
-            <el-button class="fcal_plain_btn">View Details</el-button>
+            <el-button class="fcal_plain_btn" @click="shodetails">View Details</el-button>
         </el-table-column>
     </el-table>
 </template>
@@ -54,7 +54,9 @@ export default {
         }
     },
     methods: {
-
+        shodetails() {
+            this.$router.push({name: 'scheduled_event_details', params: {spot_id: 3}})
+        }
     },
     computed: {
         // spotTitle() {
