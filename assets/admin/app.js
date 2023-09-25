@@ -63854,6 +63854,24 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* unplugin-vue-components disabled *//* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "_ExistingSchedule.vue",
+  props: ['existing_schedules']
+});
+
+/***/ }),
+
 /***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=script&lang=js":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=script&lang=js ***!
@@ -64019,7 +64037,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _parts_WeeklySchedules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../parts/WeeklySchedules */ "./resources/admin/Modules/Calendars/parts/WeeklySchedules.vue");
 /* harmony import */ var _DateOverRides__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_DateOverRides */ "./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue");
 /* harmony import */ var _SchedulingConditions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./__SchedulingConditions */ "./resources/admin/Modules/Calendars/Edit/__SchedulingConditions.vue");
+/* harmony import */ var _ExistingSchedule__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_ExistingSchedule */ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue");
 /* unplugin-vue-components disabled */
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -64027,7 +64047,8 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     SchedulingConditions: _SchedulingConditions__WEBPACK_IMPORTED_MODULE_2__["default"],
     DateOverRides: _DateOverRides__WEBPACK_IMPORTED_MODULE_1__["default"],
-    WeeklySchedules: _parts_WeeklySchedules__WEBPACK_IMPORTED_MODULE_0__["default"]
+    WeeklySchedules: _parts_WeeklySchedules__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ExistingSchedule: _ExistingSchedule__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['slot'],
   data: function data() {
@@ -66917,6 +66938,57 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6 ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* unplugin-vue-components disabled */
+var _hoisted_1 = {
+  "class": "fcal_availability_setting"
+};
+var _hoisted_2 = {
+  "class": "fcal_weekly_schedule_wrap"
+};
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "fcal_availability_title"
+}, "Weekly Hours", -1 /* HOISTED */);
+var _hoisted_4 = {
+  "class": "fcal_weekly_existing_schedule"
+};
+var _hoisted_5 = {
+  "class": "day"
+};
+var _hoisted_6 = {
+  "class": "date"
+};
+var _hoisted_7 = {
+  key: 1,
+  "class": "unavailable"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_4, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.existing_schedules, function (schedule, i) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      key: i
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(i), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_6, [schedule.slots.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+      key: 0
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(schedule.slots, function (time, index) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+        key: index
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(time.start) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(time.end), 1 /* TEXT */);
+    }), 128 /* KEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_7, "Unavailable"))])]);
+  }), 128 /* KEYED_FRAGMENT */))])])]);
+}
+
+/***/ }),
+
 /***/ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=template&id=37b385b0":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=template&id=37b385b0 ***!
@@ -67308,12 +67380,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/form/index.mjs");
 /* harmony import */ var element_plus_es_components_form_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/form/style/css */ "./node_modules/element-plus/es/components/form/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/tabs/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/tabs/index.mjs");
 /* harmony import */ var element_plus_es_components_tabs_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/tabs/style/css */ "./node_modules/element-plus/es/components/tabs/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/select/index.mjs");
-/* harmony import */ var element_plus_es_components_select_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/select/style/css */ "./node_modules/element-plus/es/components/select/style/css.mjs");
-/* harmony import */ var element_plus_es_components_option_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/option/style/css */ "./node_modules/element-plus/es/components/option/style/css.mjs");
-/* harmony import */ var element_plus_es_components_tab_pane_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/tab-pane/style/css */ "./node_modules/element-plus/es/components/tab-pane/style/css.mjs");
+/* harmony import */ var element_plus_es_components_tab_pane_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/tab-pane/style/css */ "./node_modules/element-plus/es/components/tab-pane/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/select/index.mjs");
+/* harmony import */ var element_plus_es_components_select_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/select/style/css */ "./node_modules/element-plus/es/components/select/style/css.mjs");
+/* harmony import */ var element_plus_es_components_option_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/option/style/css */ "./node_modules/element-plus/es/components/option/style/css.mjs");
 /* harmony import */ var element_plus_es_components_form_item_style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es/components/form-item/style/css */ "./node_modules/element-plus/es/components/form-item/style/css.mjs");
 /* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/radio/index.mjs");
 /* harmony import */ var element_plus_es_components_radio_group_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es/components/radio-group/style/css */ "./node_modules/element-plus/es/components/radio-group/style/css.mjs");
@@ -67365,9 +67437,12 @@ var _hoisted_10 = {
   "class": "fcal_availability_body"
 };
 var _hoisted_11 = {
+  "class": "fcal_availability_body"
+};
+var _hoisted_12 = {
   "class": "fcal_availability_setting"
 };
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("span", {
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("span", {
   "class": "sub-label"
 }, "Invitees can't schedule within...", -1 /* HOISTED */);
 
@@ -67377,17 +67452,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_date_picker = element_plus_es__WEBPACK_IMPORTED_MODULE_13__.ElDatePicker;
   var _component_el_radio_group = element_plus_es__WEBPACK_IMPORTED_MODULE_11__.ElRadioGroup;
   var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElFormItem;
-  var _component_el_tab_pane = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElTabPane;
-  var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElOption;
-  var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElSelect;
+  var _component_el_option = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElOption;
+  var _component_el_select = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElSelect;
+  var _component_ExistingSchedule = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("ExistingSchedule");
+  var _component_el_tab_pane = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElTabPane;
   var _component_WeeklySchedules = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("WeeklySchedules");
   var _component_date_over_rides = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("date-over-rides");
-  var _component_el_tabs = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElTabs;
+  var _component_el_tabs = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElTabs;
   var _component_SchedulingConditions = (0,vue__WEBPACK_IMPORTED_MODULE_10__.resolveComponent)("SchedulingConditions");
   var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElForm;
   return (0,vue__WEBPACK_IMPORTED_MODULE_10__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_form, {
     modelValue: $data.formData,
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $data.formData = $event;
     }),
     "label-position": "top"
@@ -67463,7 +67539,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tabs, {
             modelValue: $data.formData.availabilityTab,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
               return $data.formData.availabilityTab = $event;
             })
           }, {
@@ -67471,14 +67547,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tab_pane, {
                 label: "Use an Existing Schedule",
                 name: "existingSchedule"
-              }, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("User")];
-                }),
-                _: 1 /* STABLE */
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tab_pane, {
-                label: "Set Custom Hours",
-                name: "setCustomHour"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_select, {
@@ -67500,7 +67568,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       })];
                     }),
                     _: 1 /* STABLE */
-                  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_WeeklySchedules, {
+                  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_ExistingSchedule, {
+                    existing_schedules: $props.slot.settings.weekly_schedules
+                  }, null, 8 /* PROPS */, ["existing_schedules"])])];
+                }),
+                _: 1 /* STABLE */
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_tab_pane, {
+                label: "Set Custom Hours",
+                name: "setCustomHour"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_select, {
+                    modelValue: $data.formData.timezone,
+                    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+                      return $data.formData.timezone = $event;
+                    }),
+                    placeholder: "Select timezone",
+                    "popper-class": "fcal_select",
+                    "class": "fcal_timezone"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_option, {
+                        label: "Asia/Dhaka",
+                        value: "asia/dhaka"
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_option, {
+                        label: "United State",
+                        value: "us"
+                      })];
+                    }),
+                    _: 1 /* STABLE */
+                  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_WeeklySchedules, {
                     weekly_schedules: $props.slot.settings.weekly_schedules,
                     title: "Weekly Hours"
                   }, null, 8 /* PROPS */, ["weekly_schedules"]), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_date_over_rides, {
@@ -67521,7 +67618,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "fcal_override_scheduling_condition_wrap"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
-          return [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_SchedulingConditions, {
+          return [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_SchedulingConditions, {
             settings: $props.slot.settings
           }, null, 8 /* PROPS */, ["settings"])];
         }),
@@ -71144,6 +71241,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ExistingSchedule_vue_vue_type_template_id_45a344b6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_ExistingSchedule.vue?vue&type=template&id=45a344b6 */ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6");
+/* harmony import */ var _ExistingSchedule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_ExistingSchedule.vue?vue&type=script&lang=js */ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js");
+/* harmony import */ var _Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* unplugin-vue-components disabled */
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_Users_tanbirahmed_Projects_test_plugins_wp_content_plugins_fluent_calendar_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ExistingSchedule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ExistingSchedule_vue_vue_type_template_id_45a344b6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue":
 /*!**********************************************************************!*\
   !*** ./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue ***!
@@ -72095,6 +72220,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js":
+/*!**********************************************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ExistingSchedule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ExistingSchedule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./_ExistingSchedule.vue?vue&type=script&lang=js */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=script&lang=js");
+/* unplugin-vue-components disabled */ 
+
+/***/ }),
+
 /***/ "./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=script&lang=js":
 /*!**********************************************************************************************!*\
   !*** ./resources/admin/Modules/Calendars/Edit/_LocationSelector.vue?vue&type=script&lang=js ***!
@@ -72715,6 +72856,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_DateOverRides_vue_vue_type_template_id_4da8e896__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_DateOverRides_vue_vue_type_template_id_4da8e896__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./_DateOverRides.vue?vue&type=template&id=4da8e896 */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_DateOverRides.vue?vue&type=template&id=4da8e896");
+/* unplugin-vue-components disabled */
+
+/***/ }),
+
+/***/ "./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6":
+/*!****************************************************************************************************!*\
+  !*** ./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6 ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ExistingSchedule_vue_vue_type_template_id_45a344b6__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_vue_components_node_modules_unplugin_dist_webpack_loaders_transform_js_unpluginName_unplugin_auto_import_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ExistingSchedule_vue_vue_type_template_id_45a344b6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!../../../../../node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./_ExistingSchedule.vue?vue&type=template&id=45a344b6 */ "./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-vue-components!./node_modules/unplugin/dist/webpack/loaders/transform.js?unpluginName=unplugin-auto-import!./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/admin/Modules/Calendars/Edit/_ExistingSchedule.vue?vue&type=template&id=45a344b6");
 /* unplugin-vue-components disabled */
 
 /***/ }),
