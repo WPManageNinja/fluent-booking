@@ -40,9 +40,15 @@ export default {
     }
 };
 
-jQuery(document).ajaxSuccess((event, xhr, settings) => {
-    const nonce = xhr.getResponseHeader('X-WP-Nonce');
-    if (nonce) {
-        window.fluentFrameworkAdmin.rest_nonce = nonce;
-    }
+jQuery(($) => {
+    (() => {
+        $.ajaxSetup({
+            success: function(response, status, xhr) {
+                const nonce = xhr.getResponseHeader('X-WP-Nonce');
+                if (nonce) {
+                    window.fluentFrameworkAdmin.rest.nonce = nonce;
+                }
+            }
+        });
+    })();
 });
