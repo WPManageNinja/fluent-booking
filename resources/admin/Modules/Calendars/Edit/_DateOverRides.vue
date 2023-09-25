@@ -1,58 +1,117 @@
 <template>
-    <div>
-        <p v-if="!overrides.length">Add dates when your availability changes from your weekly hours</p>
-        <el-button @click="showModal()" plain type="primary">Add a date override</el-button>
-        <table style="font-size: 85%; margin-top: 20px;" class="fcal_table fcal_table_compact fcal_table_stripe">
-            <tbody>
-                <tr v-for="item in overrides" style="cursor: pointer;">
-                    <td @click="showSlotEdit(item)">{{item.label}}</td>
-                    <td @click="showSlotEdit(item)" style="text-align: right;">
-                        <ul class="fcal_slots_list">
-                            <li v-for="slot in item.slots">
-                                {{toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')}}
-                            </li>
-                        </ul>
-                    </td>
-                    <td style="width: 20px; padding: 5px 0;"><el-button @click="deleteOverRide(item)" size="small" :icon="DeleteIcon" text></el-button></td>
-                </tr>
-            </tbody>
-        </table>
-        <el-dialog width="50%" v-model="modal_visible" :append-to-body="true" title="Select the date(s) you want to assign specific hours">
-            <div v-if="modal_visible" class="fcal_cal_wrapper">
-                <el-calendar v-model="current_date" ref="calendar">
-                    <template #header="{ date }">
-                        <span>{{ date }}</span>
-                        <el-button-group>
-                            <el-button size="small" @click="selectDate('prev-month')">
-                                <el-icon><ArrowLeft /></el-icon>
+    <div class="fcal_override_date">
+        <h2 v-if="title" class="fcal_availability_title">{{ title }}</h2>
+        <div class="fcal_override_date_inner">
+            <p v-if="!overrides.length">Add dates when your availability changes from your weekly hours</p>
+            <div class="fcal_override_dropdown_wrap" @click.self="modal_visible = false">
+                <el-button class="fcal_primary_btn2" @click="modal_visible = !modal_visible">
+                    Add a date override
+                </el-button>
+
+                <div v-if="modal_visible" class="fcal_override_dropdown">
+                    <el-calendar v-model="current_date" ref="calendar">
+                        <template #header="{ date }">
+                            <span>{{ date }}</span>
+                            <el-button-group>
+                                <el-button size="small" @click="selectDate('prev-month')">
+                                    <el-icon><ArrowLeft /></el-icon>
+                                </el-button>
+                                <el-button size="small" @click="selectDate('next-month')">
+                                    <el-icon><ArrowRight /></el-icon>
+                                </el-button>
+                            </el-button-group>
+                        </template>
+                        <template #date-cell="{ data }">
+                            <p @click="toggleSelect(data)" :class="{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }">
+                                {{ data.date.getDate() }}
+                                <span v-if="(current_selects.indexOf(data.day) > -1)" class="check-icon"></span>
+                            </p>
+                        </template>
+                    </el-calendar>
+                    <div class="fcal_override_calendar_footer">
+                        <div v-if="current_selects.length" class="fcal_override_calendar_available_hour">
+                            <h3>What hours are you available?</h3>
+                            <div class="fcal_weekly_schedules">
+                                <DayOverRideConfig day_label="" :slots="slots" />
+                            </div>
+                        </div>
+
+                        <div class="fcal_override_calendar_footer_action">
+                            <el-button
+                                class="fcal_plain_btn"
+                                @click="modal_visible = false">
+                                Cancel
                             </el-button>
-                            <el-button size="small" @click="selectDate('next-month')">
-                                <el-icon><ArrowRight /></el-icon>
+                            <el-button
+                                :disabled="!current_selects.length"
+                                class="fcal_primary_btn"
+                                @click="addOverRides()">
+                                Apply
                             </el-button>
-                        </el-button-group>
-                    </template>
-                    <template #date-cell="{ data }">
-                        <p @click="toggleSelect(data)" :class="{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }">
-                            {{ data.date.getDate() }}
-                            {{ (current_selects.indexOf(data.day) > -1) ? '✔️' : '' }}
-                        </p>
-                    </template>
-                </el-calendar>
-            </div>
-            <div v-if="current_selects.length">
-                <h3>What hours are you available?</h3>
-                <div class="fcal_weekly_schedules">
-                    <DayOverRideConfig day_label="" :slots="slots" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="modal_visible = false">Cancel</el-button>
-                    <el-button :disabled="!current_selects.length" type="primary" @click="addOverRides()">Add</el-button>
-                </span>
-            </template>
-        </el-dialog>
+            <div class="fcal_override_table">
+                <table class="fcal_table_compact fcal_table_stripe">
+                <tbody>
+                    <tr v-for="item in overrides" style="cursor: pointer;">
+                        <td @click="showSlotEdit(item)">
+                            <span class="date">{{item.label}}</span>
+                        </td>
+                        <td @click="showSlotEdit(item)" style="text-align: right;">
+                            <ul class="fcal_slots_list">
+                                <li v-for="slot in item.slots">
+                                    {{toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')}}
+                                </li>
+                            </ul>
+                        </td>
+                        <td class="action">
+                            <el-button @click="deleteOverRide(item)" size="small" :icon="DeleteIcon" text></el-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+<!--            <el-dialog width="50%" v-model="modal_visible" :append-to-body="true" title="Select the date(s) you want to assign specific hours">-->
+<!--                <div v-if="modal_visible" class="fcal_cal_wrapper">-->
+<!--                    <el-calendar v-model="current_date" ref="calendar">-->
+<!--                        <template #header="{ date }">-->
+<!--                            <span>{{ date }}</span>-->
+<!--                            <el-button-group>-->
+<!--                                <el-button size="small" @click="selectDate('prev-month')">-->
+<!--                                    <el-icon><ArrowLeft /></el-icon>-->
+<!--                                </el-button>-->
+<!--                                <el-button size="small" @click="selectDate('next-month')">-->
+<!--                                    <el-icon><ArrowRight /></el-icon>-->
+<!--                                </el-button>-->
+<!--                            </el-button-group>-->
+<!--                        </template>-->
+<!--                        <template #date-cell="{ data }">-->
+<!--                            <p @click="toggleSelect(data)" :class="{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }">-->
+<!--                                {{ data.date.getDate() }}-->
+<!--                                {{ (current_selects.indexOf(data.day) > -1) ? '✔️' : '' }}-->
+<!--                            </p>-->
+<!--                        </template>-->
+<!--                    </el-calendar>-->
+<!--                </div>-->
+<!--                <div v-if="current_selects.length">-->
+<!--                    <h3>What hours are you available?</h3>-->
+<!--                    <div class="fcal_weekly_schedules">-->
+<!--                        <DayOverRideConfig day_label="" :slots="slots" />-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <template #footer>-->
+<!--                    <span class="dialog-footer">-->
+<!--                        <el-button @click="modal_visible = false">Cancel</el-button>-->
+<!--                        <el-button :disabled="!current_selects.length" type="primary" @click="addOverRides()">Add</el-button>-->
+<!--                    </span>-->
+<!--                </template>-->
+<!--            </el-dialog>-->
+        </div>
     </div>
 </template>
 
@@ -68,7 +127,7 @@ import {markRaw} from "vue";
 
 export default {
     name: 'DateOverRides',
-    props: ['settings'],
+    props: ['settings', 'title'],
     components: {
         ArrowRight,
         ArrowLeft,
@@ -220,23 +279,5 @@ export default {
 .el-calendar-day:has(>.fcal_date_disabled) {
     color: #b8b6b6;
     cursor: not-allowed !important;
-}
-.el-calendar-day {
-    position: relative;
-    > p {
-        position: absolute;
-        margin: 0;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-        padding-top: 10px;
-        &.is-selected {
-            background-color: #5092e9;
-            color: white;
-        }
-    }
 }
 </style>

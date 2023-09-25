@@ -219,16 +219,30 @@ input.el-input__inner {
     line-height: 120%;
 }
 
-.el-select-dropdown.fcal_selector_with_submenu li {
-    line-height: 16px;
-    padding: 8px 20px;
-    height: auto;
-    span {
-        display: block;
-        color: var(--el-text-color-secondary);
-        padding:0;
-        margin:0; 
-        font-size: 12px;
+.el-select-dropdown {
+    &.fcal_selector_with_submenu {
+        li {
+            line-height: 16px;
+            padding: 8px 20px !important;
+            height: auto;
+            + li {
+                margin-top: 8px !important;
+            }
+
+            b {
+                display: block;
+                line-height: 1.2;
+                margin-bottom: 8px;
+            }
+            span {
+                display: block;
+                color: var(--el-text-color-secondary);
+                padding: 0;
+                margin: 0;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+        }
     }
 }
 .el-radio-group.radio_desc_group {

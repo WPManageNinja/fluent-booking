@@ -39,35 +39,6 @@
 
 }
 
-.fcal_weekly_schedules {
-  width: 100%;
-  display: block;
-  border: 1px solid rgba(26, 26, 26, 0.1);
-
-  .fcal_week_day_config {
-    display: flex;
-    column-gap: 20px;
-    align-items: flex-start;
-    padding: 7px;
-    margin: 0 15px;
-    border-top: 1px solid rgba(26, 26, 26, 0.1);
-
-    &:first-child {
-      border-top: none;
-    }
-
-    .fcal_slot {
-      display: flex;
-      column-gap: 20px;
-      margin: 5px 0;
-    }
-
-    .fcal_day_slots {
-      flex: 1;
-    }
-  }
-}
-
 
 .fcal_all_schediles {
   display: flex;
