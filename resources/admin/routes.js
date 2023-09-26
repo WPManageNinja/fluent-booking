@@ -108,7 +108,8 @@ export var routes = [
             },
             {
                 name: 'configure-integrations',
-                path: 'configure-integrations',
+                path: 'configure-integrations/:settings_key',
+                props: true,
                 component: ConfigureIntegrationSettings,
                 meta: {
                     active_menu: 'settings',
@@ -117,7 +118,8 @@ export var routes = [
             },
             {
                 name: 'integrations',
-                path: 'integrations',
+                path: 'integrations/:settings_key',
+                props: true,
                 component: IntegrationSettings,
                 meta: {
                     active_menu: 'settings',

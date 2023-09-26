@@ -18,9 +18,12 @@ class IntegrationSettingsController extends Controller
 
             $settings = apply_filters('fluent_booking/get_integration_settings_' . $settingsKey, []);
 
+            $fieldSettings = apply_filters('fluent_booking/get_integration_field_settings_' . $settingsKey, []);
+
             return $this->sendSuccess([
-                'status'   => true,
-                'settings' => $settings,
+                'status'         => true,
+                'settings'       => $settings,
+                'field_settings' => $fieldSettings,
             ]);
 
         } catch (Exception $e) {

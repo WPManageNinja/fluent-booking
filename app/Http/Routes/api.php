@@ -56,3 +56,7 @@ $router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($rout
         $router->post('/', 'IntegrationSettingsController@update');
     });
 });
+
+$router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'SettingsController@index');
+});
