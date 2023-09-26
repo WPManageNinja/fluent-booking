@@ -239,7 +239,7 @@ class CalendarController extends Controller
         ]);
 
         $slotData = [
-            'title'             => $slot['duration'] . ' Minute Meeting',
+            'title'             => $slot['title'],
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
             'calendar_id'       => $calendar->id,
             'duration'          => (int)$slot['duration'],

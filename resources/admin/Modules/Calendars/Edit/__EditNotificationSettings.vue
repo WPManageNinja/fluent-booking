@@ -1,85 +1,75 @@
 <template>
-    <div class="fcal_form_section">
-        <div class="fcal_section_body">
-            <el-form :model="email" label-position="top">
-                <el-col :sm="24" :md="15">
-                    <el-form-item label="Subject">
-                        <popover
-                            groupTitle="Shortcodes"
-                           :data="editorShortcodes"
-                           :isVisible="subjectPopupVisible"
-                           @command="handleSubjectCommand">
-                           <template #popoverButton>
-                                <el-input 
-                                    type="text"
-                                    v-model="email.subject">
-                                    <template #append>
-                                        <el-button :icon="MoreIcon" @click="toggleSubjectPopup"></el-button>
-                                    </template>
-                                </el-input>
-                            </template>
-                        </popover>
-                    </el-form-item>
+    <el-form :model="email" label-position="top">
+        <el-form-item label="Subject">
+            <popover
+                groupTitle="Shortcodes"
+               :data="editorShortcodes"
+               :isVisible="subjectPopupVisible"
+               @command="handleSubjectCommand">
+               <template #popoverButton>
+                    <el-input
+                        type="text"
+                        v-model="email.subject">
+                        <template #append>
+                            <el-button :icon="MoreIcon" @click="toggleSubjectPopup"></el-button>
+                        </template>
+                    </el-input>
+                </template>
+            </popover>
+        </el-form-item>
+        <el-form-item label="Email Body">
+            <div class="wp_vue_editor_wrapper">
+                <popover
+                    v-if="hasWpEditor"
+                    class="popover-wrapper"
+                    groupTitle="Shortcodes"
+                    :data="editorShortcodes"
+                    :isVisible="bodyPopupVisible"
+                    @command="handleBodyCommand">
+                    <template #popoverButton>
+                        <el-button
+                            type="info"
+                            :icon="ArrowDownIcon"
+                            @click="toggleBodyPopup"
+                            class="editor-add-shortcode el-button--soft">
+                            Add Shortcodes
+                        </el-button>
+                    </template>
+                </popover>
+                <textarea
+                    class="wp_vue_editor"
+                    :id="editor_id"
+                    v-model="email.body">
+                </textarea>
+            </div>
+        </el-form-item>
+        <el-form-item v-if="email.times" label="Timing">
+            <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
+                <el-col :span="6">
+                    <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
                 </el-col>
-                <el-col :sm="24" :md="15">
-                    <el-form-item label="Email Body">
-                        <div class="wp_vue_editor_wrapper">
-                            <popover
-                                v-if="hasWpEditor"
-                                class="popover-wrapper"
-                                groupTitle="Shortcodes"
-                                :data="editorShortcodes"
-                                :isVisible="bodyPopupVisible"
-                                @command="handleBodyCommand">
-                                <template #popoverButton>
-                                    <el-button 
-                                        type="info"
-                                        :icon="ArrowDownIcon"
-                                        @click="toggleBodyPopup"
-                                        class="editor-add-shortcode el-button--soft">
-                                        Add Shortcodes
-                                    </el-button>
-                                </template>
-                            </popover>
-                            <textarea 
-                                class="wp_vue_editor"
-                                :id="editor_id" 
-                                v-model="email.body">
-                            </textarea>
-                        </div>
-                    </el-form-item>
+                <el-col :span="15">
+                    <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit">
+                        <el-option value="minutes" label="Minutes Before"></el-option>
+                        <el-option value="hours" label="Hours Before"></el-option>
+                        <el-option value="days" label="Days Before"></el-option>
+                    </el-select>
                 </el-col>
-                <el-col v-if="email.times" :sm="14" :md="10" :lg="7">
-                    <el-form-item label="Timing">
-                        <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
-                            <el-col :span="6">
-                                <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
-                            </el-col>
-                            <el-col :span="15">
-                                <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit">
-                                    <el-option value="minutes" label="Minutes Before"></el-option>
-                                    <el-option value="hours" label="Hours Before"></el-option>
-                                    <el-option value="days" label="Days Before"></el-option>
-                                </el-select>
-                            </el-col>
-                            <el-col :span="3" v-if="isRemovable">
-                                <el-link type="danger" title="Remove" 
-                                    :icon="CloseBoldIcon" 
-                                    :underline="false"
-                                    @click="removeReminderTime(index)">
-                                </el-link>
-                            </el-col>
-                        </div>
-                        <div class="fcal_add_reminder">
-                            <el-link type="primary" :underline="false" @click="addReminderTime" :icon="PlusIcon">
-                                 Add Another Reminder
-                            </el-link>
-                        </div>
-                    </el-form-item>
+                <el-col :span="3" v-if="isRemovable">
+                    <el-link type="danger" title="Remove"
+                        :icon="CloseBoldIcon"
+                        :underline="false"
+                        @click="removeReminderTime(index)">
+                    </el-link>
                 </el-col>
-            </el-form>
-        </div>
-    </div>
+            </div>
+            <div class="fcal_add_reminder">
+                <el-link type="primary" :underline="false" @click="addReminderTime" :icon="PlusIcon">
+                     Add Another Reminder
+                </el-link>
+            </div>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script>

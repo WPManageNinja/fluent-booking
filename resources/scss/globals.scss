@@ -72,6 +72,7 @@
         border-color: rgb(38 83 199 / 20%);
     }
 }
+.fcal_primary_btn_update,
 .fcal_primary_btn {
     background: $primaryColor;
     color: #ffffff;
@@ -97,6 +98,12 @@
         border-color: $primaryColor;
         color: #ffffff;
         background: $primaryColor;
+    }
+}
+.fcal_primary_btn_update {
+    background: var(--el-color-success);
+    &:hover {
+        background: var(--el-color-success-light-3);
     }
 }
 

@@ -27,7 +27,7 @@
                             <el-icon><User /></el-icon>
                             <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
                         </span>
-                    </span> {{ eventTitle }}
+                    </span> {{ slot.event_type == 'single' ? 'One-to-One' : 'Group' }}
                 </span>
 
             </p>
@@ -95,7 +95,7 @@ export default {
     },
     computed: {
         eventTitle() {
-            return this.appVars.event_types[this.slot.event_type].title;
+            // return this.appVars.event_types[this.slot.event_type].title;
         }
     },
     methods: {
