@@ -5,12 +5,12 @@
             <el-steps class="fcal_steps" :space="200" :active="stepIndex">
                 <el-step>
                     <template #title>
-                        <h3 @click="handleSteps(1)">Event Info <el-icon><Right /></el-icon></h3>
+                        <h3>Event Info <el-icon><Right /></el-icon></h3>
                     </template>
                 </el-step>
                 <el-step>
                     <template #title>
-                        <h3 @click="handleSteps(2)">Schedule Settings <el-icon><Right /></el-icon></h3>
+                        <h3>Schedule Settings <el-icon><Right /></el-icon></h3>
                     </template>
                 </el-step>
                 <el-step>
@@ -24,18 +24,23 @@
 
         <div v-if="slot" class="fcal_create_calendar_body">
             <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
-                <basic-info :slot="slot" :event_type="event_type" />
+                <basic-info ref="basicInfo" :slot="slot" :event_type="event_type" />
             </div>
 
             <div v-if="stepIndex == 2" class="fcal_create_calendar_schedule_setting">
                 <ScheduleSettings :slot="slot" />
             </div>
 
+            <div v-if="stepIndex == 3" class="fcal_create_calendar_notification_setting">
+<!--                <NotificationSettings :slot="slot" />-->
+            </div>
+
+
             <div class="fcal_create_calendar_form_footer">
                 <el-button v-if="stepIndex != 1" class="fcal_plain_btn" @click="backStep">
                     Go Back
                 </el-button>
-                <el-button class="fcal_primary_btn" @click="handleSaveContinue">
+                <el-button class="fcal_primary_btn" @click="saveSettings">
                     {{ stepIndex == 1 ? 'Save and ' : null }}Continue
                 </el-button>
             </div>
@@ -52,11 +57,13 @@
 import ScheduleSettings from './_ScheduleSettings';
 import BasicInfo from './_BasicInfo.vue';
 import { Right } from '@element-plus/icons-vue';
+import NotificationSettings from "./_NotificationSettings";
 
 export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
+        NotificationSettings,
         ScheduleSettings,
         BasicInfo,
         Right
@@ -87,6 +94,8 @@ export default {
                 });
         },
         saveSettings() {
+            const formData  =  this.$refs.basicInfo.formData;
+
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots', {
                 title: this.slot.title,
@@ -96,11 +105,20 @@ export default {
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings,
-                event_type: this.slot.event_type
+                event_type: formData.event_type
+                //
+                // title: formData.title,
+                // description: formData.description,
+                // duration: formData.duration,
+                // settings: this.slot.settings,
+                // location_type: this.slot.location_type,
+                // location_heading: this.slot.location_heading,
+                // location_settings: this.slot.location_settings,
+                // event_type: formData.event_type
             })
                 .then(response => {
                     this.$handleSuccess(response);
-                    this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id } })
+                    this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id }, query: { step: 2 } })
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -120,7 +138,7 @@ export default {
             if (this.stepIndex > 3) {
                 this.stepIndex = 3;
             }
-            console.log(this.stepIndex);
+            this.saveSettings();
         }
     },
     mounted() {

@@ -65,12 +65,14 @@
             font-size: 18px;
         }
     }
+    &:focus,
     &:hover {
         background: rgb(38 83 199 / 10%);
         color: $primaryColor;
         border-color: rgb(38 83 199 / 20%);
     }
 }
+.fcal_primary_btn_update,
 .fcal_primary_btn {
     background: $primaryColor;
     color: #ffffff;
@@ -96,6 +98,12 @@
         border-color: $primaryColor;
         color: #ffffff;
         background: $primaryColor;
+    }
+}
+.fcal_primary_btn_update {
+    background: var(--el-color-success);
+    &:hover {
+        background: var(--el-color-success-light-3);
     }
 }
 
@@ -666,11 +674,6 @@ p.fcal_profile_link a {
 .fcal_status_draft {
     opacity: 0.6;
 }
-
-.fcal_head_actions {
-    margin: -15px 0;
-}
-
 // el-popover-dropdown
 .el-dropdown-list-wrapper {
     &.el-popover {

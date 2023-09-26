@@ -43,7 +43,7 @@ class CalendarController extends Controller
 
         if (!Helper::isCalendarSlugAvailable($slug, true)) {
             return $this->sendError([
-                'message' => 'The provided slug is not available. Please choose a different one'
+                'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
             ], 423);
         }
 
@@ -90,7 +90,7 @@ class CalendarController extends Controller
             $slug = trim(sanitize_text_field($data['slug']));
             if (!Helper::isCalendarSlugAvailable($slug, true)) {
                 return $this->sendError([
-                    'message' => 'The provided slug is not available. Please choose a different one'
+                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
                 ], 423);
             }
 
@@ -107,7 +107,7 @@ class CalendarController extends Controller
 
         if (!$calendar) {
             return $this->sendError([
-                'message' => 'Calendar could not be found. Please try again'
+                'message' => __('Calendar could not be found. Please try again', 'fluent-booking')
             ], 423);
         }
 
@@ -239,7 +239,7 @@ class CalendarController extends Controller
         ]);
 
         $slotData = [
-            'title'             => $slot['duration'] . ' Minute Meeting',
+            'title'             => $slot['title'],
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
             'calendar_id'       => $calendar->id,
             'duration'          => (int)$slot['duration'],
@@ -263,7 +263,7 @@ class CalendarController extends Controller
         $createdSlot = CalendarSlot::create($slotData);
 
         return [
-            'message' => 'New Event Type has been created successfully',
+            'message' => __('New Event Type has been created successfully', 'fluent-booking'),
             'slot'    => $createdSlot
         ];
     }
@@ -312,7 +312,7 @@ class CalendarController extends Controller
         $slot->save();
 
         return [
-            'message' => 'Data has been updated',
+            'message' => __('Data has been updated', 'fluent-booking'),
             'slot'    => $slot
         ];
     }
@@ -329,7 +329,7 @@ class CalendarController extends Controller
         }
 
         return [
-            'message' => 'Data has been updated'
+            'message' => __('Data has been updated', 'fluent-booking')
         ];
 
     }
@@ -370,7 +370,7 @@ class CalendarController extends Controller
         $slot->setNotifications($formattedNotifications);
 
         return [
-            'message' => 'Notifications has been saved'
+            'message' => __('Notifications has been saved', 'fluent-booking')
         ];
     }
 
@@ -386,7 +386,7 @@ class CalendarController extends Controller
         $slot->delete();
 
         return [
-            'message' => 'Slot has been deleted'
+            'message' => __('Slot has been deleted', 'fluent-booking')
         ];
     }
 

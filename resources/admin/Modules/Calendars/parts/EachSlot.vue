@@ -8,7 +8,6 @@
                         <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item command="edit">Edit Booking Type Details</el-dropdown-item>
                                 <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
                                 <el-dropdown-item command="delete" class="danger">Delete</el-dropdown-item>
@@ -27,7 +26,7 @@
                             <el-icon><User /></el-icon>
                             <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
                         </span>
-                    </span> {{ eventTitle }}
+                    </span> {{ slot.event_type == 'single' ? 'One-to-One' : 'Group' }}
                 </span>
 
             </p>
@@ -46,19 +45,23 @@
 <!--            </div>-->
 
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
-                <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" text>
+                <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" class="fcal_copy_btn">
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
                     <span v-if="!isCopied">Copy Link</span>
                     <span v-else>Copied!</span>
                 </el-button>
-                <el-button v-else-if="slot.shortcode" @click="copyTo(slot.shortcode)" text>
+                <el-button v-else-if="slot.shortcode" @click="copyTo(slot.shortcode)" class="fcal_copy_btn">
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
                     <span v-if="!isCopied">Copy Shorcode</span>
                     <span v-else>Copied!</span>
+                </el-button>
+
+                <el-button class="fcal_plain_btn" @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })">
+                    <el-icon><EditPen /></el-icon> Edit
                 </el-button>
 
             </div>
@@ -95,7 +98,7 @@ export default {
     },
     computed: {
         eventTitle() {
-            return this.appVars.event_types[this.slot.event_type].title;
+            // return this.appVars.event_types[this.slot.event_type].title;
         }
     },
     methods: {
@@ -130,11 +133,6 @@ export default {
                 });
         },
         handleCommand(command) {
-            if(command == 'edit') {
-                this.$router.push({ name: 'slot_settings', params: { calendar_id: this.slot.calendar_id, slot_id: this.slot.id } });
-                return;
-            }
-
             if(command == 'enable') {
                 this.updateStatus('active');
                 return;
