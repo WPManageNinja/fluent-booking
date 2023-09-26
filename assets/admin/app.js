@@ -69358,16 +69358,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     handleCommand: function handleCommand(command) {
       var _this3 = this;
-      if (command == 'edit') {
-        this.$router.push({
-          name: 'slot_settings',
-          params: {
-            calendar_id: this.slot.calendar_id,
-            slot_id: this.slot.id
-          }
-        });
-        return;
-      }
       if (command == 'enable') {
         this.updateStatus('active');
         return;
@@ -73857,6 +73847,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Right = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Right");
   var _component_CopyDocument = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("CopyDocument");
   var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElButton;
+  var _component_EditPen = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("EditPen");
   var _directive_loading = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveDirective)("loading");
   return (0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_5__.normalizeClass)('fcal_status_' + $props.slot.status)
@@ -73868,14 +73859,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     dropdown: (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dropdown_menu, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_dropdown_item, {
-            command: "edit"
-          }, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Edit Booking Type Details")];
-            }),
-            _: 1 /* STABLE */
-          }), $props.slot.status == 'active' ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_dropdown_item, {
+          return [$props.slot.status == 'active' ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_dropdown_item, {
             key: 0,
             command: "disable"
           }, {
@@ -73956,7 +73940,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.copyTo($props.slot.public_url);
     }),
-    text: ""
+    "class": "fcal_copy_btn"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
@@ -73972,7 +73956,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return $options.copyTo($props.slot.shortcode);
     }),
-    text: ""
+    "class": "fcal_copy_btn"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
@@ -73983,9 +73967,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }), !$data.isCopied ? ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_16, "Copy Shorcode")) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("span", _hoisted_17, "Copied!"))];
     }),
     _: 1 /* STABLE */
-  })) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
-    disabled: $data.working,
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_5__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_button, {
+    "class": "fcal_plain_btn",
     onClick: _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.$router.push({
+        name: 'slot_settings',
+        params: {
+          calendar_id: $props.slot.calendar_id,
+          slot_id: $props.slot.id
+        }
+      });
+    })
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_EditPen)];
+        }),
+        _: 1 /* STABLE */
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Edit ")];
+    }),
+    _: 1 /* STABLE */
+  })])) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createElementBlock)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_5__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_button, {
+    disabled: $data.working,
+    onClick: _cache[3] || (_cache[3] = function ($event) {
       return $options.updateStatus('active');
     }),
     text: ""
