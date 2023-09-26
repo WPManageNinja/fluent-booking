@@ -273,6 +273,7 @@ ul.fframe_menu.fcal_secondary_menu {
   border-color: rgba(38, 83, 199, 0.2);
 }
 
+.fcal_primary_btn_update,
 .fcal_primary_btn {
   background: #2653C7;
   color: #ffffff;
@@ -283,9 +284,11 @@ ul.fframe_menu.fcal_secondary_menu {
   font-weight: 400;
   border: none;
 }
+.fcal_primary_btn_update > span,
 .fcal_primary_btn > span {
   gap: 8px;
 }
+.fcal_primary_btn_update:hover,
 .fcal_primary_btn:hover {
   background: #416ddd;
   color: #ffffff;
@@ -299,6 +302,13 @@ ul.fframe_menu.fcal_secondary_menu {
   border-color: #2653C7;
   color: #ffffff;
   background: #2653C7;
+}
+
+.fcal_primary_btn_update {
+  background: var(--el-color-success);
+}
+.fcal_primary_btn_update:hover {
+  background: var(--el-color-success-light-3);
 }
 
 .fcal_photo_card .fcal_photo_holder {
@@ -2750,9 +2760,8 @@ p.fcal_profile_link a {
 }
 
 .fcal_notification_container {
-  padding: 1rem;
-  border-bottom: 1px solid #ebeef5;
-  border-radius: 4px;
+  border-bottom: 1px solid #EAECF0;
+  padding: 15px 0;
 }
 .fcal_notification_container.disabled {
   opacity: 0.6;
@@ -2760,27 +2769,21 @@ p.fcal_profile_link a {
 .fcal_notification_container .fcal_notification_header {
   display: flex;
   align-items: center;
-  padding: 0 1rem;
+  justify-content: space-between;
 }
 .fcal_notification_container .fcal_notification_header .header_left {
-  flex: 50%;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
+  line-height: 24px;
+  color: #1B2533;
 }
 .fcal_notification_container .fcal_notification_header .header_left.active {
   font-size: 20px;
 }
 .fcal_notification_container .fcal_notification_header .header_right {
-  flex: 50%;
   display: flex;
-  flex-grow: 1;
   align-items: center;
-  gap: 1rem;
-}
-.fcal_notification_container .fcal_notification_header .header_right span {
-  display: flex;
-  justify-content: center;
-  width: 13%;
+  gap: 16px;
 }
 .fcal_notification_container .fcal_section_body .el-form-item__content {
   display: block;
@@ -2798,6 +2801,55 @@ p.fcal_profile_link a {
 }
 .fcal_notification_container .fcal_section_body .fcal_add_reminder .el-icon {
   margin-right: 2px;
+}
+
+.fcal_notification_body {
+  width: 100%;
+  border-top: 1px solid #EAECF0;
+  padding-top: 24px;
+  margin-top: 16px;
+}
+.fcal_notification_body .el-form .el-form-item {
+  margin-bottom: 16px;
+}
+.fcal_notification_body .el-form .el-form-item:last-child {
+  margin-bottom: 0;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #323E4F;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content > div {
+  width: 100%;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input__wrapper {
+  height: auto;
+  background: #F5F6F7;
+  border-radius: 8px 0 0 8px;
+  box-shadow: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #445164;
+  padding: 8px 16px;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input__wrapper .el-input__inner {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append {
+  background: #DDEBFC;
+  box-shadow: none;
+  border: none;
+  border-radius: 0 8px 8px 0;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append .el-button {
+  color: #1B2533;
 }
 
 .fcal_notification_btn {

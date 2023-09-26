@@ -13,10 +13,10 @@
             <el-switch v-model="isEnable" />
         </div>
         <div class="fcal_create_calendar_form_body">
-            <el-form v-model="formData" label-position="top">
+            <el-form v-model="slot" label-position="top">
                 <el-form-item label="Event Name *" class="fcal_color_select_wrap">
                     <el-input
-                        v-model="formData.title"
+                        v-model="slot.title"
                         placeholder="Enter Event Title"
                     >
                         <template #prepend>
@@ -40,7 +40,7 @@
                 </el-form-item>
 
                 <el-form-item label="Meeting Duration *">
-                    <el-select v-model="formData.duration" placeholder="Select" popper-class="fcal_select">
+                    <el-select v-model="slot.duration" placeholder="Select" popper-class="fcal_select">
                         <el-option
                             v-for="item in meetingDuration"
                             :key="item.value"
@@ -48,11 +48,11 @@
                             :value="item.value"
                         />
                     </el-select>
-                    <div v-if="formData.duration == 'custom'" class="custom-duration">
+                    <div v-if="slot.duration == 'custom'" class="custom-duration">
                         <el-input
-                            v-model="formData.customDuration"
+                            v-model="slot.customDuration"
                         />
-                        <el-select v-model="formData.durationType" popper-class="fcal_select" placeholder="Select">
+                        <el-select v-model="slot.durationType" popper-class="fcal_select" placeholder="Select">
                             <el-option
                                 v-for="item in durationTypes"
                                 :key="item.value"
@@ -65,14 +65,14 @@
 
                 <el-form-item label="Description">
                     <el-input
-                        v-model="formData.description"
+                        v-model="slot.description"
                         type="textarea"
                         placeholder="Enter Description here"
                     />
                 </el-form-item>
 
                 <el-form-item label="Location">
-                    <location-selector :slot="formData"/>
+                    <location-selector :slot="slot"/>
                 </el-form-item>
             </el-form>
         </div>
@@ -92,7 +92,6 @@ export default {
         return {
             isEnable: true,
             calendarColor: '#4587EC',
-            eventTypes: this.event_type,
             colors: [
                 {
                     value: '#4587EC',
@@ -161,9 +160,10 @@ export default {
                 customDuration: '',
                 durationType: 'minutes',
                 description: '',
-                location_type: '',
+                location_type: 'phone',
                 location_heading: '',
                 location_settings: {},
+                event_type: this.event_type,
             }
         }
     },
@@ -171,6 +171,16 @@ export default {
         toggleDisplaySpots() {
 
         }
+    },
+    mounted() {
+        // if (this.slot) {
+        //     this.formData.title = this.slot.title;
+        //     this.formData.duration = this.slot.duration;
+        //     this.formData.customDuration = this.slot.customDuration;
+        //     this.formData.durationType = this.slot.durationType;
+        //     this.formData.description = this.slot.description;
+        //     this.formData.event_type = this.slot.event_type;
+        // }
     }
 }
 </script>
