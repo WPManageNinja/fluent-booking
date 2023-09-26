@@ -3091,6 +3091,38 @@ p.fcal_profile_link a {
   margin-top: 24px;
 }
 
+.fcal_settings_submenu {
+  background-color: #fff;
+  margin-left: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+.fcal_settings_submenu li {
+  position: relative;
+  margin: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.fcal_settings_submenu li::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6%;
+  width: 10px;
+  height: 1px;
+  background-color: #e4e2df;
+  border-radius: 50%;
+}
+.fcal_settings_submenu::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background-color: #e4e2df;
+}
+
 .fcal_single_integration_wrap {
   max-width: 985px;
   margin: auto;
