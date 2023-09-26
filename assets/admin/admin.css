@@ -1658,7 +1658,13 @@ p.fcal_profile_link a {
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer h3 {
   margin: 0;
 }
-.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button {
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .fcal_copy_btn {
   border-radius: 8px;
   font-size: 14px;
   transition: 0.2s;
@@ -1668,11 +1674,12 @@ p.fcal_profile_link a {
   background: rgba(38, 83, 199, 0.1);
   padding: 11px 16px;
   height: auto;
+  border: none;
 }
-.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button i {
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .fcal_copy_btn i {
   font-size: 18px;
 }
-.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .el-button:hover {
+.fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .fcal_copy_btn:hover {
   background: rgba(38, 83, 199, 0.2);
 }
 
