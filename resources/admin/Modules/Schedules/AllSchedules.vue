@@ -79,8 +79,33 @@
         </div>
 
         <div class="fcal_schedule_meetings_body">
-
-            <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schedules">
+            <div style="padding: 0;" v-loading="loading" class="fcal_section_body">
+                <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
+                    <div class="fcal_schedules">
+                        <div class="fcal_schedule_wrapper">
+                            <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
+                                <div class="fcal_schedule_header">
+                                    <h3 class="fcal_schedule_data">{{formattedDate(scheduleDate)}}</h3>
+                                </div>
+                                <div class="fcal_schedule_items">
+                                    <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.event_id == spot_id }" class="fcal_each_spot">
+                                        <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fcal_right fcal_tm20">
+                            <pagination :pagination="pagination" @fetch="fetchSchedules"/>
+                        </div>
+                    </div>
+                    <div v-if="spot_id" class="fcal_spot_details">
+                        <schedule-spot-details @spotFetched="(data) => { current_spot = data; }" :spot="current_spot" :spot_id="spot_id" />
+                    </div>
+                </div>
+                <el-empty v-else description="No schedules based on your filter" />
+            </div>
+            <p>All dates are shown in {{currentTimezone}} timezone</p>
+            <!-- <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schedules">
                 <div class="fcal_schedule_wrapper">
                     <div class="fcal_schedule_items">
                         <schedule-spots
@@ -91,25 +116,24 @@
                 <div class="fcal_right fcal_tm20">
                     <pagination :pagination="pagination" @fetch="fetchSchedules"/>
                 </div>
-            </div>
-
+            </div> -->
         </div>
     </div>
 </template>
 
 <script type="text/babel">
 import Pagination from "../../Pieces/Pagination.vue";
-import ScheduleSpots from "./parts/ScheduleSpots.vue";
-import SpotInfo from './parts/SpotInfo.vue';
+import ScheduleSpot from "./parts/ScheduleSpot.vue";
+import ScheduleSpotDetails from './parts/ScheduleSpotDetails.vue';
 import each from 'lodash/each';
 import { Filter, CircleClose } from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
     components: {
-        ScheduleSpots,
+        ScheduleSpot,
         Pagination,
-        SpotInfo,
+        ScheduleSpotDetails,
         Filter,
         CircleClose
     },

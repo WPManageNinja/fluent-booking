@@ -54,7 +54,7 @@ export default {
     methods: {
         fetchActivities() {
             this.loading = true;
-            this.$get(`schedules/3/activities`)
+            this.$get(`schedules/${this.event_id}/activities`)
                 .then(response => {
                     this.activities = response.activities;
                 })
