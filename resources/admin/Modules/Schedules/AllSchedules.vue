@@ -88,7 +88,11 @@
                                     <h3 class="fcal_schedule_data">{{formattedDate(scheduleDate)}}</h3>
                                 </div>
                                 <div class="fcal_schedule_items">
-                                    <div v-for="spot in schedules" :key="spot.id" :class="{ fcal_is_current: spot.event_id == spot_id }" class="fcal_each_spot">
+                                    <div
+                                        v-for="spot in schedules"
+                                        :key="spot.id"
+                                        :class="{ fcal_is_current: spot[0].event_id == spot_id }"
+                                        class="fcal_each_spot">
                                         <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot"/>
                                     </div>
                                 </div>
