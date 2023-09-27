@@ -1,76 +1,35 @@
 <template>
-    <div class="fcal_create_calendar fcal_section fcal_section_narrow">
-        <div class="fcal_section_header">
-            <h3 v-if="appVars.is_new">Let's create your first booking form</h3>
-            <h3 v-else>Create a new booking calendar</h3>
-        </div>
-        <div class="fcal_section_body">
-            <div style="max-width: 600px; margin: 0 auto;" v-if="form_step == 'slug'">
-                <h3>Please choose your booking slug</h3>
-                <el-input placeholder="Your Profile Slug" type="text" v-model="calendar.slug">
-                    <template #prepend>{{appVars.site_url}}</template>
-                </el-input>
-                <el-button @click="checkSlug()" style="margin-top: 30px;" :disabled="checking_slug" v-loading="checking_slug" type="primary" size="large">Continue</el-button>
-            </div>
-            <div v-else>
-                <el-form :model="calendar" label-position="top">
-                    <el-form-item v-if="!this.hasSupport('is_hosted')" label="Select Host">
-                        <host-selector v-model="calendar.user_id" />
-                    </el-form-item>
-                    <el-form-item label="Event Type">
-                    <el-select popper-class="fcal_selector_with_submenu" v-model="calendar.slot.event_type" placeholder="Select Event Type">
-                        <el-option
-                            v-for="(type, typeKey) in eventTypes"
-                            :key="typeKey"
-                            :label="type.title"
-                            :value="typeKey"
-                        >
-                            <b>{{ type.title }}</b>
-                            <span>{{ type.subtitle }}</span>
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                    <el-form-item label="Title of the booking">
-                        <el-input type="text" placeholder="eg: 15 minutes meeting" v-model="calendar.slot.title"/>
-                    </el-form-item>
-                    <el-row :gutter="20">
-                        <el-col :md="12" :xs="24">
-                            <el-form-item label="Slot Duration">
-                                <el-input type="number" :min="10" placeholder="duration in minutes"
-                                          v-model="calendar.slot.duration">
-                                    <template #append>minutes</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="12" :xs="24">
-                            <el-form-item label="Location *">
-                                <location-selector :slot="calendar.slot" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-form-item label="Select Your Timezone">
-                        <time-zone-selector v-model="calendar.author_timezone"/>
-                    </el-form-item>
-                    <el-form-item label="Schedule Type">
-                        <el-radio-group v-model="calendar.slot.schedule_type">
-                            <el-radio-button label="weekly_schedules">
-                                Weekly Hours By Day
-                            </el-radio-button>
-                            <el-radio-button :disabled="true" label="custom_dates">
-                                Specific Dates & Hours (coming soon)
-                            </el-radio-button>
-                        </el-radio-group>
-                    </el-form-item>
-                    <template v-if="calendar.slot.schedule_type == 'weekly_schedules'">
-                        <el-form-item label="Weekly Hours Schedules">
-                            <weekly-schedules :weekly_schedules="calendar.slot.weekly_schedules"/>
-                        </el-form-item>
+    <div class="fcal_create_calendar_wrap">
+        <div class="fcal_create_calendar_header">
+            <h1>Create a new booking calendar</h1>
+            <el-steps class="fcal_steps" :space="200" :active="stepIndex">
+                <el-step>
+                    <template #title>
+                        <h3>Event Info <el-icon><Right /></el-icon></h3>
                     </template>
-                    <el-form-item>
-                        <el-button :disabled="saving" v-loading="saving" type="primary" @click="createCalendar">Create
-                        </el-button>
-                    </el-form-item>
-                </el-form>
+                </el-step>
+                <el-step>
+                    <template #title>
+                        <h3>Schedule Settings <el-icon><Right /></el-icon></h3>
+                    </template>
+                </el-step>
+                <el-step>
+                    <template #title>
+                        <h3>Notification & Question</h3>
+                    </template>
+                </el-step>
+            </el-steps>
+        </div>
+
+        <div v-if="calendar.slot" class="fcal_create_calendar_body">
+            <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
+                <basic-info ref="basicInfo" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
+            </div>
+
+            <div class="fcal_create_calendar_form_footer">
+                <el-button class="fcal_primary_btn" @click="createCalendar">
+                    {{ stepIndex == 1 ? 'Create and ' : null }}Continue
+                </el-button>
             </div>
         </div>
     </div>
@@ -81,6 +40,8 @@ import WeeklySchedules from './parts/WeeklySchedules.vue';
 import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import LocationSelector from './Edit/_LocationSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
+import { Right } from '@element-plus/icons-vue';
+import BasicInfo from './Edit/_BasicInfo';
 
 export default {
     name: 'NewCalender',
@@ -88,7 +49,9 @@ export default {
         WeeklySchedules,
         TimeZoneSelector,
         LocationSelector,
-        HostSelector
+        HostSelector,
+        Right,
+        BasicInfo
     },
     data() {
         return {
@@ -97,14 +60,17 @@ export default {
             form_step: 'general',
             checking_slug: false,
             eventTypes: this.appVars.event_types,
+            stepIndex: 1,
             calendar: {
                 slug: '',
                 title: '',
                 description: '',
-                author_timezone: '',
+                author_timezone: 'Asia/Dhaka',
+                user_id: '',
                 slot: {
                     duration: 15,
-                    title: '15 minutes meeting',
+                    title: '',
+                    description: '',
                     schedule_type: 'weekly_schedules',
                     weekly_schedules: {
                         sun: {
@@ -185,9 +151,9 @@ export default {
                         window.location.href = response.redirect_url;
                     }
 
-                    setTimeout(() => {
-                        window.location.reload(true);
-                    }, 500);
+                    // setTimeout(() => {
+                    //     window.location.reload(true);
+                    // }, 500);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -236,6 +202,12 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$route.params);
+        if (this.$route.params) {
+            this.calendar.slot.event_type = this.$route.params.event_type;
+            this.calendar.user_id = this.$route.params.host_id;
+        }
+
 
         if(!this.hasSupport('is_hosted')) {
             this.form_step = 'general';

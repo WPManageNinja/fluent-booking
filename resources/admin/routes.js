@@ -40,9 +40,10 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/new',
+        path: '/calendars/:host_id/:event_type/new',
         name: 'create_calendar',
         component: CreateCalendar,
+        props: true,
         meta: {
             active_menu: 'calendars'
         }

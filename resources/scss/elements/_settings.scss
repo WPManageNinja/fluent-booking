@@ -71,22 +71,22 @@
             .icon {
                 transform: translateY(3px);
             }
-            //&.router-link-exact-active {
-            //    background: $primaryColor;
-            //    color: #ffffff;
-            //    svg {
-            //        path {
-            //            stroke: #ffffff;
-            //        }
-            //    }
-            //}
-            //&.router-link-exact-active {
-            //    svg {
-            //        path {
-            //            stroke: #ffffff;
-            //        }
-            //    }
-            //}
+            &.router-link-exact-active {
+                background: $primaryColor;
+                color: #ffffff;
+                svg {
+                    path {
+                        stroke: #ffffff;
+                    }
+                }
+            }
+            &.router-link-exact-active {
+                svg {
+                    path {
+                        stroke: #ffffff;
+                    }
+                }
+            }
         }
     }
 }
