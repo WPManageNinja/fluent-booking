@@ -13,7 +13,7 @@
             <el-switch v-model="isEnable" />
         </div>
         <div class="fcal_create_calendar_form_body">
-            <el-form v-model="slot" label-position="top">
+            <el-form label-position="top">
                 <el-form-item label="Event Name *" class="fcal_color_select_wrap">
                     <el-input
                         v-model="slot.title"

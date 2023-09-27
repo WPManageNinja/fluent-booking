@@ -84,7 +84,6 @@
                 <div class="fcal_schedule_wrapper">
                     <div class="fcal_schedule_items">
                         <schedule-spots
-                            :multi_host="filters.author != 'me'"
                             :spots="schedules"
                         />
                     </div>

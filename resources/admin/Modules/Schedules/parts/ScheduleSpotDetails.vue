@@ -4,25 +4,22 @@
             <router-link :to="{name: 'scheduled_events'}" class="fcal_back_btn">
                 <el-icon><Back /></el-icon> Go Back
             </router-link>
-            <h1>
-                [Event Title]
-            </h1>
+            <h1>[Event Title]</h1>
         </div>
 
         <div class="fcal_schedule_details_body">
             <div class="fcal_schedule_details_sidebar">
                 <div class="fcal_schedule_details_sidebar_inner" v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate">
                     <h3>{{formattedDate(scheduleDate)}}</h3>
-
                     <ul>
                         <li
                             class="fcal_spot_line"
                             v-for="spot in schedules"
-                            :key="spot[0].id"
-                            :id="'spot-'+spot[0].id"
-                            :class="$route.params.spot_id==spot[0].id ? 'is-active' : null"
-                            @click="$router.push({name: 'scheduled_event_details', params: {spot_id: spot[0].id}})"
-                        >
+                                :key="spot[0].id"
+                                :id="'spot-'+spot[0].id"
+                                :class="$route.params.spot_id==spot[0].id ? 'is-active' : null"
+                                @click="$router.push({name: 'scheduled_event_details', params: {spot_id: spot[0].id}})"
+                            >
                             <span class="fcal_spot_timing">09:00am - 09:15am</span>
                             <span class="fcal_spot_meeting">1 of 1 guests with you</span>
                             <span class="fcal_spot_event">Free Consultation</span>
