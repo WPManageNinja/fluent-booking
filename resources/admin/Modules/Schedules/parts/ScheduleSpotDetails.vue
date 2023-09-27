@@ -89,7 +89,7 @@
                         </h1>
                     </div>
                     <el-table :data="showing_spots">
-                        <el-table-column label="Name" width="180">
+                        <el-table-column label="Name" width="150">
                             <template #default="scope">
                                 {{ scope.row.first_name }} {{ scope.row.last_name }}
                             </template>
@@ -99,7 +99,7 @@
                                 {{ scope.row.email }}
                             </template>
                         </el-table-column>
-                        <el-table-column label="Time Zone" width="150">
+                        <el-table-column label="Time Zone" width="120">
                             <template #default="scope">
                                 {{ scope.row.person_time_zone }}
                             </template>
@@ -109,7 +109,7 @@
                                 {{ toCurrentTimezone(scope.row.created_at, 'DD MMM YYYY, hh:mma') }}
                             </template>
                         </el-table-column>
-                        <el-table-column width="40">
+                        <el-table-column width="40" fixed="right">
                             <template #default="scope">
                                 <el-dropdown trigger="click" popper-class="fcal_select">
                                     <span class="el-dropdown-link">
