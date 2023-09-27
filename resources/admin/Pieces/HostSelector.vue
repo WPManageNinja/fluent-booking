@@ -9,6 +9,7 @@
         :remote-method="fetchHosts"
         :loading="loading"
         @change="$emit('update:modelValue', selected_host_id)"
+        popper-class="fcal_select"
     >
         <el-option
             v-for="item in hosts"

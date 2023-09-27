@@ -32,7 +32,7 @@
         <el-drawer
             v-model="isNewBookingOpen"
             title="Create New Booking Type"
-            :zIndex="99999"
+            :zIndex="999"
             modal-class="fcal_drawer"
         >
             <div class="fcal_create_new_booking_type_drawer">
