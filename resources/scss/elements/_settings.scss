@@ -104,15 +104,22 @@
         display: flex;
         gap: 24px;
         align-items: flex-start;
+        @media (max-width: 705px) {
+            flex-direction: column;
+        }
         .el-aside {
             width: 324px;
             flex: none;
             background: #ffffff;
             border-radius: 8px;
             padding: 24px 14px;
+            overflow-x: hidden;
         }
         .fcal_settings_container {
             flex: 1;
+            @media (max-width: 705px) {
+                width: 100%;
+            }
             &.disabled {
                 opacity: 0.6;
             }
@@ -358,6 +365,11 @@
     align-items: center;
     justify-content: space-between;
     transition: .2s;
+    @media (max-width: 585px) {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 15px;
+    }
     &:hover {
         border-color: transparent;
         box-shadow: 0 8px 30px rgb(27 37 51 / 10%);

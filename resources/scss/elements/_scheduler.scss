@@ -12,6 +12,10 @@
       border-bottom: 1px solid #EAECF0;
       padding-bottom: 24px;
       margin-bottom: 24px;
+      @media (max-width: 600px) {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
 
       .fcal_cal_title {
         display: flex;

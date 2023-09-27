@@ -1598,6 +1598,12 @@ p.fcal_profile_link a {
   padding-bottom: 24px;
   margin-bottom: 24px;
 }
+@media (max-width: 600px) {
+  .fcal_each_cal .fcal_event_block .fcal_cal_header {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
 .fcal_each_cal .fcal_event_block .fcal_cal_header .fcal_cal_title {
   display: flex;
   align-items: center;
@@ -2987,15 +2993,26 @@ p.fcal_profile_link a {
   gap: 24px;
   align-items: flex-start;
 }
+@media (max-width: 705px) {
+  .fcal_settings .fcal_settings_body {
+    flex-direction: column;
+  }
+}
 .fcal_settings .fcal_settings_body .el-aside {
   width: 324px;
   flex: none;
   background: #ffffff;
   border-radius: 8px;
   padding: 24px 14px;
+  overflow-x: hidden;
 }
 .fcal_settings .fcal_settings_body .fcal_settings_container {
   flex: 1;
+}
+@media (max-width: 705px) {
+  .fcal_settings .fcal_settings_body .fcal_settings_container {
+    width: 100%;
+  }
 }
 .fcal_settings .fcal_settings_body .fcal_settings_container.disabled {
   opacity: 0.6;
@@ -3209,6 +3226,13 @@ p.fcal_profile_link a {
   justify-content: space-between;
   transition: 0.2s;
 }
+@media (max-width: 585px) {
+  .fcal_settings_card {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
 .fcal_settings_card:hover {
   border-color: transparent;
   box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
@@ -3386,5 +3410,176 @@ p.fcal_profile_link a {
   font-weight: 500;
 }
 .fcal_location p {
+  margin: 0;
+}
+
+.fcal_dashboard_box {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.fcal_dashboard .fcal_section_header {
+  border-bottom: 1px solid #EAECF0;
+  padding-bottom: 12px;
+}
+@media (max-width: 585px) {
+  .fcal_dashboard .fcal_section_header {
+    flex-wrap: wrap;
+  }
+}
+.fcal_dashboard .fcal_section_header .fcal_title h3 {
+  font-size: 20px;
+}
+.fcal_dashboard .fcal_section_header .fcal_actions .el-date-editor {
+  height: auto;
+  border-radius: 8px;
+  padding: 3px 16px;
+  box-shadow: none;
+  border: 1px solid #D6DAE1;
+}
+@media (max-width: 585px) {
+  .fcal_dashboard .fcal_section_header .fcal_actions .el-date-editor {
+    width: auto;
+  }
+}
+.fcal_dashboard .fcal_dashboard_chat_wrap .fcal_section_header .fcal_actions .el-date-editor {
+  border: none;
+  padding: 0;
+}
+.fcal_dashboard .fcal_dashboard_chat_wrap .fcal_section_header .fcal_actions .el-date-editor .el-input__wrapper {
+  padding: 3px 16px;
+  border-radius: 8px;
+  border: 1px solid #D6DAE1;
+  box-shadow: none;
+}
+.fcal_dashboard .fcal_dashboard_chat_wrap .fcal_section_header .fcal_actions .el-date-editor .el-input__wrapper .el-input__inner {
+  height: auto;
+}
+
+.fcal_dashboard_overview {
+  margin-bottom: 24px;
+}
+.fcal_dashboard_overview .overview-widgets {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
+@media (max-width: 954px) {
+  .fcal_dashboard_overview .overview-widgets {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 585px) {
+  .fcal_dashboard_overview .overview-widgets {
+    grid-template-columns: 1fr;
+  }
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget {
+  border-radius: 8px;
+  background: #F0F6FE;
+  padding: 20px 15px 38px 20px;
+  position: relative;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(1) {
+  background: #FEF4E6;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(1) .stat {
+  color: #DC8006;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(1) .icon:after {
+  background: #F7A539;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(2) {
+  background: #F3FAF8;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(2) .stat {
+  color: #16896B;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(2) .icon:after {
+  background: #46AD92;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(3) {
+  background: #FEF2F2;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(3) .stat {
+  color: #B91C1C;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget:nth-child(3) .icon:after {
+  background: #EF4444;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget .stat {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  position: absolute;
+  right: 15px;
+  top: 20px;
+  color: #2653C7;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget .icon {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1;
+}
+@media (max-width: 585px) {
+  .fcal_dashboard_overview .overview-widgets .overview-widget .icon {
+    width: 54px;
+    height: 54px;
+  }
+  .fcal_dashboard_overview .overview-widgets .overview-widget .icon svg {
+    width: 30px;
+  }
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget .icon:after, .fcal_dashboard_overview .overview-widgets .overview-widget .icon:before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+  left: -7px;
+  z-index: -1;
+  top: -7px;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget .icon:after {
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #2653C7;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  margin: 0 0 10px;
+  color: #445164;
+  position: relative;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget h1 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 44px;
+  margin: 0 0 5px;
+  color: #1B2533;
+}
+.fcal_dashboard_overview .overview-widgets .overview-widget p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
   margin: 0;
 }
