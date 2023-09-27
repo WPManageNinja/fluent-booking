@@ -74,14 +74,6 @@ export var routes = [
         }
     },
     {
-        path: '/scheduled-events/:spot_id',
-        name: 'scheduled_event_details',
-        component: ScheduleSpotDetails,
-        meta: {
-            active_menu: 'scheduled_events'
-        }
-    },
-    {
         path: '/availability',
         name: 'availability',
         component: Availabilities,
