@@ -4,24 +4,19 @@
             <h3>Configure Integration</h3>
         </div>
         <div class="fcal_settings_content_wrap">
-            <el-collapse accordion class="fcal_configure_integrations">
-                <el-collapse-item class="fcal_configure_integration_card">
-                    <template #title>
-                        <div class="fcal_configure_integration_card_header">
-                            <div class="left">
-                                <div class="img-box">
-                                    <div v-html="fieldSettings.logo"></div>
-                                </div>
-                                <div class="content">
-                                    <h3>{{ fieldSettings.title }}</h3>
-                                    <p>{{ fieldSettings.subtitle }}</p>
-                                </div>
+            <div class="fcal_configure_integrations">
+                <div class="fcal_configure_integration_card">
+                    <div class="fcal_configure_integration_card_header">
+                        <div class="left">
+                            <div class="img-box">
+                                <div v-html="fieldSettings.logo"></div>
                             </div>
-                            <span class="collapse-btn">
-                                Configure <el-icon><ArrowRight /></el-icon>
-                            </span>
+                            <div class="content">
+                                <h3>{{ fieldSettings.title }}</h3>
+                                <p>{{ fieldSettings.subtitle }}</p>
+                            </div>
                         </div>
-                    </template>
+                    </div>
                     <div class="fcal_configure_integration_body">
                         <div v-html="fieldSettings.description"></div>
                         <el-form label-position="top">
@@ -41,8 +36,8 @@
                             </el-form-item>
                         </el-form>
                     </div>
-                </el-collapse-item>
-            </el-collapse>
+                </div>
+            </div>
         </div>
     </div>
 </template>

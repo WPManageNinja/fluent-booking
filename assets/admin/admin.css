@@ -2893,7 +2893,19 @@ p.fcal_profile_link a {
 .fcal_settings_sidebar li + li {
   margin-top: 5px;
 }
-.fcal_settings_sidebar li.configure a.router-link-exact-active svg path {
+.fcal_settings_sidebar li ul li a.router-link-exact-active {
+  background: rgba(38, 83, 199, 0.1);
+  color: #2653C7;
+}
+.fcal_settings_sidebar li .fcal_submenu_item {
+  cursor: pointer;
+  position: relative;
+}
+.fcal_settings_sidebar li .fcal_submenu_item i {
+  position: absolute;
+  right: 10px;
+}
+.fcal_settings_sidebar li:nth-child(3).is-active a svg path, .fcal_settings_sidebar li:nth-child(4).is-active a svg path {
   fill: #ffffff;
 }
 .fcal_settings_sidebar li a {
@@ -2913,15 +2925,8 @@ p.fcal_profile_link a {
   outline: none;
   box-shadow: none;
 }
-.fcal_settings_sidebar li a.router-link-exact-active {
-  background: #2653C7;
-  color: #ffffff;
-}
-.fcal_settings_sidebar li a.router-link-exact-active svg path {
-  stroke: #ffffff;
-}
-.fcal_settings_sidebar li a.router-link-exact-active svg path {
-  stroke: #ffffff;
+.fcal_settings_sidebar li a .icon {
+  transform: translateY(3px);
 }
 
 .fcal_settings .fcal_settings_header_title h3 {
@@ -3109,22 +3114,19 @@ p.fcal_profile_link a {
   margin-left: 20px;
   margin-top: 10px;
   position: relative;
+  display: block;
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.3s;
+}
+.fcal_settings_submenu.active {
+  max-height: 500px;
 }
 .fcal_settings_submenu li {
   position: relative;
   margin: 1rem;
   font-size: 1rem;
   font-weight: 500;
-}
-.fcal_settings_submenu li::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -6%;
-  width: 10px;
-  height: 1px;
-  background-color: #e4e2df;
-  border-radius: 50%;
 }
 .fcal_settings_submenu::after {
   content: "";
@@ -3251,16 +3253,6 @@ p.fcal_profile_link a {
   margin: 1rem;
   font-size: 1rem;
   font-weight: 500;
-}
-.fcal_settings_submenu li::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -6%;
-  width: 10px;
-  height: 1px;
-  background-color: #e4e2df;
-  border-radius: 50%;
 }
 .fcal_settings_submenu::after {
   content: "";
