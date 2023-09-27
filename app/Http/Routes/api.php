@@ -61,3 +61,7 @@ $router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($rout
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SettingsController@index');
 });
+
+$router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'ReportController@getReports');
+});
