@@ -635,6 +635,9 @@ ul.fframe_menu.fcal_secondary_menu {
   font-weight: normal;
 }
 
+.fcal_drawer .el-drawer__body {
+  padding-top: 0;
+}
 .fcal_drawer .el-drawer {
   min-width: 640px;
 }
@@ -642,7 +645,7 @@ ul.fframe_menu.fcal_secondary_menu {
   font-weight: 500;
   line-height: 32px;
   color: #1B2533;
-  padding: 24px;
+  padding: 40px 24px 20px 24px;
   margin: 0;
 }
 .fcal_drawer .el-drawer .el-drawer__header .el-drawer__title {
@@ -668,6 +671,36 @@ ul.fframe_menu.fcal_secondary_menu {
   color: var(--el-color-danger);
 }
 
+.fcal_create_new_booking_type_drawer .el-form-item {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.fcal_create_new_booking_type_drawer .el-form-item label {
+  display: block;
+  height: auto;
+  text-align: left;
+  margin-bottom: 8px;
+  line-height: 22px;
+}
+.fcal_create_new_booking_type_drawer .el-form-item .el-form-item__content {
+  width: 100%;
+}
+.fcal_create_new_booking_type_drawer .el-form-item .el-form-item__content .el-select .el-input .el-input__wrapper {
+  box-shadow: none !important;
+  outline: none;
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+.fcal_create_new_booking_type_drawer .el-form-item .el-form-item__content .el-select .el-input .el-input__wrapper.is-focus {
+  border-color: #2653C7;
+}
+.fcal_create_new_booking_type_drawer .el-form-item .el-form-item__content .el-select .el-input .el-input__wrapper input {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
 .fcal_create_new_booking_type_drawer .el-button {
   position: relative;
   width: 100%;
@@ -680,6 +713,9 @@ ul.fframe_menu.fcal_secondary_menu {
   border-radius: 8px;
   margin: 0;
   transition: 0.2s;
+}
+.fcal_create_new_booking_type_drawer .el-button.is-disabled {
+  opacity: 0.4;
 }
 .fcal_create_new_booking_type_drawer .el-button + .el-button {
   margin-top: 24px;
@@ -2927,6 +2963,16 @@ p.fcal_profile_link a {
 }
 .fcal_settings_sidebar li a .icon {
   transform: translateY(3px);
+}
+.fcal_settings_sidebar li a.router-link-exact-active {
+  background: #2653C7;
+  color: #ffffff;
+}
+.fcal_settings_sidebar li a.router-link-exact-active svg path {
+  stroke: #ffffff;
+}
+.fcal_settings_sidebar li a.router-link-exact-active svg path {
+  stroke: #ffffff;
 }
 
 .fcal_settings .fcal_settings_header_title h3 {

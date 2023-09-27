@@ -5,7 +5,7 @@
                 <h3>Booking Calendars</h3>
             </div>
             <div class="fcal_actions">
-                <el-button @click="$router.push({name: 'create_calendar'})" class="fcal_primary_btn">
+                <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
                     <span>+</span> Create New Host
                 </el-button>
             </div>
@@ -25,16 +25,72 @@
                 <pagination :pagination="pagination" @fetch="getCalendars"/>
             </div>
         </div>
+
+        <el-drawer
+            v-model="isNewBookingOpen"
+            title="Create New Booking Type"
+            :zIndex="999"
+            modal-class="fcal_drawer"
+        >
+            <div class="fcal_create_new_booking_type_drawer">
+
+                <el-form-item label="Select Host">
+                    <HostSelector v-model="user_id" />
+                </el-form-item>
+                <el-button
+                    @click="$router.push({ name: 'create_calendar', params: { host_id: user_id, event_type: 'one-on-one' } })"
+                    :disabled="!user_id"
+                >
+                    <div class="icons-wrap">
+                        <el-icon><User /></el-icon>
+                        <el-icon><Right /></el-icon>
+                        <div class="icons">
+                            <el-icon><User /></el-icon>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>One-on-One</h3>
+                        <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
+                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <el-icon class="icon-right"><Right /></el-icon>
+                    </div>
+                </el-button>
+                <el-button
+                    @click="$router.push({ name: 'create_calendar', params: { host_id: user_id, event_type: 'group' } })"
+                    :disabled="!user_id"
+                >
+                    <div class="icons-wrap">
+                        <el-icon><User /></el-icon>
+                        <el-icon><Right /></el-icon>
+                        <div class="icons">
+                            <el-icon><User /></el-icon>
+                            <el-icon><User /></el-icon>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>Group</h3>
+                        <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
+                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <el-icon class="icon-right"><Right /></el-icon>
+                    </div>
+                </el-button>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
 <script type="text/babel">
 import Pagination from "../../Pieces/Pagination.vue";
 import CalendarEventBlock from "./parts/CalendarEventBlock.vue";
+import { User, Right } from '@element-plus/icons-vue';
+import HostSelector from "../../Pieces/HostSelector";
 
 export default {
     name: 'AllCalendars',
     components: {
+        HostSelector,
+        User,
+        Right,
         Pagination,
         CalendarEventBlock
     },
@@ -47,6 +103,8 @@ export default {
                 per_page: 10,
                 current_page: 1
             },
+            isNewBookingOpen: false,
+            user_id: ''
         }
     },
     methods: {

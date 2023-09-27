@@ -26,7 +26,7 @@
                             <el-icon><User /></el-icon>
                             <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
                         </span>
-                    </span> {{ slot.event_type == 'single' ? 'One-to-One' : 'Group' }}
+                    </span> {{ slot.event_type == 'single' || 'One-to-One' ? 'One-to-One' : 'Group' }}
                 </span>
 
             </p>
