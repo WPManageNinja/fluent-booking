@@ -10,6 +10,7 @@
                         v-model="filterDate"
                         type="daterange"
                         unlink-panels
+                        clearable
                         range-separator="-"
                         start-placeholder="Start date"
                         end-placeholder="End date"
@@ -119,10 +120,24 @@ export default {
             chatCats: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
         }
     },
+    watch: {
+        filterDate() {
+            this.fetchReports();
+        },
+    },
     methods: {
+        convertDate(date) {
+            if (date) {
+                return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
+            }
+            return '';
+        },
         fetchReports() {
             this.loading = true;
-            this.$get('reports')
+            this.$get('reports', {
+                    startDate: this.convertDate(this.filterDate[0]),
+                    endDate: this.convertDate(this.filterDate[1])
+                })
                 .then(response => {
                     this.widgets = response.overview;
                 })

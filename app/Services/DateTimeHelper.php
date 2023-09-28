@@ -53,6 +53,17 @@ class DateTimeHelper
         return $topLevels + $lists;
     }
 
+    public static function getTimeZone()
+    {
+        $timeZone = wp_timezone_string();
+
+        if (!in_array($timeZone, \DateTimeZone::listIdentifiers())) {
+            $timeZone = 'UTC';
+        }
+
+        return $timeZone;
+    }
+
     public static function convertToUtc($dateTime, $timezone, $format = 'Y-m-d H:i:s')
     {
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($timezone));
