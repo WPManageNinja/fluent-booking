@@ -4,7 +4,6 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
-import ScheduleSpotDetails from "./Modules/Schedules/parts/ScheduleSpotDetails";
 import Availabilities from "./Modules/Availability/Availabilities.vue";
 import Settings from "./Modules/Settings/Settings.vue";
 import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";

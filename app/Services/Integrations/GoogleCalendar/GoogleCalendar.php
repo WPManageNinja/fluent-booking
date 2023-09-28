@@ -33,7 +33,6 @@ class GoogleCalendar extends IntegrationManager
         
         if ($credentials) {
             $this->initClient();
-            $this->enqueueAssets();
             $this->initHooks();
         }
     }
@@ -70,7 +69,7 @@ class GoogleCalendar extends IntegrationManager
 
         do_action('fluent_booking/google_calendar_integration', $code, $scope);
 
-        wp_redirect(admin_url('admin.php?page=fluent-booking#/integrations/google-calendar'));
+        wp_redirect(admin_url('admin.php?page=fluent-booking#/settings/integrations/google_calendar'));
 
         exit;
     }
@@ -90,47 +89,6 @@ class GoogleCalendar extends IntegrationManager
         $this->updateAuthDetails($authData);
 
         do_action('fluent_booking/google_calendar_authenticated', $authData);
-    }
-
-    public function enqueueAssets()
-    {
-        $slug = $this->app->config->get('app.slug');
-
-        $assets = $this->app['url.assets'];
-
-        wp_enqueue_script(
-            $slug . '_admin_app',
-            $assets . 'admin/app.js',
-            array('jquery'),
-            '1.0',
-            true
-        );
-
-        wp_localize_script($slug . '_admin_app', 'fluentFramework_' . $this->integrationKey, [
-            'auth_url'  => $this->client->getAuthUrl(),
-            'connected' => $this->isConnected()
-        ]);
-    }
-
-    public function addMenu($menu)
-    {
-        $baseUrl = Helper::getAppBaseUrl();
-
-        $menu['configurations']['submenu'] = [
-            'google_calendar' => [
-                'key'       => 'google-calendar',
-                'label'     => __('Google Calendar', 'fluent-booking'),
-                'permalink' => $baseUrl . 'configure-integration/google-calendar'
-            ]
-        ];
-        $menu['integrations']['submenu'] = [
-            'google_calendar' => [
-                'key'       => 'google-calendar',
-                'label'     => __('Google Calendar', 'fluent-booking'),
-                'permalink' => $baseUrl . 'integrations/google-calendar'
-            ]
-        ];
-        return $menu;
     }
 
     public function getAccessToken($hostId = null)
@@ -162,6 +120,14 @@ class GoogleCalendar extends IntegrationManager
         $accessToken = $this->getAccessToken();
 
         return $accessToken ? true : false;
+    }
+
+    private function getClientAuthUrl()
+    {
+        if (!$this->client) {
+            return '';
+        }
+        return $this->client->getAuthUrl();
     }
 
     protected function getHostEmail($hostId)
@@ -197,6 +163,19 @@ class GoogleCalendar extends IntegrationManager
         }
 
         return $attendees;
+    }
+
+    public function addMenu($menu)
+    {
+        $menu['configurations']['submenu'][] = [
+            'key'       => 'google_calendar',
+            'label'     => __('Google Calendar', 'fluent-booking'),
+        ];
+        $menu['integrations']['submenu'][] = [
+            'key'       => 'google_calendar',
+            'label'     => __('Google Calendar', 'fluent-booking'),
+        ];
+        return $menu;
     }
 
     public function getClientFields()
@@ -283,6 +262,8 @@ class GoogleCalendar extends IntegrationManager
             'title'         => __('Google Calendar/Meet', 'fluent_booking'),
             'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
             'save_btn_text' => __('Save', 'fluent_booking'),
+            'auth_url'      => $this->getClientAuthUrl(),
+            'is_connected'  => $this->isConnected(),
             'fields'        => [
                 'add_to_calendar' => [
                     'logo'     => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 2V5" stroke="#1B2533" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V5" stroke="#1B2533" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 9.08984H20.5" stroke="#1B2533" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 19C22 19.75 21.79 20.46 21.42 21.06C20.73 22.22 19.46 23 18 23C16.99 23 16.07 22.63 15.37 22C15.06 21.74 14.79 21.42 14.58 21.06C14.21 20.46 14 19.75 14 19C14 16.79 15.79 15 18 15C19.2 15 20.27 15.53 21 16.36C21.62 17.07 22 17.99 22 19Z" stroke="#1B2533" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.4399 18.9995L17.4299 19.9895L19.5599 18.0195" stroke="#1B2533" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 8.5V16.36C20.27 15.53 19.2 15 18 15C15.79 15 14 16.79 14 19C14 19.75 14.21 20.46 14.58 21.06C14.79 21.42 15.06 21.74 15.37 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#1B2533" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.9955 13.7002H12.0045" stroke="#1B2533" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.29431 13.7002H8.30329" stroke="#1B2533" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.29431 16.7002H8.30329" stroke="#1B2533" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',

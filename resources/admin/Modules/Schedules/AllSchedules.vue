@@ -109,18 +109,6 @@
                 <el-empty v-else description="No schedules based on your filter" />
             </div>
             <p>All dates are shown in {{currentTimezone}} timezone</p>
-            <!-- <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schedules">
-                <div class="fcal_schedule_wrapper">
-                    <div class="fcal_schedule_items">
-                        <schedule-spots
-                            :spots="schedules"
-                        />
-                    </div>
-                </div>
-                <div class="fcal_right fcal_tm20">
-                    <pagination :pagination="pagination" @fetch="fetchSchedules"/>
-                </div>
-            </div> -->
         </div>
     </div>
 </template>

@@ -4,7 +4,7 @@
             <h3>Integrations</h3>
         </div>
 
-        <div class="fcal_settings_content_wrap">
+        <div v-if="Object.keys(fieldSettings).length" class="fcal_settings_content_wrap">
             <div class="fcal_configure_integrations fcal_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
@@ -22,7 +22,7 @@
                         </el-button>
                     </div>
 
-                    <div v-if="integrationVars?.connected && fieldSettings.fields" class="fcal_configure_integration_body">
+                    <div v-if="fieldSettings?.is_connected && fieldSettings.fields" class="fcal_configure_integration_body">
                         <h4>Configuration</h4>
                         <div class="fcal_integration_configuration_items">
                             <div v-for="(field, fieldKey) in fieldSettings.fields" :key="fieldKey" class="fcal_configure_integration_card fcal_integration_configuration_card">
@@ -60,7 +60,9 @@
                 </div>
             </div>
         </div>
-
+        <div v-else>
+            <el-alert title="No Integration Found" type="info" :closable="false" center show-icon></el-alert>
+        </div>
     </div>
 </template>
 
@@ -73,13 +75,17 @@ export default {
             saving: false,
             settings: {},
             fieldSettings: {},
-            integrationVars: '',
             isConnectedBtn: false
+        }
+    },
+    watch: {
+        settings_key() {
+            this.getSettings();
         }
     },
     computed: {
         buttonAttrs() {
-            const isConnected = this.integrationVars?.connected;
+            const isConnected = this.fieldSettings?.is_connected;
             this.isConnectedBtn = isConnected;
             return {
                 label: isConnected ? 'Disconnect' : 'Connect',
@@ -89,10 +95,10 @@ export default {
     },
     methods: {
         toggleSettings() {
-            if (this.integrationVars?.connected) {
+            if (this.fieldSettings?.is_connected) {
                 this.disconnectIntegration();
             } else {
-                window.location.href = this.integrationVars?.auth_url;
+                window.location.href = this.fieldSettings?.auth_url;
             }
         },
         getSettings() {
@@ -102,7 +108,6 @@ export default {
             .then(response => {
                 this.settings = response.settings;
                 this.fieldSettings = response.field_settings;
-                console.log(response);
             })
             .catch(errors => {
                 this.$handleError(errors);
@@ -130,7 +135,7 @@ export default {
             })
             .then(response => {
                 this.$handleSuccess(response);
-                this.integrationVars.connected = false;
+                this.fieldSettings.is_connected = false;
             })
             .catch(errors => {
                 this.$handleError(errors);
@@ -139,10 +144,6 @@ export default {
     },
     mounted() {
         this.getSettings();
-    },
-    created() {
-        this.integrationVars = window['fluentFramework_' + this.settings_key];
-        console.log(this.integrationVars);
     }
 }
 </script>

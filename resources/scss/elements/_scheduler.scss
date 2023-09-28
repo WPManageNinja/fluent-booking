@@ -1372,7 +1372,7 @@
 
 .fcal_schedule_details_content {
   width: 100%;
-  max-width: 670px;
+  max-width: 720px;
   .fcal_schedule_details_event {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -1423,7 +1423,6 @@
         font-weight: 500;
         line-height: 20px;
         display: inline-block;
-        border-bottom: 1px solid $primaryColor;
         color: $primaryColor;
         text-decoration: none;
       }

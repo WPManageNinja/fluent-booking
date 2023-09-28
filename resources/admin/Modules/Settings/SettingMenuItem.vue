@@ -1,13 +1,13 @@
 <template>
     <li class="fcal_settings_submenu_item">
         <div v-if="setting.submenu">
-            <a :href="setting.menu.url" @click="handleClick(setting.menu.key)" class="fcal_submenu_item">
+            <a :href="setting.menu.url" @click="handleClick(setting)" :class="['fcal_submenu_item', {'router-link-exact-active': isShowSubMenu}]">
                 <div class="icon" v-html="setting.menu.svgIcon"></div>
                 {{ setting.menu.label }} <el-icon><ArrowRight /></el-icon>
             </a>
-            <ul class="fcal_settings_submenu" :class="isShowSubMenu ? 'active' : null">
+            <ul :class="['fcal_settings_submenu', {'active': isShowSubMenu}]">
                 <li v-for="(submenu, indx) in setting.submenu" :key="indx">
-                    <router-link :to="{ name: setting.menu.key, params: { settings_key: indx }}">
+                    <router-link :to="{ name: setting.menu.key, params: { settings_key: submenu.key }}">
                         {{ submenu.label }}
                     </router-link>
                 </li>
@@ -36,17 +36,29 @@ export default {
             isShowSubMenu: false,
         }
     },
+    watch: {
+        '$route.path': function() {
+            this.checkSubMenu();
+        }
+    },
     methods: {
-        handleClick(name) {
-            this.isShowSubMenu = !this.isShowSubMenu;
+        handleClick(setting) {
+            this.$router.push({ 
+                name: setting.menu.key, 
+                params: {settings_key: setting.submenu[0].key}
+            });
+        },
+        checkSubMenu() {
+            const pathParts = this.$route.path.split('/');
+            if (pathParts[2] === this.setting.menu.key) {
+                this.isShowSubMenu = true;
+            } else {
+                this.isShowSubMenu = false;
+            }
         }
     },
     mounted() {
-
+        this.checkSubMenu();
     }
 }
 </script>
-
-<style scoped>
-
-</style>
