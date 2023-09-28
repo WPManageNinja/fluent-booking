@@ -71,16 +71,17 @@
     }
 
     .fcal_schedules {
-      flex: 1;
       max-height: 85vh;
       overflow-y: scroll;
-    }
-  }
-
-  .fcal_is_current.fcal_each_spot {
-    background: #fff;
-    .fcal_spot_wrapper {
-      border-left: 4px solid #0169ff;
+      &::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #e5e8eb;
+        border-radius: 10px;
+      }
     }
   }
 }
