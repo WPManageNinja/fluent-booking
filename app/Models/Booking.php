@@ -194,6 +194,10 @@ class Booking extends Model
 
     public function getOngoingStatus()
     {
+        if ($this->status == 'cancelled') {
+            return '';
+        }
+
         $currentTime = time();
         $startTime = strtotime($this->start_time);
         $endTime = strtotime($this->end_time);

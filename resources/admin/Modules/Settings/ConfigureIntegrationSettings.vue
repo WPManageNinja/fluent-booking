@@ -3,7 +3,7 @@
         <div class="fcal_settings_header">
             <h3>Configure Integration</h3>
         </div>
-        <div class="fcal_settings_content_wrap">
+        <div v-if="Object.keys(fieldSettings).length" class="fcal_settings_content_wrap">
             <div class="fcal_configure_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
@@ -27,7 +27,9 @@
                                     :placeholder="field.placeholder"
                                     :disabled="field.readonly">
                                     <template v-if="field.copy_btn" #append>
-                                        <el-button type="primary"><el-icon><CopyDocument /></el-icon> Copy</el-button>
+                                        <el-button type="primary" @click="copyText(settings[fieldKey])">
+                                            <el-icon><CopyDocument /></el-icon> Copy
+                                        </el-button>
                                     </template>
                                 </el-input>
                             </el-form-item>
@@ -39,12 +41,15 @@
                 </div>
             </div>
         </div>
+        <div v-else>
+            <el-alert title="No Settings Found" type="info" :closable="false" center show-icon></el-alert>
+        </div>
     </div>
 </template>
 
 <script>
+import { copyToClipBoard } from '@/Bits/data_config.js';
 import { Calendar, ArrowRight, CopyDocument } from '@element-plus/icons-vue';
-
 export default {
     name: 'ConfigureIntegrationSettings',
     props: ['settings_key'],
@@ -59,6 +64,11 @@ export default {
             loading: false,
             fieldSettings: {},
             settings: {}
+        }
+    },
+    watch: {
+        settings_key() {
+            this.getSettings();
         }
     },
     methods: {
@@ -88,6 +98,10 @@ export default {
             .finally(() => {
                 this.saving = false;
             });
+        },
+        copyText(text) {
+            copyToClipBoard(text);
+            this.$handleSuccess('Copied to clipboard');
         }
     },
     mounted() {
