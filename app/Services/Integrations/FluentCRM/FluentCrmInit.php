@@ -5,6 +5,7 @@ namespace FluentBooking\App\Services\Integrations\FluentCRM;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Integrations\FluentCRM\NewBookingTrigger;
+use FluentBooking\App\Services\Integrations\FluentCRM\CancelBookingTrigger;
 
 class FluentCrmInit {
 
@@ -44,6 +45,7 @@ class FluentCrmInit {
 	public function addAutomations()
 	{
         new NewBookingTrigger();
+        new CancelBookingTrigger();
 	}
 
     private function getSubscriberId($email)
