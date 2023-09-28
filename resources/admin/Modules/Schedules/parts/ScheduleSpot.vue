@@ -1,29 +1,34 @@
 <template>
     <div :class="'fcal_spoot_status_' + spot[0].status" class="fcal_spot_wrapper">
         <div @click="showDetails()" class="fcal_spot_line">
-            <div class="fcal_spot_color">
-                <span :class="'fcal_'+spot[0].status"></span>
-            </div>
             <div class="fcal_spot_timing">
+                <div class="fcal_spot_color">
+                    <span :class="'fcal_'+spot[0].status"></span>
+                </div>
+
                 {{ toCurrentTimezone(spot[0].start_time, 'hh:mma') }} - {{ toCurrentTimezone(spot[0].end_time, 'hh:mma') }}
                 <div v-if="spot[0].happening_status" class="fcal_spot_happening">
                     <span :class="'fcal_'+spot[0].happening_status">{{ getTextFromSlug(spot[0].happening_status) }}</span>
                 </div>
             </div>
             <div class="fcal_spot_desc">
-                <div class="fcal_spot_title">
+                <h3 class="fcal_spot_title">
                     {{ spotTitle }}
-                </div>
-                <div class="fcal_spot_desc_text">
+                </h3>
+                <h3 class="fcal_spot_desc_text">
                     Event: <b>{{ spot[0].slot.title }}</b>
-                </div>
-                <div v-if="multi_host">
+                </h3>
+            </div>
+            <div class="fcal_spot_meeting_with">
+                <h3 v-if="multi_host">
                     Host: <b>{{spot[0].author.name}}</b>
-                </div>
+                </h3>
             </div>
             <div class="fcal_spot_actions">
                 <!-- fcal_plain_btn -->
-                <el-button text>Details</el-button>
+                <el-button class="fcal_plain_btn">
+                    View Details
+                </el-button>
             </div>
         </div>
     </div>
