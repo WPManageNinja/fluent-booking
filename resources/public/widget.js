@@ -23,7 +23,6 @@ if (calendarApps.length) {
                 action: 'fcal_get_widget_vars'
             })
                 .then((response) => {
-                    console.log(response);
                     window.fluentCalendarPublicVars = response.global_vars;
                     elem.innerHTML = '';
                     new BookingApp({
