@@ -403,8 +403,6 @@
           .fcal_spot_color {
             margin-right: 10px;
             .fcal_scheduled {
-              width: 14px;
-              height: 14px;
               border: 1px solid #ffffff;
             }
           }
@@ -583,8 +581,8 @@
 
 .fcal_spot_color {
   span {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     display: block;
     border-radius: 50%;
     background: #1a1a1a;

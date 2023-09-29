@@ -31,10 +31,8 @@ class GoogleCalendar extends IntegrationManager
         $this->clientSecret = Arr::get($credentials, 'client_secret');
         $this->redirectUrl  = Arr::get($credentials, 'redirect_url');
         
-        if ($credentials) {
-            $this->initClient();
-            $this->initHooks();
-        }
+        $this->initClient();
+        $this->initHooks();
     }
 
     public function initClient()
@@ -48,10 +46,10 @@ class GoogleCalendar extends IntegrationManager
 
     public function initHooks()
     {
+        add_filter('fluent_booking/settings_menu_items', [$this, 'addMenu'], 10, 1);
         add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
         add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
         add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
-        add_filter('fluent_booking/settings_menu_items', [$this, 'addMenu'], 10, 1);
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback'] );
     }
 
@@ -115,7 +113,7 @@ class GoogleCalendar extends IntegrationManager
         return $tokens['access_token'];
     }
 
-    public function isConnected()
+    private function isConnected()
     {
         $accessToken = $this->getAccessToken();
 
@@ -124,7 +122,7 @@ class GoogleCalendar extends IntegrationManager
 
     private function getClientAuthUrl()
     {
-        if (!$this->client) {
+        if (!$this->clientId || !$this->clientSecret) {
             return '';
         }
         return $this->client->getAuthUrl();
