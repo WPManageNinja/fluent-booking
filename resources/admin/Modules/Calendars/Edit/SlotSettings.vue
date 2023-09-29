@@ -15,7 +15,7 @@
                 </el-step>
                 <el-step>
                     <template #title>
-                        <h3 @click="handleSteps(3)">Notification & Question</h3>
+                        <h3 @click="handleSteps(3)">Notifications</h3>
                     </template>
                 </el-step>
             </el-steps>

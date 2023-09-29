@@ -4,14 +4,11 @@
             <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
                 <el-icon><Back /></el-icon> Go Back
             </router-link>
-            <h1>
-                {{ user_id }} - Tanbir
-            </h1>
         </div>
 
         <div class="fcal_single_integration_body">
             <h2 class="title">Integrations</h2>
-            <div v-if="Object.keys(fieldSettings).length" class="fcal_configure_integrations fcal_integrations">
+            <div v-if="fieldSettings?.auth_url" class="fcal_configure_integrations fcal_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
                         <div class="left">

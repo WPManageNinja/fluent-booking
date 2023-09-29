@@ -15,7 +15,7 @@
                 </el-step>
                 <el-step>
                     <template #title>
-                        <h3>Notification & Question</h3>
+                        <h3>Notifications</h3>
                     </template>
                 </el-step>
             </el-steps>
@@ -28,7 +28,7 @@
 
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="createCalendar">
-                    {{ stepIndex == 1 ? 'Create and ' : null }}Continue
+                    {{ stepIndex == 1 ? 'Create and ' : null }} Continue
                 </el-button>
             </div>
         </div>
@@ -45,6 +45,7 @@ import BasicInfo from './Edit/_BasicInfo';
 
 export default {
     name: 'NewCalender',
+    props: ['host_id', 'event_type'],
     components: {
         WeeklySchedules,
         TimeZoneSelector,
@@ -146,14 +147,12 @@ export default {
             })
                 .then(response => {
                     this.saving = false;
-                    // reload the page
                     if(response.redirect_url) {
                         window.location.href = response.redirect_url;
                     }
-
-                    // setTimeout(() => {
-                    //     window.location.reload(true);
-                    // }, 500);
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 500);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -164,24 +163,24 @@ export default {
         },
         checkSlug() {
             if (!this.calendar.slug) {
-                this.$notify.error('Please provide a slug first');
+                this.$handleError('Please provide a slug first');
                 return;
             }
 
             if(!isNaN(this.calendar.slug)) {
-                this.$notify.error('Only number in slug is not allowed');
+                this.$handleError('Only number in slug is not allowed');
                 return;
             }
 
             if  (this.calendar.slug.length < 4) {
-                this.$notify.error('The Slug need to be atleast 4 characters');
+                this.$handleError('The Slug need to be atleast 4 characters');
                 return;
             }
 
             // check if the slug has special characters or any space. we will only allow alpha-numeric characters
             const isInvalid = this.calendar.slug.match(/[^a-zA-Z0-9_-]/g);
             if(isInvalid) {
-                this.$notify.error('Your booking slug only accepts alpha-numeric values. Please do not provide any space or special characters');
+                this.$handleError('Your booking slug only accepts alpha-numeric values. Please do not provide any space or special characters');
                 return;
             }
 
@@ -202,12 +201,10 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$route.params);
-        if (this.$route.params) {
-            this.calendar.slot.event_type = this.$route.params.event_type;
-            this.calendar.user_id = this.$route.params.host_id;
+        if (this.host_id && this.event_type) {
+            this.calendar.slot.event_type = this.event_type;
+            this.calendar.user_id = this.host_id;
         }
-
 
         if(!this.hasSupport('is_hosted')) {
             this.form_step = 'general';

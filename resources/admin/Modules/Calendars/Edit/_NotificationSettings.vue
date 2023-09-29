@@ -38,16 +38,6 @@
                 <EditNotificationSettings :email="notification.email"/>
             </div>
         </div>
-
-        <div class="fcal_create_calendar_form_footer">
-            <el-button
-                @click="save()"
-                :disabled="saving"
-                class="fcal_primary_btn_update"
-                v-loading="saving">
-                Update Notification Settings
-            </el-button>
-        </div>
     </div>
     <div class="fcal_section_body" v-else>
         <el-skeleton :rows="1" animated />

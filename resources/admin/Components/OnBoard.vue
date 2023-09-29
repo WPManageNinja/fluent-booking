@@ -1,6 +1,9 @@
 <template>
     <div>
-        <create-new />
+        <create-new 
+            :host_id="appVars.me.id"
+            :event_type="'single'"
+        />
     </div>
 </template>
 
