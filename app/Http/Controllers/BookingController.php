@@ -18,7 +18,7 @@ class BookingController extends Controller
 
         if ($slot->status != 'active') {
             return $this->sendError([
-                'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
+                'message' => __('Sorry, this host is not accepting any new bookings at the moment.', 'fluent-booking')
             ]);
         }
 
@@ -56,7 +56,7 @@ class BookingController extends Controller
 
         if ($calendarSlot->status != 'active') {
             return $this->sendError([
-                'message' => 'Sorry, this host is not accepting any new bookings at the moment.'
+                'message' => __('Sorry, this host is not accepting any new bookings at the moment.', 'fluent-booking')
             ]);
         }
 
@@ -104,7 +104,7 @@ class BookingController extends Controller
 
         if (!$isSpotAvailable) {
             wp_send_json([
-                'message' => 'This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.'
+                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
             ], 423);
         }
 
@@ -122,7 +122,7 @@ class BookingController extends Controller
             'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
             'slot'        => $calendarSlot,
             'booking'     => $booking,
-            'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
+            'message'     => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking')
         ];
 
         $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
@@ -130,7 +130,7 @@ class BookingController extends Controller
         $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
 
         return apply_filters('fluent_booking/booking_confirmation', [
-            'message'       => 'Booking has been confirmed',
+            'message'       => __('Booking has been confirmed', 'fluent-booking'),
             'response_html' => $responseHtml
         ]);
     }
