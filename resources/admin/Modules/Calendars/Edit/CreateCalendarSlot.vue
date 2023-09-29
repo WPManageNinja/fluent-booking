@@ -106,19 +106,10 @@ export default {
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings,
                 event_type: formData.event_type
-                //
-                // title: formData.title,
-                // description: formData.description,
-                // duration: formData.duration,
-                // settings: this.slot.settings,
-                // location_type: this.slot.location_type,
-                // location_heading: this.slot.location_heading,
-                // location_settings: this.slot.location_settings,
-                // event_type: formData.event_type
             })
                 .then(response => {
                     this.$handleSuccess(response);
-                    this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id }, query: { step: 2 } })
+                    this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id }, query: { step: 'schedule-settings' } })
                 })
                 .catch(errors => {
                     this.$handleError(errors);

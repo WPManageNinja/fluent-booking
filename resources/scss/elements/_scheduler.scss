@@ -641,7 +641,17 @@
       font-weight: 700;
       line-height: 36px;
       color: $dark;
-      margin: 0 0 20px;
+    }
+  }
+  .fcal_header {
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 36px;
+      color: $dark;
     }
   }
   .fcal_create_calendar_body {
@@ -823,7 +833,7 @@
               }
             }
             .el-tabs__header {
-              margin-bottom: 4px;
+              margin-bottom: 16px;
               .el-tabs__nav-wrap {
                 &:after {
                   display: none;

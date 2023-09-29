@@ -1,55 +1,79 @@
 <template>
     <div class="fcal_create_calendar_wrap">
-        <div class="fcal_create_calendar_header">
-            <h1>Edit One-on-One Booking Type</h1>
-            <el-steps class="fcal_steps" :space="200" :active="stepIndex">
-                <el-step>
-                    <template #title>
-                        <h3 @click="handleSteps(1)">Event Info <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3 @click="handleSteps(2)">Schedule Settings <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3 @click="handleSteps(3)">Notification & Question</h3>
-                    </template>
-                </el-step>
-            </el-steps>
+        <div class="fcal_header">
+            <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
+                <el-icon><Back /></el-icon> Go Back
+            </router-link>
+            <h1>
+                [Event Title]
+            </h1>
         </div>
+        <el-tabs
+            v-model="activeTab"
+            tab-position="left"
+            @tab-change="handleTabChange"
+            class="fcal_tabs">
+            <el-tab-pane name="basic-info">
+                <template #label>
+                    <el-icon><Calendar /></el-icon> Event Details
+                </template>
+                <div class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading" />
+                    <basic-info v-else :slot="slot" />
 
-        <div v-if="slot" class="fcal_create_calendar_body">
-            <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
-                <basic-info ref="basicInfo" :slot="slot" />
-            </div>
+                    <div class="fcal_create_calendar_form_footer">
+                        <el-button
+                            @click="saveSettings()"
+                            :disabled="saving"
+                            v-loading="saving"
+                            class="fcal_primary_btn_update"
+                        >
+                            Update Settings
+                        </el-button>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane name="schedule-settings">
+                <template #label>
+                    <el-icon><Calendar /></el-icon> Schedule Settings
+                </template>
+                <div class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading" />
+                    <ScheduleSettings v-else :slot="slot" />
 
-            <div v-if="stepIndex == 2" class="fcal_create_calendar_schedule_setting">
-                <ScheduleSettings :slot="slot" />
-            </div>
+                    <div class="fcal_create_calendar_form_footer">
+                        <el-button
+                            @click="saveSettings()"
+                            :disabled="saving"
+                            v-loading="saving"
+                            class="fcal_primary_btn_update"
+                        >
+                            Update Settings
+                        </el-button>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane name="notification-settings">
+                <template #label>
+                    <el-icon><Bell /></el-icon> Notification
+                </template>
+                <div class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading" />
+                    <NotificationSettings v-else ref="notificationData" :slot="slot" />
 
-            <div v-if="stepIndex == 3" class="fcal_create_calendar_notification_setting">
-                <NotificationSettings ref="notificationData" :slot="slot" />
-            </div>
-
-
-            <div class="fcal_create_calendar_form_footer">
-                <el-button v-if="stepIndex != 1" class="fcal_plain_btn" @click="backStep">
-                    Go Back
-                </el-button>
-
-                <el-button
-                    @click="saveSettings()"
-                    :disabled="saving"
-                    v-loading="saving"
-                    class="fcal_primary_btn_update"
-                >
-                    Update Settings
-                </el-button>
-            </div>
-        </div>
+                    <div class="fcal_create_calendar_form_footer">
+                        <el-button
+                            @click="saveSettings()"
+                            :disabled="saving"
+                            v-loading="saving"
+                            class="fcal_primary_btn_update"
+                        >
+                            Update Settings
+                        </el-button>
+                    </div>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
@@ -58,7 +82,7 @@ import SlotSettingsFrom from './_SlotSettingsForm.vue';
 import BasicInfo from './_BasicInfo.vue'
 import NotificationSettings from './_NotificationSettings.vue'
 import ScheduleSettings from "./_ScheduleSettings";
-import { Right } from '@element-plus/icons-vue';
+import { Right, Back, Calendar, Bell } from '@element-plus/icons-vue';
 
 export default {
     name: 'SlotSettings',
@@ -68,30 +92,20 @@ export default {
         SlotSettingsFrom,
         BasicInfo,
         NotificationSettings,
-        Right
+        Right,
+        Back,
+        Calendar,
+        Bell
     },
     data() {
         return {
             slot: null,
             loading: true,
             saving: false,
-            activeTab: 'info',
-            stepIndex: 1
+            activeTab: 'basic-info'
         }
     },
     methods: {
-        handleSteps(step) {
-            this.stepIndex = step;
-            this.$router.push({ name: 'slot_settings', params: { calendar_id: this.slot.calendar_id, slot_id: this.slot.id }, query: { step: step } })
-
-        },
-        backStep() {
-            this.stepIndex -= 1;
-            if (this.stepIndex <= 1) {
-                this.stepIndex = 1;
-            }
-            this.$router.push({ name: 'slot_settings', params: { calendar_id: this.slot.calendar_id, slot_id: this.slot.id }, query: { step: this.stepIndex } })
-        },
         getSlot() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/slots/' + this.slot_id)
@@ -104,6 +118,9 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        handleTabChange() {
+            this.$router.push({ name: 'slot_settings', params: { calendar_id: this.slot.calendar_id, slot_id: this.slot.id }, query: { step: this.activeTab } })
         },
         saveSettings() {
             this.saving = true;
@@ -133,7 +150,7 @@ export default {
         this.$changeTitle('Slot Settings');
         this.getSlot();
         if (this.$route.query.step) {
-            this.stepIndex = this.$route.query.step;
+            this.activeTab = this.$route.query.step
         }
     }
 }
