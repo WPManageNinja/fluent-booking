@@ -3,16 +3,19 @@
         <div class="fcal_schedule_details_content">
             <div v-if="showing_spot" class="fcal_schedule_event_infos">
                 <div class="fcal_schedule_header_bar">
-                    {{ showing_spot.slot_minutes }} minutes meeting with {{ showing_spot.first_name }}
-                    {{ showing_spot.last_name }} @ {{ toCurrentTimezone(showing_spot.start_time, 'DD MMM YYYY, hh:mma') }}
-                    <el-dropdown trigger="click" popper-class="fcal_select">
-                            <span class="el-dropdown-link">
-                                 <el-icon><MoreFilled /></el-icon>
-                            </span>
+                    {{ meetingDetails }}
+                    <el-dropdown v-if="isMoreIconVisible" trigger="click" popper-class="fcal_select">
+                        <span class="el-dropdown-link">
+                            <el-icon><MoreFilled /></el-icon>
+                        </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item><el-icon><Refresh /></el-icon> Reschedule</el-dropdown-item>
-                                <el-dropdown-item><el-icon><Close /></el-icon> Cancel</el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-icon><Refresh /></el-icon> Reschedule
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="cancelDialog = true">
+                                    <el-icon><Close /></el-icon> Cancel
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -131,6 +134,23 @@
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
         </div>
+        <el-dialog v-model="cancelDialog" width="30%" title="Cancel Meeting">
+            <div style="text-align: center;">
+                <h3>{{ showing_spot.slot.title }}</h3>
+                <p>with <b>{{ showing_spot.first_name }} {{ showing_spot.last_name }}</b></p>
+                <p>{{ meetingTime }}</p>
+                <p style="text-align: left;">Please confirm that you would like to cancel this event. A cancellation email will also go out to the invitee</p>
+                <el-input type="textarea" v-model="cancel_reason" placeholder="Reason for cancellation"></el-input>
+            </div>
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="cancelDialog = false">No, Don't cancel</el-button>
+                <el-button v-loading="updating" :disabled="updating" type="primary" @click="cancelEvent()">
+                  Yes, Cancel
+                </el-button>
+              </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -166,6 +186,21 @@ export default {
             this.showing_spots = this.spot || null;
             this.showing_spot = this.spot ? this.spot[0] : null;
         }
+    },
+    computed: {
+        isMoreIconVisible() {
+            return this.showing_spot.status != 'cancelled' && this.showing_spot.status != 'completed';
+        },
+        meetingDetails() {
+            const guestName = `${this.showing_spot.first_name} ${this.showing_spot.last_name}`;
+            const startTime = this.toCurrentTimezone(this.showing_spot.start_time, 'DD MMM YYYY, hh:mma');
+            return `${this.showing_spot.slot_minutes} minutes meeting with ${guestName} @ ${startTime}`;
+        },
+        meetingTime() {
+            const startTime = this.toCurrentTimezone(this.showing_spot.start_time, 'MMMM D, YYYY hh:mma');
+            const endTime = this.toCurrentTimezone(this.showing_spot.end_time, 'MMMM D, YYYY hh:mma');
+            return `${startTime} - ${endTime}`;
+        },
     },
     methods: {
         fetchSchedule() {
