@@ -15,7 +15,7 @@
                 </el-step>
                 <el-step>
                     <template #title>
-                        <h3>Notification & Question</h3>
+                        <h3>Notifications</h3>
                     </template>
                 </el-step>
             </el-steps>
@@ -32,7 +32,7 @@
             </div>
 
             <div v-if="stepIndex == 3" class="fcal_create_calendar_notification_setting">
-<!--                <NotificationSettings :slot="slot" />-->
+               <NotificationSettings :slot="slot" />
             </div>
 
 
@@ -41,7 +41,7 @@
                     Go Back
                 </el-button>
                 <el-button class="fcal_primary_btn" @click="saveSettings">
-                    {{ stepIndex == 1 ? 'Save and ' : null }}Continue
+                    {{ stepIndex == 1 ? 'Save and ' : null }} Continue
                 </el-button>
             </div>
         </div>

@@ -4,7 +4,7 @@
             <h3>Integrations</h3>
         </div>
 
-        <div v-if="Object.keys(fieldSettings).length" class="fcal_settings_content_wrap">
+        <div v-if="fieldSettings?.auth_url" class="fcal_settings_content_wrap">
             <div class="fcal_configure_integrations fcal_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
@@ -61,7 +61,7 @@
             </div>
         </div>
         <div v-else>
-            <el-alert title="No Integration Found" type="info" :closable="false" center show-icon></el-alert>
+            <el-alert title="Please Configure The Integration First" type="info" :closable="false" center show-icon></el-alert>
         </div>
     </div>
 </template>

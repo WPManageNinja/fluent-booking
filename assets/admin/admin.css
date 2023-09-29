@@ -2022,8 +2022,6 @@ p.fcal_profile_link a {
   margin-right: 10px;
 }
 .fcal_schedule .fcal_schedule_items .fcal_each_spot .fcal_spot_line .fcal_spot_timing .fcal_spot_color .fcal_scheduled {
-  width: 14px;
-  height: 14px;
   border: 1px solid #ffffff;
 }
 .fcal_schedule .fcal_schedule_items .fcal_each_spot .fcal_spot_line .fcal_spot_desc h3 {
@@ -2170,8 +2168,8 @@ p.fcal_profile_link a {
 }
 
 .fcal_spot_color span {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   display: block;
   border-radius: 50%;
   background: #1a1a1a;
