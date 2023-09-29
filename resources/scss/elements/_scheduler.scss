@@ -528,12 +528,14 @@
           &.fcal_is_current {
             &:before {
               background: $primaryColor;
+              width: 1px;
             }
             .fcal_spot_line {
-              background: $primaryColor;
+              //background: $primaryColor;
+              border-color: #D6DAE1;
               &:before {
                 content: '';
-                width: 1px;
+                width: 2px;
                 height: 100%;
                 position: absolute;
                 background: $primaryColor;
@@ -541,12 +543,12 @@
                 top: 0;
               }
               .fcal_spot_timing {
-                color: #ffffff;
+                //color: #ffffff;
               }
               .fcal_spot_meeting_with,
               .fcal_spot_desc {
                 h3 {
-                  color: #ffffff;
+                  //color: #ffffff;
                 }
               }
             }
