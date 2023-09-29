@@ -1,7 +1,11 @@
 <template>
     <div v-if="settings.schedule_conditions" class="fcal_inline_items">
         <el-input placeholder="eg: 4" type="number" v-model="settings.schedule_conditions.value" />
-        <el-select v-model="settings.schedule_conditions.unit" placeholder="Select Unit">
+        <el-select
+            v-model="settings.schedule_conditions.unit"
+            placeholder="Select Unit"
+            popper-class="fcal_select"
+        >
             <el-option value="minutes" label="Minutes"></el-option>
             <el-option value="hours" label="Hours"></el-option>
             <el-option value="days" label="Days"></el-option>

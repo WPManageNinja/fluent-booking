@@ -275,3 +275,65 @@
     }
   }
 }
+
+
+//
+.fcal_tabs {
+  overflow: inherit;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  > .el-tabs__header {
+    position: sticky;
+    top: 40px;
+    &.is-left {
+      margin-right: 30px;
+    }
+    max-width: 324px;
+    width: 100%;
+    background: #ffffff;
+    padding: 24px 14px;
+    border-radius: 8px;
+    .el-tabs__nav-wrap {
+      margin: 0;
+      &:after {
+        display: none;
+      }
+      .el-tabs__nav {
+        .el-tabs__active-bar {
+          display: none;
+        }
+        .el-tabs__item {
+          text-align: left;
+          border-radius: 10px;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #445164;
+          height: auto;
+          padding: 8px 10px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 5px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          &.is-active {
+            background: $primaryColor;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+  .el-tabs__content {
+    overflow: inherit;
+    flex: 1;
+  }
+  .fcal_create_calendar_body {
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+  }
+}
