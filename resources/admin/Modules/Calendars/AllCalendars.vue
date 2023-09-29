@@ -13,7 +13,7 @@
         <div v-loading="loading" class="fcal_section_body">
             <div class="fcal_calendars_wrap">
                 <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                    <calendar-event-block :calendar="calendar" />
+                    <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" />
                 </div>
             </div>
             <template v-if="loading">

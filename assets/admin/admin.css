@@ -1677,6 +1677,16 @@ p.fcal_profile_link a {
     gap: 15px;
   }
 }
+.fcal_each_cal .fcal_event_block .fcal_cal_header .el-dropdown {
+  align-items: center;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_header .el-dropdown .el-dropdown-link {
+  margin-left: 8px;
+}
+.fcal_each_cal .fcal_event_block .fcal_cal_header .el-dropdown .el-dropdown-link i {
+  transform: rotate(90deg);
+  cursor: pointer;
+}
 .fcal_each_cal .fcal_event_block .fcal_cal_header .fcal_cal_title {
   display: flex;
   align-items: center;
