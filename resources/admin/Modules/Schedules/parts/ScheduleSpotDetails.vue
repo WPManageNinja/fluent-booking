@@ -134,18 +134,32 @@
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
         </div>
-        <el-dialog v-model="cancelDialog" width="30%" title="Cancel Meeting">
+        <el-dialog
+            v-model="cancelDialog"
+            width="30%"
+            title="Cancel Meeting"
+            class="fcal_modal"
+        >
             <div style="text-align: center;">
                 <h3>{{ showing_spot.slot.title }}</h3>
-                <p>with <b>{{ showing_spot.first_name }} {{ showing_spot.last_name }}</b></p>
-                <p>{{ meetingTime }}</p>
-                <p style="text-align: left;">Please confirm that you would like to cancel this event. A cancellation email will also go out to the invitee</p>
+                <p class="fcal_meeting_with">with <b>{{ showing_spot.first_name }} {{ showing_spot.last_name }}</b></p>
+                <p class="fcal_meeting_time">{{ meetingTime }}</p>
+                <p>Please confirm that you would like to cancel this event. A cancellation email will also go out to the invitee</p>
                 <el-input type="textarea" v-model="cancel_reason" placeholder="Reason for cancellation"></el-input>
             </div>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="cancelDialog = false">No, Don't cancel</el-button>
-                <el-button v-loading="updating" :disabled="updating" type="primary" @click="cancelEvent()">
+                <el-button
+                    @click="cancelDialog = false"
+                    class="fcal_plain_btn"
+                >
+                    No, Don't cancel
+                </el-button>
+                <el-button
+                    v-loading="updating"
+                    :disabled="updating"
+                    class="fcal_primary_btn"
+                    @click="cancelEvent()">
                   Yes, Cancel
                 </el-button>
               </span>

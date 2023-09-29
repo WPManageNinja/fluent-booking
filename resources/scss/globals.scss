@@ -629,7 +629,83 @@
         }
     }
 }
+.el-dialog {
+    &.fcal_modal {
+        border-radius: 8px;
+        .el-dialog__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: #1B2533;
+            padding: 15px 24px 15px 24px;
+            margin: 0;
+            border: none;
+            border-radius: 8px 8px 0 0;
 
+            .el-dialog__headerbtn {
+                color: #1B2533;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                line-height: 46px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                top: 9px;
+                right: 9px;
+                &:hover {
+                    color: var(--el-color-danger);
+                }
+            }
+        }
+        .el-dialog__body {
+            padding-top: 20px;
+            h3 {
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                margin: 0;
+            }
+            p {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #445164;
+                margin: 0 0 15px;
+            }
+            .el-textarea {
+                textarea {
+                    padding: 9px 16px;
+                    border-radius: 8px;
+                    height: 112px;
+                    border: 1px solid #D6DAE1;
+                    box-shadow: none;
+                    &:focus {
+                        border-color: $primaryColor;
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding-bottom: 0;
+            .dialog-footer {
+                padding: 10px;
+                .el-button {
+                    padding: 10px 20px;
+                    transition: .2s;
+                    &.fcal_primary_btn {
+                        background: var(--el-color-danger);
+                        color: #ffffff;
+                        &:hover {
+                            background: var(--el-color-danger-light-5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 table.fcal_table {
     width: 100%;
     text-align: left;
