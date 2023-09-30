@@ -1,15 +1,7 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 13H15" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 17H12" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16 3.5C19.33 3.68 21 4.95 21 9.65V15.83C21 19.95 20 22.01 15 22.01H9C4 22.01 3 19.95 3 15.83V9.65C3 4.95 4.67 3.69 8 3.5H16Z" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg> Event Details
-            </h2>
+            <h2> <EventIcon/> Event Details </h2>
             <el-switch v-model="isEnable" />
         </div>
         <div class="fcal_create_calendar_form_body">
@@ -71,7 +63,7 @@
                     />
                 </el-form-item>
 
-                <el-form-item label="Location">
+                <el-form-item label="Location *">
                     <location-selector :slot="slot"/>
                 </el-form-item>
             </el-form>
@@ -81,17 +73,18 @@
 
 <script type="text/babel">
 import LocationSelector from "./_LocationSelector.vue";
+import EventIcon from "../../../Components/Icons/EventIcon";
 
 export default {
     name: 'EventBasicInfo',
     props: ['slot', 'event_type'],
     components: {
-        LocationSelector
+        LocationSelector,
+        EventIcon
     },
     data() {
         return {
             isEnable: true,
-            localSlot: this.slot,
             calendarColor: '#4587EC',
             colors: [
                 {
@@ -145,14 +138,6 @@ export default {
                 {
                     value: 'hours',
                     label: 'Hours'
-                },
-                {
-                    value: 'days',
-                    label: 'Days'
-                },
-                {
-                    value: 'months',
-                    label: 'Months'
                 }
             ],
             formData: {
@@ -168,25 +153,10 @@ export default {
             }
         }
     },
-    watch: {
-        localSlot() {
-            this.$emit("input", this.localSlot);
-        },
-    },
     methods: {
         toggleDisplaySpots() {
 
         }
     },
-    mounted() {
-        // if (this.slot) {
-        //     this.formData.title = this.slot.title;
-        //     this.formData.duration = this.slot.duration;
-        //     this.formData.customDuration = this.slot.customDuration;
-        //     this.formData.durationType = this.slot.durationType;
-        //     this.formData.description = this.slot.description;
-        //     this.formData.event_type = this.slot.event_type;
-        // }
-    }
 }
 </script>

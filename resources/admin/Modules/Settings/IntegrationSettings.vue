@@ -4,8 +4,8 @@
             <h3>Integrations</h3>
         </div>
 
-        <div v-if="fieldSettings?.auth_url" class="fcal_settings_content_wrap">
-            <div class="fcal_configure_integrations fcal_integrations">
+        <div  v-if="!loading" class="fcal_settings_content_wrap">
+            <div v-if="fieldSettings?.auth_url"  class="fcal_configure_integrations fcal_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
                         <div class="left">
@@ -52,27 +52,29 @@
                                     </el-form-item>
                                 </div>
                             </div>
-                            <el-form-item>
-                                <el-button class="fcal_primary_btn" @click="saveSettings()">{{ fieldSettings.save_btn_text }}</el-button>
-                            </el-form-item>
+                            <SaveButton :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                         </div>
                     </div>
                 </div>
             </div>
+            <el-alert v-else title="Please Configure The Integration First" type="info" :closable="false" center show-icon></el-alert>
         </div>
-        <div v-else>
-            <el-alert title="Please Configure The Integration First" type="info" :closable="false" center show-icon></el-alert>
-        </div>
+        <el-skeleton v-else :rows="4" animated/>
     </div>
 </template>
 
 <script>
+import SaveButton from '../../Components/Buttons/SaveButton';
 export default {
     name: 'IntegrationSettings',
     props: ['settings_key'],
+    components: {
+        SaveButton
+    },
     data() {
         return {
             saving: false,
+            loading: false,
             settings: {},
             fieldSettings: {},
             isConnectedBtn: false
@@ -102,6 +104,7 @@ export default {
             }
         },
         getSettings() {
+            this.loading = true;
             this.$get('integrations/settings', {
                 settings_key: this.settings_key,
             })
@@ -111,6 +114,9 @@ export default {
             })
             .catch(errors => {
                 this.$handleError(errors);
+            })
+            .finally(() => {
+                this.loading = false;
             })
         },
         saveSettings() {

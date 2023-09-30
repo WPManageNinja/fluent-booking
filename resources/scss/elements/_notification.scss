@@ -4,11 +4,25 @@
     &.disabled {
         opacity: 0.6;
     }
+    &:last-child {
+        border-bottom: none;
+        padding: 15px 0 0 0;
+    }
 
     .fcal_notification_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        .el-switch {
+            &.is-checked {
+                .el-switch__core {
+                    background: $primaryColor;
+                    border-color: $primaryColor;
+                }
+            }
+        }
+
         .header_left {
             font-size: 16px;
             font-weight: 500;
@@ -22,9 +36,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            > span {
-
-            }
         }
     }
 
@@ -104,10 +115,6 @@
             }
         }
     }
-}
-.fcal_notification_btn {
-    margin: 0 1rem; 
-    padding: 1rem 1rem 0 1rem;
 }
 
 @media (max-width: 992px) {

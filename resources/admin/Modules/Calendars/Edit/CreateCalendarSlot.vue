@@ -1,47 +1,19 @@
 <template>
     <div class="fcal_create_calendar_wrap">
         <div class="fcal_create_calendar_header">
-            <h1>Add One-on-One Booking Type</h1>
-            <el-steps class="fcal_steps" :space="200" :active="stepIndex">
-                <el-step>
-                    <template #title>
-                        <h3>Event Info <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3>Schedule Settings <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3>Notifications</h3>
-                    </template>
-                </el-step>
-            </el-steps>
+            <h1>{{ slotTitle }}</h1>
         </div>
 
-
         <div v-if="slot" class="fcal_create_calendar_body">
-            <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
+            <div class="fcal_create_calendar_basic_info">
                 <basic-info ref="basicInfo" :slot="slot" :event_type="event_type" />
             </div>
-
-            <div v-if="stepIndex == 2" class="fcal_create_calendar_schedule_setting">
-                <ScheduleSettings :slot="slot" />
-            </div>
-
-            <div v-if="stepIndex == 3" class="fcal_create_calendar_notification_setting">
-               <NotificationSettings :slot="slot" />
-            </div>
-
-
             <div class="fcal_create_calendar_form_footer">
-                <el-button v-if="stepIndex != 1" class="fcal_plain_btn" @click="backStep">
+                <el-button class="fcal_plain_btn" @click="goToCalendars">
                     Go Back
                 </el-button>
                 <el-button class="fcal_primary_btn" @click="saveSettings">
-                    {{ stepIndex == 1 ? 'Save and ' : null }} Continue
+                    Continue
                 </el-button>
             </div>
         </div>
@@ -54,31 +26,30 @@
 </template>
 
 <script type="text/babel">
-import ScheduleSettings from './_ScheduleSettings';
 import BasicInfo from './_BasicInfo.vue';
-import { Right } from '@element-plus/icons-vue';
-import NotificationSettings from "./_NotificationSettings";
 
 export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
-        NotificationSettings,
-        ScheduleSettings,
         BasicInfo,
-        Right
     },
     data() {
         return {
             slot: null,
             loading: true,
             saving: false,
-            stepIndex: 1
+        }
+    },
+    computed:  {
+        slotTitle() {
+            const eventType = `${this.event_type.charAt(0).toUpperCase()}${this.event_type.slice(1)}`;
+            return `Add ${eventType} Booking Type`;
         }
     },
     methods: {
-        handleSteps(step) {
-            this.stepIndex = step;
+        goToCalendars() {
+            this.$router.push({ name: 'calendars' });
         },
         getSlotSchema() {
             this.loading = true;
@@ -95,7 +66,6 @@ export default {
         },
         saveSettings() {
             const formData  =  this.$refs.basicInfo.formData;
-
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots', {
                 title: this.slot.title,
@@ -109,7 +79,11 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response);
-                    this.$router.push({ name: 'slot_settings', params: { calendar_id: response.slot.calendar_id, slot_id: response.slot.id }, query: { step: 'schedule-settings' } })
+                    this.$router.push({ 
+                        name: 'slot_settings', 
+                        params: {calendar_id: response.slot.calendar_id, slot_id: response.slot.id},
+                        query: {step: 'basic-info' }
+                    })
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -118,19 +92,6 @@ export default {
                     this.saving = false;
                 });
         },
-        backStep() {
-            this.stepIndex -= 1;
-            if (this.stepIndex <= 1) {
-                this.stepIndex = 1;
-            }
-        },
-        handleSaveContinue() {
-            this.stepIndex += 1;
-            if (this.stepIndex > 3) {
-                this.stepIndex = 3;
-            }
-            this.saveSettings();
-        }
     },
     mounted() {
         this.$changeTitle('Create new Event Type');
