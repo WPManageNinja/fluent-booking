@@ -1,15 +1,7 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 13H15" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 17H12" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16 3.5C19.33 3.68 21 4.95 21 9.65V15.83C21 19.95 20 22.01 15 22.01H9C4 22.01 3 19.95 3 15.83V9.65C3 4.95 4.67 3.69 8 3.5H16Z" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg> Schedule Settings
-            </h2>
+            <h2> <ScheduleIcon/> Schedule Settings </h2>
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form v-model="formData" label-position="top">
@@ -45,7 +37,7 @@
                         </div>
                     </el-radio-group>
                 </el-form-item>
-
+                <el-divider/>
                 <el-form-item label="How do you want to offer your availability for this event type?">
                     <el-tabs v-model="formData.availabilityTab">
                         <el-tab-pane label="Use an Existing Schedule" name="existingSchedule">
@@ -118,13 +110,15 @@ import WeeklySchedules from "../parts/WeeklySchedules";
 import DateOverRides from "./_DateOverRides";
 import SchedulingConditions from "./__SchedulingConditions";
 import ExistingSchedule from './_ExistingSchedule';
+import ScheduleIcon from "../../../Components/Icons/ScheduleIcon.vue";
 export default {
     name: '_ScheduleSettings',
     components: {
         SchedulingConditions,
         DateOverRides,
         WeeklySchedules,
-        ExistingSchedule
+        ExistingSchedule,
+        ScheduleIcon
     },
     props: ['slot'],
     data() {

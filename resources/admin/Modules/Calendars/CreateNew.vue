@@ -2,33 +2,16 @@
     <div class="fcal_create_calendar_wrap">
         <div class="fcal_create_calendar_header">
             <h1>Create a new booking calendar</h1>
-            <el-steps class="fcal_steps" :space="200" :active="stepIndex">
-                <el-step>
-                    <template #title>
-                        <h3>Event Info <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3>Schedule Settings <el-icon><Right /></el-icon></h3>
-                    </template>
-                </el-step>
-                <el-step>
-                    <template #title>
-                        <h3>Notifications</h3>
-                    </template>
-                </el-step>
-            </el-steps>
         </div>
 
         <div v-if="calendar.slot" class="fcal_create_calendar_body">
-            <div v-if="stepIndex == 1" class="fcal_create_calendar_basic_info">
+            <div class="fcal_create_calendar_basic_info">
                 <basic-info ref="basicInfo" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
             </div>
 
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="createCalendar">
-                    {{ stepIndex == 1 ? 'Create and ' : null }} Continue
+                    Continue
                 </el-button>
             </div>
         </div>
@@ -61,7 +44,6 @@ export default {
             form_step: 'general',
             checking_slug: false,
             eventTypes: this.appVars.event_types,
-            stepIndex: 1,
             calendar: {
                 slug: '',
                 title: '',

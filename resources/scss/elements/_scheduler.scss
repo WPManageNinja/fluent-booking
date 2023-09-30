@@ -684,6 +684,12 @@
       .el-form {
         .el-form-item {
           margin-bottom: 18px;
+          .el-form-item__label {
+            font-size: 18px;
+            line-height: 28px;
+            margin-bottom: 16px;
+            font-weight: 500;
+          }
           .sub-label {
             display: block;
             width: 100%;

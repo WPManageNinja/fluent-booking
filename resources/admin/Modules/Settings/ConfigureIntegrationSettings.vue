@@ -3,8 +3,8 @@
         <div class="fcal_settings_header">
             <h3>Configure Integration</h3>
         </div>
-        <div v-if="Object.keys(fieldSettings).length" class="fcal_settings_content_wrap">
-            <div class="fcal_configure_integrations">
+        <div v-if="!loading" class="fcal_settings_content_wrap">
+            <div v-if="Object.keys(fieldSettings).length" class="fcal_configure_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
                         <div class="left">
@@ -33,21 +33,19 @@
                                     </template>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item>
-                                <el-button class="fcal_primary_btn" @click="saveSettings()">{{ fieldSettings.save_btn_text }}</el-button>
-                            </el-form-item>
+                            <SaveButton :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                         </el-form>
                     </div>
                 </div>
             </div>
+            <el-alert v-else title="No Settings Found" type="info" :closable="false" center show-icon></el-alert>
         </div>
-        <div v-else>
-            <el-alert title="No Settings Found" type="info" :closable="false" center show-icon></el-alert>
-        </div>
+        <el-skeleton v-else :rows="4" animated/>
     </div>
 </template>
 
 <script>
+import SaveButton from '../../Components/Buttons/SaveButton'
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import { Calendar, ArrowRight, CopyDocument } from '@element-plus/icons-vue';
 export default {
@@ -55,6 +53,7 @@ export default {
     props: ['settings_key'],
     components: {
         Calendar,
+        SaveButton,
         ArrowRight,
         CopyDocument
     },
@@ -73,6 +72,7 @@ export default {
     },
     methods: {
         getSettings() {
+            this.loading = true;
             this.$get('integrations/', {
                 settings_key: this.settings_key,
             })
@@ -83,8 +83,12 @@ export default {
             .catch(errors => {
                 this.$handleError(errors);
             })
+            .finally(() => {
+                this.loading = false;
+            })
         },
         saveSettings() {
+            this.saving = true;
             this.$post('integrations/', {
                 settings_key: this.settings_key,
                 settings: this.settings
