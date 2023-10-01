@@ -209,15 +209,17 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $schema = [
-            'title'       => '',
-            'description' => '',
-            'duration'    => 30,
-            'event_type'  => 'single',
-            'settings'    => (new CalendarSlot())->getSlotSettingsSchema(),
-            'calendar'    => $calendar
-        ];
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
 
+        $schema = [
+            'title'           => '',
+            'status'          => 'active',
+            'description'     => '',
+            'duration'        => '30',
+            'color_schema'    => '#0099ff',
+            'calendar'        => $calendar,
+            'settings'        => $settingsSchema
+        ];
 
         return [
             'slot' => $schema
@@ -233,6 +235,7 @@ class CalendarController extends Controller
         $this->validate($slot, [
             'title'                     => 'required',
             'duration'                  => 'required|int',
+            'status'                    => 'required',
             'settings.schedule_type'    => 'required',
             'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
             'event_type'                => 'required'
@@ -253,7 +256,8 @@ class CalendarController extends Controller
                 'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
             ],
-            'status'            => 'active',
+            'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
+            'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
@@ -303,6 +307,8 @@ class CalendarController extends Controller
 
         $slot->title = sanitize_text_field($data['title']);
         $slot->duration = (int)$data['duration'];
+        $slot->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
+        $slot->color_schema = sanitize_text_field(Arr::get($data, 'color_schema', '#0099ff'));
         $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
         $slot->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
         $slot->is_display_spots  = (bool)Arr::get($data, 'is_display_spots');

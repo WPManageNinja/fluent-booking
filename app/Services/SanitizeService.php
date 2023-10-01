@@ -125,4 +125,12 @@ class SanitizeService
             'unit' => sanitize_text_field(Arr::get($conditions, 'unit', 'hours'))
         ];
     }
+
+    public static function checkCollection($value, $collection)
+    {
+        if (in_array($value, $collection, true)) {
+            return $value;
+        }
+        return '';
+    }
 }

@@ -180,7 +180,8 @@ class AdminMenuHandler
         }
 
         $user = User::find($currentUser->ID);
-        $eventTypes = Helper::getEventTypesSchema();
+        $eventColors = Helper::getEventColors();
+        $meetingDurations = Helper::getMeetingDurations();
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
@@ -188,11 +189,12 @@ class AdminMenuHandler
             'slug'  => $slug = $app->config->get('app.slug'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
-            'brand_logo'  => $this->getMenuIcon(),
-            'asset_url'   => $assets,
-            'event_types' => $eventTypes,
+            'brand_logo'        => $this->getMenuIcon(),
+            'asset_url'         => $assets,
+            'event_colors'      => $eventColors,
+            'meeting_durations' => $meetingDurations,
             'editor_shortcodes' => $editorShortcodes,
-            'me'          => [
+            'me' => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email
