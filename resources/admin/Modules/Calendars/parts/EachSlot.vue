@@ -2,7 +2,7 @@
     <div :class="'fcal_status_'+slot.status">
         <div class="fcal_slot_body">
             <h3>
-                <span class="fcal_status_badge"></span> {{ slot.title }}
+                <span class="fcal_status_badge" :style="{background: slot.color_schema}"></span> {{ slot.title }}
                 <div class="fcal_slot_config">
                     <el-dropdown @command="handleCommand" trigger="click" popper-class="fcal_select">
                         <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
@@ -26,7 +26,7 @@
                             <el-icon><User /></el-icon>
                             <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
                         </span>
-                    </span> {{ slot.event_type == 'single' || 'One-to-One' ? 'One-to-One' : 'Group' }}
+                    </span> {{ eventTitle }}
                 </span>
 
             </p>
@@ -36,14 +36,6 @@
             </p>
         </div>
         <div class="fcal_slot_footer">
-<!--            <div class="fcal_slot_actions">-->
-<!--                <el-button-->
-<!--                    @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })"-->
-<!--                    class="fcal_plain_btn">-->
-<!--                    <el-icon><EditPen /></el-icon> Edit-->
-<!--                </el-button>-->
-<!--            </div>-->
-
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" class="fcal_copy_btn">
                     <el-icon>
@@ -60,7 +52,7 @@
                     <span v-else>Copied!</span>
                 </el-button>
 
-                <el-button class="fcal_plain_btn" @click="$router.push({ name: 'slot_settings', params: { calendar_id: slot.calendar_id, slot_id: slot.id } })">
+                <el-button class="fcal_plain_btn" @click="editSlot">
                     <el-icon><EditPen /></el-icon> Edit
                 </el-button>
 
@@ -98,10 +90,16 @@ export default {
     },
     computed: {
         eventTitle() {
-            // return this.appVars.event_types[this.slot.event_type].title;
+            return this.slot.event_type == 'group' ? 'Group' : 'One-to-One';
         }
     },
     methods: {
+        editSlot() {
+            this.$router.push({
+                name: 'slot_settings', 
+                params: {calendar_id: this.slot.calendar_id, slot_id: this.slot.id}
+            })
+        },
         copyTo(text) {
             copyToClipBoard(text);
             this.isCopied = true;
@@ -141,28 +139,25 @@ export default {
                 this.updateStatus('draft');
                 return;
             }
-
             if(command == 'delete') {
-                this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted', 'Delete Booking Type', {
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }).then(() => {
-                    this.$del('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id)
-                        .then(response => {
-                            this.$handleSuccess(response);
-                            this.$emit('slotDeleted');
-                        })
-                        .catch(errors => {
-                            this.$handleError(errors);
-                        });
-                }).catch(() => {
-
-                });
-                return;
+                this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted',
+                    'Delete Booking Type', {
+                        confirmButtonText: 'Delete',
+                        cancelButtonText: 'Cancel',
+                        type: 'warning'
+                    })
+                    .then(() => {
+                        this.$del('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id)
+                            .then(response => {
+                                this.$handleSuccess(response);
+                                this.$emit('slotDeleted');
+                            })
+                            .catch(errors => {
+                                this.$handleError(errors);
+                            });
+                    })
+                    return;
             }
-
-            console.log(command);
         }
     }
 }

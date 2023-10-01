@@ -64,18 +64,22 @@ export default {
                     this.loading = false;
                 });
         },
+        getMeetingDuration() {
+            return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
+        },
         saveSettings() {
-            const formData  =  this.$refs.basicInfo.formData;
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots', {
                 title: this.slot.title,
+                status: this.slot.status,
+                color_schema: this.slot.color_schema,
                 description: this.slot.description,
-                duration: this.slot.duration,
+                duration: this.getMeetingDuration(),
                 settings: this.slot.settings,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings,
-                event_type: formData.event_type
+                event_type: this.slot.event_type
             })
                 .then(response => {
                     this.$handleSuccess(response);

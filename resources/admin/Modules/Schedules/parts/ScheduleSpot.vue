@@ -3,7 +3,7 @@
         <div @click="showDetails()" class="fcal_spot_line">
             <div class="fcal_spot_timing">
                 <div class="fcal_spot_color">
-                    <span :class="'fcal_'+spot[0].status"></span>
+                    <span :style="{background: spot[0].slot.color_schema}"></span>
                 </div>
                 {{ formattedTimeRange }}
                 <div v-if="spot[0].happening_status" class="fcal_spot_happening">

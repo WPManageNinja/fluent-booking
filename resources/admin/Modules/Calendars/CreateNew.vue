@@ -43,7 +43,6 @@ export default {
             require_slug: false,
             form_step: 'general',
             checking_slug: false,
-            eventTypes: this.appVars.event_types,
             calendar: {
                 slug: '',
                 title: '',

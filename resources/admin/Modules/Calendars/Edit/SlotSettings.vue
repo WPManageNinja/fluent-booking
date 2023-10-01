@@ -49,7 +49,6 @@
 </template>
 
 <script type="text/babel">
-import SlotSettingsFrom from './_SlotSettingsForm';
 import BasicInfo from './_BasicInfo'
 import NotificationSettings from './_NotificationSettings'
 import ScheduleSettings from "./_ScheduleSettings";
@@ -64,7 +63,6 @@ export default {
     props: ['slot_id', 'calendar_id'],
     components: {
         ScheduleSettings,
-        SlotSettingsFrom,
         BasicInfo,
         SaveButton,
         NotificationSettings,
@@ -108,12 +106,17 @@ export default {
                 query: {step: this.activeTab}
             })
         },
+        getMeetingDuration() {
+            return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
+        },
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
                 title: this.slot.title,
+                status: this.slot.status,
+                color_schema: this.slot.color_schema,
                 description: this.slot.description,
-                duration: this.slot.duration,
+                duration: this.getMeetingDuration(),
                 settings: this.slot.settings,
                 max_book_per_slot: this.slot.max_book_per_slot,
                 is_display_spots: this.slot.is_display_spots,

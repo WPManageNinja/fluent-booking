@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>One-on-One</h3>
+                        <h3>One-to-One</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
                         <p>Good for: coffee chats, 1:1 interviews, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
@@ -65,7 +65,7 @@
                     <div class="content">
                         <h3>Group</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
-                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <p>Good for: webinars, online classes, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
@@ -107,7 +107,7 @@ export default {
         createOneToOneSlot() {
             this.$router.push({
                 name: 'create_slot_event',
-                params: {calendar_id: this.calendar.id, event_type: 'one-on-one'}
+                params: {calendar_id: this.calendar.id, event_type: 'one-to-one'}
             })
         },
         createGroupSlot() {
