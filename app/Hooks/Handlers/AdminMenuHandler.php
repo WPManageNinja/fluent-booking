@@ -199,6 +199,7 @@ class AdminMenuHandler
         $user = User::find($currentUser->ID);
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
+        $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
@@ -210,6 +211,7 @@ class AdminMenuHandler
             'asset_url'         => $assets,
             'event_colors'      => $eventColors,
             'meeting_durations' => $meetingDurations,
+            'schedule_schema'   => $scheduleSchema,
             'editor_shortcodes' => $editorShortcodes,
             'me' => [
                 'id'        => $currentUser->ID,

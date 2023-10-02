@@ -25,7 +25,3 @@ export default {
     props: ['existing_schedules']
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -3,10 +3,8 @@
         <div class="fcal_settings_header">
             <h3>Availability</h3>
         </div>
-
-
         <div class="fcal_settings_content_wrap">
-            <el-form v-model="formData" label-position="top">
+            <el-form label-position="top">
                 <el-form-item label="Available hours">
                     <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
                 </el-form-item>
@@ -26,42 +24,19 @@
                             :name="item.name"
                         >
                             <template #label>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M6.66669 1.66699V4.16699" stroke="#2653C7" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M13.3333 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M2.91669 7.5752H17.0834" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M17.5 7.08366V14.167C17.5 16.667 16.25 18.3337 13.3333 18.3337H6.66667C3.75 18.3337 2.5 16.667 2.5 14.167V7.08366C2.5 4.58366 3.75 2.91699 6.66667 2.91699H13.3333C16.25 2.91699 17.5 4.58366 17.5 7.08366Z" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M13.0789 11.4167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M13.0789 13.9167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M9.99626 11.4167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M9.99626 13.9167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M6.91191 11.4167H6.91939" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M6.91191 13.9167H6.91939" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg> {{ item.title }}
+                                <el-icon><ScheduleIcon/></el-icon> {{ item.title }}
                             </template>
                             <div class="fcal_availability_body">
                                 <div class="fcal_availability_header">
-                                    <h3>
-                                        Working Hours Schedule <span class="default-schedule-badge"><el-icon><StarFilled /></el-icon> Default schedule</span>
+                                    <h3> Working Hours Schedule
+                                        <span class="default-schedule-badge"><el-icon><StarFilled /></el-icon> Default schedule</span>
                                     </h3>
                                 </div>
                                 <div class="timezone">
-                                    <div class="el-form-item__label">Timezone</div>
-                                    <el-select
-                                        v-model="formData.timezone"
-                                        placeholder="Select timezone"
-                                        popper-class="fcal_select"
-                                        class="fcal_timezone"
-                                    >
-                                        <el-option
-                                            label="Asia/Dhaka"
-                                            value="asia/dhaka"
-                                        />
-                                        <el-option
-                                            label="United State"
-                                            value="us"
-                                        />
-                                    </el-select>
+                                    <div class="fcal_timezone_text">
+                                        <el-icon><TimezoneIcon/></el-icon>
+                                        <p>{{ slot.calendar.author_timezone }}</p>
+                                    </div>
                                 </div>
                                 <div class="fcal_availability_setting">
                                     <WeeklySchedules
@@ -118,15 +93,19 @@ import { Calendar, Plus, StarFilled } from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
+import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
+import TimezoneIcon from '../../Components/Icons/TimezoneIcon';
 
 export default {
     name: "AvailabilitySettings",
     components: {
         DateOverRides,
         WeeklySchedules,
+        TimezoneIcon,
         Calendar,
         Plus,
         ScheduleSettings,
+        ScheduleIcon,
         StarFilled
     },
     data() {
@@ -136,9 +115,6 @@ export default {
             editableTabsValue: '2',
             addTabData: {
                 title: ''
-            },
-            formData: {
-
             },
             editableTabs: [
                 {
@@ -153,68 +129,13 @@ export default {
                 },
             ],
             slot: {
+                calendar: {
+                    author_timezone: 'Asia/Dhaka'
+                },
                 settings: {
                     date_overrides: {},
-                    schedule_conditions: {
-                        unit: '',
-                        value: 4
-                    },
                     schedule_type: '',
-                    weekly_schedules: {
-                        sun: {
-                            enabled: false,
-                            slots: []
-                        },
-                        mon: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        tue: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        wed: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        thu: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        fri: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        sat: {
-                            enabled: false,
-                            slots: []
-                        }
-                    },
+                    weekly_schedules: this.appVars.schedule_schema,
                 },
             }
         }
