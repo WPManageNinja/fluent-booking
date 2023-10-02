@@ -78,6 +78,14 @@
         border: none;
         height: 36px;
     }
+    &.danger {
+        color: var(--el-color-danger);
+        border-color: var(--el-color-danger-light-5);
+        &:hover {
+            background: var(--el-color-danger);
+            border-color: var(--el-color-danger);
+        }
+    }
 }
 .fcal_primary_btn {
     background: $primaryColor;
