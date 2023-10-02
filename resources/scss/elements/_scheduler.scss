@@ -637,6 +637,82 @@
   }
 }
 
+
+
+.fcal_date_range_radio {
+  flex-direction: column;
+  align-items: flex-start;
+  .fcal_date_range_radio_item {
+    display: flex;
+    align-items: center;
+    + .fcal_date_range_radio_item {
+      margin-top: 20px;
+    }
+    .el-radio {
+      height: auto;
+      .el-radio__label {
+        color: $dark;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        padding-left: 8px;
+      }
+      .el-radio__input {
+        &.is-checked {
+          .el-radio__inner {
+            border-color: $primaryColor;
+            background: transparent;
+          }
+        }
+        .el-radio__inner {
+          width: 24px;
+          height: 24px;
+          border: 1.5px solid #D1D5DB;
+          &:after {
+            width: 12px;
+            height: 12px;
+            background: $primaryColor;
+          }
+        }
+      }
+    }
+    .el-input {
+      .el-input__wrapper {
+        padding: 5px 16px;
+        border-radius: 8px 0 0 8px !important;
+      }
+      &.el-input-group {
+        .el-input-group__append {
+          border-radius: 0 8px 8px 0;
+        }
+      }
+    }
+
+    .fcal_date_range_radio_condition {
+      .el-date-editor {
+        width: 255px;
+        padding: 5px 16px;
+        border-radius: 8px;
+        box-shadow: none;
+        height: auto;
+        border: 1px solid #D6DAE1;
+        .el-input {
+          .el-input__wrapper {
+            border-radius: 8px 0 0 8px !important;
+          }
+        }
+        .el-icon {
+          font-size: 18px;
+          margin-right: 8px;
+        }
+        .el-range-separator {
+          cursor: text;
+        }
+      }
+    }
+  }
+}
+
 .fcal_create_calendar_wrap {
   .fcal_create_calendar_header {
     max-width: 571px;
@@ -758,74 +834,6 @@
             margin-top: 10px;
             gap: 20px;
           }
-          .fcal_date_range_radio {
-            flex-direction: column;
-            align-items: flex-start;
-            .fcal_date_range_radio_item {
-              display: flex;
-              align-items: center;
-              + .fcal_date_range_radio_item {
-                margin-top: 20px;
-              }
-              .el-radio {
-                height: auto;
-                .el-radio__label {
-                  color: $dark;
-                  font-size: 16px;
-                  font-weight: 400;
-                  line-height: 24px;
-                  padding-left: 8px;
-                }
-                .el-radio__input {
-                  &.is-checked {
-                    .el-radio__inner {
-                      border-color: $primaryColor;
-                      background: transparent;
-                    }
-                  }
-                  .el-radio__inner {
-                    width: 24px;
-                    height: 24px;
-                    border: 1.5px solid #D1D5DB;
-                    &:after {
-                      width: 12px;
-                      height: 12px;
-                      background: $primaryColor;
-                    }
-                  }
-                }
-              }
-              .el-input {
-                .el-input__wrapper {
-                  padding: 5px 16px;
-                  border-radius: 8px 0 0 8px;
-                }
-                &.el-input-group {
-                  .el-input-group__append {
-                    border-radius: 0 8px 8px 0;
-                  }
-                }
-              }
-
-              .fcal_date_range_radio_condition {
-                .el-date-editor {
-                  width: 255px;
-                  padding: 5px 16px;
-                  border-radius: 8px;
-                  box-shadow: none;
-                  height: auto;
-                  border: 1px solid #D6DAE1;
-                  .el-icon {
-                    font-size: 18px;
-                    margin-right: 8px;
-                  }
-                  .el-range-separator {
-                    cursor: text;
-                  }
-                }
-              }
-            }
-          }
           .el-tabs {
             width: 100%;
             .el-tabs__content {
@@ -921,24 +929,6 @@
                 }
               }
             }
-            .fcal_availability_setting {
-              display: flex;
-              align-items: flex-start;
-              gap: 24px;
-              margin-top: 8px;
-              .fcal_availability_title {
-                color: $dark;
-                font-size: 18px;
-                font-weight: 700;
-                line-height: 28px;
-                margin: 0 0 16px;
-              }
-              .fcal_weekly_schedule_wrap {
-                max-width: 460px;
-                width: 100%;
-                flex: none;
-              }
-            }
           }
         }
       }
@@ -998,6 +988,29 @@
       }
     }
   }
+}
+
+
+.fcal_availability_body {
+  .fcal_availability_setting {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 18px;
+    .fcal_availability_title {
+      color: $dark;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 28px;
+      margin: 0 0 16px;
+    }
+    .fcal_weekly_schedule_wrap {
+      max-width: 460px;
+      width: 100%;
+      flex: none;
+    }
+  }
+
 }
 
 .fcal_weekly_schedules {
@@ -1266,6 +1279,68 @@
   }
 }
 
+.fcal_tabs2 {
+  width: 100%;
+  .el-tabs__header {
+    border-bottom: 1px solid #EAECF0;
+    padding-bottom: 15px;
+    height: auto;
+    .el-tabs__nav-wrap {
+      .el-tabs__nav {
+        border: none;
+        .el-tabs__item {
+          padding: 9px 10px;
+          border-radius: 8px;
+          height: auto;
+          border: 1px solid #697483;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 20px;
+          margin-right: 8px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          &.is-active {
+            border-color: $primaryColor;
+            color: $primaryColor;
+            svg {
+              path {
+                stroke: $primaryColor;
+              }
+            }
+          }
+          &:hover {
+            color: $primaryColor;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+  .el-tabs__content {
+    .fcal_availability_body {
+      .timezone {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        .el-form-item__label {
+          font-size: 14px !important;
+          font-weight: 500;
+          line-height: 20px !important;
+          margin: 0 !important;
+        }
+        .el-select {
+          max-width: 368px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
 
 .fcal_schedule_details {
   display: flex;

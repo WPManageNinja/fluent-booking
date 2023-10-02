@@ -2217,6 +2217,67 @@ p.fcal_profile_link a {
   flex: none;
 }
 
+.fcal_date_range_radio {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item {
+  display: flex;
+  align-items: center;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item + .fcal_date_range_radio_item {
+  margin-top: 20px;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-radio {
+  height: auto;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__label {
+  color: #1B2533;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  padding-left: 8px;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input.is-checked .el-radio__inner {
+  border-color: #2653C7;
+  background: transparent;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input .el-radio__inner {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #D1D5DB;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input .el-radio__inner:after {
+  width: 12px;
+  height: 12px;
+  background: #2653C7;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-input .el-input__wrapper {
+  padding: 5px 16px;
+  border-radius: 8px 0 0 8px !important;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .el-input.el-input-group .el-input-group__append {
+  border-radius: 0 8px 8px 0;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor {
+  width: 255px;
+  padding: 5px 16px;
+  border-radius: 8px;
+  box-shadow: none;
+  height: auto;
+  border: 1px solid #D6DAE1;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-input .el-input__wrapper {
+  border-radius: 8px 0 0 8px !important;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+.fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-range-separator {
+  cursor: text;
+}
+
 .fcal_create_calendar_wrap .fcal_create_calendar_header {
   max-width: 571px;
   margin: auto;
@@ -2324,63 +2385,6 @@ p.fcal_profile_link a {
   margin-top: 10px;
   gap: 20px;
 }
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio {
-  flex-direction: column;
-  align-items: flex-start;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item {
-  display: flex;
-  align-items: center;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item + .fcal_date_range_radio_item {
-  margin-top: 20px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-radio {
-  height: auto;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__label {
-  color: #1B2533;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  padding-left: 8px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input.is-checked .el-radio__inner {
-  border-color: #2653C7;
-  background: transparent;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input .el-radio__inner {
-  width: 24px;
-  height: 24px;
-  border: 1.5px solid #D1D5DB;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-radio .el-radio__input .el-radio__inner:after {
-  width: 12px;
-  height: 12px;
-  background: #2653C7;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-input .el-input__wrapper {
-  padding: 5px 16px;
-  border-radius: 8px 0 0 8px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .el-input.el-input-group .el-input-group__append {
-  border-radius: 0 8px 8px 0;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor {
-  width: 255px;
-  padding: 5px 16px;
-  border-radius: 8px;
-  box-shadow: none;
-  height: auto;
-  border: 1px solid #D6DAE1;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-icon {
-  font-size: 18px;
-  margin-right: 8px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-range-separator {
-  cursor: text;
-}
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-tabs {
   width: 100%;
 }
@@ -2455,24 +2459,6 @@ p.fcal_profile_link a {
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_schedule_setting .el-form .el-form-item .fcal_availability_body .fcal_timezone .el-input .el-input__wrapper.is-focus {
   box-shadow: none !important;
 }
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_schedule_setting .el-form .el-form-item .fcal_availability_body .fcal_availability_setting {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  margin-top: 8px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_schedule_setting .el-form .el-form-item .fcal_availability_body .fcal_availability_setting .fcal_availability_title {
-  color: #1B2533;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 28px;
-  margin: 0 0 16px;
-}
-.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_schedule_setting .el-form .el-form-item .fcal_availability_body .fcal_availability_setting .fcal_weekly_schedule_wrap {
-  max-width: 460px;
-  width: 100%;
-  flex: none;
-}
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_footer {
   border-top: 1px solid #EAECF0;
   padding-top: 24px;
@@ -2520,6 +2506,25 @@ p.fcal_profile_link a {
   line-height: 24px;
   color: #445164;
 }
+.fcal_availability_body .fcal_availability_setting {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 18px;
+}
+.fcal_availability_body .fcal_availability_setting .fcal_availability_title {
+  color: #1B2533;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0 0 16px;
+}
+.fcal_availability_body .fcal_availability_setting .fcal_weekly_schedule_wrap {
+  max-width: 460px;
+  width: 100%;
+  flex: none;
+}
+
 .fcal_weekly_schedules {
   width: 100%;
   display: block;
@@ -2760,6 +2765,60 @@ p.fcal_profile_link a {
 .fcal_override_date .fcal_override_date_inner .fcal_override_table table tbody tr td.action .el-button:hover, .fcal_override_date .fcal_override_date_inner .fcal_override_table table tbody tr td.action .el-button:focus {
   background: transparent;
   color: var(--el-color-danger);
+}
+
+.fcal_tabs2 {
+  width: 100%;
+}
+.fcal_tabs2 .el-tabs__header {
+  border-bottom: 1px solid #EAECF0;
+  padding-bottom: 15px;
+  height: auto;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav {
+  border: none;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item {
+  padding: 9px 10px;
+  border-radius: 8px;
+  height: auto;
+  border: 1px solid #697483;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active {
+  border-color: #2653C7;
+  color: #2653C7;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active svg path {
+  stroke: #2653C7;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item:hover {
+  color: #2653C7;
+}
+.fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item:last-child {
+  margin-right: 0;
+}
+.fcal_tabs2 .el-tabs__content .fcal_availability_body .timezone {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.fcal_tabs2 .el-tabs__content .fcal_availability_body .timezone .el-form-item__label {
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 20px !important;
+  margin: 0 !important;
+}
+.fcal_tabs2 .el-tabs__content .fcal_availability_body .timezone .el-select {
+  max-width: 368px;
+  width: 100%;
 }
 
 .fcal_schedule_details {
@@ -3346,6 +3405,8 @@ p.fcal_profile_link a {
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper.is-focus {
   border-color: #2653C7;
+  box-shadow: none !important;
+  outline: none;
 }
 .fcal_settings_body_inner .fcal_settings_content_wrap .el-form .el-form-item .el-input .el-input__wrapper .el-input__inner {
   padding: 0;
@@ -3526,6 +3587,61 @@ p.fcal_profile_link a {
 .fcal_notification_btn {
   margin: 0 1rem;
   padding: 1rem 1rem 0 1rem;
+}
+
+.default-schedule-badge {
+  display: inline-flex;
+  border-radius: 4px;
+  border: 1px solid #FCC365;
+  background: #FEF4E6;
+  color: #F58E07;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+}
+.default-schedule-badge i {
+  transform: translateY(2px);
+}
+
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header {
+  margin-bottom: 8px;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header h3 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #1B2533;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  gap: 8px;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .sub-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .el-form-item__label {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #1B2533;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .el-form-item__content {
+  position: relative;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item.fcal_tab_schedule .fcal_add_new_tab {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #697483;
+  border-radius: 8px;
 }
 
 @media (max-width: 992px) {
