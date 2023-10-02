@@ -2,9 +2,8 @@
     <div>
         <el-popover
             :width="200"
-            :visible="isVisible"
             :placement="placement"
-            popper-class="el-dropdown-list-wrapper"
+            popper-class="fcal_popover fcal_select el-dropdown-list-wrapper"
             trigger="click">
             <ul class="el-dropdown-menu el-dropdown-list">
                 <ul>

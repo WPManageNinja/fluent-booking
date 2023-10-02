@@ -1384,6 +1384,32 @@ p.fcal_profile_link a {
 .el-popper.fcal_override_dropdown .fcal_override_calendar_footer .fcal_override_calendar_footer_action > .el-button {
   padding: 10px 16px;
 }
+.el-popper.fcal_popover .el-dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+.el-popper.fcal_popover .el-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+.el-popper.fcal_popover .el-dropdown-menu::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: 10px;
+}
+.el-popper.fcal_popover .el-dropdown-menu .group-title {
+  background: #606266;
+  border-radius: 8px 8px 0 0;
+  padding: 4px 16px;
+  line-height: 30px;
+}
+.el-popper.fcal_popover .el-dropdown-menu li {
+  padding: 2px 16px;
+  line-height: 31px;
+  border-radius: 0;
+}
+.el-popper.fcal_popover .el-dropdown-menu li:hover {
+  background: transparent;
+  color: #2653C7;
+}
 
 .el-dropdown-list-wrapper {
   padding: 0;

@@ -4,7 +4,8 @@
             <popover
                 groupTitle="Shortcodes"
                :data="editorShortcodes"
-               :isVisible="subjectPopupVisible"
+                placement="bottom-end"
+                trigger="click"
                @command="handleSubjectCommand">
                <template #popoverButton>
                     <el-input
