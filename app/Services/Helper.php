@@ -994,6 +994,50 @@ class Helper
         ]);
     }
 
+    public static function getWeeklyScheduleSchema()
+    {
+        return apply_filters('fluent_booking/weekly_schedule_schema', [
+            'sun' => [
+                'enabled' => false,
+                'slots'   => []
+            ],
+            'mon' => [
+                'enabled' => true,
+                'slots'   => [
+                    ['start' => '09:00', 'end' => '17:00']
+                ],
+            ],
+            'tue' => [
+                'enabled' => true,
+                'slots'   => [
+                    ['start' => '09:00', 'end' => '17:00']
+                ],
+            ],
+            'wed' => [
+                'enabled' => true,
+                'slots'   => [
+                    ['start' => '09:00', 'end' => '17:00']
+                ],
+            ],
+            'thu' => [
+                'enabled' => true,
+                'slots'   => [
+                    ['start' => '09:00', 'end' => '17:00']
+                ],
+            ],
+            'fri' => [
+                'enabled' => true,
+                'slots'   => [
+                    ['start' => '09:00', 'end' => '17:00']
+                ],
+            ],
+            'sat' => [
+                'enabled' => false,
+                'slots'   => []
+            ],
+        ]);
+    }
+
     public static function getDefaultNotificationSettings()
     {
         $defaults = apply_filters('fluent_booking/default_notification_settings', [

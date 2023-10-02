@@ -25,7 +25,9 @@
                                 <el-date-picker
                                     v-model="slot.settings.range_date_between"
                                     type="daterange"
-                                    range-separator="-"
+                                    :disabled-date="disabledDate"
+                                    value-format="YYYY-MM-DD"
+                                    range-separator="To"
                                     start-placeholder="Start Date"
                                     end-placeholder="End Date"
                                     popper-class="fcal_daterange_popover"
@@ -40,11 +42,16 @@
                 <el-divider/>
                 <el-form-item label="How do you want to offer your availability for this event type?">
                     <el-tabs v-model="slot.availability_type">
-                        <el-tab-pane label="Use an Existing Schedule" name="existingSchedule">
+                        <el-tab-pane label="Use an Existing Schedule" name="weekly_schedules">
                             <div class="fcal_availability_body">
+                                <div class="fcal_timezone_text">
+                                    <el-icon><TimezoneIcon/></el-icon>
+                                    <p>{{ slot.calendar.author_timezone }}</p>
+                                </div>
+                                <h4>Which Schedule Do You Want to Use?</h4>
                                 <el-select
-                                    v-model="slot.calendar.author_timezone"
-                                    placeholder="Select timezone"
+                                    v-model="slot.availability_id"
+                                    placeholder="Select Schedule"
                                     popper-class="fcal_select"
                                     class="fcal_timezone"
                                 >
@@ -57,28 +64,16 @@
                                         value="us"
                                     />
                                 </el-select>
-
                                 <ExistingSchedule :existing_schedules="slot.settings.weekly_schedules" />
 
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="Set Custom Hours" name="custom">
                             <div class="fcal_availability_body">
-                                <el-select
-                                    v-model="slot.calendar.author_timezone"
-                                    placeholder="Select timezone"
-                                    popper-class="fcal_select"
-                                    class="fcal_timezone"
-                                >
-                                    <el-option
-                                        label="Asia/Dhaka"
-                                        value="asia/dhaka"
-                                    />
-                                    <el-option
-                                        label="United State"
-                                        value="us"
-                                    />
-                                </el-select>
+                                <div class="fcal_timezone_text">
+                                    <el-icon><TimezoneIcon/></el-icon>
+                                    <p>{{ slot.calendar.author_timezone }}</p>
+                                </div>
                                 <div class="fcal_availability_setting">
                                     <WeeklySchedules
                                         :weekly_schedules="slot.settings.weekly_schedules"
@@ -110,16 +105,18 @@ import WeeklySchedules from "../parts/WeeklySchedules";
 import DateOverRides from "./_DateOverRides";
 import SchedulingConditions from "./__SchedulingConditions";
 import ExistingSchedule from './_ExistingSchedule';
-import ScheduleIcon from "../../../Components/Icons/ScheduleIcon.vue";
+import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
+import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 export default {
     name: '_ScheduleSettings',
     components: {
-        SchedulingConditions,
-        DateOverRides,
-        WeeklySchedules,
-        ExistingSchedule,
-        ScheduleIcon
-    },
+    SchedulingConditions,
+    DateOverRides,
+    WeeklySchedules,
+    ExistingSchedule,
+    ScheduleIcon,
+    TimezoneIcon
+},
     props: {
         slot: {
             type: Object,
@@ -131,6 +128,11 @@ export default {
                     author_timezone: ''
                 },
             }
+        }
+    },
+    methods: {
+        disabledDate(time) {
+            return (time.getTime() + 86400000) <= Date.now();
         }
     }
 }
