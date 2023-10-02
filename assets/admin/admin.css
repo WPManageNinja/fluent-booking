@@ -3181,7 +3181,7 @@ p.fcal_profile_link a {
   padding: 0;
   margin: 0;
   height: auto;
-  text-align: center;
+  text-align: left;
 }
 .fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append {
   background: #DDEBFC;
@@ -3191,6 +3191,35 @@ p.fcal_profile_link a {
 }
 .fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append .el-button {
   color: #1B2533;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing {
+  gap: 0;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing > .el-input {
+  width: 100px;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing > .el-input .el-input__wrapper {
+  background: none;
+  border: 1px solid #EAECF0;
+  border-radius: 8px 0 0 8px;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing > .el-input .el-input__wrapper input {
+  text-align: center !important;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing .el-select {
+  max-width: 200px;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing .el-select .el-input .el-input__wrapper {
+  border: 1px solid #EAECF0;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing .el-select .el-input .el-input__wrapper.is-focus {
+  outline: none;
+  box-shadow: none !important;
+}
+.fcal_notification_body .el-form .el-form-item .fcal_reminder_timing .el-select .el-input .el-input__wrapper input {
+  text-align: center !important;
 }
 .fcal_notification_body .fcal_reminder_timing {
   margin-bottom: 8px;

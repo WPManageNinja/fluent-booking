@@ -143,11 +143,13 @@ export default {
             editableTabs: [
                 {
                     title: 'Working Hours',
-                    name: '1'
+                    name: '1',
+                    content: '<h1>test 2</h1>'
                 },
                 {
                     title: 'New Schedule',
-                    name: '2'
+                    name: '2',
+                    content: '<code>test</code>'
                 },
             ],
             slot: {

@@ -86,7 +86,7 @@
                             padding: 0;
                             margin: 0;
                             height: auto;
-                            text-align: center;
+                            text-align: left;
                         }
                     }
                     .el-input-group__append {
@@ -96,6 +96,37 @@
                         border-radius: 0 8px 8px 0;
                         .el-button {
                             color: $dark;
+                        }
+                    }
+                }
+            }
+            .fcal_reminder_timing {
+                gap: 0;
+                > .el-input {
+                    width: 100px;
+                    .el-input__wrapper {
+                        background: none;
+                        border: 1px solid #EAECF0;
+                        border-radius: 8px 0 0 8px;
+                        input {
+                            text-align: center !important;
+                        }
+                    }
+                }
+                .el-select {
+                    max-width: 200px;
+                    .el-input {
+                        .el-input__wrapper {
+                            border: 1px solid #EAECF0;
+                            border-radius: 0 8px 8px 0;
+                            border-left: none;
+                            &.is-focus {
+                                outline: none;
+                                box-shadow: none !important;
+                            }
+                            input {
+                                text-align: center !important;
+                            }
                         }
                     }
                 }
