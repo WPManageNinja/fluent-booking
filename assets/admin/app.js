@@ -68669,7 +68669,9 @@ __webpack_require__.r(__webpack_exports__);
     User: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.User,
     Clock: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.Clock,
     Right: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.Right,
-    EditPen: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.EditPen
+    EditPen: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.EditPen,
+    Delete: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.Delete,
+    SwitchButton: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_1__.SwitchButton
   },
   data: function data() {
     return {
@@ -73192,7 +73194,9 @@ var _hoisted_17 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_More = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("More");
   var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_6__.ElIcon;
+  var _component_SwitchButton = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("SwitchButton");
   var _component_el_dropdown_item = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElDropdownItem;
+  var _component_Delete = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Delete");
   var _component_el_dropdown_menu = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElDropdownMenu;
   var _component_el_dropdown = element_plus_es__WEBPACK_IMPORTED_MODULE_7__.ElDropdown;
   var _component_Clock = (0,vue__WEBPACK_IMPORTED_MODULE_5__.resolveComponent)("Clock");
@@ -73222,7 +73226,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             command: "disable"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Disable")];
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_SwitchButton)];
+                }),
+                _: 1 /* STABLE */
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Disable")];
             }),
             _: 1 /* STABLE */
           })) : ((0,vue__WEBPACK_IMPORTED_MODULE_5__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createBlock)(_component_el_dropdown_item, {
@@ -73238,7 +73247,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "class": "danger"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)("Delete")];
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createVNode)(_component_Delete)];
+                }),
+                _: 1 /* STABLE */
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Delete")];
             }),
             _: 1 /* STABLE */
           })];
