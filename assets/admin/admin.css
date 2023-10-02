@@ -846,6 +846,25 @@ ul.fframe_menu.fcal_secondary_menu {
 .el-dialog.fcal_modal .el-dialog__footer .dialog-footer .el-button.fcal_primary_btn:hover {
   background: var(--el-color-danger-light-5);
 }
+.el-dialog.fcal_dialog {
+  max-width: 560px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+}
+.el-dialog.fcal_dialog .el-dialog__header {
+  border: none;
+  padding: 0;
+  background: transparent;
+  border-bottom: 1px solid #EAECF0;
+}
+.el-dialog.fcal_dialog .el-dialog__header .el-dialog__title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #1B2533;
+  margin: 0;
+}
 
 table.fcal_table {
   width: 100%;
@@ -2299,6 +2318,18 @@ p.fcal_profile_link a {
 }
 .fcal_date_range_radio .fcal_date_range_radio_item .fcal_date_range_radio_condition .el-date-editor .el-range-separator {
   cursor: text;
+}
+
+.fcal_location_selector_wrap {
+  position: relative;
+}
+.fcal_location_selector_wrap .fcal_location_edit_btn {
+  position: absolute;
+  right: 30px;
+  border: none;
+  height: 100%;
+  background: transparent;
+  padding: 8px 10px;
 }
 
 .fcal_create_calendar_wrap .fcal_create_calendar_header {
