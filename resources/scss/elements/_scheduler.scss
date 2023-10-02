@@ -720,6 +720,19 @@
   }
 }
 
+
+.fcal_location_selector_wrap {
+  position: relative;
+  .fcal_location_edit_btn {
+    position: absolute;
+    right: 30px;
+    border: none;
+    height: 100%;
+    background: transparent;
+    padding: 8px 10px;
+  }
+}
+
 .fcal_create_calendar_wrap {
   .fcal_create_calendar_header {
     max-width: 946px;

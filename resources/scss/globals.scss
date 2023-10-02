@@ -705,6 +705,25 @@
             }
         }
     }
+    &.fcal_dialog {
+        max-width: 560px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 8px;
+        .el-dialog__header {
+            border: none;
+            padding: 0;
+            background: transparent;
+            border-bottom: 1px solid #EAECF0;
+            .el-dialog__title {
+                font-size: 20px;
+                font-weight: 600;
+                line-height: 28px;
+                color: $dark;
+                margin: 0;
+            }
+        }
+    }
 }
 table.fcal_table {
     width: 100%;

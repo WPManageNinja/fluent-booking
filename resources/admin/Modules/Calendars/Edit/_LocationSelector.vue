@@ -2,9 +2,9 @@
     <div class="fcal_location_selector_wrap">
         <el-select
             @change="locationChanged()"
-            :disabled="!!location_details.location_type"
             popper-class="fcal_selector_with_submenu fcal_select"
             v-model="location_details.location_type"
+            clearable
             placeholder="Select Location">
             <el-option
                 v-for="(location, locationKey) in locations"
@@ -15,15 +15,21 @@
                 <b>{{ location.title }}</b>
                 <span>{{ location.subtitle }}</span>
             </el-option>
-            <template #prefix>
-                <el-button class="location_edit_btn fcal_plain_btn" v-if="location_details.location_type" @click="showModal = true;">Edit</el-button>
-            </template>
         </el-select>
+
+        <el-button
+            class="fcal_location_edit_btn fcal_plain_btn"
+           v-if="location_details.location_type"
+            @click="showModal = true;">
+            <el-icon><EditPen /></el-icon>
+        </el-button>
+
         <el-dialog
             v-model="showModal"
             title="Edit Location"
             :append-to-body="true"
-            max-width="300px">
+            class="fcal_dialog"
+        >
             <el-form v-if="showModal" :model="location_details" label-position="top" >
                 <el-form-item label="Location">
                     <el-select @change="locationChanged()" popper-class="fcal_selector_with_submenu" v-model="location_details.location_type" placeholder="Select Location">
@@ -67,20 +73,26 @@
 
             </el-form>
             <template #footer>
-              <span class="dialog-footer">
-                <el-button type="primary" @click="confirmLocation()">
-                  Confirm
-                </el-button>
-              </span>
+              <div class="dialog-footer">
+                    <el-button class="fcal_plain_btn" @click="showModal = false">Cancel</el-button>
+                    <el-button type="primary" @click="confirmLocation()">
+                      Confirm
+                    </el-button>
+              </div>
             </template>
         </el-dialog>
     </div>
 </template>
 
 <script type="text/babel">
+import { EditPen } from '@element-plus/icons-vue';
+
 export default {
     name: 'LocationSelector',
     props: ['slot'],
+    components: {
+        EditPen
+    },
     data() {
         return {
             locations: {
