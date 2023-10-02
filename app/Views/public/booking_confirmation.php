@@ -7,7 +7,7 @@
     <div class="fcal_confirm_body">
         <ul class="fcal_conform_items">
             <li class="fcal_conform_slot_name">
-                <span class="fcal_slot_name_icon"></span>
+                <span class="fcal_slot_name_icon" style="background: <?php echo esc_attr($slot->color_schema); ?>"></span>
                 <span class="fcal_slot_item_value"><?php echo esc_attr($slot->title); ?></span>
             </li>
             <li>

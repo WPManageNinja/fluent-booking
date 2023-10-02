@@ -4,11 +4,25 @@
     &.disabled {
         opacity: 0.6;
     }
+    &:last-child {
+        border-bottom: none;
+        padding: 15px 0 0 0;
+    }
 
     .fcal_notification_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        .el-switch {
+            &.is-checked {
+                .el-switch__core {
+                    background: $primaryColor;
+                    border-color: $primaryColor;
+                }
+            }
+        }
+
         .header_left {
             font-size: 16px;
             font-weight: 500;
@@ -22,31 +36,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            > span {
-
-            }
-        }
-    }
-
-    .fcal_section_body {
-        .el-form-item__content {
-            display: block;
-        }
-        .fcal_reminder_timing {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 5px;
-            .el-input__wrapper {
-                padding: 1px 8px;
-                .el-input__inner {
-                    text-align: center;
-                }
-            }
-        }
-        .fcal_add_reminder {
-            .el-icon {
-                margin-right: 2px;
-            }
         }
     }
 }
@@ -71,6 +60,14 @@
                 > div {
                     width: 100%;
                 }
+                .el-select {
+                    width: 100%;
+                }
+                .el-link--primary {
+                    .el-link__inner {
+                        color: $primaryColor;
+                    }
+                }
                 .el-input {
                     .el-input__wrapper {
                         height: auto;
@@ -89,6 +86,7 @@
                             padding: 0;
                             margin: 0;
                             height: auto;
+                            text-align: center;
                         }
                     }
                     .el-input-group__append {
@@ -104,10 +102,12 @@
             }
         }
     }
-}
-.fcal_notification_btn {
-    margin: 0 1rem; 
-    padding: 1rem 1rem 0 1rem;
+    .fcal_reminder_timing {
+        margin-bottom: 8px;
+        .el-input__wrapper {
+            padding: 1px 8px !important;
+        }
+    }
 }
 
 @media (max-width: 992px) {

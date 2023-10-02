@@ -322,6 +322,9 @@
           &.is-active {
             background: $primaryColor;
             color: #ffffff;
+            .el-icon svg {
+                fill: #ffffff;
+            }
           }
         }
       }

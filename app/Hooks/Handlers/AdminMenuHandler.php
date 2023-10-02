@@ -180,7 +180,8 @@ class AdminMenuHandler
         }
 
         $user = User::find($currentUser->ID);
-        $eventTypes = Helper::getEventTypesSchema();
+        $eventColors = Helper::getEventColors();
+        $meetingDurations = Helper::getMeetingDurations();
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
@@ -188,11 +189,12 @@ class AdminMenuHandler
             'slug'  => $slug = $app->config->get('app.slug'),
             'nonce' => wp_create_nonce($slug),
             'rest'  => $this->getRestInfo($app),
-            'brand_logo'  => $this->getMenuIcon(),
-            'asset_url'   => $assets,
-            'event_types' => $eventTypes,
+            'brand_logo'        => $this->getMenuIcon(),
+            'asset_url'         => $assets,
+            'event_colors'      => $eventColors,
+            'meeting_durations' => $meetingDurations,
             'editor_shortcodes' => $editorShortcodes,
-            'me'          => [
+            'me' => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email
@@ -305,7 +307,7 @@ class AdminMenuHandler
                 'menu' => [
                     'key'       => 'integrations',
                     'label'     => __('Integrations', 'fluent-booking'),
-                    'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.7915 13.425V6.57499C5.8665 6.29999 6.6665 5.33332 6.6665 4.16666C6.6665 2.78332 5.54984 1.66666 4.1665 1.66666C2.78317 1.66666 1.6665 2.78332 1.6665 4.16666C1.6665 5.33332 2.4665 6.29999 3.5415 6.57499V13.4167C2.4665 13.7 1.6665 14.6667 1.6665 15.8333C1.6665 17.2167 2.78317 18.3333 4.1665 18.3333C5.54984 18.3333 6.6665 17.2167 6.6665 15.8333C6.6665 14.6667 5.8665 13.7 4.7915 13.425Z" fill="#445164" stroke="#445164" stroke-width="0.5" /><path d="M16.4583 13.425V5.41666C16.4583 4.14999 15.4333 3.12499 14.1667 3.12499H11.725L12.9 2.14999C13.1667 1.92499 13.2 1.53333 12.9833 1.26666C12.7583 0.999994 12.3667 0.96666 12.1 1.18333L9.6 3.26666C9.45833 3.38333 9.375 3.55833 9.375 3.74999C9.375 3.94166 9.45833 4.10833 9.6 4.23333L12.1 6.31666C12.2167 6.41666 12.3583 6.45833 12.5 6.45833C12.675 6.45833 12.8583 6.38333 12.9833 6.23333C13.2083 5.96666 13.1667 5.57499 12.9 5.34999L11.725 4.37499H14.1667C14.7417 4.37499 15.2083 4.84166 15.2083 5.41666V13.425C14.1333 13.7 13.3333 14.6667 13.3333 15.8333C13.3333 17.2167 14.45 18.3333 15.8333 18.3333C17.2167 18.3333 18.3333 17.2167 18.3333 15.8333C18.3333 14.6667 17.5333 13.7 16.4583 13.425Z" fill="#445164" stroke="#445164" stroke-width="0.5" /></svg>',
+                    'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15.8333 13.3333V5.41667C15.8333 4.5 15.0833 3.75 14.1667 3.75H9.58334" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.6667 1.66602L9.16666 3.74935L11.6667 5.83268" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.8333 18.334C17.2141 18.334 18.3333 17.2147 18.3333 15.834C18.3333 14.4533 17.2141 13.334 15.8333 13.334C14.4526 13.334 13.3333 14.4533 13.3333 15.834C13.3333 17.2147 14.4526 18.334 15.8333 18.334Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.16666 6.66602V14.5827C4.16666 15.4993 4.91666 16.2493 5.83332 16.2493H10.4167" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.33334 18.3327L10.8333 16.2493L8.33334 14.166" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.16666 6.66602C5.54737 6.66602 6.66666 5.54673 6.66666 4.16602C6.66666 2.7853 5.54737 1.66602 4.16666 1.66602C2.78594 1.66602 1.66666 2.7853 1.66666 4.16602C1.66666 5.54673 2.78594 6.66602 4.16666 6.66602Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',
                     'permalink' => $baseUrl . 'integrations'
                 ]
             ]

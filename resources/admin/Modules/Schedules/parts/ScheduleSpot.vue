@@ -1,14 +1,15 @@
 <template>
-    <div :class="'fcal_spoot_status_' + spot[0].status" class="fcal_spot_wrapper">
+    <div :class="'fcal_spot_wrapper fcal_spoot_status_' + spot[0].status">
         <div @click="showDetails()" class="fcal_spot_line">
             <div class="fcal_spot_timing">
                 <div class="fcal_spot_color">
-                    <span :class="'fcal_'+spot[0].status"></span>
+                    <span :style="{background: spot[0].slot.color_schema}"></span>
                 </div>
-
-                {{ toCurrentTimezone(spot[0].start_time, 'hh:mma') }} - {{ toCurrentTimezone(spot[0].end_time, 'hh:mma') }}
+                {{ formattedTimeRange }}
                 <div v-if="spot[0].happening_status" class="fcal_spot_happening">
-                    <span :class="'fcal_'+spot[0].happening_status">{{ getTextFromSlug(spot[0].happening_status) }}</span>
+                    <span :class="'fcal_'+spot[0].happening_status">
+                        {{ getTextFromSlug(spot[0].happening_status) }}
+                    </span>
                 </div>
             </div>
             <div class="fcal_spot_desc">
@@ -25,7 +26,6 @@
                 </h3>
             </div>
             <div class="fcal_spot_actions">
-                <!-- fcal_plain_btn -->
                 <el-button class="fcal_plain_btn">
                     View Details
                 </el-button>
@@ -44,6 +44,11 @@ export default {
         }
     },
     computed: {
+        formattedTimeRange() {
+            const startTime = this.toCurrentTimezone(this.spot[0].start_time, 'hh:mma');
+            const endTime = this.toCurrentTimezone(this.spot[0].end_time, 'hh:mma');
+            return `${startTime} - ${endTime}`;
+        },
         spotTitle() {
             const eventType = this.spot[0].slot?.event_type;
             const guestName = this.spot[0].first_name + ' ' + this.spot[0].last_name;

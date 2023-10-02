@@ -6,7 +6,7 @@
             </div>
             <div class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
-                    <span>+</span> Create New Host
+                    <span>+</span> Create New Calendar
                 </el-button>
             </div>
         </div>
@@ -29,17 +29,14 @@
             v-model="isNewBookingOpen"
             title="Create New Booking Type"
             :zIndex="999"
-            modal-class="fcal_drawer"
-        >
+            modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
-
                 <el-form-item label="Select Host">
                     <HostSelector v-model="user_id" />
                 </el-form-item>
                 <el-button
-                    @click="$router.push({ name: 'create_calendar', params: { host_id: user_id, event_type: 'one-on-one' } })"
-                    :disabled="!user_id"
-                >
+                    @click="createOneToOneSlot"
+                    :disabled="!user_id">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -48,16 +45,15 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>One-on-One</h3>
+                        <h3>One-to-One</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
                         <p>Good for: coffee chats, 1:1 interviews, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
                 <el-button
-                    @click="$router.push({ name: 'create_calendar', params: { host_id: user_id, event_type: 'group' } })"
-                    :disabled="!user_id"
-                >
+                    @click="createGroupSlot"
+                    :disabled="!user_id">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -69,7 +65,7 @@
                     <div class="content">
                         <h3>Group</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
-                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <p>Good for: webinars, online classes, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
@@ -125,6 +121,18 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        createOneToOneSlot() {
+            this.$router.push({
+                name: 'create_calendar',
+                params: {host_id: this.user_id, event_type: 'one-to-one'}
+            })
+        },
+        createGroupSlot() {
+            this.$router.push({
+                name: 'create_calendar',
+                params: {host_id: this.user_id, event_type: 'group'}
+            })
         }
     },
     mounted() {

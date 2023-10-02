@@ -90,7 +90,6 @@
             gap: 12px;
             font-size: 18px;
             .fcal_status_badge {
-              background: #4587EC;
               border-radius: 50%;
               height: 14px;
               width: 14px;
@@ -765,11 +764,25 @@
           font-weight: 500;
         }
       }
+      .fcal_switch {
+        &.is-checked {
+            .el-switch__core {
+                background-color: $primaryColor;
+                border-color: $primaryColor;
+            }
+        }
+      }
     }
     .fcal_create_calendar_form_body {
       .el-form {
         .el-form-item {
           margin-bottom: 18px;
+          .el-form-item__label {
+            font-size: 18px;
+            line-height: 28px;
+            margin-bottom: 16px;
+            font-weight: 500;
+          }
           .sub-label {
             display: block;
             width: 100%;
@@ -886,6 +899,18 @@
               width: 100%;
             }
           }
+        }
+      }
+      .fcal_checkbox {
+          .el-checkbox__label {
+            color: black;
+            font-size: 16px;
+          }
+          &.is-checked {
+            .el-checkbox__inner {
+                background: $primaryColor;
+                border-color: $primaryColor;
+            }
         }
       }
     }
