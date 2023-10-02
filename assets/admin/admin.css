@@ -1673,23 +1673,39 @@ p.fcal_profile_link a {
   margin: 0;
   border: none;
 }
+.fframe_main-menu-items ul.fframe_menu li.active_item:last-child a svg path, .fframe_main-menu-items ul.fframe_menu li.active_item:nth-child(3) a svg path {
+  fill: none;
+}
+.fframe_main-menu-items ul.fframe_menu li.active_item:nth-child(2) a svg path {
+  stroke: none;
+}
 .fframe_main-menu-items ul.fframe_menu li.active_item a {
-  background: rgba(38, 83, 199, 0.1);
+  background: #F0F6FE;
   color: #2653C7;
+}
+.fframe_main-menu-items ul.fframe_menu li.active_item a svg path {
+  fill: #2653C7;
+  stroke: #2653C7;
 }
 .fframe_main-menu-items ul.fframe_menu li a:focus {
   box-shadow: none;
   outline: 0 solid transparent;
 }
 .fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary {
-  padding: 12px 20px;
-  display: block;
+  padding: 11px 20px;
   font-size: 16px;
   line-height: 100%;
   text-decoration: none;
   color: #445164;
   font-weight: 500;
-  border-radius: 20px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary svg {
+  width: 18px;
+  height: 18px;
 }
 .fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary span {
   font-size: 14px;
