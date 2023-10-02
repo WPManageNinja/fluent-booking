@@ -58,7 +58,11 @@
 
             </div>
             <div v-else>
-                <el-button v-loading="working" :disabled="working" @click="updateStatus('active')" text>
+                <el-button
+                    v-loading="working"
+                    :disabled="working"
+                    @click="updateStatus('active')"
+                    class="fcal_primary_btn fcal_turn_on_btn">
                     Turn On
                 </el-button>
             </div>

@@ -260,6 +260,8 @@
                         padding: 8px 16px;
                         &.is-focus {
                             border-color: $primaryColor;
+                            box-shadow: none !important;
+                            outline: none;
                         }
                         .el-input__inner {
                             padding: 0;
@@ -446,6 +448,77 @@
         }
     }
 }
+
+.fcal_notification_btn {
+    margin: 0 1rem; 
+    padding: 1rem 1rem 0 1rem;
+}
+
+.default-schedule-badge {
+    display: inline-flex;
+    border-radius: 4px;
+    border: 1px solid #FCC365;
+    background: #FEF4E6;
+    color: #F58E07;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    i {
+        transform: translateY(2px);
+    }
+}
+.fcal_settings_availability {
+    .fcal_settings_content_wrap {
+        .el-form {
+            .el-form-item {
+                .fcal_availability_header {
+                    margin-bottom: 8px;
+                    h3 {
+                        font-size: 18px;
+                        font-weight: 500;
+                        line-height: 28px;
+                        color: $dark;
+                        display: inline-flex;
+                        align-items: center;
+                        margin: 0;
+                        gap: 8px;
+                    }
+                }
+                .sub-label {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    color: #445164;
+                }
+                .el-form-item__label {
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 28px;
+                    color: $dark;
+                }
+                .el-form-item__content {
+                    position: relative;
+                }
+                &.fcal_tab_schedule {
+                    .fcal_add_new_tab {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        z-index: 9;
+                        width: 40px;
+                        height: 40px;
+
+                        border: 1px solid #697483;
+                        border-radius: 8px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @media (max-width: 992px) {
     .header_right {
