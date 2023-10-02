@@ -184,23 +184,6 @@ input.el-input__inner:focus {
   line-height: 1.2;
 }
 
-.el-radio-group.radio_desc_group {
-  display: block;
-  position: relative;
-  margin-top: 20px;
-}
-.el-radio-group.radio_desc_group > label {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  height: auto;
-  line-height: 14px;
-  margin-bottom: 15px;
-}
-.el-radio-group.radio_desc_group > label p {
-  margin: 0;
-}
-
 ul.fframe_menu.fcal_secondary_menu {
   float: right;
 }
@@ -854,9 +837,10 @@ ul.fframe_menu.fcal_secondary_menu {
 }
 .el-dialog.fcal_dialog .el-dialog__header {
   border: none;
-  padding: 0;
+  padding: 0 0 16px;
   background: transparent;
   border-bottom: 1px solid #EAECF0;
+  margin-bottom: 20px;
 }
 .el-dialog.fcal_dialog .el-dialog__header .el-dialog__title {
   font-size: 20px;
@@ -864,6 +848,106 @@ ul.fframe_menu.fcal_secondary_menu {
   line-height: 28px;
   color: #1B2533;
   margin: 0;
+}
+.el-dialog.fcal_dialog .el-dialog__body {
+  padding: 0;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item {
+  margin-bottom: 16px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-form-item__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #445164;
+  margin-bottom: 10px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-input.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-input .el-input__wrapper {
+  box-shadow: none;
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-input .el-input__wrapper.is-focus {
+  border-color: #2653C7;
+  box-shadow: none !important;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-input .el-input__wrapper .el-input__inner {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-textarea textarea {
+  box-shadow: none;
+  border: 1px solid #D6DAE1;
+  border-radius: 8px;
+  padding: 8px 16px;
+  height: 48px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-textarea textarea:focus {
+  border-color: #2653C7;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group {
+  display: block;
+  position: relative;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__input input {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #D1D5DB;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__input.is-checked .el-radio__inner {
+  background: transparent;
+  border-color: #2653C7;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__input.is-checked + .el-radio__label {
+  color: #1B2533;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__input .el-radio__inner {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #D1D5DB;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__input .el-radio__inner:after {
+  width: 12px;
+  height: 12px;
+  background: #2653C7;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__label b {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #1B2533;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group .el-radio .el-radio__label p {
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 2px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group > label {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  height: auto;
+  line-height: 14px;
+  margin-bottom: 15px;
+}
+.el-dialog.fcal_dialog .el-dialog__body .el-form .el-form-item .el-radio-group.radio_desc_group > label p {
+  margin: 0;
+}
+.el-dialog.fcal_dialog .el-dialog__footer {
+  padding: 0 20px;
+}
+.el-dialog.fcal_dialog .el-dialog__footer .dialog-footer {
+  background: transparent;
+  border-top: 1px solid #EAECF0;
+  padding: 18px 0;
+}
+.el-dialog.fcal_dialog .el-dialog__footer .dialog-footer .el-button {
+  padding: 16px 24px;
 }
 
 table.fcal_table {

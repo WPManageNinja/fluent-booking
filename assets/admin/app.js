@@ -71726,17 +71726,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)("Cancel")];
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)(" Cancel ")];
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_10__.createVNode)(_component_el_button, {
-        type: "primary",
+        "class": "fcal_primary_btn",
         onClick: _cache[10] || (_cache[10] = function ($event) {
           return $options.confirmLocation();
         })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_10__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)(" Confirm ")];
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_10__.createTextVNode)(" Save ")];
         }),
         _: 1 /* STABLE */
       })])];
@@ -71757,7 +71757,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 onChange: _cache[3] || (_cache[3] = function ($event) {
                   return $options.locationChanged();
                 }),
-                "popper-class": "fcal_selector_with_submenu",
+                "popper-class": "fcal_selector_with_submenu fcal_select",
                 modelValue: $data.location_details.location_type,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
                   return $data.location_details.location_type = $event;
