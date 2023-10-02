@@ -407,4 +407,19 @@ class CalendarController extends Controller
 
         return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);
     }
+
+    public function deleteCalendar(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $slots    = CalendarSlot::where('calendar_id', $calendar->id)->get();
+
+        foreach ($slots as $slot) {
+            $slot->delete();
+        }
+        $calendar->delete();
+
+        return [
+            'message' => __('Calendar Deleted Successfully!', 'fluent-booking')
+        ];
+    }
 }
