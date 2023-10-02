@@ -45,23 +45,17 @@
         </el-form-item>
         <el-form-item v-if="email.times" label="Timing">
             <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
-                <el-col :sm="8" :md="6" :lg="3">
-                    <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
-                </el-col>
-                <el-col :sm="16" :md="9" :lg="6">
-                    <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit">
-                        <el-option value="minutes" label="Minutes Before"></el-option>
-                        <el-option value="hours" label="Hours Before"></el-option>
-                        <el-option value="days" label="Days Before"></el-option>
-                    </el-select>
-                </el-col>
-                <el-col :span="3" v-if="isRemovable">
-                    <el-link type="danger" title="Remove"
-                        :icon="CloseBoldIcon"
-                        :underline="false"
-                        @click="removeReminderTime(index)">
-                    </el-link>
-                </el-col>
+                <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
+                <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit" popper-class="fcal_select">
+                    <el-option value="minutes" label="Minutes Before"></el-option>
+                    <el-option value="hours" label="Hours Before"></el-option>
+                    <el-option value="days" label="Days Before"></el-option>
+                </el-select>
+                <el-link v-if="isRemovable" type="danger" title="Remove"
+                    :icon="CloseBoldIcon"
+                    :underline="false"
+                    @click="removeReminderTime(index)">
+                </el-link>
             </div>
             <el-link type="primary" :underline="false" @click="addReminderTime">
                     + Add Another Reminder
