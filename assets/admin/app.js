@@ -73329,7 +73329,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function ($event) {
       return $options.updateStatus('active');
     }),
-    text: ""
+    "class": "fcal_primary_btn fcal_turn_on_btn"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_5__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_5__.createTextVNode)(" Turn On ")];

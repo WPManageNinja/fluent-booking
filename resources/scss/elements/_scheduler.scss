@@ -79,6 +79,11 @@
         border-radius: 8px;
         border: 1px solid #D6DAE1;
         padding: 24px;
+        .fcal_status_draft {
+          .fcal_slot_body {
+            opacity: 0.6;
+          }
+        }
 
         .fcal_slot_body {
           h3 {
@@ -143,6 +148,9 @@
           justify-content: space-between;
           align-items: center;
           padding-top: 24px;
+          .fcal_turn_on_btn {
+            padding: 10px 20px;
+          }
 
           h3 {
             margin: 0;
