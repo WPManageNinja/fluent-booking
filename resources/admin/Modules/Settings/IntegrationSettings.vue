@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <el-alert v-else title="Please Configure The Integration First" type="info" :closable="false" center show-icon></el-alert>
+            <el-empty v-else description="Please Configure The Integration First" />
         </div>
         <el-skeleton v-else :rows="4" animated/>
     </div>
