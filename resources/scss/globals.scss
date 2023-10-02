@@ -84,7 +84,7 @@
     color: #ffffff;
     border-radius: 8px;
     font-size: 16px;
-    padding: 16px 24px;
+    padding: 10px 20px;
     height: auto;
     font-weight: 400;
     border: none;
@@ -892,8 +892,16 @@ table.fcal_table {
 }
 
 .fcal_timezone_text {
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
     color: #595959;
+    p {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 500;
+        margin: 5px 5px;
+    }
 }
 
 h3.fcal_section_title {

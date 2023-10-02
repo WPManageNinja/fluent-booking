@@ -90,46 +90,7 @@ class CalendarSlot extends Model
     {
         return [
             'schedule_type'       => 'weekly_schedules',
-            'weekly_schedules'    => [
-                'sun' => [
-                    'enabled' => false,
-                    'slots'   => []
-                ],
-                'mon' => [
-                    'enabled' => true,
-                    'slots'   => [
-                        ['start' => '09:00', 'end' => '17:00']
-                    ],
-                ],
-                'tue' => [
-                    'enabled' => true,
-                    'slots'   => [
-                        ['start' => '09:00', 'end' => '17:00']
-                    ],
-                ],
-                'wed' => [
-                    'enabled' => true,
-                    'slots'   => [
-                        ['start' => '09:00', 'end' => '17:00']
-                    ],
-                ],
-                'thu' => [
-                    'enabled' => true,
-                    'slots'   => [
-                        ['start' => '09:00', 'end' => '17:00']
-                    ],
-                ],
-                'fri' => [
-                    'enabled' => true,
-                    'slots'   => [
-                        ['start' => '09:00', 'end' => '17:00']
-                    ],
-                ],
-                'sat' => [
-                    'enabled' => false,
-                    'slots'   => []
-                ],
-            ],
+            'weekly_schedules'    => Helper::getWeeklyScheduleSchema(),
             'date_overrides'      => [],
             'range_type'          => 'range_days',
             'range_days'          => 60,
@@ -147,7 +108,7 @@ class CalendarSlot extends Model
 
         $defaults = Helper::getDefaultNotificationSettings();
 
-        if (!$statuses || !isset($statuses['reminder_to_host'])) {
+        if (!$statuses) {
             return $defaults;
         }
 
