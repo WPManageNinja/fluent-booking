@@ -712,15 +712,135 @@
         border-radius: 8px;
         .el-dialog__header {
             border: none;
-            padding: 0;
+            padding: 0 0 16px;
             background: transparent;
             border-bottom: 1px solid #EAECF0;
+            margin-bottom: 20px;
             .el-dialog__title {
                 font-size: 20px;
                 font-weight: 600;
                 line-height: 28px;
                 color: $dark;
                 margin: 0;
+            }
+        }
+        .el-dialog__body {
+            padding: 0;
+            .el-form {
+                .el-form-item {
+                    margin-bottom: 16px;
+                    .el-form-item__label {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        color: #445164;
+                        margin-bottom: 10px;
+                    }
+                    .el-input {
+                        &.is-focus {
+                            .el-input__wrapper {
+                                box-shadow: none !important;
+                            }
+                        }
+                        .el-input__wrapper {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            &.is-focus {
+                                border-color: $primaryColor;
+                                box-shadow: none !important;
+                            }
+                            .el-input__inner {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .el-textarea {
+                        textarea {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            height: 48px;
+                            &:focus {
+                                border-color: $primaryColor;
+                            }
+                        }
+                    }
+
+                    .el-radio-group {
+                        &.radio_desc_group {
+                            display: block;
+                            position: relative;
+                            .el-radio {
+                                .el-radio__input {
+                                    input {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                    }
+                                    &.is-checked {
+                                        .el-radio__inner {
+                                            background: transparent;
+                                            border-color: $primaryColor;
+                                        }
+                                        +.el-radio__label {
+                                            color: $dark;
+                                        }
+                                    }
+                                    .el-radio__inner {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                        &:after {
+                                            width: 12px;
+                                            height: 12px;
+                                            background: $primaryColor;
+                                        }
+                                    }
+                                }
+                                .el-radio__label {
+                                    b {
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        line-height: 24px;
+                                        color: $dark;
+                                    }
+                                    p {
+                                        font-size: 13px;
+                                        font-weight: 400;
+                                        margin-top: 2px;
+                                    }
+                                }
+                            }
+                            > label {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: flex-start;
+                                height: auto;
+                                line-height: 14px;
+                                margin-bottom: 15px;
+                                p {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding: 0 20px;
+            .dialog-footer {
+                background: transparent;
+                border-top: 1px solid #EAECF0;
+                padding: 18px 0;
+                .el-button {
+                    padding: 16px 24px;
+                }
             }
         }
     }

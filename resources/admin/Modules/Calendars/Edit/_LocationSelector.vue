@@ -32,7 +32,11 @@
         >
             <el-form v-if="showModal" :model="location_details" label-position="top" >
                 <el-form-item label="Location">
-                    <el-select @change="locationChanged()" popper-class="fcal_selector_with_submenu" v-model="location_details.location_type" placeholder="Select Location">
+                    <el-select
+                        @change="locationChanged()"
+                        popper-class="fcal_selector_with_submenu fcal_select"
+                        v-model="location_details.location_type"
+                        placeholder="Select Location">
                         <el-option
                             v-for="(location, locationKey) in locations"
                             :key="locationKey"
@@ -74,9 +78,11 @@
             </el-form>
             <template #footer>
               <div class="dialog-footer">
-                    <el-button class="fcal_plain_btn" @click="showModal = false">Cancel</el-button>
-                    <el-button type="primary" @click="confirmLocation()">
-                      Confirm
+                    <el-button class="fcal_plain_btn" @click="showModal = false">
+                        Cancel
+                    </el-button>
+                    <el-button class="fcal_primary_btn" @click="confirmLocation()">
+                      Save
                     </el-button>
               </div>
             </template>
