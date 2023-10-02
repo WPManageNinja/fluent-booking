@@ -2276,13 +2276,12 @@ p.fcal_profile_link a {
 }
 
 .fcal_create_calendar_wrap .fcal_create_calendar_header {
-  max-width: 571px;
+  max-width: 946px;
   margin: auto;
   padding-top: 34px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .fcal_create_calendar_wrap .fcal_create_calendar_header > h1 {
-  text-align: center;
   font-size: 28px;
   font-weight: 700;
   line-height: 36px;
@@ -3982,8 +3981,8 @@ p.fcal_profile_link a {
   background: #2653C7;
   color: #ffffff;
 }
-.fcal_tabs > .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active .el-icon svg {
-  fill: #ffffff;
+.fcal_tabs > .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active .el-icon svg path {
+  stroke: #ffffff;
 }
 .fcal_tabs .el-tabs__content {
   overflow: inherit;

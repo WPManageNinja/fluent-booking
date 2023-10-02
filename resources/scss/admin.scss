@@ -323,7 +323,9 @@
             background: $primaryColor;
             color: #ffffff;
             .el-icon svg {
-                fill: #ffffff;
+                path {
+                    stroke: #ffffff;
+                }
             }
           }
         }
