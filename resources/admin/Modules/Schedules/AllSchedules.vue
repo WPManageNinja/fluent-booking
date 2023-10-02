@@ -79,11 +79,11 @@
         </div>
 
         <div class="fcal_schedule_meetings_body">
-            <div style="padding: 0;" v-loading="loading" class="fcal_section_body">
+            <div v-if="!loading" class="fcal_section_body" style="padding: 0;">
                 <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
                     <div class="fcal_schedules">
                         <div class="fcal_schedule_wrapper">
-                            <div v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
+                            <div v-if="schedulesLength" v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
                                     <h3 class="fcal_schedule_data">{{formattedDate(scheduleDate)}}</h3>
                                 </div>
@@ -97,6 +97,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <el-empty v-else description="No schedules based on your filter" />
                         </div>
                         <div class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
@@ -106,8 +107,8 @@
                         <schedule-spot-details @spotFetched="(data) => { current_spot = data; }" :spot="current_spot" :spot_id="spot_id" />
                     </div>
                 </div>
-                <el-empty v-else description="No schedules based on your filter" />
             </div>
+            <el-skeleton v-else :rows="5" animated/>
             <p>All dates are shown in {{currentTimezone}} timezone</p>
         </div>
     </div>
@@ -132,7 +133,6 @@ export default {
     data() {
         return {
             schedules: [],
-            schedulesLength: 0,
             loading: true,
             filters: {
                 period: 'upcoming',
@@ -184,8 +184,10 @@ export default {
                 .forEach((date) => {
                     sortedSchedules[date] = items[date];
                 });
-
             return sortedSchedules;
+        },
+        schedulesLength() {
+            return Object.keys(this.formattedSchedules).length;
         }
     },
     methods: {

@@ -1,7 +1,10 @@
 <template>
     <div class="fcal_create_calendar_wrap">
         <div class="fcal_create_calendar_header">
-            <h1>{{ slotTitle }}</h1>
+            <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
+                <el-icon :size="20" color="black"><Back/></el-icon>
+                <h1>{{ slotTitle }}</h1>
+            </router-link>
         </div>
 
         <div v-if="slot" class="fcal_create_calendar_body">
@@ -9,9 +12,6 @@
                 <basic-info ref="basicInfo" :slot="slot" :event_type="event_type" />
             </div>
             <div class="fcal_create_calendar_form_footer">
-                <el-button class="fcal_plain_btn" @click="goToCalendars">
-                    Go Back
-                </el-button>
                 <el-button class="fcal_primary_btn" @click="saveSettings">
                     Continue
                 </el-button>
@@ -27,12 +27,15 @@
 
 <script type="text/babel">
 import BasicInfo from './_BasicInfo.vue';
+import {Back} from '@element-plus/icons-vue';
+
 
 export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
         BasicInfo,
+        Back
     },
     data() {
         return {
@@ -48,9 +51,6 @@ export default {
         }
     },
     methods: {
-        goToCalendars() {
-            this.$router.push({ name: 'calendars' });
-        },
         getSlotSchema() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/slot-schema')
