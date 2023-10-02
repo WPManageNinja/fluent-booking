@@ -5,11 +5,13 @@
                 <img :src="calendar.author_profile.avatar"/>
                 <div class="fcal_cal_info">
                     <h3>{{ calendar.author_profile.name }}</h3>
-                    <p v-if="calendar.public_url && calendar.visibility == 'public'" class="fcal_profile_link"><a target="_blank" rel="noopener" :href="calendar.public_url">{{calendar.public_url}}</a></p>
+                    <p v-if="calendar.public_url && calendar.visibility == 'public'" class="fcal_profile_link">
+                        <a target="_blank" rel="noopener" :href="calendar.public_url">{{calendar.public_url}}</a>
+                    </p>
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button @click="$router.push({name: 'single-integration', params: {id: calendar.user_id}})" class="fcal_plain_btn">
+                <el-button class="fcal_plain_btn" @click="goToSingleIntegration">
                     <el-icon><Setting /></el-icon> Integrations
                 </el-button>
 
@@ -37,7 +39,7 @@
             </div>
         </div>
         <el-dialog v-model="showSettings" title="Calendar Settings">
-            <calendar-settings @calendarUpdated="() => { showSettings = false; }" :calendar="calendar" />
+            <calendar-settings @calendarUpdated="() => {showSettings = false}" :calendar="calendar" />
         </el-dialog>
 
         <el-drawer
@@ -47,7 +49,7 @@
             modal-class="fcal_drawer"
         >
             <div class="fcal_create_new_booking_type_drawer">
-                <el-button @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id, event_type: 'one-on-one' } })">
+                <el-button @click="createOneToOneSlot">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -56,13 +58,13 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>One-on-One</h3>
+                        <h3>One-to-One</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
                         <p>Good for: coffee chats, 1:1 interviews, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
-                <el-button @click="$router.push({ name: 'create_slot_event', params: { calendar_id: calendar.id, event_type: 'group' } })">
+                <el-button @click="createGroupSlot">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -74,7 +76,7 @@
                     <div class="content">
                         <h3>Group</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
-                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <p>Good for: webinars, online classes, etc.</p>
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
@@ -108,10 +110,27 @@ export default {
         slotDeleted(slotIndex) {
             this.calendar.slots.splice(slotIndex, 1);
         },
+        goToSingleIntegration() {
+            this.$router.push({
+                name: 'single-integration',
+                params: {id: this.calendar.user_id}
+            })
+        },
+        createOneToOneSlot() {
+            this.$router.push({
+                name: 'create_slot_event',
+                params: {calendar_id: this.calendar.id, event_type: 'one-to-one'}
+            })
+        },
+        createGroupSlot() {
+            this.$router.push({
+                name: 'create_slot_event',
+                params: {calendar_id: this.calendar.id, event_type: 'group'}
+            })
+        },
         handleCommand(command) {
             if (command == 'delete') {
-
-                this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted', 'Delete Booking Type', {
+                this.$confirm('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted', 'Delete Calendar', {
                     confirmButtonText: 'Delete',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
@@ -124,9 +143,8 @@ export default {
                         .catch(errors => {
                             this.$handleError(errors);
                         });
-                }).catch(() => {
-
-                });
+                })
+                return;
             }
         }
     }

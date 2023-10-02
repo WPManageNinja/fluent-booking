@@ -45,10 +45,10 @@
         </el-form-item>
         <el-form-item v-if="email.times" label="Timing">
             <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
-                <el-col :span="6">
+                <el-col :sm="8" :md="6" :lg="3">
                     <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
                 </el-col>
-                <el-col :span="15">
+                <el-col :sm="16" :md="9" :lg="6">
                     <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit">
                         <el-option value="minutes" label="Minutes Before"></el-option>
                         <el-option value="hours" label="Hours Before"></el-option>
@@ -63,11 +63,9 @@
                     </el-link>
                 </el-col>
             </div>
-            <div class="fcal_add_reminder">
-                <el-link type="primary" :underline="false" @click="addReminderTime" :icon="PlusIcon">
-                     Add Another Reminder
-                </el-link>
-            </div>
+            <el-link type="primary" :underline="false" @click="addReminderTime">
+                    + Add Another Reminder
+            </el-link>
         </el-form-item>
     </el-form>
 </template>

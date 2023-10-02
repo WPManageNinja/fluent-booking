@@ -2,8 +2,12 @@
     <div class="fcal_weekly_schedule_wrap">
         <h2 v-if="title" class="fcal_availability_title">{{ title }}</h2>
         <div class="fcal_weekly_schedules">
-            <week-day-config v-for="(config, weekDay) in weekly_schedules" :key="weekDay" :week_day="weekDay"
-                             :config="config"/>
+            <week-day-config 
+                v-for="(config, weekDay) in weekly_schedules" 
+                :key="weekDay" 
+                :week_day="weekDay" 
+                :config="config"
+            />
         </div>
     </div>
 </template>

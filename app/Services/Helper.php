@@ -930,16 +930,66 @@ class Helper
         return ltrim($fn($glue, $array), $glue);
     }
 
-    public static function getEventTypesSchema()
+    public static function getEventColors()
     {
-        return apply_filters('fluent_booking/event_types_schema', [
-            'single' => [
-                'title'     => 'One-on-One', 
-                'subtitle'  => 'Meeting with a single person'
+        return apply_filters('fluent_booking/event_colors', [
+            [
+                'label' => 'Red-Orange',
+                'value' => '#ff4f00'
             ],
-            'group' => [
-                'title'     => 'Group Meeting',
-                'subtitle'  => 'Meeting with multiple guests'
+            [
+                'label' => 'Deep Lilac',
+                'value' => '#e55cff'
+            ],
+            [
+                'label' => 'Purple',
+                'value' => '#8247f5'
+            ],
+            [
+                'label' => 'Vivid Blue',
+                'value' => '#0099ff'
+            ],
+            [
+                'label' => 'Cyan',
+                'value' => '#0ae8f0'
+            ],
+            [
+                'label' => 'Emerald Green',
+                'value' => '#17e885'
+            ],
+            [
+                'label' => 'Lime Green',
+                'value' => '#ccf000'
+            ],
+            [
+                'label' => 'Amber',
+                'value' => '#ffa600'
+            ]
+        ]);
+    }
+
+    public static function getMeetingDurations()
+    {
+        return apply_filters('fluent_booking/event_colors', [
+            [
+                'value' => '15',
+                'label' => '15 Minutes'
+            ],
+            [
+                'value' => '30',
+                'label' => '30 Minutes'
+            ],
+            [
+                'value' => '45',
+                'label' => '45 Minutes'
+            ],
+            [
+                'value' => '60',
+                'label' => '60 Minutes'
+            ],
+            [
+                'value' => 'custom',
+                'label' => 'Custom'
             ]
         ]);
     }

@@ -272,8 +272,15 @@ ul.fframe_menu.fcal_secondary_menu {
   color: #2653C7;
   border-color: rgba(38, 83, 199, 0.2);
 }
+.fcal_primary_btn2.disable,
+.fcal_plain_btn.disable {
+  color: red;
+  display: flex;
+  align-items: center;
+  border: none;
+  height: 36px;
+}
 
-.fcal_primary_btn_update,
 .fcal_primary_btn {
   background: #2653C7;
   color: #ffffff;
@@ -284,11 +291,9 @@ ul.fframe_menu.fcal_secondary_menu {
   font-weight: 400;
   border: none;
 }
-.fcal_primary_btn_update > span,
 .fcal_primary_btn > span {
   gap: 8px;
 }
-.fcal_primary_btn_update:hover,
 .fcal_primary_btn:hover {
   background: #416ddd;
   color: #ffffff;
@@ -302,13 +307,6 @@ ul.fframe_menu.fcal_secondary_menu {
   border-color: #2653C7;
   color: #ffffff;
   background: #2653C7;
-}
-
-.fcal_primary_btn_update {
-  background: var(--el-color-success);
-}
-.fcal_primary_btn_update:hover {
-  background: var(--el-color-success-light-3);
 }
 
 .fcal_photo_card .fcal_photo_holder {
@@ -1746,7 +1744,6 @@ p.fcal_profile_link a {
   font-size: 18px;
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_body h3 .fcal_status_badge {
-  background: #4587EC;
   border-radius: 50%;
   height: 14px;
   width: 14px;
@@ -2328,8 +2325,18 @@ p.fcal_profile_link a {
   gap: 10px;
   font-weight: 500;
 }
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form .fcal_switch.is-checked .el-switch__core {
+  background-color: #2653C7;
+  border-color: #2653C7;
+}
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item {
   margin-bottom: 18px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .el-form-item__label {
+  font-size: 18px;
+  line-height: 28px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .sub-label {
   display: block;
@@ -2426,6 +2433,14 @@ p.fcal_profile_link a {
 }
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item.fcal_override_scheduling_condition_wrap .fcal_inline_items {
   width: 100%;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .fcal_checkbox .el-checkbox__label {
+  color: black;
+  font-size: 16px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .fcal_checkbox.is-checked .el-checkbox__inner {
+  background: #2653C7;
+  border-color: #2653C7;
 }
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_schedule_setting .el-form .el-form-item {
   border-bottom: 1px solid #EAECF0;
@@ -3094,10 +3109,18 @@ p.fcal_profile_link a {
 .fcal_notification_container.disabled {
   opacity: 0.6;
 }
+.fcal_notification_container:last-child {
+  border-bottom: none;
+  padding: 15px 0 0 0;
+}
 .fcal_notification_container .fcal_notification_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.fcal_notification_container .fcal_notification_header .el-switch.is-checked .el-switch__core {
+  background: #2653C7;
+  border-color: #2653C7;
 }
 .fcal_notification_container .fcal_notification_header .header_left {
   font-size: 16px;
@@ -3112,23 +3135,6 @@ p.fcal_profile_link a {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-.fcal_notification_container .fcal_section_body .el-form-item__content {
-  display: block;
-}
-.fcal_notification_container .fcal_section_body .fcal_reminder_timing {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 5px;
-}
-.fcal_notification_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper {
-  padding: 1px 8px;
-}
-.fcal_notification_container .fcal_section_body .fcal_reminder_timing .el-input__wrapper .el-input__inner {
-  text-align: center;
-}
-.fcal_notification_container .fcal_section_body .fcal_add_reminder .el-icon {
-  margin-right: 2px;
 }
 
 .fcal_notification_body {
@@ -3152,6 +3158,12 @@ p.fcal_profile_link a {
 .fcal_notification_body .el-form .el-form-item .el-form-item__content > div {
   width: 100%;
 }
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-select {
+  width: 100%;
+}
+.fcal_notification_body .el-form .el-form-item .el-form-item__content .el-link--primary .el-link__inner {
+  color: #2653C7;
+}
 .fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input__wrapper {
   height: auto;
   background: #F5F6F7;
@@ -3169,6 +3181,7 @@ p.fcal_profile_link a {
   padding: 0;
   margin: 0;
   height: auto;
+  text-align: center;
 }
 .fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append {
   background: #DDEBFC;
@@ -3179,10 +3192,11 @@ p.fcal_profile_link a {
 .fcal_notification_body .el-form .el-form-item .el-form-item__content .el-input .el-input-group__append .el-button {
   color: #1B2533;
 }
-
-.fcal_notification_btn {
-  margin: 0 1rem;
-  padding: 1rem 1rem 0 1rem;
+.fcal_notification_body .fcal_reminder_timing {
+  margin-bottom: 8px;
+}
+.fcal_notification_body .fcal_reminder_timing .el-input__wrapper {
+  padding: 1px 8px !important;
 }
 
 @media (max-width: 992px) {
@@ -3938,6 +3952,9 @@ p.fcal_profile_link a {
 .fcal_tabs > .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active {
   background: #2653C7;
   color: #ffffff;
+}
+.fcal_tabs > .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav .el-tabs__item.is-active .el-icon svg {
+  fill: #ffffff;
 }
 .fcal_tabs .el-tabs__content {
   overflow: inherit;
