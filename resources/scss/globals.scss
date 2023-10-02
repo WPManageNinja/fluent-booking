@@ -1318,6 +1318,36 @@ p.fcal_profile_link a {
             }
         }
     }
+    &.fcal_popover {
+        .el-dropdown-menu {
+            &::-webkit-scrollbar {
+                width: 5px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-track {
+                background: #fff;
+                border-radius: 10px;
+            }
+            .group-title {
+                background: #606266;
+                border-radius: 8px 8px 0 0;
+                padding: 4px 16px;
+                line-height: 30px;
+            }
+            li {
+                padding: 2px 16px;
+                line-height: 31px;
+                border-radius: 0;
+                &:hover {
+                    background: transparent;
+                    color: $primaryColor;
+                }
+            }
+        }
+    }
 }
 .fcal_override_table {
 

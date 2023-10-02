@@ -70320,9 +70320,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_popover = element_plus_es__WEBPACK_IMPORTED_MODULE_2__.ElPopover;
   return (0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_el_popover, {
     width: 200,
-    visible: $props.isVisible,
     placement: $props.placement,
-    "popper-class": "el-dropdown-list-wrapper",
+    "popper-class": "fcal_popover fcal_select el-dropdown-list-wrapper",
     trigger: "click"
   }, {
     reference: (0,vue__WEBPACK_IMPORTED_MODULE_1__.withCtx)(function () {
@@ -70341,7 +70340,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
 
     _: 3 /* FORWARDED */
-  }, 8 /* PROPS */, ["visible", "placement"])]);
+  }, 8 /* PROPS */, ["placement"])]);
 }
 
 /***/ }),
@@ -72400,7 +72399,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_popover, {
             groupTitle: "Shortcodes",
             data: $data.editorShortcodes,
-            isVisible: $data.subjectPopupVisible,
+            placement: "bottom-end",
+            trigger: "click",
             onCommand: $options.handleSubjectCommand
           }, {
             popoverButton: (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
@@ -72421,7 +72421,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, 8 /* PROPS */, ["modelValue"])];
             }),
             _: 1 /* STABLE */
-          }, 8 /* PROPS */, ["data", "isVisible", "onCommand"])];
+          }, 8 /* PROPS */, ["data", "onCommand"])];
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_form_item, {
