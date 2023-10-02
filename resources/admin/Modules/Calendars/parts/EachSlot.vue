@@ -8,9 +8,9 @@
                         <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item command="disable" v-if="slot.status == 'active'">Disable</el-dropdown-item>
+                                <el-dropdown-item command="disable" v-if="slot.status == 'active'"><el-icon><SwitchButton /></el-icon> Disable</el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
-                                <el-dropdown-item command="delete" class="danger">Delete</el-dropdown-item>
+                                <el-dropdown-item command="delete" class="danger"><el-icon><Delete /></el-icon> Delete</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -72,7 +72,7 @@
 
 <script type="text/babel">
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { CopyDocument, More, ArrowDown, User, Clock, Right, EditPen } from '@element-plus/icons-vue';
+import { CopyDocument, More, ArrowDown, User, Clock, Right, EditPen, Delete, SwitchButton } from '@element-plus/icons-vue';
 export default {
     name: 'EachSlot',
     props: ['slot'],
@@ -84,7 +84,9 @@ export default {
         User,
         Clock,
         Right,
-        EditPen
+        EditPen,
+        Delete,
+        SwitchButton
     },
     data() {
         return {
