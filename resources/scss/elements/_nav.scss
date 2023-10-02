@@ -56,9 +56,35 @@
                 border: none;
 
                 &.active_item {
+
+                    &:last-child,
+                    &:nth-child(3) {
+                        a {
+                            svg {
+                                path {
+                                    fill: none;
+                                }
+                            }
+                        }
+                    }
+                    &:nth-child(2) {
+                        a {
+                            svg {
+                                path {
+                                    stroke: none;
+                                }
+                            }
+                        }
+                    }
                     a {
-                        background: rgb(38 83 199 / 10%);
+                        background: #F0F6FE;
                         color: $primaryColor;
+                        svg {
+                            path {
+                                fill: $primaryColor;
+                                stroke: $primaryColor;
+                            }
+                        }
                     }
                 }
 
@@ -68,14 +94,20 @@
                 }
 
                 .#{$slug}menu_primary {
-                    padding: 12px 20px;
-                    display: block;
+                    padding: 11px 20px;
                     font-size: 16px;
                     line-height: 100%;
                     text-decoration: none;
                     color: #445164;
                     font-weight: 500;
-                    border-radius: 20px;
+                    border-radius: 8px;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    svg {
+                        width: 18px;
+                        height: 18px;
+                    }
 
                     span {
                         font-size: 14px;
