@@ -54,61 +54,7 @@ export default {
                     title: '',
                     description: '',
                     schedule_type: 'weekly_schedules',
-                    weekly_schedules: {
-                        sun: {
-                            enabled: false,
-                            slots: []
-                        },
-                        mon: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        tue: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        wed: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        thu: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        fri: {
-                            enabled: true,
-                            slots: [
-                                {
-                                    start: '09:00',
-                                    end: '17:00'
-                                }
-                            ]
-                        },
-                        sat: {
-                            enabled: false,
-                            slots: []
-                        }
-                    },
+                    weekly_schedules: this.appVars.schedule_schema,
                     event_type: 'single',
                     location_type: '',
                     location_heading: '',
