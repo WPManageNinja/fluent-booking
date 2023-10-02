@@ -10,16 +10,15 @@
                 </el-button>
             </div>
         </div>
-        <div v-loading="loading" class="fcal_section_body">
-            <div class="fcal_calendars_wrap">
+        <div class="fcal_section_body">
+
+            <SkeletonLoader v-if="loading" />
+
+            <div v-else class="fcal_calendars_wrap">
                 <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                    <calendar-event-block :calendar="calendar" />
+                    <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" />
                 </div>
             </div>
-            <template v-if="loading">
-                <el-skeleton :animated="true" :rows="1" />
-                <el-skeleton :animated="true" :rows="4" />
-            </template>
 
             <div class="fcal_right fcal_tm20">
                 <pagination :pagination="pagination" @fetch="getCalendars"/>
@@ -80,10 +79,12 @@ import Pagination from "../../Pieces/Pagination.vue";
 import CalendarEventBlock from "./parts/CalendarEventBlock.vue";
 import { User, Right } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
+import SkeletonLoader from "../../Pieces/SkeletonLoader";
 
 export default {
     name: 'AllCalendars',
     components: {
+        SkeletonLoader,
         HostSelector,
         User,
         Right,

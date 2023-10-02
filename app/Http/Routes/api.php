@@ -23,6 +23,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->put('/{id}/slots/{slot_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('slot_id');
     $router->delete('/{id}/slots/{slot_id}', 'CalendarController@deleteCalendarSlot')->int('id')->int('slot_id');
 
+    $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
+
     $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
 });

@@ -20,6 +20,17 @@
                     class="fcal_primary_btn2">
                     <span>+</span> Create New Booking Type
                 </el-button>
+
+                <el-dropdown @command="handleCommand" popper-class="fcal_select" trigger="click">
+                    <span class="el-dropdown-link">
+                        <el-icon><MoreFilled /></el-icon>
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="delete">Delete</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
         <div class="fcal_cal_slots">
@@ -76,7 +87,7 @@
 
 <script type="text/babel">
 import EachSlot from "./EachSlot.vue";
-import { Setting, User, Right } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings.vue";
 export default {
     name: 'CalendarEventBlock',
@@ -86,7 +97,8 @@ export default {
         Setting,
         User,
         Right,
-        CalendarSettings
+        CalendarSettings,
+        MoreFilled
     },
     data() {
         return {
@@ -115,6 +127,25 @@ export default {
                 name: 'create_slot_event',
                 params: {calendar_id: this.calendar.id, event_type: 'group'}
             })
+        },
+        handleCommand(command) {
+            if (command == 'delete') {
+                this.$confirm('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted', 'Delete Calendar', {
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    this.$del('calendars/' + this.calendar.id)
+                        .then(response => {
+                            this.$handleSuccess(response);
+                            this.$emit('fetchCalendar')
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        });
+                })
+                return;
+            }
         }
     }
 }
