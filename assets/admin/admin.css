@@ -263,6 +263,16 @@ ul.fframe_menu.fcal_secondary_menu {
   border: none;
   height: 36px;
 }
+.fcal_primary_btn2.danger,
+.fcal_plain_btn.danger {
+  color: var(--el-color-danger);
+  border-color: var(--el-color-danger-light-5);
+}
+.fcal_primary_btn2.danger:hover,
+.fcal_plain_btn.danger:hover {
+  background: var(--el-color-danger);
+  border-color: var(--el-color-danger);
+}
 
 .fcal_primary_btn {
   background: #2653C7;

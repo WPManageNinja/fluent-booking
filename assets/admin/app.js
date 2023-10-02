@@ -68535,7 +68535,8 @@ __webpack_require__.r(__webpack_exports__);
     User: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.User,
     Right: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.Right,
     CalendarSettings: _CalendarSettings_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    MoreFilled: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.MoreFilled
+    MoreFilled: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.MoreFilled,
+    Delete: _element_plus_icons_vue__WEBPACK_IMPORTED_MODULE_2__.Delete
   },
   data: function data() {
     return {
@@ -68917,7 +68918,6 @@ __webpack_require__.r(__webpack_exports__);
       showAdvancedFilter: false,
       query: {
         date_to_date: '',
-        host: '',
         eventType: '',
         status: ''
       }
@@ -68967,7 +68967,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$get('schedules', {
         per_page: this.pagination.per_page,
         page: this.pagination.current_page,
-        filters: this.filters
+        filters: this.filters,
+        advanceFilter: this.query
       }).then(function (response) {
         _this3.schedules = response.schedules.data;
         _this3.pagination.total = response.schedules.total;
@@ -69004,6 +69005,12 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.current_spot = spot;
       this.spot_id = spot[0].event_id;
+    },
+    handleDiscard: function handleDiscard() {
+      this.query.eventType = '';
+      this.query.status = '';
+      this.showAdvancedFilter = false;
+      this.fetchSchedules();
     }
   },
   mounted: function mounted() {
@@ -72715,6 +72722,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_8__.ElIcon;
   var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElButton;
   var _component_MoreFilled = (0,vue__WEBPACK_IMPORTED_MODULE_7__.resolveComponent)("MoreFilled");
+  var _component_Delete = (0,vue__WEBPACK_IMPORTED_MODULE_7__.resolveComponent)("Delete");
   var _component_el_dropdown_item = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElDropdownItem;
   var _component_el_dropdown_menu = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElDropdownMenu;
   var _component_el_dropdown = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElDropdown;
@@ -72762,10 +72770,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_dropdown_menu, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_dropdown_item, {
+            "class": "danger",
             command: "delete"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Delete")];
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_Delete)];
+                }),
+                _: 1 /* STABLE */
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(" Delete")];
             }),
             _: 1 /* STABLE */
           })];
@@ -73626,7 +73640,6 @@ var _hoisted_6 = {
   "class": "top"
 };
 var _hoisted_7 = {
-  key: 0,
   "class": "fcal_head_actions"
 };
 var _hoisted_8 = {
@@ -73702,7 +73715,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_7__.normalizeClass)({
       fcal_active: $data.filters.period == 'past'
     })
-  }, "Past", 2 /* CLASS */)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_6, [$data.all_hosts ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_select, {
+  }, "Past", 2 /* CLASS */)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_select, {
     modelValue: $data.filters.author,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $data.filters.author = $event;
@@ -73730,7 +73743,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
 
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_7__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_date_picker, {
+  }, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_date_picker, {
     modelValue: $data.query.date_to_date,
     "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.query.date_to_date = $event;
@@ -73756,28 +73769,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     _: 1 /* STABLE */
   })])]), $data.showAdvancedFilter ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_select, {
-    modelValue: $data.query.host,
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
-      return $data.query.host = $event;
-    }),
-    "class": "fcal_select",
-    placeholder: "Host Name",
-    "popper-class": "fcal_select"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-      return [((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_7__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_7__.renderList)($data.all_hosts, function (host) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createBlock)(_component_el_option, {
-          key: host.id,
-          value: host.id,
-          label: host.label
-        }, null, 8 /* PROPS */, ["value", "label"]);
-      }), 128 /* KEYED_FRAGMENT */))];
-    }),
-
-    _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_select, {
     modelValue: $data.query.eventType,
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $data.query.eventType = $event;
     }),
     "class": "fcal_select",
@@ -73805,7 +73798,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_select, {
     modelValue: $data.query.status,
-    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
       return $data.query.status = $event;
     }),
     "class": "fcal_select",
@@ -73814,28 +73807,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_option, {
-        value: "available"
+        value: "scheduled"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Available")];
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Scheduled")];
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_option, {
-        value: "unavailable"
+        value: "completed"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Unavailable")];
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Completed")];
+        }),
+        _: 1 /* STABLE */
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_option, {
+        value: "cancelled"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)("Cancelled")];
         }),
         _: 1 /* STABLE */
       })];
     }),
 
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
-    "class": "fcal_primary_btn2",
-    onClick: _cache[9] || (_cache[9] = function ($event) {
-      return $data.showAdvancedFilter = false;
-    })
+  }, 8 /* PROPS */, ["modelValue"]), $data.query.eventType || $data.query.status ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createBlock)(_component_el_button, {
+    key: 0,
+    "class": "fcal_primary_btn2 danger",
+    onClick: $options.handleDiscard
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_icon, null, {
@@ -73846,14 +73845,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(" Discard ")];
     }),
     _: 1 /* STABLE */
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
-    "class": "fcal_primary_btn"
+  }, 8 /* PROPS */, ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_7__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_el_button, {
+    "class": "fcal_primary_btn",
+    onClick: $options.fetchSchedules
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_7__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createTextVNode)(" Submit ")];
     }),
     _: 1 /* STABLE */
-  })])])) : (0,vue__WEBPACK_IMPORTED_MODULE_7__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_11, [!$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", _hoisted_12, [$data.schedules ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", {
+  }, 8 /* PROPS */, ["onClick"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_7__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementVNode)("div", _hoisted_11, [!$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", _hoisted_12, [$data.schedules ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", {
     key: 0,
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_7__.normalizeClass)([{
       fcal_showing_details: $data.spot_id
@@ -73885,7 +73885,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     pagination: $data.pagination,
     onFetch: $options.fetchSchedules
   }, null, 8 /* PROPS */, ["pagination", "onFetch"])])]), $data.spot_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_7__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_7__.createElementBlock)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_7__.createVNode)(_component_schedule_spot_details, {
-    onSpotFetched: _cache[10] || (_cache[10] = function (data) {
+    onSpotFetched: _cache[8] || (_cache[8] = function (data) {
       $data.current_spot = data;
     }),
     spot: $data.current_spot,
