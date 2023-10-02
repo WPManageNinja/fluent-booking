@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <el-alert v-else title="No Settings Found" type="info" :closable="false" center show-icon></el-alert>
+            <el-empty v-else description="No Settings Found"/>
         </div>
         <el-skeleton v-else :rows="4" animated/>
     </div>
