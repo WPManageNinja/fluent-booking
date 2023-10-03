@@ -133,6 +133,13 @@ class AvailabilityController extends Controller
     
     public function deleteSchedule(Request $request, $id)
     {
-        error_log($id);
+        if (!$id) {
+            return;
+        }
+        Availability::where('id', $id)->where('object_type', 'availability')->delete();
+
+        return [
+            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking')
+        ];
     }
 }
