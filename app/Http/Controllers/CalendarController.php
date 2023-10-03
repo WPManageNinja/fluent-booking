@@ -5,6 +5,7 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\SanitizeService;
@@ -118,6 +119,11 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
+        $defaultSchedule = Availability::defaultScheduleSchema(
+            $calendar->user_id, 'Default', true, $calendar->author_timezone
+        );
+
+        $availability = Availability::create($defaultSchedule);
 
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
@@ -128,12 +134,16 @@ class CalendarController extends Controller
             'calendar_id'       => $calendar->id,
             'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
+            'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],
-            'status'            => 'active',
+            'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
+            'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
+            'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom']),
+            'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
@@ -142,6 +152,7 @@ class CalendarController extends Controller
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
 
         $slot = CalendarSlot::create($slotData);
+
         do_action('fluent_booking/after_create_calendar_slot', $slot, $calendar);
 
         do_action('fluent_booking/after_create_calendar', $calendar);
@@ -193,13 +204,18 @@ class CalendarController extends Controller
         
         $slotSettings = $slot->settings;
 
+        $availableSchedules = Availability::where('object_type', 'availability')
+                        ->where('object_id', $slot->user_id)
+                        ->get();
 
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
 
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
-        
+
+        $slotSettings['available_schedules'] = $availableSchedules;
+
         $slot->settings = $slotSettings;
-        
+
         return [
             'slot' => $slot
         ];
@@ -259,6 +275,8 @@ class CalendarController extends Controller
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
+            'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom']),
+            'availability_id'   => (int)Arr::get($slot, 'availability_id'),
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', []))
@@ -304,7 +322,6 @@ class CalendarController extends Controller
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
         ];
 
-
         $slot->title = sanitize_text_field($data['title']);
         $slot->duration = (int)$data['duration'];
         $slot->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
@@ -312,6 +329,8 @@ class CalendarController extends Controller
         $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
         $slot->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
         $slot->is_display_spots  = (bool)Arr::get($data, 'is_display_spots');
+        $slot->availability_id   = (int)Arr::get($data, 'availability_id');
+        $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
         $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
         $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
         $slot->location_settings = wp_kses_post_deep(Arr::get($data, 'location_settings', []));
@@ -399,10 +418,10 @@ class CalendarController extends Controller
     private function sanitize_data( $settings ) {
 
         $sanitizerMap = [
-            'value'                      => 'intval',
-            'unit'                       => 'sanitize_text_field',
-            'subject'                    => 'sanitize_text_field',
-            'body'                       => 'fcal_sanitize_html',
+            'value'   => 'intval',
+            'unit'    => 'sanitize_text_field',
+            'subject' => 'sanitize_text_field',
+            'body'    => 'fcal_sanitize_html',
         ];
 
         return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);
@@ -416,6 +435,9 @@ class CalendarController extends Controller
         foreach ($slots as $slot) {
             $slot->delete();
         }
+
+        Availability::where('object_id', $calendar->user_id)->delete();
+
         $calendar->delete();
 
         return [

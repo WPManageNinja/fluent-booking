@@ -15,7 +15,8 @@ class SchedulesController extends Controller
 {
     public function index(Request $request)
     {
-        $filters = $request->get('filters', []);
+        $filters       = $request->get('filters', []);
+        $advanceFilter = $request->get('advanceFilter', []);
 
         $period = Arr::get($filters, 'period', 'upcoming');
 
@@ -45,6 +46,14 @@ class SchedulesController extends Controller
             $query = $query->orderBy('start_time', 'ASC')->upcoming();
         } else {
             $query = $query->orderBy('start_time', 'DESC')->past();
+        }
+
+        if ($advanceFilter['status'] || $advanceFilter['eventType']) {
+            $query->where('status', $advanceFilter['status']);
+
+            $query->whereHas('slot', function ($q) use ($advanceFilter) {
+                $q->where('event_type', $advanceFilter['eventType']);
+            });
         }
 
         $schedules = $query->get();

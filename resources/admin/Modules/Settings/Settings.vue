@@ -9,7 +9,7 @@
                     <SettingMenuItem v-for="(setting, index) in settings" :key="index" :setting="setting" />
                 </ul>
             </el-aside>
-            <div v-loading="loading" class="fcal_settings_container">
+            <div class="fcal_settings_container">
                 <router-view/>
             </div>
         </div>

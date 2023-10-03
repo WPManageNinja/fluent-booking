@@ -16,7 +16,7 @@
         </div>
         <div class="fcal_schedule_meetings_header_actions">
             <div class="top">
-                <div v-if="all_hosts" class="fcal_head_actions">
+                <div class="fcal_head_actions">
                     <el-select
                         v-model="filters.author"
                         class="fcal_select"
@@ -46,13 +46,6 @@
             <div v-if="showAdvancedFilter" class="fcal_schedule_meetings_header_filters">
                 <div class="fcal_schedule_meetings_header_filters_inner">
                     <el-select
-                        v-model="query.host"
-                        class="fcal_select"
-                        placeholder="Host Name"
-                        popper-class="fcal_select">
-                        <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
-                    </el-select>
-                    <el-select
                         v-model="query.eventType"
                         class="fcal_select"
                         placeholder="Event Type"
@@ -65,13 +58,17 @@
                         class="fcal_select"
                         placeholder="Status"
                         popper-class="fcal_select">
-                        <el-option value="available">Available</el-option>
-                        <el-option value="unavailable">Unavailable</el-option>
+                        <el-option value="scheduled">Scheduled</el-option>
+                        <el-option value="completed">Completed</el-option>
+                        <el-option value="cancelled">Cancelled</el-option>
                     </el-select>
-                    <el-button class="fcal_primary_btn2" @click="showAdvancedFilter = false">
+                    <el-button
+                        v-if="query.eventType || query.status"
+                        class="fcal_primary_btn2 danger"
+                        @click="handleDiscard">
                         <el-icon><CircleClose /></el-icon> Discard
                     </el-button>
-                    <el-button class="fcal_primary_btn">
+                    <el-button class="fcal_primary_btn" @click="fetchSchedules">
                         Submit
                     </el-button>
                 </div>
@@ -150,7 +147,6 @@ export default {
             showAdvancedFilter: false,
             query: {
                 date_to_date: '',
-                host: '',
                 eventType: '',
                 status: ''
             }
@@ -199,7 +195,8 @@ export default {
             this.$get('schedules', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                filters: this.filters
+                filters: this.filters,
+                advanceFilter: this.query
             })
                 .then(response => {
                     this.schedules = response.schedules.data;
@@ -230,6 +227,13 @@ export default {
             this.$router.push({query: { period: this.filters.period, spot_id: spot[0].event_id }});
             this.current_spot = spot;
             this.spot_id = spot[0].event_id;
+        },
+        handleDiscard() {
+            this.query.eventType = '';
+            this.query.status = '';
+            this.showAdvancedFilter = false;
+
+            this.fetchSchedules();
         }
     },
     mounted() {
