@@ -14,10 +14,11 @@ class AvailabilityController extends Controller
 {
     public function index()
     {
+        $hostId = get_current_user_id();
+
         $query = Availability::where('object_type', 'availability');
 
         if (!PermissionManager::hasAllCalendarAccess()) {
-            $hostId = get_current_user_id();
             $query->where('object_id', $hostId);
         }
 
@@ -37,10 +38,14 @@ class AvailabilityController extends Controller
                 'settings' => [
                     'default'          => Arr::isTrue($schedule, 'value.default'),
                     'timezone'         => $timezone,
-                    'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), $timezone, 'UTC'),
-                    'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), $timezone, 'UTC')
+                    'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
+                    'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), 'UTC', $timezone)
                 ]
             ];
+        }
+
+        if (empty($formattedSchedules)) {
+            $formattedSchedules[] = Availability::defaultScheduleSchema($hostId, 'Default', true, 'UTC', $timezone);
         }
 
         return [
@@ -54,22 +59,25 @@ class AvailabilityController extends Controller
 
         $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
 
+        $scheduleTitles = Availability::where('object_type', 'availability')
+            ->where('object_id', $userId)
+            ->pluck('key')
+            ->toArray();
+
         $data = $request->all();
 
         $this->validate($data, [
             'title'   => 'required',
         ]);
 
-        $scheduleData = [
-            'object_id' => $userId,
-            'key'       => sanitize_text_field($data['title']),
-            'value'     => [
-                'default'          => false,
-                'timezone'         => $timezone,
-                'date_overrides'   => [],
-                'weekly_schedules' => SanitizeService::weeklySchedules($data['weekly_schedules'], $timezone, 'UTC'),
-            ]
-        ];
+        if (in_array($data['title'], $scheduleTitles)) {
+            $message = $data['title'] . ' is already exist';
+            return $this->sendError([
+                'message' => $message,
+            ], 422);
+        }
+
+        $scheduleData = Availability::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
         $createSchedule = Availability::create($scheduleData);
 
