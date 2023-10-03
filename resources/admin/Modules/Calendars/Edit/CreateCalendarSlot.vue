@@ -76,6 +76,8 @@ export default {
                 description: this.slot.description,
                 duration: this.getMeetingDuration(),
                 settings: this.slot.settings,
+                availability_type: this.slot.availability_type,
+                availability_id: this.slot.availability_id,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings,

@@ -20,12 +20,10 @@ class Availability extends Model
 
         static::creating(function ($model) {
             $model->object_type = 'availability';
-            $model->key = 'slot_availability';
         });
 
         static::updating(function ($model) {
             $model->object_type = 'availability';
-            $model->key = 'slot_availability';
         });
     }
 

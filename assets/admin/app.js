@@ -66988,16 +66988,7 @@ var routes = [{
   meta: {
     active_menu: 'scheduled_events'
   }
-},
-// {
-//     path: '/availability',
-//     name: 'availability',
-//     component: Availabilities,
-//     meta: {
-//         active_menu: 'availability'
-//     }
-// },
-{
+}, {
   path: '/settings',
   component: _Modules_Settings_Settings_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
   props: true,
@@ -67007,18 +66998,10 @@ var routes = [{
   children: [{
     name: 'settings',
     path: '/settings',
-    component: _Modules_Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_10__["default"],
+    component: _Modules_Settings_AvailabilitySettings__WEBPACK_IMPORTED_MODULE_7__["default"],
     meta: {
       active_menu: 'settings',
-      title: 'General'
-    }
-  }, {
-    name: 'profile-settings',
-    path: 'profile-settings',
-    component: _Modules_Settings_ProfileSettings_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
-    meta: {
-      active_menu: 'settings',
-      title: 'Profile'
+      title: 'Availability'
     }
   }, {
     name: 'configure-integrations',
@@ -67037,15 +67020,6 @@ var routes = [{
     meta: {
       active_menu: 'settings',
       title: 'Integrations'
-    }
-  }, {
-    name: 'availability',
-    path: 'availability/',
-    props: true,
-    component: _Modules_Settings_AvailabilitySettings__WEBPACK_IMPORTED_MODULE_7__["default"],
-    meta: {
-      active_menu: 'settings',
-      title: 'Availability'
     }
   }]
 }];
@@ -67469,12 +67443,15 @@ __webpack_require__.r(__webpack_exports__);
         slug: '',
         title: '',
         description: '',
-        author_timezone: 'Asia/Dhaka',
+        author_timezone: '',
         user_id: '',
         slot: {
-          duration: 15,
+          duration: '15',
           title: '',
           description: '',
+          status: 'active',
+          color_schema: '#0099ff',
+          availability_type: 'existing_schedule',
           schedule_type: 'weekly_schedules',
           weekly_schedules: this.appVars.schedule_schema,
           event_type: 'single',
@@ -67499,9 +67476,6 @@ __webpack_require__.r(__webpack_exports__);
         if (response.redirect_url) {
           window.location.href = response.redirect_url;
         }
-        setTimeout(function () {
-          window.location.reload(true);
-        }, 500);
       })["catch"](function (errors) {
         _this.$handleError(errors);
       })["finally"](function () {
@@ -67624,6 +67598,8 @@ __webpack_require__.r(__webpack_exports__);
         description: this.slot.description,
         duration: this.getMeetingDuration(),
         settings: this.slot.settings,
+        availability_type: this.slot.availability_type,
+        availability_id: this.slot.availability_id,
         location_type: this.slot.location_type,
         location_heading: this.slot.location_heading,
         location_settings: this.slot.location_settings,
@@ -67801,6 +67777,8 @@ __webpack_require__.r(__webpack_exports__);
         settings: this.slot.settings,
         max_book_per_slot: this.slot.max_book_per_slot,
         is_display_spots: this.slot.is_display_spots,
+        availability_type: this.slot.availability_type,
+        availability_id: this.slot.availability_id,
         location_type: this.slot.location_type,
         location_heading: this.slot.location_heading,
         location_settings: this.slot.location_settings
@@ -68261,10 +68239,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  computed: {
+    selectedSchedule: function selectedSchedule() {
+      var _this = this,
+        _selectedAvailability;
+      var selectedAvailability = this.slot.settings.available_schedules.find(function (schedule) {
+        return schedule.id === _this.slot.availability_id;
+      });
+      return (selectedAvailability === null || selectedAvailability === void 0 ? void 0 : (_selectedAvailability = selectedAvailability.value) === null || _selectedAvailability === void 0 ? void 0 : _selectedAvailability.weekly_schedules) || [];
+    }
+  },
   methods: {
     disabledDate: function disabledDate(time) {
       return time.getTime() + 86400000 <= Date.now();
     }
+  },
+  mounted: function mounted() {
+    var _this$slot, _this$slot$availabili;
+    (_this$slot$availabili = (_this$slot = this.slot).availability_id) !== null && _this$slot$availabili !== void 0 ? _this$slot$availabili : _this$slot.availability_id = this.slot.settings.available_schedules[0].id;
+    this.slot.availability_id = parseInt(this.slot.availability_id);
   }
 });
 
@@ -69327,44 +69320,78 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loading: false,
+      saving: false,
       dialogVisible: false,
-      tabIndex: '2',
-      editableTabsValue: '2',
-      addTabData: {
-        title: ''
-      },
-      editableTabs: [{
-        title: 'Working Hours',
-        name: '1',
-        content: '<h1>test 2</h1>'
-      }, {
-        title: 'New Schedule',
-        name: '2',
-        content: '<code>test</code>'
-      }],
-      slot: {
-        calendar: {
-          author_timezone: 'Asia/Dhaka'
-        },
-        settings: {
-          date_overrides: {},
-          schedule_type: '',
-          weekly_schedules: this.appVars.schedule_schema
-        }
-      }
+      scheduleSchema: this.appVars.schedule_schema,
+      scheduleTabs: [],
+      scheduleTabValue: '',
+      scheduleTitle: ''
     };
   },
   methods: {
-    addTab: function addTab(targetName) {
-      var newTabName = "".concat(++this.tabIndex);
-      this.editableTabs.push({
-        title: this.addTabData.title,
-        name: newTabName,
-        content: 'New Tab content'
+    addNewSchedule: function addNewSchedule() {
+      this.scheduleTitle = '';
+      this.dialogVisible = true;
+    },
+    addScheduleTab: function addScheduleTab(schedule) {
+      this.scheduleTabs.push({
+        title: schedule.key,
+        id: schedule.id,
+        settings: {
+          timezone: schedule.value.timezone,
+          "default": schedule.value["default"],
+          date_overrides: schedule.value.date_overrides,
+          weekly_schedules: schedule.value.weekly_schedules
+        }
       });
-      this.editableTabsValue = newTabName;
-      this.dialogVisible = false;
+      this.scheduleTabValue = schedule.id;
+    },
+    fetchSchedules: function fetchSchedules() {
+      var _this = this;
+      this.loading = true;
+      this.$get('availability').then(function (response) {
+        _this.scheduleTabs = response.schedules;
+        _this.scheduleTabValue = response.schedules[0].id;
+      })["catch"](function (errors) {
+        _this.$handleError(errors);
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    },
+    createSchedule: function createSchedule() {
+      var _this2 = this;
+      this.saving = true;
+      this.$post('availability/', {
+        title: this.scheduleTitle,
+        schedule: this.scheduleSchema
+      }).then(function (response) {
+        _this2.$handleSuccess(response);
+        _this2.addScheduleTab(response.schedule);
+      })["catch"](function (errors) {
+        _this2.$handleError(errors);
+      })["finally"](function () {
+        _this2.saving = false;
+        _this2.dialogVisible = false;
+      });
+    },
+    updateSchedule: function updateSchedule(item) {
+      var _this3 = this;
+      this.saving = true;
+      this.$post('availability/' + item.id, {
+        title: item.title,
+        settings: item.settings
+      }).then(function (response) {
+        _this3.$handleSuccess(response);
+      })["catch"](function (errors) {
+        _this3.$handleError(errors);
+      })["finally"](function () {
+        _this3.saving = false;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.fetchSchedules();
   }
 });
 
@@ -71513,7 +71540,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       icon: $data.DeleteIcon,
       text: ""
     }, null, 8 /* PROPS */, ["onClick", "icon"])])]);
-  }), 256 /* UNKEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("            <el-dialog width=\"50%\" v-model=\"modal_visible\" :append-to-body=\"true\" title=\"Select the date(s) you want to assign specific hours\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <div v-if=\"modal_visible\" class=\"fcal_cal_wrapper\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <el-calendar v-model=\"current_date\" ref=\"calendar\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <template #header=\"{ date }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <span>{{ date }}</span>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <el-button-group>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                <el-button size=\"small\" @click=\"selectDate('prev-month')\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                    <el-icon><ArrowLeft /></el-icon>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                </el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                <el-button size=\"small\" @click=\"selectDate('next-month')\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                    <el-icon><ArrowRight /></el-icon>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                </el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            </el-button-group>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <template #date-cell=\"{ data }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            <p @click=\"toggleSelect(data)\" :class=\"{ 'is-selected': current_selects.indexOf(data.day) > -1, 'fcal_date_disabled': isPastDate(data.date) }\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                {{ data.date.getDate() }}"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                                {{ (current_selects.indexOf(data.day) > -1) ? '✔️' : '' }}"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                            </p>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </el-calendar>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <div v-if=\"current_selects.length\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <h3>What hours are you available?</h3>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <div class=\"fcal_weekly_schedules\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <DayOverRideConfig day_label=\"\" :slots=\"slots\" />"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                <template #footer>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    <span class=\"dialog-footer\">"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <el-button @click=\"modal_visible = false\">Cancel</el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                        <el-button :disabled=\"!current_selects.length\" type=\"primary\" @click=\"addOverRides()\">Add</el-button>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                    </span>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("                </template>"), (0,vue__WEBPACK_IMPORTED_MODULE_4__.createCommentVNode)("            </el-dialog>")])]);
+  }), 256 /* UNKEYED_FRAGMENT */))])])])])]);
 }
 
 /***/ }),
@@ -72186,7 +72213,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_12__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_12__.createVNode)(_component_el_tab_pane, {
                 label: "Use an Existing Schedule",
-                name: "weekly_schedules"
+                name: "existing_schedule"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_12__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_12__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_12__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_12__.createVNode)(_component_el_icon, null, {
@@ -72204,17 +72231,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     "class": "fcal_timezone"
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_12__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_12__.createVNode)(_component_el_option, {
-                        label: "Asia/Dhaka",
-                        value: "asia/dhaka"
-                      }), (0,vue__WEBPACK_IMPORTED_MODULE_12__.createVNode)(_component_el_option, {
-                        label: "United State",
-                        value: "us"
-                      })];
+                      return [((0,vue__WEBPACK_IMPORTED_MODULE_12__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_12__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_12__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_12__.renderList)($props.slot.settings.available_schedules, function (schedule) {
+                        return (0,vue__WEBPACK_IMPORTED_MODULE_12__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_12__.createBlock)(_component_el_option, {
+                          key: schedule.id,
+                          value: schedule.id,
+                          label: schedule.key
+                        }, null, 8 /* PROPS */, ["value", "label"]);
+                      }), 128 /* KEYED_FRAGMENT */))];
                     }),
+
                     _: 1 /* STABLE */
                   }, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_12__.createVNode)(_component_ExistingSchedule, {
-                    existing_schedules: $props.slot.settings.weekly_schedules
+                    existing_schedules: $options.selectedSchedule
                   }, null, 8 /* PROPS */, ["existing_schedules"])])];
                 }),
                 _: 1 /* STABLE */
@@ -74610,22 +74638,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/dialog/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/dialog/index.mjs");
 /* harmony import */ var element_plus_es_components_dialog_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/dialog/style/css */ "./node_modules/element-plus/es/components/dialog/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/input/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/input/index.mjs");
 /* harmony import */ var element_plus_es_components_input_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/input/style/css */ "./node_modules/element-plus/es/components/input/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/form/index.mjs");
-/* harmony import */ var element_plus_es_components_form_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/form/style/css */ "./node_modules/element-plus/es/components/form/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/tabs/index.mjs");
-/* harmony import */ var element_plus_es_components_tabs_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/tabs/style/css */ "./node_modules/element-plus/es/components/tabs/style/css.mjs");
-/* harmony import */ var element_plus_es_components_tab_pane_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/tab-pane/style/css */ "./node_modules/element-plus/es/components/tab-pane/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
-/* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
-/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
-/* harmony import */ var element_plus_es_components_form_item_style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es/components/form-item/style/css */ "./node_modules/element-plus/es/components/form-item/style/css.mjs");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/skeleton/index.mjs");
+/* harmony import */ var element_plus_es_components_skeleton_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es/components/skeleton/style/css */ "./node_modules/element-plus/es/components/skeleton/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/form/index.mjs");
+/* harmony import */ var element_plus_es_components_form_style_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es/components/form/style/css */ "./node_modules/element-plus/es/components/form/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/tabs/index.mjs");
+/* harmony import */ var element_plus_es_components_tabs_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es/components/tabs/style/css */ "./node_modules/element-plus/es/components/tabs/style/css.mjs");
+/* harmony import */ var element_plus_es_components_tab_pane_style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-plus/es/components/tab-pane/style/css */ "./node_modules/element-plus/es/components/tab-pane/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
+/* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/icon/index.mjs");
+/* harmony import */ var element_plus_es_components_icon_style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! element-plus/es/components/icon/style/css */ "./node_modules/element-plus/es/components/icon/style/css.mjs");
+/* harmony import */ var element_plus_es_components_form_item_style_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! element-plus/es/components/form-item/style/css */ "./node_modules/element-plus/es/components/form-item/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
+
 
 
 
@@ -74637,13 +74668,14 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "fcal_settings_body_inner fcal_settings_availability"
 };
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", {
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", {
   "class": "fcal_settings_header"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("h3", null, "Availability")], -1 /* HOISTED */);
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("h3", null, "Availability")], -1 /* HOISTED */);
 var _hoisted_3 = {
+  key: 0,
   "class": "fcal_settings_content_wrap"
 };
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("span", {
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", {
   "class": "sub-label"
 }, "Edit the schedule below so that you can apply to your event/booking types", -1 /* HOISTED */);
 var _hoisted_5 = {
@@ -74653,6 +74685,7 @@ var _hoisted_6 = {
   "class": "fcal_availability_header"
 };
 var _hoisted_7 = {
+  key: 0,
   "class": "default-schedule-badge"
 };
 var _hoisted_8 = {
@@ -74671,93 +74704,102 @@ var _hoisted_12 = {
   "class": "dialog-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElFormItem;
-  var _component_Plus = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("Plus");
-  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElIcon;
-  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_11__.ElButton;
-  var _component_ScheduleIcon = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("ScheduleIcon");
-  var _component_StarFilled = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("StarFilled");
-  var _component_TimezoneIcon = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("TimezoneIcon");
-  var _component_WeeklySchedules = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("WeeklySchedules");
-  var _component_date_over_rides = (0,vue__WEBPACK_IMPORTED_MODULE_8__.resolveComponent)("date-over-rides");
-  var _component_el_tab_pane = element_plus_es__WEBPACK_IMPORTED_MODULE_12__.ElTabPane;
-  var _component_el_tabs = element_plus_es__WEBPACK_IMPORTED_MODULE_12__.ElTabs;
-  var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_9__.ElForm;
-  var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_13__.ElInput;
-  var _component_el_dialog = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElDialog;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form, {
+  var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElFormItem;
+  var _component_Plus = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("Plus");
+  var _component_el_icon = element_plus_es__WEBPACK_IMPORTED_MODULE_11__.ElIcon;
+  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_12__.ElButton;
+  var _component_ScheduleIcon = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("ScheduleIcon");
+  var _component_StarFilled = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("StarFilled");
+  var _component_TimezoneIcon = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("TimezoneIcon");
+  var _component_WeeklySchedules = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("WeeklySchedules");
+  var _component_date_over_rides = (0,vue__WEBPACK_IMPORTED_MODULE_9__.resolveComponent)("date-over-rides");
+  var _component_el_tab_pane = element_plus_es__WEBPACK_IMPORTED_MODULE_13__.ElTabPane;
+  var _component_el_tabs = element_plus_es__WEBPACK_IMPORTED_MODULE_13__.ElTabs;
+  var _component_el_form = element_plus_es__WEBPACK_IMPORTED_MODULE_10__.ElForm;
+  var _component_el_skeleton = element_plus_es__WEBPACK_IMPORTED_MODULE_14__.ElSkeleton;
+  var _component_el_input = element_plus_es__WEBPACK_IMPORTED_MODULE_15__.ElInput;
+  var _component_el_dialog = element_plus_es__WEBPACK_IMPORTED_MODULE_16__.ElDialog;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", _hoisted_1, [_hoisted_2, !$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form, {
     "label-position": "top"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form_item, {
         label: "Available hours"
       }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
           return [_hoisted_4];
         }),
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form_item, {
         label: "Schedule",
         "class": "fcal_tab_schedule"
       }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_button, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
             "class": "fcal_plain_btn fcal_add_new_tab",
-            onClick: _cache[0] || (_cache[0] = function ($event) {
-              return $data.dialogVisible = true;
-            })
+            onClick: $options.addNewSchedule
           }, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_icon, null, {
-                "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_Plus)];
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_icon, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_Plus)];
                 }),
                 _: 1 /* STABLE */
               })];
             }),
 
             _: 1 /* STABLE */
-          }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_tabs, {
-            modelValue: $data.editableTabsValue,
-            "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-              return $data.editableTabsValue = $event;
+          }, 8 /* PROPS */, ["onClick"]), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_tabs, {
+            modelValue: $data.scheduleTabValue,
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+              return $data.scheduleTabValue = $event;
             }),
             type: "card",
             "class": "fcal_tabs2"
           }, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-              return [((0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_8__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_8__.renderList)($data.editableTabs, function (item) {
-                return (0,vue__WEBPACK_IMPORTED_MODULE_8__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createBlock)(_component_el_tab_pane, {
-                  key: item.name,
-                  name: item.name
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+              return [((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_9__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_9__.renderList)($data.scheduleTabs, function (item) {
+                return (0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createBlock)(_component_el_tab_pane, {
+                  key: item.id,
+                  name: item.id
                 }, {
-                  label: (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                    return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_icon, null, {
-                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                        return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_ScheduleIcon)];
+                  label: (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                    return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_icon, null, {
+                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_ScheduleIcon)];
                       }),
                       _: 1 /* STABLE */
-                    }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_8__.toDisplayString)(item.title), 1 /* TEXT */)];
+                    }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(item.title), 1 /* TEXT */)];
                   }),
 
-                  "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                    return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("h3", null, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" Working Hours Schedule "), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("span", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_icon, null, {
-                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                        return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_StarFilled)];
+                  "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                    return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("h3", null, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" Working Hours Schedule "), item.settings["default"] ? ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementBlock)("span", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_icon, null, {
+                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_StarFilled)];
                       }),
                       _: 1 /* STABLE */
-                    }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" Default schedule")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_icon, null, {
-                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-                        return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_TimezoneIcon)];
+                    }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" Default schedule ")])) : (0,vue__WEBPACK_IMPORTED_MODULE_9__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_icon, null, {
+                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_TimezoneIcon)];
                       }),
                       _: 1 /* STABLE */
-                    }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_8__.toDisplayString)($data.slot.calendar.author_timezone), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_WeeklySchedules, {
-                      weekly_schedules: $data.slot.settings.weekly_schedules,
+                    }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_9__.toDisplayString)(item.settings.timezone), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_WeeklySchedules, {
+                      weekly_schedules: item.settings.weekly_schedules,
                       title: "Weekly Hours"
-                    }, null, 8 /* PROPS */, ["weekly_schedules"]), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_date_over_rides, {
-                      settings: $data.slot.settings,
+                    }, null, 8 /* PROPS */, ["weekly_schedules"]), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_date_over_rides, {
+                      settings: item.settings,
                       title: "Add date overrides"
-                    }, null, 8 /* PROPS */, ["settings"])])])];
+                    }, null, 8 /* PROPS */, ["settings"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
+                      onClick: function onClick($event) {
+                        return $options.updateSchedule(item);
+                      },
+                      "class": "fcal_primary_btn"
+                    }, {
+                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+                        return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" Save ")];
+                      }),
+                      _: 2 /* DYNAMIC */
+                    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["onClick"])])];
                   }),
                   _: 2 /* DYNAMIC */
                 }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["name"]);
@@ -74772,62 +74814,55 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
 
     _: 1 /* STABLE */
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_button, {
-    "class": "fcal_primary_btn"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" Save Changes ")];
-    }),
-    _: 1 /* STABLE */
-  })])]), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_dialog, {
+  })])) : ((0,vue__WEBPACK_IMPORTED_MODULE_9__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createBlock)(_component_el_skeleton, {
+    key: 1,
+    rows: 5,
+    animated: ""
+  })), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_dialog, {
     modelValue: $data.dialogVisible,
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.dialogVisible = $event;
     }),
-    title: "Tips",
+    title: "Add New Schedule",
     width: "30%"
   }, {
-    footer: (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createElementVNode)("span", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_button, {
+    footer: (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createElementVNode)("span", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
         "class": "fcal_plain_btn",
-        onClick: _cache[4] || (_cache[4] = function ($event) {
+        onClick: _cache[2] || (_cache[2] = function ($event) {
           return $data.dialogVisible = false;
         })
       }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" Cancel ")];
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" Cancel ")];
         }),
         _: 1 /* STABLE */
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_button, {
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_button, {
         "class": "fcal_primary_btn",
-        onClick: _cache[5] || (_cache[5] = function ($event) {
-          return $options.addTab($data.editableTabsValue);
+        onClick: _cache[3] || (_cache[3] = function ($event) {
+          return $options.createSchedule();
         })
       }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createTextVNode)(" Add ")];
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createTextVNode)(" Add ")];
         }),
         _: 1 /* STABLE */
       })])];
     }),
 
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form, {
-        modelValue: $data.addTabData,
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-          return $data.addTabData = $event;
-        }),
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form, {
         "label-position": "top"
       }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_form_item, {
-            label: "Tab Title"
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_form_item, {
+            label: "Schedule Title"
           }, {
-            "default": (0,vue__WEBPACK_IMPORTED_MODULE_8__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_8__.createVNode)(_component_el_input, {
-                modelValue: $data.addTabData.title,
-                "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-                  return $data.addTabData.title = $event;
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_9__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_9__.createVNode)(_component_el_input, {
+                modelValue: $data.scheduleTitle,
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+                  return $data.scheduleTitle = $event;
                 })
               }, null, 8 /* PROPS */, ["modelValue"])];
             }),
@@ -74836,8 +74871,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
 
         _: 1 /* STABLE */
-      }, 8 /* PROPS */, ["modelValue"])];
+      })];
     }),
+
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["modelValue"])]);
 }

@@ -94,14 +94,6 @@ export var routes = [
             active_menu: 'scheduled_events'
         }
     },
-    // {
-    //     path: '/availability',
-    //     name: 'availability',
-    //     component: Availabilities,
-    //     meta: {
-    //         active_menu: 'availability'
-    //     }
-    // },
     {
         path: '/settings',
         component: Settings,
@@ -113,19 +105,10 @@ export var routes = [
             {
                 name: 'settings',
                 path: '/settings',
-                component: GeneralSettings,
+                component: AvailabilitySettings,
                 meta: {
                     active_menu: 'settings',
-                    title: 'General'
-                },
-            },
-            {
-                name: 'profile-settings',
-                path: 'profile-settings',
-                component: ProfileSettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Profile'
+                    title: 'Availability'
                 },
             },
             {
@@ -146,16 +129,6 @@ export var routes = [
                 meta: {
                     active_menu: 'settings',
                     title: 'Integrations'
-                },
-            },
-            {
-                name: 'availability',
-                path: 'availability/',
-                props: true,
-                component: AvailabilitySettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Availability'
                 },
             }
         ]
