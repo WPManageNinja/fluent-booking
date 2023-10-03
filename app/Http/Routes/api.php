@@ -56,6 +56,7 @@ $router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($rout
     /* Integration Settings */
     $router->prefix('{settings}')->group(function ($router) {
         $router->get('/', 'IntegrationSettingsController@index');
+        $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
         $router->post('/', 'IntegrationSettingsController@update');
     });
 });

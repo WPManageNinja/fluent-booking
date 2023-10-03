@@ -8,7 +8,7 @@
             <div class="fcal_create_calendar_basic_info">
                 <basic-info ref="basicInfo" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
             </div>
-            <el-form-item label="Select Your Timezone *">
+            <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
                 <time-zone-selector v-model="calendar.author_timezone"/>
             </el-form-item>
             <div class="fcal_create_calendar_form_footer">
