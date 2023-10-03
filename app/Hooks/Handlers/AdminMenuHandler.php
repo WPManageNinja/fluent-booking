@@ -20,7 +20,7 @@ class AdminMenuHandler
                 return;
             }
             $this->enqueueAssets();
-        });
+        }, 100);
     }
 
     public function add()
@@ -157,7 +157,7 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
 
         wp_enqueue_style(
-            $slug . '_admin_app', $assets . 'admin/admin.css'
+            $slug . '_admin_app', $assets . 'admin/admin.css', [], '1.0'
         );
 
         do_action($slug . '_loading_app');
