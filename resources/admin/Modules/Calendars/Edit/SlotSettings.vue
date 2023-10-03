@@ -120,6 +120,8 @@ export default {
                 settings: this.slot.settings,
                 max_book_per_slot: this.slot.max_book_per_slot,
                 is_display_spots: this.slot.is_display_spots,
+                availability_type: this.slot.availability_type,
+                availability_id: this.slot.availability_id,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
                 location_settings: this.slot.location_settings

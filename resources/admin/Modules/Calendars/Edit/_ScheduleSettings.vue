@@ -42,7 +42,7 @@
                 <el-divider/>
                 <el-form-item label="How do you want to offer your availability for this event type?">
                     <el-tabs v-model="slot.availability_type">
-                        <el-tab-pane label="Use an Existing Schedule" name="weekly_schedules">
+                        <el-tab-pane label="Use an Existing Schedule" name="existing_schedule">
                             <div class="fcal_availability_body">
                                 <div class="fcal_timezone_text">
                                     <el-icon><TimezoneIcon/></el-icon>
@@ -55,16 +55,13 @@
                                     popper-class="fcal_select"
                                     class="fcal_timezone"
                                 >
-                                    <el-option
-                                        label="Asia/Dhaka"
-                                        value="asia/dhaka"
-                                    />
-                                    <el-option
-                                        label="United State"
-                                        value="us"
+                                    <el-option v-for="schedule in slot.settings.available_schedules"
+                                        :key="schedule.id"
+                                        :value="schedule.id"
+                                        :label="schedule.key"
                                     />
                                 </el-select>
-                                <ExistingSchedule :existing_schedules="slot.settings.weekly_schedules" />
+                                <ExistingSchedule :existing_schedules="selectedSchedule" />
 
                             </div>
                         </el-tab-pane>
@@ -130,10 +127,20 @@ export default {
             }
         }
     },
+    computed: {
+        selectedSchedule() {
+            const selectedAvailability = this.slot.settings.available_schedules.find(schedule => schedule.id === this.slot.availability_id);
+            return selectedAvailability?.value?.weekly_schedules || [];
+        }
+    },
     methods: {
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
         }
+    },
+    mounted() {
+        this.slot.availability_id ??= this.slot.settings.available_schedules[0].id;
+        this.slot.availability_id = parseInt(this.slot.availability_id);
     }
 }
 </script>
