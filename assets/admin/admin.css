@@ -3896,6 +3896,11 @@ p.fcal_profile_link a {
   border: 1px solid #697483;
   border-radius: 8px;
 }
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item.fcal_tab_schedule .fcal_settings_footer {
+  border-top: none;
+  margin-top: 0;
+  justify-content: flex-start;
+}
 
 @media (max-width: 992px) {
   .header_right {

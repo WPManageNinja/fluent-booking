@@ -5,6 +5,7 @@ namespace FluentBooking\App\Services;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Availability;
 use FluentBooking\Framework\Support\Arr;
 
 class TimeSlotService
@@ -233,8 +234,15 @@ class TimeSlotService
     {
         $period = $this->calendarSlot->duration;
 
-        $weeklySlots = SanitizeService::weeklySchedules($this->calendarSlot->settings['weekly_schedules'], 'UTC', $this->calendar->author_timezone, false);
+        $schedule = $this->calendarSlot->settings['weekly_schedules'];
 
+        if ('existing_schedule' === $this->calendarSlot->availability_type) {
+            $availability = Availability::findOrFail($this->calendarSlot->availability_id);
+            $schedule = Arr::get($availability, 'value.weekly_schedules');
+        }
+
+        $weeklySlots = SanitizeService::weeklySchedules($schedule, 'UTC', $this->calendar->author_timezone, false);
+        
         $items = [];
 
         foreach ($weeklySlots as $weekDay => $weeklySlot) {

@@ -287,31 +287,15 @@ class AdminMenuHandler
         $baseUrl = Helper::getAppBaseUrl();
 
         $menuItems = apply_filters('fluent_booking/settings_menu_items', [
-            'general' => [
+            'settings' => [
                 'menu' => [
                     'key'       => 'settings',
-                    'label'     => __('General', 'fluent-booking'),
-                    'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2.5 7.59166V12.4C2.5 14.1667 2.5 14.1667 4.16667 15.2917L8.75 17.9417C9.44167 18.3417 10.5667 18.3417 11.25 17.9417L15.8333 15.2917C17.5 14.1667 17.5 14.1667 17.5 12.4083V7.59166C17.5 5.83333 17.5 5.83333 15.8333 4.70833L11.25 2.05833C10.5667 1.65833 9.44167 1.65833 8.75 2.05833L4.16667 4.70833C2.5 5.83333 2.5 5.83333 2.5 7.59166Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'permalink' => $baseUrl
-                ]
-            ],
-            'profile' => [
-                'menu' => [
-                    'key'       => 'profile-settings',
-                    'label'     => __('Profile', 'fluent-booking'),
-                    'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10.0002 10C12.3013 10 14.1668 8.13452 14.1668 5.83334C14.1668 3.53215 12.3013 1.66667 10.0002 1.66667C7.69898 1.66667 5.8335 3.53215 5.8335 5.83334C5.8335 8.13452 7.69898 10 10.0002 10Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.1585 18.3333C17.1585 15.1083 13.9501 12.5 10.0001 12.5C6.05013 12.5 2.8418 15.1083 2.8418 18.3333" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'permalink' => $baseUrl . 'profile-settings'
-                ]
-            ],
-            'availability' => [
-                'menu' => [
-                    'key'       => 'availability',
                     'label'     => __('Availability', 'fluent-booking'),
                     'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M18.3333 9.99935C18.3333 14.5993 14.6 18.3327 9.99999 18.3327C5.39999 18.3327 1.66666 14.5993 1.66666 9.99935C1.66666 5.39935 5.39999 1.66602 9.99999 1.66602C14.6 1.66602 18.3333 5.39935 18.3333 9.99935Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M13.0917 12.6495L10.5083 11.1078C10.0583 10.8411 9.69168 10.1995 9.69168 9.67448V6.25781" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>',
-                    'permalink' => $baseUrl . 'availability'
+                    'permalink' => $baseUrl
                 ]
             ],
             'configurations' => [

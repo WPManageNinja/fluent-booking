@@ -499,6 +499,11 @@
                         border: 1px solid #697483;
                         border-radius: 8px;
                     }
+                    .fcal_settings_footer {
+                        border-top: none;
+                        margin-top: 0;
+                        justify-content: flex-start;
+                    }
                 }
             }
         }
