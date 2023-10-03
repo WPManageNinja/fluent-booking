@@ -137,7 +137,7 @@ export default {
             dialogVisible: false,
             scheduleSchema: this.appVars.schedule_schema,
             scheduleTabs: [],
-            scheduleTabValue: '',
+            scheduleTabValue: '1',
             scheduleTitle: ''
         }
     },
@@ -187,7 +187,7 @@ export default {
             this.$get('availability')
                 .then(response => {
                     this.scheduleTabs = response.schedules;
-                    this.scheduleTabValue = response.schedules[0].id;
+                    this.scheduleTabValue = response.schedules?.[0]?.id ?? this.scheduleTabValue;
                 })
                 .catch(errors => {
                     this.$handleError(errors);

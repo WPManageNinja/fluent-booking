@@ -119,6 +119,12 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
+        $defaultSchedule = Availability::defaultScheduleSchema(
+            $calendar->user_id, 'Default', true, $calendar->author_timezone
+        );
+
+        $availability = Availability::create($defaultSchedule);
+
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
@@ -137,27 +143,13 @@ class CalendarController extends Controller
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
             'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom']),
+            'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
-
-        $defaultSchedule = [
-            'object_id' => $calendar->user_id,
-            'key'       => 'Default',
-            'value'     => [
-                'default'          => true,
-                'timezone'         => $calendar->author_timezone,
-                'date_overrides'   => [],
-                'weekly_schedules' => $slotData['settings']['weekly_schedules'],
-            ]
-        ];
-
-        $availability = Availability::create($defaultSchedule);
-
-        $slotData['availability_id'] = (int)$availability->id;
 
         $slot = CalendarSlot::create($slotData);
 

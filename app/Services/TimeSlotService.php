@@ -37,6 +37,11 @@ class TimeSlotService
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
         
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
+
+        if ('existing_schedule' === $this->calendarSlot->availability_type) {
+            $availability = Availability::findOrFail($this->calendarSlot->availability_id);
+            $overrides = Arr::get($availability, 'value.date_overrides', []);
+        }
         
         $rangedValidSlots = [];
 
