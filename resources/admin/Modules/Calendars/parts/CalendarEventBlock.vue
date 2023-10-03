@@ -12,7 +12,7 @@
             </div>
             <div class="fcal_cal_actions">
                 <el-button class="fcal_plain_btn" @click="goToSingleIntegration">
-                    <el-icon><Setting /></el-icon> Integrations
+                    <el-icon><Setting /></el-icon> Settings
                 </el-button>
 
                 <el-button
