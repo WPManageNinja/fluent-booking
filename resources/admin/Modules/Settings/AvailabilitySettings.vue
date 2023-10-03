@@ -154,7 +154,7 @@ export default {
                 }).then(() => {
                     this.$del('availability/' + tab.id)
                         .then(response => {
-                            this.$handleSuccess(response);
+                            this.$handleSuccess(response.message);
                             this.fetchSchedules();
                         })
                         .catch(errors => {
