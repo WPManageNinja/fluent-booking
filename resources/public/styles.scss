@@ -1,5 +1,4 @@
 $breakpoint-tablet: 767px;
-@import url(https://fonts.cdnfonts.com/css/satoshi);
 
 .fcal_cal_wrap {
   box-sizing: border-box;
@@ -17,7 +16,6 @@ $breakpoint-tablet: 767px;
       label {
         display: block;
         .fcal_input_label {
-          font-family: Satoshi;
           font-size: 14px;
           font-weight: 700;
           line-height: 20px;
@@ -32,7 +30,6 @@ $breakpoint-tablet: 767px;
           display: block;
           width: 100%;
           transition: .2s;
-          font-family: Satoshi;
           font-size: 16px;
           font-weight: 400;
           line-height: 24px;
@@ -48,7 +45,6 @@ $breakpoint-tablet: 767px;
         }
       }
       button {
-        font-family: Satoshi;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
@@ -103,7 +99,6 @@ $breakpoint-tablet: 767px;
     }
 
     .fcal_slot_heading {
-      font-family: Satoshi;
       font-size: 24px;
       font-weight: 700;
       line-height: 32px;
@@ -134,7 +129,6 @@ $breakpoint-tablet: 767px;
           align-items: center;
           gap: 10px;
 
-          font-family: Satoshi;
           font-size: 20px;
           font-weight: 700;
           line-height: 28px;
@@ -249,7 +243,6 @@ $breakpoint-tablet: 767px;
         z-index: 1;
         color: #B4B9C1;
 
-        font-family: Satoshi;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
@@ -299,7 +292,6 @@ $breakpoint-tablet: 767px;
         &-name {
           text-transform: uppercase;
           text-align: center;
-          font-family: Satoshi;
           font-size: 14px;
           font-weight: 500;
           height: 44px;
@@ -383,7 +375,6 @@ $breakpoint-tablet: 767px;
       }
     }
 
-    font-family: Satoshi;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -453,14 +444,12 @@ $breakpoint-tablet: 767px;
         font-size: 15px;
 
         .fcal_spot_time {
-          font-family: Satoshi;
           font-size: 15px;
           font-weight: 500;
           line-height: 24px;
           color: #445164;
         }
         .fcal_spot_remaining {
-          font-family: Satoshi;
           font-size: 14px;
           font-weight: 500;
           line-height: 20px;
@@ -497,7 +486,6 @@ $breakpoint-tablet: 767px;
         cursor: pointer;
         box-sizing: border-box;
 
-        font-family: Satoshi;
         font-size: 16px;
         font-weight: 500;
         line-height: 24px;
@@ -539,7 +527,6 @@ $breakpoint-tablet: 767px;
 
   .fcal_slot_picker_header {
     margin: 0 0 20px;
-    font-family: Satoshi;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
