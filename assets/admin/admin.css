@@ -1757,6 +1757,7 @@ p.fcal_profile_link a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
 }
 .fframe_main-menu-items ul.fframe_menu li .fframe_menu_primary svg {
   width: 18px;
@@ -3178,9 +3179,131 @@ p.fcal_profile_link a {
   padding: 0 0 16px 0;
 }
 
+.fcal_schedule_profile_box {
+  background: #ffffff;
+  border-radius: 8px;
+  margin-top: 24px;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_header {
+  border-bottom: 1px solid #D6DAE1;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_header h1 {
+  padding: 20px 14px 16px 14px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  margin: 0;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body {
+  padding: 20px 28px 30px 28px;
+  text-align: center;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_avatar {
+  width: 90px;
+  height: 90px;
+  margin: auto auto 10px auto;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_avatar img {
+  display: block;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_title {
+  margin-bottom: 20px;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_title h1 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  margin: 0;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_title h1 a {
+  display: block;
+  color: #1B2533;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_title h1 a:hover {
+  color: #2653C7;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_title p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #445164;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_stats {
+  display: flex;
+  border: 1px solid #CED2DA;
+  border-radius: 8px;
+  justify-content: center;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_stats > span {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #445164;
+  display: block;
+  padding: 8px 12px;
+  border-right: 1px solid #CED2DA;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_stats > span:last-child {
+  border: none;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_stats > span b {
+  color: #1B2533;
+  transform: translateY(1px);
+  display: inline-block;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: left;
+  margin-top: 20px;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_tags i {
+  color: #697483;
+  font-size: 18px;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_tags span {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  border-radius: 4px;
+  padding: 3px 6px 3px 17px;
+  color: #2653C7;
+  background: rgba(38, 83, 199, 0.1);
+  position: relative;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_tags span:before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  left: 6px;
+  top: 9px;
+  background: #2653C7;
+  border-radius: 50%;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_footer {
+  margin-top: 20px;
+}
+.fcal_schedule_profile_box .fcal_schedule_profile_body .fcal_schedule_profile_info .fcal_schedule_profile_footer .fcal_primary_btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
 .fcal_schedule_details_content {
   width: 100%;
-  max-width: 720px;
+  max-width: 670px;
 }
 .fcal_schedule_details_content .fcal_schedule_details_event {
   display: grid;
@@ -4010,36 +4133,6 @@ p.fcal_profile_link a {
   padding: 20px;
 }
 
-.fcal_booking_activities {
-  width: 100%;
-  max-width: 356px;
-  background: #ffffff;
-  border-radius: 8px;
-}
-.fcal_booking_activities .fcal_schedule_details_header h1 {
-  font-family: Satoshi;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 28px;
-  margin: 0;
-  border-bottom: 1px solid #EAECF0;
-  padding: 20px 14px 16px 14px;
-}
-.fcal_booking_activities .fcal_schedule_event_infos_body {
-  max-height: 440px;
-  overflow-x: hidden;
-}
-.fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar {
-  width: 5px;
-}
-.fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar-thumb {
-  background: #e4e4e7;
-  border-radius: 10px;
-}
-.fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .fcal_dashboard .fcal_section_header {
   border-bottom: 1px solid #EAECF0;
   padding-bottom: 12px;
@@ -4063,6 +4156,35 @@ p.fcal_profile_link a {
   .fcal_dashboard .fcal_section_header .fcal_actions .el-date-editor {
     width: auto;
   }
+}
+.fcal_dashboard .fcal_booking_activities {
+  width: 100%;
+  max-width: 356px;
+  background: #ffffff;
+  border-radius: 8px;
+}
+.fcal_dashboard .fcal_booking_activities .fcal_schedule_details_header h1 {
+  font-family: Satoshi;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0;
+  border-bottom: 1px solid #EAECF0;
+  padding: 20px 14px 16px 14px;
+}
+.fcal_dashboard .fcal_booking_activities .fcal_schedule_event_infos_body {
+  max-height: 440px;
+  overflow-x: hidden;
+}
+.fcal_dashboard .fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar {
+  width: 5px;
+}
+.fcal_dashboard .fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar-thumb {
+  background: #e4e4e7;
+  border-radius: 10px;
+}
+.fcal_dashboard .fcal_booking_activities .fcal_schedule_event_infos_body::-webkit-scrollbar-track {
+  background: transparent;
 }
 .fcal_dashboard .fcal_dashboard_chat_wrap {
   display: flex;

@@ -100,38 +100,6 @@
   border-radius: 8px;
   padding: 20px;
 }
-.fcal_booking_activities {
-  width: 100%;
-  max-width: 356px;
-  background: #ffffff;
-  border-radius: 8px;
-  .fcal_schedule_details_header {
-    h1 {
-      font-family: Satoshi;
-      font-size: 18px;
-      font-weight: 700;
-      line-height: 28px;
-      margin: 0;
-      border-bottom: 1px solid #EAECF0;
-      padding: 20px 14px 16px 14px;
-    }
-  }
-
-  .fcal_schedule_event_infos_body {
-    max-height: 440px;
-    overflow-x: hidden;
-    &::-webkit-scrollbar {
-      width: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: #e4e4e7;
-      border-radius: 10px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  }
-}
 .fcal_dashboard {
   .fcal_section_header {
     border-bottom: 1px solid #EAECF0;
@@ -155,6 +123,38 @@
         @media (max-width: 585px) {
           width: auto;
         }
+      }
+    }
+  }
+  .fcal_booking_activities {
+    width: 100%;
+    max-width: 356px;
+    background: #ffffff;
+    border-radius: 8px;
+    .fcal_schedule_details_header {
+      h1 {
+        font-family: Satoshi;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 28px;
+        margin: 0;
+        border-bottom: 1px solid #EAECF0;
+        padding: 20px 14px 16px 14px;
+      }
+    }
+
+    .fcal_schedule_event_infos_body {
+      max-height: 440px;
+      overflow-x: hidden;
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #e4e4e7;
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
       }
     }
   }
