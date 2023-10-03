@@ -87,9 +87,8 @@ class ReportController extends Controller
         $activityQuery = BookingActivity::query();
 
         if (!PermissionManager::hasAllCalendarAccess()) {
-            $hostId = get_current_user_id();
             $activityQuery->whereHas('booking.calendar', function ($q) use ($hostId) {
-                $q->where('user_id', $hostId);
+                $q->where('user_id', get_current_user_id());
             });
         }
 

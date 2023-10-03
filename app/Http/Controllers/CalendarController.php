@@ -204,13 +204,45 @@ class CalendarController extends Controller
         
         $slotSettings = $slot->settings;
 
-        $availableSchedules = Availability::where('object_type', 'availability')
-                        ->where('object_id', $slot->user_id)
-                        ->get();
-
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
-
+        
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
+        
+        $availableSchedules = Availability::where('object_type', 'availability')->get();
+        // $availableSchedules = Availability::availablitySchedules($slot->calendar->author_timezone);
+
+        $calendars = Calendar::with(['user'])->get();
+        
+        $formattedSchedules = [];
+
+        foreach ($calendars as $index => $calendar) 
+        {
+            $availabilities = Availability::where('object_type', 'availability')
+                ->where('object_id', $calendar->user_id)
+                ->get();
+
+            $options = [];
+            foreach ($availabilities as $availability) {
+                $options[] = [
+                    'label' => Arr::get($availability, 'key'),
+                    'value' => Arr::get($availability, 'id')
+                ];
+            }
+
+            $hostName = $calendar->user->full_name;
+            if ($calendar->user_id == get_current_user_id()) {
+                $hostName = __('My Schedules', 'fluent-booking');
+            }
+
+            if (!empty($options)) {
+                $formattedSchedules[$index] = [
+                    'hostName'  => $hostName,
+                    'schedules' => $options
+                ];
+            }
+        }
+        
+        $slotSettings['schedule_options'] = $formattedSchedules;
 
         $slotSettings['available_schedules'] = $availableSchedules;
 

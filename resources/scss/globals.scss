@@ -1186,6 +1186,15 @@ p.fcal_profile_link a {
         ul {
             margin: 0;
             padding: 0;
+            > ul {
+                border-bottom: 1px solid #eaedf0;
+                margin-bottom: 8px;
+            }
+            ul {
+                &:after {
+                    display: none;
+                }
+            }
             .el-dropdown-menu__item,
             .el-select-dropdown__item {
                 margin: 0;
