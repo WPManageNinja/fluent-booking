@@ -59,11 +59,23 @@ class AvailabilityController extends Controller
 
         $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
 
+        $scheduleTitles = Availability::where('object_type', 'availability')
+            ->where('object_id', $userId)
+            ->pluck('key')
+            ->toArray();
+
         $data = $request->all();
 
         $this->validate($data, [
             'title'   => 'required',
         ]);
+
+        if (in_array($data['title'], $scheduleTitles)) {
+            $message = $data['title'] . ' is already exist';
+            return $this->sendError([
+                'message' => $message,
+            ], 422);
+        }
 
         $scheduleData = Availability::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
