@@ -11,11 +11,16 @@ use FluentBooking\App\Services\Helper;
 class AdminMenuHandler
 {
 
-    protected $app;
-
-    public function __construct()
+    public function register()
     {
-        $this->app = App::getInstance();
+        add_action('admin_menu', [$this, 'add']);
+
+        add_action('admin_enqueue_scripts', function () {
+            if(!isset($_REQUEST['page']) || $_REQUEST['page'] != 'fluent-booking') {
+                return;
+            }
+            $this->enqueueAssets();
+        });
     }
 
     public function add()
@@ -71,17 +76,18 @@ class AdminMenuHandler
 
     public function render()
     {
-        $this->enqueueAssets();
 
-        $config = $this->app->config;
-        
+       $app = App::getInstance();
+
+        $config = $app->config;
+
         $name = $config->get('app.name');
 
         $slug = $config->get('app.slug');
 
-	    $baseUrl = Helper::getAppBaseUrl();
+        $baseUrl = Helper::getAppBaseUrl();
 
-        if($this->isNew()) {
+        if ($this->isNew()) {
             $menuItems = [
                 [
                     'key'       => 'dashboard',
@@ -106,7 +112,7 @@ class AdminMenuHandler
                 [
                     'key'       => 'calendars',
                     'label'     => __('Booking Types', 'fluent-booking'),
-                    'permalink' => $baseUrl.'calendars',
+                    'permalink' => $baseUrl . 'calendars',
                     'icon'      => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
                         <path d="M27.9166 5.93398V3.33398C27.9166 2.65065 27.35 2.08398 26.6666 2.08398C25.9833 2.08398 25.4166 2.65065 25.4166 3.33398V5.83398H14.5833V3.33398C14.5833 2.65065 14.0166 2.08398 13.3333 2.08398C12.65 2.08398 12.0833 2.65065 12.0833 3.33398V5.93398C7.58331 6.35065 5.39998 9.03398 5.06664 13.0173C5.03331 13.5007 5.43331 13.9007 5.89998 13.9007H34.1C34.5833 13.9007 34.9833 13.484 34.9333 13.0173C34.6 9.03398 32.4166 6.35065 27.9166 5.93398Z" fill="#292D32"></path>
                         <path d="M31.6667 25C27.9833 25 25 27.9833 25 31.6667C25 32.9167 25.35 34.1 25.9667 35.1C27.1167 37.0333 29.2333 38.3333 31.6667 38.3333C34.1 38.3333 36.2167 37.0333 37.3667 35.1C37.9833 34.1 38.3333 32.9167 38.3333 31.6667C38.3333 27.9833 35.35 25 31.6667 25ZM35.1167 30.95L31.5667 34.2333C31.3333 34.45 31.0167 34.5667 30.7167 34.5667C30.4 34.5667 30.0833 34.45 29.8333 34.2L28.1833 32.55C27.7 32.0667 27.7 31.2667 28.1833 30.7833C28.6667 30.3 29.4667 30.3 29.95 30.7833L30.75 31.5833L33.4167 29.1167C33.9167 28.65 34.7167 28.6833 35.1833 29.1833C35.65 29.6833 35.6167 30.4667 35.1167 30.95Z" fill="#292D32"></path>
@@ -116,13 +122,13 @@ class AdminMenuHandler
                 [
                     'key'       => 'scheduled_events',
                     'label'     => __('Scheduled Meetings', 'fluent-booking'),
-                    'permalink' => $baseUrl.'scheduled-events?period=upcoming&author=me',
+                    'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
                     'icon'      => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.66669 1.66699V4.16699" stroke="#2653C7" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.3333 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.91669 7.5752H17.0834" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.5 7.08366V14.167C17.5 16.667 16.25 18.3337 13.3333 18.3337H6.66667C3.75 18.3337 2.5 16.667 2.5 14.167V7.08366C2.5 4.58366 3.75 2.91699 6.66667 2.91699H13.3333C16.25 2.91699 17.5 4.58366 17.5 7.08366Z" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.0789 11.4167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.0789 13.9167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9.99626 11.4167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9.99626 13.9167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.91191 11.4167H6.91939" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.91191 13.9167H6.91939" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>'
                 ],
                 [
                     'key'       => 'settings',
                     'label'     => __('Settings', 'fluent-booking'),
-                    'permalink' => $baseUrl.'settings',
+                    'permalink' => $baseUrl . 'settings',
                     'icon'      => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M1.66663 10.7334V9.2667C1.66663 8.40003 2.37496 7.68336 3.24996 7.68336C4.75829 7.68336 5.37496 6.6167 4.61663 5.30836C4.18329 4.55836 4.44163 3.58336 5.19996 3.15003L6.64163 2.32503C7.29996 1.93336 8.14996 2.1667 8.54163 2.82503L8.63329 2.98336C9.38329 4.2917 10.6166 4.2917 11.375 2.98336L11.4666 2.82503C11.8583 2.1667 12.7083 1.93336 13.3666 2.32503L14.8083 3.15003C15.5666 3.58336 15.825 4.55836 15.3916 5.30836C14.6333 6.6167 15.25 7.68336 16.7583 7.68336C17.625 7.68336 18.3416 8.3917 18.3416 9.2667V10.7334C18.3416 11.6 17.6333 12.3167 16.7583 12.3167C15.25 12.3167 14.6333 13.3834 15.3916 14.6917C15.825 15.45 15.5666 16.4167 14.8083 16.85L13.3666 17.675C12.7083 18.0667 11.8583 17.8334 11.4666 17.175L11.375 17.0167C10.625 15.7084 9.39163 15.7084 8.63329 17.0167L8.54163 17.175C8.14996 17.8334 7.29996 18.0667 6.64163 17.675L5.19996 16.85C4.44163 16.4167 4.18329 15.4417 4.61663 14.6917C5.37496 13.3834 4.75829 12.3167 3.24996 12.3167C2.37496 12.3167 1.66663 11.6 1.66663 10.7334Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -131,15 +137,15 @@ class AdminMenuHandler
             ];
         }
 
-	    $assets = $this->app['url.assets'];
+        $assets = $app['url.assets'];
 
-	    $this->app->view->render('admin.menu', [
-		    'name'      => $name,
-		    'slug'      => $slug,
-		    'menuItems' => $menuItems,
-		    'baseUrl'   => $baseUrl,
-		    'logo'      => $assets . 'images/logo.svg',
-	    ]);
+        $app->view->render('admin.menu', [
+            'name'      => $name,
+            'slug'      => $slug,
+            'menuItems' => $menuItems,
+            'baseUrl'   => $baseUrl,
+            'logo'      => $assets . 'images/logo.svg',
+        ]);
     }
 
     public function enqueueAssets()
@@ -164,20 +170,20 @@ class AdminMenuHandler
             true
         );
 
-	    wp_enqueue_script(
-		    $slug . '_global_admin',
-		    $assets . 'admin/global_admin.js',
-		    array(),
-		    '1.0',
-		    true
-	    );
+        wp_enqueue_script(
+            $slug . '_global_admin',
+            $assets . 'admin/global_admin.js',
+            array(),
+            '1.0',
+            true
+        );
 
         if (function_exists('wp_enqueue_editor')) {
             add_filter('user_can_richedit', '__return_true');
             wp_enqueue_editor();
         }
 
-	    wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
+        wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
     }
 
     public function getDashboardVars($app)
@@ -189,9 +195,9 @@ class AdminMenuHandler
 
         $requireSlug = false;
 
-        if($isNew) {
+        if ($isNew) {
             $result = $this->maybeAutoCreateCalendar($currentUser);
-            if(!$result) {
+            if (!$result) {
                 $requireSlug = true;
             }
         }
@@ -204,24 +210,24 @@ class AdminMenuHandler
 
 
         return apply_filters('fluent_booking/admin_vars', [
-            'slug'  => $slug = $app->config->get('app.slug'),
-            'nonce' => wp_create_nonce($slug),
-            'rest'  => $this->getRestInfo($app),
-            'brand_logo'        => $this->getMenuIcon(),
-            'asset_url'         => $assets,
-            'event_colors'      => $eventColors,
-            'meeting_durations' => $meetingDurations,
-            'schedule_schema'   => $scheduleSchema,
-            'editor_shortcodes' => $editorShortcodes,
-            'me' => [
+            'slug'               => $slug = $app->config->get('app.slug'),
+            'nonce'              => wp_create_nonce($slug),
+            'rest'               => $this->getRestInfo($app),
+            'brand_logo'         => $this->getMenuIcon(),
+            'asset_url'          => $assets,
+            'event_colors'       => $eventColors,
+            'meeting_durations'  => $meetingDurations,
+            'schedule_schema'    => $scheduleSchema,
+            'editor_shortcodes'  => $editorShortcodes,
+            'me'                 => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email
             ],
-            'is_new' => $isNew,
-            'require_slug' => $requireSlug,
-            'site_url' => site_url('/'),
-            'timezones' => DateTimeHelper::getTimeZones(true),
+            'is_new'             => $isNew,
+            'require_slug'       => $requireSlug,
+            'site_url'           => site_url('/'),
+            'timezones'          => DateTimeHelper::getTimeZones(true),
             'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ])
@@ -249,7 +255,7 @@ class AdminMenuHandler
 
     protected function isNew()
     {
-        return apply_filters('fluent_booking/is_new', ! Calendar::first());
+        return apply_filters('fluent_booking/is_new', !Calendar::first());
     }
 
     /**
@@ -258,25 +264,25 @@ class AdminMenuHandler
      */
     protected function maybeAutoCreateCalendar($user)
     {
-        if(!apply_filters('fluent_booking/auto_create_calendar', false, $user)) {
+        if (!apply_filters('fluent_booking/auto_create_calendar', false, $user)) {
             return false;
         }
 
         $userName = $user->user_login;
 
-        if(is_email($userName)) {
+        if (is_email($userName)) {
             $userName = explode('@', $userName);
             $userName = $userName[0];
         }
 
-        if(!Helper::isCalendarSlugAvailable($userName, true)) {
+        if (!Helper::isCalendarSlugAvailable($userName, true)) {
             return false;
         }
 
         $data = [
             'user_id' => $user->ID,
-            'title' => sprintf('Booking schedule with %s', trim($user->first_name.' '.$user->last_name)),
-            'slug' => $userName
+            'title'   => sprintf('Booking schedule with %s', trim($user->first_name . ' ' . $user->last_name)),
+            'slug'    => $userName
         ];
 
         return Calendar::create($data);
@@ -287,7 +293,7 @@ class AdminMenuHandler
         $baseUrl = Helper::getAppBaseUrl();
 
         $menuItems = apply_filters('fluent_booking/settings_menu_items', [
-            'general' => [
+            'general'        => [
                 'menu' => [
                     'key'       => 'settings',
                     'label'     => __('General', 'fluent-booking'),
@@ -295,7 +301,7 @@ class AdminMenuHandler
                     'permalink' => $baseUrl
                 ]
             ],
-            'profile' => [
+            'profile'        => [
                 'menu' => [
                     'key'       => 'profile-settings',
                     'label'     => __('Profile', 'fluent-booking'),
@@ -303,7 +309,7 @@ class AdminMenuHandler
                     'permalink' => $baseUrl . 'profile-settings'
                 ]
             ],
-            'availability' => [
+            'availability'   => [
                 'menu' => [
                     'key'       => 'availability',
                     'label'     => __('Availability', 'fluent-booking'),
@@ -322,7 +328,7 @@ class AdminMenuHandler
                     'permalink' => $baseUrl . 'configure-integration'
                 ]
             ],
-            'integrations' => [
+            'integrations'   => [
                 'menu' => [
                     'key'       => 'integrations',
                     'label'     => __('Integrations', 'fluent-booking'),
