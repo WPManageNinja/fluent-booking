@@ -244,6 +244,11 @@
                 {days}
                 on:dayClick={(e)=>dayClick(e.detail)}
             />
+
+            <div class="fcal_timezone_select">
+                <label for="fcal_timezone_selector">Timezone</label>
+                <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
+            </div>
         </div>
         {#if selectedDate}
             <div class="fcal_slot_picker">
@@ -267,7 +272,7 @@
                                 </div>
                                 {#if selectedDateTime && selectedDateTime.start == day.start}
                                     <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Confirm
+                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
                                     </div>
                                 {/if}
                             </div>
@@ -276,10 +281,6 @@
                 </div>
             </div>
         {/if}
-    </div>
-    <div class="fcal_timezone_select">
-        <label for="fcal_timezone_selector">Timezone</label>
-        <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
     </div>
 </div>
 

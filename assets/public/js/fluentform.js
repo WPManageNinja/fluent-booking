@@ -10504,7 +10504,7 @@ function create_else_block(ctx) {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       if (if_block1) if_block1.c();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_date_wrapper");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 172, 16, 12998);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 158, 16, 11816);
     },
     m: function mount(target, anchor) {
       if (if_block0) if_block0.m(target, anchor);
@@ -10607,16 +10607,19 @@ function create_if_block(ctx) {
 
 // (73:16) {#if !appData.disable_author}
 function create_if_block_5(ctx) {
+  var div6;
   var div5;
-  var div4;
-  var div1;
-  var t0;
+  var div2;
   var div0;
+  var img;
+  var img_src_value;
+  var t0;
+  var div1;
   var t2;
-  var div3;
+  var div4;
   var h2;
   var t4;
-  var div2;
+  var div3;
   var svg;
   var g0;
   var g1;
@@ -10628,34 +10631,29 @@ function create_if_block_5(ctx) {
   var t9;
   var t10;
   function select_block_type_1(ctx, dirty) {
-    if ( /*selectedDate*/ctx[1]) return create_if_block_10;
-    return create_else_block_1;
-  }
-  var current_block_type = select_block_type_1(ctx, -1);
-  var if_block0 = current_block_type(ctx);
-  function select_block_type_2(ctx, dirty) {
     if ( /*slot*/ctx[9].location_type == 'phone') return create_if_block_8;
     if ( /*slot*/ctx[9].location_type == 'in_person') return create_if_block_9;
   }
-  var current_block_type_1 = select_block_type_2(ctx, -1);
-  var if_block1 = current_block_type_1 && current_block_type_1(ctx);
-  var if_block2 = /*selectedDate*/ctx[1] && create_if_block_7(ctx);
-  var if_block3 = ! /*selectedDate*/ctx[1] && create_if_block_6(ctx);
+  var current_block_type = select_block_type_1(ctx, -1);
+  var if_block0 = current_block_type && current_block_type(ctx);
+  var if_block1 = /*selectedDate*/ctx[1] && create_if_block_7(ctx);
+  var if_block2 = ! /*selectedDate*/ctx[1] && create_if_block_6(ctx);
   var block = {
     c: function create() {
+      div6 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div5 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      div4 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      div1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      if_block0.c();
-      t0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      div2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      div0.textContent = "".concat( /*author*/ctx[11].name);
+      img = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("img");
+      t0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      div1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div1.textContent = "".concat( /*author*/ctx[11].name);
       t2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div4 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       h2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h2");
       h2.textContent = "".concat( /*slot*/ctx[9].title);
       t4 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       svg = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("svg");
       g0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("g");
       g1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("g");
@@ -10665,113 +10663,108 @@ function create_if_block_5(ctx) {
       span = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       span.textContent = "".concat( /*slot*/ctx[9].duration, " minutes");
       t8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      if (if_block1) if_block1.c();
+      if (if_block0) if_block0.c();
       t9 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      if (if_block2) if_block2.c();
+      if (if_block1) if_block1.c();
       t10 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      if (if_block3) if_block3.c();
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_author_name");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 93, 32, 3854);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 75, 28, 2412);
+      if (if_block2) if_block2.c();
+      if (!(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.src_url_equal)(img.src, img_src_value = /*author*/ctx[11].avatar)) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "src", img_src_value);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "alt", "Author Avatar");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(img, file, 77, 36, 2539);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_author_avatar");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 76, 32, 2470);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author_name");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 79, 32, 2658);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_author");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 75, 28, 2412);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(h2, "class", "fcal_slot_heading");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 98, 32, 4098);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 84, 32, 2902);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 102, 40, 4456);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 88, 40, 3260);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linejoin", "round");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 103, 40, 4518);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 89, 40, 3322);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 105, 44, 4658);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 104, 40, 4610);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 91, 44, 3462);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 90, 40, 3414);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "#000000");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "stroke", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 100, 36, 4255);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 108, 36, 4893);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "slot_timing fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 99, 32, 4178);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "fcal_slot_info");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 97, 28, 4037);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div4, "class", "fcal_slot_wrapper");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 74, 24, 2352);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "fcal_side");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 73, 20, 2304);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 86, 36, 3059);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 94, 36, 3697);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "slot_timing fcal_icon_item");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 85, 32, 2982);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div4, "class", "fcal_slot_info");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 83, 28, 2841);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "fcal_slot_wrapper");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 74, 24, 2352);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div6, "class", "fcal_side");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 73, 20, 2304);
     },
     m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div5, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div6, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, div5);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div5, div2);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, div0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div0, img);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, t0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, div1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div5, t2);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div5, div4);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, div1);
-      if_block0.m(div1, null);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div1, t0);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div1, div0);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, t2);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, h2);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, t4);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, div3);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, h2);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, t4);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, div2);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, svg);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, svg);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, g0);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, g1);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, g2);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(g2, path);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, t5);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, span);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, t8);
-      if (if_block1) if_block1.m(div3, null);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, t9);
-      if (if_block2) if_block2.m(div3, null);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, t10);
-      if (if_block3) if_block3.m(div4, null);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, t5);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, span);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, t8);
+      if (if_block0) if_block0.m(div4, null);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, t9);
+      if (if_block1) if_block1.m(div4, null);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div5, t10);
+      if (if_block2) if_block2.m(div5, null);
     },
     p: function update(ctx, dirty) {
-      if (current_block_type === (current_block_type = select_block_type_1(ctx, dirty)) && if_block0) {
-        if_block0.p(ctx, dirty);
-      } else {
-        if_block0.d(1);
-        if_block0 = current_block_type(ctx);
-        if (if_block0) {
-          if_block0.c();
-          if_block0.m(div1, t0);
-        }
-      }
-      if (if_block1) if_block1.p(ctx, dirty);
+      if (if_block0) if_block0.p(ctx, dirty);
       if ( /*selectedDate*/ctx[1]) {
+        if (if_block1) {
+          if_block1.p(ctx, dirty);
+        } else {
+          if_block1 = create_if_block_7(ctx);
+          if_block1.c();
+          if_block1.m(div4, null);
+        }
+      } else if (if_block1) {
+        if_block1.d(1);
+        if_block1 = null;
+      }
+      if (! /*selectedDate*/ctx[1]) {
         if (if_block2) {
           if_block2.p(ctx, dirty);
         } else {
-          if_block2 = create_if_block_7(ctx);
+          if_block2 = create_if_block_6(ctx);
           if_block2.c();
-          if_block2.m(div3, null);
+          if_block2.m(div5, null);
         }
       } else if (if_block2) {
         if_block2.d(1);
         if_block2 = null;
       }
-      if (! /*selectedDate*/ctx[1]) {
-        if (if_block3) {
-          if_block3.p(ctx, dirty);
-        } else {
-          if_block3 = create_if_block_6(ctx);
-          if_block3.c();
-          if_block3.m(div4, null);
-        }
-      } else if (if_block3) {
-        if_block3.d(1);
-        if_block3 = null;
-      }
     },
     d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div5);
-      if_block0.d();
-      if (if_block1) {
-        if_block1.d();
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div6);
+      if (if_block0) {
+        if_block0.d();
       }
+      if (if_block1) if_block1.d();
       if (if_block2) if_block2.d();
-      if (if_block3) if_block3.d();
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
@@ -10784,106 +10777,7 @@ function create_if_block_5(ctx) {
   return block;
 }
 
-// (89:32) {:else}
-function create_else_block_1(ctx) {
-  var div;
-  var img;
-  var img_src_value;
-  var block = {
-    c: function create() {
-      div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      img = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("img");
-      if (!(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.src_url_equal)(img.src, img_src_value = /*author*/ctx[11].avatar)) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "src", img_src_value);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(img, "alt", "Author Avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(img, file, 90, 40, 3693);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_author_avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 89, 36, 3620);
-    },
-    m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div, img);
-    },
-    p: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
-    d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div);
-    }
-  };
-  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
-    block: block,
-    id: create_else_block_1.name,
-    type: "else",
-    source: "(89:32) {:else}",
-    ctx: ctx
-  });
-  return block;
-}
-
-// (77:32) {#if selectedDate}
-function create_if_block_10(ctx) {
-  var div1;
-  var div0;
-  var i;
-  var svg;
-  var path0;
-  var path1;
-  var mounted;
-  var dispose;
-  var block = {
-    c: function create() {
-      div1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      div0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      i = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("i");
-      svg = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("svg");
-      path0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("path");
-      path1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("path");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M0 0h24v24H0V0z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 81, 52, 2992);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 82, 52, 3084);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "width", "32");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "32");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 80, 48, 2856);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(i, "class", "fcal_svg");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 79, 44, 2787);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "aria-label", "Back to Date Selection");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_back");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 78, 40, 2598);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_author_avatar");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 77, 36, 2525);
-    },
-    m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div1, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div1, div0);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div0, i);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(i, svg);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, path0);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, path1);
-      if (!mounted) {
-        dispose = [(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "click", /*click_handler*/ctx[17], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "keypress", /*keypress_handler*/ctx[18], false, false, false)];
-        mounted = true;
-      }
-    },
-    p: svelte_internal__WEBPACK_IMPORTED_MODULE_0__.noop,
-    d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div1);
-      mounted = false;
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.run_all)(dispose);
-    }
-  };
-  (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
-    block: block,
-    id: create_if_block_10.name,
-    type: "if",
-    source: "(77:32) {#if selectedDate}",
-    ctx: ctx
-  });
-  return block;
-}
-
-// (116:76) 
+// (102:76) 
 function create_if_block_9(ctx) {
   var div;
   var svg;
@@ -10902,10 +10796,10 @@ function create_if_block_9(ctx) {
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       span = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       span.textContent = "".concat( /*slot*/ctx[9].location_heading);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 117, 202, 6186);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 103, 202, 4990);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "fill", "currentColor");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 117, 234, 6218);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 103, 234, 5022);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
@@ -10913,10 +10807,10 @@ function create_if_block_9(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-testid", "location-marker-icon");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-id", "details-item-icon");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 117, 40, 6024);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 118, 40, 6582);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 103, 40, 4828);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 104, 40, 5386);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "slot_location fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 116, 36, 5941);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 102, 36, 4745);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -10936,13 +10830,13 @@ function create_if_block_9(ctx) {
     block: block,
     id: create_if_block_9.name,
     type: "if",
-    source: "(116:76) ",
+    source: "(102:76) ",
     ctx: ctx
   });
   return block;
 }
 
-// (111:32) {#if slot.location_type == 'phone'}
+// (97:32) {#if slot.location_type == 'phone'}
 function create_if_block_8(ctx) {
   var div;
   var svg;
@@ -10961,10 +10855,10 @@ function create_if_block_8(ctx) {
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       span = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("span");
       span.textContent = "Phone Call";
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 112, 197, 5313);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(title, file, 98, 197, 4117);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "d", "M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path, "fill", "currentColor");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 112, 222, 5338);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path, file, 98, 222, 4142);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "fill", "none");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
@@ -10972,10 +10866,10 @@ function create_if_block_8(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-testid", "phone-call-icon");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "data-id", "details-item-icon");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 112, 40, 5156);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 113, 40, 5761);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 98, 40, 3960);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span, file, 99, 40, 4565);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "slot_location fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 111, 36, 5073);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 97, 36, 3877);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -10995,13 +10889,13 @@ function create_if_block_8(ctx) {
     block: block,
     id: create_if_block_8.name,
     type: "if",
-    source: "(111:32) {#if slot.location_type == 'phone'}",
+    source: "(97:32) {#if slot.location_type == 'phone'}",
     ctx: ctx
   });
   return block;
 }
 
-// (122:32) {#if selectedDate}
+// (108:32) {#if selectedDate}
 function create_if_block_7(ctx) {
   var div0;
   var svg0;
@@ -11064,35 +10958,35 @@ function create_if_block_7(ctx) {
       t8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)( /*timezone*/ctx[2]);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "id", "SVGRepo_bgCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g0, "stroke-width", "0");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 126, 44, 7205);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g0, file, 112, 44, 6009);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "id", "SVGRepo_tracerCarrier");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linecap", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-linejoin", "round");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke", "#CCCCCC");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g1, "stroke-width", "0.05847399999999999");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 127, 44, 7297);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g1, file, 113, 44, 6101);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path0, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M7.685,24.819H8.28v-2.131h3.688v2.131h0.596v-2.131h3.862v2.131h0.597v-2.131h4.109v2.131h0.595 v-2.131h3.417v-0.594h-3.417v-3.861h3.417v-0.596h-3.417v-3.519h3.417v-0.594h-3.417v-2.377h-0.595v2.377h-4.109v-2.377h-0.597 v2.377h-3.862v-2.377h-0.596v2.377H8.279v-2.377H7.685v2.377H3.747v0.594h3.938v3.519H3.747v0.596h3.938v3.861H3.747v0.594h3.938 V24.819z M12.563,22.094v-3.861h3.862v3.861H12.563z M21.132,22.094h-4.109v-3.861h4.109V22.094z M21.132,14.118v3.519h-4.109 v-3.519C17.023,14.119,21.132,14.119,21.132,14.118z M16.426,14.118v3.519h-3.862v-3.519 C12.564,14.119,16.426,14.119,16.426,14.118z M8.279,14.118h3.688v3.519H8.279V14.118z M8.279,18.233h3.688v3.861H8.279V18.233z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 129, 48, 7561);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 115, 48, 6365);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path1, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M29.207,2.504l-4.129,0.004L24.475,2.51v2.448c0,0.653-0.534,1.187-1.188,1.187h-1.388 c-0.656,0-1.188-0.533-1.188-1.187V2.514l-1.583,0.002v2.442c0,0.653-0.535,1.187-1.191,1.187h-1.388 c-0.655,0-1.188-0.533-1.188-1.187V2.517l-1.682,0.004v2.438c0,0.653-0.534,1.187-1.189,1.187h-1.389 c-0.653,0-1.188-0.533-1.188-1.187V2.525H8.181v2.434c0,0.653-0.533,1.187-1.188,1.187H5.605c-0.656,0-1.189-0.533-1.189-1.187 V2.53L0,2.534v26.153h2.09h25.06l2.087-0.006L29.207,2.504z M27.15,26.606H2.09V9.897h25.06V26.606z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 132, 48, 8424);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 118, 48, 7228);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path2, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path2, "d", "M5.605,5.303h1.388c0.163,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.133-0.297-0.296-0.297H5.605 c-0.165,0-0.298,0.132-0.298,0.297v4.16C5.307,5.17,5.44,5.303,5.605,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 135, 48, 9113);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path2, file, 121, 48, 7917);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path3, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path3, "d", "M11.101,5.303h1.389c0.164,0,0.297-0.133,0.297-0.297v-4.16c-0.001-0.165-0.134-0.297-0.298-0.297 H11.1c-0.163,0-0.296,0.132-0.296,0.297v4.16C10.805,5.17,10.938,5.303,11.101,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 138, 48, 9471);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path3, file, 124, 48, 8275);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path4, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path4, "d", "M16.549,5.303h1.388c0.166,0,0.299-0.133,0.299-0.297v-4.16c-0.001-0.165-0.133-0.297-0.299-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C16.252,5.17,16.385,5.303,16.549,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 141, 48, 9838);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path4, file, 127, 48, 8642);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.set_style)(path5, "fill", "#010002");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path5, "d", "M21.899,5.303h1.388c0.164,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.132-0.297-0.296-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C21.603,5.17,21.735,5.303,21.899,5.303z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 144, 48, 10207);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 128, 77, 7508);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 128, 73, 7504);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path5, file, 130, 48, 9011);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g2, file, 114, 77, 6312);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g3, file, 114, 73, 6308);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(g4, "id", "SVGRepo_iconCarrier");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 128, 44, 7475);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(g4, file, 114, 44, 6279);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "height", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "width", "16px");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "version", "1.1");
@@ -11102,20 +10996,20 @@ function create_if_block_7(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "viewBox", "0 0 29.237 29.237");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "xml:space", "preserve");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg0, "fill", "#000000");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 123, 40, 6872);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 149, 40, 10669);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg0, file, 109, 40, 5676);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span0, file, 135, 40, 9473);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 122, 36, 6787);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 108, 36, 5591);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path6, "fill", "#444");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path6, "d", "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm5.2 5.3c.4 0 .7.3 1.1.3-.3.4-1.6.4-2-.1.3-.1.5-.2.9-.2zM1 8c0-.4 0-.8.1-1.3.1 0 .2.1.3.1 0 0 .1.1.1.2 0 .3.3.5.5.5.8.1 1.1.8 1.8 1 .2.1.1.3 0 .5-.6.8-.1 1.4.4 1.9.5.4.5.8.6 1.4 0 .7.1 1.5.4 2.2C2.7 13.3 1 10.9 1 8zm7 7c-.7 0-1.5-.1-2.1-.3-.1-.2-.1-.4 0-.6.4-.8.8-1.5 1.3-2.2.2-.2.4-.4.4-.7 0-.2.1-.5.2-.7.3-.5.2-.8-.2-.9-.8-.2-1.2-.9-1.8-1.2s-1.2-.5-1.7-.2c-.2.1-.5.2-.5-.1 0-.4-.5-.7-.4-1.1-.1 0-.2 0-.3.1s-.2.2-.4.1c-.2-.2-.1-.4-.1-.6.1-.2.2-.3.4-.4.4-.1.8-.1 1 .4.3-.9.9-1.4 1.5-1.8 0 0 .8-.7.9-.7s.2.2.4.3c.2 0 .3 0 .3-.2.1-.5-.2-1.1-.6-1.2 0-.1.1-.1.1-.1.3-.1.7-.3.6-.6 0-.4-.4-.6-.8-.6-.2 0-.4 0-.6.1-.4.2-.9.4-1.5.4C5.2 1.4 6.6 1 8 1h.8c-.6.1-1.2.3-1.6.5.6.1.7.4.5.9-.1.2 0 .4.2.5s.4.1.5-.1c.2-.3.6-.4.9-.5.4-.1.7-.3 1-.7 0-.1.1-.1.2-.2.6.2 1.2.6 1.8 1-.1 0-.1.1-.2.1-.2.2-.5.3-.2.7.1.2 0 .3-.1.4-.2.1-.3 0-.4-.1s-.1-.3-.4-.3c-.1.2-.4.3-.4.6.5 0 .4.4.5.7-.6.1-.8.4-.5.9.1.2-.1.3-.2.4-.4.6-.8 1-.8 1.7s.5 1.4 1.3 1.3c.9-.1.9-.1 1.2.7 0 .1.1.2.1.3.1.2.2.4.1.6-.3.8.1 1.4.4 2 .1.2.2.3.3.4-1.3 1.4-3 2.2-5 2.2z");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 156, 44, 11230);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path6, file, 142, 44, 10048);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "xmlns", "http://www.w3.org/2000/svg");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "width", "16");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg1, "height", "16");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 155, 40, 11122);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 160, 40, 12506);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "slot_time_range fcal_icon_item");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 154, 36, 11037);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg1, file, 141, 40, 9940);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(span1, file, 146, 40, 11324);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "slot_time_range slot_timezone fcal_icon_item");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 140, 36, 9841);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div0, anchor);
@@ -11162,13 +11056,13 @@ function create_if_block_7(ctx) {
     block: block,
     id: create_if_block_7.name,
     type: "if",
-    source: "(122:32) {#if selectedDate}",
+    source: "(108:32) {#if selectedDate}",
     ctx: ctx
   });
   return block;
 }
 
-// (165:28) {#if !selectedDate}
+// (151:28) {#if !selectedDate}
 function create_if_block_6(ctx) {
   var div;
   var raw_value = ( /*slot*/ctx[9].description || '') + "";
@@ -11176,7 +11070,7 @@ function create_if_block_6(ctx) {
     c: function create() {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_slot_description");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 165, 32, 12726);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 151, 32, 11544);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -11191,13 +11085,13 @@ function create_if_block_6(ctx) {
     block: block,
     id: create_if_block_6.name,
     type: "if",
-    source: "(165:28) {#if !selectedDate}",
+    source: "(151:28) {#if !selectedDate}",
     ctx: ctx
   });
   return block;
 }
 
-// (174:20) {#if appReady}
+// (160:20) {#if appReady}
 function create_if_block_1(ctx) {
   var t;
   var current_block_type_index;
@@ -11207,12 +11101,12 @@ function create_if_block_1(ctx) {
   var if_block0 = ! /*selectedDate*/ctx[1] && create_if_block_4(ctx);
   var if_block_creators = [create_if_block_2, create_if_block_3];
   var if_blocks = [];
-  function select_block_type_3(ctx, dirty) {
+  function select_block_type_2(ctx, dirty) {
     if ( /*isFluentform*/ctx[12]) return 0;
     if ( /*selectedDate*/ctx[1]) return 1;
     return -1;
   }
-  if (~(current_block_type_index = select_block_type_3(ctx, -1))) {
+  if (~(current_block_type_index = select_block_type_2(ctx, -1))) {
     if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
   }
   var block = {
@@ -11252,7 +11146,7 @@ function create_if_block_1(ctx) {
         (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.check_outros)();
       }
       var previous_block_index = current_block_type_index;
-      current_block_type_index = select_block_type_3(ctx, dirty);
+      current_block_type_index = select_block_type_2(ctx, dirty);
       if (current_block_type_index === previous_block_index) {
         if (~current_block_type_index) {
           if_blocks[current_block_type_index].p(ctx, dirty);
@@ -11304,19 +11198,19 @@ function create_if_block_1(ctx) {
     block: block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(174:20) {#if appReady}",
+    source: "(160:20) {#if appReady}",
     ctx: ctx
   });
   return block;
 }
 
-// (175:24) {#if !selectedDate}
+// (161:24) {#if !selectedDate}
 function create_if_block_4(ctx) {
   var daypickerapp;
   var updating_timezone;
   var current;
   function daypickerapp_timezone_binding(value) {
-    /*daypickerapp_timezone_binding*/ctx[19](value);
+    /*daypickerapp_timezone_binding*/ctx[17](value);
   }
   var daypickerapp_props = {
     slot: /*slot*/ctx[9],
@@ -11332,10 +11226,10 @@ function create_if_block_4(ctx) {
   svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
     return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(daypickerapp, 'timezone', daypickerapp_timezone_binding);
   });
-  daypickerapp.$on("dayClicked", /*dayClicked_handler*/ctx[20]);
-  daypickerapp.$on("spotSelected", /*spotSelected_handler*/ctx[21]);
-  daypickerapp.$on("timezoneChanged", /*timezoneChanged_handler*/ctx[22]);
-  daypickerapp.$on("resetSelection", /*resetSelection_handler*/ctx[23]);
+  daypickerapp.$on("dayClicked", /*dayClicked_handler*/ctx[18]);
+  daypickerapp.$on("spotSelected", /*spotSelected_handler*/ctx[19]);
+  daypickerapp.$on("timezoneChanged", /*timezoneChanged_handler*/ctx[20]);
+  daypickerapp.$on("resetSelection", /*resetSelection_handler*/ctx[21]);
   var block = {
     c: function create() {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(daypickerapp.$$.fragment);
@@ -11372,20 +11266,30 @@ function create_if_block_4(ctx) {
     block: block,
     id: create_if_block_4.name,
     type: "if",
-    source: "(175:24) {#if !selectedDate}",
+    source: "(161:24) {#if !selectedDate}",
     ctx: ctx
   });
   return block;
 }
 
-// (193:48) 
+// (179:48) 
 function create_if_block_3(ctx) {
+  var div2;
+  var div1;
   var h2;
+  var div0;
+  var i;
+  var svg;
+  var path0;
+  var path1;
+  var t0;
   var t1;
   var bookingform;
   var updating_spot;
   var updating_formFields;
   var current;
+  var mounted;
+  var dispose;
   function bookingform_spot_binding(value) {
     /*bookingform_spot_binding*/ctx[25](value);
   }
@@ -11415,17 +11319,55 @@ function create_if_block_3(ctx) {
   bookingform.$on("bookingConfirmed", /*bookingConfirmed_handler*/ctx[27]);
   var block = {
     c: function create() {
+      div2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       h2 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h2");
-      h2.textContent = "Enter Details";
+      div0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      i = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("i");
+      svg = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("svg");
+      path0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("path");
+      path1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.svg_element)("path");
+      t0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)("\n                                        Enter Details");
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingform.$$.fragment);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 193, 28, 14080);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "d", "M0 0h24v24H0V0z");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path0, file, 185, 52, 13488);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path1, "d", "M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(path1, file, 186, 52, 13580);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "xmlns", "http://www.w3.org/2000/svg");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "width", "32");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "height", "32");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(svg, "viewBox", "0 0 24 24");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(svg, file, 184, 48, 13352);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(i, "class", "fcal_svg");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(i, file, 183, 44, 13283);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "aria-label", "Back to Date Selection");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_back");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 182, 40, 13094);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(h2, file, 181, 36, 13049);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_date_event_details_header");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 180, 32, 12968);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_date_event_details");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 179, 28, 12898);
     },
     m: function mount(target, anchor) {
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, h2, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, t1, anchor);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingform, target, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div2, anchor);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, div1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div1, h2);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(h2, div0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div0, i);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(i, svg);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, path0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg, path1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(h2, t0);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div2, t1);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(bookingform, div2, null);
       current = true;
+      if (!mounted) {
+        dispose = [(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "click", /*click_handler*/ctx[23], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div0, "keypress", /*keypress_handler*/ctx[24], false, false, false)];
+        mounted = true;
+      }
     },
     p: function update(ctx, dirty) {
       var bookingform_changes = {};
@@ -11456,22 +11398,23 @@ function create_if_block_3(ctx) {
       current = false;
     },
     d: function destroy(detaching) {
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(h2);
-      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(t1);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingform, detaching);
+      if (detaching) (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.detach_dev)(div2);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(bookingform);
+      mounted = false;
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.run_all)(dispose);
     }
   };
   (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.dispatch_dev)("SvelteRegisterBlock", {
     block: block,
     id: create_if_block_3.name,
     type: "if",
-    source: "(193:48) ",
+    source: "(179:48) ",
     ctx: ctx
   });
   return block;
 }
 
-// (186:24) {#if isFluentform }
+// (172:24) {#if isFluentform }
 function create_if_block_2(ctx) {
   var bookingdetails;
   var current;
@@ -11483,7 +11426,7 @@ function create_if_block_2(ctx) {
     },
     $$inline: true
   });
-  bookingdetails.$on("resetSelection", /*resetSelection_handler_1*/ctx[24]);
+  bookingdetails.$on("resetSelection", /*resetSelection_handler_1*/ctx[22]);
   var block = {
     c: function create() {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(bookingdetails.$$.fragment);
@@ -11516,7 +11459,7 @@ function create_if_block_2(ctx) {
     block: block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(186:24) {#if isFluentform }",
+    source: "(172:24) {#if isFluentform }",
     ctx: ctx
   });
   return block;
@@ -11681,12 +11624,6 @@ function instance($$self, $$props, $$invalidate) {
   Object.keys($$props).forEach(function (key) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn("<BookingApp> was created with unknown prop '".concat(key, "'"));
   });
-  var click_handler = function click_handler(e) {
-    resetSelection();
-  };
-  var keypress_handler = function keypress_handler(e) {
-    $$invalidate(1, selectedDate = false);
-  };
   function daypickerapp_timezone_binding(value) {
     timezone = value;
     $$invalidate(2, timezone);
@@ -11705,6 +11642,12 @@ function instance($$self, $$props, $$invalidate) {
   };
   var resetSelection_handler_1 = function resetSelection_handler_1(e) {
     resetSelection();
+  };
+  var click_handler = function click_handler(e) {
+    resetSelection();
+  };
+  var keypress_handler = function keypress_handler(e) {
+    $$invalidate(1, selectedDate = false);
   };
   function bookingform_spot_binding(value) {
     selectedDate = value;
@@ -11768,7 +11711,7 @@ function instance($$self, $$props, $$invalidate) {
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
   }
-  return [appData, selectedDate, timezone, appReady, isBookingDone, bookingConfirmationHtml, component, isMobile, isXsDevice, slot, settings, author, isFluentform, spotSelected, handleBookingConfirmation, dayClicked, resetSelection, click_handler, keypress_handler, daypickerapp_timezone_binding, dayClicked_handler, spotSelected_handler, timezoneChanged_handler, resetSelection_handler, resetSelection_handler_1, bookingform_spot_binding, bookingform_formFields_binding, bookingConfirmed_handler, div0_binding];
+  return [appData, selectedDate, timezone, appReady, isBookingDone, bookingConfirmationHtml, component, isMobile, isXsDevice, slot, settings, author, isFluentform, spotSelected, handleBookingConfirmation, dayClicked, resetSelection, daypickerapp_timezone_binding, dayClicked_handler, spotSelected_handler, timezoneChanged_handler, resetSelection_handler, resetSelection_handler_1, click_handler, keypress_handler, bookingform_spot_binding, bookingform_formFields_binding, bookingConfirmed_handler, div0_binding];
 }
 var BookingApp = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(BookingApp, _SvelteComponentDev);
@@ -12375,7 +12318,7 @@ function create_if_block_3(ctx) {
   return block;
 }
 
-// (248:8) {#if selectedDate}
+// (253:8) {#if selectedDate}
 function create_if_block(ctx) {
   var div3;
   var div0;
@@ -12402,13 +12345,13 @@ function create_if_block(ctx) {
         each_blocks[_i].c();
       }
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_slot_picker_header");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 249, 16, 8764);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 254, 16, 8991);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_spot_lists");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 253, 20, 8964);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 258, 20, 9191);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", "fcal_slot_items");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 252, 16, 8914);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 257, 16, 9141);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div3, "class", "fcal_slot_picker");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 248, 12, 8717);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div3, file, 253, 12, 8944);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div3, anchor);
@@ -12452,13 +12395,13 @@ function create_if_block(ctx) {
     block: block,
     id: create_if_block.name,
     type: "if",
-    source: "(248:8) {#if selectedDate}",
+    source: "(253:8) {#if selectedDate}",
     ctx: ctx
   });
   return block;
 }
 
-// (264:36) {#if day.remaining && selectedDateTime != day }
+// (269:36) {#if day.remaining && selectedDateTime != day }
 function create_if_block_2(ctx) {
   var div;
   var t0_value = /*day*/ctx[39].remaining + "";
@@ -12470,7 +12413,7 @@ function create_if_block_2(ctx) {
       t0 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(t0_value);
       t1 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)(" spots left");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_spot_remaining");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 264, 40, 9836);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 269, 40, 10063);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -12488,13 +12431,13 @@ function create_if_block_2(ctx) {
     block: block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(264:36) {#if day.remaining && selectedDateTime != day }",
+    source: "(269:36) {#if day.remaining && selectedDateTime != day }",
     ctx: ctx
   });
   return block;
 }
 
-// (268:32) {#if selectedDateTime && selectedDateTime.start == day.start}
+// (273:32) {#if selectedDateTime && selectedDateTime.start == day.start}
 function create_if_block_1(ctx) {
   var div;
   var mounted;
@@ -12504,16 +12447,16 @@ function create_if_block_1(ctx) {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-    return (/*keypress_handler_2*/(_ctx = ctx)[27].apply(_ctx, [/*day*/ctx[39]].concat(args))
+    return (/*keypress_handler_2*/(_ctx = ctx)[28].apply(_ctx, [/*day*/ctx[39]].concat(args))
     );
   }
   var block = {
     c: function create() {
       div = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
-      div.textContent = "Confirm";
+      div.textContent = "Next";
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "aria-label", "Confirm Time");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div, "class", "fcal_spot_confirm");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 268, 36, 10113);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div, file, 273, 36, 10340);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div, anchor);
@@ -12535,13 +12478,13 @@ function create_if_block_1(ctx) {
     block: block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(268:32) {#if selectedDateTime && selectedDateTime.start == day.start}",
+    source: "(273:32) {#if selectedDateTime && selectedDateTime.start == day.start}",
     ctx: ctx
   });
   return block;
 }
 
-// (255:24) {#each daySlots as day}
+// (260:24) {#each daySlots as day}
 function create_each_block(ctx) {
   var div2;
   var div1;
@@ -12561,7 +12504,7 @@ function create_each_block(ctx) {
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-    return (/*click_handler_3*/(_ctx2 = ctx)[25].apply(_ctx2, [/*day*/ctx[39]].concat(args))
+    return (/*click_handler_3*/(_ctx2 = ctx)[26].apply(_ctx2, [/*day*/ctx[39]].concat(args))
     );
   }
   function keypress_handler_1() {
@@ -12569,7 +12512,7 @@ function create_each_block(ctx) {
     for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
       args[_key3] = arguments[_key3];
     }
-    return (/*keypress_handler_1*/(_ctx3 = ctx)[26].apply(_ctx3, [/*day*/ctx[39]].concat(args))
+    return (/*keypress_handler_1*/(_ctx3 = ctx)[27].apply(_ctx3, [/*day*/ctx[39]].concat(args))
     );
   }
   var if_block1 = /*selectedDateTime*/ctx[9] && /*selectedDateTime*/ctx[9].start == /*day*/ctx[39].start && create_if_block_1(ctx);
@@ -12585,12 +12528,12 @@ function create_each_block(ctx) {
       if (if_block1) if_block1.c();
       t3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", div0_class_value = /*day*/ctx[39].remaining && /*selectedDateTime*/ctx[9] != /*day*/ctx[39] ? 'fcal_spot_time' : '');
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 260, 37, 9504);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 265, 37, 9731);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "aria-label", "Select Time");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div1, "class", "fcal_spot_name");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 257, 32, 9246);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div1, file, 262, 32, 9473);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div2, "class", div2_class_value = "fcal_spot " + ( /*selectedDateTime*/ctx[9] && /*selectedDateTime*/ctx[9].start == /*day*/ctx[39].start ? 'fcal_spot_selected' : ''));
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 255, 28, 9070);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div2, file, 260, 28, 9297);
     },
     m: function mount(target, anchor) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.insert_dev)(target, div2, anchor);
@@ -12653,7 +12596,7 @@ function create_each_block(ctx) {
     block: block,
     id: create_each_block.name,
     type: "each",
-    source: "(255:24) {#each daySlots as day}",
+    source: "(260:24) {#each daySlots as day}",
     ctx: ctx
   });
   return block;
@@ -12681,9 +12624,9 @@ function create_fragment(ctx) {
   var t7;
   var t8;
   var t9;
-  var div7;
+  var div8;
   var t10;
-  var div6;
+  var div7;
   var div5;
   var div3;
   var h31;
@@ -12704,12 +12647,12 @@ function create_fragment(ctx) {
   var t16;
   var calendar;
   var t17;
-  var t18;
-  var div8;
+  var div6;
   var label;
-  var t20;
+  var t19;
   var timezoneselector;
   var updating_timezone;
+  var t20;
   var current;
   var mounted;
   var dispose;
@@ -12725,9 +12668,8 @@ function create_fragment(ctx) {
     $$inline: true
   });
   calendar.$on("dayClick", /*dayClick_handler*/ctx[24]);
-  var if_block2 = /*selectedDate*/ctx[8] && create_if_block(ctx);
   function timezoneselector_timezone_binding(value) {
-    /*timezoneselector_timezone_binding*/ctx[28](value);
+    /*timezoneselector_timezone_binding*/ctx[25](value);
   }
   var timezoneselector_props = {
     placeholder: "Select Timezone"
@@ -12742,6 +12684,7 @@ function create_fragment(ctx) {
   svelte_internal__WEBPACK_IMPORTED_MODULE_0__.binding_callbacks.push(function () {
     return (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.bind)(timezoneselector, 'timezone', timezoneselector_timezone_binding);
   });
+  var if_block2 = /*selectedDate*/ctx[8] && create_if_block(ctx);
   var block = {
     c: function create() {
       div9 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
@@ -12766,10 +12709,10 @@ function create_fragment(ctx) {
       t7 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)("Timezone: ");
       t8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.text)( /*timezone*/ctx[0]);
       t9 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div7 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       if (if_block1) if_block1.c();
       t10 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div6 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div7 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div5 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       div3 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       h31 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("h3");
@@ -12789,13 +12732,13 @@ function create_fragment(ctx) {
       t16 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(calendar.$$.fragment);
       t17 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      if (if_block2) if_block2.c();
-      t18 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
-      div8 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
+      div6 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("div");
       label = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.element)("label");
       label.textContent = "Timezone";
-      t20 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      t19 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.create_component)(timezoneselector.$$.fragment);
+      t20 = (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.space)();
+      if (if_block2) if_block2.c();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div0, "class", "fcal_day_picker_head fcal_sec_heading");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div0, file, 189, 4, 5662);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(path0, "fill", "none");
@@ -12846,14 +12789,14 @@ function create_fragment(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div4, file, 224, 16, 7298);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div5, "class", "calendar-header");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div5, file, 220, 12, 7110);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div6, "class", "calendar-container");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 219, 8, 7065);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div7, "class", "fcal_calendar_slot_wrap");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div7, file, 211, 4, 6789);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(label, "for", "fcal_timezone_selector");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(label, file, 280, 8, 10584);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div8, "class", "fcal_timezone_select");
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div8, file, 279, 4, 10541);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(label, file, 248, 16, 8727);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div6, "class", "fcal_timezone_select");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div6, file, 247, 12, 8676);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div7, "class", "calendar-container");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div7, file, 219, 8, 7065);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div8, "class", "fcal_calendar_slot_wrap");
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div8, file, 211, 4, 6789);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.attr_dev)(div9, "class", "fcal_day_picker");
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.add_location)(div9, file, 188, 0, 5628);
     },
@@ -12882,11 +12825,11 @@ function create_fragment(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(p1, t7);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(p1, t8);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, t9);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, div7);
-      if (if_block1) if_block1.m(div7, null);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, t10);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, div6);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, div5);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, div8);
+      if (if_block1) if_block1.m(div8, null);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, t10);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, div7);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, div5);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div5, div3);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div3, h31);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(h31, t11);
@@ -12902,15 +12845,15 @@ function create_fragment(ctx) {
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div4, button1);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(button1, svg2);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(svg2, path3);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, t16);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(calendar, div6, null);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, t16);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(calendar, div7, null);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, t17);
-      if (if_block2) if_block2.m(div7, null);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, t18);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div9, div8);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, label);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div7, div6);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, label);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div6, t19);
+      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(timezoneselector, div6, null);
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.append_dev)(div8, t20);
-      (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.mount_component)(timezoneselector, div8, null);
+      if (if_block2) if_block2.m(div8, null);
       current = true;
       if (!mounted) {
         dispose = [(0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div1, "click", /*click_handler*/ctx[20], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(div1, "keypress", /*keypress_handler*/ctx[21], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(button0, "click", /*click_handler_1*/ctx[22], false, false, false), (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.listen_dev)(button1, "click", /*click_handler_2*/ctx[23], false, false, false)];
@@ -12942,7 +12885,7 @@ function create_fragment(ctx) {
           if_block1 = create_if_block_3(ctx);
           if_block1.c();
           (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.transition_in)(if_block1, 1);
-          if_block1.m(div7, t10);
+          if_block1.m(div8, t10);
         }
       } else if (if_block1) {
         (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.group_outros)();
@@ -12964,18 +12907,6 @@ function create_fragment(ctx) {
       if (dirty[0] & /*headers*/32) calendar_changes.headers = /*headers*/ctx[5];
       if (dirty[0] & /*days*/2048) calendar_changes.days = /*days*/ctx[11];
       calendar.$set(calendar_changes);
-      if ( /*selectedDate*/ctx[8]) {
-        if (if_block2) {
-          if_block2.p(ctx, dirty);
-        } else {
-          if_block2 = create_if_block(ctx);
-          if_block2.c();
-          if_block2.m(div7, null);
-        }
-      } else if (if_block2) {
-        if_block2.d(1);
-        if_block2 = null;
-      }
       var timezoneselector_changes = {};
       if (!updating_timezone && dirty[0] & /*timezone*/1) {
         updating_timezone = true;
@@ -12985,6 +12916,18 @@ function create_fragment(ctx) {
         });
       }
       timezoneselector.$set(timezoneselector_changes);
+      if ( /*selectedDate*/ctx[8]) {
+        if (if_block2) {
+          if_block2.p(ctx, dirty);
+        } else {
+          if_block2 = create_if_block(ctx);
+          if_block2.c();
+          if_block2.m(div8, null);
+        }
+      } else if (if_block2) {
+        if_block2.d(1);
+        if_block2 = null;
+      }
     },
     i: function intro(local) {
       if (current) return;
@@ -13004,8 +12947,8 @@ function create_fragment(ctx) {
       if (if_block0) if_block0.d();
       if (if_block1) if_block1.d();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(calendar);
-      if (if_block2) if_block2.d();
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.destroy_component)(timezoneselector);
+      if (if_block2) if_block2.d();
       mounted = false;
       (0,svelte_internal__WEBPACK_IMPORTED_MODULE_0__.run_all)(dispose);
     }
@@ -13211,6 +13154,10 @@ function instance($$self, $$props, $$invalidate) {
   var dayClick_handler = function dayClick_handler(e) {
     return dayClick(e.detail);
   };
+  function timezoneselector_timezone_binding(value) {
+    timezone = value;
+    $$invalidate(0, timezone);
+  }
   var click_handler_3 = function click_handler_3(day, e) {
     $$invalidate(9, selectedDateTime = day);
   };
@@ -13220,10 +13167,6 @@ function instance($$self, $$props, $$invalidate) {
   var keypress_handler_2 = function keypress_handler_2(day, e) {
     $$invalidate(9, selectedDateTime = day);
   };
-  function timezoneselector_timezone_binding(value) {
-    timezone = value;
-    $$invalidate(0, timezone);
-  }
   $$self.$$set = function ($$props) {
     if ('slot' in $$props) $$invalidate(1, slot = $$props.slot);
     if ('settings' in $$props) $$invalidate(2, settings = $$props.settings);
@@ -13305,7 +13248,7 @@ function instance($$self, $$props, $$invalidate) {
       $: $$invalidate(12, prevDisabled = new Date(year, month, 1).getTime() < new Date().getTime());
     }
   };
-  return [timezone, slot, settings, year, month, headers, isLoadingDates, daySlots, selectedDate, selectedDateTime, nextDisabled, days, prevDisabled, monthNames, dayClick, next, prev, slotSpotConfirmed, resetSelection, availableDates, click_handler, keypress_handler, click_handler_1, click_handler_2, dayClick_handler, click_handler_3, keypress_handler_1, keypress_handler_2, timezoneselector_timezone_binding];
+  return [timezone, slot, settings, year, month, headers, isLoadingDates, daySlots, selectedDate, selectedDateTime, nextDisabled, days, prevDisabled, monthNames, dayClick, next, prev, slotSpotConfirmed, resetSelection, availableDates, click_handler, keypress_handler, click_handler_1, click_handler_2, dayClick_handler, timezoneselector_timezone_binding, click_handler_3, keypress_handler_1, keypress_handler_2];
 }
 var DatePickerApp = /*#__PURE__*/function (_SvelteComponentDev) {
   _inherits(DatePickerApp, _SvelteComponentDev);
@@ -15021,8 +14964,9 @@ __webpack_require__.r(__webpack_exports__);
 // Imports
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.cdnfonts.com/css/satoshi);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fcal_calendar_inner {\n  display: flex;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_calendar_inner .fcal_side {\n  width: 45%;\n  min-width: 300px;\n  border-right: 1px solid #EAECF0;\n  transition: all 0.22s ease-out;\n  padding: 30px 36px 23px 20px;\n  max-width: 360px;\n  overflow: auto;\n  min-height: 500px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar img {\n  width: 90px;\n  height: 90px;\n  object-fit: cover;\n  border-radius: 8px;\n  display: block;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_name {\n  font-size: 16px;\n  font-weight: 500;\n  line-height: 24px;\n  margin: 0;\n  color: #1B2533;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_heading {\n  font-family: Satoshi;\n  font-size: 24px;\n  font-weight: 700;\n  line-height: 32px;\n  margin: 0 0 20px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_description {\n  margin-top: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper {\n  width: auto;\n  padding: 30px 20px;\n  margin: 0 auto;\n}\n.fcal_calendar_inner .fcal_date_wrapper h2 {\n  font-size: 26px;\n  margin: 0 0 20px;\n  padding: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-container {\n  overflow: auto;\n  max-width: 368px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar-month-year h3 {\n  margin: 0;\n  font-size: 18px;\n  color: #1B2533;\n  line-height: 28px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar-month-year h3 span {\n  color: #8F97A2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar_nav button {\n  width: 30px;\n  height: 30px;\n  cursor: pointer;\n  outline: 0;\n  color: #8F97A2;\n  background: none;\n  border: none;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span:not(.day-name) {\n  padding: 5px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span:not(.day-name) span {\n  padding: 0;\n  border-radius: 4px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day {\n  text-align: center;\n  padding: 10px;\n  letter-spacing: 1px;\n  font-size: 14px;\n  box-sizing: border-box;\n  color: #98a0a6;\n  position: relative;\n  z-index: 1;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 7) {\n  border-right: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 1):nth-of-type(-n + 7) {\n  grid-row: 1;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 8):nth-of-type(-n + 14) {\n  grid-row: 2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 15):nth-of-type(-n + 21) {\n  grid-row: 3;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 22):nth-of-type(-n + 28) {\n  grid-row: 4;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 29):nth-of-type(-n + 35) {\n  grid-row: 5;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 36):nth-of-type(-n + 42) {\n  grid-row: 6;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 1) {\n  grid-column: 1/1;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 2) {\n  grid-column: 2/2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 3) {\n  grid-column: 3/3;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 4) {\n  grid-column: 4/4;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 5) {\n  grid-column: 5/5;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 6) {\n  grid-column: 6/6;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 7) {\n  grid-column: 7/7;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day-name {\n  font-size: 12px;\n  text-transform: uppercase;\n  text-align: center;\n  line-height: 30px;\n  font-weight: 500;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day-disabled {\n  color: rgb(152, 160, 166);\n  background-color: #ffffff;\n  cursor: not-allowed;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span.day.day-enabled {\n  cursor: pointer;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span.day.day-enabled:hover span {\n  background-color: rgba(0, 105, 255, 0.15);\n  color: #0060d4;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span.day.day-enabled span {\n  color: #0060e6;\n  font-weight: 700;\n  display: block;\n  width: 30px;\n  height: 30px;\n  line-height: 30px;\n  margin: 0 auto;\n  border-radius: 50%;\n  background-color: rgba(0, 105, 255, 0.065);\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span.day_is_selected.day.day-enabled span {\n  background-color: #0169ff;\n  color: white;\n}\n.fcal_calendar_inner .fcal_icon_item {\n  display: flex;\n  align-items: center;\n  column-gap: 8px;\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  line-height: 20px;\n  color: #1B2533;\n}\n.fcal_calendar_inner .fcal_icon_item svg {\n  fill: #697483;\n}\n.fcal_calendar_inner .fcal_icon_item svg path {\n  fill: #697483;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_timing {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_timing svg {\n  stroke: #697483;\n}\n\n.fcal_calendar_slot_wrap {\n  display: flex;\n  column-gap: 20px;\n  align-items: flex-start;\n  position: relative;\n}\n\n.fcal_slot_items {\n  max-height: 315px;\n  overflow: auto;\n  padding-right: 20px;\n}\n.fcal_slot_items .fcal_spot_lists {\n  margin: 0;\n  padding: 0;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot {\n  display: flex;\n  justify-content: space-between;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name {\n  width: 100%;\n  text-align: center;\n  padding: 5px 7px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: rgb(0, 105, 255);\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_time {\n  line-height: normal;\n  font-size: 1rem;\n  font-weight: 700;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_remaining {\n  line-height: normal;\n  font-size: 0.8rem;\n  font-weight: 300;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name:hover {\n  padding: 4px 7px;\n  border-width: 2px;\n  color: #0169ff;\n  border-color: #0169ff;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name {\n  width: auto;\n  background-color: rgba(0, 0, 0, 0.6);\n  color: rgb(255, 255, 255);\n  border: 1px solid transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name:hover {\n  border-color: transparent;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_confirm {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 5px 8px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.fcal_slot_picker {\n  min-width: 200px;\n}\n.fcal_slot_picker .fcal_slot_picker_header {\n  height: 38px;\n  margin-top: 0;\n  margin-bottom: 10px;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 38px;\n}\n\n.fcal_loading_dates {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 9999;\n}\n.fcal_loading_dates .fcal_loading_dates_inner {\n  display: flex;\n  height: 100%;\n  align-items: center;\n  justify-content: center;\n}\n\n.fcal_sec_heading h3 {\n  color: rgb(84, 82, 82);\n  font-size: 17px;\n  margin-bottom: 15px !important;\n}\n\n.fcal_back i.fcal_svg {\n  width: 64px;\n  height: 64px;\n  border: 1px solid rgba(0, 105, 255, 0.15);\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.fcal_back i.fcal_svg svg {\n  fill: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg:hover {\n  background-color: rgba(0, 105, 255, 0.15);\n  outline: none;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n  border-radius: 50%;\n  background-clip: padding-box;\n  color: rgb(0, 105, 255);\n}\n.fcal_back i.fcal_svg.ff_svg {\n  width: 48px;\n  height: 48px;\n}\n\n.fcal_timezone_select {\n  max-width: 300px;\n  margin-top: 30px;\n}\n.fcal_timezone_select label {\n  font-weight: 500;\n  display: block;\n  margin-bottom: 5px;\n}\n\n.fcal_form_item {\n  display: block;\n  width: 100%;\n  margin-bottom: 12px;\n}\n.fcal_form_item .fcal_input_label {\n  font-weight: 500;\n  display: block;\n  width: 100%;\n  margin-bottom: 7px;\n  line-height: 100%;\n}\n.fcal_form_item .fcal_input {\n  width: 90%;\n  padding: 8px 10px;\n}\n\n.fcal_date_wrapper {\n  min-width: 40%;\n}\n\n/*\n* Booking confirmation\n */\n.fcal_booking_confirmed {\n  max-width: 700px;\n  margin: 50px auto;\n  padding: 20px;\n}\n.fcal_booking_confirmed .fcal_confirm_header {\n  text-align: center;\n}\n.fcal_booking_confirmed ul.fcal_conform_items {\n  list-style: none;\n  margin: 20px 0;\n  padding: 20px 0;\n  border-top: 2px solid rgba(26, 26, 26, 0.1);\n  border-bottom: 2px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_booking_confirmed ul.fcal_conform_items li {\n  margin-bottom: 10px;\n}\n.fcal_booking_confirmed span.fcal_slot_name_icon {\n  width: 18px;\n  height: 18px;\n  background-color: rgb(130, 71, 245);\n  border-radius: 50%;\n}\n.fcal_booking_confirmed li.fcal_conform_slot_name {\n  display: flex;\n  column-gap: 10px;\n  align-items: center;\n}\n\n.fcal_btn_submit {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 10px 15px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_btn_submit:hover {\n  background: rgb(4, 76, 177);\n}\n.fcal_btn_submit.fcal_btn_submitting {\n  background: rgba(0, 105, 255, 0.5);\n  border-color: transparent;\n  cursor: progress;\n}\n\n.fcal_back.fcal_go_back {\n  position: absolute;\n  left: 0;\n  top: 30px;\n}\n.fcal_back.fcal_go_back i.fcal_svg {\n  width: 44px;\n  height: 44px;\n}\n\n.fcal_errors {\n  padding: 10px;\n  background: #ffff95;\n}\n\n/*\n* Responsive CSS\n */\n.fcal_time_picker_head {\n  display: none;\n}\n\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap {\n  flex-direction: column;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .calendar-container {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker {\n  width: 100%;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected {\n  justify-content: space-between;\n  column-gap: 15px;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected > div {\n  flex: 1;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_day_picker_head {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head {\n  display: block;\n  position: relative;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head h3 {\n  margin-bottom: 0 !important;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head p {\n  margin-top: 0;\n  color: rgb(84, 82, 82);\n}\n\n.fcal_on_mobile .fcal_slot_picker_header {\n  text-align: center;\n  border-bottom: 1px solid #c8c7c7;\n}\n.fcal_on_mobile.fcal_calendar_inner {\n  flex-direction: column;\n}\n.fcal_on_mobile.fcal_calendar_inner .fcal_side {\n  width: 100%;\n  max-width: 100%;\n  min-width: 100%;\n  border-right: none;\n  max-height: 100%;\n  min-height: auto;\n}\n.fcal_on_mobile .fcal_sec_heading {\n  text-align: center;\n}\n\n.calendar_nav svg {\n  height: 1em;\n  width: 1em;\n}\n.calendar_nav .fcal_nav_active svg {\n  color: rgb(3, 96, 230);\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fcal_cal_wrap {\n  box-sizing: border-box;\n}\n.fcal_cal_wrap * {\n  box-sizing: border-box;\n}\n\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item + .fcal_form_item {\n  margin-top: 16px;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label {\n  display: block;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label .fcal_input_label {\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 700;\n  line-height: 20px;\n  color: #445164;\n  margin-bottom: 10px;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label textarea,\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label input {\n  padding: 7px 16px;\n  border: 1px solid #D6DAE1;\n  border-radius: 8px;\n  display: block;\n  width: 100%;\n  transition: 0.2s;\n  font-family: Satoshi;\n  font-size: 16px;\n  font-weight: 400;\n  line-height: 24px;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label textarea:focus,\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label input:focus {\n  outline: none;\n  box-shadow: none;\n  border-color: #4587EC;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item label textarea {\n  height: 112px;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item button {\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  line-height: 20px;\n  color: #ffffff;\n  padding: 10px 20px;\n  background: #4587EC;\n  border-radius: 8px;\n}\n.fcal_booking_form_wrap .fcal_booking_form .fcal_form_item.fcal_submit {\n  margin-top: 20px;\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n}\n\n.fcal_calendar_inner {\n  display: flex;\n  border: 1px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_calendar_inner .fcal_side {\n  width: 45%;\n  min-width: 360px;\n  border-right: 1px solid #EAECF0;\n  transition: all 0.22s ease-out;\n  padding: 30px 36px 23px 20px;\n  max-width: 360px;\n  overflow: auto;\n  min-height: 500px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_avatar img {\n  width: 90px;\n  height: 90px;\n  object-fit: cover;\n  border-radius: 8px;\n  display: block;\n}\n.fcal_calendar_inner .fcal_side .fcal_author_name {\n  font-size: 16px;\n  font-weight: 500;\n  line-height: 24px;\n  margin: 0;\n  color: #1B2533;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_heading {\n  font-family: Satoshi;\n  font-size: 24px;\n  font-weight: 700;\n  line-height: 32px;\n  margin: 0 0 20px;\n}\n.fcal_calendar_inner .fcal_side .fcal_slot_description {\n  margin-top: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper {\n  width: auto;\n  padding: 0;\n  margin: 0 auto;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details {\n  padding: 24px 20px;\n  width: 600px;\n  max-width: 600px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header {\n  border-bottom: 1px solid #EAECF0;\n  padding-bottom: 20px;\n  margin-bottom: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header h2 {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  font-family: Satoshi;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 28px;\n  color: #1B2533;\n  margin: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header .fcal_back i.fcal_svg {\n  width: 40px;\n  height: 40px;\n  border: 1px solid rgba(68, 81, 100, 0.1);\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition: 0.3s;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header .fcal_back i.fcal_svg svg {\n  fill: #445164;\n  width: 18px;\n  transition: 0.3s;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header .fcal_back i.fcal_svg:hover {\n  outline: none;\n  background-clip: padding-box;\n  background: #4587EC;\n  border-color: #4587EC;\n  color: #4587EC;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header .fcal_back i.fcal_svg:hover svg {\n  fill: #ffffff;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_date_event_details .fcal_date_event_details_header .fcal_back i.fcal_svg.ff_svg {\n  width: 48px;\n  height: 48px;\n}\n.fcal_calendar_inner .fcal_date_wrapper h2 {\n  font-size: 26px;\n  margin: 0 0 20px;\n  padding: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_day_picker {\n  padding: 30px 20px;\n  height: 100%;\n}\n.fcal_calendar_inner .fcal_date_wrapper .fcal_day_picker .fcal_timezone_select {\n  max-width: 350px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-container {\n  max-width: 368px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar-month-year h3 {\n  margin: 0;\n  font-size: 18px;\n  color: #1B2533;\n  line-height: 28px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar-month-year h3 span {\n  color: #8F97A2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar-header .calendar_nav button {\n  width: 30px;\n  height: 30px;\n  cursor: pointer;\n  outline: 0;\n  color: #8F97A2;\n  background: none;\n  border: none;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span:not(.day-name) {\n  padding: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar span:not(.day-name) span {\n  padding: 0;\n  border-radius: 4px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day {\n  text-align: center;\n  padding: 10px;\n  box-sizing: border-box;\n  position: relative;\n  z-index: 1;\n  color: #B4B9C1;\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  line-height: 20px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 7) {\n  border-right: 0;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 1):nth-of-type(-n + 7) {\n  grid-row: 1;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 8):nth-of-type(-n + 14) {\n  grid-row: 2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 15):nth-of-type(-n + 21) {\n  grid-row: 3;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 22):nth-of-type(-n + 28) {\n  grid-row: 4;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 29):nth-of-type(-n + 35) {\n  grid-row: 5;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(n + 36):nth-of-type(-n + 42) {\n  grid-row: 6;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 1) {\n  grid-column: 1/1;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 2) {\n  grid-column: 2/2;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 3) {\n  grid-column: 3/3;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 4) {\n  grid-column: 4/4;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 5) {\n  grid-column: 5/5;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 6) {\n  grid-column: 6/6;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day:nth-of-type(7n + 7) {\n  grid-column: 7/7;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day-name {\n  text-transform: uppercase;\n  text-align: center;\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  height: 44px;\n  line-height: 44px;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day.day-disabled {\n  color: rgb(152, 160, 166);\n  background-color: #ffffff;\n  cursor: not-allowed;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day.day-enabled {\n  cursor: pointer;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day.day-enabled:hover span {\n  background-color: #4587EC;\n  color: white;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day.day-enabled span {\n  color: #445164;\n  font-weight: 500;\n  display: block;\n  width: 40px;\n  height: 40px;\n  line-height: 40px;\n  margin: 0 auto;\n  border-radius: 4px;\n  background-color: #F6F6F7;\n  transition: 0.3s;\n}\n.fcal_calendar_inner .fcal_date_wrapper .calendar .day.day_is_selected.day.day-enabled span {\n  background-color: #4587EC;\n  color: white;\n}\n.fcal_calendar_inner .fcal_icon_item {\n  display: flex;\n  align-items: center;\n  column-gap: 8px;\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  line-height: 20px;\n  color: #1B2533;\n}\n.fcal_calendar_inner .fcal_icon_item svg {\n  fill: #697483;\n}\n.fcal_calendar_inner .fcal_icon_item svg path {\n  fill: #697483;\n}\n.fcal_calendar_inner .fcal_icon_item.fcal_icon_item {\n  margin-bottom: 10px;\n}\n.fcal_calendar_inner .fcal_icon_item.fcal_icon_item svg {\n  stroke: #697483;\n  flex: none;\n  width: 16px;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_time_range svg {\n  fill: #697483;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_time_range svg path {\n  fill: #697483 !important;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_timezone svg {\n  fill: none;\n  stroke: none;\n}\n.fcal_calendar_inner .fcal_icon_item.slot_timezone svg path {\n  fill: #697483 !important;\n}\n\n.fcal_calendar_slot_wrap {\n  display: flex;\n  column-gap: 40px;\n  align-items: flex-start;\n  position: relative;\n}\n\n.fcal_slot_items {\n  max-height: 390px;\n  overflow: auto;\n  padding-right: 8px;\n}\n.fcal_slot_items::-webkit-scrollbar {\n  width: 5px;\n}\n.fcal_slot_items::-webkit-scrollbar-thumb {\n  background: #e4e4e7;\n  border-radius: 10px;\n}\n.fcal_slot_items::-webkit-scrollbar-track {\n  background: transparent;\n}\n.fcal_slot_items .fcal_spot_lists {\n  margin: 0;\n  padding: 0;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot {\n  display: flex;\n  justify-content: space-between;\n  padding: 0;\n  border: 1px solid #ADB5C2;\n  border-radius: 4px;\n  width: 100%;\n  align-items: center;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot + .fcal_spot {\n  margin-top: 15px;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot:hover {\n  border-color: #4587EC;\n  background: #F0F6FE;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot:hover .fcal_spot_name .fcal_spot_time {\n  color: #4587EC;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name {\n  cursor: pointer;\n  box-sizing: border-box;\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n  align-items: center;\n  padding: 12px 24px;\n  font-size: 15px;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_time {\n  font-family: Satoshi;\n  font-size: 15px;\n  font-weight: 500;\n  line-height: 24px;\n  color: #445164;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_remaining {\n  font-family: Satoshi;\n  font-size: 14px;\n  font-weight: 500;\n  line-height: 20px;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_name .fcal_spot_remaining {\n  line-height: normal;\n  font-size: 0.8rem;\n  font-weight: 300;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected {\n  background: #F0F6FE;\n  border-color: #4587EC;\n  padding-right: 1px;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name {\n  color: #4587EC;\n  font-weight: 700;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot.fcal_spot_selected .fcal_spot_name .fcal_spot_time {\n  color: #4587EC;\n  font-weight: 700;\n}\n.fcal_slot_items .fcal_spot_lists .fcal_spot .fcal_spot_confirm {\n  background: #4587EC;\n  text-align: center;\n  padding: 11px 21px;\n  border-radius: 4px;\n  border: none;\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n  font-family: Satoshi;\n  font-size: 16px;\n  font-weight: 500;\n  line-height: 24px;\n}\n\n.svelte-select .svelte-select-list {\n  border: 1px solid #EAECF0 !important;\n  border-radius: 8px;\n  box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1) !important;\n  padding: 8px 0 8px 8px;\n}\n.svelte-select .svelte-select-list::-webkit-scrollbar {\n  width: 5px;\n}\n.svelte-select .svelte-select-list::-webkit-scrollbar-thumb {\n  background: #e4e4e7;\n  border-radius: 10px;\n}\n.svelte-select .svelte-select-list::-webkit-scrollbar-track {\n  background: transparent;\n}\n\n.fcal_slot_picker {\n  min-width: 290px;\n  position: relative;\n}\n.fcal_slot_picker:before {\n  content: \"\";\n  position: absolute;\n  left: -20px;\n  width: 1px;\n  height: calc(100% + 66px);\n  background: #EAECF0;\n  top: -30px;\n}\n.fcal_slot_picker .fcal_slot_picker_header {\n  margin: 0 0 20px;\n  font-family: Satoshi;\n  font-size: 16px;\n  font-weight: 500;\n  line-height: 24px;\n  color: #1B2533;\n}\n\n.fcal_loading_dates {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 9999;\n}\n.fcal_loading_dates .fcal_loading_dates_inner {\n  display: flex;\n  height: 100%;\n  align-items: center;\n  justify-content: center;\n}\n\n.fcal_sec_heading h3 {\n  color: rgb(84, 82, 82);\n  font-size: 17px;\n  margin-bottom: 15px !important;\n}\n\n.fcal_timezone_select {\n  max-width: 300px;\n  margin-top: 30px;\n}\n.fcal_timezone_select label {\n  font-weight: 500;\n  display: block;\n  margin-bottom: 5px;\n}\n\n.fcal_date_wrapper {\n  min-width: 40%;\n}\n\n/*\n* Booking confirmation\n */\n.fcal_booking_confirmed {\n  max-width: 700px;\n  margin: 50px auto;\n  padding: 20px;\n}\n.fcal_booking_confirmed .fcal_confirm_header {\n  text-align: center;\n}\n.fcal_booking_confirmed ul.fcal_conform_items {\n  list-style: none;\n  margin: 20px 0;\n  padding: 20px 0;\n  border-top: 2px solid rgba(26, 26, 26, 0.1);\n  border-bottom: 2px solid rgba(26, 26, 26, 0.1);\n}\n.fcal_booking_confirmed ul.fcal_conform_items li {\n  margin-bottom: 10px;\n}\n.fcal_booking_confirmed span.fcal_slot_name_icon {\n  width: 18px;\n  height: 18px;\n  background-color: rgb(130, 71, 245);\n  border-radius: 50%;\n}\n.fcal_booking_confirmed li.fcal_conform_slot_name {\n  display: flex;\n  column-gap: 10px;\n  align-items: center;\n}\n\n.fcal_btn_submit {\n  background: rgb(0, 105, 255);\n  text-align: center;\n  padding: 10px 15px;\n  border-radius: 4px;\n  margin-bottom: 15px;\n  border: 1px solid rgba(0, 105, 255, 0.5);\n  color: white;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n.fcal_btn_submit:hover {\n  background: rgb(4, 76, 177);\n}\n.fcal_btn_submit.fcal_btn_submitting {\n  background: rgba(0, 105, 255, 0.5);\n  border-color: transparent;\n  cursor: progress;\n}\n\n.fcal_back.fcal_go_back {\n  position: absolute;\n  left: 0;\n  top: 30px;\n}\n.fcal_back.fcal_go_back i.fcal_svg {\n  width: 44px;\n  height: 44px;\n}\n\n.fcal_errors {\n  padding: 10px;\n  background: #ffff95;\n}\n\n/*\n* Responsive CSS\n */\n.fcal_time_picker_head {\n  display: none;\n}\n\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap {\n  flex-direction: column;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .calendar-container {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker {\n  width: 100%;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected {\n  justify-content: space-between;\n  column-gap: 15px;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_calendar_slot_wrap .fcal_slot_picker .fcal_spot_selected > div {\n  flex: 1;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_day_picker_head {\n  display: none;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head {\n  display: block;\n  position: relative;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head h3 {\n  margin-bottom: 0 !important;\n}\n.f_cal_day_selected .fcal_on_mobile .fcal_time_picker_head p {\n  margin-top: 0;\n  color: rgb(84, 82, 82);\n}\n\n.fcal_on_mobile .fcal_slot_picker_header {\n  text-align: center;\n  border-bottom: 1px solid #c8c7c7;\n}\n.fcal_on_mobile.fcal_calendar_inner {\n  flex-direction: column;\n}\n.fcal_on_mobile.fcal_calendar_inner .fcal_side {\n  width: 100%;\n  max-width: 100%;\n  min-width: 100%;\n  border-right: none;\n  max-height: 100%;\n  min-height: auto;\n}\n.fcal_on_mobile .fcal_sec_heading {\n  text-align: center;\n}\n\n.calendar_nav svg {\n  height: 1em;\n  width: 1em;\n}\n.calendar_nav .fcal_nav_active svg {\n  color: rgb(3, 96, 230);\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
