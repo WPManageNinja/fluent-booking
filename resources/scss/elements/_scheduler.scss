@@ -1084,9 +1084,39 @@
       margin: 0 0 16px;
     }
     .fcal_weekly_schedule_wrap {
-      max-width: 460px;
+      max-width: 520px;
       width: 100%;
       flex: none;
+    }
+    .fcal_override_table {
+        width: 100%;
+        .fcal_override_date {
+            border: 1px solid #D6DAE1;
+            border-radius: 8px;
+            padding: 14px 37px 30px 24px;
+            table {
+                width: 100%;
+                border-spacing: 0;
+                tbody tr td {
+                    border-bottom: 1px solid #EAECF0;
+                    .fcal_slots_list li {
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        display: block;
+                        color: #445164;
+                    }
+                    .date {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        display: block;
+                        color: #445164;
+                    }
+                }
+            }
+        }
     }
   }
 

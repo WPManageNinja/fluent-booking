@@ -8,6 +8,7 @@ use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\SanitizeService;
+use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityController extends Controller
@@ -45,7 +46,7 @@ class AvailabilityController extends Controller
         }
 
         if (empty($formattedSchedules)) {
-            $formattedSchedules[] = Availability::defaultScheduleSchema($hostId, 'Default', true, 'UTC', $timezone);
+            $formattedSchedules[] = AvailabilityService::defaultScheduleSchema($hostId, 'Default', true, 'UTC', $timezone);
         }
 
         return [
@@ -67,7 +68,7 @@ class AvailabilityController extends Controller
 
         $this->isTitleAlreadyExist($data['title'], $userId);
 
-        $scheduleData = Availability::defaultScheduleSchema($userId, $data['title'], false, $timezone);
+        $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
         $createSchedule = Availability::create($scheduleData);
 

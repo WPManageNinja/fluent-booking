@@ -2,9 +2,8 @@
     <div class="fcal_availability_setting">
         <div class="fcal_weekly_schedule_wrap">
             <h2 class="fcal_availability_title">Weekly Hours</h2>
-
             <ul class="fcal_weekly_existing_schedule">
-                <li v-for="(schedule, i) in existing_schedules" :key="i">
+                <li v-for="(schedule, i) in existing_schedules.weekly_schedules" :key="i">
                     <span class="day">{{ i }}</span>
                     <span class="date">
                         <span v-if="schedule.slots.length" v-for="(time, index) in schedule.slots" :key="index">
@@ -14,7 +13,27 @@
                     </span>
                 </li>
             </ul>
-
+        </div>
+        <div class="fcal_override_table">
+            <h2 class="fcal_availability_title">Date Overrides</h2>
+            <div class="fcal_override_date">
+                <table class="fcal_table_compact fcal_table_stripe">
+                    <tbody>
+                        <tr v-for="(date, index) in existing_schedules.date_overrides" style="cursor: pointer;">
+                            <td>
+                                <span class="date">{{index}}</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <ul class="fcal_slots_list">
+                                    <li v-for="time in date">
+                                        {{toDateFormat('2022-12-12 ' + time.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + time.end, 'HH:mma')}}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
