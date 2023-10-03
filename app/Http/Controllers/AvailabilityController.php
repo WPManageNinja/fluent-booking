@@ -114,4 +114,9 @@ class AvailabilityController extends Controller
             'timezone' => $timezone
         ];
     }
+
+    public function deleteSchedule(Request $request, $id)
+    {
+        error_log($id);
+    }
 }

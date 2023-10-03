@@ -1272,6 +1272,7 @@ p.fcal_profile_link a {
   padding: 3px 16px;
   height: auto;
   line-height: 34px;
+  text-align: left;
 }
 .el-popper.fcal_select ul .el-dropdown-menu__item.selected, .el-popper.fcal_select ul .el-dropdown-menu__item:hover,
 .el-popper.fcal_select ul .el-select-dropdown__item.selected,
@@ -1288,9 +1289,21 @@ p.fcal_profile_link a {
 .el-popper.fcal_select ul .el-select-dropdown__item.danger:hover {
   background: var(--el-color-danger-light-9);
 }
+.el-popper.fcal_select ul .el-dropdown-menu__item.danger:hover .el-button,
+.el-popper.fcal_select ul .el-select-dropdown__item.danger:hover .el-button {
+  color: var(--el-color-danger);
+}
 .el-popper.fcal_select ul .el-dropdown-menu__item.is-disabled,
 .el-popper.fcal_select ul .el-select-dropdown__item.is-disabled {
   opacity: 0.3;
+}
+.el-popper.fcal_select ul .el-dropdown-menu__item .el-button,
+.el-popper.fcal_select ul .el-select-dropdown__item .el-button {
+  width: 100%;
+  background: none !important;
+  padding: 0;
+  margin: 0;
+  justify-content: flex-start;
 }
 .el-popper.fcal_color_select_popover {
   padding: 8px;
@@ -3014,6 +3027,7 @@ p.fcal_profile_link a {
   border-bottom: 1px solid #EAECF0;
   padding-bottom: 15px;
   height: auto;
+  max-width: 857px;
 }
 .fcal_tabs2 .el-tabs__header .el-tabs__nav-wrap .el-tabs__nav {
   border: none;
@@ -3860,6 +3874,9 @@ p.fcal_profile_link a {
 
 .fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header {
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header h3 {
   font-size: 18px;
@@ -3870,6 +3887,12 @@ p.fcal_profile_link a {
   align-items: center;
   margin: 0;
   gap: 8px;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header .el-dropdown .fcal_plain_btn {
+  padding: 6px 10px;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .fcal_availability_header .el-dropdown .fcal_plain_btn i {
+  font-size: 14px;
 }
 .fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .sub-label {
   font-size: 14px;
@@ -3900,6 +3923,9 @@ p.fcal_profile_link a {
   border-top: none;
   margin-top: 0;
   justify-content: flex-start;
+}
+.fcal_settings_availability .fcal_settings_content_wrap .el-form .el-form-item .el-tabs .el-tabs__content {
+  overflow: inherit;
 }
 
 @media (max-width: 992px) {
