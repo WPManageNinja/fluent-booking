@@ -27,7 +27,7 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item command="delete">Delete</el-dropdown-item>
+                            <el-dropdown-item class="danger" command="delete"><el-icon><Delete /></el-icon> Delete</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -87,7 +87,7 @@
 
 <script type="text/babel">
 import EachSlot from "./EachSlot.vue";
-import { Setting, User, Right, MoreFilled } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Delete } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings.vue";
 export default {
     name: 'CalendarEventBlock',
@@ -98,7 +98,8 @@ export default {
         User,
         Right,
         CalendarSettings,
-        MoreFilled
+        MoreFilled,
+        Delete
     },
     data() {
         return {

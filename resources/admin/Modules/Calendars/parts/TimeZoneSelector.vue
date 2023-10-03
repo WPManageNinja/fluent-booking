@@ -1,6 +1,13 @@
 <template>
     <div class="fcal_time_zone_selector">
-        <el-select id="fcal_timezone_selector" filterable @change="timeZoneChanged" v-model="selected" placeholder="Select Timezone">
+        <el-select
+            id="fcal_timezone_selector"
+            filterable
+            @change="timeZoneChanged"
+            v-model="selected"
+            placeholder="Select Timezone"
+            popper-class="fcal_select"
+        >
             <el-option-group
                 v-for="(group, groupLabel) in appVars.timezones"
                 :key="groupLabel"
