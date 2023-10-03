@@ -20,9 +20,8 @@
 (new \FluentBooking\App\Hooks\Handlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
 
-
-$app->addAction('admin_menu', 'AdminMenuHandler@add');
 
 
 // Load Integrations
