@@ -2,6 +2,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\PermissionManager;
@@ -83,8 +84,20 @@ class ReportController extends Controller
             ]
         ]);
 
+        $activityQuery = BookingActivity::query();
+
+        if (!PermissionManager::hasAllCalendarAccess()) {
+            $hostId = get_current_user_id();
+            $activityQuery->whereHas('booking.calendar', function ($q) use ($hostId) {
+                $q->where('user_id', $hostId);
+            });
+        }
+
+        $activities = $activityQuery->latest()->get();
+
         return [
-            'overview' => $widgets
+            'overview'   => $widgets,
+            'activities' => $activities
         ];
     }
 }
