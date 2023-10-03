@@ -49,7 +49,7 @@ class Availability extends Model
             'key'       => sanitize_text_field($title),
             'value'     => [
                 'default'          => (bool)$default,
-                'timezone'         => sanitize_text_field($timezone),
+                'timezone'         => sanitize_text_field($fromTimezone),
                 'date_overrides'   => [],
                 'weekly_schedules' => SanitizeService::weeklySchedules($scheduleSchema, $fromTimezone, $toTimezone),
             ]
