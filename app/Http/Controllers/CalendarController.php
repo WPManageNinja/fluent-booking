@@ -8,6 +8,7 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
@@ -119,7 +120,7 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
-        $defaultSchedule = Availability::defaultScheduleSchema(
+        $defaultSchedule = AvailabilityService::defaultScheduleSchema(
             $calendar->user_id, 'Default', true, $calendar->author_timezone
         );
 
@@ -208,8 +209,7 @@ class CalendarController extends Controller
         
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
         
-        $availableSchedules = Availability::where('object_type', 'availability')->get();
-        // $availableSchedules = Availability::availablitySchedules($slot->calendar->author_timezone);
+        $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
 
         $calendars = Calendar::with(['user'])->get();
         
