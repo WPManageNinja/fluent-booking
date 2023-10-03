@@ -55,11 +55,17 @@
                                     popper-class="fcal_select"
                                     class="fcal_timezone"
                                 >
-                                    <el-option v-for="schedule in slot.settings.available_schedules"
-                                        :key="schedule.id"
-                                        :value="schedule.id"
-                                        :label="schedule.key"
-                                    />
+                                    <el-option-group
+                                            v-for="schedulesHosts in slot.settings.schedule_options"
+                                            :key="schedulesHosts.hostName"
+                                            :label="schedulesHosts.hostName">
+                                        <el-option
+                                                v-for="schedule in schedulesHosts.schedules"
+                                                :key="schedule.value"
+                                                :label="schedule.label"
+                                                :value="schedule.value">
+                                        </el-option>
+                                    </el-option-group>
                                 </el-select>
                                 <ExistingSchedule :existing_schedules="selectedSchedule" />
 

@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\SanitizeService;
 class Availability extends Model
 {
@@ -38,6 +39,26 @@ class Availability extends Model
     public function getValueAttribute($value)
     {
         return \maybe_unserialize($value);
+    }
+
+    public function availablitySchedules($toTimezone)
+    {
+        $availabilities = Availability::where('object_type', 'availability')->get();
+
+        $formattedSchedules = [];
+        foreach ($availabilities as $availability) {
+            $formattedSchedules[] = [
+                'object_id' => (int)Arr::get($availability, 'object_id'),
+                'key'       => sanitize_text_field(Arr::get($availability, 'title')),
+                'value'     => [
+                    'default'          => Arr::isTrue($availability, 'value.default'),
+                    'timezone'         => sanitize_text_field($toTimezone),
+                    'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($availability, 'value.date_overrides', []), 'UTC', $toTimezone),
+                    'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($availability, 'value.weekly_schedules', []), 'UTC', $toTimezone),
+                ]
+            ];
+        }
+        return $formattedSchedules;
     }
 
     public static function defaultScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC')

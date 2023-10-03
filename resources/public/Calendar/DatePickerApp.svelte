@@ -192,8 +192,6 @@
             <h3 class="{settings.validation_rules?.required?.value ? 'fcal_label_required' : ''}">
                 { settings.label }
             </h3>
-        {:else}
-            <h3>Select a Date & Time</h3>
         {/if}
     </div>
     <div class="fcal_time_picker_head fcal_sec_heading">
@@ -222,7 +220,7 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h3>{monthNames[month]} {year}</h3>
+                    <h3>{monthNames[month]} <span>{year}</span></h3>
                 </div>
                 <div class="calendar_nav">
                     <button type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
@@ -246,6 +244,11 @@
                 {days}
                 on:dayClick={(e)=>dayClick(e.detail)}
             />
+
+            <div class="fcal_timezone_select">
+                <label for="fcal_timezone_selector">Timezone</label>
+                <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
+            </div>
         </div>
         {#if selectedDate}
             <div class="fcal_slot_picker">
@@ -269,7 +272,7 @@
                                 </div>
                                 {#if selectedDateTime && selectedDateTime.start == day.start}
                                     <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Confirm
+                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
                                     </div>
                                 {/if}
                             </div>
@@ -279,42 +282,5 @@
             </div>
         {/if}
     </div>
-    <div class="fcal_timezone_select">
-        <label for="fcal_timezone_selector">Timezone</label>
-        <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
-    </div>
 </div>
 
-<style>
-    .calendar-container {
-        width: fit-content;
-        overflow: auto;
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        background: #fff;
-        max-width: 1200px;
-    }
-
-    .calendar-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 5px 15px;
-        background: #eef;
-        border-bottom: 1px solid rgba(166, 168, 179, 0.12);
-    }
-
-    .calendar-header button {
-        background: #eef;
-        border: 1px;
-        padding: 6px;
-        color: rgba(81, 86, 93, 0.7);
-        cursor: pointer;
-        outline: 0;
-    }
-
-    .calendar-header h3 {
-        margin: 0;
-        font-size: 18px;
-    }
-</style>

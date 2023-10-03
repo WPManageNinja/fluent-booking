@@ -74,23 +74,9 @@
                     <div class="fcal_side">
                         <div class="fcal_slot_wrapper">
                             <div class="fcal_author">
-                                {#if selectedDate}
-                                    <div class="fcal_author_avatar">
-                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
-                                            <i class="fcal_svg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                                                    <path fill="none" d="M0 0h24v24H0V0z"/>
-                                                    <path
-                                                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
-                                                </svg>
-                                            </i>
-                                        </div>
-                                    </div>
-                                {:else}
-                                    <div class="fcal_author_avatar">
-                                        <img src="{author.avatar}" alt="Author Avatar">
-                                    </div>
-                                {/if}
+                                <div class="fcal_author_avatar">
+                                    <img src="{author.avatar}" alt="Author Avatar">
+                                </div>
                                 <div class="fcal_author_name">
                                     {author.name}
                                 </div>
@@ -152,7 +138,7 @@
                                             {util.toDate(selectedDate.start, 'dddd, MMMM DD, YYYY')}
                                         </span>
                                     </div>
-                                    <div class="slot_time_range fcal_icon_item">
+                                    <div class="slot_time_range slot_timezone fcal_icon_item">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                                             <path fill="#444"
                                                 d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm5.2 5.3c.4 0 .7.3 1.1.3-.3.4-1.6.4-2-.1.3-.1.5-.2.9-.2zM1 8c0-.4 0-.8.1-1.3.1 0 .2.1.3.1 0 0 .1.1.1.2 0 .3.3.5.5.5.8.1 1.1.8 1.8 1 .2.1.1.3 0 .5-.6.8-.1 1.4.4 1.9.5.4.5.8.6 1.4 0 .7.1 1.5.4 2.2C2.7 13.3 1 10.9 1 8zm7 7c-.7 0-1.5-.1-2.1-.3-.1-.2-.1-.4 0-.6.4-.8.8-1.5 1.3-2.2.2-.2.4-.4.4-.7 0-.2.1-.5.2-.7.3-.5.2-.8-.2-.9-.8-.2-1.2-.9-1.8-1.2s-1.2-.5-1.7-.2c-.2.1-.5.2-.5-.1 0-.4-.5-.7-.4-1.1-.1 0-.2 0-.3.1s-.2.2-.4.1c-.2-.2-.1-.4-.1-.6.1-.2.2-.3.4-.4.4-.1.8-.1 1 .4.3-.9.9-1.4 1.5-1.8 0 0 .8-.7.9-.7s.2.2.4.3c.2 0 .3 0 .3-.2.1-.5-.2-1.1-.6-1.2 0-.1.1-.1.1-.1.3-.1.7-.3.6-.6 0-.4-.4-.6-.8-.6-.2 0-.4 0-.6.1-.4.2-.9.4-1.5.4C5.2 1.4 6.6 1 8 1h.8c-.6.1-1.2.3-1.6.5.6.1.7.4.5.9-.1.2 0 .4.2.5s.4.1.5-.1c.2-.3.6-.4.9-.5.4-.1.7-.3 1-.7 0-.1.1-.1.2-.2.6.2 1.2.6 1.8 1-.1 0-.1.1-.2.1-.2.2-.5.3-.2.7.1.2 0 .3-.1.4-.2.1-.3 0-.4-.1s-.1-.3-.4-.3c-.1.2-.4.3-.4.6.5 0 .4.4.5.7-.6.1-.8.4-.5.9.1.2-.1.3-.2.4-.4.6-.8 1-.8 1.7s.5 1.4 1.3 1.3c.9-.1.9-.1 1.2.7 0 .1.1.2.1.3.1.2.2.4.1.6-.3.8.1 1.4.4 2 .1.2.2.3.3.4-1.3 1.4-3 2.2-5 2.2z">
@@ -191,14 +177,30 @@
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
                         { :else if selectedDate}
-                            <h2>Enter Details</h2>
-                            <BookingForm 
-                                {slot}
-                                {timezone}
-                                bind:spot={selectedDate}
-                                bind:formFields={appData.form_fields}
-                                on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                            />
+                            <div class="fcal_date_event_details">
+                                <div class="fcal_date_event_details_header">
+                                    <h2>
+                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                            <i class="fcal_svg">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                                    <path fill="none" d="M0 0h24v24H0V0z"/>
+                                                    <path
+                                                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                                                </svg>
+                                            </i>
+                                        </div>
+                                        Enter Details
+                                    </h2>
+                                </div>
+
+                                <BookingForm
+                                    {slot}
+                                    {timezone}
+                                    bind:spot={selectedDate}
+                                    bind:formFields={appData.form_fields}
+                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                />
+                            </div>
                         {/if}
                     {/if}
                 </div>
