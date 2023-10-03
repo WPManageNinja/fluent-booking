@@ -48,23 +48,28 @@
             </div>
         </div>
 
-        <div class="fcal_dashboard_chat_wrap fcal_dashboard_box">
-            <div class="fcal_section_header">
-                <div class="fcal_title">
-                    <h3>Completed Bookings Trend</h3>
+        <div class="fcal_dashboard_chat_wrap">
+            <div class="fcal_dashboard_chat fcal_dashboard_box">
+                <div class="fcal_section_header">
+                    <div class="fcal_title">
+                        <h3>Completed Bookings Trend</h3>
+                    </div>
+                    <div class="fcal_actions">
+                        <el-date-picker
+                            v-model="filterDate2"
+                            type="date"
+                            placeholder="Select Date"
+                            popper-class="fcal_daterange_popover"
+                        />
+                    </div>
                 </div>
-                <div class="fcal_actions">
-                    <el-date-picker
-                        v-model="filterDate2"
-                        type="date"
-                        placeholder="Select Date"
-                        popper-class="fcal_daterange_popover"
-                    />
-                </div>
+                <el-skeleton v-if="loading" :rows="4" animated />
+                <ReportChat v-else :data="chatData" :categories="chatCats" />
             </div>
-            <el-skeleton v-if="loading" :rows="4" animated />
-            <div v-else class="fcal_dashboard_chat">
-                <ReportChat :data="chatData" :categories="chatCats" />
+
+            <div class="fcal_booking_activities">
+                <el-skeleton v-if="loading" :rows="4" animated />
+                <ReportsActivities v-else :activities="activities" />
             </div>
         </div>
 
@@ -74,10 +79,14 @@
 <script type="text/babel">
 import { Top } from '@element-plus/icons-vue';
 import ReportChat from "../Pieces/_ReportChat";
+import BookingActivities from "../Modules/Schedules/parts/_BookingActivities";
+import ReportsActivities from "./ReportsActivities";
 
 export default {
     name: 'Dashboard',
     components: {
+        ReportsActivities,
+        BookingActivities,
         ReportChat,
         Top
     },
@@ -142,7 +151,6 @@ export default {
                 .then(response => {
                     this.widgets = response.overview;
                     this.activities = response.activities;
-                    console.log(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
