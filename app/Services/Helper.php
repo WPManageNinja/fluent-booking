@@ -793,6 +793,7 @@ class Helper
 
         while (CalendarSlot::where('calendar_id', $calendar->id)->where('slug', $default)->first()) {
             $default = $original . '-' . $counter;
+            $counter += 1;
         }
 
         return apply_filters('fluent_booking/slot_slug', $default, $original);

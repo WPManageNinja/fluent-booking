@@ -307,7 +307,7 @@ class CalendarController extends Controller
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
-            'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom']),
+            'availability_type' => SanitizeService::checkCollection(Arr::get($slot, 'availability_type'), ['existing_schedule', 'custom']),
             'availability_id'   => (int)Arr::get($slot, 'availability_id'),
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),

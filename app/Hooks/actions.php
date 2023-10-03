@@ -26,3 +26,17 @@
 
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
+
+
+add_action('init', function () {
+    if(!isset($_GET['fcal'])) {
+        return;
+    }
+
+    // Write your tests here
+
+    $item = \FluentBooking\App\Models\CalendarSlot::where('calendar_id', 1)->where('slug', 'test')->first();
+
+    dd($item);
+
+});
