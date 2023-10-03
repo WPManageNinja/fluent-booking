@@ -461,6 +461,9 @@
             .el-form-item {
                 .fcal_availability_header {
                     margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                     h3 {
                         font-size: 18px;
                         font-weight: 500;
@@ -470,6 +473,14 @@
                         align-items: center;
                         margin: 0;
                         gap: 8px;
+                    }
+                    .el-dropdown {
+                        .fcal_plain_btn {
+                            padding: 6px 10px;
+                            i {
+                                font-size: 14px;
+                            }
+                        }
                     }
                 }
                 .sub-label {
@@ -503,6 +514,11 @@
                         border-top: none;
                         margin-top: 0;
                         justify-content: flex-start;
+                    }
+                }
+                .el-tabs {
+                    .el-tabs__content {
+                        overflow: inherit;
                     }
                 }
             }

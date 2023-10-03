@@ -32,6 +32,28 @@
                                             <el-icon><StarFilled /></el-icon> Default schedule
                                         </span>
                                     </h3>
+
+                                    <el-dropdown
+                                        trigger="click"
+                                        popper-class="fcal_select"
+                                    >
+                                        <el-button class="fcal_plain_btn el-dropdown-link">
+                                            <el-icon><Setting /></el-icon>
+                                        </el-button>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item>
+                                                    <el-button plain text @click="handleCommand(item, 'edit')"><el-icon><EditPen /></el-icon> Edit Name</el-button>
+                                                </el-dropdown-item>
+                                                <el-dropdown-item>
+                                                    <el-button plain text @click="handleCommand(item, 'set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
+                                                </el-dropdown-item>
+                                                <el-dropdown-item class="danger">
+                                                    <el-button plain text @click="handleCommand(item, 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
                                 </div>
                                 <div class="timezone">
                                     <div class="fcal_timezone_text">
@@ -86,7 +108,7 @@
 </template>
 
 <script>
-import { Calendar, Plus, StarFilled } from '@element-plus/icons-vue';
+import { Calendar, Plus, StarFilled, Setting, Delete, EditPen } from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
@@ -103,7 +125,10 @@ export default {
         Plus,
         ScheduleSettings,
         ScheduleIcon,
-        StarFilled
+        StarFilled,
+        Setting,
+        Delete,
+        EditPen
     },
     data() {
         return {
@@ -117,6 +142,29 @@ export default {
         }
     },
     methods: {
+        handleCommand(tab, command) {
+            if (command == 'delete') {
+                console.log(tab);
+                console.log(command);
+
+                this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    this.$del('availability/' + tab.id)
+                        .then(response => {
+                            this.$handleSuccess(response);
+                            this.fetchSchedules();
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        });
+                })
+                return;
+            }
+
+        },
         addNewSchedule() {
             this.scheduleTitle = '';
             this.dialogVisible = true;
