@@ -133,6 +133,8 @@
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
+
+            <ScheduleProfile />
         </div>
         <el-dialog
             v-model="cancelDialog"
@@ -171,11 +173,13 @@
 <script>
 import { Back, MoreFilled, Refresh, Close, EditPen } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
+import ScheduleProfile from "./ScheduleProfile";
 export default {
     name: "ScheduleSpotDetails",
     props: ['spot', 'spot_id'],
     $emits: ['spotFetched'],
     components: {
+        ScheduleProfile,
         BookingActivities,
         Back,
         MoreFilled,

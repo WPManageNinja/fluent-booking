@@ -698,7 +698,7 @@
 
     .fcal_date_range_radio_condition {
       .el-date-editor {
-        width: 255px;
+        width: 270px;
         padding: 5px 16px;
         border-radius: 8px;
         box-shadow: none;
@@ -1544,10 +1544,132 @@
       }
     }
 }
+.fcal_schedule_profile_box {
+  background: #ffffff;
+  border-radius: 8px;
+  margin-top: 24px;
+  .fcal_schedule_profile_header {
+    border-bottom: 1px solid #D6DAE1;
+    h1 {
+      padding: 20px 14px 16px 14px;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 28px;
+      margin: 0;
+    }
+  }
+  .fcal_schedule_profile_body {
+    padding: 20px 28px 30px 28px;
+    text-align: center;
+    .fcal_schedule_profile_avatar {
+      width: 90px;
+      height: 90px;
+      margin: auto auto 10px auto;
+      img {
+        display: block;
+        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .fcal_schedule_profile_info {
+      .fcal_schedule_profile_title {
+        margin-bottom: 20px;
+        h1 {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+          margin: 0;
+          a {
+            display: block;
+            color: $dark;
+            text-decoration: none;
+            transition: .2s;
+            &:hover {
+              color: $primaryColor;
+            }
+          }
+        }
+        p {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #445164;
+        }
+      }
+      .fcal_schedule_profile_stats {
+        display: flex;
+        border: 1px solid #CED2DA;
+        border-radius: 8px;
+        justify-content: center;
+        > span {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 20px;
+          color: #445164;
+          display: block;
+          padding: 8px 12px;
+          border-right: 1px solid #CED2DA;
+          &:last-child {
+            border: none;
+          }
+          b {
+            color: $dark;
+            transform: translateY(1px);
+            display: inline-block;
+          }
+        }
+      }
+      .fcal_schedule_profile_tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        text-align: left;
+        margin-top: 20px;
+        i {
+          color: #697483;
+          font-size: 18px;
+        }
+        span {
+          display: block;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 18px;
+          border-radius: 4px;
+          padding: 3px 6px 3px 17px;
+          color: $primaryColor;
+          background: rgb(38 83 199 / 10%);
+          position: relative;
+          word-wrap: break-word;
+          overflow-wrap: anywhere;
+          &:before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            position: absolute;
+            left: 6px;
+            top: 9px;
+            background: $primaryColor;
+            border-radius: 50%;
+          }
+        }
+      }
 
+      .fcal_schedule_profile_footer {
+        margin-top: 20px;
+        .fcal_primary_btn {
+          display: inline-block;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
 .fcal_schedule_details_content {
   width: 100%;
-  max-width: 720px;
+  max-width: 670px;
   .fcal_schedule_details_event {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
