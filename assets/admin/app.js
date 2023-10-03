@@ -69386,7 +69386,7 @@ __webpack_require__.r(__webpack_exports__);
           type: 'warning'
         }).then(function () {
           _this.$del('availability/' + tab.id).then(function (response) {
-            _this.$handleSuccess(response);
+            _this.$handleSuccess(response.message);
             _this.fetchSchedules();
           })["catch"](function (errors) {
             _this.$handleError(errors);
