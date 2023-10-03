@@ -29,6 +29,7 @@
             v-model="isNewBookingOpen"
             title="Create New Booking Type"
             :zIndex="999"
+            label-position="top"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item label="Select Host">
