@@ -130,4 +130,9 @@ class AvailabilityController extends Controller
         }
         return;
     }
+    
+    public function deleteSchedule(Request $request, $id)
+    {
+        error_log($id);
+    }
 }

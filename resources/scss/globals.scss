@@ -1195,6 +1195,7 @@ p.fcal_profile_link a {
                 padding: 3px 16px;
                 height: auto;
                 line-height: 34px;
+                text-align: left;
                 &.selected,
                 &:hover {
                     color: $dark;
@@ -1205,10 +1206,20 @@ p.fcal_profile_link a {
                     color: var(--el-color-danger);
                     &:hover {
                         background: var(--el-color-danger-light-9);
+                        .el-button {
+                            color: var(--el-color-danger);
+                        }
                     }
                 }
                 &.is-disabled {
                     opacity: 0.3;
+                }
+                .el-button {
+                    width: 100%;
+                    background: none !important;
+                    padding: 0;
+                    margin: 0;
+                    justify-content: flex-start;
                 }
             }
         }
