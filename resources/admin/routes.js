@@ -12,6 +12,7 @@ import GeneralSettings from "./Modules/Settings/GeneralSettings";
 import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
+import IntegrationGoogle from "./Modules/Calendars/integrations/IntegrationGoogle";
 
 export var routes = [
     {
@@ -31,13 +32,32 @@ export var routes = [
         }
     },
     {
-        name: 'single-integration',
         path: '/calendars/:id/single-integration',
         component: SingleIntegration,
+        props: true,
         meta: {
-            active_menu: 'calendars',
-            title: 'Single Integrations'
-        }
+            active_menu: 'calendars'
+        },
+        children: [
+            {
+                name: 'single-integration',
+                path: '/calendars/:id/single-integration',
+                component: IntegrationGoogle,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Booking Types'
+                },
+            },
+            {
+                name: 'google_calendar',
+                path: '/calendars/:id/single-integration/:settings_key',
+                component: IntegrationGoogle,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Booking Types'
+                },
+            }
+        ]
     },
     {
         path: '/calendars/:host_id/:event_type/new',
@@ -74,14 +94,6 @@ export var routes = [
             active_menu: 'scheduled_events'
         }
     },
-    // {
-    //     path: '/availability',
-    //     name: 'availability',
-    //     component: Availabilities,
-    //     meta: {
-    //         active_menu: 'availability'
-    //     }
-    // },
     {
         path: '/settings',
         component: Settings,
@@ -93,19 +105,10 @@ export var routes = [
             {
                 name: 'settings',
                 path: '/settings',
-                component: GeneralSettings,
+                component: AvailabilitySettings,
                 meta: {
                     active_menu: 'settings',
-                    title: 'General'
-                },
-            },
-            {
-                name: 'profile-settings',
-                path: 'profile-settings',
-                component: ProfileSettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Profile'
+                    title: 'Availability'
                 },
             },
             {
@@ -126,16 +129,6 @@ export var routes = [
                 meta: {
                     active_menu: 'settings',
                     title: 'Integrations'
-                },
-            },
-            {
-                name: 'availability',
-                path: 'availability/',
-                props: true,
-                component: AvailabilitySettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Availability'
                 },
             }
         ]

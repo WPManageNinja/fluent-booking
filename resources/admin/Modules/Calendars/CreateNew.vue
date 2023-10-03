@@ -8,7 +8,9 @@
             <div class="fcal_create_calendar_basic_info">
                 <basic-info ref="basicInfo" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
             </div>
-
+            <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
+                <time-zone-selector v-model="calendar.author_timezone"/>
+            </el-form-item>
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="createCalendar">
                     Continue
@@ -47,12 +49,15 @@ export default {
                 slug: '',
                 title: '',
                 description: '',
-                author_timezone: 'Asia/Dhaka',
+                author_timezone: '',
                 user_id: '',
                 slot: {
-                    duration: 15,
+                    duration: '15',
                     title: '',
                     description: '',
+                    status: 'active',
+                    color_schema: '#0099ff',
+                    availability_type: 'existing_schedule',
                     schedule_type: 'weekly_schedules',
                     weekly_schedules: this.appVars.schedule_schema,
                     event_type: 'single',
@@ -77,9 +82,6 @@ export default {
                     if(response.redirect_url) {
                         window.location.href = response.redirect_url;
                     }
-                    setTimeout(() => {
-                        window.location.reload(true);
-                    }, 500);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

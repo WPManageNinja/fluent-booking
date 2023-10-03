@@ -166,9 +166,9 @@
               font-size: 14px;
               transition: 0.2s;
               line-height: 1;
-              color: $primaryColor;
-              font-weight: 400;
-              background: rgb(38 83 199 / 10%);
+              color: $dark;
+              font-weight: 500;
+              background: #F5F6F7;
               padding: 11px 16px;
               height: auto;
               border: none;
@@ -176,7 +176,8 @@
                 font-size: 18px;
               }
               &:hover {
-                background: rgb(38 83 199 / 20%);
+                color: $primaryColor;
+                background: rgb(38 83 199 / 10%);
               }
             }
           }
@@ -1000,6 +1001,39 @@
         }
       }
     }
+
+    .el-form-item {
+      &.fcal_global_timezone {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 18px;
+        .el-form-item__label {
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 28px;
+          margin-bottom: 16px;
+        }
+        .el-form-item__content {
+          width: 100%;
+          .fcal_time_zone_selector {
+            width: 100%;
+            .el-select {
+              .el-input {
+                .el-input__wrapper {
+                  border-radius: 8px;
+                  padding: 9px 16px;
+                  input {
+                    height: auto;
+                    margin: 0;
+                    padding: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 .fcal_weekly_existing_schedule {
@@ -1330,6 +1364,7 @@
     border-bottom: 1px solid #EAECF0;
     padding-bottom: 15px;
     height: auto;
+    max-width: calc(897px - 40px);
     .el-tabs__nav-wrap {
       .el-tabs__nav {
         border: none;

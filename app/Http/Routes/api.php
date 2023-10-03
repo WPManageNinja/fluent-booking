@@ -56,12 +56,20 @@ $router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($rout
     /* Integration Settings */
     $router->prefix('{settings}')->group(function ($router) {
         $router->get('/', 'IntegrationSettingsController@index');
+        $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
         $router->post('/', 'IntegrationSettingsController@update');
     });
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SettingsController@index');
+});
+
+$router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'AvailabilityController@index');
+    $router->post('/', 'AvailabilityController@createSchedule');
+    $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
+    $router->delete('/{id}', 'AvailabilityController@deleteSchedule')->int('id');
 });
 
 $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
