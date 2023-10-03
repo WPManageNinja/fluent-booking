@@ -1991,9 +1991,9 @@ p.fcal_profile_link a {
   font-size: 14px;
   transition: 0.2s;
   line-height: 1;
-  color: #2653C7;
-  font-weight: 400;
-  background: rgba(38, 83, 199, 0.1);
+  color: #1B2533;
+  font-weight: 500;
+  background: #F5F6F7;
   padding: 11px 16px;
   height: auto;
   border: none;
@@ -2002,7 +2002,8 @@ p.fcal_profile_link a {
   font-size: 18px;
 }
 .fcal_each_cal .fcal_event_block .fcal_cal_slots .fcal_cal_slot .fcal_slot_footer .fcal_shortcode .fcal_copy_btn:hover {
-  background: rgba(38, 83, 199, 0.2);
+  color: #2653C7;
+  background: rgba(38, 83, 199, 0.1);
 }
 
 .el-select.fcal_select .el-input.is-focus .el-input__wrapper {
@@ -2690,6 +2691,32 @@ p.fcal_profile_link a {
 .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_footer .fcal_primary_btn:focus {
   background: #416ddd;
   color: #ffffff;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 18px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone .el-form-item__label {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  margin-bottom: 16px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone .el-form-item__content {
+  width: 100%;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone .el-form-item__content .fcal_time_zone_selector {
+  width: 100%;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone .el-form-item__content .fcal_time_zone_selector .el-select .el-input .el-input__wrapper {
+  border-radius: 8px;
+  padding: 9px 16px;
+}
+.fcal_create_calendar_wrap .fcal_create_calendar_body .el-form-item.fcal_global_timezone .el-form-item__content .fcal_time_zone_selector .el-select .el-input .el-input__wrapper input {
+  height: auto;
+  margin: 0;
+  padding: 0;
 }
 
 .fcal_weekly_existing_schedule {

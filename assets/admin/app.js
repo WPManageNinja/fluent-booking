@@ -70570,6 +70570,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     title: "Create New Booking Type",
     zIndex: 999,
+    "label-position": "top",
     "modal-class": "fcal_drawer"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_4__.withCtx)(function () {
@@ -70671,17 +70672,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/button/index.mjs");
 /* harmony import */ var element_plus_es_components_button_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-plus/es/components/button/style/css */ "./node_modules/element-plus/es/components/button/style/css.mjs");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var element_plus_es__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-plus/es */ "./node_modules/element-plus/es/components/form/index.mjs");
+/* harmony import */ var element_plus_es_components_form_item_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-plus/es/components/form-item/style/css */ "./node_modules/element-plus/es/components/form-item/style/css.mjs");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* unplugin-vue-components disabled */
+
 
 var _hoisted_1 = {
   "class": "fcal_create_calendar_wrap"
 };
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", {
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementVNode)("div", {
   "class": "fcal_create_calendar_header"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("h1", null, "Create a new booking calendar")], -1 /* HOISTED */);
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementVNode)("h1", null, "Create a new booking calendar")], -1 /* HOISTED */);
 var _hoisted_3 = {
   key: 0,
   "class": "fcal_create_calendar_body"
@@ -70693,21 +70697,36 @@ var _hoisted_5 = {
   "class": "fcal_create_calendar_form_footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_basic_info = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveComponent)("basic-info");
-  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_2__.ElButton;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_1, [_hoisted_2, $data.calendar.slot ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_basic_info, {
+  var _component_basic_info = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("basic-info");
+  var _component_time_zone_selector = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("time-zone-selector");
+  var _component_el_form_item = element_plus_es__WEBPACK_IMPORTED_MODULE_3__.ElFormItem;
+  var _component_el_button = element_plus_es__WEBPACK_IMPORTED_MODULE_4__.ElButton;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementBlock)("div", _hoisted_1, [_hoisted_2, $data.calendar.slot ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_basic_info, {
     ref: "basicInfo",
     slot: $data.calendar.slot,
     event_type: $data.calendar.slot.event_type
-  }, null, 8 /* PROPS */, ["slot", "event_type"])]), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)(_component_el_button, {
+  }, null, 8 /* PROPS */, ["slot", "event_type"])]), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_el_form_item, {
+    label: "Select Your Timezone *",
+    "class": "fcal_global_timezone"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_2__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_time_zone_selector, {
+        modelValue: $data.calendar.author_timezone,
+        "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+          return $data.calendar.author_timezone = $event;
+        })
+      }, null, 8 /* PROPS */, ["modelValue"])];
+    }),
+    _: 1 /* STABLE */
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_el_button, {
     "class": "fcal_primary_btn",
     onClick: $options.createCalendar
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_1__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_1__.createTextVNode)(" Continue ")];
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_2__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_2__.createTextVNode)(" Continue ")];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["onClick"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("v-if", true)]);
+  }, 8 /* PROPS */, ["onClick"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -73542,7 +73561,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.selected = $event;
     }),
-    placeholder: "Select Timezone"
+    placeholder: "Select Timezone",
+    "popper-class": "fcal_select"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_3__.withCtx)(function () {
       return [((0,vue__WEBPACK_IMPORTED_MODULE_3__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_3__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_3__.renderList)(_ctx.appVars.timezones, function (group, groupLabel) {
