@@ -59,23 +59,13 @@ class AvailabilityController extends Controller
 
         $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
 
-        $scheduleTitles = Availability::where('object_type', 'availability')
-            ->where('object_id', $userId)
-            ->pluck('key')
-            ->toArray();
-
         $data = $request->all();
 
         $this->validate($data, [
             'title'   => 'required',
         ]);
 
-        if (in_array($data['title'], $scheduleTitles)) {
-            $message = $data['title'] . ' is already exist';
-            return $this->sendError([
-                'message' => $message,
-            ], 422);
-        }
+        $this->isTitleAlreadyExist($data['title'], $userId);
 
         $scheduleData = Availability::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
@@ -103,6 +93,8 @@ class AvailabilityController extends Controller
             'title'   => 'required',
         ]);
 
+        $this->isTitleAlreadyExist($data['title'], $userId);
+
         $scheduleData = [
             'default'          => Arr::isTrue($data, 'settings.default'),
             'timezone'         => sanitize_text_field($timezone),
@@ -123,6 +115,22 @@ class AvailabilityController extends Controller
         ];
     }
 
+    private function isTitleAlreadyExist($title, $userId)
+    {
+        $scheduleTitles = Availability::where('object_type', 'availability')
+        ->where('object_id', $userId)
+        ->pluck('key')
+        ->toArray();
+
+        if (in_array($title, $scheduleTitles)) {
+            $message = $title . ' is already exist';
+            return $this->sendError([
+                'message' => $message,
+            ], 422);
+        }
+        return;
+    }
+    
     public function deleteSchedule(Request $request, $id)
     {
         error_log($id);
