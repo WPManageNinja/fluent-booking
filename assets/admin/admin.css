@@ -605,10 +605,34 @@ ul.fframe_menu.fcal_secondary_menu {
   margin-top: 16px;
 }
 
+.fcal_single_integration_wrap .fcal_header {
+  margin-bottom: 24px;
+}
+.fcal_single_integration_wrap .fcal_header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #1B2533;
+  margin: 2px 0 0 0;
+}
+.fcal_single_integration_wrap .fcal_single_integration_body_wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.fcal_single_integration_wrap .fcal_single_integration_body_wrap .el-aside {
+  width: 324px;
+  flex: none;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px 14px;
+  overflow-x: hidden;
+}
 .fcal_single_integration_wrap .fcal_single_integration_body {
   background: #ffffff;
   padding: 24px;
   border-radius: 8px;
+  flex: 1;
 }
 .fcal_single_integration_wrap .title {
   color: #1B2533;
@@ -3688,21 +3712,6 @@ p.fcal_profile_link a {
   width: 2px;
   height: 100%;
   background-color: #e4e2df;
-}
-
-.fcal_single_integration_wrap {
-  max-width: 985px;
-  margin: auto;
-}
-.fcal_single_integration_wrap .fcal_header {
-  margin-bottom: 24px;
-}
-.fcal_single_integration_wrap .fcal_header h1 {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 36px;
-  color: #1B2533;
-  margin: 2px 0 0 0;
 }
 
 .fcal_settings_card {

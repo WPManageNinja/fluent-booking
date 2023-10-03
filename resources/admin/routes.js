@@ -12,6 +12,7 @@ import GeneralSettings from "./Modules/Settings/GeneralSettings";
 import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
+import IntegrationGoogle from "./Modules/Calendars/integrations/IntegrationGoogle";
 
 export var routes = [
     {
@@ -31,13 +32,32 @@ export var routes = [
         }
     },
     {
-        name: 'single-integration',
         path: '/calendars/:id/single-integration',
         component: SingleIntegration,
+        props: true,
         meta: {
-            active_menu: 'calendars',
-            title: 'Single Integrations'
-        }
+            active_menu: 'calendars'
+        },
+        children: [
+            {
+                name: 'single-integration',
+                path: '/calendars/:id/single-integration',
+                component: IntegrationGoogle,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Booking Types'
+                },
+            },
+            {
+                name: 'google_calendar',
+                path: '/calendars/:id/single-integration/:settings_key',
+                component: IntegrationGoogle,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Booking Types'
+                },
+            }
+        ]
     },
     {
         path: '/calendars/:host_id/:event_type/new',

@@ -465,10 +465,34 @@
 }
 
 .fcal_single_integration_wrap {
+    .fcal_header {
+        margin-bottom: 24px;
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 36px;
+            color: $dark;
+            margin: 2px 0 0 0;
+        }
+    }
+    .fcal_single_integration_body_wrap {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        .el-aside {
+            width: 324px;
+            flex: none;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 14px;
+            overflow-x: hidden;
+        }
+    }
     .fcal_single_integration_body {
         background: #ffffff;
         padding: 24px;
         border-radius: 8px;
+        flex: 1;
     }
     .title {
         color: $dark;
