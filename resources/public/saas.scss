@@ -11,9 +11,8 @@
   }
 
   .fcal_calendar_inner {
-    border: 1px solid rgba(26, 26, 26, 0.1);
+    border: 1px solid #DADCE0;
     border-radius: 8px;
-    box-shadow: 0 1px 8px 0 rgb(0 0 0/8%);
     transition: all .22s ease-out;
 
     &.fcal_form_calendar {
