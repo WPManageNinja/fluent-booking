@@ -54,7 +54,7 @@ class IntegrationSettingsController extends Controller
                 'menu_items'     => $menuItems
             ]);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
