@@ -59,12 +59,18 @@ class LandingPageHandler
         if (!$user) {
             return;
         }
-        
+
         // get the calendar
         $calendar = Calendar::where('user_id', $user->ID)->first();
 
-        if (!$calendar || !$calendar->getLandingPageUrl()) {
+        if (!$calendar) {
             return;
+        }
+
+        $sharingSettings = LandingPageHelper::getSettings($calendar);
+
+        if (Arr::get($sharingSettings, 'enabled') != 'yes') {
+            return '';
         }
 
         if ($slotSlug) {
@@ -84,13 +90,15 @@ class LandingPageHandler
     {
         global $wp;
         $settings = LandingPageHelper::getSettings($calendar, 'public');
-        if ($settings['enabled'] != 'yes') {
-            return;
-        }
 
         $activeSlots = CalendarSlot::where('calendar_id', $calendar->id)
-            ->where('status', 'active')
-            ->get();
+            ->where('status', 'active');
+
+        if ($settings['show_type'] != 'all') {
+            $activeSlots = $activeSlots->whereIn('id', $settings['enabled_slots']);
+        }
+
+        $activeSlots = $activeSlots->get();
 
         foreach ($activeSlots as $activeSlot) {
             $activeSlot->public_url = $activeSlot->getPublicUrl();
@@ -127,6 +135,13 @@ class LandingPageHandler
 
     private function renderBookingView($calendar, $slot)
     {
+        $settings = LandingPageHelper::getSettings($calendar, 'public');
+        if ($settings['show_type'] != 'all') {
+            if (!in_array($slot->id, $settings['enabled_slots'])) {
+                return '';
+            }
+        }
+
         global $wp;
 
         $slot->max_lookup_date = $slot->getMaxLookUpDate();
