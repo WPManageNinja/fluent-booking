@@ -7,8 +7,9 @@ import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
 import AvailabilitySettings from "./Modules/Settings/AvailabilitySettings";
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
-import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
+import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import IntegrationGoogle from "./Modules/Calendars/integrations/IntegrationGoogle";
+import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
 
 export var routes = [
     {
@@ -28,16 +29,16 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/:id/single-integration',
-        component: SingleIntegration,
+        path: '/calendars/:id/settings',
+        component: CalendarSettings,
         props: true,
         meta: {
             active_menu: 'calendars'
         },
         children: [
             {
-                name: 'single-integration',
-                path: '/calendars/:id/single-integration',
+                name: 'google_calendar',
+                path: 'google',
                 component: IntegrationGoogle,
                 meta: {
                     active_menu: 'calendars',
@@ -45,12 +46,12 @@ export var routes = [
                 },
             },
             {
-                name: 'google_calendar',
-                path: '/calendars/:id/single-integration/:settings_key',
-                component: IntegrationGoogle,
+                name: 'landing_page_settings',
+                path: 'landing-page-settings',
+                component: LandingPageSettings,
                 meta: {
                     active_menu: 'calendars',
-                    title: 'Booking Types'
+                    title: 'Landing Page Settings'
                 },
             }
         ]

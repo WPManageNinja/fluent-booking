@@ -1,9 +1,11 @@
 <template>
     <div class="fcal_single_integration_wrap">
         <div class="fcal_header">
-            <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
-                <el-icon><Back /></el-icon> Go Back
-            </router-link>
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ name: 'calendars' }">Booking Types</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ calendar.author_profile?.name }}</el-breadcrumb-item>
+                <el-breadcrumb-item>Settings</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
 
         <el-skeleton v-if="loading" />
@@ -11,20 +13,18 @@
             <el-aside>
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, index) in menuItems" :key="index">
-                        <router-link :to="{ name: menu.key, params: { settings_key: menu.key }}">{{ menu.label }}</router-link>
+                        <router-link v-if="menu.type == 'route'" :to="menu.route">{{ menu.label }}</router-link>
                     </li>
                 </ul>
             </el-aside>
-
-            <div class="fcal_single_integration_body">
-                <router-view />
+            <div v-if="calendar.id" class="fcal_single_integration_body">
+                <router-view :calendar="calendar" />
             </div>
         </div>
-
     </div>
 </template>
 
-<script>
+<script type="text/babel">
 import {Back, Minus, Plus} from '@element-plus/icons-vue';
 import {markRaw} from "vue";
 
@@ -35,22 +35,24 @@ export default {
     },
     data() {
         return {
-            user_id: this.$route.params.id,
+            calendar_id: this.$route.params.id,
             loading: false,
             settings: {},
             fieldSettings: {},
             settingsKey: 'google_calendar',
-            menuItems: ''
+            menuItems: {},
+            calendar: {}
         }
     },
     methods: {
         getSettings() {
             this.loading = true;
-            this.$get('integrations/settings/menu', {
-                settings_key: this.settingsKey,
+            this.$get('calendars/' + this.calendar_id, {
+                with: ['settings_menu']
             })
             .then(response => {
-                this.menuItems = response.menu_items
+                this.menuItems = response.settings_menu
+                this.calendar = response.calendar
             })
             .catch(errors => {
                 this.$handleError(errors);
