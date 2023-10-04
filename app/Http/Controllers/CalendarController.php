@@ -261,6 +261,12 @@ class CalendarController extends Controller
             'event_type'                => 'required'
         ]);
 
+        $availability = Availability::where('object_type', 'availability')
+            ->where('object_id', $calendar->user_id)
+            ->first();
+
+        $availabilityId = $availability ? $availability->id : '';
+
         $slotData = [
             'title'             => $slot['title'],
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
@@ -279,8 +285,8 @@ class CalendarController extends Controller
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
-            'availability_type' => SanitizeService::checkCollection(Arr::get($slot, 'availability_type'), ['existing_schedule', 'custom']),
-            'availability_id'   => (int)Arr::get($slot, 'availability_id'),
+            'availability_type' => 'existing_schedule',
+            'availability_id'   => $availabilityId,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', []))
