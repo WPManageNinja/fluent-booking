@@ -84,6 +84,13 @@ class ReportController extends Controller
             ]
         ]);
 
+        return [
+            'overview'   => $widgets,
+        ];
+    }
+
+    public function getActivities()
+    {
         $activityQuery = BookingActivity::query();
 
         if (!PermissionManager::hasAllCalendarAccess()) {
@@ -92,10 +99,9 @@ class ReportController extends Controller
             });
         }
 
-        $activities = $activityQuery->latest()->get();
+        $activities = $activityQuery->latest()->take(100)->get();
 
         return [
-            'overview'   => $widgets,
             'activities' => $activities
         ];
     }

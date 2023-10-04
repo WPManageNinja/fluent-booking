@@ -33,17 +33,13 @@ export default {
                 },
                 series: [{
                     name: 'sales',
-                    data: this.data,//[30,40,35,50,49,60,70,91,125]
+                    data: [30,40,35,50,49,60,70,91,125]
                 }],
                 xaxis: {
-                    categories: this.categories//[1991,1992,1993,1994,1995,1996,1997, 1998,1999]
+                    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
                 }
             }
         }
     }
 }
 </script>
-
-<style scoped>
-
-</style>

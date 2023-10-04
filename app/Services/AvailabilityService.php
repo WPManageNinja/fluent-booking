@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Availability;
+use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\SanitizeService;
@@ -29,6 +30,73 @@ class AvailabilityService
             ];
         }
         return $formattedSchedules;
+    }
+
+    public static function getAvailabilitySchedule($schedule)
+    {
+        $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone'));
+
+        $formattedSchedule = [
+            'id'      => (int)Arr::get($schedule, 'id'),
+            'object_id' => (int)Arr::get($schedule, 'object_id'),
+            'key'       => sanitize_text_field(Arr::get($schedule, 'key')),
+            'value' => [
+                'default'          => Arr::isTrue($schedule, 'value.default'),
+                'timezone'         => $timezone,
+                'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
+                'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules', []), 'UTC', $timezone),
+            ]
+        ];
+        return $formattedSchedule;
+    }
+
+    public static function isTitleAlreadyExist($title, $userId)
+    {
+        $scheduleTitles = Availability::where('object_type', 'availability')
+            ->where('object_id', $userId)
+            ->pluck('key')
+            ->toArray();
+
+        if (in_array($title, $scheduleTitles)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getScheduleOptions()
+    {
+        $calendars = Calendar::with(['user'])->get();
+        
+        $scheduleOptions = [];
+
+        foreach ($calendars as $index => $calendar) 
+        {
+            $availabilities = Availability::where('object_type', 'availability')
+                ->where('object_id', $calendar->user_id)
+                ->get();
+
+            $options = [];
+            foreach ($availabilities as $availability) {
+                $options[] = [
+                    'label' => Arr::get($availability, 'key'),
+                    'value' => Arr::get($availability, 'id')
+                ];
+            }
+
+            $hostName = $calendar->user->full_name;
+            if ($calendar->user_id == get_current_user_id()) {
+                $hostName = __('My Schedules', 'fluent-booking');
+            }
+
+            if (!empty($options)) {
+                $scheduleOptions[$index] = [
+                    'hostName'  => $hostName,
+                    'schedules' => $options
+                ];
+            }
+        }
+
+        return apply_filters('fluent_booking/availability_schedule_options', $scheduleOptions);
     }
 
     public static function defaultScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC')

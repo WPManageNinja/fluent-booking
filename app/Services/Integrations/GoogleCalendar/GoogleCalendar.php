@@ -169,10 +169,6 @@ class GoogleCalendar extends IntegrationManager
             'key'       => 'google_calendar',
             'label'     => __('Google Calendar', 'fluent-booking'),
         ];
-        $menu['integrations']['submenu'][] = [
-            'key'       => 'google_calendar',
-            'label'     => __('Google Calendar', 'fluent-booking'),
-        ];
         return $menu;
     }
 
@@ -478,8 +474,8 @@ class GoogleCalendar extends IntegrationManager
 
         $bookedEvents = Arr::get($response, 'items');
 
-        foreach ($bookedEvents as $event){
-            
+        foreach ($bookedEvents as $event)
+        {    
             if ('fluent_booking' == Arr::get($event, 'extendedProperties.shared.created_by')) {
                 continue;
             }

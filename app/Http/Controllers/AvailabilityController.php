@@ -66,7 +66,14 @@ class AvailabilityController extends Controller
             'title'   => 'required',
         ]);
 
-        $this->isTitleAlreadyExist($data['title'], $userId);
+        $isTitleExist = AvailabilityService::isTitleAlreadyExist($data['title'], $userId);
+
+        if ($isTitleExist) {   
+            $message = $data['title'] . ' is already exist';
+            return $this->sendError([
+                'message' => $message,
+            ], 422);
+        }
 
         $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
@@ -74,9 +81,11 @@ class AvailabilityController extends Controller
 
         do_action('fluent_booking/avaibility_schedule_created', $createSchedule);
 
+        $availabilitySchedule = AvailabilityService::getAvailabilitySchedule($createSchedule);
+
         return [
             'message'  => __('Schedule has been created successfully', 'fluent-booking'),
-            'schedule' => $createSchedule,
+            'schedule' => $availabilitySchedule,
         ];
     }
 
@@ -94,7 +103,14 @@ class AvailabilityController extends Controller
             'title'   => 'required',
         ]);
 
-        $this->isTitleAlreadyExist($data['title'], $userId);
+        $isTitleExist = AvailabilityService::isTitleAlreadyExist($data['title'], $userId);
+
+        if ($isTitleExist) {   
+            $message = $data['title'] . ' is already exist';
+            return $this->sendError([
+                'message' => $message,
+            ], 422);
+        }
 
         $scheduleData = [
             'default'          => Arr::isTrue($data, 'settings.default'),
@@ -114,22 +130,6 @@ class AvailabilityController extends Controller
             'schedule' => $schedule,
             'timezone' => $timezone
         ];
-    }
-
-    private function isTitleAlreadyExist($title, $userId)
-    {
-        $scheduleTitles = Availability::where('object_type', 'availability')
-        ->where('object_id', $userId)
-        ->pluck('key')
-        ->toArray();
-
-        if (in_array($title, $scheduleTitles)) {
-            $message = $title . ' is already exist';
-            return $this->sendError([
-                'message' => $message,
-            ], 422);
-        }
-        return;
     }
     
     public function deleteSchedule(Request $request, $id)
