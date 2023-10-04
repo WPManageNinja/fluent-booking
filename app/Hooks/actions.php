@@ -27,6 +27,8 @@
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
+(new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
+
 
 add_action('init', function () {
     if(!isset($_GET['fcal'])) {
