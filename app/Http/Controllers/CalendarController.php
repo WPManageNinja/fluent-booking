@@ -62,6 +62,7 @@ class CalendarController extends Controller
             'author_timezone'       => 'required',
             'slot.duration'         => 'required|int',
             'slot.event_type'       => 'required',
+            'slot.availability_type'=> 'required',
             'slot.schedule_type'    => 'required',
             'slot.title'            => 'required',
             'slot.weekly_schedules' => 'required_if:slot.schedule_type,weekly_schedules',
@@ -211,38 +212,9 @@ class CalendarController extends Controller
         
         $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
 
-        $calendars = Calendar::with(['user'])->get();
+        $scheduleOptions = AvailabilityService::getScheduleOptions();
         
-        $formattedSchedules = [];
-
-        foreach ($calendars as $index => $calendar) 
-        {
-            $availabilities = Availability::where('object_type', 'availability')
-                ->where('object_id', $calendar->user_id)
-                ->get();
-
-            $options = [];
-            foreach ($availabilities as $availability) {
-                $options[] = [
-                    'label' => Arr::get($availability, 'key'),
-                    'value' => Arr::get($availability, 'id')
-                ];
-            }
-
-            $hostName = $calendar->user->full_name;
-            if ($calendar->user_id == get_current_user_id()) {
-                $hostName = __('My Schedules', 'fluent-booking');
-            }
-
-            if (!empty($options)) {
-                $formattedSchedules[$index] = [
-                    'hostName'  => $hostName,
-                    'schedules' => $options
-                ];
-            }
-        }
-        
-        $slotSettings['schedule_options'] = $formattedSchedules;
+        $slotSettings['schedule_options'] = $scheduleOptions;
 
         $slotSettings['available_schedules'] = $availableSchedules;
 

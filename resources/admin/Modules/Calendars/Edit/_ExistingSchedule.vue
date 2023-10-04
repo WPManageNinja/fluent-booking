@@ -17,7 +17,7 @@
         <div class="fcal_override_table">
             <h2 class="fcal_availability_title">Date Overrides</h2>
             <div class="fcal_override_date">
-                <table class="fcal_table_compact fcal_table_stripe">
+                <table v-if="dateOverridesNotEmpty" class="fcal_table_compact fcal_table_stripe">
                     <tbody>
                         <tr v-for="(date, index) in existing_schedules.date_overrides" style="cursor: pointer;">
                             <td>
@@ -33,6 +33,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <div v-else>No specific date overrides found for this schedule</div>
             </div>
         </div>
     </div>
@@ -41,6 +42,14 @@
 <script>
 export default {
     name: "_ExistingSchedule.vue",
-    props: ['existing_schedules']
+    props: ['existing_schedules'],
+    computed: {
+        dateOverridesNotEmpty() {
+            if (this.existing_schedules.date_overrides) {
+                return Object.keys(this.existing_schedules?.date_overrides).length;
+            }
+            return false;
+        }
+    }
 }
 </script>

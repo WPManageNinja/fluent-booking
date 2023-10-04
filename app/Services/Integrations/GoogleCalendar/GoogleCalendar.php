@@ -478,8 +478,8 @@ class GoogleCalendar extends IntegrationManager
 
         $bookedEvents = Arr::get($response, 'items');
 
-        foreach ($bookedEvents as $event){
-            
+        foreach ($bookedEvents as $event)
+        {    
             if ('fluent_booking' == Arr::get($event, 'extendedProperties.shared.created_by')) {
                 continue;
             }

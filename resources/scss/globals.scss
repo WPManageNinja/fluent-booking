@@ -112,899 +112,1273 @@
             background: $primaryColor;
         }
     }
+}
 
-    .fcal_photo_card {
-        .fcal_photo_holder {
-            position: relative;
-            width: 120px;
-            height: 120px;
+.fcal_photo_card {
+    .fcal_photo_holder {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #f1f1f1;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 50%;
-            background: #f1f1f1;
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-            }
-            .el-button {
-                position: absolute;
-                background: $primaryColor;
-                color: #ffffff;
-                border: 3px solid #ffffff;
-                border-radius: 50%;
-                width: 31px;
-                height: 31px;
-                text-align: center;
-                justify-content: center;
-                align-items: center;
-                right: 0;
-                bottom: 0;
-                padding: 0;
-                font-size: 14px;
+        }
+        .el-button {
+            position: absolute;
+            background: $primaryColor;
+            color: #ffffff;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            width: 31px;
+            height: 31px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            right: 0;
+            bottom: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+    }
+}
+.fcal_tm20 {
+    margin-top: 20px;
+}
+
+.fcal_right {
+    display: block;
+    overflow: hidden;
+    > * {
+        text-align: right;
+        float: right;
+    }
+}
+.fcal_color_select_wrap {
+    .el-select {
+        &:hover {
+            .el-input__wrapper {
+                box-shadow: none !important;
+                outline: none !important;
             }
         }
     }
-    .fcal_tm20 {
-        margin-top: 20px;
+    .el-input {
+        .el-input-group__prepend {
+            padding: 0;
+            box-shadow: none;
+            border-radius: 8px 0 0 8px !important;
+            border: 1px solid #D6DAE1;
+            border-right: none;
+            background: #F6F6F7;
+        }
+        &:hover {
+            .el-input__wrapper {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
     }
 
-    .fcal_right {
-        display: block;
-        overflow: hidden;
-        > * {
-            text-align: right;
-            float: right;
-        }
-    }
-    .fcal_color_select_wrap {
-        .el-select {
-            &:hover {
-                .el-input__wrapper {
-                    box-shadow: none !important;
-                    outline: none !important;
-                }
-            }
-        }
-        .el-input {
-            .el-input-group__prepend {
-                padding: 0;
-                box-shadow: none;
-                border-radius: 8px 0 0 8px !important;
-                border: 1px solid #D6DAE1;
-                border-right: none;
-                background: #F6F6F7;
-            }
-            &:hover {
-                .el-input__wrapper {
-                    box-shadow: none !important;
-                    outline: none !important;
-                }
-            }
-        }
-
-        .el-input-group--prepend {
-            .el-input-group__prepend {
-                .el-select {
-                    .el-input {
-                        &.is-focus {
-                            .el-input__wrapper {
-                                box-shadow: none !important;
-                                outline: none !important;
-                            }
-
-                        }
-                    }
-                    &:focus,
-                    &:hover {
+    .el-input-group--prepend {
+        .el-input-group__prepend {
+            .el-select {
+                .el-input {
+                    &.is-focus {
                         .el-input__wrapper {
                             box-shadow: none !important;
                             outline: none !important;
                         }
-                    }
-                }
-            }
-        }
-    }
-    .fcal_color_select {
-        position: relative;
-        padding: 0 20px;
-        .fcal_color {
-            width: 19px;
-            height: 19px;
-            border-radius: 50%;
-            display: block;
-            position: absolute;
-            left: 16px;
-            top: 14px;
-        }
-        .el-input {
-            .el-input__wrapper {
-                box-shadow: none !important;
-                border: none !important;
-                .el-input__inner {
-                    color: transparent !important;
-                    &::placeholder {
-                        color: transparent !important;
-                    }
-                }
-            }
-        }
-    }
-    .fcal_back_btn {
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 24px;
-        color: #445164;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        &:hover {
-            color: $primaryColor;
-        }
-        &:focus {
-            outline: none;
-            box-shadow: none;
-        }
-    }
-    .fcal_configure_integrations {
-        border: none;
-        .fcal_configure_integration_card {
-            + .fcal_configure_integration_card {
-                margin-top: 24px;
-            }
-        }
-    }
-    .fcal_configure_integration_card {
-        margin: 0;
-        border: 1px solid #D6DAE1;
-        border-radius: 8px;
-        padding: 24px;
-        &.el-collapse-item,
-        &:last-child {
-            margin: 0;
-        }
-        .el-collapse-item__header {
-            height: auto;
-            border: none;
-            &.is-active {
-                .fcal_configure_integration_card_header {
-                    .collapse-btn {
-                        i {
-                            transform: rotate(90deg);
-                        }
-                    }
-                }
 
-            }
-            > .el-collapse-item__arrow {
-                display: none;
+                    }
+                }
+                &:focus,
+                &:hover {
+                    .el-input__wrapper {
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+                }
             }
         }
-        .fcal_configure_integration_card_header {
-            width: 100%;
+    }
+}
+.fcal_color_select {
+    position: relative;
+    padding: 0 20px;
+    .fcal_color {
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        left: 16px;
+        top: 14px;
+    }
+    .el-input {
+        .el-input__wrapper {
+            box-shadow: none !important;
+            border: none !important;
+            .el-input__inner {
+                color: transparent !important;
+                &::placeholder {
+                    color: transparent !important;
+                }
+            }
+        }
+    }
+}
+.fcal_back_btn {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #445164;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    &:hover {
+        color: $primaryColor;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+.fcal_configure_integrations {
+    border: none;
+    .fcal_configure_integration_card {
+        + .fcal_configure_integration_card {
+            margin-top: 24px;
+        }
+    }
+}
+.fcal_configure_integration_card {
+    margin: 0;
+    border: 1px solid #D6DAE1;
+    border-radius: 8px;
+    padding: 24px;
+    &.el-collapse-item,
+    &:last-child {
+        margin: 0;
+    }
+    .el-collapse-item__header {
+        height: auto;
+        border: none;
+        &.is-active {
+            .fcal_configure_integration_card_header {
+                .collapse-btn {
+                    i {
+                        transform: rotate(90deg);
+                    }
+                }
+            }
+
+        }
+        > .el-collapse-item__arrow {
+            display: none;
+        }
+    }
+    .fcal_configure_integration_card_header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            .left {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 24px;
-                .img-box {
-                    border: 1px solid #D6DAE1;
-                    border-radius: 8px;
-                    padding: 12px;
-                    width: 56px;
-                    height: 56px;
-                    flex: none;
-                    overflow: hidden;
-                    img {
-                        max-width: 100%;
-                        display: block;
-                        object-fit: cover;
-                    }
-                }
-                .icon {
-                    width: 48px;
-                    height: 48px;
-                    border: 1px solid #D6DAE1;
-                    flex: none;
-                    border-radius: 50%;
-                    text-align: center;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .content {
-                    h3 {
-                        margin: 0 0 8px;
-                        font-size: 18px;
-                        font-weight: 500;
-                        line-height: 28px;
-                        color: $dark;
-                    }
-                    p {
-                        font-size: 14px;
-                        font-weight: 400;
-                        line-height: 20px;
-                        color: #445164;
-                        margin: 0;
-                    }
+            gap: 24px;
+            .img-box {
+                border: 1px solid #D6DAE1;
+                border-radius: 8px;
+                padding: 12px;
+                width: 56px;
+                height: 56px;
+                flex: none;
+                overflow: hidden;
+                img {
+                    max-width: 100%;
+                    display: block;
+                    object-fit: cover;
                 }
             }
-            .collapse-btn {
+            .icon {
+                width: 48px;
+                height: 48px;
+                border: 1px solid #D6DAE1;
+                flex: none;
+                border-radius: 50%;
+                text-align: center;
                 display: inline-flex;
                 align-items: center;
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 24px;
-                color: $primaryColor;
-                gap: 8px;
-                i {
+                justify-content: center;
+            }
+            .content {
+                h3 {
+                    margin: 0 0 8px;
                     font-size: 18px;
-                    transition: .3s;
-                }
-            }
-            .fcal_primary_btn2 {
-                height: auto;
-                padding: 9px 23px;
-                .icon {
-                    font-size: 20px;
-                }
-                &:hover {
-                    background: rgb(38 83 199 / 8%);
-                    color: $primaryColor;
-                }
-                &.disconnect-btn {
-                    color: #b91c1d;
-                    border-color: #b91c1d;
-                    &:hover {
-                        background: rgb(185 28 29 / 10%);
-                    }
-                }
-            }
-
-            .el-switch {
-                &.is-checked {
-                    .el-switch__core {
-                        background: $primaryColor;
-                        .el-switch__action {
-                            left: calc(100% - 22px);
-                            &:hover {
-                                box-shadow: 0 0 0 6px rgb(38 83 199 / 20%);
-                            }
-                        }
-                    }
-                }
-                .el-switch__core {
-                    min-width: 44px;
-                    height: 24px;
-                    border-radius: 30px;
-                    background: #CED2DA;
-                    border: none;
-                    transition: .2s;
-
-                    .el-switch__action {
-                        width: 20px;
-                        height: 20px;
-                        transition: .2s;
-                        left: 2px;
-                        &:hover {
-                            box-shadow: 0 0 0 6px rgb(206 210 218 / 30%);
-                        }
-                    }
-                }
-            }
-        }
-        .el-collapse-item__wrap {
-            border: none;
-        }
-        .el-collapse-item__content {
-            padding: 0;
-            border: none;
-
-            .fcal_configure_integration_body {
-                border-top: 1px solid #EAECF0;
-                padding-top: 24px;
-                margin-top: 24px;
-                .el-form {
-                    .el-form-item {
-                        &:last-child {
-                            margin-top: 24px;
-                        }
-                    }
+                    font-weight: 500;
+                    line-height: 28px;
+                    color: $dark;
                 }
                 p {
                     font-size: 14px;
                     font-weight: 400;
                     line-height: 20px;
                     color: #445164;
-                    margin: 0 0 24px;
-                    a {
-                        text-decoration: none;
-                        color: $primaryColor;
-                        font-weight: 500;
+                    margin: 0;
+                }
+            }
+        }
+        .collapse-btn {
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            color: $primaryColor;
+            gap: 8px;
+            i {
+                font-size: 18px;
+                transition: .3s;
+            }
+        }
+        .fcal_primary_btn2 {
+            height: auto;
+            padding: 9px 23px;
+            .icon {
+                font-size: 20px;
+            }
+            &:hover {
+                background: rgb(38 83 199 / 8%);
+                color: $primaryColor;
+            }
+            &.disconnect-btn {
+                color: #b91c1d;
+                border-color: #b91c1d;
+                &:hover {
+                    background: rgb(185 28 29 / 10%);
+                }
+            }
+        }
+
+        .el-switch {
+            &.is-checked {
+                .el-switch__core {
+                    background: $primaryColor;
+                    .el-switch__action {
+                        left: calc(100% - 22px);
+                        &:hover {
+                            box-shadow: 0 0 0 6px rgb(38 83 199 / 20%);
+                        }
+                    }
+                }
+            }
+            .el-switch__core {
+                min-width: 44px;
+                height: 24px;
+                border-radius: 30px;
+                background: #CED2DA;
+                border: none;
+                transition: .2s;
+
+                .el-switch__action {
+                    width: 20px;
+                    height: 20px;
+                    transition: .2s;
+                    left: 2px;
+                    &:hover {
+                        box-shadow: 0 0 0 6px rgb(206 210 218 / 30%);
                     }
                 }
             }
         }
     }
-    .fcal_integrations {
-        .fcal_configure_integration_card {
-            .fcal_configure_integration_body {
-                border-top: 1px solid #EAECF0;
-                padding-top: 16px;
-                margin-top: 16px;
-                h4 {
-                    color: $dark;
-                    font-size: 20px;
-                    font-weight: 500;
-                    line-height: 28px;
-                    margin: 0 0 16px;
-                }
-                .fcal_integration_configuration_items {
-                    .fcal_configure_integration_card {
-                        + .fcal_configure_integration_card {
-                            margin-top: 16px;
-                        }
-                        transition: .2s;
-                        &:hover {
-                            border-color: $primaryColor;
-                            box-shadow: 0 10px 20px rgb(206 210 218 / 20%);
-                        }
+    .el-collapse-item__wrap {
+        border: none;
+    }
+    .el-collapse-item__content {
+        padding: 0;
+        border: none;
+
+        .fcal_configure_integration_body {
+            border-top: 1px solid #EAECF0;
+            padding-top: 24px;
+            margin-top: 24px;
+            .el-form {
+                .el-form-item {
+                    &:last-child {
+                        margin-top: 24px;
                     }
-                    .fcal_primary_btn {
+                }
+            }
+            p {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #445164;
+                margin: 0 0 24px;
+                a {
+                    text-decoration: none;
+                    color: $primaryColor;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
+.fcal_integrations {
+    .fcal_configure_integration_card {
+        .fcal_configure_integration_body {
+            border-top: 1px solid #EAECF0;
+            padding-top: 16px;
+            margin-top: 16px;
+            h4 {
+                color: $dark;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                margin: 0 0 16px;
+            }
+            .fcal_integration_configuration_items {
+                .fcal_configure_integration_card {
+                    + .fcal_configure_integration_card {
                         margin-top: 16px;
                     }
-                }
-            }
-        }
-    }
-
-    .fcal_single_integration_wrap {
-        .fcal_header {
-            margin-bottom: 24px;
-            h1 {
-                font-size: 28px;
-                font-weight: 700;
-                line-height: 36px;
-                color: $dark;
-                margin: 2px 0 0 0;
-            }
-        }
-        .fcal_single_integration_body_wrap {
-            display: flex;
-            align-items: flex-start;
-            gap: 24px;
-            .el-aside {
-                width: 324px;
-                flex: none;
-                background: #ffffff;
-                border-radius: 8px;
-                padding: 24px 14px;
-                overflow-x: hidden;
-            }
-        }
-        .fcal_single_integration_body {
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-            flex: 1;
-        }
-        .title {
-            color: $dark;
-            border-bottom: 1px solid #EAECF0;
-            font-size: 20px;
-            font-weight: 500;
-            line-height: 28px;
-            margin: 0 0 24px;
-            padding-bottom: 16px;
-        }
-    }
-
-
-    .fcal_sub_title {
-        margin: 0;
-        font-size: 12px;
-        font-weight: normal;
-    }
-
-    .fcal_drawer {
-        .el-drawer__body {
-            padding-top: 0;
-        }
-        .el-drawer {
-            min-width: 640px;
-            .el-drawer__header {
-                font-weight: 500;
-                line-height: 32px;
-                color: $dark;
-                padding: 40px 24px 20px 24px;
-                margin: 0;
-                .el-drawer__title {
-                    font-size: 24px;
-                }
-                .el-drawer__close-btn {
-                    border: 1px solid #D6DAE1;
-                    color: $dark;
-                    border-radius: 50%;
-                    width: 44px;
-                    height: 44px;
-                    padding: 0;
-                    margin: 0;
-                    align-items: center;
-                    justify-content: center;
                     transition: .2s;
                     &:hover {
-                        border-color: var(--el-color-danger);
+                        border-color: $primaryColor;
+                        box-shadow: 0 10px 20px rgb(206 210 218 / 20%);
+                    }
+                }
+                .fcal_primary_btn {
+                    margin-top: 16px;
+                }
+            }
+        }
+    }
+}
+
+.fcal_single_integration_wrap {
+    .fcal_header {
+        margin-bottom: 24px;
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 36px;
+            color: $dark;
+            margin: 2px 0 0 0;
+        }
+    }
+    .fcal_single_integration_body_wrap {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        .el-aside {
+            width: 324px;
+            flex: none;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 14px;
+            overflow-x: hidden;
+        }
+    }
+    .fcal_single_integration_body {
+        background: #ffffff;
+        padding: 24px;
+        border-radius: 8px;
+        flex: 1;
+    }
+    .title {
+        color: $dark;
+        border-bottom: 1px solid #EAECF0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0 0 24px;
+        padding-bottom: 16px;
+    }
+}
+
+
+.fcal_sub_title {
+    margin: 0;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.fcal_drawer {
+    .el-drawer__body {
+        padding-top: 0;
+    }
+    .el-drawer {
+        min-width: 640px;
+        .el-drawer__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: $dark;
+            padding: 40px 24px 20px 24px;
+            margin: 0;
+            .el-drawer__title {
+                font-size: 24px;
+            }
+            .el-drawer__close-btn {
+                border: 1px solid #D6DAE1;
+                color: $dark;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: .2s;
+                &:hover {
+                    border-color: var(--el-color-danger);
+                    color: var(--el-color-danger);
+                    i {
                         color: var(--el-color-danger);
-                        i {
-                            color: var(--el-color-danger);
+                    }
+                }
+            }
+        }
+    }
+}
+.fcal_create_new_booking_type_drawer {
+    .el-form-item {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        label {
+            display: block;
+            height: auto;
+            text-align: left;
+            margin-bottom: 8px;
+            line-height: 22px;
+        }
+        .el-form-item__content {
+            width: 100%;
+            .el-select {
+                .el-input {
+                    .el-input__wrapper {
+                        box-shadow: none !important;
+                        outline: none;
+                        border: 1px solid #D6DAE1;
+                        border-radius: 8px;
+                        padding: 8px 16px;
+                        &.is-focus {
+                            border-color: $primaryColor;
+                        }
+                        input {
+                            height: auto;
+                            margin: 0;
+                            padding: 0;
                         }
                     }
                 }
             }
         }
     }
-    .fcal_create_new_booking_type_drawer {
-        .el-form-item {
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 24px;
-            label {
-                display: block;
-                height: auto;
-                text-align: left;
-                margin-bottom: 8px;
-                line-height: 22px;
+    .el-button {
+        position: relative;
+        width: 100%;
+        height: auto;
+        text-align: left;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border: 1px solid #D6DAE1;
+        padding: 24px;
+        border-radius: 8px;
+        margin: 0;
+        transition: .2s;
+        &.is-disabled {
+            opacity: 0.4;
+        }
+        + .el-button {
+            margin-top: 24px;
+        }
+        &:hover {
+            background: #fafafa;
+            border-color: $primaryColor;
+            box-shadow: inset 0 0 0 1px $primaryColor;
+        }
+        > span {
+            gap: 24px;
+            width: 100%;
+        }
+        .icons-wrap {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            min-width: 76px;
+            i {
+                color: $dark;
+                font-size: 18px;
             }
-            .el-form-item__content {
-                width: 100%;
-                .el-select {
+        }
+        .content {
+            h3 {
+                color: $dark;
+                font-size: 20px;
+                font-weight: 500;
+                margin: 0 0 4px;
+                line-height: 28px;
+            }
+            h4 {
+                font-size: 14px;
+                color: #445164;
+                font-weight: 300;
+                margin: 0 0 4px;
+                line-height: 20px;
+                strong {
+                    color: $dark;
+                    font-weight: 600;
+                }
+                span {
+                    font-weight: 300;
+                }
+            }
+            p {
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 18px;
+                color: #445164;
+                margin: 0;
+            }
+            .icon-right {
+                position: absolute;
+                right: 24px;
+                color: $dark;
+                font-size: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+    }
+}
+.el-dialog {
+    &.fcal_modal {
+        border-radius: 8px;
+        .el-dialog__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: #1B2533;
+            padding: 15px 24px 15px 24px;
+            margin: 0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+
+            .el-dialog__headerbtn {
+                color: #1B2533;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                line-height: 46px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                top: 9px;
+                right: 9px;
+                &:hover {
+                    color: var(--el-color-danger);
+                }
+            }
+        }
+        .el-dialog__body {
+            padding-top: 20px;
+            h3 {
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                margin: 0;
+            }
+            p {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #445164;
+                margin: 0 0 15px;
+            }
+            .el-textarea {
+                textarea {
+                    padding: 9px 16px;
+                    border-radius: 8px;
+                    height: 112px;
+                    border: 1px solid #D6DAE1;
+                    box-shadow: none;
+                    &:focus {
+                        border-color: $primaryColor;
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding-bottom: 0;
+            .dialog-footer {
+                padding: 10px;
+                .el-button {
+                    padding: 10px 20px;
+                    transition: .2s;
+                    &.fcal_primary_btn {
+                        background: var(--el-color-danger);
+                        color: #ffffff;
+                        &:hover {
+                            background: var(--el-color-danger-light-5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.fcal_dialog {
+        max-width: 560px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 8px;
+        .el-dialog__header {
+            border: none;
+            padding: 0 0 16px;
+            background: transparent;
+            border-bottom: 1px solid #EAECF0;
+            margin-bottom: 20px;
+            .el-dialog__title {
+                font-size: 20px;
+                font-weight: 600;
+                line-height: 28px;
+                color: $dark;
+                margin: 0;
+            }
+        }
+        .el-dialog__body {
+            padding: 0;
+            .el-form {
+                .el-form-item {
+                    margin-bottom: 16px;
+                    .el-form-item__label {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        color: #445164;
+                        margin-bottom: 10px;
+                    }
                     .el-input {
+                        &.is-focus {
+                            .el-input__wrapper {
+                                box-shadow: none !important;
+                            }
+                        }
                         .el-input__wrapper {
-                            box-shadow: none !important;
-                            outline: none;
+                            box-shadow: none;
                             border: 1px solid #D6DAE1;
                             border-radius: 8px;
                             padding: 8px 16px;
                             &.is-focus {
                                 border-color: $primaryColor;
+                                box-shadow: none !important;
                             }
-                            input {
+                            .el-input__inner {
                                 height: auto;
                                 margin: 0;
                                 padding: 0;
                             }
                         }
                     }
-                }
-            }
-        }
-        .el-button {
-            position: relative;
-            width: 100%;
-            height: auto;
-            text-align: left;
-            align-items: flex-start;
-            justify-content: flex-start;
-            border: 1px solid #D6DAE1;
-            padding: 24px;
-            border-radius: 8px;
-            margin: 0;
-            transition: .2s;
-            &.is-disabled {
-                opacity: 0.4;
-            }
-            + .el-button {
-                margin-top: 24px;
-            }
-            &:hover {
-                background: #fafafa;
-                border-color: $primaryColor;
-                box-shadow: inset 0 0 0 1px $primaryColor;
-            }
-            > span {
-                gap: 24px;
-                width: 100%;
-            }
-            .icons-wrap {
-                display: flex;
-                align-items: center;
-                gap: 2px;
-                min-width: 76px;
-                i {
-                    color: $dark;
-                    font-size: 18px;
-                }
-            }
-            .content {
-                h3 {
-                    color: $dark;
-                    font-size: 20px;
-                    font-weight: 500;
-                    margin: 0 0 4px;
-                    line-height: 28px;
-                }
-                h4 {
-                    font-size: 14px;
-                    color: #445164;
-                    font-weight: 300;
-                    margin: 0 0 4px;
-                    line-height: 20px;
-                    strong {
-                        color: $dark;
-                        font-weight: 600;
+                    .el-textarea {
+                        textarea {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            height: 48px;
+                            &:focus {
+                                border-color: $primaryColor;
+                            }
+                        }
                     }
-                    span {
-                        font-weight: 300;
-                    }
-                }
-                p {
-                    font-size: 12px;
-                    font-weight: 400;
-                    line-height: 18px;
-                    color: #445164;
-                    margin: 0;
-                }
-                .icon-right {
-                    position: absolute;
-                    right: 24px;
-                    color: $dark;
-                    font-size: 20px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-            }
-        }
-    }
-    .el-dialog {
-        &.fcal_modal {
-            border-radius: 8px;
-            .el-dialog__header {
-                font-weight: 500;
-                line-height: 32px;
-                color: #1B2533;
-                padding: 15px 24px 15px 24px;
-                margin: 0;
-                border: none;
-                border-radius: 8px 8px 0 0;
 
-                .el-dialog__headerbtn {
-                    color: #1B2533;
-                    border-radius: 50%;
-                    width: 44px;
-                    height: 44px;
-                    line-height: 46px;
-                    padding: 0;
-                    margin: 0;
-                    align-items: center;
-                    justify-content: center;
-                    transition: 0.2s;
-                    top: 9px;
-                    right: 9px;
-                    &:hover {
-                        color: var(--el-color-danger);
-                    }
-                }
-            }
-            .el-dialog__body {
-                padding-top: 20px;
-                h3 {
-                    font-size: 20px;
-                    font-weight: 500;
-                    line-height: 28px;
-                    margin: 0;
-                }
-                p {
-                    font-size: 14px;
-                    font-weight: 400;
-                    line-height: 20px;
-                    color: #445164;
-                    margin: 0 0 15px;
-                }
-                .el-textarea {
-                    textarea {
-                        padding: 9px 16px;
-                        border-radius: 8px;
-                        height: 112px;
-                        border: 1px solid #D6DAE1;
-                        box-shadow: none;
-                        &:focus {
-                            border-color: $primaryColor;
-                        }
-                    }
-                }
-            }
-            .el-dialog__footer {
-                padding-bottom: 0;
-                .dialog-footer {
-                    padding: 10px;
-                    .el-button {
-                        padding: 10px 20px;
-                        transition: .2s;
-                        &.fcal_primary_btn {
-                            background: var(--el-color-danger);
-                            color: #ffffff;
-                            &:hover {
-                                background: var(--el-color-danger-light-5);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        &.fcal_dialog {
-            max-width: 560px;
-            width: 100%;
-            padding: 20px;
-            border-radius: 8px;
-            .el-dialog__header {
-                border: none;
-                padding: 0 0 16px;
-                background: transparent;
-                border-bottom: 1px solid #EAECF0;
-                margin-bottom: 20px;
-                .el-dialog__title {
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 28px;
-                    color: $dark;
-                    margin: 0;
-                }
-            }
-            .el-dialog__body {
-                padding: 0;
-                .el-form {
-                    .el-form-item {
-                        margin-bottom: 16px;
-                        .el-form-item__label {
-                            font-size: 14px;
-                            font-weight: 500;
-                            line-height: 20px;
-                            color: #445164;
-                            margin-bottom: 10px;
-                        }
-                        .el-input {
-                            &.is-focus {
-                                .el-input__wrapper {
-                                    box-shadow: none !important;
-                                }
-                            }
-                            .el-input__wrapper {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 8px 16px;
-                                &.is-focus {
-                                    border-color: $primaryColor;
-                                    box-shadow: none !important;
-                                }
-                                .el-input__inner {
-                                    height: auto;
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                            }
-                        }
-                        .el-textarea {
-                            textarea {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 8px 16px;
-                                height: 48px;
-                                &:focus {
-                                    border-color: $primaryColor;
-                                }
-                            }
-                        }
-
-                        .el-radio-group {
-                            &.radio_desc_group {
-                                display: block;
-                                position: relative;
-                                .el-radio {
-                                    .el-radio__input {
-                                        input {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                        }
-                                        &.is-checked {
-                                            .el-radio__inner {
-                                                background: transparent;
-                                                border-color: $primaryColor;
-                                            }
-                                            +.el-radio__label {
-                                                color: $dark;
-                                            }
-                                        }
-                                        .el-radio__inner {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                            &:after {
-                                                width: 12px;
-                                                height: 12px;
-                                                background: $primaryColor;
-                                            }
-                                        }
+                    .el-radio-group {
+                        &.radio_desc_group {
+                            display: block;
+                            position: relative;
+                            .el-radio {
+                                .el-radio__input {
+                                    input {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
                                     }
-                                    .el-radio__label {
-                                        b {
-                                            font-size: 16px;
-                                            font-weight: 500;
-                                            line-height: 24px;
+                                    &.is-checked {
+                                        .el-radio__inner {
+                                            background: transparent;
+                                            border-color: $primaryColor;
+                                        }
+                                        +.el-radio__label {
                                             color: $dark;
                                         }
-                                        p {
-                                            font-size: 13px;
-                                            font-weight: 400;
-                                            margin-top: 2px;
+                                    }
+                                    .el-radio__inner {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                        &:after {
+                                            width: 12px;
+                                            height: 12px;
+                                            background: $primaryColor;
                                         }
                                     }
                                 }
-                                > label {
-                                    display: flex;
-                                    flex-direction: row;
-                                    align-items: flex-start;
-                                    height: auto;
-                                    line-height: 14px;
-                                    margin-bottom: 15px;
-                                    p {
-                                        margin: 0;
+                                .el-radio__label {
+                                    b {
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        line-height: 24px;
+                                        color: $dark;
                                     }
+                                    p {
+                                        font-size: 13px;
+                                        font-weight: 400;
+                                        margin-top: 2px;
+                                    }
+                                }
+                            }
+                            > label {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: flex-start;
+                                height: auto;
+                                line-height: 14px;
+                                margin-bottom: 15px;
+                                p {
+                                    margin: 0;
                                 }
                             }
                         }
                     }
                 }
             }
-            .el-dialog__footer {
-                padding: 0 20px;
-                .dialog-footer {
-                    background: transparent;
-                    border-top: 1px solid #EAECF0;
-                    padding: 18px 0;
-                    .el-button {
-                        padding: 16px 24px;
-                    }
+        }
+        .el-dialog__footer {
+            padding: 0 20px;
+            .dialog-footer {
+                background: transparent;
+                border-top: 1px solid #EAECF0;
+                padding: 18px 0;
+                .el-button {
+                    padding: 16px 24px;
                 }
             }
         }
     }
-    table.fcal_table {
-        width: 100%;
-        text-align: left;
-        border-collapse: collapse;
-        thead tr {
-            background: #f5f5f5;
-            th {
+}
+table.fcal_table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    thead tr {
+        background: #f5f5f5;
+        th {
+            padding: 10px 15px;
+            font-weight: bold;
+            color: #000;
+        }
+    }
+    tbody {
+        tr {
+            border-bottom: 1px solid #f5f5f5;
+            border-left: 1px solid #f5f5f5;
+            border-right: 1px solid #f5f5f5;
+            td {
                 padding: 10px 15px;
-                font-weight: bold;
-                color: #000;
+                color: #666;
             }
         }
+    }
+    &.fcal_stripe {
+        tbody {
+            tr:nth-child(even) {
+                background: #f8fafc;
+            }
+        }
+    }
+    &.fcal_table_compact {
         tbody {
             tr {
-                border-bottom: 1px solid #f5f5f5;
-                border-left: 1px solid #f5f5f5;
-                border-right: 1px solid #f5f5f5;
                 td {
-                    padding: 10px 15px;
-                    color: #666;
-                }
-            }
-        }
-        &.fcal_stripe {
-            tbody {
-                tr:nth-child(even) {
-                    background: #f8fafc;
-                }
-            }
-        }
-        &.fcal_table_compact {
-            tbody {
-                tr {
-                    td {
-                        padding: 8px 5px;
-                    }
-                }
-            }
-            thead tr {
-                th {
                     padding: 8px 5px;
                 }
             }
         }
-    }
-
-    .fcal_timezone_text {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        color: #595959;
-        p {
-            font-size: 16px;
-            line-height: 16px;
-            font-weight: 500;
-            margin: 5px 5px;
+        thead tr {
+            th {
+                padding: 8px 5px;
+            }
         }
     }
+}
 
-    h3.fcal_section_title {
-        font-size: 20px;
-        margin: 15px 0;
+.fcal_timezone_text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #595959;
+    p {
+        font-size: 16px;
+        line-height: 16px;
         font-weight: 500;
+        margin: 5px 5px;
     }
+}
 
-    .fcal_booking_header {
-        padding: 12px 40px;
-        background: #e3e8ee;
-        margin: -40px -40px 30px;
-        border-bottom: 2px solid #e3e8ee;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        min-height: 58px;
-    }
+h3.fcal_section_title {
+    font-size: 20px;
+    margin: 15px 0;
+    font-weight: 500;
+}
 
-    .fcal_status_cancelled * {
-        text-decoration: line-through;
-    }
+.fcal_booking_header {
+    padding: 12px 40px;
+    background: #e3e8ee;
+    margin: -40px -40px 30px;
+    border-bottom: 2px solid #e3e8ee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 58px;
+}
 
-    p.fcal_profile_link a {
-        text-decoration: none;
-        font-weight: 500;
-    }
+.fcal_status_cancelled * {
+    text-decoration: line-through;
+}
 
-    .el-notification__content {
-        text-align: left !important;
-    }
+p.fcal_profile_link a {
+    text-decoration: none;
+    font-weight: 500;
+}
 
-    // el-popover-dropdown
-    .el-dropdown-list-wrapper {
-        &.el-popover {
-            z-index: 9999999999999 !important;
-        }
+.el-notification__content {
+    text-align: left !important;
+}
+
+// el-popover-dropdown
+.el-dropdown-list-wrapper {
+    &.el-popover {
+        z-index: 9999999999999 !important;
     }
-    .fcal_inline_items {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        > .el-input {
-            width: 64px;
-            .el-input__wrapper {
-                padding: 3px 16px !important;
-                input {
+}
+.fcal_inline_items {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    > .el-input {
+        width: 64px;
+        .el-input__wrapper {
+            padding: 3px 16px !important;
+            input {
+                appearance: none;
+                -webkit-appearance: none;
+                text-align: center;
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
                     appearance: none;
                     -webkit-appearance: none;
-                    text-align: center;
-                    &::-webkit-outer-spin-button,
-                    &::-webkit-inner-spin-button {
-                        appearance: none;
-                        -webkit-appearance: none;
+                }
+            }
+        }
+    }
+    .el-select {
+        width: 96px;
+        .el-input__wrapper {
+            padding: 3px 16px !important;
+        }
+    }
+    .help-tx {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        display: block;
+    }
+}
+
+.fcal_override_dropdown {
+    max-width: 312px;
+    width: 100%;
+    border: none;
+    box-shadow: 0 16px 48px -4px #1B253314;
+    padding: 16px 16px 23px 16px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 36px;
+    z-index: 999;
+    background: #ffffff;
+    .el-popper__arrow {
+        display: none;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    .el-calendar {
+        .el-calendar__body {
+            padding: 0;
+        }
+    }
+    .el-calendar-table {
+        tr {
+            td {
+                border: none;
+                border-radius: 8px;
+                &.is-today {
+                    color: $primaryColor;
+                    .el-calendar-day {
+                        background: rgb(38 83 199 / 10%);
+                    }
+                }
+                .el-calendar-day {
+                    border-radius: 8px;
+                    &:hover {
+                        background: rgb(38 83 199 / 10%);
+                    }
+                    p {
+                        color: $primaryColor;
+                    }
+                }
+                &.is-selected {
+                    .el-calendar-day {
+                        background: $primaryColor;
+                        p {
+                            color: #ffffff;
+                            .is-selected {
+                                background: $primaryColor;
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+                .el-calendar-day {
+                    height: 40px;
+                    width: 40px;
+                    position: relative;
+                    p {
+                        position: absolute;
+                        border-radius: 8px;
+                        &.fcal_date_disabled {
+                            color: #B4B9C1;
+                            cursor: no-drop;
+                        }
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #445164;
+                        margin: 0;
+                        text-align: center;
+                        line-height: 24px;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        line-height: 40px;
+                        .check-icon {
+                            position: absolute;
+                            border: 1.5px solid #fff;
+                            border-left: 0;
+                            border-top: 0;
+                            height: 8px;
+                            top: 3px;
+                            right: 6px;
+                            transform: rotate(45deg);
+                            width: 4px;
+                            transition: transform 0.15s ease-in 50ms;
+                            transform-origin: center;
+                        }
+                        &.is-selected {
+                            background: $primaryColor;
+                            color: #ffffff;
+                        }
                     }
                 }
             }
         }
-        .el-select {
-            width: 96px;
-            .el-input__wrapper {
-                padding: 3px 16px !important;
-            }
-        }
-        .help-tx {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 24px;
-            display: block;
-        }
     }
 
-    .fcal_override_dropdown {
+    .fcal_override_calendar_footer {
+        .fcal_override_calendar_available_hour {
+            border-top: 1px solid #EAECF0;
+            padding-top: 24px;
+            margin-top: 16px;
+            border-bottom: 1px solid #EAECF0;
+            padding-bottom: 24px;
+            h3 {
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 20px;
+                margin: 0 0 10px;
+                color: #445164;
+            }
+            .fcal_weekly_schedules {
+                border: none;
+                padding: 0;
+                border-radius: 0;
+
+                .fcal_week_day_config {
+                    padding: 0;
+                    min-height: auto;
+                    column-gap: 10px;
+                    padding-right: 10px;
+                    .fcal_add_slot {
+                        margin-top: 8px;
+                    }
+                    .fcal_slot {
+                        .el-select {
+                            width: 90px;
+                            .el-input {
+                                .el-input__wrapper {
+                                    padding: 4px 8px !important;
+                                    border-radius: 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fcal_override_calendar_footer_action {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+            > .el-button {
+                padding: 10px 16px;
+            }
+        }
+    }
+}
+.fcal_override_dropdown_wrap {
+    position: relative;
+    > .fcal_primary_btn2 {
+        padding: 10px 16px;
+    }
+}
+.el-popper {
+    &.el-dropdown-list-wrapper {
+        padding: 0;
+
+        .el-dropdown-menu {
+            width: 100%;
+
+            li {
+                margin: 0;
+            }
+        }
+    }
+    &.fcal_select {
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
+        .el-popper__arrow {
+            display: none;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            > ul {
+                border-bottom: 1px solid #eaedf0;
+                margin-bottom: 8px;
+            }
+            ul {
+                &:after {
+                    display: none;
+                }
+            }
+            .el-dropdown-menu__item,
+            .el-select-dropdown__item {
+                margin: 0;
+                border-radius: 8px;
+                color: $dark;
+                font-weight: 500;
+                padding: 3px 16px;
+                height: auto;
+                line-height: 34px;
+                text-align: left;
+                &.selected,
+                &:hover {
+                    color: $dark;
+                    background: #f5f6f7;
+                    font-weight: 500;
+                }
+                &.danger {
+                    color: var(--el-color-danger);
+                    &:hover {
+                        background: var(--el-color-danger-light-9);
+                        .el-button {
+                            color: var(--el-color-danger);
+                        }
+                    }
+                }
+                &.is-disabled {
+                    opacity: 0.3;
+                }
+                .el-button {
+                    width: 100%;
+                    background: none !important;
+                    padding: 0;
+                    margin: 0;
+                    justify-content: flex-start;
+                }
+            }
+        }
+    }
+    &.fcal_color_select_popover {
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
+        .fcal_color_select_popover {
+            min-width: 22px !important;
+        }
+
+        .el-popper__arrow {
+            display: none;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            &:hover {
+                li {
+                    span {
+                        opacity: 0.5;
+                    }
+                }
+            }
+            li {
+                margin: 0;
+                padding: 0;
+                height: auto;
+                + li {
+                    margin-top: 10px;
+                }
+                &.selected {
+                    span {
+                        opacity: 1;
+                        &:before {
+                            content: "";
+                            width: 3px;
+                            height: 8px;
+                            border-right: 1.5px solid #fff;
+                            border-bottom: 1.5px solid #fff;
+                            position: absolute;
+                            left: 9px;
+                            top: 6px;
+                            transform: rotate(45deg);
+                        }
+                    }
+                }
+                &.hover,
+                &.selected,
+                &:hover {
+                    background: transparent;
+                }
+                &.hover {
+                    > span {
+                        opacity: 1;
+                    }
+                }
+                span {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    display: block;
+                    transition: .2s;
+                    position: relative;
+                }
+            }
+        }
+    }
+    &.fcal_daterange_popover {
+        box-shadow: 0 32px 80px -4px #1B25331F;
+        border-radius: 16px;
+        border: none;
+        .el-date-range-picker {
+            border-radius: 16px;
+        }
+
+        .el-picker-panel__body {
+            .el-date-range-picker__content {
+                padding: 16px;
+                &.is-left {
+                    border-right-color: #EAECF0;
+                }
+            }
+            .el-date-table {
+                border-spacing: 0;
+                td {
+                    position: relative;
+                    &.available {
+                        &:hover {
+                            color: $primaryColor;
+                        }
+                    }
+                    &.today {
+                        &.in-range {
+                            &:hover {
+                                .el-date-table-cell__text {
+                                    color: #ffffff;
+                                }
+                            }
+                        }
+                        .el-date-table-cell__text {
+                            color: $primaryColor;
+                        }
+                        .el-date-table-cell {
+                            color: $primaryColor;
+                        }
+                    }
+                    &.in-range {
+                        .el-date-table-cell {
+                            background: #DDEBFC;
+                        }
+                    }
+                    &.end-date {
+                        .el-date-table-cell {
+                            .el-date-table-cell__text {
+                                background: $primaryColor;
+                                border-radius: 0 8px 8px 0;
+                            }
+                        }
+                    }
+                    &.start-date {
+                        .el-date-table-cell {
+                            .el-date-table-cell__text {
+                                border-radius: 12px 0 0 12px;
+                                background: $primaryColor;
+                            }
+                        }
+                    }
+                    .el-date-table-cell {
+                        width: 42px;
+                        height: 40px;
+                        position: relative;
+                        margin: 0;
+                        .el-date-table-cell__text {
+                            width: 42px;
+                            height: 40px;
+                            line-height: 38px;
+                            position: absolute;
+                            left: 0;
+                            transform: translateX(0);
+                            border-radius: 0;
+                            top: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.fcal_override_dropdown {
         max-width: 312px;
         width: 100%;
         border: none;
@@ -1012,10 +1386,6 @@
         padding: 16px 16px 23px 16px;
         border-radius: 16px;
         box-sizing: border-box;
-        position: absolute;
-        top: 36px;
-        z-index: 999;
-        background: #ffffff;
         .el-popper__arrow {
             display: none;
         }
@@ -1064,7 +1434,7 @@
                         width: 40px;
                         position: relative;
                         p {
-                            position: absolute;
+                            position: relative;
                             border-radius: 8px;
                             &.fcal_date_disabled {
                                 color: #B4B9C1;
@@ -1076,27 +1446,18 @@
                             margin: 0;
                             text-align: center;
                             line-height: 24px;
-                            left: 0;
-                            top: 0;
-                            width: 100%;
-                            height: 100%;
-                            line-height: 40px;
                             .check-icon {
                                 position: absolute;
                                 border: 1.5px solid #fff;
                                 border-left: 0;
                                 border-top: 0;
                                 height: 8px;
-                                top: 3px;
-                                right: 6px;
+                                top: -4px;
+                                right: 0;
                                 transform: rotate(45deg);
                                 width: 4px;
                                 transition: transform 0.15s ease-in 50ms;
                                 transform-origin: center;
-                            }
-                            &.is-selected {
-                                background: $primaryColor;
-                                color: #ffffff;
                             }
                         }
                     }
@@ -1155,505 +1516,144 @@
             }
         }
     }
-    .fcal_override_dropdown_wrap {
-        position: relative;
-        > .fcal_primary_btn2 {
-            padding: 10px 16px;
-        }
-    }
-    .el-popper {
-        &.el-dropdown-list-wrapper {
-            padding: 0;
-
-            .el-dropdown-menu {
-                width: 100%;
-
-                li {
-                    margin: 0;
-                }
+    &.fcal_popover {
+        .el-dropdown-menu {
+            &::-webkit-scrollbar {
+                width: 5px;
             }
-        }
-        &.fcal_select {
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
-            .el-popper__arrow {
-                display: none;
+            &::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 10px;
             }
-            ul {
-                margin: 0;
-                padding: 0;
-                > ul {
-                    border-bottom: 1px solid #eaedf0;
-                    margin-bottom: 8px;
-                }
-                ul {
-                    &:after {
-                        display: none;
-                    }
-                }
-                .el-dropdown-menu__item,
-                .el-select-dropdown__item {
-                    margin: 0;
-                    border-radius: 8px;
-                    color: $dark;
-                    font-weight: 500;
-                    padding: 3px 16px;
-                    height: auto;
-                    line-height: 34px;
-                    text-align: left;
-                    &.selected,
-                    &:hover {
-                        color: $dark;
-                        background: #f5f6f7;
-                        font-weight: 500;
-                    }
-                    &.danger {
-                        color: var(--el-color-danger);
-                        &:hover {
-                            background: var(--el-color-danger-light-9);
-                            .el-button {
-                                color: var(--el-color-danger);
-                            }
-                        }
-                    }
-                    &.is-disabled {
-                        opacity: 0.3;
-                    }
-                    .el-button {
-                        width: 100%;
-                        background: none !important;
-                        padding: 0;
-                        margin: 0;
-                        justify-content: flex-start;
-                    }
-                }
+            &::-webkit-scrollbar-track {
+                background: #fff;
+                border-radius: 10px;
             }
-        }
-        &.fcal_color_select_popover {
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
-            .fcal_color_select_popover {
-                min-width: 22px !important;
+            .group-title {
+                background: #606266;
+                border-radius: 8px 8px 0 0;
+                padding: 4px 16px;
+                line-height: 30px;
             }
-
-            .el-popper__arrow {
-                display: none;
-            }
-            ul {
-                margin: 0;
-                padding: 0;
+            li {
+                padding: 2px 16px;
+                line-height: 31px;
+                border-radius: 0;
                 &:hover {
-                    li {
-                        span {
-                            opacity: 0.5;
-                        }
-                    }
-                }
-                li {
-                    margin: 0;
-                    padding: 0;
-                    height: auto;
-                    + li {
-                        margin-top: 10px;
-                    }
-                    &.selected {
-                        span {
-                            opacity: 1;
-                            &:before {
-                                content: "";
-                                width: 3px;
-                                height: 8px;
-                                border-right: 1.5px solid #fff;
-                                border-bottom: 1.5px solid #fff;
-                                position: absolute;
-                                left: 9px;
-                                top: 6px;
-                                transform: rotate(45deg);
-                            }
-                        }
-                    }
-                    &.hover,
-                    &.selected,
-                    &:hover {
-                        background: transparent;
-                    }
-                    &.hover {
-                        > span {
-                            opacity: 1;
-                        }
-                    }
-                    span {
-                        width: 22px;
-                        height: 22px;
-                        border-radius: 50%;
-                        display: block;
-                        transition: .2s;
-                        position: relative;
-                    }
-                }
-            }
-        }
-        &.fcal_daterange_popover {
-            box-shadow: 0 32px 80px -4px #1B25331F;
-            border-radius: 16px;
-            border: none;
-            .el-date-range-picker {
-                border-radius: 16px;
-            }
-
-            .el-picker-panel__body {
-                .el-date-range-picker__content {
-                    padding: 16px;
-                    &.is-left {
-                        border-right-color: #EAECF0;
-                    }
-                }
-                .el-date-table {
-                    border-spacing: 0;
-                    td {
-                        position: relative;
-                        &.available {
-                            &:hover {
-                                color: $primaryColor;
-                            }
-                        }
-                        &.today {
-                            &.in-range {
-                                &:hover {
-                                    .el-date-table-cell__text {
-                                        color: #ffffff;
-                                    }
-                                }
-                            }
-                            .el-date-table-cell__text {
-                                color: $primaryColor;
-                            }
-                            .el-date-table-cell {
-                                color: $primaryColor;
-                            }
-                        }
-                        &.in-range {
-                            .el-date-table-cell {
-                                background: #DDEBFC;
-                            }
-                        }
-                        &.end-date {
-                            .el-date-table-cell {
-                                .el-date-table-cell__text {
-                                    background: $primaryColor;
-                                    border-radius: 0 8px 8px 0;
-                                }
-                            }
-                        }
-                        &.start-date {
-                            .el-date-table-cell {
-                                .el-date-table-cell__text {
-                                    border-radius: 12px 0 0 12px;
-                                    background: $primaryColor;
-                                }
-                            }
-                        }
-                        .el-date-table-cell {
-                            width: 42px;
-                            height: 40px;
-                            position: relative;
-                            margin: 0;
-                            .el-date-table-cell__text {
-                                width: 42px;
-                                height: 40px;
-                                line-height: 38px;
-                                position: absolute;
-                                left: 0;
-                                transform: translateX(0);
-                                border-radius: 0;
-                                top: 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        &.fcal_override_dropdown {
-            max-width: 312px;
-            width: 100%;
-            border: none;
-            box-shadow: 0 16px 48px -4px #1B253314;
-            padding: 16px 16px 23px 16px;
-            border-radius: 16px;
-            box-sizing: border-box;
-            .el-popper__arrow {
-                display: none;
-            }
-            * {
-                box-sizing: border-box;
-            }
-            .el-calendar {
-                .el-calendar__body {
-                    padding: 0;
-                }
-            }
-            .el-calendar-table {
-                tr {
-                    td {
-                        border: none;
-                        border-radius: 8px;
-                        &.is-today {
-                            color: $primaryColor;
-                            .el-calendar-day {
-                                background: rgb(38 83 199 / 10%);
-                            }
-                        }
-                        .el-calendar-day {
-                            border-radius: 8px;
-                            &:hover {
-                                background: rgb(38 83 199 / 10%);
-                            }
-                            p {
-                                color: $primaryColor;
-                            }
-                        }
-                        &.is-selected {
-                            .el-calendar-day {
-                                background: $primaryColor;
-                                p {
-                                    color: #ffffff;
-                                    .is-selected {
-                                        background: $primaryColor;
-                                        color: #ffffff;
-                                    }
-                                }
-                            }
-                        }
-                        .el-calendar-day {
-                            height: 40px;
-                            width: 40px;
-                            position: relative;
-                            p {
-                                position: relative;
-                                border-radius: 8px;
-                                &.fcal_date_disabled {
-                                    color: #B4B9C1;
-                                    cursor: no-drop;
-                                }
-                                font-size: 14px;
-                                font-weight: 400;
-                                color: #445164;
-                                margin: 0;
-                                text-align: center;
-                                line-height: 24px;
-                                .check-icon {
-                                    position: absolute;
-                                    border: 1.5px solid #fff;
-                                    border-left: 0;
-                                    border-top: 0;
-                                    height: 8px;
-                                    top: -4px;
-                                    right: 0;
-                                    transform: rotate(45deg);
-                                    width: 4px;
-                                    transition: transform 0.15s ease-in 50ms;
-                                    transform-origin: center;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .fcal_override_calendar_footer {
-                .fcal_override_calendar_available_hour {
-                    border-top: 1px solid #EAECF0;
-                    padding-top: 24px;
-                    margin-top: 16px;
-                    border-bottom: 1px solid #EAECF0;
-                    padding-bottom: 24px;
-                    h3 {
-                        font-size: 14px;
-                        font-weight: 700;
-                        line-height: 20px;
-                        margin: 0 0 10px;
-                        color: #445164;
-                    }
-                    .fcal_weekly_schedules {
-                        border: none;
-                        padding: 0;
-                        border-radius: 0;
-
-                        .fcal_week_day_config {
-                            padding: 0;
-                            min-height: auto;
-                            column-gap: 10px;
-                            padding-right: 10px;
-                            .fcal_add_slot {
-                                margin-top: 8px;
-                            }
-                            .fcal_slot {
-                                .el-select {
-                                    width: 90px;
-                                    .el-input {
-                                        .el-input__wrapper {
-                                            padding: 4px 8px !important;
-                                            border-radius: 8px;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .fcal_override_calendar_footer_action {
-                    margin-top: 16px;
-                    display: flex;
-                    justify-content: flex-end;
-                    > .el-button {
-                        padding: 10px 16px;
-                    }
-                }
-            }
-        }
-        &.fcal_popover {
-            .el-dropdown-menu {
-                &::-webkit-scrollbar {
-                    width: 5px;
-                }
-                &::-webkit-scrollbar-thumb {
-                    background: #c1c1c1;
-                    border-radius: 10px;
-                }
-                &::-webkit-scrollbar-track {
-                    background: #fff;
-                    border-radius: 10px;
-                }
-                .group-title {
-                    background: #606266;
-                    border-radius: 8px 8px 0 0;
-                    padding: 4px 16px;
-                    line-height: 30px;
-                }
-                li {
-                    padding: 2px 16px;
-                    line-height: 31px;
-                    border-radius: 0;
-                    &:hover {
-                        background: transparent;
-                        color: $primaryColor;
-                    }
+                    background: transparent;
+                    color: $primaryColor;
                 }
             }
         }
     }
+}
 
-    .el-dropdown-list-wrapper {
-        padding: 0;
-        .group-title {
-            display: block;
-            padding: 0.5rem 1rem;
-            background-color: #4B4C4D;
-            color: #fff;
-        }
+.el-dropdown-list-wrapper {
+    padding: 0;
+    .group-title {
+        display: block;
+        padding: 0.5rem 1rem;
+        background-color: #4B4C4D;
+        color: #fff;
     }
+}
 
-    .el-dropdown-list {
-        border: 0;
-        margin: 0;
-        box-shadow: none;
-        padding: 0;
-        z-index: 10;
-        position: static;
-        min-width: auto;
-        max-height: 280px;
-        overflow-y: scroll;
+.el-dropdown-list {
+    border: 0;
+    margin: 0;
+    box-shadow: none;
+    padding: 0;
+    z-index: 10;
+    position: static;
+    min-width: auto;
+    max-height: 280px;
+    overflow-y: scroll;
 
-        .el-dropdown-menu__item {
-            font-size: 13px;
-            line-height: 1rem;
-            padding: 0.5rem 1rem;
-            border-bottom: 1px solid #f1f1f1;
+    .el-dropdown-menu__item {
+        font-size: 13px;
+        line-height: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #f1f1f1;
 
-            &:last-of-type {
-                border-bottom: 0;
-            }
-
-            &:hover {
-                background-color: #e8f2ff;
-                color: #4898fc;
-            }
-        }
-    }
-
-    // wp vue editorx
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-    .wp_vue_editor_wrapper {
-        border: 1px solid #DCDFE6;
-        border-radius: 8px;
-        overflow: hidden;
-        position: relative;
-        background-color: #fff;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 10px;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        .wp-editor-container{
-            border: 0;
-        }
-        .wp-editor-tabs{
-            float: none;
-            padding: 8px;
-        }
-        .wp-switch-editor{
-            height: auto;
-            margin: 0 0 0 4px;
-            background-color: transparent;
-            padding: 2px 12px;
-            font-size: 14px;
-            border-radius: 5px;
-            line-height: inherit;
-            border-color: transparent;
-            float: none;
-            font-weight: 500;
-        }
-        .html-active .switch-html,
-        .tmce-active .switch-tmce,
-        .editor-add-shortcode {
-            background-color: #f5f7fa;
-            border-color: #DCDFE6;
-            color: #1E1F21;
-        }
-        .switch-html{
-            margin-left: 0;
-        }
-        .mce-top-part::before{
-            box-shadow: none;
-        }
-        div.mce-toolbar-grp,
-        .quicktags-toolbar {
+        &:last-of-type {
             border-bottom: 0;
-            background: #f5f7fa;
         }
-        .mce-toolbar .mce-btn-group .mce-btn.mce-listbox{
-            border: 0;
-            box-shadow: none;
-            border-radius: 4px;
+
+        &:hover {
+            background-color: #e8f2ff;
+            color: #4898fc;
         }
-        textarea{
-            border: 0;
-            padding-top: 15px;
+    }
+}
+
+// wp vue editorx
+.wp_vue_editor {
+    width: 100%;
+    min-height: 100px;
+}
+.wp_vue_editor_wrapper {
+    border: 1px solid #DCDFE6;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+
+    .popover-wrapper {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        &-plaintext {
+            left: auto;
+            right: 0;
+            top: -32px;
         }
+    }
+    .wp-editor-container{
+        border: 0;
+    }
+    .wp-editor-tabs{
+        float: none;
+        padding: 8px;
+    }
+    .wp-switch-editor{
+        height: auto;
+        margin: 0 0 0 4px;
+        background-color: transparent;
+        padding: 2px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+        line-height: inherit;
+        border-color: transparent;
+        float: none;
+        font-weight: 500;
+    }
+    .html-active .switch-html,
+    .tmce-active .switch-tmce,
+    .editor-add-shortcode {
+        background-color: #f5f7fa;
+        border-color: #DCDFE6;
+        color: #1E1F21;
+    }
+    .switch-html{
+        margin-left: 0;
+    }
+    .mce-top-part::before{
+        box-shadow: none;
+    }
+    div.mce-toolbar-grp,
+    .quicktags-toolbar {
+        border-bottom: 0;
+        background: #f5f7fa;
+    }
+    .mce-toolbar .mce-btn-group .mce-btn.mce-listbox{
+        border: 0;
+        box-shadow: none;
+        border-radius: 4px;
+    }
+    textarea{
+        border: 0;
+        padding-top: 15px;
     }
 }

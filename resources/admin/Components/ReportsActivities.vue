@@ -7,7 +7,7 @@
         </div>
 
         <div class="fcal_schedule_event_infos_body">
-            <div class="fcal_booking_activities_list">
+            <div v-if="!loading" class="fcal_booking_activities_list">
                 <div v-if="activities.length" class="fcal_booking_activity" v-for="activity in activities" :key="activity.id">
                     <el-icon class="fcal_activity_complete_icon"><Check /></el-icon>
 
@@ -18,12 +18,15 @@
                         <div class="fcal_booking_activity_title">
                             {{ activity.title }}
                         </div>
-                        <div class="fcal_booking_activity_description" v-html="activity.description" />
+                        <div class="fcal_booking_activity_description" v-html="activity.description"></div>
                     </div>
                 </div>
                 <div v-else class="fcal_no_activities">
                     <p>No activities has been recorded for this booking</p>
                 </div>
+            </div>
+            <div v-else>
+                <el-skeleton :row="5" animated/>
             </div>
         </div>
     </div>
@@ -34,13 +37,32 @@ import { Check } from '@element-plus/icons-vue';
 
 export default {
     name: "ReportsActivities",
-    props: ['activities'],
     components: {
         Check
+    },
+    data() {
+        return {
+            loading: false,
+            activities: []
+        }
+    },
+    methods: {
+        fetchActivities() {
+            this.loading = true;
+            this.$get('reports/activities')
+                .then(response => {
+                    this.activities = response.activities;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
+    },
+    mounted() {
+        this.fetchActivities();
     }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -78,10 +78,7 @@ export default {
                 calendar: this.calendar
             })
                 .then(response => {
-                    this.saving = false;
-                    if(response.redirect_url) {
-                        window.location.href = response.redirect_url;
-                    }
+                    this.redirectToSetting(response.calendar.id, response.slot.id); 
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -89,6 +86,17 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        redirectToSetting(calendarId, slotId) {
+            this.$router.push({
+                name: 'slot_settings',
+                params: { calendar_id: calendarId, slot_id: slotId }
+            });
+            if (this.appVars.is_new) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 150);
+            }
         },
         checkSlug() {
             if (!this.calendar.slug) {
