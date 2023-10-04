@@ -10,9 +10,6 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>
-                                    <el-icon><Refresh /></el-icon> Reschedule
-                                </el-dropdown-item>
                                 <el-dropdown-item @click="cancelDialog = true">
                                     <el-icon><Close /></el-icon> Cancel
                                 </el-dropdown-item>
@@ -20,10 +17,11 @@
                         </template>
                     </el-dropdown>
                 </div>
+                <SingleInviteeInfo v-if="showing_spot && !isGroupEvent" :spot="showing_spot"/>
                 <div class="fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
-                            Event Information
+                            Meeting Information
                         </h1>
                     </div>
 
@@ -33,11 +31,11 @@
                             <p>{{ showing_spot.first_name }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Event Title</h3>
+                            <h3>Meeting Title</h3>
                             <p>{{ showing_spot.slot.title }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Event Duration</h3>
+                            <h3>Meeting Duration</h3>
                             <p>{{ showing_spot.slot_minutes }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
@@ -60,80 +58,22 @@
                                 v-html="showing_spot.source">
                             </div>
                         </div>
-                        <div v-if="showing_spot.crm_profile" class="fcal_schedule_details_event_item">
-                            <h3>Fluent CRM</h3>
-                            <div class="fcal_spot_details_value"
-                                v-html="showing_spot.crm_profile">
-                            </div>
-                        </div>
                     </div>
                     <div class="fcal_schedule_details_event_additional fcal_schedule_details_event_item">
-                        <h3>Additional Note <el-icon @click="isAdditionalNoteOpen=true"><EditPen /></el-icon></h3>
-                        <p>N/A</p>
-                        <div v-if="isAdditionalNoteOpen" class="fcal_schedule_additional_form">
-                            <el-input
-                                type="textarea"
-                                placeholder="Additional Note"
-                            />
-                            <div class="action">
-                                <el-button class="fcal_plain_btn" @click="isAdditionalNoteOpen=false">Cancel</el-button>
-                                <el-button class="fcal_primary_btn">Update</el-button>
-                            </div>
-                        </div>
+                        <editable-spot-data 
+                            input_type="textarea"
+                            input_label="Additional Note"
+                            data_key="internal_note"
+                            @dataUpdated="handleDataUpdated"
+                            :spot="showing_spot">
+                        </editable-spot-data>
                     </div>
                 </div>
             </div>
-
-            <div class="fcal_schedule_event_infos">
-                <div class="fcal_schedule_event_infos_body">
-                    <div class="fcal_schedule_details_header">
-                        <h1 class="fcal_header_title">
-                            Invitees Information
-                        </h1>
-                    </div>
-                    <el-table :data="showing_spots">
-                        <el-table-column label="Name" width="150">
-                            <template #default="scope">
-                                {{ scope.row.first_name }} {{ scope.row.last_name }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Email" width="200">
-                            <template #default="scope">
-                                {{ scope.row.email }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Time Zone" width="120">
-                            <template #default="scope">
-                                {{ scope.row.person_time_zone }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Booked At" width="150">
-                            <template #default="scope">
-                                {{ toCurrentTimezone(scope.row.created_at, 'DD MMM YYYY, hh:mma') }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column width="40" fixed="right">
-                            <template #default="scope">
-                                <el-dropdown trigger="click" popper-class="fcal_select">
-                                    <span class="el-dropdown-link">
-                                         <el-icon><MoreFilled /></el-icon>
-                                    </span>
-                                    <template #dropdown>
-                                        <el-dropdown-menu>
-                                            <el-dropdown-item><el-icon><Refresh /></el-icon> Reschedule</el-dropdown-item>
-                                            <el-dropdown-item><el-icon><Close /></el-icon> Cancel</el-dropdown-item>
-                                        </el-dropdown-menu>
-                                    </template>
-                                </el-dropdown>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>
+            <InviteeInformations v-if="showing_spots && isGroupEvent" :spots="showing_spots"/>
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
-
             <ScheduleProfile />
         </div>
         <el-dialog
@@ -174,6 +114,9 @@
 import { Back, MoreFilled, Refresh, Close, EditPen } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import ScheduleProfile from "./ScheduleProfile";
+import InviteeInformations from './InviteeInformations';
+import SingleInviteeInfo from './SingleInviteeInfo';
+import EditableSpotData from "./EditableSpotData.vue";
 export default {
     name: "ScheduleSpotDetails",
     props: ['spot', 'spot_id'],
@@ -181,6 +124,9 @@ export default {
     components: {
         ScheduleProfile,
         BookingActivities,
+        SingleInviteeInfo,
+        InviteeInformations,
+        EditableSpotData,
         Back,
         MoreFilled,
         Refresh,
@@ -194,7 +140,6 @@ export default {
             fetching_spot: false,
             showing_spots: this.spot || null,
             showing_spot: this.spot ? this.spot[0] : null,
-            isAdditionalNoteOpen: false,
             cancelDialog: false,
             cancel_reason: '',
         }
@@ -208,6 +153,9 @@ export default {
     computed: {
         isMoreIconVisible() {
             return this.showing_spot.status != 'cancelled' && this.showing_spot.status != 'completed';
+        },
+        isGroupEvent() {
+            return this.showing_spot?.slot?.event_type == 'group';
         },
         meetingDetails() {
             const guestName = `${this.showing_spot.first_name} ${this.showing_spot.last_name}`;
