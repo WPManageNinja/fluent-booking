@@ -8,374 +8,425 @@
 @import "elements/responsive";
 @import "elements/wp";
 
-.fl_app {
-  margin-right: 20px;
-}
-.fcal_section_header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 24px;
-  .fcal_title {
-    h3 {
-      margin: 0;
-      padding: 0;
-      color: $dark;
-      font-size: 24px;
-      line-height: 1.4;
-    }
-  }
-}
-.fcal_section {
-  display: block;
-  width: 100%;
-
-  .fcal_section_body {
-    //padding: 15px;
-    //background: white;
-    //overflow: hidden;
+#fluent-booking-app {
+  .fl_app {
+    margin-right: 20px;
   }
 
-}
-
-
-.fcal_all_schediles {
-  display: flex;
-
-  .fcal_schedules {
-    flex: 1;
-  }
-
-  .fcal_spot_details {
-    flex: 3;
-    margin: 0;
-  }
-
-  &.fcal_showing_details {
-    .fcal_spot_actions {
-      display: none;
-    }
-
-    .fcal_spot_color {
-      display: none;
-    }
-
-    .fcal_spot_line {
-      flex-direction: column;
-      margin-bottom: 0;
-    }
-
-    .fcal_schedule {
-      margin: 0;
-    }
-
-    .fcal_schedules {
-      max-height: 85vh;
-      overflow-y: scroll;
-      &::-webkit-scrollbar {
-        width: 6px;
-        background: transparent;
-        border-radius: 10px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #e5e8eb;
-        border-radius: 10px;
-      }
-    }
-  }
-}
-.fcal_location {
-  b {
-    font-weight: 500;
-  }
-  p {
-    margin: 0;
-  }
-}
-
-// Dashboard
-.fcal_dashboard_box {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 20px;
-}
-.fcal_dashboard {
   .fcal_section_header {
-    border-bottom: 1px solid #EAECF0;
-    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 24px;
 
-    @media (max-width: 585px) {
-      flex-wrap: wrap;
-    }
     .fcal_title {
       h3 {
-        font-size: 20px;
-      }
-    }
-    .fcal_actions {
-      .el-date-editor {
-        height: auto;
-        border-radius: 8px;
-        padding: 3px 16px;
-        box-shadow: none;
-        border: 1px solid #D6DAE1;
-        @media (max-width: 585px) {
-          width: auto;
-        }
+        margin: 0;
+        padding: 0;
+        color: $dark;
+        font-size: 24px;
+        line-height: 1.4;
       }
     }
   }
-  .fcal_booking_activities {
+
+  .fcal_section {
+    display: block;
     width: 100%;
-    max-width: 356px;
-    background: #ffffff;
-    border-radius: 8px;
-    .fcal_schedule_details_header {
-      h1 {
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 28px;
-        margin: 0;
-        border-bottom: 1px solid #EAECF0;
-        padding: 20px 14px 16px 14px;
-      }
+
+    .fcal_section_body {
+      //padding: 15px;
+      //background: white;
+      //overflow: hidden;
     }
 
-    .fcal_schedule_event_infos_body {
-      max-height: 440px;
-      overflow-x: hidden;
-      &::-webkit-scrollbar {
-        width: 5px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #e4e4e7;
-        border-radius: 10px;
-      }
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-    }
   }
-  .fcal_dashboard_chat_wrap {
+
+
+  .fcal_all_schediles {
     display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    .fcal_dashboard_chat {
+
+    .fcal_schedules {
       flex: 1;
     }
-    .fcal_section_header {
-      .fcal_actions {
-        .el-date-editor {
-          border: none;
-          padding: 0;
-          .el-input__wrapper {
-            padding: 3px 16px;
-            border-radius: 8px;
-            border: 1px solid #D6DAE1;
-            box-shadow: none;
-            .el-input__inner {
-              height: auto;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-.fcal_dashboard_overview {
-  margin-bottom: 24px;
-  .overview-widgets {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 15px;
-    @media (max-width: 954px) {
-      grid-template-columns: 1fr 1fr;
-    }
-    @media (max-width: 585px) {
-      grid-template-columns: 1fr;
-    }
 
-    .overview-widget {
-      border-radius: 8px;
-      background: #F0F6FE;
-      padding: 20px 15px 38px 20px;
-      position: relative;
-      &:nth-child(1) {
-        background: #FEF4E6;
-        .stat {
-          color: #DC8006;
-        }
-        .icon {
-          &:after {
-            background: #F7A539;
-          }
-        }
-      }
-      &:nth-child(2) {
-        background: #F3FAF8;
-        .stat {
-          color: #16896B;
-        }
-        .icon {
-          &:after {
-            background: #46AD92;
-          }
-        }
-      }
-      &:nth-child(3) {
-        background: #FEF2F2;
-        .stat {
-          color: #B91C1C;
-        }
-        .icon {
-          &:after {
-            background: #EF4444;
-          }
-        }
-      }
-      .stat {
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 18px;
-        position: absolute;
-        right: 15px;
-        top: 20px;
-        color: #2653C7;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 8px;
-        border-radius: 6px;
-        background: #ffffff;
-      }
-      .icon {
-        position: absolute;
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        right: 20px;
-        bottom: 20px;
-        z-index: 1;
-        @media (max-width: 585px) {
-          width: 54px;
-          height: 54px;
-          svg {
-            width: 30px;
-          }
-        }
-        &:after,
-        &:before {
-          content: '';
-          width: 40px;
-          height: 40px;
-          position: absolute;
-          background: #ffffff;
-          border-radius: 50%;
-          left: -7px;
-          z-index: -1;
-          top: -7px;
-        }
-        &:after {
-          width: 100%;
-          height: 100%;
-          left: 0;
-          top: 0;
-          background: $primaryColor;
-        }
-      }
-
-      h3 {
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 24px;
-        margin: 0 0 10px;
-        color: #445164;
-        position: relative;
-      }
-      h1 {
-        font-size: 36px;
-        font-weight: 700;
-        line-height: 44px;
-        margin: 0 0 5px;
-        color: $dark;
-      }
-      p {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        margin: 0;
-      }
-    }
-  }
-}
-
-
-//
-.fcal_tabs {
-  overflow: inherit;
-  display: flex;
-  align-items: flex-start;
-  position: relative;
-  > .el-tabs__header {
-    position: sticky;
-    top: 40px;
-    &.is-left {
-      margin-right: 30px;
-    }
-    max-width: 324px;
-    width: 100%;
-    background: #ffffff;
-    padding: 24px 14px;
-    border-radius: 8px;
-    .el-tabs__nav-wrap {
+    .fcal_spot_details {
+      flex: 3;
       margin: 0;
-      &:after {
+    }
+
+    &.fcal_showing_details {
+      .fcal_spot_actions {
         display: none;
       }
-      .el-tabs__nav {
-        .el-tabs__active-bar {
-          display: none;
-        }
-        .el-tabs__item {
-          text-align: left;
+
+      .fcal_spot_color {
+        display: none;
+      }
+
+      .fcal_spot_line {
+        flex-direction: column;
+        margin-bottom: 0;
+      }
+
+      .fcal_schedule {
+        margin: 0;
+      }
+
+      .fcal_schedules {
+        max-height: 85vh;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+          width: 6px;
+          background: transparent;
           border-radius: 10px;
-          font-size: 16px;
-          font-weight: 400;
-          line-height: 24px;
-          color: #445164;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: #e5e8eb;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+
+  .fcal_location {
+    b {
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  // Dashboard
+  .fcal_dashboard_box {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .fcal_dashboard {
+    .fcal_section_header {
+      border-bottom: 1px solid #EAECF0;
+      padding-bottom: 12px;
+
+      @media (max-width: 585px) {
+        flex-wrap: wrap;
+      }
+
+      .fcal_title {
+        h3 {
+          font-size: 20px;
+        }
+      }
+
+      .fcal_actions {
+        .el-date-editor {
           height: auto;
-          padding: 8px 10px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 5px;
-          &:last-child {
-            margin-bottom: 0;
+          border-radius: 8px;
+          padding: 3px 16px;
+          box-shadow: none;
+          border: 1px solid #D6DAE1;
+          @media (max-width: 585px) {
+            width: auto;
           }
-          &.is-active {
-            background: $primaryColor;
-            color: #ffffff;
-            .el-icon svg {
-                path {
-                    stroke: #ffffff;
-                }
+        }
+      }
+    }
+
+    .fcal_booking_activities {
+      width: 100%;
+      max-width: 356px;
+      background: #ffffff;
+      border-radius: 8px;
+
+      .fcal_schedule_details_header {
+        h1 {
+          font-size: 18px;
+          font-weight: 700;
+          line-height: 28px;
+          margin: 0;
+          border-bottom: 1px solid #EAECF0;
+          padding: 20px 14px 16px 14px;
+        }
+      }
+
+      .fcal_schedule_event_infos_body {
+        max-height: 440px;
+        overflow-x: hidden;
+
+        &::-webkit-scrollbar {
+          width: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: #e4e4e7;
+          border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+      }
+    }
+
+    .fcal_dashboard_chat_wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+
+      .fcal_dashboard_chat {
+        flex: 1;
+      }
+
+      .fcal_section_header {
+        .fcal_actions {
+          .el-date-editor {
+            border: none;
+            padding: 0;
+
+            .el-input__wrapper {
+              padding: 3px 16px;
+              border-radius: 8px;
+              border: 1px solid #D6DAE1;
+              box-shadow: none;
+
+              .el-input__inner {
+                height: auto;
+              }
             }
           }
         }
       }
     }
   }
-  .el-tabs__content {
-    overflow: inherit;
-    flex: 1;
+
+  .fcal_dashboard_overview {
+    margin-bottom: 24px;
+
+    .overview-widgets {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 15px;
+      @media (max-width: 954px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media (max-width: 585px) {
+        grid-template-columns: 1fr;
+      }
+
+      .overview-widget {
+        border-radius: 8px;
+        background: #F0F6FE;
+        padding: 20px 15px 38px 20px;
+        position: relative;
+
+        &:nth-child(1) {
+          background: #FEF4E6;
+
+          .stat {
+            color: #DC8006;
+          }
+
+          .icon {
+            &:after {
+              background: #F7A539;
+            }
+          }
+        }
+
+        &:nth-child(2) {
+          background: #F3FAF8;
+
+          .stat {
+            color: #16896B;
+          }
+
+          .icon {
+            &:after {
+              background: #46AD92;
+            }
+          }
+        }
+
+        &:nth-child(3) {
+          background: #FEF2F2;
+
+          .stat {
+            color: #B91C1C;
+          }
+
+          .icon {
+            &:after {
+              background: #EF4444;
+            }
+          }
+        }
+
+        .stat {
+          font-size: 12px;
+          font-weight: 700;
+          line-height: 18px;
+          position: absolute;
+          right: 15px;
+          top: 20px;
+          color: #2653C7;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 4px 8px;
+          border-radius: 6px;
+          background: #ffffff;
+        }
+
+        .icon {
+          position: absolute;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          right: 20px;
+          bottom: 20px;
+          z-index: 1;
+          @media (max-width: 585px) {
+            width: 54px;
+            height: 54px;
+            svg {
+              width: 30px;
+            }
+          }
+
+          &:after,
+          &:before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            left: -7px;
+            z-index: -1;
+            top: -7px;
+          }
+
+          &:after {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: $primaryColor;
+          }
+        }
+
+        h3 {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+          margin: 0 0 10px;
+          color: #445164;
+          position: relative;
+        }
+
+        h1 {
+          font-size: 36px;
+          font-weight: 700;
+          line-height: 44px;
+          margin: 0 0 5px;
+          color: $dark;
+        }
+
+        p {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 20px;
+          margin: 0;
+        }
+      }
+    }
   }
-  .fcal_create_calendar_body {
-    max-width: 100%;
-    border: none;
-    box-shadow: none;
+
+
+  //
+  .fcal_tabs {
+    overflow: inherit;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+
+    > .el-tabs__header {
+      position: sticky;
+      top: 40px;
+
+      &.is-left {
+        margin-right: 30px;
+      }
+
+      max-width: 324px;
+      width: 100%;
+      background: #ffffff;
+      padding: 24px 14px;
+      border-radius: 8px;
+
+      .el-tabs__nav-wrap {
+        margin: 0;
+
+        &:after {
+          display: none;
+        }
+
+        .el-tabs__nav {
+          .el-tabs__active-bar {
+            display: none;
+          }
+
+          .el-tabs__item {
+            text-align: left;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            color: #445164;
+            height: auto;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            &.is-active {
+              background: $primaryColor;
+              color: #ffffff;
+
+              .el-icon svg {
+                path {
+                  stroke: #ffffff;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .el-tabs__content {
+      overflow: inherit;
+      flex: 1;
+    }
+
+    .fcal_create_calendar_body {
+      max-width: 100%;
+      border: none;
+      box-shadow: none;
+    }
   }
 }
