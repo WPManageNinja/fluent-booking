@@ -7,6 +7,7 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\BookingMeta;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Services\PermissionManager;
 
 class Helper
 {
@@ -765,6 +766,35 @@ class Helper
         $user = get_user_by('ID', $userId);
 
         return $user->user_email;
+    }
+
+    public static function getCalendarOptions()
+    {
+        if (PermissionManager::hasAllCalendarAccess()) {
+            $calendars = Calendar::select(['id', 'title'])->with(['slots'])->latest()->get();
+        } else {
+            $calendars = Calendar::select(['id', 'title'])->where('user_id', get_current_user_id())->latest()->get();
+        }
+        $formattedCalendars = [];
+        foreach ($calendars as $index => $calendar) {
+            $slots = Arr::get($calendar, 'slots');
+            if (!empty($slots)) {
+                $options = [];
+                foreach ($slots as $slot) {
+                    $options[] = [
+                        'label' => Arr::get($slot, 'title'),
+                        'value' => Arr::get($slot, 'id')
+                    ];
+                }
+                if (!empty($options)) {
+                    $formattedCalendars[$index] = [
+                        'label'   => Arr::get($calendar, 'title'),
+                        'options' => $options
+                    ];
+                }
+            }
+        }
+        return $formattedCalendars;
     }
 
     public static function excerpt($text, $max_length = 160)

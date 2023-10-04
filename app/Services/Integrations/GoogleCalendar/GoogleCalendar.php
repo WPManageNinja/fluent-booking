@@ -169,10 +169,6 @@ class GoogleCalendar extends IntegrationManager
             'key'       => 'google_calendar',
             'label'     => __('Google Calendar', 'fluent-booking'),
         ];
-        $menu['integrations']['submenu'][] = [
-            'key'       => 'google_calendar',
-            'label'     => __('Google Calendar', 'fluent-booking'),
-        ];
         return $menu;
     }
 
