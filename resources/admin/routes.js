@@ -4,12 +4,8 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
-import Availabilities from "./Modules/Availability/Availabilities.vue";
 import AvailabilitySettings from "./Modules/Settings/AvailabilitySettings";
 import Settings from "./Modules/Settings/Settings.vue";
-import ProfileSettings from "./Modules/Settings/ProfileSettings.vue";
-import GeneralSettings from "./Modules/Settings/GeneralSettings";
-import IntegrationSettings from "./Modules/Settings/IntegrationSettings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import SingleIntegration from "./Modules/Calendars/Edit/SingleIntegration.vue";
 import IntegrationGoogle from "./Modules/Calendars/integrations/IntegrationGoogle";
@@ -119,16 +115,6 @@ export var routes = [
                 meta: {
                     active_menu: 'settings',
                     title: 'Configure Integrations'
-                },
-            },
-            {
-                name: 'integrations',
-                path: 'integrations/:settings_key',
-                props: true,
-                component: IntegrationSettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Integrations'
                 },
             }
         ]

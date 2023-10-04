@@ -4,7 +4,7 @@
             <div class="fcal_title">
                 <div v-if="spot_id" @click="goBackToList" class="fcal_back_btn">
                     <el-icon :size="20" color="black"><Back/></el-icon>
-                    <h3>Event Info</h3>
+                    <h3>Meeting Info</h3>
                 </div>
                 <h3 v-else>Scheduled Meetings</h3>
             </div>

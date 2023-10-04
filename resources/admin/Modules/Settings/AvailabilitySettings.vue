@@ -144,9 +144,6 @@ export default {
     methods: {
         handleCommand(tab, command) {
             if (command == 'delete') {
-                console.log(tab);
-                console.log(command);
-
                 this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
                     confirmButtonText: 'Delete',
                     cancelButtonText: 'Cancel',

@@ -63,13 +63,11 @@
                         />
                     </div>
                 </div>
-                <el-skeleton v-if="loading" :rows="4" animated />
-                <ReportChat v-else :data="chatData" :categories="chatCats" />
+                <ReportChat/>
             </div>
 
             <div class="fcal_booking_activities">
-                <el-skeleton v-if="loading" :rows="4" animated />
-                <ReportsActivities v-else :activities="activities" />
+                <ReportsActivities/>
             </div>
         </div>
 
@@ -79,14 +77,12 @@
 <script type="text/babel">
 import { Top } from '@element-plus/icons-vue';
 import ReportChat from "../Pieces/_ReportChat";
-import BookingActivities from "../Modules/Schedules/parts/_BookingActivities";
 import ReportsActivities from "./ReportsActivities";
 
 export default {
     name: 'Dashboard',
     components: {
         ReportsActivities,
-        BookingActivities,
         ReportChat,
         Top
     },
@@ -125,9 +121,6 @@ export default {
             ],
             loading: false,
             widgets: '',
-            activities: '',
-            chatData: [30,40,35,50,49,60,70,91,125],
-            chatCats: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
         }
     },
     watch: {
@@ -150,7 +143,6 @@ export default {
                 })
                 .then(response => {
                     this.widgets = response.overview;
-                    this.activities = response.activities;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
