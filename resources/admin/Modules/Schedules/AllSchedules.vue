@@ -12,40 +12,38 @@
 
         <template v-if="!spot_id">
             <div class="fcal_schedule_meetings_header">
-                <div class="fcal_schedule_meetings_nav">
-                    <ul class="fcal_secendary_nav_items">
-                        <li @click="changePeriod('upcoming')" :class="{fcal_active : filters.period == 'upcoming' }">Upcoming</li>
-                        <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="fcal_schedule_meetings_header_actions">
-                <div class="top">
-                    <div class="fcal_head_actions">
-                        <el-select
-                            v-model="filters.author"
-                            class="fcal_select"
-                            popper-class="fcal_select"
-                            @change="fetchSchedules()">
-                            <el-option value="me" label="My Meetings"></el-option>
-                            <el-option value="all" label="All Meetings"></el-option>
-                            <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
-                        </el-select>
+
+                <div class="fcal_schedule_meetings_header_actions">
+                    <div class="fcal_schedule_meetings_nav">
+                        <ul class="fcal_secendary_nav_items">
+                            <li @click="changePeriod('upcoming')" :class="{fcal_active : filters.period == 'upcoming' }">Upcoming</li>
+                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past</li>
+                        </ul>
                     </div>
 
-                    <div class="fcal_schedule_meetings_header_action_right">
-                        <el-date-picker
-                            v-model="query.date_to_date"
-                            type="daterange"
-                            start-placeholder="Start Date"
-                            range-separator="-"
-                            end-placeholder="End Date"
-                            popper-class="fcal_daterange_popover"
-                        />
-                        <el-button class="fcal_plain_btn" @click="showAdvancedFilter = !showAdvancedFilter">
-                            <el-icon><Filter /></el-icon> Filter
-                        </el-button>
-                    </div>
+                    <div class="fcal_head_actions">
+                            <el-select
+                                v-model="filters.author"
+                                class="fcal_select"
+                                popper-class="fcal_select"
+                                @change="fetchSchedules()">
+                                <el-option value="me" label="My Meetings"></el-option>
+                                <el-option value="all" label="All Meetings"></el-option>
+                                <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
+                            </el-select>
+
+                            <el-date-picker
+                                v-model="query.date_to_date"
+                                type="daterange"
+                                start-placeholder="Start Date"
+                                range-separator="-"
+                                end-placeholder="End Date"
+                                popper-class="fcal_daterange_popover"
+                            />
+                            <el-button class="fcal_plain_btn" @click="showAdvancedFilter = !showAdvancedFilter">
+                                <el-icon><Filter /></el-icon> Filter
+                            </el-button>
+                        </div>
                 </div>
 
                 <div v-if="showAdvancedFilter" class="fcal_schedule_meetings_header_filters">
