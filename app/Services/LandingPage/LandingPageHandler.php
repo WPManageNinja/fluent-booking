@@ -39,14 +39,14 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
-        if(empty($_REQUEST['host'])) {
+        if (empty($_REQUEST['host'])) {
             return;
         }
         $authorSlug = sanitize_text_field($_REQUEST['host']);
 
         $slotSlug = null;
 
-        if(!empty($_REQUEST['event'])) {
+        if (!empty($_REQUEST['event'])) {
             $slotSlug = sanitize_text_field($_REQUEST['event']);
         }
 
@@ -59,11 +59,11 @@ class LandingPageHandler
         if (!$user) {
             return;
         }
-
+        
         // get the calendar
         $calendar = Calendar::where('user_id', $user->ID)->first();
 
-        if (!$calendar) {
+        if (!$calendar || !$calendar->getLandingPageUrl()) {
             return;
         }
 
