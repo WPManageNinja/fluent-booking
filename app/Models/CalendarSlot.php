@@ -4,6 +4,8 @@ namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\LandingPage\LandingPageHandler;
+use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class CalendarSlot extends Model
@@ -230,5 +232,25 @@ class CalendarSlot extends Model
     public function getMaxBookingPerSlot()
     {
         return $this->max_book_per_slot;
+    }
+
+    public function getPublicUrl()
+    {
+        $calendar = $this->calendar;
+        if (!$calendar) {
+            return false;
+        }
+
+        $baseUr = $calendar->getLandingPageUrl();
+
+        if(!$baseUr) {
+            return '';
+        }
+
+        if(defined('FLUENT_BOOKING_LANDING_SLUG')) {
+            return  $baseUr. '/' . $this->slug;
+        }
+
+        return $baseUr.'&event='.$this->slug;
     }
 }
