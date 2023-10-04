@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="fcal_date_range_radio_item">
-                            <el-radio label="indefinitely" size="large">Indefinitely into the future </el-radio>
+                            <el-radio label="range_indefinite" size="large">Indefinitely into the future </el-radio>
                         </div>
                     </el-radio-group>
                 </el-form-item>
