@@ -115,11 +115,26 @@ $breakpoint-tablet: 767px;
     width: auto;
     padding: 0;
     margin: 0 auto;
+    position: relative;
+    transition: .5s;
+    &.is_active {
+      padding-right: 600px;
+    }
 
     .fcal_date_event_details {
       padding: 24px 20px;
       width: 600px;
       max-width: 600px;
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      transition: .5s;
+      right: 0;
+      top: 0;
+      &.is_active {
+        opacity: 1;
+        visibility: visible;
+      }
       .fcal_date_event_details_header {
         border-bottom: 1px solid #EAECF0;
         padding-bottom: 20px;
@@ -183,6 +198,7 @@ $breakpoint-tablet: 767px;
     .fcal_day_picker {
       padding: 30px 20px;
       height: 100%;
+      position: relative;
       .fcal_timezone_select {
         max-width: 350px;
       }
@@ -389,6 +405,10 @@ $breakpoint-tablet: 767px;
   column-gap: 40px;
   align-items: flex-start;
   position: relative;
+  transition: .3s;
+  &.is_active {
+    padding-right: 310px;
+  }
 }
 
 
@@ -514,6 +534,17 @@ $breakpoint-tablet: 767px;
 .fcal_slot_picker {
   min-width: 290px;
   position: relative;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  background: #ffffff;
+  right: -12px;
+  top: 0;
+  transition: .3s;
+  &.is_active {
+    opacity: 1;
+    visibility: visible;
+  }
 
   &:before {
     content: '';
@@ -704,6 +735,39 @@ $breakpoint-tablet: 767px;
   .fcal_slot_picker_header {
     text-align: center;
     border-bottom: 1px solid #c8c7c7;
+  }
+  .fcal_date_wrapper {
+    &.is_active {
+      padding-right: 0;
+    }
+    .fcal_date_event_details {
+      width: 100%;
+      position: relative;
+      visibility: visible;
+      opacity: 1;
+    }
+    .fcal_calendar_slot_wrap {
+      &.is_active {
+        padding-right: 0;
+      }
+      .fcal_slot_picker {
+        position: relative;
+        right: auto;
+        opacity: 1;
+        visibility: visible;
+        display: none;
+        .fcal_slot_picker_header {
+          margin-bottom: 25px;
+          padding-bottom: 10px;
+        }
+        &:before {
+          display: none;
+        }
+        &.is_active {
+          display: block;
+        }
+      }
+    }
   }
   &.fcal_calendar_inner {
     flex-direction: column;

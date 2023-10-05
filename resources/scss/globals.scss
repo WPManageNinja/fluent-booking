@@ -709,12 +709,13 @@
             }
         }
     }
+    .el-button--primary,
     .fcal_primary_btn {
         background: $primaryColor;
         color: #ffffff;
         border-radius: 8px;
         font-size: 16px;
-        padding: 10px 20px;
+        padding: 12px 20px;
         height: auto;
         font-weight: 400;
         border: none;
@@ -1125,6 +1126,35 @@
             padding: 24px;
             border-radius: 8px;
             flex: 1;
+
+
+            .fcal_settings_landing_page {
+                .el-form {
+                    .el-form-item {
+                        .el-form-item__label {
+                            font-size: 16px;
+                        }
+                        .el-checkbox {
+                            &.is-checked {
+                                .el-checkbox__label {
+                                    color: $primaryColor;
+                                }
+                            }
+                            .el-checkbox__label {
+                                color: $dark;
+                                font-size: 14px;
+                            }
+                        }
+                        .el-radio-group {
+                            .el-radio {
+                                .el-radio__label {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         .title {
             color: $dark;
@@ -1134,6 +1164,11 @@
             line-height: 28px;
             margin: 0 0 24px;
             padding-bottom: 16px;
+
+            .short-desc {
+                margin: 5px 0 0 0;
+                font-weight: 400;
+            }
         }
     }
 
@@ -1503,7 +1538,7 @@
                     border-top: 1px solid #EAECF0;
                     padding: 18px 0;
                     .el-button {
-                        padding: 16px 24px;
+                        padding: 12px 24px;
                     }
                 }
             }

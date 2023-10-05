@@ -2,17 +2,29 @@
     <div class="fcal_availability_setting">
         <div class="fcal_weekly_schedule_wrap">
             <h2 class="fcal_availability_title">Weekly Hours</h2>
-            <ul class="fcal_weekly_existing_schedule">
-                <li v-for="(schedule, i) in existing_schedules.weekly_schedules" :key="i">
-                    <span class="day">{{ i }}</span>
-                    <span class="date">
-                        <span v-if="schedule.slots.length" v-for="(time, index) in schedule.slots" :key="index">
-                            {{ time.start }} - {{ time.end }}
+            <div class="fcal_weekly_existing_schedule">
+                <div class="fcal_weekly_existing_schedule_header">
+                    <div class="fcal_timezone_text">
+                        <el-icon><TimezoneIcon /></el-icon>
+                        <p>{{ timezone }}</p>
+                    </div>
+
+                    <el-button class="fcal_plain_btn" @click="this.$router.push({name: 'availability', params:{id: availability_id}})">
+                        <el-icon><Edit /></el-icon> Edit Availability
+                    </el-button>
+                </div>
+                <ul>
+                    <li v-for="(schedule, i) in existing_schedules.weekly_schedules" :key="i">
+                        <span class="day">{{ i }}</span>
+                        <span class="date">
+                            <span v-if="schedule.slots.length" v-for="(time, index) in schedule.slots" :key="index">
+                                {{ time.start }} - {{ time.end }}
+                            </span>
+                            <span v-else class="unavailable">Unavailable</span>
                         </span>
-                        <span v-else class="unavailable">Unavailable</span>
-                    </span>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="fcal_override_table">
             <h2 class="fcal_availability_title">Date Overrides</h2>
@@ -40,9 +52,16 @@
 </template>
 
 <script>
+import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
+import { Edit } from '@element-plus/icons-vue';
+
 export default {
     name: "_ExistingSchedule.vue",
-    props: ['existing_schedules'],
+    props: ['existing_schedules', 'timezone', 'availability_id'],
+    components: {
+        Edit,
+        TimezoneIcon
+    },
     computed: {
         dateOverridesNotEmpty() {
             if (this.existing_schedules.date_overrides) {
