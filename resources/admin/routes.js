@@ -5,6 +5,7 @@ import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
 import AvailabilitySettings from "./Modules/Settings/AvailabilitySettings";
+import AvailabilityDetailsSettings from "./Modules/Settings/AvailabilityDetailsSettings";
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
@@ -103,6 +104,15 @@ export var routes = [
                 name: 'settings',
                 path: '/settings',
                 component: AvailabilitySettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Availability'
+                },
+            },
+            {
+                name: 'availability',
+                path: 'availability/:id',
+                component: AvailabilityDetailsSettings,
                 meta: {
                     active_menu: 'settings',
                     title: 'Availability'

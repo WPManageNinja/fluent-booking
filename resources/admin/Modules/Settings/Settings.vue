@@ -5,7 +5,14 @@
         </div>
         <div class="fcal_settings_body">
             <el-aside>
-                <ul class="fcal_settings_sidebar">
+                <el-skeleton v-if="loading" animated>
+                    <template #template>
+                        <el-skeleton-item />
+                        <el-skeleton-item style="width: 70%" />
+                        <el-skeleton-item style="width: 50%" />
+                    </template>
+                </el-skeleton>
+                <ul v-else class="fcal_settings_sidebar">
                     <SettingMenuItem v-for="(setting, index) in settings" :key="index" :setting="setting" />
                 </ul>
             </el-aside>
