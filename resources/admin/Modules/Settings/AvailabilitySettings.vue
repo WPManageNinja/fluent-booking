@@ -50,6 +50,7 @@
             v-model="dialogVisible"
             title="Add New Schedule"
             width="30%"
+            class="fcal_dialog"
         >
             <el-form label-position="top">
                 <el-form-item label="Schedule Title">
