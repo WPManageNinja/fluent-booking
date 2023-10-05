@@ -44,10 +44,6 @@
                     <el-tabs v-model="slot.availability_type">
                         <el-tab-pane label="Use an Existing Schedule" name="existing_schedule">
                             <div class="fcal_availability_body">
-                                <div class="fcal_timezone_text">
-                                    <el-icon><TimezoneIcon/></el-icon>
-                                    <p>{{ slot.calendar.author_timezone }}</p>
-                                </div>
                                 <h4>Which Schedule Do You Want to Use?</h4>
                                 <el-select
                                     v-model="slot.availability_id"
@@ -67,7 +63,11 @@
                                         </el-option>
                                     </el-option-group>
                                 </el-select>
-                                <ExistingSchedule :existing_schedules="selectedSchedule" />
+                                <ExistingSchedule
+                                    :existing_schedules="selectedSchedule"
+                                    :timezone="slot.calendar.author_timezone"
+                                    :availability_id="slot.availability_id"
+                                />
 
                             </div>
                         </el-tab-pane>
