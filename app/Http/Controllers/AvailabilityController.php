@@ -9,6 +9,7 @@ use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\AvailabilityService;
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityController extends Controller
@@ -30,12 +31,12 @@ class AvailabilityController extends Controller
         $formattedSchedules = [];
         foreach ($schedules as $schedule)
         {
-            $timezone =  sanitize_text_field(Arr::get($schedule, 'value.timezone'));
+            $timezone =  sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
 
             $formattedSchedules[] = [
                 'id'    => $schedule->id,
                 'title' => $schedule->key,
-                'created_at' => $schedule->created_at,
+                'created_at' => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
                 'settings' => [
                     'default'          => Arr::isTrue($schedule, 'value.default'),
                     'timezone'         => $timezone,
@@ -107,14 +108,12 @@ class AvailabilityController extends Controller
 
         $data = $request->all();
 
-        $this->validate($data, [
-            'title'   => 'required',
-        ]);
+        $title = Arr::get($data, 'title');
 
-        $isTitleExist = AvailabilityService::isTitleAlreadyExist($data['title'], $userId);
+        $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $userId);
 
         if ($isTitleExist) {   
-            $message = $data['title'] . ' is already exist';
+            $message = $title . ' is already exist';
             return $this->sendError([
                 'message' => $message,
             ], 422);
@@ -127,7 +126,7 @@ class AvailabilityController extends Controller
             'weekly_schedules' => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $timezone, 'UTC'),
         ];
 
-        $schedule->key   = sanitize_text_field($data['title']);
+        $schedule->key   = sanitize_text_field($title);
         $schedule->value = $scheduleData;
         $schedule->save();
 

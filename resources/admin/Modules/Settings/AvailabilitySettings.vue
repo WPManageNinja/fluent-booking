@@ -32,7 +32,7 @@
                 </el-table-column>
                 <el-table-column label="Created Date" width="180">
                     <template #default="scope">
-                        <h4>{{ toCurrentTimezone(scope.row.created_at.date, 'DD MMM YYYY, hh:mma') }}</h4>
+                        <h4>{{ scope.row.created_at }}</h4>
                     </template>
                 </el-table-column>
                 <el-table-column width="180">
@@ -100,7 +100,6 @@ export default {
             dialogVisible: false,
             scheduleSchema: this.appVars.schedule_schema,
             schedules: [],
-            scheduleTabValue: '1',
             scheduleTitle: '',
             filter: 'all'
         }
@@ -130,25 +129,24 @@ export default {
             this.scheduleTitle = '';
             this.dialogVisible = true;
         },
-        // addScheduleTab(schedule) {
-        //     this.schedules.push({
-        //         title: schedule.key,
-        //         id: schedule.id,
-        //         settings: {
-        //             timezone: schedule.value.timezone,
-        //             default: schedule.value.default,
-        //             date_overrides: schedule.value.date_overrides,
-        //             weekly_schedules: schedule.value.weekly_schedules,
-        //         },
-        //     })
-        //     this.scheduleTabValue = schedule.id;
-        // },
+        addScheduleTab(schedule) {
+            this.schedules.push({
+                title: schedule.key,
+                id: schedule.id,
+                created_at: schedule.created_at,
+                settings: {
+                    timezone: schedule.value.timezone,
+                    default: schedule.value.default,
+                    date_overrides: schedule.value.date_overrides,
+                    weekly_schedules: schedule.value.weekly_schedules,
+                },
+            })
+        },
         fetchSchedules() {
             this.loading = true;
             this.$get('availability')
                 .then(response => {
                     this.schedules = response.schedules;
-                    this.scheduleTabValue = response.schedules?.[0]?.id ?? this.scheduleTabValue;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -166,14 +164,16 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response);
+                    this.addScheduleTab(response.schedule);
+                    console.log(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
                 })
                 .finally(() => {
                     this.saving = false;
+                    this.dialogVisible = false;
                 });
-            this.fetchSchedules();
         },
         updateSchedule(item) {
             this.saving = true;
