@@ -13,7 +13,10 @@
             <el-aside>
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, index) in menuItems" :key="index">
-                        <router-link v-if="menu.type == 'route'" :to="menu.route">{{ menu.label }}</router-link>
+                        <router-link v-if="menu.type == 'route'" :to="menu.route" class="calendar_route">
+                            <div class="icon" v-html="menu.svgIcon"></div>
+                            {{ menu.label }}
+                        </router-link>
                     </li>
                 </ul>
             </el-aside>
@@ -25,21 +28,13 @@
 </template>
 
 <script type="text/babel">
-import {Back, Minus, Plus} from '@element-plus/icons-vue';
-import {markRaw} from "vue";
 
 export default {
-    name: 'SingleIntegration',
-    components: {
-        Back
-    },
+    name: 'CalendarSettings',
     data() {
         return {
             calendar_id: this.$route.params.id,
             loading: false,
-            settings: {},
-            fieldSettings: {},
-            settingsKey: 'google_calendar',
             menuItems: {},
             calendar: {}
         }
@@ -68,7 +63,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-
-</style>

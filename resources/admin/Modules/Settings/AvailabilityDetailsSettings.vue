@@ -157,7 +157,6 @@ export default {
             this.$get('availability/'+this.scheduleID)
                 .then(response => {
                     this.schedule = response.schedule;
-
                 })
                 .catch(errors => {
                     this.$handleError(errors);

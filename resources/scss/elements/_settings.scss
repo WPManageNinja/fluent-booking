@@ -10,26 +10,20 @@
         + li {
             margin-top: 5px;
         }
-        &:nth-child(2) {
-            a {
-                &.router-link-exact-active {
-                    .icon {
-                        svg {
-                            path {
-                                fill: #fff;
-                            }
-                        }
+        &:first-child {
+            .calendar_route.router-link-exact-active {
+                .icon svg {
+                    path {
+                        stroke: none;
                     }
                 }
             }
         }
-        &.configure {
-            a {
-                &.router-link-exact-active {
-                    svg {
-                        path {
-                            //fill: #ffffff;
-                        }
+        &:nth-child(2) {
+            a.router-link-exact-active {
+                .icon svg {
+                    path {
+                        stroke: #ffffff;
                     }
                 }
             }

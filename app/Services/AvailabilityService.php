@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\SanitizeService;
+use FluentBooking\App\Services\DateTimeHelper;
 
 class AvailabilityService
 {
@@ -34,12 +35,13 @@ class AvailabilityService
 
     public static function getAvailabilitySchedule($schedule)
     {
-        $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone'));
+        $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
 
         $formattedSchedule = [
-            'id'      => (int)Arr::get($schedule, 'id'),
-            'object_id' => (int)Arr::get($schedule, 'object_id'),
-            'key'       => sanitize_text_field(Arr::get($schedule, 'key')),
+            'id'         => (int)Arr::get($schedule, 'id'),
+            'object_id'  => (int)Arr::get($schedule, 'object_id'),
+            'key'        => sanitize_text_field(Arr::get($schedule, 'key')),
+            'created_at' => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
             'value' => [
                 'default'          => Arr::isTrue($schedule, 'value.default'),
                 'timezone'         => $timezone,
@@ -104,8 +106,9 @@ class AvailabilityService
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
 
         $defaultSchedule = [
-            'object_id' => $userId,
-            'key'       => sanitize_text_field($title),
+            'object_id'  => $userId,
+            'key'        => sanitize_text_field($title),
+            'created_at' => '',
             'value'     => [
                 'default'          => (bool)$default,
                 'timezone'         => sanitize_text_field($fromTimezone),

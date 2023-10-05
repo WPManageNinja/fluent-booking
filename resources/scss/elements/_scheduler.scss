@@ -431,13 +431,15 @@
   }
 
   .fcal_schedule {
-    margin: 0 0 20px;
     border: 1px solid #EAECF0;
-    border-radius: 8px;
+
+    &:first-child {
+        border: none;
+    }
 
     .fcal_schedule_items {
       .fcal_each_spot {
-        padding: 10px;
+        // padding: 10px;
         border-bottom: 1px solid #EAECF0;
         position: relative;
 
@@ -448,22 +450,21 @@
         .fcal_spot_line {
           display: flex;
           column-gap: 15px;
-          padding: 20px 14px;
+          padding: 15px 25px;
           cursor: pointer;
           position: relative;
-          border-radius: 8px;
           justify-content: space-between;
           transition: .2s;
 
           &:hover {
-            background: rgb(38 83 199 / 10%);
+            background: #F0F6FE;
           }
 
           .fcal_spot_timing {
             display: flex;
             align-items: center;
 
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             line-height: 24px;
             color: #445164;
@@ -531,15 +532,14 @@
   }
 
   .fcal_schedule_header {
-    padding: 15px 23px;
+    padding: 12px 23px;
     background: #F5F6F7;
     border-bottom: 1px solid #EAECF0;
-    border-radius: 8px 8px 0 0;
 
     h3 {
       margin: 0;
       padding: 0;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       line-height: 28px;
     }
@@ -547,9 +547,7 @@
 
   .fcal_schedule_wrapper {
     margin-top: 12px;
-    padding: 24px;
     background: #ffffff;
-    border-radius: 8px;
 
     .fcal_schedule {
       &:last-child {
@@ -681,8 +679,8 @@
 
   .fcal_spot_color {
     span {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       display: block;
       border-radius: 50%;
       background: #1a1a1a;
