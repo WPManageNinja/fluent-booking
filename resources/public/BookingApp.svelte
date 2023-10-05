@@ -156,7 +156,7 @@
                         </div>
                     </div>
                 {/if}
-                <div class="fcal_date_wrapper">
+                <div class="fcal_date_wrapper {selectedDate ? 'is_active' : ''}">
                     {#if appReady}
                         {#if !selectedDate}
                             <DayPickerApp 
@@ -176,8 +176,9 @@
                                 {selectedDate}
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
-                        { :else if selectedDate}
-                            <div class="fcal_date_event_details">
+                        {/if}
+
+                            <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
                                 <div class="fcal_date_event_details_header">
                                     <h2>
                                         <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
@@ -201,7 +202,6 @@
                                     on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
                                 />
                             </div>
-                        {/if}
                     {/if}
                 </div>
             {/if}

@@ -209,7 +209,7 @@
         <p>{slot.duration} minutes</p>
         <p>Timezone: {timezone}</p>
     </div>
-    <div class="fcal_calendar_slot_wrap">
+    <div class="fcal_calendar_slot_wrap {selectedDate ? 'is_active' : ''}">
         {#if isLoadingDates}
             <div class="fcal_loading_dates">
                 <div class="fcal_loading_dates_inner">
@@ -250,8 +250,8 @@
                 <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
             </div>
         </div>
-        {#if selectedDate}
-            <div class="fcal_slot_picker">
+
+            <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
                 <div class="fcal_slot_picker_header">
                     { util.dayjs(selectedDate).format('dddd, MMMM DD') }
                 </div>
@@ -280,7 +280,7 @@
                     </div>
                 </div>
             </div>
-        {/if}
+
     </div>
 </div>
 

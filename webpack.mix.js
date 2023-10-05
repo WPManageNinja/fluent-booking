@@ -32,6 +32,7 @@ mix.webpackConfig({
 });
 
 mix.js('resources/admin/app.js', 'assets/admin').vue({version: 3})
+    .copy('resources/Blocks/images', 'assets/Blocks/images')
     .js('resources/admin/global_admin', 'assets/admin')
     .js('resources/Blocks/fluent-booking-index.js', 'assets/admin')
     .sass('resources/scss/admin.scss', 'admin/admin.css')
