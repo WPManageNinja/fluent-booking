@@ -12,9 +12,7 @@
                 <time-zone-selector v-model="calendar.author_timezone"/>
             </el-form-item>
             <div class="fcal_create_calendar_form_footer">
-                <el-button class="fcal_primary_btn" @click="createCalendar">
-                    Continue
-                </el-button>
+                <SaveButton :saving="saving" label="Continue" @save="createCalendar"/>
             </div>
         </div>
     </div>
@@ -25,6 +23,7 @@ import WeeklySchedules from './parts/WeeklySchedules.vue';
 import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import LocationSelector from './Edit/_LocationSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
+import SaveButton from '../../Components/Buttons/SaveButton.vue';
 import { Right } from '@element-plus/icons-vue';
 import BasicInfo from './Edit/_BasicInfo';
 
@@ -36,6 +35,7 @@ export default {
         TimeZoneSelector,
         LocationSelector,
         HostSelector,
+        SaveButton,
         Right,
         BasicInfo
     },

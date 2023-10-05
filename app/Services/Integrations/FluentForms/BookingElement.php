@@ -190,14 +190,17 @@ class BookingElement extends BaseFieldManager
             ->where('slot_id', $slot_id)
             ->where('start_time', $startTimeUtc)
             ->first();
+            
+        $eventId      = Arr::get($booking, 'event_id');
+        $hostTimezone = Arr::get($booking, 'calendar.author_timezone');
 
-        if (!$booking) {
+        if (!$eventId || !$hostTimezone) {
             return '';
         }
-        
-        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $booking->calendar->author_timezone, 'j M Y, g:i A');
 
-        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $booking->event_id);
+        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $hostTimezone, 'j M Y, g:i A');
+
+        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $eventId);
 
         $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($formattedTime) . '</a>';
         

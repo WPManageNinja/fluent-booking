@@ -3,24 +3,18 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Request\Request;
 
 class IntegrationSettingsController extends Controller
 {
-    /**
-     * Request object
-     *
-     * @var \FluentForm\Framework\Request\Request $request
-     */
-    protected $request;
-
-    public function index()
+    public function index(Request $request, $hostId)
     {
         try {
-            $settingsKey = sanitize_text_field($this->request->get('settings_key'));
+            $settingsKey = sanitize_text_field($request->get('settings_key'));
 
-            $settings = apply_filters('fluent_booking/get_integration_settings_' . $settingsKey, []);
+            $settings = apply_filters('fluent_booking/get_integration_settings_' . $settingsKey, $hostId, []);
 
-            $fieldSettings = apply_filters('fluent_booking/get_integration_field_settings_' . $settingsKey, []);
+            $fieldSettings = apply_filters('fluent_booking/get_integration_field_settings_' . $settingsKey, $hostId, []);
 
             return $this->sendSuccess([
                 'status'         => true,
@@ -61,14 +55,28 @@ class IntegrationSettingsController extends Controller
         }
     }
     
-    public function update()
+    public function update(Request $request, $hostId)
     {
         try {
-            $settingsKey = sanitize_text_field($this->request->get('settings_key'));
+            $settingsKey = sanitize_text_field($request->get('settings_key'));
 
-            $settings = wp_unslash($this->request->get('settings'));
+            $settings = wp_unslash($request->get('settings'));
 
-            do_action('fluent_booking/save_integration_settings_' . $settingsKey, $settings);
+            do_action('fluent_booking/save_integration_settings_' . $settingsKey, $settings, $hostId);
+
+        } catch (Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function revoke(Request $request, $hostId)
+    {
+        try {
+            $settingsKey = sanitize_text_field($request->get('settings_key'));
+            
+            do_action('fluent_booking/disconnect_integration_' . $settingsKey, $hostId);
 
         } catch (Exception $e) {
             return $this->sendError([

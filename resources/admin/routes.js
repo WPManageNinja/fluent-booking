@@ -9,7 +9,7 @@ import AvailabilityDetailsSettings from "./Modules/Settings/AvailabilityDetailsS
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
-import IntegrationGoogle from "./Modules/Calendars/integrations/IntegrationGoogle";
+import IntegrationSettings from "./Modules/Calendars/integrations/IntegrationSettings";
 import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
 
 export var routes = [
@@ -40,7 +40,7 @@ export var routes = [
             {
                 name: 'google_calendar',
                 path: 'google',
-                component: IntegrationGoogle,
+                component: IntegrationSettings,
                 meta: {
                     active_menu: 'calendars',
                     title: 'Booking Types'

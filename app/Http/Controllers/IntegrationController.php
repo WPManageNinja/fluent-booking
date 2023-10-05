@@ -1,20 +1,14 @@
 <?php
 
 namespace FluentBooking\App\Http\Controllers;
+use FluentBooking\Framework\Request\Request;
 
 class IntegrationController extends Controller
 {
-    /**
-     * Request object
-     *
-     * @var \FluentForm\Framework\Request\Request $request
-     */
-    protected $request;
-
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $settingsKey = sanitize_text_field($this->request->get('settings_key'));
+            $settingsKey = sanitize_text_field($request->get('settings_key'));
 
             $settings = apply_filters('fluent_booking/get_client_settings_' . $settingsKey, []);
 
@@ -33,28 +27,14 @@ class IntegrationController extends Controller
         }
     }
     
-    public function update()
+    public function update(Request $request)
     {
         try {
-            $settingsKey = sanitize_text_field($this->request->get('settings_key'));
+            $settingsKey = sanitize_text_field($request->get('settings_key'));
 
-            $settings = wp_unslash($this->request->get('settings'));
+            $settings = wp_unslash($request->get('settings'));
 
             do_action('fluent_booking/save_client_settings_' . $settingsKey, $settings);
-
-        } catch (Exception $e) {
-            return $this->sendError([
-                'message' => $e->getMessage(),
-            ], 422);
-        }
-    }
-
-    public function revoke()
-    {
-        try {
-            $settingsKey = sanitize_text_field($this->request->get('settings_key'));
-            
-            do_action('fluent_booking/disconnect_integration_' . $settingsKey);
 
         } catch (Exception $e) {
             return $this->sendError([
