@@ -50,8 +50,15 @@
             color: $dark;
           }
 
-          p {
-            margin: 0;
+          .fcal_profile_link {
+            margin: 8px 0 0 0;
+            a {
+              color: $primaryColor;
+              &:focus {
+                outline: none;
+                box-shadow: none;
+              }
+            }
           }
         }
 
@@ -556,6 +563,39 @@
     }
   }
 
+  .el-radio {
+    height: auto;
+
+    .el-radio__label {
+      color: $dark;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      padding-left: 8px;
+    }
+
+    .el-radio__input {
+      &.is-checked {
+        .el-radio__inner {
+          border-color: $primaryColor;
+          background: transparent;
+        }
+      }
+
+      .el-radio__inner {
+        width: 24px;
+        height: 24px;
+        border: 1.5px solid #D1D5DB;
+
+        &:after {
+          width: 12px;
+          height: 12px;
+          background: $primaryColor;
+        }
+      }
+    }
+  }
+
   .fcal_showing_details {
     padding-top: 12px;
     gap: 20px;
@@ -742,39 +782,6 @@
 
       + .fcal_date_range_radio_item {
         margin-top: 20px;
-      }
-
-      .el-radio {
-        height: auto;
-
-        .el-radio__label {
-          color: $dark;
-          font-size: 16px;
-          font-weight: 400;
-          line-height: 24px;
-          padding-left: 8px;
-        }
-
-        .el-radio__input {
-          &.is-checked {
-            .el-radio__inner {
-              border-color: $primaryColor;
-              background: transparent;
-            }
-          }
-
-          .el-radio__inner {
-            width: 24px;
-            height: 24px;
-            border: 1.5px solid #D1D5DB;
-
-            &:after {
-              width: 12px;
-              height: 12px;
-              background: $primaryColor;
-            }
-          }
-        }
       }
 
       .el-input {
@@ -1183,8 +1190,46 @@
   .fcal_weekly_existing_schedule {
     margin: 0;
     border: 1px solid #D6DAE1;
-    padding: 24px;
     border-radius: 8px;
+    .fcal_weekly_existing_schedule_header {
+      background: #F6F6F7;
+      border-radius: 8px 8px 0 0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      .fcal_timezone_text {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #445164;
+        gap: 8px;
+        margin: 0;
+        p {
+          margin: 0;
+        }
+      }
+
+      .el-button {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #445164;
+        padding: 0;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        &:hover {
+          color: $primaryColor;
+        }
+      }
+    }
+    ul {
+      padding: 0 24px 24px 24px;
+    }
 
     li {
       display: flex;
@@ -1278,6 +1323,33 @@
 
   }
 
+
+  .el-checkbox {
+    margin-right: 8px;
+
+    .el-checkbox__input {
+      &.is-checked {
+        .el-checkbox__inner {
+          background: $primaryColor;
+          border-color: $primaryColor;
+        }
+      }
+
+      .el-checkbox__inner {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border-color: #D1D5DB;
+
+        &::after {
+          height: 8px;
+          left: 7px;
+          top: 3px;
+        }
+      }
+    }
+  }
+
   .fcal_weekly_schedules {
     width: 100%;
     display: block;
@@ -1303,32 +1375,6 @@
         display: inline-flex;
         align-items: center;
         min-width: 80px;
-
-        .el-checkbox {
-          margin-right: 8px;
-
-          .el-checkbox__input {
-            &.is-checked {
-              .el-checkbox__inner {
-                background: $primaryColor;
-                border-color: $primaryColor;
-              }
-            }
-
-            .el-checkbox__inner {
-              width: 20px;
-              height: 20px;
-              border-radius: 4px;
-              border-color: #D1D5DB;
-
-              &::after {
-                height: 8px;
-                left: 7px;
-                top: 3px;
-              }
-            }
-          }
-        }
 
         .fcal_day {
           text-transform: capitalize;
