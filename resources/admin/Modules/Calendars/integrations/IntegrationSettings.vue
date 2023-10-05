@@ -1,6 +1,6 @@
 <template>
-    <h2 class="title">Integrations</h2>
-    <el-skeleton v-if="loading" />
+    <el-skeleton :rows="4" animated v-if="loading" />
+    <h2 v-if="!loading" class="title">{{ fieldSettings?.header }}</h2>
     <div v-if="!loading && fieldSettings?.auth_url" class="fcal_configure_integrations fcal_integrations">
         <div class="fcal_configure_integration_card">
             <div class="fcal_configure_integration_card_header">
@@ -13,7 +13,7 @@
                         <p>{{ fieldSettings.subtitle }}</p>
                     </div>
                 </div>
-                <el-button class="fcal_primary_btn2" :class="isConnectedBtn ? 'disconnect-btn' : null" @click="toggleSettings()">
+                <el-button class="fcal_primary_btn2" v-loading="saving" :disabled="saving" :class="isConnectedBtn ? 'disconnect-btn' : null" @click="toggleSettings()">
                     <span class="icon">{{ buttonAttrs.icon }}</span> {{ buttonAttrs.label }}
                 </el-button>
             </div>
@@ -49,34 +49,36 @@
                         </div>
                     </div>
                     <el-form-item>
-                        <el-button class="fcal_primary_btn" @click="saveSettings()">{{ fieldSettings.save_btn_text }}</el-button>
+                        <SaveButton :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                     </el-form-item>
                 </div>
             </div>
         </div>
     </div>
-    <div v-if="!loading && !fieldSettings?.auth_url">
-        <el-alert title="No Integration Found" type="info" :closable="false" center show-icon></el-alert>
+    <div v-if="!loading && !fieldSettings?.auth_url" class="fcal_integration_required">
+        <h3>Integration has not been configured yet</h3>
+        <p v-if="isAdmin">Configure the integration <a @click="goToConfiguration">here</a></p>
     </div>
 </template>
 
 <script type="text/babel">
-import {markRaw} from "vue";
-import {Minus, Plus} from "@element-plus/icons-vue";
-
+import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 export default {
-    name: "IntegrationGoogle",
+    name: "IntegrationSettings",
+    props: ['calendar'],
+    components: {
+        SaveButton
+    },
     data() {
         return {
-            user_id: this.$route.params.id,
             saving: false,
             loading: false,
             settings: {},
             fieldSettings: {},
-            settingsKey: 'google_calendar',
-            PlusIcon: markRaw(Plus),
-            MinusIcon: markRaw(Minus),
-            isConnectedBtn: false
+            isConnectedBtn: false,
+            settingsKey: this.$route.name,
+            hostId: this.calendar.user_id,
+            isAdmin: this.appVars?.me?.is_admin
         }
     },
     computed: {
@@ -90,16 +92,23 @@ export default {
         }
     },
     methods: {
+        goToConfiguration() {
+            this.$router.push({
+                name: 'configure-integrations',
+                params: {settings_key: this.settingsKey}
+            })
+        },
         toggleSettings() {
             if (this.fieldSettings?.is_connected) {
                 this.disconnectIntegration();
             } else {
+                this.saving = true;
                 window.location.href = this.fieldSettings?.auth_url;
             }
         },
         getSettings() {
             this.loading = true;
-            this.$get('integrations/settings', {
+            this.$get('integrations/' + this.hostId + '/settings', {
                 settings_key: this.settingsKey,
             })
             .then(response => {
@@ -114,7 +123,8 @@ export default {
             })
         },
         saveSettings() {
-            this.$post('integrations/settings', {
+            this.saving = true;
+            this.$post('integrations/' + this.hostId + '/settings', {
                 settings_key: this.settingsKey,
                 settings: this.settings
             })
@@ -129,15 +139,19 @@ export default {
                 });
         },
         disconnectIntegration() {
-            this.$post('integrations/disconnect/', {
+            this.saving = true;
+            this.$post('integrations/' + this.hostId + '/disconnect', {
                 settings_key: this.settingsKey,
             })
                 .then(response => {
                     this.$handleSuccess(response);
-                    this.fieldSettings.connected = false;
+                    this.fieldSettings.is_connected = false;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
                 });
         },
     },

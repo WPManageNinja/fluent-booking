@@ -55,14 +55,12 @@ $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) 
 $router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'IntegrationController@index');
     $router->post('/', 'IntegrationController@update');
-    $router->post('disconnect', 'IntegrationController@revoke');
 
-    /* Integration Settings */
-    $router->prefix('{settings}')->group(function ($router) {
-        $router->get('/', 'IntegrationSettingsController@index');
-        $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
-        $router->post('/', 'IntegrationSettingsController@update');
-    });
+    // Integration Settings
+    $router->get('/{host_id}/settings', 'IntegrationSettingsController@index')->int('host_id');
+    $router->post('/{host_id}/settings', 'IntegrationSettingsController@update')->int('host_id');
+    $router->post('/{host_id}/disconnect', 'IntegrationSettingsController@revoke')->int('host_id');
+    $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {

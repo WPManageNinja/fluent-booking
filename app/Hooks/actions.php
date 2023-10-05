@@ -25,6 +25,8 @@
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
+(new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
+
 
 $app->addAction('init', 'BlockEditorHandler@init');
 
