@@ -446,7 +446,6 @@
 
     .fcal_schedule_items {
       .fcal_each_spot {
-        // padding: 10px;
         border-bottom: 1px solid #EAECF0;
         position: relative;
 
@@ -636,7 +635,6 @@
 
           .fcal_each_spot {
             border: none;
-            //margin-bottom: 10px;
             padding: 0 0 10px 10px;
 
             &:last-child {
@@ -659,7 +657,6 @@
               }
 
               .fcal_spot_line {
-                //background: $primaryColor;
                 border-color: #D6DAE1;
 
                 &:before {
@@ -670,17 +667,6 @@
                   background: $primaryColor;
                   left: -11px;
                   top: 0;
-                }
-
-                .fcal_spot_timing {
-                  //color: #ffffff;
-                }
-
-                .fcal_spot_meeting_with,
-                .fcal_spot_desc {
-                  h3 {
-                    //color: #ffffff;
-                  }
                 }
               }
             }
@@ -954,7 +940,6 @@
                 .el-input__wrapper {
                   padding: 7px 16px;
                   border: 1px solid #D6DAE1;
-                  //border-left: none;
                   border-radius: 0 8px 8px 0;
                   box-shadow: none;
 
