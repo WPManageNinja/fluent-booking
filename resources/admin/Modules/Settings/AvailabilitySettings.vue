@@ -2,87 +2,50 @@
     <div class="fcal_settings_body_inner fcal_settings_availability">
         <div class="fcal_settings_header">
             <h3>Availability</h3>
+            <div class="fcal_settings_header_bottom">
+                <div class="fcal_settings_header_left_action">
+                    <el-select v-model="filter" placeholder="Select" popper-class="fcal_select">
+                        <el-option value="all" label="All Schedule" />
+                        <el-option value="1" label="Tanbir" />
+                    </el-select>
+                </div>
+                <div class="fcal_settings_header_right_action">
+                    <el-button class="fcal_primary_btn2" @click="dialogVisible = true">
+                        <el-icon><Plus /></el-icon> Add New Schedule
+                    </el-button>
+                </div>
+            </div>
         </div>
         <div v-if="!loading" class="fcal_settings_content_wrap">
-            <el-form label-position="top">
-                <el-form-item label="Available hours">
-                    <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
-                </el-form-item>
-                <el-form-item label="Schedule" class="fcal_tab_schedule">
-                    <el-button class="fcal_plain_btn fcal_add_new_tab" @click="addNewSchedule">
-                        <el-icon><Plus /></el-icon>
-                    </el-button>
-                    <el-tabs
-                        v-model="scheduleTabValue"
-                        type="card"
-                        class="fcal_tabs2"
-                    >
-                        <el-tab-pane
-                            v-for="item in scheduleTabs"
-                            :key="item.id"
-                            :name="item.id"
-                        >
-                            <template #label>
-                                <el-icon><ScheduleIcon/></el-icon> {{ item.title }}
-                            </template>
-                            <div class="fcal_availability_body">
-                                <div class="fcal_availability_header">
-                                    <h3> Working Hours Schedule
-                                        <span v-if="item.settings.default" class="default-schedule-badge">
-                                            <el-icon><StarFilled /></el-icon> Default schedule
-                                        </span>
-                                    </h3>
-
-                                    <el-dropdown
-                                        trigger="click"
-                                        popper-class="fcal_select"
-                                    >
-                                        <el-button class="fcal_plain_btn el-dropdown-link">
-                                            <el-icon><Setting /></el-icon>
-                                        </el-button>
-                                        <template #dropdown>
-                                            <el-dropdown-menu>
-                                                <el-dropdown-item>
-                                                    <el-button plain text @click="handleCommand(item, 'edit')"><el-icon><EditPen /></el-icon> Edit Name</el-button>
-                                                </el-dropdown-item>
-                                                <el-dropdown-item>
-                                                    <el-button plain text @click="handleCommand(item, 'set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
-                                                </el-dropdown-item>
-                                                <el-dropdown-item class="danger">
-                                                    <el-button plain text @click="handleCommand(item, 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
-                                                </el-dropdown-item>
-                                            </el-dropdown-menu>
-                                        </template>
-                                    </el-dropdown>
-                                </div>
-                                <div class="timezone">
-                                    <div class="fcal_timezone_text">
-                                        <el-icon><TimezoneIcon/></el-icon>
-                                        <p>{{ item.settings.timezone }}</p>
-                                    </div>
-                                </div>
-                                <div class="fcal_availability_setting">
-                                    <WeeklySchedules
-                                        :weekly_schedules="item.settings.weekly_schedules"
-                                        title="Weekly Hours"
-                                    />
-                                    <date-over-rides
-                                        :settings="item.settings"
-                                        title="Add date overrides"
-                                    />
-                                </div>
-                            </div>
-                            <div class="fcal_settings_footer">
-                                <el-button @click="updateSchedule(item)" class="fcal_primary_btn">
-                                    Save
-                                </el-button>
-                            </div>
-                        </el-tab-pane>
-                    </el-tabs>
-                </el-form-item>
-            </el-form>
+            <el-table :data="schedules">
+                <el-table-column label="Name" width="180">
+                    <template #default="scope">
+                        <h4 class="author">
+                            <img src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60" alt=""> {{ scope.row.title }}
+                        </h4>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Schedule" width="180">
+                    <template #default="scope">
+                        <h4>{{ scope.row.title }}</h4>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Created Date" width="180">
+                    <template #default="scope">
+                        <h4>{{ toCurrentTimezone(scope.row.created_at.date, 'DD MMM YYYY, hh:mma') }}</h4>
+                    </template>
+                </el-table-column>
+                <el-table-column width="180">
+                    <template #default="scope">
+                        <el-button class="fcal_plain_btn" @click="this.$router.push({name: 'availability', params: {id: scope.row.id}})">
+                            View Details
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
         <el-skeleton v-else :rows="5" animated/>
+
         <el-dialog
             v-model="dialogVisible"
             title="Add New Schedule"
@@ -136,9 +99,10 @@ export default {
             saving: false,
             dialogVisible: false,
             scheduleSchema: this.appVars.schedule_schema,
-            scheduleTabs: [],
+            schedules: [],
             scheduleTabValue: '1',
-            scheduleTitle: ''
+            scheduleTitle: '',
+            filter: 'all'
         }
     },
     methods: {
@@ -166,24 +130,24 @@ export default {
             this.scheduleTitle = '';
             this.dialogVisible = true;
         },
-        addScheduleTab(schedule) {
-            this.scheduleTabs.push({
-                title: schedule.key,
-                id: schedule.id,
-                settings: {
-                    timezone: schedule.value.timezone,
-                    default: schedule.value.default,
-                    date_overrides: schedule.value.date_overrides,
-                    weekly_schedules: schedule.value.weekly_schedules,
-                },
-            })
-            this.scheduleTabValue = schedule.id;
-        },
+        // addScheduleTab(schedule) {
+        //     this.schedules.push({
+        //         title: schedule.key,
+        //         id: schedule.id,
+        //         settings: {
+        //             timezone: schedule.value.timezone,
+        //             default: schedule.value.default,
+        //             date_overrides: schedule.value.date_overrides,
+        //             weekly_schedules: schedule.value.weekly_schedules,
+        //         },
+        //     })
+        //     this.scheduleTabValue = schedule.id;
+        // },
         fetchSchedules() {
             this.loading = true;
             this.$get('availability')
                 .then(response => {
-                    this.scheduleTabs = response.schedules;
+                    this.schedules = response.schedules;
                     this.scheduleTabValue = response.schedules?.[0]?.id ?? this.scheduleTabValue;
                 })
                 .catch(errors => {
@@ -194,22 +158,22 @@ export default {
                 });
         },
         createSchedule() {
+            this.dialogVisible = false;
             this.saving = true;
             this.$post('availability/', {
                 title: this.scheduleTitle,
                 schedule: this.scheduleSchema
             })
                 .then(response => {
-                    this.$handleSuccess(response);           
-                    this.addScheduleTab(response.schedule);
+                    this.$handleSuccess(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
                 })
                 .finally(() => {
                     this.saving = false;
-                    this.dialogVisible = false;
                 });
+            this.fetchSchedules();
         },
         updateSchedule(item) {
             this.saving = true;
