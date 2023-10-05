@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
@@ -25,6 +26,7 @@ class CalendarController extends Controller
 
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
+            $calendar->public_url = $calendar->getLandingPageUrl();
             foreach ($calendar->slots as $slot) {
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
 
@@ -59,14 +61,14 @@ class CalendarController extends Controller
         $data = $request->get('calendar');
 
         $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
-            'author_timezone'       => 'required',
-            'slot.duration'         => 'required|int',
-            'slot.event_type'       => 'required',
-            'slot.availability_type'=> 'required',
-            'slot.schedule_type'    => 'required',
-            'slot.title'            => 'required',
-            'slot.weekly_schedules' => 'required_if:slot.schedule_type,weekly_schedules',
-            'user_id'               => 'required|int'
+            'author_timezone'        => 'required',
+            'slot.duration'          => 'required|int',
+            'slot.event_type'        => 'required',
+            'slot.availability_type' => 'required',
+            'slot.schedule_type'     => 'required',
+            'slot.title'             => 'required',
+            'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
+            'user_id'                => 'required|int'
         ], $data));
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
@@ -171,8 +173,65 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::with(['slots'])->findOrFail($id);
 
-        return [
+        $calendar->author_profile = $calendar->getAuthorProfile();
+
+        $data = [
             'calendar' => $calendar
+        ];
+
+        if (in_array('settings_menu', $request->get('with', []))) {
+            $baseUrl = Helper::getAppBaseUrl();
+            $data['settings_menu'] = apply_filters('fluent_booking/calendar_setting_menu_items', [
+                'google_calendar'       => [
+                    'type'    => 'route',
+                    'route'   => [
+                        'name'   => 'google_calendar',
+                        'params' => [
+                            'id' => $calendar->id
+                        ]
+                    ],
+                    'label'   => __('Google Calendar', 'fluent-booking'),
+                    'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2.5 7.59166V12.4C2.5 14.1667 2.5 14.1667 4.16667 15.2917L8.75 17.9417C9.44167 18.3417 10.5667 18.3417 11.25 17.9417L15.8333 15.2917C17.5 14.1667 17.5 14.1667 17.5 12.4083V7.59166C17.5 5.83333 17.5 5.83333 15.8333 4.70833L11.25 2.05833C10.5667 1.65833 9.44167 1.65833 8.75 2.05833L4.16667 4.70833C2.5 5.83333 2.5 5.83333 2.5 7.59166Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                ],
+                'landing_page_settings' => [
+                    'type'    => 'route',
+                    'route'   => [
+                        'name'   => 'landing_page_settings',
+                        'params' => [
+                            'id' => $calendar->id
+                        ]
+                    ],
+                    'label'   => __('Landing Page Settings', 'fluent-booking'),
+                    'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2.5 7.59166V12.4C2.5 14.1667 2.5 14.1667 4.16667 15.2917L8.75 17.9417C9.44167 18.3417 10.5667 18.3417 11.25 17.9417L15.8333 15.2917C17.5 14.1667 17.5 14.1667 17.5 12.4083V7.59166C17.5 5.83333 17.5 5.83333 15.8333 4.70833L11.25 2.05833C10.5667 1.65833 9.44167 1.65833 8.75 2.05833L4.16667 4.70833C2.5 5.83333 2.5 5.83333 2.5 7.59166Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                ]
+            ], $calendar);
+        }
+
+        return $data;
+    }
+
+    public function getSharingSettings(Request $request, $id)
+    {
+        $calendar = Calendar::findOrFail($id);
+
+        return [
+            'settings' => LandingPageHelper::getSettings($calendar)
+        ];
+    }
+
+    public function saveSharingSettings(Request $request, $id)
+    {
+        $calendar = Calendar::findOrFail($id);
+
+        $description = wp_kses_post($request->get('description'));
+        $calendar->description = $description;
+        $calendar->save();
+
+        $sharingSettings = $request->get('settings', []);
+        LandingPageHelper::updateSettings($calendar, $sharingSettings);
+
+        return [
+            'message' => __('Landing Page settings has been updated', 'fluent-booking')
         ];
     }
 
@@ -203,17 +262,17 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar.user'])->findOrFail($slotId);
 
         $slot->author_profile = $slot->getAuthorProfile();
-        
+
         $slotSettings = $slot->settings;
 
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
-        
+
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
-        
+
         $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
 
         $scheduleOptions = AvailabilityService::getScheduleOptions();
-        
+
         $slotSettings['schedule_options'] = $scheduleOptions;
 
         $slotSettings['available_schedules'] = $availableSchedules;
@@ -232,13 +291,13 @@ class CalendarController extends Controller
         $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
 
         $schema = [
-            'title'           => '',
-            'status'          => 'active',
-            'description'     => '',
-            'duration'        => '30',
-            'color_schema'    => '#0099ff',
-            'calendar'        => $calendar,
-            'settings'        => $settingsSchema
+            'title'        => '',
+            'status'       => 'active',
+            'description'  => '',
+            'duration'     => '30',
+            'color_schema' => '#0099ff',
+            'calendar'     => $calendar,
+            'settings'     => $settingsSchema
         ];
 
         return [
@@ -307,9 +366,9 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         $generalRules = [
-            'title'             => 'required',
-            'duration'          => 'required|numeric',
-            'location_type'     => 'required'
+            'title'         => 'required',
+            'duration'      => 'required|numeric',
+            'location_type' => 'required'
         ];
 
         $conditionalRules = [];
@@ -338,8 +397,8 @@ class CalendarController extends Controller
         $slot->color_schema = sanitize_text_field(Arr::get($data, 'color_schema', '#0099ff'));
         $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
         $slot->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
-        $slot->is_display_spots  = (bool)Arr::get($data, 'is_display_spots');
-        $slot->availability_id   = (int)Arr::get($data, 'availability_id');
+        $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
+        $slot->availability_id = (int)Arr::get($data, 'availability_id');
         $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
         $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
         $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
@@ -368,7 +427,7 @@ class CalendarController extends Controller
         ];
 
     }
-    
+
     public function getSlotNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
@@ -425,7 +484,8 @@ class CalendarController extends Controller
         ];
     }
 
-    private function sanitize_data( $settings ) {
+    private function sanitize_data($settings)
+    {
 
         $sanitizerMap = [
             'value'   => 'intval',
@@ -440,7 +500,7 @@ class CalendarController extends Controller
     public function deleteCalendar(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $slots    = CalendarSlot::where('calendar_id', $calendar->id)->get();
+        $slots = CalendarSlot::where('calendar_id', $calendar->id)->get();
 
         foreach ($slots as $slot) {
             $slot->delete();
