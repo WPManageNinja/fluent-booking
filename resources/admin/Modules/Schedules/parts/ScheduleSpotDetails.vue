@@ -18,6 +18,7 @@
                     </el-dropdown>
                 </div>
                 <SingleInviteeInfo v-if="showing_spot && !isGroupEvent" :spot="showing_spot"/>
+                <InviteeInformations v-if="showing_spots && isGroupEvent" :spots="showing_spots"/>
                 <div class="fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
@@ -70,7 +71,6 @@
                     </div>
                 </div>
             </div>
-            <InviteeInformations v-if="showing_spots && isGroupEvent" :spots="showing_spots"/>
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>

@@ -60,7 +60,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
 import {markRaw} from "vue";
 import {Minus, Plus} from "@element-plus/icons-vue";
 
@@ -138,7 +138,7 @@ export default {
                 })
                 .catch(errors => {
                     this.$handleError(errors);
-                })
+                });
         },
     },
     mounted() {
@@ -146,7 +146,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

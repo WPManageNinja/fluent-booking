@@ -20,7 +20,7 @@ class TimeSlotService
         $this->calendarSlot = $calendarSlot;
     }
 
-    public function getDates($fromDate = false, $toDate = false)
+    public function getDates($fromDate = false, $toDate = false, $bookingRequest = false)
     {
         $period = $this->calendarSlot->duration;
 
@@ -29,7 +29,7 @@ class TimeSlotService
 
         $ranges      = $this->getCurrentDateRange($fromDate, $toDate);
         $daySlots    = $this->getWeekDaySlots();
-        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone);
+        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
@@ -130,7 +130,7 @@ class TimeSlotService
         $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp);
         $toTime   = date('Y-m-d 23:59:59', $toTimeStamp);
 
-        $slots = $this->getDates($fromTime, $toTime);
+        $slots = $this->getDates($fromTime, $toTime, true);
 
         $date = date('Y-m-d', $fromTimeStamp);
 
@@ -181,7 +181,7 @@ class TimeSlotService
         return $date_array;
     }
 
-    protected function getBookedSlots($dateRange, $toTimeZone = false)
+    protected function getBookedSlots($dateRange, $toTimeZone = false, $bookingRequest = false)
     {
         if ($toTimeZone) {
             $dateRange[0] = DateTimeHelper::convertToTimeZone($dateRange[0], $toTimeZone, 'UTC');
@@ -232,7 +232,7 @@ class TimeSlotService
             ];
         }
 
-        return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $dateRange, $toTimeZone);
+        return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $bookingRequest, $dateRange);
     }
 
     protected function getWeekDaySlots()
