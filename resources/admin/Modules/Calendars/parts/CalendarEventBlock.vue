@@ -113,8 +113,8 @@ export default {
         },
         goToSingleIntegration() {
             this.$router.push({
-                name: 'single-integration',
-                params: {id: this.calendar.user_id}
+                name: 'google_calendar',
+                params: {id: this.calendar.id}
             })
         },
         createOneToOneSlot() {

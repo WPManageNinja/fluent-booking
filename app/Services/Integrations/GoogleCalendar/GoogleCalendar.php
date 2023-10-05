@@ -49,7 +49,7 @@ class GoogleCalendar extends IntegrationManager
         add_filter('fluent_booking/settings_menu_items', [$this, 'addMenu'], 10, 1);
         add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
         add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
-        add_filter('fluent_booking/booked_events', [$this, 'getBookedEvents'], 10, 4);
+        add_filter('fluent_booking/booked_events', [$this, 'addBookedEvents'], 10, 4);
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback'] );
     }
 
@@ -442,40 +442,10 @@ class GoogleCalendar extends IntegrationManager
         do_action('fluent_booking/google_calendar_event_updated', $booking, $calendarSlot, $response);
     }
 
-    public function getBookedEvents($books, $calendarSlot, $dateRanges, $timeZone)
+    private function getBookedEvents($bookedEvents, $books, $timeZone)
     {
-        $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
-        if (!Arr::isTrue($integrationSettings, 'check_conflict')) {
-            return $books;
-        }
-
-        $accessToken = $this->getAccessToken($calendarSlot->user_id);
-        if (!$accessToken) {
-            return $books;
-        }
-        
-        $header = static::getStandardHeader($accessToken);
-        
-        $startRange = DateTimeHelper::convertToIso($dateRanges[0]);
-        $endRange   = DateTimeHelper::convertToIso($dateRanges[1]);
-
-        $query = [
-            'timeMin' => $startRange,
-            'timeMax' => $endRange,
-        ];
-
-        $url = $this->client->calendarEvent . '?' . http_build_query($query);
-
-        $response = static::makeRequest($url, '', 'GET', $header);
-
-        if (is_wp_error($response)) {
-            return $books;
-        }
-
-        $bookedEvents = Arr::get($response, 'items');
-
         foreach ($bookedEvents as $event)
-        {    
+        {
             if ('fluent_booking' == Arr::get($event, 'extendedProperties.shared.created_by')) {
                 continue;
             }
@@ -496,8 +466,89 @@ class GoogleCalendar extends IntegrationManager
                 'remaining' => 0
             ];
         }
-
         return $books;
+    }
+
+    private function getUpdatedCalendarEvents($calendarSlot, $header)
+    {
+        $startRange = $calendarSlot->getMinLookUpDate();
+        $endRange   = $calendarSlot->getMaxLookUpDate();
+
+        $query['timeMin'] = DateTimeHelper::convertToIso($startRange, 'UTC');
+
+        if ($endRange) {
+            $query['timeMax'] = DateTimeHelper::convertToIso($endRange, 'UTC');
+        }
+
+        $url = $this->client->calendarEvent . '?' . http_build_query($query);
+
+        $response = static::makeRequest($url, '', 'GET', $header);
+
+        if (is_wp_error($response)) {
+            return false;
+        }
+
+        $eventsData = [
+            'startRange' => $startRange,
+            'endRange'   => $endRange,
+            'response'   => $response
+        ];
+
+        Helper::updateMeta($this->integrationKey, $calendarSlot->user_id,  'google_calendar_events', $eventsData);
+
+        return $response;
+    }
+
+    private function checkAndGetUpdatedCalendarEvents($calendarSlot, $header)
+    {
+        $hostId = $calendarSlot->user_id;
+
+        $bookedEvents = Helper::getMeta($this->integrationKey, $hostId, 'google_calendar_events', true);
+
+        $eventStartRange = date("Y-m-d", strtotime(Arr::get($bookedEvents, 'value.startRange')));
+        $eventEndRange   = date("Y-m-d", strtotime(Arr::get($bookedEvents, 'value.endRange')));
+
+        $startRange = date("Y-m-d", strtotime($calendarSlot->getMinLookUpDate()));
+        $endRange   = date("Y-m-d", strtotime($calendarSlot->getMaxLookUpDate()));
+
+        if ($startRange == $eventStartRange && $endRange == $eventEndRange) {
+            $tenMinuteAgoTime = time() - 600;
+            $lastUpdateTime   = strtotime(Arr::get($bookedEvents, 'updated_at'));
+            if ($lastUpdateTime >= $tenMinuteAgoTime) {
+                return Arr::get($bookedEvents, 'value.response');
+            }
+        }
+
+        return $this->getUpdatedCalendarEvents($calendarSlot, $header);
+    }
+
+    public function addBookedEvents($books, $calendarSlot, $timeZone, $bookingRequest)
+    {
+        $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);
+        if (!Arr::isTrue($integrationSettings, 'check_conflict')) {
+            return $books;
+        }
+
+        $accessToken = $this->getAccessToken($calendarSlot->user_id);
+        if (!$accessToken) {
+            return $books;
+        }
+        
+        $header = static::getStandardHeader($accessToken);
+
+        $response = $bookingRequest
+            ? $this->getUpdatedCalendarEvents($calendarSlot, $header)
+            : $this->checkAndGetUpdatedCalendarEvents($calendarSlot, $header);
+
+        if (!$response) {
+            return $books;
+        }
+
+        $bookedEvents = Arr::get($response, 'items');
+
+        $updatedBookedEvents = $this->getBookedEvents($bookedEvents, $books, $timeZone);
+
+        return $updatedBookedEvents;
     }
 
     public function updateEventLink($bookingId, $response)
