@@ -1,8 +1,10 @@
 <template>
-    <div class="fcal_cal_settings">
+    <div class="fcal_settings_landing_page">
         <div class="fcal_settings_header">
-            <h2>Landing Page Settings</h2>
-            <p>Share your Booking Types in a beautiful & standalone landing page</p>
+            <h3 class="title">
+                Landing Page Settings
+                <p class="short-desc">Share your Booking Types in a beautiful & standalone landing page</p>
+            </h3>
         </div>
         <div v-loading="loading" class="fcal_settings_body">
             <el-form v-model="settings" label-position="top">
@@ -37,7 +39,11 @@
                     </el-form-item>
                 </template>
                 <el-form-item>
-                    <el-button @click="saveSettings()" :disabled="saving" v-loading="saving" type="primary">Save
+                    <el-button
+                        @click="saveSettings()"
+                        :disabled="saving"
+                        v-loading="saving"
+                        type="primary">Save
                         Settings
                     </el-button>
                 </el-form-item>
