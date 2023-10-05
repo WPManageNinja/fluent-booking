@@ -166,7 +166,6 @@ export default {
                 .then(response => {
                     this.$handleSuccess(response);
                     this.addScheduleTab(response.schedule);
-                    console.log(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
