@@ -66,7 +66,7 @@ export const LandingPage = props => {
                             <div className="fcal_block_preview_aside">
                                 <div className="fcal_author">
                                     <div className="fcal_author_avatar">
-                                        <img src="" alt="" />
+                                        <img src="https://images.unsplash.com/photo-1682655799900-98eba189adc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3072&q=80" alt="Host" />
                                     </div>
                                     <h3 class="fcal_author_name">Rina Bender</h3>
                                 </div>
@@ -101,31 +101,31 @@ export const LandingPage = props => {
                                     {/*<Spinner/>*/}
                                 </h2>
                                 :
-                                <div>
-                                    {
-                                        calendars && calendars.length && !error ?
-                                            <select
-                                                id="fcal_select_calendar"
-                                                onChange={handleCalendar}
-                                            >
-                                                <option value="">---Select a Slot---</option>
-                                                {calendars.map((item, index) => {
-                                                    return <optgroup label={item.title} key={index}>
-                                                        {
-                                                            item.slots.map(slot => {
-                                                                return <option key={'slot-'+slot.id} value={slot.id}>{slot.title}</option>
-                                                            })
-                                                        }
-                                                    </optgroup>
-                                                })}
-                                            </select>
-                                            :
-                                            <div className="fcal_calendar_not_found">
-                                                <h2>{error ? 'Something went wrong!' : 'No Calendars found!'}</h2>
-                                            </div>
-                                    }
+                            <div>
+                                {
+                                    calendars && calendars.length && !error ?
+                                        <select
+                                            id="fcal_select_calendar"
+                                            onChange={handleCalendar}
+                                        >
+                                            <option value="">---Select a Slot---</option>
+                                            {calendars.map((item, index) => {
+                                                return <optgroup label={item.title} key={index}>
+                                                    {
+                                                        item.slots.map(slot => {
+                                                            return <option key={'slot-'+slot.id} value={slot.id}>{slot.title}</option>
+                                                        })
+                                                    }
+                                                </optgroup>
+                                            })}
+                                        </select>
+                                        :
+                                        <div className="fcal_calendar_not_found">
+                                            <h2>{error ? 'Something went wrong!' : 'No Calendars found!'}</h2>
+                                        </div>
+                                }
 
-                                </div>
+                            </div>
                         }
                     </div>
                 }
