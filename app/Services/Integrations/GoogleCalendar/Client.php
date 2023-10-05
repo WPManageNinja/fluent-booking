@@ -58,14 +58,15 @@ class Client
         return $tokens;
     }
 
-    public function getAuthUrl()
+    public function getAuthUrl($calendarId)
     {
         $authUrl = add_query_arg([
             'client_id'     => $this->clientId,
             'scope'         => urlencode_deep($this->authScope),
             'redirect_uri'  => $this->redirectUrl,
             'response_type' => 'code',
-            'access_type'   => 'offline'
+            'access_type'   => 'offline',
+            'state'         => $calendarId
 		], $this->authUrl);
 
         return $authUrl;

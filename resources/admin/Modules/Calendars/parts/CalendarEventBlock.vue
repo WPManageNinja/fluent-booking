@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button class="fcal_plain_btn" @click="goToSingleIntegration">
+                <el-button class="fcal_plain_btn" @click="goToIntegrationSetting">
                     <el-icon><Setting /></el-icon> Settings
                 </el-button>
 
@@ -111,7 +111,7 @@ export default {
         slotDeleted(slotIndex) {
             this.calendar.slots.splice(slotIndex, 1);
         },
-        goToSingleIntegration() {
+        goToIntegrationSetting() {
             this.$router.push({
                 name: 'google_calendar',
                 params: {id: this.calendar.id}
