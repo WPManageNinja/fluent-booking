@@ -71,6 +71,7 @@ $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) 
 
 $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
+    $router->get('/{id}', 'AvailabilityController@getSchedule')->int('id');
     $router->post('/', 'AvailabilityController@createSchedule');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
     $router->delete('/{id}', 'AvailabilityController@deleteSchedule')->int('id');

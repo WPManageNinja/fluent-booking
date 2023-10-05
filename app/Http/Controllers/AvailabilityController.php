@@ -28,7 +28,6 @@ class AvailabilityController extends Controller
         do_action('fluent_booking/availability_schedules', $schedules);
 
         $formattedSchedules = [];
-
         foreach ($schedules as $schedule)
         {
             $timezone =  sanitize_text_field(Arr::get($schedule, 'value.timezone'));
@@ -36,6 +35,7 @@ class AvailabilityController extends Controller
             $formattedSchedules[] = [
                 'id'    => $schedule->id,
                 'title' => $schedule->key,
+                'created_at' => $schedule->created_at,
                 'settings' => [
                     'default'          => Arr::isTrue($schedule, 'value.default'),
                     'timezone'         => $timezone,
@@ -51,6 +51,14 @@ class AvailabilityController extends Controller
 
         return [
             'schedules' => $formattedSchedules
+        ];
+    }
+
+    public function getSchedule(Request $request, $id)
+    {
+        $schedule = Availability::where('object_type', 'availability')->where('id', $id)->first();
+        return [
+            'schedule' => $schedule
         ];
     }
 
