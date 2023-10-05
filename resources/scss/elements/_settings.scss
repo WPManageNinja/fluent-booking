@@ -449,7 +449,7 @@
 }
 
 .fcal_notification_btn {
-    margin: 0 1rem; 
+    margin: 0 1rem;
     padding: 1rem 1rem 0 1rem;
 }
 
@@ -469,7 +469,45 @@
     }
 }
 .fcal_settings_availability {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    .fcal_settings_header {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 16px 20px;
+        border: none;
+        h3 {
+            border-bottom: 1px solid #EAECF0;
+            padding-bottom: 16px;
+        }
+        .fcal_settings_header_bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 24px;
+            .el-select {
+                width: 170px;
+                .el-input {
+                    .el-input__wrapper {
+                        box-shadow: none !important;
+                        border-radius: 8px;
+                        border: 1px solid #D6DAE1;
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 18px;
+                        padding: 2px 16px;
+                    }
+                }
+            }
+        }
+    }
     .fcal_settings_content_wrap {
+        padding: 0 20px;
+        background: #fff;
+        border-radius: 8px;
+
         .el-form {
             .el-form-item {
                 .fcal_availability_header {
@@ -533,6 +571,149 @@
                     .el-tabs__content {
                         overflow: inherit;
                     }
+                }
+            }
+        }
+
+        .el-table {
+            width: 100%;
+            .el-table__inner-wrapper {
+                &:before {
+                    display: none;
+                }
+            }
+            table {
+                width: 100% !important;
+            }
+            thead {
+                tr {
+                    th {
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 24px;
+                        color: #323232;
+                        padding: 18px 0;
+                        border-color: #D6DAE1;
+                        .cell {
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+            tbody {
+				tr {
+                    &:hover {
+                        background: none;
+                        td {
+                            background: none;
+                        }
+                    }
+                    &:last-child {
+                        td {
+                            border-bottom: none;
+                        }
+                    }
+					td {
+                        padding: 14px 0;
+                        border-color: #F5F8FC;
+                        &:hover {
+                            background: none;
+                        }
+                        .cell {
+                            padding: 0;
+                        }
+                        &:last-child {
+                            text-align: right;
+                        }
+                        h4 {
+                            font-size: 16px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            color: #5D5D7A;
+                            margin: 0;
+                        }
+						.author {
+							display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            img {
+                                width: 42px;
+                                height: 42px;
+                                border-radius: 50%;
+                                object-fit: cover;
+                                display: block;
+                            }
+						}
+					}
+				}
+			}
+        }
+    }
+}
+
+.fcal_settings_availability_details {
+    .fcal_settings_header {
+        padding-bottom: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-bottom: 0;
+        h3 {
+            cursor: pointer;
+        }
+    }
+    .fcal_settings_content_wrap {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        padding: 24px 18px 24px 24px;
+        .el-form {
+            .el-form-item {
+                &.fcal_availability_header {
+                    border: 1px solid #D6DAE1;
+                    padding: 20px 20px 40px 20px;
+                    border-radius: 8px;
+                    position: relative;
+                    .el-form-item__content {
+                        max-width: 490px;
+                        width: 100%;
+                        position: initial;
+                        .sub-label {
+                            margin-bottom: 20px;
+                        }
+                        h3 {
+                            font-size: 18px;
+                            font-weight: 500;
+                            line-height: 28px;
+                            margin: 0 0 10px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            width: 100%;
+                        }
+                        .el-dropdown {
+                            position: absolute;
+                            right: 20px;
+                            top: 20px;
+                            .el-button {
+                                border: none !important;
+                                padding: 0 !important;
+                                &:hover {
+                                    background: none !important;
+                                }
+                            }
+                        }
+                        .timezone {
+                            .fcal_timezone_text {
+                                margin: 0;
+                                font-size: 14px;
+                                font-weight: 600;
+                                line-height: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .fcal_availability_body {
+                    width: 100%;
                 }
             }
         }
