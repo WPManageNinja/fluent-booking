@@ -22,11 +22,11 @@
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
 
-
-
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
+
+$app->addAction('init', 'BlockEditorHandler@init');
 
 add_action('init', function () {
     if(!isset($_GET['fcal'])) {
@@ -38,5 +38,4 @@ add_action('init', function () {
     $item = \FluentBooking\App\Models\CalendarSlot::where('calendar_id', 1)->where('slug', 'test')->first();
 
     dd($item);
-
 });
