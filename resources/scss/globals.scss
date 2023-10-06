@@ -634,6 +634,56 @@
         color: #fff;
     }
 }
+.is-message-box {
+    .el-message-box {
+
+        .el-message-box__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: #1B2533;
+            padding: 15px 24px 15px 24px;
+            margin: 0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+
+            .el-message-box__headerbtn {
+                color: #1B2533;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                line-height: 46px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                top: 9px;
+                right: 9px;
+                &:hover {
+                    color: var(--el-color-danger);
+                    i {
+                        color: var(--el-color-danger);
+                    }
+                }
+            }
+        }
+
+        .el-message-box__btns {
+
+            .el-button {
+                padding: 10px 20px;
+                transition: .2s;
+                border-radius: 8px;
+                height: auto;
+                &.el-button--primary {
+                    &:focus {
+                        background: #416ddd;
+                    }
+                }
+            }
+        }
+    }
+}
 
 .el-dialog {
     &.fcal_modal {

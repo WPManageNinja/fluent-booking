@@ -36,7 +36,7 @@
                                 <el-dropdown-item>
                                     <el-button plain text @click="handleCommand( 'set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
                                 </el-dropdown-item>
-                                <el-dropdown-item class="danger">
+                                <el-dropdown-item>
                                     <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
                                 </el-dropdown-item>
                             </el-dropdown-menu>

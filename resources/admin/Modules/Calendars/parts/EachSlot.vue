@@ -10,7 +10,7 @@
                             <el-dropdown-menu>
                                 <el-dropdown-item command="disable" v-if="slot.status == 'active'"><el-icon><SwitchButton /></el-icon> Disable</el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
-                                <el-dropdown-item command="delete" class="danger"><el-icon><Delete /></el-icon> Delete</el-dropdown-item>
+                                <el-dropdown-item command="delete"><el-icon><Delete /></el-icon> Delete</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
