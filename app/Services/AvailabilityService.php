@@ -19,10 +19,10 @@ class AvailabilityService
         
         foreach ($availabilities as $availability) {
             $formattedSchedules[] = [
-                'id'      => (int)Arr::get($availability, 'id'),
+                'id'        => (int)Arr::get($availability, 'id'),
                 'object_id' => (int)Arr::get($availability, 'object_id'),
-                'key'       => sanitize_text_field(Arr::get($availability, 'key')),
-                'value' => [
+                'title'     => sanitize_text_field(Arr::get($availability, 'key')),
+                'settings' => [
                     'default'          => Arr::isTrue($availability, 'value.default'),
                     'timezone'         => sanitize_text_field($toTimezone),
                     'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($availability, 'value.date_overrides', []), 'UTC', $toTimezone),
@@ -33,16 +33,23 @@ class AvailabilityService
         return $formattedSchedules;
     }
 
-    public static function getAvailabilitySchedule($schedule)
+    public static function getFormattedSchedule($schedule)
     {
+        $author = ['name' => 'Deleted User', 'avatar' => ''];
+
+        if ($schedule->calendar) {
+            $author = $schedule->calendar->getAuthorProfile();
+        }
+
         $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
 
         $formattedSchedule = [
             'id'         => (int)Arr::get($schedule, 'id'),
-            'object_id'  => (int)Arr::get($schedule, 'object_id'),
-            'key'        => sanitize_text_field(Arr::get($schedule, 'key')),
+            'host_name'   => $author['name'],
+            'host_avatar' => $author['avatar'],
+            'title'      => sanitize_text_field(Arr::get($schedule, 'key')),
             'created_at' => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
-            'value' => [
+            'settings'   => [
                 'default'          => Arr::isTrue($schedule, 'value.default'),
                 'timezone'         => $timezone,
                 'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
@@ -52,8 +59,12 @@ class AvailabilityService
         return $formattedSchedule;
     }
 
-    public static function isTitleAlreadyExist($title, $userId)
+    public static function isTitleAlreadyExist($title, $userId, $currentTitle = '')
     {
+        if ($title == $currentTitle) {
+            return false;
+        }
+
         $scheduleTitles = Availability::where('object_type', 'availability')
             ->where('object_id', $userId)
             ->pluck('key')
@@ -62,7 +73,29 @@ class AvailabilityService
         if (in_array($title, $scheduleTitles)) {
             return true;
         }
+
         return false;
+    }
+
+    public static function updateOtherDefaultStatus($schedule, $id)
+    {
+        $schedules = Availability::where('object_type', 'availability')
+            ->where('object_id', $schedule->object_id)
+            ->where('id', '!=', $id)
+            ->get();
+
+        foreach ($schedules as $schedule) {
+            $schedule = Availability::findOrFail($schedule->id);
+            $updatedSettings = [
+                'default'          => false,
+                'timezone'         => Arr::get($schedule, 'value.timezone', 'UTC'),
+                'date_overrides'   => Arr::get($schedule, 'value.data_overrides', []),
+                'weekly_schedules' => Arr::get($schedule, 'value.weekly_schedules'),
+            ];
+    
+            $schedule->value = $updatedSettings;
+            $schedule->save();
+        }
     }
 
     public static function getScheduleOptions()
@@ -108,7 +141,6 @@ class AvailabilityService
         $defaultSchedule = [
             'object_id'  => $userId,
             'key'        => sanitize_text_field($title),
-            'created_at' => '',
             'value'     => [
                 'default'          => (bool)$default,
                 'timezone'         => sanitize_text_field($fromTimezone),
