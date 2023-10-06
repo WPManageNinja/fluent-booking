@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { Plus, StarFilled, Edit, Delete } from '@element-plus/icons-vue';
+import {Delete, Edit, Plus, StarFilled} from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
@@ -190,12 +190,16 @@ export default {
             this.$del('availability/' + id)
                 .then(response => {
                     this.$handleSuccess(response.message);
+                    this.removeSchedule(id);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
                 });
-            this.fetchSchedules();
         },
+        removeSchedule(id) {
+            const updatedSchedules = this.schedules.filter(item => item.id !== id);
+            this.schedules = updatedSchedules;
+        }
     },
     mounted() {
         if (this.$route.query.schedule_id) {
