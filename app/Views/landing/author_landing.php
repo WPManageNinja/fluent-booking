@@ -25,87 +25,163 @@
     <?php endforeach; ?>
 
     <style>
-        .author_header {
-            padding: 20px;
+        :root {
+            --dark: #1B2533;
+            --primaryColor: #2653C7;
+        }
+        .fcal_author_header {
+            max-width: 420px;
+            margin: auto;
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto 30px;
         }
-        .author_header img {
-            max-width: 96px;
-            border-radius: 50%;
-        }
-        .author_header h1 {
-            font-size: 24px;
-            margin: 0 0 10px;
-        }
-        .cal_slots {
-            padding: 20px 30px;
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .cal_slot {
-            flex: 0 calc(50% - 40px);
-            margin: 20px;
-            background: #f8fafc;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            box-shadow: 0 1px 6px 0 rgb(0 0 0 / 10%);
-        }
-        .cal_slot h2 {
-            font-size: 18px;
-            margin: 0 0 10px;
-        }
-        .cal_slot .cal_description {
-            font-size: 14px;
-            color: #666;
-            min-height: 80px;
-        }
-
-        .cal_slot button {
-            border: 1px solid #666;
-            padding: 5px 15px;
-            background: white;
-            cursor: pointer;
-        }
-
-        .cal_slot:hover {
-            box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
-        }
-
-        .cal_slot > a.cal_card {
-            color: initial;
-            text-decoration: none;
-            padding: 20px;
+        .fcal_author_header img {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 8px;
             display: block;
+            margin: auto auto 10px auto;
+        }
+        .fcal_author_header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 28px;
+            margin: 0;
+            color: var(--dark);
+        }
+        .fcal_author_header p {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            margin: 8px 0 0 0;
+        }
+        .fcal_slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 32px;
+        }
+        .fcal_slots_wrap {
+            border-top: 1px solid #D6DAE1;
+            padding-top: 48px;
+            margin-top: 48px;
+        }
+        .fcal_slots_wrap h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 32px;
+            margin: 0 0 32px;
+        }
+        .fcal_slot {
+            border: 1px solid #D6DAE1;
+            padding: 24px;
+            border-radius: 8px;
+            transition: .3s;
+        }
+        .fcal_slot h2 {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 28px;
+            position: relative;
+            margin: 0;
+            color: var(--dark);
+            padding-left: 32px;
+        }
+        .fcal_slot h2 .fcal_slot_color_schema {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+            top: 6px;
+        }
+        .fcal_slot .fcal_description {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            color: var(--dark);
+            margin: 0 0 16px;
+            padding-left: 32px;
+        }
+
+        .fcal_slot button {
+            border: 1px solid var(--primaryColor);
+            color: var(--primaryColor);
+            width: 100%;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            display: block;
+            border-radius: 8px;
+            background: transparent;
+            padding: 7px 24px;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .fcal_slot button:hover {
+            background: var(--primaryColor);
+            border-color: var(--primaryColor);
+            color: #ffffff;
+        }
+
+        .fcal_slot:hover {
+            box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+        }
+
+        .fcal_slot > a.cal_card {
+            text-decoration: none;
         }
 
         .fluent_booking_app {
-            max-width: 900px;
-            border-radius: 5px;
+            max-width: 1216px;
+        }
+
+        @media (max-width: 800px) {
+            .fcal_slots {
+                grid-template-columns: 1fr 1fr;
+            }
+            .fluent_booking_app {
+                padding: 0 20px;
+            }
+        }
+        @media (max-width: 544px) {
+            .fcal_slots {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .fcal_slots_wrap {
+                padding-top: 28px;
+                margin-top: 28px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="calendar_wrap">
-    <div class="fcal_cal_wrap">
-        <div class="fluent_booking_app">
-            <div class="author_header">
-                <img src="<?php echo $author['avatar']; ?>"/>
-                <div class="author_info">
-                    <h1><?php echo $author['name']; ?></h1>
-                    <div class="cal_description"><?php echo $calendar->description; ?></div>
-                </div>
+<div class="fcal_calendar_wrap">
+    <div class="fluent_booking_app">
+        <div class="fcal_author_header">
+            <img src="<?php echo $author['avatar']; ?>"/>
+            <div class="author_info">
+                <h1>
+                    <?php echo $author['name']; ?>
+                </h1>
+                <?php if ($calendar->description) { ?>
+                    <p class="fcal_description"><?php echo $calendar->description; ?></p>
+                <?php } ?>
             </div>
-            <div class="cal_slots">
+        </div>
+        <div class="fcal_slots_wrap">
+            <h1><?php esc_html_e('All Bookings', 'fluent-booking'); ?></h1>
+            <div class="fcal_slots">
                 <?php foreach ($slots as $slot): ?>
-                <div class="cal_slot">
+                <div class="fcal_slot">
                     <a href="<?php echo $slot->public_url; ?>" class="cal_card">
-                        <h2><?php echo $slot->title; ?></h2>
-                        <div class="cal_description"><?php echo $slot->description; ?></div>
+                        <h2>
+                            <span class="fcal_slot_color_schema" style="background: <?php echo esc_attr($slot->color_schema); ?>;"></span>
+                            <?php echo $slot->title; ?>
+                        </h2>
+                        <p class="fcal_description"><?php echo $slot->description; ?></p>
                         <button class="book_now">
                             Book Now
                         </button>
