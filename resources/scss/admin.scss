@@ -314,6 +314,15 @@
             }
           }
 
+          svg {
+            path {
+              stroke-dasharray: 200;
+              stroke-dashoffset: 200;
+              stroke: #ffffff;
+              animation: animateSvg 5s linear alternate;
+            }
+          }
+
           &:after,
           &:before {
             content: '';
@@ -442,5 +451,18 @@
       border: none;
       box-shadow: none;
     }
+  }
+}
+
+
+@keyframes animateSvg {
+  from {
+    stroke-dashoffset: 200;
+    fill: none;
+  }
+  to {
+    stroke-dashoffset: 0;
+    stroke: none;
+    fill: #ffffff;
   }
 }

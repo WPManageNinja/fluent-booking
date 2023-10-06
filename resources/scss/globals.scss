@@ -623,6 +623,22 @@
             }
         }
     }
+    &.fcal_confirm_dialog {
+        padding: 8px !important;
+        border-radius: 8px;
+        border: none !important;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%) !important;
+        .el-popconfirm__action {
+            .el-button {
+                padding: 8px 11px;
+                height: auto;
+                border-radius: 8px;
+            }
+            + .el-button {
+                margin-left: 8px;
+            }
+        }
+    }
 }
 
 .el-dropdown-list-wrapper {
@@ -895,7 +911,7 @@
                 border-top: 1px solid #EAECF0;
                 padding: 18px 0;
                 .el-button {
-                    padding: 12px 24px;
+                    padding: 10px 22px !important;
                 }
             }
         }
