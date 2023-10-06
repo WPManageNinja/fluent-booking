@@ -129,10 +129,6 @@ export default {
             this.scheduleId = '';
             this.fetchSchedules();
         },
-        addNewSchedule() {
-            this.scheduleTitle = '';
-            this.dialogVisible = true;
-        },
         fetchSchedules() {
             this.loading = true;
             this.$get('availability', {
@@ -176,25 +172,22 @@ export default {
                     this.dialogVisible = false;
                 });
         },
-        handleCommand(tab, command) {
-            if (command == 'delete') {
-                this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
+        deleteStatus() {
+            this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
                     confirmButtonText: 'Delete',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    this.$del('availability/' + tab.id)
+                    this.$del('availability/' + this.schedule_id)
                         .then(response => {
                             this.$handleSuccess(response.message);
-                            this.fetchSchedules();
+                            this.goBackToList();
                         })
                         .catch(errors => {
                             this.$handleError(errors);
                         });
                 })
                 return;
-            }
-
         },
     },
     mounted() {
