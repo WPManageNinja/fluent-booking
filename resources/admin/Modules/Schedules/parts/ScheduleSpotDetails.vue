@@ -74,7 +74,8 @@
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
-            <ScheduleProfile />
+            <FluentCrmProfile
+                :crm_email="showing_spot.email" />
         </div>
         <el-dialog
             v-model="cancelDialog"
@@ -113,7 +114,7 @@
 <script>
 import { Back, MoreFilled, Refresh, Close, EditPen } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
-import ScheduleProfile from "./ScheduleProfile";
+import FluentCrmProfile from "./FluentCrmProfile";
 import InviteeInformations from './InviteeInformations';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableSpotData from "./EditableSpotData.vue";
@@ -122,7 +123,7 @@ export default {
     props: ['spot', 'spot_id'],
     $emits: ['spotFetched'],
     components: {
-        ScheduleProfile,
+        FluentCrmProfile,
         BookingActivities,
         SingleInviteeInfo,
         InviteeInformations,

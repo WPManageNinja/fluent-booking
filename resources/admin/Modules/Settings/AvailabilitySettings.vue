@@ -1,12 +1,13 @@
 <template>
-    <div class="fcal_settings_body_inner fcal_settings_availability">
+    <div v-if="!scheduleId" class="fcal_settings_body_inner fcal_settings_availability">
         <div class="fcal_settings_header">
             <h3>Availability</h3>
             <div class="fcal_settings_header_bottom">
                 <div class="fcal_settings_header_left_action">
-                    <el-select v-model="filter" placeholder="Select" popper-class="fcal_select">
-                        <el-option value="all" label="All Schedule" />
-                        <el-option value="1" label="Tanbir" />
+                    <el-select v-model="filters.author" @change="fetchSchedules" placeholder="Select" popper-class="fcal_select">
+                        <el-option value="me" label="My Schedule"></el-option>
+                        <el-option value="all" label="All Schedules"></el-option>
+                        <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
                     </el-select>
                 </div>
                 <div class="fcal_settings_header_right_action">
@@ -21,13 +22,17 @@
                 <el-table-column label="Name" width="180">
                     <template #default="scope">
                         <h4 class="author">
-                            <img src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60" alt=""> {{ scope.row.title }}
+                            <img :src="scope.row.host_avatar"> {{ scope.row.host_name }}
                         </h4>
                     </template>
                 </el-table-column>
                 <el-table-column label="Schedule" width="180">
                     <template #default="scope">
-                        <h4>{{ scope.row.title }}</h4>
+                        <h4>{{ scope.row.title }}
+                            <span v-if="scope.row.settings.default" class="default-schedule-badge">
+                                <el-icon><StarFilled /></el-icon> Default
+                            </span>
+                        </h4>
                     </template>
                 </el-table-column>
                 <el-table-column label="Created Date" width="180">
@@ -37,7 +42,7 @@
                 </el-table-column>
                 <el-table-column width="180">
                     <template #default="scope">
-                        <el-button class="fcal_plain_btn" @click="this.$router.push({name: 'availability', params: {id: scope.row.id}})">
+                        <el-button class="fcal_plain_btn" @click="viewDetails(scope.row)">
                             View Details
                         </el-button>
                     </template>
@@ -59,95 +64,82 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button class="fcal_plain_btn" @click="dialogVisible = false">
-                        Cancel
-                    </el-button>
-                    <el-button class="fcal_primary_btn" @click="createSchedule()">
-                        Add
-                    </el-button>
+                    <el-button class="fcal_plain_btn" @click="dialogVisible = false">Cancel</el-button>
+                    <SaveButton :saving="saving" label="Add" @save="createSchedule"/>
                 </span>
             </template>
         </el-dialog>
+        <div class="fcal_right fcal_tm20">
+            <pagination :pagination="pagination" @fetch="fetchSchedules"/>
+        </div>
     </div>
+    <AvailabilityDetailsSettings v-if="scheduleId" @backToList="backToList" :schedule="schedule" :schedule_id="scheduleId"/>
 </template>
 
 <script>
-import { Calendar, Plus, StarFilled, Setting, Delete, EditPen } from '@element-plus/icons-vue';
+import { Plus, StarFilled } from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
-import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
-import TimezoneIcon from '../../Components/Icons/TimezoneIcon';
+import AvailabilityDetailsSettings from './AvailabilityDetailsSettings';
+import SaveButton from '../../Components/Buttons/SaveButton';
+import Pagination from '../../Pieces/Pagination';
 
 export default {
     name: "AvailabilitySettings",
     components: {
         DateOverRides,
         WeeklySchedules,
-        TimezoneIcon,
-        Calendar,
-        Plus,
         ScheduleSettings,
-        ScheduleIcon,
+        AvailabilityDetailsSettings,
+        SaveButton,
+        Pagination,
         StarFilled,
-        Setting,
-        Delete,
-        EditPen
+        Plus
     },
     data() {
         return {
             loading: false,
             saving: false,
             dialogVisible: false,
-            scheduleSchema: this.appVars.schedule_schema,
+            schedule: '',
+            scheduleId: '',
             schedules: [],
             scheduleTitle: '',
-            filter: 'all'
+            all_hosts: null,
+            filters: {
+                author: 'me'
+            },
+            pagination: {
+                total: 0,
+                current_page: 1,
+                per_page: 10
+            }
         }
     },
     methods: {
-        handleCommand(tab, command) {
-            if (command == 'delete') {
-                this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }).then(() => {
-                    this.$del('availability/' + tab.id)
-                        .then(response => {
-                            this.$handleSuccess(response.message);
-                            this.fetchSchedules();
-                        })
-                        .catch(errors => {
-                            this.$handleError(errors);
-                        });
-                })
-                return;
-            }
-
+        viewDetails(schedule) {
+            this.schedule = schedule;
+            this.scheduleId = schedule.id;
+            this.$router.push({
+                query: { schedule_id: schedule.id }
+            });
         },
-        addNewSchedule() {
-            this.scheduleTitle = '';
-            this.dialogVisible = true;
-        },
-        addScheduleTab(schedule) {
-            this.schedules.push({
-                title: schedule.key,
-                id: schedule.id,
-                created_at: schedule.created_at,
-                settings: {
-                    timezone: schedule.value.timezone,
-                    default: schedule.value.default,
-                    date_overrides: schedule.value.date_overrides,
-                    weekly_schedules: schedule.value.weekly_schedules,
-                },
-            })
+        backToList() {
+            this.scheduleId = '';
+            this.fetchSchedules();
         },
         fetchSchedules() {
             this.loading = true;
-            this.$get('availability')
+            this.$get('availability', {
+                per_page: this.pagination.per_page,
+                page: this.pagination.current_page,
+                filters: this.filters
+            })
                 .then(response => {
                     this.schedules = response.schedules;
+                    this.pagination.total = response.total;
+                    this.pagination.current_page = response.current_page;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -156,16 +148,21 @@ export default {
                     this.loading = false;
                 });
         },
+        fetchHosts() {
+            this.$get('admin/other-hosts')
+                .then(response => {
+                    this.all_hosts = response.hosts;
+                });
+        },
         createSchedule() {
             this.dialogVisible = false;
             this.saving = true;
             this.$post('availability/', {
-                title: this.scheduleTitle,
-                schedule: this.scheduleSchema
+                title: this.scheduleTitle
             })
                 .then(response => {
-                    this.$handleSuccess(response);
-                    this.addScheduleTab(response.schedule);
+                    this.$handleSuccess(response.message);
+                    this.fetchSchedules();
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -175,25 +172,34 @@ export default {
                     this.dialogVisible = false;
                 });
         },
-        updateSchedule(item) {
-            this.saving = true;
-            this.$post('availability/' + item.id, {
-                title: item.title,
-                settings: item.settings,
-            })
-                .then(response => {
-                    this.$handleSuccess(response);           
+        deleteStatus() {
+            this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    this.$del('availability/' + this.schedule_id)
+                        .then(response => {
+                            this.$handleSuccess(response.message);
+                            this.goBackToList();
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        });
                 })
-                .catch(errors => {
-                    this.$handleError(errors);
-                })
-                .finally(() => {
-                    this.saving = false;
-                });
-        }
+                return;
+        },
     },
     mounted() {
+        if (this.$route.query.schedule_id) {
+            this.scheduleId = this.$route.query.schedule_id;
+        }
+        this.$router.push({name: 'availability'});
         this.fetchSchedules();
+
+        if(this.hasSupport('multi_users')) {
+            this.fetchHosts();
+        }
     }
 }
 </script>

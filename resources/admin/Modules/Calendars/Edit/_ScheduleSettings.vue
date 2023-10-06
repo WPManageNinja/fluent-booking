@@ -136,7 +136,7 @@ export default {
     computed: {
         selectedSchedule() {
             const selectedAvailability = this.slot.settings.available_schedules.find(schedule => schedule.id === this.slot.availability_id);
-            return selectedAvailability?.value || [];
+            return selectedAvailability?.settings || [];
         }
     },
     methods: {

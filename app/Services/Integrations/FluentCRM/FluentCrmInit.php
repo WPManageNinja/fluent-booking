@@ -26,7 +26,7 @@ class FluentCrmInit {
 
     public function registerHooks()
     {
-        add_action('fluent_booking/booking_schedule', [$this, 'addProfileLink'], 10, 1);
+//        add_action('fluent_booking/booking_schedule', [$this, 'addProfileLink'], 10, 1);
         add_filter('fluentcrm_profile_sections', [$this, 'addProfileSection'], 10, 1);
         add_filter('fluentcrm_get_form_submissions_fluent_booking', [$this, 'getScheduledMeetings'], 10, 2);      
     }
