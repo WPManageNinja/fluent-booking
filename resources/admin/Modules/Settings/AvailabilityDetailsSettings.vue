@@ -194,7 +194,6 @@ export default {
                     this.$del('availability/' + this.schedule_id)
                         .then(response => {
                             this.$handleSuccess(response.message);
-                            this.goBackToList();
                         })
                         .catch(errors => {
                             this.$handleError(errors);
