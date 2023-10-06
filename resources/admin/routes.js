@@ -111,8 +111,8 @@ export var routes = [
             },
             {
                 name: 'availability',
-                path: 'availability/:id',
-                component: AvailabilityDetailsSettings,
+                path: 'availability',
+                component: AvailabilitySettings,
                 meta: {
                     active_menu: 'settings',
                     title: 'Availability'
