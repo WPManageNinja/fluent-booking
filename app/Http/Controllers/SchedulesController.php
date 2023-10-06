@@ -219,4 +219,25 @@ class SchedulesController extends Controller
         ];
     }
 
+
+    public function getCrmProfile(Request $request)
+    {
+        $email = $request->get('crmProfile');
+
+        if (!defined('FLUENTCRM')) {
+            return; // If not defined, return early and exit the method.
+        }
+
+        // Attempt to retrieve the CRM profile HTML for the provided email address.
+        $profileHtml = fluentcrm_get_crm_profile_html($email, false);
+
+        if (!$profileHtml) {
+            return; // If not found or empty, return early and exit the method.
+        }
+
+        return [
+            'crm_profile' => $profileHtml
+        ];
+    }
+
 }

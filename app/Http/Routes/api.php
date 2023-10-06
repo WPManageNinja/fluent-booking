@@ -44,6 +44,9 @@ $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router)
     $router->get('/{spot_id}/slot', 'SchedulesController@getScheduleSpot')->int('spot_id');
     $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
     $router->get('/{event_id}/activities', 'SchedulesController@getBookingActivities')->int('event_id');
+
+    // Get FluentCrm Profile
+    $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {

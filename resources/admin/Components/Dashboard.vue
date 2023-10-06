@@ -16,6 +16,7 @@
                         end-placeholder="End date"
                         :shortcuts="shortcuts"
                         popper-class="fcal_daterange_popover"
+                        @change="fetchReports"
                     />
                 </div>
             </div>
@@ -39,10 +40,9 @@
                     v-for="(widget, i) in widgets"
                     :key="i"
                     class="overview-widget">
-                    <h3>{{ widget.title }}</h3>
-                    <h1>{{ widget.number }}</h1>
-                    <p>{{ widget.content }}</p>
                     <span class="stat"><el-icon><Top /></el-icon> {{ widget.stat }}</span>
+                    <h1>{{ widget.number }}</h1>
+                    <p>{{ widget.title }}</p>
                     <span class="icon" v-html="widget.icon"></span>
                 </div>
             </div>
@@ -123,11 +123,6 @@ export default {
             widgets: '',
         }
     },
-    watch: {
-        filterDate() {
-            this.fetchReports();
-        },
-    },
     methods: {
         convertDate(date) {
             if (date) {
@@ -137,9 +132,11 @@ export default {
         },
         fetchReports() {
             this.loading = true;
+            const startDate = this.filterDate ? this.filterDate[0] : '';
+            const endDate = this.filterDate ? this.filterDate[1] : '';
             this.$get('reports', {
-                    startDate: this.convertDate(this.filterDate[0]),
-                    endDate: this.convertDate(this.filterDate[1])
+                    startDate: this.convertDate(startDate),
+                    endDate: this.convertDate(endDate)
                 })
                 .then(response => {
                     this.widgets = response.overview;

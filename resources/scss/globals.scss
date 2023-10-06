@@ -310,10 +310,10 @@
         }
     }
     &.fcal_color_select_popover {
-        padding: 8px;
+        padding: 8px !important;
         border-radius: 8px;
-        border: none;
-        box-shadow: 0 8px 30px rgb(27 37 51 / 10%);
+        border: none !important;
+        box-shadow: 0 8px 30px rgb(27 37 51 / 10%) !important;
         .fcal_color_select_popover {
             min-width: 22px !important;
         }
@@ -634,7 +634,273 @@
         color: #fff;
     }
 }
+.is-message-box {
+    .el-message-box {
 
+        .el-message-box__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: #1B2533;
+            padding: 15px 24px 15px 24px;
+            margin: 0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+
+            .el-message-box__headerbtn {
+                color: #1B2533;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                line-height: 46px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                top: 9px;
+                right: 9px;
+                &:hover {
+                    color: var(--el-color-danger);
+                    i {
+                        color: var(--el-color-danger);
+                    }
+                }
+            }
+        }
+
+        .el-message-box__btns {
+
+            .el-button {
+                padding: 10px 20px;
+                transition: .2s;
+                border-radius: 8px;
+                height: auto;
+                &.el-button--primary {
+                    &:focus {
+                        background: #416ddd;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.el-dialog {
+    &.fcal_modal {
+        border-radius: 8px;
+        .el-dialog__header {
+            font-weight: 500;
+            line-height: 32px;
+            color: #1B2533;
+            padding: 15px 24px 15px 24px;
+            margin: 0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+
+            .el-dialog__headerbtn {
+                color: #1B2533;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                line-height: 46px;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                top: 9px;
+                right: 9px;
+                &:hover {
+                    color: var(--el-color-danger);
+                }
+            }
+        }
+        .el-dialog__body {
+            padding-top: 20px;
+            h3 {
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                margin: 0;
+            }
+            p {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #445164;
+                margin: 0 0 15px;
+            }
+            .el-textarea {
+                textarea {
+                    padding: 9px 16px;
+                    border-radius: 8px;
+                    height: 112px;
+                    border: 1px solid #D6DAE1;
+                    box-shadow: none;
+                    &:focus {
+                        border-color: $primaryColor;
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding-bottom: 0;
+            .dialog-footer {
+                padding: 10px;
+                .el-button {
+                    padding: 10px 20px;
+                    transition: .2s;
+                    &.fcal_primary_btn {
+                        background: var(--el-color-danger);
+                        color: #ffffff;
+                        &:hover {
+                            background: var(--el-color-danger-light-5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.fcal_dialog {
+        max-width: 560px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 8px;
+        .el-dialog__header {
+            border: none;
+            padding: 0 0 16px;
+            background: transparent;
+            border-bottom: 1px solid #EAECF0;
+            margin-bottom: 20px;
+            .el-dialog__title {
+                font-size: 20px;
+                font-weight: 600;
+                line-height: 28px;
+                color: $dark;
+                margin: 0;
+            }
+        }
+        .el-dialog__body {
+            padding: 0;
+            .el-form {
+                .el-form-item {
+                    margin-bottom: 16px;
+                    .el-form-item__label {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        color: #445164;
+                        margin-bottom: 10px;
+                    }
+                    .el-input {
+                        &.is-focus {
+                            .el-input__wrapper {
+                                box-shadow: none !important;
+                            }
+                        }
+                        .el-input__wrapper {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            &.is-focus {
+                                border-color: $primaryColor;
+                                box-shadow: none !important;
+                            }
+                            .el-input__inner {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .el-textarea {
+                        textarea {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            height: 48px;
+                            &:focus {
+                                border-color: $primaryColor;
+                            }
+                        }
+                    }
+
+                    .el-radio-group {
+                        &.radio_desc_group {
+                            display: block;
+                            position: relative;
+                            .el-radio {
+                                .el-radio__input {
+                                    input {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                    }
+                                    &.is-checked {
+                                        .el-radio__inner {
+                                            background: transparent;
+                                            border-color: $primaryColor;
+                                        }
+                                        +.el-radio__label {
+                                            color: $dark;
+                                        }
+                                    }
+                                    .el-radio__inner {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                        &:after {
+                                            width: 12px;
+                                            height: 12px;
+                                            background: $primaryColor;
+                                        }
+                                    }
+                                }
+                                .el-radio__label {
+                                    b {
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        line-height: 24px;
+                                        color: $dark;
+                                    }
+                                    p {
+                                        font-size: 13px;
+                                        font-weight: 400;
+                                        margin-top: 2px;
+                                    }
+                                }
+                            }
+                            > label {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: flex-start;
+                                height: auto;
+                                line-height: 14px;
+                                margin-bottom: 15px;
+                                p {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding: 0 20px;
+            .dialog-footer {
+                background: transparent;
+                border-top: 1px solid #EAECF0;
+                padding: 18px 0;
+                .el-button {
+                    padding: 12px 24px;
+                }
+            }
+        }
+    }
+}
 .el-dropdown-list {
     border: 0;
     margin: 0;
@@ -662,6 +928,76 @@
         }
     }
 }
+
+.el-button {
+    &.fcal_primary_btn2,
+    &.fcal_plain_btn {
+        border: 1px solid #D6DAE1;
+        padding: 8px 16px;
+        color: $dark;
+        border-radius: 8px;
+        height: auto;
+        font-size: 14px;
+        transition: .2s;
+        line-height: 1;
+        > span {
+            gap: 8px;
+            i {
+                font-size: 18px;
+            }
+        }
+        &:focus,
+        &:hover {
+            background: rgb(38 83 199 / 10%);
+            color: $primaryColor;
+            border-color: rgb(38 83 199 / 20%);
+        }
+        &.disable {
+            color: red;
+            display: flex;
+            align-items: center;
+            border: none;
+            height: 36px;
+        }
+        &.danger {
+            color: var(--el-color-danger);
+            border-color: var(--el-color-danger-light-5);
+            &:hover {
+                background: var(--el-color-danger);
+                border-color: var(--el-color-danger);
+            }
+        }
+    }
+    &.el-button--primary,
+    &.fcal_primary_btn {
+        background: $primaryColor;
+        color: #ffffff;
+        border-radius: 8px;
+        font-size: 16px;
+        padding: 12px 20px;
+        height: auto;
+        font-weight: 400;
+        border: none;
+        > span {
+            gap: 8px;
+        }
+        &:hover {
+            background: #416ddd;
+            color: #ffffff;
+        }
+    }
+    &.fcal_primary_btn2 {
+        border-color: $primaryColor;
+        color: $primaryColor;
+
+        &:hover {
+            border-color: $primaryColor;
+            color: #ffffff;
+            background: $primaryColor;
+        }
+    }
+}
+
 #fluent-booking-app {
     background: #f5f6f7;
     margin-left: -20px;
@@ -1324,222 +1660,6 @@
                     font-size: 20px;
                     top: 50%;
                     transform: translateY(-50%);
-                }
-            }
-        }
-    }
-    .el-dialog {
-        &.fcal_modal {
-            border-radius: 8px;
-            .el-dialog__header {
-                font-weight: 500;
-                line-height: 32px;
-                color: #1B2533;
-                padding: 15px 24px 15px 24px;
-                margin: 0;
-                border: none;
-                border-radius: 8px 8px 0 0;
-
-                .el-dialog__headerbtn {
-                    color: #1B2533;
-                    border-radius: 50%;
-                    width: 44px;
-                    height: 44px;
-                    line-height: 46px;
-                    padding: 0;
-                    margin: 0;
-                    align-items: center;
-                    justify-content: center;
-                    transition: 0.2s;
-                    top: 9px;
-                    right: 9px;
-                    &:hover {
-                        color: var(--el-color-danger);
-                    }
-                }
-            }
-            .el-dialog__body {
-                padding-top: 20px;
-                h3 {
-                    font-size: 20px;
-                    font-weight: 500;
-                    line-height: 28px;
-                    margin: 0;
-                }
-                p {
-                    font-size: 14px;
-                    font-weight: 400;
-                    line-height: 20px;
-                    color: #445164;
-                    margin: 0 0 15px;
-                }
-                .el-textarea {
-                    textarea {
-                        padding: 9px 16px;
-                        border-radius: 8px;
-                        height: 112px;
-                        border: 1px solid #D6DAE1;
-                        box-shadow: none;
-                        &:focus {
-                            border-color: $primaryColor;
-                        }
-                    }
-                }
-            }
-            .el-dialog__footer {
-                padding-bottom: 0;
-                .dialog-footer {
-                    padding: 10px;
-                    .el-button {
-                        padding: 10px 20px;
-                        transition: .2s;
-                        &.fcal_primary_btn {
-                            background: var(--el-color-danger);
-                            color: #ffffff;
-                            &:hover {
-                                background: var(--el-color-danger-light-5);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        &.fcal_dialog {
-            max-width: 560px;
-            width: 100%;
-            padding: 20px;
-            border-radius: 8px;
-            .el-dialog__header {
-                border: none;
-                padding: 0 0 16px;
-                background: transparent;
-                border-bottom: 1px solid #EAECF0;
-                margin-bottom: 20px;
-                .el-dialog__title {
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 28px;
-                    color: $dark;
-                    margin: 0;
-                }
-            }
-            .el-dialog__body {
-                padding: 0;
-                .el-form {
-                    .el-form-item {
-                        margin-bottom: 16px;
-                        .el-form-item__label {
-                            font-size: 14px;
-                            font-weight: 500;
-                            line-height: 20px;
-                            color: #445164;
-                            margin-bottom: 10px;
-                        }
-                        .el-input {
-                            &.is-focus {
-                                .el-input__wrapper {
-                                    box-shadow: none !important;
-                                }
-                            }
-                            .el-input__wrapper {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 8px 16px;
-                                &.is-focus {
-                                    border-color: $primaryColor;
-                                    box-shadow: none !important;
-                                }
-                                .el-input__inner {
-                                    height: auto;
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                            }
-                        }
-                        .el-textarea {
-                            textarea {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 8px 16px;
-                                height: 48px;
-                                &:focus {
-                                    border-color: $primaryColor;
-                                }
-                            }
-                        }
-
-                        .el-radio-group {
-                            &.radio_desc_group {
-                                display: block;
-                                position: relative;
-                                .el-radio {
-                                    .el-radio__input {
-                                        input {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                        }
-                                        &.is-checked {
-                                            .el-radio__inner {
-                                                background: transparent;
-                                                border-color: $primaryColor;
-                                            }
-                                            +.el-radio__label {
-                                                color: $dark;
-                                            }
-                                        }
-                                        .el-radio__inner {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                            &:after {
-                                                width: 12px;
-                                                height: 12px;
-                                                background: $primaryColor;
-                                            }
-                                        }
-                                    }
-                                    .el-radio__label {
-                                        b {
-                                            font-size: 16px;
-                                            font-weight: 500;
-                                            line-height: 24px;
-                                            color: $dark;
-                                        }
-                                        p {
-                                            font-size: 13px;
-                                            font-weight: 400;
-                                            margin-top: 2px;
-                                        }
-                                    }
-                                }
-                                > label {
-                                    display: flex;
-                                    flex-direction: row;
-                                    align-items: flex-start;
-                                    height: auto;
-                                    line-height: 14px;
-                                    margin-bottom: 15px;
-                                    p {
-                                        margin: 0;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            .el-dialog__footer {
-                padding: 0 20px;
-                .dialog-footer {
-                    background: transparent;
-                    border-top: 1px solid #EAECF0;
-                    padding: 18px 0;
-                    .el-button {
-                        padding: 12px 24px;
-                    }
                 }
             }
         }
