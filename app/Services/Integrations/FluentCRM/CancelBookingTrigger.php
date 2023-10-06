@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\FluentCRM;
 
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Services\Helper;
 use FluentCrm\App\Services\Funnel\FunnelHelper;
 use FluentCrm\App\Services\Funnel\FunnelProcessor;
 use FluentBooking\App\Services\PermissionManager;
@@ -21,38 +22,9 @@ class CancelBookingTrigger extends BaseTrigger
 
     public function getCalendarOptions()
     {
-        if (PermissionManager::hasAllCalendarAccess()) {
-            $calendars = Calendar::select(['id', 'title'])
-                ->with(['slots'])
-                ->latest()
-                ->get();
-        } else {
-            $calendars = Calendar::select(['id', 'title'])
-                ->where('user_id', get_current_user_id())
-                ->latest()
-                ->get();
-        }
+        $calendarOptions = Helper::getCalendarOptionsByTitle();
 
-        $formattedCalendars = [];
-        foreach ($calendars as $index => $calendar) {
-            $slots = Arr::get($calendar, 'slots');
-            if (!empty($slots)) {
-                $options = [];
-                foreach ($slots as $slot) {
-                    $options[] = [
-                        'id'    => Arr::get($slot, 'id'),
-                        'title' => Arr::get($slot, 'title')
-                    ];
-                }
-                if (!empty($options)) {
-                    $formattedCalendars[$index] = [
-                        'title'   => Arr::get($calendar, 'title'),
-                        'options' => $options
-                    ];
-                }
-            }
-        }
-        return apply_filters('fluent_booking/crm_trigger_calendar_options', $formattedCalendars);
+        return apply_filters('fluent_booking/crm_trigger_calendar_options', $calendarOptions);
     } 
 
     public function getTrigger()
