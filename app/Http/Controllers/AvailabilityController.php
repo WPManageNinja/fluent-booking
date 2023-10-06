@@ -112,7 +112,7 @@ class AvailabilityController extends Controller
 
         $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
-        Availability::create($scheduleData);
+        $createSchedule = Availability::create($scheduleData);
 
         do_action('fluent_booking/avaibility_schedule_created', $createSchedule);
 
