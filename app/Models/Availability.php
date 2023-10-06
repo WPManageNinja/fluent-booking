@@ -37,4 +37,9 @@ class Availability extends Model
     {
         return \maybe_unserialize($value);
     }
+
+    public function calendar()
+    {
+        return $this->belongsTo(Calendar::class, 'object_id');
+    }
 }

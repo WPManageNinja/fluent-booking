@@ -9,7 +9,7 @@
                         <p>{{ timezone }}</p>
                     </div>
 
-                    <el-button class="fcal_plain_btn" @click="this.$router.push({name: 'availability', params:{id: availability_id}})">
+                    <el-button class="fcal_plain_btn" @click="goToEdit">
                         <el-icon><Edit /></el-icon> Edit Availability
                     </el-button>
                 </div>
@@ -68,6 +68,13 @@ export default {
                 return Object.keys(this.existing_schedules?.date_overrides).length;
             }
             return false;
+        }
+    },
+    methods: {
+        goToEdit() {
+            this.$router.push({
+                name: 'availability', query:{schedule_id: this.availability_id}
+            })
         }
     }
 }

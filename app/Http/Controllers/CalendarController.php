@@ -124,7 +124,7 @@ class CalendarController extends Controller
         }
 
         $defaultSchedule = AvailabilityService::defaultScheduleSchema(
-            $calendar->user_id, 'Default', true, $calendar->author_timezone
+            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone
         );
 
         $availability = Availability::create($defaultSchedule);
@@ -472,6 +472,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
         $slot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+
         // Let's delete all the events related to this slot
         Booking::where('slot_id', $slot->id)
             ->where('calendar_id', $calendar->id)
@@ -499,14 +500,17 @@ class CalendarController extends Controller
 
     public function deleteCalendar(Request $request, $calendarId)
     {
-        $calendar = Calendar::findOrFail($calendarId);
-        $slots = CalendarSlot::where('calendar_id', $calendar->id)->get();
+        $calendar     = Calendar::findOrFail($calendarId);
+        $slots        = CalendarSlot::where('calendar_id', $calendar->id);
+        $bookings     = Booking::where('calendar_id', $calendar->id);
+        $availability = Availability::where('object_id', $calendar->user_id);
 
-        foreach ($slots as $slot) {
-            $slot->delete();
-        }
+        // Let's delete all the data related to this caledar
+        $bookings->delete();
 
-        Availability::where('object_id', $calendar->user_id)->delete();
+        $slots->delete();
+
+        $availability->delete();
 
         $calendar->delete();
 
