@@ -768,13 +768,16 @@ class Helper
         return $user->user_email;
     }
 
-    public static function getCalendarOptions()
+    public static function getCalendarOptionsByHost()
     {
-        if (PermissionManager::hasAllCalendarAccess()) {
-            $calendars = Calendar::select(['id', 'title'])->with(['slots'])->latest()->get();
-        } else {
-            $calendars = Calendar::select(['id', 'title'])->where('user_id', get_current_user_id())->latest()->get();
-        }
+        $calendars = Calendar::select(['id', 'title'])
+            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+                return $query->where('user_id', get_current_user_id());
+            })
+            ->with(['slots'])
+            ->latest()
+            ->get();
+        
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {
             $slots = Arr::get($calendar, 'slots');
@@ -796,6 +799,39 @@ class Helper
         }
         return $formattedCalendars;
     }
+
+    public static function getCalendarOptionsByTitle()
+    {
+        $calendars = Calendar::select(['id', 'title'])
+            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+                return $query->where('user_id', get_current_user_id());
+            })
+            ->with(['slots'])
+            ->latest()
+            ->get();
+
+
+        $formattedCalendars = [];
+        foreach ($calendars as $index => $calendar) {
+            $slots = Arr::get($calendar, 'slots');
+            if (!empty($slots)) {
+                $options = [];
+                foreach ($slots as $slot) {
+                    $options[] = [
+                        'id'    => Arr::get($slot, 'id'),
+                        'title' => Arr::get($slot, 'title')
+                    ];
+                }
+                if (!empty($options)) {
+                    $formattedCalendars[$index] = [
+                        'title'   => Arr::get($calendar, 'title'),
+                        'options' => $options
+                    ];
+                }
+            }
+        }
+        return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
+    } 
 
     public static function excerpt($text, $max_length = 160)
     {
