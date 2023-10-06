@@ -16,6 +16,7 @@
                         end-placeholder="End date"
                         :shortcuts="shortcuts"
                         popper-class="fcal_daterange_popover"
+                        @change="fetchReports"
                     />
                 </div>
             </div>
@@ -122,11 +123,6 @@ export default {
             widgets: '',
         }
     },
-    watch: {
-        filterDate() {
-            this.fetchReports();
-        },
-    },
     methods: {
         convertDate(date) {
             if (date) {
@@ -136,9 +132,11 @@ export default {
         },
         fetchReports() {
             this.loading = true;
+            const startDate = this.filterDate ? this.filterDate[0] : '';
+            const endDate = this.filterDate ? this.filterDate[1] : '';
             this.$get('reports', {
-                    startDate: this.convertDate(this.filterDate[0]),
-                    endDate: this.convertDate(this.filterDate[1])
+                    startDate: this.convertDate(startDate),
+                    endDate: this.convertDate(endDate)
                 })
                 .then(response => {
                     this.widgets = response.overview;
