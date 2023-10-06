@@ -595,6 +595,9 @@
                         .cell {
                             padding: 0;
                         }
+                        &:last-child {
+                            text-align: right;
+                        }
                     }
                 }
             }
@@ -622,6 +625,14 @@
                         }
                         &:last-child {
                             text-align: right;
+                            .el-button {
+                                padding: 10px 16px !important;
+                                height: auto;
+                                border-radius: 8px;
+                                + .el-button {
+                                    margin-left: 8px;
+                                }
+                            }
                         }
                         h4 {
                             font-size: 16px;
