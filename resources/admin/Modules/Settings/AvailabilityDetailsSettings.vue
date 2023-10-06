@@ -39,8 +39,8 @@
                                 <el-dropdown-item>
                                     <el-button plain text @click="handleCommand('set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
                                 </el-dropdown-item>
-                                <el-dropdown-item class="danger">
-                                    <el-button plain text @click="handleCommand('delete')"><el-icon><Delete /></el-icon> Delete</el-button>
+                                <el-dropdown-item>
+                                    <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -194,7 +194,7 @@ export default {
                     this.$del('availability/' + this.schedule_id)
                         .then(response => {
                             this.$handleSuccess(response.message);
-                            this.$router.push({name: 'availability'});
+                            this.goBackToList();
                         })
                         .catch(errors => {
                             this.$handleError(errors);
