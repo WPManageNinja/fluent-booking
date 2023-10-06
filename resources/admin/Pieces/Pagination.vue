@@ -1,14 +1,15 @@
 <template>
-    <el-pagination class="fluent-pagination"
-                   :background="false"
-                   layout="total, sizes, prev, pager, next"
-                   @current-change="changePage"
-                   @size-change="changeSize"
-                   :hide-on-single-page="hide_on_single"
-                   :current-page.sync="pagination.current_page"
-                   :page-sizes="page_sizes"
-                   :page-size="pagination.per_page"
-                   :total="pagination.total"
+    <el-pagination 
+        class="fluent-pagination"
+        :background="false"
+        layout="total, sizes, prev, pager, next"
+        @current-change="changePage"
+        @size-change="changeSize"
+        :hide-on-single-page="hide_on_single"
+        :current-page.sync="pagination.current_page"
+        :page-sizes="page_sizes"
+        :page-size="pagination.per_page"
+        :total="pagination.total"
     />
 </template>
 

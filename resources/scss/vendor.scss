@@ -164,6 +164,10 @@
     display: flex;
     align-items: center;
 
+    .el-breadcrumb__inner a:hover,
+    .el-breadcrumb__inner.is-link:hover {
+        color: #2653C7;
+    }
     span.fct_tag {
         display: inline-flex;
         margin-right: 0.25rem;

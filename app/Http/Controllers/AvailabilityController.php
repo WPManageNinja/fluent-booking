@@ -14,30 +14,55 @@ use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $hostId = get_current_user_id();
+        $filters = $request->get('filters', []);
 
-        $query = Availability::where('object_type', 'availability');
+        $query = Availability::with(['calendar'])->where('object_type', 'availability');
 
-        if (!PermissionManager::hasAllCalendarAccess()) {
-            $query->where('object_id', $hostId);
+        $host = Arr::get($filters, 'author');
+
+        if ($host == 'me') {
+            $host = get_current_user_id();
+        } else if ($host !== 'all') {
+            $host = (int)$host;
         }
 
-        $schedules = $query->get();
+        if (!PermissionManager::hasAllCalendarAccess()) {
+            $host = get_current_user_id();
+        }
+
+        if ($host && $host !== 'all') {
+            $query->where('object_id', $host);
+        }
+
+        do_action_ref_array('fluent_booking/availability_schedules_query', [&$query]);
+
+        $schedules = $query->latest()->paginate();
+        
+        $currentPage = $schedules->currentPage();
+        $totalData   = $schedules->total();
 
         do_action('fluent_booking/availability_schedules', $schedules);
 
         $formattedSchedules = [];
         foreach ($schedules as $schedule)
         {
+            $author = ['name' => 'Deleted User', 'avatar' => ''];
+
+            if ($schedule->calendar) {
+                $author = $schedule->calendar->getAuthorProfile();
+            }
+
             $timezone =  sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
 
             $formattedSchedules[] = [
-                'id'    => $schedule->id,
-                'title' => $schedule->key,
-                'created_at' => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
-                'settings' => [
+                'id'          => $schedule->id,
+                'host_name'   => $author['name'],
+                'host_avatar' => $author['avatar'],
+                'title'       => $schedule->key,
+                'created_at'  => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
+                'settings'  => [
                     'default'          => Arr::isTrue($schedule, 'value.default'),
                     'timezone'         => $timezone,
                     'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
@@ -46,21 +71,22 @@ class AvailabilityController extends Controller
             ];
         }
 
-        if (empty($formattedSchedules)) {
-            $formattedSchedules[] = AvailabilityService::defaultScheduleSchema($hostId, 'Default', true, 'UTC', $timezone);
-        }
-
-        return [
-            'schedules' => $formattedSchedules
-        ];
+        return $this->sendSuccess([
+            'schedules'    => $formattedSchedules,
+            'current_page' => $currentPage,
+            'total'        => $totalData,
+        ]);
     }
 
-    public function getSchedule(Request $request, $id)
+    public function getSchedule(Request $request, $scheduleId)
     {
-        $schedule = Availability::where('object_type', 'availability')->where('id', $id)->first();
-        return [
-            'schedule' => $schedule
-        ];
+        $schedule = Availability::with('calendar')->findOrFail($scheduleId);
+
+        $formattedSchedule = AvailabilityService::getFormattedSchedule($schedule);
+
+        return $this->sendSuccess([
+            'schedule' => $formattedSchedule,
+        ]);
     }
 
     public function createSchedule(Request $request)
@@ -86,31 +112,51 @@ class AvailabilityController extends Controller
 
         $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], false, $timezone);
 
-        $createSchedule = Availability::create($scheduleData);
+        Availability::create($scheduleData);
 
         do_action('fluent_booking/avaibility_schedule_created', $createSchedule);
 
-        $availabilitySchedule = AvailabilityService::getAvailabilitySchedule($createSchedule);
-
-        return [
+        return $this->sendSuccess([
             'message'  => __('Schedule has been created successfully', 'fluent-booking'),
-            'schedule' => $availabilitySchedule,
-        ];
+        ]);
     }
 
-    public function updateSchedule(Request $request, $id)
+    public function updateSchedule(Request $request, $scheduleId)
     {
         $userId = get_current_user_id();
 
-        $schedule = Availability::findOrFail($id);
+        $schedule = Availability::findOrFail($scheduleId);
 
         $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
 
         $data = $request->all();
 
-        $title = Arr::get($data, 'title');
+        $scheduleData = [
+            'default'          => Arr::isTrue($data, 'schedule.settings.default'),
+            'timezone'         => sanitize_text_field($timezone),
+            'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data, 'schedule.settings.date_overrides', []), $timezone, 'UTC'),
+            'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($data, 'schedule.settings.weekly_schedules', []), $timezone, 'UTC'),
+        ];
 
-        $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $userId);
+        $schedule->value = $scheduleData;
+        $schedule->save();
+
+        do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
+
+        return $this->sendSuccess([
+            'message'  => __('Schedule has been updated successfully', 'fluent-booking'),
+            'schedule' => $schedule,
+            'timezone' => $timezone
+        ]);
+    }
+
+    public function updateScheduleTitle(Request $request, $scheduleId)
+    {
+        $title = $request->get('title');
+
+        $schedule = Availability::findOrFail($scheduleId);
+
+        $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $userId, $schedule->key);
 
         if ($isTitleExist) {   
             $message = $title . ' is already exist';
@@ -119,35 +165,52 @@ class AvailabilityController extends Controller
             ], 422);
         }
 
-        $scheduleData = [
-            'default'          => Arr::isTrue($data, 'settings.default'),
-            'timezone'         => sanitize_text_field($timezone),
-            'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $timezone, 'UTC'),
-            'weekly_schedules' => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $timezone, 'UTC'),
-        ];
-
-        $schedule->key   = sanitize_text_field($title);
-        $schedule->value = $scheduleData;
+        $schedule->key = $title;
         $schedule->save();
 
-        do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
+        return $this->sendSuccess([
+            'message' => __('Schedule title has been updated successfully', 'fluent-booking'),
+            'title'   => $schedule->key
+        ]);
+    }
 
-        return [
-            'message'  => __('Schedule has been updated successfully', 'fluent-booking'),
-            'schedule' => $schedule,
-            'timezone' => $timezone
+    public function updateDefaultStatus(Request $request, $scheduleId)
+    {
+        $schedule = Availability::findOrFail($scheduleId);
+
+        $updatedSettings = [
+            'default'          => true,
+            'timezone'         => Arr::get($schedule, 'value.timezone', 'UTC'),
+            'date_overrides'   => Arr::get($schedule, 'value.data_overrides', []),
+            'weekly_schedules' => Arr::get($schedule, 'value.weekly_schedules'),
         ];
+
+        $schedule->value = $updatedSettings;
+        $schedule->save();
+
+        AvailabilityService::updateOtherDefaultStatus($schedule, $scheduleId);
+
+        return $this->sendSuccess([
+            'message' => __('Status has been updated successfully', 'fluent-booking')
+        ]);
     }
     
-    public function deleteSchedule(Request $request, $id)
+    public function deleteSchedule(Request $request, $scheduleId)
     {
-        if (!$id) {
-            return;
-        }
-        Availability::where('id', $id)->where('object_type', 'availability')->delete();
+        $schedule = Availability::findOrFail($scheduleId);
 
-        return [
+        $isDefault = Arr::isTrue($schedule, 'value.default');
+
+        if ($isDefault) {
+            return $this->sendError([
+                'message' => __('Default Schedule can not be deleted', 'fluent-booking')
+            ], 422);
+        }
+
+        $schedule->delete();
+
+        return $this->sendSuccess([
             'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking')
-        ];
+        ]);
     }
 }

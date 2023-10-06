@@ -44,6 +44,9 @@ $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router)
     $router->get('/{spot_id}/slot', 'SchedulesController@getScheduleSpot')->int('spot_id');
     $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
     $router->get('/{event_id}/activities', 'SchedulesController@getBookingActivities')->int('event_id');
+
+    // Get FluentCrm Profile
+    $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
@@ -69,10 +72,12 @@ $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) 
 
 $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
-    $router->get('/{id}', 'AvailabilityController@getSchedule')->int('id');
+    $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
     $router->post('/', 'AvailabilityController@createSchedule');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
-    $router->delete('/{id}', 'AvailabilityController@deleteSchedule')->int('id');
+    $router->post('/{schedule_id}/update-title', 'AvailabilityController@updateScheduleTitle')->int('schedule_id');
+    $router->post('/{schedule_id}/update-status', 'AvailabilityController@updateDefaultStatus')->int('schedule_id');
+    $router->delete('/{schedule_id}', 'AvailabilityController@deleteSchedule')->int('schedule_id');
 });
 
 $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
