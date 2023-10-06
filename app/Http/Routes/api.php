@@ -84,3 +84,7 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/activities', 'ReportController@getActivities');
 });
+
+$router->prefix('webhooks')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->post('/', 'WebhookController@create');
+});
