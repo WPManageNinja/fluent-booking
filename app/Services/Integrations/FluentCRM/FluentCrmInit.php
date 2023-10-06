@@ -26,7 +26,6 @@ class FluentCrmInit {
 
     public function registerHooks()
     {
-//        add_action('fluent_booking/booking_schedule', [$this, 'addProfileLink'], 10, 1);
         add_filter('fluentcrm_profile_sections', [$this, 'addProfileSection'], 10, 1);
         add_filter('fluentcrm_get_form_submissions_fluent_booking', [$this, 'getScheduledMeetings'], 10, 2);      
     }
@@ -52,21 +51,6 @@ class FluentCrmInit {
     {
         $contact = FluentCrmApi('contacts')->getContact($email);
         return $contact ? $contact->id : null;
-    }
-
-    public function addProfileLink(&$booking)
-    {
-        $subscriberId = $booking->person_user_id ?: $this->getSubscriberId($booking->email);
-
-        if (!$subscriberId) {
-            return;
-        }
-        
-        $url = admin_url('admin.php?page=fluentcrm-admin#/subscribers/' . $subscriberId);
-
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'profile' . '</a>';
-
-        $booking->crm_profile = $link;
     }
 
     public function addProfileSection($sections)
@@ -96,6 +80,14 @@ class FluentCrmInit {
         return $formattedTime;
     }
 
+    private function getMeetingTitle($meeting)
+    {
+        $host  = $meeting->calendar->getAuthorProfile();
+        $title = $meeting->slot->title . ' with ' . $host['name'];
+
+        return $title;
+    }
+
     public function getScheduledMeetings($data, $subsriber)
     {
         $app      = fluentCrm();
@@ -110,11 +102,15 @@ class FluentCrmInit {
 
         $formattedMeetings = [];
 
-        foreach ($meetings->items() as $meeting){
-            $host = $meeting->calendar->getAuthorProfile();
+        foreach ($meetings->items() as $meeting)
+        {
+            if (!$meeting->calendar || !$meeting->slot) {
+                continue;
+            }
+
             $formattedMeetings[] = [
                 'id'           => '#'.$meeting->event_id,
-                'title'        => $meeting->slot->title . ' with ' . $host['name'],
+                'title'        => $this->getMeetingTitle($meeting),
                 'status'       => $meeting->status,
                 'meeting_at'   => $this->getFormattedTime($meeting),
                 'action'       => $this->getActionUrl($meeting)
