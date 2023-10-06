@@ -39,10 +39,9 @@
                     v-for="(widget, i) in widgets"
                     :key="i"
                     class="overview-widget">
-                    <h3>{{ widget.title }}</h3>
-                    <h1>{{ widget.number }}</h1>
-                    <p>{{ widget.content }}</p>
                     <span class="stat"><el-icon><Top /></el-icon> {{ widget.stat }}</span>
+                    <h1>{{ widget.number }}</h1>
+                    <p>{{ widget.title }}</p>
                     <span class="icon" v-html="widget.icon"></span>
                 </div>
             </div>
