@@ -26,6 +26,10 @@ class Availability extends Model
         static::updating(function ($model) {
             $model->object_type = 'availability';
         });
+
+        static::addGlobalScope('object_type', function ($query) {
+            $query->where('object_type', 'availability');
+        });
     }
 
     public function setValueAttribute($value)
@@ -41,5 +45,26 @@ class Availability extends Model
     public function calendar()
     {
         return $this->belongsTo(Calendar::class, 'object_id');
+    }
+
+    public function getAuthor()
+    {
+        $user = get_user_by('ID', $this->object_id);
+        if(!$user) {
+            return [
+                'name' => 'Deleted user',
+                'avatar' => ''
+            ];
+        }
+
+        $name = trim($user->first_name . ' ' . $user->last_name);
+        if(!$name) {
+            $name = $user->display_name;
+        }
+
+        return [
+            'name' => $name,
+            'avatar' => apply_filters('fluent_booking/author_photo', get_avatar_url($user->user_email), $user)
+        ];
     }
 }

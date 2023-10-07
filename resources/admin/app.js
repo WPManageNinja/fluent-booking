@@ -6,6 +6,7 @@ import Rest from './Bits/Rest.js';
 import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
+import { Plus, Delete, Location } from "@element-plus/icons-vue";
 
 const utc = require('dayjs/plugin/utc')
 const timezone = require('dayjs/plugin/timezone')
@@ -34,6 +35,11 @@ function convertToText(obj) {
 }
 
 const app = createApp(DashboardApplication);
+
+const Icons = [Plus, Delete, Location];
+Icons.forEach((icon) => {
+    app.component(icon.name, icon);
+});
 
 app.config.globalProperties.appVars = window.fluentFrameworkAdmin;
 
