@@ -4,10 +4,8 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Calendar;
-use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\Framework\Support\Arr;
-use FluentBooking\App\Services\SanitizeService;
-use FluentBooking\App\Services\DateTimeHelper;
 
 class AvailabilityService
 {
@@ -16,13 +14,13 @@ class AvailabilityService
         $availabilities = Availability::where('object_type', 'availability')->get();
 
         $formattedSchedules = [];
-        
+
         foreach ($availabilities as $availability) {
             $formattedSchedules[] = [
                 'id'        => (int)Arr::get($availability, 'id'),
                 'object_id' => (int)Arr::get($availability, 'object_id'),
                 'title'     => sanitize_text_field(Arr::get($availability, 'key')),
-                'settings' => [
+                'settings'  => [
                     'default'          => Arr::isTrue($availability, 'value.default'),
                     'timezone'         => sanitize_text_field($toTimezone),
                     'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($availability, 'value.date_overrides', []), 'UTC', $toTimezone),
@@ -35,28 +33,24 @@ class AvailabilityService
 
     public static function getFormattedSchedule($schedule)
     {
-        $author = ['name' => 'Deleted User', 'avatar' => ''];
+        $timezone = sanitize_text_field(Arr::get($schedule->value, 'timezone', 'UTC'));
 
-        if ($schedule->calendar) {
-            $author = $schedule->calendar->getAuthorProfile();
-        }
+        $author = $schedule->getAuthor();
 
-        $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
-
-        $formattedSchedule = [
-            'id'         => (int)Arr::get($schedule, 'id'),
+        return [
+            'id'          => $schedule->id,
             'host_name'   => $author['name'],
             'host_avatar' => $author['avatar'],
-            'title'      => sanitize_text_field(Arr::get($schedule, 'key')),
-            'created_at' => DateTimeHelper::convertFromUtc($schedule->created_at, $timezone, 'd M Y'),
-            'settings'   => [
+            'title'       => $schedule->key,
+            'usage_count' => AvailabilityService::getAvailabilityUsageCount($schedule->id),
+            'created_at'  => $schedule->created_at->format('Y-m-d H:i:s'),
+            'settings'    => [
                 'default'          => Arr::isTrue($schedule, 'value.default'),
                 'timezone'         => $timezone,
                 'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
-                'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules', []), 'UTC', $timezone),
+                'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), 'UTC', $timezone)
             ]
         ];
-        return $formattedSchedule;
     }
 
     public static function isTitleAlreadyExist($title, $userId, $currentTitle = '')
@@ -92,7 +86,7 @@ class AvailabilityService
                 'date_overrides'   => Arr::get($schedule, 'value.data_overrides', []),
                 'weekly_schedules' => Arr::get($schedule, 'value.weekly_schedules'),
             ];
-    
+
             $schedule->value = $updatedSettings;
             $schedule->save();
         }
@@ -101,11 +95,10 @@ class AvailabilityService
     public static function getScheduleOptions()
     {
         $calendars = Calendar::with(['user'])->get();
-        
+
         $scheduleOptions = [];
 
-        foreach ($calendars as $index => $calendar) 
-        {
+        foreach ($calendars as $index => $calendar) {
             $availabilities = Availability::where('object_type', 'availability')
                 ->where('object_id', $calendar->user_id)
                 ->get();
@@ -139,8 +132,8 @@ class AvailabilityService
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
 
         $defaultSchedule = [
-            'object_id'  => $userId,
-            'key'        => sanitize_text_field($title),
+            'object_id' => $userId,
+            'key'       => sanitize_text_field($title),
             'value'     => [
                 'default'          => (bool)$default,
                 'timezone'         => sanitize_text_field($fromTimezone),
@@ -149,5 +142,12 @@ class AvailabilityService
             ]
         ];
         return $defaultSchedule;
+    }
+
+    public static function getAvailabilityUsageCount($scheduleId)
+    {
+        return CalendarSlot::where('availability_type', 'existing_schedule')
+            ->where('availability_id', $scheduleId)
+            ->count();
     }
 }

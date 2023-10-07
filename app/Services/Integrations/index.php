@@ -13,3 +13,9 @@ add_action('init', function () {
     (new \FluentBooking\App\Services\Integrations\GoogleCalendar\GoogleCalendar());
 
 });
+
+
+/*
+ * Remote calendars
+ */
+(new \FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarsInit())->boot();
