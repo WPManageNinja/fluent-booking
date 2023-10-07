@@ -257,3 +257,7 @@ ul.fframe_menu.fcal_secondary_menu {
     border-radius: 6px;
     border: 1px solid #e5e7eb;
 }
+
+.fcal_lined_checks > label {
+    display: flex;
+}

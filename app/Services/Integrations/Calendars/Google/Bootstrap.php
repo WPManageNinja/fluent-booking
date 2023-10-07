@@ -29,6 +29,17 @@ class Bootstrap
 
         add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushGoogleFeeds'], 10, 2);
 
+        add_action('fluent_calendar/patch_calendar_config_settings__google_user_token', function ($conflictIds, $meta) {
+
+            $meta = Meta::where('object_type', '_google_user_token')
+                ->where('id', $meta->id)
+                ->first();
+            $settings = $meta->value;
+            $settings['conflict_check_ids'] = $conflictIds;
+            $meta->value = $settings;
+            $meta->save();
+        }, 10, 2);
+
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
     }
@@ -46,7 +57,7 @@ class Bootstrap
                 'db_id'              => $item->id,
                 'identifier'         => $item->key,
                 'remote_calendars'   => $this->getRemoteCalendarsList($item),
-                'conflict_check_ids' => Arr::get($item->settings, 'conflict_check_ids', [])
+                'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
             ];
         }
 

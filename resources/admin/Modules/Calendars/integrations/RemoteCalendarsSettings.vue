@@ -27,16 +27,9 @@
             </div>
 
             <div class="fcal_remote_calendars_blocks">
-                <div class="fcal_remote_calendar_block" v-for="feed in feeds" :key="db_id">
+                <div class="fcal_each_calendar_block" v-for="feed in feeds" :key="db_id">
                     <remote-calendar :feed="feed" :driver="providers[feed.driver]" :calendar="calendar" />
                 </div>
-            </div>
-
-            <div style="width: 800px; overflow: auto;">
-                <pre>{{ settings }}</pre>
-                <pre>{{ providers }}</pre>
-                <pre>{{ insertableCalendars }}</pre>
-                <pre>{{ feeds }}</pre>
             </div>
         </div>
     </div>
