@@ -1,0 +1,203 @@
+<template>
+    <div class="fcal_calendar_settings">
+        <div class="fcal_settings_header">
+            <div class="fcal_settings_head">
+                <h2>Remote Calendar Sync Settings</h2>
+                <p>Set the calendars to check for conflicts to prevent double bookings and add events to your remote
+                    calendar.</p>
+            </div>
+            <div v-if="!isEmpty(feeds)" class="fcal_settings_actions">
+                <el-popover placement="bottom-end" width="300" trigger="click">
+                    <template #reference>
+                        <el-button type="default">
+                            <el-icon>
+                                <Plus/>
+                            </el-icon>
+                            <span>Add</span>
+                        </el-button>
+                    </template>
+                    <div v-for="driver in configuredProviders" :key="driver.key">
+                        <div class="fcal_driver_action">
+                            <a :href="driver.auth_url"
+                               class="el-button el-button--primary el-button--small">{{ driver.btn_text }}</a>
+                        </div>
+                    </div>
+                </el-popover>
+            </div>
+        </div>
+        <el-skeleton :rows="4" animated v-if="loading"/>
+        <div v-else class="fcal_calendar_body">
+
+            <template v-if="feeds.length">
+                <div v-if="insertableCalendars.length" class="fcal_hightlight_box fcal_create_event_selector">
+                    <el-row align="middle" :gutter="30">
+                        <el-col :md="14" :xs="24">
+                            <h3>Create events on</h3>
+                            <p>Select remote calendar in where to add new events to when you're booked.</p>
+                        </el-col>
+                        <el-col :md="10" :xs="24">
+                            <el-select :disabled="saving" v-loading="saving" @change="updateSettings()" clearable
+                                       v-model="settings.remote_calendar_config" value-key="id"
+                                       placeholder="Select a Remote Calendar">
+                                <el-option
+                                    v-for="item in insertableCalendars"
+                                    :key="item.details.id"
+                                    :label="item.title"
+                                    :value="item.details"
+                                />
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                </div>
+                <div class="fcal_remote_calendars_blocks">
+                    <div class="fcal_each_calendar_block" v-for="feed in feeds" :key="db_id">
+                        <remote-calendar :feed="feed" :driver="providers[feed.driver]" :calendar="calendar"/>
+                    </div>
+                </div>
+            </template>
+
+            <div v-else-if="!isEmpty(configuredProviders)">
+                <h3>To use Remote Calendar Sync feature please connect with one of the following calendar providers</h3>
+                <div v-for="driver in configuredProviders" :key="driver.key" class="">
+                    <div class="fcal_remote_calendar_block fcal_promt_box">
+                        <div class="fcal_remote_header">
+                            <div class="fcal_driver_brand">
+                                <img :src="driver.icon"/>
+                                <div class="fcal_driver_heading">
+                                    <h3>{{ driver.title }}</h3>
+                                    <p>{{ driver.subtitle }}</p>
+                                </div>
+                            </div>
+                            <div class="fcal_driver_action">
+                                <a :href="driver.auth_url"
+                                   class="el-button el-button--primary el-button--small">{{ driver.btn_text }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else-if="!isEmpty(providers) && !feeds.length">
+                <h3>To use Remote Calendar Sync feature please configure your apps first</h3>
+                <div v-for="driver in providers" :key="driver.key" class="">
+                    <div class="fcal_remote_calendar_block fcal_promt_box">
+                        <div class="fcal_remote_header">
+                            <div class="fcal_driver_brand">
+                                <img :src="driver.icon"/>
+                                <div class="fcal_driver_heading">
+                                    <h3>{{ driver.title }}</h3>
+                                    <p>{{ driver.subtitle }}</p>
+                                </div>
+                            </div>
+                            <div class="fcal_driver_action">
+                                <a :href="driver.global_config_url"
+                                   class="el-button el-button--primary el-button--small">Configure {{ driver.title }}
+                                    API</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script type="text/babel">
+import each from 'lodash/each';
+import isEmpty from 'lodash/isEmpty';
+import RemoteCalendar from './RemoteCalendar';
+
+export default {
+    name: 'RemoteCalendarsSettings',
+    props: ['calendar'],
+    components: {
+        RemoteCalendar
+    },
+    data() {
+        return {
+            loading: false,
+            saving: false,
+            providers: {},
+            feeds: [],
+            settings: {
+                remote_calendar_config: ''
+            }
+        }
+    },
+    computed: {
+        insertableCalendars() {
+            if (isEmpty(this.feeds)) {
+                return [];
+            }
+            const calendars = [];
+
+            each(this.feeds, (feed) => {
+                each(feed.remote_calendars, (item) => {
+                    if (item.can_write === 'yes') {
+                        calendars.push({
+                            title: item.title + ' - ' + feed.driver + ' (' + feed.identifier + ')',
+                            id: feed.db_id + '__||__' + item.id,
+                            details: {
+                                id: feed.db_id + '__||__' + item.id,
+                                driver: feed.driver
+                            }
+                        })
+                    }
+                });
+            });
+
+            return calendars;
+        },
+        configuredProviders() {
+            if (isEmpty(this.providers)) {
+                return [];
+            }
+
+            const validProviders = [];
+            each(this.providers, (provider, key) => {
+                if (provider.is_global_configured) {
+                    validProviders.push(provider)
+                }
+            });
+
+            return validProviders;
+        }
+    },
+    methods: {
+        getSettings() {
+            this.loading = true;
+            this.$get('calendars/' + this.calendar.id + '/integrations/remote-calendars')
+                .then(response => {
+                    this.providers = response.providers;
+                    this.feeds = response.feeds;
+                    this.settings.remote_calendar_config = response.settings;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        updateSettings() {
+            this.saving = true;
+            this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/sync-settings', {
+                remote_calendar_config: this.settings.remote_calendar_config
+            })
+                .then(response => {
+                    this.$notify.success(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
+        isEmpty
+    },
+    mounted() {
+        this.getSettings();
+    }
+}
+</script>

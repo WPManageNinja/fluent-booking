@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_settings">
         <div class="fcal_settings_header_title">
-            <h3>Settings</h3>
+            <h3>General Settings</h3>
         </div>
         <div class="fcal_settings_body">
             <el-aside>
@@ -17,7 +17,7 @@
                 </ul>
             </el-aside>
             <div class="fcal_settings_container">
-                <router-view/>
+                <router-view />
             </div>
         </div>
     </div>
