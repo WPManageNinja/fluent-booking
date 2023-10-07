@@ -40,11 +40,23 @@
                         <h4>{{ scope.row.created_at }}</h4>
                     </template>
                 </el-table-column>
-                <el-table-column width="180">
+                <el-table-column label="Action" width="100">
                     <template #default="scope">
-                        <el-button class="fcal_plain_btn" @click="viewDetails(scope.row)">
-                            View Details
+                        <el-button class="fcal_primary_btn" @click="viewDetails(scope.row)">
+                            <el-icon><Edit /></el-icon>
                         </el-button>
+                        <el-popconfirm
+                            title="Are you sure to delete this schedule?"
+                            popper-class="fcal_confirm_dialog"
+                            confirm-button-type="danger"
+                            @confirm="deleteSchedule(scope.row.id)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" class="fcal_danger_btn">
+                                    <el-icon><Delete /></el-icon>
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -77,7 +89,7 @@
 </template>
 
 <script>
-import { Plus, StarFilled } from '@element-plus/icons-vue';
+import {Delete, Edit, Plus, StarFilled} from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
@@ -95,7 +107,9 @@ export default {
         SaveButton,
         Pagination,
         StarFilled,
-        Plus
+        Plus,
+        Edit,
+        Delete
     },
     data() {
         return {
@@ -171,23 +185,20 @@ export default {
                     this.dialogVisible = false;
                 });
         },
-        deleteStatus() {
-            this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }).then(() => {
-                    this.$del('availability/' + this.schedule_id)
-                        .then(response => {
-                            this.$handleSuccess(response.message);
-                            this.goBackToList();
-                        })
-                        .catch(errors => {
-                            this.$handleError(errors);
-                        });
+        deleteSchedule(id) {
+            this.$del('availability/' + id)
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.removeSchedule(id);
                 })
-                return;
+                .catch(errors => {
+                    this.$handleError(errors);
+                });
         },
+        removeSchedule(id) {
+            const updatedSchedules = this.schedules.filter(item => item.id !== id);
+            this.schedules = updatedSchedules;
+        }
     },
     mounted() {
         if (this.$route.query.schedule_id) {
