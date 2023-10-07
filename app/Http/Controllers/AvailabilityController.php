@@ -118,6 +118,7 @@ class AvailabilityController extends Controller
         $existingSchedule = Availability::where('object_id', $userId)
             ->first();
 
+
         $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], !!$existingSchedule, $timezone);
 
         $createSchedule = Availability::create($scheduleData);
