@@ -113,7 +113,7 @@ export default {
         },
         goToIntegrationSetting() {
             this.$router.push({
-                name: 'google_calendar',
+                name: 'remote_calendars',
                 params: {id: this.calendar.id}
             })
         },
