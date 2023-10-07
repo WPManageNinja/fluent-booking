@@ -278,3 +278,32 @@ a.el-button {
     align-items: center;
     gap: 5px;
 }
+
+.fcal_actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.fcal_radio_switch {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 5px;
+    background: #fff;
+    .el-radio-button  input.el-radio-button__original-radio {
+        display: none !important;
+    }
+    .is-active.is-active .el-radio-button__inner {
+        background: #e5e7eb;
+        color: rgb(55, 65, 81);
+        border-radius: 5px !important;
+        box-shadow: none;
+    }
+    .el-radio-button .el-radio-button__inner {
+        padding: 7px 10px;
+        background: transparent;
+        border: none !important;
+    }
+}
+

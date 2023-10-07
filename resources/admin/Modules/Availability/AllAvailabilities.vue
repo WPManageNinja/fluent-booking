@@ -1,11 +1,16 @@
 <template>
-    <div class="fcal_section fcal_section_narrow">
+    <div class="fcal_section fcal_availability_route fcal_section_narrow">
         <div class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Availablity</h3>
+                <h3>Availability</h3>
                 <p>Configure times when you are available for bookings.</p>
             </div>
             <div class="fcal_actions">
+                <el-radio-group class="fcal_radio_switch" size="large" v-model="filters.author" @change="fetchAvailabilities">
+                    <el-radio-button label="me">My Schedules</el-radio-button>
+                    <el-radio-button label="all">All Schedules</el-radio-button>
+                </el-radio-group>
+
                 <el-button @click="creatingNew = true" type="primary">
                     <el-icon>
                         <Plus/>
