@@ -2,16 +2,20 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
+use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
 {
     public function register()
     {
         add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
+            $app = App::getInstance();
             $calendars['google'] = [
                 'key'                  => 'google',
+                'icon'                 => $app['url.assets'] . 'images/google-calendar.svg',
                 'title'                => __('Google Calendar', 'fluent-booking'),
                 'subtitle'             => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
                 'btn_text'             => __('Connect with Google Calendar', 'fluent-booking'),
@@ -38,10 +42,11 @@ class Bootstrap
         $formattedFeeds = [];
         foreach ($items as $item) {
             $formattedFeeds[] = [
-                'driver'           => 'google',
-                'db_id'            => $item->id,
-                'identifier'       => $item->key,
-                'remote_calendars' => $this->getRemoteCalendarsList($item)
+                'driver'             => 'google',
+                'db_id'              => $item->id,
+                'identifier'         => $item->key,
+                'remote_calendars'   => $this->getRemoteCalendarsList($item),
+                'conflict_check_ids' => Arr::get($item->settings, 'conflict_check_ids', [])
             ];
         }
 
