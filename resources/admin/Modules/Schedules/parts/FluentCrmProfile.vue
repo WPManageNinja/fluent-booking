@@ -5,7 +5,7 @@
         </div>
         <el-skeleton v-if="loading" />
 
-        <div v-else class="fcal_schedule_profile_body" v-html="crmProfile" />
+        <div v-else class="fcal_schedule_profile_body" v-html="crmProfile"></div>
     </div>
 </template>
 
@@ -42,7 +42,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

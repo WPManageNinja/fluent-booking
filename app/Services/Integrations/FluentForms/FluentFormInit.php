@@ -3,7 +3,6 @@
 namespace FluentBooking\App\Services\Integrations\FluentForms;
 
 use FluentBooking\App\App;
-use FluentForm\App\Models\Submission;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
@@ -12,6 +11,8 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\Integrations\FluentForms\BookingElement;
+use FluentBooking\App\Services\Integrations\FluentForms\FormDataUpdate;
+
 
 class FluentFormInit 
 {
@@ -21,29 +22,22 @@ class FluentFormInit
     public function init()
     {
         if (defined('FLUENTFORM')) {
-            new BookingElement();
-            add_action('fluent_booking/booking_schedule', [$this, 'updateSourceLink'], 10, 1);
-            add_action('fluentform/before_form_validation', [$this, 'handleValidations'], 10, 2);
-            add_action('fluentform/before_insert_submission', [$this, 'handleBookings'], 10);
-            add_action('fluentform/notify_on_form_submit', [$this, 'updateSubmissionId'], 10, 1);  
+            $this->registerHooks();
+            $this->registerIntegrations();
         }
     }
 
-    public function updateSourceLink(&$booking)
+    public function registerHooks()
     {
-        $submissionId = Arr::get($booking, 'source_id');
+        add_action('fluentform/before_form_validation', [$this, 'handleValidations'], 10, 2);
+        add_action('fluentform/before_insert_submission', [$this, 'handleBookings'], 10);
+        add_action('fluentform/notify_on_form_submit', [$this, 'updateSubmissionId'], 10, 1);
+    }
 
-        if ('fluentform' != $booking->source || !$submissionId) {
-            return;
-        }
-        
-        $formId = Submission::find($submissionId)->form_id;
-        
-        $url = admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $formId . '#/entries/' . $submissionId);
-
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'fluentform' . '</a>';
-
-        $booking->source = $link;
+    public function registerIntegrations()
+    {
+        new BookingElement();
+        new FormDataUpdate();
     }
 
     private function getName($value)
@@ -207,10 +201,15 @@ class FluentFormInit
             return;
         }
 
-        foreach ($this->bookingIds as $bookingId) {
-            Booking::where('id', $bookingId)->update([
-                'source_id' => $submissionId
-            ]);
-        }
+        try {
+            Booking::whereIn('id', $this->bookingIds)
+                ->update(
+                    ['source_id' => $submissionId]
+                );
+            } catch (\Exception $e) {
+                wp_send_json([
+                    $e->getMessage()
+                ], $e->getCode());
+            }
     }
 }
