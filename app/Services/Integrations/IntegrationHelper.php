@@ -8,8 +8,11 @@ use FluentBooking\Framework\Support\Arr;
 class IntegrationHelper
 {
     public $clientKey;
+
     public $authKey;
+
     public $settingsKey;
+
     public $integrationKey;
 
     public function __construct($integrationKey, $authKey, $settingsKey, $clientKey)
@@ -22,7 +25,7 @@ class IntegrationHelper
 
     public function getClientDetails()
     {
-        return get_option($this->clientKey);
+        return get_option($this->clientKey, []);
     }
 
     public function updateClientDetails($data)
