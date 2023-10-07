@@ -2,7 +2,10 @@
 
 namespace FluentBooking\App\Http\Controllers;
 
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Request\Request;
 
 class IntegrationSettingsController extends Controller
@@ -22,7 +25,7 @@ class IntegrationSettingsController extends Controller
                 'field_settings' => $fieldSettings,
             ]);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
@@ -33,7 +36,7 @@ class IntegrationSettingsController extends Controller
     {
         try {
 
-            $baseUrl   = Helper::getAppBaseUrl();
+            $baseUrl = Helper::getAppBaseUrl();
             $menuItems = apply_filters('fluent_booking/integrations_menu_items', [
                 'google_calendar' => [
                     'key'       => 'google_calendar',
@@ -44,8 +47,8 @@ class IntegrationSettingsController extends Controller
             ]);
 
             return $this->sendSuccess([
-                'status'         => true,
-                'menu_items'     => $menuItems
+                'status'     => true,
+                'menu_items' => $menuItems
             ]);
 
         } catch (\Exception $e) {
@@ -54,7 +57,7 @@ class IntegrationSettingsController extends Controller
             ], 422);
         }
     }
-    
+
     public function update(Request $request, $hostId)
     {
         try {
@@ -64,7 +67,7 @@ class IntegrationSettingsController extends Controller
 
             do_action('fluent_booking/save_integration_settings_' . $settingsKey, $settings, $hostId);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
@@ -75,13 +78,54 @@ class IntegrationSettingsController extends Controller
     {
         try {
             $settingsKey = sanitize_text_field($request->get('settings_key'));
-            
+
             do_action('fluent_booking/disconnect_integration_' . $settingsKey, $hostId);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
         }
     }
+
+    public function getRemoteCalendars(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $providers = apply_filters('fluent_booking/remote_calendar_providers', [], $calendar->user_id);
+
+        $connectionFeeds = apply_filters('fluent_booking/remote_calendar_connection_feeds', [], $calendar->user_id);
+
+        return [
+            'providers' => $providers,
+            'feeds'     => $connectionFeeds,
+            'settings' => RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id)
+        ];
+    }
+
+    public function patchRemoteCalendarConflictSettings(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $meta = Meta::where('id', $request->get('meta_id'))->first();
+
+        $conflictCheckIds = $request->get('conflict_check_ids');
+
+        do_action('fluent_calendar/patch_calendar_config_settings_' . $meta->object_type, $conflictCheckIds, $meta, $calendar);
+
+        return [
+            'message' => 'Your settings has been updated'
+        ];
+    }
+
+    public function syncCreatbleRemoteCalSettings(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $settings = $request->get('remote_calendar_config', []);
+
+        RemoteCalendarHelper::updateUserRemoteCreatableCalendarSettings($calendar->user_id, $settings);
+
+        return [
+            'message' => 'Your settings has been updated'
+        ];
+    }
+
 }
