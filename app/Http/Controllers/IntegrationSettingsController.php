@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Request\Request;
 
@@ -96,6 +97,20 @@ class IntegrationSettingsController extends Controller
         return [
             'providers' => $providers,
             'feeds'     => $connectionFeeds
+        ];
+    }
+
+    public function patchRemoteCalendarConflictSettings(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $meta = Meta::where('id', $request->get('meta_id'))->first();
+
+        $conflictCheckIds = $request->get('conflict_check_ids');
+
+        do_action('fluent_calendar/patch_calendar_config_settings_' . $meta->object_type, $conflictCheckIds, $meta, $calendar);
+
+        return [
+            'message' => 'Your settings has been updated'
         ];
     }
 
