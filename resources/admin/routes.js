@@ -11,6 +11,8 @@ import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegratio
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCalendarsSettings";
 import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
+import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
+import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 
 export var routes = [
     {
@@ -127,6 +129,21 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Configure Integrations'
                 },
+            }
+        ]
+    },
+    {
+        path: '/availability_x',
+        component: AvailabilityRoute,
+        props: true,
+        meta: {
+            active_menu: 'availability'
+        },
+        children: [
+            {
+                name: 'availability_x',
+                path: '',
+                component: AllAvailabilities,
             }
         ]
     }

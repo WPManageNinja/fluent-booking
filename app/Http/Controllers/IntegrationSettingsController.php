@@ -5,6 +5,7 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Request\Request;
 
 class IntegrationSettingsController extends Controller
@@ -96,7 +97,8 @@ class IntegrationSettingsController extends Controller
 
         return [
             'providers' => $providers,
-            'feeds'     => $connectionFeeds
+            'feeds'     => $connectionFeeds,
+            'settings' => RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id)
         ];
     }
 
@@ -108,6 +110,18 @@ class IntegrationSettingsController extends Controller
         $conflictCheckIds = $request->get('conflict_check_ids');
 
         do_action('fluent_calendar/patch_calendar_config_settings_' . $meta->object_type, $conflictCheckIds, $meta, $calendar);
+
+        return [
+            'message' => 'Your settings has been updated'
+        ];
+    }
+
+    public function syncCreatbleRemoteCalSettings(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $settings = $request->get('remote_calendar_config', []);
+
+        RemoteCalendarHelper::updateUserRemoteCreatableCalendarSettings($calendar->user_id, $settings);
 
         return [
             'message' => 'Your settings has been updated'

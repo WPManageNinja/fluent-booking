@@ -28,6 +28,14 @@
         font-size: 24px;
         line-height: 1.4;
       }
+
+      p {
+        margin: 0;
+        padding: 0;
+        color: $lightDark;
+        font-size: 13px;
+        line-height: 1.4;
+      }
     }
   }
 
@@ -227,6 +235,7 @@
 
         &:nth-child(1) {
           background: #FEF4E6;
+
           h1 {
             border-color: rgba(247, 165, 57, 0.2);
           }
@@ -249,6 +258,7 @@
           h1 {
             border-color: rgba(70, 173, 146, 0.2);
           }
+
           .stat {
             color: #16896B;
             border-color: #16896B;
@@ -450,6 +460,7 @@
     margin: 0;
     font-size: 16px;
   }
+
   p {
     margin: 5px 0 0;
   }
@@ -460,32 +471,97 @@
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   margin-top: 20px;
+
   .fcal_remote_header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px;
     border-bottom: 1px solid #e5e7eb;
+
     .fcal_driver_brand {
       display: flex;
       align-items: center;
       gap: 15px;
     }
+
     .fcal_driver_brand img {
       max-width: 44px;
     }
+
     .fcal_driver_heading {
       h3 {
         margin: 0;
         font-size: 16px;
       }
+
       p {
         margin: 0 0 5px;
       }
     }
   }
+
   .fcal_remote_body {
     padding: 15px;
   }
 
+}
+
+.fcal_settings_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+}
+
+
+.fcal_card_items {
+  display: block;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  .fcal_card_item {
+    background: white;
+    border-bottom: 1px solid #d1d5db;
+    padding: 15px;
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+
+    .fcal_card_wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.fcal_availability_card {
+  cursor: pointer;
+  width: 100%;
 }

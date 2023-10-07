@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="fcal_driver_action">
-                <el-button>Delete</el-button>
+                <el-button size="small"><el-icon><Delete /></el-icon></el-button>
             </div>
         </div>
         <div class="fcal_remote_body">

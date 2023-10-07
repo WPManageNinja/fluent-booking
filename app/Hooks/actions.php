@@ -35,6 +35,12 @@ add_action('init', function () {
         return;
     }
 
+    $availabilities = \FluentBooking\App\Models\Availability::with(['calendar'])
+        ->orderBy('id', 'desc')
+        ->get();
+
+    dd($availabilities->toArray());
+
 
     $meta = \FluentBooking\App\Models\Meta::where('object_type', '_google_user_token')
         ->where('object_id', 1)

@@ -10,6 +10,8 @@
 @import "~element-plus/theme-chalk/el-loading.css";
 @import "~element-plus/theme-chalk/el-message-box.css";
 
+
+
       // customize element ui css here
 .el {
     &-select {
@@ -258,6 +260,21 @@ ul.fframe_menu.fcal_secondary_menu {
     border: 1px solid #e5e7eb;
 }
 
+.fcal_promt_box {
+    background: #f5f6f7;
+    border: 1px solid #e5e7eb;
+}
+
 .fcal_lined_checks > label {
     display: flex;
+}
+
+a.el-button {
+    text-decoration: none;
+}
+
+.fcal_icon_line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }

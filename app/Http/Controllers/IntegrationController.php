@@ -1,6 +1,7 @@
 <?php
 
 namespace FluentBooking\App\Http\Controllers;
+
 use FluentBooking\Framework\Request\Request;
 
 class IntegrationController extends Controller
@@ -9,24 +10,22 @@ class IntegrationController extends Controller
     {
         try {
             $settingsKey = sanitize_text_field($request->get('settings_key'));
-
             $settings = apply_filters('fluent_booking/get_client_settings_' . $settingsKey, []);
 
             $fieldSettings = apply_filters('fluent_booking/get_client_field_settings_' . $settingsKey, []);
 
-            return $this->sendSuccess([
-                'status'         => true,
+            return [
+                'status'         => !empty($fieldSettings),
                 'settings'       => $settings,
                 'field_settings' => $fieldSettings,
-            ]);
-
-        } catch (Exception $e) {
+            ];
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
         }
     }
-    
+
     public function update(Request $request)
     {
         try {
@@ -36,7 +35,11 @@ class IntegrationController extends Controller
 
             do_action('fluent_booking/save_client_settings_' . $settingsKey, $settings);
 
-        } catch (Exception $e) {
+            return [
+                'message' => __('Settings has been successfully saved.', 'fluent-booking')
+            ];
+
+        } catch (\Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
             ], 422);
