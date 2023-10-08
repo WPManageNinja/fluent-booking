@@ -11,6 +11,8 @@ class Client
     public $clientSecret;
     public $redirectUrl;
 
+    private $accessToken;
+
     public $revokeUrl = 'https://oauth2.googleapis.com/revoke';
     public $tokenUrl = 'https://oauth2.googleapis.com/token';
     public $authUrl = 'https://accounts.google.com/o/oauth2/auth';
@@ -25,6 +27,12 @@ class Client
 
         //$this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
         $this->redirectUrl = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
+    }
+
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+        return $this;
     }
 
     public function generateAuthCode($code)
@@ -61,12 +69,9 @@ class Client
         return $tokens;
     }
 
-    public function getCalendarLists($accessToken)
+    public function getCalendarLists($accessToken = null)
     {
-        $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList', [], 'GET', [
-            'Authorization' => 'Bearer ' . $accessToken,
-            'Content-Type'  => 'application/json; charset=utf-8'
-        ]);
+        $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList', [], 'GET', $this->getAuthorizationHeader($accessToken));
 
         if (is_wp_error($lists)) {
             return $lists;
@@ -85,26 +90,33 @@ class Client
         return $formattedLists;
     }
 
-    public function generateAccessToken($token, $grantType = 'refresh_token')
+    public function getCalendarEvents($id, $args = [])
     {
-        $body = [
-            'client_id'     => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'redirect_uri'  => $this->redirectUrl,
-            'grant_type'    => $grantType
-        ];
+        $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/calendars/' . $id . '/events', $args, 'GET', $this->getAuthorizationHeader());
 
-        if ($grantType == 'authorization_code') {
-            $body['code'] = $token;
-        } else {
-            $body['refresh_token'] = $token;
+        if (is_wp_error($lists)) {
+            return $lists;
         }
 
-        return IntegrationHelper::makeRequest($this->tokenUrl, $body, 'POST');
+        $formattedLists = [];
+        foreach ($lists['items'] as $item) {
+            $formattedLists[] = [
+                'summary' => Arr::get($item, 'summary'),
+                'start'  => Arr::get($item, 'start.dateTime'),
+                'end'    => Arr::get($item, 'end.dateTime'),
+                'status' => Arr::get($item, 'status'),
+            ];
+        }
+
+        return $formattedLists;
     }
 
-    public function getAuthorizationHeader($accessToken)
+    public function getAuthorizationHeader($accessToken = null)
     {
+        if (!$accessToken) {
+            $accessToken = $this->accessToken;
+        }
+
         return [
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type'  => 'application/json; charset=utf-8'
@@ -128,14 +140,18 @@ class Client
         ];
 
         if ($body) {
-            $args['body'] = json_encode($body);
+            if ($type == 'GET') {
+                $url = add_query_arg($body, $url);
+            } else {
+                $args['body'] = json_encode($body);
+            }
         }
 
         $request = wp_remote_request($url, $args);
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
-            return new \WP_Error(423, $message, $request->get_all_error_data());
+            return new \WP_Error('wp_error', $message, $request->get_all_error_data());
         }
 
         $resCode = wp_remote_retrieve_response_code($request);
@@ -144,12 +160,11 @@ class Client
 
         if ($resCode > 299) {
             $message = Arr::get($resBody, 'error_description', 'Unexpected error from google api');
-            return new \WP_Error($resCode, $message, $resBody);
+            return new \WP_Error('api_error', $message, $resBody);
         }
 
         return $resBody;
     }
-
 
     public function getAuthUrl($calendarId)
     {
