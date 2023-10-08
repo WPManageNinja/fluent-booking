@@ -19,7 +19,7 @@
                 </div>
                 <SingleInviteeInfo v-if="showing_spot && !isGroupEvent" :spot="showing_spot"/>
                 <InviteeInformations v-if="showing_spots && isGroupEvent" :spots="showing_spots"/>
-                <div class="fcal_schedule_event_infos_body">
+                <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
                             Meeting Information
@@ -70,12 +70,12 @@
                         </editable-spot-data>
                     </div>
                 </div>
+                <SourceDetailsSection v-if="showing_spot.sourceDetails" :spots="showing_spots"/>
             </div>
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
             <BookingActivities :event_id="showing_spot.event_id"/>
-            <FluentCrmProfile
-                :crm_email="showing_spot.email" />
+            <FluentCrmProfile :crm_email="showing_spot.email" />
         </div>
         <el-dialog
             v-model="cancelDialog"
@@ -117,23 +117,25 @@ import BookingActivities from "./_BookingActivities";
 import FluentCrmProfile from "./FluentCrmProfile";
 import InviteeInformations from './InviteeInformations';
 import SingleInviteeInfo from './SingleInviteeInfo';
-import EditableSpotData from "./EditableSpotData.vue";
+import EditableSpotData from "./EditableSpotData";
+import SourceDetailsSection from './SourceDetailsSection';
 export default {
     name: "ScheduleSpotDetails",
     props: ['spot', 'spot_id'],
     $emits: ['spotFetched'],
     components: {
-        FluentCrmProfile,
-        BookingActivities,
-        SingleInviteeInfo,
-        InviteeInformations,
-        EditableSpotData,
-        Back,
-        MoreFilled,
-        Refresh,
-        Close,
-        EditPen
-    },
+    FluentCrmProfile,
+    BookingActivities,
+    SingleInviteeInfo,
+    InviteeInformations,
+    EditableSpotData,
+    SourceDetailsSection,
+    Back,
+    MoreFilled,
+    Refresh,
+    Close,
+    EditPen,
+},
     data() {
         return {
             loading: false,

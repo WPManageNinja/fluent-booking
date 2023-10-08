@@ -210,6 +210,12 @@ class CalendarController extends Controller
         return $data;
     }
 
+    public function getCalendarsSlots()
+    {
+//        getCalendarOptionsByTitle
+        error_log(print_r(Helper::getCalendarOptionsByTitle(), 1));
+    }
+
     public function getSharingSettings(Request $request, $id)
     {
         $calendar = Calendar::findOrFail($id);
@@ -465,6 +471,28 @@ class CalendarController extends Controller
 
         return [
             'message' => __('Notifications has been saved', 'fluent-booking')
+        ];
+    }
+
+    public function getSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        return [
+            'fields' => $slot->getBookingFields()
+        ];
+    }
+
+    public function saveSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $bookingFields = $request->get('booking_fields');
+
+        $slot->setBookingFields($bookingFields);
+
+        return [
+            'message' => __('Fields has been updated', 'fluent-booking')
         ];
     }
 

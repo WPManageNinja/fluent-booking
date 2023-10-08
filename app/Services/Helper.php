@@ -653,6 +653,76 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
+
+
+    /**
+     * Sending a job to background for further processing
+     *
+     * @param string $callbackName - name of the callback
+     * @param mixed $payload
+     * @return bool
+     */
+    public static function fluentbooking_queue_on_background($callbackName, $payload)
+    {
+        $body = [
+            'payload'       => $payload,
+            'callback_name' => $callbackName
+        ];
+
+        $args = array(
+            'timeout'   => 0.1,
+            'blocking'  => false,
+            'body'      => $body,
+            'cookies'   => $_COOKIE
+        );
+
+        $queryArgs = array(
+            'action' => 'fluent_booking_callback_for_background',
+            'nonce'  => wp_create_nonce('fluent_booking_callback_for_background'),
+        );
+
+        $url = add_query_arg($queryArgs, admin_url('admin-ajax.php'));
+        wp_remote_post(esc_url_raw($url), $args);
+        return true;
+    }
+
+
+    /**
+     * Sanitize form inputs recursively.
+     *
+     * @param $input
+     *
+     * @return mixed $input
+     */
+    public static function fluentBookingSanitizer($input, $attribute = null, $fields = [])
+    {
+        if (is_string($input)) {
+            $element = Arr::get($fields, $attribute . '.element');
+
+            if (in_array($element, ['post_content', 'rich_text_input'])) {
+                return wp_kses_post($input);
+            } elseif ('textarea' === $element) {
+                $input = sanitize_textarea_field($input);
+            } elseif ('input_email' === $element) {
+                $input = strtolower(sanitize_text_field($input));
+            } elseif ('input_url' === $element) {
+                $input = sanitize_url($input);
+            } else {
+                $input = sanitize_text_field($input);
+            }
+        } elseif (is_array($input)) {
+            foreach ($input as $key => &$value) {
+                $attribute = $attribute ? $attribute . '[' . $key . ']' : $key;
+
+                $value = self::fluentBookingSanitizer($value, $attribute, $fields);
+
+                $attribute = null;
+            }
+        }
+
+        return $input;
+    }
+
     public static function getMeta($group, $objectId, $key, $withModel = false)
     {
         $meta = Meta::where('object_type', $group)
@@ -768,13 +838,16 @@ class Helper
         return $user->user_email;
     }
 
-    public static function getCalendarOptions()
+    public static function getCalendarOptionsByHost()
     {
-        if (PermissionManager::hasAllCalendarAccess()) {
-            $calendars = Calendar::select(['id', 'title'])->with(['slots'])->latest()->get();
-        } else {
-            $calendars = Calendar::select(['id', 'title'])->where('user_id', get_current_user_id())->latest()->get();
-        }
+        $calendars = Calendar::select(['id', 'title'])
+            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+                return $query->where('user_id', get_current_user_id());
+            })
+            ->with(['slots'])
+            ->latest()
+            ->get();
+        
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {
             $slots = Arr::get($calendar, 'slots');
@@ -796,6 +869,39 @@ class Helper
         }
         return $formattedCalendars;
     }
+
+    public static function getCalendarOptionsByTitle()
+    {
+        $calendars = Calendar::select(['id', 'title'])
+            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+                return $query->where('user_id', get_current_user_id());
+            })
+            ->with(['slots'])
+            ->latest()
+            ->get();
+
+
+        $formattedCalendars = [];
+        foreach ($calendars as $index => $calendar) {
+            $slots = Arr::get($calendar, 'slots');
+            if (!empty($slots)) {
+                $options = [];
+                foreach ($slots as $slot) {
+                    $options[] = [
+                        'id'    => Arr::get($slot, 'id'),
+                        'title' => Arr::get($slot, 'title')
+                    ];
+                }
+                if (!empty($options)) {
+                    $formattedCalendars[$index] = [
+                        'title'   => Arr::get($calendar, 'title'),
+                        'options' => $options
+                    ];
+                }
+            }
+        }
+        return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
+    } 
 
     public static function excerpt($text, $max_length = 160)
     {
@@ -1065,6 +1171,48 @@ class Helper
             'sat' => [
                 'enabled' => false,
                 'slots'   => []
+            ],
+        ]);
+    }
+
+    public static function getCustomFieldTypes()
+    {
+        return apply_filters('fluent_booking/custom_fields_types', [
+            [
+                'value' => 'additional_email',
+                'label' => 'Email'
+            ],
+            [
+                'value' => 'text',
+                'label' => 'Text'
+            ],
+            [
+                'value' => 'textarea',
+                'label' => 'Textarea'
+            ],
+            [
+                'value' => 'number',
+                'label' => 'Number'
+            ],
+            [
+                'value' => 'phone',
+                'label' => 'Phone'
+            ],
+            [
+                'value' => 'dropdown',
+                'label' => 'Dropdown'
+            ],
+            [
+                'value' => 'checkbox',
+                'label' => 'Checkbox'
+            ],
+            [
+                'value' => 'multi_select_checkbox',
+                'label' => 'Multiple Select'
+            ],
+            [
+                'value' => 'date',
+                'label' => 'Date'
             ],
         ]);
     }

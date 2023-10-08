@@ -87,10 +87,10 @@ class SchedulesController extends Controller
         
         $paginatedSchedules = new LengthAwarePaginator($filteredSchedules, $total, $perPage, $page);
 
-        return [
+        return $this->sendSuccess([
             'schedules' => $paginatedSchedules,
             'timezone'  => 'UTC'
-        ];
+        ]);
     }
 
     public function patchBooking(Request $request, $bookingId)
@@ -159,9 +159,9 @@ class SchedulesController extends Controller
 
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
-        return [
+        return $this->sendSuccess([
             'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
-        ];
+        ]);
     }
 
     public function getBooking(Request $request, $eventId)
@@ -192,9 +192,9 @@ class SchedulesController extends Controller
             do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
         }
 
-        return [
+        return $this->sendSuccess([
             'schedule' => $bookings
-        ];
+        ]);
     }
 
     public function getBookingActivities(Request $request, $eventId)
@@ -214,9 +214,9 @@ class SchedulesController extends Controller
         $activities = BookingActivity::whereIn('booking_id', $bookingIds)
             ->orderBy('id', 'DESC')->get();
 
-        return [
+        return $this->sendSuccess([
             'activities' => $activities
-        ];
+        ]);
     }
 
 
@@ -225,19 +225,19 @@ class SchedulesController extends Controller
         $email = $request->get('crmProfile');
 
         if (!defined('FLUENTCRM')) {
-            return; // If not defined, return early and exit the method.
+            return '';
         }
 
         // Attempt to retrieve the CRM profile HTML for the provided email address.
         $profileHtml = fluentcrm_get_crm_profile_html($email, false);
 
         if (!$profileHtml) {
-            return; // If not found or empty, return early and exit the method.
+            return '';
         }
 
-        return [
+        return $this->sendSuccess([
             'crm_profile' => $profileHtml
-        ];
+        ]);
     }
 
 }

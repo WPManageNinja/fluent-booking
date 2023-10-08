@@ -18,8 +18,7 @@ class AvailabilityController extends Controller
     {
         $filters = $request->get('filters', []);
 
-        $query = Availability::with(['calendar'])
-            ->orderBy('id', 'desc');
+        $query = Availability::orderBy('id', 'desc');
 
         $host = Arr::get($filters, 'author');
 
@@ -61,7 +60,7 @@ class AvailabilityController extends Controller
                     'default'          => Arr::isTrue($schedule, 'value.default'),
                     'timezone'         => $timezone,
                     'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
-                    'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), 'UTC', $timezone)
+                    'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules', []), 'UTC', $timezone)
                 ]
             ];
         }

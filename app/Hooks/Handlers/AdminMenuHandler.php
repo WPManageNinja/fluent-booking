@@ -11,7 +11,6 @@ use FluentBooking\App\Services\PermissionManager;
 
 class AdminMenuHandler
 {
-
     public function register()
     {
         add_action('admin_menu', [$this, 'add']);
@@ -211,6 +210,7 @@ class AdminMenuHandler
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
+        $customFieldTypes = Helper::getCustomFieldTypes();
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
@@ -223,6 +223,7 @@ class AdminMenuHandler
             'event_colors'       => $eventColors,
             'meeting_durations'  => $meetingDurations,
             'schedule_schema'    => $scheduleSchema,
+            'custom_field_types' => $customFieldTypes,
             'editor_shortcodes'  => $editorShortcodes,
             'me'                 => [
                 'id'        => $currentUser->ID,

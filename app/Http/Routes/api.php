@@ -18,6 +18,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/slots', 'CalendarController@createCalendarSlot')->int('id');
     $router->get('/{id}/slot-schema', 'CalendarController@getSlotSchema')->int('id');
 
+    $router->get('/calendars-slots', 'CalendarController@getCalendarsSlots')->int('id');
+
     // Landing Page API
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
     $router->post('/{id}/sharing-settings', 'CalendarController@saveSharingSettings')->int('id');
@@ -36,6 +38,9 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
+
+    $router->get('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('slot_id');
+    $router->post('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('slot_id');
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
@@ -88,4 +93,11 @@ $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($rout
 $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/activities', 'ReportController@getActivities');
+});
+
+$router->prefix('webhooks')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'WebhookController@index');
+    $router->post('/', 'WebhookController@create');
+    $router->put('/', 'WebhookController@updateData');
+    $router->delete('/{id}', 'WebhookController@delete')->int('id');
 });

@@ -842,7 +842,6 @@
                             }
                         }
                     }
-
                     .el-radio-group {
                         &.radio_desc_group {
                             display: block;
@@ -897,6 +896,43 @@
                                 margin-bottom: 15px;
                                 p {
                                     margin: 0;
+                                }
+                            }
+                        }
+                    }
+                    .el-link--primary {   
+                        .el-link__inner {
+                            color: $primaryColor;
+                            padding: 4px;
+                            &:hover {
+                                background: #F0F6FE;
+                                border-radius: 8px;
+                            }
+                        }
+                      }
+
+                    &.fcal_question_options {
+                        .el-form-item__content {
+                            > .el-link {
+                                margin-top: 8px;
+                            }
+                        }
+                        .fcal_question_option {
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            + .fcal_question_option {
+                                margin-top: 8px;
+                            }
+                            .el-link {
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 4px;
+                                flex: none;
+                                transition: .3s;
+                                &:hover {
+                                    background: var(--el-color-danger-light-9);
                                 }
                             }
                         }
@@ -1014,6 +1050,123 @@
     }
 }
 
+.fcal_questions_wrapper {
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    padding: 24px;
+    .fcal_question_footer {
+        display: flex;
+        justify-content: space-between;
+
+        .fcal_add_question {
+            color: $primaryColor;
+            margin-top: 24px;
+            &:hover {
+                color: $primaryColor;
+                background: #F0F6FE;
+                border-radius: 8px;
+            }
+        }
+        .fcal_primary_btn {
+            margin-top:24px;
+        }
+    }
+}
+.fcal_questions {
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    .fcal_question {
+        &:last-child {
+            border-bottom: none;
+        }
+    }    
+}
+.fcal_question {
+    border-bottom: 1px solid #EAECF0;
+    position: relative;
+    transition: .3s;
+    &:hover {
+        background: #f6f7f8;
+        .fcal_question_sorting  {
+            i {
+                transform: scale(1);
+            }
+        }
+    }
+    .fcal_question_sorting {
+        position: absolute;
+        left: -10px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        gap: 8px;
+        z-index: 9;
+        > i {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            border-radius: 4px;
+            border: 1px solid #EAECF0;
+            background: #ffffff;
+            cursor: pointer;
+            transition: .3s;
+            transform: scale(0);
+            &:hover {
+                border-color: $dark;
+            }
+        }
+
+    }
+    .fcal_question_card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        .fcal_question_content {
+            h2 {
+                margin: 0 0 4px;
+                font-size: 16px;
+                color: $dark;
+                line-height: 24px;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                .required {
+                    display: block;
+                    font-size: 12px;
+                    font-weight: 400;
+                    background: #eaecf0;
+                    color: $dark;
+                    border-radius: 4px;
+                    line-height: 20px;
+                    padding: 0 6px;
+                }
+            }
+            p {
+                margin: 0;
+                font-size: 14px;
+                line-height: 24px;
+            }
+        }
+        .fcal_question_actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            .el-switch {
+                &.is-checked {
+                    .el-switch__core {
+                        background-color: $primaryColor;
+                        border-color: $primaryColor;
+                    }
+                }
+            }
+        }
+    }
+}
+
 #fluent-booking-app {
     background: #f5f6f7;
     margin-left: -20px;
@@ -1123,6 +1276,31 @@
     }
     .fcal_tm20 {
         margin-top: 20px;
+    }
+
+    .el-input {
+        &.fcal_copyText_input {
+            .el-input__wrapper {
+                border: 1px solid #D6DAE1;
+                border-right: none;
+                box-shadow: none;
+                border-radius: 8px 0 0 8px;
+                background: #F5F6F7;
+                .el-input__inner {
+                    margin: 0;
+                    background: transparent;
+                }
+            }
+            .el-input-group__append {
+                border-radius: 8px;
+                .el-button {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    padding: 10px 20px;
+                    background: #b5b5b6;
+                }
+            }
+        }
     }
 
     .fcal_right {
@@ -1477,7 +1655,6 @@
             border-radius: 8px;
             flex: 1;
 
-
             .fcal_settings_landing_page {
                 .el-form {
                     .el-form-item {
@@ -1522,6 +1699,28 @@
         }
     }
 
+    .fcal_webhook_settings {
+        .el-table {
+            tbody {
+                tr {
+                    td {
+                        &:last-child {
+                            //text-align: right;
+                            .el-button {
+                                padding: 8px 16px;
+                                height: auto;
+                                border-radius: 8px !important;
+                                font-size: 14px;
+                                i {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     .fcal_sub_title {
         margin: 0;
