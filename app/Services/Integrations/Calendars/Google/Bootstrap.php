@@ -55,7 +55,7 @@ class Bootstrap
                 'logo'          => $app['url.assets'] . 'images/google-calendar.svg',
                 'title'         => __('Google Calendar / Meet', 'fluent_booking'),
                 'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
-                'description'   => '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>',
+                'description'   => '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>',
                 'save_btn_text' => __('Save', 'fluent_booking'),
                 'fields'        => [
                     'client_id'     => [
