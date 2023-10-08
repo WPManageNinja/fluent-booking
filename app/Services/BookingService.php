@@ -91,54 +91,51 @@ class BookingService
         return $booking;
     }
 
-    public static function getBookingFields($slot)
+    public static function getDefaultBookingFields($phoneRequired = false)
     {
-        $fields = [
+        $defaultFields = [
             [
+                'index'       => 1,
                 'type'        => 'text',
                 'name'        => 'name',
                 'label'       => __('Your Name', 'fluent-booking'),
-                'required'    => true,
-                'placeholder' => __('Your Full Name', 'fluent-booking'),
+                'required'    => "yes",
+                'status'      => "active",
+                'placeholder' => __('Your Name', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ],
             [
+                'index'       => 2,
                 'type'        => 'email',
                 'name'        => 'email',
-                'label'       => __('Your Email Address', 'fluent-booking'),
-                'required'    => true,
-                'placeholder' => __('Your Email Address', 'fluent-booking'),
+                'label'       => __('Your Email', 'fluent-booking'),
+                'required'    => "yes",
+                'status'      => "active",
+                'placeholder' => __('Your Email', 'fluent-booking'),
                 'input_class' => 'fcal_input',
                 'disabled'    => is_user_logged_in()
             ]
         ];
 
-        if (self::isPhoneRequired($slot)) {
-            $fields[] = [
-                'type'        => 'tel',
+        if ($phoneRequired == true) {
+            $defaultFields[] = [
+                'index'       => 3,
+                'type'        => 'number',
                 'name'        => 'phone',
                 'label'       => __('Your Phone Number', 'fluent-booking'),
-                'required'    => true,
+                'required'    => "yes",
+                'status'      => "active",
                 'placeholder' => esc_attr__('Phone Number with country code', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ];
         }
 
-        $fields[] = [
-            'type'        => 'textarea',
-            'data_type'   => 'textarea',
-            'name'        => 'message',
-            'label'       => __('Please share anything that will help prepare for our meeting.', 'fluent-booking'),
-            'placeholder' => __('Note about this meeting', 'fluent-booking'),
-            'input_class' => 'fcal_input fcal_textarea'
-        ];
-
-        return $fields;
+        return apply_filters('fluent_booking/default_booking_fields', $defaultFields);
     }
 
-    public static function isPhoneRequired($slot)
+    public static function getBookingFields($slot)
     {
-        return $slot->location_type == 'phone' && $slot->location_settings['call_type'] == 'outbound';
+        return $slot->getBookingFields();
     }
 
     public static function getBookingConfirmationHtml($booking, $calendarSlot = null, $withActions = false)

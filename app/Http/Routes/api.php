@@ -36,6 +36,9 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
+
+    $router->get('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('slot_id');
+    $router->post('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('slot_id');
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {

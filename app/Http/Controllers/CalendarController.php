@@ -468,6 +468,28 @@ class CalendarController extends Controller
         ];
     }
 
+    public function getSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        return [
+            'fields' => $slot->getBookingFields()
+        ];
+    }
+
+    public function saveSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $bookingFields = $request->get('booking_fields');
+
+        $slot->setBookingFields($bookingFields);
+
+        return [
+            'message' => __('Fields has been updated', 'fluent-booking')
+        ];
+    }
+
     public function deleteCalendarSlot(Request $request, $calendarId, $slotId)
     {
         $calendar = Calendar::findOrFail($calendarId);
