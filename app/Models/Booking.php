@@ -223,7 +223,7 @@ class Booking extends Model
     public function getCancelReasonDescription()
     {
         $cancelReason = $this->getCancelReason();
-        
+
         if ($cancelReason) {
             return $cancelReason->description;
         }
@@ -261,4 +261,35 @@ class Booking extends Model
             ->get();
     }
 
+    public function updateMeta($key, $value)
+    {
+        $exist = BookingMeta::where('event_id', $this->id)
+            ->where('meta_key', $key)
+            ->first();
+
+        if ($exist) {
+            $exist->value = $value;
+            $exist->save();
+            return $exist;
+        }
+
+        return BookingMeta::insert([
+            'event_id' => $this->id,
+            'meta_key' => $key,
+            'value'    => $value
+        ]);
+    }
+
+    public function getMeta($key, $default = '')
+    {
+        $exist = BookingMeta::where('event_id', $this->id)
+            ->where('meta_key', $key)
+            ->first();
+
+        if ($exist) {
+            return $exist->value;
+        }
+
+        return $default;
+    }
 }

@@ -119,5 +119,4 @@ class GoogleHelper
 
         return $calendars;
     }
-
 }
