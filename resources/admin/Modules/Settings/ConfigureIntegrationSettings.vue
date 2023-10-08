@@ -5,8 +5,8 @@
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
                         <div class="left">
-                            <div class="img-box">
-                                <div v-html="fieldSettings.logo"></div>
+                            <div v-if="fieldSettings.logo" class="img-box">
+                                <img :src="fieldSettings.logo"  />
                             </div>
                             <div class="content">
                                 <h3>{{ fieldSettings.title }}</h3>

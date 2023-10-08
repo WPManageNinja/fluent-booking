@@ -40,8 +40,50 @@ class Bootstrap
             $meta->save();
         }, 10, 2);
 
-        add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
+        add_filter('fluent_booking/get_client_settings_google_calendar', function ($settings) {
+            $config = GoogleHelper::getApiConfig();
+            // $config['redirect_url'] = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
+            $config['redirect_url'] = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
+            return $config;
+        });
 
+        add_filter('fluent_booking/get_client_field_settings_google_calendar', function ($items) {
+
+            $app = App::getInstance();
+
+            return [
+                'logo'          => $app['url.assets'] . 'images/google-calendar.svg',
+                'title'         => __('Google Calendar / Meet', 'fluent_booking'),
+                'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
+                'description'   => '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>',
+                'save_btn_text' => __('Save', 'fluent_booking'),
+                'fields'        => [
+                    'client_id'     => [
+                        'type'        => 'text',
+                        'label'       => __('Client ID', 'fluent_booking'),
+                        'placeholder' => __('Enter Your Client ID', 'fluent_booking'),
+                    ],
+                    'client_secret' => [
+                        'type'        => 'password',
+                        'label'       => __('Secret Key', 'fluent_booking'),
+                        'placeholder' => __('Enter Your Secret Key', 'fluent_booking'),
+                    ],
+                    'redirect_url'  => [
+                        'type'        => 'text',
+                        'label'       => __('Redirect URI', 'fluent_booking'),
+                        'placeholder' => __('Enter Your Redirect URI', 'fluent_booking'),
+                        'readonly'    => true,
+                        'copy_btn'    => true,
+                    ],
+                ],
+            ];
+        });
+
+        add_action('fluent_booking/save_client_settings_google_calendar', function ($settings) {
+            GoogleHelper::updateApiConfig($settings);
+        });
+
+        add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
     }
 
     public function pushGoogleFeeds($feeds, $userId)

@@ -11,7 +11,6 @@ class IntegrationController extends Controller
         try {
             $settingsKey = sanitize_text_field($request->get('settings_key'));
             $settings = apply_filters('fluent_booking/get_client_settings_' . $settingsKey, []);
-
             $fieldSettings = apply_filters('fluent_booking/get_client_field_settings_' . $settingsKey, []);
 
             return [
