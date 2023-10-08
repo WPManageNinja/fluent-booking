@@ -219,7 +219,7 @@ class BookingElement extends BaseFieldManager
     
     public function getCalendarOptions()
     {
-        $calendarOptions = Helper::getCalendarOptions();
+        $calendarOptions = Helper::getCalendarOptionsByHost();
 
         return apply_filters('fluent_booking/ff_editor_calendar_options', $calendarOptions);
     }
