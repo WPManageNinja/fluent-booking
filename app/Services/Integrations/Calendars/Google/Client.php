@@ -101,7 +101,7 @@ class Client
         $formattedLists = [];
         foreach ($lists['items'] as $item) {
             $formattedLists[] = [
-                'summary' => Arr::get($item, 'summary'),
+              //  'summary' => Arr::get($item, 'summary'),
                 'start'  => Arr::get($item, 'start.dateTime'),
                 'end'    => Arr::get($item, 'end.dateTime'),
                 'status' => Arr::get($item, 'status'),
