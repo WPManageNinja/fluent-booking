@@ -35,7 +35,7 @@ class GoogleCalendar
     {
         $defaults = [
             'maxResults' => 2000,
-            'timeZone' => 'UTC'
+            'timeZone'   => 'UTC'
         ];
 
         $args = array_merge($defaults, $args);
@@ -87,5 +87,20 @@ class GoogleCalendar
         $metaModel->save();
         $this->metaModel = $metaModel;
         return $this;
+    }
+
+    public function createEvent($calendarId, $eventData, $queryArgs = [])
+    {
+
+        $argsDefaults = [
+            'sendUpdates' => 'all'
+        ];
+        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
+
+        if (empty($eventData['start']) || empty($eventData['end'])) {
+            return new \WP_Error('invalid_data', 'start and end data is required');
+        }
+
+        return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
     }
 }

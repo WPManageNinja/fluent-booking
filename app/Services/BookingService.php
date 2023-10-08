@@ -61,18 +61,18 @@ class BookingService
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
         $locationData = [
-            'location_type' => $calendarSlot->location_type,
-            'location_heading' => $calendarSlot->location_heading,
+            'location_type'     => $calendarSlot->location_type,
+            'location_heading'  => $calendarSlot->location_heading,
             'location_settings' => $calendarSlot->location_settings
         ];
 
         $bookingData['location_details'] = $locationData;
 
         $event = Booking::select('event_id')
-                    ->where('slot_id', $calendarSlot->id)
-                    ->where('calendar_id', $calendarSlot->calendar_id)
-                    ->where('start_time', $bookingData['start_time'])
-                    ->first();
+            ->where('slot_id', $calendarSlot->id)
+            ->where('calendar_id', $calendarSlot->calendar_id)
+            ->where('start_time', $bookingData['start_time'])
+            ->first();
 
         $bookingData['event_id'] = $event ? $event->event_id : null;
 
@@ -86,7 +86,7 @@ class BookingService
             'status' => 'confirmed'
         ]);
 
-        do_action('fluent_booking/after_booking_scheduled', $booking, $calendarSlot, $bookingData);
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
         return $booking;
     }
