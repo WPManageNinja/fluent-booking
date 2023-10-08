@@ -103,24 +103,6 @@ export var routes = [
         },
         children: [
             {
-                name: 'settings',
-                path: '/settings',
-                component: AvailabilitySettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Availability'
-                },
-            },
-            {
-                name: 'availability',
-                path: 'availability',
-                component: AvailabilitySettings,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Availability'
-                },
-            },
-            {
                 name: 'configure-integrations',
                 path: 'configure-integrations/:settings_key',
                 props: true,
@@ -133,7 +115,7 @@ export var routes = [
         ]
     },
     {
-        path: '/availability_x',
+        path: '/availability',
         component: AvailabilityRoute,
         props: true,
         meta: {
@@ -141,7 +123,7 @@ export var routes = [
         },
         children: [
             {
-                name: 'availability_x',
+                name: 'availability',
                 path: '',
                 component: AllAvailabilities,
             }

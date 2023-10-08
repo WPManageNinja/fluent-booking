@@ -18,6 +18,14 @@ class GoogleHelper
         return wp_parse_args($settings, $defaults);
     }
 
+    public static function updateApiConfig($settings)
+    {
+        $settings = Arr::only($settings, ['client_id', 'client_secret']);
+        update_option('_fcal_google_calendar_client_details', $settings);
+
+        return $settings;
+    }
+
     public static function getApiClient()
     {
         $config = self::getApiConfig();
@@ -29,7 +37,6 @@ class GoogleHelper
         $config = self::getApiConfig();
         return !empty($config['client_id']) && !empty($config['client_secret']);
     }
-
 
     public static function getEmailByIdToken($token)
     {
