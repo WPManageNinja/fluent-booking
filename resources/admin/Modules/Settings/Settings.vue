@@ -5,7 +5,7 @@
         </div>
         <div class="fcal_settings_body">
             <el-aside>
-                <ul v-else class="fcal_settings_sidebar">
+                <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
                         <router-link :to="menu.route">
                             {{menu.title}}

@@ -232,7 +232,7 @@ class FrontEndHandler
         }
 
         if (!in_array($timeZone, \DateTimeZone::listIdentifiers() )) {
-            $timeZone = 'UTC';
+            $timeZone = $calendar->author_timezone;
         }
 
         $timeSlotService = new TimeSlotService($calendar, $slot);
@@ -248,8 +248,11 @@ class FrontEndHandler
             ], 200);
         }
 
+        $availableSpots = array_filter($availableSpots);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone);
+
         wp_send_json([
-            'available_slots' => array_filter($availableSpots),
+            'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ], 200);
