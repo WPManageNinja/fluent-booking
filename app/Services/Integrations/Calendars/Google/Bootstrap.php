@@ -191,7 +191,7 @@ class Bootstrap
             if ($calendarApi->lastError) {
                 continue;
             }
-            
+
             foreach ($item['check_ids'] as $remoteId) {
                 $cacheKey = md5($cacheKeyPrefix . '_' . $remoteId);
                 $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $remoteId) {
@@ -228,6 +228,7 @@ class Bootstrap
             }
 
             $books[$date][] = [
+                'type'      => 'remote',
                 'start'     => $start,
                 'end'       => $end,
                 'source'    => 'google',
