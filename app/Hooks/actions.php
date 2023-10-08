@@ -30,6 +30,27 @@ require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
 $app->addAction('init', 'BlockEditorHandler@init');
 
+
+// FluentBooking Outgoing Webhook
+$app->addAction('fluent_booking/after_booking_scheduled', function ($booking) use ($app) {
+    $webhook = new \FluentBooking\App\Hooks\Handlers\WebhookHandler($app);
+    $webhook->processWebhookResponseForBooking($booking, 'scheduled');
+}, 20, 1);
+
+$app->addAction('fluent_booking/booking_schedule_cancelled', function ($booking) use ($app) {
+    $webhook = new \FluentBooking\App\Hooks\Handlers\WebhookHandler($app);
+    $webhook->processWebhookResponseForBooking($booking, 'cancelled');
+}, 20, 1);
+
+$app->addAction('fluent_booking/booking_schedule_completed', function ($booking) use ($app) {
+    $webhook = new \FluentBooking\App\Hooks\Handlers\WebhookHandler($app);
+    $webhook->processWebhookResponseForBooking($booking, 'completed');
+}, 20, 1);
+
+$app->addAction('wp_ajax_fluent_booking_callback_for_background', 'WebhookHandler@handleBackgroundProcessCallback');
+$app->addAction('wp_ajax_nopriv_fluent_booking_callback_for_background', 'WebhookHandler@handleBackgroundProcessCallback');
+
+
 add_action('init', function () {
     if(!isset($_GET['fcal'])) {
         return;

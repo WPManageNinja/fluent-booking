@@ -210,6 +210,12 @@ class CalendarController extends Controller
         return $data;
     }
 
+    public function getCalendarsSlots()
+    {
+//        getCalendarOptionsByTitle
+        error_log(print_r(Helper::getCalendarOptionsByTitle(), 1));
+    }
+
     public function getSharingSettings(Request $request, $id)
     {
         $calendar = Calendar::findOrFail($id);
