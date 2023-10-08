@@ -14,7 +14,7 @@ class CalendarCache
 {
     private static $objectType = 'performance_cache';
 
-    public static function getCache($parentId, $key, $callback, $cacheTime = 600) // 10 minutes check
+    public static function getCache($parentId, $key, $callback, $cacheTime = 600, $renew = false) // 10 minutes check
     {
         $db = self::db();
 
@@ -24,15 +24,15 @@ class CalendarCache
             ->where('object_id', $parentId)
             ->first();
 
-        if ($row && $row->value !== '') {
-            if(strtotime($row->updated_at) > time()) {
+        if ($row && $row->value !== '' && !$renew) {
+            if (strtotime($row->updated_at) > time()) {
                 return maybe_unserialize($row->value);
             }
         }
-
+        
         $value = $callback();
 
-        if(is_wp_error($value)) {
+        if (is_wp_error($value)) {
             return null;
         }
 
@@ -49,7 +49,7 @@ class CalendarCache
                     'value'      => maybe_serialize($value)
                 ]);
         } else {
-            if($value === null) {
+            if ($value === null) {
                 return null;
             }
 
