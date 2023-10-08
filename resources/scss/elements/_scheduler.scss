@@ -1040,6 +1040,61 @@
               }
             }
           }
+          .el-link--primary {   
+            .el-link__inner {
+                color: $primaryColor;
+                padding: 4px;
+                &:hover {
+                    background: #F0F6FE;
+                    border-radius: 8px;
+                }
+            }
+          }
+          .fcal_questions {
+            display: grid;
+            grid-template-columns: 1fr;
+            border: 1px solid #D6DAE1;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+        
+          .fcal_question {
+            border-bottom: 1px solid #D6DAE1;
+            padding: 16px 24px;
+            transition: 0.3s;
+        
+            .fcal_question_card {
+                display: flex
+            }
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        
+            h2 {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                position: relative;
+                margin: 0;
+                color: black;
+                padding-left: 19px;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        
+            .fcal_description {
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 24px;
+                color: black;
+                margin: 0 0 7px;
+                padding-left: 19px;
+            }
+          }
         }
 
         .fcal_checkbox {

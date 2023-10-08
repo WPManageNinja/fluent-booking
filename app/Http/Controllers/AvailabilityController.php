@@ -18,8 +18,7 @@ class AvailabilityController extends Controller
     {
         $filters = $request->get('filters', []);
 
-        $query = Availability::with(['calendar'])
-            ->orderBy('id', 'desc');
+        $query = Availability::orderBy('id', 'desc');
 
         $host = Arr::get($filters, 'author');
 

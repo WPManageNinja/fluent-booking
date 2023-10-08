@@ -1105,6 +1105,48 @@ class Helper
         ]);
     }
 
+    public static function getCustomFieldTypes()
+    {
+        return apply_filters('fluent_booking/custom_fields_types', [
+            [
+                'value' => 'additional_email',
+                'label' => 'Email'
+            ],
+            [
+                'value' => 'text',
+                'label' => 'Text'
+            ],
+            [
+                'value' => 'textarea',
+                'label' => 'Textarea'
+            ],
+            [
+                'value' => 'number',
+                'label' => 'Number'
+            ],
+            [
+                'value' => 'phone',
+                'label' => 'Phone'
+            ],
+            [
+                'value' => 'dropdown',
+                'label' => 'Dropdown'
+            ],
+            [
+                'value' => 'checkbox',
+                'label' => 'Checkbox'
+            ],
+            [
+                'value' => 'multi_select_checkbox',
+                'label' => 'Multiple Select'
+            ],
+            [
+                'value' => 'date',
+                'label' => 'Date'
+            ],
+        ]);
+    }
+
     public static function getDefaultNotificationSettings()
     {
         $defaults = apply_filters('fluent_booking/default_notification_settings', [
