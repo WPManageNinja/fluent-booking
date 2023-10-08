@@ -188,6 +188,10 @@ class Bootstrap
             $meta = $item['item'];
             $calendarApi = new GoogleCalendar($meta);
 
+            if ($calendarApi->lastError) {
+                continue;
+            }
+            
             foreach ($item['check_ids'] as $remoteId) {
                 $cacheKey = md5($cacheKeyPrefix . '_' . $remoteId);
                 $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $remoteId) {
