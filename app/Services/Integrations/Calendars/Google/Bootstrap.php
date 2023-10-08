@@ -5,6 +5,8 @@ namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -84,6 +86,9 @@ class Bootstrap
         });
 
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
+
+        add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
+
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -94,57 +99,27 @@ class Bootstrap
 
         $formattedFeeds = [];
         foreach ($items as $item) {
+
+            $errors = '';
+
+            $remoteCalendars = $this->getRemoteCalendarsList($item);
+
+            if (is_wp_error($remoteCalendars)) {
+                $errors = $remoteCalendars->get_error_message();
+                $remoteCalendars = [];
+            }
+
             $formattedFeeds[] = [
                 'driver'             => 'google',
                 'db_id'              => $item->id,
                 'identifier'         => $item->key,
-                'remote_calendars'   => $this->getRemoteCalendarsList($item),
+                'remote_calendars'   => $remoteCalendars,
+                'errors'             => $errors,
                 'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
             ];
         }
 
         return $formattedFeeds;
-    }
-
-    private function getRemoteCalendarsList($item)
-    {
-        $settings = $item->value;
-
-        if (!empty($settings['calendar_lists'])) {
-            return $settings['calendar_lists'];
-        }
-
-        if ($settings['expires_in'] - 3 <= time()) {
-            $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
-            if (is_wp_error($newTokens)) {
-                return [];
-            }
-
-            $settings['access_token'] = $newTokens['access_token'];
-            $settings['expires_in'] = $newTokens['expires_in'];
-        }
-
-        $lists = (GoogleHelper::getApiClient())->getCalendarLists($settings['access_token']);
-
-        if (is_wp_error($lists)) {
-            return [];
-        }
-
-        $settings['calendar_lists'] = $lists;
-
-        $item->value = $settings;
-        $item->save();
-
-        return $settings['calendar_lists'];
-    }
-
-    protected function getAuthUrl($userId)
-    {
-        if (!$userId) {
-            return '';
-        }
-
-        return (GoogleHelper::getApiClient())->getAuthUrl($userId);
     }
 
     public function handleAuthCallback()
@@ -187,6 +162,79 @@ class Bootstrap
         exit;
     }
 
+    public function pushBookedSlots($books, $calendarSlot, $toTimeZone, $bookingRequest, $dateRange)
+    {
+        if (!GoogleHelper::isConfigured()) {
+            return $books;
+        }
+
+        $items = GoogleHelper::getConflictCheckCalendars($calendarSlot->user_id);
+
+        if (!$items) {
+            return $books;
+        }
+
+        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
+        $toDate = new \DateTime('first day of next month 23:59:59', new \DateTimeZone('UTC'));
+
+        $startDate = $fromDate->format('Y-m-d\TH:i:s\Z');
+        $endDate = $toDate->format('Y-m-d\TH:i:s\Z');
+        $cacheKeyPrefix = $toDate->format('YmdHis');
+
+        $allRemoteBookedSlots = [];
+
+        foreach ($items as $item) {
+            $meta = $item['item'];
+            $calendarApi = new GoogleCalendar($meta);
+
+            foreach ($item['check_ids'] as $remoteId) {
+                $cacheKey = md5($cacheKeyPrefix . '_' . $remoteId);
+                $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $remoteId) {
+                    $events = $calendarApi->getCalendarEvents($remoteId, [
+                        'timeMin' => $startDate,
+                        'timeMax' => $endDate
+                    ]);
+
+                    if (is_wp_error($events)) {
+                        if ($events->get_error_code() == 'api_error') {
+                            return []; // it's an api error so let's not call again and again
+                        }
+
+                        return $events; //  it's an wp error so we will call again
+                    }
+
+                    // We have to format it appropriately
+                    return $events;
+                }, mt_rand(600, 800));
+
+                if ($remoteSlots) {
+                    $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
+                }
+            }
+        }
+
+        foreach ($allRemoteBookedSlots as $slot) {
+            $start = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $toTimeZone);
+            $end = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone);
+            $date = date('Y-m-d', strtotime($start));
+
+            if (!isset($books[$date])) {
+                $books[$date] = [];
+            }
+
+            $books[$date][] = [
+                'start'     => $start,
+                'end'       => $end,
+                'source'    => 'google',
+                'slot_id'   => null,
+                'remaining' => 0
+            ];
+        }
+
+        return $books;
+    }
+
     private function addFeedIntegration($userId, $tokenData)
     {
         $exist = Meta::where('object_type', '_google_user_token')
@@ -206,6 +254,42 @@ class Bootstrap
             'key'         => $tokenData['remote_email'],
             'value'       => $tokenData
         ]);
+    }
+
+    private function getRemoteCalendarsList($item)
+    {
+        $settings = $item->value;
+        if (!empty($settings['calendar_lists'])) {
+            $lastChecked = Arr::get($settings, 'last_calendar_lists_fetched');
+            if ($lastChecked && ($lastChecked + 86400) > time()) {
+                return $settings['calendar_lists'];
+            }
+        }
+
+        $calendarClient = new GoogleCalendar($item);
+
+        if ($calendarClient->lastError) {
+            return $calendarClient->lastError;
+        }
+
+        $remoteCalendars = $calendarClient->getCalendarLists();
+        if (is_wp_error($remoteCalendars)) {
+            return $remoteCalendars;
+        }
+
+        $calendarClient->updateSettinsValueByKey('calendar_lists', $remoteCalendars);
+        $calendarClient->updateSettinsValueByKey('last_calendar_lists_fetched', time());
+
+        return $remoteCalendars;
+    }
+
+    protected function getAuthUrl($userId)
+    {
+        if (!$userId) {
+            return '';
+        }
+
+        return (GoogleHelper::getApiClient())->getAuthUrl($userId);
     }
 
 }
