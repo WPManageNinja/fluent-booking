@@ -11,7 +11,6 @@ import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegratio
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import IntegrationSettings from "./Modules/Calendars/integrations/IntegrationSettings";
 import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
-import WebhookSettings from "./Modules/Calendars/integrations/WebhookSettings.vue";
 
 export var routes = [
     {
@@ -54,15 +53,6 @@ export var routes = [
                 meta: {
                     active_menu: 'calendars',
                     title: 'Landing Page Settings'
-                },
-            },
-            {
-                name: 'webhook_settings',
-                path: 'webhook_settings',
-                component: WebhookSettings,
-                meta: {
-                    active_menu: 'calendars',
-                    title: 'Webhook Settings'
                 },
             }
         ]

@@ -18,6 +18,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/slots', 'CalendarController@createCalendarSlot')->int('id');
     $router->get('/{id}/slot-schema', 'CalendarController@getSlotSchema')->int('id');
 
+    $router->get('/calendars-slots', 'CalendarController@getCalendarsSlots')->int('id');
+
     // Landing Page API
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
     $router->post('/{id}/sharing-settings', 'CalendarController@saveSharingSettings')->int('id');
@@ -86,5 +88,8 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
 });
 
 $router->prefix('webhooks')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/', 'WebhookController@index');
     $router->post('/', 'WebhookController@create');
+    $router->put('/', 'WebhookController@updateData');
+    $router->delete('/{id}', 'WebhookController@delete')->int('id');
 });

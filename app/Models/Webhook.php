@@ -3,30 +3,37 @@
 namespace FluentBooking\App\Models;
 
 
+/**
+ *  Webhook Model - DB Model for Webhooks
+ *  Database Model
+ * @package FluentBooking\App\Models
+ * @version 1.0.0
+ */
+
 class Webhook extends Meta
 {
     protected $fillable = [
-        'id',
         'key',
         'value',
-        'object_type'
+        'object_type',
+        'object_id'
     ];
 
     public static function boot()
     {
+        parent::boot();
         static::addGlobalScope('type', function ($builder) {
             $builder->where('object_type', '=', 'webhook');
         });
     }
 
-    public function store($data)
+    public static function store($slot_id, $data)
     {
         return static::create([
+            'object_id'   => $slot_id,
             'object_type' => 'webhook',
-            'key'         => $key = wp_generate_uuid4(),
-            'value'       => array_merge($data, [
-                'url' => site_url("?fluentbooking=1&route=calendar&hash={$key}")
-            ]),
+            'key'         => 'webhook_settings',
+            'value'       => json_encode($data),
         ]);
     }
 }
