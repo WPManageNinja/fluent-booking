@@ -49,4 +49,39 @@ class RemoteCalendarHelper
             'value'       => $settings
         ]);
     }
+
+    public static function getRemoteCalendarConfig($userId)
+    {
+        $settings = self::getUserRemoteCreatableCalendarSettings($userId);
+        if (!$settings) {
+            return null;
+        }
+
+        $idConfig = Arr::get($settings, 'id');
+        $driver = Arr::get($settings, 'driver');
+
+        if (!$idConfig || !$driver) {
+            return null;
+        }
+
+        $idArr = explode('__||__', $idConfig);
+
+        if (count($idArr) < 2) {
+            return null;
+        }
+
+        $metaId = (int)array_shift($idArr);
+
+        if (!$metaId) {
+            return null;
+        }
+
+        $remoteCalendarId = implode('__||__', $idArr);
+
+        return [
+            'db_id'              => $metaId,
+            'remote_calendar_id' => $remoteCalendarId,
+            'driver'             => $driver
+        ];
+    }
 }

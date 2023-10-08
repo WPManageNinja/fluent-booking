@@ -149,7 +149,7 @@ class FrontEndHandler
         }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
+        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -157,7 +157,8 @@ class FrontEndHandler
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
-            'ip_address'       => Helper::getIp()
+            'ip_address'       => Helper::getIp(),
+            'status'           => 'scheduled'
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -231,7 +232,7 @@ class FrontEndHandler
             $timeZone = wp_timezone_string();
         }
 
-        if (!in_array($timeZone, \DateTimeZone::listIdentifiers() )) {
+        if (!in_array($timeZone, \DateTimeZone::listIdentifiers())) {
             $timeZone = $calendar->author_timezone;
         }
 
