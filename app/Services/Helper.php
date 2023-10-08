@@ -654,6 +654,39 @@ class Helper
     }
 
 
+
+    /**
+     * Sending a job to background for further processing
+     *
+     * @param string $callbackName - name of the callback
+     * @param mixed $payload
+     * @return bool
+     */
+    public static function fluentbooking_queue_on_background($callbackName, $payload)
+    {
+        $body = [
+            'payload'       => $payload,
+            'callback_name' => $callbackName
+        ];
+
+        $args = array(
+            'timeout'   => 0.1,
+            'blocking'  => false,
+            'body'      => $body,
+            'cookies'   => $_COOKIE
+        );
+
+        $queryArgs = array(
+            'action' => 'fluent_booking_callback_for_background',
+            'nonce'  => wp_create_nonce('fluent_booking_callback_for_background'),
+        );
+
+        $url = add_query_arg($queryArgs, admin_url('admin-ajax.php'));
+        wp_remote_post(esc_url_raw($url), $args);
+        return true;
+    }
+
+
     /**
      * Sanitize form inputs recursively.
      *

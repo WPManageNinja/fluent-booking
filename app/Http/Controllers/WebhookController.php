@@ -5,6 +5,7 @@ use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Models\Webhook;
+use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\ValidationException as Exception;
 
 class WebhookController extends Controller
@@ -34,17 +35,17 @@ class WebhookController extends Controller
             $slot_id = $this->app->request->get('slot_id');
             $webhook_id = $this->app->request->get('webhook_id');
             $webhook = $this->app->request->get('webhook');
-            $webhook = json_decode($webhook, true);
+//            $webhook = json_decode($webhook, true);
 
             $webhook = Helper::fluentBookingSanitizer(
                 $this->validate($webhook,[])
             );
             if ($webhook_id) {
-                Meta::where('id', $webhook_id)
-                    ->where('object_type', 'webhook')
-                    ->update([
-                        'value' => json_encode($webhook),
-                    ]);
+
+                $webhookUpdate = Webhook::where('id', $webhook_id)->first();
+                $webhookUpdate->value = $webhook;
+                $webhookUpdate->save();
+
                 $message = __('WebHook Successfully Updated', 'fluent-booking');
             } else {
                 Webhook::store($slot_id, $webhook);
@@ -63,21 +64,18 @@ class WebhookController extends Controller
         }
     }
 
-    public function updateData()
+    public function updateData(Request $request)
     {
         try {
-            $webhook = $this->app->request->get('webhook');
-            $id = $this->app->request->get('id');
-            $webhook = json_decode($webhook, true);
+            $webhook = $request->get('webhook');
+            $id = $request->get('id');
 
             $webhook = Helper::fluentBookingSanitizer(
                 $this->validate($webhook,[])
             );
-            Meta::where('id', $id)
-                ->where('object_type', 'webhook')
-                ->update([
-                    'value' => json_encode($webhook),
-                ]);
+            $webhookUpdate = Webhook::where('id', $id)->first();
+            $webhookUpdate->value = $webhook;
+            $webhookUpdate->save();
 
             return $this->sendSuccess([
                 'message'  => __('WebHook Successfully Updated', 'fluent-booking')
@@ -108,8 +106,16 @@ class WebhookController extends Controller
     {
         return [
             [
+                'label' => 'Booking Confirmed',
+                'value' => 'after_booking_scheduled'
+            ],
+            [
                 'label' => 'Booking Canceled',
                 'value' => 'booking_schedule_cancelled'
+            ],
+            [
+                'label' => 'Booking Completed',
+                'value' => 'booking_schedule_completed'
             ]
         ];
     }
@@ -288,18 +294,13 @@ class WebhookController extends Controller
         $slot_id       = $request->get('slot_id');
         $settingsQuery = Webhook::where('object_id', $slot_id)->get();
 
+
         foreach ($settingsQuery as $setting) {
-            $setting->formattedValue = $this->getFormattedValue($setting);
+
+            $setting->enabled = Arr::isTrue($setting, 'value.enabled');
+
+//            $setting->value = $setting->value;
         }
         return $settingsQuery;
-    }
-
-    private function getFormattedValue($setting)
-    {
-        if ($this->isJsonValue) {
-            return json_decode($setting->value, true);
-        }
-
-        return $setting->value;
     }
 }

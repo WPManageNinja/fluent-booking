@@ -33,7 +33,7 @@ class Webhook extends Meta
             'object_id'   => $slot_id,
             'object_type' => 'webhook',
             'key'         => 'webhook_settings',
-            'value'       => json_encode($data),
+            'value'       => $data,
         ]);
     }
 }

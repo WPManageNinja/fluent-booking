@@ -26,23 +26,24 @@
                         <a href="#">create one!</a>
                     </template>
 
+
                     <el-table-column width="100">
                         <template #default="scope">
                             <el-switch
                                 active-color="#13ce66"
-                                @change="handleActive(scope.row)"
-                                v-model="scope.row.formattedValue.enabled"
+                                @click="handleActive(scope.row)"
+                                v-model="scope.row.enabled"
                             ></el-switch>
                         </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="formattedValue.name"
+                        prop="value.name"
                         label="Name">
                     </el-table-column>
 
                     <el-table-column
-                        prop="formattedValue.request_url"
+                        prop="value.request_url"
                         :label="('WebHook URL')">
                     </el-table-column>
 
@@ -144,7 +145,7 @@ export default {
             let webhook = this.webhooks[index];
             this.selectedIndex = 0;
             this.selected_id = webhook.id;
-            this.editing_item =  webhook.formattedValue;
+            this.editing_item =  webhook.value;
             this.show_edit = true;
         },
         // store() {
@@ -183,9 +184,11 @@ export default {
         // },
 
         handleActive(row) {
+            console.log(row);
+            row.value.enabled = row.enabled;
             let data = {
                 id: row.id,
-                webhook: JSON.stringify(row.formattedValue)
+                webhook: row.value
             };
 
             this.$put('webhooks',data)
@@ -193,7 +196,7 @@ export default {
                     this.$handleSuccess(response.message);
                 })
                 .catch(error => {
-                    this.$handleError(errors);
+                    this.$handleError(error);
                 });
         },
         deleteWebhook(id) {
@@ -219,6 +222,7 @@ export default {
                     this.request_headers = response.request_headers;
                     this.event_triggers = response.event_triggers;
                     this.webhooks = response.webhooks;
+
                     this.request_headers.push({
                         'label': 'Add Custom Header',
                         'value': '__webhook_custom_header__'

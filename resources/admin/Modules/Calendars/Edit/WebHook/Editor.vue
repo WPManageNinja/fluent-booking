@@ -76,6 +76,7 @@
                             placeholder="Select Header"
                             v-model="editing_item.request_headers[headerKey].key"
                             v-if="!editing_item.custom_header_keys[headerKey]"
+                            popper-class="fcal_select"
                             >
                             <el-option
                                 v-for="(header, index) in request_headers"
@@ -122,7 +123,7 @@
         <!--Request Body-->
         <el-form-item required label="Request Body">
             <el-radio-group v-model="editing_item.request_body">
-                <el-radio label="all_calendars">All Calendars</el-radio>
+                <el-radio label="all_data">All Data</el-radio>
                 <el-radio label="selected_fields">Selected Fields</el-radio>
             </el-radio-group>
         </el-form-item>
@@ -145,24 +146,36 @@
                     <td>
                         <el-input
                             clearable
-                            style="width: 95%"
                             v-model="editing_item.fields[mappedKey].key"
                             placeholder="Enter Name"></el-input>
                     </td>
                     <td>
-                        <div>
-                            <el-input
+                        <div class="right-field">
+
+                            <el-select
                                 filterable
-                                clearable
+                                allow-create
                                 v-model="editing_item.fields[mappedKey].value"
+                                placeholder="Select Value"
+                                popper-class="fcal_select"
                             >
-                            </el-input>
+                                    <template v-for="(value, index) in editorShortcodes">
+                                        <el-option
+                                            v-if="index!='{all_data}'"
+                                            :value="index"
+                                            :label="value"
+                                            :key="index"
+                                        ></el-option>
+                                    </template>
+                            </el-select>
 
                             <div class="action-btn">
-                                <el-button @click="addFieldRow(mappedKey)">
+                                <el-button
+                                    class="fcal_plain_btn" @click="addFieldRow(mappedKey)">
                                     <el-icon><Plus /></el-icon>
                                 </el-button>
                                 <el-button
+                                    class="fcal_plain_btn danger"
                                     v-if="editing_item.fields.length > 1"
                                    @click="removeFieldRow(mappedKey)"
                                 >
@@ -177,9 +190,19 @@
         </el-form-item>
 
 
+        <!--Request Body-->
+        <el-form-item required label="Event Triggers">
+            <el-checkbox-group v-model="editing_item.event_triggers">
+                <el-checkbox v-for="trigger in event_triggers" :key="trigger.value" :label="trigger.value">
+                    {{ trigger.label }}
+                </el-checkbox>
+            </el-checkbox-group>
+
+        </el-form-item>
+
         <div class="fcal_webhook_form_footer">
             <el-button @click="saveWebHook" class="fcal_primary_btn">
-                Save Feed {{ selected_id }}
+                Save Feed
             </el-button>
         </div>
     </el-form>
@@ -187,6 +210,7 @@
 
 <script>
 import { Plus, Minus } from '@element-plus/icons-vue';
+import Popover from '../../../../Components/Popover';
 
 export default {
     name: "Editor",
@@ -225,25 +249,26 @@ export default {
     },
     components: {
         Plus,
-        Minus
+        Minus,
+        Popover
     },
     data() {
         return  {
             request_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             editing_item: false,
             saving: false,
-            webhook_id: null
+            webhook_id: null,
+            editorShortcodes: this.appVars.editor_shortcodes,
         }
     },
     methods: {
-
         saveWebHook() {
             this.saving = true;
 
             let data = {
                 slot_id: this.slot_id,
                 webhook_id: this.selected_id,
-                webhook: JSON.stringify(this.editing_item)
+                webhook: this.editing_item
             };
 
             this.$post('webhooks', data)
@@ -304,12 +329,12 @@ export default {
                     with_header: 'nop',
                     request_method: 'GET',
                     request_format: 'FORM',
-                    request_body: 'all_calendars',
+                    request_body: 'all_data',
                     custom_header_keys: [false],
                     custom_header_values: [false],
                     fields: [{key:null, value:null}],
                     request_headers: [{key: null, value: null}],
-                    event_triggers: [{key: null, value: null}],
+                    event_triggers: [],
                     enabled: true
                 };
             }
@@ -334,7 +359,6 @@ export default {
     },
     mounted() {
         this.loadApp();
-        // this.webhook_id = this.selected_id;
     }
 }
 </script>
