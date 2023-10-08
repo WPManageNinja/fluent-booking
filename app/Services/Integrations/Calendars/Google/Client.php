@@ -101,7 +101,7 @@ class Client
         $formattedLists = [];
         foreach ($lists['items'] as $item) {
             $formattedLists[] = [
-              //  'summary' => Arr::get($item, 'summary'),
+                //  'summary' => Arr::get($item, 'summary'),
                 'start'  => Arr::get($item, 'start.dateTime'),
                 'end'    => Arr::get($item, 'end.dateTime'),
                 'status' => Arr::get($item, 'status'),
@@ -109,6 +109,18 @@ class Client
         }
 
         return $formattedLists;
+    }
+
+    public function createEvent($calendarId, $data, $args = [])
+    {
+
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events';
+
+        if ($args) {
+            $url = add_query_arg($args, $url);
+        }
+
+        return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
     }
 
     public function getAuthorizationHeader($accessToken = null)
