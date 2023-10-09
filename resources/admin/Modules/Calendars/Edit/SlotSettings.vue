@@ -47,9 +47,9 @@
             <el-tab-pane name="notification-settings">
                 <template #label>
                     <el-icon>
-                        <NoficationIcon/>
+                        <Message/>
                     </el-icon>
-                    Notification
+                    Email Notifications
                 </template>
                 <div class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -94,7 +94,7 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link} from '@element-plus/icons-vue';
+import {Back, Link, Message} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings"
 
 export default {
@@ -112,7 +112,8 @@ export default {
         NoficationIcon,
         QuestionIcon,
         Back,
-        Link
+        Link,
+        Message
     },
     data() {
         return {
