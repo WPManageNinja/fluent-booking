@@ -36,12 +36,12 @@ import { Check } from '@element-plus/icons-vue';
 
 export default {
     name: 'BookingActivities',
-    props: ['event_id'],
+    props: ['group_id'],
     components: {
         Check
     },
     watch: {
-        event_id() {
+        group_id() {
             this.fetchActivities();
         }
     },
@@ -54,7 +54,7 @@ export default {
     methods: {
         fetchActivities() {
             this.loading = true;
-            this.$get(`schedules/${this.event_id}/activities`)
+            this.$get(`schedules/${this.group_id}/activities`)
                 .then(response => {
                     this.activities = response.activities;
                 })

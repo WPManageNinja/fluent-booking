@@ -2,7 +2,7 @@
     <div :class="'fcal_spot_wrapper fcal_spoot_status_' + spot[0].status">
         <div @click="showDetails()" class="fcal_spot_line">
             <div class="fcal_spot_timing">
-                <div class="fcal_spot_color">
+                <div v-if="spot[0].slot" class="fcal_spot_color">
                     <span :style="{background: spot[0].slot.color_schema}"></span>
                 </div>
                 {{ formattedTimeRange }}
@@ -16,7 +16,7 @@
                 <h3 class="fcal_spot_title">
                     {{ spotTitle }}
                 </h3>
-                <h3 class="fcal_spot_desc_text">
+                <h3 v-if="spot[0].slot" class="fcal_spot_desc_text">
                     Event: <b>{{ spot[0].slot.title }}</b>
                 </h3>
             </div>

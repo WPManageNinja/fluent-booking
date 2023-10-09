@@ -15,8 +15,7 @@ class SchedulesController extends Controller
 {
     public function index(Request $request)
     {
-        $filters       = $request->get('filters', []);
-        $advanceFilter = $request->get('advanceFilter', []);
+        $filters = $request->get('filters', []);
 
         $period = Arr::get($filters, 'period', 'upcoming');
 
@@ -42,18 +41,12 @@ class SchedulesController extends Controller
 
         do_action_ref_array('fluent_booking/schedules_query', [&$query]);
 
+        $query->applyComputedStatus($period);
+
         if ($period == 'upcoming') {
-            $query = $query->orderBy('start_time', 'ASC')->upcoming();
+            $query = $query->orderBy('start_time', 'ASC');
         } else {
-            $query = $query->orderBy('start_time', 'DESC')->past();
-        }
-
-        if ($advanceFilter['status'] || $advanceFilter['eventType']) {
-            $query->where('status', $advanceFilter['status']);
-
-            $query->whereHas('slot', function ($q) use ($advanceFilter) {
-                $q->where('event_type', $advanceFilter['eventType']);
-            });
+            $query = $query->orderBy('start_time', 'DESC');
         }
 
         $schedules = $query->get();
@@ -67,12 +60,20 @@ class SchedulesController extends Controller
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
-            $schedule->author = $schedule->slot->getAuthorProfile(false);
+
+            if(!$schedule->slot) {
+                $schedule->author = [
+                    'name' => 'unknown'
+                ];
+                $schedule->slot = (object) [];
+            } else {
+                $schedule->author = $schedule->slot->getAuthorProfile(false);
+            }
 
             do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
-        $groupedSchedules = $schedules->groupBy('event_id');
+        $groupedSchedules = $schedules->groupBy('group_id');
 
         $perPage = $request->get('per_page', 10);
         $page = $request->get('page', 1);
@@ -84,7 +85,7 @@ class SchedulesController extends Controller
             $chunkedSchedules = $groupedSchedules->chunk($perPage);
             $filteredSchedules = $chunkedSchedules->get($page - 1, []);
         }
-        
+
         $paginatedSchedules = new LengthAwarePaginator($filteredSchedules, $total, $perPage, $page);
 
         return $this->sendSuccess([
@@ -176,7 +177,7 @@ class SchedulesController extends Controller
             });
         }
 
-        $bookings = $booking->where('event_id', $eventId)->get();
+        $bookings = $booking->where('group_id', $eventId)->get();
 
         foreach ($bookings as $booking) {
             if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
@@ -184,7 +185,7 @@ class SchedulesController extends Controller
                 $booking->save();
                 do_action('fluent_booking/booking_schedule_completed', $booking);
             }
-        
+
             $booking->happening_status = $booking->getOngoingStatus();
             $booking->author = $booking->slot->getAuthorProfile(false);
             $booking->location = $booking->getLocationDetailsHtml();
@@ -202,10 +203,10 @@ class SchedulesController extends Controller
         $isAdmin = current_user_can('manage_options');
 
         if ($isAdmin) {
-            $bookingIds = Booking::where('event_id', $eventId)
+            $bookingIds = Booking::where('group_id', $eventId)
                 ->pluck('id')->toArray();
         } else {
-            $bookingIds = Booking::where('event_id', $eventId)
+            $bookingIds = Booking::where('group_id', $eventId)
                 ->whereHas('calendar', function ($q) {
                     $q->where('user_id', get_current_user_id());
                 })->pluck('id')->toArray();

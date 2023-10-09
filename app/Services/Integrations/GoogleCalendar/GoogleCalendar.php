@@ -347,7 +347,7 @@ class GoogleCalendar extends IntegrationManager
 
     protected function getUpdatedResponse($booking, $header)
     {
-        $eventDetails = $this->getResponse($booking->event_id);
+        $eventDetails = $this->getResponse($booking->group_id);
 
         $eventId = Arr::get($eventDetails, 'id');
 
@@ -446,7 +446,7 @@ class GoogleCalendar extends IntegrationManager
             return;
         }
 
-        $this->updateResponse($booking->event_id, $response);
+        $this->updateResponse($booking->group_id, $response);
 
         $this->updateEventLink($booking->id, $response);
 
