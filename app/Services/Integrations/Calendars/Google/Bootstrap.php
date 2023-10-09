@@ -325,7 +325,7 @@ class Bootstrap
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'summary'   => __(sprintf('%d minutes meeting - %1s & %2s', $booking->slot_minutes, trim($booking->first_name . ' ' . $booking->last_name), $author['name']), 'fluent-booking')
+            'summary'   => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking')
         ], $booking, $slot);
 
         $response = $api->createEvent($config['remote_calendar_id'], $data);
