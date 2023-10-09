@@ -846,6 +846,13 @@
                         &.radio_desc_group {
                             display: block;
                             position: relative;
+                            &.radio_required_field {
+                                display: flex;
+                                align-items: center;
+                                .el-radio {
+                                    align-items: center;
+                                }
+                            }
                             .el-radio {
                                 .el-radio__input {
                                     input {
@@ -1017,6 +1024,9 @@
             &:hover {
                 background: var(--el-color-danger);
                 border-color: var(--el-color-danger);
+                i {
+                    color: #ffffff;
+                }
             }
         }
     }
@@ -1714,6 +1724,45 @@
                                 i {
                                     font-size: 14px;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fcal_settings_body {
+            .el-form {
+                .el-row {
+                    .el-form-item {
+                        margin-bottom: 24px !important;
+                    }
+                }
+                .el-form-item {
+                    margin-bottom: 24px;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                    .el-form-item__label {
+                        font-size: 16px;
+                        margin-bottom: 10px;
+                    }
+                    .el-input {
+                        .el-input__wrapper {
+                            padding: 8px 20px;
+                            border-radius: 8px;
+                            .el-input__inner {
+                                height: auto;
+                                display: block;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .el-checkbox-group {
+                        .el-checkbox {
+                            margin-right: 20px;
+                            &:last-child {
+                                margin-right: 0;
                             }
                         }
                     }

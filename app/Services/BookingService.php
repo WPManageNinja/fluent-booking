@@ -99,8 +99,8 @@ class BookingService
                 'type'        => 'text',
                 'name'        => 'name',
                 'label'       => __('Your Name', 'fluent-booking'),
-                'required'    => "yes",
-                'status'      => "active",
+                'required'    => true,
+                'enabled'     => true,
                 'placeholder' => __('Your Name', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ],
@@ -109,8 +109,8 @@ class BookingService
                 'type'        => 'email',
                 'name'        => 'email',
                 'label'       => __('Your Email', 'fluent-booking'),
-                'required'    => "yes",
-                'status'      => "active",
+                'required'    => true,
+                'enabled'     => true,
                 'placeholder' => __('Your Email', 'fluent-booking'),
                 'input_class' => 'fcal_input',
                 'disabled'    => is_user_logged_in()
@@ -123,8 +123,8 @@ class BookingService
                 'type'        => 'number',
                 'name'        => 'phone',
                 'label'       => __('Your Phone Number', 'fluent-booking'),
-                'required'    => "yes",
-                'status'      => "active",
+                'required'    => true,
+                'enabled'     => true,
                 'placeholder' => esc_attr__('Phone Number with country code', 'fluent-booking'),
                 'input_class' => 'fcal_input'
             ];

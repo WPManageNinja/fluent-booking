@@ -1179,7 +1179,7 @@ class Helper
     {
         return apply_filters('fluent_booking/custom_fields_types', [
             [
-                'value' => 'additional_email',
+                'value' => 'email',
                 'label' => 'Email'
             ],
             [
@@ -1205,15 +1205,7 @@ class Helper
             [
                 'value' => 'checkbox',
                 'label' => 'Checkbox'
-            ],
-            [
-                'value' => 'multi_select_checkbox',
-                'label' => 'Multiple Select'
-            ],
-            [
-                'value' => 'date',
-                'label' => 'Date'
-            ],
+            ]
         ]);
     }
 

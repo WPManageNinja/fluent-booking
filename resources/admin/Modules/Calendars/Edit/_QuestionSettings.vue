@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2><EventIcon/> Booking Questions </h2>
+            <h2><QuestionIcon/> Booking Questions </h2>
         </div>
         <div class="fcal_create_calendar_form_body">
             <div class="fcal_questions_wrapper">
@@ -13,10 +13,11 @@
                         </div>
                         <div class="fcal_question_card">
                             <div class="fcal_question_content">
-                                <h2>{{ field.label }} <span class="required" v-if="field.required == 'yes'">Required</span></h2>
+                                <h2>{{ field.label }} <span class="required" v-if="field.required">Required</span></h2>
                                 <p>{{ field.type }}</p>
                             </div>
                             <div class="fcal_question_actions">
+                                <el-switch v-if="!isMandatoryField(field.name)" v-model="field.enabled"/>
                                 <el-button class="fcal_plain_btn" @click="editField(field)">Edit</el-button>
                                 <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
                                     <el-icon><Delete /></el-icon>
@@ -33,38 +34,29 @@
                 </div>
             </div>
         </div>
-        <AddCustomFieldModal 
-            v-if="showAddModal"
-            :showModal="showAddModal"
-            :fields="fields"
-            @closeModal="showAddModal = false"
-            @newFieldData="newFieldData"
-        />
         <EditCustomFieldModal 
-            v-if="showEditModal"
+            v-if="showModal"
             :field="field"
             :fields="fields"
             :phoneRequired="isPhoneRequired"
-            :showModal="showEditModal"
-            @closeModal="showEditModal = false"
-            @updatedFieldData="updatedFieldData"
+            :showModal="showModal"
+            @closeModal="closeModal"
+            @updateFieldData="updateFieldData"
         />
     </div>
 </template>
 
 <script>
-import EventIcon from "../../../Components/Icons/EventIcon";
-import AddCustomFieldModal from "./__AddCustomFieldModal";
+import QuestionIcon from "../../../Components/Icons/QuestionIcon";
 import EditCustomFieldModal from "./__EditCustomFieldModal";
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
-import { Bottom, Top } from '@element-plus/icons-vue';
+import { Delete, Bottom, Top } from '@element-plus/icons-vue';
 
 export default {
     name: 'QuestionSettings',
     props: ['slot', 'activeTab'],
     components: {
-        EventIcon,
-        AddCustomFieldModal,
+        QuestionIcon,
         EditCustomFieldModal,
         SaveButton,
         Bottom,
@@ -74,10 +66,9 @@ export default {
         return {
             loading: false,
             saving: false,
-            field: {},
+            field: '',
             fields : [],
-            showAddModal: false,
-            showEditModal: false,
+            showModal: false,
             isPhoneRequired: ''
         }
     },
@@ -88,21 +79,28 @@ export default {
     },
     methods: {
         addQuestion() {
-            this.showAddModal = true;
+            this.showModal = true;
         },
         editField(field) {
             this.field = field;
-            this.showEditModal = true;
+            this.showModal = true;
         },
         deleteField(index) {
             this.fields = this.fields.filter((field) => field.index !== index);
             this.saveSettings();
         },
-        newFieldData(field) {
+        addNewField(field) {
             this.fields.push(field);
             this.saveSettings();
         },
-        updatedFieldData(updatedField) {
+        updateFieldData(field, newField) {
+            if (newField) {
+                this.addNewField(field);
+            } else {
+                this.updateField(field);
+            }
+        },
+        updateField(updatedField) {
             this.fields = this.fields.map(field => {
                 if (field.index === updatedField.index) {
                     return updatedField;
@@ -111,14 +109,9 @@ export default {
             });
             this.saveSettings();
         },
-        updateStatus(status, index) {
-            const fieldIndex = this.fields.findIndex(field => field.index === index);
-            this.fields[fieldIndex].status = true;
-            console.log(this.fields[fieldIndex]);
-        },
-        closeEdtiModal(field) {
-            this.field = {};
-            this.showEditModal = false;
+        closeModal() {
+            this.field = '';
+            this.showModal = false;
         },
         isMandatoryField(name) {
             const allowedFields = ['name', 'email'];
@@ -133,7 +126,6 @@ export default {
                 const previousField = this.fields[index - 1];
                 this.fields.splice(index - 1, 2, currentField, previousField);
             }
-
         },
         moveDown(index) {
             if (index < this.fields.length - 1) {

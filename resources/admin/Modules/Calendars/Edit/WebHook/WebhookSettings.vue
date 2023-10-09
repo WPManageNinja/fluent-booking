@@ -84,6 +84,7 @@
                 :selected_id="selected_id"
                 :setSelectedId="setSelectedId"
                 :selected_index="selectedIndex"
+                @backToWebhook="backToWebhook"
             />
 
         </div>
@@ -148,41 +149,6 @@ export default {
             this.editing_item =  webhook.value;
             this.show_edit = true;
         },
-        // store() {
-        //     this.loading = true;
-        //     this.webhook.calendar_id = this.calendar_id;
-        //     this.webhook.slot_id     = this.slot_id;
-        //     this.$post('webhooks', this.webhook)
-        //         .then(response => {
-        //             this.$handleSuccess(response.message);
-        //             this.getWebHooks();
-        //         })
-        //         .catch(errors => {
-        //             this.$handleError(errors);
-        //         })
-        //         .finally(() => {
-        //             this.loading = false;
-        //             this.isDrawerOpen = false;
-        //         });
-        //
-        // },
-        // getWebHooks() {
-        //     this.loading = true;
-        //     const slotId = this.slot_id;
-        //     this.$get('webhooks', {
-        //         slot_id: slotId
-        //     })
-        //         .then(response => {
-        //             this.webhooks = response.webhooks;
-        //         })
-        //         .catch(errors => {
-        //             this.$handleError(errors);
-        //         })
-        //         .finally(() => {
-        //             this.loading = false;
-        //         });
-        // },
-
         handleActive(row) {
             console.log(row);
             row.value.enabled = row.enabled;
@@ -223,13 +189,16 @@ export default {
                     this.event_triggers = response.event_triggers;
                     this.webhooks = response.webhooks;
 
-                    this.request_headers.push({
-                        'label': 'Add Custom Header',
-                        'value': '__webhook_custom_header__'
-                    });
+                    // this.request_headers.push({
+                    //     'label': 'Add Custom Header',
+                    //     'value': '__webhook_custom_header__'
+                    // });
                 })
                 .catch(e => console.log(e))
                 .finally(r => this.loading = false);
+        },
+        backToWebhook() {
+            this.show_edit = false;
         }
     },
     computed: {
@@ -241,7 +210,7 @@ export default {
         this.getFeeds();
     },
     mounted() {
-        // this.getWebHooks();
+
     }
 }
 </script>
