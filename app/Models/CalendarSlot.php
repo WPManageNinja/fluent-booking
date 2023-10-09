@@ -11,7 +11,7 @@ use FluentBooking\Framework\Support\Arr;
 
 class CalendarSlot extends Model
 {
-    protected $table = 'fcal_calendar_slots';
+    protected $table = 'fcal_calendar_events';
 
     protected $guarded = ['id'];
 
