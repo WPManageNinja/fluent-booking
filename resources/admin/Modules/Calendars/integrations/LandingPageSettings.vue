@@ -1,10 +1,15 @@
 <template>
     <div class="fcal_settings_landing_page">
         <div class="fcal_settings_header">
-            <h3 class="title">
-                Landing Page Settings
+            <div class="fcal_settings_head">
+                <h2>Landing Page Settings</h2>
                 <p class="short-desc">Share your Booking Types in a beautiful & standalone landing page</p>
-            </h3>
+            </div>
+            <div class="fcal_settings_actions">
+                <a v-if="settings.enabled" :href="share_url" target="_blank" rel="noopener noreferrer" class="el-button el-button--text el-button--large">
+                    <el-icon><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg></el-icon> <span>View</span>
+                </a>
+            </div>
         </div>
         <div v-loading="loading" class="fcal_settings_body">
             <el-form v-model="settings" label-position="top">
@@ -24,7 +29,7 @@
                 <template v-if="settings.enabled == 'yes'">
                     <el-form-item label="Which Booking Forms to Show?">
                         <el-radio-group v-model="settings.show_type">
-                            <el-radio label="all">All Booking Forms</el-radio>
+                            <el-radio label="all">All Active Booking Forms</el-radio>
                             <el-radio label="selected_only">Only Selected Active Booking Types</el-radio>
                         </el-radio-group>
                     </el-form-item>
@@ -53,14 +58,19 @@
 </template>
 
 <script type="text/babel">
+import {Share} from '@element-plus/icons-vue';
 export default {
     name: 'LandingPageCalendarSettings',
     props: ['calendar'],
+    components: {
+        Share
+    },
     data() {
         return {
             loading: false,
             settings: {},
-            saving: false
+            saving: false,
+            share_url: ''
         }
     },
     methods: {
@@ -69,6 +79,7 @@ export default {
             this.$get('calendars/' + this.calendar.id + '/sharing-settings')
                 .then(response => {
                     this.settings = response.settings;
+                    this.share_url = response.share_url;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
