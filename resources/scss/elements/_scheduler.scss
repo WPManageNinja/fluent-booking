@@ -1311,6 +1311,11 @@
 
   .el-checkbox {
     margin-right: 8px;
+    &.is-checked {
+      .el-checkbox__label {
+        color: $primaryColor;
+      }
+    }
 
     .el-checkbox__input {
       &.is-checked {
