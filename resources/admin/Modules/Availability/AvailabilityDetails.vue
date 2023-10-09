@@ -96,15 +96,10 @@
 
             <div class="fcal_uses_list_body">
                 <div class="fcal_card_items">
-                    <div class="fcal_card_item">
+                    <div v-for="usages in scheduleInfo.availability_usages" class="fcal_card_item">
                         <div class="fcal_card_wrap">
                             <div class="fcal_card_item_details fcal_availability_card">
-                                <h4>
-                                    Title
-                                    <span class="default-schedule-badge">
-                                        <el-icon><StarFilled/></el-icon> Default
-                                    </span>
-                                </h4>
+                                <h4>{{ usages.title }}</h4>
                                 <p class="fcal_icon_line">
                                     <el-icon>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -119,42 +114,9 @@
                                     <span>Asia/Dhaka</span>
                                 </p>
                             </div>
-                            <div class="fcal_card_item_host">
-                                <h3>[Host Name]</h3>
-                            </div>
                             <div class="fcal_card_actions">
-                                <el-button class="fcal_plain_btn">
-                                    View Details
-                                </el-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fcal_card_item">
-                        <div class="fcal_card_wrap">
-                            <div class="fcal_card_item_details fcal_availability_card">
-                                <h4>
-                                    Static Data
-                                </h4>
-                                <p class="fcal_icon_line">
-                                    <el-icon>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                             stroke-linejoin="round" class="h-3.5 w-3.5">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="2" x2="22" y1="12" y2="12"></line>
-                                            <path
-                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                        </svg>
-                                    </el-icon>
-                                    <span>Asia/Dhaka</span>
-                                </p>
-                            </div>
-                            <div class="fcal_card_item_host">
-                                <h3>[Host Name]</h3>
-                            </div>
-                            <div class="fcal_card_actions">
-                                <el-button class="fcal_plain_btn">
-                                    View Details
+                                <el-button @click="goToEvent(usages)" class="fcal_plain_btn">
+                                    View Event
                                 </el-button>
                             </div>
                         </div>
@@ -224,6 +186,12 @@ export default {
     methods: {
         goBackToList() {
             this.$router.push({name: 'availability'});
+        },
+        goToEvent(event) {
+            this.$router.push({
+                name: 'slot_settings',
+                params: { calendar_id: event.calendar_id, slot_id: event.id}
+            })
         },
         fetchSchedule() {
             this.loading = true;
