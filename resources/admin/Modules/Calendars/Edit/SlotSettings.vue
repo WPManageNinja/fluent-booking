@@ -44,6 +44,15 @@
                     <NotificationSettings v-else ref="notificationData" :slot="slot" />
                 </div>
             </el-tab-pane>
+            <el-tab-pane name="question-settings">
+                <template #label>
+                    <el-icon><NoficationIcon/></el-icon> Booking Questions
+                </template>
+                <div class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading" />
+                    <QuestionSettings v-else :activeTab="activeTab" :slot="slot" />
+                </div>
+            </el-tab-pane>
             <el-tab-pane name="webhooks-settings">
                 <template #label>
                     <el-icon><Link /></el-icon> Webhooks Settings
@@ -64,9 +73,10 @@
 import BasicInfo from './_BasicInfo'
 import NotificationSettings from './_NotificationSettings'
 import ScheduleSettings from "./_ScheduleSettings";
+import QuestionSettings from "./_QuestionSettings";
 import EventIcon from '../../../Components/Icons/EventIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
-import SaveButton from '../../../Components/Buttons/SaveButton'
+import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
 import { Back, Link } from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings"
@@ -80,6 +90,7 @@ export default {
         BasicInfo,
         SaveButton,
         NotificationSettings,
+        QuestionSettings,
         EventIcon,
         ScheduleIcon,
         NoficationIcon,

@@ -1040,6 +1040,61 @@
               }
             }
           }
+          .el-link--primary {   
+            .el-link__inner {
+                color: $primaryColor;
+                padding: 4px;
+                &:hover {
+                    background: #F0F6FE;
+                    border-radius: 8px;
+                }
+            }
+          }
+          .fcal_questions {
+            display: grid;
+            grid-template-columns: 1fr;
+            border: 1px solid #D6DAE1;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+        
+          .fcal_question {
+            border-bottom: 1px solid #D6DAE1;
+            padding: 16px 24px;
+            transition: 0.3s;
+        
+            .fcal_question_card {
+                display: flex
+            }
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        
+            h2 {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                position: relative;
+                margin: 0;
+                color: black;
+                padding-left: 19px;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        
+            .fcal_description {
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 24px;
+                color: black;
+                margin: 0 0 7px;
+                padding-left: 19px;
+            }
+          }
         }
 
         .fcal_checkbox {
@@ -1749,6 +1804,7 @@
       .el-table {
         border-radius: 8px;
         border: 1px solid #D6DAE1;
+        border-spacing: 0;
 
         .el-table__inner-wrapper {
           &:before {
@@ -1756,71 +1812,75 @@
           }
         }
 
-        table {
-          width: 100% !important;
+        thead {
+          tr {
+            background: #EAECF0;
 
-          thead {
-            tr {
-              background: #EAECF0;
+            th {
+              background: none;
+              font-size: 14px;
+              font-weight: 700;
+              line-height: 20px;
+              color: #323232;
+              padding: 16px 0;
 
-              th {
-                background: none;
-                font-size: 14px;
-                font-weight: 700;
-                line-height: 20px;
-                color: #323232;
-                padding: 16px 0;
-
-                .cell {
-                  padding: 0 20px;
-                }
+              .cell {
+                padding: 0 20px;
               }
             }
           }
+        }
 
-          tbody {
-            tr {
-              &:hover {
-                td {
-                  background: transparent;
-                }
+        tbody {
+          tr {
+            &:hover {
+              td {
+                background: transparent;
+              }
+            }
+
+            &:last-child {
+              td {
+                border-bottom: none;
+              }
+            }
+
+            td {
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 20px;
+              padding: 16px 0;
+              color: #5D5D7A;
+              border-color: #D6DAE1;
+
+              .cell {
+                padding: 0 20px;
+              }
+              a {
+                text-decoration: none;
+                font-weight: 500;
               }
 
               &:last-child {
-                td {
-                  border-bottom: none;
-                }
-              }
-
-              td {
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 20px;
-                padding: 16px 0;
-                color: #5D5D7A;
-                border-color: #D6DAE1;
+                text-align: center;
 
                 .cell {
-                  padding: 0 20px;
+                  padding: 0;
                 }
 
-                &:last-child {
-                  text-align: center;
-
-                  .cell {
-                    padding: 0;
-                  }
-
-                  .el-dropdown {
-                    .el-dropdown-link {
-                      transform: rotate(90deg);
-                      cursor: pointer;
-                    }
+                .el-dropdown {
+                  .el-dropdown-link {
+                    transform: rotate(90deg);
+                    cursor: pointer;
                   }
                 }
               }
             }
           }
+        }
+
+        table {
+          width: 100% !important;
         }
       }
     }

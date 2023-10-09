@@ -24,6 +24,11 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
     $router->post('/{id}/sharing-settings', 'CalendarController@saveSharingSettings')->int('id');
 
+    // Integrations
+    $router->get('/{id}/integrations/remote-calendars', 'IntegrationSettingsController@getRemoteCalendars')->int('id');
+    $router->post('/{id}/integrations/remote-calendars/patch-conflicts', 'IntegrationSettingsController@patchRemoteCalendarConflictSettings')->int('id');
+    $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
+
     $router->get('/{id}/slots/{slot_id}', 'CalendarController@getSlot')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('slot_id');
     $router->put('/{id}/slots/{slot_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('slot_id');
@@ -33,6 +38,9 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
     $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
+
+    $router->get('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('slot_id');
+    $router->post('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('slot_id');
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
@@ -57,7 +65,7 @@ $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) 
     $router->get('public_vars', 'WidgetController@getPublicVars');
 });
 
-$router->prefix('integrations')->withPolicy('UserPolicy')->group(function ($router) {
+$router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('/', 'IntegrationController@index');
     $router->post('/', 'IntegrationController@update');
 
@@ -74,8 +82,8 @@ $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) 
 
 $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
-    $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
     $router->post('/', 'AvailabilityController@createSchedule');
+    $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
     $router->post('/{schedule_id}/update-title', 'AvailabilityController@updateScheduleTitle')->int('schedule_id');
     $router->post('/{schedule_id}/update-status', 'AvailabilityController@updateDefaultStatus')->int('schedule_id');

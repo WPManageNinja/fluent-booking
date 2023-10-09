@@ -182,16 +182,16 @@ class CalendarController extends Controller
         if (in_array('settings_menu', $request->get('with', []))) {
             $baseUrl = Helper::getAppBaseUrl();
             $data['settings_menu'] = apply_filters('fluent_booking/calendar_setting_menu_items', [
-                'google_calendar'       => [
+                'remote_calendars'       => [
                     'type'    => 'route',
                     'route'   => [
-                        'name'   => 'google_calendar',
+                        'name'   => 'remote_calendars',
                         'params' => [
                             'id' => $calendar->id
                         ]
                     ],
-                    'label'   => __('Google Calendar', 'fluent-booking'),
-                    'svgIcon' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.4935 2H17.2422V6.71125H21.9997V3.32845C22.001 3.32845 21.7646 2.12848 20.4935 2Z" fill="#1967D2"/><path d="M17.2422 21.978V21.9895V21.9998L21.9997 17.2886H21.957L17.2422 21.978Z" fill="#1967D2"/><path d="M22.0032 17.2883V17.2461L21.9609 17.2883H22.0032Z" fill="#FBBC05"/><path d="M21.9997 6.71143H17.2422V17.2465H21.9997V6.71143Z" fill="#FBBC05"/><path d="M21.957 17.2886H17.2422V21.978L21.957 17.2886Z" fill="#EA4335"/><path d="M17.2422 17.2883H21.957L21.9997 17.2461H17.2422V17.2883Z" fill="#EA4335"/><path d="M17.2266 21.9896H17.2381V21.978L17.2266 21.9896Z" fill="#34A853"/><path d="M6.64844 17.2461V21.9895H17.2291L17.2407 17.2461H6.64844Z" fill="#34A853"/><path d="M17.2381 17.2885V17.2461L17.2266 21.9895L17.2381 21.9779V17.2885Z" fill="#34A853"/><path d="M2 17.2461V20.5441C2.04263 21.6143 3.20002 21.9895 3.20002 21.9895H6.65026V17.2461H2Z" fill="#188038"/><path d="M6.65026 6.71125H17.2425V2H3.33437C3.33437 2 2.08525 2.12848 2 3.45564V17.2464H6.65026V6.71125Z" fill="#4285F4"/><path d="M10.1204 15.114C9.87806 15.114 9.64438 15.0824 9.41936 15.0193C9.20011 14.9562 8.99817 14.8615 8.81354 14.7352C8.6289 14.6032 8.46447 14.4397 8.32022 14.2446C8.18175 14.0495 8.07501 13.8228 8 13.5645L9.06452 13.1428C9.13953 13.4297 9.26646 13.6478 9.44533 13.797C9.62419 13.9404 9.84921 14.0122 10.1204 14.0122C10.2416 14.0122 10.357 13.9949 10.4666 13.9605C10.5762 13.9203 10.6714 13.8658 10.7522 13.797C10.833 13.7281 10.8964 13.6478 10.9426 13.5559C10.9945 13.4584 11.0205 13.3493 11.0205 13.2288C11.0205 12.9763 10.9253 12.7784 10.7349 12.6349C10.5502 12.4914 10.2935 12.4197 9.96461 12.4197H9.45398V11.3953H9.92133C10.0367 11.3953 10.1492 11.381 10.2589 11.3523C10.3685 11.3236 10.4637 11.2806 10.5445 11.2232C10.631 11.1601 10.6974 11.0826 10.7435 10.9908C10.7955 10.8932 10.8214 10.7813 10.8214 10.6551C10.8214 10.4599 10.7522 10.3021 10.6137 10.1816C10.4752 10.0554 10.2877 9.99225 10.0512 9.99225C9.79728 9.99225 9.60111 10.0611 9.46264 10.1988C9.32993 10.3308 9.23762 10.48 9.18569 10.6465L8.14713 10.2247C8.19906 10.0812 8.27695 9.93486 8.3808 9.78566C8.48466 9.63071 8.61448 9.49298 8.77026 9.37247C8.93182 9.24622 9.11934 9.1458 9.33282 9.07119C9.5463 8.99085 9.79151 8.95068 10.0685 8.95068C10.3512 8.95068 10.6079 8.99085 10.8387 9.07119C11.0753 9.15154 11.2772 9.26344 11.4446 9.40691C11.6119 9.54463 11.7417 9.71105 11.834 9.90617C11.9263 10.0955 11.9725 10.3021 11.9725 10.5259C11.9725 10.6981 11.9494 10.853 11.9032 10.9908C11.8629 11.1285 11.808 11.2519 11.7388 11.3609C11.6696 11.4699 11.5888 11.5646 11.4965 11.645C11.4099 11.7196 11.3205 11.7798 11.2282 11.8257V11.8946C11.5051 12.0036 11.733 12.1787 11.9119 12.4197C12.0965 12.6607 12.1889 12.9649 12.1889 13.3321C12.1889 13.5904 12.1398 13.8285 12.0417 14.0466C11.9436 14.2589 11.8023 14.4454 11.6176 14.6061C11.4388 14.7668 11.2224 14.8902 10.9685 14.9763C10.7147 15.0681 10.432 15.114 10.1204 15.114Z" fill="#4285F4"/<path d="M14.2556 14.9763V10.414L13.2084 10.853L12.793 9.89756L14.5326 9.08841H15.3894V14.9763H14.2556Z" fill="#4285F4"/></svg>'
+                    'label'   => __('Remote Calendars', 'fluent-booking'),
+                    'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-[16px] w-[16px] stroke-[2px] ltr:mr-2 rtl:ml-2 md:mt-0" data-testid="icon-component"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>'
                 ],
                 'landing_page_settings' => [
                     'type'    => 'route',
@@ -471,6 +471,28 @@ class CalendarController extends Controller
 
         return [
             'message' => __('Notifications has been saved', 'fluent-booking')
+        ];
+    }
+
+    public function getSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        return [
+            'fields' => $slot->getBookingFields()
+        ];
+    }
+
+    public function saveSlotBookingFields(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $bookingFields = $request->get('booking_fields');
+
+        $slot->setBookingFields($bookingFields);
+
+        return [
+            'message' => __('Fields has been updated', 'fluent-booking')
         ];
     }
 
