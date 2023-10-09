@@ -221,7 +221,8 @@ class CalendarController extends Controller
         $calendar = Calendar::findOrFail($id);
 
         return [
-            'settings' => LandingPageHelper::getSettings($calendar)
+            'settings' => LandingPageHelper::getSettings($calendar),
+            'share_url' => $calendar->getLandingPageUrl(true)
         ];
     }
 
