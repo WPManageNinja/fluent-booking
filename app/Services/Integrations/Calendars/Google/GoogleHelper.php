@@ -3,26 +3,62 @@
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class GoogleHelper
 {
     public static function getApiConfig()
     {
+        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
+            return [
+                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
+                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
+                'constant_defined' => true
+            ];
+        }
+
         $defaults = [
             'client_id'     => '',
             'client_secret' => ''
         ];
 
+
         $settings = get_option('_fcal_google_calendar_client_details', []);
 
-        return wp_parse_args($settings, $defaults);
+        $settings = wp_parse_args($settings, $defaults);
+
+        if (!empty($settings['client_secret'])) {
+            $settings['client_secret'] = Helper::decryptKey($settings['client_secret']);
+        }
+
+        return $settings;
+
     }
 
     public static function updateApiConfig($settings)
     {
+        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
+            return [
+                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
+                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
+                'constant_defined' => true
+            ];
+        }
+
         $settings = Arr::only($settings, ['client_id', 'client_secret']);
-        update_option('_fcal_google_calendar_client_details', $settings);
+
+        if (!empty($settings['client_secret'])) {
+
+            if ($settings['client_secret'] == '********************') {
+                $oldSettings = self::getApiConfig();
+                $settings['client_secret'] = $oldSettings['client_secret'];
+            }
+
+            $settings['client_secret'] = Helper::encryptKey($settings['client_secret']);
+        }
+
+        update_option('_fcal_google_calendar_client_details', $settings, 'no');
 
         return $settings;
     }
@@ -56,25 +92,6 @@ class GoogleHelper
         }
 
         return Arr::get($jwtPayload, 'email');
-    }
-
-    public static function normalizeUserAccessMeta(Meta $item)
-    {
-        $settings = $item->value;
-        if ($settings['expires_in'] - 3 <= time()) {
-            $newTokens = (self::getApiClient())->reGenerateToken($settings['refresh_token']);
-            if (is_wp_error($newTokens)) {
-                return $newTokens;
-            }
-
-            $settings['access_token'] = $newTokens['access_token'];
-            $settings['expires_in'] = $newTokens['expires_in'];
-        }
-
-        $item->value = $settings;
-        $item->save();
-
-        return $item;
     }
 
     public static function getConflictCheckCalendars($userId)
@@ -118,5 +135,13 @@ class GoogleHelper
         }
 
         return $calendars;
+    }
+
+    public static function getAppRedirectUrl()
+    {
+        if (defined('FLUENT_BOOKING_G_AUTH_REDIRECT_URL')) {
+            return FLUENT_BOOKING_G_AUTH_REDIRECT_URL;
+        }
+        return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
     }
 }

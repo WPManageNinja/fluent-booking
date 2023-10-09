@@ -1,49 +1,51 @@
 <template>
-    <div :class="{ fcal_showing_details: spot_id }" class="fcal_section fcal_schedlues fcal_section_narrow">
+    <div :class="{ fcal_showing_details: booking_id }" class="fcal_section fcal_schedlues fcal_section_narrow">
         <div class="fcal_section_header">
             <div class="fcal_title">
-                <div v-if="spot_id" @click="goBackToList" class="fcal_back_btn">
-                    <el-icon :size="20" color="black"><Back/></el-icon>
+                <div v-if="booking_id" @click="goBackToList" class="fcal_back_btn">
+                    <el-icon :size="20" color="black">
+                        <Back/>
+                    </el-icon>
                     <h3>Meeting Info</h3>
                 </div>
-                <h3 v-else>Bookings</h3>
+                <template v-else>
+                    <h3>Bookings</h3>
+                </template>
             </div>
         </div>
 
-        <template v-if="!spot_id">
-            <div class="fcal_schedule_meetings_header">
-
+        <template v-if="!booking_id">
+            <div style="margin-bottom: 0;" class="fcal_section_header">
+                <div class="fcal_section_filters">
+                    <el-radio-group @change="handlePeriodChange()" class="fcal_radio_switch" v-model="filters.period">
+                        <el-radio-button v-for="(label, status) in statusFilters" :key="status" :label="status">{{ label }}</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <div class="fcal_section_actions">
+                    <el-select
+                        v-model="filters.author"
+                        class="fcal_select"
+                        popper-class="fcal_select"
+                        @change="handlePeriodChange()">
+                        <el-option value="me" label="My Meetings"></el-option>
+                        <template v-if="all_hosts.length">
+                            <el-option value="all" label="All Meetings" />
+                            <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
+                        </template>
+                    </el-select>
+                </div>
+            </div>
+            <div v-if="false" class="fcal_schedule_meetings_header">
                 <div class="fcal_schedule_meetings_header_actions">
                     <div class="fcal_schedule_meetings_nav">
                         <ul class="fcal_secendary_nav_items">
-                            <li @click="changePeriod('upcoming')" :class="{fcal_active : filters.period == 'upcoming' }">Upcoming</li>
-                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past</li>
+                            <li @click="changePeriod('upcoming')"
+                                :class="{fcal_active : filters.period == 'upcoming' }">Upcoming
+                            </li>
+                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past
+                            </li>
                         </ul>
                     </div>
-
-                    <div class="fcal_head_actions">
-                            <el-select
-                                v-model="filters.author"
-                                class="fcal_select"
-                                popper-class="fcal_select"
-                                @change="fetchSchedules()">
-                                <el-option value="me" label="My Meetings"></el-option>
-                                <el-option value="all" label="All Meetings"></el-option>
-                                <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
-                            </el-select>
-
-                            <el-date-picker
-                                v-model="query.date_to_date"
-                                type="daterange"
-                                start-placeholder="Start Date"
-                                range-separator="-"
-                                end-placeholder="End Date"
-                                popper-class="fcal_daterange_popover"
-                            />
-                            <el-button class="fcal_plain_btn" @click="showAdvancedFilter = !showAdvancedFilter">
-                                <el-icon><Filter /></el-icon> Filter
-                            </el-button>
-                        </div>
                 </div>
 
                 <div v-if="showAdvancedFilter" class="fcal_schedule_meetings_header_filters">
@@ -69,7 +71,10 @@
                             v-if="query.eventType || query.status"
                             class="fcal_primary_btn2 danger"
                             @click="handleDiscard">
-                            <el-icon><CircleClose /></el-icon> Discard
+                            <el-icon>
+                                <CircleClose/>
+                            </el-icon>
+                            Discard
                         </el-button>
                         <el-button class="fcal_primary_btn" @click="fetchSchedules">
                             Submit
@@ -81,53 +86,55 @@
 
         <div class="fcal_schedule_meetings_body">
             <div v-if="!loading" class="fcal_section_body" style="padding: 0;">
-                <div v-if="schedules" :class="{ fcal_showing_details: spot_id }" class="fcal_all_schediles">
+                <div v-if="schedules" :class="{ fcal_showing_details: booking_id }" class="fcal_all_schediles">
                     <div class="fcal_schedules">
                         <div class="fcal_schedule_wrapper">
-                            <div v-if="schedulesLength" v-for="(schedules, scheduleDate) in formattedSchedules" :key="scheduleDate" class="fcal_schedule">
+                            <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
+                                 :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
-                                    <h3 class="fcal_schedule_data">{{formattedDate(scheduleDate)}}</h3>
+                                    <h3 class="fcal_schedule_data">{{ formattedDate(scheduleDate) }}</h3>
                                 </div>
                                 <div class="fcal_schedule_items">
                                     <div
-                                        v-for="spot in schedules"
-                                        :key="spot.id"
-                                        :class="{ fcal_is_current: spot[0].event_id == spot_id }"
+                                        v-for="schedule in daySchedules"
+                                        :key="schedule.id"
+                                        :class="{ fcal_is_current: schedule.id == booking_id }"
                                         class="fcal_each_spot">
-                                        <schedule-spot :multi_host="filters.author != 'me'" @showDetails="showDetails(spot)" :spot="spot"/>
+                                        <booking-card :multi_host="filters.author != 'me'"
+                                                       @showDetails="showDetails(schedule)" :booking="schedule"/>
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-else description="No schedules based on your filter" />
+                            <el-empty v-else description="No schedules based on your filter"/>
                         </div>
                         <div class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
                         </div>
                     </div>
-                    <div v-if="spot_id" class="fcal_spot_details">
-                        <schedule-spot-details @spotFetched="(data) => { current_spot = data; }" :spot="current_spot" :spot_id="spot_id" />
+                    <div v-if="booking_id" class="fcal_spot_details">
+                        <schedule-booking-details @bookingFetched="(data) => { current_schedule = data; }" :booking="current_schedule" :booking_id="booking_id"/>
                     </div>
                 </div>
             </div>
             <el-skeleton v-else :rows="5" animated/>
-            <p>All dates are shown in {{currentTimezone}} timezone</p>
+            <p>All dates are shown in {{ currentTimezone }} timezone</p>
         </div>
     </div>
 </template>
 
 <script type="text/babel">
 import Pagination from "../../Pieces/Pagination.vue";
-import ScheduleSpot from "./parts/ScheduleSpot.vue";
-import ScheduleSpotDetails from './parts/ScheduleSpotDetails.vue';
+import BookingCard from "./parts/BookingCard.vue";
+import ScheduleBookingDetails from './parts/ScheduleBookingDetails.vue';
 import each from 'lodash/each';
-import { Back, Filter, CircleClose } from '@element-plus/icons-vue';
+import {Back, Filter, CircleClose} from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
     components: {
-        ScheduleSpot,
+        BookingCard,
         Pagination,
-        ScheduleSpotDetails,
+        ScheduleBookingDetails,
         Filter,
         Back,
         CircleClose
@@ -145,15 +152,21 @@ export default {
                 current_page: 1,
                 per_page: 10
             },
-            spot_id: false,
-            current_spot: null,
+            booking_id: false,
+            current_schedule: null,
             loadingHosts: false,
-            all_hosts: null,
+            all_hosts: [],
             showAdvancedFilter: false,
             query: {
                 date_to_date: '',
                 eventType: '',
                 status: ''
+            },
+            statusFilters: {
+                upcoming: 'Upcoming',
+                completed: 'Completed',
+                cancelled: 'Cancelled',
+                all: 'All'
             }
         }
     },
@@ -173,7 +186,7 @@ export default {
         formattedSchedules() {
             const items = {};
             each(this.schedules, (schedule) => {
-                const startTime = schedule[0].start_time;
+                const startTime = schedule.start_time;
                 let date = this.toCurrentTimezone(startTime, 'MMMM D, YYYY');
                 items[date] = items[date] || [];
                 items[date].push(schedule);
@@ -194,14 +207,13 @@ export default {
     methods: {
         fetchSchedules() {
             this.loading = true;
-            this.spot_id = false;
-            this.current_spot = null;
+            this.booking_id = false;
+            this.current_schedule = null;
 
             this.$get('schedules', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                filters: this.filters,
-                advanceFilter: this.query
+                filters: this.filters
             })
                 .then(response => {
                     this.schedules = response.schedules.data;
@@ -222,16 +234,16 @@ export default {
                 });
         },
         changePeriod(period) {
-            if(this.filters.period != period) {
+            if (this.filters.period != period) {
                 this.$router.push({query: {period}});
                 this.filters.period = period;
                 this.fetchSchedules();
             }
         },
-        showDetails(spot) {
-            this.$router.push({query: { period: this.filters.period, spot_id: spot[0].event_id }});
-            this.current_spot = spot;
-            this.spot_id = spot[0].event_id;
+        showDetails(schedule) {
+            this.$router.push({query: {period: this.filters.period, booking_id: schedule.id}});
+            this.current_schedule = schedule;
+            this.booking_id = schedule.id;
         },
         handleDiscard() {
             this.query.eventType = '';
@@ -240,25 +252,29 @@ export default {
             this.fetchSchedules();
         },
         goBackToList() {
-            this.spot_id = null;
-            this.current_spot = null;
+            this.booking_id = null;
+            this.current_schedule = null;
             this.$router.push({
                 name: 'scheduled_events',
-                query: { period: this.filters.period }
+                query: {period: this.filters.period}
             })
+        },
+        handlePeriodChange() {
+            this.$router.push({query: this.filters});
+            this.fetchSchedules();
         }
     },
     mounted() {
         if (this.$route.query.period) {
-           this.filters.period =  this.$route.query.period;
+            this.filters.period = this.$route.query.period;
         }
         this.$changeTitle('Schedules');
         this.fetchSchedules();
-        if (this.$route.query.spot_id) {
-            this.spot_id = this.$route.query.spot_id;
+        if (this.$route.query.booking_id) {
+            this.booking_id = this.$route.query.booking_id;
         }
 
-        if(this.hasSupport('multi_users')) {
+        if (this.hasSupport('multi_users')) {
             this.fetchHosts();
         }
     }

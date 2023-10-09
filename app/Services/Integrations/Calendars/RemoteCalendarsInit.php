@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\Calendars;
 
 
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Meta;
 
 class RemoteCalendarsInit
 {
@@ -12,6 +13,19 @@ class RemoteCalendarsInit
         (new \FluentBooking\App\Services\Integrations\Calendars\Google\Bootstrap())->register();
 
         add_action('fluent_booking/after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 10, 2);
+
+        add_action('fluent_booking/after_disconnect_remote_calendar', function ($metaId, $calendar) {
+            $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
+            if (!$config) {
+                return; // no integration available
+            }
+
+            $meta = Meta::where('id', $config['db_id'])->first();
+            if (!$meta) {
+                RemoteCalendarHelper::updateUserRemoteCreatableCalendarSettings($calendar->user_id, []);
+            }
+
+        }, 10, 2);
     }
 
     public function checkForRemoteCalendarEventInsert($booking, $slot)

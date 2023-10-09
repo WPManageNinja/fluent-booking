@@ -11,7 +11,7 @@ class WidgetController extends Controller
 {
     public function getPublicVars(Request $request)
     {
-        $slotId = (int)$request->get('slot_id');
+        $slotId = (int)$request->get('event_id');
         $slot = CalendarSlot::findOrFail($slotId);
         $formFields = BookingService::getBookingFields($slot);
 

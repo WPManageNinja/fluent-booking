@@ -16,7 +16,7 @@ class BookingService
         }
 
         if (!$calendarSlot) {
-            $calendarSlot = CalendarSlot::findOrFail($data['slot_id']);
+            $calendarSlot = CalendarSlot::findOrFail($data['event_id']);
         }
 
         if (empty($data['first_name']) && !empty($data['name'])) {
@@ -26,7 +26,7 @@ class BookingService
         }
 
         $defaults = [
-            'slot_id'     => $calendarSlot->id,
+            'event_id'     => $calendarSlot->id,
             'calendar_id' => $calendarSlot->calendar_id
         ];
 
@@ -68,13 +68,13 @@ class BookingService
 
         $bookingData['location_details'] = $locationData;
 
-        $event = Booking::select('event_id')
-            ->where('slot_id', $calendarSlot->id)
+        $event = Booking::select('group_id')
+            ->where('event_id', $calendarSlot->id)
             ->where('calendar_id', $calendarSlot->calendar_id)
             ->where('start_time', $bookingData['start_time'])
             ->first();
 
-        $bookingData['event_id'] = $event ? $event->event_id : null;
+        $bookingData['group_id'] = $event ? $event->group_id : null;
 
         $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot);
 

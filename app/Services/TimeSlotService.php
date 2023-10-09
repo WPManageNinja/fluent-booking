@@ -198,7 +198,7 @@ class TimeSlotService
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
             ->get()
-            ->groupBy('event_id');
+            ->groupBy('group_id');
 
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
 
@@ -218,14 +218,14 @@ class TimeSlotService
 
             $remaining = 0;
 
-            if ($this->calendarSlot->id == $booking->slot_id) {
+            if ($this->calendarSlot->id == $booking->event_id) {
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
                 }
             }
 
             $books[$date][] = [
-                'slot_id'   => $booking->slot_id,
+                'event_id'   => $booking->event_id,
                 'start'     => $booking->start_time,
                 'end'       => $booking->end_time,
                 'remaining' => $remaining,
