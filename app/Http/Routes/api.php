@@ -52,10 +52,13 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
 
 $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index');
-    $router->get('/{group_id}', 'SchedulesController@getBooking')->int('group_id');
-    $router->get('/{spot_id}/slot', 'SchedulesController@getScheduleSpot')->int('spot_id');
-    $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
-    $router->get('/{group_id}/activities', 'SchedulesController@getBookingActivities')->int('group_id');
+    $router->get('/{id}', 'SchedulesController@getBooking')->int('id');
+    $router->get('/{id}/slot', 'SchedulesController@getScheduleSpot')->int('id');
+    $router->put('/{id}', 'SchedulesController@patchBooking')->int('id');
+    $router->get('/{id}/activities', 'SchedulesController@getBookingActivities')->int('id');
+
+
+    $router->get('/group-bookings/{group_id}/attendees', 'SchedulesController@getGroupAttendees')->int('group_id');
 
     // Get FluentCrm Profile
     $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
