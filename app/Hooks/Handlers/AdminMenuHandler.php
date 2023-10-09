@@ -50,8 +50,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Booking Types', 'fluent-booking'),
-            __('Booking Types', 'fluent-booking'),
+            __('Booking Calendars', 'fluent-booking'),
+            __('Booking Calendars', 'fluent-booking'),
             $capability,
             'admin.php?page=fluent-booking#/calendars',
             ''
@@ -115,7 +115,7 @@ class AdminMenuHandler
                 ],
                 [
                     'key'       => 'calendars',
-                    'label'     => __('Booking Types', 'fluent-booking'),
+                    'label'     => __('Booking Calendars', 'fluent-booking'),
                     'permalink' => $baseUrl . 'calendars'
                 ],
                 [
