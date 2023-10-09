@@ -1,30 +1,46 @@
 <div class="fcal_booking_form_wrap">
     <div class="fcal_booking_form">
         {#each formFields as field}
-            <div class="fcal_form_item">
-                <label class="fcal_input_content">
-                    <div class="fcal_input_label">
-                        {field.label}
-                        {#if field.required}<span>*</span>{/if}
-                    </div>
-                    {#if field.type === 'text'}
-                        <input disabled="{field.disabled}" class="{field.input_class}" type="text"
-                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                    {:else if field.type === 'email'}
-                        <input disabled="{field.disabled}" class="{field.input_class}" type="email"
-                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                    {:else if field.type === 'number'}
-                        <input disabled="{field.disabled}" class="{field.input_class}" type="number"
-                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                    {:else if field.type === 'tel'}
-                        <input disabled="{field.disabled}" class="{field.input_class}" type="tel"
-                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                    {:else if field.type === 'textarea'}
-                        <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
-                                  class="{field.input_class}" bind:value={form[field.name]}/>
-                    {/if}
-                </label>
-            </div>
+            {#if field.enabled}
+                <div class="fcal_form_item">
+                    <label class="fcal_input_content">
+                        <div class="fcal_input_label">
+                            {field.label}
+                            {#if field.required}<span>*</span>{/if}
+                        </div>
+                        {#if field.type === 'text'}
+                            <input disabled="{field.disabled}" class="fcal_input" type="text"
+                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                        {:else if field.type === 'email'}
+                            <input disabled="{field.disabled}" class="fcal_input" type="email"
+                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                        {:else if field.type === 'number'}
+                            <input disabled="{field.disabled}" class="fcal_input" type="number"
+                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                        {:else if field.type === 'phone'}
+                            <input disabled="{field.disabled}" class="fcal_input" type="tel"
+                                placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                        {:else if field.type === 'textarea'}
+                            <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
+                                    class="fcal_input" bind:value={form[field.name]}/>
+                        {:else if field.type === 'dropdown'}
+                        <select bind:value={form[field.name]}>
+                            {#each field.options as option (option)}
+                                <option value={option}>{option}</option>
+                            {/each}
+                        </select>
+                        {:else if field.type === 'checkbox'}
+                            {#each field.options as option}
+                                <label>
+                                    <input class="fcal_input" type="checkbox" 
+                                        bind:checked={form[field.name]} value={option} />
+                                        {option}
+                                </label>
+                            {/each}
+                        {/if}
+                    </label>
+                </div>
+            {/if}
         {/each}
         <div class="fcal_form_item fcal_submit">
             <button disabled="{submitting}" on:click={submitForm}

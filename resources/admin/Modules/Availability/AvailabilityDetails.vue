@@ -130,7 +130,6 @@ export default {
             this.$get('availability/' + this.schedule_id)
                 .then(response => {
                     this.scheduleInfo = response.schedule;
-                    console.log(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

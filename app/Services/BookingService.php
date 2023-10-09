@@ -102,7 +102,6 @@ class BookingService
                 'required'    => true,
                 'enabled'     => true,
                 'placeholder' => __('Your Name', 'fluent-booking'),
-                'input_class' => 'fcal_input'
             ],
             [
                 'index'       => 2,
@@ -112,8 +111,6 @@ class BookingService
                 'required'    => true,
                 'enabled'     => true,
                 'placeholder' => __('Your Email', 'fluent-booking'),
-                'input_class' => 'fcal_input',
-                'disabled'    => is_user_logged_in()
             ]
         ];
 
@@ -126,7 +123,6 @@ class BookingService
                 'required'    => true,
                 'enabled'     => true,
                 'placeholder' => esc_attr__('Phone Number with country code', 'fluent-booking'),
-                'input_class' => 'fcal_input'
             ];
         }
 

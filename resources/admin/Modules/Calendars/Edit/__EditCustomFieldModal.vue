@@ -4,8 +4,8 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
-        <el-form v-if="openModal" label-position="top" >
-            <el-form-item label="Location">
+        <el-form v-if="openModal" v-model="fieldData" label-position="top" >
+            <el-form-item label="Input Type *">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"
@@ -20,13 +20,13 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="Label">
-                <el-input v-model="fieldData.label" type="text" placeholder="Label" />
+            <el-form-item label="Label *">
+                <el-input v-model="fieldData.label" type="text" placeholder="Label"/>
             </el-form-item>
             <el-form-item label="Placeholder">
                 <el-input v-model="fieldData.placeholder" type="textarea" placeholder="Placeholder" />
             </el-form-item>
-            <el-form-item v-show="isOptionRequired" label="Options" class="fcal_question_options">
+            <el-form-item v-show="isOptionRequired" label="Options *" class="fcal_question_options">
                 <div class="fcal_question_option" v-for="(option, index) in fieldData.options" :key="index">
                     <el-input
                         type="text"
@@ -123,6 +123,10 @@ export default {
     },
     methods: {
         saveChanges() {
+            if (!this.fieldData.label) {
+                this.$handleError("Label field is required");
+                return;
+            }
             this.updateFieldName();
             this.$emit('updateFieldData', this.fieldData, this.isNewEntry);
             this.openModal = false;
