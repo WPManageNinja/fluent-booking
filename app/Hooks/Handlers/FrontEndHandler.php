@@ -135,7 +135,7 @@ class FrontEndHandler
             'start_date' => 'required'
         ];
 
-        $isPhoneRequired = BookingService::isPhoneRequired($calendarSlot);
+        $isPhoneRequired = $calendarSlot->isPhoneRequired();
         if ($isPhoneRequired) {
             $rules['phone'] = 'required';
         }
