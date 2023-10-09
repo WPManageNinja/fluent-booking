@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
@@ -123,6 +124,13 @@ class Client
         return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
     }
 
+    public function revokeConnection()
+    {
+        return $this->makeRequest($this->revokeUrl, [
+            'token' => $this->accessToken
+        ], 'POST');
+    }
+
     public function getAuthorizationHeader($accessToken = null)
     {
         if (!$accessToken) {
@@ -163,6 +171,13 @@ class Client
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
+            Helper::debugLog([
+                'message' => $message,
+                'url'     => $url,
+                'body'    => $body,
+                'method'  => __METHOD__,
+                'type'    => 'wp_request_error'
+            ]);
             return new \WP_Error('wp_error', $message, $request->get_all_error_data());
         }
 
@@ -172,13 +187,22 @@ class Client
 
         if ($resCode > 299) {
             $message = Arr::get($resBody, 'error_description', 'Unexpected error from google api');
+
+            Helper::debugLog([
+                'message' => $message,
+                'url'     => $url,
+                'body'    => $body,
+                'method'  => __METHOD__,
+                'type'    => 'api_error'
+            ]);
+
             return new \WP_Error('api_error', $message, $resBody);
         }
 
         return $resBody;
     }
 
-    public function getAuthUrl($calendarId)
+    public function getAuthUrl($userId)
     {
         $authUrl = add_query_arg([
             'client_id'     => $this->clientId,
@@ -186,7 +210,8 @@ class Client
             'redirect_uri'  => $this->redirectUrl,
             'response_type' => 'code',
             'access_type'   => 'offline',
-            'state'         => $calendarId
+            'state'         => $userId,
+            'prompt'        => 'consent'
         ], $this->authUrl);
 
         return $authUrl;

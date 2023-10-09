@@ -128,4 +128,16 @@ class IntegrationSettingsController extends Controller
         ];
     }
 
+    public function disconnectRemoteCalendar(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $meta = Meta::where('id', $request->get('meta_id'))->first();
+        $metaId = $meta->id;
+        do_action('fluent_calendar/disconnect_remote_calendar_' . $meta->object_type, $meta, $calendar);
+        do_action('fluent_booking/after_disconnect_remote_calendar', $metaId, $calendar);
+
+        return [
+            'message' => 'Your selected remote calendar has been disconnected'
+        ];
+    }
 }
