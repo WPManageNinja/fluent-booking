@@ -654,7 +654,6 @@ class Helper
     }
 
 
-
     /**
      * Sending a job to background for further processing
      *
@@ -670,10 +669,10 @@ class Helper
         ];
 
         $args = array(
-            'timeout'   => 0.1,
-            'blocking'  => false,
-            'body'      => $body,
-            'cookies'   => $_COOKIE
+            'timeout'  => 0.1,
+            'blocking' => false,
+            'body'     => $body,
+            'cookies'  => $_COOKIE
         );
 
         $queryArgs = array(
@@ -791,9 +790,9 @@ class Helper
         }
 
         return BookingMeta::create([
-            'event_id'    => $eventId,
-            'meta_key'    => $metaKey,
-            'value'       => $value
+            'event_id' => $eventId,
+            'meta_key' => $metaKey,
+            'value'    => $value
         ]);
     }
 
@@ -847,7 +846,7 @@ class Helper
             ->with(['slots'])
             ->latest()
             ->get();
-        
+
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {
             $slots = Arr::get($calendar, 'slots');
@@ -901,7 +900,7 @@ class Helper
             }
         }
         return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
-    } 
+    }
 
     public static function excerpt($text, $max_length = 160)
     {
@@ -939,7 +938,7 @@ class Helper
     {
         $server = $_SERVER;
 
-        $clientIp   = Arr::get($server, 'HTTP_CLIENT_IP');
+        $clientIp = Arr::get($server, 'HTTP_CLIENT_IP');
         $xForwarded = Arr::get($server, 'HTTP_X_FORWARDED_FOR');
 
         if (!empty($clientIp)) {
@@ -988,7 +987,7 @@ class Helper
         //svg
         if (empty($tags['svg'])) {
             $svg_args = [
-                'svg' => [
+                'svg'   => [
                     'class'           => true,
                     'aria-hidden'     => true,
                     'aria-labelledby' => true,
@@ -1045,7 +1044,7 @@ class Helper
      * Recursively implode a multi-dimentional array
      *
      * @param string $glue
-     * @param array  $array
+     * @param array $array
      *
      * @return string
      */
@@ -1220,7 +1219,7 @@ class Helper
                     'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
                 ],
             ],
-            'booking_conf_host' => [
+            'booking_conf_host'     => [
                 'enabled' => true,
                 'title'   => 'Booking Confirmation to Organizer (You)',
                 'email'   => [
@@ -1228,7 +1227,7 @@ class Helper
                     'body'    => '<h2 class="p1" style="text-align: center;">New Booking Confirmed</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>'
                 ],
             ],
-            'reminder_to_attendee' => [
+            'reminder_to_attendee'  => [
                 'enabled' => true,
                 'title'   => 'Reminder Before Meeting to Attendee',
                 'email'   => [
@@ -1236,13 +1235,13 @@ class Helper
                     'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>',
                     'times'   => [
                         [
-                            'unit' => 'minutes',
-                            'value'=> 15,
+                            'unit'  => 'minutes',
+                            'value' => 15,
                         ]
                     ]
                 ],
             ],
-            'reminder_to_host' => [
+            'reminder_to_host'      => [
                 'enabled' => true,
                 'title'   => 'Reminder Before Meeting to Organizer (You)',
                 'email'   => [
@@ -1250,8 +1249,8 @@ class Helper
                     'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>',
                     'times'   => [
                         [
-                            'unit' => 'minutes',
-                            'value'=> 15,
+                            'unit'  => 'minutes',
+                            'value' => 15,
                         ]
                     ]
                 ],
@@ -1264,7 +1263,7 @@ class Helper
                     'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><p>Your booking has been cancelled.</p><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.first_name} {guest.last_name}</p><h3><strong>Date &amp; Time</strong></h3><p>{event.full_datetime} ({host.timezone})</p><h3>Cancellation Reason</h3><p>{event.cancel_reason}</p>'
                 ],
             ],
-            'cancelled_by_host' => [
+            'cancelled_by_host'     => [
                 'enabled' => true,
                 'title'   => 'Booking Cancelled by Organizer (email to Attendee)',
                 'email'   => [
@@ -1280,32 +1279,105 @@ class Helper
     public static function getEditorShortCodes()
     {
         $shortcodes = apply_filters('fluent_booking/editor_shortcodes', [
-            '{event.name}'                => 'Event Name',
-            '{event.datetime}'            => 'Event Date',
-            '{event.full_datetime}'       => 'Event Full Date',
-            '{event.location}'            => 'Event Location',
-            '{event.description}'         => 'Event Description',
-            '{event.reminder_time}'       => 'Event Reminder Time',
-            '{even.cancel_reason}'        => 'Event Cancel Reason',
-            '{host.timezone}'             => 'Host Timezone',
-            '{host.name}'                 => 'Host Name',
-            '{host.email}'                => 'Host Email',
-            '{guest.timezone}'            => 'Guest Timezone',
-            '{guest.first_name}'          => 'Guest First Name',
-            '{guest.last_name}'           => 'Guest Last Name',
-            '{guest.full_name}'           => 'Guest Full Name',
-            '{guest.email}'               => 'Guest Email',
-            '{guest.note}'                => 'Guest Note',
-            '{wp.admin_email}'            => 'Admin Email',
-            '{wp.site_url}'               => 'Site URL',
-            '{wp.site_title}'             => 'Site Title',
-            '{date.m/d/Y}'                => 'Date (mm/dd/yyyy)',
-            '{date.d/m/Y}'                => 'Date (dd/mm/yyyy)',
-            '{user.display_name}'         => 'User Display Name',
-            '{user.user_email}'           => 'User Email',
-            '{user.user_login}'           => 'User Username',
+            '{event.name}'          => 'Event Name',
+            '{event.datetime}'      => 'Event Date',
+            '{event.full_datetime}' => 'Event Full Date',
+            '{event.location}'      => 'Event Location',
+            '{event.description}'   => 'Event Description',
+            '{event.reminder_time}' => 'Event Reminder Time',
+            '{even.cancel_reason}'  => 'Event Cancel Reason',
+            '{host.timezone}'       => 'Host Timezone',
+            '{host.name}'           => 'Host Name',
+            '{host.email}'          => 'Host Email',
+            '{guest.timezone}'      => 'Guest Timezone',
+            '{guest.first_name}'    => 'Guest First Name',
+            '{guest.last_name}'     => 'Guest Last Name',
+            '{guest.full_name}'     => 'Guest Full Name',
+            '{guest.email}'         => 'Guest Email',
+            '{guest.note}'          => 'Guest Note',
+            '{wp.admin_email}'      => 'Admin Email',
+            '{wp.site_url}'         => 'Site URL',
+            '{wp.site_title}'       => 'Site Title',
+            '{date.m/d/Y}'          => 'Date (mm/dd/yyyy)',
+            '{date.d/m/Y}'          => 'Date (dd/mm/yyyy)',
+            '{user.display_name}'   => 'User Display Name',
+            '{user.user_email}'     => 'User Email',
+            '{user.user_login}'     => 'User Username',
         ]);
 
         return $shortcodes;
+    }
+
+    public static function encryptKey($value)
+    {
+        if (!$value) {
+            return $value;
+        }
+
+        if (!extension_loaded('openssl')) {
+            return $value;
+        }
+
+        $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+
+        if (defined('FLUENT_BOOKING_ENCRYPTION_KEY')) {
+            $key = FLUENT_BOOKING_ENCRYPTION_KEY;
+        } else {
+            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+        }
+
+
+        $method = 'aes-256-ctr';
+        $ivlen = openssl_cipher_iv_length($method);
+        $iv = openssl_random_pseudo_bytes($ivlen);
+
+        $raw_value = openssl_encrypt($value . $salt, $method, $key, 0, $iv);
+        if (!$raw_value) {
+            return false;
+        }
+
+        return base64_encode($iv . $raw_value); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+    }
+
+    public static function decryptKey($raw_value)
+    {
+
+        if (!$raw_value) {
+            return $raw_value;
+        }
+
+        if (!extension_loaded('openssl')) {
+            return $raw_value;
+        }
+
+        $raw_value = base64_decode($raw_value, true); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+
+        $method = 'aes-256-ctr';
+        $ivlen = openssl_cipher_iv_length($method);
+        $iv = substr($raw_value, 0, $ivlen);
+
+        $raw_value = substr($raw_value, $ivlen);
+
+        $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+
+        if (defined('FLUENT_BOOKING_ENCRYPTION_KEY')) {
+            $key = FLUENT_BOOKING_ENCRYPTION_KEY;
+        } else {
+            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+        }
+
+        $value = openssl_decrypt($raw_value, $method, $key, 0, $iv);
+        if (!$value || substr($value, -strlen($salt)) !== $salt) {
+            return false;
+        }
+
+        return substr($value, 0, -strlen($salt));
+    }
+
+    public static function debugLog($data)
+    {
+        if (defined('FLUENT_BOOKING_DEBUG') && FLUENT_BOOKING_DEBUG) {
+            error_log(print_r($data, true));
+        }
     }
 }
