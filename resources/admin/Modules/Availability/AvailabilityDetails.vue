@@ -8,14 +8,15 @@
         </div>
         <div v-if="!loading" class="fcal_settings_content_wrap">
             <el-form label-position="top">
-                <el-form-item label="Available hours" class="fcal_availability_header">
-                    <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
-
-                    <h3> {{ scheduleInfo.title }}
+                <el-form-item class="fcal_availability_header">
+                    <h3> Weekly Hours
                         <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
                             <el-icon><StarFilled /></el-icon> Default schedule
                         </span>
                     </h3>
+                    <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
+
+                    <h3> {{ scheduleInfo.title }}</h3>
 
                     <div class="timezone">
                         <div class="fcal_timezone_text">
@@ -98,9 +99,8 @@ import TimezoneIcon from '../../Components/Icons/TimezoneIcon';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
 
 export default {
-    name: "AvailabilityDetailsSettings",
-    props: ['schedule', 'schedule_id'],
-    emits: ['backToList'],
+    name: "AvailabilityDetails",
+    props: ['schedule_id'],
     components: {
         DateOverRides,
         WeeklySchedules,
@@ -118,19 +118,19 @@ export default {
             loading: false,
             saving: false,
             dialogVisible: false,
-            scheduleInfo: this.schedule || '',
+            scheduleInfo: '',
         }
     },
     methods: {
         goBackToList() {
             this.$router.push({name: 'availability'});
-            this.$emit('backToList');
         },
         fetchSchedule() {
             this.loading = true;
             this.$get('availability/' + this.schedule_id)
                 .then(response => {
                     this.scheduleInfo = response.schedule;
+                    console.log(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -215,10 +215,7 @@ export default {
         }
     },
     mounted() {
-        if (!this.schedule) {
-            this.$router.push({query: {schedule_id: this.schedule_id}});
-            this.fetchSchedule();
-        }
+        this.fetchSchedule();
     }
 }
 </script>

@@ -4,8 +4,6 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
-import AvailabilitySettings from "./Modules/Settings/AvailabilitySettings";
-import AvailabilityDetailsSettings from "./Modules/Settings/AvailabilityDetailsSettings";
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
@@ -13,6 +11,7 @@ import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCale
 import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
+import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
 
 export var routes = [
     {
@@ -126,8 +125,17 @@ export var routes = [
                 name: 'availability',
                 path: '',
                 component: AllAvailabilities,
+            },
+            {
+                path: ':schedule_id',
+                name: 'availability_details',
+                component: AvailabilityDetails,
+                props: true,
+                meta: {
+                    active_menu: 'availability'
+                },
             }
         ]
-    }
+    },
 ];
 
