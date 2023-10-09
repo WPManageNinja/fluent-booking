@@ -291,7 +291,7 @@ class Bootstrap
                 'start'     => $start,
                 'end'       => $end,
                 'source'    => 'google',
-                'slot_id'   => null,
+                'event_id'   => null,
                 'remaining' => 0
             ];
         }

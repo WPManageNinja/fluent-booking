@@ -369,7 +369,7 @@ class GoogleCalendar extends IntegrationManager
     public function updateEvent($booking, $calendarSlot = null)
     {
         if (!$calendarSlot) {
-            $calendarSlot = CalendarSlot::findOrFail($booking->slot_id);
+            $calendarSlot = CalendarSlot::findOrFail($booking->event_id);
         }
 
         $integrationSettings = $this->getIntegrationDetails($calendarSlot->user_id);

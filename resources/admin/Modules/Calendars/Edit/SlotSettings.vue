@@ -75,7 +75,7 @@
                 <div class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
-                        :slot_id="slot_id"
+                        :event_id="event_id"
                         :calendar_id="calendar_id"
                     />
                 </div>
@@ -99,7 +99,7 @@ import WebhookSettings from "./WebHook/WebhookSettings"
 
 export default {
     name: 'SlotSettings',
-    props: ['slot_id', 'calendar_id'],
+    props: ['event_id', 'calendar_id'],
     components: {
         WebhookSettings,
         ScheduleSettings,
@@ -126,7 +126,7 @@ export default {
     methods: {
         getSlot() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
+            this.$get('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 with: ['calendar']
             })
                 .then(response => {
@@ -149,7 +149,7 @@ export default {
         handleTabChange() {
             this.$router.push({
                 name: 'slot_settings',
-                params: {calendar_id: this.slot?.calendar_id, slot_id: this.slot?.id},
+                params: {calendar_id: this.slot?.calendar_id, event_id: this.slot?.id},
                 query: {step: this.activeTab}
             })
         },
@@ -158,7 +158,7 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
+            this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
                 status: this.slot.status,
                 color_schema: this.slot.color_schema,

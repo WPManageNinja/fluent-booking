@@ -19,7 +19,7 @@ class BookingMigrator
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `hash` VARCHAR(192) NULL,
                 `calendar_id` BIGINT(20) UNSIGNED NOT NULL,
-                `slot_id` BIGINT(20) UNSIGNED NOT NULL,
+                `event_id` BIGINT(20) UNSIGNED NOT NULL,
                 `group_id` BIGINT(20) UNSIGNED NULL,
                 `parent_id` BIGINT(20) UNSIGNED NULL,
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
@@ -56,7 +56,7 @@ class BookingMigrator
                 KEY `fcal_b_parent_id` (`parent_id`),
                 KEY `fcal_b_hash` (`hash`),
                 KEY `fcal_b_calendar_id` (`calendar_id`),
-                KEY `fcal_b_slot_id` (`slot_id`),
+                KEY `fcal_b_event_id` (`event_id`),
                 KEY `fcal_b_booking_type` (`booking_type`),
                 KEY `fcal_b_start_time` (`start_time`)
             ) $charsetCollate;";

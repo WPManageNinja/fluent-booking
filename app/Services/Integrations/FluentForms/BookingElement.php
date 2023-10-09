@@ -50,7 +50,7 @@ class BookingElement extends BaseFieldManager
             'settings'       => array(
                 'label'              => __('Fluent Booking Field', 'fluent-booking'),
                 'admin_field_label'  => '',
-                'slot_id'            => '',
+                'event_id'            => '',
                 'booking_calendar'   => '',
                 'conditional_logics' => array(),
                 'container_class'    => '',
@@ -80,7 +80,7 @@ class BookingElement extends BaseFieldManager
             'label',
             'label_placement',
             'admin_field_label',
-            'slot_id',
+            'event_id',
             'cal_guest_fields',
             'validation_rules',
         ];
@@ -98,7 +98,7 @@ class BookingElement extends BaseFieldManager
     public function getEditorCustomizationSettings()
     {
         return [
-            'slot_id' => [
+            'event_id' => [
                 'template' => 'selectGroup',
                 'label'    => __('Select Calendar', 'fluentform'),
             ],
@@ -120,7 +120,7 @@ class BookingElement extends BaseFieldManager
     {
         $element_id = $this->makeElementId($data, $form);
 
-        $slot_id = (int)Arr::get($data, 'settings.slot_id');
+        $slot_id = (int)Arr::get($data, 'settings.event_id');
         
         $slot = CalendarSlot::find($slot_id);
         
@@ -176,7 +176,7 @@ class BookingElement extends BaseFieldManager
     {
         $data = json_decode($response, true);
 
-        $slot_id   = Arr::get($field, 'raw.settings.slot_id');
+        $slot_id   = Arr::get($field, 'raw.settings.event_id');
         $startTime = Arr::get($data, 'start_time');
         $timezone  = Arr::get($data, 'timezone');
 
@@ -187,7 +187,7 @@ class BookingElement extends BaseFieldManager
         $startTimeUtc = DateTimeHelper::convertToUtc($startTime, $timezone);
 
         $booking = Booking::with('calendar')
-            ->where('slot_id', $slot_id)
+            ->where('event_id', $slot_id)
             ->where('start_time', $startTimeUtc)
             ->first();
             
