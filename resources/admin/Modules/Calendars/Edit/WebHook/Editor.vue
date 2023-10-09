@@ -244,7 +244,7 @@ export default {
             type: Array,
             required: true
         },
-        slot_id: {
+        event_id: {
             type: String,
             required: true
         }
@@ -268,7 +268,7 @@ export default {
             this.saving = true;
 
             let data = {
-                slot_id: this.slot_id,
+                event_id: this.event_id,
                 webhook_id: this.selected_id,
                 webhook: this.editing_item
             };

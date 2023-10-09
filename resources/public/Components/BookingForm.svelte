@@ -65,7 +65,7 @@
             ...form,
             timezone,
             start_date: spot.start,
-            slot_id: slot.id,
+            event_id: slot.id,
             source_url: currentUrl,
             action: 'fluent_cal_schedule_meeting'
         }

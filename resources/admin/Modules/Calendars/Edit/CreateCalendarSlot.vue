@@ -85,7 +85,7 @@ export default {
                     this.$handleSuccess(response);
                     this.$router.push({ 
                         name: 'slot_settings', 
-                        params: {calendar_id: response.slot.calendar_id, slot_id: response.slot.id},
+                        params: {calendar_id: response.slot.calendar_id, event_id: response.slot.id},
                         query: {step: 'basic-info' }
                     })
                 })

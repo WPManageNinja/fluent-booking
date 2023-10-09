@@ -116,7 +116,7 @@ class FrontEndHandler
     {
         $app = App::getInstance();
 
-        $slotId = (int)$_REQUEST['slot_id'];
+        $slotId = (int)$_REQUEST['event_id'];
 
         $calendarSlot = CalendarSlot::find($slotId);
 
@@ -211,7 +211,7 @@ class FrontEndHandler
 
     public function ajaxGetAvailableDates()
     {
-        $slotId = (int)$_REQUEST['slot_id'];
+        $slotId = (int)$_REQUEST['event_id'];
         $slot = CalendarSlot::findOrfail($slotId);
 
         if (!$slot || $slot->status != 'active') {
