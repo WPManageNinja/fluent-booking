@@ -273,7 +273,7 @@ class Booking extends Model
             return $exist;
         }
 
-        return BookingMeta::insert([
+        return BookingMeta::create([
             'event_id' => $this->id,
             'meta_key' => $key,
             'value'    => $value
