@@ -64,13 +64,15 @@ class GoogleCalendar
         $metaModel = $this->metaModel;
         $settings = $metaModel->value;
         if ($settings['expires_in'] - 10 <= time()) {
+            $settings['refresh_token'] = Helper::decryptKey($settings['refresh_token']);
             $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
             if (is_wp_error($newTokens)) {
                 $this->lastError = $newTokens;
                 return;
             }
-
+            
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
+            $settings['refresh_token'] = Helper::encryptKey($newTokens['access_token']);
             $settings['expires_in'] = $newTokens['expires_in'];
             $metaModel->value = $settings;
             $metaModel->save();
