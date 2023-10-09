@@ -4,7 +4,7 @@ namespace FluentBooking\Database\Migrations;
 
 class CalendarSlotsMigrator
 {
-    static $tableName = 'fcal_calendar_slots';
+    static $tableName = 'fcal_calendar_events';
 
     public static function migrate()
     {

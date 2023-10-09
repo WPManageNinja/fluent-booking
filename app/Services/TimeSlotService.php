@@ -198,7 +198,7 @@ class TimeSlotService
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
             ->get()
-            ->groupBy('event_id');
+            ->groupBy('group_id');
 
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
 

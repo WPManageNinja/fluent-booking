@@ -20,7 +20,7 @@ class BookingMigrator
                 `hash` VARCHAR(192) NULL,
                 `calendar_id` BIGINT(20) UNSIGNED NOT NULL,
                 `slot_id` BIGINT(20) UNSIGNED NOT NULL,
-                `event_id` BIGINT(20) UNSIGNED NULL,
+                `group_id` BIGINT(20) UNSIGNED NULL,
                 `parent_id` BIGINT(20) UNSIGNED NULL,
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_contact_id` BIGINT(20) UNSIGNED NULL,
@@ -44,6 +44,7 @@ class BookingMigrator
                 `status` VARCHAR(20) NOT NULL DEFAULT 'scheduled',
                 `source` VARCHAR(20) NOT NULL DEFAULT 'web',
                 `booking_type` VARCHAR(20) NOT NULL DEFAULT 'scheduling',
+                `event_type` VARCHAR(20) NOT NULL DEFAULT 'single', /* singe|group */
                 `source_url` TEXT NULL,
                 `source_id` BIGINT(20) UNSIGNED NULL,
                 `utm_source` VARCHAR(192) NULL DEFAULT '',

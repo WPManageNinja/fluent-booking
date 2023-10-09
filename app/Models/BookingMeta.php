@@ -9,7 +9,7 @@ class BookingMeta extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'event_id',
+        'booking_id',
         'meta_key',
         'value'
     ];

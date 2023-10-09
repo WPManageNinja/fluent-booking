@@ -74,7 +74,7 @@
             </div>
         </div>
         <div v-if="showing_spot" class="fcal_booking_activities">
-            <BookingActivities :event_id="showing_spot.event_id"/>
+            <BookingActivities :group_id="showing_spot.group_id"/>
             <FluentCrmProfile :crm_email="showing_spot.email" />
         </div>
         <el-dialog

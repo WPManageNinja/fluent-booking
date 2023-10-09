@@ -158,7 +158,8 @@ class FrontEndHandler
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
             'ip_address'       => Helper::getIp(),
-            'status'           => 'scheduled'
+            'status'           => 'scheduled',
+            'event_type'       => $calendarSlot->event_type
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
