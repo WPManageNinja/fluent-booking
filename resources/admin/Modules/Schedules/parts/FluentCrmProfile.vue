@@ -1,7 +1,7 @@
 <template>
     <div v-if="crmProfile" class="fcal_schedule_profile_box">
         <div class="fcal_schedule_profile_header">
-            <h1>FluentCrm Profile</h1>
+            <h1>FluentCRM Profile</h1>
         </div>
         <el-skeleton v-if="loading" />
 

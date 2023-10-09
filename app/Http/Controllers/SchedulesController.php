@@ -49,7 +49,9 @@ class SchedulesController extends Controller
             $query = $query->orderBy('start_time', 'DESC');
         }
 
-        $schedules = $query->get();
+        $query->groupBy('group_id');
+
+        $schedules = $query->paginate();
 
         foreach ($schedules as $schedule) {
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
@@ -61,35 +63,24 @@ class SchedulesController extends Controller
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
 
-            if(!$schedule->slot) {
+            if (!$schedule->slot) {
                 $schedule->author = [
                     'name' => 'unknown'
                 ];
-                $schedule->slot = (object) [];
+                $schedule->slot = (object)[];
             } else {
                 $schedule->author = $schedule->slot->getAuthorProfile(false);
+            }
+
+            if ($schedule->event_type == 'group') {
+                $schedule->booked_count = Booking::where('group_id', $schedule->group_id)->count();
             }
 
             do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
-        $groupedSchedules = $schedules->groupBy('group_id');
-
-        $perPage = $request->get('per_page', 10);
-        $page = $request->get('page', 1);
-        $total = $groupedSchedules->count();
-
-        $filteredSchedules = [];
-
-        if ($total) {
-            $chunkedSchedules = $groupedSchedules->chunk($perPage);
-            $filteredSchedules = $chunkedSchedules->get($page - 1, []);
-        }
-
-        $paginatedSchedules = new LengthAwarePaginator($filteredSchedules, $total, $perPage, $page);
-
         return $this->sendSuccess([
-            'schedules' => $paginatedSchedules,
+            'schedules' => $schedules,
             'timezone'  => 'UTC'
         ]);
     }
@@ -165,7 +156,7 @@ class SchedulesController extends Controller
         ]);
     }
 
-    public function getBooking(Request $request, $eventId)
+    public function getBooking(Request $request, $bookingId)
     {
         $isAdmin = current_user_can('manage_options');
 
@@ -177,47 +168,66 @@ class SchedulesController extends Controller
             });
         }
 
-        $bookings = $booking->where('group_id', $eventId)->get();
+        $booking = $booking->findOrFail($bookingId);
 
-        foreach ($bookings as $booking) {
-            if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
-                $booking->status = 'completed';
-                $booking->save();
-                do_action('fluent_booking/booking_schedule_completed', $booking);
-            }
-
-            $booking->happening_status = $booking->getOngoingStatus();
-            $booking->author = $booking->slot->getAuthorProfile(false);
-            $booking->location = $booking->getLocationDetailsHtml();
-
-            do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
+        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
+            $booking->status = 'completed';
+            $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking);
         }
 
-        return $this->sendSuccess([
-            'schedule' => $bookings
-        ]);
+        $booking->happening_status = $booking->getOngoingStatus();
+
+        if ($booking->slot) {
+            $booking->author = $booking->slot->getAuthorProfile(false);
+        }
+
+        $booking->location = $booking->getLocationDetailsHtml();
+
+        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
+
+        return [
+            'schedule' => $booking
+        ];
     }
 
-    public function getBookingActivities(Request $request, $eventId)
+    public function getGroupAttendees(Request $request, $groupId)
     {
+
         $isAdmin = current_user_can('manage_options');
 
-        if ($isAdmin) {
-            $bookingIds = Booking::where('group_id', $eventId)
-                ->pluck('id')->toArray();
-        } else {
-            $bookingIds = Booking::where('group_id', $eventId)
-                ->whereHas('calendar', function ($q) {
-                    $q->where('user_id', get_current_user_id());
-                })->pluck('id')->toArray();
+        $booking = Booking::with('slot');
+
+        if (!$isAdmin) {
+            $booking->whereHas('calendar', function ($q) {
+                $q->where('user_id', get_current_user_id());
+            });
         }
 
-        $activities = BookingActivity::whereIn('booking_id', $bookingIds)
-            ->orderBy('id', 'DESC')->get();
+        $booking = $booking->where('group_id', $groupId)->first();
 
-        return $this->sendSuccess([
+        if (!$booking || $booking->event_type != 'group') {
+            return $this->sendError(['message' => 'Invalid group id or the event is not a group event']);
+        }
+
+
+        $attendees = Booking::where('group_id', $booking->group_id)
+            ->paginate();
+
+        return [
+            'attendees' => $attendees
+        ];
+    }
+
+    public function getBookingActivities(Request $request, $bookingId)
+    {
+        $activities = BookingActivity::where('booking_id', $bookingId)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return [
             'activities' => $activities
-        ]);
+        ];
     }
 
 
