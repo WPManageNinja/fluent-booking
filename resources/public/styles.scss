@@ -1,5 +1,11 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
+$bodyBg: #f1f2f5;
+$primaryColor: #2653C7;
+$dark: #1B2533;
+$lightDark: #6b7280;
+
+
 
 .fcal_cal_wrap {
   max-width: 100% !important;
@@ -24,6 +30,10 @@ $breakpoint-tablet: 767px;
           color: #445164;
           margin-bottom: 10px;
         }
+        select {
+          min-height: 46px;
+        }
+        select,
         textarea,
         input {
           padding: 7px 16px;
@@ -47,6 +57,61 @@ $breakpoint-tablet: 767px;
             border-color: #4587EC;
           }
         }
+        .fcal_checkbox_wrap {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: flex-start;
+          gap: 18px;
+          .fcal_checkbox {
+            display: flex;
+            align-items: center;
+            position: relative;
+            gap: 6px;
+            cursor: pointer;
+            input[type=checkbox] {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 30px;
+              height: 30px;
+              min-height: 30px;
+              margin: 0;
+              padding: 0;
+              opacity: 0;
+              &:checked~.fcal_checkbox_mark {
+                background: $primaryColor;
+                border-color: $primaryColor;
+                &:before {
+                  transform: scale(1) rotate(45deg);
+                }
+              }
+            }
+            .fcal_checkbox_mark {
+              width: 30px;
+              height: 30px;
+              border-radius: 8px;
+              border: 1px solid #D6DAE1;
+              cursor: pointer;
+              transition: .3s;
+              position: relative;
+              &:before {
+                content: '';
+                width: 5px;
+                height: 12px;
+                border-bottom: 1.5px solid #ffffff;
+                border-right: 1.5px solid #ffffff;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -3px;
+                margin-top: -9px;
+                transform: scale(0) rotate(45deg);
+                transition: .3s;
+              }
+            }
+          }
+        }
+
         textarea {
           height: 112px;
         }
