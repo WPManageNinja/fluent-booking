@@ -136,6 +136,7 @@ app.mixin({
 app.config.globalProperties.$notify = ElNotification;
 app.config.globalProperties.$confirm = ElMessageBox.confirm;
 app.config.globalProperties.$alert = ElMessageBox.alert;
+app.config.globalProperties.$prompt = ElMessageBox.prompt;
 
 const router = createRouter({
     routes,
