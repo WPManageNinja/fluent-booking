@@ -7,7 +7,7 @@ use FluentBooking\App\Services\EditorShortCodeParser;
 class WebhookHandler {
     public function processWebhookResponseForBooking($booking, $type)
     {
-        $slot_id     = $booking['slot_id'];
+        $slot_id     = $booking['event_id'];
 
         $webhook_metas = Webhook::where('object_id', $slot_id)->where('object_type', 'webhook')->get();
 
@@ -77,7 +77,7 @@ class WebhookHandler {
                 ],
                 'remote_url'  => $remoteUrl,
                 'booking_id'  => $booking->id,
-                'slot_id'     => $booking->slot_id,
+                'event_id'     => $booking->event_id,
                 'calendar_id' => $booking->calendar_id,
                 'is_json'     => $isJson
             ];

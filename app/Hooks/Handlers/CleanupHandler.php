@@ -29,7 +29,7 @@ class CleanupHandler
         }
 
         foreach ($slots as $slot) {
-            Booking::where('slot_id', $slot->id)
+            Booking::where('event_id', $slot->id)
                 ->where('calendar_id', $slot->calendar_id)
                 ->delete();
             $slot->delete();

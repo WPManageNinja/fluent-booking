@@ -4137,8 +4137,8 @@ if (calendarApps.length) {
   calendarApps.forEach(function (item, index) {
     var elem = calendarApps[index];
     var calendarId = elem.dataset.calendar_id;
-    var slot_id = elem.dataset.slot_id;
-    if (calendarId && slot_id) {
+    var slot_id = elem.dataset.event_id;
+    if (calendarId && event_id) {
       elem.innerHTML = '';
       new _BookingApp_svelte__WEBPACK_IMPORTED_MODULE_0__["default"]({
         target: elem,
