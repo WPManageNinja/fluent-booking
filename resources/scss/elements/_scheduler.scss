@@ -2036,8 +2036,9 @@
   }
 
   .fcal_schedule_details_content {
-    width: 100%;
-    max-width: 670px;
+    //width: 100%;
+    //max-width: 670px;
+    flex: 1;
 
     .fcal_schedule_details_event {
       display: grid;
@@ -2150,7 +2151,9 @@
   }
 
   .fcal_booking_activities {
-    flex: 1;
+    //flex: 1;
+    max-width: 330px;
+    width: 100%;
 
     .fcal_schedule_event_infos {
       .fcal_schedule_event_infos_body {

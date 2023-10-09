@@ -43,6 +43,6 @@ class BlockEditorHandler
     public function fcal_render_block($attributes)
     {
         $slotId = $attributes['slotId'];
-        return do_shortcode("[fluent_booking id=$slotId style=$attributes]");
+        return do_shortcode("[fluent_booking id=$slotId]");
     }
 }

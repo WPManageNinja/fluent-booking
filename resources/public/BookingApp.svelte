@@ -25,7 +25,7 @@
         timezone = util.dayjs.tz.guess();
 
         appReady = true;
-        if(window.outerWidth <= 767) {
+        if(window.outerWidth <= 1045) {
             isMobile = true;
         }
         if (window.outerWidth < 400) {
@@ -34,7 +34,7 @@
     });
 
     window.onresize = function () {
-        if(window.outerWidth <= 767) {
+        if(window.outerWidth <= 1045) {
             isMobile = true;
         }
         if (window.outerWidth < 400) {
@@ -158,25 +158,25 @@
                 {/if}
                 <div class="fcal_date_wrapper {selectedDate ? 'is_active' : ''}">
                     {#if appReady}
-                        {#if !selectedDate}
-                            <DayPickerApp 
-                                {slot}
-                                {settings}
-                                bind:timezone={timezone}
-                                on:dayClicked={(e) => {dayClicked(e.detail)}} 
-                                on:spotSelected={(e) => {spotSelected(e.detail)}}
-                                on:timezoneChanged={(e) => {resetSelection()}}
-                                on:resetSelection={(e) => { resetSelection() }}
-                            />
-                        {/if}
-                        {#if isFluentform }
-                            <BookingDetails
-                                {appData}
-                                {timezone}
-                                {selectedDate}
-                                on:resetSelection={(e) => { resetSelection() }}
-                            />
-                        {/if}
+                        <div class="fcal_day_picker_wrap">
+                                <DayPickerApp
+                                    {slot}
+                                    {settings}
+                                    bind:timezone={timezone}
+                                    on:dayClicked={(e) => {dayClicked(e.detail)}}
+                                    on:spotSelected={(e) => {spotSelected(e.detail)}}
+                                    on:timezoneChanged={(e) => {resetSelection()}}
+                                    on:resetSelection={(e) => { resetSelection() }}
+                                />
+                            {#if isFluentform }
+                                <BookingDetails
+                                    {appData}
+                                    {timezone}
+                                    {selectedDate}
+                                    on:resetSelection={(e) => { resetSelection() }}
+                                />
+                            {/if}
+                        </div>
 
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
                                 <div class="fcal_date_event_details_header">
