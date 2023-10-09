@@ -1,14 +1,14 @@
 <template>
     <el-dialog
         v-model="openModal"
-        title="Update Question"
+        :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
         <el-form v-if="openModal" label-position="top" >
             <el-form-item label="Location">
                 <el-select
                     popper-class="fcal_select"
-                    v-model="field.type"
+                    v-model="fieldData.type"
                     :disabled="isMandatoryField"
                     placeholder="Select Type">
                     <el-option
@@ -21,18 +21,18 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Label">
-                <el-input v-model="field.label" type="text" placeholder="Label" />
+                <el-input v-model="fieldData.label" type="text" placeholder="Label" />
             </el-form-item>
             <el-form-item label="Placeholder">
-                <el-input v-model="field.placeholder" type="textarea" placeholder="Placeholder" />
+                <el-input v-model="fieldData.placeholder" type="textarea" placeholder="Placeholder" />
             </el-form-item>
             <el-form-item v-show="isOptionRequired" label="Options" class="fcal_question_options">
-                <div class="fcal_question_option" v-for="(option, index) in field.options" :key="index">
+                <div class="fcal_question_option" v-for="(option, index) in fieldData.options" :key="index">
                     <el-input
                         type="text"
                         class="form-control"
                         :placeholder="`Option ${index + 1}`"
-                        v-model=field.options[index]
+                        v-model=fieldData.options[index]
                     />
                     <el-link v-if="isRemovable" type="danger" title="Remove"
                         :icon="CloseBoldIcon"
@@ -45,9 +45,9 @@
                 </el-link>
             </el-form-item>
             <el-form-item label="Required">
-                <el-radio-group v-model="field.required" class="ml-4">
-                    <el-radio label="yes">Yes</el-radio>
-                    <el-radio label="no">No</el-radio>
+                <el-radio-group v-model="fieldData.required" class="radio_desc_group radio_required_field">
+                    <el-radio :label="true">Yes</el-radio>
+                    <el-radio :label="false">No</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>
@@ -56,8 +56,8 @@
                 <el-button class="fcal_plain_btn" @click="openModal = false">
                     Cancel
                 </el-button>
-                <el-button class="fcal_primary_btn" @click="updateFieldSettings">
-                    Update
+                <el-button class="fcal_primary_btn" @click="saveChanges">
+                    Save
                 </el-button>
             </div>
         </template>
@@ -70,13 +70,25 @@ import { CloseBold } from '@element-plus/icons-vue';
 export default {
     name: 'EditCustomFieldModal',
     props: ['field', 'fields', 'phoneRequired', 'showModal'],
-    emits: ['closeModal', 'updatedFieldData'],
+    emits: ['closeModal', 'updateFieldData'],
     data() {
         return {
             openModal: this.showModal,
             fieldsTypes: this.appVars.custom_field_types,
             defaultOptions: ['Option 1', 'Option 2'],
             CloseBoldIcon: markRaw(CloseBold),
+            isNewEntry: false,
+            fieldData: {},
+            newField: {
+                index: '',
+                label: '',
+                name: '',
+                type: 'checkbox',
+                placeholder: '',
+                enabled: true,
+                required: false,
+                options: ['Option 1', 'Option 2']
+            },
         }
     },
     watch: {
@@ -84,48 +96,78 @@ export default {
             this.$emit('closeModal');
         },
         'field.type': function() {
-            if (this.isOptionRequired && !this.field.options) {
-                this.field.options = this.defaultOptions;
+            if (this.isOptionRequired && !this.fieldData.options) {
+                this.fieldData.options = this.defaultOptions;
             } else {
-                this.field.options = {};
+                this.fieldData.options = {};
             }
         }
     },
     computed: {
+        modalTitle() {
+            return this.isNewEntry ? 'Add Question' : 'Update Question';
+        },
         isOptionRequired() {
-            return ['checkbox', 'dropdown', 'multi_select_checkbox'].includes(this.field.type);
+            return ['checkbox', 'dropdown'].includes(this.fieldData.type);
         },
         isRemovable() {
-            return this.field.options.length > 2;
+            return this.fieldData.options.length > 2;
         },
         isMandatoryField() {
             const allowedFields = ['name', 'email'];
             if (this.phoneRequired) {
                 allowedFields.push('phone');
             }
-            return allowedFields.includes(this.field.name);
+            return allowedFields.includes(this.fieldData.name);
         },
     },
     methods: {
-        updateFieldSettings() {
+        saveChanges() {
             this.updateFieldName();
-            this.$emit('updatedFieldData', this.field);
+            this.$emit('updateFieldData', this.fieldData, this.isNewEntry);
             this.openModal = false;
         },
         updateFieldName() {
-            let fieldName = this.field.type;
-            let totalMatch = this.fields.filter(field => field.name.startsWith(fieldName)).length;
-            if (totalMatch) {
-                fieldName = `${fieldName}_${totalMatch}`;
+            let fieldName = this.fieldData.type;
+            let suffix = 0;
+            if (this.fields.some(field => field.name === fieldName)) {
+                if (this.fields.forEach(field => {
+                    if(field.name.startsWith(fieldName)) {
+                        const chars = field.name.split('_');
+                        const suffixNum = parseInt(chars[1]);
+                        if (suffixNum && suffixNum > suffix) {
+                            suffix = suffixNum;
+                        }
+                    }
+                }));
+                fieldName = `${fieldName}_${parseInt(suffix)+1}`;
             }
-            this.field.name = fieldName;
+            this.fieldData.name = fieldName;
         },
         addNewOption() {
-            const index = this.field.options.length + 1;
-            this.field.options = [...this.field.options, `Option ${index}`];
+            const index = this.fieldData.options.length + 1;
+            this.fieldData.options = [...this.fieldData.options, `Option ${index}`];
         },
         removeOption(index) {
-            this.field.options.splice(index, 1);
+            this.fieldData.options.splice(index, 1);
+        },
+        getFieldIndex() {
+            let index = 0;
+            this.fields.forEach(field => {
+                if (field.index > index) {
+                    index = field.index;
+                }
+            });
+            return index + 1;
+        }
+    },
+    mounted() {
+        if (!this.field) {
+            this.fieldData = this.newField;
+            this.newField.index = this.getFieldIndex();
+            this.isNewEntry = true;
+        } else {
+            this.fieldData = this.field;
         }
     }
 }
