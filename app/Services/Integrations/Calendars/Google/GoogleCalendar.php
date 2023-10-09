@@ -91,7 +91,6 @@ class GoogleCalendar
 
     public function createEvent($calendarId, $eventData, $queryArgs = [])
     {
-
         $argsDefaults = [
             'sendUpdates' => 'all'
         ];
@@ -102,5 +101,13 @@ class GoogleCalendar
         }
 
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
+    }
+
+    public function revoke()
+    {
+        if($this->lastError) {
+            return $this->lastError;
+        }
+        return ($this->getAccessClient())->revokeConnection();
     }
 }

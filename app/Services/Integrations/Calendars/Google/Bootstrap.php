@@ -8,7 +8,9 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
+use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -27,14 +29,12 @@ class Bootstrap
                 'is_global_configured' => GoogleHelper::isConfigured(),
                 'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar'),
             ];
-
             return $calendars;
         }, 10, 2);
 
         add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushGoogleFeeds'], 10, 2);
 
         add_action('fluent_calendar/patch_calendar_config_settings__google_user_token', function ($conflictIds, $meta) {
-
             $meta = Meta::where('object_type', '_google_user_token')
                 ->where('id', $meta->id)
                 ->first();
@@ -43,6 +43,13 @@ class Bootstrap
             $meta->value = $settings;
             $meta->save();
         }, 10, 2);
+
+        add_action('fluent_calendar/disconnect_remote_calendar__google_user_token', function ($meta) {
+            // Let's remove the cache first
+            CalendarCache::deleteAllParentCache($meta->id);
+            (new GoogleCalendar($meta))->revoke();
+            $meta->delete();
+        });
 
         add_filter('fluent_booking/get_client_settings_google_calendar', function ($settings) {
             $config = GoogleHelper::getApiConfig();
@@ -90,7 +97,6 @@ class Bootstrap
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
         add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
-
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -134,20 +140,54 @@ class Bootstrap
         $scope = sanitize_text_field($_GET['scope']);
 
         $userId = sanitize_text_field($_GET['state']);
+        $calendar = Calendar::where('user_id', $userId)->first();
+
 
         $client = GoogleHelper::getApiClient();
-
 
         $response = $client->generateAuthCode($code);
 
         if (is_wp_error($response)) {
-            dd($response);
+            RemoteCalendarHelper::showGeneralError([
+                'title'    => __('Failed to connect Calendar API', 'fluent-booking'),
+                'body'     => 'Google API Response Error: ' . $response->get_error_message(),
+                'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
+                'btn_text' => 'Back to Calendars Configuration'
+            ]);
+            return;
         }
+
+        $requiredScopes = [];
+
+        // Verify the scopes
+        $returnedScope = $response['scope'];
+        if (!strpos($returnedScope, 'https://www.googleapis.com/auth/calendar.events') !== false) {
+            $requiredScopes[] = 'https://www.googleapis.com/auth/calendar.events';
+        }
+
+        if (!strpos($returnedScope, 'https://www.googleapis.com/auth/calendar.readonly') !== false) {
+            $requiredScopes[] = 'https://www.googleapis.com/auth/calendar.readonly';
+        }
+
+        if ($requiredScopes) {
+            RemoteCalendarHelper::showGeneralError([
+                'title'    => __('Required scopes missing', 'fluent-booking'),
+                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes),
+                'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
+                'btn_text' => 'Back to Calendars Configuration'
+            ]);
+        }
+
 
         $calendarEmail = GoogleHelper::getEmailByIdToken($response['id_token']);
 
         if (is_wp_error($calendarEmail)) {
-            dd($calendarEmail);
+            RemoteCalendarHelper::showGeneralError([
+                'title'    => __('Google API Error', 'fluent-booking'),
+                'body'     => 'We could not authenticate your account. Please try again later.',
+                'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
+                'btn_text' => 'Back to Calendars Configuration'
+            ]);
         }
 
         unset($response['id_token']);
@@ -157,10 +197,7 @@ class Bootstrap
 
         $this->addFeedIntegration($userId, $response);
 
-        $calendar = Calendar::where('user_id', $userId)->first();
-
-        wp_redirect(admin_url('admin.php?page=fluent-booking#/calendars/' . $calendar->id . '/settings/google'));
-
+        wp_redirect(Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),);
         exit;
     }
 
@@ -249,7 +286,7 @@ class Bootstrap
             return false;
         }
 
-        if($booking->getMeta('__google_calendar_event')) {
+        if ($booking->getMeta('__google_calendar_event')) {
             return false; // Already created
         }
 

@@ -123,6 +123,13 @@ class Client
         return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
     }
 
+    public function revokeConnection()
+    {
+        return $this->makeRequest($this->revokeUrl, [
+            'token' => $this->accessToken
+        ], 'POST');
+    }
+
     public function getAuthorizationHeader($accessToken = null)
     {
         if (!$accessToken) {
@@ -178,7 +185,7 @@ class Client
         return $resBody;
     }
 
-    public function getAuthUrl($calendarId)
+    public function getAuthUrl($userId)
     {
         $authUrl = add_query_arg([
             'client_id'     => $this->clientId,
@@ -186,7 +193,8 @@ class Client
             'redirect_uri'  => $this->redirectUrl,
             'response_type' => 'code',
             'access_type'   => 'offline',
-            'state'         => $calendarId
+            'state'         => $userId,
+            'prompt'        => 'consent'
         ], $this->authUrl);
 
         return $authUrl;
