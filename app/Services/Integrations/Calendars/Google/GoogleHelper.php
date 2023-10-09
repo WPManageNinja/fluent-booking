@@ -10,6 +10,14 @@ class GoogleHelper
 {
     public static function getApiConfig()
     {
+        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
+            return [
+                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
+                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
+                'constant_defined' => true
+            ];
+        }
+
         $defaults = [
             'client_id'     => '',
             'client_secret' => ''
@@ -20,7 +28,7 @@ class GoogleHelper
 
         $settings = wp_parse_args($settings, $defaults);
 
-        if(!empty($settings['client_secret'])) {
+        if (!empty($settings['client_secret'])) {
             $settings['client_secret'] = Helper::decryptKey($settings['client_secret']);
         }
 
@@ -30,9 +38,23 @@ class GoogleHelper
 
     public static function updateApiConfig($settings)
     {
+        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
+            return [
+                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
+                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
+                'constant_defined' => true
+            ];
+        }
+
         $settings = Arr::only($settings, ['client_id', 'client_secret']);
 
-        if(!empty($settings['client_secret'])) {
+        if (!empty($settings['client_secret'])) {
+
+            if ($settings['client_secret'] == '********************') {
+                $oldSettings = self::getApiConfig();
+                $settings['client_secret'] = $oldSettings['client_secret'];
+            }
+
             $settings['client_secret'] = Helper::encryptKey($settings['client_secret']);
         }
 
@@ -113,5 +135,13 @@ class GoogleHelper
         }
 
         return $calendars;
+    }
+
+    public static function getAppRedirectUrl()
+    {
+        if (defined('FLUENT_BOOKING_G_AUTH_REDIRECT_URL')) {
+            return FLUENT_BOOKING_G_AUTH_REDIRECT_URL;
+        }
+        return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
     }
 }

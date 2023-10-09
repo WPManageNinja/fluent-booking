@@ -53,8 +53,15 @@ class Bootstrap
 
         add_filter('fluent_booking/get_client_settings_google_calendar', function ($settings) {
             $config = GoogleHelper::getApiConfig();
-            // $config['redirect_url'] = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-            $config['redirect_url'] = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
+            $config['redirect_url'] = GoogleHelper::getAppRedirectUrl();
+
+            if (!empty($config['constant_defined'])) {
+                $config['client_secret'] = '**********';
+                $config['client_id'] = '**********';
+            } else {
+                $config['client_secret'] = '********************';
+            }
+
             return $config;
         });
 
@@ -62,31 +69,42 @@ class Bootstrap
 
             $app = App::getInstance();
 
+            $fields = [
+                'client_id'     => [
+                    'type'        => 'text',
+                    'label'       => __('Client ID', 'fluent_booking'),
+                    'placeholder' => __('Enter Your Client ID', 'fluent_booking'),
+                ],
+                'client_secret' => [
+                    'type'        => 'text',
+                    'label'       => __('Secret Key', 'fluent_booking'),
+                    'placeholder' => __('Enter Your Secret Key', 'fluent_booking'),
+                ],
+                'redirect_url'  => [
+                    'type'        => 'text',
+                    'label'       => __('Redirect URI', 'fluent_booking'),
+                    'placeholder' => __('Enter Your Redirect URI', 'fluent_booking'),
+                    'readonly'    => true,
+                    'copy_btn'    => true,
+                ],
+            ];
+
+            $config = GoogleHelper::getApiConfig();
+
+            $description = '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>';
+
+            if (!empty($config['constant_defined'])) {
+                $fields = null;
+                $description = '<p>Google Calendar/Meet integration is configured by wp-config.php constants. No action required here</p>';
+            }
+
             return [
                 'logo'          => $app['url.assets'] . 'images/google-calendar.svg',
                 'title'         => __('Google Calendar / Meet', 'fluent_booking'),
                 'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
-                'description'   => '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>',
+                'description'   => $description,
                 'save_btn_text' => __('Save', 'fluent_booking'),
-                'fields'        => [
-                    'client_id'     => [
-                        'type'        => 'text',
-                        'label'       => __('Client ID', 'fluent_booking'),
-                        'placeholder' => __('Enter Your Client ID', 'fluent_booking'),
-                    ],
-                    'client_secret' => [
-                        'type'        => 'password',
-                        'label'       => __('Secret Key', 'fluent_booking'),
-                        'placeholder' => __('Enter Your Secret Key', 'fluent_booking'),
-                    ],
-                    'redirect_url'  => [
-                        'type'        => 'text',
-                        'label'       => __('Redirect URI', 'fluent_booking'),
-                        'placeholder' => __('Enter Your Redirect URI', 'fluent_booking'),
-                        'readonly'    => true,
-                        'copy_btn'    => true,
-                    ],
-                ],
+                'fields'        => $fields
             ];
         });
 
@@ -172,7 +190,7 @@ class Bootstrap
         if ($requiredScopes) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Required scopes missing', 'fluent-booking'),
-                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes).print_r($response, true),
+                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes) . print_r($response, true),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
                 'btn_text' => 'Back to Calendars Configuration'
             ]);
@@ -195,6 +213,7 @@ class Bootstrap
         $response['expires_in'] += time();
 
         $response['access_token'] = Helper::encryptKey($response['access_token']);
+        $response['refresh_token'] = Helper::encryptKey($response['refresh_token']);
 
         $this->addFeedIntegration($userId, $response);
 
