@@ -29,8 +29,8 @@
                                 {{ availability.title }}
                                 <span v-if="availability.settings.default && filters.author == 'me'"
                                       class="default-schedule-badge">
-                                <el-icon><StarFilled/></el-icon> Default
-                            </span>
+                                    <el-icon><StarFilled/></el-icon> Default
+                                </span>
                             </h4>
                             <p class="fcal_icon_line">
                                 <el-icon>
@@ -54,6 +54,21 @@
                             </p>
                         </div>
                         <div class="fcal_card_actions">
+                            <el-dropdown trigger="click" popper-class="fcal_select">
+                                <el-button class="fcal_plain_btn">
+                                    <el-icon><MoreFilled /></el-icon>
+                                </el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item @click="">
+                                            <el-icon><CopyDocument /></el-icon> Duplicate
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="deleteAvailability(availability.id)">
+                                            <el-icon><Delete /></el-icon> Delete
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
 
                         </div>
                     </div>
@@ -71,7 +86,7 @@
             class="fcal_dialog"
         >
             <el-form label-position="top">
-                <el-form-item label="Schedule Title">
+                <el-form-item label="Schedule Title *">
                     <el-input v-model="newSchedule.title"/>
                 </el-form-item>
                 <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
@@ -91,12 +106,12 @@
 <script>
 import SaveButton from "../../Components/Buttons/SaveButton.vue";
 import TimeZoneSelector from "../Calendars/parts/TimeZoneSelector.vue";
-import {StarFilled} from "@element-plus/icons-vue";
+import { StarFilled, MoreFilled, CopyDocument, Delete } from "@element-plus/icons-vue";
 import Pagination from "../../Pieces/Pagination.vue";
 
 export default {
     name: 'AllAvailabilities',
-    components: {Pagination, StarFilled, TimeZoneSelector, SaveButton},
+    components: {Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton},
     data() {
         return {
             loading: false,
@@ -128,6 +143,7 @@ export default {
                 .then(response => {
                     this.availabilities = response.availabilities.data;
                     this.pagination.total = response.availabilities.total;
+                    console.log(this.availabilities);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -149,11 +165,35 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
-                    this.dialogVisible = false;
+                    this.creatingNew = false;
                 });
         },
+        deleteAvailability(availabilityId) {
+            this.$confirm('Are you sure you want to delete this schedule?', 'Delete Schedule', {
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    this.$del('availability/' + availabilityId)
+                        .then(response => {
+                            this.$handleSuccess(response.message);
+                            this.removeSchedule(availabilityId);
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        });
+                })
+                return;
+        },
+        removeSchedule(scheduleId) {
+            const updatedAilabilities = this.availabilities.filter(schedule => schedule.id !== scheduleId);
+            this.availabilities = updatedAilabilities;
+        },
         gotoDetails(schedule) {
-
+            this.$router.push({
+                name: 'availability_details',
+                params: { schedule_id: schedule.id }
+            })
         }
     },
     mounted() {

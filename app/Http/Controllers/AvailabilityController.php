@@ -76,7 +76,7 @@ class AvailabilityController extends Controller
 
     public function getSchedule(Request $request, $scheduleId)
     {
-        $schedule = Availability::with('calendar')->findOrFail($scheduleId);
+        $schedule = Availability::findOrFail($scheduleId);
 
         $formattedSchedule = AvailabilityService::getFormattedSchedule($schedule);
 
@@ -118,7 +118,7 @@ class AvailabilityController extends Controller
             ->first();
 
 
-        $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], !!$existingSchedule, $timezone);
+        $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], !$existingSchedule, $timezone);
 
         $createSchedule = Availability::create($scheduleData);
 
@@ -212,6 +212,14 @@ class AvailabilityController extends Controller
         if ($isDefault) {
             return $this->sendError([
                 'message' => __('Default Schedule can not be deleted', 'fluent-booking')
+            ], 422);
+        }
+
+        $usageCount = AvailabilityService::getAvailabilityUsageCount($scheduleId);
+
+        if ($usageCount) {
+            return $this->sendError([
+                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount),
             ], 422);
         }
 

@@ -1,11 +1,14 @@
 <template>
     <div class="fcal_create_calendar_wrap">
+
         <div class="fcal_header">
-            <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
-                <el-icon :size="20" color="black"><Back/></el-icon>
-                <h1>{{ slot?.title }}</h1>
-            </router-link>
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ name: 'calendars' }">Booking Types</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ calendar.author_profile?.name }}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ slot?.title }}</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
+
         <el-tabs
             v-model="activeTab"
             tab-position="left"
@@ -13,11 +16,14 @@
             class="fcal_tabs">
             <el-tab-pane name="basic-info">
                 <template #label>
-                    <el-icon><EventIcon/></el-icon> Event Details
+                    <el-icon>
+                        <EventIcon/>
+                    </el-icon>
+                    Event Details
                 </template>
                 <div class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading" />
-                    <basic-info v-else :slot="slot" />
+                    <el-skeleton v-if="loading"/>
+                    <basic-info v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
                         <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
                     </div>
@@ -25,11 +31,14 @@
             </el-tab-pane>
             <el-tab-pane name="schedule-settings">
                 <template #label>
-                    <el-icon><ScheduleIcon/></el-icon> Schedule Settings
+                    <el-icon>
+                        <ScheduleIcon/>
+                    </el-icon>
+                    Schedule Settings
                 </template>
                 <div class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading" />
-                    <ScheduleSettings v-else :slot="slot" />
+                    <el-skeleton v-if="loading"/>
+                    <ScheduleSettings v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
                         <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
                     </div>
@@ -37,28 +46,34 @@
             </el-tab-pane>
             <el-tab-pane name="notification-settings">
                 <template #label>
-                    <el-icon><NoficationIcon/></el-icon> Notification
+                    <el-icon>
+                        <NoficationIcon/>
+                    </el-icon>
+                    Notification
                 </template>
                 <div class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading" />
-                    <NotificationSettings v-else ref="notificationData" :slot="slot" />
+                    <el-skeleton v-if="loading"/>
+                    <NotificationSettings v-else ref="notificationData" :slot="slot"/>
                 </div>
             </el-tab-pane>
             <el-tab-pane name="question-settings">
                 <template #label>
-                    <el-icon><NoficationIcon/></el-icon> Booking Questions
+                    <el-icon><QuestionIcon/></el-icon> Booking Questions
                 </template>
                 <div class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading" />
-                    <QuestionSettings v-else :activeTab="activeTab" :slot="slot" />
+                    <el-skeleton v-if="loading"/>
+                    <QuestionSettings v-else :activeTab="activeTab" :slot="slot"/>
                 </div>
             </el-tab-pane>
             <el-tab-pane name="webhooks-settings">
                 <template #label>
-                    <el-icon><Link /></el-icon> Webhooks Settings
+                    <el-icon>
+                        <Link/>
+                    </el-icon>
+                    Webhooks Settings
                 </template>
                 <div class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading" />
+                    <el-skeleton v-if="loading"/>
                     <WebhookSettings
                         :slot_id="slot_id"
                         :calendar_id="calendar_id"
@@ -75,10 +90,11 @@ import NotificationSettings from './_NotificationSettings'
 import ScheduleSettings from "./_ScheduleSettings";
 import QuestionSettings from "./_QuestionSettings";
 import EventIcon from '../../../Components/Icons/EventIcon';
+import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import { Back, Link } from '@element-plus/icons-vue';
+import {Back, Link} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings"
 
 export default {
@@ -94,11 +110,13 @@ export default {
         EventIcon,
         ScheduleIcon,
         NoficationIcon,
+        QuestionIcon,
         Back,
         Link
     },
     data() {
         return {
+            calendar: {},
             slot: null,
             loading: true,
             saving: false,
@@ -108,8 +126,11 @@ export default {
     methods: {
         getSlot() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/slots/' + this.slot_id)
+            this.$get('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
+                with: ['calendar']
+            })
                 .then(response => {
+                    this.calendar = response.calendar;
                     this.slot = response.slot;
                     this.updateTabValue();
                 })
@@ -124,9 +145,9 @@ export default {
             if (this.$route.query.step) {
                 this.activeTab = this.$route.query.step;
             }
-        }, 
+        },
         handleTabChange() {
-            this.$router.push({ 
+            this.$router.push({
                 name: 'slot_settings',
                 params: {calendar_id: this.slot?.calendar_id, slot_id: this.slot?.id},
                 query: {step: this.activeTab}

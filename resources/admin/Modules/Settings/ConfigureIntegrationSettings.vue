@@ -1,15 +1,12 @@
 <template>
     <div class="fcal_settings_body_inner fcal_settings_general">
-        <div class="fcal_settings_header">
-            <h3>Configure Integration</h3>
-        </div>
         <div v-if="!loading" class="fcal_settings_content_wrap">
             <div v-if="Object.keys(fieldSettings).length" class="fcal_configure_integrations">
                 <div class="fcal_configure_integration_card">
                     <div class="fcal_configure_integration_card_header">
                         <div class="left">
-                            <div class="img-box">
-                                <div v-html="fieldSettings.logo"></div>
+                            <div v-if="fieldSettings.logo" class="img-box">
+                                <img :src="fieldSettings.logo"  />
                             </div>
                             <div class="content">
                                 <h3>{{ fieldSettings.title }}</h3>
@@ -19,7 +16,7 @@
                     </div>
                     <div class="fcal_configure_integration_body">
                         <div v-html="fieldSettings.description"></div>
-                        <el-form label-position="top">
+                        <el-form v-model="settings" label-position="top">
                             <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
                                 <el-input
                                     v-model="settings[fieldKey]"
@@ -27,7 +24,7 @@
                                     :placeholder="field.placeholder"
                                     :disabled="field.readonly">
                                     <template v-if="field.copy_btn" #append>
-                                        <el-button type="primary" @click="copyText(settings[fieldKey])">
+                                        <el-button type="default" @click="copyText(settings[fieldKey])">
                                             <el-icon><CopyDocument /></el-icon> Copy
                                         </el-button>
                                     </template>

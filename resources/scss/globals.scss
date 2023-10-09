@@ -846,6 +846,13 @@
                         &.radio_desc_group {
                             display: block;
                             position: relative;
+                            &.radio_required_field {
+                                display: flex;
+                                align-items: center;
+                                .el-radio {
+                                    align-items: center;
+                                }
+                            }
                             .el-radio {
                                 .el-radio__input {
                                     input {
@@ -1415,9 +1422,7 @@
     }
     .fcal_configure_integration_card {
         margin: 0;
-        border: 1px solid #D6DAE1;
         border-radius: 8px;
-        padding: 24px;
         &.el-collapse-item,
         &:last-child {
             margin: 0;

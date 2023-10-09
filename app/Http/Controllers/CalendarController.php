@@ -221,7 +221,8 @@ class CalendarController extends Controller
         $calendar = Calendar::findOrFail($id);
 
         return [
-            'settings' => LandingPageHelper::getSettings($calendar)
+            'settings' => LandingPageHelper::getSettings($calendar),
+            'share_url' => $calendar->getLandingPageUrl(true)
         ];
     }
 
@@ -285,9 +286,17 @@ class CalendarController extends Controller
 
         $slot->settings = $slotSettings;
 
-        return [
+        $data = [
             'slot' => $slot
         ];
+
+        if(in_array('calendar', $this->request->get('with', []))) {
+            $calendar = $slot->calendar;
+            $calendar->author_profile = $calendar->getAuthorProfile();
+            $data['calendar'] = $calendar;
+        }
+
+        return $data;
     }
 
     public function getSlotSchema(Request $request, $calendarId)
@@ -463,7 +472,7 @@ class CalendarController extends Controller
             $formattedNotifications[$key] = [
                 'title'   => sanitize_text_field($value['title']),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'email'   => $this->sanitize_data($value['email'])
+                'email'   => $this->sanitize_notification_data($value['email'])
             ];
         }
 
@@ -489,7 +498,30 @@ class CalendarController extends Controller
 
         $bookingFields = $request->get('booking_fields');
 
-        $slot->setBookingFields($bookingFields);
+        $optionRequiredFields = ['checkbox', 'dropdown'];
+
+        $formattedFields = [];
+
+        foreach ($bookingFields as $value) {
+            $formattedField = [
+                'index'    => (int) Arr::get($value, 'index'),
+                'type'     => sanitize_text_field(Arr::get($value, 'type')),
+                'name'     => sanitize_text_field(Arr::get($value, 'name')),
+                'enabled'  => Arr::isTrue($value, 'enabled'),
+                'required' => Arr::isTrue($value, 'required'),
+                'label'    => sanitize_text_field(Arr::get($value, 'label')),
+                'placeholder' => sanitize_text_field(Arr::get($value, 'placeholder'))
+            ];
+
+            if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
+                $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
+                $formattedField['options'] = $sanitizedOptions;
+            }
+
+            $formattedFields[] = $formattedField;
+        }
+
+        $slot->setBookingFields($formattedFields);
 
         return [
             'message' => __('Fields has been updated', 'fluent-booking')
@@ -513,9 +545,8 @@ class CalendarController extends Controller
         ];
     }
 
-    private function sanitize_data($settings)
+    private function sanitize_notification_data($settings)
     {
-
         $sanitizerMap = [
             'value'   => 'intval',
             'unit'    => 'sanitize_text_field',

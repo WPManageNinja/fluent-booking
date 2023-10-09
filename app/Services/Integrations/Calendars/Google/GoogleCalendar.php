@@ -3,44 +3,104 @@
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
 use FluentBooking\App\Models\Meta;
-use FluentBooking\App\Services\Integrations\Calendars\BaseCalendar;
 
-class GoogleCalendar extends BaseCalendar
+class GoogleCalendar
 {
-    public function __construct($settings)
-    {
-        if (is_numeric($settings)) {
-            $settings = Meta::where('id', $settings)
-                ->where('object_type', 'google_calendar')
-                ->where('key', 'google_calendar_config')
-                ->first();
 
-            if (!$settings) {
-                throw new \Exception('Google Calendar settings could be not found');
-            }
+    public $lastError = null;
+
+    private $metaModel;
+
+    public function __construct(Meta $meta)
+    {
+        $this->metaModel = $meta;
+        $this->normalizeUserAccessMeta();
+    }
+
+    public function getMetaModel()
+    {
+        return $this->metaModel;
+    }
+
+    public function getCalendarLists()
+    {
+        if ($this->lastError) {
+            return $this->lastError;
         }
 
-        $configData = $settings->value;
+        return ($this->getAccessClient())->getCalendarLists();
+    }
 
-        $config = [
-            'id'           => $settings->id,
-            'settings_key' => 'google_calendar_config',
-            'settings'     => $configData,
-            'calendar_id'  => $settings->object_id,
-            'db_id'        => $settings->id,
+    public function getCalendarEvents($calendarId, $args = [])
+    {
+        $defaults = [
+            'maxResults' => 2000,
+            'timeZone'   => 'UTC'
         ];
 
-        parent::__construct($config);
+        $args = array_merge($defaults, $args);
+
+        if ($this->lastError) {
+            return $this->lastError;
+        }
+
+
+        return ($this->getAccessClient())->getCalendarEvents($calendarId, $args);
     }
 
-    public function getToken()
+    private function getAccessClient()
+    {
+        return (GoogleHelper::getApiClient($this->getAccessToken()));
+    }
+
+    private function getAccessToken()
+    {
+        $settings = $this->metaModel->value;
+        return $settings['access_token'];
+    }
+
+    private function normalizeUserAccessMeta()
+    {
+        $metaModel = $this->metaModel;
+        $settings = $metaModel->value;
+        if ($settings['expires_in'] - 10 <= time()) {
+            $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
+            if (is_wp_error($newTokens)) {
+                $this->lastError = $newTokens;
+                return;
+            }
+
+            $settings['access_token'] = $newTokens['access_token'];
+            $settings['expires_in'] = $newTokens['expires_in'];
+            $metaModel->value = $settings;
+            $metaModel->save();
+            $this->metaModel = $metaModel;
+        }
+    }
+
+    public function updateSettinsValueByKey($key, $value)
+    {
+        $metaModel = $this->metaModel;
+        $settings = $metaModel->value;
+        $settings[$key] = $value;
+        $metaModel->value = $settings;
+        $metaModel->save();
+        $this->metaModel = $metaModel;
+        return $this;
+    }
+
+    public function createEvent($calendarId, $eventData, $queryArgs = [])
     {
 
+        $argsDefaults = [
+            'sendUpdates' => 'all'
+        ];
+        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
+
+        if (empty($eventData['start']) || empty($eventData['end'])) {
+            return new \WP_Error('invalid_data', 'start and end data is required');
+        }
+
+        return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
     }
-
-    public function renewToken()
-    {
-
-    }
-
 }
