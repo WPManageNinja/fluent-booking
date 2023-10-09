@@ -83,7 +83,7 @@ export default {
                 index: '',
                 label: '',
                 name: '',
-                type: 'checkbox',
+                type: 'text',
                 placeholder: '',
                 enabled: true,
                 required: false,
@@ -108,7 +108,7 @@ export default {
             return this.isNewEntry ? 'Add Question' : 'Update Question';
         },
         isOptionRequired() {
-            return ['checkbox', 'dropdown'].includes(this.fieldData.type);
+            return ['dropdown'].includes(this.fieldData.type);
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
