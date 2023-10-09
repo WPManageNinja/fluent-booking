@@ -30,7 +30,7 @@
                                     </template>
                                 </el-input>
                             </el-form-item>
-                            <SaveButton :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
+                            <SaveButton v-if="fieldSettings.fields" :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                         </el-form>
                     </div>
                 </div>

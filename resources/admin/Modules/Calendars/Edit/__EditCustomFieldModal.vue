@@ -4,8 +4,8 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
-        <el-form v-if="openModal" v-model="fieldData" label-position="top" >
-            <el-form-item label="Input Type *">
+        <el-form v-if="openModal" label-position="top" >
+            <el-form-item label="Field Type">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"

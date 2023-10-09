@@ -150,7 +150,7 @@ class LandingPageHandler
         if (!empty($_REQUEST['booking_id'])) {
             $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
             $booking = Booking::where('hash', $bookingHash)
-                ->where('slot_id', $slot->id)
+                ->where('event_id', $slot->id)
                 ->first();
             if ($booking) {
                 $this->showBookingConfimationPage($booking, $slot);

@@ -36,13 +36,13 @@ import { Check } from '@element-plus/icons-vue';
 
 export default {
     name: 'BookingActivities',
-    props: ['event_id'],
+    props: ['booking_id'],
     components: {
         Check
     },
     watch: {
-        event_id() {
-            this.fetchActivities();
+        booking_id() {
+           // this.fetchActivities();
         }
     },
     data() {
@@ -54,7 +54,7 @@ export default {
     methods: {
         fetchActivities() {
             this.loading = true;
-            this.$get(`schedules/${this.event_id}/activities`)
+            this.$get(`schedules/${this.booking_id}/activities`)
                 .then(response => {
                     this.activities = response.activities;
                 })
@@ -63,7 +63,7 @@ export default {
                 })
                 .finally(() => {
                     this.loading = false;
-                })
+                });
         }
     },
     mounted() {

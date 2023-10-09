@@ -9,19 +9,19 @@
             <div class="fcal_schedule_details_event">
                 <div class="fcal_schedule_details_event_item">
                     <h3>Invitee Name</h3>
-                    <p>{{ spot.first_name }} {{ spot.last_name }}</p>
+                    <p>{{ booking.first_name }} {{ booking.last_name }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>Invitee Email</h3>
-                    <p>{{ spot.email }}</p>
+                    <p>{{ booking.email }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>Invitee Timezone</h3>
-                    <p>{{ spot.person_time_zone }}</p>
+                    <p>{{ booking.person_time_zone }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>Booked At</h3>
-                    <p>{{ toCurrentTimezone(spot.created_at, 'DD MMM YYYY, hh:mma') }}</p>
+                    <p>{{ toCurrentTimezone(booking.created_at, 'DD MMM YYYY, hh:mma') }}</p>
                 </div>
             </div>
         </div>
@@ -31,6 +31,6 @@
 <script>
 export default {
     name: "SingleInviteeInfo",
-    props: ['spot']
+    props: ['booking']
 }
 </script>

@@ -66,7 +66,7 @@ class FluentCrmInit {
 
     private function getActionUrl($meeting)
     {
-        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $meeting->event_id);
+        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $meeting->group_id);
 
         $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'view' . '</a>';
         
@@ -96,7 +96,7 @@ class FluentCrmInit {
 
         $meetings = Booking::with(['slot', 'calendar'])
             ->where('email', $subsriber->email)
-            ->distinct('event_id')
+            ->distinct('group_id')
             ->orderBy('start_time', 'DESC')
             ->paginate();
 
@@ -109,7 +109,7 @@ class FluentCrmInit {
             }
 
             $formattedMeetings[] = [
-                'id'           => '#'.$meeting->event_id,
+                'id'           => '#'.$meeting->group_id,
                 'title'        => $this->getMeetingTitle($meeting),
                 'status'       => $meeting->status,
                 'meeting_at'   => $this->getFormattedTime($meeting),
