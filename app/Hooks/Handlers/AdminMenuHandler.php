@@ -59,8 +59,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Meetings', 'fluent-booking'),
-            __('Meetings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking'),
             $capability,
             'admin.php?page=fluent-booking#/scheduled-events',
             ''
@@ -120,7 +120,7 @@ class AdminMenuHandler
                 ],
                 [
                     'key'       => 'scheduled_events',
-                    'label'     => __('Scheduled Meetings', 'fluent-booking'),
+                    'label'     => __('Bookings', 'fluent-booking'),
                     'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
                 ],
                 [
