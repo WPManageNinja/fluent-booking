@@ -54,7 +54,7 @@ class CalendarSlot extends Model
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class, 'slot_id');
+        return $this->hasMany(Booking::class, 'event_id');
     }
 
     public function user()

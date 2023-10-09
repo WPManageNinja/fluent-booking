@@ -28,14 +28,14 @@ if (calendarApps.length) {
     calendarApps.forEach((item, index) => {
         const elem = calendarApps[index];
         let calendarId = elem.dataset.calendar_id;
-        let slot_id = elem.dataset.slot_id;
+        let event_id = elem.dataset.event_id;
         if (elem.dataset.app_booted) {
             console.log('App already booted');
             return;
         }
-        if (calendarId && slot_id) {
+        if (calendarId && event_id) {
             elem.innerHTML = '';
-            const appData = window['fcal_public_vars_' + calendarId + '_' + slot_id];
+            const appData = window['fcal_public_vars_' + calendarId + '_' + event_id];
 
             if(preSelects) {
                 appData.slot.pre_selects = preSelects;

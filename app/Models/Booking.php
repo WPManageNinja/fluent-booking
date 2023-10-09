@@ -14,7 +14,7 @@ class Booking extends Model
 
     protected $fillable = [
         'calendar_id',
-        'slot_id',
+        'event_id',
         'parent_id',
         'group_id',
         'hash',
@@ -85,7 +85,7 @@ class Booking extends Model
 
     public function slot()
     {
-        return $this->belongsTo(CalendarSlot::class, 'slot_id');
+        return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
     public function hosts()

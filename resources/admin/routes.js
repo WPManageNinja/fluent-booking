@@ -69,7 +69,7 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/:calendar_id/slot-settings/:slot_id',
+        path: '/calendars/:calendar_id/slot-settings/:event_id',
         name: 'slot_settings',
         component: SlotSettings,
         props: true,

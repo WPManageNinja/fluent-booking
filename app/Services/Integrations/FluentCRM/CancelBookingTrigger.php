@@ -70,7 +70,7 @@ class CancelBookingTrigger extends BaseTrigger
              'title'     => __('New Booking Confirm Funnel', 'fluent-crm'),
              'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-crm'),
              'fields'    => [
-                'slot_id'  => [
+                'event_id'  => [
                     'type'        => 'grouped-select',
                     'label'       => __('Booking Calendar', 'fluent-crm'),
                     'placeholder' => __('Select Calendar', 'fluent-crm'),
@@ -112,9 +112,9 @@ class CancelBookingTrigger extends BaseTrigger
 
     private function isProcessable($funnel, $booking)
     {
-        $slotId = Arr::get($funnel, 'settings.slot_id');
+        $slotId = Arr::get($funnel, 'settings.event_id');
 
-        if ($slotId != $booking->slot_id) {
+        if ($slotId != $booking->event_id) {
             return false;
         }
 
