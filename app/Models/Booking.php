@@ -16,7 +16,7 @@ class Booking extends Model
         'calendar_id',
         'slot_id',
         'parent_id',
-        'event_id',
+        'group_id',
         'hash',
         'person_user_id',
         'person_contact_id',
@@ -38,6 +38,7 @@ class Booking extends Model
         'location_details',
         'cancelled_by',
         'status',
+        'event_type',
         'source',
         'source_id',
         'source_url',
@@ -56,10 +57,10 @@ class Booking extends Model
                 $model->person_user_id = $userId;
             }
 
-            if (is_null($model->event_id)) {
-                $lastEvent = static::orderBy('event_id', 'desc')->first(['event_id']);
-                $nextEventId = $lastEvent ? $lastEvent->event_id + 1 : 1;
-                $model->event_id = $nextEventId;
+            if (is_null($model->group_id)) {
+                $lastEvent = static::orderBy('group_id', 'desc')->first(['group_id']);
+                $nextEventId = $lastEvent ? $lastEvent->group_id + 1 : 1;
+                $model->group_id = $nextEventId;
             }
 
             if (defined('FLUENTCRM') && !empty($model->email) && apply_filters('fluent_calender/auto_booking_fluent_crm_sync', true)) {
@@ -109,6 +110,32 @@ class Booking extends Model
     public function scopePast($query)
     {
         return $query->where('end_time', '<', date('Y-m-d H:i:s'));
+    }
+
+    public function scopeApplyComputedStatus($query, $status)
+    {
+        $validStatuses = [
+            'upcoming',
+            'completed',
+            'cancelled',
+            'pending'
+        ];
+
+        if (!in_array($status, $validStatuses)) {
+            return $query;
+        }
+
+        if ($status == 'upcoming') {
+            return $query->where('end_time', '>=', date('Y-m-d H:i:s'))
+                ->where('status', 'scheduled');
+        }
+
+        if ($status == 'completed') {
+            return $query->where('end_time', '<', date('Y-m-d H:i:s'))
+                ->whereIn('status', ['scheduled', 'completed']); // maybe cron did not mark few as completed yet
+        }
+
+        return $query->where('status', $status);
     }
 
     public function getFullBookingDateTimeText($timeZone = 'UTC')
@@ -263,7 +290,7 @@ class Booking extends Model
 
     public function updateMeta($key, $value)
     {
-        $exist = BookingMeta::where('event_id', $this->id)
+        $exist = BookingMeta::where('booking_id', $this->id)
             ->where('meta_key', $key)
             ->first();
 
@@ -274,7 +301,7 @@ class Booking extends Model
         }
 
         return BookingMeta::create([
-            'event_id' => $this->id,
+            'booking_id' => $this->id,
             'meta_key' => $key,
             'value'    => $value
         ]);
@@ -282,7 +309,7 @@ class Booking extends Model
 
     public function getMeta($key, $default = '')
     {
-        $exist = BookingMeta::where('event_id', $this->id)
+        $exist = BookingMeta::where('booking_id', $this->id)
             ->where('meta_key', $key)
             ->first();
 
