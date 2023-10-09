@@ -30,13 +30,17 @@
                             {/each}
                         </select>
                         {:else if field.type === 'checkbox'}
-                            {#each field.options as option}
-                                <label>
-                                    <input class="fcal_input" type="checkbox" 
-                                        bind:checked={form[field.name]} value={option} />
+                            <div class="fcal_checkbox_wrap">
+                                {#each field.options as option}
+                                    <div class="fcal_checkbox">
+                                        <input class="fcal_input" type="checkbox"
+                                            bind:checked={form[field.name]} value={option} />
+                                        <span class="fcal_checkbox_mark"></span>
+
                                         {option}
-                                </label>
-                            {/each}
+                                    </div>
+                                {/each}
+                            </div>
                         {/if}
                     </label>
                 </div>
