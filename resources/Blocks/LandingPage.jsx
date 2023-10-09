@@ -80,9 +80,6 @@ export const LandingPage = props => {
     return [
         <Fragment>
             <div className={slotId ? 'fcal_block_landing_page fcal_block_landing_preview' : 'fcal_block_landing_page'}>
-                <div className="fcal_block_header">
-                    <img className="fcal_block_logo" src={assetsUrl+'Blocks/images/logo.svg'} alt="FluentBooking" />
-                </div>
 
                 {
                     slotId && calendar ?
@@ -146,7 +143,6 @@ export const LandingPage = props => {
                                             value={[slotId, calendarId]}
                                             id="fcal_select_calendar"
                                             onChange={handleCalendar}
-                                            multiple={false}
                                         >
                                             <option value="">---Select a Slot---</option>
                                             {calendars.map((item, index) => {
