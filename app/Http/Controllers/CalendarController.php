@@ -285,9 +285,17 @@ class CalendarController extends Controller
 
         $slot->settings = $slotSettings;
 
-        return [
+        $data = [
             'slot' => $slot
         ];
+
+        if(in_array('calendar', $this->request->get('with', []))) {
+            $calendar = $slot->calendar;
+            $calendar->author_profile = $calendar->getAuthorProfile();
+            $data['calendar'] = $calendar;
+        }
+
+        return $data;
     }
 
     public function getSlotSchema(Request $request, $calendarId)
