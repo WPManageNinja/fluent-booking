@@ -71,16 +71,6 @@
           padding-left: 5px;
           padding-right: 0;
         }
-        .el-input {
-          .el-input__wrapper {
-            padding: 9px 16px;
-            border-radius: 8px;
-            .el-input__inner {
-              height: auto;
-              display: block;
-            }
-          }
-        }
         .right-field {
           display: flex;
           align-items: center;
@@ -91,6 +81,7 @@
             gap: 6px;
             .el-button {
               margin: 0;
+              padding: 8px 16px;
             }
           }
         }
