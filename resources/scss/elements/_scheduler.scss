@@ -1329,9 +1329,10 @@
       }
 
       .fcal_weekly_schedule_wrap {
-        max-width: 520px;
-        width: 100%;
-        flex: none;
+        //max-width: 520px;
+        width: 60%;
+        //flex: none;
+        //flex: 1;
       }
 
       .fcal_override_table {
@@ -1429,7 +1430,7 @@
         margin-top: 4px;
         display: inline-flex;
         align-items: center;
-        min-width: 80px;
+        min-width: 200px;
 
         .fcal_day {
           text-transform: capitalize;
@@ -1610,7 +1611,9 @@
   }
 
   .fcal_override_date {
-    width: 100%;
+    //width: 100%;
+    //max-width: 467px;
+    width: 40%;
 
     .fcal_override_date_inner {
       border: 1px solid #D6DAE1;
