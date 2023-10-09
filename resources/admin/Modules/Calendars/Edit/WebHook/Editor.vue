@@ -72,11 +72,10 @@
                     <td>
                         <el-select
                             clearable
-                            style="width: 95%"
                             placeholder="Select Header"
                             v-model="editing_item.request_headers[headerKey].key"
-                            v-if="!editing_item.custom_header_keys[headerKey]"
                             popper-class="fcal_select"
+                            @change="addCustomHeaderKeyInput(headerKey, $event)"
                             >
                             <el-option
                                 v-for="(header, index) in request_headers"
@@ -85,34 +84,37 @@
                                 :key="index"
                             ></el-option>
                         </el-select>
-
-                        <el-input
-                            style="width: 95%"
-                            placeholder="Enter Custom Header"
-                            clearable
-                            v-if="editing_item.custom_header_keys[headerKey]"
-                            v-model="editing_item.request_headers[headerKey].key">
-                        </el-input>
+<!--                        <el-input-->
+<!--                            v-else-->
+<!--                            placeholder="Enter Custom Header"-->
+<!--                            clearable-->
+<!--                            v-model="editing_item.request_headers[headerKey].key">-->
+<!--&lt;!&ndash;                            <template #append>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <el-button @click="hideCustomHeaderValueInput(headerKey)"><el-icon><Minus /></el-icon></el-button>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </template>&ndash;&gt;-->
+<!--                        </el-input>-->
                     </td>
                     <td>
-                        <el-input
-                            style="width: 84%"
-                            placeholder="Enter Value"
-                            clearable
-                            v-model="editing_item.request_headers[headerKey].value">
-<!--                            <template #append>-->
-<!--                                <el-button @click="hideCustomHeaderValueInput(headerKey)"><el-icon><Minus /></el-icon></el-button>-->
-<!--                            </template>-->
-                        </el-input>
-                        <div class="action-btns">
-                            <el-button @click="addHeaderRow(headerKey)">
-                                <el-icon><Plus /></el-icon>
-                            </el-button>
-                            <el-button
-                                v-if="editing_item.request_headers.length > 1"
-                                @click="removeHeaderRow(headerKey)">
-                                <el-icon><Minus /></el-icon>
-                            </el-button>
+                        <div class="right-field">
+                            <el-input
+                                placeholder="Enter Value"
+                                clearable
+                                v-model="editing_item.request_headers[headerKey].value">
+    <!--                            <template #append>-->
+    <!--                                <el-button @click="hideCustomHeaderValueInput(headerKey)"><el-icon><Minus /></el-icon></el-button>-->
+    <!--                            </template>-->
+                            </el-input>
+                            <div class="action-btn">
+                                <el-button class="fcal_plain_btn" @click="addHeaderRow(headerKey)">
+                                    <el-icon><Plus /></el-icon>
+                                </el-button>
+                                <el-button
+                                    class="fcal_plain_btn danger"
+                                    v-if="editing_item.request_headers.length > 1"
+                                    @click="removeHeaderRow(headerKey)">
+                                    <el-icon><Minus /></el-icon>
+                                </el-button>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -275,6 +277,7 @@ export default {
                 .then(response => {
                     this.setSelectedId(response.webhook_id);
                     this.$handleSuccess(response.message);
+                    this.$emit('backToWebhook');
                     // this.$success(response.data.message);
                 })
                 .catch(error => {
@@ -282,8 +285,15 @@ export default {
                 .finally(() => this.saving = false);
         },
         hideCustomHeaderValueInput(headerKey) {
+            console.log(headerKey);
             this.editing_item.custom_header_values.splice(headerKey, 1, false);
             this.editing_item.request_headers[headerKey].value = null;
+        },
+        addCustomHeaderValueInput(headerKey, val) {
+            if (val == '__webhook_custom_header_value__') {
+                this.editing_item.custom_header_values[headerKey] = true;
+                this.editing_item.request_headers[headerKey].value = null;
+            }
         },
         addHeaderRow(headerKey) {
             let index = headerKey + 1;
