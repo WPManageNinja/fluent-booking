@@ -193,7 +193,7 @@
         hours = parseInt(hours, 10) + 12;
       }
 
-      const result = `${hours}:${minutes} ${formatHr === '12' ? 'A.M' : ''}`;
+      const result = `${hours}:${minutes} ${formatHr === '12' ? 'AM' : ''}`;
       return result;
     }
 
