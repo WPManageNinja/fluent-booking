@@ -768,7 +768,7 @@ class Helper
 
     public static function getBookingMeta($eventId, $metaKey, $withModel = false)
     {
-        $bookingMeta = BookingMeta::where('event_id', $eventId)
+        $bookingMeta = BookingMeta::where('booking_id', $eventId)
             ->where('meta_key', $metaKey)
             ->first();
 
@@ -790,7 +790,7 @@ class Helper
         }
 
         return BookingMeta::create([
-            'event_id' => $eventId,
+            'booking_id' => $eventId,
             'meta_key' => $metaKey,
             'value'    => $value
         ]);
@@ -798,7 +798,7 @@ class Helper
 
     public static function deleteBookingMeta($eventId, $metaKey)
     {
-        return BookingMeta::where('event_id', $eventId)
+        return BookingMeta::where('booking_id', $eventId)
             ->where('meta_key', $metaKey)
             ->delete();
     }

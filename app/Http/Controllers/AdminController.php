@@ -88,7 +88,7 @@ class AdminController extends Controller
             }
 
             $allHosts[] = [
-                'id'    => (int) $calendar->user_id,
+                'id'    => (string) $calendar->user_id,
                 'label' => $userName
             ];
         }

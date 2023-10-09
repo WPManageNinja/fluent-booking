@@ -191,7 +191,7 @@ class BookingElement extends BaseFieldManager
             ->where('start_time', $startTimeUtc)
             ->first();
             
-        $eventId      = Arr::get($booking, 'event_id');
+        $eventId      = Arr::get($booking, 'group_id');
         $hostTimezone = Arr::get($booking, 'calendar.author_timezone');
 
         if (!$eventId || !$hostTimezone) {
