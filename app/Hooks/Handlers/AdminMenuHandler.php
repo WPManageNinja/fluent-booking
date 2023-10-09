@@ -59,8 +59,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Meetings', 'fluent-booking'),
-            __('Meetings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking'),
             $capability,
             'admin.php?page=fluent-booking#/scheduled-events',
             ''
@@ -80,7 +80,7 @@ class AdminMenuHandler
             __('Settings', 'fluent-booking'),
             __('Settings', 'fluent-booking'),
             $capability,
-            'admin.php?page=fluent-booking#/settings',
+            'admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar',
             ''
         );
     }
@@ -120,18 +120,18 @@ class AdminMenuHandler
                 ],
                 [
                     'key'       => 'scheduled_events',
-                    'label'     => __('Scheduled Meetings', 'fluent-booking'),
+                    'label'     => __('Bookings', 'fluent-booking'),
                     'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
                 ],
                 [
                     'key' => 'availability',
                     'label' => __('Availability', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'availability_x'
+                    'permalink' => $baseUrl . 'availability'
                 ],
                 [
                     'key'       => 'settings',
                     'label'     => __('Settings', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'settings'
+                    'permalink' => $baseUrl . 'settings/configure-integrations/google_calendar'
                 ]
             ];
         }
@@ -300,14 +300,6 @@ class AdminMenuHandler
         $baseUrl = Helper::getAppBaseUrl();
 
         $menuItems = apply_filters('fluent_booking/settings_menu_items', [
-            'availability'   => [
-                'menu' => [
-                    'key'       => 'availability',
-                    'label'     => __('Availability', 'fluent-booking'),
-                    'svgIcon'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M18.3333 9.99935C18.3333 14.5993 14.6 18.3327 9.99999 18.3327C5.39999 18.3327 1.66666 14.5993 1.66666 9.99935C1.66666 5.39935 5.39999 1.66602 9.99999 1.66602C14.6 1.66602 18.3333 5.39935 18.3333 9.99935Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0917 12.6495L10.5083 11.1078C10.0583 10.8411 9.69168 10.1995 9.69168 9.67448V6.25781" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'permalink' => $baseUrl
-                ]
-            ],
             'configurations' => [
                 'menu' => [
                     'key'       => 'configure-integrations',

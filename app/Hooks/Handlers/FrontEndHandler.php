@@ -149,7 +149,7 @@ class FrontEndHandler
         }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
+        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -157,7 +157,8 @@ class FrontEndHandler
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
-            'ip_address'       => Helper::getIp()
+            'ip_address'       => Helper::getIp(),
+            'status'           => 'scheduled'
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -231,8 +232,8 @@ class FrontEndHandler
             $timeZone = wp_timezone_string();
         }
 
-        if (!in_array($timeZone, \DateTimeZone::listIdentifiers() )) {
-            $timeZone = 'UTC';
+        if (!in_array($timeZone, \DateTimeZone::listIdentifiers())) {
+            $timeZone = $calendar->author_timezone;
         }
 
         $timeSlotService = new TimeSlotService($calendar, $slot);
@@ -248,8 +249,11 @@ class FrontEndHandler
             ], 200);
         }
 
+        $availableSpots = array_filter($availableSpots);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone);
+
         wp_send_json([
-            'available_slots' => array_filter($availableSpots),
+            'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ], 200);

@@ -5,54 +5,53 @@
         </div>
         <div class="fcal_settings_body">
             <el-aside>
-                <el-skeleton v-if="loading" animated>
+                <ul class="fcal_settings_sidebar">
+                    <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
+                        <router-link :to="menu.route">
+                            {{menu.title}}
+                        </router-link>
+                    </li>
+                </ul>
+            </el-aside>
+            <div class="fcal_settings_container">
+                <router-view v-if="!loading" />
+                <el-skeleton v-else animated>
                     <template #template>
                         <el-skeleton-item />
                         <el-skeleton-item style="width: 70%" />
                         <el-skeleton-item style="width: 50%" />
+                        <el-skeleton-item style="width: 50%" />
+                        <el-skeleton-item style="width: 50%" />
                     </template>
                 </el-skeleton>
-                <ul v-else class="fcal_settings_sidebar">
-                    <SettingMenuItem v-for="(setting, index) in settings" :key="index" :setting="setting" />
-                </ul>
-            </el-aside>
-            <div class="fcal_settings_container">
-                <router-view />
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import SettingMenuItem from "./SettingMenuItem";
+<script type="text/babel">
 export default {
     name: 'Settings',
-    components: {
-        SettingMenuItem
-    },
     data() {
         return {
             loading: false,
-            settings: {}
+            menuItems: {
+                google_calendar: {
+                    title: 'Google Calendar',
+                    route: {
+                        name: 'configure-integrations',
+                        params: {
+                            settings_key: 'google_calendar'
+                        }
+                    }
+                },
+            }
         }
     },
     methods: {
-        fetchSettings() {
-            this.loading = true;
-            this.$get('settings')
-                .then(response => {
-                    this.settings = response.items;
-                })
-                .catch(errors => {
-                    this.$handleError(errors);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+        gotoMenu(menu) {
+            console.log(menu);
         }
-    },
-    mounted() {
-        this.fetchSettings();
     }
 }
 </script>
