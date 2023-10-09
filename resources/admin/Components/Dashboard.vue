@@ -52,7 +52,7 @@
             <div class="fcal_dashboard_chat fcal_dashboard_box">
                 <div class="fcal_section_header">
                     <div class="fcal_title">
-                        <h3>Completed Bookings Trend</h3>
+                        <h3>Booking Trends</h3>
                     </div>
                     <div class="fcal_actions">
                         <el-date-picker
