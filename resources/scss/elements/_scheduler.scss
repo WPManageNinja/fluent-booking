@@ -975,6 +975,16 @@
               align-items: center;
               margin-top: 10px;
               gap: 20px;
+              .el-input {
+                .el-input__wrapper {
+                  border-top-right-radius: 0;
+                  border-bottom-right-radius: 0;
+                }
+                .el-input-group__append {
+                  border-top-right-radius: 8px;
+                  border-bottom-right-radius: 8px;
+                }
+              }
             }
 
             .el-tabs {
