@@ -151,9 +151,8 @@ export default {
                 filters: this.filters
             })
                 .then(response => {
-                    this.schedules = response.schedules;
-                    this.pagination.total = response.total;
-                    this.pagination.current_page = response.current_page;
+                    this.schedules = response.availabilities.data;
+                    this.pagination.total = response.availabilities.total;
                 })
                 .catch(errors => {
                     this.$handleError(errors);

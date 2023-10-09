@@ -10,6 +10,8 @@
 @import "~element-plus/theme-chalk/el-loading.css";
 @import "~element-plus/theme-chalk/el-message-box.css";
 
+
+
       // customize element ui css here
 .el {
     &-select {
@@ -250,3 +252,58 @@ input.el-input__inner {
 ul.fframe_menu.fcal_secondary_menu {
     float: right;
 }
+
+.fcal_hightlight_box {
+    background: #f5f6f7;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.fcal_promt_box {
+    background: #f5f6f7;
+    border: 1px solid #e5e7eb;
+}
+
+.fcal_lined_checks > label {
+    display: flex;
+}
+
+a.el-button {
+    text-decoration: none;
+}
+
+.fcal_icon_line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fcal_actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.fcal_radio_switch {
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+    padding: 5px;
+    background: #fff;
+    .el-radio-button  input.el-radio-button__original-radio {
+        display: none !important;
+    }
+    .is-active.is-active .el-radio-button__inner {
+        background: #e5e7eb;
+        color: rgb(55, 65, 81);
+        border-radius: 5px !important;
+        box-shadow: none;
+    }
+    .el-radio-button .el-radio-button__inner {
+        padding: 7px 10px;
+        background: transparent;
+        border: none !important;
+    }
+}
+

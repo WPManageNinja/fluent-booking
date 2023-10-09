@@ -28,6 +28,10 @@ class GoogleCalendar extends IntegrationManager
 
         $credentials  = $this->getClientDetails();
 
+        if(!empty($credentials['redirect_url'])) {
+            $credentials['redirect_url'] = str_replace('convertleap.lab', 'fluentbooking.com', $credentials['redirect_url']);
+        }
+
         $this->clientId     = Arr::get($credentials, 'client_id');
         $this->clientSecret = Arr::get($credentials, 'client_secret');
         $this->redirectUrl  = Arr::get($credentials, 'redirect_url');
@@ -51,7 +55,6 @@ class GoogleCalendar extends IntegrationManager
         add_action('fluent_booking/after_booking_scheduled', [$this, 'updateEvent'], 10, 2);
         add_action('fluent_booking/after_patch_booking_schedule', [$this, 'updateEvent'], 10, 1);
         add_filter('fluent_booking/booked_events', [$this, 'addBookedEvents'], 10, 4);
-        add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback'] );
     }
 
     public function handleAuthCallback()
@@ -70,7 +73,7 @@ class GoogleCalendar extends IntegrationManager
 
         do_action('fluent_booking/google_calendar_integration', $code, $scope);
 
-        wp_redirect(admin_url('admin.php?page=fluent-booking#/calendars/' . $calendarId . '/settings/google-calendar'));
+        wp_redirect(admin_url('admin.php?page=fluent-booking#/calendars/' . $calendarId . '/settings/google'));
 
         exit;
     }
@@ -215,12 +218,15 @@ class GoogleCalendar extends IntegrationManager
         $defaults = [
             'client_id'     => '',
             'client_secret' => '',
-            'redirect_url'  => admin_url('/admin-ajax.php?action=fluent_booking_g_auth'),
+            'redirect_url'  => admin_url('/wp-admin/admin-ajax.php?action=fluent_booking_g_auth'),
         ];
+
 
         $clientDetails = $this->getClientDetails();
 
         $settings = wp_parse_args($clientDetails, $defaults);
+
+        $settings['redirect_url'] = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
 
         return $settings;
     }

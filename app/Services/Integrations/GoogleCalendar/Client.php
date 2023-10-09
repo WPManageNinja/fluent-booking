@@ -12,17 +12,17 @@ class Client
     public $redirectUrl;
 
     public $revokeUrl = 'https://oauth2.googleapis.com/revoke';
-    public $tokenUrl  = 'https://oauth2.googleapis.com/token';
-    public $authUrl   = 'https://accounts.google.com/o/oauth2/auth';
-    public $authScope = 'https://www.googleapis.com/auth/calendar';
+    public $tokenUrl = 'https://oauth2.googleapis.com/token';
+    public $authUrl = 'https://accounts.google.com/o/oauth2/auth';
+    public $authScope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
 
     public $calendarEvent = 'https://www.googleapis.com/calendar/v3/calendars/primary/events/';
 
     public function __construct($clientID, $clientSecret, $redirectUrl)
     {
-        $this->clientId     = $clientID;
+        $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-        $this->redirectUrl  = $redirectUrl;
+        $this->redirectUrl = $redirectUrl;
     }
 
     public function generateAccessToken($token, $grantType = 'refresh_token')
@@ -66,8 +66,9 @@ class Client
             'redirect_uri'  => $this->redirectUrl,
             'response_type' => 'code',
             'access_type'   => 'offline',
+            'prompt'        => 'consent',
             'state'         => $calendarId
-		], $this->authUrl);
+        ], $this->authUrl);
 
         return $authUrl;
     }
