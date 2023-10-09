@@ -46,7 +46,7 @@
             </el-tab-pane>
             <el-tab-pane name="question-settings">
                 <template #label>
-                    <el-icon><NoficationIcon/></el-icon> Booking Questions
+                    <el-icon><QuestionIcon/></el-icon> Booking Questions
                 </template>
                 <div class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading" />
@@ -75,6 +75,7 @@ import NotificationSettings from './_NotificationSettings'
 import ScheduleSettings from "./_ScheduleSettings";
 import QuestionSettings from "./_QuestionSettings";
 import EventIcon from '../../../Components/Icons/EventIcon';
+import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
@@ -94,6 +95,7 @@ export default {
         EventIcon,
         ScheduleIcon,
         NoficationIcon,
+        QuestionIcon,
         Back,
         Link
     },
