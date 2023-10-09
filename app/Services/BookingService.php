@@ -154,4 +154,29 @@ class BookingService
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
     }
 
+    public static function getCustomFieldsData($fieldValues, $slot)
+    {
+        $mainFields = ['name', 'email', 'phone'];
+
+        $customFields = self::getBookingFields($slot);
+
+        $formattedValues =  [];
+        foreach ($customFields as $field) {
+            if (!in_array($field['name'], $mainFields) && $field['enabled']) {
+                $value = $fieldValues[$field['name']];
+
+                if (empty($value) && $field['required']) {
+                    wp_send_json([
+                        'message' => 'Please fill up the required data',
+                    ], 422);
+                }
+
+                $formattedValues[] = [
+                    'label' => $field['label'],
+                    'value' => sanitize_text_field($value)
+                ];
+            }
+        }
+        return $formattedValues;
+    }
 }

@@ -97,7 +97,7 @@
             <div class="fcal_uses_list_body">
                 <div class="fcal_card_items">
                     <div v-for="usages in scheduleInfo.availability_usages" class="fcal_card_item">
-                        <div class="fcal_card_wrap">
+                        <div @click="goToEvent(usages)" class="fcal_card_wrap">
                             <div class="fcal_card_item_details fcal_availability_card">
                                 <h4>{{ usages.title }}</h4>
                                 <p class="fcal_icon_line">
@@ -190,7 +190,7 @@ export default {
         goToEvent(event) {
             this.$router.push({
                 name: 'slot_settings',
-                params: { calendar_id: event.calendar_id, slot_id: event.id}
+                params: { calendar_id: event.calendar_id, event_id: event.id}
             })
         },
         fetchSchedule() {
