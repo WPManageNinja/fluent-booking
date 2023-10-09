@@ -23,8 +23,8 @@
             <el-skeleton v-if="loading" :animated="true" :rows="5"></el-skeleton>
             <div v-else class="fcal_card_items">
                 <div v-for="availability in availabilities" :key="availability.id" class="fcal_card_item">
-                    <div class="fcal_card_wrap">
-                        <div @click="gotoDetails(availability)" class="fcal_card_item_details fcal_availability_card">
+                    <div @click="gotoDetails(availability)" class="fcal_card_wrap">
+                        <div class="fcal_card_item_details fcal_availability_card">
                             <h4>
                                 {{ availability.title }}
                                 <span v-if="availability.settings.default && filters.author == 'me'"
