@@ -161,23 +161,22 @@ class Bootstrap
 
         // Verify the scopes
         $returnedScope = $response['scope'];
-        if (!strpos($returnedScope, 'https://www.googleapis.com/auth/calendar.events') !== false) {
+        if (!strpos($returnedScope, 'googleapis.com/auth/calendar.events') !== false) {
             $requiredScopes[] = 'https://www.googleapis.com/auth/calendar.events';
         }
 
-        if (!strpos($returnedScope, 'https://www.googleapis.com/auth/calendar.readonly') !== false) {
+        if (!strpos($returnedScope, 'googleapis.com/auth/calendar.readonly') !== false) {
             $requiredScopes[] = 'https://www.googleapis.com/auth/calendar.readonly';
         }
 
         if ($requiredScopes) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Required scopes missing', 'fluent-booking'),
-                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes),
+                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes).print_r($response, true),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
                 'btn_text' => 'Back to Calendars Configuration'
             ]);
         }
-
 
         $calendarEmail = GoogleHelper::getEmailByIdToken($response['id_token']);
 
@@ -194,6 +193,8 @@ class Bootstrap
         $response['remote_email'] = $calendarEmail;
 
         $response['expires_in'] += time();
+
+        $response['access_token'] = Helper::encryptKey($response['access_token']);
 
         $this->addFeedIntegration($userId, $response);
 

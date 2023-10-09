@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
@@ -170,6 +171,13 @@ class Client
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
+            Helper::debugLog([
+                'message' => $message,
+                'url'     => $url,
+                'body'    => $body,
+                'method'  => __METHOD__,
+                'type'    => 'wp_request_error'
+            ]);
             return new \WP_Error('wp_error', $message, $request->get_all_error_data());
         }
 
@@ -179,6 +187,15 @@ class Client
 
         if ($resCode > 299) {
             $message = Arr::get($resBody, 'error_description', 'Unexpected error from google api');
+
+            Helper::debugLog([
+                'message' => $message,
+                'url'     => $url,
+                'body'    => $body,
+                'method'  => __METHOD__,
+                'type'    => 'api_error'
+            ]);
+
             return new \WP_Error('api_error', $message, $resBody);
         }
 

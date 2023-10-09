@@ -27,6 +27,11 @@
                         <span v-loading="saving_id == cal.id"></span>
                     </el-checkbox>
                 </el-checkbox-group>
+
+                <div v-if="feed.errors">
+                    <hr />
+                    <p style="color: red;" class="fcal_remote_sub">API Error: {{ feed.errors }}</p>
+                </div>
             </div>
         </div>
     </div>
