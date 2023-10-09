@@ -128,10 +128,10 @@ class Calendar extends Model
         return $exist;
     }
 
-    public function getLandingPageUrl()
+    public function getLandingPageUrl($isForce = false)
     {
         $settings = LandingPageHelper::getSettings($this);
-        if (Arr::get($settings, 'enabled') != 'yes') {
+        if (Arr::get($settings, 'enabled') != 'yes' && !$isForce) {
             return '';
         }
 
