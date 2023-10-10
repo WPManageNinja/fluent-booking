@@ -258,6 +258,14 @@
         }
         &.fcal_location_select {
             ul {
+                > ul {
+                    > li {
+                        &:not(.el-select-group__title) {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                    }
+                }
                 li {
                     line-height: 25px;
                     &.el-select-group__title {

@@ -47,11 +47,13 @@
                             <h3>Location</h3>
                             <div v-html="showing_booking.location"></div>
                         </div>
-                        <div class="fcal_schedule_details_event_item">
+                        <div
+                            v-if="showing_booking.event_type != 'group'"
+                            class="fcal_schedule_details_event_item">
                             <h3>Status</h3>
                             <p>{{ showing_booking.status }}</p>
                         </div>
-                        <div v-if="showing_booking.source_url" class="fcal_schedule_details_event_item">
+                        <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'" class="fcal_schedule_details_event_item">
                             <h3>Booking URL</h3>
                             <div class="fcal_spot_details_value">
                                 <a target="_blank" rel="nofollow"
