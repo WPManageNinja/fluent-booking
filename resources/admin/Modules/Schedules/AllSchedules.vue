@@ -87,7 +87,7 @@
         <div class="fcal_schedule_meetings_body">
             <div v-if="!loading" class="fcal_section_body" style="padding: 0;">
                 <div v-if="schedules" :class="{ fcal_showing_details: booking_id }" class="fcal_all_schediles">
-                    <div class="fcal_schedules">
+                    <div class="fcal_schedules" :class="isHideSidebar ? 'hide_sidebar' : ''">
                         <div class="fcal_schedule_wrapper">
                             <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
                                  :key="scheduleDate" class="fcal_schedule">
@@ -111,7 +111,10 @@
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
                         </div>
                     </div>
-                    <div v-if="booking_id" class="fcal_spot_details">
+                    <div v-if="booking_id" class="fcal_spot_details" :class="isHideSidebar ? 'hide_sidebar' : ''">
+                        <el-button class="fcal_hide_schedule_sidebar" @click="hideSidebar">
+                            <el-icon><ArrowLeft /></el-icon>
+                        </el-button>
                         <schedule-booking-details @bookingFetched="(data) => { current_schedule = data; }" :booking="current_schedule" :booking_id="booking_id"/>
                     </div>
                 </div>
@@ -127,7 +130,7 @@ import Pagination from "../../Pieces/Pagination.vue";
 import BookingCard from "./parts/BookingCard.vue";
 import ScheduleBookingDetails from './parts/ScheduleBookingDetails.vue';
 import each from 'lodash/each';
-import {Back, Filter, CircleClose} from '@element-plus/icons-vue';
+import {Back, Filter, CircleClose, ArrowLeft} from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
@@ -137,7 +140,8 @@ export default {
         ScheduleBookingDetails,
         Filter,
         Back,
-        CircleClose
+        CircleClose,
+        ArrowLeft
     },
     data() {
         return {
@@ -167,7 +171,8 @@ export default {
                 completed: 'Completed',
                 cancelled: 'Cancelled',
                 all: 'All'
-            }
+            },
+            isHideSidebar: false
         }
     },
     computed: {
@@ -262,6 +267,16 @@ export default {
         handlePeriodChange() {
             this.$router.push({query: this.filters});
             this.fetchSchedules();
+        },
+        hideSidebar() {
+            const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");
+            this.isHideSidebar = !this.isHideSidebar;
+            // if (hideSidebarVar == 'true') {
+            //     this.isHideSidebar = true;
+            // } else {
+            //     this.isHideSidebar = false;
+            // }
+            localStorage.setItem("hide_schedule_details_sidebar", this.isHideSidebar);
         }
     },
     mounted() {
@@ -277,6 +292,14 @@ export default {
         if (this.hasSupport('multi_users')) {
             this.fetchHosts();
         }
+
+        const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");
+        if (hideSidebarVar == 'true') {
+            this.isHideSidebar = true;
+        } else {
+            this.isHideSidebar = false;
+        }
+
     }
 }
 </script>
