@@ -106,7 +106,8 @@ class CalendarSlot extends Model
             'schedule_conditions' => [
                 'value' => 4,
                 'unit'  => 'hours'
-            ]
+            ],
+            'location_fields' => (new Calendar())->getLocationFields()
         ];
     }
 
