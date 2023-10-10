@@ -43,7 +43,7 @@ class Bootstrap
             if (!empty($config['constant_defined'])) {
                 $config['client_secret'] = '**********';
                 $config['client_id'] = '**********';
-            } else if(!empty($config['client_secret'])) {
+            } else if (!empty($config['client_secret'])) {
                 $config['client_secret'] = '********************';
             }
 
@@ -99,7 +99,7 @@ class Bootstrap
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
         /*
-         * Calendar Settings Handlers
+         * oAuth From Handlers from Calendar
          */
         add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
             $app = App::getInstance();

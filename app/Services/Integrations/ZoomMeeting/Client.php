@@ -64,7 +64,7 @@ class Client
             'redirect_uri' => $this->redirectUrl
         ];
 
-        return $this->makeRequest($this->tokenUrl, $body, 'POST', $this->getAccessHeader());
+        return $this->makeRequest($this->tokenUrl, $body, 'POST');
     }
 
     public function reGenerateToken($refreshToken)
@@ -74,66 +74,12 @@ class Client
             'grant_type'    => 'refresh_token'
         ];
 
-        return $this->makeRequest($this->tokenUrl, $body, 'POST', $this->getAccessHeader());
+        return $this->makeRequest($this->tokenUrl, $body, 'POST');
     }
 
     public function me()
     {
         return $this->makeRequest('https://api.zoom.us/v2/users/me', [], 'GET', $this->getAuthorizationHeader());
-    }
-
-    public function getCalendarLists($accessToken = null)
-    {
-        $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList', [], 'GET', $this->getAuthorizationHeader($accessToken));
-
-        if (is_wp_error($lists)) {
-            return $lists;
-        }
-
-        $formattedLists = [];
-
-        foreach ($lists['items'] as $item) {
-            $formattedLists[] = [
-                'id'        => $item['id'],
-                'title'     => $item['summary'],
-                'can_write' => in_array($item['accessRole'], ['owner', 'writer']) ? 'yes' : 'no'
-            ];
-        }
-
-        return $formattedLists;
-    }
-
-    public function getCalendarEvents($id, $args = [])
-    {
-        $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/calendars/' . $id . '/events', $args, 'GET', $this->getAuthorizationHeader());
-
-        if (is_wp_error($lists)) {
-            return $lists;
-        }
-
-        $formattedLists = [];
-        foreach ($lists['items'] as $item) {
-            $formattedLists[] = [
-                //  'summary' => Arr::get($item, 'summary'),
-                'start'  => Arr::get($item, 'start.dateTime'),
-                'end'    => Arr::get($item, 'end.dateTime'),
-                'status' => Arr::get($item, 'status'),
-            ];
-        }
-
-        return $formattedLists;
-    }
-
-    public function createEvent($calendarId, $data, $args = [])
-    {
-
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events';
-
-        if ($args) {
-            $url = add_query_arg($args, $url);
-        }
-
-        return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
     }
 
     public function revokeConnection()
@@ -143,14 +89,22 @@ class Client
         ], 'POST');
     }
 
+    public function createMeeting($data)
+    {
+
+        $header = [];
+        $header['Authorization'] = 'Bearer ' . $this->accessToken;
+        $header['content-type'] = 'application/json';
+
+        $url = 'https://api.zoom.us/v2/users/me/meetings';
+        $data = json_encode($data);
+        return $this->makeRequest($url, $data, 'POST', $header);
+    }
+
     public function makeRequest($url, $body = null, $type = 'GET', $headers = null)
     {
         if (!$headers) {
-            $headers = [
-                'Content-Type'              => 'application/http',
-                'Content-Transfer-Encoding' => 'binary',
-                'MIME-Version'              => '1.0',
-            ];
+            $headers = $this->getAccessHeader();
         }
 
         $args = [
@@ -200,20 +154,5 @@ class Client
         }
 
         return $resBody;
-    }
-
-    public function getAuthUrl($userId)
-    {
-        $authUrl = add_query_arg([
-            'client_id'     => $this->clientId,
-            'scope'         => urlencode_deep($this->authScope),
-            'redirect_uri'  => $this->redirectUrl,
-            'response_type' => 'code',
-            'access_type'   => 'offline',
-            'state'         => $userId,
-            'prompt'        => 'consent'
-        ], $this->authUrl);
-
-        return $authUrl;
     }
 }
