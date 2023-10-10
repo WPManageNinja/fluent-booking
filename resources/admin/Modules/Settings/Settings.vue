@@ -7,8 +7,9 @@
             <el-aside>
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
-                        <router-link :to="menu.route">
-                            {{menu.title}}
+                        <router-link class="fcal_img_menu_link" :to="menu.route">
+                            <img class="fcal_img_icon" :src="menu.icon_url" />
+                            <span>{{menu.title}}</span>
                         </router-link>
                     </li>
                 </ul>
@@ -38,6 +39,7 @@ export default {
             menuItems: {
                 google_calendar: {
                     title: 'Google Calendar',
+                    icon_url: this.appVars.asset_url + 'images/google-calendar.svg',
                     route: {
                         name: 'configure-integrations',
                         params: {
