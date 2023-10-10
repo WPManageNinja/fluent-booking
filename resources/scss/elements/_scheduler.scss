@@ -2269,6 +2269,11 @@
     .fcal_schedule_event_infos {
       margin-bottom: 20px;
 
+      .fcal_group_booking_guests_wrap {
+        text-align: left;
+        padding: 0 20px;
+      }
+
       &:first-child {
         .fcal_schedule_event_infos_body {
           padding-top: 10px;
