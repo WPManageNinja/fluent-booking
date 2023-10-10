@@ -19,3 +19,5 @@ add_action('init', function () {
  * Remote calendars
  */
 (new \FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarsInit())->boot();
+(new \FluentBooking\App\Services\Integrations\Twillio\Bootstrap())->register();
+(new \FluentBooking\App\Services\Integrations\ZoomMeeting\Bootstrap())->register();

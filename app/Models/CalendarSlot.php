@@ -269,14 +269,51 @@ class CalendarSlot extends Model
 
         $baseUr = $calendar->getLandingPageUrl();
 
-        if(!$baseUr) {
+        if (!$baseUr) {
             return '';
         }
 
-        if(defined('FLUENT_BOOKING_LANDING_SLUG')) {
-            return  $baseUr. '/' . $this->slug;
+        if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
+            return $baseUr . '/' . $this->slug;
         }
 
-        return $baseUr.'&event='.$this->slug;
+        return $baseUr . '&event=' . $this->slug;
     }
+
+    public function getMeta($key, $default = null)
+    {
+        $meta = Meta::where('object_type', 'calendar_event')
+            ->where('object_id', $this->id)
+            ->where('key', $key)
+            ->first();
+
+        if (!$meta) {
+            return $default;
+        }
+
+        return $meta->value;
+    }
+
+    public function updateMeta($key, $value)
+    {
+        $exist = Meta::where('object_type', 'calendar_event')
+            ->where('object_id', $this->id)
+            ->where('key', $key)
+            ->first();
+
+        if ($exist) {
+            $exist->value = $value;
+            $exist->save();
+        } else {
+            $exist = Meta::create([
+                'object_type' => 'calendar_event',
+                'object_id'   => $this->id,
+                'key'         => $key,
+                'value'       => $value
+            ]);
+        }
+
+        return $exist;
+    }
+
 }

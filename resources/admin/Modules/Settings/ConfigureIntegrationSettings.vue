@@ -16,26 +16,33 @@
                     </div>
                     <div class="fcal_configure_integration_body">
                         <div v-html="fieldSettings.description"></div>
-                        <el-form v-model="settings" label-position="top">
-                            <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
-                                <el-input
-                                    v-model="settings[fieldKey]"
-                                    :type="field.type"
-                                    :placeholder="field.placeholder"
-                                    :disabled="field.readonly">
-                                    <template v-if="field.copy_btn" #append>
-                                        <el-button type="default" @click="copyText(settings[fieldKey])">
-                                            <el-icon><CopyDocument /></el-icon> Copy
-                                        </el-button>
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-                            <SaveButton v-if="fieldSettings.fields" :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
-                        </el-form>
+                        <template v-if="fieldSettings.fields">
+                            <el-form v-model="settings" label-position="top">
+                                <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
+                                    <el-input
+                                        v-model="settings[fieldKey]"
+                                        :type="field.type"
+                                        :placeholder="field.placeholder"
+                                        :disabled="field.readonly">
+                                        <template v-if="field.copy_btn" #append>
+                                            <el-button type="default" @click="copyText(settings[fieldKey])">
+                                                <el-icon><CopyDocument /></el-icon> Copy
+                                            </el-button>
+                                        </template>
+                                    </el-input>
+                                </el-form-item>
+                                <SaveButton v-if="fieldSettings.fields" :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
+                            </el-form>
+                            <p v-if="fieldSettings && fieldSettings.will_encrypt">
+                                <hr />
+                                <el-icon><Lock /></el-icon>
+                                The above app secret key will be encrypted and stored securely.
+                            </p>
+                        </template>
                     </div>
                 </div>
             </div>
-            <el-empty v-else description="No Settings Found"/>
+            <el-empty v-else description="No Settings Found for this integration"/>
         </div>
         <el-skeleton v-else :rows="4" animated/>
     </div>
@@ -44,7 +51,7 @@
 <script>
 import SaveButton from '../../Components/Buttons/SaveButton'
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { Calendar, ArrowRight, CopyDocument } from '@element-plus/icons-vue';
+import { Calendar, ArrowRight, CopyDocument, Lock } from '@element-plus/icons-vue';
 export default {
     name: 'ConfigureIntegrationSettings',
     props: ['settings_key'],
@@ -52,7 +59,8 @@ export default {
         Calendar,
         SaveButton,
         ArrowRight,
-        CopyDocument
+        CopyDocument,
+        Lock
     },
     data() {
         return {
@@ -92,6 +100,7 @@ export default {
             })
             .then(response => {
                 this.$handleSuccess(response);
+                this.getSettings();
             })
             .catch(errors => {
                 this.$handleError(errors);

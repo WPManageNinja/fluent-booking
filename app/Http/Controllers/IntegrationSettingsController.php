@@ -91,14 +91,13 @@ class IntegrationSettingsController extends Controller
     public function getRemoteCalendars(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $providers = apply_filters('fluent_booking/remote_calendar_providers', [], $calendar->user_id);
-
-        $connectionFeeds = apply_filters('fluent_booking/remote_calendar_connection_feeds', [], $calendar->user_id);
+        $providers = apply_filters('fluent_booking/remote_calendar_providers', [], $calendar->user_id, $calendar);
+        $connectionFeeds = apply_filters('fluent_booking/remote_calendar_connection_feeds', [], $calendar->user_id, $calendar);
 
         return [
             'providers' => $providers,
             'feeds'     => $connectionFeeds,
-            'settings' => RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id)
+            'settings'  => RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id)
         ];
     }
 
@@ -139,5 +138,21 @@ class IntegrationSettingsController extends Controller
         return [
             'message' => 'Your selected remote calendar has been disconnected'
         ];
+    }
+
+    public function getGeneralIntegrationFeed(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $settingsKey = sanitize_text_field($request->get('settings_key'));
+
+        $data = apply_filters('fluent_booking/get_general_integration_feed_' . $settingsKey, [], $calendar);
+
+        if (!$data) {
+            return $this->sendError([
+                'message' => 'Integration Feed Settings could not be found. Driver missing!'
+            ]);
+        }
+
+        return $data;
     }
 }
