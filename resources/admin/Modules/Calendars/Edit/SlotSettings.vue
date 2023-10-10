@@ -159,6 +159,13 @@ export default {
         },
         saveSettings() {
             this.saving = true;
+            const locationSettings = {
+                type: this.slot.location_settings.type,
+                title: this.slot.location_settings.title,
+                description: this.slot.location_settings.description,
+                host_phone_number: this.slot.location_settings.host_phone_number
+            }
+
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
                 status: this.slot.status,
@@ -172,7 +179,7 @@ export default {
                 availability_id: this.slot.availability_id,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
-                location_settings: this.slot.location_settings
+                location_settings: locationSettings
             })
                 .then(response => {
                     this.$handleSuccess(response);

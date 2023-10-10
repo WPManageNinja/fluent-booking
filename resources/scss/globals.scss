@@ -258,7 +258,16 @@
         }
         &.fcal_location_select {
             ul {
+                > ul {
+                    > li {
+                        &:not(.el-select-group__title) {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                    }
+                }
                 li {
+                    margin: 0;
                     line-height: 25px;
                     &.el-select-group__title {
                         margin-bottom: 0;
@@ -653,6 +662,11 @@
             }
         }
     }
+}
+
+.el-notification {
+    top: auto !important;
+    bottom: 10px !important;
 }
 
 .el-dropdown-list-wrapper {
@@ -1268,6 +1282,17 @@
             border-color: $primaryColor;
             color: #ffffff;
             background: $primaryColor;
+        }
+    }
+
+    .el-breadcrumb {
+        .el-breadcrumb__item {
+            &:first-child {
+                .el-breadcrumb__inner[role="link"] {
+                    color: $dark;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
