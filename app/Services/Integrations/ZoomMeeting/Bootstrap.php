@@ -8,6 +8,7 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -206,7 +207,7 @@ class Bootstrap
 
         $calendar = Calendar::find($calendarId);
 
-        if (!$calendar) {
+        if (!$calendar || !PermissionManager::hasCalendarAccess($calendar)) {
             return;
         }
 
