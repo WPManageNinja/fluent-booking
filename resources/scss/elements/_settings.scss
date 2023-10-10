@@ -103,7 +103,8 @@
             flex-direction: column;
         }
         .el-aside {
-            width: 324px;
+            width: 100%;
+            max-width: 324px;
             flex: none;
             background: #ffffff;
             border-radius: 8px;
@@ -457,6 +458,13 @@
         display: flex;
         align-items: flex-start;
         gap: 24px;
+        @media (max-width: 668px) {
+            flex-direction: column;
+            gap: 4px;
+            .fcal_availability_header {
+                width: 100% !important;
+            }
+        }
         .fcal_availability_header {
             width: 60%;
             &:last-child {

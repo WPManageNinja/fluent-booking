@@ -1,4 +1,4 @@
-<div class="fcal_booking_form_wrap">
+<div class="fcal_booking_form_wrap" id="fcal_booking_form_wrap">
     <div class="fcal_booking_form">
         {#each formFields as field}
             {#if field.enabled}
@@ -48,7 +48,6 @@
         {/if}
     </div>
 </div>
-
 <script>
     import {util, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
