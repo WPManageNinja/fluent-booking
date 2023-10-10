@@ -94,6 +94,22 @@ class Bootstrap
             ];
         });
 
+        add_filter( 'fluent_booking/get_location_fields', function($fields, $userId) {
+            $meetExist = Meta::where('object_type', '_google_user_token')
+                ->where('object_id', $userId)
+                ->first();
+            
+            $message = !$meetExist ? ' (Connect Google Meet First)' : '';
+            
+            $fields['conferencing']['options'] = [
+                'google_meet' => [
+                    'title'    => 'Google Meet' . $message,
+                    'disabled' => !$meetExist,
+                ],
+            ];
+            return $fields;
+        }, 10, 2);
+
         add_action('fluent_booking/save_client_settings_google_calendar', function ($settings) {
             GoogleHelper::updateApiConfig($settings);
         });
