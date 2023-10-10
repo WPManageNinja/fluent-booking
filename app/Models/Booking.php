@@ -88,6 +88,12 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
+    public function custom_field()
+    {
+        return $this->hasOne(BookingMeta::class, 'booking_id')
+                    ->where('meta_key', 'custom_fields_data');
+    }
+
     public function hosts()
     {
         $class = __NAMESPACE__ . '\User';

@@ -19,7 +19,7 @@ class SchedulesController extends Controller
 
         $period = Arr::get($filters, 'period', 'upcoming');
 
-        $query = Booking::with('slot');
+        $query = Booking::with(['slot', 'custom_field']);
 
         $author = Arr::get($filters, 'author');
 
@@ -160,7 +160,7 @@ class SchedulesController extends Controller
     {
         $isAdmin = current_user_can('manage_options');
 
-        $booking = Booking::with('slot');
+        $booking = Booking::with(['slot', 'custom_field']);
 
         if (!$isAdmin) {
             $booking->whereHas('calendar', function ($q) {
@@ -193,7 +193,6 @@ class SchedulesController extends Controller
 
     public function getGroupAttendees(Request $request, $groupId)
     {
-
         $isAdmin = current_user_can('manage_options');
 
         $booking = Booking::with('slot');
@@ -210,8 +209,8 @@ class SchedulesController extends Controller
             return $this->sendError(['message' => 'Invalid group id or the event is not a group event']);
         }
 
-
-        $attendees = Booking::where('group_id', $booking->group_id)
+        $attendees = Booking::with('custom_field')
+            ->where('group_id', $booking->group_id)
             ->paginate();
 
         return [
