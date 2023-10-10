@@ -55,5 +55,7 @@ add_action('init', function () {
     if (!isset($_GET['fcal'])) {
         return;
     }
-    
+
+    dd(sanitize_url(''));
+
 });

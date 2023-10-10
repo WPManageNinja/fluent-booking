@@ -72,8 +72,9 @@ class Calendar extends Model
         $user = get_user_by('id', $this->user_id);
         if (!$user) {
             return [
-                'avatar' => '',
-                'name'   => 'Unknown'
+                'avatar'         => $this->getMeta('profile_photo_url'),
+                'name'           => 'Unknown',
+                'featured_image' => $this->getMeta('featured_image_url')
             ];
         }
 
@@ -83,12 +84,19 @@ class Calendar extends Model
             $name = $user->display_name;
         }
 
+        $photo = $this->getMeta('profile_photo_url');
+
+        if (!$photo) {
+            $photo = apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user);
+        }
+
         return [
-            'name'        => $name,
-            'author_slug' => $user->user_nicename,
-            'first_name'  => $user->first_name,
-            'last_name'   => $user->last_name,
-            'avatar'      => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
+            'name'           => $name,
+            'author_slug'    => $user->user_nicename,
+            'first_name'     => $user->first_name,
+            'last_name'      => $user->last_name,
+            'avatar'         => $photo,
+            'featured_image' => $this->getMeta('featured_image_url')
         ];
     }
 
