@@ -2,7 +2,7 @@
     <div :class="{ fcal_showing_details: booking_id }" class="fcal_section fcal_schedlues fcal_section_narrow">
         <div class="fcal_section_header">
             <div class="fcal_title">
-                <div v-if="booking_id" @click="goBackToList" class="fcal_back_btn">
+                <div v-if="booking_id" class="fcal_back_btn">
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ filters.period }}</el-breadcrumb-item>
@@ -86,8 +86,12 @@
         </template>
 
         <div class="fcal_schedule_meetings_body">
-            <div v-if="!loading" class="fcal_section_body" style="padding: 0;">
+            <div v-if="!loading" class="fcal_section_body" style="padding: 0;" :class="isHideSidebar ? 'hide_sidebar' : ''">
                 <div v-if="schedules" :class="{ fcal_showing_details: booking_id }" class="fcal_all_schediles">
+                    <el-button class="fcal_hide_schedule_sidebar" @click="hideSidebar">
+                        <el-icon><ArrowLeft /></el-icon>
+                    </el-button>
+
                     <div class="fcal_schedules" :class="isHideSidebar ? 'hide_sidebar' : ''">
                         <div class="fcal_schedule_wrapper">
                             <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
@@ -112,10 +116,7 @@
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
                         </div>
                     </div>
-                    <div v-if="booking_id" class="fcal_spot_details" :class="isHideSidebar ? 'hide_sidebar' : ''">
-                        <el-button class="fcal_hide_schedule_sidebar" @click="hideSidebar">
-                            <el-icon><ArrowLeft /></el-icon>
-                        </el-button>
+                    <div v-if="booking_id" class="fcal_spot_details">
                         <schedule-booking-details @bookingFetched="(data) => { current_schedule = data; }" :booking="current_schedule" :booking_id="booking_id"/>
                     </div>
                 </div>
