@@ -11,6 +11,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -182,6 +183,9 @@ class Bootstrap
         $userId = sanitize_text_field($_GET['state']);
         $calendar = Calendar::where('user_id', $userId)->first();
 
+        if (!$calendar || !PermissionManager::hasCalendarAccess($calendar)) {
+            return;
+        }
 
         $client = GoogleHelper::getApiClient();
 
