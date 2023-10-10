@@ -2,7 +2,9 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars;
 
+use FluentBooking\App\App;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class RemoteCalendarHelper
@@ -83,5 +85,23 @@ class RemoteCalendarHelper
             'remote_calendar_id' => $remoteCalendarId,
             'driver'             => $driver
         ];
+    }
+
+    public static function showGeneralError($data = [])
+    {
+        $defaults = [
+            'title' => 'Unknow error',
+            'body' => 'Something went wrong. Please try again later.',
+            'btn_url' => Helper::getAppBaseUrl(),
+            'btn_text' => 'Back to dashboard'
+        ];
+
+        $data = array_merge($defaults, $data);
+
+        $app = App::getInstance();
+
+        header('Content-Type: text/html; charset=utf-8');
+        $app->view->render('admin.general_error', $data);
+        exit();
     }
 }

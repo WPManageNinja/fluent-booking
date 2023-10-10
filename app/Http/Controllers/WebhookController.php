@@ -32,7 +32,7 @@ class WebhookController extends Controller
     public function create(Request $request)
     {
         try {
-            $slot_id = $this->app->request->get('slot_id');
+            $slot_id = $this->app->request->get('event_id');
             $webhook_id = $this->app->request->get('webhook_id');
             $webhook = $this->app->request->get('webhook');
 //            $webhook = json_decode($webhook, true);
@@ -291,7 +291,7 @@ class WebhookController extends Controller
 
     public function getAll($request)
     {
-        $slot_id       = $request->get('slot_id');
+        $slot_id       = $request->get('event_id');
         $settingsQuery = Webhook::where('object_id', $slot_id)->get();
 
 

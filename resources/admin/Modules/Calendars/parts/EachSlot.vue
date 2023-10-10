@@ -103,7 +103,7 @@ export default {
         editSlot() {
             this.$router.push({
                 name: 'slot_settings', 
-                params: {calendar_id: this.slot.calendar_id, slot_id: this.slot.id}
+                params: {calendar_id: this.slot.calendar_id, event_id: this.slot.id}
             })
         },
         copyTo(text) {

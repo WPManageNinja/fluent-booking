@@ -47,9 +47,9 @@
             <el-tab-pane name="notification-settings">
                 <template #label>
                     <el-icon>
-                        <NoficationIcon/>
+                        <Message/>
                     </el-icon>
-                    Notification
+                    Email Notifications
                 </template>
                 <div class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -75,7 +75,7 @@
                 <div class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
-                        :slot_id="slot_id"
+                        :event_id="event_id"
                         :calendar_id="calendar_id"
                     />
                 </div>
@@ -94,12 +94,12 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link} from '@element-plus/icons-vue';
+import {Back, Link, Message} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings"
 
 export default {
     name: 'SlotSettings',
-    props: ['slot_id', 'calendar_id'],
+    props: ['event_id', 'calendar_id'],
     components: {
         WebhookSettings,
         ScheduleSettings,
@@ -112,7 +112,8 @@ export default {
         NoficationIcon,
         QuestionIcon,
         Back,
-        Link
+        Link,
+        Message
     },
     data() {
         return {
@@ -126,7 +127,7 @@ export default {
     methods: {
         getSlot() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
+            this.$get('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 with: ['calendar']
             })
                 .then(response => {
@@ -149,7 +150,7 @@ export default {
         handleTabChange() {
             this.$router.push({
                 name: 'slot_settings',
-                params: {calendar_id: this.slot?.calendar_id, slot_id: this.slot?.id},
+                params: {calendar_id: this.slot?.calendar_id, event_id: this.slot?.id},
                 query: {step: this.activeTab}
             })
         },
@@ -158,7 +159,7 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_id + '/slots/' + this.slot_id, {
+            this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
                 status: this.slot.status,
                 color_schema: this.slot.color_schema,

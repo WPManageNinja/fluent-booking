@@ -51,7 +51,7 @@
                 </div>
                 <div class="fcal_remote_calendars_blocks">
                     <div class="fcal_each_calendar_block" v-for="feed in feeds" :key="db_id">
-                        <remote-calendar :feed="feed" :driver="providers[feed.driver]" :calendar="calendar"/>
+                        <remote-calendar @refetch="getSettings()" :feed="feed" :driver="providers[feed.driver]" :calendar="calendar"/>
                     </div>
                 </div>
             </template>

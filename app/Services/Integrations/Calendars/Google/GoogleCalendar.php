@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\Helper;
 
 class GoogleCalendar
 {
@@ -44,7 +45,6 @@ class GoogleCalendar
             return $this->lastError;
         }
 
-
         return ($this->getAccessClient())->getCalendarEvents($calendarId, $args);
     }
 
@@ -53,10 +53,10 @@ class GoogleCalendar
         return (GoogleHelper::getApiClient($this->getAccessToken()));
     }
 
-    private function getAccessToken()
+    public function getAccessToken()
     {
         $settings = $this->metaModel->value;
-        return $settings['access_token'];
+        return Helper::decryptKey($settings['access_token']);
     }
 
     private function normalizeUserAccessMeta()
@@ -64,13 +64,15 @@ class GoogleCalendar
         $metaModel = $this->metaModel;
         $settings = $metaModel->value;
         if ($settings['expires_in'] - 10 <= time()) {
+            $settings['refresh_token'] = Helper::decryptKey($settings['refresh_token']);
             $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
             if (is_wp_error($newTokens)) {
                 $this->lastError = $newTokens;
                 return;
             }
-
-            $settings['access_token'] = $newTokens['access_token'];
+            
+            $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
+            $settings['refresh_token'] = Helper::encryptKey($newTokens['access_token']);
             $settings['expires_in'] = $newTokens['expires_in'];
             $metaModel->value = $settings;
             $metaModel->save();
@@ -80,6 +82,11 @@ class GoogleCalendar
 
     public function updateSettinsValueByKey($key, $value)
     {
+
+        if($key == 'access_token') {
+            $value = Helper::encryptKey($value);
+        }
+
         $metaModel = $this->metaModel;
         $settings = $metaModel->value;
         $settings[$key] = $value;
@@ -91,7 +98,6 @@ class GoogleCalendar
 
     public function createEvent($calendarId, $eventData, $queryArgs = [])
     {
-
         $argsDefaults = [
             'sendUpdates' => 'all'
         ];
@@ -102,5 +108,13 @@ class GoogleCalendar
         }
 
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
+    }
+
+    public function revoke()
+    {
+        if ($this->lastError) {
+            return $this->lastError;
+        }
+        return ($this->getAccessClient())->revokeConnection();
     }
 }

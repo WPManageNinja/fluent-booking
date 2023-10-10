@@ -28,19 +28,21 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/integrations/remote-calendars', 'IntegrationSettingsController@getRemoteCalendars')->int('id');
     $router->post('/{id}/integrations/remote-calendars/patch-conflicts', 'IntegrationSettingsController@patchRemoteCalendarConflictSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
+    $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
 
-    $router->get('/{id}/slots/{slot_id}', 'CalendarController@getSlot')->int('id')->int('slot_id');
-    $router->post('/{id}/slots/{slot_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('slot_id');
-    $router->put('/{id}/slots/{slot_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('slot_id');
-    $router->delete('/{id}/slots/{slot_id}', 'CalendarController@deleteCalendarSlot')->int('id')->int('slot_id');
+
+    $router->get('/{id}/slots/{event_id}', 'CalendarController@getSlot')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('event_id');
+    $router->put('/{id}/slots/{event_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('event_id');
+    $router->delete('/{id}/slots/{event_id}', 'CalendarController@deleteCalendarSlot')->int('id')->int('event_id');
 
     $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
-    $router->get('/{id}/slots/{slot_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('slot_id');
-    $router->post('/{id}/slots/{slot_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('slot_id');
+    $router->get('/{id}/slots/{event_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('event_id');
 
-    $router->get('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('slot_id');
-    $router->post('/{id}/slots/{slot_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('slot_id');
+    $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
@@ -50,18 +52,21 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
 
 $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index');
-    $router->get('/{event_id}', 'SchedulesController@getBooking')->int('event_id');
-    $router->get('/{spot_id}/slot', 'SchedulesController@getScheduleSpot')->int('spot_id');
-    $router->put('/{booking_id}', 'SchedulesController@patchBooking')->int('booking_id');
-    $router->get('/{event_id}/activities', 'SchedulesController@getBookingActivities')->int('event_id');
+    $router->get('/{id}', 'SchedulesController@getBooking')->int('id');
+    $router->get('/{id}/slot', 'SchedulesController@getScheduleSpot')->int('id');
+    $router->put('/{id}', 'SchedulesController@patchBooking')->int('id');
+    $router->get('/{id}/activities', 'SchedulesController@getBookingActivities')->int('id');
+
+
+    $router->get('/group-bookings/{group_id}/attendees', 'SchedulesController@getGroupAttendees')->int('group_id');
 
     // Get FluentCrm Profile
     $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
 $router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
-    $router->get('slots/{slot_id}', 'BookingController@getSlots')->int('slot_id');
-    $router->post('slots/{slot_id}/schedule', 'BookingController@bookSlot')->int('slot_id');
+    $router->get('slots/{event_id}', 'BookingController@getSlots')->int('event_id');
+    $router->post('slots/{event_id}/schedule', 'BookingController@bookSlot')->int('event_id');
     $router->get('public_vars', 'WidgetController@getPublicVars');
 });
 

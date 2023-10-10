@@ -79,7 +79,7 @@ class FluentFormInit
                     'email'      => $this->getEmail($emailValue),
                     'name'       => $this->getName($nameValue),
                     'rules'      => Arr::get($value, 'rules'),
-                    'slot_id'    => Arr::get($value, 'raw.settings.slot_id'),
+                    'event_id'    => Arr::get($value, 'raw.settings.event_id'),
                     'source_url' => site_url(Arr::get($formData, '_wp_http_referer')),
                 ];
 
@@ -103,7 +103,7 @@ class FluentFormInit
             return;
         }
         
-        $calendarSlot = CalendarSlot::find($data['slot_id']);
+        $calendarSlot = CalendarSlot::find($data['event_id']);
         
         if ($calendarSlot->status != 'active') {
             throw new \Exception('Sorry, This host is not accepting any new bookings at the moment.', 423);
@@ -142,7 +142,7 @@ class FluentFormInit
 
     private function bookSlot($data = [])
     {
-        $calendarSlot = CalendarSlot::find($data['slot_id']);
+        $calendarSlot = CalendarSlot::find($data['event_id']);
 
         $startDateTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
 

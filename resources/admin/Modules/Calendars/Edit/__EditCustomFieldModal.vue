@@ -4,8 +4,8 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
-        <el-form v-if="openModal" v-model="fieldData" label-position="top" >
-            <el-form-item label="Input Type *">
+        <el-form v-if="openModal" label-position="top" >
+            <el-form-item label="Field Type">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"
@@ -83,7 +83,7 @@ export default {
                 index: '',
                 label: '',
                 name: '',
-                type: 'checkbox',
+                type: 'text',
                 placeholder: '',
                 enabled: true,
                 required: false,
@@ -108,7 +108,7 @@ export default {
             return this.isNewEntry ? 'Add Question' : 'Update Question';
         },
         isOptionRequired() {
-            return ['checkbox', 'dropdown'].includes(this.fieldData.type);
+            return ['dropdown'].includes(this.fieldData.type);
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
