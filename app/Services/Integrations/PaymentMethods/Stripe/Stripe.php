@@ -19,7 +19,8 @@ class Stripe extends BasePaymentMethod
         parent::__construct(
             __('Stripe', 'fluent-booking'),
             'stripe',
-            '#136196'
+            '#136196',
+            $this->getLogo()
         );
         
         add_filter('fluent_booking/get_payment_connect_info_' . $this->slug, [$this, 'getConnectInfo']);
@@ -50,7 +51,7 @@ class Stripe extends BasePaymentMethod
      */
     public function getLogo()
     {
-        return FLUENT_BOOKING_URL . "images/payment-methods/stripe.svg";
+        return FLUENT_BOOKING_URL . "assets/images/payment-methods/stripe.svg";
     }
 
     /**
@@ -71,26 +72,30 @@ class Stripe extends BasePaymentMethod
 
     public function makePayment($orderItem)
     {
-        $hash = $this->resolveOrderHash($orderItem);
+        $hash = $orderItem->hash;
         $stripeSettings = new StripeSettings($this->slug);
         $apiKey = $stripeSettings->getApiKey();
         $publicKey = $stripeSettings->getPublicKey();
-        $customer = $orderItem->customer;
         $stripeSetting = $this->getSettings();
+
+        //to-do will add from settings
+        $currency =  'USD';
+        $paymentTotal = 2000;
+//            $this->getPayableAmount($orderItem)
 
         $paymentArgs = array(
             'payment_method_type' => ['card'],
             'client_reference_id' => $hash,
             'items' => $orderItem->items,
-            'amount' => (int) round($this->getPayableAmount($orderItem)),
-            'currency' => strtolower($orderItem->order->currency),
+            'amount' => (int) round($paymentTotal),
+            'currency' => strtolower($currency),
             'description' => "Payment for Order",
-            'customer_email' => $customer->email,
+            'customer_email' => $orderItem->email,
             'success_url' => $this->getSuccessUrl($orderItem),
         );
 
         //Subscription only available for hosted, will implement onsite later
-        if ($stripeSetting['checkout_mode'] === 'onsite' && empty($orderItem->subscriptionItems)) {
+        if ($stripeSetting['checkout_mode'] === 'onsite') {
             $paymentArgs['public_key'] = $publicKey;
             $this->handleOnsitePayment($orderItem, $paymentArgs, $apiKey);
         } else {
@@ -150,7 +155,17 @@ class Stripe extends BasePaymentMethod
 
     public function sessionData($args)
     {
-        $items = $args['items'];
+
+        //to-do
+        //now dummy data
+        $items = [
+            [
+                'price' => 2000,
+                'title' => 'test',
+                'quantity' => 1
+            ]
+        ];
+
         $lineItems = [];
 
         foreach ($items as $item) {
@@ -204,22 +219,6 @@ class Stripe extends BasePaymentMethod
     {
         try {
             $sessionData = $this->sessionData($paymentArgs);
-
-            if (!empty($orderItem->subscriptionItems)) {
-                $subscriptionArgs = Subscriptions::processArgs($orderItem);
-                if (!empty($subscriptionArgs)) {
-                    $sessionData['subscription_data'] = $subscriptionArgs;
-                    unset($sessionData['mode']);
-                    unset($sessionData['invoice_creation']);
-                }
-            }
-
-            if (empty($sessionData['subscription_data'])) {
-                $sessionData['payment_intent_data'] = [
-                    'capture_method' => 'automatic',
-                    'description' => 'Payment for Order #' . $orderItem->order->id,
-                ];
-            }
 
             $sessionData = apply_filters('fluent-booking/payment/stripe_checkout_session_args', $sessionData);
 

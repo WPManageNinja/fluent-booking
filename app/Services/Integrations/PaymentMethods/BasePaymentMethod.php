@@ -3,22 +3,27 @@
 namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Validator\Validator;
+
+
 use FluentCart\Api\Orders;
 use FluentCart\App\Models\Order;
 use FluentCart\App\Models\OrderTransaction;
 use FluentCart\Api\Helper;
 use FluentCart\App\Services\OrderHelper;
-use FluentCart\App\Services\Payments\PaymentHelper;
 use FluentCart\App\Services\StatusHelper;
 
-use FluentBooking\Framework\Support\Arr;
-use FluentBooking\Framework\Validator\Validator;
+
 
 abstract class BasePaymentMethod implements BasePaymentInterface
 {
     public $slug;
 
     public $title;
+
+    public $logo;
 
     public $brandColor = '#ccc';
 
@@ -53,17 +58,15 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function resolveOrderHash($orderItem)
     {
-        if ($orderItem != null && isset($orderItem->order) && $orderItem->order instanceof Order) {
-            return $orderItem->order->uuid;
-        }
-        return "";
+        return $orderItem->hash;
     }
 
-    public function __construct($title, $slug, $brandColor)
+    public function __construct($title, $slug, $brandColor, $logo)
     {
         $this->title = $title;
         $this->slug = $slug;
         $this->brandColor = $brandColor;
+        $this->logo = $logo;
         $this->methodHandler = 'fluent_booking_payment_settings_' . $slug;
     }
 
@@ -87,11 +90,10 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function addGlobalMenu($menuItems)
     {
-        $app = App::getInstance();
         $menuItems[$this->slug] = [
             'title' => $this->title,
-            'icon_url' => '',
             'component_type' => 'GlobalSettingsComponent',
+            'icon_url' =>  $this->logo,
             'route' => [
                 'name' => 'PaymentSettingsIndex',
                 'params' => [
@@ -226,7 +228,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     protected function getSuccessUrl($orderItem, $args = null)
     {
         $paymentHelper = new PaymentHelper($this->slug);
-        return $paymentHelper->successUrl($orderItem->order->uuid, $args);
+        return $paymentHelper->successUrl($orderItem, $args);
     }
 
     protected function getListenerUrl($args = null)

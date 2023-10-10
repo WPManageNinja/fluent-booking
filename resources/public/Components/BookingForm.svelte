@@ -87,6 +87,9 @@
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
                 dispatch('bookingConfirmed', res);
+                if (res.data.redirect_to) {
+                    window.location.href = res.data.redirect_to;
+                }
             })
             .catch(err => {
                 errors = getErrorText(err.response);

@@ -12,7 +12,7 @@ class Booking extends Model
 
     protected $guarded = ['id'];
 
-    private $bookingType = 'scheduling';
+    protected static $bookingType = 'scheduling';
 
     protected $fillable = [
         'calendar_id',
@@ -54,7 +54,7 @@ class Booking extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
+        static::creating( function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
             }
@@ -73,7 +73,7 @@ class Booking extends Model
             }
 
             if (empty($model->booking_type)) {
-                $model->booking_type = $this->bookingType;
+                $model->booking_type = static::$bookingType;
             }
 
             $model->hash = md5(wp_generate_uuid4() . time());

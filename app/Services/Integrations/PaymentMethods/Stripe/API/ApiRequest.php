@@ -70,8 +70,8 @@ class ApiRequest
     public static function get_user_agent()
     {
         $app_info = array(
-            'name' => 'Fluent Cart',
-            'version' => FLUENTCART_VERSION,
+            'name' => 'Fluent Booking',
+            'version' => FLUENT_BOOKING_ASSETS_VERSION,
             'url' => site_url(),
             'partner_id' => 'pp_partner_FN62GfRLM2Kx5d'
         );
