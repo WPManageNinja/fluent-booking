@@ -304,43 +304,7 @@ class AdminMenuHandler
 
     public function settingMenuItems()
     {
-        $app = App::getInstance();
-
-        return apply_filters('fluent_booking/settings_menu_items', [
-            'google_calendar' => [
-                'title'          => __('Google Calendar', 'fluent-booking'),
-                'icon_url'       => $app['url.assets'] . 'images/google-calendar.svg',
-                'component_type' => 'GlobalSettingsComponent',
-                'route'          => [
-                    'name'   => 'configure-integrations',
-                    'params' => [
-                        'settings_key' => 'google_calendar'
-                    ]
-                ]
-            ],
-            'zoom' => [
-                'title' => __('Zoom', 'fluent-booking'),
-                'icon_url' => $app['url.assets'] . 'images/zoom.svg',
-                'component_type' => 'GlobalSettingsComponent',
-                'route' => [
-                    'name' => 'configure-integrations',
-                    'params' => [
-                        'settings_key' => 'zoom'
-                    ]
-                ]
-            ],
-            'twilio' => [
-                'title' => __('SMS by Twillio', 'fluent-booking'),
-                'icon_url' => $app['url.assets'] . 'images/twilio.svg',
-                'component_type' => 'GlobalSettingsComponent',
-                'route' => [
-                    'name' => 'configure-integrations',
-                    'params' => [
-                        'settings_key' => 'twilio'
-                    ]
-                ]
-            ]
-        ]);
+        return [];
     }
 }
 

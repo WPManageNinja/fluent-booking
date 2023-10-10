@@ -8,11 +8,8 @@ class SettingsController extends Controller
 {
     public function getSettingsMenu()
     {
-        $menuItems = (new AdminMenuHandler())->settingMenuItems();
         return [
-            'menu_items' => $menuItems,
+            'menu_items' => apply_filters('fluent_booking/settings_menu_items', []),
         ];
     }
-
-
 }

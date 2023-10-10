@@ -185,7 +185,6 @@ class CalendarController extends Controller
         ];
 
         if (in_array('settings_menu', $request->get('with', []))) {
-            $baseUrl = Helper::getAppBaseUrl();
             $data['settings_menu'] = apply_filters('fluent_booking/calendar_setting_menu_items', [
                 'calendar_settings' => [
                     'type'    => 'route',
