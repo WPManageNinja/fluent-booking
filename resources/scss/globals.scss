@@ -1271,6 +1271,17 @@
         }
     }
 
+    .el-breadcrumb {
+        .el-breadcrumb__item {
+            &:first-child {
+                .el-breadcrumb__inner[role="link"] {
+                    color: $dark;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
     .fcal_photo_card {
         .fcal_photo_holder {
             position: relative;
