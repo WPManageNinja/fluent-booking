@@ -18,29 +18,18 @@
                             <input disabled="{field.disabled}" class="fcal_input" type="number"
                                 placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                         {:else if field.type === 'phone'}
-                            <input disabled="{field.disabled}" class="fcal_input" type="tel"
+                            <input disabled="{field.disabled}" class="fcal_input" type="number"
                                 placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                         {:else if field.type === 'textarea'}
                             <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                     class="fcal_input" bind:value={form[field.name]}/>
                         {:else if field.type === 'dropdown'}
                         <select bind:value={form[field.name]}>
+                            <option value="" disabled selected>{field.placeholder}</option>
                             {#each field.options as option (option)}
                                 <option value={option}>{option}</option>
                             {/each}
                         </select>
-                        {:else if field.type === 'checkbox'}
-                            <div class="fcal_checkbox_wrap">
-                                {#each field.options as option}
-                                    <div class="fcal_checkbox">
-                                        <input class="fcal_input" type="checkbox"
-                                            bind:checked={form[field.name]} value={option} />
-                                        <span class="fcal_checkbox_mark"></span>
-
-                                        {option}
-                                    </div>
-                                {/each}
-                            </div>
                         {/if}
                     </label>
                 </div>
@@ -85,7 +74,7 @@
             ...form,
             timezone,
             start_date: spot.start,
-            slot_id: slot.id,
+            event_id: slot.id,
             source_url: currentUrl,
             action: 'fluent_cal_schedule_meeting'
         }
@@ -106,9 +95,5 @@
             .finally(() => {
                 submitting = false;
             });
-    }
-
-    function getFieldType(field) {
-        return 'text';
     }
 </script>

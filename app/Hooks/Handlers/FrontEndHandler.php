@@ -116,7 +116,7 @@ class FrontEndHandler
     {
         $app = App::getInstance();
 
-        $slotId = (int)$_REQUEST['slot_id'];
+        $slotId = (int)$_REQUEST['event_id'];
 
         $calendarSlot = CalendarSlot::find($slotId);
 
@@ -148,6 +148,8 @@ class FrontEndHandler
             ], 422);
         }
 
+        $customFieldsData = BookingService::getCustomFieldsData($postedData, $calendarSlot);
+
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
         $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
 
@@ -158,7 +160,8 @@ class FrontEndHandler
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
             'ip_address'       => Helper::getIp(),
-            'status'           => 'scheduled'
+            'status'           => 'scheduled',
+            'event_type'       => $calendarSlot->event_type
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -183,6 +186,9 @@ class FrontEndHandler
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot);
+            if ($customFieldsData) {
+                Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+            }
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
@@ -210,7 +216,7 @@ class FrontEndHandler
 
     public function ajaxGetAvailableDates()
     {
-        $slotId = (int)$_REQUEST['slot_id'];
+        $slotId = (int)$_REQUEST['event_id'];
         $slot = CalendarSlot::findOrfail($slotId);
 
         if (!$slot || $slot->status != 'active') {

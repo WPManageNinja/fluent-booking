@@ -90,7 +90,7 @@ export default {
         redirectToSetting(calendarId, slotId) {
             this.$router.push({
                 name: 'slot_settings',
-                params: { calendar_id: calendarId, slot_id: slotId }
+                params: { calendar_id: calendarId, event_id: slotId }
             });
             if (this.appVars.is_new) {
                 setTimeout(() => {

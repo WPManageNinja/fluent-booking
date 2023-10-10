@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_remote_calendar_block">
+    <div v-loading="working" class="fcal_remote_calendar_block">
         <div class="fcal_remote_header">
             <div class="fcal_driver_brand">
                 <img :src="driver.icon"/>
@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="fcal_driver_action">
-                <el-button size="small">
+                <el-button @click="disconnectCalendar()" size="small">
                     <el-icon>
                         <Delete/>
                     </el-icon>
@@ -27,6 +27,11 @@
                         <span v-loading="saving_id == cal.id"></span>
                     </el-checkbox>
                 </el-checkbox-group>
+
+                <div v-if="feed.errors">
+                    <hr />
+                    <p style="color: red;" class="fcal_remote_sub">API Error: {{ feed.errors }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -37,10 +42,12 @@ import isArray from "lodash/isArray";
 export default {
     name: 'RemoteCalendarBlock',
     props: ['calendar', 'driver', 'feed'],
+    $emit: ['refetch'],
     data() {
         return {
             saving: false,
-            saving_id: ''
+            saving_id: '',
+            working: false
         }
     },
     methods: {
@@ -60,6 +67,28 @@ export default {
                 .finally(() => {
                     this.saving = false;
                     this.saving_id = '';
+                });
+        },
+        disconnectCalendar() {
+            this.$confirm('Are you sure you want to disconnect this calendar? This action can\'t be undone.', 'Disconnect Calendar', {
+                confirmButtonText: 'Confirm Disconnect',
+                cancelButtonText: 'Cancel'
+            })
+                .then(() => {
+                    this.working = true;
+                    this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/disconnect-calendar', {
+                        meta_id: this.feed.db_id
+                    })
+                        .then(response => {
+                            this.$notify.success(response.message);
+                            this.$emit('refetch');
+                        })
+                        .catch(errors => {
+                            this.$handleError(errors);
+                        })
+                        .finally(() => {
+                            this.working = false;
+                        });
                 });
         }
     },

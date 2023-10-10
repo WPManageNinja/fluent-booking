@@ -498,7 +498,7 @@ class CalendarController extends Controller
 
         $bookingFields = $request->get('booking_fields');
 
-        $optionRequiredFields = ['checkbox', 'dropdown'];
+        $optionRequiredFields = ['dropdown'];
 
         $formattedFields = [];
 
@@ -534,7 +534,7 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
 
         // Let's delete all the events related to this slot
-        Booking::where('slot_id', $slot->id)
+        Booking::where('event_id', $slot->id)
             ->where('calendar_id', $calendar->id)
             ->delete();
 

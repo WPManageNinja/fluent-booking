@@ -80,7 +80,7 @@
                 :edit_item="editing_item"
                 :request_headers="request_headers"
                 :event_triggers="event_triggers"
-                :slot_id="slot_id"
+                :event_id="event_id"
                 :selected_id="selected_id"
                 :setSelectedId="setSelectedId"
                 :selected_index="selectedIndex"
@@ -97,7 +97,7 @@ import Editor from "./Editor";
 
 export default {
     name: "WebhookSettings",
-    props:['slot_id', 'calendar_id'],
+    props:['event_id', 'calendar_id'],
     components: {
         Editor,
         Plus,
@@ -116,7 +116,7 @@ export default {
             webhook: {
                 name: '',
                 calendar_id: '',
-                slot_id: '',
+                event_id: '',
             },
             calendars: [],
             slots: [],
@@ -180,9 +180,9 @@ export default {
                 });
         },
         getFeeds(onlyFeeds = null) {
-            const slotID = this.slot_id;
+            const slotID = this.event_id;
             this.$get('webhooks',{
-                slot_id: slotID
+                event_id: slotID
             })
                 .then(response => {
                     this.request_headers = response.request_headers;
