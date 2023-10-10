@@ -2,11 +2,11 @@
     <div class="fcal_location_selector_wrap">
         <el-select
             popper-class="fcal_selector_with_submenu fcal_location_select fcal_select"
-            v-model="slot.location_type"
+            v-model="slot.location_settings.type"
             clearable
             placeholder="Select Location">
             <el-option-group
-                v-for="(location, locationKey) in locations"
+                v-for="(location, locationKey) in slot.settings.location_fields"
                 :key="locationKey"
                 :label="location.label"
                 :value="locationKey"
@@ -16,6 +16,7 @@
                     :key="optionKey"
                     :label="option.title"
                     :value="optionKey"
+                    :disabled="option.disabled"
                 >
                     {{ option.title }}
                 </el-option>
@@ -28,7 +29,7 @@
             class="fcal_location_form"
         >
             <el-form-item label="Location Title *">
-                <el-input v-model="slot.location_heading" type="text" placeholder="Location Title" />
+                <el-input v-model="slot.location_settings.title" type="text" placeholder="Location Title" />
             </el-form-item>
             <el-form-item label="Location Description">
                 <el-input v-model="slot.location_settings.description" type="textarea" placeholder="Location Description" />
@@ -55,15 +56,15 @@ export default {
     props: ['slot'],
     data() {
         return {
-            locations: this.appVars.location_schema,
+            locations: '',
         }
     },
     computed: {
         isPhoneRequired() {
-            return this.slot.location_type == 'phone_organizer';
+            return this.slot.location_settings.type == 'phone_organizer';
         },
         isLocationInfoRequired() {
-            return this.slot.location_type == 'in_person_organizer' || this.slot.location_type == 'custom';
+            return this.slot.location_settings.type == 'in_person_organizer' || this.slot.location_settings.type == 'custom';
         }
     }
 }

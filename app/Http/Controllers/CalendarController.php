@@ -295,6 +295,8 @@ class CalendarController extends Controller
 
         $slotSettings['available_schedules'] = $availableSchedules;
 
+        $slotSettings['location_fields'] = $slot->calendar->getLocationFields();
+
         $slot->settings = $slotSettings;
 
         $data = [
