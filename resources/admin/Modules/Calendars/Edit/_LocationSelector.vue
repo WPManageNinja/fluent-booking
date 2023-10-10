@@ -54,11 +54,6 @@
 export default {
     name: 'LocationSelector',
     props: ['slot'],
-    data() {
-        return {
-            locations: '',
-        }
-    },
     computed: {
         isPhoneRequired() {
             return this.slot.location_settings.type == 'phone_organizer';
