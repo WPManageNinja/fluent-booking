@@ -25,6 +25,7 @@ class Stripe extends BasePaymentMethod
         add_filter('fluent_booking/get_payment_connect_info_' . $this->slug, [$this, 'getConnectInfo']);
         add_filter('fluent_booking/get_payment_settings_disconnect_' . $this->slug, [$this, 'disconnect']);
         add_action('fluent-booking/before_render_payment_method_' . $this->slug, [$this, 'loadCheckoutJs'], 10, 1);
+
     }
     
     public function disconnect($data)
@@ -36,7 +37,6 @@ class Stripe extends BasePaymentMethod
     {
         return $this->getActiveStatus();
     }
-
     /**
      * Connect configuration should return
      */

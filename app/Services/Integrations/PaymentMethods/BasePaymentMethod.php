@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
+use FluentBooking\App\App;
 use FluentCart\Api\Orders;
 use FluentCart\App\Models\Order;
 use FluentCart\App\Models\OrderTransaction;
@@ -77,12 +78,30 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
         add_action('fluent_booking/payment/prepare_payment_method_' . $this->slug, [$this, 'prepare'], 10, 1);
         add_action('fluent_booking/payment/pre_render_page_process_' . $this->slug, [$this, 'maybeUpdatePayments'], 10, 1);
+        add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
     }
     public function handleRedirectData() 
     {
         return '';
     }
 
+    public function addGlobalMenu($menuItems)
+    {
+        $app = App::getInstance();
+        $menuItems[$this->slug] = [
+            'title' => $this->title,
+            'icon_url' => '',
+            'component_type' => 'GlobalSettingsComponent',
+            'route' => [
+                'name' => 'PaymentSettingsIndex',
+                'params' => [
+                    'settings_key' => $this->slug
+                ]
+            ]
+        ];
+        return $menuItems;
+
+    }
     public function setRoutes()
     {
         static::$routes[] = [
