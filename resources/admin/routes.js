@@ -12,6 +12,7 @@ import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGe
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
+import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
 
 export var routes = [
     {
@@ -55,6 +56,16 @@ export var routes = [
                     active_menu: 'calendars',
                     title: 'Calendar Settings'
                 },
+            },
+            {
+                name: 'calendar_general_integration_settings',
+                path: 'calendar-general-integration-settings/:settings_key',
+                component: GeneralIntegrationFeedSettings,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Calendar Settings'
+                },
+                props: true
             }
         ]
     },

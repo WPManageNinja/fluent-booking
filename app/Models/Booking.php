@@ -12,6 +12,8 @@ class Booking extends Model
 
     protected $guarded = ['id'];
 
+    private $bookingType = 'scheduling';
+
     protected $fillable = [
         'calendar_id',
         'event_id',
@@ -70,11 +72,19 @@ class Booking extends Model
                 }
             }
 
+            if (empty($model->booking_type)) {
+                $model->booking_type = $this->bookingType;
+            }
+
             $model->hash = md5(wp_generate_uuid4() . time());
         });
 
         static::deleting(function ($model) { // before delete() method call this
             $model->hosts()->delete();
+        });
+
+        static::addGlobalScope('main_bookings', function ($builder) {
+            $builder->where('booking_type', 'scheduling');
         });
     }
 
@@ -302,8 +312,8 @@ class Booking extends Model
 
         return BookingMeta::create([
             'booking_id' => $this->id,
-            'meta_key' => $key,
-            'value'    => $value
+            'meta_key'   => $key,
+            'value'      => $value
         ]);
     }
 
