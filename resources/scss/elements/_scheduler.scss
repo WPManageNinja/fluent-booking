@@ -914,6 +914,15 @@
             &:last-child {
               margin-bottom: 0;
             }
+            .fcal_availability_setting {
+              .fcal_override_table {
+                width: 40%;
+                .fcal_override_date {
+                  max-width: 100%;
+                  width: 100%;
+                }
+              }
+            }
 
             .el-input {
               .el-input__wrapper {
