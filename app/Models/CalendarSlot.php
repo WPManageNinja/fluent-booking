@@ -91,7 +91,7 @@ class CalendarSlot extends Model
 
     public function isPhoneRequired()
     {
-        return $this->location_type == 'phone' && $this->location_settings['call_type'] == 'outbound';
+        return $this->location_type == 'phone_guest';
     }
 
     public function getSlotSettingsSchema()

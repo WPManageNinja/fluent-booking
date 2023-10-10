@@ -24,4 +24,9 @@ class BookingMeta extends Model
         return \maybe_unserialize($value);
     }
 
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
+
 }

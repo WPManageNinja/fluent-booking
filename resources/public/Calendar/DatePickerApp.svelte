@@ -193,7 +193,7 @@
         hours = parseInt(hours, 10) + 12;
       }
 
-      const result = `${hours}:${minutes} ${formatHr === '12' ? 'A.M' : ''}`;
+      const result = `${hours}:${minutes} ${formatHr === '12' ? 'AM' : ''}`;
       return result;
     }
 
@@ -267,7 +267,7 @@
 
             <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
                 <div class="fcal_slot_picker_header">
-                    { util.dayjs(selectedDate).format('dddd, MMMM DD') }
+                    { util.dayjs(selectedDate).format('dddd, MMM DD') }
 
                     <div class="fcal_slot_picker_header_action">
                         <div class="format-hour">

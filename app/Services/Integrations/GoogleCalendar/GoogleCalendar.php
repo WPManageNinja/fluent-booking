@@ -152,7 +152,7 @@ class GoogleCalendar extends IntegrationManager
 
         $location = Arr::get($booking, 'location_details.location_heading');
 
-        if ('phone' == $locationType) {
+        if ('phone_guest' == $locationType) {
             $location = 'Phone Call: ' . $booking->phone;
         } elseif ('google_meet' == $locationType) {
             $location = 'Google Meet';
