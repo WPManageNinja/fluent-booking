@@ -269,9 +269,10 @@ class Bootstrap
         if ($booking->getMeta('__zoom_meeting_details')) {
             return false; // Already created
         }
-        
-        // @todo: Check if the booking has a location type of zoom meeting
-        // If not then return false
+
+        if (Arr::get($calendarSlot->location_details, 'location_type') !== 'zoom_meeting') {
+            return false; // not our location
+        }
 
         // let's prepare the booking data
         $data = apply_filters('fluent_booking/zoom_meeting_data', [
