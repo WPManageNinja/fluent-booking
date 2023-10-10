@@ -116,13 +116,15 @@ class ZoomHelper
 
         if ($config['expires_in'] - 10 < time()) {
             // New to renew this token
-            $config = $client->reGenerateToken($config['refresh_token']);
-            if (is_wp_error($config)) {
-                return $config;
+            $newConfig = $client->reGenerateToken($config['refresh_token']);
+            if (is_wp_error($newConfig)) {
+                return $newConfig;
             }
 
-            $config['expires_in'] += time();
-            self::updateAccessConfig($config, $calendar);
+            $newConfig['expires_in'] += time();
+            $newConfig['account_email'] = $config['account_email'];
+            self::updateAccessConfig($newConfig, $calendar);
+            return $client->setAccessToken($newConfig['access_token']);
         }
 
         return $client->setAccessToken($config['access_token']);
