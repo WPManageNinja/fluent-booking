@@ -16,7 +16,7 @@ class AdminMenuHandler
         add_action('admin_menu', [$this, 'add']);
 
         add_action('admin_enqueue_scripts', function () {
-            if(!isset($_REQUEST['page']) || $_REQUEST['page'] != 'fluent-booking') {
+            if (!isset($_REQUEST['page']) || $_REQUEST['page'] != 'fluent-booking') {
                 return;
             }
             $this->enqueueAssets();
@@ -88,7 +88,7 @@ class AdminMenuHandler
     public function render()
     {
 
-       $app = App::getInstance();
+        $app = App::getInstance();
 
         $config = $app->config;
 
@@ -124,8 +124,8 @@ class AdminMenuHandler
                     'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
                 ],
                 [
-                    'key' => 'availability',
-                    'label' => __('Availability', 'fluent-booking'),
+                    'key'       => 'availability',
+                    'label'     => __('Availability', 'fluent-booking'),
                     'permalink' => $baseUrl . 'availability'
                 ],
                 [
@@ -180,6 +180,7 @@ class AdminMenuHandler
         if (function_exists('wp_enqueue_editor')) {
             add_filter('user_can_richedit', '__return_true');
             wp_enqueue_editor();
+            wp_enqueue_media();
         }
 
         wp_localize_script($slug . '_admin_app', 'fluentFrameworkAdmin', $this->getDashboardVars($app));
@@ -286,9 +287,15 @@ class AdminMenuHandler
             return false;
         }
 
+        $personName = trim($user->first_name . ' ' . $user->last_name);
+
+        if (!$personName) {
+            $personName = $user->display_name;
+        }
+
         $data = [
             'user_id' => $user->ID,
-            'title'   => sprintf('Booking schedule with %s', trim($user->first_name . ' ' . $user->last_name)),
+            'title'   => $personName,
             'slug'    => $userName
         ];
 

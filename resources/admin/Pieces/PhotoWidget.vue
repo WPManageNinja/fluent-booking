@@ -15,8 +15,9 @@ import { CameraFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'PhotoWidget',
+    $emits: ['update:modelValue'],
     props: {
-        value: {
+        modelValue: {
             required: false,
             type: String
         }
@@ -27,7 +28,7 @@ export default {
     data() {
         return {
             app_ready: false,
-            image_url: this.value
+            image_url: this.modelValue
         }
     },
     methods: {
@@ -35,8 +36,7 @@ export default {
             const that = this;
             const sendAttachmentBkp = wp.media.editor.send.attachment;
             wp.media.editor.send.attachment = function (props, attachment) {
-                that.$emit('input', attachment.url);
-                that.$emit('changed', attachment.url);
+                that.$emit('update:modelValue', attachment.url);
                 that.image_url = attachment.url;
                 wp.media.editor.send.attachment = sendAttachmentBkp;
             }

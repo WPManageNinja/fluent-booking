@@ -2,7 +2,7 @@
 
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2> <NoficationIcon/> Notification Settings </h2>
+            <h2> <NoficationIcon/> Email Notification Settings </h2>
         </div>
     </div>
 

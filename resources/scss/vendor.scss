@@ -307,3 +307,17 @@ a.el-button {
     }
 }
 
+.fcal_input_desc {
+    margin: 3px 0 0;
+    font-size: 90%;
+    color: #6e6d6d;
+}
+
+.fcal_photo_card.fcal_featured_image_upload .fcal_photo_holder {
+    width: 100% !important;
+    border-radius: 0 !important;
+    img {
+        border-radius: 0 !important;
+        border: none !important;
+    }
+}
