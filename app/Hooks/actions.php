@@ -13,6 +13,8 @@
  * @var $app FluentBooking\Framework\Foundation\Application
  */
 
+use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
+
 /*
  * Register all the grouped action handlers
  */
@@ -24,6 +26,7 @@
 
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
+
 
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
 
@@ -50,6 +53,7 @@ $app->addAction('fluent_booking/booking_schedule_completed', function ($booking)
 $app->addAction('wp_ajax_fluent_booking_callback_for_background', 'WebhookHandler@handleBackgroundProcessCallback');
 $app->addAction('wp_ajax_nopriv_fluent_booking_callback_for_background', 'WebhookHandler@handleBackgroundProcessCallback');
 
+(new GlobalPaymentHandler)->register();
 
 add_action('init', function () {
     if (!isset($_GET['fcal'])) {

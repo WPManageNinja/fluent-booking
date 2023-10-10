@@ -45,6 +45,15 @@ export default {
                         }
                     }
                 },
+                stripe: {
+                    title: 'Stripe',
+                    route: {
+                        name: 'PaymentSettingsIndex',
+                        params: {
+                            settings_key: 'stripe'
+                        }
+                    }
+                },
             }
         }
     },

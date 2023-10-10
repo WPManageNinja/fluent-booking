@@ -12,6 +12,7 @@ import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGe
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
+import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
 
 export var routes = [
     {
@@ -110,7 +111,17 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Configure Integrations'
                 },
-            }
+            },
+            {
+                name: 'PaymentSettingsIndex',
+                path: 'configure-integrations/payment/:settings_key',
+                props: true,
+                component: PaymentSettingsIndex,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Configure Integrations'
+                },
+            },
         ]
     },
     {
