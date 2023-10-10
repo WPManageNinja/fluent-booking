@@ -79,6 +79,16 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
     $router->post('/{host_id}/settings', 'IntegrationSettingsController@update')->int('host_id');
     $router->post('/{host_id}/disconnect', 'IntegrationSettingsController@revoke')->int('host_id');
     $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
+
+    $router->prefix('settings/payment-methods')->group(function ($router) {
+        $router->get('/all', 'PaymentMethodController@index');
+
+        $router->post('/', 'PaymentMethodController@store');
+        $router->get('/', 'PaymentMethodController@getSettings');
+
+        $router->get('connect/info', 'PaymentMethodController@connectInfo');
+        $router->post('disconnect', 'PaymentMethodController@disconnect');
+    });
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
