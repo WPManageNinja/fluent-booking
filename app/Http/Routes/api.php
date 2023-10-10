@@ -88,7 +88,9 @@ $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) 
 $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
     $router->post('/', 'AvailabilityController@createSchedule');
+    $router->post('/clone', 'AvailabilityController@cloneSchedule');
     $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
+    $router->get('/{schedule_id}/usages', 'AvailabilityController@getAvailabilityUsages')->int('schedule_id');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
     $router->post('/{schedule_id}/update-title', 'AvailabilityController@updateScheduleTitle')->int('schedule_id');
     $router->post('/{schedule_id}/update-status', 'AvailabilityController@updateDefaultStatus')->int('schedule_id');
