@@ -4,10 +4,10 @@ namespace FluentBooking\App\Services\Integrations\ZoomMeeting;
 
 
 use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
-use FluentBooking\App\Services\Integrations\ZoomMeeting;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -93,7 +93,7 @@ class Bootstrap
         });
 
         /*
-         * Calendar Level Settings
+         * Oauth Flow Settings
          */
         add_filter('fluent_booking/calendar_setting_menu_items', function ($menuItems, $calendar) {
             if (!ZoomHelper::isConfigured()) {
@@ -125,37 +125,74 @@ class Bootstrap
                 'key'            => 'zoom_meeting',
                 'title'          => 'Zoom Video Meeting Integration',
                 'description'    => 'Create zoom meeting from your booked events. Connect your zoom account to create dynamic meeting for your bookings.',
-                'configure_type' => 'require_oauth',
+                'configure_type' => 'oauth',
                 'icon'           => App::getInstance()['url.assets'] . 'images/zoom.svg',
-                'oauth_content'  => [
+                'secure_message' => 'Your Zoom API tokens will be encrypted and stored securely.'
+            ];
+
+            $accessConfig = ZoomHelper::getAccessConfig($calendar);
+            if ($accessConfig) {
+                $me = ZoomHelper::getCalendarApiClient($calendar)->me();
+
+                $errorMessage = '';
+
+                if (is_wp_error($me)) {
+                    $errorMessage = $me->get_error_message();
+                    $driverInfo['secure_message'] = '';
+                } else {
+                    $driverInfo['icon'] = $me['pic_url'];
+                    $driverInfo['secure_message'] = 'Your Zoom API tokens are encrypted and stored securely';
+
+                    if (empty($accessConfig['account_email']) || $accessConfig['account_email'] != $me['email']) {
+                        $accessConfig['account_email'] = $me['email'];
+                        ZoomHelper::updateAccessConfig($accessConfig, $calendar);
+                    }
+                }
+
+                $driverInfo['description'] = 'Create zoom meeting from your booked events. An Account is connected with this calendar.';
+
+                $instruction = 'The following Zoom Account is connected with this calendar. Based on your event location, a zoom meeting will be created for your bookings.';
+
+                if ($errorMessage) {
+                    $instruction = 'Looks like, the system failed to connect with your connected account. Please reload this page or disconnect the account and connect again.';
+                }
+
+                $driverInfo['oauth_content'] = [
+                    'instruction'     => $instruction,
+                    'disconnect_text' => 'Disconnect',
+                    'title'           => ($errorMessage) ? 'Failed to connect Zoom API.' : $me['display_name'] . ' (' . $me['email'] . ')',
+                    'subtitle'        => ($errorMessage) ? '<span style="color: red;">Error Message From API: ' . $errorMessage . '</span>' : 'Connected Zoom Account',
+                    'error'           => $errorMessage
+                ];
+            } else {
+                $driverInfo['oauth_content'] = [
                     'instruction' => 'To use Zoom Video Meeting feature as a meeting location please connect with your Zoom account.',
                     'btn_text'    => 'Connect with Zoom',
                     'btn_url'     => ZoomHelper::getOauthRedirectUrl($calendar->id),
                     'title'       => 'Zoom Video Meeting',
                     'subtitle'    => 'Configure Zoom to use the video meeting feature for your bookings',
-                ],
-                'configure_url'  => ZoomHelper::getAppRedirectUrl(),
-            ];
+                ];
+            }
+
 
             return [
                 'driver' => $driverInfo
             ];
 
         }, 10, 2);
-
+        add_action('fluent_booking/disconnect_general_integration_feed_zoom_meeting', function ($calendar) {
+            $api = ZoomHelper::getCalendarApiClient($calendar);
+            if (!is_wp_error($api)) {
+                $api->revokeConnection();
+            }
+            $calendar->updateMeta('_zoom_integration_config', []);
+        });
         add_action('wp_ajax_fluent_booking_zoom_auth', [$this, 'handleAuthCallback']);
 
-        add_action('init', function () {
-            if (!isset($_REQUEST['zoom'])) {
-                return;
-            }
-
-            $calendar = Calendar::find(3);
-            $access = ZoomHelper::getCalendarApiClient($calendar);
-            $me = $access->me();
-            dd($me);
-        });
-
+        /*
+         * Booking Level Hooks
+         */
+        add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 9, 2);
     }
 
     public function handleAuthCallback()
@@ -214,5 +251,73 @@ class Bootstrap
 
         wp_redirect(Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/calendar-general-integration-settings/zoom_meeting'));
         exit;
+    }
+
+    public function maybeCreateZoomMeeting($booking, $calendarSlot)
+    {
+        $calendar = $calendarSlot->calendar;
+        if (!ZoomHelper::isConfigured()) {
+            return;
+        }
+
+        $config = ZoomHelper::getAccessConfig($calendar);
+
+        if (!$config || empty($config['access_token'])) {
+            return;
+        }
+
+        if ($booking->getMeta('__zoom_meeting_details')) {
+            return false; // Already created
+        }
+        
+        // @todo: Check if the booking has a location type of zoom meeting
+        // If not then return false
+
+        // let's prepare the booking data
+        $data = apply_filters('fluent_booking/zoom_meeting_data', [
+            'agenda'       => $calendarSlot->title,
+            'duration'     => 30,
+            'type'         => 2,
+            'settings'     => [
+                'meeting_invitees' => [
+                    [
+                        'email' => $booking->email
+                    ]
+                ],
+            ],
+            'schedule_for' => $config['account_email'],
+            'start_time'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'topic'        => sprintf('%1s meeting with %2s', $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
+        ], $booking, $calendarSlot);
+
+        $api = ZoomHelper::getCalendarApiClient($calendar);
+        if (is_wp_error($api)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $response = $api->createMeeting($data);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $dataKeys = ['id', 'start_url', 'join_url', 'password'];
+        $booking->updateMeta('__zoom_meeting_details', Arr::only($response, $dataKeys));
+
+        return true;
     }
 }

@@ -192,7 +192,8 @@ class FrontEndHandler
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], 423);
+            return;
         }
 
         $author = $calendarSlot->getAuthorProfile(true);
@@ -206,12 +207,12 @@ class FrontEndHandler
 
         $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
-        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $responseHtml = (string) App::make('view')->make('public.booking_confirmation', $confirmationData);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',
             'response_html' => $responseHtml
-        ]);
+        ], 200);
     }
 
     public function ajaxGetAvailableDates()

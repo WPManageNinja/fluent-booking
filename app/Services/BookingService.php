@@ -86,6 +86,8 @@ class BookingService
             'status' => 'confirmed'
         ]);
 
+        $booking->load('calendar');
+
         do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
         return $booking;
