@@ -12,7 +12,7 @@ class Booking extends Model
 
     protected $guarded = ['id'];
 
-    private $bookingType = 'scheduling';
+    private static $bookingType = 'scheduling';
 
     protected $fillable = [
         'calendar_id',
@@ -73,7 +73,7 @@ class Booking extends Model
             }
 
             if (empty($model->booking_type)) {
-                $model->booking_type = $this->bookingType;
+                $model->booking_type = self::$bookingType;
             }
 
             $model->hash = md5(wp_generate_uuid4() . time());
@@ -84,7 +84,7 @@ class Booking extends Model
         });
 
         static::addGlobalScope('main_bookings', function ($builder) {
-            $builder->where('booking_type', 'scheduling');
+            $builder->where('booking_type', self::$bookingType);
         });
     }
 
