@@ -798,8 +798,21 @@
   .fcal_spoot_status_cancelled * {
     text-decoration: line-through;
   }
+  .fcal_section_body {
+    &.hide_sidebar {
+      .fcal_showing_details {
+        &.fcal_all_schediles {
+          gap: 0;
+        }
+      }
 
+    }
+  }
+  .fcal_hide_schedule_sidebar {
+    display: none;
+  }
   .fcal_showing_details {
+    position: relative;
     &.fcal_all_schediles {
       .fcal_schedules {
         width: 245px;
@@ -809,17 +822,8 @@
           width: 0;
         }
       }
-    }
-    .fcal_spot_details {
-      position: relative;
-      &.hide_sidebar {
-        .fcal_hide_schedule_sidebar {
-          i {
-            transform: rotate(180deg);
-          }
-        }
-      }
       .fcal_hide_schedule_sidebar {
+        display: block;
         position: absolute;
         left: -31px;
         height: auto;
@@ -833,6 +837,21 @@
         box-shadow:0 8px 30px rgba(27, 37, 51, 0.1);
         i {
           transition: .3s;
+        }
+        @media (max-width: 700px) {
+          left: -18px;
+          padding: 5px 1px;
+          top: 13px;
+        }
+      }
+    }
+    .fcal_spot_details {
+      position: relative;
+      &.hide_sidebar {
+        .fcal_hide_schedule_sidebar {
+          i {
+            transform: rotate(180deg);
+          }
         }
       }
     }
@@ -1916,6 +1935,9 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
+    @media (max-width: 700px) {
+      flex-direction: column;
+    }
 
     .fcal_schedule_details_sidebar {
       max-width: 245px;
@@ -1982,7 +2004,7 @@
               font-weight: 700;
               line-height: 20px;
               color: #323232;
-              padding: 16px 0;
+              padding: 8px 0;
 
               .cell {
                 padding: 0 20px;
@@ -2206,6 +2228,9 @@
       gap: 20px 10px;
       @media (max-width: 1222px) {
         grid-template-columns: 1fr 1fr;
+      }
+      @media (max-width: 378px) {
+        grid-template-columns: 1fr;
       }
     }
 

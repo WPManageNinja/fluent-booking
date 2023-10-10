@@ -1204,54 +1204,6 @@ class Helper
         ]);
     }
 
-    public static function getLocationSchema()
-    {
-        return apply_filters('fluent_booking/location_options_schema', [
-            'conferencing' => [
-                'value' => 'conferencing',
-                'label' => 'Conferencing',
-                'options' => [
-                    'google_meet' => [
-                        'title' => 'Google Meet',
-                    ],
-                ],
-            ],
-            'in_person' => [
-                'value' => 'in_person',
-                'label' => 'In Person',
-                'options' => [
-                    'in_person_guest' => [
-                        'title' => 'In Person (Attendee Address)',
-                    ],
-                    'in_person_organizer' => [
-                        'title' => 'In Person (Organizer Address)',
-                    ],
-                ],
-            ],
-            'phone' => [
-                'value' => 'phone',
-                'label' => 'Phone',
-                'options' => [
-                    'phone_guest' => [
-                        'title' => 'Attendee Phone Number',
-                    ],
-                    'phone_organizer' => [
-                        'title' => 'Organizer Phone Number',
-                    ],
-                ],
-            ],
-            'other' => [
-                'value' => 'other',
-                'label' => 'Other',
-                'options' => [
-                    'custom' => [
-                        'title' => 'Custom',
-                    ],
-                ],
-            ],
-        ]);
-    }
-
     public static function getDefaultNotificationSettings()
     {
         $defaults = apply_filters('fluent_booking/default_notification_settings', [

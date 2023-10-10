@@ -100,6 +100,55 @@ class Calendar extends Model
         ];
     }
 
+    public function getLocationFields()
+    {
+        $meetExist = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $this->user_id)
+            ->first();
+
+        return apply_filters('fluent_booking/get_location_fields', [
+            [
+                'label' => 'Conferencing',
+                'options' => [
+                    'google_meet' => [
+                        'title'    => 'Google Meet',
+                        'disabled' => !$meetExist,
+                    ],
+                ],
+            ],
+            [
+                'label' => 'In Person',
+                'options' => [
+                    'in_person_guest' => [
+                        'title' => 'In Person (Attendee Address)',
+                    ],
+                    'in_person_organizer' => [
+                        'title' => 'In Person (Organizer Address)',
+                    ],
+                ],
+            ],
+            [
+                'label' => 'Phone',
+                'options' => [
+                    'phone_guest' => [
+                        'title' => 'Attendee Phone Number',
+                    ],
+                    'phone_organizer' => [
+                        'title' => 'Organizer Phone Number',
+                    ],
+                ],
+            ],
+            [
+                'label' => 'Other',
+                'options' => [
+                    'custom' => [
+                        'title' => 'Custom',
+                    ],
+                ],
+            ],
+        ], $this);
+    }
+
     public function getMeta($key, $default = null)
     {
         $meta = Meta::where('object_type', 'Calendar')
