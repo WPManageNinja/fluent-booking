@@ -53,24 +53,24 @@
                                 <span v-else>No events are using this schedule</span>
                             </p>
                         </div>
-                        <div class="fcal_card_actions">
-                            <el-dropdown trigger="click" popper-class="fcal_select">
-                                <el-button class="fcal_plain_btn">
-                                    <el-icon><MoreFilled /></el-icon>
-                                </el-button>
-                                <template #dropdown>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item @click="">
-                                            <el-icon><CopyDocument /></el-icon> Duplicate
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click="deleteAvailability(availability.id)">
-                                            <el-icon><Delete /></el-icon> Delete
-                                        </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </template>
-                            </el-dropdown>
-
-                        </div>
+                    </div>
+                    <div class="fcal_card_actions">
+                        <el-dropdown trigger="click" popper-class="fcal_select">
+                            <el-icon class="el-dropdown-link"><MoreFilled /></el-icon>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item v-if="filters.author == 'me'" @click="updateDefaultStatus(availability.id)">
+                                        <el-icon><StarFilled /></el-icon> Set as Default
+                                    </el-dropdown-item>
+                                    <el-dropdown-item @click="cloneAvailability(availability)">
+                                        <el-icon><CopyDocument /></el-icon> Duplicate
+                                    </el-dropdown-item>
+                                    <el-dropdown-item @click="deleteAvailability(availability.id)">
+                                        <el-icon><Delete /></el-icon> Delete
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
                     </div>
                 </div>
             </div>
@@ -133,6 +133,16 @@ export default {
         }
     },
     methods: {
+        removeSchedule(scheduleId) {
+            const updatedAilabilities = this.availabilities.filter(schedule => schedule.id !== scheduleId);
+            this.availabilities = updatedAilabilities;
+        },
+        gotoDetails(schedule) {
+            this.$router.push({
+                name: 'availability_details',
+                params: { schedule_id: schedule.id }
+            })
+        },
         fetchAvailabilities() {
             this.loading = true;
             this.$get('availability', {
@@ -143,7 +153,6 @@ export default {
                 .then(response => {
                     this.availabilities = response.availabilities.data;
                     this.pagination.total = response.availabilities.total;
-                    console.log(this.availabilities);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -168,6 +177,34 @@ export default {
                     this.creatingNew = false;
                 });
         },
+        updateDefaultStatus(scheduleId) {
+            this.saving = true;
+            this.$post('availability/' + scheduleId + '/update-status')
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.fetchAvailabilities();     
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
+        cloneAvailability(availability) {
+            this.saving = true;
+            this.$post('availability/clone', availability)
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.gotoDetails(response.schedule);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
         deleteAvailability(availabilityId) {
             this.$confirm('Are you sure you want to delete this schedule?', 'Delete Schedule', {
                     confirmButtonText: 'Delete',
@@ -184,16 +221,6 @@ export default {
                         });
                 })
                 return;
-        },
-        removeSchedule(scheduleId) {
-            const updatedAilabilities = this.availabilities.filter(schedule => schedule.id !== scheduleId);
-            this.availabilities = updatedAilabilities;
-        },
-        gotoDetails(schedule) {
-            this.$router.push({
-                name: 'availability_details',
-                params: { schedule_id: schedule.id }
-            })
         }
     },
     mounted() {
