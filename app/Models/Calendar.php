@@ -107,16 +107,11 @@ class Calendar extends Model
             ->first();
 
         return apply_filters('fluent_booking/get_location_fields', [
-            [
+            'conferencing' => [
                 'label' => 'Conferencing',
-                'options' => [
-                    'google_meet' => [
-                        'title'    => 'Google Meet',
-                        'disabled' => !$meetExist,
-                    ],
-                ],
+                'options' => [],
             ],
-            [
+            'in_person' => [
                 'label' => 'In Person',
                 'options' => [
                     'in_person_guest' => [
@@ -127,7 +122,7 @@ class Calendar extends Model
                     ],
                 ],
             ],
-            [
+            'phone' => [
                 'label' => 'Phone',
                 'options' => [
                     'phone_guest' => [
@@ -138,7 +133,7 @@ class Calendar extends Model
                     ],
                 ],
             ],
-            [
+            'other' => [
                 'label' => 'Other',
                 'options' => [
                     'custom' => [
