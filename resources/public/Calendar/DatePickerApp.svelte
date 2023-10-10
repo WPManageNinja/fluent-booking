@@ -267,7 +267,7 @@
 
             <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
                 <div class="fcal_slot_picker_header">
-                    { util.dayjs(selectedDate).format('dddd, MMMM DD') }
+                    { util.dayjs(selectedDate).format('dddd, MMM DD') }
 
                     <div class="fcal_slot_picker_header_action">
                         <div class="format-hour">
