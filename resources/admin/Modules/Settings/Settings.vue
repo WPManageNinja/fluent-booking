@@ -4,25 +4,25 @@
             <h3>General Settings</h3>
         </div>
         <div class="fcal_settings_body">
-            <el-aside>
+            <el-aside v-loading="loading">
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="menu.route">
-                            <img class="fcal_img_icon" :src="menu.icon_url" />
-                            <span>{{menu.title}}</span>
+                            <img class="fcal_img_icon" :src="menu.icon_url"/>
+                            <span>{{ menu.title }}</span>
                         </router-link>
                     </li>
                 </ul>
             </el-aside>
             <div class="fcal_settings_container">
-                <router-view v-if="!loading" />
+                <router-view v-if="!loading"/>
                 <el-skeleton v-else animated>
                     <template #template>
-                        <el-skeleton-item />
-                        <el-skeleton-item style="width: 70%" />
-                        <el-skeleton-item style="width: 50%" />
-                        <el-skeleton-item style="width: 50%" />
-                        <el-skeleton-item style="width: 50%" />
+                        <el-skeleton-item/>
+                        <el-skeleton-item style="width: 70%"/>
+                        <el-skeleton-item style="width: 50%"/>
+                        <el-skeleton-item style="width: 50%"/>
+                        <el-skeleton-item style="width: 50%"/>
                     </template>
                 </el-skeleton>
             </div>
@@ -36,24 +36,29 @@ export default {
     data() {
         return {
             loading: false,
-            menuItems: {
-                google_calendar: {
-                    title: 'Google Calendar',
-                    icon_url: this.appVars.asset_url + 'images/google-calendar.svg',
-                    route: {
-                        name: 'configure-integrations',
-                        params: {
-                            settings_key: 'google_calendar'
-                        }
-                    }
-                },
-            }
+            menuItems: {}
         }
     },
     methods: {
+        fetchMenuItems() {
+            this.loading = true;
+            this.$get('settings/menu')
+                .then(response => {
+                    this.menuItems = response.menu_items;
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         gotoMenu(menu) {
             console.log(menu);
         }
+    },
+    mounted() {
+        this.fetchMenuItems();
     }
 }
 </script>
