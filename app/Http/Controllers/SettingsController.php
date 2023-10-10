@@ -6,19 +6,10 @@ use FluentBooking\App\Hooks\Handlers\AdminMenuHandler;
 
 class SettingsController extends Controller
 {
-    public function index()
+    public function getSettingsMenu()
     {
-        try {
-            $menuItems = (new AdminMenuHandler())->settingMenuItems();
-
-            return $this->sendSuccess([
-                'items' => $menuItems,
-            ]);
-
-        } catch (Exception $e) {
-            return $this->sendError([
-                'message' => $e->getMessage(),
-            ], 422);
-        }
+        return [
+            'menu_items' => apply_filters('fluent_booking/settings_menu_items', []),
+        ];
     }
 }
