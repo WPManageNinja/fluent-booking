@@ -148,6 +148,8 @@ class FrontEndHandler
             ], 422);
         }
 
+        $customFieldsData = BookingService::getCustomFieldsData($postedData, $calendarSlot);
+
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
         $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
 
@@ -184,6 +186,9 @@ class FrontEndHandler
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot);
+            if ($customFieldsData) {
+                Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+            }
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()

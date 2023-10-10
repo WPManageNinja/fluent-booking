@@ -1,52 +1,70 @@
 <template>
     <div class="fcal_settings_body_inner fcal_settings_availability fcal_settings_availability_details">
+        <div class="fcal_section_header">
+            <div class="fcal_title">
+                <h3>Availability</h3>
+            </div>
+        </div>
+
         <div class="fcal_settings_header">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><a @click="goBackToList">Availability</a></el-breadcrumb-item>
                 <el-breadcrumb-item>{{ scheduleInfo.host_name }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div v-if="!loading" class="fcal_settings_content_wrap">
+        <el-skeleton v-if="loading" :rows="5" animated/>
+        <div v-else class="fcal_settings_content_wrap">
             <el-form label-position="top">
-                <el-form-item class="fcal_availability_header">
-                    <h3> Weekly Hours
-                        <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
-                            <el-icon><StarFilled /></el-icon> Default schedule
-                        </span>
-                    </h3>
-                    <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
+                <div class="fcal_availability_header_wrap">
+                    <el-form-item class="fcal_availability_header">
+                        <h3> Weekly Hours Schedule: <el-icon style="cursor: pointer" @click="editScheduleTitleShow = true"><EditPen /></el-icon>
+                            <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
+                                <el-icon><StarFilled /></el-icon> Default schedule
+                            </span>
+                        </h3>
+                        <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
 
-                    <h3> {{ scheduleInfo.title }}</h3>
+                        <div class="fcal_edit_availability_title">
+                            <el-input v-if="editScheduleTitleShow" v-model="scheduleInfo.title" placeholder="Enter Schedule Title">
+                                <template #append>
+                                    <el-button @click="editScheduleTitleShow = false">Cancel</el-button>
+                                    <el-button @click="updateSchedule">Update</el-button>
+                                </template>
+                            </el-input>
+                        </div>
 
+                        <el-dropdown
+                            trigger="click"
+                            popper-class="fcal_select"
+                        >
+                            <el-button class="fcal_plain_btn el-dropdown-link">
+                                <el-icon><Setting /></el-icon>
+                            </el-button>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item>
+                                        <el-button plain text @click="handleCommand('edit')"><el-icon><EditPen /></el-icon> Edit Name</el-button>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button plain text @click="handleCommand('set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </el-form-item>
+                    <el-form-item class="fcal_availability_header" label="Timezone:">
                     <div class="timezone">
                         <div class="fcal_timezone_text">
                             <el-icon><TimezoneIcon/></el-icon>
                             <p>{{ scheduleInfo.settings?.timezone }}</p>
                         </div>
                     </div>
-
-                    <el-dropdown
-                            trigger="click"
-                            popper-class="fcal_select"
-                        >
-                        <el-button class="fcal_plain_btn el-dropdown-link">
-                            <el-icon><Setting /></el-icon>
-                        </el-button>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item>
-                                    <el-button plain text @click="handleCommand('edit')"><el-icon><EditPen /></el-icon> Edit Name</el-button>
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <el-button plain text @click="handleCommand('set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
                 </el-form-item>
+                </div>
+
                 <el-form-item class="fcal_tab_schedule">
                     <div class="fcal_availability_body">
                         <div class="fcal_availability_setting">
@@ -67,7 +85,47 @@
                 <SaveButton :saving="saving" label="Save Changes" @save="updateSchedule"/>
             </div>
         </div>
-        <el-skeleton v-else :rows="5" animated/>
+
+        <el-skeleton v-if="loading" :rows="5" animated/>
+        <div v-else class="fcal_uses_lists_wrap">
+            <div class="fcal_section_header">
+                <div class="fcal_title">
+                    <h3>Uses List</h3>
+                </div>
+            </div>
+
+            <div class="fcal_uses_list_body">
+                <div class="fcal_card_items">
+                    <div v-for="usages in scheduleInfo.availability_usages" class="fcal_card_item">
+                        <div @click="goToEvent(usages)" class="fcal_card_wrap">
+                            <div class="fcal_card_item_details fcal_availability_card">
+                                <h4>{{ usages.title }}</h4>
+                                <p class="fcal_icon_line">
+                                    <el-icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="h-3.5 w-3.5">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="2" x2="22" y1="12" y2="12"></line>
+                                            <path
+                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                        </svg>
+                                    </el-icon>
+                                    <span>Asia/Dhaka</span>
+                                </p>
+                            </div>
+                            <div class="fcal_card_actions">
+                                <el-button @click="goToEvent(usages)" class="fcal_plain_btn">
+                                    View Event
+                                </el-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <el-dialog
             v-model="dialogVisible"
             title="Add New Schedule"
@@ -90,7 +148,7 @@
 </template>
 
 <script>
-import { StarFilled, Setting, Delete, EditPen } from '@element-plus/icons-vue';
+import { StarFilled, Setting, Delete, EditPen, Location, MoreFilled, CopyDocument } from '@element-plus/icons-vue';
 import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
@@ -111,7 +169,10 @@ export default {
         StarFilled,
         Setting,
         Delete,
-        EditPen
+        EditPen,
+        Location,
+        MoreFilled,
+        CopyDocument
     },
     data() {
         return {
@@ -119,18 +180,24 @@ export default {
             saving: false,
             dialogVisible: false,
             scheduleInfo: '',
+            editScheduleTitleShow: false
         }
     },
     methods: {
         goBackToList() {
             this.$router.push({name: 'availability'});
         },
+        goToEvent(event) {
+            this.$router.push({
+                name: 'slot_settings',
+                params: { calendar_id: event.calendar_id, event_id: event.id}
+            })
+        },
         fetchSchedule() {
             this.loading = true;
             this.$get('availability/' + this.schedule_id)
                 .then(response => {
                     this.scheduleInfo = response.schedule;
-                    console.log(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

@@ -25,6 +25,7 @@
     let selectedDate = '';
     let selectedDateTime = {};
     let nextDisabled = false;
+    let formatHours = '12';
 
     if (slot.pre_selects) {
         month = slot.pre_selects.month - 1;
@@ -183,6 +184,19 @@
         dispatch('resetSelection');
     }
 
+    function convertTime12to24(time12h, formatHr) {
+      const [time, modifier] = time12h.split(' ');
+
+      let [hours, minutes] = time.split(':');
+
+      if (modifier === 'PM' && formatHr === '24') {
+        hours = parseInt(hours, 10) + 12;
+      }
+
+      const result = `${hours}:${minutes} ${formatHr === '12' ? 'A.M' : ''}`;
+      return result;
+    }
+
 
 </script>
 
@@ -254,6 +268,17 @@
             <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
                 <div class="fcal_slot_picker_header">
                     { util.dayjs(selectedDate).format('dddd, MMMM DD') }
+
+                    <div class="fcal_slot_picker_header_action">
+                        <div class="format-hour">
+                            <input type="radio" id="12" bind:group={formatHours} value="12" />
+                            <label for="12">12h</label>
+                        </div>
+                        <div class="format-hour">
+                            <input type="radio" id="24" bind:group={formatHours} value="24" />
+                            <label for="24">24h</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="fcal_slot_items">
                     <div class="fcal_spot_lists">
@@ -264,7 +289,7 @@
                                      on:keypress="{(e) => {selectedDateTime = day}}"
                                      class="fcal_spot_name">
                                      <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
-                                        {util.dayjs(day.start).format('hh:mm A')}
+                                        {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                     </div>
                                     {#if day.remaining && selectedDateTime != day }
                                         <div class="fcal_spot_remaining">{day.remaining} spots left</div>
