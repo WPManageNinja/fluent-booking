@@ -2,8 +2,8 @@
     <div class="fcal_settings_landing_page">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>Landing Page Settings</h2>
-                <p class="short-desc">Share your Booking Types in a beautiful & standalone landing page</p>
+                <h2>General Calendar Settings</h2>
+                <p class="short-desc">Manage general settings for this calendar</p>
             </div>
             <div class="fcal_settings_actions">
                 <a v-if="settings.enabled" :href="share_url" target="_blank" rel="noopener noreferrer" class="el-button el-button--text el-button--large">
@@ -12,19 +12,43 @@
             </div>
         </div>
         <div v-loading="loading" class="fcal_settings_body">
+
             <el-form v-model="settings" label-position="top">
-                <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="settings.enabled">Enable Landing Page
-                        Features for this calendar
-                    </el-checkbox>
+                <el-row :gutter="30">
+                    <el-col :span="12">
+                        <el-form-item label="Calendar Avatar">
+                            <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar" />
+                            <p class="fcal_input_desc">Recommended Size: 600x600. Should be squire size image for best view.</p>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Featured Image">
+                            <photo-widget class="fcal_featured_image_upload" style="width: 100%;" v-model="calendar.author_profile.featured_image" />
+                            <p class="fcal_input_desc">Will be shown on landing page social share meta or profile block</p>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="Host Name / Calendar Title">
+                    <el-input
+                        v-model="calendar.title"
+                        type="text"
+                        placeholder="Enter Name of this calendar"
+                    />
+                    <p class="fcal_input_desc" v-if="calendar.type == 'simple'">Should be same as the host name</p>
                 </el-form-item>
-                <el-form-item label="Landing Page Description">
+                <el-form-item label="About">
                     <el-input
                         v-model="calendar.description"
                         type="textarea"
                         :rows="3"
-                        placeholder="Enter description for your landing page"
+                        placeholder="Enter description for this person / calendar"
                     />
+                    <p class="fcal_input_desc">Will be shown on your calendar landing page / team block UI</p>
+                </el-form-item>
+                <el-form-item>
+                    <el-checkbox true-label="yes" false-label="no" v-model="settings.enabled">Enable Landing Page
+                        Features for this calendar
+                    </el-checkbox>
                 </el-form-item>
                 <template v-if="settings.enabled == 'yes'">
                     <el-form-item label="Which Booking Forms to Show?">
@@ -59,11 +83,13 @@
 
 <script type="text/babel">
 import {Share} from '@element-plus/icons-vue';
+import PhotoWidget from '../../../Pieces/PhotoWidget.vue'
 export default {
     name: 'LandingPageCalendarSettings',
     props: ['calendar'],
     components: {
-        Share
+        Share,
+        PhotoWidget
     },
     data() {
         return {
@@ -91,8 +117,13 @@ export default {
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/sharing-settings', {
-                settings: this.settings,
-                description: this.calendar.description
+                landing_page_settings: this.settings,
+                calendar_data: {
+                    description: this.calendar.description,
+                    title: this.calendar.title,
+                    calendar_avatar: this.calendar.author_profile.avatar,
+                    featured_image: this.calendar.author_profile.featured_image
+                }
             })
                 .then(response => {
                     this.$notify.success(response.message);

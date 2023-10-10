@@ -68,7 +68,7 @@ app.mixin({
             return new Intl.NumberFormat('en-US').format(amount)
         },
         $changeTitle(title) {
-            jQuery('head title').text(title + ' - ConvertLeap');
+            jQuery('head title').text(title + ' - FluentBooking');
         },
         $handleError(response) {
             let errorMessage = '';
@@ -157,7 +157,7 @@ router.afterEach((to, from) => {
     jQuery('.toplevel_page_fluent_frame li.fluent_frame_' + activeMenu).addClass('current'); // change fluent_frame with your plugin slug
 
     if(to.meta.title) {
-        jQuery('head title').text(to.meta.title + ' - Fluent Framework'); // Change it with your app name
+        jQuery('head title').text(to.meta.title + ' - FluentBooking'); // Change it with your app name
     }
 
 });
