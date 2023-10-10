@@ -8,7 +8,7 @@ import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCalendarsSettings";
-import LandingPageSettings from "./Modules/Calendars/integrations/LandingPageSettings.vue";
+import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGeneralSettings.vue";
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
@@ -48,12 +48,12 @@ export var routes = [
                 },
             },
             {
-                name: 'landing_page_settings',
-                path: 'landing-page-settings',
-                component: LandingPageSettings,
+                name: 'calendar_settings',
+                path: 'calendar-settings',
+                component: CalendarGeneralSettings,
                 meta: {
                     active_menu: 'calendars',
-                    title: 'Landing Page Settings'
+                    title: 'Calendar Settings'
                 },
             }
         ]
