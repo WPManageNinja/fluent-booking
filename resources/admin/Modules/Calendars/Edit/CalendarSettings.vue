@@ -14,7 +14,7 @@
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, index) in menuItems" :key="index">
                         <router-link v-if="menu.type == 'route'" :to="menu.route" class="calendar_route">
-                            <div class="icon" v-html="menu.svgIcon"></div>
+                            <el-icon><div class="icon" v-html="menu.svgIcon"></div></el-icon>
                             {{ menu.label }}
                         </router-link>
                     </li>
