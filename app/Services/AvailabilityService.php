@@ -43,13 +43,13 @@ class AvailabilityService
             'host_avatar' => $author['avatar'],
             'title'       => $schedule->key,
             'created_at'  => $schedule->created_at->format('Y-m-d H:i:s'),
+            'usage_count' => self::getAvailabilityUsageCount($schedule->id),
             'settings'    => [
                 'default'          => Arr::isTrue($schedule, 'value.default'),
                 'timezone'         => $timezone,
                 'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
                 'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), 'UTC', $timezone)
             ],
-            'availability_usages' => self::getAvailabilityUsages($schedule->id),
         ];
     }
 
@@ -127,9 +127,11 @@ class AvailabilityService
         return apply_filters('fluent_booking/availability_schedule_options', $scheduleOptions);
     }
 
-    public static function defaultScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC')
+    public static function createScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC', $weeklySchedule = [], $dateOverrides = [])
     {
-        $scheduleSchema = Helper::getWeeklyScheduleSchema();
+        $weeklySchedule = $weeklySchedule ? $weeklySchedule : Helper::getWeeklyScheduleSchema();
+
+        $dateOverrides = $dateOverrides ? SanitizeService::slotDateOverrides($dateOverrides, $fromTimezone, $toTimezone) : [];
 
         $defaultSchedule = [
             'object_id' => $userId,
@@ -137,18 +139,11 @@ class AvailabilityService
             'value'     => [
                 'default'          => (bool)$default,
                 'timezone'         => sanitize_text_field($fromTimezone),
-                'date_overrides'   => [],
-                'weekly_schedules' => SanitizeService::weeklySchedules($scheduleSchema, $fromTimezone, $toTimezone),
+                'date_overrides'   => $dateOverrides,
+                'weekly_schedules' => SanitizeService::weeklySchedules($weeklySchedule, $fromTimezone, $toTimezone),
             ]
         ];
         return $defaultSchedule;
-    }
-
-    public static function getAvailabilityUsages($scheduleId)
-    {
-        return CalendarSlot::where('availability_type', 'existing_schedule')
-            ->where('availability_id', $scheduleId)
-            ->get();
     }
 
     public static function getAvailabilityUsageCount($scheduleId)

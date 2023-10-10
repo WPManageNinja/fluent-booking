@@ -123,7 +123,7 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
-        $defaultSchedule = AvailabilityService::defaultScheduleSchema(
+        $defaultSchedule = AvailabilityService::createScheduleSchema(
             $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone
         );
 
