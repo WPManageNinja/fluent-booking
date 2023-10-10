@@ -88,6 +88,12 @@ class BookingService
 
         do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
+        //to-do will add payment method from frontend
+        $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
+        if ($calendarSlot->calendar->account_type !== 'free' && $paymentMethod) {
+            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking);
+        }
+
         return $booking;
     }
 
