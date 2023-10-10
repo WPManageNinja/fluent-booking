@@ -1200,10 +1200,6 @@ class Helper
             [
                 'value' => 'dropdown',
                 'label' => 'Dropdown'
-            ],
-            [
-                'value' => 'checkbox',
-                'label' => 'Checkbox'
             ]
         ]);
     }

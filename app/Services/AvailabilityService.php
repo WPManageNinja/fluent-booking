@@ -42,14 +42,14 @@ class AvailabilityService
             'host_name'   => $author['name'],
             'host_avatar' => $author['avatar'],
             'title'       => $schedule->key,
-            'usage_count' => AvailabilityService::getAvailabilityUsageCount($schedule->id),
             'created_at'  => $schedule->created_at->format('Y-m-d H:i:s'),
             'settings'    => [
                 'default'          => Arr::isTrue($schedule, 'value.default'),
                 'timezone'         => $timezone,
                 'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($schedule, 'value.date_overrides', []), 'UTC', $timezone),
                 'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($schedule, 'value.weekly_schedules'), 'UTC', $timezone)
-            ]
+            ],
+            'availability_usages' => self::getAvailabilityUsages($schedule->id),
         ];
     }
 
@@ -142,6 +142,13 @@ class AvailabilityService
             ]
         ];
         return $defaultSchedule;
+    }
+
+    public static function getAvailabilityUsages($scheduleId)
+    {
+        return CalendarSlot::where('availability_type', 'existing_schedule')
+            ->where('availability_id', $scheduleId)
+            ->get();
     }
 
     public static function getAvailabilityUsageCount($scheduleId)

@@ -102,6 +102,9 @@
             }
             .fcal_reminder_timing {
                 gap: 0;
+                > .el-link {
+                    margin-left: 6px;
+                }
                 > .el-input {
                     width: 100px;
                     .el-input__wrapper {
@@ -136,7 +139,7 @@
     .fcal_reminder_timing {
         margin-bottom: 8px;
         .el-input__wrapper {
-            padding: 1px 8px !important;
+            padding: 6px 8px !important;
         }
     }
 }

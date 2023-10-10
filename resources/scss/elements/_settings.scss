@@ -194,6 +194,9 @@
                             text-align: center;
                         }
                     }
+                    > .el-link {
+                        margin-left: 6px;
+                    }
                 }
                 .fcal_add_reminder {
                     .el-icon {
@@ -467,6 +470,18 @@
     padding: 0;
     border-radius: 0;
     border: none;
+
+    .fcal_availability_header_wrap {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        .fcal_availability_header {
+            width: 60%;
+            &:last-child {
+                width: 40%;
+            }
+        }
+    }
     .fcal_settings_header {
         background: #ffffff;
         border-radius: 8px;
@@ -670,6 +685,21 @@
             cursor: pointer;
         }
     }
+    .fcal_uses_lists_wrap {
+        margin-top: 24px;
+        .fcal_uses_list_body {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+        }
+        .fcal_section_header {
+            h3 {
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 32px;
+            }
+        }
+    }
     .fcal_settings_content_wrap {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
@@ -678,7 +708,7 @@
             .el-form-item {
                 &.fcal_availability_header {
                     border: 1px solid #D6DAE1;
-                    padding: 20px 20px 40px 20px;
+                    padding: 20px;
                     border-radius: 8px;
                     position: relative;
                     .el-form-item__content {
@@ -686,7 +716,7 @@
                         width: 100%;
                         position: initial;
                         .sub-label {
-                            margin-bottom: 20px;
+                            margin-bottom: 15px;
                         }
                         h3 {
                             font-size: 18px;
@@ -716,6 +746,17 @@
                                 font-size: 14px;
                                 font-weight: 600;
                                 line-height: 20px;
+                            }
+                        }
+                        .el-input {
+                            .el-input__wrapper {
+                                border-top-right-radius: 0;
+                                border-bottom-right-radius: 0;
+                            }
+                            .el-input-group__append {
+                                border-top-right-radius: 8px;
+                                border-bottom-right-radius: 8px;
+
                             }
                         }
                     }
