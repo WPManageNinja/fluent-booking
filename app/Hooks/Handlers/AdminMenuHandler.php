@@ -212,6 +212,7 @@ class AdminMenuHandler
         $meetingDurations = Helper::getMeetingDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $customFieldTypes = Helper::getCustomFieldTypes();
+        $locationFields = (new Calendar())->getLocationFields();
         $editorShortcodes = Helper::getEditorShortCodes();
 
 
@@ -224,6 +225,7 @@ class AdminMenuHandler
             'event_colors'       => $eventColors,
             'meeting_durations'  => $meetingDurations,
             'schedule_schema'    => $scheduleSchema,
+            'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,
             'editor_shortcodes'  => $editorShortcodes,
             'me'                 => [

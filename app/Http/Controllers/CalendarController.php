@@ -325,7 +325,13 @@ class CalendarController extends Controller
             'duration'     => '30',
             'color_schema' => '#0099ff',
             'calendar'     => $calendar,
-            'settings'     => $settingsSchema
+            'settings'     => $settingsSchema,
+            'location_settings' => [
+                'type' => '',
+                'title' => '',
+                'description' => '',
+                'host_phone_number' => ''
+            ]
         ];
 
         return [
