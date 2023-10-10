@@ -3,10 +3,11 @@
         <div class="fcal_section_header">
             <div class="fcal_title">
                 <div v-if="booking_id" @click="goBackToList" class="fcal_back_btn">
-                    <el-icon :size="20" color="black">
-                        <Back/>
-                    </el-icon>
-                    <h3>Meeting Info</h3>
+                    <el-breadcrumb separator="/">
+                        <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ filters.period }}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
+                    </el-breadcrumb>
                 </div>
                 <template v-else>
                     <h3>Bookings</h3>
@@ -172,7 +173,8 @@ export default {
                 cancelled: 'Cancelled',
                 all: 'All'
             },
-            isHideSidebar: false
+            isHideSidebar: false,
+            currentEventTitle: ''
         }
     },
     computed: {
@@ -249,6 +251,7 @@ export default {
             this.$router.push({query: {period: this.filters.period, booking_id: schedule.id}});
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
+            this.currentEventTitle = schedule.slot.title;
         },
         handleDiscard() {
             this.query.eventType = '';
