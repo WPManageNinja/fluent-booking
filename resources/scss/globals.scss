@@ -256,12 +256,26 @@
         .el-popper__arrow {
             display: none;
         }
+        &.fcal_location_select {
+            ul {
+                li {
+                    line-height: 25px;
+                    &.el-select-group__title {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
         ul {
             margin: 0;
             padding: 0;
             > ul {
                 border-bottom: 1px solid #eaedf0;
                 margin-bottom: 8px;
+                &:last-child {
+                    border-bottom: none;
+                    margin-bottom: 0;
+                }
             }
             ul {
                 &:after {
@@ -1067,6 +1081,10 @@
     .fcal_question_footer {
         display: flex;
         justify-content: space-between;
+        @media (max-width: 508px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
         .fcal_add_question {
             color: $primaryColor;

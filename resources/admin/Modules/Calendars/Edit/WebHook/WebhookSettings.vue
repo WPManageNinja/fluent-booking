@@ -20,14 +20,14 @@
 
         <div class="fcal_settings_body" v-if="!show_edit">
             <el-skeleton :loading="loading" animated :rows="6">
-                <el-table class="ff_table_s2" :data="tableData">
+                <el-table :data="tableData" stripe>
                     <template #empty>
                         You don't have any feeds configured. Let's go
                         <a href="#">create one!</a>
                     </template>
 
 
-                    <el-table-column width="100">
+                    <el-table-column width="70">
                         <template #default="scope">
                             <el-switch
                                 active-color="#13ce66"

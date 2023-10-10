@@ -20,6 +20,7 @@
     let component = null;
     let isMobile = false;
     let isXsDevice = false;
+    let calendarHeight = '';
 
     onMount(() => {
         timezone = util.dayjs.tz.guess();
@@ -30,6 +31,23 @@
         }
         if (window.outerWidth < 400) {
             isXsDevice = true;
+        }
+        if (appReady === true) {
+            setTimeout(() => {
+
+                const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
+                const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+
+                const formHeight = document.getElementById("fcal_booking_form_wrap");
+                const formOffsetHeight = formHeight.offsetHeight;
+
+                if (dayPickerWrapHeight > formOffsetHeight) {
+                    calendarHeight = dayPickerWrapHeight;
+                } else {
+                    calendarHeight = formOffsetHeight;
+                }
+
+            },1000)
         }
     });
 
@@ -45,6 +63,10 @@
     function spotSelected(spot) {
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
+
+        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+        const height   = calendarHeight + 135;
+        calendar.style.height = height+'px';
         selectedDate = spot;
     }
 
@@ -61,6 +83,10 @@
         selectedDate = false;
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.remove("f_cal_spot_selected");
+
+        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+        const height   = 'auto';
+        calendar.style.height = height;
     }
 
 </script>
@@ -158,7 +184,7 @@
                 {/if}
                 <div class="fcal_date_wrapper {selectedDate ? 'is_active' : ''}">
                     {#if appReady}
-                        <div class="fcal_day_picker_wrap">
+                        <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                                 <DayPickerApp
                                     {slot}
                                     {settings}
