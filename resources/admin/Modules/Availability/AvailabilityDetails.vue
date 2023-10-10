@@ -6,18 +6,18 @@
             </div>
         </div>
 
-        <div class="fcal_settings_header">
+        <el-skeleton v-if="loading" :rows="5" animated/>
+        <div v-else class="fcal_settings_header">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><a @click="goBackToList">Availability</a></el-breadcrumb-item>
                 <el-breadcrumb-item>{{ scheduleInfo.host_name }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <el-skeleton v-if="loading" :rows="5" animated/>
-        <div v-else class="fcal_settings_content_wrap">
+        <div v-if="!loading" class="fcal_settings_content_wrap">
             <el-form label-position="top">
                 <div class="fcal_availability_header_wrap">
                     <el-form-item class="fcal_availability_header">
-                        <h3> Weekly Hours Schedule: <el-icon style="cursor: pointer" @click="editScheduleTitleShow = true"><EditPen /></el-icon>
+                        <h3> {{ scheduleInfo.title }} <el-icon style="cursor: pointer" @click="editScheduleTitleShow = true"><EditPen /></el-icon>
                             <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
                                 <el-icon><StarFilled /></el-icon> Default schedule
                             </span>
@@ -90,16 +90,16 @@
         <div v-else class="fcal_uses_lists_wrap">
             <div class="fcal_section_header">
                 <div class="fcal_title">
-                    <h3>Uses List</h3>
+                    <h3>Usages List</h3>
                 </div>
             </div>
 
-            <div class="fcal_uses_list_body">
-                <div class="fcal_card_items">
-                    <div v-for="usages in scheduleInfo.availability_usages" class="fcal_card_item">
-                        <div @click="goToEvent(usages)" class="fcal_card_wrap">
+            <div v-if="!usagesLoading" class="fcal_uses_list_body">
+                <div v-if="scheduleInfo.usage_count" class="fcal_card_items">
+                    <div v-for="usage in availabilityUsages" class="fcal_card_item">
+                        <div @click="goToEvent(usage)" class="fcal_card_wrap">
                             <div class="fcal_card_item_details fcal_availability_card">
-                                <h4>{{ usages.title }}</h4>
+                                <h4>{{ usage.title }}</h4>
                                 <p class="fcal_icon_line">
                                     <el-icon>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -111,20 +111,24 @@
                                                 d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                         </svg>
                                     </el-icon>
-                                    <span>Asia/Dhaka</span>
+                                    <span>{{ usage.calendar.author_timezone }}</span>
                                 </p>
                             </div>
                             <div class="fcal_card_actions">
-                                <el-button @click="goToEvent(usages)" class="fcal_plain_btn">
+                                <el-button class="fcal_plain_btn">
                                     View Event
                                 </el-button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <el-empty v-else description="No events are using this schedule"/>
+                <div class="fcal_right fcal_tm20">
+                    <pagination :pagination="pagination" @fetch="fetchAvailabilityUsages"/>
+                </div>
             </div>
+            <el-skeleton v-else :row="4" animated/>
         </div>
-
 
         <el-dialog
             v-model="dialogVisible"
@@ -155,6 +159,7 @@ import DateOverRides from "../Calendars/Edit/_DateOverRides";
 import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from '../../Components/Icons/TimezoneIcon';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
+import Pagination from '../../Pieces/Pagination';
 
 export default {
     name: "AvailabilityDetails",
@@ -166,6 +171,7 @@ export default {
         SaveButton,
         ScheduleSettings,
         ScheduleIcon,
+        Pagination,
         StarFilled,
         Setting,
         Delete,
@@ -177,10 +183,17 @@ export default {
     data() {
         return {
             loading: false,
+            usagesLoading: false,
             saving: false,
             dialogVisible: false,
             scheduleInfo: '',
-            editScheduleTitleShow: false
+            editScheduleTitleShow: false,
+            availabilityUsages: [],
+            pagination: {
+                total: 0,
+                current_page: 1,
+                per_page: 10
+            }
         }
     },
     methods: {
@@ -204,6 +217,25 @@ export default {
                 })
                 .finally(() => {
                     this.loading = false;
+                });
+        },
+        fetchAvailabilityUsages() {
+            this.usagesLoading = true;
+            this.$get('availability/' + this.schedule_id + '/usages',{
+                per_page: this.pagination.per_page,
+                page: this.pagination.current_page,
+            })
+                .then(response => {
+                    this.availabilityUsages = response.usages.data;
+                    this.pagination.total   = response.usages.total;
+                    console.log(response)
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.usagesLoading = false;
+
                 });
         },
         updateSchedule() {
@@ -283,6 +315,7 @@ export default {
     },
     mounted() {
         this.fetchSchedule();
+        this.fetchAvailabilityUsages();
     }
 }
 </script>

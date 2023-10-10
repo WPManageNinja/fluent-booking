@@ -599,6 +599,7 @@
     background: white;
     border-bottom: 1px solid #d1d5db;
     padding: 15px;
+    position: relative;
 
     &:hover {
       background-color: #f9fafb;
@@ -617,6 +618,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      cursor: pointer;
       .fcal_card_item_details {
         width: auto;
       }
@@ -639,15 +641,25 @@
     &:last-child {
       border-bottom: none;
     }
+    .fcal_card_actions {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
+        .el-dropdown-link {
+            transform: rotate(90deg);
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+        }
+    }
   }
 }
 
 .fcal_availability_card {
   cursor: pointer;
   width: 100%;
-}
-.fcal_card_actions {
-    margin-right: 1rem;
 }
 
 

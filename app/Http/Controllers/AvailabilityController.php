@@ -4,6 +4,7 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
@@ -85,6 +86,19 @@ class AvailabilityController extends Controller
         ]);
     }
 
+    public function getAvailabilityUsages(Request $request, $scheduleId)
+    {
+        $availabilityUsages = CalendarSlot::with(['calendar'])
+            ->where('availability_type', 'existing_schedule')
+            ->where('availability_id', $scheduleId)
+            ->latest()
+            ->paginate();
+
+        return $this->sendSuccess([
+            'usages' => $availabilityUsages
+        ]);
+    }
+
     public function createSchedule(Request $request)
     {
         $userId = get_current_user_id();
@@ -114,11 +128,9 @@ class AvailabilityController extends Controller
         }
 
         // Check if the author has existing schedule
-        $existingSchedule = Availability::where('object_id', $userId)
-            ->first();
+        $existingSchedule = Availability::where('object_id', $userId)->first();
 
-
-        $scheduleData = AvailabilityService::defaultScheduleSchema($userId, $data['title'], !$existingSchedule, $timezone);
+        $scheduleData = AvailabilityService::createScheduleSchema($userId, $data['title'], !$existingSchedule, $timezone);
 
         $createSchedule = Availability::create($scheduleData);
 
@@ -126,6 +138,35 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'message' => __('Schedule has been created successfully', 'fluent-booking'),
+        ]);
+    }
+
+    public function cloneSchedule(Request $request)
+    {
+        $userId = get_current_user_id();
+
+        $data = $request->all();
+
+        $timezone       = Arr::get($data, 'settings.timezone');
+        $weeklySchedule = Arr::get($data, 'settings.weekly_schedules');
+        $dateOverrides  = Arr::get($data, 'settings.date_overrides');
+
+        if (!$timezone) {
+            $calendar = Calendar::where('user_id', $userId)->first();
+            if ($calendar) {
+                $timezone = $calendar->author_timezone;
+            }
+        }
+
+        $scheduleData = AvailabilityService::createScheduleSchema($userId, $data['title'] . ' (Copy)', false, $timezone, 'UTC', $weeklySchedule, $dateOverrides);
+
+        $createdSchedule = Availability::create($scheduleData);
+
+        do_action('fluent_booking/availability_schedule_created', $createdSchedule);
+
+        return $this->sendSuccess([
+            'schedule' => $createdSchedule,
+            'message'  => __('Schedule has been cloned successfully', 'fluent-booking'),
         ]);
     }
 
@@ -164,7 +205,7 @@ class AvailabilityController extends Controller
 
         $schedule = Availability::findOrFail($scheduleId);
 
-        $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $userId, $schedule->key);
+        $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $schedule->object_id, $schedule->key);
 
         if ($isTitleExist) {
             $message = $title . ' is already exist';
