@@ -13,6 +13,21 @@
                     <template #default="scope">
                         <div class="fcal_group_booking_guests_wrap">
                             <div class="fcal_schedule_details_event">
+                                <div class="fcal_schedule_details_event_item">
+                                    <h3>Timezone</h3>
+                                    <div class="fcal_spot_details_value">
+                                        {{ scope.row.person_time_zone }}
+                                    </div>
+                                </div>
+                                <div class="fcal_schedule_details_event_item">
+                                    <h3>Booking URL</h3>
+                                    <div class="fcal_spot_details_value">
+                                        <a :href="scope.row.source_url" target="_blank">{{ scope.row.source_url }}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fcal_schedule_details_event">
                                 <div
                                     v-if="scope.row.custom_field"
                                     v-for="field in scope.row.custom_field.value"
@@ -38,9 +53,9 @@
                         {{ scope.row.email }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Time Zone" width="120">
+                <el-table-column label="Status" width="120">
                     <template #default="scope">
-                        {{ scope.row.person_time_zone }}
+                        {{ scope.row.status }}
                     </template>
                 </el-table-column>
                 <el-table-column label="Booked At" width="150">
