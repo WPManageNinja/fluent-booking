@@ -82,7 +82,7 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
-    $router->get('/', 'SettingsController@index');
+    $router->get('/menu', 'SettingsController@getSettingsMenu');
 });
 
 $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
