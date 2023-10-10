@@ -17,21 +17,20 @@
             <el-form label-position="top">
                 <div class="fcal_availability_header_wrap">
                     <el-form-item class="fcal_availability_header">
-                        <h3> {{ scheduleInfo.title }} <el-icon style="cursor: pointer" @click="editScheduleTitleShow = true"><EditPen /></el-icon>
+                        <h3> {{ scheduleInfo.title }} <el-icon style="cursor: pointer" @click="toggleEditTitle"><EditPen /></el-icon>
                             <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
                                 <el-icon><StarFilled /></el-icon> Default schedule
                             </span>
                         </h3>
-                        <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
-
                         <div class="fcal_edit_availability_title">
                             <el-input v-if="editScheduleTitleShow" v-model="scheduleInfo.title" placeholder="Enter Schedule Title">
                                 <template #append>
-                                    <el-button @click="editScheduleTitleShow = false">Cancel</el-button>
-                                    <el-button @click="updateSchedule">Update</el-button>
+                                    <el-button @click="updateTitle">Update</el-button>
                                 </template>
                             </el-input>
                         </div>
+
+                        <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
 
                         <el-dropdown
                             trigger="click"
@@ -43,10 +42,7 @@
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item>
-                                        <el-button plain text @click="handleCommand('edit')"><el-icon><EditPen /></el-icon> Edit Name</el-button>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <el-button plain text @click="handleCommand('set_as')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
+                                        <el-button plain text @click="handleCommand('set_default')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
@@ -122,32 +118,15 @@
                         </div>
                     </div>
                 </div>
-                <el-empty v-else description="No events are using this schedule"/>
+                <p v-else class="fcal_no_usage_list">
+                    No events are using this schedule
+                </p>
                 <div class="fcal_right fcal_tm20">
                     <pagination :pagination="pagination" @fetch="fetchAvailabilityUsages"/>
                 </div>
             </div>
             <el-skeleton v-else :row="4" animated/>
         </div>
-
-        <el-dialog
-            v-model="dialogVisible"
-            title="Add New Schedule"
-            width="30%"
-            class="fcal_dialog"
-        >
-            <el-form label-position="top">
-                <el-form-item label="Schedule Title">
-                    <el-input v-model="scheduleInfo.title" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button class="fcal_plain_btn" @click="dialogVisible = false">Cancel</el-button>
-                    <SaveButton :saving="saving" label="Add" @save="updateTitle"/>
-                </span>
-            </template>
-        </el-dialog>
     </div>
 </template>
 
@@ -185,14 +164,13 @@ export default {
             loading: false,
             usagesLoading: false,
             saving: false,
-            dialogVisible: false,
             scheduleInfo: '',
             editScheduleTitleShow: false,
             availabilityUsages: [],
             pagination: {
                 total: 0,
                 current_page: 1,
-                per_page: 10
+                per_page: 5
             }
         }
     },
@@ -205,6 +183,9 @@ export default {
                 name: 'slot_settings',
                 params: { calendar_id: event.calendar_id, event_id: event.id}
             })
+        },
+        toggleEditTitle() {
+            this.editScheduleTitleShow = !this.editScheduleTitleShow;
         },
         fetchSchedule() {
             this.loading = true;
@@ -228,7 +209,6 @@ export default {
                 .then(response => {
                     this.availabilityUsages = response.usages.data;
                     this.pagination.total   = response.usages.total;
-                    console.log(response)
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -267,7 +247,7 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
-                    this.dialogVisible = false;
+                    this.editScheduleTitleShow = false;
                 });
         },
         updateStatus() {
@@ -302,10 +282,7 @@ export default {
                 return;
         },
         handleCommand(command) {
-            if (command == 'edit') {
-                this.dialogVisible = true;
-            }
-            else if (command == 'set_as') {
+            if (command == 'set_default') {
                 this.updateStatus();
             }
             else if (command == 'delete') {

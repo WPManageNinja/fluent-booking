@@ -166,7 +166,7 @@ export default {
     },
     mounted() {
         this.fetchFields();
-        this.isPhoneRequired = this.slot?.location_type == 'phone' && this.slot?.location_settings?.call_type == 'outbound';
+        this.isPhoneRequired = this.slot?.location_type == 'phone_guest';
     }
 }
 </script>

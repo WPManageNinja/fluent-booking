@@ -27,7 +27,7 @@
                         <div class="fcal_card_item_details fcal_availability_card">
                             <h4>
                                 {{ availability.title }}
-                                <span v-if="availability.settings.default && filters.author == 'me'"
+                                <span v-if="availability.settings?.default && filters.author == 'me'"
                                       class="default-schedule-badge">
                                     <el-icon><StarFilled/></el-icon> Default
                                 </span>
@@ -43,7 +43,7 @@
                                             d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                     </svg>
                                 </el-icon>
-                                <span>{{ availability.settings.timezone }}</span>
+                                <span>{{ availability.settings?.timezone }}</span>
                             </p>
                             <p class="fcal_icon_line">
                                 <el-icon>
@@ -59,7 +59,8 @@
                             <el-icon class="el-dropdown-link"><MoreFilled /></el-icon>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item v-if="filters.author == 'me'" @click="updateDefaultStatus(availability.id)">
+                                    <el-dropdown-item v-if="!availability.settings?.default && filters.author == 'me'"
+                                        @click="updateDefaultStatus(availability.id)">
                                         <el-icon><StarFilled /></el-icon> Set as Default
                                     </el-dropdown-item>
                                     <el-dropdown-item @click="cloneAvailability(availability)">
@@ -166,8 +167,7 @@ export default {
             this.$post('availability', this.newSchedule)
                 .then(response => {
                     this.$handleSuccess(response.message);
-                    this.fetchAvailabilities();
-                    this.newSchedule.title = '';
+                    this.gotoDetails(response.schedule);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

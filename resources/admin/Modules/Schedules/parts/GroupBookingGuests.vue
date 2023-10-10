@@ -9,6 +9,25 @@
             <el-skeleton v-if="!app_loaded" :rows="5" :animated="true" :loading="loading" />
 
             <el-table v-else v-loading="loading" stripe :data="attendees">
+                <el-table-column type="expand">
+                    <template #default="scope">
+                        <div class="fcal_group_booking_guests_wrap">
+                            <div class="fcal_schedule_details_event">
+                                <div
+                                    v-if="scope.row.custom_field"
+                                    v-for="field in scope.row.custom_field.value"
+                                    class="fcal_schedule_details_event_item"
+                                >
+                                    <h3>{{ field.label }}</h3>
+                                    <div class="fcal_spot_details_value">
+                                        <p>{{ field.value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </el-table-column>
+
                 <el-table-column label="Name" width="150">
                     <template #default="scope">
                         {{ scope.row.first_name }} {{ scope.row.last_name }}

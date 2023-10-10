@@ -132,12 +132,13 @@ class AvailabilityController extends Controller
 
         $scheduleData = AvailabilityService::createScheduleSchema($userId, $data['title'], !$existingSchedule, $timezone);
 
-        $createSchedule = Availability::create($scheduleData);
+        $createdSchedule = Availability::create($scheduleData);
 
-        do_action('fluent_booking/availability_schedule_created', $createSchedule);
+        do_action('fluent_booking/availability_schedule_created', $createdSchedule);
 
         return $this->sendSuccess([
-            'message' => __('Schedule has been created successfully', 'fluent-booking'),
+            'schedule' => $createdSchedule,
+            'message'  => __('Schedule has been created successfully', 'fluent-booking'),
         ]);
     }
 

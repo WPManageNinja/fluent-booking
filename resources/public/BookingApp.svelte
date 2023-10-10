@@ -20,6 +20,7 @@
     let component = null;
     let isMobile = false;
     let isXsDevice = false;
+    let calendarHeight = '';
 
     onMount(() => {
         timezone = util.dayjs.tz.guess();
@@ -30,6 +31,23 @@
         }
         if (window.outerWidth < 400) {
             isXsDevice = true;
+        }
+        if (appReady === true) {
+            setTimeout(() => {
+
+                const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
+                const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+
+                const formHeight = document.getElementById("fcal_booking_form_wrap");
+                const formOffsetHeight = formHeight.offsetHeight;
+
+                if (dayPickerWrapHeight > formOffsetHeight) {
+                    calendarHeight = dayPickerWrapHeight;
+                } else {
+                    calendarHeight = formOffsetHeight;
+                }
+
+            },1000)
         }
     });
 
@@ -45,6 +63,10 @@
     function spotSelected(spot) {
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
+
+        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+        const height   = calendarHeight + 135;
+        calendar.style.height = height+'px';
         selectedDate = spot;
     }
 
@@ -61,6 +83,10 @@
         selectedDate = false;
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.remove("f_cal_spot_selected");
+
+        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+        const height   = 'auto';
+        calendar.style.height = height;
     }
 
 </script>
@@ -94,12 +120,12 @@
                                     </svg>
                                     <span>{slot.duration} minutes</span>
                                 </div>
-                                {#if slot.location_type == 'phone'}
+                                {#if slot.location_type == 'phone_organizer'}
                                     <div class="slot_location fcal_icon_item">
                                         <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" data-testid="phone-call-icon" data-id="details-item-icon"><title>Phone call</title><path d="M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z" fill="currentColor"></path></svg>
                                         <span>Phone Call</span>
                                     </div>
-                                {:else if slot.location_type == 'in_person'}
+                                {:else if slot.location_type == 'in_person_organizer'}
                                     <div class="slot_location fcal_icon_item">
                                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
                                         <span>{slot.location_heading}</span>
@@ -158,7 +184,7 @@
                 {/if}
                 <div class="fcal_date_wrapper {selectedDate ? 'is_active' : ''}">
                     {#if appReady}
-                        <div class="fcal_day_picker_wrap">
+                        <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                                 <DayPickerApp
                                     {slot}
                                     {settings}

@@ -98,6 +98,12 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
+    public function custom_field()
+    {
+        return $this->hasOne(BookingMeta::class, 'booking_id')
+                    ->where('meta_key', 'custom_fields_data');
+    }
+
     public function hosts()
     {
         $class = __NAMESPACE__ . '\User';
@@ -175,7 +181,7 @@ class Booking extends Model
 
         $locationType = $details['location_type'];
 
-        if ($locationType == 'in_person') {
+        if ($locationType == 'in_person_organizer') {
             $html = '<b>' . $details['location_heading'] . '</b>';
             if ($description = Arr::get($details, 'location_settings.description')) {
                 $html .= wpautop($description);
@@ -191,14 +197,10 @@ class Booking extends Model
             return $html;
         }
 
-        if ($locationType == 'phone') {
-            $html = '<b>Phone Call: </b>';
-            if (Arr::get($details, 'location_settings.call_type') == 'outbound') {
-                $html .= $this->phone;
-            } else {
-                $html .= Arr::get($details, 'location_settings.host_phone_number') . ' (Host phone number)';
-            }
-            return $html;
+        if ($locationType == 'phone_guest') {
+            return '<b>Phone Call: </b>' . $this->phone;
+        } else if ($locationType == 'phone_organizer') {
+            return '<b>Phone Call: </b>' . Arr::get($details, 'location_settings.host_phone_number') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
