@@ -1067,6 +1067,10 @@
     .fcal_question_footer {
         display: flex;
         justify-content: space-between;
+        @media (max-width: 508px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
         .fcal_add_question {
             color: $primaryColor;

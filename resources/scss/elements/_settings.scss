@@ -121,7 +121,8 @@
             flex-direction: column;
         }
         .el-aside {
-            width: 324px;
+            width: 100%;
+            max-width: 324px;
             flex: none;
             background: #ffffff;
             border-radius: 8px;
