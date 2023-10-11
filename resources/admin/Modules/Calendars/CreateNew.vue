@@ -80,6 +80,7 @@ export default {
     methods: {
         createCalendar() {
             this.saving = true;
+            this.updateMeetingDuration();
             this.$post('calendars', {
                 calendar: this.calendar
             })
@@ -103,6 +104,10 @@ export default {
                     window.location.reload();
                 }, 150);
             }
+        },
+        updateMeetingDuration() {
+            const duration = this.calendar.slot.duration;
+            this.calendar.slot.duration = duration === 'custom' ? this.calendar.slot.custom_duration : duration;
         },
         checkSlug() {
             if (!this.calendar.slug) {
