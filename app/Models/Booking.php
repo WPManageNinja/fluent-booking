@@ -98,12 +98,6 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
-    public function custom_field()
-    {
-        return $this->hasOne(BookingMeta::class, 'booking_id')
-                    ->where('meta_key', 'custom_fields_data');
-    }
-
     public function hosts()
     {
         $class = __NAMESPACE__ . '\User';
@@ -175,23 +169,23 @@ class Booking extends Model
     {
         $details = $this->location_details;
 
-        if (empty($details['location_type'])) {
+        if (empty($details['type'])) {
             return 'n/a';
         }
 
-        $locationType = $details['location_type'];
+        $locationType = $details['type'];
 
         if ($locationType == 'in_person_organizer') {
-            $html = '<b>' . $details['location_heading'] . '</b>';
-            if ($description = Arr::get($details, 'location_settings.description')) {
+            $html = '<b>' . $details['title'] . '</b>';
+            if ($description = Arr::get($details, 'description')) {
                 $html .= wpautop($description);
             }
             return $html;
         }
 
         if ($locationType == 'google_meet') {
-            $html = '<b>' . $details['location_heading'] . ' </b>';
-            if ($meetingLink = Arr::get($details, 'location_settings.meeting_link')) {
+            $html = '<b> Google Meet </b>';
+            if ($meetingLink = Arr::get($details, 'description')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . esc_html('join now') . '</a>';
             }
             return $html;
@@ -200,12 +194,12 @@ class Booking extends Model
         if ($locationType == 'phone_guest') {
             return '<b>Phone Call: </b>' . $this->phone;
         } else if ($locationType == 'phone_organizer') {
-            return '<b>Phone Call: </b>' . Arr::get($details, 'location_settings.host_phone_number') . ' (Host phone number)';
+            return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
-            $html = '<b>' . Arr::get($details, 'location_heading') . '</b>';
-            $html .= wpautop(Arr::get($details, 'location_settings.description'));
+            $html = '<b>' . Arr::get($details, 'title') . '</b>';
+            $html .= wpautop(Arr::get($details, 'description'));
 
             return $html;
         }

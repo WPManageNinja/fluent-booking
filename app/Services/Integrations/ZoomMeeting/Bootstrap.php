@@ -285,7 +285,7 @@ class Bootstrap
             return false; // Already created
         }
 
-        if (Arr::get($calendarSlot->location_details, 'location_type') !== 'zoom_meeting') {
+        if (Arr::get($calendarSlot->location_settings, 'type') !== 'zoom_meeting') {
             return false; // not our location
         }
 
