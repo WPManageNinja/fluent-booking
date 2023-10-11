@@ -41,6 +41,8 @@ class Booking extends Model
         'location_details',
         'cancelled_by',
         'status',
+        'payment_method',
+        'payment_status',
         'event_type',
         'source',
         'source_id',

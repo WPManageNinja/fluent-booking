@@ -11,16 +11,16 @@ class WebhookHandler {
 
         $webhook_metas = Webhook::where('object_id', $slot_id)->where('object_type', 'webhook')->get();
 
-        foreach ($webhook_metas as $meta) {
-
-            if ($type == 'scheduled' && in_array('after_booking_scheduled', $meta->value['event_triggers'])) {
-                $this->processWebhook($meta, $booking);
-            } else if ($type == 'cancelled' && in_array('booking_schedule_cancelled', $meta->value['event_triggers'])) {
-                $this->processWebhook($meta, $booking);
-            } else if ($type == 'completed' && in_array('booking_schedule_completed', $meta->value['event_triggers'])) {
-                $this->processWebhook($meta, $booking);
+        if (isset($meta->value['event_triggers'])) {
+            foreach ($webhook_metas as $meta) {
+                if ($type == 'scheduled' && in_array('after_booking_scheduled', $meta->value['event_triggers'])) {
+                    $this->processWebhook($meta, $booking);
+                } else if ($type == 'cancelled' && in_array('booking_schedule_cancelled', $meta->value['event_triggers'])) {
+                    $this->processWebhook($meta, $booking);
+                } else if ($type == 'completed' && in_array('booking_schedule_completed', $meta->value['event_triggers'])) {
+                    $this->processWebhook($meta, $booking);
+                }
             }
-
         }
 
     }
