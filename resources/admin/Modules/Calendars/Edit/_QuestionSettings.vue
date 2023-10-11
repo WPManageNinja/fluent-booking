@@ -174,7 +174,7 @@ export default {
     },
     mounted() {
         this.fetchFields();
-        this.isPhoneRequired = this.slot?.location_type == 'phone_guest';
+        this.isPhoneRequired = this.slot.location_settings[0]?.type == 'phone_guest';
     }
 }
 </script>

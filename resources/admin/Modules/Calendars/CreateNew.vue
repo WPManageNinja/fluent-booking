@@ -113,12 +113,12 @@ export default {
             this.calendar.slot.duration = duration === 'custom' ? this.calendar.slot.custom_duration : duration;
         },
         getSlotLocation() {
-            return {
-                type: this.calendar.slot.location_settings.type,
-                title: this.calendar.slot.location_settings.title,
-                description: this.calendar.slot.location_settings.description,
-                host_phone_number: this.calendar.slot.location_settings.host_phone_number
-            }
+            return [{
+                type: this.calendar.slot.location_settings[0].type,
+                title: this.calendar.slot.location_settings[0].title,
+                description: this.calendar.slot.location_settings[0].description,
+                host_phone_number: this.calendar.slot.location_settings[0].host_phone_number
+            }]
         },
         checkSlug() {
             if (!this.calendar.slug) {

@@ -170,12 +170,12 @@ export default {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
         getLocationSettings() {
-            return {
-                type: this.slot.location_settings.type,
-                title: this.slot.location_settings.title,
-                description: this.slot.location_settings.description,
-                host_phone_number: this.slot.location_settings.host_phone_number
-            }
+            return [{
+                type: this.slot.location_settings[0].type,
+                title: this.slot.location_settings[0].title,
+                description: this.slot.location_settings[0].description,
+                host_phone_number: this.slot.location_settings[0].host_phone_number
+            }]
         },
         saveSettings() {
             this.saving = true;

@@ -2,7 +2,7 @@
     <div class="fcal_location_selector_wrap">
         <el-select
             popper-class="fcal_selector_with_submenu fcal_location_select fcal_select"
-            v-model="slot.location_settings.type"
+            v-model="slot.location_settings[0].type"
             clearable
             placeholder="Select Location">
             <el-option-group
@@ -29,10 +29,10 @@
             class="fcal_location_form"
         >
             <el-form-item label="Location Title *">
-                <el-input v-model="slot.location_settings.title" type="text" placeholder="Location Title" />
+                <el-input v-model="slot.location_settings[0].title" type="text" placeholder="Location Title" />
             </el-form-item>
             <el-form-item label="Location Description">
-                <el-input v-model="slot.location_settings.description" type="textarea" placeholder="Location Description" />
+                <el-input v-model="slot.location_settings[0].description" type="textarea" placeholder="Location Description" />
             </el-form-item>
         </el-form>
 
@@ -43,7 +43,7 @@
         >
             <div>
                 <el-form-item label="Your Phone Number (with country code)">
-                    <el-input v-model="slot.location_settings.host_phone_number" type="text" placeholder="Your Phone Number"/>
+                    <el-input v-model="slot.location_settings[0].host_phone_number" type="text" placeholder="Your Phone Number"/>
                 </el-form-item>
             </div>
         </el-form>
@@ -56,10 +56,10 @@ export default {
     props: ['slot'],
     computed: {
         isPhoneRequired() {
-            return this.slot.location_settings.type == 'phone_organizer';
+            return this.slot.location_settings[0]?.type == 'phone_organizer';
         },
         isLocationInfoRequired() {
-            return this.slot.location_settings.type == 'in_person_organizer' || this.slot.location_settings.type == 'custom';
+            return this.slot.location_settings[0]?.type == 'in_person_organizer' || this.slot.location_settings[0]?.type == 'custom';
         }
     }
 }
