@@ -653,3 +653,104 @@
     fill: #ffffff;
   }
 }
+
+.fcrm-smartcodes-popover {
+  padding: 0 !important;
+  border-radius: 8px;
+  .el_pop_data_group {
+    overflow: hidden;
+    display: flex;
+    * {
+      box-sizing: border-box;
+    }
+    .pop_doc {
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 0;
+      a {
+        background: #e6e6e6;
+        color: #1e1f21;
+        text-align: center;
+        display: block;
+        padding: 4px 5px;
+        border-radius: 4px;
+        transition: .2s;
+        &:hover {
+          background: #1e1f21;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .el_pop_data_headings {
+      width: 130px;
+      background: #f2f2f2;
+      border-radius: 0px;
+      padding: 10px 3px;
+      position: relative;
+
+      ul {
+        padding: 0;
+        margin: 10px 0 0 0;
+
+        li {
+          cursor: pointer;
+          color: #1e1f21;
+          font-size: 14px;
+          padding: 10px 7px;
+          border-radius: 4px;
+          margin-bottom: 4px;
+          position: relative;
+          transition: .2s;
+
+          &.active_item_selected {
+            background: #1e1f21;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .el_pop_data_body {
+      background: #ffffff;
+      padding: 14px 20px 0 20px;
+      width: 270px;
+      height: 400px;
+      overflow: auto;
+      border-radius: 0 10px 10px 0;
+
+      ul {
+        padding: 0;
+        margin: 0;
+
+        li {
+          color: black;
+          padding: 12px 10px 12px 10px;
+          display: block;
+          margin-bottom: 0;
+          cursor: pointer;
+          text-align: left;
+          border-bottom: 1px solid #ececec;
+          &:first-child {
+            padding-top: 0;
+          }
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:hover {
+            background: white;
+          }
+
+          span {
+            font-size: 11px;
+            color: #8e8f90;
+            margin: 2px 0 0 0;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
