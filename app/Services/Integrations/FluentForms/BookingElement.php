@@ -138,8 +138,6 @@ class BookingElement extends BaseFieldManager
 
         $slot->min_lookup_date = $slot->getMinLookUpDate();
 
-        $slot->location_settings = (object)[];
-
         $slot->description = wpautop($slot->description);
 
         $settings = Arr::get($data, 'settings');
