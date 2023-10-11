@@ -162,7 +162,6 @@ class LandingPageHandler
 
         $authorProfile = $slot->getAuthorProfile(true);
 
-        $slot->location_settings = (object)[];
         $slot->description = wpautop($slot->description);
 
         $slot->pre_selects = false;
