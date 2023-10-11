@@ -36,7 +36,7 @@ class AdminMenuHandler
             'fluent-booking',
             [$this, 'render'],
             $this->getMenuIcon(),
-            6
+            26
         );
 
         add_submenu_page(
