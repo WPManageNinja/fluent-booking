@@ -47,7 +47,7 @@
                     calendarHeight = formOffsetHeight;
                 }
 
-            },1000)
+            },2000)
         }
     });
 
@@ -64,10 +64,12 @@
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
 
-        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height   = calendarHeight + 135;
-        calendar.style.height = height+'px';
-        selectedDate = spot;
+        if (!isFluentform) {
+            const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+            const height = calendarHeight + 135;
+            calendar.style.height = height + 'px';
+            selectedDate = spot;
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
@@ -207,20 +209,6 @@
                                 />
                         </div>
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
-                                <div class="fcal_date_event_details_header">
-                                    <h2>
-                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
-                                            <i class="fcal_svg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                                                    <path fill="none" d="M0 0h24v24H0V0z"/>
-                                                    <path
-                                                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
-                                                </svg>
-                                            </i>
-                                        </div>
-                                        Enter Details
-                                    </h2>
-                                </div>
                                 {#if isFluentform }
                                     <FluentFormBookingDetails
                                         {appData}
@@ -229,6 +217,20 @@
                                         on:resetSelection={(e) => { resetSelection() }}
                                     />
                                 {:else}
+                                    <div class="fcal_date_event_details_header">
+                                        <h2>
+                                            <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                                <i class="fcal_svg">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                                        <path fill="none" d="M0 0h24v24H0V0z"/>
+                                                        <path
+                                                                d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                            Enter Details
+                                        </h2>
+                                    </div>
                                     <BookingForm
                                         {slot}
                                         {timezone}
