@@ -5,6 +5,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -47,7 +48,7 @@ class FrontEndHandler
         $slot->max_lookup_date = $slot->getMaxLookUpDate();
         $slot->min_lookup_date = $slot->getMinLookUpDate();
 
-        $formFields = BookingService::getBookingFields($slot);
+        $formFields = BookingFieldService::getBookingFields($slot);
 
         if (!$slot || !$calendar) {
             return 'Calendar not found';
@@ -146,9 +147,18 @@ class FrontEndHandler
                 'message' => 'Please fill up the required data',
                 'errors'  => $validator->errors()
             ], 422);
+            return;
         }
 
-        $customFieldsData = BookingService::getCustomFieldsData($postedData, $calendarSlot);
+        $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
+
+        if(is_wp_error($customFieldsData)) {
+            wp_send_json([
+                'message' => $customFieldsData->get_error_message(),
+                'errors' => $customFieldsData->get_error_data()
+            ], 422);
+            return;
+        }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
         $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
@@ -169,10 +179,6 @@ class FrontEndHandler
 
         if ($sourceUrl) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
-        }
-
-        if ($isPhoneRequired) {
-            $bookingData['phone'] = sanitize_text_field($postedData['phone']);
         }
 
         // Check if the time is available or not for this slot
