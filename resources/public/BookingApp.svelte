@@ -3,7 +3,7 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import BookingDetails from './Fluentform/BookingDetails.svelte';
+    import FluentFormBookingDetails from './Fluentform/BookingDetails.svelte';
 
     export let appData;
 
@@ -47,7 +47,7 @@
                     calendarHeight = formOffsetHeight;
                 }
 
-            },1000)
+            },2000)
         }
     });
 
@@ -65,9 +65,19 @@
         component.parentNode.classList.add("f_cal_spot_selected");
 
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height   = calendarHeight + 135;
-        calendar.style.height = height+'px';
+        const height = calendarHeight + 135;
+        calendar.style.height = height + 'px';
         selectedDate = spot;
+
+
+        if (isFluentform) {
+            setTimeout(() => {
+                const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
+                console.log(formFieldsHeight);
+                const height = formFieldsHeight + 135;
+                calendar.style.height = height + 'px';
+            }, 100)
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
@@ -130,7 +140,7 @@
                                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
                                         <span>{slot.location_settings[0]?.title}</span>
                                     </div>
-                                    <div class="fcal_slot_description">
+                                    <div class="fcal_location_description">
                                         <p>{slot.location_settings[0]?.description}</p>
                                     </div>
                                 {:else}
@@ -138,13 +148,8 @@
                                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
                                         <span>{slot.location_settings[0]?.title}</span>
                                     </div>
-                                    <div class="fcal_slot_description">
+                                    <div class="fcal_location_description">
                                         <p>{slot.location_settings[0]?.description}</p>
-                                    </div>
-                                {:else if slot.location_settings?.type}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings?.title}</span>
                                     </div>
                                 {/if}
                                 {#if selectedDate}
@@ -210,39 +215,38 @@
                                     on:timezoneChanged={(e) => {resetSelection()}}
                                     on:resetSelection={(e) => { resetSelection() }}
                                 />
-                            {#if isFluentform }
-                                <BookingDetails
-                                    {appData}
-                                    {timezone}
-                                    {selectedDate}
-                                    on:resetSelection={(e) => { resetSelection() }}
-                                />
-                            {/if}
                         </div>
-
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
-                                <div class="fcal_date_event_details_header">
-                                    <h2>
-                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
-                                            <i class="fcal_svg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                                                    <path fill="none" d="M0 0h24v24H0V0z"/>
-                                                    <path
-                                                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
-                                                </svg>
-                                            </i>
-                                        </div>
-                                        Enter Details
-                                    </h2>
-                                </div>
-
-                                <BookingForm
-                                    {slot}
-                                    {timezone}
-                                    bind:spot={selectedDate}
-                                    bind:formFields={appData.form_fields}
-                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                />
+                                {#if isFluentform }
+                                    <FluentFormBookingDetails
+                                        {appData}
+                                        {timezone}
+                                        {selectedDate}
+                                        on:resetSelection={(e) => { resetSelection() }}
+                                    />
+                                {:else}
+                                    <div class="fcal_date_event_details_header">
+                                        <h2>
+                                            <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                                <i class="fcal_svg">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                                        <path fill="none" d="M0 0h24v24H0V0z"/>
+                                                        <path
+                                                                d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                            Enter Details
+                                        </h2>
+                                    </div>
+                                    <BookingForm
+                                        {slot}
+                                        {timezone}
+                                        bind:spot={selectedDate}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    />
+                                {/if}
                             </div>
                     {/if}
                 </div>

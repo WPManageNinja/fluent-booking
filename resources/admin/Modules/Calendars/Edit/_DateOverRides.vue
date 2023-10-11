@@ -210,7 +210,9 @@ export default {
                 },
                 {}
             );
-
+            this.resetOverRide();
+        },
+        resetOverRide() {
             this.modal_visible = false;
             this.current_selects = [];
             this.slots = [{

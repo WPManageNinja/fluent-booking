@@ -262,6 +262,77 @@
           }
         }
       }
+
+      .fcal_dashboard_report_sidebar {
+        max-width: 350px;
+        width: 100%;
+        flex: none;
+
+        .fcal_schedule_event_infos {
+          background: #ffffff;
+          border-radius: 8px;
+          margin-bottom: 20px;
+
+          .fcal_schedule_details_header {
+            padding: 20px 14px 16px 14px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #EAECF0;
+            h1 {
+              margin: 0;
+              font-size: 18px;
+              font-weight: 500;
+              line-height: 28px;
+            }
+          }
+          .fcal_booking_activities_list {
+            .fcal_booking_activity {
+              padding: 11px 0 8px 32px;
+              .timing {
+                display: block;
+                margin-bottom: 4px;
+              }
+              .fcal_activity_complete_icon {
+                top: 25px;
+              }
+              &:before {
+                top: 35px;
+              }
+              .description_and_link {
+                .description {
+                  line-height: 22px;
+                }
+              }
+              .el-link {
+                color: $primaryColor;
+                margin-left: 4px;
+                display: inline-block;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .fcal_dashboard_report_widget {
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      border-bottom: 1px solid #EAECF0;
+      padding: 15px 20px;
+    }
+    .fcal_dashboard_widget_body {
+      padding: 20px;
+      ul {
+        li {
+          span {
+            display: block;
+          }
+        }
+      }
     }
   }
 
