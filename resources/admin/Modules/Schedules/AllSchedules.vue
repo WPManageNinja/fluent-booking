@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-else description="No schedules based on your filter"/>
+                            <el-empty v-else description="No bookings found based on your filter"/>
                         </div>
                         <div class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>

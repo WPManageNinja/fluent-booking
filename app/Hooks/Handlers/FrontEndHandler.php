@@ -5,6 +5,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -47,7 +48,7 @@ class FrontEndHandler
         $slot->max_lookup_date = $slot->getMaxLookUpDate();
         $slot->min_lookup_date = $slot->getMinLookUpDate();
 
-        $formFields = BookingService::getBookingFields($slot);
+        $formFields = BookingFieldService::getBookingFields($slot);
 
         if (!$slot || !$calendar) {
             return 'Calendar not found';
@@ -135,7 +136,7 @@ class FrontEndHandler
 
         $isPhoneRequired = $calendarSlot->isPhoneRequired();
         if ($isPhoneRequired) {
-            $rules['phone'] = 'required';
+            $rules['phone_number'] = 'required';
         }
 
         $validator = $app->validator->make($postedData, $rules, []);
@@ -144,9 +145,18 @@ class FrontEndHandler
                 'message' => 'Please fill up the required data',
                 'errors'  => $validator->errors()
             ], 422);
+            return;
         }
 
-        $customFieldsData = BookingService::getCustomFieldsData($postedData, $calendarSlot);
+        $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
+
+        if(is_wp_error($customFieldsData)) {
+            wp_send_json([
+                'message' => $customFieldsData->get_error_message(),
+                'errors' => $customFieldsData->get_error_data()
+            ], 422);
+            return;
+        }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
         $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
@@ -157,6 +167,7 @@ class FrontEndHandler
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'event_type'       => $calendarSlot->event_type
@@ -166,10 +177,6 @@ class FrontEndHandler
 
         if ($sourceUrl) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
-        }
-
-        if ($isPhoneRequired) {
-            $bookingData['phone'] = sanitize_text_field($postedData['phone']);
         }
 
         // Check if the time is available or not for this slot
@@ -205,7 +212,7 @@ class FrontEndHandler
 
         $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
-        $responseHtml = (string) App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',

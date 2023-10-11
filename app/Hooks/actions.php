@@ -52,10 +52,27 @@ $app->addAction('wp_ajax_nopriv_fluent_booking_callback_for_background', 'Webhoo
 
 
 add_action('init', function () {
-    if (!isset($_GET['fcal'])) {
+    if (!isset($_GET['fluent-booking']) || $_GET['fluent-booking'] != 'fluent-booking-beta') {
         return;
     }
 
-    dd(sanitize_url(''));
+    $tables = [
+        'fcal_booking_activity',
+        'fcal_booking_hosts',
+        'fcal_booking_meta',
+        'fcal_bookings',
+        'fcal_calendar_events',
+        'fcal_calendars',
+        'fcal_meta'
+    ];
 
+    global $wpdb;
+    foreach ($tables as $table) {
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}{$table}");
+    }
+    // run the migrations
+    require_once FLUENT_BOOKING_DIR . 'database/DBMigrator.php';
+    \FluentBooking\Database\DBMigrator::run();
+    wp_redirect(admin_url('admin.php?page=fluent-booking#/'));
+    exit();
 });

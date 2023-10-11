@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -96,6 +97,15 @@ class Booking extends Model
     public function slot()
     {
         return $this->belongsTo(CalendarSlot::class, 'event_id');
+    }
+
+    public function getCustomFormData($isFormatted = true)
+    {
+        if($isFormatted) {
+            return BookingFieldService::getFormattedCustomBookingData($this);
+        }
+
+        return $this->getMeta('custom_fields_data', []);
     }
 
     public function hosts()
