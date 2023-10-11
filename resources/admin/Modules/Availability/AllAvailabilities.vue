@@ -32,6 +32,7 @@
                                     <el-icon><StarFilled/></el-icon> Default
                                 </span>
                             </h4>
+                            <p class="fcal_human_text" v-html="formatAvailability(availability.settings.weekly_schedules)"></p>
                             <p class="fcal_icon_line">
                                 <el-icon>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -221,6 +222,64 @@ export default {
                         });
                 })
                 return;
+        },
+        formatAvailability(avail) {
+
+            if(!avail) return '';
+
+            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const humanDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            let segments = [];
+            let currentSegment = null;
+
+            for (let i = 0; i < days.length; i++) {
+                const day = days[i];
+                const slots = avail[day].slots.map(slot => `${slot.start}-${slot.end}`).join(" & ");
+
+                if (avail[day].enabled && slots) {
+                    if (currentSegment && currentSegment.slots === slots) {
+                        currentSegment.days.push(humanDays[i]);
+                    } else {
+                        if (currentSegment) {
+                            segments.push(currentSegment);
+                        }
+                        currentSegment = { days: [humanDays[i]], slots: slots };
+                    }
+                } else {
+                    if (currentSegment) {
+                        segments.push(currentSegment);
+                        currentSegment = null;
+                    }
+                }
+            }
+
+            if (currentSegment) {
+                segments.push(currentSegment);
+            }
+
+            const groupedDays = segments.reduce((acc, segment) => {
+                const key = segment.slots;
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(segment.days);
+                return acc;
+            }, {});
+
+            const results = [];
+            for (const slots in groupedDays) {
+                const daySegments = groupedDays[slots].map(segment => {
+                    if (segment.length === 1) {
+                        return segment[0];
+                    } else {
+                        return `${segment[0]}-${segment[segment.length - 1]}`;
+                    }
+                });
+                results.push(`${daySegments.join(' & ')}, ${slots}`);
+            }
+
+            return results.join('<span class="fc_space_10"> </span>');
         }
     },
     mounted() {
