@@ -141,11 +141,6 @@
                                     <div class="fcal_slot_description">
                                         <p>{slot.location_settings[0]?.description}</p>
                                     </div>
-                                {:else if slot.location_settings?.type}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings?.title}</span>
-                                    </div>
                                 {/if}
                                 {#if selectedDate}
                                     <div class="slot_time_range fcal_icon_item">
