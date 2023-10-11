@@ -230,9 +230,9 @@ class CalendarController extends Controller
 
         $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image']);
 
-        if($calendarDataItems) {
+        if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
-                'title' => 'required',
+                'title'           => 'required',
                 'calendar_avatar' => 'url'
             ]);
 
@@ -327,9 +327,9 @@ class CalendarController extends Controller
             'settings'     => $settingsSchema,
             'max_book_per_slot' => 2,
             'location_settings' => [
-                'type' => '',
-                'title' => '',
-                'description' => '',
+                'type'              => '',
+                'title'             => '',
+                'description'       => '',
                 'host_phone_number' => ''
             ]
         ];
@@ -402,8 +402,8 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         $generalRules = [
-            'title'         => 'required',
-            'duration'      => 'required|numeric'
+            'title'    => 'required',
+            'duration' => 'required|numeric'
         ];
 
         $conditionalRules = [];
@@ -520,16 +520,22 @@ class CalendarController extends Controller
 
         $formattedFields = [];
 
+        $textFields = ['type', 'name', 'label', 'placeholder'];
+        $booleanFields = ['enabled', 'required', 'system_defined', 'disable_alter'];
+
         foreach ($bookingFields as $value) {
-            $formattedField = [
-                'index'       => (int)Arr::get($value, 'index'),
-                'type'        => sanitize_text_field(Arr::get($value, 'type')),
-                'name'        => sanitize_text_field(Arr::get($value, 'name')),
-                'enabled'     => Arr::isTrue($value, 'enabled'),
-                'required'    => Arr::isTrue($value, 'required'),
-                'label'       => sanitize_text_field(Arr::get($value, 'label')),
-                'placeholder' => sanitize_text_field(Arr::get($value, 'placeholder'))
-            ];
+            if (empty($value['name'])) {
+                $value['name'] = 'custom_' . sanitize_title($value['label']);
+            }
+
+            $textValues = array_map('sanitize_text_field', Arr::only($value, $textFields));
+            $booleanValues = array_map(function ($valueItem) {
+                return $valueItem === true || $valueItem === 'true' || $valueItem == 1;
+            }, Arr::only($value, $booleanFields));
+
+            $formattedField = array_merge($textValues, $booleanValues);
+
+            $formattedField['index'] = (int)Arr::get($value, 'index');
 
             if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
