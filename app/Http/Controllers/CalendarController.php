@@ -315,7 +315,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($calendar);
 
         $schema = [
             'title'        => '',

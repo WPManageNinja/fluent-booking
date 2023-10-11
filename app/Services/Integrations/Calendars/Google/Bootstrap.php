@@ -101,11 +101,9 @@ class Bootstrap
             
             $message = !$meetExist ? ' (Connect Google Meet First)' : '';
             
-            $fields['conferencing']['options'] = [
-                'google_meet' => [
+            $fields['conferencing']['options']['google_meet'] = [
                     'title'    => 'Google Meet' . $message,
                     'disabled' => !$meetExist,
-                ],
             ];
             return $fields;
         }, 10, 2);
