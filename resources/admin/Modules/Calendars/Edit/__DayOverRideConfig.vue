@@ -12,7 +12,7 @@
                                 :max-time="slot.end"
                                 placeholder="Start"
                                 popper-class="fcal_select"
-                                :disabled="unavailable_date"
+                                :disabled="isUnavailable"
                 />
                 <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
@@ -22,7 +22,7 @@
                                 end="23:50"
                                 placeholder="End"
                                 popper-class="fcal_select"
-                                :disabled="unavailable_date"
+                                :disabled="isUnavailable"
                 />
 
                 <el-button
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="fcal_add_slot">
-            <el-button :disabled="unavailable_date" text :icon="PlusIcon" @click="addSlot" />
+            <el-button :disabled="isUnavailable" text :icon="PlusIcon" @click="addSlot" />
         </div>
     </div>
 </template>
@@ -47,7 +47,7 @@ import {
 import {markRaw} from "vue";
 export default {
     name: 'DayOverRideConfig',
-    props: ['day_label', 'slots', 'unavailable_date'],
+    props: ['day_label', 'slots', 'isUnavailable'],
     data() {
         return {
             DeleteIcon: markRaw(Delete),
@@ -55,7 +55,7 @@ export default {
         }
     },
     watch: {
-        unavailable_date() {
+        isUnavailable() {
             this.updateAvailability();
         }
     },
@@ -71,10 +71,17 @@ export default {
         },
         updateAvailability() {
             this.slots.splice(0, this.slots.length);
-            this.slots.push({
-                start: "00:00",
-                end: "23:50"
-            });
+            if (this.isUnavailable) {
+                this.slots.push({
+                    start: "00:00",
+                    end: "00:00"
+                });
+            } else {
+                this.slots.push({
+                    start: '',
+                    end: ''
+                });
+            }
         }
     },
     mounted() {
