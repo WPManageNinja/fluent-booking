@@ -70,7 +70,7 @@
                     <el-icon>
                         <Link/>
                     </el-icon>
-                    Webhooks Settings
+                    Webhooks Feeds
                 </template>
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
