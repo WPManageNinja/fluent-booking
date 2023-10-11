@@ -118,7 +118,7 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message, View, CopyDocument} from '@element-plus/icons-vue';
+import {Back, Link, Message, View, CopyDocument, Money} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import PaymentSettings from "./Payments/PaymentSettings.vue";
