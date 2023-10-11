@@ -54,6 +54,11 @@ export default {
             PlusIcon: markRaw(Plus)
         }
     },
+    watch: {
+        unavailable_date() {
+            this.updateAvailability();
+        }
+    },
     methods: {
         removeSlot(index) {
             this.slots.splice(index, 1);
@@ -62,6 +67,13 @@ export default {
             this.slots.push({
                 start: '',
                 end: ''
+            });
+        },
+        updateAvailability() {
+            this.slots.splice(0, this.slots.length);
+            this.slots.push({
+                start: "00:00",
+                end: "23:50"
             });
         }
     },
