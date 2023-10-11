@@ -3,13 +3,12 @@
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
 use FluentBooking\App\Services\Integrations\PaymentMethods\BasePaymentMethod;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\API;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\ApiRequest;
 use FluentBooking\Framework\Support\Arr;
 
-use FluentCart\App\Services\OrderHelper;
-
-class Stripe extends BasePaymentMethod 
+class Stripe extends BasePaymentMethod
 {
     /**
      * title, slug, brandColor
@@ -70,23 +69,27 @@ class Stripe extends BasePaymentMethod
         return (new StripeSettings())->get();
     }
 
-    public function makePayment($orderItem)
+    public function makePayment($orderItem, $calendarSlot)
     {
         $hash = $orderItem->hash;
         $stripeSettings = new StripeSettings($this->slug);
         $apiKey = $stripeSettings->getApiKey();
         $publicKey = $stripeSettings->getPublicKey();
         $stripeSetting = $this->getSettings();
+        $paymentInfo = $calendarSlot->getMeta('payment_settings');
 
-        //to-do will add from settings
-        $currency =  'USD';
-        $paymentTotal = 2000;
-//            $this->getPayableAmount($orderItem)
+        if (empty($paymentInfo)) {
+            return;
+        }
+
+        $items = Arr::get($paymentInfo, 'items');
+        $currency =  Arr::get($paymentInfo, 'currency');
+        $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
             'payment_method_type' => ['card'],
             'client_reference_id' => $hash,
-            'items' => $orderItem->items,
+            'items' => $items,
             'amount' => (int) round($paymentTotal),
             'currency' => strtolower($currency),
             'description' => "Payment for Order",
@@ -101,6 +104,12 @@ class Stripe extends BasePaymentMethod
         } else {
             $this->handleHostedPayment($orderItem, $paymentArgs, $apiKey);
         }
+    }
+
+    public function calculateAmount()
+    {
+
+
     }
 
     /**
@@ -138,10 +147,25 @@ class Stripe extends BasePaymentMethod
 
     }
 
+    public function getPayableAmount($items, $currency)
+    {
+        $total = 0;
+        foreach ($items as $item) {
+            if (!isset($item['value'])) {
+                continue;
+            }
+            $total += intval($item['value']);
+        }
+
+        if (CurrenciesHelper::isZeroDecimal($currency)) {
+            return $total;
+        }
+        return $total * 100;
+    }
+
     public function intentData($orderItem, $args)
     {
-        $items = $args['items'];
-
+        //        $items = $args['items'];
         $sessionPayload = array(
             'amount' => intval($args['amount']),
             'currency' => $args['currency'],
@@ -155,25 +179,20 @@ class Stripe extends BasePaymentMethod
 
     public function sessionData($args)
     {
+        $items = $args['items'];
 
-        //to-do
-        //now dummy data
-        $items = [
-            [
-                'price' => 2000,
-                'title' => 'test',
-                'quantity' => 1
-            ]
-        ];
+        $conversionFactor = 100;
+        if (CurrenciesHelper::isZeroDecimal($args['currency'])) {
+            $conversionFactor = 1;
+        }
 
         $lineItems = [];
-
         foreach ($items as $item) {
             $lineItems[] = [
-                'amount' => (int) ($item['price']),
+                'amount' => intval($item['value'] * $conversionFactor),
                 'currency' => $args['currency'],
                 'name' => $item['title'],
-                'quantity' => (int) $item['quantity'],
+                'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 1,
             ];
         }
 
@@ -416,9 +435,11 @@ class Stripe extends BasePaymentMethod
 
     public function render($method)
     {
-        echo '
-            <img src="' . esc_url($this->getLogo()) . '"alt="' . esc_attr($this->title) . '"/>
-            <span>Stripe</span>
+        return '
+            <input checked value="' .esc_attr($this->slug) .'" name="'. esc_attr($this->slug) .'_payment_method' .'" type="radio"  id="'. esc_attr($this->slug) .'_payment_method">
+            <label for="' . esc_attr($this->slug) . '_payment_method">
+              Stripe
+            </label>
         ';
     }
 

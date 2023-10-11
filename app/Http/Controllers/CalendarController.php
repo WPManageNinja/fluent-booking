@@ -406,7 +406,7 @@ class CalendarController extends Controller
         $generalRules = [
             'title'         => 'required',
             'duration'      => 'required|numeric',
-           'location_type' => 'required',
+//           'location_type' => 'required',
             'title'    => 'required',
             'duration' => 'required|numeric'
         ];

@@ -66,6 +66,7 @@ class FrontEndHandler
             'author_profile' => $slot->getAuthorProfile(true),
             'form_fields'    => $formFields,
             'disable_author' => $atts['disable_author'] == 'yes',
+            'payment_methods' => apply_filters('fluent_booking/payment_methods_renderer', ['templates' => ''])
         ]);
 
         return App::make('view')->make('public.calendar', [
@@ -170,7 +171,8 @@ class FrontEndHandler
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
-            'event_type'       => $calendarSlot->event_type
+            'event_type'       => $calendarSlot->event_type,
+            'payment_method'   => Arr::get($postedData, 'payment_method', ''),
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -191,6 +193,7 @@ class FrontEndHandler
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot);
+
             if ($customFieldsData) {
                 Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
             }

@@ -1026,3 +1026,20 @@ $lightDark: #6b7280;
     }
   }
 }
+
+
+//to-do will refactor tanbir
+//payment items styles
+
+.fcal_payment_items {
+  display: flex;
+  gap: 20px;
+  p {
+    margin: 0;
+  }
+}
+.fcal_payment_items_wrapper {
+  padding: 7px 19px;
+  background: #f9fafb;
+  border-radius: 4px;
+}

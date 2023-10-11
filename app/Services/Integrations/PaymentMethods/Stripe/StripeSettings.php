@@ -2,10 +2,6 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
-use FluentCart\Api\OrderItems;
-use FluentCart\App\Models\OrderItem;
-use FluentCart\Api\PaymentMethods;
-
 class StripeSettings
 {
 

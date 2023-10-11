@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
 use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\Validator;
@@ -52,7 +53,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     abstract public function onPaymentEventTriggered();
 
-    abstract public function makePayment($orderItem);
+    abstract public function makePayment($orderItem, $calendarSlot);
 
     abstract public function maybeUpdatePayments($orderHash);
 
@@ -77,12 +78,28 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_action('fluent_booking/payment/payment_settings_update_' . $this->slug, [$this, 'update'], 10, 1);
         add_filter('fluent_booking/payment/payment_settings_before_update_' . $this->slug, [$this, 'beforeUpdate']);
         add_filter('fluent_booking/payment/payment_method_settings_routes', [$this, 'setRoutes']);
-        add_action('fluent_booking/payment/pay_order_with_' . $this->slug, [$this, 'makePayment']);
+        add_action('fluent_booking/payment/pay_order_with_' . $this->slug, [$this, 'makePayment'], 10, 2);
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
-        add_action('fluent_booking/payment/prepare_payment_method_' . $this->slug, [$this, 'prepare'], 10, 1);
         add_action('fluent_booking/payment/pre_render_page_process_' . $this->slug, [$this, 'maybeUpdatePayments'], 10, 1);
         add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
+
+        add_filter('fluent_booking/payment/get_all_methods', array($this, 'getAllMethods'), 10, 1);
+
+        add_filter('fluent_booking/payment_methods_renderer', array($this, 'getMethodsTemplate'), 10, 1);
+
+
     }
+
+    public function getAllMethods()
+    {
+        static::$methods[$this->slug] = array(
+            'title' => $this->title,
+            'image' => $this->logo,
+            "status" => $this->isEnabled(),
+        );
+        return static::$methods;
+    }
+
     public function handleRedirectData() 
     {
         return '';
@@ -255,16 +272,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             ->updateTransactionData($transactionData);
     }
 
-    public function getPayableAmount($orderData)
-    {
-        if ($orderData instanceof OrderHelper) {
-            return $orderData->order->total_amount;
-        } else if ($orderData instanceof Order) {
-            return $orderData->total_amount;
-        }
-        return 0;
-    }
-
     public function maybeUpdatePayment()
     {
         return false;
@@ -272,19 +279,38 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function render($method)
     {
-        echo '
+        return  '
+        <input type="radio" id="'. esc_attr($this->slug) .'">
+        <label for="' . esc_attr($this->slug) . '_payment_method">
             <img src="' . esc_url($this->getLogo()) . '"alt="' . esc_attr($this->title) . '"/>
-            <span>Cash on delivery</span>
+         <span>Cash on delivery</span>
         ';
     }
 
-    public function prepare($method)
+    public function getMethodsTemplate($data)
     {
-        do_action('fluent-booking/before_render_payment_method_' . $this->slug, $method);
+        $methods = GlobalPaymentHandler::getAllMethods();
 
-        $this->render($method);
+        $templates = [
+            'template' => '',
+        ];
 
-        do_action('fluent-booking/after_render_payment_method_' . $this->slug, $method);
+        $hasActiveMethod = false;
+        $radio = "<div class='payment-methods-radio' style='display: flex; gap: 20px;'>Pay with:";
+        foreach ($methods as $slug => $methodData) {
+            if (isset($methodData['status']) && $methodData['status']) {
+                $hasActiveMethod = true;
+                $radio .= $this->render($slug);
+            }
+        }
+        $radio .= "</div>";
+
+        $templates['template'] = $radio;
+        if (!$hasActiveMethod) {
+            return $data['template'] = '<p style="color:#fb7373; font-size:16px; margin: 0 auto;">Please active at least one payment method!</p>';
+        }
+
+        return $data['template'] = $templates;
     }
 
     protected function validate($data, array $rules = [])

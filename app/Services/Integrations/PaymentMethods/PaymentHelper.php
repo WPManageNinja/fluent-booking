@@ -1,8 +1,6 @@
 <?php
 namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
-use FluentCart\Api\Confirmation;
-use FluentCart\Api\StoreSettings;
 class PaymentHelper
 {
     public $slug = '';

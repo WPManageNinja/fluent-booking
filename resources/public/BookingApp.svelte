@@ -226,6 +226,7 @@
                                 </div>
 
                                 <BookingForm
+                                    {appData}
                                     {slot}
                                     {timezone}
                                     bind:spot={selectedDate}

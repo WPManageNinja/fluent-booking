@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Hooks\Handlers;
 
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\Stripe;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\ConnectConfig;
 use FluentBooking\Framework\Support\Arr;
@@ -60,6 +61,19 @@ class GlobalPaymentHandler
     public function getAll()
     {
         return apply_filters('fluent_booking/payment/get_global_payment_methods', []);
+    }
+
+    public function currencies()
+    {
+        return [
+          'data' =>   CurrenciesHelper::getFormattedCurrencies()
+        ];
+    }
+
+    public static function getAllMethods()
+    {
+        $methods = apply_filters('fluent_booking/payment/get_all_methods', []);
+        return $methods;
     }
 
 }

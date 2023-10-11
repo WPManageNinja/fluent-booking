@@ -1,7 +1,6 @@
 <template>
     <div class="fcal_settings_container">
       <div v-if="!fetching" class="fcal_settings_body_inner fcal_settings_general">
-        <h1> Hello from stripe</h1>
         <Renderer
             @onSettingsChange="updateSettings"
             :route_name="route_name"

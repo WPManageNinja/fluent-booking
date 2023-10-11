@@ -80,6 +80,21 @@
                     />
                 </div>
             </el-tab-pane>
+            <el-tab-pane name="payment-settings">
+              <template #label>
+                <el-icon>
+                  <Money/>
+                </el-icon>
+                Payment Settings
+              </template>
+              <div class="fcal_create_calendar_body">
+                <el-skeleton v-if="loading"/>
+                <payment-settings
+                    :event_id="event_id"
+                    :calendar_id="calendar_id"
+                />
+              </div>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -94,8 +109,9 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message} from '@element-plus/icons-vue';
+import {Back, Link, Message, Money} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings"
+import PaymentSettings from "./Payments/PaymentSettings.vue";
 
 export default {
     name: 'SlotSettings',
@@ -103,6 +119,7 @@ export default {
     components: {
         WebhookSettings,
         ScheduleSettings,
+        PaymentSettings,
         BasicInfo,
         SaveButton,
         NotificationSettings,
@@ -113,6 +130,7 @@ export default {
         QuestionIcon,
         Back,
         Link,
+        Money,
         Message
     },
     data() {
