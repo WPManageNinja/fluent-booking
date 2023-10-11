@@ -136,7 +136,7 @@ class BookingService
 
         if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
-            $defaultFields['phone'] = [
+            $defaultFields['phone_number'] = [
                 'index'          => 4,
                 'type'           => 'phone',
                 'name'           => 'phone_number',

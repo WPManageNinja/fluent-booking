@@ -137,7 +137,7 @@ class FrontEndHandler
 
         $isPhoneRequired = $calendarSlot->isPhoneRequired();
         if ($isPhoneRequired) {
-            $rules['phone'] = 'required';
+            $rules['phone_number'] = 'required';
         }
 
         $validator = $app->validator->make($postedData, $rules, []);
@@ -159,6 +159,7 @@ class FrontEndHandler
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'event_type'       => $calendarSlot->event_type
@@ -207,7 +208,7 @@ class FrontEndHandler
 
         $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
 
-        $responseHtml = (string) App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',
