@@ -7,6 +7,15 @@
                 <el-breadcrumb-item>{{ calendar.author_profile?.name }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ slot?.title }}</el-breadcrumb-item>
             </el-breadcrumb>
+
+            <div class="fcal_actions">
+                <el-button class="fcal_plain_btn fcal_copy_btn" @click="copyTo(slot?.id)">
+                    <el-icon><CopyDocument /></el-icon> [fluent_booking id="{{ slot?.id }}"]
+                </el-button>
+<!--                <el-button class="fcal_plain_btn">-->
+<!--                    <el-icon><View /></el-icon> View LandingPage-->
+<!--                </el-button>-->
+            </div>
         </div>
 
         <el-tabs
@@ -94,8 +103,9 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message} from '@element-plus/icons-vue';
-import WebhookSettings from "./WebHook/WebhookSettings"
+import {Back, Link, Message, View, CopyDocument} from '@element-plus/icons-vue';
+import WebhookSettings from "./WebHook/WebhookSettings";
+import { copyToClipBoard } from '@/Bits/data_config.js';
 
 export default {
     name: 'SlotSettings',
@@ -113,7 +123,9 @@ export default {
         QuestionIcon,
         Back,
         Link,
-        Message
+        Message,
+        View,
+        CopyDocument
     },
     data() {
         return {
@@ -191,7 +203,13 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
-        }
+        },
+        copyTo(text) {
+            const CopyText = '[fluent_booking id="'+text+'"]';
+            copyToClipBoard(CopyText);
+
+            this.$handleSuccess('Shortcode has been copied to your clipboard');
+        },
     },
     mounted() {
         this.$changeTitle('Slot Settings');

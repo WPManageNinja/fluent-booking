@@ -66,8 +66,43 @@
                 <ReportChat/>
             </div>
 
-            <div class="fcal_booking_activities">
-                <ReportsActivities/>
+            <div class="fcal_dashboard_report_sidebar">
+
+                <div class="fcal_new_booked_event_widget fcal_dashboard_report_widget">
+                    <h1>Today Meeting</h1>
+                    <el-skeleton v-if="loading" animated />
+                    <div v-else class="fcal_dashboard_widget_body">
+                        <ul>
+                            <li v-for="(schedule, i) in nextMeetings" :key="i">
+                                <span class="timing">
+                                    {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
+                                </span>
+                                <span class="title">
+                                    {{ schedule.slot?.title }}
+                                </span>
+                                <span class="duration"><b>Duration: </b> {{ schedule.slot_minutes }} Minutes</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="fcal_today_meeting_widget fcal_dashboard_report_widget">
+                    <h1>Latest Booked</h1>
+                    <el-skeleton v-if="loading" animated />
+                    <div v-else class="fcal_dashboard_widget_body">
+                        <ul>
+                            <li v-for="(schedule, i) in latestBookedLists" :key="i">
+                                <span class="timing">
+                                    {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
+                                </span>
+                                <span class="description">
+                                    {{ schedule.event_type === 'group' ? schedule.booked_count : ''}}
+                                     guests with
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -77,12 +112,12 @@
 <script type="text/babel">
 import { Top } from '@element-plus/icons-vue';
 import ReportChat from "../Pieces/_ReportChat";
-import ReportsActivities from "./ReportsActivities";
+import BookingCard from "../Modules/Schedules/parts/BookingCard";
 
 export default {
     name: 'Dashboard',
     components: {
-        ReportsActivities,
+        BookingCard,
         ReportChat,
         Top
     },
@@ -121,7 +156,18 @@ export default {
             ],
             loading: false,
             widgets: '',
+            latestBookedLists: '',
+            nextMeetings: ''
         }
+    },
+    computed: {
+        formattedTimeRange() {
+            return (start_time, end_time) => {
+                const startTime = this.toCurrentTimezone(start_time, 'hh:mma');
+                const endTime = this.toCurrentTimezone(end_time, 'hh:mma');
+                return `${startTime} - ${endTime}`;
+            }
+        },
     },
     methods: {
         convertDate(date) {
@@ -140,6 +186,8 @@ export default {
                 })
                 .then(response => {
                     this.widgets = response.overview;
+                    this.latestBookedLists = response.latest_booked_lists;
+                    this.nextMeetings = response.next_meetings;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -147,7 +195,7 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        }
+        },
     },
     mounted() {
         this.fetchReports();
