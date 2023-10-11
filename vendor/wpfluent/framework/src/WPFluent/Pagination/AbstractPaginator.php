@@ -3,6 +3,7 @@
 namespace FluentBooking\Framework\Pagination;
 
 use Closure;
+use FluentBooking\Framework\Foundation\App;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Str;
 use FluentBooking\Framework\Support\Helper;
@@ -539,6 +540,45 @@ abstract class AbstractPaginator
     public static function queryStringResolver(Closure $resolver)
     {
         static::$queryStringResolver = $resolver;
+    }
+
+    /**
+     * Render the paginator using the given view.
+     *
+     * @param  string|null  $view
+     * @param  array  $data
+     * @return \FluentBooking\Framework\View\View
+     */
+    public function links($view = 'web.pagination.default', $data = [])
+    {
+        $elements = method_exists($this, 'elements') ? $this->elements() : null;
+        
+        return App::make('view')->make($view ?: static::$defaultView, array_merge($data, [
+            'paginator' => $this,
+            'elements' => $elements
+        ]));
+    }
+
+    /**s
+     * Set the default pagination view.
+     *
+     * @param  string  $view
+     * @return void
+     */
+    public static function defaultView($view)
+    {
+        static::$defaultView = $view;
+    }
+
+    /**
+     * Set the default "simple" pagination view.
+     *
+     * @param  string  $view
+     * @return void
+     */
+    public static function defaultSimpleView($view)
+    {
+        static::$defaultSimpleView = $view;
     }
 
     /**

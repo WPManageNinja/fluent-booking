@@ -13,11 +13,13 @@ use FluentBooking\Framework\Response\Response;
 use FluentBooking\Framework\Events\Dispatcher;
 use FluentBooking\Framework\Database\Orm\Model;
 use FluentBooking\Framework\Validator\Validator;
-use FluentBooking\Framework\Encryption\Encrypter;
 use FluentBooking\Framework\Foundation\RequestGuard;
-use FluentBooking\Framework\Pagination\AbstractPaginator;
 use FluentBooking\Framework\Database\ConnectionResolver;
 use FluentBooking\Framework\Database\Query\WPDBConnection;
+use FluentBooking\Framework\Pagination\AbstractCursorPaginator;
+use FluentBooking\Framework\Pagination\AbstractPaginator;
+use FluentBooking\Framework\Pagination\CursorPaginator;
+use FluentBooking\Framework\Pagination\Cursor;
 
 class ComponentBinder
 {
@@ -41,7 +43,6 @@ class ComponentBinder
         'URL',
         'Router',
         'Paginator',
-        'Encrypter',
         'Pipeline',
     ];
 
@@ -279,19 +280,14 @@ class ComponentBinder
 
             return 1;
         });
-    }
 
-    /**
-     * Bind the encrypter instance into the container.
-     * @return null
-     */
-    protected function bindEncrypter()
-    {
-        $this->app->singleton(Encrypter::class, function ($app) {
-            return new Encrypter($app);
+        AbstractPaginator::queryStringResolver(function () {
+            return $this->app['request']->query();
         });
 
-        $this->app->alias(Encrypter::class, 'encrypter');    
+        AbstractCursorPaginator::currentCursorResolver(function ($cursorName = 'cursor') {
+            return Cursor::fromEncoded($this->app['request']->get($cursorName));
+        });
     }
 
     /**
