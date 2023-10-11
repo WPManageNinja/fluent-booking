@@ -13,17 +13,7 @@
                 </div>
             </div>
             <div class="fcal_spot_desc">
-                <h3 class="fcal_spot_title">
-                    {{ spotTitle }}
-                </h3>
-                <h3 v-if="booking.slot" class="fcal_spot_desc_text">
-                    Event: <b>{{ booking.slot.title }}</b>
-                </h3>
-            </div>
-            <div class="fcal_spot_meeting_with">
-                <h3 v-if="multi_host">
-                    Host: <b>{{booking.author.name}}</b>
-                </h3>
+                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
             </div>
             <div class="fcal_spot_actions">
                 <el-button class="fcal_plain_btn">
@@ -37,7 +27,12 @@
 <script type="text/babel">
 export default {
     name: 'BookingCard',
-    props: ['booking', 'multi_host'],
+    props: ['booking', 'multi_host', 'showing_id'],
+    data() {
+        return {
+            booking_id: this.$route.query.booking_id,
+        }
+    },
     methods: {
         showDetails() {
             this.$emit('showDetails', this.booking);
@@ -54,10 +49,12 @@ export default {
             const guestName = this.booking.first_name + ' ' + this.booking.last_name;
             if (eventType === 'group') {
                 const booked = this.booking.booked_count;
-                const totalSpots = this.booking.slot.max_book_per_slot;
-                return booked + ' of ' + totalSpots + ' guests with you';
+                return booked + ' guests with '+ this.booking.author.name + 'as group booking type';
             }
-            return guestName;
+            if(this.showing_id) {
+                return guestName;
+            }
+            return '<b>' + this.booking?.slot.title +'</b> meeting between ' + guestName + ' & '+ this.booking.author.name;
         }
     }
 }

@@ -39,40 +39,7 @@ class DateTime extends PHPDateTime
     #[\ReturnTypeWillChange]
     public function getTimezone()
     {
-        // if site timezone string exists, return it
-        if ($timezone = wp_timezone_string()) {
-            return new DateTimeZone($timezone);
-        }
-
-        // get UTC offset, if it isn't set then return UTC
-        $utcOffset = get_option('gmt_offset', 0);
-        if ($utcOffset === 0) {
-            return new DateTimeZone('UTC');
-        }
-
-        // Adjust UTC offset from hours to seconds
-        $utcOffset *= 3600;
-
-        // Attempt to guess the timezone string from the UTC offset
-        $timezone = timezone_name_from_abbr('', $utcOffset, 0);
-        if ($timezone) {
-            return new DateTimeZone($timezone);
-        }
-
-        // Guess timezone string manually
-        $isDst = date('I');
-        foreach (timezone_abbreviations_list() as $abbr) {
-            foreach ($abbr as $city) {
-                if ($city['dst'] == $isDst && $city['offset'] == $utcOffset) {
-                    $timezoneId = $city['timezone_id'];
-                    $timezone = $timezoneId ?: timezone_name_from_abbr('', $timezoneId, 0);
-                    if ($timezone) return new DateTimeZone($timezone);
-                }
-            }
-        }
-
-        // Fallback
-        return new DateTimeZone('UTC');
+        return wp_timezone();
     }
 
     /**
@@ -104,6 +71,23 @@ class DateTime extends PHPDateTime
         }
 
         throw new InvalidArgumentException('Unable to handle datetime.');
+    }
+
+    /**
+     * Given a date in UTC or GMT timezone, returns that date in the timezone of the site.
+     *
+     * Requires a date in the Y-m-d H:i:s format.
+     * Default return format of 'Y-m-d H:i:s' can be overridden using the `$format` parameter.
+     *
+     * @param string $date_string The date to be converted, in UTC or GMT timezone.
+     * @param string $format      The format string for the returned date. Default 'Y-m-d H:i:s'.
+     * @see https://developer.wordpress.org/reference/functions/get_date_from_gmt/
+     * 
+     * @return string Formatted version of the date, in the site's timezone.
+     */
+    public function createFromUTC($dateString, $format = 'Y-m-d H:i:s')
+    {
+        return get_date_from_gmt($dateString, $format);
     }
 
     /**
@@ -182,6 +166,24 @@ class DateTime extends PHPDateTime
         }
 
         return $message;
+    }
+
+    /**
+     * Given a date in the timezone of the site, returns that date in UTC.
+     *
+     * Requires and returns a date in the Y-m-d H:i:s format.
+     * 
+     * Return format can be overridden using the $format parameter.
+     *
+     * @param string $date_string The date to be converted, in the timezone of the site.
+     * @param string $format      The format string for the returned date. Default 'Y-m-d H:i:s'.
+     * @see https://developer.wordpress.org/reference/functions/get_gmt_from_date/
+     * 
+     * @return string Formatted version of the date, in UTC.
+     */
+    public function toUTC($dateString, $format = 'Y-m-d H:i:s')
+    {
+        return get_gmt_from_date($date_string, $format);
     }
 
     /**

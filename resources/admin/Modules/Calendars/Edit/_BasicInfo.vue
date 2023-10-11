@@ -121,6 +121,7 @@ export default {
     mounted() {
         this.checkDurationType();
         this.slot.event_type = this.event_type ? this.event_type : this.slot.event_type;
+        this.isGroupMeeting = this.slot.event_type == 'group';
     }
 }
 </script>

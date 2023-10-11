@@ -105,7 +105,7 @@
     .el-calendar-table {
         tr {
             td {
-                border: none;
+                border: none !important;
                 border-radius: 8px;
                 &.is-today {
                     color: $primaryColor;
@@ -135,8 +135,8 @@
                     }
                 }
                 .el-calendar-day {
-                    height: 40px;
-                    width: 40px;
+                    height: 38px;
+                    width: 39px;
                     position: relative;
                     p {
                         position: absolute;
@@ -199,12 +199,20 @@
                 border-radius: 0;
 
                 .fcal_week_day_config {
-                    padding: 0;
-                    min-height: auto;
+                    padding: 10px 0 !important;
+                    min-height: auto !important;
                     column-gap: 10px;
-                    padding-right: 10px;
                     .fcal_add_slot {
                         margin-top: 8px;
+                        .el-select {
+                            &.el-select--disabled {
+                                .el-input {
+                                    .el-input__wrapper {
+                                        font-weight: 400;
+                                    }
+                                }
+                            }
+                        }
                     }
                     .fcal_slot {
                         .el-select {
@@ -219,6 +227,9 @@
                     }
                 }
             }
+        }
+        .fcal_override_calendar_unavailable_check {
+            margin-top: 10px;
         }
         .fcal_override_calendar_footer_action {
             margin-top: 16px;
@@ -258,7 +269,16 @@
         }
         &.fcal_location_select {
             ul {
+                > ul {
+                    > li {
+                        &:not(.el-select-group__title) {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                    }
+                }
                 li {
+                    margin: 0;
                     line-height: 25px;
                     &.el-select-group__title {
                         margin-bottom: 0;
@@ -655,6 +675,14 @@
     }
 }
 
+.el-notification {
+    top: auto !important;
+    bottom: 10px !important;
+    p {
+        text-align: left !important;
+    }
+}
+
 .el-dropdown-list-wrapper {
     padding: 0;
     .group-title {
@@ -973,6 +1001,79 @@
             }
         }
     }
+    &.fcal_notification_modal {
+        .el-dialog__header {
+            border-bottom: 1px solid #DCDFE6;
+        }
+        .el-dialog__body {
+            padding-bottom: 0;
+        }
+        .el-form {
+            .el-form-item {
+                .el-form-item__content {
+                    .fcal_popover_shortcode {
+                        width: 100%;
+                    }
+                    .el-input {
+                        &.is-focus {
+                            .el-input__wrapper {
+                                box-shadow: none !important;
+                            }
+                        }
+                        &.el-input-group--append {
+                            .el-input__wrapper {
+                                border-top-right-radius: 0;
+                                border-bottom-right-radius: 0;
+                                &.is-focus {
+                                    border-color: #EAECF0;
+                                }
+                            }
+                        }
+                        .el-input-group__append {
+                            border-top-right-radius: 8px;
+                            border-bottom-right-radius: 8px;
+                            border-color: #EAECF0;
+                        }
+                        .el-input__wrapper {
+                            padding: 6px 18px;
+                            border-radius: 8px;
+                            box-shadow: none;
+                            border: 1px solid #EAECF0;
+                            &:hover {
+                                box-shadow: none;
+                            }
+                            &.is-focus {
+                                border-color: $primaryColor;
+                            }
+
+                            .el-input__inner {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .el-link {
+                        color: $primaryColor;
+                    }
+                    .fcal_reminder_timing {
+                        margin-bottom: 10px;
+                        width: 100%;
+                        .el-select {
+                            width: auto;
+                            min-width: 160px;
+                        }
+                        .el-link--danger {
+                            color: var(--el-color-danger);
+                        }
+                    }
+                }
+                .wp_vue_editor_wrapper {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 .el-dropdown-list {
     border: 0;
@@ -1075,9 +1176,6 @@
 }
 
 .fcal_questions_wrapper {
-    border: 1px solid #EAECF0;
-    border-radius: 8px;
-    padding: 24px;
     .fcal_question_footer {
         display: flex;
         justify-content: space-between;
@@ -1113,6 +1211,9 @@
     border-bottom: 1px solid #EAECF0;
     position: relative;
     transition: .3s;
+    &.fcal_field_type_disabled {
+        opacity: 0.6;
+    }
     &:hover {
         background: #f6f7f8;
         .fcal_question_sorting  {
@@ -1268,6 +1369,17 @@
             border-color: $primaryColor;
             color: #ffffff;
             background: $primaryColor;
+        }
+    }
+
+    .el-breadcrumb {
+        .el-breadcrumb__item {
+            &:first-child {
+                .el-breadcrumb__inner[role="link"] {
+                    color: $dark;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
@@ -1467,11 +1579,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid #d6dae1;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
             .left {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                gap: 24px;
+                gap: 20px;
                 .img-box {
                     border: 1px solid #D6DAE1;
                     border-radius: 8px;
@@ -1499,10 +1614,10 @@
                 }
                 .content {
                     h3 {
-                        margin: 0 0 8px;
+                        margin: 0 0 4px;
                         font-size: 18px;
                         font-weight: 500;
-                        line-height: 28px;
+                        line-height: 25px;
                         color: $dark;
                     }
                     p {
@@ -1704,6 +1819,34 @@
                             .el-radio {
                                 .el-radio__label {
                                     font-size: 14px;
+                                }
+                            }
+                        }
+
+                        .el-input {
+                            .el-input__wrapper {
+                                box-shadow: none;
+                                border: 1px solid #D6DAE1;
+                                border-radius: 8px;
+                                padding: 8px 16px;
+                                &.is-focus {
+                                    border-color: $primaryColor;
+                                }
+                                .el-input__inner {
+                                    height: auto;
+                                    margin: 0;
+                                    padding: 0;
+                                }
+                            }
+                        }
+                        .el-textarea {
+                            textarea {
+                                box-shadow: none;
+                                border: 1px solid #D6DAE1;
+                                border-radius: 8px;
+                                padding: 8px 16px;
+                                &:focus {
+                                    border-color: $primaryColor;
                                 }
                             }
                         }
@@ -2105,4 +2248,14 @@
             padding-top: 15px;
         }
     }
+}
+
+span.fc_space_10 {
+    width: 10px !important;
+    display: inline-block;
+}
+p.fcal_human_text {
+    margin: 0px 0 6px !important;
+    color: #6b7280;
+    line-height: 100%;
 }

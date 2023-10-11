@@ -11,6 +11,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
@@ -43,7 +44,7 @@ class Bootstrap
             if (!empty($config['constant_defined'])) {
                 $config['client_secret'] = '**********';
                 $config['client_id'] = '**********';
-            } else if(!empty($config['client_secret'])) {
+            } else if (!empty($config['client_secret'])) {
                 $config['client_secret'] = '********************';
             }
 
@@ -93,13 +94,27 @@ class Bootstrap
             ];
         });
 
+        add_filter( 'fluent_booking/get_location_fields', function($fields, $userId) {
+            $meetExist = Meta::where('object_type', '_google_user_token')
+                ->where('object_id', $userId)
+                ->first();
+            
+            $message = !$meetExist ? ' (Connect Google Meet First)' : '';
+            
+            $fields['conferencing']['options']['google_meet'] = [
+                    'title'    => 'Google Meet' . $message,
+                    'disabled' => !$meetExist,
+            ];
+            return $fields;
+        }, 10, 2);
+
         add_action('fluent_booking/save_client_settings_google_calendar', function ($settings) {
             GoogleHelper::updateApiConfig($settings);
         });
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
         /*
-         * Calendar Settings Handlers
+         * oAuth From Handlers from Calendar
          */
         add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
             $app = App::getInstance();
@@ -182,6 +197,9 @@ class Bootstrap
         $userId = sanitize_text_field($_GET['state']);
         $calendar = Calendar::where('user_id', $userId)->first();
 
+        if (!$calendar || !PermissionManager::hasCalendarAccess($calendar)) {
+            return;
+        }
 
         $client = GoogleHelper::getApiClient();
 

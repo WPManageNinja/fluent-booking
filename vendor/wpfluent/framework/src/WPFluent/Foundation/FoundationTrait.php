@@ -4,6 +4,8 @@ namespace FluentBooking\Framework\Foundation;
 
 trait FoundationTrait
 {
+    use HooksRemovalTrait;
+    
     /**
      * Determine the environment
      * @return string
@@ -235,7 +237,12 @@ trait FoundationTrait
     public function parseHookHandler($handler)
     {
         if (is_string($handler)) {
-            list($class, $method) = preg_split('/::|@/', $handler);
+            
+            if (count($array = preg_split('/::|@/', $handler)) < 2) {
+                $array[] = 'handle';
+            }
+
+            list($class, $method) = $array;
 
             $class = $this->makeInstance($class);
 

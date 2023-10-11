@@ -142,6 +142,15 @@ class View
 	}
 
 	/**
+	 * Set view path (used for micro)
+	 * @param [type] $path [description]
+	 */
+	public function setViewPath($path)
+	{
+		$this->app['path.views'] = $path;
+	}
+
+	/**
 	 * Setter for the view
 	 * @param string $key
 	 * @param mixed $value

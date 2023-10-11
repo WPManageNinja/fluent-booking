@@ -12,6 +12,7 @@
                                 :max-time="slot.end"
                                 placeholder="Start"
                                 popper-class="fcal_select"
+                                :disabled="unavailable_date"
                 />
                 <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
@@ -21,6 +22,7 @@
                                 end="23:50"
                                 placeholder="End"
                                 popper-class="fcal_select"
+                                :disabled="unavailable_date"
                 />
 
                 <el-button
@@ -32,7 +34,7 @@
             </div>
         </div>
         <div class="fcal_add_slot">
-            <el-button text :icon="PlusIcon" @click="addSlot" />
+            <el-button :disabled="unavailable_date" text :icon="PlusIcon" @click="addSlot" />
         </div>
     </div>
 </template>
@@ -45,7 +47,7 @@ import {
 import {markRaw} from "vue";
 export default {
     name: 'DayOverRideConfig',
-    props: ['day_label', 'slots'],
+    props: ['day_label', 'slots', 'unavailable_date'],
     data() {
         return {
             DeleteIcon: markRaw(Delete),

@@ -66,8 +66,7 @@ class ZoomHelper
 
     public static function updateAccessConfig($config, $calendar)
     {
-
-        $config = Arr::only($config, ['access_token', 'refresh_token', 'expires_in']);
+        $config = Arr::only($config, ['access_token', 'refresh_token', 'expires_in', 'account_email']);
 
         $config['access_token'] = Helper::encryptKey($config['access_token']);
         $config['refresh_token'] = Helper::encryptKey($config['refresh_token']);
@@ -117,13 +116,15 @@ class ZoomHelper
 
         if ($config['expires_in'] - 10 < time()) {
             // New to renew this token
-            $config = $client->reGenerateToken($config['refresh_token']);
-            if (is_wp_error($config)) {
-                return $config;
+            $newConfig = $client->reGenerateToken($config['refresh_token']);
+            if (is_wp_error($newConfig)) {
+                return $newConfig;
             }
 
-            $config['expires_in'] += time();
-            self::updateAccessConfig($config, $calendar);
+            $newConfig['expires_in'] += time();
+            $newConfig['account_email'] = $config['account_email'];
+            self::updateAccessConfig($newConfig, $calendar);
+            return $client->setAccessToken($newConfig['access_token']);
         }
 
         return $client->setAccessToken($config['access_token']);
@@ -133,6 +134,21 @@ class ZoomHelper
     {
         $config = self::getApiConfig();
         return !empty($config['client_id']) && !empty($config['client_secret']);
+    }
+
+    public static function isCalendarConfigured($calendar)
+    {
+        if (!self::isConfigured()) {
+            return false;
+        }
+
+        $config = self::getAccessConfig($calendar);
+
+        if (!$config) {
+            return false;
+        }
+
+        return !empty($config['access_token']) && !empty($config['refresh_token']);
     }
 
     public static function getAppRedirectUrl()
