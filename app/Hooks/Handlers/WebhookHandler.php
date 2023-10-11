@@ -122,7 +122,6 @@ class WebhookHandler {
     {
         $callbackName = sanitize_text_field($_REQUEST['callback_name']);
         if (!wp_verify_nonce($_REQUEST['nonce'], 'fluent_booking_callback_for_background')) {
-            error_log($callbackName . ' Security Check Failed');
             die('Security Check Failed');
         }
         $data = $_REQUEST['payload'];
