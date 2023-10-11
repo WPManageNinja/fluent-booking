@@ -12,6 +12,12 @@ class ReportController extends Controller
 
     public function getReports(Request $request)
     {
+
+        $latestBookedLists = Booking::with(['slot'])->latest()->limit(5)->get();
+
+        $nextMeeting = Booking::with(['slot'])->where('end_time', '>=', date('Y-m-d H:i:s'))
+            ->where('status', 'scheduled')->latest()->limit(5)->get();
+
         $startDate = $request->get('startDate');
         $endDate   = $request->get('endDate');
 
@@ -85,7 +91,9 @@ class ReportController extends Controller
         ]);
 
         return [
-            'overview'   => $widgets,
+            'overview'            => $widgets,
+            'latest_booked_lists' => $latestBookedLists,
+            'next_meetings'       => $nextMeeting
         ];
     }
 

@@ -262,6 +262,34 @@
           }
         }
       }
+
+      .fcal_dashboard_report_sidebar {
+        max-width: 350px;
+        width: 100%;
+        flex: none;
+      }
+    }
+  }
+
+  .fcal_dashboard_report_widget {
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      border-bottom: 1px solid #EAECF0;
+      padding: 15px 20px;
+    }
+    .fcal_dashboard_widget_body {
+      padding: 20px;
+      ul {
+        li {
+          span {
+            display: block;
+          }
+        }
+      }
     }
   }
 
