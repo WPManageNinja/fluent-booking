@@ -34,5 +34,10 @@
     "unplugin-auto-import": "^0.12.1",
     "unplugin-vue-components": "^0.22.12",
     "vue-loader": "^17.0.1"
+  },
+  "scripts": {
+    "watch": "npx mix watch",
+    "dev": "npx mix watch",
+    "watch-front": "npx mix --mix-config=public-webpack.mix.js watch"
   }
 }

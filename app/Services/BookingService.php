@@ -91,6 +91,13 @@ class BookingService
 
         do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
+        $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
+        if ($calendarSlot->calendar->type !== 'free' && $paymentMethod) {
+            //make draft orders
+            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
+            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
+        }
+
         return $booking;
     }
 
