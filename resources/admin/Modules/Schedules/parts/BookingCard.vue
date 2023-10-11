@@ -27,7 +27,12 @@
 <script type="text/babel">
 export default {
     name: 'BookingCard',
-    props: ['booking', 'multi_host'],
+    props: ['booking', 'multi_host', 'showing_id'],
+    data() {
+        return {
+            booking_id: this.$route.query.booking_id,
+        }
+    },
     methods: {
         showDetails() {
             this.$emit('showDetails', this.booking);
@@ -45,6 +50,9 @@ export default {
             if (eventType === 'group') {
                 const booked = this.booking.booked_count;
                 return booked + ' guests with '+ this.booking.author.name + 'as group booking type';
+            }
+            if(this.showing_id) {
+                return guestName;
             }
             return '<b>' + this.booking?.slot.title +'</b> meeting between ' + guestName + ' & '+ this.booking.author.name;
         }
