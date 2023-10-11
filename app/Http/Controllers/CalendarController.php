@@ -474,7 +474,6 @@ class CalendarController extends Controller
          * Cancelled By Organizer to Attendee
          * Cancelled By Attendee to Organizer
          */
-
         return [
             'notifications' => $slot->getNotifications()
         ];
