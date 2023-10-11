@@ -6,18 +6,25 @@
         <div class="fcal_create_calendar_form_body">
             <div class="fcal_questions_wrapper">
                 <div class="fcal_questions">
-                    <div class="fcal_question" v-for="(field, index) in fields" :key="index">
+                    <div class="fcal_question" v-for="(field, index) in fields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
                         <div class="fcal_question_sorting">
                             <el-icon @click="moveUp(index)"><Top /></el-icon>
                             <el-icon @click="moveDown(index)"><Bottom /></el-icon>
                         </div>
                         <div class="fcal_question_card">
                             <div class="fcal_question_content">
-                                <h2>{{ field.label }} <span class="required" v-if="field.required">Required</span></h2>
-                                <p>{{ field.type }}</p>
+                                <h2>{{ field.label }}
+                                    <span class="required" title="Required Field" v-if="field.required">Required</span>
+                                    <span class="required" v-if="field.system_defined">System</span>
+                                    <span class="required" v-if="!field.enabled">Hidden</span>
+                                </h2>
+                                <p>
+                                    <span v-if="field.system_defined">{{ field.name }}</span>
+                                    <span v-else>{{ field.type }}</span>
+                                </p>
                             </div>
                             <div class="fcal_question_actions">
-                                <el-switch v-if="!isMandatoryField(field.name)" v-model="field.enabled"/>
+                                <el-switch v-if="!field.disable_alter" v-model="field.enabled"/>
                                 <el-button class="fcal_plain_btn" @click="editField(field)">Edit</el-button>
                                 <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
                                     <el-icon><Delete /></el-icon>
@@ -114,7 +121,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email'];
+            const allowedFields = ['name', 'email', 'message'];
             if (this.isPhoneRequired) {
                 allowedFields.push('phone');
             }

@@ -26,7 +26,7 @@ class BookingService
         }
 
         $defaults = [
-            'event_id'     => $calendarSlot->id,
+            'event_id'    => $calendarSlot->id,
             'calendar_id' => $calendarSlot->calendar_id
         ];
 
@@ -93,47 +93,88 @@ class BookingService
         return $booking;
     }
 
-    public static function getDefaultBookingFields($phoneRequired = false)
+    public static function getBookingFields(CalendarSlot $calendarSlot)
     {
+        $requiredIndexes = ['name', 'email', 'message'];
+
         $defaultFields = [
-            [
-                'index'       => 1,
-                'type'        => 'text',
-                'name'        => 'name',
-                'label'       => __('Your Name', 'fluent-booking'),
-                'required'    => true,
-                'enabled'     => true,
-                'placeholder' => __('Your Name', 'fluent-booking'),
+            'name'    => [
+                'index'          => 1,
+                'type'           => 'text',
+                'name'           => 'name',
+                'label'          => __('Your Name', 'fluent-booking'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
+                'is_visible'     => true,
+                'placeholder'    => __('Your Name', 'fluent-booking'),
             ],
-            [
-                'index'       => 2,
-                'type'        => 'email',
-                'name'        => 'email',
-                'label'       => __('Your Email', 'fluent-booking'),
-                'required'    => true,
-                'enabled'     => true,
-                'placeholder' => __('Your Email', 'fluent-booking'),
+            'email'   => [
+                'index'          => 2,
+                'type'           => 'email',
+                'name'           => 'email',
+                'label'          => __('Your Email', 'fluent-booking'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
+                'is_visible'     => true,
+                'placeholder'    => __('Your Email', 'fluent-booking'),
+            ],
+            'message' => [
+                'index'          => 3,
+                'type'           => 'textarea',
+                'name'           => 'message',
+                'label'          => __('What is this meeting about?', 'fluent-booking'),
+                'required'       => false,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
             ]
         ];
 
-        if ($phoneRequired == true) {
-            $defaultFields[] = [
-                'index'       => 3,
-                'type'        => 'number',
-                'name'        => 'phone',
-                'label'       => __('Your Phone Number', 'fluent-booking'),
-                'required'    => true,
-                'enabled'     => true,
-                'placeholder' => esc_attr__('Phone Number with country code', 'fluent-booking'),
+        if ($calendarSlot->isPhoneRequired()) {
+            $requiredIndexes[] = 'phone_number';
+            $defaultFields['phone'] = [
+                'index'          => 4,
+                'type'           => 'phone',
+                'name'           => 'phone_number',
+                'label'          => __('Your Phone Number', 'fluent-booking'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
+                'placeholder'    => esc_attr__('Phone Number', 'fluent-booking'),
             ];
         }
 
-        return apply_filters('fluent_booking/default_booking_fields', $defaultFields);
-    }
 
-    public static function getBookingFields($slot)
-    {
-        return $slot->getBookingFields();
+        $existingFields = $calendarSlot->getMeta('booking_fields', []);
+
+        if (!$existingFields) {
+            return array_values($defaultFields);
+        }
+
+        $validFields = [];
+
+        foreach ($existingFields as $existingField) {
+            $name = $existingField['name'];
+            if(in_array($name, $requiredIndexes)) {
+                // remove from required indexes
+                $requiredIndexes = array_diff($requiredIndexes, [$name]);
+            }
+
+            $validFields[] = $existingField;
+        }
+
+        if($requiredIndexes) {
+            foreach($requiredIndexes as $requiredIndex) {
+                $validFields[] = $defaultFields[$requiredIndex];
+            }
+        }
+
+        return $validFields;
     }
 
     public static function getBookingConfirmationHtml($booking, $calendarSlot = null, $withActions = false)
@@ -162,7 +203,7 @@ class BookingService
 
         $customFields = self::getBookingFields($slot);
 
-        $formattedValues =  [];
+        $formattedValues = [];
         foreach ($customFields as $field) {
             if (!in_array($field['name'], $mainFields) && $field['enabled']) {
                 $value = $fieldValues[$field['name']];
