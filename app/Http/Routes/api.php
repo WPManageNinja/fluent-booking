@@ -85,6 +85,8 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/general', 'SettingsController@getGeneralSettings');
+    $router->post('/general', 'SettingsController@updateGeneralSettings');
     $router->get('/menu', 'SettingsController@getSettingsMenu');
 });
 
