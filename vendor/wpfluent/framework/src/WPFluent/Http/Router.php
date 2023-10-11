@@ -113,7 +113,7 @@ class Router
     /**
      * Execute the route group callback
      * 
-     * @param  \Closure $callback
+     * @param  Closure $callback
      * @return null
      */
     protected function executeGroupCallback($callback)
@@ -121,6 +121,7 @@ class Router
         $callback($this);
         array_pop($this->prefix);
         array_pop($this->namespace);
+        $this->policyHandler = null;
     }
 
     /**

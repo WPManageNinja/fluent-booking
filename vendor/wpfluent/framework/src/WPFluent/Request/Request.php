@@ -327,6 +327,18 @@ class Request
     }
 
     /**
+     * Retrieve an input item from the request.
+     *
+     * @param  string|null  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function input($key = null, $default = null)
+    {
+        return Arr::get($this->inputs(), $key, $default);
+    }
+
+    /**
      * Get all inputs
      * @return array $this->request
      */
@@ -489,16 +501,16 @@ class Request
      */
     public function __call($method, $params)
     {
-        if ($this->app->bound('wprestrequest')) {
-
-            if ($method == 'route') {
+        if ($method == 'route') {
                 
-                if ($params) {
-                    return $this->app->route->{$params[0]};
-                }
-
-                return $this->app->route;
+            if ($params) {
+                return $this->app->route->{$params[0]};
             }
+
+            return $this->app->route;
+        }
+        
+        if ($this->app->bound('wprestrequest')) {
             
             if (!method_exists($this->app->wprestrequest, $method)) {
                 $method = strtolower(
