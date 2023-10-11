@@ -9,21 +9,16 @@ use FluentBooking\App\Services\PermissionManager;
 
 class ReportController extends Controller
 {
-
     public function getReports(Request $request)
     {
-
-        $latestBookedLists = Booking::with(['slot'])->latest()->limit(5)->get();
-
-        $nextMeeting = Booking::with(['slot'])->where('end_time', '>=', date('Y-m-d H:i:s'))
-            ->where('status', 'scheduled')->latest()->limit(5)->get();
-
         $startDate = $request->get('startDate');
         $endDate   = $request->get('endDate');
 
+        $isAdmin = PermissionManager::hasAllCalendarAccess();
+
         $bookingQuery = Booking::query();
         
-        if (!PermissionManager::hasAllCalendarAccess()) {
+        if (!$isAdmin) {
             $bookingQuery->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -91,10 +86,58 @@ class ReportController extends Controller
         ]);
 
         return [
-            'overview'            => $widgets,
-            'latest_booked_lists' => $latestBookedLists,
-            'next_meetings'       => $nextMeeting
+            'overview'      => $widgets,
+            'latest_books'  => $this->getLatestBooks(),
+            'next_meetings' => $this->getNextMeetings()
         ];
+    }
+
+    public function getNextMeetings()
+    {
+        $bookingQuery = Booking::with(['slot'])
+            ->where('end_time', '>=', date('Y-m-d H:i:s'))
+            ->where('status', 'scheduled');
+
+        $isAdmin = PermissionManager::hasAllCalendarAccess();
+
+        if (!$isAdmin) {
+            $bookingQuery->whereHas('calendar', function ($q) {
+                $q->where('user_id', get_current_user_id());
+            });
+        }
+
+        $nextMeetings = $bookingQuery->groupBy('group_id')->latest()->take(5)->get();
+       
+        foreach ($nextMeetings as $meeting) {
+            if (!$meeting->slot) {
+                $meeting->author = [
+                    'name' => 'unknown'
+                ];
+                $meeting->slot = (object)[];
+            } else {
+                $meeting->author = $meeting->slot->getAuthorProfile(false);
+            }
+
+            if ($meeting->event_type == 'group') {
+                $meeting->booked_count = Booking::where('group_id', $meeting->group_id)->count();
+            }
+        }
+        return $nextMeetings;
+    }
+
+    public function getLatestBooks()
+    {
+        $bookingQuery = Booking::query();
+        
+        $isAdmin = PermissionManager::hasAllCalendarAccess();
+
+        if (!$isAdmin) {
+            $bookingQuery->whereHas('calendar', function ($q) {
+                $q->where('user_id', get_current_user_id());
+            });
+        }
+
+        return $bookingQuery->latest()->take(5)->get();
     }
 
     public function getActivities()
