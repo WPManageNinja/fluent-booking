@@ -288,57 +288,36 @@
         &:nth-child(1) {
           background: #FEF4E6;
 
-          h1 {
-            border-color: rgba(247, 165, 57, 0.2);
-          }
-
-          .stat {
-            color: #DC8006;
-            border-color: #DC8006;
+          h3 {
+            border-color: #F7A53933;
           }
 
           .icon {
-            &:after {
-              background: #F7A539;
-            }
+            background: #F7A539;
           }
         }
 
         &:nth-child(2) {
           background: #F3FAF8;
 
-          h1 {
-            border-color: rgba(70, 173, 146, 0.2);
-          }
-
-          .stat {
-            color: #16896B;
-            border-color: #16896B;
+          h3 {
+            border-color: #46AD9233;
           }
 
           .icon {
-            &:after {
-              background: #46AD92;
-            }
+            background: #46AD92;
           }
         }
 
         &:nth-child(3) {
           background: #FEF2F2;
 
-          h1 {
-            border-color: rgba(239, 68, 68, 0.2);
-          }
-
-          .stat {
-            color: #B91C1C;
-            border-color: #B91C1C;
+          h3 {
+            border-color: #EF444433;
           }
 
           .icon {
-            &:after {
-              background: #EF4444;
-            }
+            background: #EF4444;
           }
         }
 
@@ -346,28 +325,34 @@
           font-size: 12px;
           font-weight: 700;
           line-height: 18px;
-          color: $primaryColor;
           display: inline-flex;
           align-items: center;
           gap: 4px;
           padding: 4px 8px;
           border-radius: 6px;
           background: #ffffff;
-          margin-bottom: 20px;
-          border: 1px solid $primaryColor;
+          border: 1px solid #16896B;
+          &.down {
+            color: #EF4444;
+            border-color: #EF4444;
+            i {
+              transform: rotate(180deg);
+            }
+          }
         }
 
         .icon {
           position: absolute;
-          width: 64px;
-          height: 64px;
-          border-radius: 50%;
+          width: 50px;
+          height: 50px;
           display: flex;
           align-items: center;
           justify-content: center;
           right: 20px;
-          bottom: 20px;
+          top: 20px;
           z-index: 1;
+          background: $primaryColor;
+          border-radius: 50%;
           @media (max-width: 585px) {
             width: 54px;
             height: 54px;
@@ -377,6 +362,7 @@
           }
 
           svg {
+            width: 28px;
             path {
               stroke-dasharray: 200;
               stroke-dashoffset: 200;
@@ -385,35 +371,30 @@
             }
           }
 
-          &:after,
           &:before {
-            content: '';
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            background: #ffffff;
+            content: "";
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
             border-radius: 50%;
-            left: -7px;
-            z-index: -1;
-            top: -7px;
-          }
-
-          &:after {
-            width: 100%;
-            height: 100%;
-            left: 0;
-            top: 0;
-            background: $primaryColor;
+            border: 1px dashed #ffffff;
+            position: absolute;
+            left: 3px;
+            top: 3px;
           }
         }
 
         h3 {
-          font-size: 16px;
-          font-weight: 700;
-          line-height: 24px;
-          margin: 0 0 10px;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 20px;
+          margin: 12px 0 0 0;
           color: #445164;
           position: relative;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border-top: 1px solid #4587EC33;
+          padding-top: 12px;
         }
 
         h1 {
@@ -422,13 +403,11 @@
           line-height: 44px;
           margin: 0 0 5px;
           color: $dark;
-          border-top: 1px solid rgb(39 83 199 / 20%);
-          padding-top: 10px;
         }
 
         p {
           font-size: 16px;
-          font-weight: 400;
+          font-weight: 600;
           line-height: 24px;
           margin: 0;
           position: relative;
