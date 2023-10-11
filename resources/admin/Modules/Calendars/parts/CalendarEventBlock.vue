@@ -8,6 +8,7 @@
                     <p v-if="calendar.public_url && calendar.visibility == 'public'" class="fcal_profile_link">
                         <a target="_blank" rel="noopener" :href="calendar.public_url">{{calendar.public_url}}</a>
                     </p>
+                    <p class="fcal_profile_link" v-else-if="!calendar.public_url"><span style="cursor: pointer;" @click="goToIntegrationSetting">Enable Landing Page</span></p>
                 </div>
             </div>
             <div class="fcal_cal_actions">
@@ -18,7 +19,7 @@
                 <el-button
                     @click="isNewBookingOpen = true"
                     class="fcal_primary_btn2">
-                    <span>+</span> Create New Booking Type
+                    <span>+</span> Create New Event
                 </el-button>
 
                 <el-dropdown @command="handleCommand" popper-class="fcal_select" trigger="click">
