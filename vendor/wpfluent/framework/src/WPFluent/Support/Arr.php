@@ -747,8 +747,23 @@ class Arr
         return is_array($value) ? $value : [$value];
     }
 
-    public static function isTrue($array, $key)
+    /**
+     * Maps a function to all non-iterable elements of an array or an object.
+     *
+     * This is similar to `array_walk_recursive()` but acts upon objects too.
+     *
+     * @param mixed    $value    The array, object, or scalar.
+     * @param callable $callback The function to map onto $value.
+     * @see https://developer.wordpress.org/reference/functions/map_deep/
+     * 
+     * @return mixed The value with the callback applied to all non-arrays and non-objects inside it.
+     */
+    public static function map($value, $callback)
     {
+        return map_deep($value, $callback);
+    }
+
+    public static function isTrue($array, $key) {
         $value = static::get($array, $key);
         return $value === true || $value === 'true' || $value == 1;
     }
