@@ -4,12 +4,13 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
+        <p v-if="fieldData.system_defined">This is a system defined field. You can only edit labels</p>
         <el-form v-if="openModal" label-position="top" >
             <el-form-item label="Field Type">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"
-                    :disabled="isMandatoryField"
+                    :disabled="fieldData.system_defined"
                     placeholder="Select Type">
                     <el-option
                         v-for="(type, index) in fieldsTypes"
@@ -45,7 +46,7 @@
                 </el-link>
             </el-form-item>
             <el-form-item label="Required">
-                <el-radio-group v-model="fieldData.required" class="radio_desc_group radio_required_field">
+                <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
                     <el-radio :label="true">Yes</el-radio>
                     <el-radio :label="false">No</el-radio>
                 </el-radio-group>
@@ -64,7 +65,7 @@
     </el-dialog>
 </template>
 
- <script>
+ <script type="text/babel">
  import { markRaw } from "vue";
 import { CloseBold } from '@element-plus/icons-vue';
 export default {
@@ -127,26 +128,8 @@ export default {
                 this.$handleError("Label field is required");
                 return;
             }
-            this.updateFieldName();
             this.$emit('updateFieldData', this.fieldData, this.isNewEntry);
             this.openModal = false;
-        },
-        updateFieldName() {
-            let fieldName = this.fieldData.type;
-            let suffix = 0;
-            if (this.fields.some(field => field.name === fieldName)) {
-                if (this.fields.forEach(field => {
-                    if(field.name.startsWith(fieldName)) {
-                        const chars = field.name.split('_');
-                        const suffixNum = parseInt(chars[1]);
-                        if (suffixNum && suffixNum > suffix) {
-                            suffix = suffixNum;
-                        }
-                    }
-                }));
-                fieldName = `${fieldName}_${parseInt(suffix)+1}`;
-            }
-            this.fieldData.name = fieldName;
         },
         addNewOption() {
             const index = this.fieldData.options.length + 1;

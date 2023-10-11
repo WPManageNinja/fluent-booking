@@ -155,4 +155,17 @@ class IntegrationSettingsController extends Controller
 
         return $data;
     }
+
+    public function disconnectGeneralIntegrationFeed(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $settingsKey = sanitize_text_field($request->get('settings_key'));
+
+        do_action('fluent_booking/disconnect_general_integration_feed_' . $settingsKey, $calendar);
+
+        return [
+            'message' => 'Your selected integration feed has been disconnected'
+        ];
+    }
+
 }

@@ -100,6 +100,46 @@ class Calendar extends Model
         ];
     }
 
+    public function getLocationFields()
+    {
+        return apply_filters('fluent_booking/get_location_fields', [
+            'conferencing' => [
+                'label' => 'Conferencing',
+                'options' => [],
+            ],
+            'in_person' => [
+                'label' => 'In Person',
+                'options' => [
+                    'in_person_guest' => [
+                        'title' => 'In Person (Attendee Address)',
+                    ],
+                    'in_person_organizer' => [
+                        'title' => 'In Person (Organizer Address)',
+                    ],
+                ],
+            ],
+            'phone' => [
+                'label' => 'Phone',
+                'options' => [
+                    'phone_guest' => [
+                        'title' => 'Attendee Phone Number',
+                    ],
+                    'phone_organizer' => [
+                        'title' => 'Organizer Phone Number',
+                    ],
+                ],
+            ],
+            'other' => [
+                'label' => 'Other',
+                'options' => [
+                    'custom' => [
+                        'title' => 'Custom',
+                    ],
+                ],
+            ],
+        ], $this->user_id);
+    }
+
     public function getMeta($key, $default = null)
     {
         $meta = Meta::where('object_type', 'Calendar')

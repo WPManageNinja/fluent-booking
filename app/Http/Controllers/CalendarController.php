@@ -137,6 +137,8 @@ class CalendarController extends Controller
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
+        $locationSettings = $request->get('location');
+        
         $slotData = [
             'title'             => $title,
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
@@ -155,10 +157,10 @@ class CalendarController extends Controller
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'location_settings' => wp_kses_post_deep($locationSettings),
         ];
 
-        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
+        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
 
         $slot = CalendarSlot::create($slotData);
 
@@ -230,9 +232,9 @@ class CalendarController extends Controller
 
         $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image']);
 
-        if($calendarDataItems) {
+        if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
-                'title' => 'required',
+                'title'           => 'required',
                 'calendar_avatar' => 'url'
             ]);
 
@@ -294,6 +296,8 @@ class CalendarController extends Controller
 
         $slotSettings['available_schedules'] = $availableSchedules;
 
+        $slotSettings['location_fields'] = $slot->calendar->getLocationFields();
+
         $slot->settings = $slotSettings;
 
         $data = [
@@ -313,7 +317,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($calendar);
 
         $schema = [
             'title'        => '',
@@ -322,7 +326,14 @@ class CalendarController extends Controller
             'duration'     => '30',
             'color_schema' => '#0099ff',
             'calendar'     => $calendar,
-            'settings'     => $settingsSchema
+            'settings'     => $settingsSchema,
+            'max_book_per_slot' => 2,
+            'location_settings' => [
+                'type'              => '',
+                'title'             => '',
+                'description'       => '',
+                'host_phone_number' => ''
+            ]
         ];
 
         return [
@@ -373,7 +384,9 @@ class CalendarController extends Controller
             'availability_id'   => $availabilityId,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', []))
+            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'max_book_per_slot' => (int)Arr::get($slot, 'max_book_per_slot', 1),
+            'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),
         ];
 
         $createdSlot = CalendarSlot::create($slotData);
@@ -393,7 +406,9 @@ class CalendarController extends Controller
         $generalRules = [
             'title'         => 'required',
             'duration'      => 'required|numeric',
-//            'location_type' => 'required'
+           'location_type' => 'required',
+            'title'    => 'required',
+            'duration' => 'required|numeric'
         ];
 
         $conditionalRules = [];
@@ -425,8 +440,6 @@ class CalendarController extends Controller
         $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $slot->availability_id = (int)Arr::get($data, 'availability_id');
         $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
-        $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
-        $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
         $slot->location_settings = wp_kses_post_deep(Arr::get($data, 'location_settings', []));
         $slot->save();
 
@@ -512,16 +525,22 @@ class CalendarController extends Controller
 
         $formattedFields = [];
 
+        $textFields = ['type', 'name', 'label', 'placeholder'];
+        $booleanFields = ['enabled', 'required', 'system_defined', 'disable_alter'];
+
         foreach ($bookingFields as $value) {
-            $formattedField = [
-                'index'       => (int)Arr::get($value, 'index'),
-                'type'        => sanitize_text_field(Arr::get($value, 'type')),
-                'name'        => sanitize_text_field(Arr::get($value, 'name')),
-                'enabled'     => Arr::isTrue($value, 'enabled'),
-                'required'    => Arr::isTrue($value, 'required'),
-                'label'       => sanitize_text_field(Arr::get($value, 'label')),
-                'placeholder' => sanitize_text_field(Arr::get($value, 'placeholder'))
-            ];
+            if (empty($value['name'])) {
+                $value['name'] = 'custom_' . sanitize_title($value['label']);
+            }
+
+            $textValues = array_map('sanitize_text_field', Arr::only($value, $textFields));
+            $booleanValues = array_map(function ($valueItem) {
+                return $valueItem === true || $valueItem === 'true' || $valueItem == 1;
+            }, Arr::only($value, $booleanFields));
+
+            $formattedField = array_merge($textValues, $booleanValues);
+
+            $formattedField['index'] = (int)Arr::get($value, 'index');
 
             if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));

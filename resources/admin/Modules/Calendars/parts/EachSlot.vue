@@ -48,7 +48,7 @@
                     <el-icon>
                         <CopyDocument/>
                     </el-icon>
-                    <span v-if="!isCopied">Copy Shorcode</span>
+                    <span v-if="!isCopied">Copy Shortcode</span>
                     <span v-else>Copied!</span>
                 </el-button>
 
