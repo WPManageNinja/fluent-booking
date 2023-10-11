@@ -69,7 +69,7 @@
             <div class="fcal_dashboard_report_sidebar">
 
                 <div class="fcal_new_booked_event_widget fcal_dashboard_report_widget">
-                    <h1>Today Meeting</h1>
+                    <h1>Next Meetings</h1>
                     <el-skeleton v-if="loading" animated />
                     <div v-else class="fcal_dashboard_widget_body">
                         <ul>
@@ -77,28 +77,22 @@
                                 <span class="timing">
                                     {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
                                 </span>
-                                <span class="title">
-                                    {{ schedule.slot?.title }}
+                                <span class="title" v-html="scheduleTitle(schedule)">
                                 </span>
-                                <span class="duration"><b>Duration: </b> {{ schedule.slot_minutes }} Minutes</span>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view details</el-link>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="fcal_today_meeting_widget fcal_dashboard_report_widget">
-                    <h1>Latest Booked</h1>
+                    <h1>Latest Booked Meetings</h1>
                     <el-skeleton v-if="loading" animated />
                     <div v-else class="fcal_dashboard_widget_body">
                         <ul>
                             <li v-for="(schedule, i) in latestBookedLists" :key="i">
-                                <span class="timing">
-                                    {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
-                                </span>
-                                <span class="description">
-                                    {{ schedule.event_type === 'group' ? schedule.booked_count : ''}}
-                                     guests with
-                                </span>
+                                <span class="description" v-html="bookingTitle(schedule)"></span>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view details</el-link>
                             </li>
                         </ul>
                     </div>
@@ -168,6 +162,23 @@ export default {
                 return `${startTime} - ${endTime}`;
             }
         },
+        bookingTitle() {
+            return (schedule) => {
+                const guestName = schedule.first_name + ' ' + schedule.last_name;
+                const createdAt = this.convertDate(schedule.created_at)
+                return '<b>' + guestName + '</b>' + ' booked a new meeting at ' + createdAt;    
+            }
+        },
+        scheduleTitle() {
+            return (schedule) => {
+                const guestName = schedule.first_name + ' ' + schedule.last_name;
+                if (schedule.event_type === 'group') {
+                    const booked = schedule.booked_count;
+                    return booked + ' guests with '+ schedule.author.name + 'as group booking type';
+                }
+                return '<b>' + schedule?.slot.title +'</b> meeting between ' + guestName + ' & '+ schedule.author.name;        
+            }
+        }
     },
     methods: {
         convertDate(date) {
@@ -175,6 +186,12 @@ export default {
                 return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
             }
             return '';
+        },
+        viewMeetingDetails(scheduleId) {
+            this.$router.push({
+                name: 'scheduled_events',
+                query:{booking_id: scheduleId}
+            })
         },
         fetchReports() {
             this.loading = true;
@@ -186,8 +203,9 @@ export default {
                 })
                 .then(response => {
                     this.widgets = response.overview;
-                    this.latestBookedLists = response.latest_booked_lists;
+                    this.latestBookedLists = response.latest_books;
                     this.nextMeetings = response.next_meetings;
+                    console.log(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
