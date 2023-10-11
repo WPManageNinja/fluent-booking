@@ -80,7 +80,7 @@ class AdminMenuHandler
             __('Settings', 'fluent-booking'),
             __('Settings', 'fluent-booking'),
             $capability,
-            'admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar',
+            'admin.php?page=fluent-booking#/settings/general-settings',
             ''
         );
     }
@@ -131,7 +131,7 @@ class AdminMenuHandler
                 [
                     'key'       => 'settings',
                     'label'     => __('Settings', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'settings/configure-integrations/google_calendar'
+                    'permalink' => $baseUrl . 'settings/general-settings'
                 ]
             ];
         }

@@ -4,8 +4,11 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
+
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
+import GeneralSettings from "./Modules/Settings/GeneralSettings.vue";
+
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCalendarsSettings";
 import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGeneralSettings.vue";
@@ -112,6 +115,14 @@ export var routes = [
             active_menu: 'settings'
         },
         children: [
+            {
+                name: 'general_settings',
+                path: 'general-settings',
+                component: GeneralSettings,
+                meta: {
+                    active_menu: 'settings',
+                }
+            },
             {
                 name: 'configure-integrations',
                 path: 'configure-integrations/:settings_key',
