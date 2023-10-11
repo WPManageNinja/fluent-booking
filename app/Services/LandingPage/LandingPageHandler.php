@@ -188,13 +188,13 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/js/app.js'
             ],
             'js_vars'     => [
-                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => [
+                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => apply_filters('fluent_calendar_public_event_vars', [
                     'slot'           => $slot,
                     'calendar'       => $calendar,
                     'author_profile' => $authorProfile,
                     'form_fields'    => $formFields
-                ],
-                'fluentCalendarPublicVars'                            => (new FrontEndHandler())->getGlobalVars()
+                ], $slot, $calendar),
+                'fluentCalendarPublicVars'  => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
 
