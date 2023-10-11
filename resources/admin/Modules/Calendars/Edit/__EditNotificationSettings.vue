@@ -123,7 +123,6 @@ export default {
                 },
                 quicktags: true
             });
-
             jQuery('#'+this.editor_id).on('change', function(e) {
                 that.changeContentEvent();
             });

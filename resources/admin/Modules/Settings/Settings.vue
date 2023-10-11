@@ -1,11 +1,17 @@
 <template>
     <div class="fcal_settings">
         <div class="fcal_settings_header_title">
-            <h3>General Settings</h3>
+            <h3>Global Settings</h3>
         </div>
         <div class="fcal_settings_body">
             <el-aside v-loading="loading">
                 <ul class="fcal_settings_sidebar">
+                    <li class="fcal_settings_submenu_item">
+                        <router-link class="fcal_img_menu_link" :to="{ name: 'general_settings' }">
+                            <el-icon><Operation /></el-icon>
+                            <span>General Settings</span>
+                        </router-link>
+                    </li>
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="menu.route">
                             <img class="fcal_img_icon" :src="menu.icon_url"/>
@@ -31,8 +37,12 @@
 </template>
 
 <script type="text/babel">
+import {Operation } from '@element-plus/icons-vue';
 export default {
     name: 'Settings',
+    components: {
+        Operation
+    },
     data() {
         return {
             loading: false,

@@ -653,7 +653,6 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
-
     /**
      * Sending a job to background for further processing
      *
@@ -791,16 +790,9 @@ class Helper
 
         return BookingMeta::create([
             'booking_id' => $eventId,
-            'meta_key' => $metaKey,
-            'value'    => $value
+            'meta_key'   => $metaKey,
+            'value'      => $value
         ]);
-    }
-
-    public static function deleteBookingMeta($eventId, $metaKey)
-    {
-        return BookingMeta::where('booking_id', $eventId)
-            ->where('meta_key', $metaKey)
-            ->delete();
     }
 
     public static function getUserDisplayName($userId = null)
@@ -1375,5 +1367,71 @@ class Helper
         if (defined('FLUENT_BOOKING_DEBUG') && FLUENT_BOOKING_DEBUG) {
             error_log(print_r($data, true));
         }
+    }
+
+    public static function getGlobalSettings()
+    {
+        $defaults = [
+            'emailing'       => [
+                'from_name'               => '',
+                'from_email'              => '',
+                'reply_to_name'           => '',
+                'reply_to_email'          => '',
+                'use_host_name'           => '',
+                'use_host_email_on_reply' => '',
+                'email_footer'            => ''
+            ],
+            'administration' => [
+                'admin_email'            => '{{wp.admin_email}}',
+                'summary_notification'   => 'no',
+                'notification_frequency' => 'daily',
+                'notification_day'       => 'mon'
+            ]
+        ];
+
+        $settings = get_option('_fluent_booking_settings', []);
+
+        if (empty($settings)) {
+            $settings = [];
+        }
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        $emailSettings = $settings['emailing'];
+
+        if (empty($emailSettings['from_name']) && defined('FLUENTCRM')) {
+            $crmSettings = fluentcrmGetGlobalSettings('email_settings', []);
+            $emailSettings['from_name'] = Arr::get($crmSettings, 'from_name');
+            if (empty($emailSettings['from_email'])) {
+                $emailSettings['from_email'] = Arr::get($crmSettings, 'from_email');
+            }
+            if (empty($emailSettings['reply_to_name'])) {
+                $emailSettings['reply_to_name'] = Arr::get($crmSettings, 'reply_to_name');
+            }
+            if (empty($emailSettings['reply_to_email'])) {
+                $emailSettings['reply_to_email'] = Arr::get($crmSettings, 'reply_to_email');
+            }
+
+            $settings['emailing'] = $emailSettings;
+        }
+
+        return $settings;
+
+    }
+
+    public static function getVerifiedSenders()
+    {
+        $verifiedSenders = [];
+        if (defined('FLUENTMAIL')) {
+            $smtpSettings = get_option('fluentmail-settings', []);
+            if ($smtpSettings && count($smtpSettings['mappings'])) {
+                $verifiedSenders = array_keys($smtpSettings['mappings']);
+            }
+        }
+        /**
+         * Filter the verified email senders
+         * @param array $verifiedSenders
+         */
+        return apply_filters('fluent_booking/verfied_email_senders', $verifiedSenders);
     }
 }
