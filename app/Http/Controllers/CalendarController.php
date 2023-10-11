@@ -158,7 +158,7 @@ class CalendarController extends Controller
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
-        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
+        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
 
         $slot = CalendarSlot::create($slotData);
 
@@ -315,16 +315,17 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($calendar);
 
         $schema = [
-            'title'             => '',
-            'status'            => 'active',
-            'description'       => '',
-            'duration'          => '30',
-            'color_schema'      => '#0099ff',
-            'calendar'          => $calendar,
-            'settings'          => $settingsSchema,
+            'title'        => '',
+            'status'       => 'active',
+            'description'  => '',
+            'duration'     => '30',
+            'color_schema' => '#0099ff',
+            'calendar'     => $calendar,
+            'settings'     => $settingsSchema,
+            'max_book_per_slot' => 2,
             'location_settings' => [
                 'type'              => '',
                 'title'             => '',
@@ -381,7 +382,9 @@ class CalendarController extends Controller
             'availability_id'   => $availabilityId,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', []))
+            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'max_book_per_slot' => (int)Arr::get($slot, 'max_book_per_slot', 1),
+            'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),
         ];
 
         $createdSlot = CalendarSlot::create($slotData);
