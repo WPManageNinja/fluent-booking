@@ -105,7 +105,7 @@
     .el-calendar-table {
         tr {
             td {
-                border: none;
+                border: none !important;
                 border-radius: 8px;
                 &.is-today {
                     color: $primaryColor;
@@ -135,8 +135,8 @@
                     }
                 }
                 .el-calendar-day {
-                    height: 40px;
-                    width: 40px;
+                    height: 38px;
+                    width: 39px;
                     position: relative;
                     p {
                         position: absolute;
@@ -199,12 +199,20 @@
                 border-radius: 0;
 
                 .fcal_week_day_config {
-                    padding: 0;
-                    min-height: auto;
+                    padding: 10px 0 !important;
+                    min-height: auto !important;
                     column-gap: 10px;
-                    padding-right: 10px;
                     .fcal_add_slot {
                         margin-top: 8px;
+                        .el-select {
+                            &.el-select--disabled {
+                                .el-input {
+                                    .el-input__wrapper {
+                                        font-weight: 400;
+                                    }
+                                }
+                            }
+                        }
                     }
                     .fcal_slot {
                         .el-select {
@@ -219,6 +227,9 @@
                     }
                 }
             }
+        }
+        .fcal_override_calendar_unavailable_check {
+            margin-top: 10px;
         }
         .fcal_override_calendar_footer_action {
             margin-top: 16px;
@@ -667,6 +678,9 @@
 .el-notification {
     top: auto !important;
     bottom: 10px !important;
+    p {
+        text-align: left !important;
+    }
 }
 
 .el-dropdown-list-wrapper {
@@ -983,6 +997,79 @@
                 padding: 18px 0;
                 .el-button {
                     padding: 10px 22px !important;
+                }
+            }
+        }
+    }
+    &.fcal_notification_modal {
+        .el-dialog__header {
+            border-bottom: 1px solid #DCDFE6;
+        }
+        .el-dialog__body {
+            padding-bottom: 0;
+        }
+        .el-form {
+            .el-form-item {
+                .el-form-item__content {
+                    .fcal_popover_shortcode {
+                        width: 100%;
+                    }
+                    .el-input {
+                        &.is-focus {
+                            .el-input__wrapper {
+                                box-shadow: none !important;
+                            }
+                        }
+                        &.el-input-group--append {
+                            .el-input__wrapper {
+                                border-top-right-radius: 0;
+                                border-bottom-right-radius: 0;
+                                &.is-focus {
+                                    border-color: #EAECF0;
+                                }
+                            }
+                        }
+                        .el-input-group__append {
+                            border-top-right-radius: 8px;
+                            border-bottom-right-radius: 8px;
+                            border-color: #EAECF0;
+                        }
+                        .el-input__wrapper {
+                            padding: 6px 18px;
+                            border-radius: 8px;
+                            box-shadow: none;
+                            border: 1px solid #EAECF0;
+                            &:hover {
+                                box-shadow: none;
+                            }
+                            &.is-focus {
+                                border-color: $primaryColor;
+                            }
+
+                            .el-input__inner {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+                    }
+                    .el-link {
+                        color: $primaryColor;
+                    }
+                    .fcal_reminder_timing {
+                        margin-bottom: 10px;
+                        width: 100%;
+                        .el-select {
+                            width: auto;
+                            min-width: 160px;
+                        }
+                        .el-link--danger {
+                            color: var(--el-color-danger);
+                        }
+                    }
+                }
+                .wp_vue_editor_wrapper {
+                    width: 100%;
                 }
             }
         }
@@ -1492,11 +1579,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid #d6dae1;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
             .left {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                gap: 24px;
+                gap: 20px;
                 .img-box {
                     border: 1px solid #D6DAE1;
                     border-radius: 8px;
@@ -1524,10 +1614,10 @@
                 }
                 .content {
                     h3 {
-                        margin: 0 0 8px;
+                        margin: 0 0 4px;
                         font-size: 18px;
                         font-weight: 500;
-                        line-height: 28px;
+                        line-height: 25px;
                         color: $dark;
                     }
                     p {
