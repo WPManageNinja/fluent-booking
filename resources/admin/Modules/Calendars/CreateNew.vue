@@ -63,12 +63,14 @@ export default {
                     event_type: 'single',
                     location_type: '',
                     location_heading: '',
-                    location_settings: {
-                        type: '',
-                        title: '',
-                        description: '',
-                        host_phone_number: ''
-                    },
+                    location_settings: [
+                        {
+                            type: '',
+                            title: '',
+                            description: '',
+                            host_phone_number: ''
+                        }
+                    ],
                     settings: {
                         location_fields: this.appVars.location_fields
                     }
