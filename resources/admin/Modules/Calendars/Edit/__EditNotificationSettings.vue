@@ -66,7 +66,7 @@
     </el-form>
 </template>
 
-<script>
+<script type="text/babel">
 import { markRaw } from "vue";
 import Popover from '../../../Components/Popover.vue';
 import { Plus, More, CloseBold, ArrowDown } from '@element-plus/icons-vue';
