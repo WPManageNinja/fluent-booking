@@ -95,8 +95,9 @@ class ReportController extends Controller
     public function getNextMeetings()
     {
         $bookingQuery = Booking::with(['slot'])
-            ->where('end_time', '>=', date('Y-m-d H:i:s'))
-            ->where('status', 'scheduled');
+            ->where('status', 'scheduled')
+            ->orderBy('start_time', 'ASC')
+            ->upcoming();
 
         $isAdmin = PermissionManager::hasAllCalendarAccess();
 
