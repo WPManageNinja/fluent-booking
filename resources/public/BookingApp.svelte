@@ -64,11 +64,19 @@
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
 
-        if (!isFluentform) {
-            const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-            const height = calendarHeight + 135;
-            calendar.style.height = height + 'px';
-            selectedDate = spot;
+        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+        const height = calendarHeight + 135;
+        calendar.style.height = height + 'px';
+        selectedDate = spot;
+
+
+        if (isFluentform) {
+            setTimeout(() => {
+                const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
+                console.log(formFieldsHeight);
+                const height = formFieldsHeight + 135;
+                calendar.style.height = height + 'px';
+            }, 100)
         }
     }
 
