@@ -188,6 +188,10 @@ $lightDark: #6b7280;
 
     .fcal_slot_description {
       margin-top: 20px;
+      font-size: 16px;
+    }
+    .fcal_location_description {
+        font-size: 15px;
     }
 
   }
@@ -241,6 +245,30 @@ $lightDark: #6b7280;
         opacity: 1;
         visibility: visible;
         right: 0;
+      }
+      .fcal_form_booking_details {
+        padding-left: 20px;
+        .fcal_author {
+          position: relative;
+          .fcal_back {
+            cursor: pointer;
+            position: absolute;
+            background: #ffffff;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: -35px;
+            top: 15px;
+            border: 1px solid #dadbdd;
+            border-radius: 50%;
+            svg {
+              fill: #697483;
+            }
+          }
+        }
       }
       .fcal_date_event_details_header {
         border-bottom: 1px solid #EAECF0;
@@ -718,6 +746,7 @@ $lightDark: #6b7280;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-right: 12px;
     .fcal_slot_picker_header_action {
       display: flex;
       align-items: center;
