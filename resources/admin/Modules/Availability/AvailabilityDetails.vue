@@ -8,9 +8,7 @@
         </div>
 
         <el-skeleton v-if="loading" :rows="5" animated/>
-        <div v-else class="fcal_settings_header">
 
-        </div>
         <div v-if="!loading" class="fcal_settings_content_wrap">
             <el-form label-position="top">
                 <div class="fcal_availability_header_wrap">
