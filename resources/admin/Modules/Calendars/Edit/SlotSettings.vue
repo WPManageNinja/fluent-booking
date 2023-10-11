@@ -21,7 +21,7 @@
                     </el-icon>
                     Event Details
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'basic-info'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <basic-info v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
@@ -36,7 +36,7 @@
                     </el-icon>
                     Schedule Settings
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'schedule-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <ScheduleSettings v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
@@ -51,7 +51,7 @@
                     </el-icon>
                     Email Notifications
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'notification-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <NotificationSettings v-else ref="notificationData" :slot="slot"/>
                 </div>
@@ -60,7 +60,7 @@
                 <template #label>
                     <el-icon><QuestionIcon/></el-icon> Booking Questions
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'question-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <QuestionSettings v-else :activeTab="activeTab" :slot="slot"/>
                 </div>
@@ -72,7 +72,7 @@
                     </el-icon>
                     Webhooks Settings
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
                         :event_id="event_id"
