@@ -25,7 +25,7 @@
                     v-if="hasWpEditor"
                     class="popover-wrapper"
                     groupTitle="Shortcodes"
-                    :data="editorShortcodes"
+                    :data="editorShortcodesHtml"
                     :isVisible="bodyPopupVisible"
                     @command="handleBodyCommand">
                     <template #popoverButton>
@@ -96,6 +96,7 @@ export default {
             bodyPopupVisible: false,
             hasWpEditor: !!window.wp.editor,
             editorShortcodes: this.appVars.editor_shortcodes,
+            editorShortcodesHtml: this.appVars.editor_shortcodes_for_html,
             PlusIcon: markRaw(Plus),
             MoreIcon: markRaw(More),
             CloseBoldIcon: markRaw(CloseBold),
