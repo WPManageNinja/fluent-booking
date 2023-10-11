@@ -400,8 +400,7 @@ class CalendarController extends Controller
 
         $generalRules = [
             'title'         => 'required',
-            'duration'      => 'required|numeric',
-            'location_type' => 'required'
+            'duration'      => 'required|numeric'
         ];
 
         $conditionalRules = [];
@@ -433,8 +432,6 @@ class CalendarController extends Controller
         $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $slot->availability_id = (int)Arr::get($data, 'availability_id');
         $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
-        $slot->location_type = sanitize_text_field(Arr::get($data, 'location_type'));
-        $slot->location_heading = wp_kses_post(Arr::get($data, 'location_heading'));
         $slot->location_settings = wp_kses_post_deep(Arr::get($data, 'location_settings', []));
         $slot->save();
 
