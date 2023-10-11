@@ -94,7 +94,7 @@ class CalendarSlot extends Model
         return $this->location_type == 'phone_guest';
     }
 
-    public function getSlotSettingsSchema()
+    public function getSlotSettingsSchema($calendar)
     {
         return [
             'schedule_type'       => 'weekly_schedules',
@@ -107,7 +107,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields' => (new Calendar())->getLocationFields()
+            'location_fields' => $calendar->getLocationFields()
         ];
     }
 
