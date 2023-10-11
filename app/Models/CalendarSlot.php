@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
@@ -91,10 +92,10 @@ class CalendarSlot extends Model
 
     public function isPhoneRequired()
     {
-        return $this->location_type == 'phone_guest';
+        return Arr::get($this->location_settings, 'type') == 'phone_guest';
     }
 
-    public function getSlotSettingsSchema()
+    public function getSlotSettingsSchema($calendar)
     {
         return [
             'schedule_type'       => 'weekly_schedules',
@@ -107,7 +108,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields' => (new Calendar())->getLocationFields()
+            'location_fields' => $calendar->getLocationFields()
         ];
     }
 
@@ -131,22 +132,12 @@ class CalendarSlot extends Model
 
     public function getBookingFields()
     {
-        $fields = Helper::getMeta('calendar_slot', $this->id, 'booking_fields');
-
-        $phoneRequired = $this->isPhoneRequired();
-
-        $defaults = BookingService::getDefaultBookingFields($phoneRequired);
-
-        if (!$fields) {
-            return $defaults;
-        }
-
-        return $fields;
+        return BookingFieldService::getBookingFields($this);
     }
 
     public function setBookingFields($bookingFields)
     {
-        $fields = Helper::updateMeta('calendar_slot', $this->id, 'booking_fields', $bookingFields);
+        return $this->updateMeta('booking_fields', $bookingFields);
     }
 
     public function getMaxBookableDateTime($startDate)
@@ -270,14 +261,51 @@ class CalendarSlot extends Model
 
         $baseUr = $calendar->getLandingPageUrl();
 
-        if(!$baseUr) {
+        if (!$baseUr) {
             return '';
         }
 
-        if(defined('FLUENT_BOOKING_LANDING_SLUG')) {
-            return  $baseUr. '/' . $this->slug;
+        if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
+            return $baseUr . '/' . $this->slug;
         }
 
-        return $baseUr.'&event='.$this->slug;
+        return $baseUr . '&event=' . $this->slug;
     }
+
+    public function getMeta($key, $default = null)
+    {
+        $meta = Meta::where('object_type', 'calendar_event')
+            ->where('object_id', $this->id)
+            ->where('key', $key)
+            ->first();
+
+        if (!$meta) {
+            return $default;
+        }
+
+        return $meta->value;
+    }
+
+    public function updateMeta($key, $value)
+    {
+        $exist = Meta::where('object_type', 'calendar_event')
+            ->where('object_id', $this->id)
+            ->where('key', $key)
+            ->first();
+
+        if ($exist) {
+            $exist->value = $value;
+            $exist->save();
+        } else {
+            $exist = Meta::create([
+                'object_type' => 'calendar_event',
+                'object_id'   => $this->id,
+                'key'         => $key,
+                'value'       => $value
+            ]);
+        }
+
+        return $exist;
+    }
+
 }

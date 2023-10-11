@@ -46,7 +46,7 @@ export default {
     },
     computed:  {
         slotTitle() {
-            const eventType = `${this.event_type.charAt(0).toUpperCase()}${this.event_type.slice(1)}`;
+            const eventType = this.event_type == 'group' ? 'Group' : 'One-to-One';
             return `Add ${eventType} Booking Type`;
         }
     },
@@ -75,6 +75,8 @@ export default {
                 color_schema: this.slot.color_schema,
                 description: this.slot.description,
                 duration: this.getMeetingDuration(),
+                max_book_per_slot: this.slot.max_book_per_slot,
+                is_display_spots: this.slot.is_display_spots,
                 settings: this.slot.settings,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,

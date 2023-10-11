@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -11,6 +12,8 @@ class Booking extends Model
     protected $table = 'fcal_bookings';
 
     protected $guarded = ['id'];
+
+    private static $bookingType = 'scheduling';
 
     protected $fillable = [
         'calendar_id',
@@ -70,11 +73,19 @@ class Booking extends Model
                 }
             }
 
+            if (empty($model->booking_type)) {
+                $model->booking_type = self::$bookingType;
+            }
+
             $model->hash = md5(wp_generate_uuid4() . time());
         });
 
         static::deleting(function ($model) { // before delete() method call this
             $model->hosts()->delete();
+        });
+
+        static::addGlobalScope('main_bookings', function ($builder) {
+            $builder->where('booking_type', self::$bookingType);
         });
     }
 
@@ -88,10 +99,13 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
-    public function custom_field()
+    public function getCustomFormData($isFormatted = true)
     {
-        return $this->hasOne(BookingMeta::class, 'booking_id')
-                    ->where('meta_key', 'custom_fields_data');
+        if($isFormatted) {
+            return BookingFieldService::getFormattedCustomBookingData($this);
+        }
+
+        return $this->getMeta('custom_fields_data', []);
     }
 
     public function hosts()
@@ -165,23 +179,23 @@ class Booking extends Model
     {
         $details = $this->location_details;
 
-        if (empty($details['location_type'])) {
+        if (empty($details['type'])) {
             return 'n/a';
         }
 
-        $locationType = $details['location_type'];
+        $locationType = $details['type'];
 
         if ($locationType == 'in_person_organizer') {
-            $html = '<b>' . $details['location_heading'] . '</b>';
-            if ($description = Arr::get($details, 'location_settings.description')) {
+            $html = '<b>' . $details['title'] . '</b>';
+            if ($description = Arr::get($details, 'description')) {
                 $html .= wpautop($description);
             }
             return $html;
         }
 
         if ($locationType == 'google_meet') {
-            $html = '<b>' . $details['location_heading'] . ' </b>';
-            if ($meetingLink = Arr::get($details, 'location_settings.meeting_link')) {
+            $html = '<b> Google Meet </b>';
+            if ($meetingLink = Arr::get($details, 'description')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . esc_html('join now') . '</a>';
             }
             return $html;
@@ -190,12 +204,12 @@ class Booking extends Model
         if ($locationType == 'phone_guest') {
             return '<b>Phone Call: </b>' . $this->phone;
         } else if ($locationType == 'phone_organizer') {
-            return '<b>Phone Call: </b>' . Arr::get($details, 'location_settings.host_phone_number') . ' (Host phone number)';
+            return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
-            $html = '<b>' . Arr::get($details, 'location_heading') . '</b>';
-            $html .= wpautop(Arr::get($details, 'location_settings.description'));
+            $html = '<b>' . Arr::get($details, 'title') . '</b>';
+            $html .= wpautop(Arr::get($details, 'description'));
 
             return $html;
         }
@@ -304,8 +318,8 @@ class Booking extends Model
 
         return BookingMeta::create([
             'booking_id' => $this->id,
-            'meta_key' => $key,
-            'value'    => $value
+            'meta_key'   => $key,
+            'value'      => $value
         ]);
     }
 

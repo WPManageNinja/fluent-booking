@@ -63,12 +63,14 @@ export default {
                     event_type: 'single',
                     location_type: '',
                     location_heading: '',
-                    location_settings: {
-                        type: '',
-                        title: '',
-                        description: '',
-                        host_phone_number: ''
-                    },
+                    location_settings: [
+                        {
+                            type: '',
+                            title: '',
+                            description: '',
+                            host_phone_number: ''
+                        }
+                    ],
                     settings: {
                         location_fields: this.appVars.location_fields
                     }
@@ -80,8 +82,10 @@ export default {
     methods: {
         createCalendar() {
             this.saving = true;
+            this.updateMeetingDuration();
             this.$post('calendars', {
-                calendar: this.calendar
+                calendar: this.calendar,
+                location: this.getSlotLocation()
             })
                 .then(response => {
                     this.redirectToSetting(response.calendar.id, response.slot.id); 
@@ -102,6 +106,18 @@ export default {
                 setTimeout(() => {
                     window.location.reload();
                 }, 150);
+            }
+        },
+        updateMeetingDuration() {
+            const duration = this.calendar.slot.duration;
+            this.calendar.slot.duration = duration === 'custom' ? this.calendar.slot.custom_duration : duration;
+        },
+        getSlotLocation() {
+            return {
+                type: this.calendar.slot.location_settings.type,
+                title: this.calendar.slot.location_settings.title,
+                description: this.calendar.slot.location_settings.description,
+                host_phone_number: this.calendar.slot.location_settings.host_phone_number
             }
         },
         checkSlug() {

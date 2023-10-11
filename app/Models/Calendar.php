@@ -102,10 +102,6 @@ class Calendar extends Model
 
     public function getLocationFields()
     {
-        $meetExist = Meta::where('object_type', '_google_user_token')
-            ->where('object_id', $this->user_id)
-            ->first();
-
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
                 'label' => 'Conferencing',
@@ -141,7 +137,7 @@ class Calendar extends Model
                     ],
                 ],
             ],
-        ], $this);
+        ], $this->user_id);
     }
 
     public function getMeta($key, $default = null)

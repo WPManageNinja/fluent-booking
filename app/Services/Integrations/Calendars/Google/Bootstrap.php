@@ -11,45 +11,31 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
 class Bootstrap
 {
     public function register()
     {
-        add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
+        /*
+         * Global Settings Handlers
+         */
+        add_filter('fluent_booking/settings_menu_items', function ($menuItems) {
             $app = App::getInstance();
-            $calendars['google'] = [
-                'key'                  => 'google',
-                'icon'                 => $app['url.assets'] . 'images/google-calendar.svg',
-                'title'                => __('Google Calendar', 'fluent-booking'),
-                'subtitle'             => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
-                'btn_text'             => __('Connect with Google Calendar', 'fluent-booking'),
-                'auth_url'             => $this->getAuthUrl($userId),
-                'is_global_configured' => GoogleHelper::isConfigured(),
-                'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar'),
+            $menuItems['google_calendar'] = [
+                'title'          => __('Google Calendar', 'fluent-booking'),
+                'icon_url'       => $app['url.assets'] . 'images/google-calendar.svg',
+                'component_type' => 'GlobalSettingsComponent',
+                'route'          => [
+                    'name'   => 'configure-integrations',
+                    'params' => [
+                        'settings_key' => 'google_calendar'
+                    ]
+                ]
             ];
-            return $calendars;
-        }, 10, 2);
-
-        add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushGoogleFeeds'], 10, 2);
-
-        add_action('fluent_calendar/patch_calendar_config_settings__google_user_token', function ($conflictIds, $meta) {
-            $meta = Meta::where('object_type', '_google_user_token')
-                ->where('id', $meta->id)
-                ->first();
-            $settings = $meta->value;
-            $settings['conflict_check_ids'] = $conflictIds;
-            $meta->value = $settings;
-            $meta->save();
-        }, 10, 2);
-
-        add_action('fluent_calendar/disconnect_remote_calendar__google_user_token', function ($meta) {
-            // Let's remove the cache first
-            CalendarCache::deleteAllParentCache($meta->id);
-            (new GoogleCalendar($meta))->revoke();
-            $meta->delete();
-        });
+            return $menuItems;
+        }, 10, 1);
 
         add_filter('fluent_booking/get_client_settings_google_calendar', function ($settings) {
             $config = GoogleHelper::getApiConfig();
@@ -58,13 +44,12 @@ class Bootstrap
             if (!empty($config['constant_defined'])) {
                 $config['client_secret'] = '**********';
                 $config['client_id'] = '**********';
-            } else {
+            } else if (!empty($config['client_secret'])) {
                 $config['client_secret'] = '********************';
             }
 
             return $config;
         });
-
         add_filter('fluent_booking/get_client_field_settings_google_calendar', function ($items) {
 
             $app = App::getInstance();
@@ -104,16 +89,68 @@ class Bootstrap
                 'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
                 'description'   => $description,
                 'save_btn_text' => __('Save', 'fluent_booking'),
-                'fields'        => $fields
+                'fields'        => $fields,
+                'will_encrypt'  => true
             ];
         });
+
+        add_filter( 'fluent_booking/get_location_fields', function($fields, $userId) {
+            $meetExist = Meta::where('object_type', '_google_user_token')
+                ->where('object_id', $userId)
+                ->first();
+            
+            $message = !$meetExist ? ' (Connect Google Meet First)' : '';
+            
+            $fields['conferencing']['options']['google_meet'] = [
+                    'title'    => 'Google Meet' . $message,
+                    'disabled' => !$meetExist,
+            ];
+            return $fields;
+        }, 10, 2);
 
         add_action('fluent_booking/save_client_settings_google_calendar', function ($settings) {
             GoogleHelper::updateApiConfig($settings);
         });
-
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
+        /*
+         * oAuth From Handlers from Calendar
+         */
+        add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
+            $app = App::getInstance();
+            $calendars['google'] = [
+                'key'                  => 'google',
+                'icon'                 => $app['url.assets'] . 'images/google-calendar.svg',
+                'title'                => __('Google Calendar', 'fluent-booking'),
+                'subtitle'             => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
+                'btn_text'             => __('Connect with Google Calendar', 'fluent-booking'),
+                'auth_url'             => $this->getAuthUrl($userId),
+                'is_global_configured' => GoogleHelper::isConfigured(),
+                'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar'),
+            ];
+            return $calendars;
+        }, 10, 2);
+        add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushGoogleFeeds'], 10, 2);
+        add_action('fluent_calendar/patch_calendar_config_settings__google_user_token', function ($conflictIds, $meta) {
+            $meta = Meta::where('object_type', '_google_user_token')
+                ->where('id', $meta->id)
+                ->first();
+            $settings = $meta->value;
+            $settings['conflict_check_ids'] = $conflictIds;
+            $meta->value = $settings;
+            $meta->save();
+        }, 10, 2);
+        add_action('fluent_calendar/disconnect_remote_calendar__google_user_token', function ($meta) {
+            // Let's remove the cache first
+            CalendarCache::deleteAllParentCache($meta->id);
+            (new GoogleCalendar($meta))->revoke();
+            $meta->delete();
+        });
+
+        /*
+         * Booking Handlers
+         */
+        add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
         add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
     }
 
@@ -160,6 +197,9 @@ class Bootstrap
         $userId = sanitize_text_field($_GET['state']);
         $calendar = Calendar::where('user_id', $userId)->first();
 
+        if (!$calendar || !PermissionManager::hasCalendarAccess($calendar)) {
+            return;
+        }
 
         $client = GoogleHelper::getApiClient();
 
@@ -190,7 +230,7 @@ class Bootstrap
         if ($requiredScopes) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Required scopes missing', 'fluent-booking'),
-                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes) . print_r($response, true),
+                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
                 'btn_text' => 'Back to Calendars Configuration'
             ]);
@@ -211,7 +251,6 @@ class Bootstrap
         $response['remote_email'] = $calendarEmail;
 
         $response['expires_in'] += time();
-
         $response['access_token'] = Helper::encryptKey($response['access_token']);
         $response['refresh_token'] = Helper::encryptKey($response['refresh_token']);
 
@@ -291,7 +330,7 @@ class Bootstrap
                 'start'     => $start,
                 'end'       => $end,
                 'source'    => 'google',
-                'event_id'   => null,
+                'event_id'  => null,
                 'remaining' => 0
             ];
         }
@@ -464,5 +503,4 @@ class Bootstrap
 
         return (GoogleHelper::getApiClient())->getAuthUrl($userId);
     }
-
 }

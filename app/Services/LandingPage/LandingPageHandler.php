@@ -7,6 +7,7 @@ use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
@@ -157,7 +158,7 @@ class LandingPageHandler
             }
         }
 
-        $formFields = BookingService::getBookingFields($slot);
+        $formFields = BookingFieldService::getBookingFields($slot);
 
         $authorProfile = $slot->getAuthorProfile(true);
 

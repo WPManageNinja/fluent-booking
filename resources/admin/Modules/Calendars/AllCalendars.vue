@@ -126,7 +126,7 @@ export default {
         createOneToOneSlot() {
             this.$router.push({
                 name: 'create_calendar',
-                params: {host_id: this.user_id, event_type: 'one-to-one'}
+                params: {host_id: this.user_id, event_type: 'single'}
             })
         },
         createGroupSlot() {
