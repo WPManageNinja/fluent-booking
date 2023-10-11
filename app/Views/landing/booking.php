@@ -23,7 +23,7 @@
     <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL; ?>assets/images/default-featured.png" />
 
     <?php foreach ($css_files as $css_file): ?>
-    <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen" />
+    <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" media="screen" />
     <?php endforeach; ?>
 </head>
 <body>
@@ -43,7 +43,7 @@
 </script>
 
 <?php foreach ($js_files as $file): ?>
-    <script src="<?php echo $file; ?>" defer="defer"></script>
+    <script src="<?php echo $file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" defer="defer"></script>
 <?php endforeach; ?>
 </body>
 </html>

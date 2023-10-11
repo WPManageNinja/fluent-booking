@@ -34,7 +34,11 @@ class BoundMethod
         }
 
         return static::callBoundMethod($container, $callback, function () use ($container, $callback, $parameters) {
-            return $callback(...array_values(static::getMethodDependencies($container, $callback, $parameters)));
+            return $callback(
+                ...array_values(
+                    static::getMethodDependencies($container, $callback, $parameters)
+                )
+            );
         });
     }
 
@@ -119,21 +123,10 @@ class BoundMethod
      */
     protected static function getMethodDependencies($container, $callback, array $parameters = [])
     {
-        try {
-            $dependencies = [];
+        $dependencies = [];
 
-            $callbackParameters = static::getCallReflector($callback)->getParameters();
-
-            foreach ($callbackParameters as $parameter) {
-                static::addDependencyForCallParameter($container, $parameter, $parameters, $dependencies);
-            }
-        } catch (BindingResolutionException $e) {
-            
-            if (count(array_keys($callbackParameters)) > count(array_keys($dependencies))) {
-                return array_merge($dependencies, array_values($parameters));
-            }
-            
-            throw $e;
+        foreach (static::getCallReflector($callback)->getParameters() as $parameter) {
+            static::addDependencyForCallParameter($container, $parameter, $parameters, $dependencies);
         }
 
         return array_merge($dependencies, array_values($parameters));
@@ -174,34 +167,6 @@ class BoundMethod
     protected static function addDependencyForCallParameter($container, $parameter,
                                                             array &$parameters, &$dependencies)
     {
-        /**
-         * If an implicit route model binding is detected then
-         * resolve the model and terminate execution.
-         */
-        
-        $primitiveTypes = ['bool', 'int', 'float', 'string', 'array', 'resource'];
-
-        if ($type = $parameter->getType()) {
-            if (in_array($type->getName(), $primitiveTypes)) {
-                return;
-            }
-        }
-        
-        if (!is_null($className = Util::getParameterClassName($parameter))) {
-            if (array_key_exists($paramName = $parameter->getName(), $parameters)) {
-                if (($object = $container->make($className)) instanceof Model) {
-                    $dependencies[] = $object->findOrFail($parameters[$paramName]);
-                    unset($parameters[$paramName]);
-                }
-            }
-        }
-
-        /**
-         * The original code by Laravel frameework started from right here. The code snippet
-         * written above is added by Sheikh Heere to resolve the implicit route
-         * model binding, which uses a different approach than Laravel.
-         */
-
         if (array_key_exists($paramName = $parameter->getName(), $parameters)) {
             $dependencies[] = $parameters[$paramName];
 

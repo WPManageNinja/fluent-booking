@@ -6,6 +6,7 @@
                :data="editorShortcodes"
                 placement="bottom-end"
                 trigger="click"
+                class="fcal_popover_shortcode"
                @command="handleSubjectCommand">
                <template #popoverButton>
                     <el-input
