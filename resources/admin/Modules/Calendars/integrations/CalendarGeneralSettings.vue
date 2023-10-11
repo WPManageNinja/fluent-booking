@@ -6,7 +6,7 @@
                 <p class="short-desc">Manage general settings for this calendar</p>
             </div>
             <div class="fcal_settings_actions">
-                <a v-if="settings.enabled" :href="share_url" target="_blank" rel="noopener noreferrer" class="el-button el-button--text el-button--large">
+                <a v-if="settings.enabled" :href="share_url" style="text-decoration: none;" target="_blank" rel="noopener noreferrer" class="fcal_plain_btn">
                     <el-icon><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg></el-icon> <span>View</span>
                 </a>
             </div>

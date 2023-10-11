@@ -1732,6 +1732,34 @@
                                 }
                             }
                         }
+
+                        .el-input {
+                            .el-input__wrapper {
+                                box-shadow: none;
+                                border: 1px solid #D6DAE1;
+                                border-radius: 8px;
+                                padding: 8px 16px;
+                                &.is-focus {
+                                    border-color: $primaryColor;
+                                }
+                                .el-input__inner {
+                                    height: auto;
+                                    margin: 0;
+                                    padding: 0;
+                                }
+                            }
+                        }
+                        .el-textarea {
+                            textarea {
+                                box-shadow: none;
+                                border: 1px solid #D6DAE1;
+                                border-radius: 8px;
+                                padding: 8px 16px;
+                                &:focus {
+                                    border-color: $primaryColor;
+                                }
+                            }
+                        }
                     }
                 }
             }
