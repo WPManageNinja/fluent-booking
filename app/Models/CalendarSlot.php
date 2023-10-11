@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
@@ -131,7 +132,7 @@ class CalendarSlot extends Model
 
     public function getBookingFields()
     {
-        return BookingService::getBookingFields($this);
+        return BookingFieldService::getBookingFields($this);
     }
 
     public function setBookingFields($bookingFields)

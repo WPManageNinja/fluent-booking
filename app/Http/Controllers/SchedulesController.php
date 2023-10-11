@@ -19,7 +19,7 @@ class SchedulesController extends Controller
 
         $period = Arr::get($filters, 'period', 'upcoming');
 
-        $query = Booking::with(['slot', 'custom_field']);
+        $query = Booking::with(['slot']);
 
         $author = Arr::get($filters, 'author');
 
@@ -62,6 +62,8 @@ class SchedulesController extends Controller
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
+
+            $schedule->custom_form_data = $schedule->getCustomFormData();
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -160,7 +162,7 @@ class SchedulesController extends Controller
     {
         $isAdmin = current_user_can('manage_options');
 
-        $booking = Booking::with(['slot', 'custom_field']);
+        $booking = Booking::with(['slot']);
 
         if (!$isAdmin) {
             $booking->whereHas('calendar', function ($q) {
@@ -183,6 +185,8 @@ class SchedulesController extends Controller
         }
 
         $booking->location = $booking->getLocationDetailsHtml();
+
+        $booking->custom_form_data = $booking->getCustomFormData();
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
