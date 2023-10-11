@@ -32,8 +32,12 @@
                         <div v-if="current_selects.length" class="fcal_override_calendar_available_hour">
                             <h3>What hours are you available?</h3>
                             <div class="fcal_weekly_schedules">
-                                <DayOverRideConfig day_label="" :slots="slots" />
+                                <DayOverRideConfig :unavailable_date="markUnavailableDate" day_label="" :slots="slots" />
                             </div>
+                        </div>
+
+                        <div class="fcal_override_calendar_unavailable_check">
+                            <el-checkbox v-model="markUnavailableDate" label="Mark to Unavailable" />
                         </div>
 
                         <div class="fcal_override_calendar_footer_action">
@@ -105,8 +109,9 @@ export default {
                 end: ''
             }],
             DeleteIcon: markRaw(Delete),
-            current_date: '',
-            existing_dates: []
+            current_date: new Date(),
+            existing_dates: [],
+            markUnavailableDate: false
         }
     },
     computed: {
@@ -160,7 +165,7 @@ export default {
             }];
             this.current_selects = [];
             this.existing_dates = [];
-            this.current_date = '';
+            this.current_date = new Date();
             this.modal_visible = true;
         },
         toggleSelect(data) {
