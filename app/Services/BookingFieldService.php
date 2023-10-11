@@ -66,7 +66,7 @@ class BookingFieldService
                 'required'       => false,
                 'enabled'        => true,
                 'system_defined' => true,
-                'disable_alter'  => true,
+                'disable_alter'  => false,
             ]
         ];
 
