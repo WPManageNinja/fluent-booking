@@ -329,10 +329,12 @@ class CalendarController extends Controller
             'settings'     => $settingsSchema,
             'max_book_per_slot' => 2,
             'location_settings' => [
-                'type'              => '',
-                'title'             => '',
-                'description'       => '',
-                'host_phone_number' => ''
+                [
+                    'type'              => '',
+                    'title'             => '',
+                    'description'       => '',
+                    'host_phone_number' => ''
+                ]
             ]
         ];
 
