@@ -68,6 +68,16 @@
         const height = calendarHeight + 135;
         calendar.style.height = height + 'px';
         selectedDate = spot;
+
+
+        if (isFluentform) {
+            setTimeout(() => {
+                const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
+                console.log(formFieldsHeight);
+                const height = formFieldsHeight + 135;
+                calendar.style.height = height + 'px';
+            }, 100)
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
