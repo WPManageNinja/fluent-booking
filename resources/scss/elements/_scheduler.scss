@@ -2370,82 +2370,82 @@
             margin-bottom: 10px;
           }
         }
+      }
+    }
+  }
 
-        .fcal_booking_activities_list {
-          padding: 0 20px 20px 13px;
+  .fcal_booking_activities_list {
+    padding: 0 20px 20px 13px;
 
-          .fcal_no_activities {
-            padding: 20px 0;
-            text-align: center;
-            font-size: 16px;
-            color: #999;
-          }
+    .fcal_no_activities {
+      padding: 20px 0;
+      text-align: center;
+      font-size: 16px;
+      color: #999;
+    }
 
-          .fcal_booking_activity {
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-            align-content: flex-start;
-            padding: 14px 0 14px 32px;
-            position: relative;
+    .fcal_booking_activity {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      align-content: flex-start;
+      padding: 14px 0 14px 32px;
+      position: relative;
 
-            &:last-child {
-              &:before {
-                display: none;
-              }
-            }
+      &:last-child {
+        &:before {
+          display: none;
+        }
+      }
 
-            &:before {
-              content: "";
-              position: absolute;
-              left: 6px;
-              height: 100%;
-              width: 1px;
-              border-right: 1px dashed #B4B9C1;
-              top: 45px;
-            }
+      &:before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        height: 100%;
+        width: 1px;
+        border-right: 1px dashed #B4B9C1;
+        top: 45px;
+      }
 
-            .fcal_activity_complete_icon {
-              position: absolute;
-              left: 0;
-              width: 16px;
-              height: 16px;
-              border-radius: 50%;
-              color: #ffffff;
-              background: #46AD92;
-              border: 1px solid #D1EAE4;
-              font-size: 10px;
-              top: 41px;
-            }
+      .fcal_activity_complete_icon {
+        position: absolute;
+        left: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        color: #ffffff;
+        background: #46AD92;
+        border: 1px solid #D1EAE4;
+        font-size: 10px;
+        top: 41px;
+      }
 
-            .fcal_booking_activity_time {
-              font-size: 12px;
-              font-weight: 400;
-              line-height: 18px;
-              color: #697483;
-              margin-bottom: 4px;
-            }
+      .fcal_booking_activity_time {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 18px;
+        color: #697483;
+        margin-bottom: 4px;
+      }
 
-            .fcal_booking_activity_content {
-              .fcal_booking_activity_title {
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 24px;
-                color: $dark;
-                margin-bottom: 6px;
-              }
+      .fcal_booking_activity_content {
+        .fcal_booking_activity_title {
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 24px;
+          color: $dark;
+          margin-bottom: 6px;
+        }
 
-              .fcal_booking_activity_description {
-                font-size: 16px;
-                font-weight: 400;
-                line-height: 24px;
-                color: #445164;
+        .fcal_booking_activity_description {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #445164;
 
-                a {
-                  color: $primaryColor;
-                }
-              }
-            }
+          a {
+            color: $primaryColor;
           }
         }
       }
