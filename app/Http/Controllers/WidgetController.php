@@ -4,6 +4,7 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\Framework\Request\Request;
 
@@ -13,7 +14,7 @@ class WidgetController extends Controller
     {
         $slotId = (int)$request->get('event_id');
         $slot = CalendarSlot::findOrFail($slotId);
-        $formFields = BookingService::getBookingFields($slot);
+        $formFields = BookingFieldService::getBookingFields($slot);
 
         $calendarVars = [
             'slot'           => $slot,

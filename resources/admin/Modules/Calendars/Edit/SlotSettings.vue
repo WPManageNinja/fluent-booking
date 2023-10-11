@@ -21,7 +21,7 @@
                     </el-icon>
                     Event Details
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'basic-info'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <basic-info v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
@@ -36,7 +36,7 @@
                     </el-icon>
                     Schedule Settings
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'schedule-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <ScheduleSettings v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
@@ -51,7 +51,7 @@
                     </el-icon>
                     Email Notifications
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'notification-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <NotificationSettings v-else ref="notificationData" :slot="slot"/>
                 </div>
@@ -60,7 +60,7 @@
                 <template #label>
                     <el-icon><QuestionIcon/></el-icon> Booking Questions
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'question-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <QuestionSettings v-else :activeTab="activeTab" :slot="slot"/>
                 </div>
@@ -72,7 +72,7 @@
                     </el-icon>
                     Webhooks Settings
                 </template>
-                <div class="fcal_create_calendar_body">
+                <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
                         :event_id="event_id"
@@ -157,15 +157,16 @@ export default {
         getMeetingDuration() {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
-        saveSettings() {
-            this.saving = true;
-            const locationSettings = {
+        getLocationSettings() {
+            return {
                 type: this.slot.location_settings.type,
                 title: this.slot.location_settings.title,
                 description: this.slot.location_settings.description,
                 host_phone_number: this.slot.location_settings.host_phone_number
             }
-
+        },
+        saveSettings() {
+            this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
                 status: this.slot.status,
@@ -179,7 +180,7 @@ export default {
                 availability_id: this.slot.availability_id,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
-                location_settings: locationSettings
+                location_settings: this.getLocationSettings()
             })
                 .then(response => {
                     this.$handleSuccess(response);

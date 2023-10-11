@@ -27,7 +27,6 @@
         </div>
         <el-skeleton :rows="4" animated v-if="loading"/>
         <div v-else class="fcal_calendar_body">
-
             <template v-if="feeds.length">
                 <div v-if="insertableCalendars.length" class="fcal_hightlight_box fcal_create_event_selector">
                     <el-row align="middle" :gutter="30">

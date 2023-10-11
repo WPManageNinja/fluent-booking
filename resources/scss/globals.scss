@@ -1176,9 +1176,6 @@
 }
 
 .fcal_questions_wrapper {
-    border: 1px solid #EAECF0;
-    border-radius: 8px;
-    padding: 24px;
     .fcal_question_footer {
         display: flex;
         justify-content: space-between;
@@ -1214,6 +1211,9 @@
     border-bottom: 1px solid #EAECF0;
     position: relative;
     transition: .3s;
+    &.fcal_field_type_disabled {
+        opacity: 0.6;
+    }
     &:hover {
         background: #f6f7f8;
         .fcal_question_sorting  {
@@ -2248,4 +2248,14 @@
             padding-top: 15px;
         }
     }
+}
+
+span.fc_space_10 {
+    width: 10px !important;
+    display: inline-block;
+}
+p.fcal_human_text {
+    margin: 0px 0 6px !important;
+    color: #6b7280;
+    line-height: 100%;
 }

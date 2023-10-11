@@ -23,7 +23,7 @@
                     <h3>Booked At</h3>
                     <p>{{ toCurrentTimezone(booking.created_at, 'DD MMM YYYY, hh:mma') }}</p>
                 </div>
-                <div v-if="booking.custom_field" v-for="field in booking.custom_field.value" class="fcal_schedule_details_event_item">
+                <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <h3>{{ field.label }}</h3>
                     <div class="fcal_spot_details_value">
                         <p>{{ field.value }}</p>
