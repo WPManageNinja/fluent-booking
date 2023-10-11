@@ -60,16 +60,16 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
-            'author_timezone'        => 'required',
-            'slot.duration'          => 'required|int',
-            'slot.event_type'        => 'required',
-            'slot.availability_type' => 'required',
-            'slot.schedule_type'     => 'required',
-            'slot.title'             => 'required',
-            'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
-            'user_id'                => 'required|int'
-        ], $data));
+//        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
+//            'author_timezone'        => 'required',
+//            'slot.duration'          => 'required|int',
+//            'slot.event_type'        => 'required',
+//            'slot.availability_type' => 'required',
+//            'slot.schedule_type'     => 'required',
+//            'slot.title'             => 'required',
+//            'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
+//            'user_id'                => 'required|int'
+//        ], $data));
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
@@ -349,14 +349,14 @@ class CalendarController extends Controller
 
         $slot = $request->all();
 
-        $this->validate($slot, [
-            'title'                     => 'required',
-            'duration'                  => 'required|int',
-            'status'                    => 'required',
-            'settings.schedule_type'    => 'required',
-            'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
-            'event_type'                => 'required'
-        ]);
+//        $this->validate($slot, [
+//            'title'                     => 'required',
+//            'duration'                  => 'required|int',
+//            'status'                    => 'required',
+//            'settings.schedule_type'    => 'required',
+//            'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
+//            'event_type'                => 'required'
+//        ]);
 
         $availability = Availability::where('object_type', 'availability')
             ->where('object_id', $calendar->user_id)
@@ -406,6 +406,9 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         $generalRules = [
+            'title'         => 'required',
+            'duration'      => 'required|numeric',
+//           'location_type' => 'required',
             'title'    => 'required',
             'duration' => 'required|numeric'
         ];
