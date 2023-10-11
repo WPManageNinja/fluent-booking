@@ -3,7 +3,7 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import BookingDetails from './Fluentform/BookingDetails.svelte';
+    import FluentFormBookingDetails from './Fluentform/BookingDetails.svelte';
 
     export let appData;
 
@@ -205,16 +205,7 @@
                                     on:timezoneChanged={(e) => {resetSelection()}}
                                     on:resetSelection={(e) => { resetSelection() }}
                                 />
-                            {#if isFluentform }
-                                <BookingDetails
-                                    {appData}
-                                    {timezone}
-                                    {selectedDate}
-                                    on:resetSelection={(e) => { resetSelection() }}
-                                />
-                            {/if}
                         </div>
-
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
                                 <div class="fcal_date_event_details_header">
                                     <h2>
@@ -230,14 +221,22 @@
                                         Enter Details
                                     </h2>
                                 </div>
-
-                                <BookingForm
-                                    {slot}
-                                    {timezone}
-                                    bind:spot={selectedDate}
-                                    bind:formFields={appData.form_fields}
-                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                />
+                                {#if isFluentform }
+                                    <FluentFormBookingDetails
+                                        {appData}
+                                        {timezone}
+                                        {selectedDate}
+                                        on:resetSelection={(e) => { resetSelection() }}
+                                    />
+                                {:else}
+                                    <BookingForm
+                                        {slot}
+                                        {timezone}
+                                        bind:spot={selectedDate}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    />
+                                {/if}
                             </div>
                     {/if}
                 </div>
