@@ -194,7 +194,7 @@ export default {
             this.$get(`schedules/${this.booking_id}`)
                 .then(response => {
                     this.showing_booking = response.schedule;
-                    this.$emit('bookingFetched', response.showing_booking);
+                    this.$emit('bookingFetched', response.schedule);
                 })
                 .catch((errors) => {
                     this.$handleError(errors);

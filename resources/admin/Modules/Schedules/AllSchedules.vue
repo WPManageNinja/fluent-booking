@@ -5,7 +5,7 @@
                 <div v-if="booking_id" class="fcal_back_btn">
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{ filters.period }}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ currentPeriod }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div v-if="booking_id" class="fcal_spot_details">
-                        <schedule-booking-details @bookingFetched="(data) => { current_schedule = data; }" :booking="current_schedule" :booking_id="booking_id"/>
+                        <schedule-booking-details @bookingFetched="updateCurrentSchedule" :booking="current_schedule" :booking_id="booking_id"/>
                     </div>
                 </div>
             </div>
@@ -210,6 +210,10 @@ export default {
         },
         schedulesLength() {
             return Object.keys(this.formattedSchedules).length;
+        },
+        currentPeriod() {
+            const period = this.filters.period;
+            return period.charAt(0).toUpperCase() + period.slice(1);;
         }
     },
     methods: {
@@ -275,12 +279,10 @@ export default {
         hideSidebar() {
             const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");
             this.isHideSidebar = !this.isHideSidebar;
-            // if (hideSidebarVar == 'true') {
-            //     this.isHideSidebar = true;
-            // } else {
-            //     this.isHideSidebar = false;
-            // }
             localStorage.setItem("hide_schedule_details_sidebar", this.isHideSidebar);
+        },
+        updateCurrentSchedule(newSchedule) {
+            this.current_schedule = newSchedule;
         }
     },
     mounted() {
