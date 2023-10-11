@@ -1,17 +1,15 @@
 <template>
     <div class="fcal_settings_body_inner fcal_settings_availability fcal_settings_availability_details">
         <div class="fcal_section_header">
-            <div class="fcal_title">
-                <h3>Availability</h3>
-            </div>
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item><a @click="goBackToList">Availability</a></el-breadcrumb-item>
+                <el-breadcrumb-item v-if="scheduleInfo">{{ scheduleInfo.host_name }}</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
 
         <el-skeleton v-if="loading" :rows="5" animated/>
         <div v-else class="fcal_settings_header">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item><a @click="goBackToList">Availability</a></el-breadcrumb-item>
-                <el-breadcrumb-item>{{ scheduleInfo.host_name }}</el-breadcrumb-item>
-            </el-breadcrumb>
+
         </div>
         <div v-if="!loading" class="fcal_settings_content_wrap">
             <el-form label-position="top">
