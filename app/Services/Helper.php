@@ -1291,8 +1291,8 @@ class Helper
                         '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
                         '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
                         '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
-                        '##booking_cancelation_url##'               => 'Booking Cancellation URL',
-                        '##booking_reschedule_url##'                => 'Booking Reschedule URL',
+                        '##booking.cancelation_url##'               => 'Booking Cancellation URL',
+                        '##booking.reschedule_url##'                => 'Booking Reschedule URL',
                     ]
                 ],
                 'host'    => [
@@ -1309,7 +1309,7 @@ class Helper
                     'key'        => 'other',
                     'shortcodes' => [
                         '{{event.id}}'             => 'Event ID',
-                        '{{event.calendar_id}}'    => 'Calendar ID',
+                        '{{calendar.id}}'          => 'Calendar ID',
                         '{{calendar.title}}'       => 'Calendar Title',
                         '{{calendar.description}}' => 'Calendar Description',
                     ]
