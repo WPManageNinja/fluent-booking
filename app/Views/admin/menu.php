@@ -4,7 +4,6 @@
             <div class="menu_logo_holder">
                 <a href="<?php echo esc_url($baseUrl); ?>">
                     <img style="max-height: 40px;" src="<?php echo esc_url($logo); ?>" />
-                    <span>beta</span>
                 </a>
             </div>
             <div class="fframe_handheld">

@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
@@ -131,22 +132,12 @@ class CalendarSlot extends Model
 
     public function getBookingFields()
     {
-        $fields = Helper::getMeta('calendar_slot', $this->id, 'booking_fields');
-
-        $phoneRequired = $this->isPhoneRequired();
-
-        $defaults = BookingService::getDefaultBookingFields($phoneRequired);
-
-        if (!$fields) {
-            return $defaults;
-        }
-
-        return $fields;
+        return BookingFieldService::getBookingFields($this);
     }
 
     public function setBookingFields($bookingFields)
     {
-        $fields = Helper::updateMeta('calendar_slot', $this->id, 'booking_fields', $bookingFields);
+        return $this->updateMeta('booking_fields', $bookingFields);
     }
 
     public function getMaxBookableDateTime($startDate)
