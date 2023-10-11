@@ -67,36 +67,60 @@
             </div>
 
             <div class="fcal_dashboard_report_sidebar">
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            Next Meetings
+                        </h1>
+                    </div>
 
-                <div class="fcal_new_booked_event_widget fcal_dashboard_report_widget">
-                    <h1>Next Meetings</h1>
-                    <el-skeleton v-if="loading" animated />
-                    <div v-else class="fcal_dashboard_widget_body">
-                        <ul>
-                            <li v-for="(schedule, i) in nextMeetings" :key="i">
-                                <span class="timing">
-                                    {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
-                                </span>
-                                <span class="title" v-html="scheduleTitle(schedule)">
-                                </span>
-                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view details</el-link>
-                            </li>
-                        </ul>
+                    <div v-if="!loading" class="fcal_booking_activities_list">
+                        <div v-if="nextMeetings.length" class="fcal_booking_activity" v-for="(schedule, i) in nextMeetings" :key="i">
+                            <el-icon class="fcal_activity_complete_icon"></el-icon>
+
+                            <span class="timing">
+                                {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
+                            </span>
+                            <div class="description_and_link">
+                                <span class="title" v-html="scheduleTitle(schedule)"></span>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                            </div>
+                        </div>
+                        <div v-else class="fcal_no_activities">
+                            <p>Next meeting not available</p>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <el-skeleton :row="5" animated/>
                     </div>
                 </div>
 
-                <div class="fcal_today_meeting_widget fcal_dashboard_report_widget">
-                    <h1>Latest Booked Meetings</h1>
-                    <el-skeleton v-if="loading" animated />
-                    <div v-else class="fcal_dashboard_widget_body">
-                        <ul>
-                            <li v-for="(schedule, i) in latestBookedLists" :key="i">
-                                <span class="description" v-html="bookingTitle(schedule)"></span>
-                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view details</el-link>
-                            </li>
-                        </ul>
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            Latest Booked Meetings
+                        </h1>
+                    </div>
+
+                    <div class="fcal_schedule_event_infos_body">
+                        <div v-if="!loading" class="fcal_booking_activities_list">
+                            <div v-if="latestBookedLists.length" class="fcal_booking_activity" v-for="(schedule, i) in latestBookedLists" :key="i">
+                                <el-icon class="fcal_activity_complete_icon"></el-icon>
+
+                                <div class="description_and_link">
+                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                                </div>
+                            </div>
+                            <div v-else class="fcal_no_activities">
+                                <p>No Latest Booked Event Found</p>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <el-skeleton :row="5" animated/>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
