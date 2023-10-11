@@ -296,7 +296,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         ];
 
         $hasActiveMethod = false;
-        $radio = "<div class='payment-methods-radio' style='display: flex; gap: 20px;'>Pay with:";
+        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods' style='display: flex; gap: 20px;'>Pay with:";
         foreach ($methods as $slug => $methodData) {
             if (isset($methodData['status']) && $methodData['status']) {
                 $hasActiveMethod = true;

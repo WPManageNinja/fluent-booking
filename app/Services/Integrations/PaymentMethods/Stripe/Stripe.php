@@ -430,11 +430,12 @@ class Stripe extends BasePaymentMethod
     public function loadCheckoutJs($my_data)
     {
         wp_enqueue_script('fluent-booking-checkout-sdk-' . $this->slug, 'https://js.stripe.com/v3/',null, false);
-        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/admin/js/payment-methods/stripe-checkout.js', ['fluent-booking-checkout-sdk-stripe'], false);
+        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-stripe'], false);
     }
 
     public function render($method)
     {
+        do_action('fluent-booking/before_render_payment_method_' . $this->slug, $method);
         return '
             <input checked value="' .esc_attr($this->slug) .'" name="'. esc_attr($this->slug) .'_payment_method' .'" type="radio"  id="'. esc_attr($this->slug) .'_payment_method">
             <label for="' . esc_attr($this->slug) . '_payment_method">
