@@ -157,15 +157,16 @@ export default {
         getMeetingDuration() {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
-        saveSettings() {
-            this.saving = true;
-            const locationSettings = {
+        getLocationSettings() {
+            return {
                 type: this.slot.location_settings.type,
                 title: this.slot.location_settings.title,
                 description: this.slot.location_settings.description,
                 host_phone_number: this.slot.location_settings.host_phone_number
             }
-
+        },
+        saveSettings() {
+            this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
                 status: this.slot.status,
@@ -179,7 +180,7 @@ export default {
                 availability_id: this.slot.availability_id,
                 location_type: this.slot.location_type,
                 location_heading: this.slot.location_heading,
-                location_settings: locationSettings
+                location_settings: this.getLocationSettings()
             })
                 .then(response => {
                     this.$handleSuccess(response);
