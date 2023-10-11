@@ -23,7 +23,7 @@
                 <el-table :data="tableData" stripe>
                     <template #empty>
                         You don't have any feeds configured. Let's go
-                        <a href="#">create one!</a>
+                        <el-link :underline="true" @click="add">create one!</el-link>
                     </template>
 
 

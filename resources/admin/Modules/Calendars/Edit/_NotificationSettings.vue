@@ -15,10 +15,7 @@
                     </span>
                     <div class="header_right">
                         <span v-if="notification.enabled">
-                            <el-button v-if="isEditOpen[index]" @click="toggleEdit(index)" class="fcal_plain_btn">
-                                <el-icon><Close /></el-icon> Close
-                            </el-button>
-                            <el-button v-else @click="toggleEdit(index)" class="fcal_plain_btn">
+                            <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
                                 <el-icon><EditPen /></el-icon> Edit
                             </el-button>
                         </span>
@@ -26,9 +23,24 @@
                         <el-switch v-model="notification.enabled" @click="closeEdit(index)"></el-switch>
                     </div>
                 </div>
-                <div v-if="isEditOpen[index] && notification.enabled" class="fcal_notification_body">
+<!--                <div v-if="isEditOpen[index] && notification.enabled" class="fcal_notification_body">-->
+<!--                    <EditNotificationSettings :email="notification.email"/>-->
+<!--                </div>-->
+
+                <el-dialog
+                    v-model="isEditOpen[index]"
+                    v-if="notification.enabled"
+                    title="Edit Notification"
+                    class="fcal_modal fcal_notification_modal"
+                    :close-on-click-modal="false"
+                >
                     <EditNotificationSettings :email="notification.email"/>
-                </div>
+                    <template #footer>
+                        <div class="dialog-footer">
+                            <el-button class="fcal_primary_btn" @click="isEditOpen = false">Done</el-button>
+                        </div>
+                    </template>
+                </el-dialog>
             </div>
         </div>
         <div class="fcal_create_calendar_form_footer">

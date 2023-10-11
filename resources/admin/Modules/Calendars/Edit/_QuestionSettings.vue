@@ -5,7 +5,9 @@
         </div>
         <div class="fcal_create_calendar_form_body">
             <div class="fcal_questions_wrapper">
-                <div class="fcal_questions">
+
+                <el-skeleton v-if="loading" />
+                <div v-else class="fcal_questions">
                     <div class="fcal_question" v-for="(field, index) in fields" :key="index">
                         <div class="fcal_question_sorting">
                             <el-icon @click="moveUp(index)"><Top /></el-icon>
