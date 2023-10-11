@@ -61,9 +61,10 @@ class BookingService
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
         $locationData = [
-            'location_type'     => $calendarSlot->location_type,
-            'location_heading'  => $calendarSlot->location_heading,
-            'location_settings' => $calendarSlot->location_settings
+            'type'              => Arr::get($calendarSlot, 'location_settings.type'),
+            'title'             => Arr::get($calendarSlot, 'location_settings.title'),
+            'host_phone_number' => Arr::get($calendarSlot, 'location_settings.host_phone_number'),
+            'description'       => Arr::get($calendarSlot, 'location_settings.description')
         ];
 
         $bookingData['location_details'] = $locationData;

@@ -57,8 +57,6 @@ class FrontEndHandler
 
         $this->loadGlobalVars();
 
-        $slot->location_settings = (object)[];
-
         $slot->description = wpautop($slot->description);
 
         wp_localize_script('fluent-booking-public', 'fcal_public_vars_' . $calendar->id . '_' . $slot->id, [

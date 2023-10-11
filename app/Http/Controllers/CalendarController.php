@@ -137,6 +137,8 @@ class CalendarController extends Controller
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
+        $locationSettings = $request->get('location');
+        
         $slotData = [
             'title'             => $title,
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
@@ -155,7 +157,7 @@ class CalendarController extends Controller
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'location_settings' => wp_kses_post_deep($locationSettings),
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
