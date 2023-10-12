@@ -69,20 +69,7 @@
                 <tbody>
                 <tr v-for="(headerValue, headerKey) in settings.request_headers" :key="headerKey">
                     <td>
-                        <el-select
-                            clearable
-                            placeholder="Select Header"
-                            v-model="settings.request_headers[headerKey].key"
-                            popper-class="fcal_select"
-                            @change="addCustomHeaderKeyInput(headerKey, $event)"
-                            >
-                            <el-option
-                                v-for="(header, index) in request_headers"
-                                :value="header.value"
-                                :label="header.label"
-                                :key="index"
-                            ></el-option>
-                        </el-select>
+                        <el-input type="text" placeholder="Header Key" v-model="settings.request_headers[headerKey].key"></el-input>
                     </td>
                     <td>
                         <div class="right-field">
@@ -140,7 +127,6 @@
                     </td>
                     <td>
                         <div class="right-field">
-
                             <el-select
                                 filterable
                                 allow-create
@@ -214,10 +200,6 @@ export default {
                 return null;
             }
         },
-        request_headers: {
-            type: Array,
-            required: true
-        },
         event_triggers: {
             type: Array,
             required: true
@@ -252,7 +234,9 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response.message);
-                  //  this.$emit('backToWebhook');
+                    if(!this.editing_feed.id) {
+                        this.$emit('backToWebhook');
+                    }
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -274,78 +258,24 @@ export default {
         },
         addHeaderRow(headerKey) {
             let index = headerKey + 1;
-            this.editing_item.request_headers.splice(index, 0, {
+            this.settings.request_headers.splice(index, 0, {
                 key: null,
                 value: null
             });
-            this.editing_item.custom_header_keys.splice(index, 0, false);
-            this.editing_item.custom_header_values.splice(index, 0, false);
-
-            // this.header_shortcodes[index] = this.cloneheaderShortCodes();
         },
         removeHeaderRow(headerKey) {
-            this.editing_item.request_headers.splice(headerKey, 1);
-            this.editing_item.custom_header_keys.splice(headerKey, 1);
-            this.editing_item.custom_header_values.splice(headerKey, 1);
-
-            // this.header_shortcodes.splice(headerKey, 1);
+            this.settings.request_headers.splice(headerKey, 1);
         },
         addFieldRow(mapIndex) {
             let index = mapIndex + 1;
-            this.editing_item.fields.splice(index, 0, {
+            this.settings.fields.splice(index, 0, {
                 key: null,
                 value: null
             });
         },
         removeFieldRow(mapIndex) {
-            this.editing_item.fields.splice(mapIndex, 1);
+            this.settings.fields.splice(mapIndex, 1);
         },
-
-        loadApp() {
-            if (this.edit_item) {
-                this.editing_item = Object.assign({}, this.editing_item, this.edit_item);
-                for (let i = 0, l = this.editing_item.request_headers.length; i < l; i++) {
-                    // this.header_shortcodes[i] = this.cloneheaderShortCodes();
-                    this.addCustomHeaderKeyInput(i, this.editing_item.request_headers[i].key);
-                }
-            } else {
-                // this.header_shortcodes[0] = this.headerShortCodes;
-                this.editing_item = {
-                    name: '',
-                    request_url: '',
-                    with_header: 'nop',
-                    request_method: 'GET',
-                    request_format: 'FORM',
-                    request_body: 'all_data',
-                    custom_header_keys: [false],
-                    custom_header_values: [false],
-                    fields: [{key:null, value:null}],
-                    request_headers: [{key: null, value: null}],
-                    event_triggers: [],
-                    enabled: true
-                };
-            }
-        },
-        addCustomHeaderKeyInput(headerKey, val) {
-            let header;
-            if (val == '__webhook_custom_header__') {
-                this.editing_item.custom_header_keys[headerKey] = true;
-                this.editing_item.request_headers[headerKey].key = null;
-            } else if (header = this.request_headers.find(h => h.value == val)) {
-                if (header.hasOwnProperty('possible_values')) {
-                    // let shortcodes = this.cloneheaderShortCodes();
-                    // shortcodes.unshift(header.possible_values);
-                    // this.header_shortcodes[headerKey] = shortcodes;
-                } else {
-                    // this.header_shortcodes[headerKey] = this.cloneheaderShortCodes();
-                }
-            } else {
-                // this.header_shortcodes[headerKey] = this.cloneheaderShortCodes();
-            }
-        },
-    },
-    mounted() {
-        this.loadApp();
     }
 }
 </script>

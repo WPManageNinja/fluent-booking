@@ -99,7 +99,6 @@
             <Editor
                 :editing_feed="editing_feed"
                 :calendar_event="calendar_event"
-                :request_headers="request_headers"
                 :event_triggers="event_triggers"
                 @backToWebhook="backToWebhook"
             />
@@ -126,7 +125,6 @@ export default {
         return {
             loading: false,
             feeds: [],
-            request_headers: [],
             event_triggers: [],
             editing_feed: null,
 
@@ -149,7 +147,6 @@ export default {
             this.loading = true;
             this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`)
                 .then(response => {
-                    this.request_headers = response.request_headers;
                     this.event_triggers = response.event_triggers;
                     this.feeds = response.feeds;
                 })
