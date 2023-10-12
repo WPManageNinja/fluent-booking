@@ -22,6 +22,7 @@ class BookingMigrator
                 `event_id` BIGINT(20) UNSIGNED NOT NULL,
                 `group_id` BIGINT(20) UNSIGNED NULL,
                 `parent_id` BIGINT(20) UNSIGNED NULL,
+                `host_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_contact_id` BIGINT(20) UNSIGNED NULL,
                 `person_time_zone` VARCHAR(100) NULL,
