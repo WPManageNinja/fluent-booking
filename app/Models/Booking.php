@@ -22,6 +22,7 @@ class Booking extends Model
         'group_id',
         'hash',
         'person_user_id',
+        'host_user_id',
         'person_contact_id',
         'person_time_zone',
         'start_time',

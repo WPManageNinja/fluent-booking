@@ -27,8 +27,9 @@ class BookingService
         }
 
         $defaults = [
-            'event_id'    => $calendarSlot->id,
-            'calendar_id' => $calendarSlot->calendar_id
+            'event_id'     => $calendarSlot->id,
+            'calendar_id'  => $calendarSlot->calendar_id,
+            'host_user_id' => $calendarSlot->user_id,
         ];
 
         if (empty($data['slot_minutes'])) {
@@ -80,7 +81,7 @@ class BookingService
 
         $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot);
 
-        if(is_wp_error($bookingData)) {
+        if (is_wp_error($bookingData)) {
             return $bookingData;
         }
 
