@@ -282,6 +282,7 @@ export default {
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
             this.currentEventTitle = schedule.slot.title;
+            
         },
         handleDiscard() {
             this.query.eventType = '';
