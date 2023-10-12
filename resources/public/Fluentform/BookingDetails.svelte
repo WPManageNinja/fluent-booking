@@ -25,12 +25,6 @@
         
         dispatch('resetSelection');
     }
-
-
-    setTimeout(() => {
-        const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
-        console.log(formFieldsHeight);
-    }, 1000)
 </script>
 
 {#if selectedDate}

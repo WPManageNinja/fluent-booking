@@ -8,7 +8,11 @@
                     Add a date override
                 </el-button>
 
-                <div v-if="modal_visible" class="fcal_override_dropdown">
+                <el-dialog
+                    v-model="modal_visible"
+                    title="Add date overrides"
+                    class="fcal_dialog fcal_override_dropdown"
+                >
                     <el-calendar v-model="current_date" ref="calendar">
                         <template #header="{ date }">
                             <span>{{ date }}</span>
@@ -54,7 +58,7 @@
                             </el-button>
                         </div>
                     </div>
-                </div>
+                </el-dialog>
             </div>
 
             <div class="fcal_override_table">

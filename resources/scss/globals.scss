@@ -270,6 +270,10 @@
         &.fcal_location_select {
             ul {
                 > ul {
+                    &.el-select-group__wrap {
+                        margin-bottom: 0;
+                        padding-bottom: 4px;
+                    }
                     > li {
                         &:not(.el-select-group__title) {
                             margin: 0 !important;
@@ -282,6 +286,19 @@
                     line-height: 25px;
                     &.el-select-group__title {
                         margin-bottom: 0;
+                        padding: 1px 10px !important;
+                    }
+                }
+                ul {
+                    li {
+                        ul {
+                            li {
+                                + li {
+                                    margin-top: 4px;
+                                }
+                                padding: 6px 20px !important;
+                            }
+                        }
                     }
                 }
             }
@@ -1070,6 +1087,209 @@
                 }
                 .wp_vue_editor_wrapper {
                     width: 100%;
+                }
+            }
+        }
+    }
+    &.fcal_override_dropdown {
+        max-width: 768px;
+        width: 100%;
+        border: none;
+        box-shadow: 0 16px 48px -4px #1B253314;
+        padding: 24px;
+        border-radius: 16px;
+        box-sizing: border-box;
+        @media (max-width: 728px) {
+            max-width: 300px;
+        }
+        .el-popper__arrow {
+            display: none;
+        }
+        .el-dialog__body {
+            display: flex;
+            gap: 48px;
+            @media (max-width: 728px) {
+                flex-direction: column;
+            }
+        }
+        .el-dialog__header {
+            margin-bottom: 0;
+            align-items: center;
+            padding: 12px 0;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        .el-calendar {
+            max-width: 282px;
+            .el-calendar__body {
+                padding: 0;
+            }
+            .el-calendar__header {
+                .el-button-group {
+                    .el-button {
+                        height: auto;
+                        border-top-left-radius: 6px;
+                        border-bottom-left-radius: 6px;
+                        padding: 5px 11px;
+                        transition: .3s;
+                        &:last-child {
+                            border-radius: 0 6px 6px 0;
+                        }
+                        &:hover {
+                            background: $primaryColor;
+                            color: #ffffff;
+                            border-color: $primaryColor;
+                        }
+                    }
+                }
+            }
+        }
+        .el-calendar-table {
+            tr {
+                td {
+                    border: none;
+                    border-radius: 8px;
+                    &.is-today {
+                        color: $primaryColor;
+                        .el-calendar-day {
+                            background: rgb(38 83 199 / 10%);
+                        }
+                    }
+                    .el-calendar-day {
+                        border-radius: 8px;
+                        &:hover {
+                            background: rgb(38 83 199 / 10%);
+                        }
+                        p {
+                            color: $primaryColor;
+                        }
+                    }
+                    &.is-selected {
+                        .el-calendar-day {
+                            background: $primaryColor;
+                            p {
+                                color: #ffffff;
+                                &.is-selected,
+                                .is-selected {
+                                    background: $primaryColor;
+                                    color: #ffffff;
+                                }
+                            }
+                        }
+                    }
+                    .el-calendar-day {
+                        height: 39px;
+                        width: 39px;
+                        position: relative;
+                        padding: 0;
+                        p {
+                            position: relative;
+                            border-radius: 8px;
+                            &.fcal_date_disabled {
+                                color: #B4B9C1;
+                                cursor: no-drop;
+                            }
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #445164;
+                            margin: 0;
+                            text-align: center;
+                            line-height: 40px;
+                            .check-icon {
+                                position: absolute;
+                                border: 1.5px solid #fff;
+                                border-left: 0;
+                                border-top: 0;
+                                height: 8px;
+                                top: 2px;
+                                right: 6px;
+                                transform: rotate(45deg);
+                                width: 4px;
+                                transition: transform 0.15s ease-in 50ms;
+                                transform-origin: center;
+                            }
+                            &.is-selected {
+                                background: $primaryColor;
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .fcal_override_calendar_footer {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            &:before {
+                content: "";
+                position: absolute;
+                left: -24px;
+                width: 1px;
+                background: #eaecf0;
+                height: calc(100% + 24px);
+                top: 0;
+                @media (max-width: 728px) {
+                    width: calc(100% + 46px);
+                    height: 1px;
+                    top: 0;
+                }
+            }
+            .fcal_weekly_schedules {
+                border: none !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+            }
+            .fcal_override_calendar_available_hour {
+                border-top: 0;
+                margin-top: 0;
+                border-bottom: 1px solid #EAECF0;
+                padding-bottom: 10px;
+                padding-top: 16px;
+                h3 {
+                    font-size: 14px;
+                    font-weight: 700;
+                    line-height: 20px;
+                    margin: 0 0 10px;
+                    color: #445164;
+                }
+                .fcal_weekly_schedules {
+                    border: none;
+                    padding: 0;
+                    border-radius: 0;
+
+                    .fcal_week_day_config {
+                        padding: 0;
+                        min-height: auto;
+                        column-gap: 10px;
+                        padding-right: 10px;
+                        .fcal_add_slot {
+                            margin-top: 8px;
+                        }
+                        .fcal_slot {
+                            .el-select {
+                                width: 90px;
+                                .el-input {
+                                    .el-input__wrapper {
+                                        padding: 2px 10px !important;
+                                        border-radius: 8px;
+                                        font-size: 14px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .fcal_override_calendar_footer_action {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: auto;
+                > .el-button {
+                    padding: 10px 16px;
                 }
             }
         }
