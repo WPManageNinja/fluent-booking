@@ -71,4 +71,9 @@ class OrderHelper
         Transactions::create($data);
     }
 
+    public function getOrderByHash($hash)
+    {
+        return Order::where('uuid', $hash)->first();
+    }
+
 }
