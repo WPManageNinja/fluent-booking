@@ -92,12 +92,9 @@
                 </el-icon>
                 Payment Settings
               </template>
-              <div class="fcal_create_calendar_body">
+              <div v-if="activeTab == 'payment-settings'" class="fcal_create_calendar_body">
                 <el-skeleton v-if="loading"/>
-                <payment-settings
-                    :event_id="event_id"
-                    :calendar_id="calendar_id"
-                />
+                <payment-settings :calendar_event="slot"/>
               </div>
             </el-tab-pane>
         </el-tabs>
