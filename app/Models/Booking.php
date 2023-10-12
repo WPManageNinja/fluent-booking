@@ -101,6 +101,11 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
+    public function calendar_event()
+    {
+        return $this->belongsTo(CalendarSlot::class, 'event_id');
+    }
+
     public function getCustomFormData($isFormatted = true)
     {
         if($isFormatted) {
