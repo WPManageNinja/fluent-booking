@@ -18,4 +18,5 @@ return array(
     'FluentBooking\\Database\\Migrations\\CalendarMigrator' => $baseDir . '/database/Migrations/CalendarMigrator.php',
     'FluentBooking\\Database\\Migrations\\CalendarSlotsMigrator' => $baseDir . '/database/Migrations/CalendarSlotsMigrator.php',
     'FluentBooking\\Database\\Migrations\\MetaMigrator' => $baseDir . '/database/Migrations/MetaMigrator.php',
+    'FluentBooking\\Database\\Migrations\\OrdersItemsMigrator' => $baseDir . '/database/Migrations/OrdersItemsMigrator.php',
 );

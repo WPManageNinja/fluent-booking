@@ -2,9 +2,9 @@
     <div>
         <el-popover
             :width="400"
+            :visible="isVisible"
             :placement="placement"
-            popper-class="fcrm-smartcodes-popover el-dropdown-list-wrapper"
-            trigger="click">
+            popper-class="fcrm-smartcodes-popover el-dropdown-list-wrapper">
 
             <div class="el_pop_data_group">
                 <div class="el_pop_data_headings">
@@ -32,7 +32,7 @@
             </div>
 
             <template #reference>
-                <slot name="popoverButton"></slot>
+                <slot @click="visible = !visible" name="popoverButton"></slot>
             </template>
         </el-popover>
     </div>

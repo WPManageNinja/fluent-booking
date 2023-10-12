@@ -9,6 +9,7 @@ use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\ValidationException;
@@ -39,35 +40,21 @@ class FrontEndHandler
 
         $slot = CalendarSlot::find($atts['id']);
 
-
         if (!$slot) {
             return '';
         }
 
         $calendar = $slot->calendar;
 
-        $slot->max_lookup_date = $slot->getMaxLookUpDate();
-        $slot->min_lookup_date = $slot->getMinLookUpDate();
-
-        $formFields = BookingFieldService::getBookingFields($slot);
-
-        if (!$slot || !$calendar) {
+        if (!$calendar) {
             return 'Calendar not found';
         }
 
-        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], App::getInstance('config')->get('app.version'), true);
+        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
 
         $this->loadGlobalVars();
-
-        $slot->description = wpautop($slot->description);
-
-        $localizeData = apply_filters('fluent_calendar_public_event_vars', [
-            'slot'           => $slot,
-            'calendar'       => $calendar,
-            'author_profile' => $slot->getAuthorProfile(true),
-            'form_fields'    => $formFields,
-            'disable_author' => $atts['disable_author'] == 'yes',
-        ], $slot);
+        $localizeData = $this->getCalendarEventVars($calendar, $slot);
+        $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
 
         wp_localize_script(
             'fluent-booking-public',
@@ -146,7 +133,13 @@ class FrontEndHandler
             $rules['phone_number'] = 'required';
         }
 
-        $validator = $app->validator->make($postedData, $rules, []);
+        $validator = $app->validator->make($postedData, $rules, [
+            'name.required'       => 'Please enter your name',
+            'email.required'      => 'Please enter your email address',
+            'email.email'         => 'Please enter provide a valid email address',
+            'timezone.required'   => 'Please select timezone first',
+            'start_date.required' => 'Please select a date and time',
+        ]);
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'message' => 'Please fill up the required data',
@@ -157,10 +150,10 @@ class FrontEndHandler
 
         $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
 
-        if(is_wp_error($customFieldsData)) {
+        if (is_wp_error($customFieldsData)) {
             wp_send_json([
                 'message' => $customFieldsData->get_error_message(),
-                'errors' => $customFieldsData->get_error_data()
+                'errors'  => $customFieldsData->get_error_data()
             ], 422);
             return;
         }
@@ -177,8 +170,8 @@ class FrontEndHandler
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
-            'event_type'       => $calendarSlot->event_type,
-            'payment_method'   => Arr::get($postedData, 'payment_method', ''),
+            'source'           => 'web',
+            'event_type'       => $calendarSlot->event_type
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -198,11 +191,12 @@ class FrontEndHandler
         }
 
         try {
-            $booking = BookingService::createBooking($bookingData, $calendarSlot);
+            $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
-            if ($customFieldsData) {
-                Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+            if(is_wp_error($booking)) {
+                throw new \Exception($booking->get_error_message(), 423);
             }
+
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
@@ -278,5 +272,23 @@ class FrontEndHandler
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ], 200);
+    }
+
+    public function getCalendarEventVars(Calendar $calendar, CalendarSlot $calendarEvent)
+    {
+        $calendarEvent->max_lookup_date = $calendarEvent->getMaxLookUpDate();
+        $calendarEvent->min_lookup_date = $calendarEvent->getMinLookUpDate();
+
+        $calendarEvent->description = wpautop($calendarEvent->description);
+        $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
+        $formFields = BookingFieldService::getBookingFields($calendarEvent);
+
+
+        return apply_filters('fluent_calendar_public_event_vars', [
+            'slot'           => $calendarEvent,
+            'calendar'       => $calendar,
+            'author_profile' => $calendarEvent->getAuthorProfile(true),
+            'form_fields'    => $formFields,
+        ], $calendarEvent);
     }
 }

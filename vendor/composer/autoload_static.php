@@ -46,6 +46,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\Database\\Migrations\\CalendarMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarMigrator.php',
         'FluentBooking\\Database\\Migrations\\CalendarSlotsMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarSlotsMigrator.php',
         'FluentBooking\\Database\\Migrations\\MetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/MetaMigrator.php',
+        'FluentBooking\\Database\\Migrations\\OrdersItemsMigrator' => __DIR__ . '/../..' . '/database/Migrations/OrdersItemsMigrator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
