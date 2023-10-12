@@ -102,11 +102,6 @@ class Booking extends Model
         return $this->belongsTo(CalendarSlot::class, 'event_id');
     }
 
-    public function order()
-    {
-        return $this->hasOne(Order::class, 'parent_id');
-    }
-
     public function calendar_event()
     {
         return $this->belongsTo(CalendarSlot::class, 'event_id');
@@ -278,6 +273,11 @@ class Booking extends Model
         }
 
         return '';
+    }
+
+    public function getOrderItem()
+    {
+        return OrderItems::where('booking_id', $this->id)->first();
     }
 
     public function getCancelReason()
