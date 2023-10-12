@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Order;
 use FluentBooking\App\Models\Transactions;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class OrderHelper
@@ -23,7 +24,8 @@ class OrderHelper
 
         $items = Arr::get($paymentInfo, 'items');
         $total = $this->getTotal($items);
-        $currency = Arr::get($paymentInfo, 'currency');
+
+        $currency = CurrenciesHelper::getGlobalCurrency();
 
         $data = [
             'status' => 'draft',

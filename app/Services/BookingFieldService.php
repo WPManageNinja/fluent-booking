@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class BookingFieldService
@@ -99,8 +100,9 @@ class BookingFieldService
                 'enabled'        => true,
                 'payment_items'  => Arr::get($paymentSettings, 'items'),
                 'label' => 'Payment Summary',
-                'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
+                'currency_sign' => CurrenciesHelper::getGlobalCurrencySign()
             ];
+
         }
 
         if (!$existingFields) {
