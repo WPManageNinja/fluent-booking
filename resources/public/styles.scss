@@ -1090,7 +1090,12 @@ $lightDark: #6b7280;
 .fcal_payment_items {
   display: flex;
   gap: 20px;
+  table td, thead th {
+    padding: 10px;
+  }
   table tr:nth-child(even) {
+    width: 100%;
+    text-align: left;
     background-color: #f2f2f2;
   }
   p {
