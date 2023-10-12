@@ -188,7 +188,7 @@ class Booking extends Model
         $details = $this->location_details;
 
         if (empty($details['type'])) {
-            return 'n/a';
+            return '--';
         }
 
         $locationType = $details['type'];
@@ -202,27 +202,38 @@ class Booking extends Model
         }
 
         if ($locationType == 'google_meet') {
-            $html = '<b> Google Meet </b>';
-            if ($meetingLink = Arr::get($details, 'description')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . esc_html('join now') . '</a>';
+            $html = '<b>Google Meet </b> ';
+            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
+            }
+            return $html;
+        }
+
+        if ($locationType == 'zoom_meeting') {
+            $html = '<b>Zoom Video</b> ';
+            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
             }
             return $html;
         }
 
         if ($locationType == 'phone_guest') {
             return '<b>Phone Call: </b>' . $this->phone;
-        } else if ($locationType == 'phone_organizer') {
+        }
+
+        if ($locationType == 'phone_organizer') {
             return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
+
+
 
         if ($locationType == 'custom') {
             $html = '<b>' . Arr::get($details, 'title') . '</b>';
             $html .= wpautop(Arr::get($details, 'description'));
-
             return $html;
         }
 
-        return '';
+        return '--';
     }
 
     public function getMessage()
