@@ -37,15 +37,23 @@ class StripeCheckout {
                 elements.submit().then(result=> {
                     jQuery(this).text('Processing...');
                     jQuery(this).attr('disabled', true);
-                    stripe.confirmPayment({
+                    const pay = stripe.confirmPayment({
                         elements,
                         confirmParams: {
-                            return_url: that.data?.data?.payment_args?.success_url
+                            // return_url: that.data?.data?.payment_args?.success_url
                         }
                     }).then((result) => {
+                        console.log(result)
+                        jQuery.post(window.fluentCalendarPublicVars.ajaxurl, {
+                            action: 'fluent_cal_confirm_stripe_payment',
+                            id: result.id,
+                        });
                         jQuery(this).text('Pay Now');
                         jQuery(this).attr('disabled', false);
                     })
+                    if (!pay.error) {
+
+                    }
                 }).catch(error => {
                     jQuery(this).text('Pay Now');
                     jQuery(this).attr('disabled', false);
