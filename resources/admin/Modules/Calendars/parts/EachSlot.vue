@@ -26,7 +26,7 @@
                             <el-icon><User /></el-icon>
                             <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
                         </span>
-                    </span> {{ eventTitle }}
+                    </span> {{ eventType }}
                 </span>
 
             </p>
@@ -44,12 +44,8 @@
                     <span v-if="!isCopied">Copy Link</span>
                     <span v-else>Copied!</span>
                 </el-button>
-                <el-button v-else-if="slot.shortcode" @click="copyTo(slot.shortcode)" class="fcal_copy_btn">
-                    <el-icon>
-                        <CopyDocument/>
-                    </el-icon>
-                    <span v-if="!isCopied">Shortcode</span>
-                    <span v-else>Copied!</span>
+                <el-button class="fcal_plain_btn" @click="viewShareCalendar(slot)">
+                    <el-icon><Share /></el-icon> Share
                 </el-button>
 
                 <el-button class="fcal_plain_btn" @click="editSlot">
@@ -67,35 +63,48 @@
                 </el-button>
             </div>
         </div>
+        <ShareCalendarBlock 
+            v-if="shareSlot" 
+            :slot="shareSlot" 
+            :openShare="openShare"
+            :publicUrl="publicUrl"
+            :calendarId="calendarId"
+            @closeShare="closeShareCalendar"
+        />
     </div>
 </template>
 
 <script type="text/babel">
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { CopyDocument, More, ArrowDown, User, Clock, Right, EditPen, Delete, SwitchButton } from '@element-plus/icons-vue';
+import { CopyDocument, More, Share, ArrowDown, User, Clock, Right, EditPen, Delete, SwitchButton } from '@element-plus/icons-vue';
+import ShareCalendarBlock from './ShareCalendarBlock';
 export default {
     name: 'EachSlot',
-    props: ['slot'],
+    props: ['slot', 'calendarId', 'publicUrl'],
     $emits: ['slotDeleted'],
     components: {
-        CopyDocument,
-        More,
-        ArrowDown,
-        User,
-        Clock,
-        Right,
-        EditPen,
-        Delete,
-        SwitchButton
-    },
+    CopyDocument,
+    More,
+    Share,
+    ArrowDown,
+    User,
+    Clock,
+    Right,
+    EditPen,
+    Delete,
+    SwitchButton,
+    ShareCalendarBlock
+},
     data() {
         return {
             working: false,
-            isCopied: false
+            isCopied: false,
+            openShare: false,
+            shareSlot: null
         }
     },
     computed: {
-        eventTitle() {
+        eventType() {
             return this.slot.event_type == 'group' ? 'Group' : 'One-to-One';
         }
     },
@@ -105,6 +114,14 @@ export default {
                 name: 'slot_settings', 
                 params: {calendar_id: this.slot.calendar_id, event_id: this.slot.id}
             })
+        },
+        viewShareCalendar(slot) {
+            this.openShare = true;
+            this.shareSlot = slot;  
+        },
+        closeShareCalendar() {
+            this.openShare = false;
+            this.shareSlot = null;
         },
         copyTo(text) {
             copyToClipBoard(text);

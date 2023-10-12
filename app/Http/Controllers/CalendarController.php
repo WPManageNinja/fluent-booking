@@ -286,6 +286,8 @@ class CalendarController extends Controller
 
         $slot->author_profile = $slot->getAuthorProfile();
 
+        $slot->public_url = $slot->getPublicUrl();
+
         $slotSettings = $slot->settings;
 
         $slotSettings['weekly_schedules'] = SanitizeService::weeklySchedules($slotSettings['weekly_schedules'], 'UTC', $slot->calendar->author_timezone);
