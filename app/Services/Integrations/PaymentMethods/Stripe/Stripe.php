@@ -237,7 +237,6 @@ class Stripe extends BasePaymentMethod
 
     public function intentData($orderItem, $args)
     {
-        //        $items = $args['items'];
         $sessionPayload = array(
             'amount' => intval($args['amount']),
             'currency' => $args['currency'],
@@ -352,8 +351,8 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active' => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment', 'fluent-booking'),
-                'type' => 'enable'
+                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking'),
+                'type' => 'inline_checkbox'
             ),
             'payment_mode' => array(
                 'value' => 'test',
@@ -363,11 +362,6 @@ class Stripe extends BasePaymentMethod
                     'live' => __('Live Mode', 'fluent-booking')
                 ),
                 'type' => 'radio'
-            ),
-            'checkout_mode_notice' => array(
-                'value' => "Using onsite checkout mode you can accept payment without leaving your site.<br/> NB: Subscriptions payment may force to hosted checkout automatically! <br/>",
-                'label' => '',
-                'type' => 'html_attr'
             ),
             'checkout_mode' => array(
                 'value' => 'onsite',
@@ -382,44 +376,7 @@ class Stripe extends BasePaymentMethod
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),
                 'type' => 'provider'
-            ),
-//            'setup_guide' => array(
-//                'value' => '<h3>Or Setup keys manually.</h3><hr/>',
-//                'label' => __('Or Setup keys manually', 'fluent-booking'),
-//                'type' => 'html_attr'
-//            ),
-//            'test_publishable_key' => array(
-//                'value' => '',
-//                'label' => __('Test Publishable Key', 'fluent-booking'),
-//                'type' => 'text'
-//            ),
-//            'test_secret_key' => array(
-//                'value' => '',
-//                'label' => __('Test Publishable Key', 'fluent-booking'),
-//                'type' => 'password'
-//            ),
-//            'live_publishable_key' => array(
-//                'value' => '',
-//                'label' => __('Live Publishable Key', 'fluent-booking'),
-//                'type' => 'text'
-//            ),
-//            'live_secret_key' => array(
-//                'value' => '',
-//                'label' => __('Live Secret Key', 'fluent-booking'),
-//                'type' => 'password'
-//            ),
-            'webhook_desc' => array(
-                'value' => "
-                <hr/>
-                <div class='mt-6'>
-                <h3>Stripe Webhook</h3> 
-                <p>If you use Stripe webhook please set the notification URL in Stripe as bellow:<br/> 
-                <p><b>Webhook URL: </b><br/><code> " . site_url() . '?fluent_booking_payment_listener=1&method=stripe' . "</code></p> <br/> 
-                you must configure your Stripe webhooks. Visit your <a href='https://stripe.com/docs/webhooks' target='_blank' rel='noopener'>account dashboard</a> 
-                to configure them.<br/> Please consider enabling webhook endpoints must: <code>charge.succeeded</code>, <code>charge.captured</code>, <code>invoice.paid</code></div></div><br/>",
-                'label' => __('Webhook URL', 'fluent-booking'),
-                'type' => 'html_attr'
-            ),
+             )
         );
 
     }

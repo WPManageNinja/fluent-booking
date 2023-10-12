@@ -25,7 +25,7 @@ class Client
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-        
+
         if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
             $this->redirectUrl = FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
         } else {
