@@ -58,7 +58,7 @@ class EditorShortCodeParser
         }
 
         if ('full_start_end_guest_timezone' == $key) {
-            return $booking->getShortBookingDateTime($bookingEvent->person_time_zone) . ' (' . $bookingEvent->person_time_zone . ')';
+            return $booking->getShortBookingDateTime($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
         }
 
         if ($key == 'full_start_end_host_timezone') {
@@ -69,8 +69,8 @@ class EditorShortCodeParser
             return $booking->start_time;
         }
 
-        if ($key = 'start_date_time_for_attendee') {
-            return DateTimeHelper::convertFromUtc($booking->start_time, $bookingEvent->person_time_zone, 'Y-m-d H:i:s');
+        if ($key == 'start_date_time_for_attendee') {
+            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->person_time_zone, 'Y-m-d H:i:s');
         }
 
         if ($key == 'start_date_time_for_host') {
@@ -88,7 +88,7 @@ class EditorShortCodeParser
                 $suffix = ' from now';
             }
 
-            return human_time_diff(time(), $booking->start_time) . ' ' . $suffix;
+            return human_time_diff(time(), strtotime($booking->start_time)) . ' ' . $suffix;
         }
 
         if ($key == 'cancelation_url') {
@@ -109,6 +109,14 @@ class EditorShortCodeParser
             return $booking->getLocationDetailsHtml;
         }
 
+        if ($key == 'booking_hash') {
+            return $booking->hash;
+        }
+
+        if (property_exists($booking, $key)) {
+            return $booking->{$key};
+        }
+
         return '';
     }
 
@@ -118,6 +126,11 @@ class EditorShortCodeParser
 
         if (is_null($host)) {
             return '';
+        }
+
+        if ($key == 'timezone') {
+            $calendar = static::$store['calendar'];
+            return $calendar->author_timezone;
         }
 
         return Arr::get($host, $key, '');
@@ -134,7 +147,8 @@ class EditorShortCodeParser
             return $guest['first_name'] . ' ' . $guest['last_name'];
         }
         if ('timezone' == $key) {
-            return $guest['person_time_zone'];
+            $booking = static::$store['booking'];
+            return $booking->person_time_zone;
         }
         if ('notes' == $key) {
             return $guest->getMessage();
@@ -215,23 +229,30 @@ class EditorShortCodeParser
 
         return preg_replace_callback('/({{|##)+(.*?)(}}|##)/', function ($matches) {
             $value = '';
-            if (false !== strpos($matches[1], 'guest.')) {
-                $guestProperty = substr($matches[1], strlen('guest.'));
+
+            if (empty($matches[2])) {
+                return '';
+            }
+
+            $match = $matches[2];
+
+            if (false !== strpos($match, 'guest.')) {
+                $guestProperty = substr($match, strlen('guest.'));
                 $value = static::getGuestData($guestProperty);
-            } elseif (false !== strpos($matches[1], 'booking.')) {
-                $bookingProperty = substr($matches[1], strlen('booking.'));
+            } elseif (false !== strpos($match, 'booking.')) {
+                $bookingProperty = substr($match, strlen('booking.'));
                 $value = static::getBookingData($bookingProperty);
-            } elseif (false !== strpos($matches[1], 'host.')) {
-                $hostProperty = substr($matches[1], strlen('host.'));
+            } elseif (false !== strpos($match, 'host.')) {
+                $hostProperty = substr($match, strlen('host.'));
                 $value = static::getHostData($hostProperty);
-            } elseif (false !== strpos($matches[1], 'event.')) {
-                $eventProperty = substr($matches[1], strlen('host.'));
+            } elseif (false !== strpos($match, 'event.')) {
+                $eventProperty = substr($match, strlen('host.'));
                 $value = static::getBookingEventData($eventProperty);
-            } elseif (false !== strpos($matches[1], 'calendar.')) {
-                $calendarProperty = substr($matches[1], strlen('calendar.'));
+            } elseif (false !== strpos($match, 'calendar.')) {
+                $calendarProperty = substr($match, strlen('calendar.'));
                 $value = static::getCalendarData($calendarProperty);
             } else {
-                $value = static::getOtherData($matches[1]);
+                $value = static::getOtherData($match);
             }
 
             if (static::$requireHtml && is_array($value)) {
