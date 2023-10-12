@@ -95,10 +95,10 @@ class BookingFieldService
                 'index'          => 20,
                 'type'           => 'payment',
                 'name'           => 'payment_method',
-                'required'       => true,
+                'required'       => false,
                 'enabled'        => true,
                 'payment_items'  => Arr::get($paymentSettings, 'items'),
-                'label' => 'Payment Items',
+                'label' => 'Payment Summary',
                 'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
             ];
         }
