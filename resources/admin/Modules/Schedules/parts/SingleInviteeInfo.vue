@@ -16,6 +16,10 @@
                     <p>{{ booking.email }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
+                    <h3>Message</h3>
+                    <p>{{ booking.message }}</p>
+                </div>
+                <div class="fcal_schedule_details_event_item">
                     <h3>Invitee Timezone</h3>
                     <p>{{ booking.person_time_zone }}</p>
                 </div>
