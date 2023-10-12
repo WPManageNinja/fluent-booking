@@ -36,7 +36,21 @@ class OrderHelper
             'uuid' => $booking->hash,
         ];
 
-        $order = Order::create($data);
+        $order = Order::query()->create($data);
+
+        //create order Items
+        $orderItem = [];
+        foreach ($items as $item) {
+            $itemPrice = intval($item['value'] * 100);
+            $orderItem['booking_id'] = $booking->id;
+            $orderItem['item_name'] = $item['title'];
+            $orderItem['item_price'] = $itemPrice;
+            $orderItem['quantity'] = 1;
+            $orderItem['item_total'] = $itemPrice * 1;
+            $orderItem['rate'] = 1;
+            $orderItem['line_meta'] = json_encode($item);
+            $order->items()->create($orderItem);
+        }
 
         $this->createDraftTransactions($order);
     }
