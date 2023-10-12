@@ -11,18 +11,17 @@ use FluentBooking\Framework\Support\Arr;
 
 class EmailNotificationService
 {
-    /**
-     * @param $booking Booking
-     * @param $slot CalendarSlot
-     * @return void
-     */
-    public static function emailOnBooked($booking, $slot, $email, $emailTo)
-    {
-        if (!$slot) {
-            $slot = $booking->slot;
-        }
 
-        $author = $slot->getAuthorProfile(false);
+    /**
+     * @param \FluentBooking\App\Models\Booking $booking
+     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
+     * @param $email
+     * @param $emailTo
+     * @return bool|mixed
+     */
+    public static function emailOnBooked(Booking $booking, CalendarSlot $calendarEvent, $email, $emailTo)
+    {
+        $author = $calendarEvent->getAuthorProfile(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -56,6 +55,7 @@ class EmailNotificationService
 
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'      => $html,
+            'email_footer' => '',
         ]);
 
         $emogrifier = new Emogrifier($body);
@@ -64,7 +64,7 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_booking/booking_confirmation_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_confirmation_email_sent_to_' . $emailTo, $booking, $calendarEvent, [
             'subject' => $subject,
             'body'    => $body,
             'to'      => $to
@@ -73,13 +73,17 @@ class EmailNotificationService
         return $result;
     }
 
-    public static function reminderEmail($booking, $slot, $email, $time, $emailTo)
+    /**
+     * @param \FluentBooking\App\Models\Booking $booking
+     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
+     * @param $email
+     * @param $time
+     * @param $emailTo
+     * @return bool|mixed
+     */
+    public static function reminderEmail(Booking $booking, CalendarSlot $calendarEvent, $email, $time, $emailTo)
     {
-        if (!$slot) {
-            $slot = $booking->slot;
-        }
-
-        $author = $slot->getAuthorProfile(false);
+        $author = $calendarEvent->getAuthorProfile(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -112,6 +116,7 @@ class EmailNotificationService
 
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'      => $html,
+            'email_footer' => ''
         ]);
 
         $emogrifier = new Emogrifier($body);
@@ -120,7 +125,7 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_booking/booking_reminder_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_reminder_email_sent_to_' . $emailTo, $booking, $calendarEvent, [
             'subject' => $subject,
             'body'    => $body,
             'time'    => $time,
@@ -137,13 +142,16 @@ class EmailNotificationService
         return $result;
     }
 
-    public static function bookingCancelledEmail($booking, $slot, $email, $emailTo)
+    /**
+     * @param \FluentBooking\App\Models\Booking $booking
+     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
+     * @param $email
+     * @param $emailTo
+     * @return bool|mixed
+     */
+    public static function bookingCancelledEmail(Booking $booking, CalendarSlot $calendarEvent, $email, $emailTo)
     {
-        if (!$slot) {
-            $slot = $booking->slot;
-        }
-
-        $author = $slot->getAuthorProfile(false);
+        $author = $calendarEvent->getAuthorProfile(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -176,6 +184,7 @@ class EmailNotificationService
 
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'      => $html,
+            'email_footer' => ''
         ]);
 
         $emogrifier = new Emogrifier($body);
@@ -184,7 +193,7 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        do_action('fluent_booking/booking_cancelled_email_sent_to_' . $emailTo, $booking, $slot, [
+        do_action('fluent_booking/booking_cancelled_email_sent_to_' . $emailTo, $booking, $calendarEvent, [
             'subject' => $subject,
             'body'    => $body,
             'to'      => $to
@@ -198,7 +207,6 @@ class EmailNotificationService
         ]);
 
         return $result;
-
     }
 
 }
