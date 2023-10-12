@@ -43,7 +43,9 @@
             <EditNotificationSettings v-if="editingNotification.email" :email="editingNotification.email"/>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">Save Email</el-button>
+                    <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">Save
+                        Email
+                    </el-button>
                 </div>
             </template>
         </el-dialog>
@@ -84,7 +86,7 @@ export default {
     methods: {
         toggleEdit(notification) {
             this.showEdit = !this.showEdit;
-            if(this.showEdit) {
+            if (this.showEdit) {
                 this.editingNotification = notification;
             } else {
                 this.editingNotification = {};
