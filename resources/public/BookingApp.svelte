@@ -34,17 +34,19 @@
         if (appReady === true) {
             setTimeout(() => {
 
-                const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
-                const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+                // const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
+                // const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+                // const formHeight = document.getElementById("fcal_booking_form_wrap");
+                // const formOffsetHeight = formHeight.offsetHeight;
 
-                const formHeight = document.getElementById("fcal_booking_form_wrap");
-                const formOffsetHeight = formHeight.offsetHeight;
+                const currentHeight = document.querySelector(".fcal_date_event_details.is_active").offsetHeight;
+                calendarHeight = currentHeight;
 
-                if (dayPickerWrapHeight > formOffsetHeight) {
-                    calendarHeight = dayPickerWrapHeight;
-                } else {
-                    calendarHeight = formOffsetHeight;
-                }
+                // if (dayPickerWrapHeight > formOffsetHeight) {
+                //     calendarHeight = dayPickerWrapHeight;
+                // } else {
+                //     calendarHeight = formOffsetHeight;
+                // }
 
             },2000)
         }
@@ -64,9 +66,19 @@
         component.parentNode.classList.add("f_cal_spot_selected");
 
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height = calendarHeight + 135;
-        calendar.style.height = height + 'px';
+
+        // const height = calendarHeight + 135;
+        // calendar.style.height = height + 'px';
         selectedDate = spot;
+
+
+        setTimeout(() => {
+            const currentHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+            console.log(currentHeight);
+            calendarHeight = currentHeight + 60;
+            calendar.style.height = calendarHeight + 'px';
+        }, 100);
+
 
 
         if (isFluentform) {
