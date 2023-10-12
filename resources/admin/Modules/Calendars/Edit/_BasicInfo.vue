@@ -55,6 +55,7 @@
                     <el-input
                         v-model="slot.description"
                         type="textarea"
+                        :rows="3"
                         placeholder="Enter Description here"
                     />
                 </el-form-item>
