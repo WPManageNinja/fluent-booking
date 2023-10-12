@@ -188,6 +188,10 @@ $lightDark: #6b7280;
 
     .fcal_slot_description {
       margin-top: 20px;
+      font-size: 16px;
+    }
+    .fcal_location_description {
+        font-size: 15px;
     }
 
   }
@@ -241,6 +245,30 @@ $lightDark: #6b7280;
         opacity: 1;
         visibility: visible;
         right: 0;
+      }
+      .fcal_form_booking_details {
+        padding-left: 20px;
+        .fcal_author {
+          position: relative;
+          .fcal_back {
+            cursor: pointer;
+            position: absolute;
+            background: #ffffff;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: -35px;
+            top: 15px;
+            border: 1px solid #dadbdd;
+            border-radius: 50%;
+            svg {
+              fill: #697483;
+            }
+          }
+        }
       }
       .fcal_date_event_details_header {
         border-bottom: 1px solid #EAECF0;
@@ -534,6 +562,26 @@ $lightDark: #6b7280;
     color: #1B2533;
   }
 
+  &.fcal_form_calendar {
+    border: none !important;
+    .fcal_date_wrapper {
+      margin: 0;
+      .fcal_day_picker_wrap {
+        .fcal_day_picker {
+          padding: 0;
+          .fcal_day_picker_head {
+            .fcal_label_required {
+              margin-bottom: 0;
+              display: inline-block;
+              font-weight: 500;
+              line-height: inherit;
+              color: #000000;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -657,6 +705,13 @@ $lightDark: #6b7280;
         font-weight: 500;
         line-height: 24px;
         flex: none;
+        svg {
+          width: 22px;
+          height: 22px;
+          path {
+            fill: #ffffff;
+          }
+        }
       }
     }
   }
@@ -718,6 +773,7 @@ $lightDark: #6b7280;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-right: 12px;
     .fcal_slot_picker_header_action {
       display: flex;
       align-items: center;
@@ -1025,4 +1081,26 @@ $lightDark: #6b7280;
       color: rgb(3 96 230);
     }
   }
+}
+
+
+//to-do will refactor tanbir
+//payment items styles
+
+.fcal_payment_items {
+  display: flex;
+  gap: 20px;
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  p {
+    margin: 0;
+  }
+}
+.fcal_payment_items_wrapper {
+  table {
+    margin: 0;
+  }
+  background: #f9fafb;
+  border-radius: 4px;
 }

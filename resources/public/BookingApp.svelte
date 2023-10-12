@@ -3,7 +3,6 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import BookingDetails from './Fluentform/BookingDetails.svelte';
 
     export let appData;
 
@@ -47,7 +46,7 @@
                     calendarHeight = formOffsetHeight;
                 }
 
-            },1000)
+            },2000)
         }
     });
 
@@ -65,9 +64,19 @@
         component.parentNode.classList.add("f_cal_spot_selected");
 
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height   = calendarHeight + 135;
-        calendar.style.height = height+'px';
+        const height = calendarHeight + 135;
+        calendar.style.height = height + 'px';
         selectedDate = spot;
+
+
+        if (isFluentform) {
+            setTimeout(() => {
+                const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
+                console.log(formFieldsHeight);
+                const height = formFieldsHeight + 135;
+                calendar.style.height = height + 'px';
+            }, 100)
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
@@ -120,31 +129,18 @@
                                     </svg>
                                     <span>{slot.duration} minutes</span>
                                 </div>
-                                {#if slot.location_settings[0]?.type == 'phone_organizer'}
+                                {#if slot.location_settings[0]?.type == 'phone_organizer' || slot.location_settings[0]?.type == 'phone_guest'}
                                     <div class="slot_location fcal_icon_item">
                                         <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" data-testid="phone-call-icon" data-id="details-item-icon"><title>Phone call</title><path d="M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z" fill="currentColor"></path></svg>
                                         <span>Phone Call</span>
                                     </div>
-                                {:else if slot.location_settings[0]?.type == 'in_person_organizer'}
+                                {:else if slot.location_settings[0]?.type == 'in_person_organizer' || slot.location_settings[0]?.type == 'custom'}
                                     <div class="slot_location fcal_icon_item">
                                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
                                         <span>{slot.location_settings[0]?.title}</span>
                                     </div>
-                                    <div class="fcal_slot_description">
+                                    <div class="fcal_location_description">
                                         <p>{slot.location_settings[0]?.description}</p>
-                                    </div>
-                                {:else}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings[0]?.title}</span>
-                                    </div>
-                                    <div class="fcal_slot_description">
-                                        <p>{slot.location_settings[0]?.description}</p>
-                                    </div>
-                                {:else if slot.location_settings?.type}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings?.title}</span>
                                     </div>
                                 {/if}
                                 {#if selectedDate}
@@ -202,6 +198,8 @@
                     {#if appReady}
                         <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                                 <DayPickerApp
+                                    {appData}
+                                    {isFluentform}
                                     {slot}
                                     {settings}
                                     bind:timezone={timezone}
@@ -210,16 +208,7 @@
                                     on:timezoneChanged={(e) => {resetSelection()}}
                                     on:resetSelection={(e) => { resetSelection() }}
                                 />
-                            {#if isFluentform }
-                                <BookingDetails
-                                    {appData}
-                                    {timezone}
-                                    {selectedDate}
-                                    on:resetSelection={(e) => { resetSelection() }}
-                                />
-                            {/if}
                         </div>
-
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
                                 <div class="fcal_date_event_details_header">
                                     <h2>
@@ -236,13 +225,16 @@
                                     </h2>
                                 </div>
 
-                                <BookingForm
-                                    {slot}
-                                    {timezone}
-                                    bind:spot={selectedDate}
-                                    bind:formFields={appData.form_fields}
-                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                />
+                                {#if !isFluentform}
+                                    <BookingForm
+                                        {appData}
+                                        {slot}
+                                        {timezone}
+                                        bind:spot={selectedDate}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    />
+                                {/if}
                             </div>
                     {/if}
                 </div>

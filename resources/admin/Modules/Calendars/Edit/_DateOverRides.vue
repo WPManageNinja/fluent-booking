@@ -4,11 +4,15 @@
         <div class="fcal_override_date_inner">
             <p v-if="!overrides.length">Add dates when your availability changes from your weekly hours</p>
             <div class="fcal_override_dropdown_wrap" @click.self="modal_visible = false">
-                <el-button class="fcal_primary_btn2" @click="modal_visible = !modal_visible">
+                <el-button class="fcal_primary_btn2" @click="toggleDateOverRide">
                     Add a date override
                 </el-button>
 
-                <div v-if="modal_visible" class="fcal_override_dropdown">
+                <el-dialog
+                    v-model="modal_visible"
+                    title="Add date overrides"
+                    class="fcal_dialog fcal_override_dropdown"
+                >
                     <el-calendar v-model="current_date" ref="calendar">
                         <template #header="{ date }">
                             <span>{{ date }}</span>
@@ -32,12 +36,12 @@
                         <div v-if="current_selects.length" class="fcal_override_calendar_available_hour">
                             <h3>What hours are you available?</h3>
                             <div class="fcal_weekly_schedules">
-                                <DayOverRideConfig :unavailable_date="markUnavailableDate" day_label="" :slots="slots" />
+                                <DayOverRideConfig :isUnavailable="isUnavailableDate" day_label="" :slots="slots" />
                             </div>
                         </div>
 
                         <div class="fcal_override_calendar_unavailable_check">
-                            <el-checkbox v-model="markUnavailableDate" label="Mark to Unavailable" />
+                            <el-checkbox v-model="isUnavailableDate" label="Mark to Unavailable" />
                         </div>
 
                         <div class="fcal_override_calendar_footer_action">
@@ -54,7 +58,7 @@
                             </el-button>
                         </div>
                     </div>
-                </div>
+                </el-dialog>
             </div>
 
             <div class="fcal_override_table">
@@ -67,7 +71,7 @@
                             <td @click="showSlotEdit(item)" style="text-align: right;">
                                 <ul class="fcal_slots_list">
                                     <li v-for="slot in item.slots">
-                                        {{toDateFormat('2022-12-12 ' + slot.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + slot.end, 'HH:mma')}}
+                                        {{ overriddenDate(slot) }}
                                     </li>
                                 </ul>
                             </td>
@@ -111,7 +115,7 @@ export default {
             DeleteIcon: markRaw(Delete),
             current_date: new Date(),
             existing_dates: [],
-            markUnavailableDate: false
+            isUnavailableDate: false
         }
     },
     computed: {
@@ -155,7 +159,15 @@ export default {
             });
 
             return formatted;
-        }
+        },
+        overriddenDate() {
+            return (slot) => {
+                if (slot.start === "00:00" && slot.end === "00:00") {
+                    return 'Unavailable';
+                }
+                return this.toDateFormat('2022-12-12 ' + slot.start, 'HH:mma') + ' - ' + this.toDateFormat('2022-12-12 ' + slot.end, 'HH:mma');
+            }
+        },
     },
     methods: {
         showModal() {
@@ -165,6 +177,7 @@ export default {
             }];
             this.current_selects = [];
             this.existing_dates = [];
+            this.isUnavailableDate = false;
             this.current_date = new Date();
             this.modal_visible = true;
         },
@@ -193,8 +206,6 @@ export default {
                 return;
             }
 
-            console.log(this.existing_dates);
-
             each(this.existing_dates, (date) => {
                 delete this.settings.date_overrides[date];
             });
@@ -210,8 +221,18 @@ export default {
                 },
                 {}
             );
-
+            this.resetOverRide();
+        },
+        toggleDateOverRide() {
+            if (!this.modal_visible) {
+                this.showModal()
+            } else {
+                this.modal_visible = false;
+            }
+        },
+        resetOverRide() {
             this.modal_visible = false;
+            this.isUnavailableDate = false;
             this.current_selects = [];
             this.slots = [{
                 start: '',
@@ -223,7 +244,16 @@ export default {
                delete this.settings.date_overrides[date];
             });
         },
+        updateUnavailable(item) {
+            const [firstSlot] = item.slots;
+            if (firstSlot.start === "00:00" && firstSlot.end === "00:00") {
+                this.isUnavailableDate = true;
+            } else {
+                this.isUnavailableDate = false;
+            }
+        },
         showSlotEdit(item) {
+            this.updateUnavailable(item);
             this.current_selects = JSON.parse(JSON.stringify(item.dates));
             this.existing_dates = JSON.parse(JSON.stringify(item.dates));
             this.slots = JSON.parse(JSON.stringify(item.slots));
