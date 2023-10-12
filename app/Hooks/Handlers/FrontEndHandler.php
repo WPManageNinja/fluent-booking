@@ -170,8 +170,8 @@ class FrontEndHandler
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
-            'event_type'       => $calendarSlot->event_type,
-            'payment_method'   => Arr::get($postedData, 'payment_method', ''),
+            'source'           => 'web',
+            'event_type'       => $calendarSlot->event_type
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -191,11 +191,12 @@ class FrontEndHandler
         }
 
         try {
-            $booking = BookingService::createBooking($bookingData, $calendarSlot);
+            $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
-            if ($customFieldsData) {
-                Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+            if(is_wp_error($booking)) {
+                throw new \Exception($booking->get_error_message(), 423);
             }
+
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
