@@ -83,6 +83,28 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         add_filter('fluent_calendar_public_event_vars', array($this, 'addPaymentRendererTemplates'), 10, 2);
 
+        add_action('fluent_booking/pre_after_booking_pending', array($this, 'afterBookingPending'), 1, 3);
+
+        add_filter('fluent_booking/booking_data', array($this, 'addPaymentMethodToBookingData'), 10, 3);
+    }
+
+    public function addPaymentMethodToBookingData($bookingData, $calendarSlot, $customData)
+    {
+        if ($calendarSlot->type === 'paid') {
+            $bookingData['status'] = 'pending';
+            $bookingData['payment_method'] = Arr::get($customData, 'payment_method', '');
+        }
+        return $bookingData;
+    }
+
+    public function afterBookingPending($booking, $calendarSlot, $bookingData)
+    {
+        $paymentMethod = Arr::get($bookingData, 'payment_method', 'stripe');
+        if ($calendarSlot->type === 'paid' && $booking->source === 'web' && $paymentMethod) {
+            //make draft orders
+            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
+            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
+        }
     }
 
     public function getAllMethods()
@@ -265,9 +287,15 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             $transaction->update($transactionData);
         }
 
-        $calendarSlot = Booking::where('hash', $orderHash)->first();
+        $booking = Booking::where('hash', $orderHash)->first();
 
-        $calendarSlot->update([
+        do_action('fluent_booking/payment/update_payment_status_paid', $booking);
+
+        // We are just renewing this as this may have been changed by the pre hook
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking, $booking->toArray());
+
+        $booking->update([
+            'status' => 'scheduled',
             'payment_status' => 'paid'
         ]);
     }
