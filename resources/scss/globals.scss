@@ -2152,6 +2152,24 @@
         }
     }
 
+    .el-link {
+        color: $primaryColor;
+    }
+
+    .fcal_payment_settings {
+        .fcal_settings_body {
+            .el-form {
+                .el-form-item {
+                    &.fcal_payment_flex_row {
+                        .el-form-item__content {
+                            align-items: flex-start;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .fcal_sub_title {
         margin: 0;
         font-size: 12px;
