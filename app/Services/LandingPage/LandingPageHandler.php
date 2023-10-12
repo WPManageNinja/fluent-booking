@@ -184,7 +184,8 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
             'js_files'    => [
-                App::getInstance('url.assets') . 'public/js/app.js'
+                includes_url('wp-includes/js/jquery/jquery.min.js'),
+                App::getInstance('url.assets') . 'public/js/app.js',
             ],
             'js_vars'     => [
                 'fcal_public_vars_' . $calendar->id . '_' . $slot->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $slot),

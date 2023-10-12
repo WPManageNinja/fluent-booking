@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 class ConnectConfig
 {
-    private static $connectBase = 'https://api.wpmanageninja.com/fluentform/';
+    private static $connectBase = 'https://apiv2.wpmanageninja.com/fluentform/';
 
     public static function getConnectConfig()
     {
