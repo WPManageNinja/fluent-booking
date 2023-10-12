@@ -97,7 +97,7 @@ class BookingService
         ]);
 
         $booking->load('calendar');
-        
+
         $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
         if ($calendarSlot->type === 'paid' && $paymentMethod) {
             //make draft orders
