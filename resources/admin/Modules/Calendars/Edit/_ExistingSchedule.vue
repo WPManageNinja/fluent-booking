@@ -73,7 +73,8 @@ export default {
     methods: {
         goToEdit() {
             this.$router.push({
-                name: 'availability', query:{schedule_id: this.availability_id}
+                name: 'availability_details',
+                params: { schedule_id: this.availability_id }
             })
         }
     }
