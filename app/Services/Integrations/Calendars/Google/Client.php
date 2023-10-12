@@ -117,6 +117,10 @@ class Client
 
         $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events';
 
+        if (!empty($data['conferenceData'])) {
+            $url .= '?conferenceDataVersion=1';
+        }
+
         if ($args) {
             $url = add_query_arg($args, $url);
         }

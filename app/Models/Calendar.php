@@ -142,7 +142,7 @@ class Calendar extends Model
                     ],
                 ],
             ],
-        ], $this->user_id);
+        ], $this);
     }
 
     public function getMeta($key, $default = null)

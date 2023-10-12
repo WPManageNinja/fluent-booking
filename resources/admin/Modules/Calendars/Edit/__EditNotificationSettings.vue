@@ -5,7 +5,7 @@
                 groupTitle="Shortcodes"
                :data="editorShortcodes"
                 placement="bottom-end"
-                trigger="click"
+                :isVisible="subjectPopupVisible"
                 class="fcal_popover_shortcode"
                @command="handleSubjectCommand">
                <template #popoverButton>
@@ -113,9 +113,10 @@ export default {
             wp.editor.remove(this.editor_id);
             const that = this;
             wp.editor.initialize(this.editor_id, {
+                mediaButtons: true,
                 tinymce: {
                     height : 300,
-                    toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',
+                    toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,hr,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',
                     setup(editor) {
                         editor.on('change', function (ed, l) {
                             that.changeContentEvent();
