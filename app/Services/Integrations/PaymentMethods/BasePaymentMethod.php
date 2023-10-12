@@ -76,7 +76,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_filter('fluent_booking/payment/get_global_payment_settings_' . $this->slug, [$this, 'globalFields']);
         add_filter('fluent_booking/payment/get_global_payment_methods', [$this, 'register']);
         add_action('fluent_booking/payment/payment_settings_update_' . $this->slug, [$this, 'update'], 10, 1);
-        add_filter('fluent_booking/payment/payment_settings_before_update_' . $this->slug, [$this, 'beforeUpdate']);
         add_filter('fluent_booking/payment/payment_method_settings_routes', [$this, 'setRoutes']);
         add_action('fluent_booking/payment/pay_order_with_' . $this->slug, [$this, 'makePayment'], 10, 2);
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
@@ -245,11 +244,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         }
 
         return $data;
-    }
-
-    public function beforeUpdate($data)
-    {
-        return Helper::sanitize($data, $this->fields());
     }
 
     protected function getSuccessUrl($orderItem, $args = null)
