@@ -291,13 +291,12 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         do_action('fluent_booking/payment/update_payment_status_paid', $booking);
 
-        // We are just renewing this as this may have been changed by the pre hook
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking, $booking->toArray());
-
         $booking->update([
             'status' => 'scheduled',
             'payment_status' => 'paid'
         ]);
+        // We are just renewing this as this may have been changed by the pre hook
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->slot);
     }
 
     public function maybeUpdatePayment()
