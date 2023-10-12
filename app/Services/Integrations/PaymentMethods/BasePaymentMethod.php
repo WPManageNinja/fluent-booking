@@ -4,17 +4,15 @@ namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Order;
+use FluentBooking\App\Models\Transactions;
 use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\Validator;
+use FluentBooking\App\Services\OrderHelper;
 
-
-use FluentCart\Api\Orders;
-use FluentCart\App\Models\Order;
-use FluentCart\App\Models\OrderTransaction;
-use FluentCart\Api\Helper;
-use FluentCart\App\Services\OrderHelper;
-use FluentCart\App\Services\StatusHelper;
 
 
 
@@ -55,8 +53,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     abstract public function makePayment($orderItem, $calendarSlot);
 
-    abstract public function maybeUpdatePayments($orderHash);
-
     public function resolveOrderHash($orderItem)
     {
         return $orderItem->hash;
@@ -79,7 +75,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_filter('fluent_booking/payment/payment_method_settings_routes', [$this, 'setRoutes']);
         add_action('fluent_booking/payment/pay_order_with_' . $this->slug, [$this, 'makePayment'], 10, 2);
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
-        add_action('fluent_booking/payment/pre_render_page_process_' . $this->slug, [$this, 'maybeUpdatePayments'], 10, 1);
         add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
 
         add_filter('fluent_booking/payment/get_all_methods', array($this, 'getAllMethods'), 10, 1);
@@ -257,23 +252,24 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return (new PaymentHelper($this->slug))->listenerUrl($args);
     }
 
-    public function getOrderByHash($orderHash)
-    {
-        return (new Orders())->getByHash($orderHash);
-    }
-
     public function updateOrderDataByHash($orderHash, $transactionData = [])
     {
-        $order = $this->getOrderByHash($orderHash);
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
         if ($order == null) {
             return;
         }
+        $order->update($transactionData);
 
-        $status = Arr::get($transactionData, 'status', 'paid');
+        $transaction = Transactions::where('object_id', $order->id)->where('uuid', $orderHash)->first();
+        if ($transaction) {
+            $transaction->update($transactionData);
+        }
 
-        (new StatusHelper())->setOrder($order)
-            ->changeOrderStatus($status)
-            ->updateTransactionData($transactionData);
+        $calendarSlot = Booking::where('hash', $orderHash)->first();
+
+        $calendarSlot->update([
+            'payment_status' => 'paid'
+        ]);
     }
 
     public function maybeUpdatePayment()

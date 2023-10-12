@@ -369,7 +369,6 @@ class Stripe extends BasePaymentMethod
 
         $eventId = $data->id;
         $invoice = (new API())->getInvoice($eventId);
-
         $orderHash = $this->getOrderHash($invoice);
 
         if (!$invoice || is_wp_error($invoice)) {
@@ -389,7 +388,9 @@ class Stripe extends BasePaymentMethod
         }
 
         if ($invoice->data->object->status === 'succeeded') {
-            $updateData['status'] = 'pending';
+            $updateData['status'] = 'paid';
+            $updateData['payment_method_type'] = $invoice->data->object->payment_method_details->type;
+            $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
         }
 
         $this->updateOrderDataByHash($orderHash, $updateData);
@@ -444,14 +445,5 @@ class Stripe extends BasePaymentMethod
               Stripe
             </label>
         ';
-    }
-
-    public function maybeUpdatePayments($orderHash)
-    {
-        $updateData = [
-            'status' => 'pending'
-        ];
-        $this->updateOrderDataByHash($orderHash, $updateData);
-        return;
     }
 }
