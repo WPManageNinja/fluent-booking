@@ -275,6 +275,11 @@ class Booking extends Model
         return '';
     }
 
+    public function getOrderItem()
+    {
+        return OrderItems::where('booking_id', $this->id)->first();
+    }
+
     public function getCancelReason()
     {
         return BookingActivity::where('booking_id', $this->id)

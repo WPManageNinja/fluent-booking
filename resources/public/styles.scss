@@ -1227,6 +1227,18 @@ $lightDark: #6b7280;
 .fcal_payment_items_wrapper {
   table {
     margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    th {
+      text-align: left;
+      padding: 6px 15px;
+    }
+    tbody {
+      td {
+        padding: 6px 15px;
+      }
+    }
   }
 
   background: #f9fafb;

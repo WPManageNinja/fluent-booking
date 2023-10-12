@@ -282,8 +282,7 @@ class FrontEndHandler
         $calendarEvent->description = wpautop($calendarEvent->description);
         $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
         $formFields = BookingFieldService::getBookingFields($calendarEvent);
-
-
+        
         return apply_filters('fluent_calendar_public_event_vars', [
             'slot'           => $calendarEvent,
             'calendar'       => $calendar,
