@@ -45,6 +45,8 @@ class SchedulesController extends Controller
 
         if ($period == 'upcoming') {
             $query = $query->orderBy('start_time', 'ASC');
+        } else if ($period == 'latest_bookings') {
+            $query = $query->orderBy('created_at', 'DESC');
         } else {
             $query = $query->orderBy('start_time', 'DESC');
         }
@@ -81,10 +83,25 @@ class SchedulesController extends Controller
             do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
-        return $this->sendSuccess([
+        $data = [
             'schedules' => $schedules,
             'timezone'  => 'UTC'
-        ]);
+        ];
+
+        if ($request->get('page') == 1) {
+            if ($author && $author !== 'all') {
+                $pendingCount = Booking::where('host_user_id', $author)
+                    ->where('status', 'pending')
+                    ->count();
+            } else {
+                $pendingCount = Booking::where('status', 'pending')->count();
+            }
+
+            $data['pending_count'] = $pendingCount;
+            $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
+        }
+
+        return $data;
     }
 
     public function patchBooking(Request $request, $bookingId)
