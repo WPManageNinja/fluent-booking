@@ -26,8 +26,9 @@ class BookingService
         }
 
         $defaults = [
-            'event_id'    => $calendarSlot->id,
-            'calendar_id' => $calendarSlot->calendar_id
+            'event_id'     => $calendarSlot->id,
+            'calendar_id'  => $calendarSlot->calendar_id,
+            'host_user_id' => $calendarSlot->user_id,
         ];
 
         if (empty($data['slot_minutes'])) {
