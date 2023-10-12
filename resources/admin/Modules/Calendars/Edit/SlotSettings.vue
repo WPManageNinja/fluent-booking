@@ -23,6 +23,7 @@
             tab-position="left"
             @tab-change="handleTabChange"
             class="fcal_tabs">
+            
             <el-tab-pane name="basic-info">
                 <template #label>
                     <el-icon>
@@ -38,6 +39,7 @@
                     </div>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane name="schedule-settings">
                 <template #label>
                     <el-icon>
@@ -53,6 +55,7 @@
                     </div>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane name="notification-settings">
                 <template #label>
                     <el-icon>
@@ -65,6 +68,7 @@
                     <NotificationSettings v-else ref="notificationData" :slot="slot"/>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane name="question-settings">
                 <template #label>
                     <el-icon><QuestionIcon/></el-icon> Booking Questions
@@ -74,6 +78,7 @@
                     <QuestionSettings v-else :activeTab="activeTab" :slot="slot"/>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane name="webhooks-settings">
                 <template #label>
                     <el-icon>
@@ -83,12 +88,15 @@
                 </template>
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
-                    <WebhookSettings
+                    <WebhookSettings 
+                        v-else 
+                        :activeTab="activeTab"
                         :event_id="event_id"
                         :calendar_id="calendar_id"
                     />
                 </div>
             </el-tab-pane>
+            
             <el-tab-pane name="payment-settings">
               <template #label>
                 <el-icon>
@@ -96,11 +104,32 @@
                 </el-icon>
                 Payment Settings
               </template>
-              <div class="fcal_create_calendar_body">
+              <div class="fcal_create_calendar_body" v-if="activeTab === 'payment-settings'">
                 <el-skeleton v-if="loading"/>
-                <payment-settings
+                <payment-settings 
+                    v-else 
+                    :activeTab="activeTab"
                     :event_id="event_id"
                     :calendar_id="calendar_id"
+                />
+              </div>
+            </el-tab-pane>
+
+            <el-tab-pane name="integrations">
+              <template #label>
+                <el-icon>
+                    <Connection/>
+                </el-icon>
+                Integrations
+              </template>
+              <div class="fcal_create_calendar_body" v-if="activeTab === 'integrations'">
+                <el-skeleton v-if="loading"/>
+                <integration
+                    v-else 
+                    :activeTab="activeTab"
+                    :event_id="event_id"
+                    :calendar_id="calendar_id"
+                    :has_pro="true"
                 />
               </div>
             </el-tab-pane>
@@ -112,16 +141,17 @@
 import BasicInfo from './_BasicInfo'
 import NotificationSettings from './_NotificationSettings'
 import ScheduleSettings from "./_ScheduleSettings";
-import QuestionSettings from "./_QuestionSettings";
+import QuestionSettings from "./_QuestionSettings.vue";
 import EventIcon from '../../../Components/Icons/EventIcon';
 import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message, View, CopyDocument, Money} from '@element-plus/icons-vue';
+import {Back, Link, Message, View, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import PaymentSettings from "./Payments/PaymentSettings.vue";
+import Integration from './GeneralIntegration/Integration.vue';
 
 export default {
     name: 'SlotSettings',
@@ -143,7 +173,9 @@ export default {
         View,
         CopyDocument,
         Money,
-        Message
+        Message,
+        Connection,
+        Integration
     },
     data() {
         return {
