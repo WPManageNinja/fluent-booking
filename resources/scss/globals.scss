@@ -2500,3 +2500,9 @@ p.fcal_human_text {
     color: #6b7280;
     line-height: 100%;
 }
+
+.fcal_showing_details {
+    .fcal_spot_line {
+        align-items: start !important;
+    }
+}
