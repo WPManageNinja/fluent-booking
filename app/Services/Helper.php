@@ -433,7 +433,6 @@ class Helper
             'requests',
             'reset',
             'roc',
-            'root',
             'rss',
             'ruby',
             'rule',

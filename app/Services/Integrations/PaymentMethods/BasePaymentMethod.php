@@ -306,17 +306,17 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function render($method)
     {
-        return  '
-        <input type="radio" id="'. esc_attr($this->slug) .'">
-        <label for="' . esc_attr($this->slug) . '_payment_method">
-            <img src="' . esc_url($this->getLogo()) . '"alt="' . esc_attr($this->title) . '"/>
-         <span>Cash on delivery</span>
-        ';
+        return  '';
     }
 
     public function getMethodsTemplate($data)
     {
         $methods = GlobalPaymentHandler::getAllMethods();
+
+        $settings = $this->getSettings();
+        if (isset($settings['is_active']) && $settings['is_active'] !== 'yes') {
+            return $data['template'] = '<div class="fluent_booking_payment_methods">Please activate payment first!</div>';
+        }
 
         $templates = [
             'template' => '',

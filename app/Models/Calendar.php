@@ -188,16 +188,10 @@ class Calendar extends Model
             return '';
         }
 
-        $author = $this->getAuthorProfile();
-
-        if (empty($author['author_slug'])) {
-            return '';
-        }
-
         if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
-            return LandingPageHelper::getLandingBaseUrl() . $author['author_slug'];
+            return LandingPageHelper::getLandingBaseUrl() . $this->slug;
         }
 
-        return LandingPageHelper::getLandingBaseUrl() . '&host=' . $author['author_slug'];
+        return LandingPageHelper::getLandingBaseUrl() . '&host=' . $this->slug;
     }
 }
