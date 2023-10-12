@@ -11,7 +11,6 @@ class BookingService
 {
     public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
-
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
             throw new \Exception('Email, Start Time and timezone are required to create a booking', 423);
         }
@@ -78,9 +77,9 @@ class BookingService
 
         $bookingData['group_id'] = $event ? $event->group_id : null;
 
-        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot);
+        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
 
-        if(is_wp_error($bookingData)) {
+        if (is_wp_error($bookingData)) {
             return $bookingData;
         }
 
@@ -97,13 +96,6 @@ class BookingService
         ]);
 
         $booking->load('calendar');
-        
-        $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
-        if ($calendarSlot->type === 'paid' && $paymentMethod) {
-            //make draft orders
-            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
-            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
-        }
 
         // this pre hook is for early actions that require for remote calendars and locations
         do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);

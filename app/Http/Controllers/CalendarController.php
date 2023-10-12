@@ -548,7 +548,10 @@ class CalendarController extends Controller
             $formattedField = array_merge($textValues, $booleanValues);
 
             $formattedField['index'] = (int)Arr::get($value, 'index');
-
+            if ($value['type'] == 'payment') {
+                $formattedField['payment_items'] = Arr::get($value, 'payment_items');
+                $formattedField['currency_sign'] = Arr::get($value, 'currency_sign');
+            }
             if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
                 $formattedField['options'] = $sanitizedOptions;
