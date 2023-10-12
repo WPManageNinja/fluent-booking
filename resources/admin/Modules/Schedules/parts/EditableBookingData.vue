@@ -36,7 +36,7 @@ export default {
     methods: {
         updateData() {
             this.updating = true;
-            this.$put(`schedules/${this.spot.id}`, {
+            this.$put(`schedules/${this.booking.id}`, {
                 column: this.data_key,
                 value: this.booking[this.data_key]
             })

@@ -10,6 +10,7 @@ class LogHandler
     public function register()
     {
         add_action('fluent_booking/log_booking_note', [$this, 'logBookingActivity'], 10);
+        add_action('fluent_booking/log_booking_activity', [$this, 'logBookingActivity'], 10, 1);
     }
 
     public function logBookingActivity($data)

@@ -8,6 +8,7 @@ use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
+use FluentBooking\App\Services\LocationService;
 use FluentBooking\Framework\Support\Arr;
 
 class CalendarSlot extends Model
@@ -108,7 +109,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields' => $calendar->getLocationFields()
+            'location_fields'     => $calendar->getLocationFields()
         ];
     }
 
@@ -306,6 +307,26 @@ class CalendarSlot extends Model
         }
 
         return $exist;
+    }
+
+    public function defaultLocationHtml()
+    {
+        if (empty($this->location_settings)) {
+            return '';
+        }
+
+        $default = Arr::get($this->location_settings, '0');
+        if (!$default) {
+            return '';
+        }
+
+        $driver = Arr::get($default, 'type');
+
+        if (!$driver) {
+            return '';
+        }
+
+        return LocationService::getLocationIconHeadingHtml($driver, $default, $this);
     }
 
 }
