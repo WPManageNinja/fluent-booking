@@ -6,6 +6,7 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\BasePaymentMethod;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\API;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\ApiRequest;
+use FluentBooking\App\Services\OrderHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class Stripe extends BasePaymentMethod
@@ -111,17 +112,42 @@ class Stripe extends BasePaymentMethod
 
     public function confirmStripePayment()
     {
-        $data = $_REQUEST;
-        error_log('newdata ' . json_encode($data));
-//
-//        $data = $_REQUEST['id']);
-//
-//        $eventId = $data->id;
-//        error_log('event id' . $eventId);
-//
-//        if ($eventId){
-//            $this->verifyInvoiceAndUpdate($data->id);
-//        }
+        if (!isset($_REQUEST['intentId'])) {
+            error_log('No intentId found! ' . json_encode($_REQUEST));
+            return;
+        } else {
+            error_log('intentId found! ' . json_encode($_REQUEST));
+        }
+
+        $intentId = $_REQUEST['intentId'];
+        $path = 'payment_intents/' . $intentId;
+
+        $api = new API();
+        $response = $api->makeRequest($path, [], (new StripeSettings())->getApiKey());
+
+        if (!$response || is_wp_error($response)) {
+            return;
+        }
+
+        $orderHash = Arr::get($response, 'metadata.ref_id');
+        $amount = intval(Arr::get($response, 'amount_received'));
+
+        //verify order
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        if (intval($order->total_amount) !== $amount) {
+            return;
+        }
+
+        $status = Arr::get($response, 'status') === 'succeeded' ?? 'paid';
+
+        $updateData = [
+            'status' => sanitize_text_field($status),
+            'vendor_charge_id' => sanitize_text_field($intentId),
+            'payment_mode' => Arr::get($response, 'livemode') ? 'live' : 'test'
+        ];
+
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        $this->updateOrderData($order, $updateData);
 
     }
 
@@ -153,7 +179,8 @@ class Stripe extends BasePaymentMethod
             $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
         }
 
-        $this->updateOrderDataByHash($orderHash, $updateData);
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        $this->updateOrderData($order, $updateData);
     }
 
 
@@ -349,7 +376,7 @@ class Stripe extends BasePaymentMethod
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),
                 'type' => 'provider'
-            )
+             )
         );
 
     }
