@@ -80,7 +80,9 @@
                 </div>
                 <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
-                <PaymentLogs v-if="showing_booking.event_type == 'single'" :booking="showing_booking" />
+                <PaymentLogs
+                    v-if="showing_booking.event_type == 'single' && showing_booking.order"
+                    :booking="showing_booking" />
             </div>
         </div>
         <div v-if="showing_booking" class="fcal_booking_activities">

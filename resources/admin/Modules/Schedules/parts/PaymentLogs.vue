@@ -1,12 +1,12 @@
 <template>
-    <div class="fcal_schedule_event_infos">
+    <div class="fcal_schedule_event_infos" :class="booking.event_type == 'group' ? 'fcal_schedule_group_payment_log' : ''">
         <div class="fcal_schedule_event_infos_body">
-            <div class="fcal_schedule_details_header">
+            <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_header">
                 <h1 class="fcal_header_title">
                     Payment History
                 </h1>
             </div>
-            <div class="fcal_schedule_details_event">
+            <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_event">
                 <div class="fcal_schedule_details_event_item">
                     <h3>Name</h3>
                     <p>{{ booking.first_name }} {{ booking.last_name }}</p>
@@ -18,23 +18,27 @@
             </div>
 
 
-            <table>
+            <table class="fcal_payment_history_table">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th>Qty</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Product Item</td>
-                        <td>1</td>
-                        <td>$44</td>
+                        <td>{{ booking.order?.payment_method }}</td>
+                        <td>{{ booking.order?.status }}</td>
+                        <td><span class="currency">{{ booking.order?.currency }}</span> {{ Math.floor(booking.order?.total_amount) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr></tr>
+                    <tr>
+                        <th></th>
+                        <th>Total:</th>
+                        <td><span class="currency">{{ booking.order?.currency }}</span> {{ Math.floor(booking.order?.total_amount) }}</td>
+                    </tr>
                 </tfoot>
             </table>
         </div>
