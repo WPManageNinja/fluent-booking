@@ -9,6 +9,7 @@ use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\ValidationException;
@@ -39,35 +40,21 @@ class FrontEndHandler
 
         $slot = CalendarSlot::find($atts['id']);
 
-
         if (!$slot) {
             return '';
         }
 
         $calendar = $slot->calendar;
 
-        $slot->max_lookup_date = $slot->getMaxLookUpDate();
-        $slot->min_lookup_date = $slot->getMinLookUpDate();
-
-        $formFields = BookingFieldService::getBookingFields($slot);
-
-        if (!$slot || !$calendar) {
+        if (!$calendar) {
             return 'Calendar not found';
         }
 
-        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], App::getInstance('config')->get('app.version'), true);
+        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
 
         $this->loadGlobalVars();
-
-        $slot->description = wpautop($slot->description);
-
-        $localizeData = apply_filters('fluent_calendar_public_event_vars', [
-            'slot'           => $slot,
-            'calendar'       => $calendar,
-            'author_profile' => $slot->getAuthorProfile(true),
-            'form_fields'    => $formFields,
-            'disable_author' => $atts['disable_author'] == 'yes',
-        ], $slot);
+        $localizeData = $this->getCalendarEventVars($calendar, $slot);
+        $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
 
         wp_localize_script(
             'fluent-booking-public',
@@ -284,5 +271,23 @@ class FrontEndHandler
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ], 200);
+    }
+
+    public function getCalendarEventVars(Calendar $calendar, CalendarSlot $calendarEvent)
+    {
+        $calendarEvent->max_lookup_date = $calendarEvent->getMaxLookUpDate();
+        $calendarEvent->min_lookup_date = $calendarEvent->getMinLookUpDate();
+
+        $calendarEvent->description = wpautop($calendarEvent->description);
+        $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
+        $formFields = BookingFieldService::getBookingFields($calendarEvent);
+
+
+        return apply_filters('fluent_calendar_public_event_vars', [
+            'slot'           => $calendarEvent,
+            'calendar'       => $calendar,
+            'author_profile' => $calendarEvent->getAuthorProfile(true),
+            'form_fields'    => $formFields,
+        ], $calendarEvent);
     }
 }
