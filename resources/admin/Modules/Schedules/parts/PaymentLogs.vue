@@ -21,23 +21,23 @@
             <table class="fcal_payment_history_table">
                 <thead>
                     <tr>
-                        <th>Payment Method</th>
-                        <th>Status</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ booking.order?.payment_method }}</td>
-                        <td>{{ booking.order?.status }}</td>
-                        <td><span class="currency">{{ booking.order?.currency }}</span> {{ Math.floor(booking.order?.total_amount) }}</td>
+                        <td>{{ booking.order_info?.item_name }}</td>
+                        <td>{{ booking.order_info?.quantity }}</td>
+                        <td>{{ Math.floor(booking.order_info?.item_price) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
                         <th>Total:</th>
-                        <td><span class="currency">{{ booking.order?.currency }}</span> {{ Math.floor(booking.order?.total_amount) }}</td>
+                        <td>{{ Math.floor(booking.order_info?.item_total) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -48,36 +48,6 @@
 <script>
 export default {
     name: "PaymentLogs",
-    props: ['booking'],
-    data() {
-        return {
-            tableData: [
-                {
-                    date: '2016-05-03',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles',
-                },
-                {
-                    date: '2016-05-02',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles',
-                },
-                {
-                    date: '2016-05-04',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles',
-                },
-                {
-                    date: '2016-05-01',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles',
-                },
-            ]
-        }
-    }
+    props: ['booking']
 }
 </script>
-
-<style scoped>
-
-</style>
