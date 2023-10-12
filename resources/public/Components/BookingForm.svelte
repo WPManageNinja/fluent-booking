@@ -33,6 +33,7 @@
                             </select>
                             {:else if field.type === 'payment'}
                                 <div class="fcal_payment_items_wrapper">
+                                    <div class="fcal_payment_items_provider_script"></div>
                                     <div class="fcal_payment_items">
                                         <table>
                                             <thead>

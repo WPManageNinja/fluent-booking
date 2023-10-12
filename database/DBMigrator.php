@@ -38,6 +38,7 @@ class DBMigrator
         BookingMigrator::migrate();
         BookingMetaMigrator::migrate();
         BookingHostMigrator::migrate();
+        BookingOrdersMigrator::migrate();
         MetaMigrator::migrate();
         BookingActivityMigrator::migrate();
         BookingOrdersMigrator::migrate();
