@@ -197,7 +197,7 @@ class Bootstrap
                 }
             }
 
-            $driverInfo['description'] = 'Create zoom meeting from your booked events. An Account is connected with this calendar.';
+            $driverInfo['description'] = 'Create zoom meeting from your booked events. An Account is connected with this calendar. From this Calendar event you can now select Zoom Video as a location to create meeting in zoom automatically event booking.';
 
             $instruction = 'The following Zoom Account is connected with this calendar. Based on your event location, a zoom meeting will be created for your bookings.';
 
