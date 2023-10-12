@@ -132,7 +132,7 @@
                                 {#if slot.location_icon_html }
                                     {@html slot.location_icon_html}
                                 {/if}
-                                
+
                                 {#if selectedDate}
                                     <div class="slot_time_range fcal_icon_item">
                                         <svg height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
