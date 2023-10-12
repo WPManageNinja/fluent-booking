@@ -13,7 +13,7 @@ class NotificationHandler
     {
         add_action('fluent_booking/after_booking_scheduled', array($this, 'pushBookingScheduledToQueue'), 10, 2);
         add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
-        add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 4);
+        add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
     }
 
@@ -37,59 +37,58 @@ class NotificationHandler
 
             $happeningTimestamp = strtotime($booking->start_time);
             $startingTo = $happeningTimestamp - time();
-            
+
             $bufferTime = 2 * 60; // 2 Minute Buffer Time
             if ($startingTo > ($reminderTimestamp + $bufferTime)) {
                 as_schedule_single_action(($happeningTimestamp - $reminderTimestamp), 'fluent_booking/booking_schedule_reminder', [
                     $booking->id,
-                    $slot->id,
-                    $time,
                     $emailTo
                 ], 'fluent-booking');
             }
         }
     }
 
-    public function pushBookingScheduledToQueue($booking, $slot)
+    public function pushBookingScheduledToQueue($booking, $bookingEvent)
     {
-        $notifications = $slot->getNotifications();
+        $notifications = $bookingEvent->getNotifications();
 
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled') || (Arr::isTrue($notifications, 'booking_conf_host.enabled'))) {
             as_enqueue_async_action('fluent_booking/after_booking_scheduled_async', [
                 $booking->id,
-                $slot->id
+                $bookingEvent->id
             ], 'fluent-booking');
         }
 
         if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_attendee.email.times', []);
-            $this->pushRemindersToQueue($booking, $slot, $reminderTimes, 'guest');
+            $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'guest');
         }
 
         if (Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_host.email.times', []);
-            $this->pushRemindersToQueue($booking, $slot, $reminderTimes, 'host');
+            $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'host');
         }
-        
+
     }
 
     public function bookingScheduledEmails($bookingId, $slotId)
     {
-        $booking = Booking::find($bookingId);
-        $slot = CalendarSlot::find($slotId);
+        $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
 
-        if ($booking && $slot) {
-            $notifications = $slot->getNotifications();
+        if (!$booking || !$booking->calendar_event) {
+            return '';
+        }
 
-            if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled')) {
-                $email = Arr::get($notifications, 'booking_conf_attendee.email', []);
-                EmailNotificationService::emailOnBooked($booking, $slot, $email, 'guest');
-            }
+        $notifications = $booking->calendar_event->getNotifications();
 
-            if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
-                $email = Arr::get($notifications, 'booking_conf_host.email', []);
-                EmailNotificationService::emailOnBooked($booking, $slot, $email, 'host');
-            }
+        if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled')) {
+            $email = Arr::get($notifications, 'booking_conf_attendee.email', []);
+            EmailNotificationService::emailOnBooked($booking, $email, 'guest');
+        }
+
+        if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
+            $email = Arr::get($notifications, 'booking_conf_host.email', []);
+            EmailNotificationService::emailOnBooked($booking, $email, 'host');
         }
 
         return true;
@@ -99,16 +98,15 @@ class NotificationHandler
      * @param $booking Booking
      * @return void
      */
-    public function bookingReminderEmails($bookingId, $slotId, $time, $emailTo)
+    public function bookingReminderEmails($bookingId, $emailTo)
     {
-        $booking = Booking::find($bookingId);
-        $slot = CalendarSlot::find($slotId);
+        $booking = Booking::with(['calendar_event', 'calendar'])->find($bookingId);
 
-        if (!$slot || !$booking || $booking->status != 'scheduled') {
+        if (!$booking || $booking->status != 'scheduled') {
             return false;
         }
 
-        $notifications = $slot->getNotifications();
+        $notifications = $booking->getNotifications();
 
         if (!$notifications) {
             return;
@@ -116,22 +114,22 @@ class NotificationHandler
 
         if ('guest' == $emailTo && Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $email = Arr::get($notifications, 'reminder_to_attendee.email', []);
-            EmailNotificationService::reminderEmail($booking, $slot, $email, $time, $emailTo);
+            EmailNotificationService::reminderEmail($booking, $email, $emailTo);
         } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $email = Arr::get($notifications, 'reminder_to_host.email', []);
-            EmailNotificationService::reminderEmail($booking, $slot, $email, $time, $emailTo);
+            EmailNotificationService::reminderEmail($booking, $email, $emailTo);
         }
 
     }
 
-    public function emailOnBookingCancelled($booking)
+    public function emailOnBookingCancelled(Booking $booking)
     {
-        $slot = $booking->slot;
-        if (!$slot) {
+        $calendarEvent = $booking->calendar_event;
+        if (!$calendarEvent) {
             return;
         }
 
-        $notifications = $slot->getNotifications();
+        $notifications = $calendarEvent->getNotifications();
 
         if (!$notifications) {
             return;
@@ -140,12 +138,10 @@ class NotificationHandler
         if ($booking->cancelled_by && Arr::isTrue($notifications, 'cancelled_by_host.enabled')) {
             // This from the host
             $email = Arr::get($notifications, 'cancelled_by_host.email', []);
-            EmailNotificationService::bookingCancelledEmail($booking, $slot, $email, 'guest');
+            EmailNotificationService::bookingCancelledEmail($booking, $email, 'guest');
         } elseif (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $email = Arr::get($notifications, 'cancelled_by_attendee.email', []);
-            foreach ($booking->getHostProfiles() as $host) {
-                EmailNotificationService::bookingCancelledEmail($booking, $slot, $email, 'host', $host);
-            }
+            EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
         }
     }
 }

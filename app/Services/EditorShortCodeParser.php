@@ -32,10 +32,10 @@ class EditorShortCodeParser
 
     protected static function setData($booking)
     {
-        $bookingEvent = $booking->slot;
+        $bookingEvent = $booking->calendar_event;
         static::$store['booking'] = $booking;
         static::$store['booking_event'] = $bookingEvent;
-        static::$store['calendar'] = $bookingEvent->calendar;
+        static::$store['calendar'] = $booking->calendar;
         static::$store['host'] = $bookingEvent->getAuthorProfile(false);
     }
 
@@ -106,7 +106,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'location_details_html') {
-            return $booking->getLocationDetailsHtml;
+            return $booking->getLocationDetailsHtml();
         }
 
         if ($key == 'booking_hash') {
