@@ -18,7 +18,9 @@ class LandingPageHandler
     {
         if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
             add_action('template_redirect', [$this, 'handleSlugDefinedPage'], 1);
-        } else if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
+        }
+
+        if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
             add_action('init', [$this, 'handleUrlParamsPage']);
         }
     }
@@ -232,7 +234,7 @@ class LandingPageHandler
         if (!$booking) {
             return;
         }
-        
+
         dd($_REQUEST);
     }
 
