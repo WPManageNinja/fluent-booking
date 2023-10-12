@@ -9,7 +9,7 @@ use FluentBooking\Framework\Support\Arr;
 
 class BookingService
 {
-    public static function createBooking($data = [], $calendarSlot = null)
+    public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
             throw new \Exception('Email, Start Time and timezone are required to create a booking', 423);
@@ -26,8 +26,9 @@ class BookingService
         }
 
         $defaults = [
-            'event_id'    => $calendarSlot->id,
-            'calendar_id' => $calendarSlot->calendar_id
+            'event_id'     => $calendarSlot->id,
+            'calendar_id'  => $calendarSlot->calendar_id,
+            'host_user_id' => $calendarSlot->user_id,
         ];
 
         if (empty($data['slot_minutes'])) {
@@ -77,11 +78,19 @@ class BookingService
 
         $bookingData['group_id'] = $event ? $event->group_id : null;
 
-        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot);
+        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
+
+        if (is_wp_error($bookingData)) {
+            return $bookingData;
+        }
 
         do_action('fluent_booking/before_booking', $bookingData, $calendarSlot);
 
         $booking = Booking::create($bookingData);
+
+        if ($customFieldsData) {
+            Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+        }
 
         $booking->hosts()->attach($calendarSlot->user_id, [
             'status' => 'confirmed'
@@ -89,14 +98,12 @@ class BookingService
 
         $booking->load('calendar');
 
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+        // this pre hook is for early actions that require for remote calendars and locations
+        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
-        $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
-        if ($calendarSlot->calendar->type !== 'free' && $paymentMethod) {
-            //make draft orders
-            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
-            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
-        }
+        // We are just renewing this as this may have been changed by the pre hook
+        $booking = Booking::find($booking->id);
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
         return $booking;
     }

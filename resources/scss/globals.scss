@@ -2578,7 +2578,10 @@
             float: none;
             padding: 8px;
         }
-        .wp-switch-editor{
+        .wp-media-buttons {
+            margin-top: 10px;
+        }
+        .wp-switch-editor, .insert-media.add_media{
             height: auto;
             margin: 0 0 0 4px;
             background-color: transparent;
@@ -2628,4 +2631,10 @@ p.fcal_human_text {
     margin: 0px 0 6px !important;
     color: #6b7280;
     line-height: 100%;
+}
+
+.fcal_showing_details {
+    .fcal_spot_line {
+        align-items: start !important;
+    }
 }
