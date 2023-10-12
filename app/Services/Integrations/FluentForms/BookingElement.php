@@ -144,21 +144,20 @@ class BookingElement extends BaseFieldManager
 
         $name = Arr::get($data, 'attributes.name');
 
+        $localizeData = (new FrontEndHandler())->getCalendarEventVars($calendar, $slot);
+        
+        $localizeData['name'] = $name;
+        $localizeData['settings'] = $settings;
+        $localizeData['disable_author'] = true;
+        $localizeData['form_instance'] = $form->instance_css_class;
+
         wp_enqueue_script(
             'fluentform-calendar-public',
             App::getInstance('url.assets') . 'public/js/fluentform.js', [],
             App::getInstance('config')->get('app.version'), true
         );
 
-        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, [
-            'name'           => $name,
-            'slot'           => $slot,
-            'calendar'       => $calendar,
-            'settings'       => $settings,
-            'form_instance'  => $form->instance_css_class,
-            'author_profile' => $slot->getAuthorProfile(true),
-            'disable_author' => true,
-        ]);
+        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, $localizeData);
 
         wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars',
             (new FrontEndHandler())->getGlobalVars()
