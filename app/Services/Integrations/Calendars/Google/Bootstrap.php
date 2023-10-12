@@ -94,9 +94,9 @@ class Bootstrap
             ];
         });
 
-        add_filter( 'fluent_booking/get_location_fields', function($fields, $userId) {
+        add_filter( 'fluent_booking/get_location_fields', function($fields, $calendar) {
             $meetExist = Meta::where('object_type', '_google_user_token')
-                ->where('object_id', $userId)
+                ->where('object_id', $calendar->user_id)
                 ->first();
             
             $message = !$meetExist ? ' (Connect Google Meet First)' : '';

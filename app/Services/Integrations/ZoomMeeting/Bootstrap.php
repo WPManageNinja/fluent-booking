@@ -6,6 +6,7 @@ namespace FluentBooking\App\Services\Integrations\ZoomMeeting;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\App\Services\PermissionManager;
@@ -37,6 +38,30 @@ class Bootstrap
          * Booking Level Hooks
          */
         add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 9, 2);
+
+        /*
+         * Location Hooks
+         */
+
+        add_filter( 'fluent_booking/get_location_fields', function($fields, $calendar) {
+
+            if (!ZoomHelper::isConfigured()) {
+                return $fields;
+            }
+
+            $config = ZoomHelper::getAccessConfig($calendar);
+
+            if (!$config || empty($config['access_token'])) {
+                return $fields;
+            }
+
+            $fields['conferencing']['options']['zoom_meeting'] = [
+                'title'    => 'Zoom Video',
+                'disabled' => false
+            ];
+
+            return $fields;
+        }, 10, 2);
     }
 
     public function addGlobalMenu($menuItems)

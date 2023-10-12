@@ -158,11 +158,7 @@ class LandingPageHandler
             }
         }
 
-        $formFields = BookingFieldService::getBookingFields($slot);
-
         $authorProfile = $slot->getAuthorProfile(true);
-
-        $slot->description = wpautop($slot->description);
 
         $slot->pre_selects = false;
 
@@ -187,13 +183,8 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/js/app.js'
             ],
             'js_vars'     => [
-                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => apply_filters('fluent_calendar_public_event_vars', [
-                    'slot'           => $slot,
-                    'calendar'       => $calendar,
-                    'author_profile' => $authorProfile,
-                    'form_fields'    => $formFields
-                ], $slot, $calendar),
-                'fluentCalendarPublicVars'  => (new FrontEndHandler())->getGlobalVars()
+                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $slot),
+                'fluentCalendarPublicVars'                            => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
 
