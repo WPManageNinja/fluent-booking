@@ -46,6 +46,14 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');
+
+    // webhooks
+    $router->get('/{id}/slots/{event_id}/webhooks', 'WebhookController@getFeeds')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/webhooks', 'WebhookController@saveFeed')->int('id')->int('event_id');
+    $router->delete('/{id}/slots/{event_id}/webhooks/{webhook_id}', 'WebhookController@deleteFeed')->int('id')->int('event_id')->int('webhook_id');
+
+
+
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
