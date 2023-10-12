@@ -39,8 +39,8 @@
                 // const formHeight = document.getElementById("fcal_booking_form_wrap");
                 // const formOffsetHeight = formHeight.offsetHeight;
 
-                const currentHeight = document.querySelector(".fcal_date_event_details.is_active").offsetHeight;
-                calendarHeight = currentHeight;
+              //  const currentHeight = document.querySelector(".fcal_date_event_details.is_active").offsetHeight;
+              //  calendarHeight = currentHeight;
 
                 // if (dayPickerWrapHeight > formOffsetHeight) {
                 //     calendarHeight = dayPickerWrapHeight;
@@ -73,6 +73,7 @@
 
 
         setTimeout(() => {
+            return;
             const currentHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
             console.log(currentHeight);
             calendarHeight = currentHeight + 135;
