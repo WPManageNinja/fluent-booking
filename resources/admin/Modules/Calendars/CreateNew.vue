@@ -81,6 +81,9 @@ export default {
     },
     methods: {
         createCalendar() {
+            if (!this.checkValidattion()) {
+                return;
+            }
             this.saving = true;
             this.updateMeetingDuration();
             this.$post('calendars', {
@@ -107,6 +110,20 @@ export default {
                     window.location.reload();
                 }, 150);
             }
+        },
+        checkValidattion() {
+            const location = this.calendar.slot.location_settings[0];
+            if (!location.type) {
+                this.$handleError('Location is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+                this.$handleError('Location Title is required');
+                return false;
+            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                this.$handleError('Phone Number is required');
+                return false;
+            }
+            return true;
         },
         updateMeetingDuration() {
             const duration = this.calendar.slot.duration;
