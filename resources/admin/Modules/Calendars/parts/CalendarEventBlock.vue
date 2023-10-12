@@ -36,7 +36,7 @@
         </div>
         <div class="fcal_cal_slots">
             <div class="fcal_cal_slot" v-for="(slot, slotIndex) in calendar.slots" :key="slot.id">
-                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" />
+                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id" :publicUrl="calendar.public_url"/>
             </div>
         </div>
         <el-dialog v-model="showSettings" title="Calendar Settings">
