@@ -479,6 +479,7 @@ class CalendarController extends Controller
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
+
         /*
          * Confirmation Email to Attendee
          * Confirmation Email to Organizer

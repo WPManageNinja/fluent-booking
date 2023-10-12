@@ -84,8 +84,7 @@
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
-                        :event_id="event_id"
-                        :calendar_id="calendar_id"
+                        :calendar_event="slot"
                     />
                 </div>
             </el-tab-pane>
