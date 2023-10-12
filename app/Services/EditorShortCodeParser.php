@@ -109,6 +109,14 @@ class EditorShortCodeParser
             return $booking->getLocationDetailsHtml;
         }
 
+        if ($key == 'booking_hash') {
+            return $booking->hash;
+        }
+
+        if (property_exists($booking, $key)) {
+            return $booking->{$key};
+        }
+
         return '';
     }
 
