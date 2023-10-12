@@ -89,6 +89,11 @@ class BookingService
 
         $booking->load('calendar');
 
+        // this pre hook is for early actions that require for remote calendars and locations
+        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+
+        // We are just renewing this as this may have been changed by the pre hook
+        $booking = Booking::find($booking->id);
         do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
 
         $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
