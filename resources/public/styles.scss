@@ -1090,12 +1090,17 @@ $lightDark: #6b7280;
 .fcal_payment_items {
   display: flex;
   gap: 20px;
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
   p {
     margin: 0;
   }
 }
 .fcal_payment_items_wrapper {
-  padding: 7px 19px;
+  table {
+    margin: 0;
+  }
   background: #f9fafb;
   border-radius: 4px;
 }

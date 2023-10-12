@@ -33,25 +33,54 @@
                             </select>
                             {:else if field.type === 'payment'}
                                 <div class="fcal_payment_items_wrapper">
-                                {#each field.payment_items as item}
                                     <div class="fcal_payment_items">
-                                        <input type="hidden" disabled="true" value="{item.value}" class="fcal_input"/>
-                                        <p>{item.title}:</p>
-                                        <p>
-                                            <span>{@html field.currency_sign}</span>
-                                                {item.value}
-                                        </p>
+                                        <table>
+                                            <thead>
+                                                <tr style="background: #e0e0e0;">
+                                                    <th>Item</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {#each field.payment_items as item}
+                                                    <tr>
+                                                        <td>
+                                                            <p>{item.title}</p>
+                                                            <input type="hidden" disabled="true" value="{item.value}" class="fcal_input"/>
+                                                        </td>
+                                                        <td>
+                                                            <p>
+                                                                <span>{@html field.currency_sign}</span>
+                                                                {item.value}
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                            {/each}
+                                            <tr>
+                                                <td>
+                                                    <p>Total:</p>
+                                                </td>
+                                                <td>
+                                                    <p>
+                                                        <span>{@html field.currency_sign}</span>
+                                                        {getSubTotal(field.payment_items)}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                    </table>
                                     </div>
-                                {/each}
                                 </div>
                             {/if}
                         </label>
                     </div>
                 {/if}
             {/each}
+            {#if appData?.payment_methods?.template}
             <div class="fcal_form_item">
                 {@html appData.payment_methods.template}
             </div>
+            {/if}
             <div class="fcal_form_item fcal_submit">
                 <button disabled="{submitting}" type="submit"
                         class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
@@ -69,6 +98,7 @@
 <script>
     import {util, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
+    import {intros} from "svelte/internal";
 
     export let timezone;
     export let formFields;
@@ -84,6 +114,15 @@
     let dispatch = createEventDispatcher();
 
     let errors = '';
+
+
+    let getSubTotal = (items) => {
+        let subtotal = 0;
+        for (let item of items) {
+            subtotal += parseFloat(item.value);
+        }
+        return subtotal;
+    }
 
     const currentUrl = window.location.href;
 
@@ -109,12 +148,12 @@
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
-                if (res.data.redirect_to) {
+                if (res.data?.redirect_to) {
                     window.location.href = res.data.redirect_to;
                     return;
                 }
 
-                if (res.data.actionName === 'custom') {
+                if (res.data?.actionName === 'custom') {
                     window.dispatchEvent(new CustomEvent('fluent_booking_payment_next_action_' + res.data.nextAction, {
                         detail: {
                             form: e.target,
