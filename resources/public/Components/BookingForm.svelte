@@ -148,12 +148,12 @@
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
-                if (res.data.redirect_to) {
+                if (res.data?.redirect_to) {
                     window.location.href = res.data.redirect_to;
                     return;
                 }
 
-                if (res.data.actionName === 'custom') {
+                if (res.data?.actionName === 'custom') {
                     window.dispatchEvent(new CustomEvent('fluent_booking_payment_next_action_' + res.data.nextAction, {
                         detail: {
                             form: e.target,

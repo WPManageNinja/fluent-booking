@@ -87,7 +87,7 @@ class Stripe extends BasePaymentMethod
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
-            'payment_method_type' => ['card'],
+//            'payment_method_type' => ['card'],
             'client_reference_id' => $hash,
             'items' => $items,
             'amount' => (int) round($paymentTotal),
@@ -210,8 +210,6 @@ class Stripe extends BasePaymentMethod
         $sessionPayload = array(
             'client_reference_id' => $args['client_reference_id'],
             'success_url' => $args['success_url'],
-            //'cancel_url' => 'http://stripe.com',
-            'payment_method_types' => $args['payment_method_type'],
             'line_items' => $lineItems,
             'mode' => 'payment',
             'invoice_creation' => array(
@@ -222,6 +220,10 @@ class Stripe extends BasePaymentMethod
                 'ref_id'  => $args['client_reference_id'],
             ]
         );
+
+        if (isset($args['payment_method_type'])) {
+            $sessionPayload['payment_method_types'] = $args['payment_method_type'];
+        }
 
         return $sessionPayload;
     }
