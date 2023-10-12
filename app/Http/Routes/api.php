@@ -114,10 +114,3 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/activities', 'ReportController@getActivities');
 });
-
-$router->prefix('webhooks')->withPolicy('UserPolicy')->group(function ($router) {
-    $router->get('/', 'WebhookController@index');
-    $router->post('/', 'WebhookController@create');
-    $router->put('/', 'WebhookController@updateData');
-    $router->delete('/{id}', 'WebhookController@delete')->int('id');
-});
