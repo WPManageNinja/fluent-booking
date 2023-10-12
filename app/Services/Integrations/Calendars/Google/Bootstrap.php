@@ -116,8 +116,6 @@ class Bootstrap
                 'location_type' => 'conferencing'
             ];
             return $fields;
-
-            return $fields;
         }, 10, 2);
 
         add_action('fluent_booking/save_client_settings_google_calendar', function ($settings) {
