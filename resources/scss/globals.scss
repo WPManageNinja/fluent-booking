@@ -2446,7 +2446,10 @@
             float: none;
             padding: 8px;
         }
-        .wp-switch-editor{
+        .wp-media-buttons {
+            margin-top: 10px;
+        }
+        .wp-switch-editor, .insert-media.add_media{
             height: auto;
             margin: 0 0 0 4px;
             background-color: transparent;
