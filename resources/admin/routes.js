@@ -4,14 +4,18 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
+
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
+import GeneralSettings from "./Modules/Settings/GeneralSettings.vue";
+
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCalendarsSettings";
 import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGeneralSettings.vue";
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
+import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
 import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
 
 export var routes = [
@@ -113,6 +117,14 @@ export var routes = [
         },
         children: [
             {
+                name: 'general_settings',
+                path: 'general-settings',
+                component: GeneralSettings,
+                meta: {
+                    active_menu: 'settings',
+                }
+            },
+            {
                 name: 'configure-integrations',
                 path: 'configure-integrations/:settings_key',
                 props: true,
@@ -121,7 +133,17 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Configure Integrations'
                 },
-            }
+            },
+            {
+                name: 'PaymentSettingsIndex',
+                path: 'configure-integrations/payment/:settings_key',
+                props: true,
+                component: PaymentSettingsIndex,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Configure Integrations'
+                },
+            },
         ]
     },
     {

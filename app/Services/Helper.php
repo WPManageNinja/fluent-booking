@@ -653,7 +653,6 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
-
     /**
      * Sending a job to background for further processing
      *
@@ -791,16 +790,9 @@ class Helper
 
         return BookingMeta::create([
             'booking_id' => $eventId,
-            'meta_key' => $metaKey,
-            'value'    => $value
+            'meta_key'   => $metaKey,
+            'value'      => $value
         ]);
-    }
-
-    public static function deleteBookingMeta($eventId, $metaKey)
-    {
-        return BookingMeta::where('booking_id', $eventId)
-            ->where('meta_key', $metaKey)
-            ->delete();
     }
 
     public static function getUserDisplayName($userId = null)
@@ -1206,13 +1198,13 @@ class Helper
 
     public static function getDefaultNotificationSettings()
     {
-        $defaults = apply_filters('fluent_booking/default_notification_settings', [
+        return apply_filters('fluent_booking/default_email_notification_settings', [
             'booking_conf_attendee' => [
                 'enabled' => true,
                 'title'   => 'Booking Confirmation to Attendee',
                 'email'   => [
                     'subject' => 'Booking Confirmation with {host.name} {event.datetime}',
-                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
+                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><p><strong>Event Name</strong></p><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
                 ],
             ],
             'booking_conf_host'     => [
@@ -1268,40 +1260,118 @@ class Helper
                 ],
             ]
         ]);
-
-        return $defaults;
     }
 
-    public static function getEditorShortCodes()
+    public static function getEditorShortCodes($isHtmlSupported = false)
     {
-        $shortcodes = apply_filters('fluent_booking/editor_shortcodes', [
-            '{event.name}'          => 'Event Name',
-            '{event.datetime}'      => 'Event Date',
-            '{event.full_datetime}' => 'Event Full Date',
-            '{event.location}'      => 'Event Location',
-            '{event.description}'   => 'Event Description',
-            '{event.reminder_time}' => 'Event Reminder Time',
-            '{even.cancel_reason}'  => 'Event Cancel Reason',
-            '{host.timezone}'       => 'Host Timezone',
-            '{host.name}'           => 'Host Name',
-            '{host.email}'          => 'Host Email',
-            '{guest.timezone}'      => 'Guest Timezone',
-            '{guest.first_name}'    => 'Guest First Name',
-            '{guest.last_name}'     => 'Guest Last Name',
-            '{guest.full_name}'     => 'Guest Full Name',
-            '{guest.email}'         => 'Guest Email',
-            '{guest.note}'          => 'Guest Note',
-            '{wp.admin_email}'      => 'Admin Email',
-            '{wp.site_url}'         => 'Site URL',
-            '{wp.site_title}'       => 'Site Title',
-            '{date.m/d/Y}'          => 'Date (mm/dd/yyyy)',
-            '{date.d/m/Y}'          => 'Date (dd/mm/yyyy)',
-            '{user.display_name}'   => 'User Display Name',
-            '{user.user_email}'     => 'User Email',
-            '{user.user_login}'     => 'User Username',
-        ]);
+        if (!$isHtmlSupported) {
+            $groups = [
+                'guest'   => [
+                    'title'      => 'Attendee Data',
+                    'key'        => 'guest',
+                    'shortcodes' => [
+                        '{{guest.first_name}}' => 'Guest First Name',
+                        '{{guest.last_name}}'  => 'Guest Last Name',
+                        '{{guest.full_name}}'  => 'Guest Full Name',
+                        '{{guest.email}}'      => 'Guest Email',
+                        '{{guest.note}}'       => 'Guest Note',
+                        '{{guest.timezone}}'   => 'Guest Timezone'
+                    ]
+                ],
+                'booking' => [
+                    'title'      => 'Booking Data',
+                    'key'        => 'booking',
+                    'shortcodes' => [
+                        '{{booking.event_name}}'                    => 'Event Name',
+                        '{{booking.description}}'                   => 'Event Description',
+                        '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
+                        '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
+                        '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
+                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with attendee timezone)',
+                        '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
+                        '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
+                        '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
+                        '##booking.cancelation_url##'               => 'Booking Cancellation URL',
+                        '##booking.reschedule_url##'                => 'Booking Reschedule URL',
+                    ]
+                ],
+                'host'    => [
+                    'title'      => 'Host Data',
+                    'key'        => 'host',
+                    'shortcodes' => [
+                        '{{host.name}}'     => 'Host Name',
+                        '{{host.email}}'    => 'Host Email',
+                        '{{host.timezone}}' => 'Host Timezone',
+                    ]
+                ],
+                'other'   => [
+                    'title'      => 'Other',
+                    'key'        => 'other',
+                    'shortcodes' => [
+                        '{{event.id}}'             => 'Event ID',
+                        '{{calendar.id}}'          => 'Calendar ID',
+                        '{{calendar.title}}'       => 'Calendar Title',
+                        '{{calendar.description}}' => 'Calendar Description',
+                    ]
+                ]
+            ];
+        } else {
+            $groups = [
+                'guest'   => [
+                    'title'      => 'Attendee Data',
+                    'key'        => 'guest',
+                    'shortcodes' => [
+                        '{{guest.first_name}}'     => 'Guest First Name',
+                        '{{guest.last_name}}'      => 'Guest Last Name',
+                        '{{guest.full_name}}'      => 'Guest Full Name',
+                        '{{guest.email}}'          => 'Guest Email',
+                        '{{guest.note}}'           => 'Guest Note',
+                        '{{guest.timezone}}'       => 'Guest Timezone',
+                        '{{guest.form_data_html}}' => 'Guest Form Submitted Data (HTML)'
+                    ]
+                ],
+                'booking' => [
+                    'title'      => 'Booking Data',
+                    'key'        => 'booking',
+                    'shortcodes' => [
+                        '{{booking.event_name}}'                    => 'Event Name',
+                        '{{booking.description}}'                   => 'Event Description',
+                        '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
+                        '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
+                        '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
+                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with attendee timezone)',
+                        '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
+                        '{booking.location_details_html}'           => 'Event Location Details (HTML)',
+                        '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
+                        '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
+                        '##booking_cancelation_url##'               => 'Booking Cancellation URL',
+                        '##booking_reschedule_url##'                => 'Booking Reschedule URL',
+                    ]
+                ],
+                'host'    => [
+                    'title'      => 'Host Data',
+                    'key'        => 'host',
+                    'shortcodes' => [
+                        '{{host.name}}'     => 'Host Name',
+                        '{{host.email}}'    => 'Host Email',
+                        '{{host.timezone}}' => 'Host Timezone',
+                    ]
+                ],
+                'other'   => [
+                    'title'      => 'Other',
+                    'key'        => 'other',
+                    'shortcodes' => [
+                        '{{event.id}}'             => 'Event ID',
+                        '{{event.calendar_id}}'    => 'Calendar ID',
+                        '{{calendar.title}}'       => 'Calendar Title',
+                        '{{calendar.description}}' => 'Calendar Description',
+                    ]
+                ]
+            ];
+        }
 
-        return $shortcodes;
+
+        return apply_filters('fluent_booking/editor_shortcodes_groups', $groups, $isHtmlSupported);
     }
 
     public static function encryptKey($value)
@@ -1375,5 +1445,71 @@ class Helper
         if (defined('FLUENT_BOOKING_DEBUG') && FLUENT_BOOKING_DEBUG) {
             error_log(print_r($data, true));
         }
+    }
+
+    public static function getGlobalSettings()
+    {
+        $defaults = [
+            'emailing'       => [
+                'from_name'               => '',
+                'from_email'              => '',
+                'reply_to_name'           => '',
+                'reply_to_email'          => '',
+                'use_host_name'           => '',
+                'use_host_email_on_reply' => '',
+                'email_footer'            => ''
+            ],
+            'administration' => [
+                'admin_email'            => '{{wp.admin_email}}',
+                'summary_notification'   => 'no',
+                'notification_frequency' => 'daily',
+                'notification_day'       => 'mon'
+            ]
+        ];
+
+        $settings = get_option('_fluent_booking_settings', []);
+
+        if (empty($settings)) {
+            $settings = [];
+        }
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        $emailSettings = $settings['emailing'];
+
+        if (empty($emailSettings['from_name']) && defined('FLUENTCRM')) {
+            $crmSettings = fluentcrmGetGlobalSettings('email_settings', []);
+            $emailSettings['from_name'] = Arr::get($crmSettings, 'from_name');
+            if (empty($emailSettings['from_email'])) {
+                $emailSettings['from_email'] = Arr::get($crmSettings, 'from_email');
+            }
+            if (empty($emailSettings['reply_to_name'])) {
+                $emailSettings['reply_to_name'] = Arr::get($crmSettings, 'reply_to_name');
+            }
+            if (empty($emailSettings['reply_to_email'])) {
+                $emailSettings['reply_to_email'] = Arr::get($crmSettings, 'reply_to_email');
+            }
+
+            $settings['emailing'] = $emailSettings;
+        }
+
+        return $settings;
+
+    }
+
+    public static function getVerifiedSenders()
+    {
+        $verifiedSenders = [];
+        if (defined('FLUENTMAIL')) {
+            $smtpSettings = get_option('fluentmail-settings', []);
+            if ($smtpSettings && count($smtpSettings['mappings'])) {
+                $verifiedSenders = array_keys($smtpSettings['mappings']);
+            }
+        }
+        /**
+         * Filter the verified email senders
+         * @param array $verifiedSenders
+         */
+        return apply_filters('fluent_booking/verfied_email_senders', $verifiedSenders);
     }
 }

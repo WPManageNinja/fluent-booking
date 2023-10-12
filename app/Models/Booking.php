@@ -41,6 +41,8 @@ class Booking extends Model
         'location_details',
         'cancelled_by',
         'status',
+        'payment_method',
+        'payment_status',
         'event_type',
         'source',
         'source_id',
@@ -55,7 +57,7 @@ class Booking extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
+        static::creating( function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
             }

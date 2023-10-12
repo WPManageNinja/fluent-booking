@@ -61,10 +61,10 @@ class BookingService
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
         $locationData = [
-            'type'              => Arr::get($calendarSlot->location_settings[0], 'type'),
-            'title'             => Arr::get($calendarSlot->location_settings[0], 'title'),
-            'host_phone_number' => Arr::get($calendarSlot->location_settings[0], 'host_phone_number'),
-            'description'       => Arr::get($calendarSlot->location_settings[0], 'description')
+            'type'              => Arr::get($calendarSlot->location_settings, '0.type'),
+            'title'             => Arr::get($calendarSlot->location_settings, '0.title'),
+            'host_phone_number' => Arr::get($calendarSlot->location_settings, '0.host_phone_number'),
+            'description'       => Arr::get($calendarSlot->location_settings, '0.description')
         ];
 
         $bookingData['location_details'] = $locationData;
@@ -90,6 +90,13 @@ class BookingService
         $booking->load('calendar');
 
         do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+
+        $paymentMethod = Arr::get($data, 'payment_method', 'stripe');
+        if ($calendarSlot->calendar->type !== 'free' && $paymentMethod) {
+            //make draft orders
+            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
+            do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
+        }
 
         return $booking;
     }

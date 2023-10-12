@@ -79,7 +79,7 @@
                     <el-icon>
                         <Link/>
                     </el-icon>
-                    Webhooks Settings
+                    Webhooks Feeds
                 </template>
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -88,6 +88,21 @@
                         :calendar_id="calendar_id"
                     />
                 </div>
+            </el-tab-pane>
+            <el-tab-pane name="payment-settings">
+              <template #label>
+                <el-icon>
+                  <Money/>
+                </el-icon>
+                Payment Settings
+              </template>
+              <div class="fcal_create_calendar_body">
+                <el-skeleton v-if="loading"/>
+                <payment-settings
+                    :event_id="event_id"
+                    :calendar_id="calendar_id"
+                />
+              </div>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -103,9 +118,10 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message, View, CopyDocument} from '@element-plus/icons-vue';
+import {Back, Link, Message, View, CopyDocument, Money} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings";
 import { copyToClipBoard } from '@/Bits/data_config.js';
+import PaymentSettings from "./Payments/PaymentSettings.vue";
 
 export default {
     name: 'SlotSettings',
@@ -113,6 +129,7 @@ export default {
     components: {
         WebhookSettings,
         ScheduleSettings,
+        PaymentSettings,
         BasicInfo,
         SaveButton,
         NotificationSettings,
@@ -123,9 +140,10 @@ export default {
         QuestionIcon,
         Back,
         Link,
-        Message,
         View,
-        CopyDocument
+        CopyDocument,
+        Money,
+        Message
     },
     data() {
         return {

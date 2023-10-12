@@ -12,6 +12,8 @@ use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
 
 class Route
 {
+    use SubstituteRouteParametersTrait;
+    
     /**
      * Application Instance
      * @var \FluentBooking\Framework\Foundation\Application
@@ -100,6 +102,12 @@ class Route
         'alpha_num' => '[a-zA-Z0-9]+',
         'alpha_num_dash' => '[a-zA-Z0-9-_]+'
     ];
+
+    /**
+     * Route parameters
+     * @var null|array
+     */
+    protected static $parameters = null;
 
     /**
      * Construct the route instance
@@ -288,6 +296,35 @@ class Route
     public function withPolicy($handler)
     {
         $this->policyHandler = $handler;
+
+        if (is_string($handler) && !$this->app->hasNamespace($handler)) {
+            $this->setPolicyHandlerWithNamespace(
+                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4)
+            );
+        }
+    }
+
+    /**
+     * Resolve and set policy with namespace for add-ons
+     * 
+     * @param null
+     */
+    protected function setPolicyHandlerWithNamespace($backTrace)
+    {
+        $last = end($backTrace);
+
+        if (!isset($last['class'])) return;
+
+        $class = $last['class'];
+
+        $namespace = substr(__NAMESPACE__, 0, strpos(__NAMESPACE__, '\\'));
+        
+        $calledClassNamespace = substr($class, 0, strpos($class, '\\'));
+
+        if ($namespace != $calledClassNamespace) {
+            $ns = $calledClassNamespace . '\\App\\Http\\Policies\\';
+            $this->policyHandler = $ns . $this->policyHandler;
+        }
     }
 
     /**
@@ -401,10 +438,11 @@ class Route
     {
         try {
 
-            $response = $this->app->call(
-                $this->action,
-                $this->app->request->get_url_params()
-            );
+            if ($routeParameters = $this->getParameter()) {
+                $routeParameters = $this->SubstituteParameters($routeParameters);
+            }
+
+            $response = $this->app->call($this->action, $routeParameters);
 
             if (!($response instanceof WP_REST_Response)) {
                 if (is_wp_error($response)) {
@@ -438,12 +476,13 @@ class Route
      */
     public function permissionCallback($wpRestRequest)
     {
+        $this->app->instance('route', $this);
+        
         if (!$this->app->bound('wprestrequest')) {
             $this->app->instance('wprestrequest', $wpRestRequest);
             $this->app->request->mergeInputsFromRestRequest($wpRestRequest);
 
             if (method_exists($this, 'prepareCallbacks')) {
-                $this->app->instance('route', $this);
                 $this->prepareCallbacks($this->app->request);
             }
         }
@@ -547,6 +586,21 @@ class Route
     }
 
     /**
+     * Get route one or more parameters
+     * @param  string $key
+     * 
+     * @return mixed
+     */
+    public function getParameter($key = null)
+    {
+        if (is_null(static::$parameters)) {
+            static::$parameters = $this->app->request->get_url_params();
+        }
+
+        return $key ? static::$parameters[$key] : static::$parameters;
+    }
+
+    /**
      * Dynamically access a route parameter.
      * 
      * @param string $key
@@ -554,10 +608,6 @@ class Route
      */
     public function __get($key)
     {
-        $array = $this->app->request->get_url_params();
-
-        if (isset($array[$key])) {
-            return $array[$key];
-        }
+        return $this->getParameter($key);
     }
 }

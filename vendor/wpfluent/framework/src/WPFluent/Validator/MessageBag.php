@@ -91,7 +91,9 @@ trait MessageBag
      */
     protected function makeBagKey($attribute, $rule)
     {
-        $type = $this->deduceType($this->getValue($attribute));
+        $type = $this->deduceType(
+            $this->getValue($attribute), $attribute
+        );
 
         return $rule.'.'.$type;
     }
@@ -168,7 +170,13 @@ trait MessageBag
     {
         $text = $this->getReplacementText($attribute.'.required_if', 'required_if');
 
-        return str_replace([':attribute', ':other', ':value'], [$attribute, $parameters[0], $parameters[1]], $text);
+        $value = end($parameters);
+        
+        return str_replace([
+            ':attribute', ':other', ':value'],
+            [$attribute, $parameters[0], $value],
+            $text
+        );
     }
 
     /**
