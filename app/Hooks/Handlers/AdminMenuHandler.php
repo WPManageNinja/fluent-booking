@@ -36,7 +36,7 @@ class AdminMenuHandler
             'fluent-booking',
             [$this, 'render'],
             $this->getMenuIcon(),
-            6
+            26
         );
 
         add_submenu_page(
@@ -80,7 +80,7 @@ class AdminMenuHandler
             __('Settings', 'fluent-booking'),
             __('Settings', 'fluent-booking'),
             $capability,
-            'admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar',
+            'admin.php?page=fluent-booking#/settings/general-settings',
             ''
         );
     }
@@ -131,7 +131,7 @@ class AdminMenuHandler
                 [
                     'key'       => 'settings',
                     'label'     => __('Settings', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'settings/configure-integrations/google_calendar'
+                    'permalink' => $baseUrl . 'settings/general-settings'
                 ]
             ];
         }
@@ -214,7 +214,7 @@ class AdminMenuHandler
         $customFieldTypes = Helper::getCustomFieldTypes();
         $locationFields = (new Calendar())->getLocationFields();
         $editorShortcodes = Helper::getEditorShortCodes();
-
+        $editorShortcodesForHtml = Helper::getEditorShortCodes(true);
 
         return apply_filters('fluent_booking/admin_vars', [
             'slug'               => $slug = $app->config->get('app.slug'),
@@ -228,6 +228,7 @@ class AdminMenuHandler
             'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,
             'editor_shortcodes'  => $editorShortcodes,
+            'editor_shortcodes_for_html'  => $editorShortcodesForHtml,
             'me'                 => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),

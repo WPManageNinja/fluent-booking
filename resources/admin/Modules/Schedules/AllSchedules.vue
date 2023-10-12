@@ -5,7 +5,7 @@
                 <div v-if="booking_id" class="fcal_back_btn">
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{ currentPeriod }}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ statusFilters[filters.period] || filters.period }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
@@ -105,7 +105,7 @@
                                         :key="schedule.id"
                                         :class="{ fcal_is_current: schedule.id == booking_id }"
                                         class="fcal_each_spot">
-                                        <booking-card :multi_host="filters.author != 'me'"
+                                        <booking-card :showing_id="booking_id" :multi_host="filters.author != 'me'"
                                                        @showDetails="showDetails(schedule)" :booking="schedule"/>
                                     </div>
                                 </div>

@@ -3,7 +3,7 @@
     <div class="fcal_webhook_settings">
         <div class="fcal_create_calendar_form">
             <div class="fcal_create_calendar_form_header">
-                <h2><el-icon><Link /></el-icon> Webhook Settings </h2>
+                <h2><el-icon><Link /></el-icon> Webhook Feeds </h2>
 
                 <el-button
                     v-if="show_edit"

@@ -6,19 +6,21 @@ use FluentBooking\Framework\Support\Arr;
 
 class EditorShortCodeParser
 {
+    protected static $requireHtml = true;
+
     protected static $store = [
-        'time'          => null,
-        'booking'       => null,
-        'calendar'      => null,
-        'host'          => null,
-        'user'          => null,
+        'booking'          => null,
+        'calendar_booking' => null,
+        'calendar'         => null,
+        'host'             => null,
+        'user'             => null,
     ];
 
-    public static function parse($parsable, $booking, $time = null)
+    public static function parse($parsable, $booking, $requireHtml = true)
     {
         try {
-            static::setData($booking, $time);
-
+            static::$requireHtml = $requireHtml;
+            static::setData($booking);
             return static::parseShortCodes($parsable);
         } catch (\Exception $e) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -28,57 +30,94 @@ class EditorShortCodeParser
         }
     }
 
-    protected static function setData($booking, $time)
+    protected static function setData($booking)
     {
-        static::$store['time']     = $time;
-        static::$store['booking']  = $booking;
-        static::$store['calendar'] = $booking->slot->calendar;
-        static::$store['host']     = $booking->slot->getAuthorProfile(false);
+        $bookingEvent = $booking->slot;
+        static::$store['booking'] = $booking;
+        static::$store['booking_event'] = $bookingEvent;
+        static::$store['calendar'] = $bookingEvent->calendar;
+        static::$store['host'] = $bookingEvent->getAuthorProfile(false);
     }
 
-    protected static function getEventData($key)
+    protected static function getBookingData($key)
     {
-        $event = static::$store['booking'];
-        $time  = static::$store['time'];
-        if (is_null($event)) {
+        $bookingEvent = static::$store['booking_event'];
+        $calendar = static::$store['calendar'];
+        $booking = static::$store['booking'];
+
+        if (!$bookingEvent || !$calendar || !$booking) {
             return '';
         }
 
-        if('name' == $key) {
-            return $event->slot['title'];
-        }
-        if('datetime' == $key) {
-            $timezone = $event['person_time_zone'];
-            return $event->getShortBookingDateTime($timezone);
-        }
-        if('full_datetime' == $key) {
-            $timezone = $event['person_time_zone'];
-            return $event->getFullBookingDateTimeText($timezone);
-        }
-        if('location' == $key) {
-            return $event->getLocationDetailsHtml();
-        }
-        if('reminder_time' == $key) {
-            return $time['value'] . ' ' . $time['unit'];
-        }
-        if('cancel_reason' == $key) {
-            return $event->getCancelReasonDescription();
+        if ($key == 'event_name') {
+            return $bookingEvent->title;
         }
 
-        return Arr::get($event, $key);
+        if ($key == 'description') {
+            return $bookingEvent->description;
+        }
+
+        if ('full_start_end_guest_timezone' == $key) {
+            return $booking->getShortBookingDateTime($bookingEvent->person_time_zone) . ' (' . $bookingEvent->person_time_zone . ')';
+        }
+
+        if ($key == 'full_start_end_host_timezone') {
+            return $booking->getShortBookingDateTime($calendar->author_timezone) . ' (' . $calendar->author_timezone . ')';
+        }
+
+        if ($key == 'start_date_time') {
+            return $booking->start_time;
+        }
+
+        if ($key = 'start_date_time_for_attendee') {
+            return DateTimeHelper::convertFromUtc($booking->start_time, $bookingEvent->person_time_zone, 'Y-m-d H:i:s');
+        }
+
+        if ($key == 'start_date_time_for_host') {
+            return DateTimeHelper::convertFromUtc($booking->start_time, $calendar->author_timezone, 'Y-m-d H:i:s');
+        }
+
+        if ($key == 'cancel_reason') {
+            return $booking->getCancelReasonDescription();
+        }
+
+        if ($key == 'start_time_human_format') {
+            if (time() > strtotime($booking->start_time)) {
+                $suffix = ' ago';
+            } else {
+                $suffix = ' from now';
+            }
+
+            return human_time_diff(time(), $booking->start_time) . ' ' . $suffix;
+        }
+
+        if ($key == 'cancelation_url') {
+            return add_query_arg([
+                'fluent-booking' => 'cancel-booking',
+                'booking_token'  => $booking->hash
+            ], site_url('index.php'));
+        }
+
+        if ($key == 'reschedule_url') {
+            return add_query_arg([
+                'fluent-booking' => 'reschedule-booking',
+                'booking_token'  => $booking->hash
+            ], site_url('index.php'));
+        }
+
+        if ($key == 'location_details_html') {
+            return $booking->getLocationDetailsHtml;
+        }
+
+        return '';
     }
 
     protected static function getHostData($key)
     {
-        $calendar = static::$store['calendar'];
         $host = static::$store['host'];
 
-        if (is_null($calendar) || is_null($host)) {
+        if (is_null($host)) {
             return '';
-        }
-
-        if ('timezone' == $key) {
-            return $calendar['author_timezone'];
         }
 
         return Arr::get($host, $key, '');
@@ -91,17 +130,50 @@ class EditorShortCodeParser
             return '';
         }
 
-        if('full_name' == $key) {
+        if ('full_name' == $key) {
             return $guest['first_name'] . ' ' . $guest['last_name'];
         }
-        if('timezone' == $key) {
+        if ('timezone' == $key) {
             return $guest['person_time_zone'];
         }
         if ('notes' == $key) {
             return $guest->getMessage();
         }
 
+        if ($key == 'form_data_html') {
+            return 'will be available soon';
+        }
+
         return Arr::get($guest, $key, '');
+    }
+
+    protected static function getBookingEventData($key)
+    {
+        $bookingEvent = static::$store['booking_event'];
+
+        if (is_null($bookingEvent)) {
+            return '';
+        }
+
+        if (property_exists($bookingEvent, $key)) {
+            return $bookingEvent->{$key};
+        }
+        return '';
+    }
+
+    protected static function getCalendarData($key)
+    {
+        $calendar = static::$store['calendar'];
+
+        if (is_null($calendar)) {
+            return '';
+        }
+
+        if (property_exists($calendar, $key)) {
+            return $calendar->{$key};
+        }
+
+        return '';
     }
 
     protected static function getUserData($key)
@@ -140,25 +212,30 @@ class EditorShortCodeParser
         if (!$parsable) {
             return '';
         }
-        return preg_replace_callback('/{+(.*?)}/', function ($matches) {
+
+        return preg_replace_callback('/({{|##)+(.*?)(}}|##)/', function ($matches) {
             $value = '';
-            if (false !== strpos($matches[1], 'event.')) {
-                $userProperty = substr($matches[1], strlen('event.'));
-                $value = static::getEventData($userProperty);
+            if (false !== strpos($matches[1], 'guest.')) {
+                $guestProperty = substr($matches[1], strlen('guest.'));
+                $value = static::getGuestData($guestProperty);
+            } elseif (false !== strpos($matches[1], 'booking.')) {
+                $bookingProperty = substr($matches[1], strlen('booking.'));
+                $value = static::getBookingData($bookingProperty);
             } elseif (false !== strpos($matches[1], 'host.')) {
-                $wpProperty = substr($matches[1], strlen('host.'));
-                $value = static::getHostData($wpProperty);
-            } elseif (false !== strpos($matches[1], 'guest.')) {
-                $wpProperty = substr($matches[1], strlen('guest.'));
-                $value = static::getGuestData($wpProperty);
-            } elseif (false !== strpos($matches[1], 'user.')) {
-                $userProperty = substr($matches[1], strlen('user.'));
-                $value = static::getUserData($userProperty);
-            } elseif (false !== strpos($matches[1], 'wp.')) {
-                $wpProperty = substr($matches[1], strlen('wp.'));
-                $value = static::getWPData($wpProperty);
+                $hostProperty = substr($matches[1], strlen('host.'));
+                $value = static::getHostData($hostProperty);
+            } elseif (false !== strpos($matches[1], 'event.')) {
+                $eventProperty = substr($matches[1], strlen('host.'));
+                $value = static::getBookingEventData($eventProperty);
+            } elseif (false !== strpos($matches[1], 'calendar.')) {
+                $calendarProperty = substr($matches[1], strlen('calendar.'));
+                $value = static::getCalendarData($calendarProperty);
             } else {
                 $value = static::getOtherData($matches[1]);
+            }
+
+            if (static::$requireHtml && is_array($value)) {
+                $value = Helper::fcalImplodeRecursive(', ', $value);
             }
 
             return $value;

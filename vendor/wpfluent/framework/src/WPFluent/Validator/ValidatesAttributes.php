@@ -42,7 +42,7 @@ trait ValidatesAttributes
         // return the proper size accordingly. If it is a number, then number itself
         // is the size. If it is a file, we take kilobytes, and for a string the
         // entire length of the string will be considered the attribute size.
-        $type = $this->deduceType($value);
+        $type = $this->deduceType($value, $attribute);
 
         switch ($type) {
             case 'numeric':
@@ -63,10 +63,10 @@ trait ValidatesAttributes
      *
      * @return string
      */
-    protected function deduceType($value)
+    protected function deduceType($value, $attribute = null)
     {
         if (is_numeric($value)) {
-            return 'numeric';
+            return $this->guessType($value, $attribute);
         } elseif (is_array($value)) {
             return 'array';
         } elseif ($value instanceof File) {
@@ -74,6 +74,22 @@ trait ValidatesAttributes
         }
 
         return 'string';
+    }
+
+    /**
+     * Guess the real type by examining rules.
+     * 
+     * @param  mixed $value
+     * @param  string|null $attribute
+     * @return string
+     */
+    protected function guessType($value, $attribute)
+    {
+        if ($attribute && in_array('string', $this->rules[$attribute])) {
+            return 'string';
+        }
+
+        return 'numeric';
     }
 
     /**

@@ -1,104 +1,149 @@
 <template>
-    <div class="fcal_settings_body_inner fcal_settings_general">
-        <div class="fcal_settings_header">
-            <h3>General</h3>
-        </div>
-
-        <div class="fcal_settings_content_wrap">
-            <el-form v-model="formData">
-                <el-form-item>
-                    <div class="fcal_settings_card">
+    <div>
+        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
+            <div class="fcal_configure_integration_card">
+                <div class="fcal_configure_integration_card_header">
+                    <div class="left">
                         <div class="content">
-                            <h3>Date & Time Format</h3>
-                            <p>Change the date and time format to your likings</p>
-                            <span class="format-date">
-                                Default format:
-                                <span>{{ formData.dateFormat }}</span>
-                            </span>
+                            <h3>General Settings</h3>
                         </div>
-                        <el-button class="fcal_primary_btn2">
-                            Update Date & Time Format
+                    </div>
+                </div>
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body fc_global_form_builder">
+                    <el-form v-model="administration" label-position="top">
+                        <el-row :gutter="30">
+                            <el-col :sm="24" :md="12">
+                                <el-form-item label="Admin Email">
+                                    <el-input v-model="administration.admin_email" placeholder="Admin Email"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="12">
+                                <el-form-item label="Summary Email">
+                                    <el-checkbox v-model="administration.summary_notification" true-label="yes"
+                                                 false-label="no"> Enable Booking Summary Notification
+                                    </el-checkbox>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+
+                        <template v-if="administration.summary_notification == 'yes'">
+                            <el-row :gutter="30">
+                                <el-col :sm="24" :md="12">
+                                    <el-form-item label="How often to send summary email?">
+                                        <el-select v-model="administration.notification_frequency"
+                                                   placeholder="Select Frequency" popper-class="fcal_select">
+                                            <el-option value="daily" label="Daily"></el-option>
+                                            <el-option value="weekly" label="Weekly"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :sm="24" :md="12">
+                                    <el-form-item v-if="administration.notification_frequency == 'weekly'"
+                                                  label="In which day to send the email?">
+                                        <el-select v-model="administration.notification_day" placeholder="Select Day"
+                                                   popper-class="fcal_select">
+                                            <el-option value="mon" label="Monday"></el-option>
+                                            <el-option value="tue" label="Tuesday"></el-option>
+                                            <el-option value="wed" label="Wednesday"></el-option>
+                                            <el-option value="thu" label="Thursday"></el-option>
+                                            <el-option value="fri" label="Friday"></el-option>
+                                            <el-option value="sat" label="Saturday"></el-option>
+                                            <el-option value="sun" label="Sunday"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </template>
+
+                    </el-form>
+
+                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
+                                   class="fcal_primary_btn">
+                            Save Settings
                         </el-button>
                     </div>
-                </el-form-item>
-
-
-                <el-form-item>
-                    <div class="fcal_settings_card">
-                        <div class="content">
-                            <h3>Calendar translator</h3>
-                            <p>Select the language for your user</p>
-                        </div>
-
-                        <el-select
-                            v-model="formData.translateLanguage"
-                            placeholder="Select"
-                            popper-class="fcal_select"
-                        >
-                            <el-option
-                                label="English"
-                                value="english"
-                            />
-                            <el-option
-                                label="Bangla"
-                                value="bangla"
-                            />
-                        </el-select>
-                    </div>
-                </el-form-item>
-
-                <el-form-item>
-                    <div class="fcal_settings_card">
-                        <div class="content">
-                            <h3>Set Timezone</h3>
-                            <p>Select the timezone of timetics</p>
-                            <p>Current Time: 4:39pm</p>
-                        </div>
-
-                        <el-select
-                            v-model="formData.timezone"
-                            placeholder="Select"
-                            popper-class="fcal_select"
-                        >
-                            <el-option
-                                label="Asia/Dhaka"
-                                value="asia/dhaka"
-                            />
-                            <el-option
-                                label="United State"
-                                value="us"
-                            />
-                        </el-select>
-                    </div>
-                </el-form-item>
-
-            </el-form>
-
-            <div class="fcal_settings_footer">
-                <el-button class="fcal_primary_btn">
-                    Save Changes
-                </el-button>
+                </div>
             </div>
         </div>
-
+        <div class="fcal_settings_body_inner fcal_settings_general">
+            <div class="fcal_configure_integration_card">
+                <div class="fcal_configure_integration_card_header">
+                    <div class="left">
+                        <div class="content">
+                            <h3>Emailing Settings</h3>
+                            <p>Configure your email settings for booking related emails</p>
+                        </div>
+                    </div>
+                </div>
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body">
+                    <form-builder :formData="emailing" :fields="emailingFields"/>
+                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
+                                   class="fcal_primary_btn">
+                            Save Settings
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
-<script>
+<script type="text/babel">
+import FormBuilder from '@/Components/FormBuilder/FormBuilder.vue';
+
 export default {
     name: "GeneralSettings",
+    components: {
+        FormBuilder
+    },
     data() {
         return {
-            formData: {
-                dateFormat: 'F j, Yg:i a',
-                translateLanguage: 'english',
-                timezone: 'asia/dhaka'
-            }
+            emailing: {},
+            emailingFields: {},
+            administration: {},
+            loading: false,
+            saving: false,
         }
+    },
+    methods: {
+        fetchSettings() {
+            this.loading = true;
+            this.$get('settings/general')
+                .then(response => {
+                    this.emailing = response.emailing;
+                    this.administration = response.administration;
+                    this.emailingFields = response.emailingFields;
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        saveSettings() {
+            this.saving = true;
+            this.$post('settings/general', {
+                emailing: this.emailing,
+                administration: this.administration,
+            })
+                .then(response => {
+                    this.$notify.success(response.message);
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        }
+    },
+    mounted() {
+        this.fetchSettings();
     }
 }
 </script>
-
-<style scoped>
-
-</style>

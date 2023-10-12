@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\Framework\Support\Arr;
 
 class BookingFieldService
 {
@@ -66,8 +67,8 @@ class BookingFieldService
                 'required'       => false,
                 'enabled'        => true,
                 'system_defined' => true,
-                'disable_alter'  => true,
-            ]
+                'disable_alter'  => false,
+            ],
         ];
 
         if ($calendarSlot->isPhoneRequired()) {
@@ -85,8 +86,23 @@ class BookingFieldService
             ];
         }
 
-
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
+
+        $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
+
+        if (Arr::get($paymentSettings, 'enabled') === 'yes'){
+            $items = Arr::get($paymentSettings, 'items');
+            $defaultFields['payment'] = [
+                'index'          => 20,
+                'type'           => 'payment',
+                'name'           => 'payment_method',
+                'required'       => true,
+                'enabled'        => true,
+                'payment_items'  => $items,
+                'label' => 'Payment Items',
+                'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
+            ];
+        }
 
         if (!$existingFields) {
             return array_values($defaultFields);

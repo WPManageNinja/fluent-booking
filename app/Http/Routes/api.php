@@ -30,6 +30,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
 
+
+
     // General Integrations
     $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
     $router->post('/{id}/integrations/general_integration_feed/disconnect', 'IntegrationSettingsController@disconnectGeneralIntegrationFeed')->int('id');
@@ -46,6 +48,12 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');
+
+    // Payment settings route
+    $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarSettings')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
+
+
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
@@ -82,9 +90,23 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
     $router->post('/{host_id}/settings', 'IntegrationSettingsController@update')->int('host_id');
     $router->post('/{host_id}/disconnect', 'IntegrationSettingsController@revoke')->int('host_id');
     $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
+
+    $router->prefix('settings/payment-methods')->group(function ($router) {
+        $router->get('/all', 'PaymentMethodController@index');
+
+        $router->post('/', 'PaymentMethodController@store');
+        $router->get('/', 'PaymentMethodController@getSettings');
+
+        $router->get('connect/info', 'PaymentMethodController@connectInfo');
+        $router->post('disconnect', 'PaymentMethodController@disconnect');
+
+        $router->get('currencies', 'PaymentMethodController@currencies');
+    });
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
+    $router->get('/general', 'SettingsController@getGeneralSettings');
+    $router->post('/general', 'SettingsController@updateGeneralSettings');
     $router->get('/menu', 'SettingsController@getSettingsMenu');
 });
 
