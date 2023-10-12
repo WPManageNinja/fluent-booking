@@ -38,7 +38,7 @@
                     <EditNotificationSettings :email="notification.email"/>
                     <template #footer>
                         <div class="dialog-footer">
-                            <el-button class="fcal_primary_btn" @click="isEditOpen = false">Done</el-button>
+                            <el-button class="fcal_primary_btn" @click="saveSettings">Save Email</el-button>
                         </div>
                     </template>
                 </el-dialog>
@@ -109,6 +109,7 @@ export default {
                 });
         },
         saveSettings() {
+            this.isEditOpen = [];
             this.saving = true;
             this.$post('calendars/' + this.slot.calendar.id + '/slots/' + this.slot.id + '/notifications', {
                 notifications: this.notifications
