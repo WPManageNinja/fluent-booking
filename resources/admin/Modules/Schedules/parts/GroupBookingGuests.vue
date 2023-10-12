@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <PaymentLogs :booking="scope.row" />
+                            <PaymentLogs v-if="scope.row.order_info" :booking="scope.row" />
                         </div>
                     </template>
                 </el-table-column>
