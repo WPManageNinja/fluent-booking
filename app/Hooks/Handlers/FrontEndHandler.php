@@ -282,10 +282,19 @@ class FrontEndHandler
         $calendarEvent->description = wpautop($calendarEvent->description);
         $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
         $formFields = BookingFieldService::getBookingFields($calendarEvent);
-        
+
+        $eventData = [
+            'id' => $calendarEvent->id,
+            'max_lookup_date' => $calendarEvent->max_lookup_date,
+            'duration' => $calendarEvent->duration,
+            'title' => $calendarEvent->title,
+            'location_settings' => $calendarEvent->location_settings,
+            'location_icon_html' => $calendarEvent->location_icon_html,
+            'description' => $calendarEvent->description
+        ];
+
         return apply_filters('fluent_calendar_public_event_vars', [
-            'slot'           => $calendarEvent,
-            'calendar'       => $calendar,
+            'slot'           => $eventData,
             'author_profile' => $calendarEvent->getAuthorProfile(true),
             'form_fields'    => $formFields,
         ], $calendarEvent);
