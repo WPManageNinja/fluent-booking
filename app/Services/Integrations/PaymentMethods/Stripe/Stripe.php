@@ -26,6 +26,9 @@ class Stripe extends BasePaymentMethod
         add_filter('fluent_booking/get_payment_settings_disconnect_' . $this->slug, [$this, 'disconnect']);
         add_action('fluent-booking/before_render_payment_method_' . $this->slug, [$this, 'loadCheckoutJs'], 10, 1);
 
+        add_action('wp_ajax_nopriv_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
+        add_action('wp_ajax_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
+
     }
     
     public function disconnect($data)
@@ -105,6 +108,54 @@ class Stripe extends BasePaymentMethod
             $this->handleHostedPayment($orderItem, $paymentArgs, $apiKey);
         }
     }
+
+    public function confirmStripePayment()
+    {
+        $data = $_REQUEST;
+        error_log('newdata ' . json_encode($data));
+//
+//        $data = $_REQUEST['id']);
+//
+//        $eventId = $data->id;
+//        error_log('event id' . $eventId);
+//
+//        if ($eventId){
+//            $this->verifyInvoiceAndUpdate($data->id);
+//        }
+
+    }
+
+    public function verifyInvoiceAndUpdate($eventId)
+    {
+        error_log('event id' . $eventId);
+        $invoice = (new API())->getInvoice($eventId);
+        $orderHash = $this->getOrderHash($invoice);
+
+        if (!$invoice || is_wp_error($invoice)) {
+            error_log('invoice not found');
+            return;
+        }
+
+        $updateData = [
+            'status' => sanitize_text_field($invoice->data->object->status),
+            'vendor_charge_id' => sanitize_text_field($invoice->data->object->payment_intent)
+        ];
+
+        //card_info update
+        if ($cardInfo = $invoice->data->object->payment_method_details->card) {
+            $updateData['card_brand'] = sanitize_text_field($cardInfo->brand);
+            $updateData['card_last_4'] = sanitize_text_field($cardInfo->last4);
+        }
+
+        if ($invoice->data->object->status === 'succeeded') {
+            $updateData['status'] = 'paid';
+            $updateData['payment_method_type'] = $invoice->data->object->payment_method_details->type;
+            $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
+        }
+
+        $this->updateOrderDataByHash($orderHash, $updateData);
+    }
+
 
     /**
      * @param $orderItem
@@ -354,42 +405,15 @@ class Stripe extends BasePaymentMethod
 
     public function onPaymentEventTriggered()
     {
-        $data = (new API())->verifyIPN();
+        $data =  (new API())->verifyIPN();
 
         if (!$data) {
             error_log('invalid data');
             return;
         }
 
-        $eventId = $data->id;
-        $invoice = (new API())->getInvoice($eventId);
-        $orderHash = $this->getOrderHash($invoice);
-
-        if (!$invoice || is_wp_error($invoice)) {
-            error_log('invoice not found');
-            return;
-        }
-
-        $updateData = [
-            'status' => sanitize_text_field($invoice->data->object->status),
-            'vendor_charge_id' => sanitize_text_field($invoice->data->object->payment_intent)
-        ];
-
-        //card_info update
-        if ($cardInfo = $invoice->data->object->payment_method_details->card) {
-            $updateData['card_brand'] = sanitize_text_field($cardInfo->brand);
-            $updateData['card_last_4'] = sanitize_text_field($cardInfo->last4);
-        }
-
-        if ($invoice->data->object->status === 'succeeded') {
-            $updateData['status'] = 'paid';
-            $updateData['payment_method_type'] = $invoice->data->object->payment_method_details->type;
-            $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
-        }
-
-        $this->updateOrderDataByHash($orderHash, $updateData);
+        $this->verifyInvoiceAndUpdate($data->id);
     }
-
 
 
     public static function getOrderHash($event)
