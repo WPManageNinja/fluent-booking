@@ -40,9 +40,17 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
+
+        if ($_REQUEST['type']) {
+            if ($_REQUEST['type'] == 'confirmation') {
+                $this->handleConfirmationPage();
+            }
+        }
+
         if (empty($_REQUEST['host'])) {
             return;
         }
+
         $authorSlug = sanitize_text_field($_REQUEST['host']);
 
         $slotSlug = null;
@@ -189,7 +197,6 @@ class LandingPageHandler
         exit(200);
     }
 
-
     private function showBookingConfimationPage($booking, $slot)
     {
         global $wp;
@@ -217,5 +224,16 @@ class LandingPageHandler
         exit(200);
     }
 
+    private function handleConfirmationPage()
+    {
+        $bookingHash = sanitize_text_field($_REQUEST['booking_token']);
+        $booking = Booking::where('hash', $bookingHash)->first();
+
+        if (!$booking) {
+            return;
+        }
+        
+        dd($_REQUEST);
+    }
 
 }

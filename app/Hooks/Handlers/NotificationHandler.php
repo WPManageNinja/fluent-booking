@@ -20,7 +20,7 @@ class NotificationHandler
     private function getReminderTime($time)
     {
         $timestamp = $time['value'] * 60;
-        
+
         if ($time['unit'] == 'hours') {
             $timestamp = $timestamp * 60;
         } elseif ($time['unit'] == 'days') {
