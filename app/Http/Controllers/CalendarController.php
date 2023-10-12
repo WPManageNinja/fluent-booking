@@ -60,6 +60,7 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
+
        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
            'author_timezone'        => 'required',
            'slot.duration'          => 'required|int',
@@ -70,8 +71,6 @@ class CalendarController extends Controller
            'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
            'user_id'                => 'required|int',
            'slot.location_settings.*.type'  => 'required',
-           'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
-           'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
            'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
        ], $data));
 
@@ -94,6 +93,7 @@ class CalendarController extends Controller
         } else {
             $user = get_user_by('ID', get_current_user_id());
         }
+
 
         if (!empty($data['slug'])) {
             $slug = trim(sanitize_text_field($data['slug']));
@@ -361,7 +361,6 @@ class CalendarController extends Controller
            'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
            'event_type'                => 'required',
            'location_settings.*.type'  => 'required',
-           'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
            'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
        ]);
@@ -389,7 +388,6 @@ class CalendarController extends Controller
             'availability_type' => 'existing_schedule',
             'availability_id'   => $availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
-            'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
             'max_book_per_slot' => (int)Arr::get($slot, 'max_book_per_slot', 1),
             'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),

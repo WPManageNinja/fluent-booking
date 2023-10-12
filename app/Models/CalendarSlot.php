@@ -314,7 +314,7 @@ class CalendarSlot extends Model
         if (empty($this->location_settings)) {
             return '';
         }
-        
+
         $default = Arr::get($this->location_settings, '0');
         if (!$default) {
             return '';
