@@ -101,10 +101,22 @@ class Bootstrap
 
             $message = !$meetExist ? ' (Connect Google Meet First)' : '';
 
+            if (!$message) {
+                // now check if the user calendar event create enabled
+                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
+                if(!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
+                    $message = ' (Set Google Event Creat First)';
+                    $meetExist = false;
+                }
+            }
+
             $fields['conferencing']['options']['google_meet'] = [
                 'title'    => 'Google Meet' . $message,
                 'disabled' => !$meetExist,
+                'location_type' => 'conferencing'
             ];
+            return $fields;
+
             return $fields;
         }, 10, 2);
 
