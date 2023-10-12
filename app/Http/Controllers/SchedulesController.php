@@ -65,6 +65,7 @@ class SchedulesController extends Controller
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
+            $schedule->order_info = $schedule->getOrderItem();
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -178,7 +179,7 @@ class SchedulesController extends Controller
     {
         $isAdmin = current_user_can('manage_options');
 
-        $booking = Booking::with(['slot', 'order']);
+        $booking = Booking::with('slot');
 
         if (!$isAdmin) {
             $booking->whereHas('calendar', function ($q) {
@@ -203,6 +204,8 @@ class SchedulesController extends Controller
         $booking->location = $booking->getLocationDetailsHtml();
 
         $booking->custom_form_data = $booking->getCustomFormData();
+
+        $booking->order_info = $booking->getOrderItem();
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
@@ -229,12 +232,11 @@ class SchedulesController extends Controller
             return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
-        $attendees = Booking::with('order')
-            ->where('group_id', $booking->group_id)
-            ->paginate();
+        $attendees = Booking::where('group_id', $booking->group_id)->paginate();
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
+            $attendee->order_info = $attendee->getOrderItem();
         }
 
         return [

@@ -41,7 +41,7 @@
                             v-model="landingPageUrl">
                             <template #append>
                                 <el-button type="default">
-                                    <a target="_blank" :href="landingPageUrl"><el-icon><Edit /></el-icon> Visit</a>
+                                    <a target="_blank" :href="landingPageUrl"><el-icon><Link /></el-icon> View</a>
                                 </el-button>
                                 <el-button type="default" @click="copyLandingPageUrl(landingPageUrl)">
                                     <el-icon><CopyDocument /></el-icon> Copy
@@ -80,7 +80,7 @@
 </template>
 
  <script>
-import { Clock, Edit, CopyDocument } from '@element-plus/icons-vue';
+import { Clock, Link, CopyDocument } from '@element-plus/icons-vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
 
 export default {
@@ -89,7 +89,7 @@ export default {
     emits: ['closeShare'],
     components: {
         Clock,
-        Edit,
+        Link,
         CopyDocument
     },    
     data() {
