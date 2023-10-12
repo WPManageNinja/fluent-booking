@@ -87,6 +87,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         add_filter('fluent_booking/payment_methods_renderer', array($this, 'getMethodsTemplate'), 10, 1);
 
+        add_filter('fluent_calendar_public_event_vars', array($this, 'addPaymentRendererTemplates'), 10, 2);
 
     }
 
@@ -98,6 +99,15 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             "status" => $this->isEnabled(),
         );
         return static::$methods;
+    }
+
+    public function addPaymentRendererTemplates($vars, $slot)
+    {
+        $paymentSettings = $slot->getMeta('payment_settings');
+        if (Arr::get($paymentSettings, 'enabled') === 'yes') {
+            $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
+        }
+        return $vars;
     }
 
     public function handleRedirectData() 

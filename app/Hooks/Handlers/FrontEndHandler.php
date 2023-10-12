@@ -39,6 +39,7 @@ class FrontEndHandler
 
         $slot = CalendarSlot::find($atts['id']);
 
+
         if (!$slot) {
             return '';
         }
@@ -60,15 +61,18 @@ class FrontEndHandler
 
         $slot->description = wpautop($slot->description);
 
-        wp_localize_script('fluent-booking-public', 'fcal_public_vars_' . $calendar->id . '_' . $slot->id, 
-            apply_filters('fluent_calendar_public_event_vars', [
-                'slot'           => $slot,
-                'calendar'       => $calendar,
-                'author_profile' => $slot->getAuthorProfile(true),
-                'form_fields'    => $formFields,
-                'disable_author' => $atts['disable_author'] == 'yes',
-                'payment_methods' => apply_filters('fluent_booking/payment_methods_renderer', ['templates' => ''])
-            ])
+        $localizeData = apply_filters('fluent_calendar_public_event_vars', [
+            'slot'           => $slot,
+            'calendar'       => $calendar,
+            'author_profile' => $slot->getAuthorProfile(true),
+            'form_fields'    => $formFields,
+            'disable_author' => $atts['disable_author'] == 'yes',
+        ], $slot);
+
+        wp_localize_script(
+            'fluent-booking-public',
+            'fcal_public_vars_' . $calendar->id . '_' . $slot->id,
+            $localizeData
         );
 
         return App::make('view')->make('public.calendar', [
