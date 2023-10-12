@@ -274,8 +274,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return (new PaymentHelper($this->slug))->listenerUrl($args);
     }
 
-    public function updateOrderDataByHash($orderHash, $transactionData = [])
+    public function updateOrderData($order, $transactionData = [])
     {
+        $orderHash = $order->uuid;
         $order =  (new OrderHelper())->getOrderByHash($orderHash);
         if ($order == null) {
             return;
