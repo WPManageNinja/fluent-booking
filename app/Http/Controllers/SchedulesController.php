@@ -62,7 +62,6 @@ class SchedulesController extends Controller
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
-
             $schedule->custom_form_data = $schedule->getCustomFormData();
 
             if (!$schedule->slot) {
