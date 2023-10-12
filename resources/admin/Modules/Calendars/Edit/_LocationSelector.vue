@@ -42,7 +42,7 @@
             class="fcal_location_form"
         >
             <div>
-                <el-form-item label="Your Phone Number (with country code)">
+                <el-form-item label="Your Phone Number * (with country code)">
                     <el-input v-model="slot.location_settings[0].host_phone_number" type="text" placeholder="Your Phone Number"/>
                 </el-form-item>
             </div>
