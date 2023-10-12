@@ -40,4 +40,5 @@ mix.js('resources/admin/app.js', 'assets/admin').vue({version: 3})
     .sass('resources/scss/saas_public.scss', 'public/saas_public.css')
     .sass('resources/scss/saas_admin.scss', 'public/saas_admin.css')
     .copy('resources/images', 'assets/images')
+    .copy('resources/public/Payments/stripe-checkout.js', 'assets/public/js/stripe-checkout.js')
     .setPublicPath('assets');

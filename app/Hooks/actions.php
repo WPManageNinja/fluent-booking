@@ -13,6 +13,8 @@
  * @var $app FluentBooking\Framework\Foundation\Application
  */
 
+use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
+
 /*
  * Register all the grouped action handlers
  */
@@ -25,10 +27,14 @@
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
+
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
 
 
 $app->addAction('init', 'BlockEditorHandler@init');
+
+
+(new GlobalPaymentHandler)->register();
 
 add_action('init', function () {
     if (!isset($_GET['fluent-booking']) || $_GET['fluent-booking'] != 'fluent-booking-beta') {

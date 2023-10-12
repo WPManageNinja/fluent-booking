@@ -7,6 +7,15 @@
                 <el-breadcrumb-item>{{ calendar.author_profile?.name }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ slot?.title }}</el-breadcrumb-item>
             </el-breadcrumb>
+
+            <div class="fcal_actions">
+                <el-button class="fcal_plain_btn fcal_copy_btn" @click="copyTo(slot?.id)">
+                    <el-icon><CopyDocument /></el-icon> [fluent_booking id="{{ slot?.id }}"]
+                </el-button>
+<!--                <el-button class="fcal_plain_btn">-->
+<!--                    <el-icon><View /></el-icon> View LandingPage-->
+<!--                </el-button>-->
+            </div>
         </div>
 
         <el-tabs
@@ -79,6 +88,21 @@
                     />
                 </div>
             </el-tab-pane>
+            <el-tab-pane name="payment-settings">
+              <template #label>
+                <el-icon>
+                  <Money/>
+                </el-icon>
+                Payment Settings
+              </template>
+              <div class="fcal_create_calendar_body">
+                <el-skeleton v-if="loading"/>
+                <payment-settings
+                    :event_id="event_id"
+                    :calendar_id="calendar_id"
+                />
+              </div>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -93,8 +117,10 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message} from '@element-plus/icons-vue';
-import WebhookSettings from "./WebHook/WebhookSettings"
+import {Back, Link, Message, View, CopyDocument, Money} from '@element-plus/icons-vue';
+import WebhookSettings from "./WebHook/WebhookSettings";
+import { copyToClipBoard } from '@/Bits/data_config.js';
+import PaymentSettings from "./Payments/PaymentSettings.vue";
 
 export default {
     name: 'SlotSettings',
@@ -102,6 +128,7 @@ export default {
     components: {
         WebhookSettings,
         ScheduleSettings,
+        PaymentSettings,
         BasicInfo,
         SaveButton,
         NotificationSettings,
@@ -112,6 +139,9 @@ export default {
         QuestionIcon,
         Back,
         Link,
+        View,
+        CopyDocument,
+        Money,
         Message
     },
     data() {
@@ -164,7 +194,24 @@ export default {
                 host_phone_number: this.slot.location_settings[0].host_phone_number
             }]
         },
+        checkValidattion() {
+            const location = this.slot.location_settings[0];
+            if (!location.type) {
+                this.$handleError('Location is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+                this.$handleError('Location Title is required');
+                return false;
+            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                this.$handleError('Phone Number is required');
+                return false;
+            }
+            return true;
+        },
         saveSettings() {
+            if (!this.checkValidattion()) {
+                return;
+            }
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
@@ -190,7 +237,12 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
-        }
+        },
+        copyTo(text) {
+            const CopyText = '[fluent_booking id="'+text+'"]';
+            copyToClipBoard(CopyText);
+            this.$handleSuccess('Shortcode has been copied to your clipboard');
+        },
     },
     mounted() {
         this.$changeTitle('Slot Settings');

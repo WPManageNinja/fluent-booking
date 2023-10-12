@@ -66,8 +66,61 @@
                 <ReportChat/>
             </div>
 
-            <div class="fcal_booking_activities">
-                <ReportsActivities/>
+            <div class="fcal_dashboard_report_sidebar">
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            Next Meetings
+                        </h1>
+                    </div>
+
+                    <div v-if="!loading" class="fcal_booking_activities_list">
+                        <div v-if="nextMeetings.length" class="fcal_booking_activity" v-for="(schedule, i) in nextMeetings" :key="i">
+                            <el-icon class="fcal_activity_complete_icon"></el-icon>
+
+                            <span class="timing">
+                                {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
+                            </span>
+                            <div class="description_and_link">
+                                <span class="title" v-html="scheduleTitle(schedule)"></span>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                            </div>
+                        </div>
+                        <div v-else class="fcal_no_activities">
+                            <p>Next meeting not available</p>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <el-skeleton :row="5" animated/>
+                    </div>
+                </div>
+
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            Latest Booked Meetings
+                        </h1>
+                    </div>
+
+                    <div class="fcal_schedule_event_infos_body">
+                        <div v-if="!loading" class="fcal_booking_activities_list">
+                            <div v-if="latestBookedLists.length" class="fcal_booking_activity" v-for="(schedule, i) in latestBookedLists" :key="i">
+                                <el-icon class="fcal_activity_complete_icon"></el-icon>
+
+                                <div class="description_and_link">
+                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                                </div>
+                            </div>
+                            <div v-else class="fcal_no_activities">
+                                <p>No Latest Booked Event Found</p>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <el-skeleton :row="5" animated/>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -77,12 +130,12 @@
 <script type="text/babel">
 import { Top } from '@element-plus/icons-vue';
 import ReportChat from "../Pieces/_ReportChat";
-import ReportsActivities from "./ReportsActivities";
+import BookingCard from "../Modules/Schedules/parts/BookingCard";
 
 export default {
     name: 'Dashboard',
     components: {
-        ReportsActivities,
+        BookingCard,
         ReportChat,
         Top
     },
@@ -121,6 +174,34 @@ export default {
             ],
             loading: false,
             widgets: '',
+            latestBookedLists: '',
+            nextMeetings: ''
+        }
+    },
+    computed: {
+        formattedTimeRange() {
+            return (start_time, end_time) => {
+                const startTime = this.toCurrentTimezone(start_time, 'hh:mma');
+                const endTime = this.toCurrentTimezone(end_time, 'hh:mma');
+                return `${startTime} - ${endTime}`;
+            }
+        },
+        bookingTitle() {
+            return (schedule) => {
+                const guestName = schedule.first_name + ' ' + schedule.last_name;
+                const createdAt = this.convertDate(schedule.created_at)
+                return '<b>' + guestName + '</b>' + ' booked a new meeting at ' + createdAt;    
+            }
+        },
+        scheduleTitle() {
+            return (schedule) => {
+                const guestName = schedule.first_name + ' ' + schedule.last_name;
+                if (schedule.event_type === 'group') {
+                    const booked = schedule.booked_count;
+                    return booked + ' guests with '+ schedule.author.name + 'as group booking type';
+                }
+                return '<b>' + schedule?.slot.title +'</b> meeting between ' + guestName + ' & '+ schedule.author.name;        
+            }
         }
     },
     methods: {
@@ -129,6 +210,12 @@ export default {
                 return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
             }
             return '';
+        },
+        viewMeetingDetails(scheduleId) {
+            this.$router.push({
+                name: 'scheduled_events',
+                query:{booking_id: scheduleId}
+            })
         },
         fetchReports() {
             this.loading = true;
@@ -140,6 +227,9 @@ export default {
                 })
                 .then(response => {
                     this.widgets = response.overview;
+                    this.latestBookedLists = response.latest_books;
+                    this.nextMeetings = response.next_meetings;
+                    console.log(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -147,7 +237,7 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        }
+        },
     },
     mounted() {
         this.fetchReports();
