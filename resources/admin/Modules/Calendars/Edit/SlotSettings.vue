@@ -9,12 +9,9 @@
             </el-breadcrumb>
 
             <div class="fcal_actions">
-                <el-button class="fcal_plain_btn fcal_copy_btn" @click="copyTo(slot?.id)">
-                    <el-icon><CopyDocument /></el-icon> [fluent_booking id="{{ slot?.id }}"]
+                <el-button class="fcal_plain_btn" @click="openShare = true">
+                    <el-icon><Share /></el-icon> Share
                 </el-button>
-<!--                <el-button class="fcal_plain_btn">-->
-<!--                    <el-icon><View /></el-icon> View LandingPage-->
-<!--                </el-button>-->
             </div>
         </div>
 
@@ -104,6 +101,14 @@
               </div>
             </el-tab-pane>
         </el-tabs>
+        <ShareCalendarBlock 
+            v-if="openShare" 
+            :slot="slot" 
+            :openShare="openShare"
+            :publicUrl="slot.public_url"
+            :calendarId="calendar_id"
+            @closeShare="openShare = false"
+        />
     </div>
 </template>
 
@@ -117,10 +122,11 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message, View, CopyDocument, Money} from '@element-plus/icons-vue';
+import {Back, Link, Message, Share, CopyDocument, Money} from '@element-plus/icons-vue';
 import WebhookSettings from "./WebHook/WebhookSettings";
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import PaymentSettings from "./Payments/PaymentSettings.vue";
+import PaymentSettings from "./Payments/PaymentSettings";
+import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {
     name: 'SlotSettings',
@@ -137,9 +143,10 @@ export default {
         ScheduleIcon,
         NoficationIcon,
         QuestionIcon,
+        ShareCalendarBlock,
         Back,
         Link,
-        View,
+        Share,
         CopyDocument,
         Money,
         Message
@@ -150,6 +157,7 @@ export default {
             slot: null,
             loading: true,
             saving: false,
+            openShare: false,
             activeTab: 'basic-info'
         }
     },

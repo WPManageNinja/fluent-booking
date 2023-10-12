@@ -1294,6 +1294,138 @@
             }
         }
     }
+    &.fcal_share_event_dialog {
+        max-width: 700px;
+        .el-dialog__header {
+            h3 {
+                margin: 0;
+            }
+            .fcal_slot_meta {
+                margin: 10px 0 0;
+                display: inline-flex;
+                align-items: center;
+                gap: 15px;
+
+                .fcal_slot_meta_mins {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+            }
+        }
+        .el-tabs {
+            .el-tabs__header {
+                .el-tabs__nav-wrap {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    &:after {
+                        display: none;
+                    }
+                    .el-tabs__nav {
+                        border-bottom: 1px solid #EAECF0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding-bottom: 10px;
+                        .el-tabs__active-bar {
+                            display: none;
+                        }
+                        .el-tabs__item {
+                            padding: 2px 20px;
+                            border-radius: 8px;
+                            height: auto;
+                            transition: .3s;
+                            font-weight: 400;
+                            &.is-active {
+                                font-weight: 400;
+                                color: $primaryColor;
+                                background: rgb(38 83 199 / 10%);
+                                &:hover {
+                                    color: $primaryColor;
+                                }
+                            }
+                            &:hover {
+                                color: $primaryColor;
+                            }
+                        }
+                    }
+                }
+            }
+            .el-tabs__content {
+                padding: 20px 0;
+            }
+            .fcal_create_calendar_body {
+                max-width: 550px;
+                margin: auto;
+                p {
+                    margin: 0 0 10px;
+                    font-size: 14px;
+                    color: $dark;
+                    text-align: center;
+                    a {
+                        color: $primaryColor;
+                        border-bottom: 1px solid $primaryColor;
+                        &:hover {
+                            &:after {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+                .el-input {
+                    &.el-input-group--append {
+                        .el-input__wrapper {
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                        .el-input-group__append {
+                            border-top-right-radius: 8px;
+                            border-bottom-right-radius: 8px;
+                            padding: 0;
+                            .el-button {
+                                height: 100%;
+                                margin: 0;
+                                color: #8F97A2;
+                                a {
+                                    color: #8F97A2;
+                                    text-decoration: none;
+                                    i {
+                                        transform: translateY(2px);
+                                    }
+                                }
+                                &:nth-child(2) {
+                                    background: rgb(38 83 199 / 20%);
+                                    border-radius: 0 8px 8px 0;
+                                    color: rgb(38 83 199);
+                                }
+                                > span {
+                                    gap: 4px;
+                                }
+                            }
+                        }
+                    }
+                    .el-input__wrapper {
+                        border-radius: 8px;
+                        padding: 4px 20px;
+                        input {
+                            margin: 0;
+                            padding: 0;
+                            height: auto;
+                        }
+                    }
+                }
+                img {
+                    max-width: 300px;
+                    display: block;
+                    margin: auto;
+                }
+            }
+        }
+        .el-dialog__footer {
+            margin-top: 20px;
+        }
+    }
 }
 .el-dropdown-list {
     border: 0;
