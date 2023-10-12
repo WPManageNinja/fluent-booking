@@ -1,5 +1,5 @@
 <template>
-  <div class="fcal_webhook_settings">
+  <div class="fcal_webhook_settings fcal_payment_settings">
     <div class="fcal_create_calendar_form">
       <div class="fcal_create_calendar_form_header">
         <h2><el-icon><Money/></el-icon> Payment Settings</h2>
@@ -26,7 +26,6 @@
         <template v-if="paymentSettings.enabled === 'yes'">
           <el-form-item class="fcal_payment_flex_row">
             <span class="header_left">Booking Payments</span>
-            <br/>
             <div>
               <el-row style="margin-bottom: 12px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
                 <el-col :span="16">
@@ -44,15 +43,20 @@
               </span>
                 </el-col>
               </el-row>
-              <span @click="addItem" style="cursor: pointer; color: cornflowerblue;">
+              <el-link @click="addItem" style="cursor: pointer;">
                   Add more item <el-icon> <Plus/></el-icon>
-              </span>
+              </el-link>
             </div>
           </el-form-item>
           <el-form-item class="fcal_payment_flex_row">
             <span class="header_left">Currency</span>
             <div class="header_right">
-              <el-select filterable v-model="paymentSettings.currency" placeholder="Select" size="large">
+              <el-select
+                  filterable
+                  v-model="paymentSettings.currency"
+                  placeholder="Select"
+                  popper-class="fcal_select"
+              >
                 <el-option
                     v-for="item in currencies"
                     :key="item.value"

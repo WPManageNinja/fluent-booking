@@ -27,9 +27,6 @@
                         <el-switch v-model="notification.enabled" @click="closeEdit(index)"></el-switch>
                     </div>
                 </div>
-                <!--                <div v-if="isEditOpen[index] && notification.enabled" class="fcal_notification_body">-->
-                <!--                    <EditNotificationSettings :email="notification.email"/>-->
-                <!--                </div>-->
 
                 <el-dialog
                     v-model="isEditOpen[index]"

@@ -24,7 +24,7 @@ class BookingOrdersMigrator
                 `type` VARCHAR(20) NOT NULL DEFAULT 'sale',
                 `customer_id` BIGINT UNSIGNED NOT NULL,
                 `payment_method` VARCHAR(100) NOT NULL,
-                `payment_mode` VARCHAR(100) NOT NULL, COMMENT 'test / live',
+                `payment_mode` VARCHAR(100) NOT NULL,
                 `payment_method_type` VARCHAR(100) NOT NULL COMMENT 'A Single Payment Method may have multiple types. ',
                 `payment_method_title` VARCHAR(100) NOT NULL,
                 `currency` VARCHAR(10) NOT NULL,

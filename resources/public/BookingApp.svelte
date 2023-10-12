@@ -207,6 +207,8 @@
                     {#if appReady}
                         <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                                 <DayPickerApp
+                                    {appData}
+                                    {isFluentform}
                                     {slot}
                                     {settings}
                                     bind:timezone={timezone}
