@@ -213,7 +213,7 @@ export default {
         },
         currentPeriod() {
             const period = this.filters.period;
-            return period.charAt(0).toUpperCase() + period.slice(1);;
+            return period.charAt(0).toUpperCase() + period.slice(1);
         }
     },
     methods: {
@@ -257,6 +257,7 @@ export default {
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
             this.currentEventTitle = schedule.slot.title;
+            
         },
         handleDiscard() {
             this.query.eventType = '';
