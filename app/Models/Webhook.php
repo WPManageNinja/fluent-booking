@@ -23,7 +23,7 @@ class Webhook extends Meta
     {
         parent::boot();
         static::addGlobalScope('type', function ($builder) {
-            $builder->where('object_type', '=', 'webhook');
+            $builder->where('object_type', '=', 'calendar_event');
         });
     }
 
@@ -31,8 +31,8 @@ class Webhook extends Meta
     {
         return static::create([
             'object_id'   => $slot_id,
-            'object_type' => 'webhook',
-            'key'         => 'webhook_settings',
+            'object_type' => 'calendar_event',
+            'key'         => 'webhook_feeds',
             'value'       => $data,
         ]);
     }
