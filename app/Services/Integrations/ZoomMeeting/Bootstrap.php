@@ -56,8 +56,9 @@ class Bootstrap
             }
 
             $fields['conferencing']['options']['zoom_meeting'] = [
-                'title'    => 'Zoom Video',
-                'disabled' => false
+                'title'         => 'Zoom Video',
+                'disabled'      => false,
+                'location_type' => 'conferencing'
             ];
 
             return $fields;
@@ -364,7 +365,6 @@ class Bootstrap
         $location['online_platform_start_link'] = Arr::get($responseData, 'start_url');
         $booking->location_details = $location;
         $booking->save();
-
 
         do_action('fluent_booking/log_booking_activity', [
             'booking_id'  => $booking->id,
