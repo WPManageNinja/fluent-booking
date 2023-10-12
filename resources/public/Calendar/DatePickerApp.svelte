@@ -6,9 +6,11 @@
     export let slot;
     export let settings;
     export let timezone;
+    export let appData;
 
     import Calendar from "./Calendar.svelte";
     import {createEventDispatcher, onMount} from 'svelte';
+    const isFluentform = appData.is_fluentform;
 
     let dispatch = createEventDispatcher();
 
@@ -296,9 +298,15 @@
                                     {/if}
                                 </div>
                                 {#if selectedDateTime && selectedDateTime.start == day.start}
-                                    <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                        on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
-                                    </div>
+                                    {#if isFluentform}
+                                        <span class="fcal_spot_confirm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="60px" height="60px"><path d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z"/></svg>
+                                        </span>
+                                    {:else }
+                                        <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
+                                             on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
+                                        </div>
+                                    {/if}
                                 {/if}
                             </div>
                         {/each}
