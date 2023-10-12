@@ -326,7 +326,7 @@ class CalendarSlot extends Model
             return '';
         }
 
-        return LocationService::getLocationIconHeadingHtml($driver, $default);
+        return LocationService::getLocationIconHeadingHtml($driver, $default, $this);
     }
 
 }
