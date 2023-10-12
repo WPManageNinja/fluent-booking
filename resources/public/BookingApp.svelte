@@ -3,7 +3,6 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import FluentFormBookingDetails from './Fluentform/BookingDetails.svelte';
 
     export let appData;
 
@@ -226,14 +225,16 @@
                                     </h2>
                                 </div>
 
-                                <BookingForm
-                                    {appData}
-                                    {slot}
-                                    {timezone}
-                                    bind:spot={selectedDate}
-                                    bind:formFields={appData.form_fields}
-                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                />
+                                {#if !isFluentform}
+                                    <BookingForm
+                                        {appData}
+                                        {slot}
+                                        {timezone}
+                                        bind:spot={selectedDate}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    />
+                                {/if}
                             </div>
                     {/if}
                 </div>
