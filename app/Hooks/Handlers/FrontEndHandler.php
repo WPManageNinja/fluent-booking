@@ -286,15 +286,17 @@ class FrontEndHandler
         $eventData = [
             'id' => $calendarEvent->id,
             'max_lookup_date' => $calendarEvent->max_lookup_date,
+            'min_lookup_date' => $calendarEvent->min_lookup_date,
             'duration' => $calendarEvent->duration,
             'title' => $calendarEvent->title,
             'location_settings' => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,
-            'description' => $calendarEvent->description
+            'description' => $calendarEvent->description,
+            'pre_selects' => (object) []
         ];
 
         return apply_filters('fluent_calendar_public_event_vars', [
-            'slot'           => $eventData,
+            'slot'           => $calendarEvent,
             'author_profile' => $calendarEvent->getAuthorProfile(true),
             'form_fields'    => $formFields,
         ], $calendarEvent);
