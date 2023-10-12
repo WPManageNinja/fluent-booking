@@ -56,13 +56,7 @@ class LandingPageHandler
 
     public function routeView($authorSlug, $slotSlug = null)
     {
-        $user = get_user_by('slug', $authorSlug);
-        if (!$user) {
-            return;
-        }
-
-        // get the calendar
-        $calendar = Calendar::where('user_id', $user->ID)->first();
+        $calendar = Calendar::where('slug', $authorSlug)->first();
 
         if (!$calendar) {
             return;
