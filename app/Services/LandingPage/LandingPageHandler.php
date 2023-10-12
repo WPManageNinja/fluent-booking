@@ -173,6 +173,8 @@ class LandingPageHandler
             ];
         }
 
+        $assetUrl = App::getInstance('url.assets');
+
         $data = [
             'calendar'    => $calendar,
             'slot'        => $slot,
@@ -181,17 +183,22 @@ class LandingPageHandler
             'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $slot->description))), 0, 300) . '...',
             'url'         => home_url($wp->request),
             'css_files'   => [
-                App::getInstance('url.assets') . 'public/saas.css'
+                $assetUrl . 'public/saas.css'
             ],
             'js_files'    => [
                 includes_url('js/jquery/jquery.min.js'),
-                App::getInstance('url.assets') . 'public/js/app.js',
+                $assetUrl . 'public/js/app.js',
             ],
             'js_vars'     => [
                 'fcal_public_vars_' . $calendar->id . '_' . $slot->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $slot),
                 'fluentCalendarPublicVars'                            => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
+
+        if ($slot->type == 'paid') {
+            $data['js_files'][] = 'https://js.stripe.com/v3/';
+            $data['js_files'][] = $assetUrl.'public/js/stripe-checkout.js';
+        }
 
         $app = App::getInstance();
 
