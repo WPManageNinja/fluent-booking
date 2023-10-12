@@ -57,6 +57,11 @@ class Calendar extends Model
         return $this->hasMany(CalendarSlot::class, 'calendar_id');
     }
 
+    public function events()
+    {
+        return $this->hasMany(CalendarSlot::class, 'calendar_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
