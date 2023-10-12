@@ -146,7 +146,13 @@ class FrontEndHandler
             $rules['phone_number'] = 'required';
         }
 
-        $validator = $app->validator->make($postedData, $rules, []);
+        $validator = $app->validator->make($postedData, $rules, [
+            'name.required'       => 'Please enter your name',
+            'email.required'      => 'Please enter your email address',
+            'email.email'         => 'Please enter provide a valid email address',
+            'timezone.required'   => 'Please select timezone first',
+            'start_date.required' => 'Please select a date and time',
+        ]);
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'message' => 'Please fill up the required data',
@@ -157,10 +163,10 @@ class FrontEndHandler
 
         $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
 
-        if(is_wp_error($customFieldsData)) {
+        if (is_wp_error($customFieldsData)) {
             wp_send_json([
                 'message' => $customFieldsData->get_error_message(),
-                'errors' => $customFieldsData->get_error_data()
+                'errors'  => $customFieldsData->get_error_data()
             ], 422);
             return;
         }
