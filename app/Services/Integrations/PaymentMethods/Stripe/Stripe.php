@@ -106,12 +106,6 @@ class Stripe extends BasePaymentMethod
         }
     }
 
-    public function calculateAmount()
-    {
-
-
-    }
-
     /**
      * @param $orderItem
      * @param $paymentArgs
