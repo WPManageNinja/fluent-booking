@@ -25,9 +25,12 @@ class Client
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-
-        //$this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-        $this->redirectUrl = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
+        
+        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
+            $this->redirectUrl = FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
+        } else {
+            $this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
+        }
     }
 
     public function setAccessToken($accessToken)
