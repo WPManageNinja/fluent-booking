@@ -15,22 +15,12 @@ class NotificationHandler
         add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
-
-
-        add_action('init', function () {
-            if (!isset($_GET['mail_test'])) {
-                return;
-            }
-
-            $this->bookingScheduledEmails(23, 1);
-
-        });
     }
 
     private function getReminderTime($time)
     {
         $timestamp = $time['value'] * 60;
-
+        
         if ($time['unit'] == 'hours') {
             $timestamp = $timestamp * 60;
         } elseif ($time['unit'] == 'days') {
