@@ -1339,7 +1339,7 @@ class Helper
                         '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
                         '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
                         '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
-                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with attendee timezone)',
+                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with guest timezone)',
                         '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
                         '{booking.location_details_html}'           => 'Event Location Details (HTML)',
                         '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
