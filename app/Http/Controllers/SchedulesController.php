@@ -178,7 +178,7 @@ class SchedulesController extends Controller
     {
         $isAdmin = current_user_can('manage_options');
 
-        $booking = Booking::with(['slot']);
+        $booking = Booking::with(['slot', 'order']);
 
         if (!$isAdmin) {
             $booking->whereHas('calendar', function ($q) {
@@ -226,12 +226,16 @@ class SchedulesController extends Controller
         $booking = $booking->where('group_id', $groupId)->first();
 
         if (!$booking || $booking->event_type != 'group') {
-            return $this->sendError(['message' => 'Invalid group id or the event is not a group event']);
+            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
-        $attendees = Booking::with('custom_field')
+        $attendees = Booking::with('order')
             ->where('group_id', $booking->group_id)
             ->paginate();
+
+        foreach ($attendees as $attendee) {
+            $attendee->custom_form_data = $attendee->getCustomFormData();
+        }
 
         return [
             'attendees' => $attendees
