@@ -127,6 +127,22 @@ class AvailabilityService
         return apply_filters('fluent_booking/availability_schedule_options', $scheduleOptions);
     }
 
+    public static function getDefaultSchedule($userId)
+    {
+        $schedules = Availability::where('object_id', $userId)->get();
+
+        $defaultSchedule = [];
+
+        foreach ($schedules as $schedule) {
+            if (Arr::isTrue($schedule, 'value.default')) {
+                $defaultSchedule = $schedule;
+                break;  
+            }
+        }
+        return $defaultSchedule;
+
+    }
+
     public static function createScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC', $weeklySchedule = [], $dateOverrides = [])
     {
         $weeklySchedule = $weeklySchedule ? $weeklySchedule : Helper::getWeeklyScheduleSchema();
