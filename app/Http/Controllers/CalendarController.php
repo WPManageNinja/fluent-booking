@@ -60,16 +60,20 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-//        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
-//            'author_timezone'        => 'required',
-//            'slot.duration'          => 'required|int',
-//            'slot.event_type'        => 'required',
-//            'slot.availability_type' => 'required',
-//            'slot.schedule_type'     => 'required',
-//            'slot.title'             => 'required',
-//            'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
-//            'user_id'                => 'required|int'
-//        ], $data));
+       $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
+           'author_timezone'        => 'required',
+           'slot.duration'          => 'required|int',
+           'slot.event_type'        => 'required',
+           'slot.availability_type' => 'required',
+           'slot.schedule_type'     => 'required',
+           'slot.title'             => 'required',
+           'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
+           'user_id'                => 'required|int',
+           'slot.location_settings.*.type'  => 'required',
+           'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
+           'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
+           'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
+       ], $data));
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
@@ -349,20 +353,20 @@ class CalendarController extends Controller
 
         $slot = $request->all();
 
-//        $this->validate($slot, [
-//            'title'                     => 'required',
-//            'duration'                  => 'required|int',
-//            'status'                    => 'required',
-//            'settings.schedule_type'    => 'required',
-//            'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
-//            'event_type'                => 'required'
-//        ]);
+       $this->validate($slot, [
+           'title'                     => 'required',
+           'duration'                  => 'required|int',
+           'status'                    => 'required',
+           'settings.schedule_type'    => 'required',
+           'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
+           'event_type'                => 'required',
+           'location_settings.*.type'  => 'required',
+           'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
+           'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
+           'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
+       ]);
 
-        $availability = Availability::where('object_type', 'availability')
-            ->where('object_id', $calendar->user_id)
-            ->first();
-
-        $availabilityId = $availability ? $availability->id : '';
+        $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
 
         $slotData = [
             'title'             => $slot['title'],
@@ -383,7 +387,7 @@ class CalendarController extends Controller
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
             'availability_type' => 'existing_schedule',
-            'availability_id'   => $availabilityId,
+            'availability_id'   => $availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
             'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
@@ -406,11 +410,14 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         $generalRules = [
-            'title'         => 'required',
-            'duration'      => 'required|numeric',
-//           'location_type' => 'required',
             'title'    => 'required',
-            'duration' => 'required|numeric'
+            'duration' => 'required|numeric',
+            'title'    => 'required',
+            'duration' => 'required|numeric',
+            'location_settings.*.type'  => 'required',
+            'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
+            'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
+            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ];
 
         $conditionalRules = [];
@@ -471,6 +478,7 @@ class CalendarController extends Controller
     public function getSlotNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
 
         /*
          * Confirmation Email to Attendee

@@ -84,8 +84,7 @@
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <WebhookSettings
-                        :event_id="event_id"
-                        :calendar_id="calendar_id"
+                        :calendar_event="slot"
                     />
                 </div>
             </el-tab-pane>
@@ -195,7 +194,24 @@ export default {
                 host_phone_number: this.slot.location_settings[0].host_phone_number
             }]
         },
+        checkValidattion() {
+            const location = this.slot.location_settings[0];
+            if (!location.type) {
+                this.$handleError('Location is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+                this.$handleError('Location Title is required');
+                return false;
+            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                this.$handleError('Phone Number is required');
+                return false;
+            }
+            return true;
+        },
         saveSettings() {
+            if (!this.checkValidattion()) {
+                return;
+            }
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
@@ -225,7 +241,6 @@ export default {
         copyTo(text) {
             const CopyText = '[fluent_booking id="'+text+'"]';
             copyToClipBoard(CopyText);
-
             this.$handleSuccess('Shortcode has been copied to your clipboard');
         },
     },
