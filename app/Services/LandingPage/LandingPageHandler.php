@@ -184,7 +184,7 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
             'js_files'    => [
-                includes_url('wp-includes/js/jquery/jquery.min.js'),
+                includes_url('js/jquery/jquery.min.js'),
                 App::getInstance('url.assets') . 'public/js/app.js',
             ],
             'js_vars'     => [
