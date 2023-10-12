@@ -1,18 +1,19 @@
 <?php
+
 namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\Models\Webhook;
 use FluentBooking\App\Services\EditorShortCodeParser;
+use FluentBooking\Framework\Support\Arr;
 
-class WebhookHandler {
+class WebhookHandler
+{
     public function processWebhookResponseForBooking($booking, $type)
     {
-        $slot_id     = $booking['event_id'];
-
-        $webhook_metas = Webhook::where('object_id', $slot_id)->where('object_type', 'webhook')->get();
+        $slot_id = $booking['event_id'];
+        $webhook_metas = Webhook::where('object_id', $slot_id)->where('object_type', 'webhook_feeds')->get();
 
         foreach ($webhook_metas as $meta) {
-
             if ($type == 'scheduled' && in_array('after_booking_scheduled', $meta->value['event_triggers'])) {
                 $this->processWebhook($meta, $booking);
             } else if ($type == 'cancelled' && in_array('booking_schedule_cancelled', $meta->value['event_triggers'])) {
@@ -20,26 +21,24 @@ class WebhookHandler {
             } else if ($type == 'completed' && in_array('booking_schedule_completed', $meta->value['event_triggers'])) {
                 $this->processWebhook($meta, $booking);
             }
-
         }
-
     }
 
 
     /**
      * Process a webhook request for a booking.
      *
-     * @param mixed $meta     Metadata containing webhook configuration.
-     * @param mixed $booking  The booking object to be used in the webhook.
+     * @param mixed $meta Metadata containing webhook configuration.
+     * @param mixed $booking The booking object to be used in the webhook.
      */
     public function processWebhook($meta, $booking)
     {
         $remoteUrl = $meta->value['request_url'];
-        if (\FluentBooking\Framework\Support\Arr::isTrue($meta, 'value.enabled') && !empty($remoteUrl)) {
+        if (Arr::isTrue($meta, 'value.enabled') && !empty($remoteUrl)) {
 
             $body = [];
 
-            if($meta->value['request_body'] == 'selected_fields') {
+            if ($meta->value['request_body'] == 'selected_fields') {
                 foreach ($meta->value['fields'] as $item) {
                     if (empty($item['key']) || empty($item['value'])) {
                         continue;
@@ -70,14 +69,14 @@ class WebhookHandler {
             }
 
             $data = [
-                'payload'       => [
-                    'body'      => $body,
-                    'method'    => $sendingMethod,
-                    'headers'   => $headers
+                'payload'     => [
+                    'body'    => $body,
+                    'method'  => $sendingMethod,
+                    'headers' => $headers
                 ],
                 'remote_url'  => $remoteUrl,
                 'booking_id'  => $booking->id,
-                'event_id'     => $booking->event_id,
+                'event_id'    => $booking->event_id,
                 'calendar_id' => $booking->calendar_id,
                 'is_json'     => $isJson
             ];
@@ -110,24 +109,5 @@ class WebhookHandler {
         }
 
         return true;
-    }
-
-
-    /**
-     * This method handles a background process callback.
-     *
-     * @return void
-     */
-    public function handleBackgroundProcessCallback()
-    {
-        $callbackName = sanitize_text_field($_REQUEST['callback_name']);
-        if (!wp_verify_nonce($_REQUEST['nonce'], 'fluent_booking_callback_for_background')) {
-            error_log($callbackName . ' Security Check Failed');
-            die('Security Check Failed');
-        }
-        $data = $_REQUEST['payload'];
-        do_action($callbackName, $data);
-        echo 'success';
-        die();
     }
 }
