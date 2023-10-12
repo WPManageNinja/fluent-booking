@@ -21,3 +21,4 @@ add_action('init', function () {
 (new \FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarsInit())->boot();
 (new \FluentBooking\App\Services\Integrations\Twilio\Bootstrap())->register();
 (new \FluentBooking\App\Services\Integrations\ZoomMeeting\Bootstrap())->register();
+(new \FluentBooking\App\Services\Integrations\Webhook\WebhookIntegration())->register();

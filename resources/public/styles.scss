@@ -562,6 +562,26 @@ $lightDark: #6b7280;
     color: #1B2533;
   }
 
+  &.fcal_form_calendar {
+    border: none !important;
+    .fcal_date_wrapper {
+      margin: 0;
+      .fcal_day_picker_wrap {
+        .fcal_day_picker {
+          padding: 0;
+          .fcal_day_picker_head {
+            .fcal_label_required {
+              margin-bottom: 0;
+              display: inline-block;
+              font-weight: 500;
+              line-height: inherit;
+              color: #000000;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -685,6 +705,13 @@ $lightDark: #6b7280;
         font-weight: 500;
         line-height: 24px;
         flex: none;
+        svg {
+          width: 22px;
+          height: 22px;
+          path {
+            fill: #ffffff;
+          }
+        }
       }
     }
   }
