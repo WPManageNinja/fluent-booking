@@ -442,7 +442,7 @@
                         if (this.fromChainedAjax && error.data?.settings_fields) {
 	                        this.settings_fields = error.data.settings_fields;
                         }
-                        this.$fail(error.data?.message || 'Error on integration settings');
+                        this.$handleError(error || 'Error on integration settings');
                     })
                     .finally(() => {
                         this.loading_app = false;
@@ -468,14 +468,11 @@
                 this.loadIntegrationSettings();
             },
             loadMergeFields() {
-                console.log('loadMergeFields');
-                return;
                 this.loading_list = true;
-                const url = FluentFormsGlobal.$rest.route('getFormIntegrationList', this.form_id, this.integration_id)
-                FluentFormsGlobal.$rest.get(url, {
-                    integration_id: this.integration_id,
+                const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + this.integration_id + '/merge-fields';
+                
+                this.$get(url, {
                     list_id: this.settings.list_id,
-                    form_id: this.form_id,
                     integration_name: this.integration_name
                 })
                     .then(response => {
@@ -483,37 +480,28 @@
                         this.merge_fields = result
                     })
                     .catch(error => {
-                        const message = error?.message || error?.data?.message
-                        this.$fail(message);
+                        this.$handleError(error);
                     })
                     .finally(() => {
                         this.loading_list = false;
                     });
             },
             saveNotification() {
-                console.log('saveNotification');
-                
                 this.errors.clear();
                 this.saving = true;
                 let data = {
-                    slot_id: this.event_id,
-                    integration_id: this.integration_id,
                     integration_name: this.integration_name,
                     integration: JSON.stringify(this.settings),
                     data_type: 'stringify',
                 };
+                
                 const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + this.integration_id;
-
-                console.log(url, data);
 
                 this.$post(url, data)
                     .then(response => {
-                        if (response.created) {
-                            // this.$router.push({
-                            //     name: 'allIntegrations'
-                            // });
-                        }
                         this.$handleSuccess(response);
+
+                        this.$emit('back');
                     })
                     .catch((error) => {
                         const getError = error?.errors || error?.data?.errors
