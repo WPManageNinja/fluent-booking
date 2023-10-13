@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_calendar_settings">
+    <div class="fcal_calendar_settings fcal_integration_settings">
         <div class="fcal_settings_header" v-if="show_edit">
             <div class="fcal_settings_head">
                 <h2>
@@ -51,76 +51,60 @@
 
         <el-skeleton v-if="loading" :animated="true" :rows="5"/>
         <div v-else class="fcal_settings_body">
-            <template v-if="!show_edit">
-                <el-table v-if="!isEmpty(available_integrations)" :data="integrations">
-                    <template #empty>
-                        <div class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
-                            <p>{{
-                                    $t('You haven\'t added any integration feed yet. Add new integration to connect your favourite tools with your calendar')
-                                }}</p>
-                        </div>
-                    </template>
 
-                    <el-table-column width="180" :label="$t('Status')">
-                        <template #default="scope">
-                            <span class="mr-3" v-if="scope.row.enabled">{{ $t('Enabled') }}</span>
-                            <span class="mr-3" v-else style="color:#fa3b3c;">{{ $t('Disabled') }}</span>
-                            <el-switch
-                                style="margin-left: 10px;"
-                                active-color="#00b27f"
-                                @change="handleActive(scope.row)"
-                                v-model="scope.row.enabled">
-                            </el-switch>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column width="180" :label="$t('Integration')">
-                        <template #default="scope">
-                            <img style="max-height: 30px;" v-if="scope.row.provider_logo"
+        <template v-if="!show_edit">
+            <div v-if="integrations" class="fcal_integration_items">
+                <div class="fcal_integration_item" v-for="integration in integrations" :key="integration.id">
+                    <div class="fcal_card_wrap">
+                        <div class="fcal_integration_icon">
+                            <img v-if="integration.provider_logo"
                                  class="general_integration_logo"
-                                 :src="scope.row.provider_logo" :alt="scope.row.provider"/>
-                            <span class="general_integration_name" v-else>{{ scope.row.provider }}</span>
-                        </template>
-                    </el-table-column>
+                                 :src="integration.provider_logo" :alt="integration.provider"/>
+                        </div>
+                        <div class="fcal_card_item_details">
+                            <h3>{{ integration.name }}</h3>
+                            <ul class="event_triggers" v-if="integration.feed.event_trigger">
 
-
-                    <el-table-column :label="$t('Title')">
-                        <template #default="scope">
-                            {{ scope.row.name }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column width="160" :label="$t('Actions')" class-name="action-buttons">
-                        <template #default="scope">
-                            <el-button
-                                size="small"
-                                type="success"
-                                @click="edit(scope.row)"
-                            >
-                                <el-icon>
-                                    <Edit/>
-                                </el-icon>
-                            </el-button>
-                            <el-popconfirm
-                                title="Are you sure to delete this?"
-                                popper-class="fcal_confirm_dialog"
-                                confirm-button-type="danger"
-                                @confirm="removeFeed(scope.row.id)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" size="small" class="fcal_danger_btn">
-                                        <el-icon>
-                                            <Delete/>
-                                        </el-icon>
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <h3 style="text-align: center; margin-top: 40px;" v-else>Your integrations will be available here. If
-                    you use FluentCRM then you can manage that from here.</h3>
-            </template>
+                                <li v-for="(event, i) in integration.feed.event_trigger" :key="i"><i class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 stroke-[3px]" data-testid="start-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></i> {{ getEventName(event) }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fcal_card_actions">
+                        <el-switch
+                            active-color="#00b27f"
+                            @change="handleActive(integration)"
+                            v-model="integration.enabled">
+                        </el-switch>
+                        <el-button
+                            size="small"
+                            type="success"
+                            @click="edit(integration)"
+                        >
+                            <el-icon>
+                                <Edit/>
+                            </el-icon>
+                        </el-button>
+                        <el-popconfirm
+                            title="Are you sure to delete this?"
+                            popper-class="fcal_confirm_dialog"
+                            confirm-button-type="danger"
+                            @confirm="removeFeed(integration.id)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small" class="fcal_danger_btn">
+                                    <el-icon>
+                                        <Delete/>
+                                    </el-icon>
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
+                <p>You haven't added any integration feed yet. Add new integration to connect your favourite tools with your calendar</p>
+            </div>
+        </template>
 
             <IntegrationEditor
                 v-else
@@ -287,6 +271,17 @@ export default {
         hideEditor() {
             this.show_edit = false;
             this.getFeeds();
+        },
+        getEventName(name) {
+            if (name == 'after_booking_scheduled') {
+                return 'Booking Confirmed';
+            }
+            if (name == 'booking_schedule_completed') {
+                return 'Booking Complated';
+            }
+            if (name == 'booking_schedule_cancelled') {
+                return 'Booking Cancelled';
+            }
         }
     },
     computed: {
