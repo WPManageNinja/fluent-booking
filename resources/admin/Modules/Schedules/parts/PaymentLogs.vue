@@ -27,10 +27,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ booking.order_info?.item_name }}</td>
-                        <td>{{ booking.order_info?.quantity }}</td>
-                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.order_info?.item_price / 100) }}</td>
+                    <tr v-for="order in booking.order_info" :key="order.id">
+                        <td>{{ order.item_name }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td><span v-html="booking.currency"></span>{{ Math.floor(order.item_price / 100) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -83,6 +83,9 @@
 <script>
 export default {
     name: "PaymentLogs",
-    props: ['booking']
+    props: ['booking'],
+    mounted() {
+        console.log(this.booking.order_info);
+    }
 }
 </script>

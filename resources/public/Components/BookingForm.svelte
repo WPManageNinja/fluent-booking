@@ -103,7 +103,7 @@
 
     let errors = '';
 
-    export let showPayments;
+  //  export let showPayments;
 
 
     const currentUrl = window.location.href;

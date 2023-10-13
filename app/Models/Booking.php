@@ -273,18 +273,9 @@ class Booking extends Model
         return '';
     }
 
-    public function getOrderItem()
+    public function PaymentOrder()
     {
-        return OrderItems::where('booking_id', $this->id)->first();
-    }
-
-    public function getTransaction()
-    {
-        $order = $this->getOrderItem();
-        if (!$order) {
-            return '';
-        }
-        return Transactions::where('object_id', $order->id)->first();
+        return $this->hasOne(Order::class, 'parent_id');
     }
 
     public function getCancelReason()
