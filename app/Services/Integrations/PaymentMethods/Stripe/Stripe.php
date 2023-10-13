@@ -113,10 +113,7 @@ class Stripe extends BasePaymentMethod
     public function confirmStripePayment()
     {
         if (!isset($_REQUEST['intentId'])) {
-            error_log('No intentId found! ' . json_encode($_REQUEST));
             return;
-        } else {
-            error_log('intentId found! ' . json_encode($_REQUEST));
         }
 
         $intentId = $_REQUEST['intentId'];
@@ -153,9 +150,8 @@ class Stripe extends BasePaymentMethod
 
     public function verifyInvoiceAndUpdate($eventId)
     {
-        error_log('event id' . $eventId);
         $invoice = (new API())->getInvoice($eventId);
-        $orderHash = $this->getOrderHash($invoice);
+        $orderHash = self::getOrderHash($invoice);
 
         if (!$invoice || is_wp_error($invoice)) {
             error_log('invoice not found');

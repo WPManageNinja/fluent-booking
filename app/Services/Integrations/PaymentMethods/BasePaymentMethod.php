@@ -14,8 +14,6 @@ use FluentBooking\Framework\Validator\Validator;
 use FluentBooking\App\Services\OrderHelper;
 
 
-
-
 abstract class BasePaymentMethod implements BasePaymentInterface
 {
     public $slug;
@@ -92,6 +90,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         if ($calendarSlot->type === 'paid') {
             $bookingData['status'] = 'pending';
+            $bookingData['payment_status'] = 'pending';
             $bookingData['payment_method'] = Arr::get($customData, 'payment_method', '');
         }
         return $bookingData;
@@ -110,8 +109,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function getAllMethods()
     {
         static::$methods[$this->slug] = array(
-            'title' => $this->title,
-            'image' => $this->logo,
+            'title'  => $this->title,
+            'image'  => $this->logo,
             "status" => $this->isEnabled(),
         );
         return static::$methods;
@@ -122,13 +121,13 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         $paymentSettings = $slot->getMeta('payment_settings');
         if (Arr::get($paymentSettings, 'enabled') === 'yes') {
             $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
-            $vars['payment_items'] = Arr::get($paymentSettings,'items');
+            $vars['payment_items'] = Arr::get($paymentSettings, 'items');
             $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
         }
         return $vars;
     }
 
-    public function handleRedirectData() 
+    public function handleRedirectData()
     {
         return '';
     }
@@ -136,11 +135,11 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function addGlobalMenu($menuItems)
     {
         $menuItems[$this->slug] = [
-            'title' => $this->title,
+            'title'          => $this->title,
             'component_type' => 'GlobalSettingsComponent',
-            'icon_url' =>  $this->logo,
-            'route' => [
-                'name' => 'PaymentSettingsIndex',
+            'icon_url'       => $this->logo,
+            'route'          => [
+                'name'   => 'PaymentSettingsIndex',
                 'params' => [
                     'settings_key' => $this->slug
                 ]
@@ -149,6 +148,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return $menuItems;
 
     }
+
     public function setRoutes()
     {
         static::$routes[] = [
@@ -164,14 +164,14 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function register()
     {
         static::$methods[] = [
-            "title" => $this->title,
-            "route" => $this->slug,
+            "title"       => $this->title,
+            "route"       => $this->slug,
             "description" => $this->getDescription(),
-            "logo" => $this->getLogo(),
-            "status" => $this->isEnabled(),
+            "logo"        => $this->getLogo(),
+            "status"      => $this->isEnabled(),
             "brand_color" => $this->brandColor
         ];
-        
+
         return static::$methods;
     }
 
@@ -245,7 +245,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function globalFields()
     {
         return [
-            'fields' => $this->fields(),
+            'fields'   => $this->fields(),
             'settings' => $this->getSettings()
         ];
     }
@@ -279,7 +279,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function updateOrderData($order, $transactionData = [])
     {
         $orderHash = $order->uuid;
-        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        $order = (new OrderHelper())->getOrderByHash($orderHash);
         if ($order == null) {
             return;
         }
@@ -292,14 +292,18 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         $booking = Booking::where('hash', $orderHash)->first();
 
+        $booking->status = 'scheduled';
+        $booking->payment_status = 'paid';
+        $booking->save();
+
         do_action('fluent_booking/payment/update_payment_status_paid', $booking);
 
-        $booking->update([
-            'status' => 'scheduled',
-            'payment_status' => 'paid'
-        ]);
+        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event);
+
         // We are just renewing this as this may have been changed by the pre hook
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->slot);
+        $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
+
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->calendar_event);
     }
 
     public function maybeUpdatePayment()
@@ -309,7 +313,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function render($method)
     {
-        return  '';
+        return '';
     }
 
     public function getMethodsTemplate($data)
