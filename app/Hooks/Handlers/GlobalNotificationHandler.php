@@ -24,7 +24,7 @@ class GlobalNotificationHandler
         $feedKeys = apply_filters('fluent_booking/global_notification_active_types', [], $slot->id);
 
         if (!$feedKeys) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot);
+            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
 
             return;
         }
@@ -33,7 +33,7 @@ class GlobalNotificationHandler
         $feeds = $this->globalNotificationService->getNotificationFeeds($slot->id, $feedMetaKeys);
 
         if (!$feeds) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot);
+            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
 
             return;
         }
@@ -42,7 +42,7 @@ class GlobalNotificationHandler
         $enabledFeeds = $this->globalNotificationService->getEnabledFeeds($feeds, $booking, $insertId);
 
         if (!$enabledFeeds) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot);
+            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
 
             return;
         }
@@ -71,7 +71,7 @@ class GlobalNotificationHandler
             // It's sync
             $processedValues = $feed['settings'];
             unset($processedValues['conditionals']);
-            // $processedValues = EditorShortCodeParser::parse($processedValues, $insertId, $booking, $slot, false, $feed['key']);
+            $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
             $feed['processedValues'] = $processedValues;
 
             if (apply_filters('fluent_booking/notifying_async_' . $integrationKey, false, $slot->id)) {
@@ -94,7 +94,7 @@ class GlobalNotificationHandler
 
                 // as_enqueue_async_action('fluent_booking/schedule_feed', ['queueId' => $queueId], 'fluentform');
             } else {
-                do_action($newAction, $feed, $booking, $entry, $slot);
+                do_action($newAction, $feed, $insertId, $booking, $slot);
             }
         }
 
