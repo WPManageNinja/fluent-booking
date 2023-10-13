@@ -17,7 +17,6 @@
                 </div>
             </div>
 
-
             <table class="fcal_payment_history_table">
                 <thead>
                     <tr>
@@ -27,50 +26,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="order in booking.order_info" :key="order.id">
-                        <td>{{ order.item_name }}</td>
-                        <td>{{ order.quantity }}</td>
-                        <td><span v-html="booking.currency"></span>{{ Math.floor(order.item_price / 100) }}</td>
+                    <tr v-for="item in booking.payment_order.items" :key="item.id">
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td><span v-html="booking.currency"></span>{{ Math.floor(item.item_price / 100) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
                         <th>Total:</th>
-                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.order_info?.item_total / 100) }}</td>
+                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.total_amount / 100) }}</td>
                     </tr>
                 </tfoot>
             </table>
 
-            <div class="fcal_payment_transaction_lists">
+            <div v-if="booking.payment_order.transaction && booking.payment_order.transaction.id" class="fcal_payment_transaction_lists">
                 <h2>Transaction Details</h2>
                 <div class="fcal_schedule_details_event">
                     <div class="fcal_schedule_details_event_item">
                         <h3>Payment Method</h3>
-                        <p class="payment_method">{{ booking.order_transaction?.payment_method }}</p>
+                        <p class="payment_method">{{ booking.payment_order.transaction.payment_method }}</p>
                     </div>
-                    <div v-if="booking.order_transaction?.card_last_4" class="fcal_schedule_details_event_item">
+                    <div v-if="booking.payment_order.transaction.card_last_4" class="fcal_schedule_details_event_item">
                         <h3>Card Last 4</h3>
                         <p class="card_last_4">
-                            <span>{{ booking.order_transaction?.card_brand}}</span>...{{ booking.order_transaction?.card_last_4 }}
+                            <span>{{ booking.payment_order.transaction.card_brand}}</span>...{{ booking.payment_order.transaction.card_last_4 }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>Payment Total</h3>
                         <p>
-                            <span v-html="booking.currency"></span>{{ Math.floor(booking.order_transaction?.total / 100) }}
+                            <span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.transaction.total / 100) }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>Payment Status</h3>
-                        <p class="payment_status" :class="booking.order_transaction?.status">
-                            {{ booking.order_transaction?.status }}
+                        <p class="payment_status" :class="booking.payment_order.transaction.status">
+                            {{ booking.payment_order.transaction.status }}
                         </p>
                     </div>
-                    <div v-if="booking.order_transaction?.vendor_charge_id" class="fcal_schedule_details_event_item">
+                    <div v-if="booking.payment_order.transaction.vendor_charge_id" class="fcal_schedule_details_event_item">
                         <h3>Transaction ID</h3>
-                        <p :class="booking.order_transaction?.vendor_charge_id">
-                            <a :href="'https://dashboard.stripe.com/test/payments/'+booking.order_transaction?.vendor_charge_id" target="_blank">{{booking.order_transaction?.vendor_charge_id}}</a>
+                        <p :class="booking.payment_order.transaction.vendor_charge_id">
+                            <a :href="'https://dashboard.stripe.com/payments/'+booking.payment_order.transaction.vendor_charge_id" target="_blank">{{booking.payment_order.transaction.vendor_charge_id}}</a>
 
                         </p>
                     </div>
@@ -83,9 +82,6 @@
 <script>
 export default {
     name: "PaymentLogs",
-    props: ['booking'],
-    mounted() {
-        console.log(this.booking.order_info);
-    }
+    props: ['booking']
 }
 </script>
