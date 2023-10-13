@@ -43,7 +43,7 @@ class Order extends BaseModel
 
     public function transaction()
     {
-        return $this->hasOne(Transactions::class, 'order_id');
+        return $this->hasOne(Transactions::class, 'object_id');
     }
 
 }
