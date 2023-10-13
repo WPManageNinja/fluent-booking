@@ -34,19 +34,21 @@ class PaymentHelper
 
     public static function getReceiptTemplate($items): array
     {
+        $sign = CurrenciesHelper::getGlobalCurrencySign();
+
         $total = 0;
         $template = '';
         if (count($items) <= 1) {
-            $template .= $items[0]['title'] . ': ' . $items[0]['value'];
+            $template .= $items[0]['title'] . ': ' . $sign .' '. $items[0]['value'];
             $total = $items[0]['value'];
         } else {
             $template = '<table>';
             $template .= '<tr><th>Item</th><th>Price</th></tr>';
             foreach ($items as $item) {
-                $total += $item['value'];
-                $template .= '<tr><td>' . $item['title'] . '</td><td>' . $item['value'] . '</td></tr>';
+                $total += floatval($item['value']);
+                $template .= '<tr><td>' . $item['title'] . '</td><td>' .$sign.' '. $item['value'] . '</td></tr>';
             }
-            $template .= '<tr><td>Total</td><td>' . $total . '</td></tr>';
+            $template .= '<tr><td>Total</td><td>' . $sign .' '. $total . '</td></tr>';
             $template .= '</table>';
         }
 
