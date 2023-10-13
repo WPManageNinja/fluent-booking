@@ -391,5 +391,4 @@ class Updater
 
         update_option($cache_key, $data, 'no');
     }
-
 }
