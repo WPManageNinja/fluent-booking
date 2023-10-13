@@ -1254,6 +1254,16 @@ $lightDark: #6b7280;
 //to-do will refactor tanbir
 //payment items styles
 
+#fluent_booking_stipe_pay{
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #fff;
+  padding: 10px 20px;
+  background: #4587EC;
+  border-radius: 8px;
+}
+
 .fcal_payment_items {
   display: flex;
   gap: 20px;

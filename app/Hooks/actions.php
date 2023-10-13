@@ -24,6 +24,7 @@ use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
 
+
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
@@ -35,6 +36,8 @@ $app->addAction('init', 'BlockEditorHandler@init');
 
 
 (new GlobalPaymentHandler)->register();
+
+(new FluentBooking\App\Services\PluginManager\Bootstrap())->register();
 
 add_action('init', function () {
     if (!isset($_GET['fluent-booking']) || $_GET['fluent-booking'] != 'fluent-booking-beta') {
