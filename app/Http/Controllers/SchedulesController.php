@@ -267,6 +267,7 @@ class SchedulesController extends Controller
 
         if ($booking->payment_status) {
             $booking->payment_order->load(['items', 'transaction']);
+            $booking->currency = CurrenciesHelper::getCurrencySign();
         }
 
         if (!$booking->calendar_event) {
