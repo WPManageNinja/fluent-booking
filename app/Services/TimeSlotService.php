@@ -229,6 +229,7 @@ class TimeSlotService
                 'start'     => $booking->start_time,
                 'end'       => $booking->end_time,
                 'remaining' => $remaining,
+                'max_booking' => $maxBooking
             ];
         }
 

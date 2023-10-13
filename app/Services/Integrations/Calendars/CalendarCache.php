@@ -36,6 +36,13 @@ class CalendarCache
             return null;
         }
 
+        // In the mean time it may got called and create the row
+        $row = $db->table('fcal_meta')
+            ->where('object_type', self::$objectType)
+            ->where('key', $key)
+            ->where('object_id', $parentId)
+            ->first();
+
         if ($row) {
             if ($value === null) { //  value got nulled so let's return the previous data
                 return maybe_unserialize($row->value);
