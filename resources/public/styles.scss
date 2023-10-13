@@ -997,8 +997,10 @@ $lightDark: #6b7280;
 }
 
 .fcal_slot_info {
-  .slot_location {
-
+  .fcal_slot_payment_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 }
 

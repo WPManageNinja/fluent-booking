@@ -22,6 +22,7 @@
     let calendarHeight = '';
 
 
+
     let showingPayments = false;
 
     onMount(() => {
@@ -153,6 +154,8 @@
                                 {#if slot.location_icon_html }
                                     {@html slot.location_icon_html}
                                 {/if}
+
+                                {@html slot.total_payment}
 
                                 {#if selectedDate}
                                     <div class="slot_time_range fcal_icon_item">
