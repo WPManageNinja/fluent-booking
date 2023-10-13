@@ -5,9 +5,11 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\Order;
 use FluentBooking\App\Models\Transactions;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
@@ -79,7 +81,8 @@ class SchedulesController extends Controller
             $schedule->order_info = $schedule->getOrderItem();
             $schedule->order_transaction = $schedule->getTransaction();
 
-            $schedule->currency = Order::where('parent_id', $schedule->id)->value('currency');
+            $schedule->currency = CurrenciesHelper::getCurrencySign();
+
 
 
             if (!$schedule->slot) {
@@ -229,7 +232,7 @@ class SchedulesController extends Controller
 
         $booking->order_transaction = $booking->getTransaction();
 
-        $booking->currency = Order::where('parent_id', $booking->id)->value('currency');
+        $booking->currency = CurrenciesHelper::getCurrencySign();
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
@@ -262,7 +265,7 @@ class SchedulesController extends Controller
             $attendee->custom_form_data = $attendee->getCustomFormData();
             $attendee->order_info = $attendee->getOrderItem();
             $attendee->order_transaction = $attendee->getTransaction();
-            $attendee->currency = Order::where('parent_id', $attendee->id)->value('currency');
+            $attendee->currency = CurrenciesHelper::getCurrencySign();
         }
 
         return [

@@ -30,14 +30,14 @@
                     <tr>
                         <td>{{ booking.order_info?.item_name }}</td>
                         <td>{{ booking.order_info?.quantity }}</td>
-                        <td>{{ booking.currency }} {{ Math.floor(booking.order_info?.item_price / 100) }}</td>
+                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.order_info?.item_price / 100) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
                         <th>Total:</th>
-                        <td>{{ booking.currency }} {{ Math.floor(booking.order_info?.item_total / 100) }}</td>
+                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.order_info?.item_total / 100) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -58,13 +58,20 @@
                     <div class="fcal_schedule_details_event_item">
                         <h3>Payment Total</h3>
                         <p>
-                            {{ booking.currency }} {{ Math.floor(booking.order_transaction?.total / 100) }}
+                            <span v-html="booking.currency"></span>{{ Math.floor(booking.order_transaction?.total / 100) }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>Payment Status</h3>
                         <p class="payment_status" :class="booking.order_transaction?.status">
                             {{ booking.order_transaction?.status }}
+                        </p>
+                    </div>
+                    <div v-if="booking.order_transaction?.vendor_charge_id" class="fcal_schedule_details_event_item">
+                        <h3>Transaction ID</h3>
+                        <p :class="booking.order_transaction?.vendor_charge_id">
+                            <a :href="'https://dashboard.stripe.com/test/payments/pi_3O0jE6IyGOUknw8l1lWfsh7g/'+booking.order_transaction?.vendor_charge_id" target="_blank">{{booking.order_transaction?.vendor_charge_id}}</a>
+
                         </p>
                     </div>
                 </div>
