@@ -18,7 +18,7 @@
                     <span class="fcal_spot_period_status" v-if="currentStatus">
                         {{ currentStatus }}
                     </span>
-                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ booking.payment_status }} | <span v-html="booking.currency"></span>{{ orderPrice }}</p>
+                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ ucFirst(booking.payment_status) }} | <span v-html="booking.currency"></span>{{ orderPrice }}</p>
                 </div>
             </div>
             <div class="fcal_spot_actions">
