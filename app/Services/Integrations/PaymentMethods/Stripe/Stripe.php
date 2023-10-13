@@ -363,15 +363,15 @@ class Stripe extends BasePaymentMethod
                 ),
                 'type' => 'radio'
             ),
-            'checkout_mode' => array(
-                'value' => 'onsite',
-                'label' => __('Checkout Mode', 'fluent-booking'),
-                'options' => array(
-                    'onsite' => __('Onsite', 'fluent-booking'),
-                    'hosted' => __('Hosted', 'fluent-booking')
-                ),
-                'type' => 'radio'
-            ),
+//            'checkout_mode' => array(
+//                'value' => 'onsite',
+//                'label' => __('Checkout Mode', 'fluent-booking'),
+//                'options' => array(
+//                    'onsite' => __('Onsite', 'fluent-booking'),
+//                    'hosted' => __('Hosted', 'fluent-booking')
+//                ),
+//                'type' => 'radio'
+//            ),
             'provider' => array(
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),

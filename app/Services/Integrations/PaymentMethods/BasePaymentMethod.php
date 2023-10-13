@@ -122,6 +122,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         $paymentSettings = $slot->getMeta('payment_settings');
         if (Arr::get($paymentSettings, 'enabled') === 'yes') {
             $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
+            $vars['payment_items'] = Arr::get($paymentSettings,'items');
+            $vars['currency_sign'] = Arr::get($paymentSettings,'currency_sign');
         }
         return $vars;
     }
