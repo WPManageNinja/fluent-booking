@@ -997,8 +997,11 @@ $lightDark: #6b7280;
 }
 
 .fcal_slot_info {
-  .slot_location {
-
+  .fcal_slot_payment_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
   }
 }
 
@@ -1269,13 +1272,57 @@ $lightDark: #6b7280;
 .fcal_payment_items {
   display: flex;
   gap: 20px;
-  table td, thead th {
-    padding: 10px;
-  }
-  table tr:nth-child(even) {
+  table {
     width: 100%;
-    text-align: left;
-    background-color: #f2f2f2;
+    margin-top: 24px;
+    border: 1px solid #e6e7e7;
+    border-radius: 8px;
+    border-spacing: 0;
+    border-collapse: separate !important;
+    background: #ffffff;
+    thead {
+      th {
+        text-align: left;
+        padding: 12px 20px;
+        background: #f5f6f7;
+        font-size: 14px;
+        font-weight: 500;
+        &:first-child {
+          border-top-left-radius: 8px;
+        }
+        &:last-child {
+          border-top-right-radius: 8px;
+        }
+      }
+    }
+    tbody {
+      td {
+        padding: 10px 20px !important;
+        border-bottom: 1px solid #e6e7e7 !important;
+        background: none !important;
+        font-size: 13px;
+      }
+    }
+    tfoot {
+      tr {
+        th {
+          padding: 12px 20px;
+          &:first-child {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .fcal_payment_item_single {
+    font-weight: 400;
+    padding: 10px 17px;
+    color: #515e72;
+    .amount {
+      font-weight: 500;
+      color: #000000;
+    }
   }
 
   p {

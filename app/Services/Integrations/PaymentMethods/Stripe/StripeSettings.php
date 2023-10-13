@@ -2,6 +2,8 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
+
 class StripeSettings
 {
 
@@ -31,6 +33,8 @@ class StripeSettings
      */
     public static function getDefaults()
     {
+        $currency = (new CurrenciesHelper())->getGlobalCurrency();
+
         return [
             'is_active'             => 'no',
             'test_publishable_key'  => '',
@@ -41,7 +45,8 @@ class StripeSettings
             'provider'              => 'api_keys',
             'test_account_id'       => '',
             'live_account_id'       => '',
-            'checkout_mode'         => 'onsite'
+            'checkout_mode'         => 'onsite',
+            'currency'              => $currency,
         ];
     }
 

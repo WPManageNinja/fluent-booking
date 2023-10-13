@@ -176,10 +176,10 @@ class Bootstrap
 
             $errors = '';
 
-            $remoteCalendars = $this->getRemoteCalendarsList($item);
+            $remoteCalendars = $this->getRemoteCalendarsList($item, true);
 
             if (is_wp_error($remoteCalendars)) {
-                $errors = $remoteCalendars->get_error_message();
+                $errors = $remoteCalendars->get_error_message(). ' Please remove the connection and reconnect again.';
                 $remoteCalendars = [];
             }
 
@@ -691,10 +691,10 @@ class Bootstrap
         ]);
     }
 
-    private function getRemoteCalendarsList($item)
+    private function getRemoteCalendarsList($item, $fromApi = false)
     {
         $settings = $item->value;
-        if (!empty($settings['calendar_lists'])) {
+        if (!empty($settings['calendar_lists']) && !$fromApi) {
             $lastChecked = Arr::get($settings, 'last_calendar_lists_fetched');
             if ($lastChecked && ($lastChecked + 86400) > time()) {
                 return $settings['calendar_lists'];
