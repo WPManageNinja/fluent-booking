@@ -123,7 +123,7 @@ class Bootstrap
 
         $config = ZoomHelper::getApiConfig();
 
-        $description = '<p>Please read the step-by-step documentation to setup client ID and Client Secret for your app. <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/zoom-integration-with-fluent-booking/">Go to the documentation article</a></p>';
+        $description = '<p>Please read the step-by-step documentation to setup client ID and Client Secret for your app. <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/zoom-integration-with-fluentbooking/">Go to the documentation article</a></p>';
 
         if (!empty($config['constant_defined'])) {
             $fields = null;
