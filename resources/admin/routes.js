@@ -18,6 +18,8 @@ import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue"
 import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
 import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
 
+import IntegrationEditor from "./Modules/Calendars/Edit/GeneralIntegration/IntegrationEditor.vue";
+
 export var routes = [
     {
         path: '/',
@@ -86,6 +88,15 @@ export var routes = [
         path: '/calendars/:calendar_id/slot-settings/:event_id',
         name: 'slot_settings',
         component: SlotSettings,
+        props: true,
+        meta: {
+            active_menu: 'calendars'
+        }
+    },
+    {
+        path: '/calendars/:calendar_id/slot-settings/:event_id/integrations/:integration_id/:integration_name',
+        name: 'edit_integration',
+        component: IntegrationEditor,
         props: true,
         meta: {
             active_menu: 'calendars'
