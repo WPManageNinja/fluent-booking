@@ -78,7 +78,7 @@ class SchedulesController extends Controller
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
-            $schedule->order_info = $schedule->getOrderItem();
+            $schedule->order_info = $schedule->getOrderItems();
             $schedule->order_transaction = $schedule->getTransaction();
 
             $schedule->currency = CurrenciesHelper::getCurrencySign();
@@ -228,7 +228,7 @@ class SchedulesController extends Controller
 
         $booking->custom_form_data = $booking->getCustomFormData();
 
-        $booking->order_info = $booking->getOrderItem();
+        $booking->order_info = $booking->getOrderItems();
 
         $booking->order_transaction = $booking->getTransaction();
 
@@ -263,7 +263,7 @@ class SchedulesController extends Controller
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
-            $attendee->order_info = $attendee->getOrderItem();
+            $attendee->order_info = $attendee->getOrderItems();
             $attendee->order_transaction = $attendee->getTransaction();
             $attendee->currency = CurrenciesHelper::getCurrencySign();
         }
