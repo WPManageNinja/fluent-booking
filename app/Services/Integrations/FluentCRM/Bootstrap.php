@@ -35,8 +35,6 @@ class Bootstrap extends IntegrationManagerController
         $this->registerAdminHooks();
 
         add_filter('fluent_booking/notifying_async_fluentcrm', '__return_false');
-
-        // $this->registerPaymentEvents();
     }
 
     public function pushIntegration($integrations, $slotId)
@@ -57,41 +55,35 @@ class Bootstrap extends IntegrationManagerController
     public function getIntegrationDefaults($settings, $slotId)
     {
         return [
-            'name'         => '',
-            'first_name'   => '',
-            'last_name'    => '',
-            'full_name'    => '',
-            'email'        => '',
-            'other_fields' => [
+            'name'              => '',
+            'first_name'        => '{{guest.first_name}}',
+            'last_name'         => '{{guest.first_name}}',
+            'email'             => 'email',
+            'other_fields'      => [
                 [
                     'item_value' => '',
                     'label'      => '',
                 ],
             ],
-            'list_id'                => '',
-            'tag_ids'                => [],
-            'tag_ids_selection_type' => 'simple',
-            'tag_routers'            => [],
-            'skip_if_exists'         => false,
-            'double_opt_in'          => false,
-            'force_subscribe'        => false,
-            'skip_primary_data'      => false,
-            'conditionals'           => [
+            'list_ids'          => '',
+            'tag_ids'           => [],
+            'skip_if_exists'    => false,
+            'double_opt_in'     => false,
+            'force_subscribe'   => false,
+            'skip_primary_data' => false,
+            'conditionals'      => [
                 'conditions' => [],
                 'status'     => false,
                 'type'       => 'all',
             ],
-            'run_events_only' => [],
-            'remove_tags'     => [],
-            'enabled'         => true,
+            'run_events_only'   => [],
+            'remove_tags'       => [],
+            'enabled'           => true,
         ];
     }
 
     public function getSettingsFields($settings, $slotId)
     {
-        // $form = fluentFormApi('forms')->find($slotId);
-        // $paymentFields = FormFieldsParser::getPaymentFields($form, ['element']);
-
         $fieldOptions = [];
 
         foreach (Subscriber::mappables() as $key => $column) {
@@ -107,6 +99,9 @@ class Bootstrap extends IntegrationManagerController
         unset($fieldOptions['email']);
         unset($fieldOptions['first_name']);
         unset($fieldOptions['last_name']);
+        unset($fieldOptions['prefix']);
+        unset($fieldOptions['full_name']);
+        unset($fieldOptions['company_id']);
 
         $fields = [
             [
@@ -117,23 +112,14 @@ class Bootstrap extends IntegrationManagerController
                 'component'   => 'text',
             ],
             [
-                'key'         => 'list_id',
-                'label'       => __('FluentCRM List', 'fluent_booking'),
-                'placeholder' => __('Select FluentCRM List', 'fluent_booking'),
-                'tips'        => __('Select the FluentCRM List you would like to add your contacts to.', 'fluent_booking'),
-                'component'   => 'select',
-                'required'    => true,
-                'options'     => $this->getLists(),
-            ],
-            [
                 'key'                => 'CustomFields',
                 'require_list'       => false,
-                'label'              => __('Primary Fields', 'fluent_booking'),
+                'label'              => __('Map Primary Fields', 'fluent_booking'),
                 'tips'               => __('Associate your FluentCRM merge tags to the appropriate Fluent Form fields by selecting the appropriate form field from the list.', 'fluent_booking'),
                 'component'          => 'map_fields',
                 'field_label_remote' => __('FluentCRM Field', 'fluent_booking'),
-                'field_label_local'  => __('Form Field', 'fluent_booking'),
-                'primary_fileds'     => [
+                'field_label_local'  => __('Booking Field', 'fluent_booking'),
+                'primary_fields'     => [
                     [
                         'key'           => 'email',
                         'label'         => __('Email Address', 'fluent_booking'),
@@ -147,12 +133,7 @@ class Bootstrap extends IntegrationManagerController
                     [
                         'key'   => 'last_name',
                         'label' => __('Last Name', 'fluent_booking'),
-                    ],
-                    [
-                        'key'       => 'full_name',
-                        'label'     => __('Full Name', 'fluent_booking'),
-                        'help_text' => __('If First Name & Last Name is not available full name will be used to get first name and last name', 'fluent_booking'),
-                    ],
+                    ]
                 ],
             ],
             [
@@ -166,22 +147,23 @@ class Bootstrap extends IntegrationManagerController
                 'options'            => $fieldOptions,
             ],
             [
-                'key'                => 'tag_ids',
-                'require_list'       => false,
-                'label'              => __('Contact Tags', 'fluent_booking'),
-                'placeholder'        => __('Select Tags', 'fluent_booking'),
-                'component'          => 'selection_routing',
-                'simple_component'   => 'select',
-                'routing_input_type' => 'select',
-                'routing_key'        => 'tag_ids_selection_type',
-                'settings_key'       => 'tag_routers',
-                'is_multiple'        => true,
-                'labels'             => [
-                    'choice_label'      => __('Enable Dynamic Tag Selection', 'fluent_booking'),
-                    'input_label'       => '',
-                    'input_placeholder' => __('Set Tag', 'fluent_booking'),
-                ],
-                'options' => $this->getTags(),
+                'key'         => 'list_ids',
+                'label'       => __('FluentCRM Lists', 'fluent_booking'),
+                'placeholder' => __('Select FluentCRM Lists', 'fluent_booking'),
+                'tips'        => __('Select the FluentCRM Lists you would like to add your contacts to.', 'fluent_booking'),
+                'component'   => 'select',
+                'is_multiple' => true,
+                'required'    => false,
+                'options'     => $this->getLists(),
+            ],
+            [
+                'key'          => 'tag_ids',
+                'require_list' => false,
+                'label'        => __('Contact Tags', 'fluent_booking'),
+                'placeholder'  => __('Select Tags', 'fluent_booking'),
+                'component'    => 'select',
+                'is_multiple'  => true,
+                'options'      => $this->getTags(),
             ],
             [
                 'key'            => 'skip_if_exists',
@@ -209,50 +191,20 @@ class Bootstrap extends IntegrationManagerController
                 'inline_tip'     => __('If you enable this then contact will forcefully subscribed no matter in which status that contact had', 'fluent_booking'),
             ],
             [
-                'require_list' => false,
-                'key'          => 'conditionals',
-                'label'        => __('Conditional Logics', 'fluent_booking'),
-                'tips'         => __('Allow FluentCRM integration conditionally based on your submission values', 'fluent_booking'),
-                'component'    => 'conditional_block',
-            ],
-            [
                 'require_list'   => false,
+                'required'            => true,
                 'key'            => 'event_trigger',
-                'options' =>      [
-                    'after_booking_scheduled' => 'Booking Confirmed',
+                'options'        => [
+                    'after_booking_scheduled'    => 'Booking Confirmed',
                     'booking_schedule_completed' => 'Booking Completed',
                     'booking_schedule_cancelled' => 'Booking Canceled',
                 ],
+                'tips' => 'Select in which booking stage you want to trigger this feed',
                 'label'          => __('Event Trigger', 'fluent_booking'),
                 'component'      => 'checkbox-multiple-text',
                 'checkbox_label' => __('Event Trigger For This Feed', 'fluent_booking'),
             ]
         ];
-
-        // if ($paymentFields) {
-        //     $hasSubscriptionFields = (bool) FormFieldsParser::getInputsByElementTypes($form, ['subscription_payment_component']);
-
-        //     $options = [
-        //         'fluentform_payment_refunded' => 'On Payment Refund',
-        //     ];
-
-        //     if ($hasSubscriptionFields) {
-        //         $options = [
-        //             'fluentform_subscription_payment_active'   => __('On Subscription Active', 'fluent_booking'),
-        //             'fluentform_subscription_payment_canceled' => __('On Subscription Cancel', 'fluent_booking'),
-        //             'fluentform_payment_refunded'              => __('On Payment Refund', 'fluent_booking'),
-        //         ];
-        //     }
-
-        //     $fields[] = [
-        //         'require_list' => false,
-        //         'key'          => 'run_events_only',
-        //         'label'        => __('Run only on events', 'fluent_booking'),
-        //         'component'    => 'checkbox-multiple-text',
-        //         'options'      => $options,
-        //         'tips'         => __('If you check any of the events then this feed will only run to the selected events', 'fluent_booking'),
-        //     ];
-        // }
 
         $fields[] = [
             'require_list' => false,
@@ -313,15 +265,6 @@ class Bootstrap extends IntegrationManagerController
      */
     public function notify($feed, $booking, $slot)
     {
-        // check if only on payment event
-        // if (Arr::get($feed, 'settings.run_events_only')) {
-        //     // We have running events selected. So we may not run this feed.
-        //     $paymentFields = FormFieldsParser::getPaymentFields($form, ['element']);
-        //     if ($paymentFields) {
-        //         return false;
-        //     }
-        // }
-
         return $this->runFeed($feed, $booking, $slot);
     }
 
@@ -591,69 +534,4 @@ class Bootstrap extends IntegrationManagerController
         return $validInputs;
     }
 
-    // private function registerPaymentEvents()
-    // {
-    //     add_action('fluentform_subscription_payment_active', function ($subscription, $submission) {
-    //         $this->handlePaymentEvent($submission, 'fluentform_subscription_payment_active');
-    //     }, 10, 2);
-    //     add_action('fluentform_subscription_payment_canceled', function ($subscription, $submission) {
-    //         $this->handlePaymentEvent($submission, 'fluentform_subscription_payment_canceled');
-    //     }, 10, 2);
-
-    //     add_action('fluentform_payment_refunded', function ($refund, $transaction, $submission) {
-    //         $this->handlePaymentEvent($submission, 'fluentform_payment_refunded');
-    //     }, 10, 3);
-    // }
-
-    // private function handlePaymentEvent($submission, $event)
-    // {
-    //     // Get Fluent Forms Feeds
-    //     $feeds = fluentCrmDb()->table('fluentform_form_meta')
-    //         ->where('form_id', $submission->form_id)
-    //         ->where('meta_key', 'fluentcrm_feeds')
-    //         ->orderBy('id', 'ASC')
-    //         ->get();
-
-    //     if (!$feeds) {
-    //         return false;
-    //     }
-    //     if (!is_array($submission->response)) {
-    //         $formData = json_decode($submission->response, true);
-    //     } else {
-    //         $formData = $submission->response;
-    //     }
-
-    //     $form = fluentFormApi('forms')->find($submission->form_id);
-
-    //     $notificationManager = new GlobalNotificationManager(wpFluentForm());
-
-    //     foreach ($feeds as $feed) {
-    //         $parsedValue = json_decode($feed->value, true);
-    //         if ($parsedValue && Arr::isTrue($parsedValue, 'enabled')) {
-    //             $runEvents = Arr::get($parsedValue, 'run_events_only', []);
-
-    //             // check if this is our event or not
-    //             if (!$runEvents || !in_array($event, $runEvents)) {
-    //                 continue;
-    //             }
-
-    //             // Now check if conditions matched or not
-    //             $isConditionMatched = $notificationManager->checkCondition($parsedValue, $formData, $submission->id);
-    //             if ($isConditionMatched) {
-    //                 $item = [
-    //                     'id'       => $feed->id,
-    //                     'meta_key' => $feed->meta_key,
-    //                     'settings' => $parsedValue,
-    //                 ];
-
-    //                 $processedValues = $item['settings'];
-    //                 unset($processedValues['conditionals']);
-
-    //                 $item['processedValues'] = ShortCodeParser::parse($processedValues, $submission->id, $formData, $form, false, $feed->meta_key);
-
-    //                 $this->runFeed($item, $formData, $submission, $form);
-    //             }
-    //         }
-    //     }
-    // }
 }

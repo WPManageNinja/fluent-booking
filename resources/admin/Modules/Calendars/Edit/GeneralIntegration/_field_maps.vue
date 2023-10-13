@@ -3,12 +3,12 @@
         <table v-if="appReady" class="ff_inner_table w-100">
             <thead>
                 <tr>
-                    <th class="text-left" width="50%" style="padding-bottom: 14px;">{{field.field_label_remote}}</th>
-                    <th class="text-left" width="50%" style="padding-bottom: 14px;">{{field.field_label_local}}</th>
+                    <th class="text-left" width="50%">{{field.field_label_remote}}</th>
+                    <th class="text-left" width="50%">{{field.field_label_local}}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(primary_field, primary_index) in field.primary_fileds" :key="primary_index">
+                <tr v-for="(primary_field, primary_index) in field.primary_fields" :key="primary_index">
                     <td>
                         <div :class="(primary_field.required) ? 'is-required' : ''" class="el-form-item">
                             <label class="el-form-item__label">{{primary_field.label}}</label>

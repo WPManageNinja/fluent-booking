@@ -8,7 +8,7 @@
 @import "elements/responsive";
 @import "elements/wp";
 
-.toplevel_page_fluent-booking{
+.toplevel_page_fluent-booking {
   background: #f5f6f7;
 }
 
@@ -62,31 +62,38 @@
   .fcal_webhook_request_header_table {
     border-spacing: 0;
     border-collapse: collapse;
+
     thead {
       tr {
         th {
           text-align: left;
+
           &:last-child {
             padding-left: 5px;
           }
         }
       }
     }
+
     tr {
       td {
         padding: 5px 5px 5px 0;
+
         &:last-child {
           padding-left: 5px;
           padding-right: 0;
         }
+
         .right-field {
           display: flex;
           align-items: center;
           gap: 8px;
+
           .action-btn {
             display: flex;
             align-items: center;
             gap: 6px;
+
             .el-button {
               margin: 0;
               padding: 8px 16px;
@@ -277,6 +284,7 @@
             padding: 20px 14px 16px 14px;
             margin-bottom: 10px;
             border-bottom: 1px solid #EAECF0;
+
             h1 {
               margin: 0;
               font-size: 18px;
@@ -284,24 +292,30 @@
               line-height: 28px;
             }
           }
+
           .fcal_booking_activities_list {
             .fcal_booking_activity {
               padding: 11px 0 8px 32px;
+
               .timing {
                 display: block;
                 margin-bottom: 4px;
               }
+
               .fcal_activity_complete_icon {
                 top: 25px;
               }
+
               &:before {
                 top: 35px;
               }
+
               .description_and_link {
                 .description {
                   line-height: 22px;
                 }
               }
+
               .el-link {
                 color: $primaryColor;
                 margin-left: 4px;
@@ -318,14 +332,17 @@
     background: #ffffff;
     border-radius: 8px;
     margin-bottom: 15px;
+
     h1 {
       margin: 0;
       font-size: 18px;
       border-bottom: 1px solid #EAECF0;
       padding: 15px 20px;
     }
+
     .fcal_dashboard_widget_body {
       padding: 20px;
+
       ul {
         li {
           span {
@@ -403,9 +420,11 @@
           border-radius: 6px;
           background: #ffffff;
           border: 1px solid #16896B;
+
           &.down {
             color: #EF4444;
             border-color: #EF4444;
+
             i {
               transform: rotate(180deg);
             }
@@ -434,6 +453,7 @@
 
           svg {
             width: 28px;
+
             path {
               stroke-dasharray: 200;
               stroke-dashoffset: 200;
@@ -654,6 +674,7 @@
     &:hover {
       background-color: #f9fafb;
     }
+
     .fcal_card_item_host {
       h3 {
         font-size: 14px;
@@ -669,6 +690,7 @@
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+
       .fcal_card_item_details {
         width: auto;
       }
@@ -691,18 +713,20 @@
     &:last-child {
       border-bottom: none;
     }
+
     .fcal_card_actions {
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        margin: 0;
-        .el-dropdown-link {
-            transform: rotate(90deg);
-            cursor: pointer;
-            width: 25px;
-            height: 25px;
-        }
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+
+      .el-dropdown-link {
+        transform: rotate(90deg);
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+      }
     }
   }
 }
@@ -728,17 +752,21 @@
 .fcrm-smartcodes-popover {
   padding: 0 !important;
   border-radius: 8px;
+
   .el_pop_data_group {
     overflow: hidden;
     display: flex;
+
     * {
       box-sizing: border-box;
     }
+
     .pop_doc {
       left: 0;
       bottom: 0;
       width: 100%;
       padding: 0;
+
       a {
         background: #e6e6e6;
         color: #1e1f21;
@@ -747,6 +775,7 @@
         padding: 4px 5px;
         border-radius: 4px;
         transition: .2s;
+
         &:hover {
           background: #1e1f21;
           color: #ffffff;
@@ -803,9 +832,11 @@
           cursor: pointer;
           text-align: left;
           border-bottom: 1px solid #ececec;
+
           &:first-child {
             padding-top: 0;
           }
+
           &:last-child {
             border-bottom: none;
           }
@@ -824,4 +855,49 @@
       }
     }
   }
+}
+
+.ff_field_map_fields, .ff_field_dropdown_many_fields {
+  .el-form-item__content {
+    display: block;
+  }
+
+  .ff-table, table.ff_inner_table {
+    width: 100%;
+    border: 1px solid #dddfe6;
+    border-spacing: 0;
+    background: #f5f7fa;
+    border-radius: 5px;
+    thead th {
+      text-align: left;
+      padding: 5px 15px;
+      border-bottom: 1px solid #dddfe6;
+    }
+    tbody {
+      tr td {
+        padding: 7px 15px;
+      }
+      tr:hover td {
+        background: #ffffff;
+      }
+    }
+  }
+
+  .ff_merge_fields {
+    width: 100% !important;
+  }
+}
+
+.action-btns {
+  i {
+    font-size: 18px;
+    margin-right: 10px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.action_btn {
+  cursor:  pointer;
 }
