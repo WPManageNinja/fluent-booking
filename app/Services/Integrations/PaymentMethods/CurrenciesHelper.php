@@ -11,6 +11,18 @@ if (!defined('ABSPATH')) {
 class CurrenciesHelper
 {
 
+    public static function getGlobalCurrency()
+    {
+        $globalPaymentSettings = get_option('fluent_booking_global_payment_settings', []);
+        return Arr::get($globalPaymentSettings, 'currency', 'USD');
+    }
+
+    public static function getGlobalCurrencySign()
+    {
+        $currency = static::getGlobalCurrency();
+        return static::getCurrencySign($currency);
+    }
+
     public static function getFormattedCurrencies()
     {
         $currencies = static::getCurrencies();

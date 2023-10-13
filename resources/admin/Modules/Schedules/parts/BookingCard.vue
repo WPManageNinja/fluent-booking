@@ -9,18 +9,17 @@
             </div>
             <div class="fcal_spot_desc">
                 <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
-                <div v-if="booking.happening_status" class="fcal_spot_happening">
-                    <span :class="'fcal_'+booking.happening_status">
+                <div v-if="booking.happening_status" class="fcal_spothappening">
+                    <span :class="'fcal'+booking.happening_status">
                         {{ getTextFromSlug(booking.happening_status) }}
                     </span>
                 </div>
-                <span class="fcal_spot_period_status" v-if="currentStatus">
-                    {{ currentStatus }}
-                </span>
-            </div>
-            <div v-if="booking.payment_status" class="fcal_spot_payment_info">
-                <p>Payment Status: {{ booking.payment_status }}</p>
-                <p>Amount: {{ booking.currency }} {{ orderPrice }}</p>
+                <div class="fcal_spot_desc_sub_info">
+                    <span class="fcal_spot_period_status" v-if="currentStatus">
+                        {{ currentStatus }}
+                    </span>
+                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ booking.payment_status }} | <span v-html="booking.currency"></span>{{ orderPrice }}</p>
+                </div>
             </div>
             <div class="fcal_spot_actions">
                 <el-button class="fcal_plain_btn">
@@ -81,9 +80,9 @@ export default {
             return '';
         },
         orderPrice() {
-            const price = Math.floor(this.booking.order_info?.item_price);
+            const price = Math.floor(this.booking.order_info?.item_price/100);
             if (!price) {
-                return '0';
+                return '';
             }
             return price;
         }

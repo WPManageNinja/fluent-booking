@@ -7,6 +7,8 @@ import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
 import { Plus, Delete, Location } from "@element-plus/icons-vue";
+import Errors from '@common/Errors';
+global.Errors = Errors;
 
 const utc = require('dayjs/plugin/utc')
 const timezone = require('dayjs/plugin/timezone')
@@ -129,6 +131,19 @@ app.mixin({
         },
         hasSupport(feature) {
             return !!window.fluentFrameworkAdmin.supported_features[feature];
+        },
+        $t(str) {
+            // let transString = window.FluentCalendarApp.form_settings_str[str];
+            // if (transString) {
+            //     return transString;
+            // }
+            return str;
+        },
+        ucFirst(str) {
+            if(!str) {
+                return '';
+            }
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     }
 });

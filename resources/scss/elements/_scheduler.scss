@@ -518,6 +518,7 @@
                 margin: 0;
             }
           }
+          .fcal_spot_payment_status,
           .fcal_spot_period_status {
             color: $primaryColor;
             display: inline-block;
@@ -525,7 +526,17 @@
             border-radius: 8px;
             padding: 2px 10px;
             font-size: 12px;
-            margin-top: 5px;
+            margin: 0;
+            font-weight: 500;
+          }
+          .fcal_spot_payment_status {
+            &.paid {
+              background: #4faf83;
+              color: #ffffff;
+            }
+          }
+          .fcal_spot_payment_amount {
+            margin: 0;
             font-weight: 500;
           }
 
@@ -551,6 +562,17 @@
             margin-right: auto;
             padding-left: 30px;
             min-width: 400px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .fcal_spot_desc_sub_info {
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              gap: 6px;
+              margin-top: 8px;
+            }
             @media (max-width: 1096px) {
                 min-width: 250px;
                 max-width: 250px;
@@ -874,6 +896,9 @@
           padding: 5px 1px;
           top: 13px;
         }
+      }
+      .fcal_spot_line {
+        overflow: hidden;
       }
     }
     .fcal_spot_details {

@@ -5,9 +5,11 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\Order;
 use FluentBooking\App\Models\Transactions;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
@@ -70,17 +72,18 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
-                do_action('fluent_booking/booking_schedule_completed', $schedule);
+                do_action('fluent_booking/booking_schedule_completed', $schedule, $schedule->calendar_event);
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
-            $schedule->order_info = $schedule->getOrderItem();
-            $schedule->order_transaction = $schedule->getTransaction();
 
-            $schedule->currency = Order::where('parent_id', $schedule->id)->value('currency');
-
+            if($schedule->payment_status) {
+                $schedule->order_info = $schedule->getOrderItem();
+                $schedule->order_transaction = $schedule->getTransaction();
+                $schedule->currency = CurrenciesHelper::getCurrencySign();
+            }
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -212,7 +215,15 @@ class SchedulesController extends Controller
         if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
             $booking->status = 'completed';
             $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+
             do_action('fluent_booking/booking_schedule_completed', $booking);
+        }
+
+        if($booking->payment_status) {
+            $booking->order_info = $booking->getOrderItem();
+            $booking->order_transaction = $booking->getTransaction();
+            $booking->currency = CurrenciesHelper::getCurrencySign();
         }
 
         $booking->happening_status = $booking->getOngoingStatus();
@@ -225,11 +236,11 @@ class SchedulesController extends Controller
 
         $booking->custom_form_data = $booking->getCustomFormData();
 
-        $booking->order_info = $booking->getOrderItem();
+        $booking->order_info = $booking->getOrderItems();
 
         $booking->order_transaction = $booking->getTransaction();
 
-        $booking->currency = Order::where('parent_id', $booking->id)->value('currency');
+        $booking->currency = CurrenciesHelper::getCurrencySign();
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
@@ -260,9 +271,12 @@ class SchedulesController extends Controller
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
-            $attendee->order_info = $attendee->getOrderItem();
-            $attendee->order_transaction = $attendee->getTransaction();
-            $attendee->currency = Order::where('parent_id', $attendee->id)->value('currency');
+
+            if($attendee->payment_status) {
+                $attendee->order_info = $attendee->getOrderItem();
+                $attendee->order_transaction = $attendee->getTransaction();
+                $attendee->currency = CurrenciesHelper::getCurrencySign();
+            }
         }
 
         return [

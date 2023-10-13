@@ -9,6 +9,7 @@ use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\Framework\Support\Arr;
@@ -286,6 +287,21 @@ class FrontEndHandler
         $calendarEvent->description = wpautop($calendarEvent->description);
         $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
         $formFields = BookingFieldService::getBookingFields($calendarEvent);
+
+        $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
+
+        if($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
+            $total = 0;
+            foreach ($paymentSettings['items'] as $payment) {
+                $total += (int) $payment['value'];
+            }
+
+            $currency = CurrenciesHelper::getCurrencySign();
+            $calendarEvent->total_payment = $calendarEvent->defaultPaymentIcon($currency, $total);
+        } else {
+            $calendarEvent->total_payment = '';
+        }
+
 
         $eventData = [
             'id' => $calendarEvent->id,

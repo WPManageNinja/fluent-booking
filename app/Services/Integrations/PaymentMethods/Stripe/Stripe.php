@@ -81,13 +81,13 @@ class Stripe extends BasePaymentMethod
         $publicKey = $stripeSettings->getPublicKey();
         $stripeSetting = $this->getSettings();
         $paymentInfo = $calendarSlot->getMeta('payment_settings');
+        $currency = CurrenciesHelper::getGlobalCurrency();
 
         if (empty($paymentInfo)) {
             return;
         }
 
         $items = Arr::get($paymentInfo, 'items');
-        $currency =  Arr::get($paymentInfo, 'currency');
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
@@ -113,10 +113,7 @@ class Stripe extends BasePaymentMethod
     public function confirmStripePayment()
     {
         if (!isset($_REQUEST['intentId'])) {
-            error_log('No intentId found! ' . json_encode($_REQUEST));
             return;
-        } else {
-            error_log('intentId found! ' . json_encode($_REQUEST));
         }
 
         $intentId = $_REQUEST['intentId'];
@@ -153,9 +150,8 @@ class Stripe extends BasePaymentMethod
 
     public function verifyInvoiceAndUpdate($eventId)
     {
-        error_log('event id' . $eventId);
         $invoice = (new API())->getInvoice($eventId);
-        $orderHash = $this->getOrderHash($invoice);
+        $orderHash = self::getOrderHash($invoice);
 
         if (!$invoice || is_wp_error($invoice)) {
             error_log('invoice not found');
@@ -237,9 +233,10 @@ class Stripe extends BasePaymentMethod
 
     public function intentData($orderItem, $args)
     {
+        $currency = CurrenciesHelper::getGlobalCurrency();
         $sessionPayload = array(
             'amount' => intval($args['amount']),
-            'currency' => $args['currency'],
+            'currency' => $currency,
             'metadata' => [
                 'ref_id'  => $args['client_reference_id'],
             ],
@@ -251,9 +248,10 @@ class Stripe extends BasePaymentMethod
     public function sessionData($args)
     {
         $items = $args['items'];
+        $currency = CurrenciesHelper::getGlobalCurrency();
 
         $conversionFactor = 100;
-        if (CurrenciesHelper::isZeroDecimal($args['currency'])) {
+        if (CurrenciesHelper::isZeroDecimal($currency)) {
             $conversionFactor = 1;
         }
 
@@ -261,7 +259,7 @@ class Stripe extends BasePaymentMethod
         foreach ($items as $item) {
             $lineItems[] = [
                 'amount' => intval($item['value'] * $conversionFactor),
-                'currency' => $args['currency'],
+                'currency' => $currency,
                 'name' => $item['title'],
                 'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 1,
             ];
@@ -348,6 +346,7 @@ class Stripe extends BasePaymentMethod
 
     public function fields()
     {
+        $currencies = CurrenciesHelper::getFormattedCurrencies();
         return array(
             'is_active' => array(
                 'value' => 'no',
@@ -376,7 +375,13 @@ class Stripe extends BasePaymentMethod
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),
                 'type' => 'provider'
-             )
+             ),
+            'currency' => array(
+                'value' => 'USD',
+                'label' => __('Currency', 'fluent-booking'),
+                'options' => $currencies,
+                'type' => 'select'
+            ),
         );
 
     }

@@ -54,24 +54,24 @@
                             </el-link>
                         </div>
                     </el-form-item>
-                    <el-form-item class="fcal_payment_flex_row">
-                        <span class="header_left">Currency</span>
-                        <div class="header_right">
-                            <el-select
-                                filterable
-                                v-model="paymentSettings.currency"
-                                placeholder="Select"
-                                popper-class="fcal_select"
-                            >
-                                <el-option
-                                    v-for="item in currencies"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                />
-                            </el-select>
-                        </div>
-                    </el-form-item>
+<!--                    <el-form-item class="fcal_payment_flex_row">-->
+<!--                        <span class="header_left">Currency</span>-->
+<!--                        <div class="header_right">-->
+<!--                            <el-select-->
+<!--                                filterable-->
+<!--                                v-model="paymentSettings.currency"-->
+<!--                                placeholder="Select"-->
+<!--                                popper-class="fcal_select"-->
+<!--                            >-->
+<!--                                <el-option-->
+<!--                                    v-for="item in currencies"-->
+<!--                                    :key="item.value"-->
+<!--                                    :label="item.label"-->
+<!--                                    :value="item.value"-->
+<!--                                />-->
+<!--                            </el-select>-->
+<!--                        </div>-->
+<!--                    </el-form-item>-->
                 </template>
 
             </el-form>
@@ -98,7 +98,7 @@ export default {
                         value: '10',
                     },
                 ],
-                currency: 'USD'
+                // currency: 'USD'
             },
             currencies: [],
             calendarId: '',
@@ -106,16 +106,16 @@ export default {
         };
     },
     methods: {
-        getCurrencies() {
-            this.$get('integrations/settings/payment-methods/currencies')
-                .then((response) => {
-                    this.currencies = response.data;
-                }).then(() => {
-                this.loading = false;
-            }).catch((error) => {
-                console.log(error);
-            });
-        },
+        // getCurrencies() {
+        //     this.$get('integrations/settings/payment-methods/currencies')
+        //         .then((response) => {
+        //             this.currencies = response.data;
+        //         }).then(() => {
+        //         this.loading = false;
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     });
+        // },
         getSettings() {
             this.loading = false;
             this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/payment-settings`, {})
@@ -154,7 +154,7 @@ export default {
         },
     },
     mounted() {
-        this.getCurrencies();
+        // this.getCurrencies();
         this.getSettings();
     },
 }
