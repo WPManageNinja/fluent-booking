@@ -5,15 +5,15 @@
                 <div v-if="booking.slot" class="fcal_spot_color">
                     <span :style="{background: booking.slot.color_schema}"></span>
                 </div>
-                {{ formattedTimeRange }}
+                <span style="line-height: 120%;" v-html="formattedTimeRange"></span>
+            </div>
+            <div class="fcal_spot_desc">
+                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
                 <div v-if="booking.happening_status" class="fcal_spot_happening">
                     <span :class="'fcal_'+booking.happening_status">
                         {{ getTextFromSlug(booking.happening_status) }}
                     </span>
                 </div>
-            </div>
-            <div class="fcal_spot_desc">
-                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
             </div>
             <div class="fcal_spot_actions">
                 <el-button class="fcal_plain_btn">
@@ -27,7 +27,7 @@
 <script type="text/babel">
 export default {
     name: 'BookingCard',
-    props: ['booking', 'multi_host', 'showing_id'],
+    props: ['booking', 'multi_host', 'showing_id', 'period'],
     data() {
         return {
             booking_id: this.$route.query.booking_id,
@@ -42,6 +42,11 @@ export default {
         formattedTimeRange() {
             const startTime = this.toCurrentTimezone(this.booking.start_time, 'hh:mma');
             const endTime = this.toCurrentTimezone(this.booking.end_time, 'hh:mma');
+
+            if(this.period == 'latest_bookings') {
+                return `${this.toCurrentTimezone(this.booking.start_time, 'D MMM, YYYY')} <br /> ${startTime} - ${endTime}`;
+            }
+
             return `${startTime} - ${endTime}`;
         },
         spotTitle() {

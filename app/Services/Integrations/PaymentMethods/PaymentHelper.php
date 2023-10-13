@@ -21,9 +21,10 @@ class PaymentHelper
     {
         $queryArgs =  array_merge(
             array(
+                'fluent-booking'=> 'calendar',
+                'type' => 'confirmation',
+                'booking_token' => $booking->hash,
                 'method' => $this->slug,
-                'order_hash' => $booking->hash,
-                'fluent_booking_redirect' => 'yes'
             ),
             is_array($args)? $args:[]
         );

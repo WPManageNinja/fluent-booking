@@ -14,6 +14,12 @@
                         <div class="fcal_group_booking_guests_wrap">
                             <div class="fcal_schedule_details_event">
                                 <div class="fcal_schedule_details_event_item">
+                                    <h3>Message</h3>
+                                    <div class="fcal_spot_details_value">
+                                        {{ scope.row.message }}
+                                    </div>
+                                </div>
+                                <div class="fcal_schedule_details_event_item">
                                     <h3>Timezone</h3>
                                     <div class="fcal_spot_details_value">
                                         {{ scope.row.person_time_zone }}
@@ -29,8 +35,8 @@
 
                             <div class="fcal_schedule_details_event">
                                 <div
-                                    v-if="scope.row.custom_field"
-                                    v-for="field in scope.row.custom_field.value"
+                                    v-if="scope.row.custom_form_data"
+                                    v-for="field in scope.row.custom_form_data"
                                     class="fcal_schedule_details_event_item"
                                 >
                                     <h3>{{ field.label }}</h3>
@@ -39,6 +45,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <PaymentLogs v-if="scope.row.order_info" :booking="scope.row" />
                         </div>
                     </template>
                 </el-table-column>
@@ -88,10 +95,12 @@
 <script>
 import { MoreFilled, Close } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
+import PaymentLogs from "./PaymentLogs";
 export default {
     name: "GroupBookingGuests",
     props: ['group_id'],
     components: {
+        PaymentLogs,
         Pagination,
         MoreFilled,
         Close
@@ -118,6 +127,7 @@ export default {
                 .then(response => {
                     this.attendees = response.attendees.data;
                     this.pagination.total = response.attendees.total;
+                    console.log(response.attendees.data);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

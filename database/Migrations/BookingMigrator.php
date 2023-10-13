@@ -22,6 +22,7 @@ class BookingMigrator
                 `event_id` BIGINT(20) UNSIGNED NOT NULL,
                 `group_id` BIGINT(20) UNSIGNED NULL,
                 `parent_id` BIGINT(20) UNSIGNED NULL,
+                `host_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_user_id` BIGINT(20) UNSIGNED NULL,
                 `person_contact_id` BIGINT(20) UNSIGNED NULL,
                 `person_time_zone` VARCHAR(100) NULL,
@@ -45,8 +46,8 @@ class BookingMigrator
                 `source` VARCHAR(20) NOT NULL DEFAULT 'web',
                 `booking_type` VARCHAR(20) NOT NULL DEFAULT 'scheduling',
                 `event_type` VARCHAR(20) NOT NULL DEFAULT 'single', /* singe|group */
-                `payment_status` VARCHAR(20) NOT NULL DEFAULT '', /* pending|paid */
-                `payment_method` VARCHAR(20) NOT NULL DEFAULT '',
+                `payment_status` VARCHAR(20) NULL, /* pending|paid */
+                `payment_method` VARCHAR(20) NULL,
                 `source_url` TEXT NULL,
                 `source_id` BIGINT(20) UNSIGNED NULL,
                 `utm_source` VARCHAR(192) NULL DEFAULT '',

@@ -1,62 +1,67 @@
 <div class="fcal_booking_form_wrap" id="fcal_booking_form_wrap">
     <div class="fcal_booking_form">
         <form on:submit|preventDefault={submitForm}>
-            {#each formFields as field}
-                {#if field.enabled}
-                    <div class="fcal_form_item">
-                        <label class="fcal_input_content">
-                            <div class="fcal_input_label">
-                                {field.label}
-                                {#if field.required}<span>*</span>{/if}
-                            </div>
-                            {#if field.type === 'text'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                    placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.type === 'email'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="email"
-                                    placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.type === 'number'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="number"
-                                    placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.type === 'phone'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="number"
-                                    placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.type === 'textarea'}
-                                <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
-                                        class="fcal_input" bind:value={form[field.name]}/>
-                            {:else if field.type === 'dropdown'}
-                            <select bind:value={form[field.name]}>
-                                <option value="" disabled selected>{field.placeholder}</option>
-                                {#each field.options as option (option)}
-                                    <option value={option}>{option}</option>
-                                {/each}
-                            </select>
-                            {:else if field.type === 'payment'}
-                                <div class="fcal_payment_items_wrapper">
-                                {#each field.payment_items as item}
-                                    <div class="fcal_payment_items">
-                                        <input type="hidden" disabled="true" value="{item.value}" class="fcal_input"/>
-                                        <p>{item.title}:</p>
-                                        <p>
-                                            <span>{@html field.currency_sign}</span>
-                                                {item.value}
-                                        </p>
-                                    </div>
-                                {/each}
+            {#if !showPayments}
+                {#each formFields as field}
+                    {#if field.enabled}
+                        <div class="fcal_form_item">
+                            <label class="fcal_input_content">
+                                <div class="fcal_input_label">
+                                    {field.label}
+                                    {#if field.required}<span>*</span>{/if}
                                 </div>
-                            {/if}
-                        </label>
+                                {#if field.type === 'text'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="text"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'email'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="email"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'number'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="number"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'phone'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="number"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'textarea'}
+                                    <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
+                                              class="fcal_input" bind:value={form[field.name]}/>
+                                {:else if field.type === 'dropdown'}
+                                    <select bind:value={form[field.name]}>
+                                        <option value="" disabled selected>{field.placeholder}</option>
+                                        {#each field.options as option (option)}
+                                            <option value={option}>{option}</option>
+                                        {/each}
+                                    </select>
+                                {/if}
+                            </label>
+                        </div>
+                    {/if}
+                {/each}
+            {/if}
+            {#if hasPaymentItem() && showPayments}
+                <Payments field={appData}/>
+                {#if appData?.payment_methods?.template}
+                    <div class="fcal_form_item">
+                        {@html appData.payment_methods.template}
                     </div>
                 {/if}
-            {/each}
-            <div class="fcal_form_item">
-                {@html appData.payment_methods.template}
-            </div>
+            {/if}
             <div class="fcal_form_item fcal_submit">
-                <button disabled="{submitting}" type="submit"
-                        class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                    Schedule Meeting
-                </button>
+                {#if !hasPaymentItem() || showPayments}
+                    <button disabled="{submitting}" type="submit"
+                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                        Schedule Meeting
+                    </button>
+                {:else}
+                    <button disabled="{submitting}" type="button"
+                            on:click={(e) => {
+                            showPayments = !showPayments;
+                            dispatch('onPaymentsVisibilityChanged', true);
+                        }}
+                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                        Confirm with payment
+                    </button>
+                {/if}
             </div>
         </form>
         {#if errors}
@@ -69,6 +74,8 @@
 <script>
     import {util, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
+    import {intros} from "svelte/internal";
+    import Payments from "./Payments.svelte";
 
     export let timezone;
     export let formFields;
@@ -85,7 +92,14 @@
 
     let errors = '';
 
+    export let showPayments;
+
+
     const currentUrl = window.location.href;
+
+    function hasPaymentItem() {
+        return appData?.payment_items ?? false;
+    }
 
     function submitForm(e) {
         const formFields = e.target.elements;
@@ -109,12 +123,12 @@
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
-                if (res.data.redirect_to) {
+                if (res.data?.redirect_to) {
                     window.location.href = res.data.redirect_to;
                     return;
                 }
 
-                if (res.data.actionName === 'custom') {
+                if (res.data?.actionName === 'custom') {
                     window.dispatchEvent(new CustomEvent('fluent_booking_payment_next_action_' + res.data.nextAction, {
                         detail: {
                             form: e.target,

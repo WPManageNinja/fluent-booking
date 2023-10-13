@@ -49,6 +49,11 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');
 
+    // webhooks
+    $router->get('/{id}/slots/{event_id}/webhooks', 'WebhookController@getFeeds')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/webhooks', 'WebhookController@saveFeed')->int('id')->int('event_id');
+    $router->delete('/{id}/slots/{event_id}/webhooks/{webhook_id}', 'WebhookController@deleteFeed')->int('id')->int('event_id')->int('webhook_id');
+
     // Payment settings route
     $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarSettings')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
@@ -138,11 +143,4 @@ $router->prefix('availability')->withPolicy('UserPolicy')->group(function ($rout
 $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/activities', 'ReportController@getActivities');
-});
-
-$router->prefix('webhooks')->withPolicy('UserPolicy')->group(function ($router) {
-    $router->get('/', 'WebhookController@index');
-    $router->post('/', 'WebhookController@create');
-    $router->put('/', 'WebhookController@updateData');
-    $router->delete('/{id}', 'WebhookController@delete')->int('id');
 });

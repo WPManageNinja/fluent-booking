@@ -55,6 +55,7 @@
                     <el-input
                         v-model="slot.description"
                         type="textarea"
+                        :rows="3"
                         placeholder="Enter Description here"
                     />
                 </el-form-item>
@@ -108,7 +109,7 @@ export default {
             this.slot.status = this.isEnable ? 'active' : 'draft';
         },
         validateDuration(slot) {
-            this.slot.custom_duration = Math.max(10, Math.min(300, slot.custom_duration));
+            this.slot.custom_duration = Math.max(10, Math.min(720, slot.custom_duration));
         },
         checkDurationType() {
             const fromDurationValue = this.appVars.meeting_durations.some(duration => duration.value === this.slot.duration);

@@ -45,6 +45,8 @@ class SchedulesController extends Controller
 
         if ($period == 'upcoming') {
             $query = $query->orderBy('start_time', 'ASC');
+        } else if ($period == 'latest_bookings') {
+            $query = $query->orderBy('created_at', 'DESC');
         } else {
             $query = $query->orderBy('start_time', 'DESC');
         }
@@ -62,8 +64,8 @@ class SchedulesController extends Controller
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
-
             $schedule->custom_form_data = $schedule->getCustomFormData();
+            $schedule->order_info = $schedule->getOrderItem();
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -81,10 +83,25 @@ class SchedulesController extends Controller
             do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
-        return $this->sendSuccess([
+        $data = [
             'schedules' => $schedules,
             'timezone'  => 'UTC'
-        ]);
+        ];
+
+        if ($request->get('page') == 1) {
+            if ($author && $author !== 'all') {
+                $pendingCount = Booking::where('host_user_id', $author)
+                    ->where('status', 'pending')
+                    ->count();
+            } else {
+                $pendingCount = Booking::where('status', 'pending')->count();
+            }
+
+            $data['pending_count'] = $pendingCount;
+            $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
+        }
+
+        return $data;
     }
 
     public function patchBooking(Request $request, $bookingId)
@@ -162,7 +179,7 @@ class SchedulesController extends Controller
     {
         $isAdmin = current_user_can('manage_options');
 
-        $booking = Booking::with(['slot']);
+        $booking = Booking::with('slot');
 
         if (!$isAdmin) {
             $booking->whereHas('calendar', function ($q) {
@@ -188,6 +205,8 @@ class SchedulesController extends Controller
 
         $booking->custom_form_data = $booking->getCustomFormData();
 
+        $booking->order_info = $booking->getOrderItem();
+
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         return [
@@ -210,12 +229,15 @@ class SchedulesController extends Controller
         $booking = $booking->where('group_id', $groupId)->first();
 
         if (!$booking || $booking->event_type != 'group') {
-            return $this->sendError(['message' => 'Invalid group id or the event is not a group event']);
+            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
-        $attendees = Booking::with('custom_field')
-            ->where('group_id', $booking->group_id)
-            ->paginate();
+        $attendees = Booking::where('group_id', $booking->group_id)->paginate();
+
+        foreach ($attendees as $attendee) {
+            $attendee->custom_form_data = $attendee->getCustomFormData();
+            $attendee->order_info = $attendee->getOrderItem();
+        }
 
         return [
             'attendees' => $attendees

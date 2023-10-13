@@ -9,12 +9,9 @@
             </el-breadcrumb>
 
             <div class="fcal_actions">
-                <el-button class="fcal_plain_btn fcal_copy_btn" @click="copyTo(slot?.id)">
-                    <el-icon><CopyDocument /></el-icon> [fluent_booking id="{{ slot?.id }}"]
+                <el-button class="fcal_plain_btn" @click="openShare = true">
+                    <el-icon><Share /></el-icon> Share
                 </el-button>
-<!--                <el-button class="fcal_plain_btn">-->
-<!--                    <el-icon><View /></el-icon> View LandingPage-->
-<!--                </el-button>-->
             </div>
         </div>
 
@@ -91,8 +88,7 @@
                     <WebhookSettings 
                         v-else 
                         :activeTab="activeTab"
-                        :event_id="event_id"
-                        :calendar_id="calendar_id"
+                        :calendar_event="slot"
                     />
                 </div>
             </el-tab-pane>
@@ -134,6 +130,14 @@
               </div>
             </el-tab-pane>
         </el-tabs>
+        <ShareCalendarBlock 
+            v-if="openShare" 
+            :slot="slot" 
+            :openShare="openShare"
+            :publicUrl="slot.public_url"
+            :calendarId="calendar_id"
+            @closeShare="openShare = false"
+        />
     </div>
 </template>
 
@@ -147,11 +151,12 @@ import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import SaveButton from '../../../Components/Buttons/SaveButton';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Back, Link, Message, View, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
-import WebhookSettings from "./WebHook/WebhookSettings";
+import WebhookSettings from "./WebHook/WebhookSettings.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import PaymentSettings from "./Payments/PaymentSettings.vue";
 import Integration from './GeneralIntegration/Integration.vue';
+import {Back, Link, Message, View, Share, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
+import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {
     name: 'SlotSettings',
@@ -168,9 +173,10 @@ export default {
         ScheduleIcon,
         NoficationIcon,
         QuestionIcon,
+        ShareCalendarBlock,
         Back,
         Link,
-        View,
+        Share,
         CopyDocument,
         Money,
         Message,
@@ -183,6 +189,7 @@ export default {
             slot: null,
             loading: true,
             saving: false,
+            openShare: false,
             activeTab: 'basic-info'
         }
     },
@@ -227,7 +234,24 @@ export default {
                 host_phone_number: this.slot.location_settings[0].host_phone_number
             }]
         },
+        checkValidattion() {
+            const location = this.slot.location_settings[0];
+            if (!location.type) {
+                this.$handleError('Location is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+                this.$handleError('Location Title is required');
+                return false;
+            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                this.$handleError('Phone Number is required');
+                return false;
+            }
+            return true;
+        },
         saveSettings() {
+            if (!this.checkValidattion()) {
+                return;
+            }
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots/' + this.event_id, {
                 title: this.slot.title,
@@ -257,7 +281,6 @@ export default {
         copyTo(text) {
             const CopyText = '[fluent_booking id="'+text+'"]';
             copyToClipBoard(CopyText);
-
             this.$handleSuccess('Shortcode has been copied to your clipboard');
         },
     },

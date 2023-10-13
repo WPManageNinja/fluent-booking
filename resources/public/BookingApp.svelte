@@ -3,7 +3,6 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import FluentFormBookingDetails from './Fluentform/BookingDetails.svelte';
 
     export let appData;
 
@@ -22,6 +21,9 @@
     let isXsDevice = false;
     let calendarHeight = '';
 
+
+    let showingPayments = false;
+
     onMount(() => {
         timezone = util.dayjs.tz.guess();
 
@@ -35,17 +37,19 @@
         if (appReady === true) {
             setTimeout(() => {
 
-                const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
-                const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+                // const dayPickerWrap = document.getElementById("fcal_day_picker_wrap");
+                // const dayPickerWrapHeight = dayPickerWrap.offsetHeight;
+                // const formHeight = document.getElementById("fcal_booking_form_wrap");
+                // const formOffsetHeight = formHeight.offsetHeight;
 
-                const formHeight = document.getElementById("fcal_booking_form_wrap");
-                const formOffsetHeight = formHeight.offsetHeight;
+              //  const currentHeight = document.querySelector(".fcal_date_event_details.is_active").offsetHeight;
+              //  calendarHeight = currentHeight;
 
-                if (dayPickerWrapHeight > formOffsetHeight) {
-                    calendarHeight = dayPickerWrapHeight;
-                } else {
-                    calendarHeight = formOffsetHeight;
-                }
+                // if (dayPickerWrapHeight > formOffsetHeight) {
+                //     calendarHeight = dayPickerWrapHeight;
+                // } else {
+                //     calendarHeight = formOffsetHeight;
+                // }
 
             },2000)
         }
@@ -60,14 +64,31 @@
         }
     };
 
+
+    function onPaymentsVisibilityChanged(visibility) {
+        console.log(visibility)
+        showingPayments = visibility;
+    }
+
     function spotSelected(spot) {
+
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
 
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height = calendarHeight + 135;
-        calendar.style.height = height + 'px';
+
+        // const height = calendarHeight + 135;
+        // calendar.style.height = height + 'px';
         selectedDate = spot;
+
+
+        setTimeout(() => {
+            const currentHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+            console.log(currentHeight);
+            calendarHeight = currentHeight + 135;
+            calendar.style.height = calendarHeight + 'px';
+        }, 100);
+
 
 
         if (isFluentform) {
@@ -130,28 +151,10 @@
                                     </svg>
                                     <span>{slot.duration} minutes</span>
                                 </div>
-                                {#if slot.location_settings[0]?.type == 'phone_organizer'}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px" data-testid="phone-call-icon" data-id="details-item-icon"><title>Phone call</title><path d="M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z" fill="currentColor"></path></svg>
-                                        <span>Phone Call</span>
-                                    </div>
-                                {:else if slot.location_settings[0]?.type == 'in_person_organizer'}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings[0]?.title}</span>
-                                    </div>
-                                    <div class="fcal_location_description">
-                                        <p>{slot.location_settings[0]?.description}</p>
-                                    </div>
-                                {:else}
-                                    <div class="slot_location fcal_icon_item">
-                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                        <span>{slot.location_settings[0]?.title}</span>
-                                    </div>
-                                    <div class="fcal_location_description">
-                                        <p>{slot.location_settings[0]?.description}</p>
-                                    </div>
+                                {#if slot.location_icon_html }
+                                    {@html slot.location_icon_html}
                                 {/if}
+
                                 {#if selectedDate}
                                     <div class="slot_time_range fcal_icon_item">
                                         <svg height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -207,8 +210,11 @@
                     {#if appReady}
                         <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                                 <DayPickerApp
+                                    {appData}
+                                    {isFluentform}
                                     {slot}
                                     {settings}
+                                    showPayments={showingPayments}
                                     bind:timezone={timezone}
                                     on:dayClicked={(e) => {dayClicked(e.detail)}}
                                     on:spotSelected={(e) => {spotSelected(e.detail)}}
@@ -217,9 +223,18 @@
                                 />
                         </div>
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
+
                                 <div class="fcal_date_event_details_header">
                                     <h2>
-                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                        <div aria-label="Back to Date Selection" on:click={(e) => {
+
+                                            if (showingPayments) {
+                                                showingPayments = false;
+                                            }else{
+                                                resetSelection()
+                                            }
+
+                                             }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
                                             <i class="fcal_svg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                                                     <path fill="none" d="M0 0h24v24H0V0z"/>
@@ -228,18 +243,26 @@
                                                 </svg>
                                             </i>
                                         </div>
-                                        Enter Details
+                                        {#if showingPayments}
+                                            Payment Details
+                                        {:else}
+                                            Enter Details
+                                        {/if}
                                     </h2>
                                 </div>
 
-                                <BookingForm
-                                    {appData}
-                                    {slot}
-                                    {timezone}
-                                    bind:spot={selectedDate}
-                                    bind:formFields={appData.form_fields}
-                                    on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                />
+                                {#if !isFluentform }
+                                    <BookingForm
+                                        {appData}
+                                        {slot}
+                                        {timezone}
+                                        showPayments={showingPayments}
+                                        on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
+                                        bind:spot={selectedDate}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    />
+                                {/if}
                             </div>
                     {/if}
                 </div>

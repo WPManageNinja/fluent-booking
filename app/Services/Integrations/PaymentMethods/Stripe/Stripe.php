@@ -6,6 +6,7 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\BasePaymentMethod;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\API;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\ApiRequest;
+use FluentBooking\App\Services\OrderHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class Stripe extends BasePaymentMethod
@@ -25,6 +26,9 @@ class Stripe extends BasePaymentMethod
         add_filter('fluent_booking/get_payment_connect_info_' . $this->slug, [$this, 'getConnectInfo']);
         add_filter('fluent_booking/get_payment_settings_disconnect_' . $this->slug, [$this, 'disconnect']);
         add_action('fluent-booking/before_render_payment_method_' . $this->slug, [$this, 'loadCheckoutJs'], 10, 1);
+
+        add_action('wp_ajax_nopriv_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
+        add_action('wp_ajax_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
 
     }
     
@@ -87,7 +91,7 @@ class Stripe extends BasePaymentMethod
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
-            'payment_method_type' => ['card'],
+//            'payment_method_type' => ['card'],
             'client_reference_id' => $hash,
             'items' => $items,
             'amount' => (int) round($paymentTotal),
@@ -106,11 +110,79 @@ class Stripe extends BasePaymentMethod
         }
     }
 
-    public function calculateAmount()
+    public function confirmStripePayment()
     {
+        if (!isset($_REQUEST['intentId'])) {
+            error_log('No intentId found! ' . json_encode($_REQUEST));
+            return;
+        } else {
+            error_log('intentId found! ' . json_encode($_REQUEST));
+        }
 
+        $intentId = $_REQUEST['intentId'];
+        $path = 'payment_intents/' . $intentId;
+
+        $api = new API();
+        $response = $api->makeRequest($path, [], (new StripeSettings())->getApiKey());
+
+        if (!$response || is_wp_error($response)) {
+            return;
+        }
+
+        $orderHash = Arr::get($response, 'metadata.ref_id');
+        $amount = intval(Arr::get($response, 'amount_received'));
+
+        //verify order
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        if (intval($order->total_amount) !== $amount) {
+            return;
+        }
+
+        $status = Arr::get($response, 'status') === 'succeeded' ? 'paid' : 'pending';
+
+        $updateData = [
+            'status' => sanitize_text_field($status),
+            'vendor_charge_id' => sanitize_text_field($intentId),
+            'payment_mode' => Arr::get($response, 'livemode') ? 'live' : 'test'
+        ];
+
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        $this->updateOrderData($order, $updateData);
 
     }
+
+    public function verifyInvoiceAndUpdate($eventId)
+    {
+        error_log('event id' . $eventId);
+        $invoice = (new API())->getInvoice($eventId);
+        $orderHash = $this->getOrderHash($invoice);
+
+        if (!$invoice || is_wp_error($invoice)) {
+            error_log('invoice not found');
+            return;
+        }
+
+        $updateData = [
+            'status' => sanitize_text_field($invoice->data->object->status),
+            'vendor_charge_id' => sanitize_text_field($invoice->data->object->payment_intent)
+        ];
+
+        //card_info update
+        if ($cardInfo = $invoice->data->object->payment_method_details->card) {
+            $updateData['card_brand'] = sanitize_text_field($cardInfo->brand);
+            $updateData['card_last_4'] = sanitize_text_field($cardInfo->last4);
+        }
+
+        if ($invoice->data->object->status === 'succeeded') {
+            $updateData['status'] = 'paid';
+            $updateData['payment_method_type'] = $invoice->data->object->payment_method_details->type;
+            $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
+        }
+
+        $order =  (new OrderHelper())->getOrderByHash($orderHash);
+        $this->updateOrderData($order, $updateData);
+    }
+
 
     /**
      * @param $orderItem
@@ -165,7 +237,6 @@ class Stripe extends BasePaymentMethod
 
     public function intentData($orderItem, $args)
     {
-        //        $items = $args['items'];
         $sessionPayload = array(
             'amount' => intval($args['amount']),
             'currency' => $args['currency'],
@@ -210,8 +281,6 @@ class Stripe extends BasePaymentMethod
         $sessionPayload = array(
             'client_reference_id' => $args['client_reference_id'],
             'success_url' => $args['success_url'],
-            //'cancel_url' => 'http://stripe.com',
-            'payment_method_types' => $args['payment_method_type'],
             'line_items' => $lineItems,
             'mode' => 'payment',
             'invoice_creation' => array(
@@ -222,6 +291,10 @@ class Stripe extends BasePaymentMethod
                 'ref_id'  => $args['client_reference_id'],
             ]
         );
+
+        if (isset($args['payment_method_type'])) {
+            $sessionPayload['payment_method_types'] = $args['payment_method_type'];
+        }
 
         return $sessionPayload;
     }
@@ -278,8 +351,8 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active' => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment', 'fluent-booking'),
-                'type' => 'enable'
+                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking'),
+                'type' => 'inline_checkbox'
             ),
             'payment_mode' => array(
                 'value' => 'test',
@@ -290,62 +363,20 @@ class Stripe extends BasePaymentMethod
                 ),
                 'type' => 'radio'
             ),
-            'checkout_mode_notice' => array(
-                'value' => "Using onsite checkout mode you can accept payment without leaving your site.<br/> NB: Subscriptions payment may force to hosted checkout automatically! <br/>",
-                'label' => '',
-                'type' => 'html_attr'
-            ),
-            'checkout_mode' => array(
-                'value' => 'onsite',
-                'label' => __('Checkout Mode', 'fluent-booking'),
-                'options' => array(
-                    'onsite' => __('Onsite', 'fluent-booking'),
-                    'hosted' => __('Hosted', 'fluent-booking')
-                ),
-                'type' => 'radio'
-            ),
+//            'checkout_mode' => array(
+//                'value' => 'onsite',
+//                'label' => __('Checkout Mode', 'fluent-booking'),
+//                'options' => array(
+//                    'onsite' => __('Onsite', 'fluent-booking'),
+//                    'hosted' => __('Hosted', 'fluent-booking')
+//                ),
+//                'type' => 'radio'
+//            ),
             'provider' => array(
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),
                 'type' => 'provider'
-            ),
-            'setup_guide' => array(
-                'value' => '<h3>Or Setup keys manually.</h3><hr/>',
-                'label' => __('Or Setup keys manually', 'fluent-booking'),
-                'type' => 'html_attr'
-            ),
-            'test_publishable_key' => array(
-                'value' => '',
-                'label' => __('Test Publishable Key', 'fluent-booking'),
-                'type' => 'text'
-            ),
-            'test_secret_key' => array(
-                'value' => '',
-                'label' => __('Test Publishable Key', 'fluent-booking'),
-                'type' => 'password'
-            ),
-            'live_publishable_key' => array(
-                'value' => '',
-                'label' => __('Live Publishable Key', 'fluent-booking'),
-                'type' => 'text'
-            ),
-            'live_secret_key' => array(
-                'value' => '',
-                'label' => __('Live Secret Key', 'fluent-booking'),
-                'type' => 'password'
-            ),
-            'webhook_desc' => array(
-                'value' => "
-                <hr/>
-                <div class='mt-6'>
-                <h3 style='color:green;'>Stripe Webhook (Setup Required *) </h3> 
-                <p>If you use Stripe for recurring payments please set the notification URL in Stripe as bellow:<br/> 
-                <p><b>Webhook URL: </b><br/><code> " . site_url() . '?fluent_booking_payment_listener=1&method=stripe' . "</code></p> <br/> 
-                you must configure your Stripe webhooks. Visit your <a href='https://stripe.com/docs/webhooks' target='_blank' rel='noopener'>account dashboard</a> 
-                to configure them.<br/> Please consider enabling webhook endpoints must: <code>charge.succeeded</code>, <code>charge.captured</code>, <code>invoice.paid</code></div></div>",
-                'label' => __('Webhook URL', 'fluent-booking'),
-                'type' => 'html_attr'
-            ),
+             )
         );
 
     }
@@ -358,41 +389,15 @@ class Stripe extends BasePaymentMethod
 
     public function onPaymentEventTriggered()
     {
-        $data = (new API())->verifyIPN();
+        $data =  (new API())->verifyIPN();
 
         if (!$data) {
             error_log('invalid data');
             return;
         }
 
-        $eventId = $data->id;
-        $invoice = (new API())->getInvoice($eventId);
-
-        $orderHash = $this->getOrderHash($invoice);
-
-        if (!$invoice || is_wp_error($invoice)) {
-            error_log('invoice not found');
-            return;
-        }
-
-        $updateData = [
-            'status' => sanitize_text_field($invoice->data->object->status),
-            'vendor_charge_id' => sanitize_text_field($invoice->data->object->payment_intent)
-        ];
-
-        //card_info update
-        if ($cardInfo = $invoice->data->object->payment_method_details->card) {
-            $updateData['card_brand'] = sanitize_text_field($cardInfo->brand);
-            $updateData['card_last_4'] = sanitize_text_field($cardInfo->last4);
-        }
-
-        if ($invoice->data->object->status === 'succeeded') {
-            $updateData['status'] = 'pending';
-        }
-
-        $this->updateOrderDataByHash($orderHash, $updateData);
+        $this->verifyInvoiceAndUpdate($data->id);
     }
-
 
 
     public static function getOrderHash($event)
@@ -430,7 +435,7 @@ class Stripe extends BasePaymentMethod
     public function loadCheckoutJs($my_data)
     {
         wp_enqueue_script('fluent-booking-checkout-sdk-' . $this->slug, 'https://js.stripe.com/v3/',null, false);
-        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-stripe'], false);
+        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-' . $this->slug, 'jquery'], false);
     }
 
     public function render($method)
@@ -442,14 +447,5 @@ class Stripe extends BasePaymentMethod
               Stripe
             </label>
         ';
-    }
-
-    public function maybeUpdatePayments($orderHash)
-    {
-        $updateData = [
-            'status' => 'pending'
-        ];
-        $this->updateOrderDataByHash($orderHash, $updateData);
-        return;
     }
 }

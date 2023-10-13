@@ -11,6 +11,7 @@ use FluentBooking\Database\Migrations\BookingTransactionsMigrator;
 use FluentBooking\Database\Migrations\CalendarMigrator;
 use FluentBooking\Database\Migrations\CalendarSlotsMigrator;
 use FluentBooking\Database\Migrations\MetaMigrator;
+use FluentBooking\Database\Migrations\OrdersItemsMigrator;
 
 class DBMigrator
 {
@@ -38,9 +39,11 @@ class DBMigrator
         BookingMigrator::migrate();
         BookingMetaMigrator::migrate();
         BookingHostMigrator::migrate();
+        BookingOrdersMigrator::migrate();
         MetaMigrator::migrate();
         BookingActivityMigrator::migrate();
         BookingOrdersMigrator::migrate();
         BookingTransactionsMigrator::migrate();
+        OrdersItemsMigrator::migrate();
     }
 }

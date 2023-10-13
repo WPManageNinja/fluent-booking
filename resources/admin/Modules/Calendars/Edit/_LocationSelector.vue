@@ -37,20 +37,22 @@
         </el-form>
 
         <el-form
-            v-if="isPhoneRequired"
+            v-else-if="isPhoneRequired"
             label-position="top"
             class="fcal_location_form"
         >
             <div>
-                <el-form-item label="Your Phone Number (with country code)">
+                <el-form-item label="Your Phone Number * (with country code)">
                     <el-input v-model="slot.location_settings[0].host_phone_number" type="text" placeholder="Your Phone Number"/>
                 </el-form-item>
             </div>
         </el-form>
+        <div style="color: red;" v-if="isDisabledSelected">Looks like your remote connection for this location is disabled. Please revise your location selection</div>
     </div>
 </template>
 
 <script type="text/babel">
+import isEmpty from 'lodash/isEmpty';
 export default {
     name: 'LocationSelector',
     props: ['slot'],
@@ -60,6 +62,18 @@ export default {
         },
         isLocationInfoRequired() {
             return this.slot.location_settings[0]?.type == 'in_person_organizer' || this.slot.location_settings[0]?.type == 'custom';
+        },
+        isDisabledSelected() {
+            const firstSelectedType = this.slot.location_settings[0]?.type;
+            if(!firstSelectedType) {
+                return false;
+            }
+
+            if(this.slot.settings.location_fields && !isEmpty(this.slot.settings.location_fields.conferencing.options)) {
+                return this.slot.settings.location_fields.conferencing.options[firstSelectedType]?.disabled;
+            }
+
+            return false;
         }
     }
 }

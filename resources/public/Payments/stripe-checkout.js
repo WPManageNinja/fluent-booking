@@ -24,31 +24,42 @@ class StripeCheckout {
 
         paymentElement.mount('.fcal_payment_items_wrapper');
 
-        $('.fcal_payment_items_wrapper').append('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
+        jQuery('.fcal_payment_items_wrapper').append('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
         this.form.find('.fcal_submit').hide();
         let that= this;
 
         paymentElement.on('ready', function(event) {
-            $('#fluent_booking_loading_payment_processor').remove();
-            $('.fcal_payment_items_wrapper').append(submitButton);
+            jQuery('#fluent_booking_loading_payment_processor').remove();
+            jQuery('.fcal_payment_items_wrapper').append(submitButton);
 
-            $('#fluent_booking_stipe_pay').on('click', function(e) {
+            jQuery('#fluent_booking_stipe_pay').on('click', function(e) {
                 e.preventDefault()
                 elements.submit().then(result=> {
-                    $(this).text('Processing...');
-                    $(this).attr('disabled', true);
-                    stripe.confirmPayment({
+                    jQuery(this).text('Processing...');
+                    jQuery(this).attr('disabled', true);
+                    const pay = stripe.confirmPayment({
                         elements,
                         confirmParams: {
-                            return_url: that.data?.data?.payment_args?.success_url
-                        }
+                            // redirect: 'if_required'
+                            // return_url: that.data?.data?.payment_args?.success_url
+                        },
+                        redirect: 'if_required'
                     }).then((result) => {
-                        $(this).text('Pay Now');
-                        $(this).attr('disabled', false);
+                        if (result?.paymentIntent?.id) {
+                            jQuery.post(window.fluentCalendarPublicVars.ajaxurl, {
+                                action: 'fluent_cal_confirm_stripe_payment',
+                                intentId: result?.paymentIntent?.id
+                            }).then((response) => {
+                                window.location.href =  that.data?.data?.payment_args?.success_url;
+                            });
+                        }
+                        jQuery(this).text('Pay Now');
+                        jQuery(this).attr('disabled', false);
                     })
+
                 }).catch(error => {
-                    $(this).text('Pay Now');
-                    $(this).attr('disabled', false);
+                    jQuery(this).text('Pay Now');
+                    jQuery(this).attr('disabled', false);
                 })
 
             })

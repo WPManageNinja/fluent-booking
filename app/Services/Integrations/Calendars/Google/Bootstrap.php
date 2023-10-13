@@ -94,16 +94,26 @@ class Bootstrap
             ];
         });
 
-        add_filter( 'fluent_booking/get_location_fields', function($fields, $userId) {
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
             $meetExist = Meta::where('object_type', '_google_user_token')
-                ->where('object_id', $userId)
+                ->where('object_id', $calendar->user_id)
                 ->first();
-            
+
             $message = !$meetExist ? ' (Connect Google Meet First)' : '';
-            
+
+            if (!$message) {
+                // now check if the user calendar event create enabled
+                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
+                if(!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
+                    $message = ' (Set Google Event Creat First)';
+                    $meetExist = false;
+                }
+            }
+
             $fields['conferencing']['options']['google_meet'] = [
-                    'title'    => 'Google Meet' . $message,
-                    'disabled' => !$meetExist,
+                'title'    => 'Google Meet' . $message,
+                'disabled' => !$meetExist,
+                'location_type' => 'conferencing'
             ];
             return $fields;
         }, 10, 2);
@@ -340,6 +350,7 @@ class Bootstrap
 
     public function createRemoteCalendarEvent($config, Booking $booking, CalendarSlot $slot)
     {
+
         $calendar = $booking->calendar;
         if (!$calendar) {
             return false;
@@ -361,7 +372,6 @@ class Bootstrap
         $settings = $meta->value;
 
         $isValid = false;
-
 
         $calendarLists = Arr::get($settings, 'calendar_lists', []);
 
@@ -403,7 +413,7 @@ class Bootstrap
 
         $author = $slot->getAuthorProfile(false);
 
-        $data = apply_filters('fluent_booking/google_event_data', [
+        $data = [
             'start'     => [
                 'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
             ],
@@ -422,7 +432,24 @@ class Bootstrap
                 'url'   => $booking->source_url
             ],
             'summary'   => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking')
-        ], $booking, $slot);
+        ];
+
+        $isGoogleMeet = false;
+
+        if (Arr::get($booking->location_details, 'type') == 'google_meet') {
+            $data['conferenceData'] = [
+                'createRequest' => [
+                    'requestId'             => $booking->hash,
+                    'conferenceSolutionKey' => [
+                        'type' => 'hangoutsMeet'
+                    ]
+                ]
+            ];
+
+            $isGoogleMeet = true;
+        }
+
+        $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $slot);
 
         $response = $api->createEvent($config['remote_calendar_id'], $data);
 
@@ -437,11 +464,29 @@ class Bootstrap
             return false;
         }
 
-        $booking->updateMeta('__google_calendar_event', [
+        $responseData = [
             'id'                 => $response['id'],
             'remote_link'        => $response['htmlLink'],
             'remote_calendar_id' => $config['remote_calendar_id'],
-            'access_db_id'       => $meta->id
+            'access_db_id'       => $meta->id,
+        ];
+
+        if ($isGoogleMeet && !empty($response['hangoutLink'])) {
+            $responseData['google_meet_link'] = $response['hangoutLink'];
+            $location = $booking->location_details;
+            $location['online_platform_link'] = $responseData['google_meet_link'];
+            $booking->location_details = $location;
+            $booking->save();
+        }
+
+        $booking->updateMeta('__google_calendar_event', $responseData);
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Google Calendar event created', 'fluent-booking'),
+            'description' => __(sprintf('Google calendar event has been created. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking') . '</a>'), 'fluent-booking')
         ]);
 
         return true;
