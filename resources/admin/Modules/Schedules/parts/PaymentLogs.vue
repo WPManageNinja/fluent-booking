@@ -30,17 +30,45 @@
                     <tr>
                         <td>{{ booking.order_info?.item_name }}</td>
                         <td>{{ booking.order_info?.quantity }}</td>
-                        <td>{{ Math.floor(booking.order_info?.item_price) }}</td>
+                        <td>{{ booking.currency }} {{ Math.floor(booking.order_info?.item_price / 100) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
                         <th>Total:</th>
-                        <td>{{ Math.floor(booking.order_info?.item_total) }}</td>
+                        <td>{{ booking.currency }} {{ Math.floor(booking.order_info?.item_total / 100) }}</td>
                     </tr>
                 </tfoot>
             </table>
+
+            <div class="fcal_payment_transaction_lists">
+                <h2>Transaction Details</h2>
+                <div class="fcal_schedule_details_event">
+                    <div class="fcal_schedule_details_event_item">
+                        <h3>Payment Method</h3>
+                        <p class="payment_method">{{ booking.order_transaction?.payment_method }}</p>
+                    </div>
+                    <div v-if="booking.order_transaction?.card_last_4" class="fcal_schedule_details_event_item">
+                        <h3>Card Last 4</h3>
+                        <p class="card_last_4">
+                            <span>{{ booking.order_transaction?.card_brand}}</span>...{{ booking.order_transaction?.card_last_4 }}
+                        </p>
+                    </div>
+                    <div class="fcal_schedule_details_event_item">
+                        <h3>Payment Total</h3>
+                        <p>
+                            {{ booking.currency }} {{ Math.floor(booking.order_transaction?.total / 100) }}
+                        </p>
+                    </div>
+                    <div class="fcal_schedule_details_event_item">
+                        <h3>Payment Status</h3>
+                        <p class="payment_status" :class="booking.order_transaction?.status">
+                            {{ booking.order_transaction?.status }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
