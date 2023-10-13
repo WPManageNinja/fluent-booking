@@ -33,43 +33,27 @@
             <el-skeleton v-if="loading" animated :rows="6">
             </el-skeleton>
             <template v-else>
-                <el-table :data="feeds" stripe>
-                    <template #empty>
-                        You don't have any feeds configured. Let's go
-                        <el-link :underline="true" @click="add">create one!</el-link>
-                    </template>
-
-
-                    <el-table-column width="70">
-                        <template #default="scope">
+                <div v-if="feeds" class="fcal_integration_items">
+                    <div class="fcal_integration_item" v-for="feed in feeds" :key="feed.id">
+                        <div class="fcal_card_wrap">
+                            <div class="fcal_card_item_details">
+                                <h3>{{ feed.settings.name }}</h3>
+                                <p class="request_url">{{ feed.settings.request_url }}</p>
+                                <ul class="event_triggers" v-if="feed.settings.event_triggers">
+                                    <li v-for="(event, i) in feed.settings.event_triggers" :key="i"><i class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 stroke-[3px]" data-testid="start-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></i> {{ getEventName(event) }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="fcal_card_actions">
                             <el-switch
                                 active-color="#13ce66"
-                                @change="handleActive(scope.row)"
-                                v-model="scope.row.settings.enabled"
+                                @change="handleActive(feed)"
+                                v-model="feed.settings.enabled"
                             ></el-switch>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        width="200"
-                        label="Name">
-                        <template #default="scope">
-                            {{ scope.row.settings.name }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        :label="('WebHook URL')">
-                        <template #default="scope">
-                            {{ scope.row.settings.request_url }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column width="160" label="Actions" class-name="action-buttons">
-                        <template #default="scope">
-
                             <el-button
-                                class="fcal_primary_btn"
-                                @click="edit(scope.row)"
+                                size="small"
+                                type="success"
+                                @click="edit(feed)"
                             >
                                 <el-icon>
                                     <Edit/>
@@ -79,19 +63,23 @@
                                 title="Are you sure to delete this webhook?"
                                 popper-class="fcal_confirm_dialog"
                                 confirm-button-type="danger"
-                                @confirm="deleteWebhook(scope.row.id)"
+                                @confirm="deleteWebhook(feed.id)"
                             >
                                 <template #reference>
-                                    <el-button type="danger" class="fcal_danger_btn">
+                                    <el-button type="danger" size="small" class="fcal_danger_btn">
                                         <el-icon>
                                             <Delete/>
                                         </el-icon>
                                     </el-button>
                                 </template>
                             </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                        </div>
+                    </div>
+                </div>
+                <p v-else>
+                    You don't have any feeds configured. Let's go
+                    <el-link :underline="true" @click="add">create one!</el-link>
+                </p>
             </template>
         </div>
 
@@ -224,6 +212,17 @@ export default {
         },
         backToWebhook() {
             this.show_edit = false;
+        },
+        getEventName(name) {
+            if (name == 'after_booking_scheduled') {
+                return 'Booking Confirmed';
+            }
+            if (name == 'booking_schedule_completed') {
+                return 'Booking Complated';
+            }
+            if (name == 'booking_schedule_cancelled') {
+                return 'Booking Cancelled';
+            }
         }
     },
     computed: {
