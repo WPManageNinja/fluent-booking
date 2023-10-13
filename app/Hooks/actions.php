@@ -44,6 +44,10 @@ add_action('init', function () {
         return;
     }
 
+    if(!current_user_can('manage_options')) {
+        return;
+    }
+
     $tables = [
         'fcal_booking_activity',
         'fcal_booking_hosts',
