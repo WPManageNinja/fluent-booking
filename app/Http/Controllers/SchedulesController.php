@@ -80,8 +80,6 @@ class SchedulesController extends Controller
             $schedule->custom_form_data = $schedule->getCustomFormData();
 
             if($schedule->payment_status) {
-                $schedule->order_info = $schedule->getOrderItem();
-                $schedule->order_transaction = $schedule->getTransaction();
                 $schedule->currency = CurrenciesHelper::getCurrencySign();
             }
 
@@ -221,8 +219,6 @@ class SchedulesController extends Controller
         }
 
         if($booking->payment_status) {
-            $booking->order_info = $booking->getOrderItem();
-            $booking->order_transaction = $booking->getTransaction();
             $booking->currency = CurrenciesHelper::getCurrencySign();
         }
 
@@ -236,9 +232,6 @@ class SchedulesController extends Controller
 
         $booking->custom_form_data = $booking->getCustomFormData();
 
-        $booking->order_info = $booking->getOrderItems();
-
-        $booking->order_transaction = $booking->getTransaction();
 
         $booking->currency = CurrenciesHelper::getCurrencySign();
 
@@ -273,8 +266,6 @@ class SchedulesController extends Controller
             $attendee->custom_form_data = $attendee->getCustomFormData();
 
             if($attendee->payment_status) {
-                $attendee->order_info = $attendee->getOrderItem();
-                $attendee->order_transaction = $attendee->getTransaction();
                 $attendee->currency = CurrenciesHelper::getCurrencySign();
             }
         }

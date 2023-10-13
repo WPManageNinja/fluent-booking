@@ -133,6 +133,11 @@ class FrontEndHandler
         if ($isPhoneRequired) {
             $rules['phone_number'] = 'required';
         }
+        
+        $isAddressRequired = $calendarSlot->isAddressRequired();
+        if ($isAddressRequired) {
+            $rules['address'] = 'required';
+        }
 
         $validator = $app->validator->make($postedData, $rules, [
             'name.required'       => 'Please enter your name',
