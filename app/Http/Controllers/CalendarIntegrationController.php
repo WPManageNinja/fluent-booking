@@ -7,11 +7,11 @@ use FluentBooking\App\Services\Integrations\CalendarIntegrationService;
 
 class CalendarIntegrationController extends Controller
 {
-    public function index(CalendarIntegrationService $integrationService, $calendarId, $slotId)
+    public function index(CalendarIntegrationService $integrationService, $calendarId, $eventId)
     {
         try {
             return $this->sendSuccess(
-                $integrationService->get($calendarId)
+                $integrationService->get($eventId)
             );
         } catch (Exception $e) {
             return $this->sendError([
@@ -24,7 +24,6 @@ class CalendarIntegrationController extends Controller
     {
         try {
             $integration = $integrationService->find($this->request->all());
-
             return $this->sendSuccess($integration);
         } catch (Exception $e) {
             return $this->sendError([
@@ -35,8 +34,12 @@ class CalendarIntegrationController extends Controller
 
     public function update(CalendarIntegrationService $integrationService, $calendarId, $slotId, $integrationId)
     {
+
+        $data = $this->request->all();
+        $data['slot_id'] = $slotId;
+
         try {
-            $integration = $integrationService->update($this->request->all());
+            $integration = $integrationService->update($data);
             return $this->sendSuccess($integration);
         } catch (Exception $e) {
             return $this->sendError([

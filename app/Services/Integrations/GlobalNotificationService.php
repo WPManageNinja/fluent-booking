@@ -10,6 +10,8 @@ class GlobalNotificationService
 {
     public function checkCondition($parsedValue, $booking)
     {
+        return true;
+
         $conditionSettings = Arr::get($parsedValue, 'conditionals');
         if (
             !$conditionSettings ||
@@ -40,23 +42,20 @@ class GlobalNotificationService
     {
         $enabledFeeds = [];
         foreach ($feeds as $feed) {
-            $parsedValue = json_decode($feed->value, true);
-            if ($parsedValue && Arr::isTrue($parsedValue, 'enabled')) {
-                // Now check if conditions matched or not
-                $isConditionMatched = $this->checkCondition($parsedValue, $booking);
-                if ($isConditionMatched) {
-                    $item = [
-                        'id'       => $feed->id,
-                        'key'      => $feed->key,
-                        'settings' => $parsedValue,
-                    ];
+            $parsedValue = $feed->value;
+            if (!$parsedValue || !Arr::isTrue($parsedValue, 'enabled')) {
+                continue;
+            }
 
-                    if ('user_registration_feeds' == $feed->key) {
-                        array_unshift($enabledFeeds, $item);
-                    } else {
-                        $enabledFeeds[] = $item;
-                    }
-                }
+            // Now check if conditions matched or not
+            $isConditionMatched = $this->checkCondition($parsedValue, $booking);
+            if ($isConditionMatched) {
+                $item = [
+                    'id'       => $feed->id,
+                    'key'      => $feed->key,
+                    'settings' => $parsedValue,
+                ];
+                $enabledFeeds[] = $item;
             }
         }
 

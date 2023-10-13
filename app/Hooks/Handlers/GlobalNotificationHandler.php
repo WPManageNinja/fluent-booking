@@ -2,6 +2,8 @@
 
 namespace FluentBooking\App\Hooks\Handlers;
 
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\EditorShortCodeParser;
 use FluentBooking\App\Services\Integrations\GlobalNotificationService;
@@ -13,86 +15,111 @@ class GlobalNotificationHandler
      */
     private $globalNotificationService;
 
-    public function __construct()
+    public function register()
     {
-        $this->globalNotificationService = new GlobalNotificationService();
+        add_action('fluent_booking/handle_global_notification_background', function ($bookingId, $feedId) {
+            $booking = Booking::with(['calendar_event'])->find($bookingId);
+            if (!$booking) {
+                return;
+            }
+
+            $item = Meta::where('id', $feedId)->where('object_id', $booking->event_id)->first();
+
+            if (!$item) {
+                return;
+            }
+
+            // Prepare the data
+            $feed = [
+                'id'       => $item->id,
+                'key'      => $item->key,
+                'settings' => $item->value,
+            ];
+
+            $processedValues = $feed['settings'];
+            $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
+            $feed['processedValues'] = $processedValues;
+
+            do_action('fluent_booking/integration_notify_' . $feed['key'], $feed, $booking, $booking->calendar_event);
+            return true;
+        }, 10, 2);
+
+        add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
+        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
+        add_action('fluent_booking/booking_schedule_completed', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
+
     }
 
-    public function globalNotify($booking, $slot)
+    public function maybeHandleGlobalIntegration($booking, $calendarSlot)
     {
+        $status = $booking->status;
+
+        $maps = [
+            'scheduled' => 'after_booking_scheduled',
+            'cancelled' => 'booking_schedule_cancelled',
+            'completed' => 'booking_schedule_completed'
+        ];
+
+        if (!isset($maps[$status])) {
+            return false;
+        }
+
+        $currentHook = $maps[$status];
+
+        return $this->globalNotify($booking, $calendarSlot, $currentHook);
+    }
+
+
+    private function globalNotify($booking, $calendarEvent, $targetHook = null)
+    {
+        $this->globalNotificationService = new GlobalNotificationService();
+
         // Let's find the feeds that are available for this form
-        $feedKeys = apply_filters('fluent_booking/global_notification_active_types', [], $slot->id);
+        $feedKeys = apply_filters('fluent_booking/global_notification_active_types', [], $calendarEvent->id);
 
         if (!$feedKeys) {
-            do_action('fluent_booking/global_notify_completed', $booking, $slot);
-
-            return;
+            return false;
         }
 
         $feedMetaKeys = array_keys($feedKeys);
-        $feeds = $this->globalNotificationService->getNotificationFeeds($slot->id, $feedMetaKeys);
+        $feeds = $this->globalNotificationService->getNotificationFeeds($calendarEvent->id, $feedMetaKeys);
 
         if (!$feeds) {
-            do_action('fluent_booking/global_notify_completed', $slot, $booking);
-
-            return;
+            return false;
         }
 
         // Now we have to filter the feeds which are enabled
         $enabledFeeds = $this->globalNotificationService->getEnabledFeeds($feeds, $booking);
 
         if (!$enabledFeeds) {
-            do_action('fluent_booking/global_notify_completed', $slot, $booking);
-
-            return;
+            return false;
         }
 
-        $entry = false;
-        $asyncFeeds = [];
-
-        // $scheduler = $this->app['fluentFormAsyncRequest'];
-
         foreach ($enabledFeeds as $feed) {
+
+            $enabledTriggers = Arr::get($feed, 'settings.event_triggers', []);
+
+            if (!$enabledTriggers && !in_array($targetHook, $enabledTriggers)) {
+                continue;
+            }
+
             // We will decide if this feed will run on async or sync
             $integrationKey = Arr::get($feedKeys, $feed['key']);
 
-            $newAction = 'fluent_booking/integration_notify_' . $feed['key'];
-
-            // It's sync
-            $processedValues = $feed['settings'];
-            unset($processedValues['conditionals']);
-            $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
-            $feed['processedValues'] = $processedValues;
-
-            dd($feed);
-
-            if (apply_filters('fluent_booking/notifying_async_' . $integrationKey, false, $slot->id)) {
-                // It's async
-                $asyncFeed = [
-                    'action'     => $newAction,
-                    'form_id'    => $slot->id,
-                    'feed_id'    => $feed['id'],
-                    'type'       => 'submission_action',
-                    'status'     => 'pending',
-                    'data'       => maybe_serialize($feed),
-                    'created_at' => current_time('mysql'),
-                    'updated_at' => current_time('mysql'),
-                ];
-
-                $asyncFeeds[] = $asyncFeed;
-
-                // $queueId = $scheduler->queue($asyncFeed);
-
-                // as_enqueue_async_action('fluent_booking/schedule_feed', ['queueId' => $queueId], 'fluentform');
+            if (apply_filters('fluent_booking/notifying_async_' . $integrationKey, false, $calendarEvent->id)) {
+                as_enqueue_async_action('fluent_booking/handle_global_notification_background', [
+                    $booking->id,
+                    $feed['id']
+                ]);
             } else {
-                do_action($newAction, $feed, $booking, $slot);
+                // It's sync
+                $processedValues = $feed['settings'];
+                $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
+                $feed['processedValues'] = $processedValues;
+                do_action('fluent_booking/integration_notify_' . $feed['key'], $feed, $booking, $calendarEvent);
             }
         }
 
-        if (!$asyncFeeds) {
-            do_action('fluent_booking/global_notify_completed', $slot);
-
-            return;
-        }
+        return true;
     }
 }
