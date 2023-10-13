@@ -110,6 +110,21 @@ class GoogleCalendar
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
     }
 
+    public function patchEvent($calendarId, $eventId, $eventData, $queryArgs = [])
+    {
+        $argsDefaults = [
+            'sendUpdates' => 'all'
+        ];
+        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
+
+        return ($this->getAccessClient())->patchEvent($calendarId, $eventId, $eventData, $queryArgs);
+    }
+
+    public function getEvent($calendarId, $eventId, $queryArgs = [])
+    {
+        return ($this->getAccessClient())->getEvent($calendarId, $eventId, $queryArgs);
+    }
+
     public function revoke()
     {
         if ($this->lastError) {

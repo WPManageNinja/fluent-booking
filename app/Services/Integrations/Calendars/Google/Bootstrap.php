@@ -162,6 +162,7 @@ class Bootstrap
          */
         add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
         add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
+        add_action('fluent_booking/update_remote_calendar_event_google', [$this, 'updateRemoteCalendarEvent'], 10, 4);
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -411,6 +412,13 @@ class Bootstrap
             'comment'      => $booking->message
         ]);
 
+        $bookingExist = Booking::where('group_id', $booking->group_id)->count();
+
+        if ($bookingExist > 1) {
+            $this->addNewAttendee($config['remote_calendar_id'], $meta, $booking, $booking->group_id, $guestAttendee); // Slot is already created just need to add the new attendee
+            return;
+        }
+
         $author = $slot->getAuthorProfile(false);
 
         $data = [
@@ -498,6 +506,168 @@ class Bootstrap
         ]);
 
         return true;
+    }
+
+    public function updateRemoteCalendarEvent($config, $booking, $updatedData, $calendar)
+    {
+        if (!$calendar) {
+            return false;
+        }
+
+        $bookingMeta = $booking->getMeta('__google_calendar_event');
+
+        if (!$bookingMeta) {
+            return false; // Nothing to update as there is no previous response of this booking
+        }
+
+        if ('status' != Arr::get($updatedData, 'column')) {
+            return false; // We will update only status for now
+        }
+
+        $meta = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $calendar->user_id)
+            ->where('id', $config['db_id'])
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+
+        $settings = $meta->value;
+
+        $isValid = false;
+
+        $calendarLists = Arr::get($settings, 'calendar_lists', []);
+
+        foreach ($calendarLists as $item) {
+            if ($item['can_write'] != 'yes') {
+                continue;
+            }
+
+            if ($item['id'] == $config['remote_calendar_id']) {
+                $isValid = true;
+            }
+        }
+
+        if (!$isValid) {
+            return false; // invalid id of the remote calendar
+        }
+
+        $api = new GoogleCalendar($meta);
+
+        if ($api->lastError) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Google Calendar API Error',
+                'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $googleEventId = Arr::get($bookingMeta, 'id');
+
+        $status = Arr::get($updatedData, 'value');
+
+        $data['status'] = $status;
+
+        $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $calendar);
+
+        $response = $api->patchEvent($config['remote_calendar_id'], $googleEventId, $data);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Google Calendar API Error',
+                'description' => __(sprintf('Failed to create event in Google calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $responseData = [
+            'id'                 => $response['id'],
+            'remote_link'        => $response['htmlLink'],
+            'remote_calendar_id' => $config['remote_calendar_id'],
+            'access_db_id'       => $meta->id,
+        ];
+
+        $booking->updateMeta('__google_calendar_event', $responseData);
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Google Calendar event updated', 'fluent-booking'),
+            'description' => __(sprintf('Google calendar event has been updated. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking') . '</a>'), 'fluent-booking')
+        ]);
+
+        return true;
+    }
+
+    public function addNewAttendee($calendarId, $meta, $booking, $groupId, $attendee)
+    {
+        $existingBooking = Booking::where('group_id', $groupId)->first();
+
+        $bookingMeta = $existingBooking->getMeta('__google_calendar_event');
+
+        if (!$bookingMeta) {
+            return false;
+        }
+
+        $googleEventId = Arr::get($bookingMeta, 'id');
+        $googleMeetLink = Arr::get($bookingMeta, 'google_meet_link');
+
+        if ($googleMeetLink) {
+            $location = $booking->location_details;
+            $location['online_platform_link'] = $googleMeetLink;
+            $booking->location_details = $location;
+            $booking->save();
+        }
+    
+        $api = new GoogleCalendar($meta);
+
+        $updatedEvent = $api->getEvent($calendarId, $googleEventId);
+
+        if (is_wp_error($updatedEvent)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Google Calendar API Error',
+                'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $attendees = $updatedEvent['attendees'] ?? [];
+
+        $attendees[] = $attendee;
+
+        $data['attendees'] = $attendees;
+
+        $response = $api->patchEvent($calendarId, $googleEventId, $data);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Google Calendar API Error',
+                'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Attendee Added in Google Calendar Event', 'fluent-booking'),
+            'description' => __(sprintf('Attendee has been added in Google calendar successfully. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking') . '</a>'), 'fluent-booking')
+        ]);
     }
 
     private function addFeedIntegration($userId, $tokenData)
