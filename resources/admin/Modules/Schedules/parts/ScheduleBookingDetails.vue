@@ -2,8 +2,8 @@
     <div class="fcal_schedule_details">
         <div class="fcal_schedule_details_content">
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
-                <div class="fcal_schedule_header_bar">
-                    {{ meetingDetails }}
+                <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
+                    {{ meetingDetails }} - {{ucFirst(showing_booking.status)}}
                     <el-dropdown v-if="isMoreIconVisible" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>

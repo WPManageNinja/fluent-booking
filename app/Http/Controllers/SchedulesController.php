@@ -72,18 +72,18 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
-                do_action('fluent_booking/booking_schedule_completed', $schedule);
+                do_action('fluent_booking/booking_schedule_completed', $schedule, $schedule->calendar_event);
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
-            $schedule->order_info = $schedule->getOrderItems();
-            $schedule->order_transaction = $schedule->getTransaction();
 
-            $schedule->currency = CurrenciesHelper::getCurrencySign();
-
-
+            if($schedule->payment_status) {
+                $schedule->order_info = $schedule->getOrderItem();
+                $schedule->order_transaction = $schedule->getTransaction();
+                $schedule->currency = CurrenciesHelper::getCurrencySign();
+            }
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -215,7 +215,15 @@ class SchedulesController extends Controller
         if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
             $booking->status = 'completed';
             $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+
             do_action('fluent_booking/booking_schedule_completed', $booking);
+        }
+
+        if($booking->payment_status) {
+            $booking->order_info = $booking->getOrderItem();
+            $booking->order_transaction = $booking->getTransaction();
+            $booking->currency = CurrenciesHelper::getCurrencySign();
         }
 
         $booking->happening_status = $booking->getOngoingStatus();
@@ -263,9 +271,12 @@ class SchedulesController extends Controller
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
-            $attendee->order_info = $attendee->getOrderItems();
-            $attendee->order_transaction = $attendee->getTransaction();
-            $attendee->currency = CurrenciesHelper::getCurrencySign();
+
+            if($attendee->payment_status) {
+                $attendee->order_info = $attendee->getOrderItem();
+                $attendee->order_transaction = $attendee->getTransaction();
+                $attendee->currency = CurrenciesHelper::getCurrencySign();
+            }
         }
 
         return [
