@@ -296,7 +296,6 @@ class FrontEndHandler
         }
 
         $currency = CurrenciesHelper::getCurrencySign();
-        error_log($currency);
         $calendarEvent->total_payment = $calendarEvent->defaultPaymentIcon($currency, $total);
 
 
