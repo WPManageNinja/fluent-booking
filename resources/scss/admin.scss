@@ -45,17 +45,16 @@
         line-height: 1.4;
       }
     }
+
+    .fcal_section_actions {
+        display: flex;
+        gap: 5px;
+    }
   }
 
   .fcal_section {
     display: block;
     width: 100%;
-
-    .fcal_section_body {
-      //padding: 15px;
-      //background: white;
-      //overflow: hidden;
-    }
 
   }
 

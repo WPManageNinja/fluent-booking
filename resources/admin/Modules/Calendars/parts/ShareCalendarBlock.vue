@@ -40,9 +40,11 @@
                         <el-input
                             v-model="landingPageUrl">
                             <template #append>
-                                <el-button type="default">
-                                    <a target="_blank" :href="landingPageUrl"><el-icon><Link /></el-icon> View</a>
-                                </el-button>
+                                <a target="_blank" :href="landingPageUrl">
+                                    <el-button type="default">
+                                        <el-icon><Link /></el-icon> View
+                                    </el-button>
+                                </a>                                
                                 <el-button type="default" @click="copyLandingPageUrl(landingPageUrl)">
                                     <el-icon><CopyDocument /></el-icon> Copy
                                 </el-button>
