@@ -45,14 +45,16 @@ class StripeCheckout {
                         },
                         redirect: 'if_required'
                     }).then((result) => {
-                        jQuery.post(window.fluentCalendarPublicVars.ajaxurl, {
-                            action: 'fluent_cal_confirm_stripe_payment',
-                            intentId: result?.paymentIntent?.id
-                        }).then((response) => {
-                            window.location.href =  that.data?.data?.payment_args?.success_url;
-                            jQuery(this).text('Pay Now');
-                            jQuery(this).attr('disabled', false);
-                        });
+                        if (result?.paymentIntent?.id) {
+                            jQuery.post(window.fluentCalendarPublicVars.ajaxurl, {
+                                action: 'fluent_cal_confirm_stripe_payment',
+                                intentId: result?.paymentIntent?.id
+                            }).then((response) => {
+                                window.location.href =  that.data?.data?.payment_args?.success_url;
+                            });
+                        }
+                        jQuery(this).text('Pay Now');
+                        jQuery(this).attr('disabled', false);
                     })
 
                 }).catch(error => {

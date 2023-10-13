@@ -21,6 +21,9 @@
     let isXsDevice = false;
     let calendarHeight = '';
 
+
+    let showingPayments = false;
+
     onMount(() => {
         timezone = util.dayjs.tz.guess();
 
@@ -61,7 +64,14 @@
         }
     };
 
+
+    function onPaymentsVisibilityChanged(visibility) {
+        console.log(visibility)
+        showingPayments = visibility;
+    }
+
     function spotSelected(spot) {
+
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.add("f_cal_spot_selected");
 
@@ -204,6 +214,7 @@
                                     {isFluentform}
                                     {slot}
                                     {settings}
+                                    showPayments={showingPayments}
                                     bind:timezone={timezone}
                                     on:dayClicked={(e) => {dayClicked(e.detail)}}
                                     on:spotSelected={(e) => {spotSelected(e.detail)}}
@@ -212,9 +223,18 @@
                                 />
                         </div>
                             <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
+
                                 <div class="fcal_date_event_details_header">
                                     <h2>
-                                        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                        <div aria-label="Back to Date Selection" on:click={(e) => {
+
+                                            if (showingPayments) {
+                                                showingPayments = false;
+                                            }else{
+                                                resetSelection()
+                                            }
+
+                                             }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
                                             <i class="fcal_svg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                                                     <path fill="none" d="M0 0h24v24H0V0z"/>
@@ -223,15 +243,21 @@
                                                 </svg>
                                             </i>
                                         </div>
-                                        Enter Details
+                                        {#if showingPayments}
+                                            Payment Details
+                                        {:else}
+                                            Enter Details
+                                        {/if}
                                     </h2>
                                 </div>
 
-                                {#if !isFluentform}
+                                {#if !isFluentform }
                                     <BookingForm
                                         {appData}
                                         {slot}
                                         {timezone}
+                                        showPayments={showingPayments}
+                                        on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
                                         bind:spot={selectedDate}
                                         bind:formFields={appData.form_fields}
                                         on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}

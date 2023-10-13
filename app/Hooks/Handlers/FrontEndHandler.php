@@ -190,6 +190,10 @@ class FrontEndHandler
             ], 423);
         }
 
+        if (isset($postedData['payment_method'])) {
+            $customFieldsData['payment_method'] = $postedData['payment_method'];
+        }
+
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
