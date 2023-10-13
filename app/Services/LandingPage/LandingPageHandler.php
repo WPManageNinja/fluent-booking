@@ -18,7 +18,9 @@ class LandingPageHandler
     {
         if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
             add_action('template_redirect', [$this, 'handleSlugDefinedPage'], 1);
-        } else if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
+        }
+
+        if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
             add_action('init', [$this, 'handleUrlParamsPage']);
         }
     }
@@ -40,9 +42,17 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
+
+        if (isset($_REQUEST['type'])) {
+            if ($_REQUEST['type'] == 'confirmation') {
+                $this->handleConfirmationPage();
+            }
+        }
+
         if (empty($_REQUEST['host'])) {
             return;
         }
+
         $authorSlug = sanitize_text_field($_REQUEST['host']);
 
         $slotSlug = null;
@@ -56,13 +66,7 @@ class LandingPageHandler
 
     public function routeView($authorSlug, $slotSlug = null)
     {
-        $user = get_user_by('slug', $authorSlug);
-        if (!$user) {
-            return;
-        }
-
-        // get the calendar
-        $calendar = Calendar::where('user_id', $user->ID)->first();
+        $calendar = Calendar::where('slug', $authorSlug)->first();
 
         if (!$calendar) {
             return;
@@ -92,21 +96,21 @@ class LandingPageHandler
         global $wp;
         $settings = LandingPageHelper::getSettings($calendar, 'public');
 
-        $activeSlots = CalendarSlot::where('calendar_id', $calendar->id)
+        $activeEvents = CalendarSlot::where('calendar_id', $calendar->id)
             ->where('status', 'active');
 
         if ($settings['show_type'] != 'all') {
-            $activeSlots = $activeSlots->whereIn('id', $settings['enabled_slots']);
+            $activeEvents = $activeEvents->whereIn('id', $settings['enabled_slots']);
         }
 
-        $activeSlots = $activeSlots->get();
+        $activeEvents = $activeEvents->get();
 
-        foreach ($activeSlots as $activeSlot) {
-            $activeSlot->public_url = $activeSlot->getPublicUrl();
-            if ($activeSlot->description) {
-                $activeSlot->description = Helper::excerpt($activeSlot->description);
+        foreach ($activeEvents as $activeEvent) {
+            $activeEvent->public_url = $activeEvent->getPublicUrl();
+            if ($activeEvent->description) {
+                $activeEvent->description = Helper::excerpt($activeEvent->description);
             } else {
-                $activeSlot->description = sprintf('Book a meeting with me for %d minutes', $activeSlot->duration);
+                $activeEvent->description = sprintf('Book a meeting with me for %d minutes', $activeEvent->duration);
             }
         }
 
@@ -118,7 +122,7 @@ class LandingPageHandler
 
         $data = [
             'calendar'    => $calendar,
-            'slots'       => $activeSlots,
+            'events'      => $activeEvents,
             'author'      => $authorProfile,
             'title'       => $authorProfile['name'],
             'description' => $metaDescription,
@@ -134,59 +138,67 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function renderBookingView($calendar, $slot)
+    private function renderBookingView($calendar, $calendarEvent)
     {
         $settings = LandingPageHelper::getSettings($calendar, 'public');
         if ($settings['show_type'] != 'all') {
-            if (!in_array($slot->id, $settings['enabled_slots'])) {
+            if (!in_array($calendarEvent->id, $settings['enabled_slots'])) {
                 return '';
             }
         }
 
         global $wp;
 
-        $slot->max_lookup_date = $slot->getMaxLookUpDate();
-        $slot->min_lookup_date = $slot->getMinLookUpDate();
+        $calendarEvent->max_lookup_date = $calendarEvent->getMaxLookUpDate();
+        $calendarEvent->min_lookup_date = $calendarEvent->getMinLookUpDate();
 
         if (!empty($_REQUEST['booking_id'])) {
             $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
             $booking = Booking::where('hash', $bookingHash)
-                ->where('event_id', $slot->id)
+                ->where('event_id', $calendarEvent->id)
                 ->first();
             if ($booking) {
-                $this->showBookingConfimationPage($booking, $slot);
+                $this->showBookingConfimationPage($booking, $calendarEvent);
             }
         }
 
-        $authorProfile = $slot->getAuthorProfile(true);
+        $authorProfile = $calendarEvent->getAuthorProfile(true);
 
-        $slot->pre_selects = false;
+        $calendarEvent->pre_selects = false;
 
-        if (date('m') != date('m', strtotime($slot->min_lookup_date))) {
-            $slot->pre_selects = [
-                'month' => date('m', strtotime($slot->min_lookup_date)),
-                'year'  => date('Y', strtotime($slot->min_lookup_date))
+        if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) {
+            $calendarEvent->pre_selects = [
+                'month' => date('m', strtotime($calendarEvent->min_lookup_date)),
+                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date))
             ];
         }
 
+        $assetUrl = App::getInstance('url.assets');
+
         $data = [
-            'calendar'    => $calendar,
-            'slot'        => $slot,
-            'author'      => $authorProfile,
-            'title'       => $slot->title . ' with ' . $authorProfile['name'],
-            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $slot->description))), 0, 300) . '...',
-            'url'         => home_url($wp->request),
-            'css_files'   => [
-                App::getInstance('url.assets') . 'public/saas.css'
+            'calendar'       => $calendar,
+            'calendar_event' => $calendarEvent,
+            'author'         => $authorProfile,
+            'title'          => $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'description'    => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
+            'url'            => home_url($wp->request),
+            'css_files'      => [
+                $assetUrl . 'public/saas.css'
             ],
-            'js_files'    => [
-                App::getInstance('url.assets') . 'public/js/app.js'
+            'js_files'       => [
+                includes_url('js/jquery/jquery.min.js'),
+                $assetUrl . 'public/js/app.js',
             ],
-            'js_vars'     => [
-                'fcal_public_vars_' . $calendar->id . '_' . $slot->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $slot),
-                'fluentCalendarPublicVars'                            => (new FrontEndHandler())->getGlobalVars()
+            'js_vars'        => [
+                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent),
+                'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
+
+        if ($calendarEvent->type == 'paid') {
+            $data['js_files'][] = 'https://js.stripe.com/v3/';
+            $data['js_files'][] = $assetUrl . 'public/js/stripe-checkout.js';
+        }
 
         $app = App::getInstance();
 
@@ -195,25 +207,24 @@ class LandingPageHandler
         exit(200);
     }
 
-
-    private function showBookingConfimationPage($booking, $slot)
+    private function showBookingConfimationPage($booking, $calendarEvent)
     {
         global $wp;
-        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $slot, true);
+        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $calendarEvent, true);
 
-        $authorProfile = $slot->getAuthorProfile(true);
+        $authorProfile = $calendarEvent->getAuthorProfile(true);
 
         $data = [
-            'title'       => 'Confirmation: ' . $slot->title . ' with ' . $authorProfile['name'],
+            'title'       => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
             'body'        => $responseHtml,
-            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $slot->description))), 0, 300) . '...',
+            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
             'js_files'    => [],
             'js_vars'     => [],
             'author'      => $authorProfile,
-            'slot'        => $slot,
+            'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
         ];
 
@@ -223,5 +234,18 @@ class LandingPageHandler
         exit(200);
     }
 
+    private function handleConfirmationPage()
+    {
+        $bookingHash = sanitize_text_field($_REQUEST['booking_token']);
+        $booking = Booking::where('hash', $bookingHash)->first();
+
+        if (!$booking) {
+            return;
+        }
+
+        $calendarSlot = $booking->calendar_event;
+
+        $this->showBookingConfimationPage($booking, $calendarSlot);
+    }
 
 }

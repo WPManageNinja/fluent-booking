@@ -202,21 +202,21 @@
         </div>
         <div class="fcal_slots_wrap">
             <div class="fcal_slots">
-                <?php foreach ($slots as $slot): ?>
+                <?php foreach ($events as $event): ?>
                 <div class="fcal_slot">
-                    <a href="<?php echo $slot->public_url; ?>" class="fcal_card">
+                    <a href="<?php echo $event->public_url; ?>" class="fcal_card">
                         <div class="fcal_slot_content">
                             <h2>
-                                <span class="fcal_slot_color_schema" style="background: <?php echo esc_attr($slot->color_schema); ?>;"></span>
-                                <?php echo $slot->title; ?>
+                                <span class="fcal_slot_color_schema" style="background: <?php echo esc_attr($event->color_schema); ?>;"></span>
+                                <?php echo $event->title; ?>
                             </h2>
-                            <p class="fcal_description"><?php echo $slot->description; ?></p>
+                            <p class="fcal_description"><?php echo $event->description; ?></p>
                             <span class="fcal_slot_duration">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                 <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M9.16418 8.855L7.35585 7.77584C7.04085 7.58917 6.78418 7.14 6.78418 6.7725V4.38084" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <?php echo esc_attr($slot->duration); esc_html_e(' minutes', 'fluent-booking'); ?>
+                                <?php echo esc_attr($event->duration); esc_html_e(' minutes', 'fluent-booking'); ?>
                             </span>
                         </div>
                         <button class="book_now">

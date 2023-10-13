@@ -105,7 +105,7 @@ class BookingController extends Controller
         if (!$isSpotAvailable) {
             wp_send_json([
                 'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
-            ], 423);
+            ], 422);
         }
 
         try {

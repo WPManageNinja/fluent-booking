@@ -122,6 +122,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         $paymentSettings = $slot->getMeta('payment_settings');
         if (Arr::get($paymentSettings, 'enabled') === 'yes') {
             $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
+            $vars['payment_items'] = Arr::get($paymentSettings,'items');
+            $vars['currency_sign'] = Arr::get($paymentSettings,'currency_sign');
         }
         return $vars;
     }
@@ -274,8 +276,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return (new PaymentHelper($this->slug))->listenerUrl($args);
     }
 
-    public function updateOrderDataByHash($orderHash, $transactionData = [])
+    public function updateOrderData($order, $transactionData = [])
     {
+        $orderHash = $order->uuid;
         $order =  (new OrderHelper())->getOrderByHash($orderHash);
         if ($order == null) {
             return;
@@ -291,13 +294,12 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         do_action('fluent_booking/payment/update_payment_status_paid', $booking);
 
-        // We are just renewing this as this may have been changed by the pre hook
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking, $booking->toArray());
-
         $booking->update([
             'status' => 'scheduled',
             'payment_status' => 'paid'
         ]);
+        // We are just renewing this as this may have been changed by the pre hook
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->slot);
     }
 
     public function maybeUpdatePayment()
@@ -307,31 +309,31 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function render($method)
     {
-        return  '
-        <input type="radio" id="'. esc_attr($this->slug) .'">
-        <label for="' . esc_attr($this->slug) . '_payment_method">
-            <img src="' . esc_url($this->getLogo()) . '"alt="' . esc_attr($this->title) . '"/>
-         <span>Cash on delivery</span>
-        ';
+        return  '';
     }
 
     public function getMethodsTemplate($data)
     {
         $methods = GlobalPaymentHandler::getAllMethods();
 
+        $settings = $this->getSettings();
+        if (isset($settings['is_active']) && $settings['is_active'] !== 'yes') {
+            return $data['template'] = '<div class="fluent_booking_payment_methods">Please activate payment first!</div>';
+        }
+
         $templates = [
             'template' => '',
         ];
 
         $hasActiveMethod = false;
-        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods' style='display: flex; gap: 20px;'>Pay with:";
+        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods'><div style='display: flex; gap: 20px;'>Pay with:";
         foreach ($methods as $slug => $methodData) {
             if (isset($methodData['status']) && $methodData['status']) {
                 $hasActiveMethod = true;
                 $radio .= $this->render($slug);
             }
         }
-        $radio .= "</div>";
+        $radio .= "</div></div>";
 
         $templates['template'] = $radio;
         if (!$hasActiveMethod) {

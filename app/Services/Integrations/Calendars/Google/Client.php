@@ -26,8 +26,11 @@ class Client
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
 
-        //$this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-        $this->redirectUrl = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_g_auth';
+        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
+            $this->redirectUrl = FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
+        } else {
+            $this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
+        }
     }
 
     public function setAccessToken($accessToken)
@@ -99,10 +102,16 @@ class Client
             return $lists;
         }
 
+        $siteUid = GoogleHelper::getUniqueSiteIdHash();
+
         $formattedLists = [];
         foreach ($lists['items'] as $item) {
+            $sharedData = Arr::get($item, 'extendedProperties.shared');
+            if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent_booking' && Arr::get($sharedData, 'site_uid') == $siteUid) {
+                continue;
+            }
+            
             $formattedLists[] = [
-                //  'summary' => Arr::get($item, 'summary'),
                 'start'  => Arr::get($item, 'start.dateTime'),
                 'end'    => Arr::get($item, 'end.dateTime'),
                 'status' => Arr::get($item, 'status'),
