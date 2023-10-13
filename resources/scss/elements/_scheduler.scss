@@ -2346,6 +2346,24 @@
           overflow-wrap: anywhere;
         }
       }
+      .payment_method,
+      .payment_status {
+        display: inline-block;
+        background: #ff8f3c;
+        border-radius: 30px;
+        padding: 2px 10px;
+        font-size: 12px;
+        color: #ffffff;
+        &.paid {
+          color: #ffffff;
+          background: #4faf83;
+        }
+      }
+      .payment_method {
+        background: rgb(38 83 199 / 10%);
+        color: $primaryColor;
+        font-weight: 500;
+      }
     }
 
     .fcal_schedule_event_infos {
@@ -2363,7 +2381,7 @@
 
       &:first-child {
         .fcal_schedule_event_infos_body {
-          padding-top: 10px;
+          padding-top: 15px;
           border-top-left-radius: 0;
           border-top-right-radius: 0;
         }
