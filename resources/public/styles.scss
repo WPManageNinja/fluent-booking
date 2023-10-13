@@ -967,7 +967,9 @@ $lightDark: #6b7280;
           box-sizing: border-box !important;
           padding-left: 5px !important;
         }
-
+        .item {
+          padding-left: 10px !important;
+        }
         * {
           padding: 0 !important;
           margin: 0 !important;
@@ -1300,4 +1302,54 @@ $lightDark: #6b7280;
 
   background: #f9fafb;
   border-radius: 4px;
+}
+
+.fluent_booking_payment_processor {
+  .label {
+    margin: 0 0 10px;
+    font-weight: 500;
+  }
+  form {
+    label {
+      font-weight: 500;
+      color: #000000;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .p-CardForm {
+      .p-GridCell {
+        margin-bottom: 15px;
+      }
+    }
+    .p-Input {
+      input {
+        padding-right: 51.2px;
+        border-radius: 8px;
+        box-shadow: none;
+      }
+    }
+    .p-Select {
+      select {
+        border-radius: 8px;
+        box-shadow: none;
+      }
+    }
+  }
+  #fluent_booking_stipe_pay {
+    background: #4587EC;
+    text-align: center;
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 105, 255, 0.5);
+    color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: inline-block;
+    transition: .3s;
+
+    &:hover {
+      background: rgb(4 76 177);
+    }
+  }
 }

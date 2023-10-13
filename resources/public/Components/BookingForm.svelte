@@ -1,5 +1,12 @@
 <div class="fcal_booking_form_wrap" id="fcal_booking_form_wrap">
     <div class="fcal_booking_form">
+        {#if submitting}
+            <div class="fcal_loading_dates">
+                <div class="fcal_loading_dates_inner">
+                    <Pulse color="#0060e6"/>
+                </div>
+            </div>
+        {/if}
         <form on:submit|preventDefault={submitForm}>
             {#if !showPayments}
                 {#each formFields as field}
@@ -44,7 +51,7 @@
             {/if}
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">
-                    Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}
+                    <h3 class="label">Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
                     {#if appData?.payment_methods?.template}
                         <div class="fcal_form_payment_item">
                             {@html appData.payment_methods.template}
@@ -75,6 +82,7 @@
     </div>
 </div>
 <script>
+    import {Pulse} from 'svelte-loading-spinners';
     import {util, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
     import {intros} from "svelte/internal";
