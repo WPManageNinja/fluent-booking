@@ -225,8 +225,6 @@ class Booking extends Model
             return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
-
-
         if ($locationType == 'custom') {
             $html = '<b>' . Arr::get($details, 'title') . '</b>';
             $html .= wpautop(Arr::get($details, 'description'));
