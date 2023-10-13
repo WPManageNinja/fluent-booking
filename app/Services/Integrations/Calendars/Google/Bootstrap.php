@@ -104,15 +104,15 @@ class Bootstrap
             if (!$message) {
                 // now check if the user calendar event create enabled
                 $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
-                if(!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
+                if (!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
                     $message = ' (Set Google Event Creat First)';
                     $meetExist = false;
                 }
             }
 
             $fields['conferencing']['options']['google_meet'] = [
-                'title'    => 'Google Meet' . $message,
-                'disabled' => !$meetExist,
+                'title'         => 'Google Meet' . $message,
+                'disabled'      => !$meetExist,
                 'location_type' => 'conferencing'
             ];
             return $fields;
@@ -292,6 +292,7 @@ class Bootstrap
 
         $allRemoteBookedSlots = [];
 
+
         foreach ($items as $item) {
             $meta = $item['item'];
             $calendarApi = new GoogleCalendar($meta);
@@ -336,12 +337,11 @@ class Bootstrap
             }
 
             $books[$date][] = [
-                'type'      => 'remote',
-                'start'     => $start,
-                'end'       => $end,
-                'source'    => 'google',
-                'event_id'  => null,
-                'remaining' => 0
+                'type'     => 'remote',
+                'start'    => $start,
+                'end'      => $end,
+                'source'   => 'google',
+                'event_id' => null
             ];
         }
 
@@ -414,24 +414,32 @@ class Bootstrap
         $author = $slot->getAuthorProfile(false);
 
         $data = [
-            'start'     => [
+            'start'              => [
                 'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
             ],
-            'end'       => [
+            'end'                => [
                 'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ],
-            'attendees' => [
+            'attendees'          => [
                 $guestAttendee,
                 [
                     'display_name' => $author['name'],
                     'email'        => $author['email']
                 ]
             ],
-            'source'    => [
+            'source'             => [
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'summary'   => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking')
+            'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking'),
+            'extendedProperties' => [
+                'shared' => [
+                    'created_by' => 'fluent_booking',
+                    'site_uid'   => GoogleHelper::getUniqueSiteIdHash(),
+                    'event_id'   => $slot->id,
+                    'booking_id' => $booking->id
+                ],
+            ],
         ];
 
         $isGoogleMeet = false;

@@ -138,7 +138,7 @@ class Stripe extends BasePaymentMethod
             return;
         }
 
-        $status = Arr::get($response, 'status') === 'succeeded' ?? 'paid';
+        $status = Arr::get($response, 'status') === 'succeeded' ? 'paid' : 'pending';
 
         $updateData = [
             'status' => sanitize_text_field($status),
@@ -363,15 +363,15 @@ class Stripe extends BasePaymentMethod
                 ),
                 'type' => 'radio'
             ),
-            'checkout_mode' => array(
-                'value' => 'onsite',
-                'label' => __('Checkout Mode', 'fluent-booking'),
-                'options' => array(
-                    'onsite' => __('Onsite', 'fluent-booking'),
-                    'hosted' => __('Hosted', 'fluent-booking')
-                ),
-                'type' => 'radio'
-            ),
+//            'checkout_mode' => array(
+//                'value' => 'onsite',
+//                'label' => __('Checkout Mode', 'fluent-booking'),
+//                'options' => array(
+//                    'onsite' => __('Onsite', 'fluent-booking'),
+//                    'hosted' => __('Hosted', 'fluent-booking')
+//                ),
+//                'type' => 'radio'
+//            ),
             'provider' => array(
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking'),
@@ -435,7 +435,7 @@ class Stripe extends BasePaymentMethod
     public function loadCheckoutJs($my_data)
     {
         wp_enqueue_script('fluent-booking-checkout-sdk-' . $this->slug, 'https://js.stripe.com/v3/',null, false);
-        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-stripe', 'jquery'], false);
+        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-' . $this->slug, 'jquery'], false);
     }
 
     public function render($method)

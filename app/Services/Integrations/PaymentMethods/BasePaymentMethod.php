@@ -122,6 +122,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         $paymentSettings = $slot->getMeta('payment_settings');
         if (Arr::get($paymentSettings, 'enabled') === 'yes') {
             $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
+            $vars['payment_items'] = Arr::get($paymentSettings,'items');
+            $vars['currency_sign'] = Arr::get($paymentSettings,'currency_sign');
         }
         return $vars;
     }
@@ -324,14 +326,14 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         ];
 
         $hasActiveMethod = false;
-        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods' style='display: flex; gap: 20px;'>Pay with:";
+        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods'><div style='display: flex; gap: 20px;'>Pay with:";
         foreach ($methods as $slug => $methodData) {
             if (isset($methodData['status']) && $methodData['status']) {
                 $hasActiveMethod = true;
                 $radio .= $this->render($slug);
             }
         }
-        $radio .= "</div>";
+        $radio .= "</div></div>";
 
         $templates['template'] = $radio;
         if (!$hasActiveMethod) {
