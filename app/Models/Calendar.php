@@ -57,6 +57,11 @@ class Calendar extends Model
         return $this->hasMany(CalendarSlot::class, 'calendar_id');
     }
 
+    public function events()
+    {
+        return $this->hasMany(CalendarSlot::class, 'calendar_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -137,7 +142,7 @@ class Calendar extends Model
                     ],
                 ],
             ],
-        ], $this->user_id);
+        ], $this);
     }
 
     public function getMeta($key, $default = null)
@@ -183,16 +188,10 @@ class Calendar extends Model
             return '';
         }
 
-        $author = $this->getAuthorProfile();
-
-        if (empty($author['author_slug'])) {
-            return '';
-        }
-
         if (defined('FLUENT_BOOKING_LANDING_SLUG')) {
-            return LandingPageHelper::getLandingBaseUrl() . $author['author_slug'];
+            return LandingPageHelper::getLandingBaseUrl() . $this->slug;
         }
 
-        return LandingPageHelper::getLandingBaseUrl() . '&host=' . $author['author_slug'];
+        return LandingPageHelper::getLandingBaseUrl() . '&host=' . $this->slug;
     }
 }

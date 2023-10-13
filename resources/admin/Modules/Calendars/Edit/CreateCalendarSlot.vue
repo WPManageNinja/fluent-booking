@@ -67,7 +67,24 @@ export default {
         getMeetingDuration() {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
+        checkValidattion() {
+            const location = this.slot.location_settings[0];
+            if (!location.type) {
+                this.$handleError('Location is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+                this.$handleError('Location Title is required');
+                return false;
+            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                this.$handleError('Phone Number is required');
+                return false;
+            }
+            return true;
+        },
         saveSettings() {
+            if (!this.checkValidattion()) {
+                return;
+            }
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/slots', {
                 title: this.slot.title,

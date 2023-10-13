@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services;
 
+use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
@@ -432,7 +433,6 @@ class Helper
             'requests',
             'reset',
             'roc',
-            'root',
             'rss',
             'ruby',
             'rule',
@@ -651,37 +651,6 @@ class Helper
     public static function getAppBaseUrl($extension = '')
     {
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
-    }
-
-    /**
-     * Sending a job to background for further processing
-     *
-     * @param string $callbackName - name of the callback
-     * @param mixed $payload
-     * @return bool
-     */
-    public static function fluentbooking_queue_on_background($callbackName, $payload)
-    {
-        $body = [
-            'payload'       => $payload,
-            'callback_name' => $callbackName
-        ];
-
-        $args = array(
-            'timeout'  => 0.1,
-            'blocking' => false,
-            'body'     => $body,
-            'cookies'  => $_COOKIE
-        );
-
-        $queryArgs = array(
-            'action' => 'fluent_booking_callback_for_background',
-            'nonce'  => wp_create_nonce('fluent_booking_callback_for_background'),
-        );
-
-        $url = add_query_arg($queryArgs, admin_url('admin-ajax.php'));
-        wp_remote_post(esc_url_raw($url), $args);
-        return true;
     }
 
 
@@ -1198,29 +1167,31 @@ class Helper
 
     public static function getDefaultNotificationSettings()
     {
+        $checkImage = App::getInstance()['url.assets'] . '/images/check.png';
+
         return apply_filters('fluent_booking/default_email_notification_settings', [
             'booking_conf_attendee' => [
                 'enabled' => true,
                 'title'   => 'Booking Confirmation to Attendee',
                 'email'   => [
-                    'subject' => 'Booking Confirmation with {host.name} {event.datetime}',
-                    'body'    => '<h2 class="p1" style="text-align: center;">Booking Confirmation</h2><p><strong>Event Name</strong></p><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({guest.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>'
+                    'subject' => 'Booking Confirmation between {{host.name}} & {{guest.full_name}}',
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {host.name}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">Need to make a change? <a href="##booking.reschedule_url##">Reschedule</a> or <a href="##booking.cancelation_url##">Cancel</a></p>'
                 ],
             ],
             'booking_conf_host'     => [
                 'enabled' => true,
                 'title'   => 'Booking Confirmation to Organizer (You)',
                 'email'   => [
-                    'subject' => 'New Booking: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
-                    'body'    => '<h2 class="p1" style="text-align: center;">New Booking Confirmed</h2><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>'
+                    'subject' => 'New Booking: {guest.full_name} @ {{booking.start_date_time_for_host}}',
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">A new event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'reminder_to_attendee'  => [
-                'enabled' => true,
+                'enabled' => false,
                 'title'   => 'Reminder Before Meeting to Attendee',
                 'email'   => [
-                    'subject' => 'Meeting Reminder: {host.name} {event.datetime}',
-                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Your Note</strong></h3><p>{guest.notes}</p><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - you</li></ul>',
+                    'subject' => 'Meeting Reminder with {{host.name}} @ {{booking.start_date_time_for_attendee}}',
+                    'body'    => '<h2 style="text-align: center;">Reminder: Your meeting will start in {{booking.start_time_human_format}}</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {host.name}</p><h3><strong>When</strong></h3><p>{{booking.full_start_end_guest_timezone}}</p><h3><strong>Who</strong></h3><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">Need to make a change? <a href="##booking.reschedule_url##">Reschedule</a> or <a href="##booking.cancelation_url##">Cancel</a></p>',
                     'times'   => [
                         [
                             'unit'  => 'minutes',
@@ -1230,11 +1201,11 @@ class Helper
                 ],
             ],
             'reminder_to_host'      => [
-                'enabled' => true,
+                'enabled' => false,
                 'title'   => 'Reminder Before Meeting to Organizer (You)',
                 'email'   => [
-                    'subject' => 'Meeting Reminder: {guest.first_name} {guest.last_name} @ {event.datetime} ({guest.email})',
-                    'body'    => '<div><h2 style="text-align: center;">Reminder: Meeting will start in {event.reminder_time}</h2></div><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.full_name}</p><h3><strong>Guest Details</strong></h3><ul><li><strong>Name</strong>: {guest.full_name}</li><li><strong>Email</strong>: {guest.email}</li></ul><h3><strong>When</strong></h3><p>{event.full_datetime}, ({host.timezone})</p><h3><strong>Location</strong></h3><ul><li>{event.location}</li></ul><h3><strong>Guests</strong></h3><ul><li>{host.email} - host</li><li>{guest.email} - guest</li></ul>',
+                    'subject' => 'Meeting Reminder with {{host.name}} @ {{booking.start_date_time_for_host}}',
+                    'body'    => '<h2 style="text-align: center;">Reminder: Your meeting will start in {{booking.start_time_human_format}}</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>',
                     'times'   => [
                         [
                             'unit'  => 'minutes',
@@ -1247,16 +1218,16 @@ class Helper
                 'enabled' => true,
                 'title'   => 'Booking Cancelled by Attendee (email to Organizer)',
                 'email'   => [
-                    'subject' => 'Your booking was cancelled with {guest.first_name} {guest.last_name}',
-                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><p>Your booking has been cancelled.</p><h3><strong>Event Name</strong></h3><p>{event.name} with {guest.first_name} {guest.last_name}</p><h3><strong>Date &amp; Time</strong></h3><p>{event.full_datetime} ({host.timezone})</p><h3>Cancellation Reason</h3><p>{event.cancel_reason}</p>'
+                    'subject' => 'Your booking was cancelled with {{guest.full_name}}',
+                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'cancelled_by_host'     => [
                 'enabled' => true,
                 'title'   => 'Booking Cancelled by Organizer (email to Attendee)',
                 'email'   => [
-                    'subject' => 'Your booking was cancelled with {host.name}',
-                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><p>Your booking has been cancelled.</p><h3><strong>Event Name</strong></h3><p>{event.name} with {host.name}</p><h3><strong>Date &amp; Time</strong></h3><p>{event.full_datetime} ({guest.timezone})</p><h3>Cancellation Reason</h3><p>{event.cancel_reason}</p>'
+                    'subject' => 'Your booking was cancelled with {{host.name}}',
+                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p>'
                 ],
             ]
         ]);
@@ -1293,6 +1264,8 @@ class Helper
                         '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
                         '##booking.cancelation_url##'               => 'Booking Cancellation URL',
                         '##booking.reschedule_url##'                => 'Booking Reschedule URL',
+                        '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
+                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash',
                     ]
                 ],
                 'host'    => [
@@ -1339,13 +1312,15 @@ class Helper
                         '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
                         '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
                         '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
-                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with attendee timezone)',
+                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with guest timezone)',
                         '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
                         '{booking.location_details_html}'           => 'Event Location Details (HTML)',
                         '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
                         '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
-                        '##booking_cancelation_url##'               => 'Booking Cancellation URL',
-                        '##booking_reschedule_url##'                => 'Booking Reschedule URL',
+                        '##booking.cancelation_url##'               => 'Booking Cancellation URL',
+                        '##booking.reschedule_url##'                => 'Booking Reschedule URL',
+                        '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
+                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash'
                     ]
                 ],
                 'host'    => [

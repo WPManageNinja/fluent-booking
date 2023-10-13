@@ -21,7 +21,7 @@ class PaymentMethodController extends Controller
         } catch (\Exception $error) {
             return $this->sendError([
                 'message' => $error->getMessage()
-            ], 423);
+            ], 422);
         }
 
         return [
@@ -31,6 +31,21 @@ class PaymentMethodController extends Controller
 
     public function store(Request $request)
     {
+
+        if($request->get('method') == 'stripe') {
+            $settings = $request->get('settings', []);
+            $isActive = Arr::get($settings, 'is_active') === 'yes';
+            $paymentMode = Arr::get($settings, 'payment_mode', 'test');
+
+
+            if($isActive) {
+                if(empty($settings[$paymentMode.'_publishable_key']) || empty($settings[$paymentMode.'_secret_key'])) {
+                    return $this->sendError([
+                        'message' => 'Please connect your Stripe account first.'
+                    ]);
+                }
+            }
+        }
 
         $data = $request->settings;
         $method = sanitize_text_field($request->method);
@@ -45,7 +60,7 @@ class PaymentMethodController extends Controller
         } catch (\Exception $error) {
             return $this->sendError([
                 'message' => $error->getMessage()
-            ], 423);
+            ], 422);
         }
     }
 
@@ -56,7 +71,7 @@ class PaymentMethodController extends Controller
         } catch (\Exception $error) {
             return $this->sendError([
                 'message' => $error->getMessage()
-            ], 423);
+            ], 422);
         }
     }
 
@@ -91,6 +106,7 @@ class PaymentMethodController extends Controller
                 'message' => 'Calendar not found'
             ], 404);
         }
+
         $type = Arr::get($data, 'enabled') === 'yes' ? 'paid' : 'free';
 
         $event->update([

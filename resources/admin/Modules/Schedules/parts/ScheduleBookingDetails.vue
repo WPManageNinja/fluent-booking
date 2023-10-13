@@ -79,6 +79,10 @@
                     </div>
                 </div>
                 <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
+
+                <PaymentLogs
+                    v-if="showing_booking.event_type == 'single' && showing_booking.order_info"
+                    :booking="showing_booking" />
             </div>
         </div>
         <div v-if="showing_booking" class="fcal_booking_activities">
@@ -130,12 +134,14 @@ import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
 import SourceDetailsSection from './SourceDetailsSection';
+import PaymentLogs from "./PaymentLogs";
 
 export default {
     name: "ScheduleSpotDetails",
     props: ['booking', 'booking_id'],
     $emits: ['bookingFetched'],
     components: {
+        PaymentLogs,
         FluentCrmProfile,
         BookingActivities,
         SingleInviteeInfo,

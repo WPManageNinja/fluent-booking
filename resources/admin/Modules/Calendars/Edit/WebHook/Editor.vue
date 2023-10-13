@@ -1,17 +1,16 @@
 <template>
-    <el-form label-position="top" class="fcal_webhook_form">
-
+    <el-form v-model="settings" label-position="top" class="fcal_webhook_form">
         <el-row :gutter="24">
             <el-col :sm="24" :md="12">
                 <!--Name-->
                 <el-form-item label="Name" required>
-                    <el-input v-model="editing_item.name" placeholder="WebHook Feed Name"></el-input>
+                    <el-input v-model="settings.name" placeholder="WebHook Feed Name"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :sm="24" :md="12">
                 <!--Request URL-->
                 <el-form-item label="Request URL" required>
-                    <el-input v-model="editing_item.request_url" placeholder="WebHook URL"></el-input>
+                    <el-input v-model="settings.request_url" type="url" placeholder="WebHook URL"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -20,7 +19,7 @@
             <el-col :sm="24" :md="12">
                 <!--Request Method-->
                 <el-form-item label="Request Method">
-                    <el-select v-model="editing_item.request_method" popper-class="fcal_select">
+                    <el-select v-model="settings.request_method" popper-class="fcal_select">
                         <el-option
                             v-for="method in request_methods"
                             :value="method"
@@ -33,7 +32,7 @@
             <el-col :sm="24" :md="12">
                 <!--Request Format-->
                 <el-form-item label="Request Format">
-                    <el-select v-model="editing_item.request_format" popper-class="fcal_select">
+                    <el-select v-model="settings.request_format" popper-class="fcal_select">
                         <el-option
                             v-for="format in ['FORM', 'JSON']"
                             :value="format"
@@ -48,14 +47,14 @@
 
         <!--Request Header-->
         <el-form-item label="Request Header">
-            <el-radio-group v-model="editing_item.with_header">
+            <el-radio-group v-model="settings.with_header">
                 <el-radio label="nop">No Headers</el-radio>
                 <el-radio label="yup">With Headers</el-radio>
             </el-radio-group>
         </el-form-item>
 
         <!--Request Headers-->
-        <el-form-item required v-if="editing_item.with_header=='yup'" label="Request Headers">
+        <el-form-item required v-if="settings.with_header=='yup'" label="Request Headers">
             <table class="fcal_webhook_request_header_table" width="100%">
                 <thead>
                     <tr>
@@ -68,41 +67,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(headerValue, headerKey) in editing_item.request_headers" :key="headerKey">
+                <tr v-for="(headerValue, headerKey) in settings.request_headers" :key="headerKey">
                     <td>
-                        <el-select
-                            clearable
-                            placeholder="Select Header"
-                            v-model="editing_item.request_headers[headerKey].key"
-                            popper-class="fcal_select"
-                            @change="addCustomHeaderKeyInput(headerKey, $event)"
-                            >
-                            <el-option
-                                v-for="(header, index) in request_headers"
-                                :value="header.value"
-                                :label="header.label"
-                                :key="index"
-                            ></el-option>
-                        </el-select>
-<!--                        <el-input-->
-<!--                            v-else-->
-<!--                            placeholder="Enter Custom Header"-->
-<!--                            clearable-->
-<!--                            v-model="editing_item.request_headers[headerKey].key">-->
-<!--&lt;!&ndash;                            <template #append>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <el-button @click="hideCustomHeaderValueInput(headerKey)"><el-icon><Minus /></el-icon></el-button>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </template>&ndash;&gt;-->
-<!--                        </el-input>-->
+                        <el-input type="text" placeholder="Header Key" v-model="settings.request_headers[headerKey].key"></el-input>
                     </td>
                     <td>
                         <div class="right-field">
                             <el-input
                                 placeholder="Enter Value"
                                 clearable
-                                v-model="editing_item.request_headers[headerKey].value">
-    <!--                            <template #append>-->
-    <!--                                <el-button @click="hideCustomHeaderValueInput(headerKey)"><el-icon><Minus /></el-icon></el-button>-->
-    <!--                            </template>-->
+                                v-model="settings.request_headers[headerKey].value">
                             </el-input>
                             <div class="action-btn">
                                 <el-button class="fcal_plain_btn" @click="addHeaderRow(headerKey)">
@@ -110,7 +84,7 @@
                                 </el-button>
                                 <el-button
                                     class="fcal_plain_btn danger"
-                                    v-if="editing_item.request_headers.length > 1"
+                                    v-if="settings.request_headers.length > 1"
                                     @click="removeHeaderRow(headerKey)">
                                     <el-icon><Minus /></el-icon>
                                 </el-button>
@@ -124,14 +98,14 @@
 
         <!--Request Body-->
         <el-form-item required label="Request Body">
-            <el-radio-group v-model="editing_item.request_body">
+            <el-radio-group v-model="settings.request_body">
                 <el-radio label="all_data">All Data</el-radio>
                 <el-radio label="selected_fields">Selected Fields</el-radio>
             </el-radio-group>
         </el-form-item>
 
         <!--Request Fields-->
-        <el-form-item required v-if="editing_item.request_body=='selected_fields'" label="Request Fields">
+        <el-form-item required v-if="settings.request_body=='selected_fields'" label="Request Fields">
             <table class="fcal_webhook_request_header_table" width="100%">
                 <thead>
                     <tr>
@@ -144,31 +118,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(mappedField, mappedKey) in editing_item.fields" :key="mappedKey">
+                <tr v-for="(mappedField, mappedKey) in settings.fields" :key="mappedKey">
                     <td>
                         <el-input
                             clearable
-                            v-model="editing_item.fields[mappedKey].key"
+                            v-model="settings.fields[mappedKey].key"
                             placeholder="Enter Name"></el-input>
                     </td>
                     <td>
                         <div class="right-field">
-
                             <el-select
                                 filterable
                                 allow-create
-                                v-model="editing_item.fields[mappedKey].value"
+                                v-model="settings.fields[mappedKey].value"
                                 placeholder="Select Value"
                                 popper-class="fcal_select"
                             >
-                                    <template v-for="(value, index) in editorShortcodes">
-                                        <el-option
-                                            v-if="index!='{all_data}'"
-                                            :value="index"
-                                            :label="value"
-                                            :key="index"
-                                        ></el-option>
-                                    </template>
+                                <el-option-group v-for="(group, groupKey) in editorShortcodes"
+                                                 :key="groupKey"
+                                                 :label="group.title">
+                                    <el-option
+                                        v-for="(item, itemName) in group.shortcodes"
+                                        :value="itemName"
+                                        :label="item"
+                                    ></el-option>
+                                </el-option-group>
+
                             </el-select>
 
                             <div class="action-btn">
@@ -178,7 +153,7 @@
                                 </el-button>
                                 <el-button
                                     class="fcal_plain_btn danger"
-                                    v-if="editing_item.fields.length > 1"
+                                    v-if="settings.fields.length > 1"
                                    @click="removeFieldRow(mappedKey)"
                                 >
                                     <el-icon><Minus /></el-icon>
@@ -194,12 +169,15 @@
 
         <!--Request Body-->
         <el-form-item required label="Event Triggers">
-            <el-checkbox-group v-model="editing_item.event_triggers">
+            <el-checkbox-group v-model="settings.event_triggers">
                 <el-checkbox v-for="trigger in event_triggers" :key="trigger.value" :label="trigger.value">
                     {{ trigger.label }}
                 </el-checkbox>
             </el-checkbox-group>
+        </el-form-item>
 
+        <el-form-item>
+            <el-checkbox v-model="settings.enabled">Enable this webhook feed</el-checkbox>
         </el-form-item>
 
         <div class="fcal_webhook_form_footer">
@@ -210,42 +188,24 @@
     </el-form>
 </template>
 
-<script>
+<script type="text/babel">
 import { Plus, Minus } from '@element-plus/icons-vue';
 import Popover from '../../../../Components/Popover';
 
 export default {
     name: "Editor",
     props: {
-        edit_item: {
+        editing_feed: {
             default() {
                 return null;
             }
-        },
-        selected_index: {
-            default() {
-                return 1;
-            }
-        },
-        setSelectedId: {
-            type: Function,
-            required: true
-        },
-        selected_id: {
-            default() {
-                return 0;
-            }
-        },
-        request_headers: {
-            type: Array,
-            required: true
         },
         event_triggers: {
             type: Array,
             required: true
         },
-        event_id: {
-            type: String,
+        calendar_event: {
+            type: Object,
             required: true
         }
     },
@@ -256,8 +216,8 @@ export default {
     },
     data() {
         return  {
+            settings: this.editing_feed.settings,
             request_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-            editing_item: false,
             saving: false,
             webhook_id: null,
             editorShortcodes: this.appVars.editor_shortcodes,
@@ -266,23 +226,24 @@ export default {
     methods: {
         saveWebHook() {
             this.saving = true;
-
-            let data = {
-                event_id: this.event_id,
-                webhook_id: this.selected_id,
-                webhook: this.editing_item
-            };
-
-            this.$post('webhooks', data)
+            this.$post(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, {
+                webhook: {
+                    settings: this.settings,
+                    id: this.editing_feed.id
+                }
+            })
                 .then(response => {
-                    this.setSelectedId(response.webhook_id);
                     this.$handleSuccess(response.message);
-                    this.$emit('backToWebhook');
-                    // this.$success(response.data.message);
+                    if(!this.editing_feed.id) {
+                        this.$emit('backToWebhook');
+                    }
                 })
-                .catch(error => {
+                .catch(errors => {
+                    this.$handleError(errors);
                 })
-                .finally(() => this.saving = false);
+                .finally(() => {
+                    this.saving = false
+                });
         },
         hideCustomHeaderValueInput(headerKey) {
             console.log(headerKey);
@@ -297,78 +258,24 @@ export default {
         },
         addHeaderRow(headerKey) {
             let index = headerKey + 1;
-            this.editing_item.request_headers.splice(index, 0, {
+            this.settings.request_headers.splice(index, 0, {
                 key: null,
                 value: null
             });
-            this.editing_item.custom_header_keys.splice(index, 0, false);
-            this.editing_item.custom_header_values.splice(index, 0, false);
-
-            // this.header_shortcodes[index] = this.cloneheaderShortCodes();
         },
         removeHeaderRow(headerKey) {
-            this.editing_item.request_headers.splice(headerKey, 1);
-            this.editing_item.custom_header_keys.splice(headerKey, 1);
-            this.editing_item.custom_header_values.splice(headerKey, 1);
-
-            // this.header_shortcodes.splice(headerKey, 1);
+            this.settings.request_headers.splice(headerKey, 1);
         },
         addFieldRow(mapIndex) {
             let index = mapIndex + 1;
-            this.editing_item.fields.splice(index, 0, {
+            this.settings.fields.splice(index, 0, {
                 key: null,
                 value: null
             });
         },
         removeFieldRow(mapIndex) {
-            this.editing_item.fields.splice(mapIndex, 1);
+            this.settings.fields.splice(mapIndex, 1);
         },
-
-        loadApp() {
-            if (this.edit_item) {
-                this.editing_item = Object.assign({}, this.editing_item, this.edit_item);
-                for (let i = 0, l = this.editing_item.request_headers.length; i < l; i++) {
-                    // this.header_shortcodes[i] = this.cloneheaderShortCodes();
-                    this.addCustomHeaderKeyInput(i, this.editing_item.request_headers[i].key);
-                }
-            } else {
-                // this.header_shortcodes[0] = this.headerShortCodes;
-                this.editing_item = {
-                    name: '',
-                    request_url: '',
-                    with_header: 'nop',
-                    request_method: 'GET',
-                    request_format: 'FORM',
-                    request_body: 'all_data',
-                    custom_header_keys: [false],
-                    custom_header_values: [false],
-                    fields: [{key:null, value:null}],
-                    request_headers: [{key: null, value: null}],
-                    event_triggers: [],
-                    enabled: true
-                };
-            }
-        },
-        addCustomHeaderKeyInput(headerKey, val) {
-            let header;
-            if (val == '__webhook_custom_header__') {
-                this.editing_item.custom_header_keys[headerKey] = true;
-                this.editing_item.request_headers[headerKey].key = null;
-            } else if (header = this.request_headers.find(h => h.value == val)) {
-                if (header.hasOwnProperty('possible_values')) {
-                    // let shortcodes = this.cloneheaderShortCodes();
-                    // shortcodes.unshift(header.possible_values);
-                    // this.header_shortcodes[headerKey] = shortcodes;
-                } else {
-                    // this.header_shortcodes[headerKey] = this.cloneheaderShortCodes();
-                }
-            } else {
-                // this.header_shortcodes[headerKey] = this.cloneheaderShortCodes();
-            }
-        },
-    },
-    mounted() {
-        this.loadApp();
     }
 }
 </script>

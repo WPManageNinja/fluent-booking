@@ -105,14 +105,14 @@
                                         :key="schedule.id"
                                         :class="{ fcal_is_current: schedule.id == booking_id }"
                                         class="fcal_each_spot">
-                                        <booking-card :showing_id="booking_id" :multi_host="filters.author != 'me'"
+                                        <booking-card :period="filters.period" :showing_id="booking_id" :multi_host="filters.author != 'me'"
                                                        @showDetails="showDetails(schedule)" :booking="schedule"/>
                                     </div>
                                 </div>
                             </div>
                             <el-empty v-else description="No bookings found based on your filter"/>
                         </div>
-                        <div class="fcal_right fcal_tm20">
+                        <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
                         </div>
                     </div>
@@ -168,12 +168,8 @@ export default {
                 eventType: '',
                 status: ''
             },
-            statusFilters: {
-                upcoming: 'Upcoming',
-                completed: 'Completed',
-                cancelled: 'Cancelled',
-                all: 'All'
-            },
+            pendingCount: 0,
+            cancelledCount: 0,
             isHideSidebar: false,
             currentEventTitle: ''
         }
@@ -193,6 +189,11 @@ export default {
         },
         formattedSchedules() {
             const items = {};
+            if(this.filters.period == 'latest_bookings') {
+                items['Sorted by booked at date time'] = this.schedules;
+                return items;
+            }
+
             each(this.schedules, (schedule) => {
                 const startTime = schedule.start_time;
                 let date = this.toCurrentTimezone(startTime, 'MMMM D, YYYY');
@@ -214,6 +215,24 @@ export default {
         currentPeriod() {
             const period = this.filters.period;
             return period.charAt(0).toUpperCase() + period.slice(1);;
+        },
+        statusFilters() {
+            const statuses = {
+                upcoming: 'Upcoming',
+                completed: 'Completed'
+            }
+
+            if(this.pendingCount) {
+                statuses.pending = 'Pending (' + this.pendingCount + ')';
+            }
+
+            if(this.cancelledCount) {
+                statuses.cancelled = 'Cancelled';
+            }
+
+            statuses.latest_bookings = 'Latest Bookings';
+            statuses.all = 'All';
+            return statuses;
         }
     },
     methods: {
@@ -230,6 +249,12 @@ export default {
                 .then(response => {
                     this.schedules = response.schedules.data;
                     this.pagination.total = response.schedules.total;
+                    if(response.pending_count) {
+                        this.pendingCount = response.pending_count;
+                    }
+                    if(response.cancelled_count) {
+                        this.cancelledCount = response.cancelled_count;
+                    }
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -257,6 +282,7 @@ export default {
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
             this.currentEventTitle = schedule.slot.title;
+            
         },
         handleDiscard() {
             this.query.eventType = '';

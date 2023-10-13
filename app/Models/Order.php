@@ -36,4 +36,9 @@ class Order extends BaseModel
         'uuid'
     ];
 
+    public function items(): \FluentBooking\Framework\Database\Orm\Relations\HasMany
+    {
+        return $this->hasMany(OrderItems::class, 'order_id');
+    }
+
 }

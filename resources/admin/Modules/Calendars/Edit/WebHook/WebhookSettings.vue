@@ -3,24 +3,37 @@
     <div class="fcal_webhook_settings">
         <div class="fcal_create_calendar_form">
             <div class="fcal_create_calendar_form_header">
-                <h2><el-icon><Link /></el-icon> Webhook Feeds </h2>
+                <h2>
+                    <el-icon>
+                        <Link/>
+                    </el-icon>
+                    Webhook Feeds
+                </h2>
 
                 <el-button
-                    v-if="show_edit"
+                    v-if="editing_feed"
                     @click="backToHome()"
                     class="fcal_primary_btn2"
                 >
-                    <el-icon><Back /></el-icon> Back
+                    <el-icon>
+                        <Back/>
+                    </el-icon>
+                    Back
                 </el-button>
                 <el-button v-else class="fcal_primary_btn2" @click="add">
-                    <el-icon><Plus /></el-icon> Add New Webhook
+                    <el-icon>
+                        <Plus/>
+                    </el-icon>
+                    Add New Webhook
                 </el-button>
             </div>
         </div>
 
-        <div class="fcal_settings_body" v-if="!show_edit">
-            <el-skeleton :loading="loading" animated :rows="6">
-                <el-table :data="tableData" stripe>
+        <div class="fcal_settings_body" v-if="!editing_feed">
+            <el-skeleton v-if="loading" animated :rows="6">
+            </el-skeleton>
+            <template v-else>
+                <el-table :data="feeds" stripe>
                     <template #empty>
                         You don't have any feeds configured. Let's go
                         <el-link :underline="true" @click="add">create one!</el-link>
@@ -31,30 +44,36 @@
                         <template #default="scope">
                             <el-switch
                                 active-color="#13ce66"
-                                @click="handleActive(scope.row)"
-                                v-model="scope.row.enabled"
+                                @change="handleActive(scope.row)"
+                                v-model="scope.row.settings.enabled"
                             ></el-switch>
                         </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="value.name"
+                        width="200"
                         label="Name">
+                        <template #default="scope">
+                            {{ scope.row.settings.name }}
+                        </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="value.request_url"
                         :label="('WebHook URL')">
+                        <template #default="scope">
+                            {{ scope.row.settings.request_url }}
+                        </template>
                     </el-table-column>
-
                     <el-table-column width="160" label="Actions" class-name="action-buttons">
                         <template #default="scope">
 
                             <el-button
                                 class="fcal_primary_btn"
-                                @click="edit(scope.$index)"
+                                @click="edit(scope.row)"
                             >
-                                <el-icon><Edit /></el-icon>
+                                <el-icon>
+                                    <Edit/>
+                                </el-icon>
                             </el-button>
                             <el-popconfirm
                                 title="Are you sure to delete this webhook?"
@@ -64,40 +83,36 @@
                             >
                                 <template #reference>
                                     <el-button type="danger" class="fcal_danger_btn">
-                                        <el-icon><Delete /></el-icon>
+                                        <el-icon>
+                                            <Delete/>
+                                        </el-icon>
                                     </el-button>
                                 </template>
                             </el-popconfirm>
                         </template>
                     </el-table-column>
                 </el-table>
-            </el-skeleton>
+            </template>
         </div>
 
-        <div class="fcal_settings_body">
+        <div class="fcal_settings_body" v-else>
             <Editor
-                v-if="show_edit"
-                :edit_item="editing_item"
-                :request_headers="request_headers"
+                :editing_feed="editing_feed"
+                :calendar_event="calendar_event"
                 :event_triggers="event_triggers"
-                :event_id="event_id"
-                :selected_id="selected_id"
-                :setSelectedId="setSelectedId"
-                :selected_index="selectedIndex"
                 @backToWebhook="backToWebhook"
             />
-
         </div>
     </div>
 </template>
 
 <script>
-import { Plus, Link, Edit, Delete, Back } from '@element-plus/icons-vue';
+import {Plus, Link, Edit, Delete, Back} from '@element-plus/icons-vue';
 import Editor from "./Editor";
 
 export default {
     name: "WebhookSettings",
-    props:['event_id', 'calendar_id'],
+    props: ['calendar_event'],
     components: {
         Editor,
         Plus,
@@ -109,7 +124,10 @@ export default {
     data() {
         return {
             loading: false,
-            webhooks: [],
+            feeds: [],
+            event_triggers: [],
+            editing_feed: null,
+
             isDrawerOpen: false,
             selected_id: null,
             selectedIndex: null,
@@ -122,42 +140,67 @@ export default {
             slots: [],
             show_edit: false,
             editing_item: null,
-            request_headers: [],
-            event_triggers: [],
         }
     },
     methods: {
-        setSelectedId(id) {
-            this.selected_id = id;
+        getFeeds() {
+            this.loading = true;
+            this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`)
+                .then(response => {
+                    this.event_triggers = response.event_triggers;
+                    this.feeds = response.feeds;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         backToHome() {
-            this.getFeeds(true);
-            this.selected_id = null;
-            this.selectedIndex = 0;
-            this.show_edit = false;
+            this.editing_feed = null;
+            this.getFeeds();
         },
         add() {
-            this.selectedIndex = this.webhooks.length;
-            this.selected_id = null;
-            this.editing_item = false;
-            this.show_edit = true;
+            this.editing_feed = {
+                id: 0,
+                settings: {
+                    name: '',
+                    request_url: '',
+                    enabled: false,
+                    custom_header_keys: [false],
+                    custom_header_values: [false],
+                    event_triggers: ['after_booking_scheduled'],
+                    fields: [
+                        {
+                            key: '',
+                            value: ''
+                        }
+                    ],
+                    request_body: 'all_data',
+                    request_format: 'JSON',
+                    request_headers: [{
+                        key: '',
+                        value: ''
+                    }],
+                    request_method: 'POST',
+                    with_header: 'nop'
+                }
+            }
         },
-        edit(index) {
-            let webhook = this.webhooks[index];
-            this.selectedIndex = 0;
-            this.selected_id = webhook.id;
-            this.editing_item =  webhook.value;
+        edit(feed) {
+            this.editing_feed = feed;
             this.show_edit = true;
         },
         handleActive(row) {
-            console.log(row);
-            row.value.enabled = row.enabled;
             let data = {
-                id: row.id,
-                webhook: row.value
+                webhook: {
+                    id: row.id,
+                    settings: row.settings
+                }
             };
 
-            this.$put('webhooks',data)
+            this.$post(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, data)
                 .then(response => {
                     this.$handleSuccess(response.message);
                 })
@@ -167,7 +210,7 @@ export default {
         },
         deleteWebhook(id) {
             this.loading = true;
-            this.$del('webhooks/'+id)
+            this.$del(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks/${id}`)
                 .then(response => {
                     this.$handleSuccess(response.message);
                     this.getFeeds();
@@ -178,24 +221,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        getFeeds(onlyFeeds = null) {
-            const slotID = this.event_id;
-            this.$get('webhooks',{
-                event_id: slotID
-            })
-                .then(response => {
-                    this.request_headers = response.request_headers;
-                    this.event_triggers = response.event_triggers;
-                    this.webhooks = response.webhooks;
-
-                    // this.request_headers.push({
-                    //     'label': 'Add Custom Header',
-                    //     'value': '__webhook_custom_header__'
-                    // });
-                })
-                .catch(e => console.log(e))
-                .finally(r => this.loading = false);
         },
         backToWebhook() {
             this.show_edit = false;

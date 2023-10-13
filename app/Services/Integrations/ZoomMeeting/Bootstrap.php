@@ -6,6 +6,7 @@ namespace FluentBooking\App\Services\Integrations\ZoomMeeting;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\App\Services\PermissionManager;
@@ -36,7 +37,32 @@ class Bootstrap
         /*
          * Booking Level Hooks
          */
-        add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 9, 2);
+        add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 10, 2);
+
+        /*
+         * Location Hooks
+         */
+
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
+
+            if (!ZoomHelper::isConfigured()) {
+                return $fields;
+            }
+
+            $config = ZoomHelper::getAccessConfig($calendar);
+
+            if (!$config || empty($config['access_token'])) {
+                return $fields;
+            }
+
+            $fields['conferencing']['options']['zoom_meeting'] = [
+                'title'         => 'Zoom Video',
+                'disabled'      => false,
+                'location_type' => 'conferencing'
+            ];
+
+            return $fields;
+        }, 10, 2);
     }
 
     public function addGlobalMenu($menuItems)
@@ -171,7 +197,7 @@ class Bootstrap
                 }
             }
 
-            $driverInfo['description'] = 'Create zoom meeting from your booked events. An Account is connected with this calendar.';
+            $driverInfo['description'] = 'Create zoom meeting from your booked events. An Account is connected with this calendar. From this Calendar event you can now select Zoom Video as a location to create meeting in zoom automatically event booking.';
 
             $instruction = 'The following Zoom Account is connected with this calendar. Based on your event location, a zoom meeting will be created for your bookings.';
 
@@ -270,6 +296,10 @@ class Bootstrap
 
     public function maybeCreateZoomMeeting($booking, $calendarSlot)
     {
+        if (Arr::get($booking->location_details, 'type') !== 'zoom_meeting') {
+            return false; // not our location
+        }
+
         $calendar = $calendarSlot->calendar;
         if (!ZoomHelper::isConfigured()) {
             return;
@@ -283,10 +313,6 @@ class Bootstrap
 
         if ($booking->getMeta('__zoom_meeting_details')) {
             return false; // Already created
-        }
-
-        if (Arr::get($calendarSlot->location_settings, 'type') !== 'zoom_meeting') {
-            return false; // not our location
         }
 
         // let's prepare the booking data
@@ -331,8 +357,22 @@ class Bootstrap
             return false;
         }
 
-        $dataKeys = ['id', 'start_url', 'join_url', 'password'];
-        $booking->updateMeta('__zoom_meeting_details', Arr::only($response, $dataKeys));
+        $responseData = Arr::only($response, ['id', 'start_url', 'join_url', 'password']);
+        $booking->updateMeta('__zoom_meeting_details', $responseData);
+
+        $location = $booking->location_details;
+        $location['online_platform_link'] = Arr::get($responseData, 'join_url');
+        $location['online_platform_start_link'] = Arr::get($responseData, 'start_url');
+        $booking->location_details = $location;
+        $booking->save();
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Zoom Meeting has been created', 'fluent-booking'),
+            'description' => __(sprintf('Zoom Meeting has been scheduled. %s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking') . '</a>'), 'fluent-booking')
+        ]);
 
         return true;
     }
