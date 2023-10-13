@@ -80,7 +80,10 @@ export default {
             return '';
         },
         orderPrice() {
-            const price = Math.floor(this.booking.order_info?.item_price/100);
+            if(!this.booking.payment_order) {
+                return '';
+            }
+            const price = Math.floor(this.booking.payment_order?.total_amount/100);
             if (!price) {
                 return '';
             }

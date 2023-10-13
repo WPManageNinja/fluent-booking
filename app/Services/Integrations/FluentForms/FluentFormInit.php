@@ -106,11 +106,11 @@ class FluentFormInit
         $calendarSlot = CalendarSlot::find($data['event_id']);
         
         if ($calendarSlot->status != 'active') {
-            throw new \Exception('Sorry, This host is not accepting any new bookings at the moment.', 423);
+            throw new \Exception('Sorry, This host is not accepting any new bookings at the moment.', 422);
         }
         
         if ($isRequired && !isset($data['start_time'])) {
-            throw new \Exception(Arr::get($data, 'rules.required.message'), 423);
+            throw new \Exception(Arr::get($data, 'rules.required.message'), 422);
         }
 
         $rules = [
@@ -136,7 +136,7 @@ class FluentFormInit
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
 
         if (!$isSpotAvailable) {
-            throw new \Exception('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 423);
+            throw new \Exception('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 422);
         }
     }
 

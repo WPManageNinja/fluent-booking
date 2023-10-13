@@ -273,7 +273,7 @@ class Booking extends Model
         return '';
     }
 
-    public function PaymentOrder()
+    public function payment_order()
     {
         return $this->hasOne(Order::class, 'parent_id');
     }
