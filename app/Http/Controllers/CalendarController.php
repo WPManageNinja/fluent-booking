@@ -48,7 +48,7 @@ class CalendarController extends Controller
         if (!Helper::isCalendarSlugAvailable($slug, true)) {
             return $this->sendError([
                 'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
-            ], 423);
+            ], 422);
         }
 
         return [
@@ -100,7 +100,7 @@ class CalendarController extends Controller
             if (!Helper::isCalendarSlugAvailable($slug, true)) {
                 return $this->sendError([
                     'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
-                ], 423);
+                ], 422);
             }
 
             $personName = trim($user->first_name . ' ' . $user->last_name);
@@ -122,7 +122,7 @@ class CalendarController extends Controller
         if (!$calendar) {
             return $this->sendError([
                 'message' => __('Calendar could not be found. Please try again', 'fluent-booking')
-            ], 423);
+            ], 422);
         }
 
         if (!empty($data['author_timezone'])) {
@@ -550,7 +550,7 @@ class CalendarController extends Controller
             $formattedField = array_merge($textValues, $booleanValues);
 
             $formattedField['index'] = (int)Arr::get($value, 'index');
-            if ($value['type'] == 'payment') {
+            if ($value['type'] == 'payment' && $slot->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
                 $formattedField['currency_sign'] = Arr::get($value, 'currency_sign');
             }

@@ -6,6 +6,9 @@
                     <span :style="{background: booking.slot.color_schema}"></span>
                 </div>
                 <span style="line-height: 120%;" v-html="formattedTimeRange"></span>
+            </div>
+            <div class="fcal_spot_desc">
+                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
                 <div v-if="booking.happening_status" class="fcal_spot_happening">
                     <span :class="'fcal_'+booking.happening_status">
                         {{ getTextFromSlug(booking.happening_status) }}

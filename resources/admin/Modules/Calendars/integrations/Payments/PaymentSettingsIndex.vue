@@ -1,101 +1,111 @@
 <template>
-    <div class="fcal_settings_container">
-      <div v-if="!fetching" class="fcal_settings_body_inner fcal_settings_general">
-        <Renderer
-            @onSettingsChange="updateSettings"
-            :route_name="route_name"
-            :fields="fields"
-            :settings="settings"/>
-
-        <div class="setting-save-action">
-          <el-button size="large" :loading="saving" @click="saveSettings()" type="primary">
-            <el-icon class="el-icon--left"><Setting /></el-icon>
-            Save Settings
-          </el-button>
+    <div class="fcal_settings_body_inner">
+        <div class="fcal_settings_header">
+            <div class="fcal_settings_head">
+                <h2>Stripe Payments</h2>
+                <p>Configure stripe to accept payments on your booking events and motenize your time slots</p>
+            </div>
+            <div class="fcal_settings_actions">
+                <el-button size="large" :loading="saving" @click="saveSettings()" type="primary">
+                    Save Settings
+                </el-button>
+            </div>
         </div>
-      </div>
-      <el-skeleton v-else animated>
-        <template #template>
-          <el-skeleton-item />
-          <el-skeleton-item style="width: 70%" />
-          <el-skeleton-item style="width: 50%" />
-          <el-skeleton-item style="width: 50%" />
-          <el-skeleton-item style="width: 50%" />
-        </template>
-      </el-skeleton>
+
+        <el-skeleton :rows="4" animated v-if="fetching"/>
+
+        <div v-else class="fcal_calendar_body">
+            <Renderer
+                @onSettingsChange="updateSettings"
+                :route_name="route_name"
+                :fields="fields"
+                :settings="settings"/>
+        </div>
     </div>
 </template>
-<script>
+<script type="text/babel">
 import Renderer from "../Payments/PaymentComponet/Renderer.vue";
+
 export default {
-  name: 'PaymentSettingsIndex',
-  components: {
-    Renderer
-  },
-  data() {
-    return {
-      fields: {},
-      settings: {},
-      saving: false,
-      fetching: false,
-      is_key_defined: false,
-      labelPosition: 'top',
-      webhook_url: '',
-      pages: [],
-      route_name: '',
-      ipn_url: 'Blank',
-      verifiedMessage: false,
-      verifiedStatus: false,
-      verifying: false
+    name: 'PaymentSettingsIndex',
+    components: {
+        Renderer
+    },
+    data() {
+        return {
+            fields: {},
+            settings: {},
+            saving: false,
+            fetching: false,
+            is_key_defined: false,
+            labelPosition: 'top',
+            webhook_url: '',
+            pages: [],
+            route_name: '',
+            ipn_url: 'Blank',
+            verifiedMessage: false,
+            verifiedStatus: false,
+            verifying: false
+        }
+    },
+    watch: {
+        $route(to, from) {
+            this.getRoute();
+            this.getSettings();
+        }
+    },
+    methods: {
+        updateSettings(settings) {
+            this.settings = settings;
+        },
+        getSettings() {
+            this.fetching = true;
+            this.$get('integrations/settings/payment-methods', {
+                method: this.route_name
+            })
+                .then((response) => {
+                    this.fields = response.fields;
+                    this.settings = response.settings;
+                })
+                .catch((errors) => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.fetching = false;
+                });
+        },
+        saveSettings() {
+            this.saving = true;
+            this.$post('integrations/settings/payment-methods', {
+                settings: this.settings,
+                method: this.route_name
+            })
+                .then(response => {
+                    this.$notify.success('Settings updated!');
+                })
+                .catch((errors) => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
+        verifyKeys(req, method) {
+            this.verifying = true;
+        },
+        getRoute() {
+            this.route_name = this.$route.params.settings_key ? this.$route.params.settings_key : 'stripe';
+        },
+    },
+    mounted() {
+        this.getRoute();
+        this.getSettings();
+        if (window.outerWidth < 500) {
+            this.labelPosition = "top";
+        }
     }
-  },
-  watch: {
-    $route(to, from) {
-      this.getRoute();
-      this.getSettings();
-    }
-  },
-  methods: {
-    updateSettings(settings) {
-      this.settings = settings;
-    },
-    getSettings() {
-      this.fetching = true;
-      console.log(this.route_name);
-      this.$get('integrations/settings/payment-methods', {
-        method: this.route_name
-      })
-          .then((response) => {
-            this.fetching = false;
-            this.fields = response.fields;
-            this.settings = response.settings;
-          })
-    },
-    saveSettings() {
-      this.saving = true;
-      this.$post('integrations/settings/payment-methods', {
-        settings: this.settings,
-        method: this.route_name
-      })
-          .then(response => {
-            this.saving = false;
-            this.$notify.success('Settings updated!');
-          })
-    },
-    verifyKeys(req, method) {
-      this.verifying = true;
-    },
-    getRoute() {
-      this.route_name = this.$route.params.settings_key ? this.$route.params.settings_key : 'stripe';
-    },
-  },
-  mounted() {
-    this.getRoute();
-    this.getSettings();
-    if (window.outerWidth < 500) {
-      this.labelPosition = "top";
-    }
-  }
 }
 
+</script>
+<script setup>
 </script>
