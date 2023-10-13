@@ -7,7 +7,9 @@
                         <div class="fcal_form_item">
                             <label class="fcal_input_content">
                                 <div class="fcal_input_label">
-                                    {field.label}
+                                    {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
+                                        {field.label}
+                                    {/if}
                                     {#if field.required}<span>*</span>{/if}
                                 </div>
                                 {#if field.type === 'text'}
@@ -32,34 +34,35 @@
                                             <option value={option}>{option}</option>
                                         {/each}
                                     </select>
+                                {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
+                                    <Payments field={field}/>
                                 {/if}
                             </label>
                         </div>
                     {/if}
                 {/each}
             {/if}
-            {#if hasPaymentItem() && showPayments}
-                <Payments field={appData}/>
-                {#if appData?.payment_methods?.template}
-                    <div class="fcal_form_item">
-                        {@html appData.payment_methods.template}
-                    </div>
-                {/if}
+            {#if hasPaymentItem()}
+                <div class="fluent_booking_payment_processor" style="display:none;">
+                    Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}
+                    {#if appData?.payment_methods?.template}
+                        <div class="fcal_form_payment_item">
+                            {@html appData.payment_methods.template}
+                        </div>
+                    {/if}
+                </div>
+
             {/if}
             <div class="fcal_form_item fcal_submit">
-                {#if !hasPaymentItem() || showPayments}
+                {#if !hasPaymentItem()}
                     <button disabled="{submitting}" type="submit"
                             class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                         Schedule Meeting
                     </button>
                 {:else}
-                    <button disabled="{submitting}" type="button"
-                            on:click={(e) => {
-                            showPayments = !showPayments;
-                            dispatch('onPaymentsVisibilityChanged', true);
-                        }}
+                    <button disabled="{submitting}" type="submit"
                             class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        Confirm with payment
+                        Continue to payments
                     </button>
                 {/if}
             </div>
@@ -99,6 +102,14 @@
 
     function hasPaymentItem() {
         return appData?.payment_items ?? false;
+    }
+
+    let getSubTotal = (items) => {
+        let subtotal = 0;
+        for (let item of items) {
+            subtotal += parseFloat(item.value);
+        }
+        return subtotal;
     }
 
     function submitForm(e) {

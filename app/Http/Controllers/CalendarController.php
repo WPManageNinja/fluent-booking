@@ -550,7 +550,7 @@ class CalendarController extends Controller
             $formattedField = array_merge($textValues, $booleanValues);
 
             $formattedField['index'] = (int)Arr::get($value, 'index');
-            if ($value['type'] == 'payment') {
+            if ($value['type'] == 'payment' && $slot->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
                 $formattedField['currency_sign'] = Arr::get($value, 'currency_sign');
             }
