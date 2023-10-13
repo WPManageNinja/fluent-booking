@@ -14,9 +14,6 @@
                         {{ getTextFromSlug(booking.happening_status) }}
                     </span>
                 </div>
-            </div>
-            <div class="fcal_spot_desc">
-                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
                 <span class="fcal_spot_period_status" v-if="currentStatus">
                     {{ currentStatus }}
                 </span>

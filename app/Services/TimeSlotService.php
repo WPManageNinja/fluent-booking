@@ -98,7 +98,7 @@ class TimeSlotService
                         ($startTimeStamp <= $bookedStart && $endTimeStamp > $bookedStart) ||
                         ($startTimeStamp < $bookedEnd && $endTimeStamp >= $bookedEnd)
                     ) {
-                        if (!$bookedSlot['remaining']) {
+                        if (!Arr::get($bookedSlot, 'remaining')) {
                             $isSpotAvailable = false;
                             break;
                         }
