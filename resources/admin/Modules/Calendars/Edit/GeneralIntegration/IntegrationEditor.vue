@@ -20,7 +20,9 @@
                                     <p v-html="field.tips"></p>
                                 </div>
                             </template>
-                            <el-icon><InfoFilled /></el-icon>
+                            <el-icon>
+                                <InfoFilled/>
+                            </el-icon>
                         </el-tooltip>
                     </template>
 
@@ -315,184 +317,185 @@
 </template>
 
 <script type="text/babel">
-    import Errors from "@common/Errors";
-    import ErrorView from '@common/ErrorView.vue';
-    import inputPopover from '@/Components/Common/InputPopover.vue';
-    import FilterFields from '@/Components/Common/FilterFields.vue';
-    import MergeFieldMapper from './_field_maps.vue';
-    import FiledGeneral from './_FieldGeneral.vue';
-    import ListSelectFilter from './_ListSelectFilter.vue';
-    import DropDownLabelRepeater from './_DropdownLabelRepeater.vue';
-    import DropDownManyFields from './_DropdownManyFields.vue';
+import Errors from "@common/Errors";
+import ErrorView from '@common/ErrorView.vue';
+import inputPopover from '@/Components/Common/InputPopover.vue';
+import FilterFields from '@/Components/Common/FilterFields.vue';
+import MergeFieldMapper from './_field_maps.vue';
+import FiledGeneral from './_FieldGeneral.vue';
+import ListSelectFilter from './_ListSelectFilter.vue';
+import DropDownLabelRepeater from './_DropdownLabelRepeater.vue';
+import DropDownManyFields from './_DropdownManyFields.vue';
 
-    import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
-    import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
-    
-    import Notice from '@/Components/Notice/Notice.vue';
-    import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
-    import {InfoFilled} from '@element-plus/icons-vue';
+import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
+import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 
-    export default {
-        name: 'general_notification_edit',
-        components: {
-            ErrorView,
-            inputPopover,
-            FilterFields,
-            MergeFieldMapper,
-            FiledGeneral,
-            ListSelectFilter,
-            DropDownLabelRepeater,
-            DropDownManyFields,
-            BtnGroup,
-            BtnGroupItem,
-            Notice,
-            InfoFilled,
-            'wp_editor' : wpEditor
-        },
-        props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro'],
-        watch: {},
-        data() {
-            return {
-                loading_app: false,
-                loading_list: false,
-                errors: new Errors(),
-                saving: false,
-                merge_fields: false,
-                settings: {},
-                settings_fields: {},
-                attachedForms: [],
-                fromChainedAjax: false,
-                refreshQuery: null,
-                editorShortcodes: this.appVars.editor_shortcodes
-            }
-        },
-        computed: {
-            title() {
-                let integrationName = this.settings_fields?.integration_title || '';
-                if (this.editingIntegration.integration_id) {
-                    return `Update ${integrationName} Integration Feed`;
-                } else {
-                    return `Add New ${integrationName} Integration Feed`;
-                }
-            },
-            maybeShowSaveButton() {
-                let fields = this.settings_fields;
-                let mergeFields = this.merge_fields;
-                return (fields?.button_require_list && mergeFields) || !fields?.button_require_list;
-            }
-        },
-        methods: {
-            loadIntegrationSettings() {
-                this.loading_app = true;
-                let data = {
-                    integration_id: this.editingIntegration.integration_id,
-                    integration_name: this.editingIntegration.integration_name,
-                };
+import Notice from '@/Components/Notice/Notice.vue';
+import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
+import {InfoFilled} from '@element-plus/icons-vue';
 
-                // add chained ajax configs query
-                if (this.fromChainedAjax) {
-                    data = {...data, configs: this.settings.chained_config}
-                }
-
-                if (this.refreshQuery) {
-                    data = {...data, ...this.refreshQuery}
-                }
-                
-                const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
-
-                this.$get(url, data)
-                    .then(response => {
-                        this.settings_fields = response.settings_fields;
-                        this.settings = response.settings;
-                        if (!this.settings.name) {
-                            this.settings.name = response.settings_fields.integration_title + ' Integration Feed' || '';
-                        }
-                        this.merge_fields = response.merge_fields;
-                    })
-                    .catch(error => {
-                        // when failed show default field if available
-                        if (this.fromChainedAjax && error.data?.settings_fields) {
-	                        this.settings_fields = error.data.settings_fields;
-                        }
-                        this.$handleError(error || 'Error on integration settings');
-                    })
-                    .finally(() => {
-                        this.loading_app = false;
-                    });
-            },
-            refresh() {
-                this.refreshQuery = {
-                    serviceName: this.settings['name'],
-                    serviceId: this.settings['list_id']
-                };
-                this.loadIntegrationSettings();
-            },
-            chainedAjax(key) {
-                for (const key in this.settings.chained_config) {
-                    if (this.settings.chained_config[key] == '') {
-                        return;
-                    }
-                }
-                if (key == 'base_id') {
-                    this.settings.chained_config['table_id'] = '';
-                }
-                this.fromChainedAjax = true;
-                this.loadIntegrationSettings();
-            },
-            loadMergeFields() {
-                this.loading_list = true;
-                const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
-                
-                this.$get(url, {
-                    list_id: this.settings.list_id,
-                    integration_name: this.editingIntegration.integration_name
-                })
-                    .then(response => {
-                        const result = response?.merge_fields || response?.data?.merge_fields
-                        this.merge_fields = result
-                    })
-                    .catch(error => {
-                        this.$handleError(error);
-                    })
-                    .finally(() => {
-                        this.loading_list = false;
-                    });
-            },
-            saveNotification() {
-                this.errors.clear();
-                this.saving = true;
-                let data = {
-                    integration_name: this.editingIntegration.integration_name,
-                    integration: JSON.stringify(this.settings),
-                    data_type: 'stringify',
-                };
-                
-                const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
-
-                this.$post(url, data)
-                    .then(response => {
-                        this.$handleSuccess(response);
-
-                        this.$emit('back');
-                    })
-                    .catch((error) => {
-                        const getError = error?.errors || error?.data?.errors
-                        this.errors.record(getError)
-                        this.$handleError(error);
-                    })
-                    .finally(() => this.saving = false);
-            },
-            getMergeModel(merge_model) {
-                if (Array.isArray(merge_model) || !merge_model) {
-                    merge_model = {};
-                }
-
-                return merge_model;
-            }
-        },
-        mounted() {
-            this.loadIntegrationSettings();
+export default {
+    name: 'general_notification_edit',
+    components: {
+        ErrorView,
+        inputPopover,
+        FilterFields,
+        MergeFieldMapper,
+        FiledGeneral,
+        ListSelectFilter,
+        DropDownLabelRepeater,
+        DropDownManyFields,
+        BtnGroup,
+        BtnGroupItem,
+        Notice,
+        InfoFilled,
+        'wp_editor': wpEditor
+    },
+    props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro'],
+    watch: {},
+    data() {
+        return {
+            loading_app: false,
+            loading_list: false,
+            errors: new Errors(),
+            saving: false,
+            merge_fields: false,
+            settings: {},
+            settings_fields: {},
+            attachedForms: [],
+            fromChainedAjax: false,
+            refreshQuery: null,
+            editorShortcodes: this.appVars.editor_shortcodes
         }
+    },
+    computed: {
+        title() {
+            let integrationName = this.settings_fields?.integration_title || '';
+            if (this.editingIntegration.integration_id) {
+                return `Update ${integrationName} Integration Feed`;
+            } else {
+                return `Add New ${integrationName} Integration Feed`;
+            }
+        },
+        maybeShowSaveButton() {
+            let fields = this.settings_fields;
+            let mergeFields = this.merge_fields;
+            return (fields?.button_require_list && mergeFields) || !fields?.button_require_list;
+        }
+    },
+    methods: {
+        loadIntegrationSettings() {
+            this.loading_app = true;
+            let data = {
+                integration_id: this.editingIntegration.integration_id,
+                integration_name: this.editingIntegration.integration_name,
+            };
+
+            // add chained ajax configs query
+            if (this.fromChainedAjax) {
+                data = {...data, configs: this.settings.chained_config}
+            }
+
+            if (this.refreshQuery) {
+                data = {...data, ...this.refreshQuery}
+            }
+
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
+
+            this.$get(url, data)
+                .then(response => {
+                    this.settings_fields = response.settings_fields;
+                    this.settings = response.settings;
+                    if (!this.settings.name) {
+                        this.settings.name = response.settings_fields.integration_title + ' Integration Feed' || '';
+                    }
+                    this.merge_fields = response.merge_fields;
+                })
+                .catch(error => {
+                    // when failed show default field if available
+                    if (this.fromChainedAjax && error.data?.settings_fields) {
+                        this.settings_fields = error.data.settings_fields;
+                    }
+                    this.$handleError(error || 'Error on integration settings');
+                })
+                .finally(() => {
+                    this.loading_app = false;
+                });
+        },
+        refresh() {
+            this.refreshQuery = {
+                serviceName: this.settings['name'],
+                serviceId: this.settings['list_id']
+            };
+            this.loadIntegrationSettings();
+        },
+        chainedAjax(key) {
+            for (const key in this.settings.chained_config) {
+                if (this.settings.chained_config[key] == '') {
+                    return;
+                }
+            }
+            if (key == 'base_id') {
+                this.settings.chained_config['table_id'] = '';
+            }
+            this.fromChainedAjax = true;
+            this.loadIntegrationSettings();
+        },
+        loadMergeFields() {
+            this.loading_list = true;
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
+
+            this.$get(url, {
+                list_id: this.settings.list_id,
+                integration_name: this.editingIntegration.integration_name
+            })
+                .then(response => {
+                    const result = response?.merge_fields || response?.data?.merge_fields
+                    this.merge_fields = result
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.loading_list = false;
+                });
+        },
+        saveNotification() {
+            this.errors.clear();
+            this.saving = true;
+            let data = {
+                integration_name: this.editingIntegration.integration_name,
+                integration: JSON.stringify(this.settings),
+                data_type: 'stringify',
+            };
+
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
+
+            this.$post(url, data)
+                .then(response => {
+                    this.$handleSuccess(response);
+                    // this.$emit('back');
+                })
+                .catch((error) => {
+                    const getError = error?.errors || error?.data?.errors
+                    this.errors.record(getError)
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.saving = false
+                });
+        },
+        getMergeModel(merge_model) {
+            if (Array.isArray(merge_model) || !merge_model) {
+                merge_model = {};
+            }
+
+            return merge_model;
+        }
+    },
+    mounted() {
+        this.loadIntegrationSettings();
     }
+}
 </script>
 

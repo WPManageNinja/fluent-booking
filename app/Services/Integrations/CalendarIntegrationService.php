@@ -32,7 +32,7 @@ class CalendarIntegrationService
             $feed = Meta::where(['object_id' => $slotId, 'id' => $integrationId])->first();
 
             if ($feed->value) {
-                $settings = json_decode($feed->value, true);
+                $settings = $feed->value;
                 $settings = apply_filters('fluent_booking/get_integration_values_' . $integrationName, $settings, $feed, $slotId);
                 if (!empty($settings['list_id'])) {
                     $mergeFields = apply_filters('fluent_booking/get_integration_merge_fields_' . $integrationName, false, $settings['list_id'], $slotId);
@@ -71,38 +71,65 @@ class CalendarIntegrationService
         } else {
             $metaValue = wp_unslash($metaValue);
         }
+
         $isUpdatingStatus = empty($metaValue);
 
         if ($isUpdatingStatus) {
             $integrationData = Meta::findOrFail($integrationId);
-            $metaValue = \json_decode($integrationData->value, true);
+            $metaValue = $integrationData->value;
             $metaValue['enabled'] = $status;
             $metaKey = $integrationData->key;
         } else {
             if (empty($metaValue['name'])) {
                 $errors['name'] = [__('Feed name is required', 'fluentform')];
-                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent_booking'), 423, null, $errors);
+                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent_booking'), 422, null, $errors);
             }
             $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue, $integrationId, $slotId);
             $metaKey = $integrationName . '_feeds';
         }
 
+
+        // Validate the meta values
+
+        if ($metaValue['enabled']) {
+            // Required fields
+
+            $errors = [];
+            if(empty($metaValue['email'])) {
+                $errors['email'] = [__('Email is required', 'fluent-booking')];
+            }
+
+            if(empty($metaValue['event_trigger'])) {
+                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking')];
+            }
+
+            if($errors) {
+                throw new ValidationException(__('Validation Failed! Please fill up required fields', 'fluent_booking'), 422, null, $errors);
+            }
+        }
+
+
         $data = [
             'object_id'   => $slotId,
             'object_type' => 'integration',
             'key'         => $metaKey,
-            'value'       => \json_encode($metaValue),
+            'value'       => $metaValue,
         ];
+
 
         $data = apply_filters('fluent_booking/save_integration_settings_' . $integrationName, $data, $integrationId);
         $created = false;
 
+
         if ($integrationId) {
-            Meta::where('object_id', $slotId)
-                ->where('id', $integrationId)
-                ->update($data);
+            $integration = Meta::where('object_id', $slotId)
+                ->where('object_type', 'integration')
+                ->findOrFail($integrationId);
+            $integration->value = $data['value'];
+            $integration->save();
         } else {
-            $integrationId = Meta::insertGetId($data);
+            $integration = Meta::create($data);
+            $integrationId = $integration->id;
             $created = true;
         }
 
@@ -126,13 +153,14 @@ class CalendarIntegrationService
 
         if (!empty($feeds)) {
             foreach ($feeds as $feed) {
-                $data = json_decode($feed->value, true);
-                $enabled = $data['enabled'];
-                if ($enabled && 'true' == $enabled) {
+                $data = $feed->value;
+                $enabled = Arr::get($data, 'enabled');
+                if ($enabled) {
                     $enabled = true;
-                } elseif ('false' == $enabled) {
+                } else {
                     $enabled = false;
                 }
+
                 $feedData = [
                     'id'       => $feed->id,
                     'name'     => Arr::get($data, 'name'),
@@ -140,7 +168,7 @@ class CalendarIntegrationService
                     'provider' => $feed->key,
                     'feed'     => $data,
                 ];
-                
+
                 $feedData = apply_filters('fluent_booking/global_notification_feed_' . $feed->key, $feedData, $slotId);
 
                 $formattedFeeds[] = $feedData;
@@ -152,7 +180,7 @@ class CalendarIntegrationService
         return [
             'feeds'                  => $formattedFeeds,
             'available_integrations' => $availableIntegrations,
-            'all_module_config_url'  => admin_url('admin.php?page=fluent_forms_add_ons'),
+            // 'all_module_config_url'  => admin_url('admin.php?page=fluent_forms_add_ons'),
         ];
     }
 
