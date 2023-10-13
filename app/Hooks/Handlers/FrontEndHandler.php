@@ -290,15 +290,16 @@ class FrontEndHandler
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
 
-        $total = '';
-        foreach ($paymentSettings['items'] as $payment) {
-            $total += $payment['value'];
+        if($paymentSettings) {
+            $total = '';
+            foreach ($paymentSettings['items'] as $payment) {
+                $total += $payment['value'];
+            }
+
+            $currency = CurrenciesHelper::getCurrencySign();
+            $calendarEvent->total_payment = $calendarEvent->defaultPaymentIcon($currency, $total);
         }
-
-        $currency = CurrenciesHelper::getCurrencySign();
-        $calendarEvent->total_payment = $calendarEvent->defaultPaymentIcon($currency, $total);
-
-
+        
 
         $eventData = [
             'id' => $calendarEvent->id,
