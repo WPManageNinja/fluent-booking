@@ -70,7 +70,7 @@
                     <div v-if="booking.order_transaction?.vendor_charge_id" class="fcal_schedule_details_event_item">
                         <h3>Transaction ID</h3>
                         <p :class="booking.order_transaction?.vendor_charge_id">
-                            <a :href="'https://dashboard.stripe.com/test/payments/pi_3O0jE6IyGOUknw8l1lWfsh7g/'+booking.order_transaction?.vendor_charge_id" target="_blank">{{booking.order_transaction?.vendor_charge_id}}</a>
+                            <a :href="'https://dashboard.stripe.com/test/payments/'+booking.order_transaction?.vendor_charge_id" target="_blank">{{booking.order_transaction?.vendor_charge_id}}</a>
 
                         </p>
                     </div>

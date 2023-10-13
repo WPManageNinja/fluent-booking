@@ -72,7 +72,7 @@ class SchedulesController extends Controller
             if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
                 $schedule->status = 'completed';
                 $schedule->save();
-                do_action('fluent_booking/booking_schedule_completed', $schedule);
+                do_action('fluent_booking/booking_schedule_completed', $schedule, $schedule->calendar_event);
             }
 
             $schedule->happening_status = $schedule->getOngoingStatus();
@@ -215,6 +215,8 @@ class SchedulesController extends Controller
         if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
             $booking->status = 'completed';
             $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+
             do_action('fluent_booking/booking_schedule_completed', $booking);
         }
 
