@@ -3,13 +3,11 @@ class StripeCheckout {
         this.form = jQuery($form)
         this.data = $response.data
         this.intent = $response.data?.intent
-
-        window.form = this.form;
-        console.log(this.data, this.form, this.intent)
     }
 
     init () {
-        this.form.find('.fluent_booking_payment_methods').hide()
+        this.form.find('.fcal_form_item').hide()
+        this.form.find('.fluent_booking_payment_processor').css('display', 'block')
 
         let submitButton = "<button id='fluent_booking_stipe_pay' style='margin-top:23px;!important' type='submit'>Pay Now</button>";
 
@@ -22,15 +20,15 @@ class StripeCheckout {
         const paymentElement = elements.create('payment', {
         });
 
-        paymentElement.mount('.fcal_payment_items_wrapper');
+        paymentElement.mount('.fluent_booking_payment_methods');
 
-        jQuery('.fcal_payment_items_wrapper').append('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
+        jQuery('.fluent_booking_payment_methods').append('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
         this.form.find('.fcal_submit').hide();
         let that= this;
 
         paymentElement.on('ready', function(event) {
             jQuery('#fluent_booking_loading_payment_processor').remove();
-            jQuery('.fcal_payment_items_wrapper').append(submitButton);
+            jQuery('.fluent_booking_payment_methods').append(submitButton);
 
             jQuery('#fluent_booking_stipe_pay').on('click', function(e) {
                 e.preventDefault()
