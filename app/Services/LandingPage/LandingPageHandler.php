@@ -243,7 +243,9 @@ class LandingPageHandler
             return;
         }
 
-        dd($_REQUEST);
+        $calendarSlot = $booking->calendar_event;
+
+        $this->showBookingConfimationPage($booking, $calendarSlot);
     }
 
 }
