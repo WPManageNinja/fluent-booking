@@ -139,9 +139,38 @@ class GoogleHelper
 
     public static function getAppRedirectUrl()
     {
-        if (defined('FLUENT_BOOKING_G_AUTH_REDIRECT_URL')) {
-            return FLUENT_BOOKING_G_AUTH_REDIRECT_URL;
+        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
+            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
         }
         return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
     }
+
+    public static function getUniqueSiteIdHash()
+    {
+
+        static $hash = null;
+
+        if($hash) {
+            return $hash;
+        }
+
+        if (defined('FLUENT_BOOKING_UNIQUE_SITE_ID')) {
+            $hash = FLUENT_BOOKING_UNIQUE_SITE_ID;
+            return $hash;
+        }
+
+        $exist = get_option('__fcal_unique_site_id');
+
+        if ($exist) {
+            $hash = (string)$exist;
+            return $hash;
+        }
+
+        $hash = md5(site_url('/') . time());
+
+        update_option('__fcal_unique_site_id', $hash, 'no');
+
+        return $hash;
+    }
+
 }
