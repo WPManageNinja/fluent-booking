@@ -37,7 +37,6 @@ class CalendarIntegrationController extends Controller
     {
         try {
             $integration = $integrationService->update($this->request->all());
-
             return $this->sendSuccess($integration);
         } catch (Exception $e) {
             return $this->sendError([

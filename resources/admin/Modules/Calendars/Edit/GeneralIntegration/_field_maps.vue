@@ -23,14 +23,19 @@
                                 style="width:100%"
                                 clearable
                             >
-                                <template v-for="(option, index) in inputs">
-                                    <el-option
-                                        v-if="option.type === 'email'"
-                                        :key="index" 
-                                        :value="option.name"
-                                        :label="option.label"
-                                    ></el-option>
-                                </template>
+                                <el-option
+                                    value="{{guest.email}}"
+                                    label="Guest Email"
+                                ></el-option>
+
+<!--                                <template v-for="(option, index) in inputs">-->
+<!--                                    <el-option-->
+<!--                                        v-if="option.type === 'email'"-->
+<!--                                        :key="index" -->
+<!--                                        :value="option.name"-->
+<!--                                        :label="option.label"-->
+<!--                                    ></el-option>-->
+<!--                                </template>-->
                             </el-select>
 
                             <el-select
