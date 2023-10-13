@@ -285,6 +285,8 @@ class SchedulesController extends Controller
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
+        $booking->slot = $booking->calendar_event;
+        
         return $booking;
     }
 

@@ -298,7 +298,7 @@ export default {
             this.$router.push({query: {period: this.filters.period, booking_id: schedule.id}});
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
-            this.currentEventTitle = schedule.slot.title;
+            this.currentEventTitle = schedule.calendar_event?.title;
             
         },
         handleDiscard() {
