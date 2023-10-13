@@ -209,6 +209,28 @@ class EditorShortCodeParser
 
     protected static function parseShortCodes($parsable)
     {
+        if (is_array($parsable)) {
+            return static::parseFromArray($parsable);
+        }
+
+        return static::parseFromString($parsable);        
+    }
+
+    protected static function parseFromArray($parsable)
+    {
+        foreach ($parsable as $key => $value) {
+            if (is_array($value)) {
+                $parsable[$key] = static::parseFromArray($value);
+            } else {
+                $parsable[$key] = static::parseFromString($value);
+            }
+        }
+
+        return $parsable;
+    }
+
+    protected static function parseFromString($parsable)
+    {
         if (!$parsable) {
             return '';
         }
