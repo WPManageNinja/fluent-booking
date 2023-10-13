@@ -324,7 +324,7 @@ class GoogleCalendar extends IntegrationManager
         $accessToken = $this->getAccessToken($hostId);
 
         if (!$accessToken) {
-            throw new \Exception('You are already disconnected', 423);
+            throw new \Exception('You are already disconnected', 422);
         }
 
         $body = [
@@ -334,7 +334,7 @@ class GoogleCalendar extends IntegrationManager
         $response = static::makeRequest($this->client->revokeUrl, $body, 'POST');
 
         if (is_wp_error($response)) {
-            throw new \Exception('Something went wrong. Please try again', 423);
+            throw new \Exception('Something went wrong. Please try again', 422);
         }
 
         $this->deleteAuthDetails($hostId);
