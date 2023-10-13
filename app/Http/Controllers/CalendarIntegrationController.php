@@ -10,8 +10,6 @@ class CalendarIntegrationController extends Controller
     public function index(CalendarIntegrationService $integrationService, $calendarId, $slotId)
     {
         try {
-            $formId = (int) $this->request->get('form_id');
-
             return $this->sendSuccess(
                 $integrationService->get($calendarId)
             );
@@ -44,21 +42,20 @@ class CalendarIntegrationController extends Controller
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
-                'errors' => $e->errors()
+                'errors'  => $e->errors(),
             ], 422);
         }
     }
 
-    public function delete(CalendarIntegrationService $integrationService)
+    public function delete(CalendarIntegrationService $integrationService, $calendarId, $slotId, $integrationId)
     {
-        dd('delete');
         try {
             $id = $this->request->get('integration_id');
             $integrationService->delete($id);
 
             return $this->sendSuccess([
-                'message' => __('Successfully deleted the Integration.', 'fluentform'),
-            ], 200);
+                'message' => __('Successfully deleted the Integration.', 'fluent_booking'),
+            ]);
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
@@ -66,26 +63,14 @@ class CalendarIntegrationController extends Controller
         }
     }
 
-    public function integrationListComponent()
+    public function integrationListComponent($calendarId, $slotId, $integrationId)
     {
         try {
             $integrationName = $this->request->get('integration_name');
-            $formId = intval($this->request->get('form_id'));
             $listId = $this->request->get('list_id');
             $merge_fields = false;
-            $merge_fields = apply_filters_deprecated(
-                'fluentform_get_integration_merge_fields_' . $integrationName,
-                [
-                    $merge_fields,
-                    $listId,
-                    $formId,
-                ],
-                FLUENTFORM_FRAMEWORK_UPGRADE,
-                'fluentform/get_integration_merge_fields_' . $integrationName,
-                'Use fluentform/get_integration_merge_fields_' . $integrationName . ' instead of fluentform_get_integration_merge_fields_' . $integrationName
-            );
 
-            $merge_fields = apply_filters('fluentform/get_integration_merge_fields_' . $integrationName, $merge_fields, $listId, $formId);
+            $merge_fields = apply_filters('fluent_booking/get_integration_merge_fields_' . $integrationName, $merge_fields, $listId, $slotId);
 
             return $this->sendSuccess([
                 'merge_fields' => $merge_fields,

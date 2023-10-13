@@ -6,22 +6,31 @@ use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Integrations\IntegrationManagerHelper;
 
 abstract class IntegrationManagerController extends IntegrationManagerHelper
-
 {
     protected $app = null;
+
     protected $subscriber = null;
+
     protected $title = '';
+
     protected $description = '';
+
     protected $integrationKey = '';
+
     protected $optionKey = '';
+
     protected $settingsKey = '';
+
     protected $priority = 11;
+
     public $logo = '';
+
     public $hasGlobalMenu = true;
+
     public $category = 'crm';
+
     public $disableGlobalSettings = 'no';
-    
-    
+
     public function __construct($title, $integrationKey, $optionKey, $settingsKey, $priority = 11)
     {
         $this->title = $title;
@@ -30,7 +39,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         $this->settingsKey = $settingsKey;
         $this->priority = $priority;
 
-        if(isset($_REQUEST['form_id'])) {
+        if (isset($_REQUEST['form_id'])) {
             parent::__construct(
                 $this->settingsKey, $_REQUEST['form_id'], true
             );
@@ -40,7 +49,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
             );
         }
     }
-    
+
     public function registerAdminHooks()
     {
         $isEnabled = $this->isEnabled();
@@ -54,17 +63,18 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
                 'logo'                    => $this->logo,
                 'enabled'                 => ($isEnabled) ? 'yes' : 'no',
             ];
+
             return $addons;
         }, $this->priority, 1);
-        
+
         if (!$isEnabled) {
             return;
         }
-        
+
         $this->registerNotificationHooks();
-        
+
         // Global Settings Here
-        
+
         if ($this->hasGlobalMenu) {
             add_filter('fluent_booking/global_settings_components', [$this, 'addGlobalMenu']);
             add_filter('fluent_booking/global_integration_settings_' . $this->integrationKey, [$this, 'getGlobalSettings'],
@@ -74,25 +84,25 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
             add_action('fluent_booking/save_global_integration_settings_' . $this->integrationKey,
                 [$this, 'saveGlobalSettings'], $this->priority, 1);
         }
-        
+
         add_filter('fluent_booking/global_notification_types', [$this, 'addNotificationType'], $this->priority);
-        
+
         add_filter('fluent_booking/get_available_form_integrations', [$this, 'pushIntegration'], $this->priority, 2);
-        
+
         add_filter('fluent_booking/global_notification_feed_' . $this->settingsKey, [$this, 'setFeedAttributes'], 10, 2);
-        
+
         add_filter('fluent_booking/get_integration_defaults_' . $this->integrationKey, [$this, 'getIntegrationDefaults'],
             10, 2);
         add_filter('fluent_booking/get_integration_settings_fields_' . $this->integrationKey, [$this, 'getSettingsFields'],
             10, 2);
         add_filter('fluent_booking/get_integration_merge_fields_' . $this->integrationKey, [$this, 'getMergeFields'], 10,
             3);
-        
+
         add_filter('fluent_booking/save_integration_settings_' . $this->integrationKey, [$this, 'setMetaKey'], 10, 2);
         add_filter('fluent_booking/get_integration_values_' . $this->integrationKey, [$this, 'prepareIntegrationFeed'], 10,
             3);
     }
-    
+
     public function registerNotificationHooks()
     {
         if ($this->isConfigured()) {
@@ -100,13 +110,13 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
             add_action('fluent_booking/integration_notify_' . $this->settingsKey, [$this, 'notify'], $this->priority, 4);
         }
     }
-    
+
     public function notify($feed, $formData, $entry, $form)
     {
         // Each integration have to implement this notify method
-        return;
+
     }
-    
+
     public function addGlobalMenu($setting)
     {
         $setting[$this->integrationKey] = [
@@ -115,46 +125,49 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
             'settings_key' => $this->integrationKey,
             'title'        => $this->title,
         ];
+
         return $setting;
     }
-    
+
     public function addNotificationType($types)
     {
         $types[] = $this->settingsKey;
+
         return $types;
     }
-    
+
     public function addActiveNotificationType($types)
     {
         $types[$this->settingsKey] = $this->integrationKey;
+
         return $types;
     }
-    
+
     public function getGlobalSettings($settings)
     {
         return $settings;
     }
-    
+
     public function saveGlobalSettings($settings)
     {
         return $settings;
     }
-    
+
     public function getGlobalFields($fields)
     {
         return $fields;
     }
-    
+
     public function setMetaKey($data)
     {
         // $data['meta_key'] = $this->settingsKey;
         return $data;
     }
-    
+
     public function prepareIntegrationFeed($setting, $feed, $formId)
     {
         $defaults = $this->getIntegrationDefaults([], $formId);
-        
+
         foreach ($setting as $settingKey => $settingValue) {
             if ('true' == $settingValue) {
                 $setting[$settingKey] = true;
@@ -169,40 +182,42 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
                 $setting['conditionals'] = $settingValue;
             }
         }
-        
+
         if (!empty($setting['list_id'])) {
-            $setting['list_id'] = (string)$setting['list_id'];
+            $setting['list_id'] = (string) $setting['list_id'];
         }
-        
+
         return wp_parse_args($setting, $defaults);
     }
-    
+
     abstract public function getIntegrationDefaults($settings, $formId);
-    
+
     abstract public function pushIntegration($integrations, $formId);
-    
+
     abstract public function getSettingsFields($settings, $formId);
-    
+
     abstract public function getMergeFields($list, $listId, $formId);
-    
+
     public function setFeedAttributes($feed, $formId)
     {
         $feed['provider'] = $this->integrationKey;
         $feed['provider_logo'] = $this->logo;
+
         return $feed;
     }
-    
+
     public function isConfigured()
     {
         $globalStatus = $this->getApiSettings();
+
         return $globalStatus && $globalStatus['status'];
     }
-    
+
     public function isEnabled()
     {
         return (new \FluentForm\App\Services\Integrations\GlobalIntegrationService())->isEnabled($this->integrationKey);
     }
-    
+
     public function getApiSettings()
     {
         $settings = get_option($this->optionKey);
@@ -212,9 +227,10 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
                 'status' => false,
             ];
         }
+
         return $settings;
     }
-    
+
     protected function getSelectedTagIds(
         $data,
         $inputData,
@@ -226,15 +242,15 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         if (!$routing || 'simple' == $routing) {
             return Arr::get($data, $simpleKey, []);
         }
-        
+
         $routers = Arr::get($data, $routersKey);
         if (empty($routers)) {
             return [];
         }
-        
+
         return $this->evaluateRoutings($routers, $inputData);
     }
-    
+
     protected function evaluateRoutings($routings, $inputData)
     {
         $validInputs = [];
@@ -253,14 +269,12 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
                     ],
                 ],
             ];
-            
+
             if (\FluentForm\App\Services\ConditionAssesor::evaluate($condition, $inputData)) {
                 $validInputs[] = $inputValue;
             }
         }
-        
+
         return $validInputs;
     }
-    
 }
-
