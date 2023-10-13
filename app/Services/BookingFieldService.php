@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class BookingFieldService
@@ -101,7 +102,7 @@ class BookingFieldService
                     'required'       => false,
                     'enabled'        => true,
                     'system_defined' => true,
-                    'payment_items'  => Arr::get($paymentSettings, 'items'),
+                    'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
                     'label' => 'Payment Summary',
                     'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
                 ];
