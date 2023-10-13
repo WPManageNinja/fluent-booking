@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations;
 
 use FluentBooking\App\Models\Meta;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Validator\ValidationException;
 
 class CalendarIntegrationService
 {
@@ -58,14 +59,12 @@ class CalendarIntegrationService
     
     public function update($attr)
     {
-        dd(__METHOD__);
-        $formId = intval(Arr::get($attr, 'form_id'));
+        $slotId = intval(Arr::get($attr, 'slot_id'));
         $integrationId = intval(Arr::get($attr, 'integration_id'));
         $integrationName = sanitize_text_field(Arr::get($attr, 'integration_name'));
         $dataType = sanitize_text_field(Arr::get($attr, 'data_type'));
         $status = Arr::get($attr, 'status', true);
         $metaValue = Arr::get($attr, 'integration');
-        
         
         if ('stringify' == $dataType) {
             $metaValue = \json_decode($metaValue, true);
@@ -78,49 +77,28 @@ class CalendarIntegrationService
             $integrationData = Meta::findOrFail($integrationId);
             $metaValue = \json_decode($integrationData->value, true);
             $metaValue['enabled'] = $status;
-            $metaKey = $integrationData->meta_key;
+            $metaKey = $integrationData->key;
         } else {
             if (empty($metaValue['name'])) {
                 $errors['name'] = [__('Feed name is required', 'fluentform')];
-                wp_send_json_error([
-                    'message' => __('Validation Failed! Feed name is required', 'fluentform'),
-                    'errors'  => $errors
-                ], 423);
+                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent_booking'), 423, null, $errors);
             }
-            $metaValue = apply_filters_deprecated(
-                'fluentform_save_integration_value_' . $integrationName,
-                [
-                    $metaValue,
-                    $integrationId,
-                    $formId
-                ],
-                FLUENTFORM_FRAMEWORK_UPGRADE,
-                'fluent_booking/save_integration_value_' . $integrationName,
-                'Use fluent_booking/save_integration_value_' . $integrationName . ' instead of fluentform_save_integration_value_' . $integrationName
-            );
-            $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue,
-                $integrationId, $formId);
+            $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue, $integrationId, $slotId);
             $metaKey = $integrationName . '_feeds';
-        }
+        }        
+        
         $data = [
-            'form_id'  => $formId,
-            'meta_key' => $metaKey,
-            'value'    => \json_encode($metaValue),
+            'object_id'   => $slotId,
+            'object_type' => 'integration',
+            'key'         => $metaKey,
+            'value'       => \json_encode($metaValue),
         ];
-        $data = apply_filters_deprecated(
-            'fluentform_save_integration_settings_' . $integrationName,
-            [
-                $data,
-                $integrationId
-            ],
-            FLUENTFORM_FRAMEWORK_UPGRADE,
-            'fluent_booking/save_integration_settings_' . $integrationName,
-            'Use fluent_booking/save_integration_settings_' . $integrationName . ' instead of fluentform_save_integration_settings_' . $integrationName
-        );
+
         $data = apply_filters('fluent_booking/save_integration_settings_' . $integrationName, $data, $integrationId);
         $created = false;
+        
         if ($integrationId) {
-            Meta::where('form_id', $formId)
+            Meta::where('object_id', $slotId)
                 ->where('id', $integrationId)
                 ->update($data);
         } else {
@@ -128,9 +106,8 @@ class CalendarIntegrationService
             $created = true;
         }
         
-        
         return ([
-            'message'          => __('Integration successfully saved', 'fluentform'),
+            'message'          => __('Integration successfully saved', 'fluent_booking'),
             'integration_id'   => $integrationId,
             'integration_name' => $integrationName,
             'created'          => $created,

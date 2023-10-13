@@ -85,6 +85,8 @@ app.mixin({
                 errorMessage = 'Something is wrong!';
             }
 
+            console.log(errorMessage)
+
             this.$notify({
                 type: 'error',
                 title: 'Error',

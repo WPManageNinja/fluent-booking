@@ -24,7 +24,7 @@
                         <td>
                             <el-select size="small" v-model="routing.field" style="width: 100%" @change="routing.value = ''">
                                 <el-option v-for="(field, key) in fields" :key="key"
-                                           :label="field.admin_label" :value="key"
+                                           :label="field.label" :value="key"
                                 ></el-option>
                             </el-select>
                         </td>

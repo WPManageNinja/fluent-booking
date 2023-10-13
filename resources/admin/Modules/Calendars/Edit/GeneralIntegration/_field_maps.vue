@@ -25,10 +25,10 @@
                             >
                                 <template v-for="(option, index) in inputs">
                                     <el-option
-                                        v-if="option.attributes.type === 'email'"
+                                        v-if="option.type === 'email'"
                                         :key="index" 
-                                        :value="option.attributes.name"
-                                        :label="option.admin_label"
+                                        :value="option.name"
+                                        :label="option.label"
                                     ></el-option>
                                 </template>
                             </el-select>
@@ -43,8 +43,8 @@
                                 <el-option
                                     v-for="(option, index) in inputs"
                                     :key="index" 
-                                    :value="option.attributes.name"
-                                    :label="option.admin_label"
+                                    :value="option.name"
+                                    :label="option.label"
                                 ></el-option>
                             </el-select>
 
@@ -120,9 +120,6 @@
             }
         },
         mounted() {
-            if (Array.isArray(this.merge_model) || !this.merge_model) {
-                this.merge_model = {};
-            }
             this.appReady = true;
         }
 
