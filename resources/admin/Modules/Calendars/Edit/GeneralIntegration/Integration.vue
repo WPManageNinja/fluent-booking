@@ -143,6 +143,8 @@
                     :event_id="event_id"
                     :integration_id="integration_id"
                     :integration_name="integration_name"
+                    :inputs="fields"
+                    :has_pro="has_pro"
                 />
             </div>
         </card>
@@ -188,6 +190,7 @@
                 show_edit: false,
                 integration_id: 0,
                 integration_name: null,
+                fields: [],
             // integrationsResource: window.FluentCalendarApp.integrationsResource,
             };
         },
@@ -292,6 +295,19 @@
                     });
             },
             isEmpty,
+            fetchFields() {
+                this.loading = true;
+                this.$get('calendars/' + this.calendar_id + '/slots/' + this.event_id + '/booking-fields')
+                    .then(response => {
+                        this.fields = response.fields;
+                    })
+                    .catch(errors => {
+                        this.$handleError(errors);
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
         },
         computed: {
             filteredList() {
@@ -306,6 +322,7 @@
         },
         beforeMount() {
             this.getFeeds();
+            this.fetchFields();
         }
     };
 </script>

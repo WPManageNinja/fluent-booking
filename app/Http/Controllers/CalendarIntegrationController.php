@@ -35,7 +35,7 @@ class CalendarIntegrationController extends Controller
         }
     }
 
-    public function update(CalendarIntegrationService $integrationService)
+    public function update(CalendarIntegrationService $integrationService, $calendarId, $slotId, $integrationId)
     {
         try {
             $integration = $integrationService->update($this->request->all());
@@ -44,12 +44,14 @@ class CalendarIntegrationController extends Controller
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),
+                'errors' => $e->errors()
             ], 422);
         }
     }
 
     public function delete(CalendarIntegrationService $integrationService)
     {
+        dd('delete');
         try {
             $id = $this->request->get('integration_id');
             $integrationService->delete($id);

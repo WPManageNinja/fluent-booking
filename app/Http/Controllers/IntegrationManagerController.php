@@ -147,7 +147,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
     
     public function setMetaKey($data)
     {
-        $data['meta_key'] = $this->settingsKey;
+        // $data['meta_key'] = $this->settingsKey;
         return $data;
     }
     

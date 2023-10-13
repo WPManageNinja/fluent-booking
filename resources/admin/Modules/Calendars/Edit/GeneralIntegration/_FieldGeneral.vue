@@ -1,40 +1,64 @@
 <template>
     <div class="field_general">
-        <input-popover 
-            :fieldType="field_type"
-            :placeholder="$t('Select a Field or Type Custom value')"
-            v-model="fieldValue"
-            icon="el-icon-arrow-down"
+        <popover
+            groupTitle="Shortcodes"
             :data="editorShortcodes"
-        ></input-popover>
+            placement="bottom-end"
+            trigger="click"
+            class="fcal_popover_shortcode"
+            @command="handleSubjectCommand"
+        >
+            <template #popoverButton>
+                <el-input :type="field_type" v-model="fieldValue">
+                    <template #append>
+                        <el-button :icon="MoreIcon"></el-button>
+                    </template>
+                </el-input>
+            </template>
+        </popover>
     </div>
 </template>
 
 <script type="text/babel">
-    import inputPopover from '@/Components/Common/InputPopover.vue';
+    import Popover from '@/Components/Popover.vue';
+    import { markRaw } from "vue";
+    import { More } from '@element-plus/icons-vue';
 
     export default {
         name: 'fieldGeneral',
         components: {
-            inputPopover
+            Popover,
+            More,
         },
         props: {
-            value: [String, Number, Boolean],
-            editorShortcodes: Array,
+            modelValue: [String, Number, Boolean],
+            editorShortcodes: [Array, Object],
             field_type: {
                 type: String,
-                default: 'text'
+                default: 'text',
+            },
+        },
+        computed: {
+            fieldValue: {
+                get() {
+                    return this.modelValue;
+                },
+                set(value) {
+                    this.$emit('update:modelValue', value);
+                },
+            },
+        },
+
+        data() {
+            return {
+                MoreIcon: markRaw(More),
+            };
+        },
+
+        methods: {
+            handleSubjectCommand(command) {
+                this.$emit('update:modelValue', this.fieldValue + command);
             }
         },
-	    computed : {
-		    fieldValue: {
-			    get() {
-				    return this.value;
-			    },
-			    set(value) {
-				    this.$emit('input', value);
-			    }
-		    }
-	    }
-    }
+    };
 </script>

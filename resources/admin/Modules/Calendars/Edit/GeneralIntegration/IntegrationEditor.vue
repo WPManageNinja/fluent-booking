@@ -6,13 +6,6 @@
                     <h5 class="title">{{ title }}</h5>
                     <btn-group>
                         <btn-group-item>
-                            <!-- <router-link class="el-button el-button--info el-button--medium"
-                                         :to="{name: 'allIntegrations'}">
-                                <i class="ff-icon ff-icon-eye"></i>
-                                <span>{{ $t('View All') }}</span>
-                            </router-link> -->
-                        </btn-group-item>
-                        <btn-group-item>
                             <video-doc btn_size="medium" :route_id="integration_name" :btn_text="$t('Learn More')"/>
                         </btn-group-item>
                     </btn-group>
@@ -28,13 +21,15 @@
                                     :required="field.required"
                                     :key="fieldIndex"
                             >
-                                <template slot="label">
+                                <template #label>
                                     {{ field.label }}
                                     <el-tooltip v-if="field.tips" class="item" popper-class="ff_tooltip_wrap"
                                                 placement="bottom-start">
-                                        <div slot="content">
-                                            <p v-html="field.tips"></p>
-                                        </div>
+                                        <template #content>
+                                            <div>
+                                                <p v-html="field.tips"></p>
+                                            </div>
+                                        </template>
                                         <i class="ff-icon ff-icon-info-filled text-primary"></i>
                                     </el-tooltip>
                                 </template>
@@ -99,7 +94,7 @@
                                             :field="field"
                                             :settings="settings"
                                             :editorShortcodes="editorShortcodes"
-                                            :merge_model="settings[field.key]"
+                                            :merge_model="getMergeModel(settings[field.key])"
                                             :merge_fields="merge_fields"/>
                                 </template>
 
@@ -382,7 +377,7 @@
             Notice,
             'wp_editor' : wpEditor
         },
-        props: ['calendar_id', 'event_id', 'integration_id', 'integration_name', 'has_pro', 'editorShortcodes'],
+        props: ['calendar_id', 'event_id', 'integration_id', 'integration_name', 'inputs', 'has_pro'],
         watch: {},
         data() {
             return {
@@ -395,7 +390,8 @@
                 settings_fields: {},
                 attachedForms: [],
                 fromChainedAjax: false,
-                refreshQuery: null
+                refreshQuery: null,
+                editorShortcodes: this.appVars.editor_shortcodes
             }
         },
         computed: {
@@ -472,6 +468,8 @@
                 this.loadIntegrationSettings();
             },
             loadMergeFields() {
+                console.log('loadMergeFields');
+                return;
                 this.loading_list = true;
                 const url = FluentFormsGlobal.$rest.route('getFormIntegrationList', this.form_id, this.integration_id)
                 FluentFormsGlobal.$rest.get(url, {
@@ -493,35 +491,45 @@
                     });
             },
             saveNotification() {
+                console.log('saveNotification');
+                
                 this.errors.clear();
                 this.saving = true;
                 let data = {
-                    form_id: this.form_id,
+                    slot_id: this.event_id,
                     integration_id: this.integration_id,
                     integration_name: this.integration_name,
                     integration: JSON.stringify(this.settings),
                     data_type: 'stringify',
                 };
-                const url = FluentFormsGlobal.$rest.route('updateFormIntegrationSettings', this.form_id, this.integration_id);
+                const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + this.integration_id;
 
-                FluentFormsGlobal.$rest.post(url, data)
+                console.log(url, data);
+
+                this.$post(url, data)
                     .then(response => {
                         if (response.created) {
                             // this.$router.push({
                             //     name: 'allIntegrations'
                             // });
                         }
-                        this.$success(response.message);
+                        this.$handleSuccess(response);
                     })
                     .catch((error) => {
                         const getError = error?.errors || error?.data?.errors
-                        const message = error?.message || error?.data?.message
 
                         this.errors.record(getError)
-                        this.$fail(message);
+                        this.$handleError(error);
                     })
                     .finally(() => this.saving = false);
             },
+            getMergeModel(merge_model) {
+                if (Array.isArray(merge_model) || !merge_model) {
+                    merge_model = {};
+                }
+
+                return merge_model;
+            }
         },
         mounted() {
             this.loadIntegrationSettings();
