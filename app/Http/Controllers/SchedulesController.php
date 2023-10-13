@@ -236,7 +236,7 @@ class SchedulesController extends Controller
 
         $booking->custom_form_data = $booking->getCustomFormData();
 
-        $booking->order_info = $booking->getOrderItem();
+        $booking->order_info = $booking->getOrderItems();
 
         $booking->order_transaction = $booking->getTransaction();
 
@@ -271,6 +271,7 @@ class SchedulesController extends Controller
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
+
             if($attendee->payment_status) {
                 $attendee->order_info = $attendee->getOrderItem();
                 $attendee->order_transaction = $attendee->getTransaction();
