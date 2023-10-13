@@ -71,7 +71,12 @@ class BookingController extends Controller
 
         $isPhoneRequired = $calendarSlot->isPhoneRequired();
         if ($isPhoneRequired) {
-            $rules['phone'] = 'required';
+            $rules['phone_number'] = 'required';
+        }
+
+        $isAddressRequired = $calendarSlot->isAddressRequired();
+        if ($isAddressRequired) {
+            $rules['address'] = 'required';
         }
 
         $this->validate($postedData, $rules);
@@ -95,7 +100,11 @@ class BookingController extends Controller
         }
 
         if ($isPhoneRequired) {
-            $bookingData['phone'] = sanitize_text_field($postedData['phone']);
+            $bookingData['phone_number'] = sanitize_text_field($postedData['phone_number']);
+        }
+
+        if ($isAddressRequired) {
+            $bookingData['address'] = sanitize_text_field($postedData['address']);
         }
 
         // Check if the time is available or not for this slot

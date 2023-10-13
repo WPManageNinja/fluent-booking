@@ -42,7 +42,7 @@ export default {
     },
     watch: {
         booking_id() {
-           // this.fetchActivities();
+           this.fetchActivities();
         }
     },
     data() {

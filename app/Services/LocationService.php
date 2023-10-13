@@ -50,7 +50,7 @@ class LocationService
 
     }
 
-    public static function getLocationDetails($locations)
+    public static function getLocationDetails($locations, $address = '')
     {
         $locationType = Arr::get($locations, '0.type');
 
@@ -61,6 +61,8 @@ class LocationService
             $locationData['description'] = Arr::get($locations, '0.description');
         } elseif ($locationType == 'phone_organizer') {
             $locationData['host_phone_number'] = Arr::get($locations, '0.host_phone_number');
+        } elseif ($locationType == 'in_person_guest') {
+            $locationData['guest_address'] = $address;
         }
 
         return $locationData;

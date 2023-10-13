@@ -88,6 +88,21 @@ class BookingFieldService
             ];
         }
 
+        if ($calendarSlot->isAddressRequired()) {
+            $requiredIndexes[] = 'address';
+            $defaultFields['address'] = [
+                'index'          => 4,
+                'type'           => 'textarea',
+                'name'           => 'address',
+                'label'          => __('Your Address', 'fluent-booking'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
+                'placeholder'    => esc_attr__('Address', 'fluent-booking'),
+            ];
+        }
+
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
 
         if ($calendarSlot->type == 'paid'){

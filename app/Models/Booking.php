@@ -194,6 +194,10 @@ class Booking extends Model
         $locationType = $details['type'];
 
         if ($locationType == 'in_person_organizer') {
+            return '<b>Invitee Address: </b>' . Arr::get($details, 'guest_address');
+        }
+
+        if ($locationType == 'in_person_guest') {
             $html = '<b>' . $details['title'] . '</b>';
             if ($description = Arr::get($details, 'description')) {
                 $html .= wpautop($description);
