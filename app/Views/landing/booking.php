@@ -30,7 +30,7 @@
 
 <div class="calendar_wrap">
     <div class="fcal_cal_wrap">
-        <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int) $calendar->id; ?>" data-event_id="<?php echo (int) $slot->id; ?>">
+        <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int) $calendar->id; ?>" data-event_id="<?php echo (int) $calendar_event->id; ?>">
             <h3>Loading...</h3>
         </div>
     </div>
