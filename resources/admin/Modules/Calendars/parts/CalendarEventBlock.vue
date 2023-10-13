@@ -36,7 +36,7 @@
         </div>
         <div class="fcal_cal_slots">
             <div class="fcal_cal_slot" v-for="(slot, slotIndex) in calendar.slots" :key="slot.id">
-                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id" :publicUrl="calendar.public_url"/>
+                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id" :publicUrl="calendarPublicUrl"/>
             </div>
         </div>
         <el-dialog v-model="showSettings" title="Calendar Settings">
@@ -90,6 +90,7 @@
 import EachSlot from "./EachSlot.vue";
 import { Setting, User, Right, MoreFilled, Delete } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings.vue";
+
 export default {
     name: 'CalendarEventBlock',
     props: ['calendar'],
@@ -106,6 +107,14 @@ export default {
         return {
             showSettings: false,
             isNewBookingOpen: false
+        }
+    },
+    computed: {
+        calendarPublicUrl() {
+            if (this.calendar.visibility == 'public' && this.calendar.public_url) {
+                return this.calendar.public_url;
+            }
+            return '';
         }
     },
     methods: {

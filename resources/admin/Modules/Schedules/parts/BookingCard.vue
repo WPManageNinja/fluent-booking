@@ -15,6 +15,16 @@
                     </span>
                 </div>
             </div>
+            <div class="fcal_spot_desc">
+                <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
+                <span class="fcal_spot_period_status" v-if="currentStatus">
+                    {{ currentStatus }}
+                </span>
+            </div>
+            <div v-if="booking.payment_status" class="fcal_spot_payment_info">
+                <p>Payment Status: {{ booking.payment_status }}</p>
+                <p>Amount: {{ booking.currency }} {{ orderPrice }}</p>
+            </div>
             <div class="fcal_spot_actions">
                 <el-button class="fcal_plain_btn">
                     View Details
@@ -60,6 +70,25 @@ export default {
                 return guestName;
             }
             return '<b>' + this.booking?.slot.title +'</b> meeting between ' + guestName + ' & '+ this.booking.author.name;
+        },
+        currentStatus() {
+            const statusLabels = {
+                scheduled: 'Upcoming',
+                completed: 'Completed',
+                cancelled: 'Cancelled',
+                pending: 'Pending'
+            };
+            if (this.period === 'latest_bookings' || this.period === 'all') {
+                return statusLabels[this.booking.status] || '';
+            }
+            return '';
+        },
+        orderPrice() {
+            const price = Math.floor(this.booking.order_info?.item_price);
+            if (!price) {
+                return '0';
+            }
+            return price;
         }
     }
 }

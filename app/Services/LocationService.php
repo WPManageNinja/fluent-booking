@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services;
 
 use FluentBooking\App\App;
+use FluentBooking\Framework\Support\Arr;
 
 class LocationService
 {
@@ -47,5 +48,21 @@ class LocationService
 
         return apply_filters('fluent_booking/location_icon_heading_html', $html, $driver, $details, $calendarEvent);
 
+    }
+
+    public static function getLocationDetails($locations)
+    {
+        $locationType = Arr::get($locations, '0.type');
+
+        $locationData['type'] = $locationType;
+
+        if ($locationType == 'in_person_organizer' || $locationType == 'custom') {
+            $locationData['title'] = Arr::get($locations, '0.title');
+            $locationData['description'] = Arr::get($locations, '0.description');
+        } elseif ($locationType == 'phone_organizer') {
+            $locationData['host_phone_number'] = Arr::get($locations, '0.host_phone_number');
+        }
+
+        return $locationData;
     }
 }

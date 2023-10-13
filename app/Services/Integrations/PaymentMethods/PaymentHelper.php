@@ -31,4 +31,30 @@ class PaymentHelper
         return add_query_arg($queryArgs, $booking->source_url);
 
     }
+
+    public static function getReceiptTemplate($items): array
+    {
+        $sign = CurrenciesHelper::getGlobalCurrencySign();
+
+        $total = 0;
+        $template = '';
+        if (count($items) <= 1) {
+            $template .= $items[0]['title'] . ': ' . $sign .' '. $items[0]['value'];
+            $total = $items[0]['value'];
+        } else {
+            $template = '<table>';
+            $template .= '<tr><th>Item</th><th>Price</th></tr>';
+            foreach ($items as $item) {
+                $total += floatval($item['value']);
+                $template .= '<tr><td>' . $item['title'] . '</td><td>' .$sign.' '. $item['value'] . '</td></tr>';
+            }
+            $template .= '<tr><td>Total</td><td>' . $sign .' '. $total . '</td></tr>';
+            $template .= '</table>';
+        }
+
+        return [
+            'total' => $total,
+            'template' => $template,
+        ];
+    }
 }

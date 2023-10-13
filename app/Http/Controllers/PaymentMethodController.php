@@ -37,7 +37,6 @@ class PaymentMethodController extends Controller
             $isActive = Arr::get($settings, 'is_active') === 'yes';
             $paymentMode = Arr::get($settings, 'payment_mode', 'test');
 
-
             if($isActive) {
                 if(empty($settings[$paymentMode.'_publishable_key']) || empty($settings[$paymentMode.'_secret_key'])) {
                     return $this->sendError([
@@ -48,6 +47,11 @@ class PaymentMethodController extends Controller
         }
 
         $data = $request->settings;
+        $currency = Arr::get($data, 'currency');
+        if ($currency) {
+            update_option('fluent_booking_global_payment_settings', ['currency' => $currency]);
+        }
+
         $method = sanitize_text_field($request->method);
 
         do_action('fluent_booking/payment/payment_settings_update_' . $method, $data);
@@ -113,7 +117,7 @@ class PaymentMethodController extends Controller
             'type' => $type
         ]);
 
-        $data['currency_sign'] = CurrenciesHelper::getCurrencySign(Arr::get($data, 'currency'));
+        $data['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
 
         $res = $event->updateMeta('payment_settings', $data);
 
