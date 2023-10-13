@@ -43,7 +43,7 @@ class LandingPageHandler
     public function handleUrlParamsPage()
     {
 
-        if ($_REQUEST['type']) {
+        if (isset($_REQUEST['type'])) {
             if ($_REQUEST['type'] == 'confirmation') {
                 $this->handleConfirmationPage();
             }

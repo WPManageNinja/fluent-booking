@@ -88,19 +88,25 @@ class BookingFieldService
 
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
 
-        $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
 
-        if (Arr::get($paymentSettings, 'enabled') === 'yes'){
-            $defaultFields['payment'] = [
-                'index'          => 20,
-                'type'           => 'payment',
-                'name'           => 'payment_method',
-                'required'       => false,
-                'enabled'        => true,
-                'payment_items'  => Arr::get($paymentSettings, 'items'),
-                'label' => 'Payment Summary',
-                'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
-            ];
+        if ($calendarSlot->type == 'paid'){
+            $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
+            $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
+
+            if($isEnables) {
+                $requiredIndexes[] = 'payment_method';
+                $defaultFields['payment_method'] = [
+                    'index'          => 20,
+                    'type'           => 'payment',
+                    'name'           => 'payment_method',
+                    'required'       => false,
+                    'enabled'        => true,
+                    'system_defined' => true,
+                    'payment_items'  => Arr::get($paymentSettings, 'items'),
+                    'label' => 'Payment Summary',
+                    'currency_sign' => Arr::get($paymentSettings, 'currency_sign'),
+                ];
+            }
         }
 
         if (!$existingFields) {
