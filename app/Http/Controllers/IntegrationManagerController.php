@@ -107,11 +107,11 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
     {
         if ($this->isConfigured()) {
             add_filter('fluent_booking/global_notification_active_types', [$this, 'addActiveNotificationType'], $this->priority);
-            add_action('fluent_booking/integration_notify_' . $this->settingsKey, [$this, 'notify'], $this->priority, 4);
+            add_action('fluent_booking/integration_notify_' . $this->settingsKey, [$this, 'notify'], $this->priority, 3);
         }
     }
 
-    public function notify($feed, $formData, $entry, $form)
+    public function notify($feed, $booking, $slot)
     {
         // Each integration have to implement this notify method
 

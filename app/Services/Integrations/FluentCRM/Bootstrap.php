@@ -208,13 +208,25 @@ class Bootstrap extends IntegrationManagerController
                 'component'      => 'checkbox-single',
                 'inline_tip'     => __('If you enable this then contact will forcefully subscribed no matter in which status that contact had', 'fluent_booking'),
             ],
-            // [
-            //     'require_list' => false,
-            //     'key'          => 'conditionals',
-            //     'label'        => __('Conditional Logics', 'fluent_booking'),
-            //     'tips'         => __('Allow FluentCRM integration conditionally based on your submission values', 'fluent_booking'),
-            //     'component'    => 'conditional_block',
-            // ],
+            [
+                'require_list' => false,
+                'key'          => 'conditionals',
+                'label'        => __('Conditional Logics', 'fluent_booking'),
+                'tips'         => __('Allow FluentCRM integration conditionally based on your submission values', 'fluent_booking'),
+                'component'    => 'conditional_block',
+            ],
+            [
+                'require_list'   => false,
+                'key'            => 'event_trigger',
+                'options' =>      [
+                    'after_booking_scheduled' => 'Booking Confirmed',
+                    'booking_schedule_completed' => 'Booking Completed',
+                    'booking_schedule_cancelled' => 'Booking Canceled',
+                ],
+                'label'          => __('Event Trigger', 'fluent_booking'),
+                'component'      => 'checkbox-multiple-text',
+                'checkbox_label' => __('Event Trigger For This Feed', 'fluent_booking'),
+            ]
         ];
 
         // if ($paymentFields) {
@@ -299,7 +311,7 @@ class Bootstrap extends IntegrationManagerController
     /*
      * Submission Hooks Here
      */
-    public function notify($feed, $formData, $entry, $form)
+    public function notify($feed, $booking, $slot)
     {
         // check if only on payment event
         // if (Arr::get($feed, 'settings.run_events_only')) {
@@ -310,17 +322,13 @@ class Bootstrap extends IntegrationManagerController
         //     }
         // }
 
-        return $this->runFeed($feed, $formData, $entry, $form);
+        return $this->runFeed($feed, $booking, $slot);
     }
 
-    private function runFeed($feed, $formData, $entry, $form)
+    private function runFeed($feed, $booking, $slot)
     {
         $data = $feed['processedValues'];
         $contact = Arr::only($data, ['first_name', 'last_name', 'email']);
-
-        if (!is_email($contact['email'])) {
-            $contact['email'] = Arr::get($formData, $contact['email']);
-        }
 
         if (!$contact['first_name'] && !$contact['last_name']) {
             $fullName = Arr::get($data, 'full_name');
@@ -341,8 +349,8 @@ class Bootstrap extends IntegrationManagerController
             }
         }
 
-        if ($entry->ip) {
-            $contact['ip'] = $entry->ip;
+        if ($booking->ip_address) {
+            $contact['ip'] = $booking->ip_address;
         }
 
         if (!is_email($contact['email'])) {
@@ -350,8 +358,8 @@ class Bootstrap extends IntegrationManagerController
                 $feed['settings']['name'],
                 'failed',
                 __('FluentCRM API called skipped because no valid email available', 'fluent_booking'),
-                $form->id,
-                $entry->id
+                $slot->id,
+                $booking->id
             );
 
             return false;
@@ -373,8 +381,8 @@ class Bootstrap extends IntegrationManagerController
                 $feed['settings']['name'],
                 'info',
                 __('Contact creation has been skipped because contact already exist in the database', 'fluent_booking'),
-                $form->id,
-                $entry->id
+                $slot->id,
+                $booking->id
             );
 
             return false;
@@ -416,7 +424,7 @@ class Bootstrap extends IntegrationManagerController
             $contact['user_id'] = $user->ID;
         }
 
-        $tags = $this->getSelectedTagIds($data, $formData, 'tag_ids');
+        $tags = $this->getSelectedTagIds($data, $booking, 'tag_ids');
         if ($tags) {
             $contact['tags'] = $tags;
         }
@@ -442,7 +450,7 @@ class Bootstrap extends IntegrationManagerController
                 return false;
             }
 
-            if ('confirmed' == $entry->status && 'subscribed' != $subscriber->status) {
+            if ('confirmed' == $booking->status && 'subscribed' != $subscriber->status) {
                 $oldStatus = $subscriber->status;
                 $subscriber->status = 'subscribed';
                 $subscriber->save();
@@ -457,11 +465,11 @@ class Bootstrap extends IntegrationManagerController
                 $feed['settings']['name'],
                 'success',
                 __('Contact has been created in FluentCRM. Contact ID: ', 'fluent_booking') . $subscriber->id,
-                $form->id,
-                $entry->id
+                $slot->id,
+                $booking->id
             );
 
-            do_action('fluent_crm/contact_added_by_fluent_booking', $subscriber, $entry, $form, $feed);
+            do_action('fluent_crm/contact_added_by_fluent_booking', $subscriber, $booking, $slot, $feed);
         } else {
             if ($listId = Arr::get($data, 'list_id')) {
                 $contact['lists'] = [$listId];
@@ -485,7 +493,7 @@ class Bootstrap extends IntegrationManagerController
                 return false;
             }
 
-            if ('confirmed' == $entry->status && 'subscribed' != $subscriber->status) {
+            if ('confirmed' == $booking->status && 'subscribed' != $subscriber->status) {
                 $oldStatus = $subscriber->status;
                 $subscriber->status = 'subscribed';
                 $subscriber->save();
@@ -496,7 +504,7 @@ class Bootstrap extends IntegrationManagerController
                 $subscriber->sendDoubleOptinEmail();
             }
 
-            do_action('fluent_crm/contact_updated_by_fluent_booking', $subscriber, $entry, $form, $feed);
+            do_action('fluent_crm/contact_updated_by_fluent_booking', $subscriber, $booking, $slot, $feed);
 
             if ($removeTags = Arr::get($feed, 'settings.remove_tags', [])) {
                 $subscriber->detachTags($removeTags);
@@ -506,8 +514,8 @@ class Bootstrap extends IntegrationManagerController
                 $feed['settings']['name'],
                 'success',
                 __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent_booking') . $subscriber->id,
-                $form->id,
-                $entry->id
+                $slot->id,
+                $booking->id
             );
         }
     }

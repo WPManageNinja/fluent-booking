@@ -18,13 +18,13 @@ class GlobalNotificationHandler
         $this->globalNotificationService = new GlobalNotificationService();
     }
 
-    public function globalNotify($insertId, $booking, $slot)
+    public function globalNotify($booking, $slot)
     {
         // Let's find the feeds that are available for this form
         $feedKeys = apply_filters('fluent_booking/global_notification_active_types', [], $slot->id);
 
         if (!$feedKeys) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
+            do_action('fluent_booking/global_notify_completed', $booking, $slot);
 
             return;
         }
@@ -33,16 +33,16 @@ class GlobalNotificationHandler
         $feeds = $this->globalNotificationService->getNotificationFeeds($slot->id, $feedMetaKeys);
 
         if (!$feeds) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
+            do_action('fluent_booking/global_notify_completed', $slot, $booking);
 
             return;
         }
 
         // Now we have to filter the feeds which are enabled
-        $enabledFeeds = $this->globalNotificationService->getEnabledFeeds($feeds, $booking, $insertId);
+        $enabledFeeds = $this->globalNotificationService->getEnabledFeeds($feeds, $booking);
 
         if (!$enabledFeeds) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot, $booking);
+            do_action('fluent_booking/global_notify_completed', $slot, $booking);
 
             return;
         }
@@ -58,28 +58,19 @@ class GlobalNotificationHandler
 
             $newAction = 'fluent_booking/integration_notify_' . $feed['key'];
 
-            // if (! $entry) {
-            //     $entry = $this->globalNotificationService->getEntry($insertId, $slot);
-            // }
-            // skip emails which will be sent on payment form submit otherwise email is sent after payment success
-            // if (!! $slot->has_payment && ('notifications' == $feed['key'])) {
-            //     if (('payment_form_submit' == Arr::get($feed, 'settings.feed_trigger_event'))) {
-            //         continue;
-            //     }
-            // }
-
             // It's sync
             $processedValues = $feed['settings'];
             unset($processedValues['conditionals']);
             $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
             $feed['processedValues'] = $processedValues;
 
+            dd($feed);
+
             if (apply_filters('fluent_booking/notifying_async_' . $integrationKey, false, $slot->id)) {
                 // It's async
                 $asyncFeed = [
                     'action'     => $newAction,
                     'form_id'    => $slot->id,
-                    'origin_id'  => $insertId,
                     'feed_id'    => $feed['id'],
                     'type'       => 'submission_action',
                     'status'     => 'pending',
@@ -94,12 +85,12 @@ class GlobalNotificationHandler
 
                 // as_enqueue_async_action('fluent_booking/schedule_feed', ['queueId' => $queueId], 'fluentform');
             } else {
-                do_action($newAction, $feed, $insertId, $booking, $slot);
+                do_action($newAction, $feed, $booking, $slot);
             }
         }
 
         if (!$asyncFeeds) {
-            do_action('fluent_booking/global_notify_completed', $insertId, $slot);
+            do_action('fluent_booking/global_notify_completed', $slot);
 
             return;
         }

@@ -4,14 +4,14 @@
             groupTitle="Shortcodes"
             :data="editorShortcodes"
             placement="bottom-end"
-            trigger="click"
             class="fcal_popover_shortcode"
             @command="handleSubjectCommand"
+            :isVisible="subjectPopupVisible"
         >
             <template #popoverButton>
                 <el-input :type="field_type" v-model="fieldValue">
                     <template #append>
-                        <el-button :icon="MoreIcon"></el-button>
+                        <el-button :icon="MoreIcon" @click="toggleSubjectPopup"></el-button>
                     </template>
                 </el-input>
             </template>
@@ -52,13 +52,18 @@
         data() {
             return {
                 MoreIcon: markRaw(More),
+                subjectPopupVisible: false,
             };
         },
 
         methods: {
             handleSubjectCommand(command) {
                 this.$emit('update:modelValue', this.fieldValue + command);
-            }
+            },
+
+            toggleSubjectPopup() {
+                this.subjectPopupVisible = !this.subjectPopupVisible;
+            },
         },
     };
 </script>
