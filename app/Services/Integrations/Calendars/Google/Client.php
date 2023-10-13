@@ -137,6 +137,28 @@ class Client
         return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
     }
 
+    public function patchEvent($calendarId, $eventId, $data, $args = [])
+    {
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events/' . $eventId;
+    
+        if ($args) {
+            $url = add_query_arg($args, $url);
+        }
+    
+        return $this->makeRequest($url, $data, 'PATCH', $this->getAuthorizationHeader());
+    }
+
+    public function getEvent($calendarId, $eventId, $args = [])
+    {
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events/' . $eventId;
+
+        if ($args) {
+            $url = add_query_arg($args, $url);
+        }
+
+        return $this->makeRequest($url, '', 'GET', $this->getAuthorizationHeader());
+    }
+
     public function revokeConnection()
     {
         return $this->makeRequest($this->revokeUrl, [

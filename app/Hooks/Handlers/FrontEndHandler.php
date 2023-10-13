@@ -117,7 +117,7 @@ class FrontEndHandler
         if (!$calendarSlot || $calendarSlot->status != 'active') {
             wp_send_json([
                 'message' => 'Sorry, this host is not accepting any new bookings at the moment'
-            ], 423);
+            ], 422);
         }
 
         $postedData = $_REQUEST;
@@ -188,7 +188,7 @@ class FrontEndHandler
         if (!$isSpotAvailable) {
             wp_send_json([
                 'message' => 'This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.'
-            ], 423);
+            ], 422);
         }
 
         if (isset($postedData['payment_method'])) {
@@ -199,13 +199,13 @@ class FrontEndHandler
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
             if(is_wp_error($booking)) {
-                throw new \Exception($booking->get_error_message(), 423);
+                throw new \Exception($booking->get_error_message(), 422);
             }
 
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
-            ], 423);
+            ], 422);
             return;
         }
 
@@ -236,7 +236,7 @@ class FrontEndHandler
         if (!$slot || $slot->status != 'active') {
             wp_send_json([
                 'message' => 'Sorry, the host is not accepting any new bookings at the moment.'
-            ], 423);
+            ], 422);
         }
 
         $calendar = $slot->calendar;

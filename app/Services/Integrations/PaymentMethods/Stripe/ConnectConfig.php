@@ -166,7 +166,7 @@ class ConnectConfig
             if ($sendResponse) {
                 wp_send_json_error([
                     'message' => 'Stripe mode is not active'
-                ], 423);
+                ], 422);
             }
             return false;
         }
@@ -176,7 +176,7 @@ class ConnectConfig
             if ($sendResponse) {
                 wp_send_json_error([
                     'message' => 'Selected Account does not exist'
-                ], 423);
+                ], 422);
             }
             return false;
         }
