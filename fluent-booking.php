@@ -1,12 +1,9 @@
 <?php defined('ABSPATH') or die;
-use FluentBooking\App\Hooks\Handlers\GlobalNotificationHandler;
-use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Models\Booking;
 
 /*
 Plugin Name: Fluent Booking
 Description: Fluent Booking WordPress Plugin
-Version: 1.0.0
+Version: 0.1
 Author: Meeting scheduling made easy
 Author URI: https://wpmanageninja.com
 Plugin URI: https://fluentbooking.com
@@ -26,12 +23,3 @@ require __DIR__.'/vendor/autoload.php';
 call_user_func(function($bootstrap) {
     $bootstrap(__FILE__);
 }, require(__DIR__.'/boot/app.php'));
-
-//add_action('init', function () {
-//    $booking = Booking::find(2);
-//    $slot = CalendarSlot::find(1);
-//
-//    $GlobalNotificationHandler = new GlobalNotificationHandler();
-//
-//    $GlobalNotificationHandler->globalNotify($booking, $slot);
-//});
