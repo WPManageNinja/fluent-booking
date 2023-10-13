@@ -8,7 +8,7 @@
             </div>
         {/if}
         <form on:submit|preventDefault={submitForm}>
-            {#if !showPayments}
+            <!--{#if !showPayments}-->
                 {#each formFields as field}
                     {#if field.enabled}
                         <div class="fcal_form_item">
@@ -48,7 +48,7 @@
                         </div>
                     {/if}
                 {/each}
-            {/if}
+            <!--{/if}-->
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">
                     <h3 class="label">Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
@@ -123,7 +123,7 @@
     function submitForm(e) {
         const formFields = e.target.elements;
         const selectedMethod = formFields?.stripe_payment_method?.value;
-
+        dispatch('onPaymentsVisibilityChanged', true);
         const postdata = {
             ...form,
             timezone,
