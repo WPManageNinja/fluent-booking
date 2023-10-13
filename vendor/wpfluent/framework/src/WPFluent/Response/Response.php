@@ -62,10 +62,10 @@ class Response
      * @param  integer $code
      * @return \WP_REST_Response
      */
-    public function sendError($data = null, $code = 423)
+    public function sendError($data = null, $code = 422)
     {
         if (!$code || $code < 400 ) {
-            $code = 423;
+            $code = 422;
         }
 
         return new WP_REST_Response($data, $code);

@@ -26,7 +26,7 @@ class SchedulesController extends Controller
 
         $slotId = Arr::get($filters, 'event_type');
 
-        $query = Booking::with(['slot']);
+        $query = Booking::with(['calendar_event']);
 
         $author = Arr::get($filters, 'author');
 
@@ -69,36 +69,7 @@ class SchedulesController extends Controller
         $schedules = $query->paginate();
 
         foreach ($schedules as $schedule) {
-            if ($schedule->status == 'scheduled' && (time() - strtotime($schedule->end_time)) > 3600) {
-                $schedule->status = 'completed';
-                $schedule->save();
-                do_action('fluent_booking/booking_schedule_completed', $schedule, $schedule->calendar_event);
-            }
-
-            $schedule->happening_status = $schedule->getOngoingStatus();
-            $schedule->location = $schedule->getLocationDetailsHtml();
-            $schedule->custom_form_data = $schedule->getCustomFormData();
-
-            if($schedule->payment_status) {
-                $schedule->order_info = $schedule->getOrderItem();
-                $schedule->order_transaction = $schedule->getTransaction();
-                $schedule->currency = CurrenciesHelper::getCurrencySign();
-            }
-
-            if (!$schedule->slot) {
-                $schedule->author = [
-                    'name' => 'unknown'
-                ];
-                $schedule->slot = (object)[];
-            } else {
-                $schedule->author = $schedule->slot->getAuthorProfile(false);
-            }
-
-            if ($schedule->event_type == 'group') {
-                $schedule->booked_count = Booking::where('group_id', $schedule->group_id)->count();
-            }
-
-            do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
+             $this->formatBooking($schedule);
         }
 
         $data = [
@@ -106,7 +77,7 @@ class SchedulesController extends Controller
             'timezone'  => 'UTC'
         ];
 
-        if ($author  && $author != 'all') {
+        if ($author && $author != 'all') {
             $slotOptions = CalendarService::getSlotOptions($author);
             $data['slotOptions'] = $slotOptions;
         }
@@ -193,9 +164,9 @@ class SchedulesController extends Controller
 
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
-        return $this->sendSuccess([
+        return [
             'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
-        ]);
+        ];
     }
 
     public function getBooking(Request $request, $bookingId)
@@ -211,36 +182,7 @@ class SchedulesController extends Controller
         }
 
         $booking = $booking->findOrFail($bookingId);
-
-        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
-            $booking->status = 'completed';
-            $booking->save();
-            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
-
-            do_action('fluent_booking/booking_schedule_completed', $booking);
-        }
-
-        if($booking->payment_status) {
-            $booking->order_info = $booking->getOrderItem();
-            $booking->order_transaction = $booking->getTransaction();
-            $booking->currency = CurrenciesHelper::getCurrencySign();
-        }
-
-        $booking->happening_status = $booking->getOngoingStatus();
-
-        if ($booking->slot) {
-            $booking->author = $booking->slot->getAuthorProfile(false);
-        }
-
-        $booking->location = $booking->getLocationDetailsHtml();
-
-        $booking->custom_form_data = $booking->getCustomFormData();
-
-        $booking->order_info = $booking->getOrderItems();
-
-        $booking->order_transaction = $booking->getTransaction();
-
-        $booking->currency = CurrenciesHelper::getCurrencySign();
+        $booking = $this->formatBooking($booking);
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
@@ -270,13 +212,7 @@ class SchedulesController extends Controller
         $attendees = Booking::where('group_id', $booking->group_id)->paginate();
 
         foreach ($attendees as $attendee) {
-            $attendee->custom_form_data = $attendee->getCustomFormData();
-
-            if($attendee->payment_status) {
-                $attendee->order_info = $attendee->getOrderItem();
-                $attendee->order_transaction = $attendee->getTransaction();
-                $attendee->currency = CurrenciesHelper::getCurrencySign();
-            }
+            $attendee = $this->formatBooking($attendee);
         }
 
         return [
@@ -314,6 +250,41 @@ class SchedulesController extends Controller
         return $this->sendSuccess([
             'crm_profile' => $profileHtml
         ]);
+    }
+
+
+    private function formatBooking(&$booking)
+    {
+        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
+            $booking->status = 'completed';
+            $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+        }
+
+        $booking->happening_status = $booking->getOngoingStatus();
+        $booking->location = $booking->getLocationDetailsHtml();
+        $booking->custom_form_data = $booking->getCustomFormData();
+
+        if ($booking->payment_status) {
+            $booking->payment_order->load(['items', 'transaction']);
+        }
+
+        if (!$booking->calendar_event) {
+            $booking->author = [
+                'name' => 'unknown'
+            ];
+            $booking->slot = (object)[];
+        } else {
+            $booking->author = $booking->calendar_event->getAuthorProfile(false);
+        }
+
+        if ($booking->event_type == 'group') {
+            $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
+        }
+
+        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
+
+        return $booking;
     }
 
 }
