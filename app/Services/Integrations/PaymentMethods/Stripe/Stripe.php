@@ -210,7 +210,7 @@ class Stripe extends BasePaymentMethod
             wp_send_json_error([
                 'status' => 'failed',
                 'message' => $e->getMessage()
-            ], 423);
+            ], 422);
         }
 
     }
@@ -319,7 +319,7 @@ class Stripe extends BasePaymentMethod
 
             $invoiceResponse = (new API())->makeRequest('checkout/sessions', $sessionData, $apiKey, 'POST');
 
-            is_wp_error($invoiceResponse) ? wp_send_json_error($invoiceResponse->get_error_message(), 423) : '';
+            is_wp_error($invoiceResponse) ? wp_send_json_error($invoiceResponse->get_error_message(), 422) : '';
 
             wp_send_json_success(
                 [
@@ -334,7 +334,7 @@ class Stripe extends BasePaymentMethod
             wp_send_json_error([
                 'status' => 'failed',
                 'message' => $e->getMessage()
-            ], 423);
+            ], 422);
         }
 
     }

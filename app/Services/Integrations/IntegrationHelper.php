@@ -112,7 +112,7 @@ class IntegrationHelper
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
-            return new \WP_Error(423, $message);
+            return new \WP_Error(422, $message);
         }
 
         $resCode = wp_remote_retrieve_response_code($request);
