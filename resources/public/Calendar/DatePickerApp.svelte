@@ -12,6 +12,8 @@
     import {createEventDispatcher, onMount} from 'svelte';
     const isFluentform = appData.is_fluentform;
 
+    const id = appData.id;
+
     let dispatch = createEventDispatcher();
 
     var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -41,6 +43,8 @@
     $: timezone, maybeTimeZoneChanged();
 
     let lastTimeZone = timezone;
+
+    let start_time;
 
     $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
 
@@ -173,11 +177,23 @@
         loadAvailableDates();
     }
 
+
+
     function slotSpotConfirmed() {
         dispatch('spotSelected', selectedDateTime);
         setTimeout(() => {
             selectedDateTime = {};
         }, 1000);
+    }
+
+    function slotSpotForFluentForm(day) {
+        selectedDateTime = day;
+        if (!isFluentform) {
+            return;
+        }
+        if (selectedDateTime) {
+            start_time = selectedDateTime.start;
+        }
     }
 
     function resetSelection() {
@@ -194,8 +210,7 @@
       if (modifier === 'PM' && formatHr === '24') {
         hours = parseInt(hours, 10) + 12;
       }
-
-      const result = `${hours}:${minutes} ${formatHr === '12' ? 'AM' : ''}`;
+      const result = `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
       return result;
     }
 
@@ -287,7 +302,7 @@
                         {#each daySlots as day}
                             <div
                                 class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
-                                <div aria-label="Select Time" on:click="{(e) => {selectedDateTime = day}}"
+                                <div aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
                                      on:keypress="{(e) => {selectedDateTime = day}}"
                                      class="fcal_spot_name">
                                      <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
@@ -316,4 +331,8 @@
 
     </div>
 </div>
-
+{#if isFluentform}
+    <div>
+        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, start_time })} />
+    </div>
+{/if}
