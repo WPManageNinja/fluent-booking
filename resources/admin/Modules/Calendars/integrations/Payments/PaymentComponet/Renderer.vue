@@ -160,6 +160,21 @@ onMounted(() => {
                 </el-checkbox-group>
             </div><!-- .fc-payment-col -->
 
+          <div class="fc-payment-col" v-else-if="field.type === 'select'">
+            <div class="flex items-center">
+              <el-form-item :label="field.label">
+                <el-select filterable style="max-width:400px;" v-model="settings[index]" class="m-2" placeholder="Select" size="large">
+                  <el-option
+                      v-for="item in field.options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </div>
+          </div><!-- .fc-payment-col -->
+
             <div class="fc-payment-col" v-else-if="field.type === 'verify_button'">
                 <p v-if="verifiedStatus" style="color:green;">Authenticated: {{ verifiedMessage }}</p>
                 <el-button style="margin: 0;" v-loading="verifying" element-loading-text="verifying..."
@@ -169,6 +184,9 @@ onMounted(() => {
                     {{ field.label }}
                 </el-button>
             </div><!-- .fc-payment-col -->
+
+
+
 
             <div class="fc-payment-col" v-else-if="field.type === 'html_attr'">
                 <div v-html="field.value"></div>
