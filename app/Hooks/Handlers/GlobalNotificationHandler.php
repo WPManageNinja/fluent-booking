@@ -52,6 +52,7 @@ class GlobalNotificationHandler
 
     public function maybeHandleGlobalIntegration($booking, $calendarSlot)
     {
+
         $status = $booking->status;
 
         $maps = [
@@ -97,7 +98,7 @@ class GlobalNotificationHandler
 
         foreach ($enabledFeeds as $feed) {
 
-            $enabledTriggers = Arr::get($feed, 'settings.event_triggers', []);
+            $enabledTriggers = Arr::get($feed, 'settings.event_trigger', []);
 
             if (!$enabledTriggers && !in_array($targetHook, $enabledTriggers)) {
                 continue;
@@ -116,6 +117,7 @@ class GlobalNotificationHandler
                 $processedValues = $feed['settings'];
                 $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
                 $feed['processedValues'] = $processedValues;
+
                 do_action('fluent_booking/integration_notify_' . $feed['key'], $feed, $booking, $calendarEvent);
             }
         }
