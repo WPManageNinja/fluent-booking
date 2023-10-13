@@ -81,7 +81,7 @@
                 <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
                 <PaymentLogs
-                    v-if="showing_booking.event_type == 'single' && showing_booking.order_info"
+                    v-if="showing_booking.event_type == 'single' && showing_booking.payment_order"
                     :booking="showing_booking" />
             </div>
         </div>
