@@ -23,6 +23,19 @@
                     </el-radio-group>
                 </div>
                 <div class="fcal_section_actions">
+                    <el-select v-if="filters.author == 'me'"
+                        v-model="filters.event_type"
+                        class="fcal_select"
+                        aria-placeholder="Select Event Types"
+                        popper-class="fcal_select"
+                        @change="handlePeriodChange()">
+                        <template v-if="event_types.length">
+                            <el-option value="all" label="All Events" />
+                            <el-option v-for="event in event_types" :key="event.id" 
+                                :value="event.id" :label="event.label">
+                            </el-option>
+                        </template>
+                    </el-select>
                     <el-select
                         v-model="filters.author"
                         class="fcal_select"
@@ -94,7 +107,7 @@
 
                     <div class="fcal_schedules" :class="isHideSidebar ? 'hide_sidebar' : ''">
                         <div class="fcal_schedule_wrapper">
-                            <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
+                            <div v-for="(daySchedules, scheduleDate) in formattedSchedules"
                                  :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
                                     <h3 class="fcal_schedule_data">{{ formattedDate(scheduleDate) }}</h3>
@@ -110,7 +123,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-else description="No bookings found based on your filter"/>
+                            <el-empty v-if="!schedulesLength" description="No bookings found based on your filter"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
@@ -151,7 +164,8 @@ export default {
             loading: true,
             filters: {
                 period: 'upcoming',
-                author: 'me'
+                author: 'me',
+                event_type: 'all'
             },
             pagination: {
                 total: 0,
@@ -162,7 +176,9 @@ export default {
             current_schedule: null,
             loadingHosts: false,
             all_hosts: [],
+            event_types: [],
             showAdvancedFilter: false,
+            schedulesLength: null,
             query: {
                 date_to_date: '',
                 eventType: '',
@@ -207,10 +223,8 @@ export default {
                 .forEach((date) => {
                     sortedSchedules[date] = items[date];
                 });
+            this.schedulesLength = Object.keys(sortedSchedules).length;
             return sortedSchedules;
-        },
-        schedulesLength() {
-            return Object.keys(this.formattedSchedules).length;
         },
         currentPeriod() {
             const period = this.filters.period;
@@ -254,6 +268,9 @@ export default {
                     }
                     if(response.cancelled_count) {
                         this.cancelledCount = response.cancelled_count;
+                    }
+                    if(response.slotOptions) {
+                        this.event_types = response.slotOptions;
                     }
                 })
                 .catch(errors => {

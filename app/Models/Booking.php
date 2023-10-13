@@ -225,8 +225,6 @@ class Booking extends Model
             return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
-
-
         if ($locationType == 'custom') {
             $html = '<b>' . Arr::get($details, 'title') . '</b>';
             $html .= wpautop(Arr::get($details, 'description'));
@@ -278,6 +276,15 @@ class Booking extends Model
     public function getOrderItem()
     {
         return OrderItems::where('booking_id', $this->id)->first();
+    }
+
+    public function getTransaction()
+    {
+        $order = $this->getOrderItem();
+        if (!$order) {
+            return '';
+        }
+        return Transactions::where('object_id', $order->id)->first();
     }
 
     public function getCancelReason()

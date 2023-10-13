@@ -5,10 +5,13 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\App\Models\Order;
+use FluentBooking\App\Models\Transactions;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\CalendarService;
 use FluentBooking\Framework\Pagination\LengthAwarePaginator;
 
 class SchedulesController extends Controller
@@ -18,6 +21,8 @@ class SchedulesController extends Controller
         $filters = $request->get('filters', []);
 
         $period = Arr::get($filters, 'period', 'upcoming');
+
+        $slotId = Arr::get($filters, 'event_type');
 
         $query = Booking::with(['slot']);
 
@@ -37,6 +42,12 @@ class SchedulesController extends Controller
             $query->whereHas('calendar', function ($q) use ($author) {
                 $q->where('user_id', $author);
             });
+
+            if ($slotId && $slotId !== 'all') {
+                $query->where(function ($q) use ($slotId) {
+                    $q->where('event_id', $slotId);
+                });
+            }
         }
 
         do_action_ref_array('fluent_booking/schedules_query', [&$query]);
@@ -66,6 +77,10 @@ class SchedulesController extends Controller
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
             $schedule->order_info = $schedule->getOrderItem();
+            $schedule->order_transaction = $schedule->getTransaction();
+
+            $schedule->currency = Order::where('parent_id', $schedule->id)->value('currency');
+
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -87,6 +102,11 @@ class SchedulesController extends Controller
             'schedules' => $schedules,
             'timezone'  => 'UTC'
         ];
+
+        if ($author  && $author != 'all') {
+            $slotOptions = CalendarService::getSlotOptions($author);
+            $data['slotOptions'] = $slotOptions;
+        }
 
         if ($request->get('page') == 1) {
             if ($author && $author !== 'all') {
@@ -207,6 +227,10 @@ class SchedulesController extends Controller
 
         $booking->order_info = $booking->getOrderItem();
 
+        $booking->order_transaction = $booking->getTransaction();
+
+        $booking->currency = Order::where('parent_id', $booking->id)->value('currency');
+
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         return [
@@ -237,6 +261,8 @@ class SchedulesController extends Controller
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
             $attendee->order_info = $attendee->getOrderItem();
+            $attendee->order_transaction = $attendee->getTransaction();
+            $attendee->currency = Order::where('parent_id', $attendee->id)->value('currency');
         }
 
         return [
