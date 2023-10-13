@@ -8,7 +8,7 @@ use FluentBooking\App\Services\ConditionAssesor;
 
 class GlobalNotificationService
 {
-    public function checkCondition($parsedValue, $booking, $insertId)
+    public function checkCondition($parsedValue, $booking)
     {
         $conditionSettings = Arr::get($parsedValue, 'conditionals');
         if (
@@ -36,14 +36,14 @@ class GlobalNotificationService
      *
      * @return array
      */
-    public function getEnabledFeeds($feeds, $booking, $insertId)
+    public function getEnabledFeeds($feeds, $booking)
     {
         $enabledFeeds = [];
         foreach ($feeds as $feed) {
             $parsedValue = json_decode($feed->value, true);
             if ($parsedValue && Arr::isTrue($parsedValue, 'enabled')) {
                 // Now check if conditions matched or not
-                $isConditionMatched = $this->checkCondition($parsedValue, $booking, $insertId);
+                $isConditionMatched = $this->checkCondition($parsedValue, $booking);
                 if ($isConditionMatched) {
                     $item = [
                         'id'       => $feed->id,
@@ -65,6 +65,6 @@ class GlobalNotificationService
 
     public function getNotificationFeeds($slotId, $feedMetaKeys)
     {
-        return Meta::where('object_id', $slotId)->whereIn('meta_key', $feedMetaKeys)->orderBy('id', 'ASC')->get();
+        return Meta::where('object_id', $slotId)->whereIn('key', $feedMetaKeys)->orderBy('id', 'ASC')->get();
     }
 }
