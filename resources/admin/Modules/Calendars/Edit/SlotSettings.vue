@@ -105,8 +105,7 @@
                 <payment-settings 
                     v-else 
                     :activeTab="activeTab"
-                    :event_id="event_id"
-                    :calendar_id="calendar_id"
+                    :calendar_event="slot"
                 />
               </div>
             </el-tab-pane>
@@ -125,6 +124,7 @@
                     :activeTab="activeTab"
                     :event_id="event_id"
                     :calendar_id="calendar_id"
+                    :calendar_event="slot"
                     :has_pro="true"
                 />
               </div>

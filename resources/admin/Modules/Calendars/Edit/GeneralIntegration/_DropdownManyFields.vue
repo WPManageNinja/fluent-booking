@@ -5,7 +5,7 @@
             <tr>
                 <th>{{rendered_labels.remote_text}}</th>
                 <th>{{rendered_labels.local_text}}</th>
-                <th></th>
+                <th style="width: 100px;"></th>
             </tr>
             </thead>
             <tbody>
@@ -28,7 +28,7 @@
                 </td>
                 <td>
                     <action-btn>
-                        <action-btn-add @click="addItemAfter(itemIndex)"></action-btn-add>
+                        <action-btn-add @clicked="addItemAfter(itemIndex)"></action-btn-add>
                         <action-btn-remove v-if="settings[field.key].length > 1" @click="removeItem(itemIndex)"></action-btn-remove>
                     </action-btn>
                 </td>
