@@ -8,6 +8,7 @@
                     <el-button
                         v-if="show_edit"
                         class="fcal_primary_btn2"
+                        @click="show_edit = false"
                     >
                         <el-icon><Back /></el-icon> Back
                     </el-button>
@@ -79,7 +80,26 @@
 
                             <el-table-column width="130" :label="$t('Actions')" class-name="action-buttons">
                                 <template #default="scope">
-                                    <btn-group size="sm">
+                                    <el-button
+                                        class="fcal_primary_btn"
+                                        @click="edit(scope.row)"
+                                    >
+                                        <el-icon><Edit /></el-icon>
+                                    </el-button>
+                                    <el-popconfirm
+                                        title="Are you sure to delete this?"
+                                        popper-class="fcal_confirm_dialog"
+                                        confirm-button-type="danger"
+                                        @confirm="remove(scope.row.id, scope)"
+                                    >
+                                        <template #reference>
+                                            <el-button type="danger" class="fcal_danger_btn">
+                                                <el-icon><Delete /></el-icon>
+                                            </el-button>
+                                        </template>
+                                    </el-popconfirm>
+
+                                    <!-- <btn-group size="sm">
                                         <btn-group-item>
                                             <el-button
                                                 class="el-button--soft el-button--icon"
@@ -99,7 +119,7 @@
                                                 />
                                             </remove>
                                         </btn-group-item>
-                                    </btn-group>
+                                    </btn-group> -->
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -145,6 +165,7 @@
                     :integration_name="integration_name"
                     :inputs="fields"
                     :has_pro="has_pro"
+                    @back="hideEditor"
                 />
             </div>
         </card>
@@ -162,7 +183,7 @@
     import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
     import IntegrationEditor from './IntegrationEditor.vue';
     
-    import {ArrowDown, Back} from '@element-plus/icons-vue';
+    import {ArrowDown, Back, Edit, Delete } from '@element-plus/icons-vue';
 
     export default {
         name: 'Integrations',
@@ -178,6 +199,8 @@
             ArrowDown,
             Back,
             IntegrationEditor,
+            Edit,
+            Delete
         },
         data() {
             return {
@@ -219,60 +242,50 @@
                 this.show_edit = true;
             },
             edit(integration) {
-                this.$router.push({
-                    name: 'edit_integration',
-                    params: {
-                        integration_id: integration.id,
-                        integration_name: integration.provider,
-                    },
-                });
+                this.integration_id = integration.id;
+                this.integration_name = integration.provider;
+                this.show_edit = true;
             },
             handleActive(row) {
                 let data = {
-                    form_id: this.form_id,
                     status: row.enabled,
-                    integration_id: row.id,
                 };
 
                 this.errors.clear();
 
                 this.saving = true;
 
-                const url = FluentFormsGlobal.$rest.route('updateFormIntegrationSettings', this.form_id);
+                const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + row.id;
 
-                FluentFormsGlobal.$rest
-                    .post(url, data)
+                this.$post(url, data)
                     .then(response => {
                         if (response.created) {
-                            this.$router.push({
-                                name: 'allIntegrations',
-                            });
+                            // this.$router.push({
+                            //     name: 'allIntegrations',
+                            // });
                         }
-                        this.$success(response.message);
+                        // this.$handleSuccess(response);
                     })
                     .catch(error => {
-                        const message = error?.message || error?.data?.message;
-                        this.$fail(message);
+                        this.$handleError(error);
                     })
                     .finally(() => (this.saving = false));
             },
             remove(feed_id, scope) {
-                const url = FluentFormsGlobal.$rest.route('deleteFormIntegration', this.form_id);
+                const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + feed_id;
+
                 let $index = scope.$index;
                 let data = {
                     integration_id: feed_id,
-                    form_id: this.form_id,
                 };
                 this.deleting = true;
-                FluentFormsGlobal.$rest
-                    .delete(url, data)
+                this.$del(url, data)
                     .then(response => {
-                        this.$success(response.message);
+                        this.$handleSuccess(response.message);
                         this.integrations.splice($index, 1);
                     })
                     .catch(error => {
-                        const message = error?.message || error?.data?.message;
-                        this.$fail(message);
+                        this.$handleError(error);
                     })
                     .finally(() => {});
             },
@@ -308,6 +321,11 @@
                         this.loading = false;
                     });
             },
+
+            hideEditor() {
+                this.show_edit = false;
+                this.getFeeds();
+            }
         },
         computed: {
             filteredList() {

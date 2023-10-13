@@ -137,11 +137,11 @@ class CalendarIntegrationService
                     'id'       => $feed->id,
                     'name'     => Arr::get($data, 'name'),
                     'enabled'  => $enabled,
-                    'provider' => $feed->meta_key,
+                    'provider' => $feed->key,
                     'feed'     => $data,
                 ];
-
-                $feedData = apply_filters('fluent_booking/global_notification_feed_' . $feed->meta_key, $feedData, $slotId);
+                
+                $feedData = apply_filters('fluent_booking/global_notification_feed_' . $feed->key, $feedData, $slotId);
 
                 $formattedFeeds[] = $feedData;
             }
