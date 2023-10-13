@@ -351,7 +351,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         $validator = (new Validator())->make($data, $rules);
         if ($validator->validate()->fails()) {
-            wp_send_json_error($validator->errors(), 423);
+            wp_send_json_error($validator->errors(), 422);
         }
     }
 }
