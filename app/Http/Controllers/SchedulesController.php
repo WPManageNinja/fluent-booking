@@ -78,12 +78,12 @@ class SchedulesController extends Controller
             $schedule->happening_status = $schedule->getOngoingStatus();
             $schedule->location = $schedule->getLocationDetailsHtml();
             $schedule->custom_form_data = $schedule->getCustomFormData();
-            $schedule->order_info = $schedule->getOrderItem();
-            $schedule->order_transaction = $schedule->getTransaction();
 
-            $schedule->currency = CurrenciesHelper::getCurrencySign();
-
-
+            if($schedule->payment_status) {
+                $schedule->order_info = $schedule->getOrderItem();
+                $schedule->order_transaction = $schedule->getTransaction();
+                $schedule->currency = CurrenciesHelper::getCurrencySign();
+            }
 
             if (!$schedule->slot) {
                 $schedule->author = [
@@ -218,6 +218,12 @@ class SchedulesController extends Controller
             do_action('fluent_booking/booking_schedule_completed', $booking);
         }
 
+        if($booking->payment_status) {
+            $booking->order_info = $booking->getOrderItem();
+            $booking->order_transaction = $booking->getTransaction();
+            $booking->currency = CurrenciesHelper::getCurrencySign();
+        }
+
         $booking->happening_status = $booking->getOngoingStatus();
 
         if ($booking->slot) {
@@ -263,9 +269,11 @@ class SchedulesController extends Controller
 
         foreach ($attendees as $attendee) {
             $attendee->custom_form_data = $attendee->getCustomFormData();
-            $attendee->order_info = $attendee->getOrderItem();
-            $attendee->order_transaction = $attendee->getTransaction();
-            $attendee->currency = CurrenciesHelper::getCurrencySign();
+            if($attendee->payment_status) {
+                $attendee->order_info = $attendee->getOrderItem();
+                $attendee->order_transaction = $attendee->getTransaction();
+                $attendee->currency = CurrenciesHelper::getCurrencySign();
+            }
         }
 
         return [

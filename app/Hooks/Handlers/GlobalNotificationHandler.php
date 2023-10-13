@@ -47,7 +47,7 @@ class GlobalNotificationHandler
         add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
         add_action('fluent_booking/booking_schedule_completed', [$this, 'maybeHandleGlobalIntegration'], 10, 2);
-        
+
     }
 
     public function maybeHandleGlobalIntegration($booking, $calendarSlot)
