@@ -25,11 +25,11 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
 
     public $logo = '';
 
-    public $hasGlobalMenu = true;
+    public $hasGlobalMenu = false;
 
     public $category = 'crm';
 
-    public $disableGlobalSettings = 'no';
+    public $disableGlobalSettings = 'yes';
 
     public function __construct($title, $integrationKey, $optionKey, $settingsKey, $priority = 11)
     {
@@ -39,15 +39,9 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         $this->settingsKey = $settingsKey;
         $this->priority = $priority;
 
-        if (isset($_REQUEST['form_id'])) {
-            parent::__construct(
-                $this->settingsKey, $_REQUEST['form_id'], true
-            );
-        } else {
-            parent::__construct(
-                $this->settingsKey, false, true
-            );
-        }
+        parent::__construct(
+            $this->settingsKey, false, true
+        );
     }
 
     public function registerAdminHooks()
@@ -59,11 +53,10 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
                 'category'                => $this->category,
                 'disable_global_settings' => $this->disableGlobalSettings,
                 'description'             => $this->description,
-                'config_url'              => ('yes' != $this->disableGlobalSettings) ? admin_url('admin.php?page=fluent_forms_settings#general-' . $this->integrationKey . '-settings') : '',
+                'config_url'              => ('yes' != $this->disableGlobalSettings) ? admin_url('admin.php?page=fluent-booking#/settings/general-settings') : '',
                 'logo'                    => $this->logo,
                 'enabled'                 => ($isEnabled) ? 'yes' : 'no',
             ];
-
             return $addons;
         }, $this->priority, 1);
 
@@ -113,8 +106,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
 
     public function notify($feed, $booking, $slot)
     {
-        // Each integration have to implement this notify method
-
+        // Do something here in your integration class
     }
 
     public function addGlobalMenu($setting)
@@ -184,7 +176,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         }
 
         if (!empty($setting['list_id'])) {
-            $setting['list_id'] = (string) $setting['list_id'];
+            $setting['list_id'] = (string)$setting['list_id'];
         }
 
         return wp_parse_args($setting, $defaults);
@@ -209,13 +201,12 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
     public function isConfigured()
     {
         $globalStatus = $this->getApiSettings();
-
         return $globalStatus && $globalStatus['status'];
     }
 
     public function isEnabled()
     {
-        return (new \FluentForm\App\Services\Integrations\GlobalIntegrationService())->isEnabled($this->integrationKey);
+        return true;
     }
 
     public function getApiSettings()
@@ -224,57 +215,22 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         if (!$settings || empty($settings['status'])) {
             $settings = [
                 'apiKey' => '',
-                'status' => false,
+                'status' => true,
             ];
         }
 
         return $settings;
     }
 
-    protected function getSelectedTagIds(
-        $data,
-        $inputData,
-        $simpleKey = 'tag_ids',
-        $routingId = 'tag_ids_selection_type',
-        $routersKey = 'tag_routers'
-    ) {
-        $routing = Arr::get($data, $routingId, 'simple');
-        if (!$routing || 'simple' == $routing) {
-            return Arr::get($data, $simpleKey, []);
-        }
 
-        $routers = Arr::get($data, $routersKey);
-        if (empty($routers)) {
-            return [];
-        }
-
-        return $this->evaluateRoutings($routers, $inputData);
-    }
-
-    protected function evaluateRoutings($routings, $inputData)
+    protected function addLog($title, $description, $bookingId, $status = 'info', $type = 'log')
     {
-        $validInputs = [];
-        foreach ($routings as $routing) {
-            $inputValue = Arr::get($routing, 'input_value');
-            if (!$inputValue) {
-                continue;
-            }
-            $condition = [
-                'conditionals' => [
-                    'status'     => true,
-                    'is_test'    => true,
-                    'type'       => 'any',
-                    'conditions' => [
-                        $routing,
-                    ],
-                ],
-            ];
-
-            if (\FluentForm\App\Services\ConditionAssesor::evaluate($condition, $inputData)) {
-                $validInputs[] = $inputValue;
-            }
-        }
-
-        return $validInputs;
+        do_action('fluent_booking/log_booking_note', [
+            'title'       => $title,
+            'description' => $description,
+            'booking_id'  => $bookingId,
+            'status'      => $status,
+            'type'        => $type,
+        ]);
     }
 }

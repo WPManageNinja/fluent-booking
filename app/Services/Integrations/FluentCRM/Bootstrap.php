@@ -192,14 +192,14 @@ class Bootstrap extends IntegrationManagerController
             ],
             [
                 'require_list'   => false,
-                'required'            => true,
+                'required'       => true,
                 'key'            => 'event_trigger',
                 'options'        => [
                     'after_booking_scheduled'    => 'Booking Confirmed',
                     'booking_schedule_completed' => 'Booking Completed',
                     'booking_schedule_cancelled' => 'Booking Canceled',
                 ],
-                'tips' => 'Select in which booking stage you want to trigger this feed',
+                'tips'           => 'Select in which booking stage you want to trigger this feed',
                 'label'          => __('Event Trigger', 'fluent_booking'),
                 'component'      => 'checkbox-multiple-text',
                 'checkbox_label' => __('Event Trigger For This Feed', 'fluent_booking'),
@@ -263,27 +263,13 @@ class Bootstrap extends IntegrationManagerController
     /*
      * Submission Hooks Here
      */
-    public function notify($feed, $booking, $slot)
-    {
-        return $this->runFeed($feed, $booking, $slot);
-    }
-
-    private function runFeed($feed, $booking, $slot)
+    public function notify($feed, $booking, $calendarEvent)
     {
         $data = $feed['processedValues'];
         $contact = Arr::only($data, ['first_name', 'last_name', 'email']);
 
-        if (!$contact['first_name'] && !$contact['last_name']) {
-            $fullName = Arr::get($data, 'full_name');
-            if ($fullName) {
-                $nameArray = explode(' ', $fullName);
-                if (count($nameArray) > 1) {
-                    $contact['last_name'] = array_pop($nameArray);
-                    $contact['first_name'] = implode(' ', $nameArray);
-                } else {
-                    $contact['first_name'] = $fullName;
-                }
-            }
+        if (empty($contact['email'])) {
+            return false;
         }
 
         foreach (Arr::get($data, 'other_fields') as $field) {
@@ -299,35 +285,21 @@ class Bootstrap extends IntegrationManagerController
         if (!is_email($contact['email'])) {
             $this->addLog(
                 $feed['settings']['name'],
-                'failed',
                 __('FluentCRM API called skipped because no valid email available', 'fluent_booking'),
-                $slot->id,
-                $booking->id
+                $booking->id,
+                'failed'
             );
-
             return false;
         }
 
-        if (isset($contact['country'])) {
-            $country = FunnelHelper::getCountryShortName($contact['country']);
-            if ($country) {
-                $contact[$contact['country']] = $country;
-            } else {
-                unset($contact['country']);
-            }
-        }
-
         $subscriber = Subscriber::where('email', $contact['email'])->first();
-
         if ($subscriber && Arr::isTrue($data, 'skip_if_exists')) {
             $this->addLog(
                 $feed['settings']['name'],
-                'info',
                 __('Contact creation has been skipped because contact already exist in the database', 'fluent_booking'),
-                $slot->id,
-                $booking->id
+                $booking->id,
+                'failed'
             );
-
             return false;
         }
 
@@ -360,6 +332,15 @@ class Bootstrap extends IntegrationManagerController
                     unset($contact['last_name']);
                 }
             }
+        } else {
+            if (empty($contact['source'])) {
+                $contact['source'] = 'FluentBooking';
+            }
+            if (Arr::isTrue($data, 'double_opt_in')) {
+                $contact['status'] = 'pending';
+            } else {
+                $contact['status'] = 'subscribed';
+            }
         }
 
         $user = get_user_by('email', $contact['email']);
@@ -367,24 +348,19 @@ class Bootstrap extends IntegrationManagerController
             $contact['user_id'] = $user->ID;
         }
 
-        $tags = $this->getSelectedTagIds($data, $booking, 'tag_ids');
-        if ($tags) {
-            $contact['tags'] = $tags;
+        if (!empty($data['tag_ids'])) {
+            $contact['tags'] = $data['tag_ids'];
+        }
+
+        if (!empty($data['list_ids'])) {
+            $contact['lists'] = $data['list_ids'];
         }
 
         if (!$subscriber) {
-            if (empty($contact['source'])) {
-                $contact['source'] = 'FluentForms';
-            }
-
             if (Arr::isTrue($data, 'double_opt_in')) {
                 $contact['status'] = 'pending';
             } else {
                 $contact['status'] = 'subscribed';
-            }
-
-            if ($listId = Arr::get($data, 'list_id')) {
-                $contact['lists'] = [$listId];
             }
 
             $subscriber = FluentCrmApi('contacts')->createOrUpdate($contact, false, false);
@@ -393,61 +369,9 @@ class Bootstrap extends IntegrationManagerController
                 return false;
             }
 
-            if ('confirmed' == $booking->status && 'subscribed' != $subscriber->status) {
-                $oldStatus = $subscriber->status;
-                $subscriber->status = 'subscribed';
-                $subscriber->save();
-                do_action('fluentcrm_subscriber_status_to_subscribed', $subscriber, $oldStatus);
-            }
-
-            if ('pending' == $subscriber->status) {
+            if ($subscriber->status == 'pending') {
                 $subscriber->sendDoubleOptinEmail();
             }
-
-            $this->addLog(
-                $feed['settings']['name'],
-                'success',
-                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent_booking') . $subscriber->id,
-                $slot->id,
-                $booking->id
-            );
-
-            do_action('fluent_crm/contact_added_by_fluent_booking', $subscriber, $booking, $slot, $feed);
-        } else {
-            if ($listId = Arr::get($data, 'list_id')) {
-                $contact['lists'] = [$listId];
-            }
-
-            $hasDouBleOptIn = Arr::isTrue($data, 'double_opt_in');
-
-            $forceSubscribed = !$hasDouBleOptIn && ('subscribed' != $subscriber->status);
-
-            if (!$forceSubscribed) {
-                $forceSubscribed = Arr::isTrue($data, 'force_subscribe');
-            }
-
-            if ($forceSubscribed) {
-                $contact['status'] = 'subscribed';
-            }
-
-            $subscriber = FluentCrmApi('contacts')->createOrUpdate($contact, $forceSubscribed, false);
-
-            if (!$subscriber) {
-                return false;
-            }
-
-            if ('confirmed' == $booking->status && 'subscribed' != $subscriber->status) {
-                $oldStatus = $subscriber->status;
-                $subscriber->status = 'subscribed';
-                $subscriber->save();
-                do_action('fluentcrm_subscriber_status_to_subscribed', $subscriber, $oldStatus);
-            }
-
-            if ($hasDouBleOptIn && ('pending' == $subscriber->status || 'unsubscribed' == $subscriber->status)) {
-                $subscriber->sendDoubleOptinEmail();
-            }
-
-            do_action('fluent_crm/contact_updated_by_fluent_booking', $subscriber, $booking, $slot, $feed);
 
             if ($removeTags = Arr::get($feed, 'settings.remove_tags', [])) {
                 $subscriber->detachTags($removeTags);
@@ -455,12 +379,53 @@ class Bootstrap extends IntegrationManagerController
 
             $this->addLog(
                 $feed['settings']['name'],
-                'success',
-                __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent_booking') . $subscriber->id,
-                $slot->id,
-                $booking->id
+                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent-booking') . $subscriber->id,
+                $booking->id,
+                'success'
             );
+
+            do_action('fluent_crm/contact_added_by_fluent_booking', $subscriber, $booking, $calendarEvent, $feed);
+            return true;
         }
+
+        // We have subscriber here
+
+        $hasDouBleOptIn = Arr::isTrue($data, 'double_opt_in');
+
+        $forceSubscribed = !$hasDouBleOptIn && ($subscriber->status != 'subscribed');
+
+        if (!$forceSubscribed) {
+            $forceSubscribed = Arr::isTrue($data, 'force_subscribe');
+        }
+
+        if ($forceSubscribed) {
+            $contact['status'] = 'subscribed';
+        }
+
+        $subscriber = FluentCrmApi('contacts')->createOrUpdate($contact, $forceSubscribed, false);
+
+        if (!$subscriber) {
+            return false;
+        }
+
+        if ($hasDouBleOptIn && ($subscriber->status == 'pending' || $subscriber->status == 'unsubscribed')) {
+            $subscriber->sendDoubleOptinEmail();
+        }
+
+        do_action('fluent_crm/contact_added_by_fluent_booking', $subscriber, $booking, $calendarEvent, $feed);
+
+        if ($removeTags = Arr::get($feed, 'settings.remove_tags', [])) {
+            $subscriber->detachTags($removeTags);
+        }
+
+        $this->addLog(
+            $feed['settings']['name'],
+            __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent-crm') . $subscriber->id,
+            $booking->id,
+            'success'
+        );
+
+        return true;
     }
 
     public function isConfigured()
@@ -472,66 +437,4 @@ class Bootstrap extends IntegrationManagerController
     {
         return true;
     }
-
-    protected function addLog($title, $status, $description, $slotId, $entryId)
-    {
-        do_action('fluent_booking_log_data', [
-            'title'            => $title,
-            'status'           => $status,
-            'description'      => $description,
-            'parent_source_id' => $slotId,
-            'source_id'        => $entryId,
-            'component'        => $this->integrationKey,
-            'source_type'      => 'submission_item',
-        ]);
-    }
-
-    /*
-     * We will remove this in future
-     */
-    protected function getSelectedTagIds($data, $inputData, $simpleKey = 'tag_ids', $routingId = 'tag_ids_selection_type', $routersKey = 'tag_routers')
-    {
-        $routing = Arr::get($data, $routingId, 'simple');
-        if (!$routing || 'simple' == $routing) {
-            return Arr::get($data, $simpleKey, []);
-        }
-
-        $routers = Arr::get($data, $routersKey);
-        if (empty($routers)) {
-            return [];
-        }
-
-        return $this->evaluateRoutings($routers, $inputData);
-    }
-
-    /*
-     * We will remove this in future
-     */
-    protected function evaluateRoutings($routings, $inputData)
-    {
-        $validInputs = [];
-        foreach ($routings as $routing) {
-            $inputValue = Arr::get($routing, 'input_value');
-            if (!$inputValue) {
-                continue;
-            }
-            $condition = [
-                'conditionals' => [
-                    'status'     => true,
-                    'is_test'    => true,
-                    'type'       => 'any',
-                    'conditions' => [
-                        $routing,
-                    ],
-                ],
-            ];
-
-            // if (\FluentForm\App\Services\ConditionAssesor::evaluate($condition, $inputData)) {
-            //     $validInputs[] = $inputValue;
-            // }
-        }
-
-        return $validInputs;
-    }
-
 }
