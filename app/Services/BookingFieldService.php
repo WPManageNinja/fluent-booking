@@ -92,7 +92,7 @@ class BookingFieldService
             $requiredIndexes[] = 'address';
             $defaultFields['address'] = [
                 'index'          => 4,
-                'type'           => 'textarea',
+                'type'           => 'text',
                 'name'           => 'address',
                 'label'          => __('Your Address', 'fluent-booking'),
                 'required'       => true,
