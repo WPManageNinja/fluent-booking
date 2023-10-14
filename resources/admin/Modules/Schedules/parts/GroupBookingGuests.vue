@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <PaymentLogs v-if="scope.row.order_info" :booking="scope.row" />
+                            <PaymentLogs v-if="scope.row.payment_order" :booking="scope.row" />
                         </div>
                     </template>
                 </el-table-column>
