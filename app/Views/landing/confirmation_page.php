@@ -21,7 +21,7 @@
 
     <?php
     $feature_image = '';
-    if ($author['featured_image']) {
+    if (isset($author['featured_image'])) {
         $feature_image = $author['featured_image'];
     } else {
         $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
