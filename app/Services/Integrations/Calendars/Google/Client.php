@@ -16,6 +16,7 @@ class Client
 
     public $revokeUrl = 'https://oauth2.googleapis.com/revoke';
     public $tokenUrl = 'https://oauth2.googleapis.com/token';
+    private $refreshTokenUrl = 'https://www.googleapis.com/oauth2/v3/token';
     public $authUrl = 'https://accounts.google.com/o/oauth2/auth';
     public $authScope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
 
@@ -62,7 +63,7 @@ class Client
             'refresh_token' => $refreshToken
         ];
 
-        $tokens = $this->makeRequest($this->tokenUrl, $body, 'POST', [
+        $tokens = $this->makeRequest($this->refreshTokenUrl, $body, 'POST', [
             'Content-Type'              => 'application/http',
             'Content-Transfer-Encoding' => 'binary',
             'MIME-Version'              => '1.0',
