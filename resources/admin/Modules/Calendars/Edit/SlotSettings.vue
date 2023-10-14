@@ -37,6 +37,19 @@
                 </div>
             </el-tab-pane>
 
+            <el-tab-pane name="notification-settings">
+                <template #label>
+                    <el-icon>
+                        <Message/>
+                    </el-icon>
+                    Email Notifications
+                </template>
+                <div v-if="activeTab == 'notification-settings'" class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading"/>
+                    <NotificationSettings v-else ref="notificationData" :slot="slot"/>
+                </div>
+            </el-tab-pane>
+
             <el-tab-pane name="schedule-settings">
                 <template #label>
                     <el-icon>
@@ -50,19 +63,6 @@
                     <div class="fcal_create_calendar_form_footer">
                         <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
                     </div>
-                </div>
-            </el-tab-pane>
-
-            <el-tab-pane name="notification-settings">
-                <template #label>
-                    <el-icon>
-                        <Message/>
-                    </el-icon>
-                    Email Notifications
-                </template>
-                <div v-if="activeTab == 'notification-settings'" class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading"/>
-                    <NotificationSettings v-else ref="notificationData" :slot="slot"/>
                 </div>
             </el-tab-pane>
 

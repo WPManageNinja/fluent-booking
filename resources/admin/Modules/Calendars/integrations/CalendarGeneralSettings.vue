@@ -18,7 +18,7 @@
                     <el-col :span="12">
                         <el-form-item label="Calendar Avatar">
                             <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar" />
-                            <p class="fcal_input_desc">Recommended Size: 600x600. Should be squire size image for best view.</p>
+                            <p class="fcal_input_desc">Recommended Image Size: 600x600. Square Orientation</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
