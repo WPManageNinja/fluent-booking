@@ -701,6 +701,7 @@
       position: absolute;
       left: 0;
       top: 12px;
+      z-index: 9;
     }
     .hide_sidebar {
       .fcal_schedule_details {
@@ -1178,6 +1179,40 @@
 
             .fcal_location_selector_wrap {
               width: 100%;
+
+              .fcal_locations_lists {
+                .fcal_location_list {
+                  margin-bottom: 8px;
+                  position: relative;
+                  &:last-child {
+                    margin-bottom: 0;
+                  }
+                  .fcal_location_actions {
+                    position: absolute;
+                    right: 32px;
+                    top: 0;
+                    .el-button {
+                      background: none;
+                      border: none;
+                      padding: 13px 10px;
+                      margin: 0;
+                      &:last-child {
+                        &:hover {
+                          color: var(--el-color-danger);
+                        }
+                      }
+                    }
+                  }
+                  .el-select {
+                    .el-input {
+                      .el-input__wrapper {
+                        padding: 7px 16px;
+                      }
+                    }
+                  }
+
+                }
+              }
             }
 
             .el-textarea {
@@ -2233,6 +2268,9 @@
       }
 
       .fcal_schedule_details_header_action {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         .el-input {
           .el-input__wrapper {
             box-shadow: none;

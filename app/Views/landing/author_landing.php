@@ -18,7 +18,15 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
     <meta property="og:author" content="<?php echo $author['name']; ?>"/>
 
-    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL; ?>assets/images/default-featured.png" />
+    <?php
+        $feature_image = '';
+        if ($author['featured_image']) {
+            $feature_image = $author['featured_image'];
+        } else {
+            $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
+        }
+    ?>
+    <meta property="og:image" content="<?php echo $feature_image; ?>" />
 
     <?php foreach ($css_files as $css_file): ?>
         <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" media="screen"/>
@@ -193,7 +201,7 @@
             <img src="<?php echo $author['avatar']; ?>"/>
             <div class="author_info">
                 <h1>
-                    <?php echo $author['name']; ?>
+                    <?php echo esc_html($calendar->title); ?>
                 </h1>
                 <?php if ($calendar->description) { ?>
                     <p class="fcal_description"><?php echo $calendar->description; ?></p>

@@ -321,9 +321,12 @@ class FrontEndHandler
             'pre_selects' => (object) []
         ];
 
+        $author = $calendar->getAuthorProfile(true);
+        $author['name'] = $calendar->title;
+
         return apply_filters('fluent_calendar_public_event_vars', [
             'slot'           => $calendarEvent,
-            'author_profile' => $calendarEvent->getAuthorProfile(true),
+            'author_profile' => $author,
             'form_fields'    => $formFields,
         ], $calendarEvent);
     }

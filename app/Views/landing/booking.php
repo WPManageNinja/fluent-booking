@@ -20,7 +20,15 @@
 
     <meta property="og:image" content="" />
 
-    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL; ?>assets/images/default-featured.png" />
+    <?php
+//    $feature_image = '';
+//    if ($author['featured_image']) {
+//        $feature_image = $author['featured_image'];
+//    } else {
+//        $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
+//    }
+    ?>
+    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL .'assets/images/default-featured.png'; ?>" />
 
     <?php foreach ($css_files as $css_file): ?>
     <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" media="screen" />

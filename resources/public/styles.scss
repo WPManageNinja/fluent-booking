@@ -682,6 +682,60 @@ $lightDark: #6b7280;
     }
   }
 }
+.fcal_multi_locations {
+  position: relative;
+  margin-bottom: 6px;
+  .fcal_multi_location_title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    svg {
+      width: 16px;
+    }
+    &:hover .fcal_location_tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .fcal_location_tooltip {
+    position: absolute;
+    bottom: 100%;
+    background: #000000;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: .2s;
+    .title {
+      margin-bottom: 10px;
+    }
+    li {
+      font-size: 12px;
+      margin-bottom: 6px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &:not(.title) {
+        padding-left: 15px;
+      }
+      .fcal_icon_item {
+        margin-bottom: 6px;
+        img {
+          filter: contrast(0);
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      .fcal_loc_text {
+        font-size: 12px;
+        color: #ffffff;
+        font-weight: 400;
+      }
+    }
+  }
+}
 
 .fcal_calendar_slot_wrap {
   display: flex;
