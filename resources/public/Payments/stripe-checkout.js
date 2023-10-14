@@ -38,6 +38,7 @@ class StripeCheckout {
 
         paymentProcessor.appendChild(loadingMessage);
 
+
         const submit = this.form.querySelector('.fcal_submit');
         submit.style.display = 'none';
 
