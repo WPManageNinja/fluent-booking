@@ -12,6 +12,14 @@
                         @change="fetchGuests"
                         clearable
                         placeholder="Search Host" />
+                    <el-tooltip
+                        class="fcal_tooltip_box"
+                        effect="dark"
+                        content="Export Hosts"
+                        placement="top-start"
+                    >
+                        <el-button class="fcal_export_btn" @click="exportHosts(group_id)"><el-icon><Download /></el-icon></el-button>
+                    </el-tooltip>
                 </div>
             </div>
             <el-skeleton v-if="!app_loaded" :rows="5" :animated="true" :loading="loading" />
@@ -107,7 +115,7 @@
 </template>
 
 <script>
-import { MoreFilled, Close } from '@element-plus/icons-vue';
+import { MoreFilled, Close, Download } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import PaymentLogs from "./PaymentLogs";
 export default {
@@ -117,7 +125,8 @@ export default {
         PaymentLogs,
         Pagination,
         MoreFilled,
-        Close
+        Close,
+        Download
     },
     data() {
         return {
@@ -152,6 +161,13 @@ export default {
                     this.loading = false;
                     this.app_loaded = true;
                 });
+        },
+        exportHosts() {
+            console.log(window.ajaxurl);
+            location.href = window.ajaxurl + '?' + jQuery.param({
+                action: 'fluent_booking_export_hosts',
+                group_id: this.group_id
+            });
         }
     },
     mounted() {
