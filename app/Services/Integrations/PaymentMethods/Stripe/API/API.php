@@ -46,7 +46,7 @@ class API
                 $message = 'Unknown Stripe API request error';
             }
 
-            return new \WP_Error(423, $message, $sessionData);
+            return new \WP_Error(422, $message, $sessionData);
         }
 
         return $sessionData;

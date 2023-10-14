@@ -37,7 +37,7 @@
                         </div>
                         <div class="fcal_schedule_details_event_item">
                             <h3>Meeting Title</h3>
-                            <p>{{ showing_booking.slot.title }}</p>
+                            <p>{{ showing_booking.calendar_event.title }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
                             <h3>Meeting Duration</h3>
@@ -81,7 +81,7 @@
                 <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
                 <PaymentLogs
-                    v-if="showing_booking.event_type == 'single' && showing_booking.order_info"
+                    v-if="showing_booking.event_type == 'single' && showing_booking.payment_order"
                     :booking="showing_booking" />
             </div>
         </div>
@@ -96,7 +96,7 @@
             class="fcal_modal"
         >
             <div style="text-align: center;">
-                <h3>{{ showing_booking.slot.title }}</h3>
+                <h3>{{ showing_booking.calendar_event.title }}</h3>
                 <p class="fcal_meeting_with">with <b>{{ showing_booking.first_name }} {{
                         showing_booking.last_name
                     }}</b></p>

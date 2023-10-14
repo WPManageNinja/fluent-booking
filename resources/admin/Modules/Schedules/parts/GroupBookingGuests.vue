@@ -1,14 +1,28 @@
 <template>
     <div class="fcal_schedule_event_infos">
         <div class="fcal_schedule_event_infos_body">
-            <div class="fcal_schedule_details_header">
+            <div class="fcal_schedule_group_header">
                 <h1 class="fcal_header_title">
                     Event Guests
                 </h1>
+
+                <div class="fcal_schedule_details_header_action">
+                    <el-input
+                        v-model="search"
+                        @change="fetchGuests"
+                        clearable
+                        placeholder="Search Host" />
+                </div>
             </div>
             <el-skeleton v-if="!app_loaded" :rows="5" :animated="true" :loading="loading" />
 
-            <el-table v-else v-loading="loading" stripe :data="attendees">
+            <el-table
+                v-else
+                stripe
+                :data="attendees"
+                empty-text="No Host Found"
+            >
+
                 <el-table-column type="expand">
                     <template #default="scope">
                         <div class="fcal_group_booking_guests_wrap">
@@ -45,7 +59,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <PaymentLogs v-if="scope.row.order_info" :booking="scope.row" />
+                            <PaymentLogs v-if="scope.row.payment_order" :booking="scope.row" />
                         </div>
                     </template>
                 </el-table-column>
@@ -114,7 +128,8 @@ export default {
                 total: 0,
                 current_page: 1,
                 per_page: 20
-            }
+            },
+            search: ''
         }
     },
     methods: {
@@ -122,7 +137,8 @@ export default {
             this.loading = true;
             this.$get(`schedules/group-bookings/${this.group_id}/attendees`, {
                 per_page: this.pagination.per_page,
-                page: this.pagination.current_page
+                page: this.pagination.current_page,
+                search: this.search
             })
                 .then(response => {
                     this.attendees = response.attendees.data;
