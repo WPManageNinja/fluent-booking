@@ -33,6 +33,7 @@ require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
 
 $app->addAction('init', 'BlockEditorHandler@init');
+$app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
 
 (new GlobalPaymentHandler)->register();

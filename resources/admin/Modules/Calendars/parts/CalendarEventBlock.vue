@@ -13,7 +13,7 @@
             </div>
             <div class="fcal_cal_actions">
                 <el-button class="fcal_plain_btn" @click="goToIntegrationSetting">
-                    <el-icon><Setting /></el-icon> Settings
+                    <el-icon><Setting /></el-icon> Host Settings
                 </el-button>
 
                 <el-button

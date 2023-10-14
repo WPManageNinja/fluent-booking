@@ -16,6 +16,7 @@ class Client
 
     public $revokeUrl = 'https://oauth2.googleapis.com/revoke';
     public $tokenUrl = 'https://oauth2.googleapis.com/token';
+    private $refreshTokenUrl = 'https://www.googleapis.com/oauth2/v3/token';
     public $authUrl = 'https://accounts.google.com/o/oauth2/auth';
     public $authScope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
 
@@ -62,7 +63,11 @@ class Client
             'refresh_token' => $refreshToken
         ];
 
-        $tokens = $this->makeRequest($this->tokenUrl, $body, 'POST');
+        $tokens = $this->makeRequest($this->refreshTokenUrl, $body, 'POST', [
+            'Content-Type'              => 'application/http',
+            'Content-Transfer-Encoding' => 'binary',
+            'MIME-Version'              => '1.0',
+        ]);
 
         if (is_wp_error($tokens)) {
             return $tokens;
@@ -110,7 +115,7 @@ class Client
             if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent_booking' && Arr::get($sharedData, 'site_uid') == $siteUid) {
                 continue;
             }
-            
+
             $formattedLists[] = [
                 'start'  => Arr::get($item, 'start.dateTime'),
                 'end'    => Arr::get($item, 'end.dateTime'),
@@ -140,11 +145,11 @@ class Client
     public function patchEvent($calendarId, $eventId, $data, $args = [])
     {
         $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events/' . $eventId;
-    
+
         if ($args) {
             $url = add_query_arg($args, $url);
         }
-    
+
         return $this->makeRequest($url, $data, 'PATCH', $this->getAuthorizationHeader());
     }
 
@@ -227,6 +232,7 @@ class Client
                 'message' => $message,
                 'url'     => $url,
                 'body'    => $body,
+                'header'  => $headers,
                 'method'  => __METHOD__,
                 'type'    => 'api_error'
             ]);

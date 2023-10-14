@@ -1437,6 +1437,54 @@
             margin-top: 20px;
         }
     }
+    &.fcal_location_modal {
+        .el-dialog__header {
+            border-bottom: 1px solid #eaeaea;
+        }
+        .el-dialog__body {
+            padding-bottom: 20px;
+            .el-form {
+                margin-top: 0 !important;
+                padding: 0 !important;
+                background: none !important;
+                .el-form-item {
+                    .el-form-item__label {
+                        font-size: 16px !important;
+                        line-height: 24px !important;
+                        margin-bottom: 5px !important;
+                    }
+                    .el-form-item__content {
+                        .el-input {
+                            .el-input__wrapper {
+                                padding: 5px 16px !important;
+                            }
+                        }
+                        .el-textarea {
+                            textarea {
+                                height: 80px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .el-dialog__footer {
+            padding: 0;
+        }
+        .dialog-footer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 20px !important;
+            margin: 0 !important;
+            .el-button {
+                margin: 0;
+                line-height: 1;
+                padding: 10px 20px !important;
+            }
+        }
+    }
 }
 .el-dropdown-list {
     border: 0;
@@ -1534,6 +1582,19 @@
             border-color: $primaryColor;
             color: #ffffff;
             background: $primaryColor;
+        }
+    }
+    &.fcal_export_btn {
+        background: #5d5d7a;
+        color: #ffffff;
+        border: none;
+        font-size: 16px;
+        padding: 10px 12px;
+        height: auto;
+        transition: .3s;
+        &:hover {
+            background: #797998;
+            color: #ffffff;
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="email" label-position="top">
+    <el-form :model="notification.email" label-position="top">
         <el-form-item label="Subject">
             <popover
                 groupTitle="Shortcodes"
@@ -11,7 +11,7 @@
                <template #popoverButton>
                     <el-input
                         type="text"
-                        v-model="email.subject">
+                        v-model="notification.email.subject">
                         <template #append>
                             <el-button :icon="MoreIcon" @click="toggleSubjectPopup"></el-button>
                         </template>
@@ -41,12 +41,12 @@
                 <textarea
                     class="wp_vue_editor"
                     :id="editor_id"
-                    v-model="email.body">
+                    v-model="notification.email.body">
                 </textarea>
             </div>
         </el-form-item>
-        <el-form-item v-if="email.times" label="Timing">
-            <div v-for="(item, index) in email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
+        <el-form-item v-if="notification.email.times" label="Timing">
+            <div v-for="(item, index) in notification.email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
                 <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
                 <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit" popper-class="fcal_select">
                     <el-option value="minutes" label="Minutes Before"></el-option>
@@ -62,6 +62,17 @@
             <el-link type="primary" :underline="false" @click="addReminderTime">
                     + Add Another Reminder
             </el-link>
+        </el-form-item>
+        <el-form-item label="Additional Recipients" v-if="notification.is_host">
+            <el-input
+                type="text"
+                v-model="notification.email.additional_recipients"
+                placeholder="Enter email addresses separated by commas">
+            </el-input>
+            <p>Provided email addresses will set as CC to this email notification</p>
+        </el-form-item>
+        <el-form-item label="Status">
+            <el-checkbox v-model="notification.enabled"> Enable this notification email</el-checkbox>
         </el-form-item>
     </el-form>
 </template>
@@ -80,7 +91,7 @@ export default {
         Popover
     },
     props: {
-        email: {
+        notification: {
             type: Object,
         },
         editor_id: {
@@ -105,7 +116,7 @@ export default {
     },
     computed: {
         isRemovable() {
-            return this.email.times.length > 1;
+            return this.notification.email.times && this.notification.email.times.length > 1;
         }
     },
     methods: {
@@ -131,7 +142,7 @@ export default {
         },
         changeContentEvent() {
             const content = wp.editor.getContent(this.editor_id);
-            this.email.body = content;
+            this.notification.email.body = content;
         },
         toggleSubjectPopup() {
             this.subjectPopupVisible = !this.subjectPopupVisible;
@@ -140,7 +151,7 @@ export default {
             this.bodyPopupVisible = !this.bodyPopupVisible;
         },
         handleSubjectCommand(command) {
-            this.email.subject += command;
+            this.notification.email.subject += command;
             this.subjectPopupVisible = false;
         },
         handleBodyCommand(command) {
@@ -148,13 +159,13 @@ export default {
             tinymce.activeEditor.insertContent(command);
         },
         addReminderTime() {
-            this.email.times.push({
+            this.notification.email.times.push({
                 value: 15,
                 unit: 'minutes'
             });
         },
         removeReminderTime(index) {
-            this.email.times.splice(index, 1);
+            this.notification.email.times.splice(index, 1);
         },
         validateInput(item) {
             const limitValues = {
