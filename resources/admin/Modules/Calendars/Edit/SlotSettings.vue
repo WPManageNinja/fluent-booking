@@ -37,19 +37,6 @@
                 </div>
             </el-tab-pane>
 
-            <el-tab-pane name="notification-settings">
-                <template #label>
-                    <el-icon>
-                        <Message/>
-                    </el-icon>
-                    Email Notifications
-                </template>
-                <div v-if="activeTab == 'notification-settings'" class="fcal_create_calendar_body">
-                    <el-skeleton v-if="loading"/>
-                    <NotificationSettings v-else ref="notificationData" :slot="slot"/>
-                </div>
-            </el-tab-pane>
-
             <el-tab-pane name="schedule-settings">
                 <template #label>
                     <el-icon>
@@ -66,6 +53,19 @@
                 </div>
             </el-tab-pane>
 
+            <el-tab-pane name="email-notifications">
+                <template #label>
+                    <el-icon>
+                        <Message/>
+                    </el-icon>
+                    Email Notifications
+                </template>
+                <div v-if="activeTab == 'email-notifications'" class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading"/>
+                    <EmailNotificationSettings v-else ref="notificationData" :calendar_event="slot"/>
+                </div>
+            </el-tab-pane>
+
             <el-tab-pane name="question-settings">
                 <template #label>
                     <el-icon><QuestionIcon/></el-icon> Booking Questions
@@ -73,6 +73,23 @@
                 <div v-if="activeTab == 'question-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <QuestionSettings v-else :activeTab="activeTab" :slot="slot"/>
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane name="payment-settings">
+                <template #label>
+                    <el-icon>
+                        <Money/>
+                    </el-icon>
+                    Payment Settings
+                </template>
+                <div class="fcal_create_calendar_body" v-if="activeTab === 'payment-settings'">
+                    <el-skeleton v-if="loading"/>
+                    <payment-settings
+                        v-else
+                        :activeTab="activeTab"
+                        :calendar_event="slot"
+                    />
                 </div>
             </el-tab-pane>
 
@@ -91,23 +108,6 @@
                         :calendar_event="slot"
                     />
                 </div>
-            </el-tab-pane>
-            
-            <el-tab-pane name="payment-settings">
-              <template #label>
-                <el-icon>
-                  <Money/>
-                </el-icon>
-                Payment Settings
-              </template>
-              <div class="fcal_create_calendar_body" v-if="activeTab === 'payment-settings'">
-                <el-skeleton v-if="loading"/>
-                <payment-settings 
-                    v-else 
-                    :activeTab="activeTab"
-                    :calendar_event="slot"
-                />
-              </div>
             </el-tab-pane>
 
             <el-tab-pane name="integrations">
@@ -143,7 +143,7 @@
 
 <script type="text/babel">
 import BasicInfo from './_BasicInfo'
-import NotificationSettings from './_NotificationSettings'
+import EmailNotificationSettings from './_EmailNotificationSettings.vue'
 import ScheduleSettings from "./_ScheduleSettings";
 import QuestionSettings from "./_QuestionSettings.vue";
 import EventIcon from '../../../Components/Icons/EventIcon';
@@ -167,7 +167,7 @@ export default {
         PaymentSettings,
         BasicInfo,
         SaveButton,
-        NotificationSettings,
+        EmailNotificationSettings,
         QuestionSettings,
         EventIcon,
         ScheduleIcon,
