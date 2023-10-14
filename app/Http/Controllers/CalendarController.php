@@ -62,18 +62,18 @@ class CalendarController extends Controller
         $data = $request->get('calendar');
 
 
-       $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
-           'author_timezone'        => 'required',
-           'slot.duration'          => 'required|int',
-           'slot.event_type'        => 'required',
-           'slot.availability_type' => 'required',
-           'slot.schedule_type'     => 'required',
-           'slot.title'             => 'required',
-           'slot.weekly_schedules'  => 'required_if:slot.schedule_type,weekly_schedules',
-           'user_id'                => 'required|int',
-           'slot.location_settings.*.type'  => 'required',
-           'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
-       ], $data));
+        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
+            'author_timezone'                            => 'required',
+            'slot.duration'                              => 'required|int',
+            'slot.event_type'                            => 'required',
+            'slot.availability_type'                     => 'required',
+            'slot.schedule_type'                         => 'required',
+            'slot.title'                                 => 'required',
+            'slot.weekly_schedules'                      => 'required_if:slot.schedule_type,weekly_schedules',
+            'user_id'                                    => 'required|int',
+            'slot.location_settings.*.type'              => 'required',
+            'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
+        ], $data));
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
@@ -143,7 +143,7 @@ class CalendarController extends Controller
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $locationSettings = $request->get('location');
-        
+
         $slotData = [
             'title'             => $title,
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
@@ -327,13 +327,13 @@ class CalendarController extends Controller
         $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($calendar);
 
         $schema = [
-            'title'        => '',
-            'status'       => 'active',
-            'description'  => '',
-            'duration'     => '30',
-            'color_schema' => '#0099ff',
-            'calendar'     => $calendar,
-            'settings'     => $settingsSchema,
+            'title'             => '',
+            'status'            => 'active',
+            'description'       => '',
+            'duration'          => '30',
+            'color_schema'      => '#0099ff',
+            'calendar'          => $calendar,
+            'settings'          => $settingsSchema,
             'max_book_per_slot' => 2,
             'location_settings' => [
                 [
@@ -356,17 +356,17 @@ class CalendarController extends Controller
 
         $slot = $request->all();
 
-       $this->validate($slot, [
-           'title'                     => 'required',
-           'duration'                  => 'required|int',
-           'status'                    => 'required',
-           'settings.schedule_type'    => 'required',
-           'settings.weekly_schedules' => 'required_if:settings.schedule_type,weekly_schedules',
-           'event_type'                => 'required',
-           'location_settings.*.type'  => 'required',
-           'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
-           'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
-       ]);
+        $this->validate($slot, [
+            'title'                                 => 'required',
+            'duration'                              => 'required|int',
+            'status'                                => 'required',
+            'settings.schedule_type'                => 'required',
+            'settings.weekly_schedules'             => 'required_if:settings.schedule_type,weekly_schedules',
+            'event_type'                            => 'required',
+            'location_settings.*.type'              => 'required',
+            'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
+            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
+        ]);
 
         $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
 
@@ -411,13 +411,13 @@ class CalendarController extends Controller
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         $generalRules = [
-            'title'    => 'required',
-            'duration' => 'required|numeric',
-            'title'    => 'required',
-            'duration' => 'required|numeric',
-            'location_settings.*.type'  => 'required',
-            'location_settings.*.title' => 'required_if:location_settings.*.type,custom',
-            'location_settings.*.title' => 'required_if:location_settings.*.type,in_person_organizer',
+            'title'                                 => 'required',
+            'duration'                              => 'required|numeric',
+            'title'                                 => 'required',
+            'duration'                              => 'required|numeric',
+            'location_settings.*.type'              => 'required',
+            'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
+            'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ];
 
@@ -478,8 +478,7 @@ class CalendarController extends Controller
 
     public function getSlotNotifications(Request $request, $calendarId, $slotId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
-
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
         /*
          * Confirmation Email to Attendee
@@ -489,7 +488,7 @@ class CalendarController extends Controller
          * Cancelled By Attendee to Organizer
          */
         return [
-            'notifications' => $slot->getNotifications()
+            'notifications' => $calendarEvent->getNotifications(true)
         ];
     }
 
@@ -497,7 +496,7 @@ class CalendarController extends Controller
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
-        $notifications = $request->get('notifications');
+        $notifications = $request->get('notifications', []);
 
         $formattedNotifications = [];
 
@@ -505,7 +504,8 @@ class CalendarController extends Controller
             $formattedNotifications[$key] = [
                 'title'   => sanitize_text_field($value['title']),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'email'   => $this->sanitize_notification_data($value['email'])
+                'email'   => $this->sanitize_notification_data($value['email']),
+                'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
 
@@ -591,10 +591,11 @@ class CalendarController extends Controller
     private function sanitize_notification_data($settings)
     {
         $sanitizerMap = [
-            'value'   => 'intval',
-            'unit'    => 'sanitize_text_field',
-            'subject' => 'sanitize_text_field',
-            'body'    => 'fcal_sanitize_html',
+            'value'                 => 'intval',
+            'unit'                  => 'sanitize_text_field',
+            'subject'               => 'sanitize_text_field',
+            'body'                  => 'fcal_sanitize_html',
+            'additional_recipients' => 'sanitize_text_field'
         ];
 
         return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);

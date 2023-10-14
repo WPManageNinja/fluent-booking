@@ -118,22 +118,32 @@ class CalendarSlot extends Model
         ];
     }
 
-    public function getNotifications($isView = false)
+    public function getNotifications($isEdit = false)
     {
-        $statuses = Helper::getMeta('calendar_slot', $this->id, 'notification_statuses');
+        $statuses = $this->getMeta('email_notifications');
 
-        $defaults = Helper::getDefaultNotificationSettings();
+        if ($statuses) {
 
-        if (!$statuses) {
-            return $defaults;
+            if ($isEdit) {
+                $defaults = Helper::getDefaultEmailNotificationSettings();
+
+                foreach ($defaults as $key => $default) {
+                    if (isset($statuses[$key])) {
+                        $statuses[$key]['title'] = $default['title'];
+                    }
+                }
+
+            }
+
+            return $statuses;
         }
 
-        return wp_parse_args($statuses, $defaults);
+        return Helper::getDefaultEmailNotificationSettings();
     }
 
     public function setNotifications($notifications)
     {
-        $statuses = Helper::updateMeta('calendar_slot', $this->id, 'notification_statuses', $notifications);
+        $this->updateMeta('email_notifications', $notifications);
     }
 
     public function getBookingFields()
@@ -314,7 +324,7 @@ class CalendarSlot extends Model
         return $exist;
     }
 
-    public function defaultPaymentIcon($currency,$amount)
+    public function defaultPaymentIcon($currency, $amount)
     {
         $html = '<div class="fcal_slot_payment_item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 532 386" fill="none">
             <rect x="9" y="9" width="514" height="368" rx="33" stroke="black" stroke-width="18"/>
@@ -324,7 +334,7 @@ class CalendarSlot extends Model
             <rect x="68" y="282" width="71" height="18" rx="9" fill="black"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M364.949 297.289C359.227 301.507 352.155 304 344.5 304C325.446 304 310 288.554 310 269.5C310 250.446 325.446 235 344.5 235C352.155 235 359.227 237.493 364.949 241.711C368.167 236.563 372.252 232.014 377 228.266C368.061 221.211 356.772 217 344.5 217C315.505 217 292 240.505 292 269.5C292 298.495 315.505 322 344.5 322C356.772 322 368.061 317.789 377 310.734C372.252 306.986 368.167 302.437 364.949 297.289Z" fill="black"/>
             <circle cx="409.5" cy="269.5" r="43.5" stroke="black" stroke-width="18"/>
-            </svg> '.$currency.$amount.'</div>';
+            </svg> ' . $currency . $amount . '</div>';
         return $html;
     }
 
