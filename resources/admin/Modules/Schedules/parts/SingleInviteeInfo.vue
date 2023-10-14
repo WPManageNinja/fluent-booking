@@ -15,7 +15,7 @@
                     <h3>Invitee Email</h3>
                     <p>{{ booking.email }}</p>
                 </div>
-                <div class="fcal_schedule_details_event_item">
+                <div v-if="booking.message" class="fcal_schedule_details_event_item">
                     <h3>Message</h3>
                     <p>{{ booking.message }}</p>
                 </div>

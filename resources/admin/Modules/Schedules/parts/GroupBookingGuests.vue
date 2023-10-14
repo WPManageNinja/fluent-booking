@@ -13,7 +13,7 @@
                     <template #default="scope">
                         <div class="fcal_group_booking_guests_wrap">
                             <div class="fcal_schedule_details_event">
-                                <div class="fcal_schedule_details_event_item">
+                                <div v-if="scope.row.message" class="fcal_schedule_details_event_item">
                                     <h3>Message</h3>
                                     <div class="fcal_spot_details_value">
                                         {{ scope.row.message }}

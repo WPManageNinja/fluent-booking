@@ -12,7 +12,7 @@ class BookingFieldService
 {
     public static function getCustomFieldsData($fieldValues, CalendarSlot $slot)
     {
-        $mainFields = ['name', 'email', 'phone_number', 'message'];
+        $mainFields = ['name', 'email', 'phone_number', 'message', 'address'];
 
         $customFields = self::getBookingFields($slot);
 
