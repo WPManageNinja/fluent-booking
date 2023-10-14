@@ -33,7 +33,7 @@
             <el-skeleton v-if="loading" animated :rows="6">
             </el-skeleton>
             <template v-else>
-                <div v-if="feeds" class="fcal_integration_items">
+                <div v-if="feeds.length" class="fcal_integration_items">
                     <div class="fcal_integration_item" v-for="feed in feeds" :key="feed.id">
                         <div class="fcal_card_wrap">
                             <div class="fcal_card_item_details">

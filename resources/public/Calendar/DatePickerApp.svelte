@@ -203,15 +203,19 @@
     }
 
     function convertTime12to24(time12h, formatHr) {
-      const [time, modifier] = time12h.split(' ');
+        const [time, modifier] = time12h.split(' ');
 
-      let [hours, minutes] = time.split(':');
+        let [hours, minutes] = time.split(':');
 
-      if (modifier === 'PM' && formatHr === '24') {
-        hours = parseInt(hours, 10) + 12;
-      }
-      const result = `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
-      return result;
+        if (hours === '12') {
+            hours = '00';
+        }
+
+        if (modifier === 'PM' && formatHr === '24') {
+            hours = parseInt(hours, 10) + 12;
+        }
+        const result = `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
+        return result;
     }
 
 
