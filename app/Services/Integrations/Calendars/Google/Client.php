@@ -62,7 +62,11 @@ class Client
             'refresh_token' => $refreshToken
         ];
 
-        $tokens = $this->makeRequest($this->tokenUrl, $body, 'POST');
+        $tokens = $this->makeRequest($this->tokenUrl, $body, 'POST', [
+            'Content-Type'              => 'application/http',
+            'Content-Transfer-Encoding' => 'binary',
+            'MIME-Version'              => '1.0',
+        ]);
 
         if (is_wp_error($tokens)) {
             return $tokens;
@@ -110,7 +114,7 @@ class Client
             if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent_booking' && Arr::get($sharedData, 'site_uid') == $siteUid) {
                 continue;
             }
-            
+
             $formattedLists[] = [
                 'start'  => Arr::get($item, 'start.dateTime'),
                 'end'    => Arr::get($item, 'end.dateTime'),
@@ -140,11 +144,11 @@ class Client
     public function patchEvent($calendarId, $eventId, $data, $args = [])
     {
         $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events/' . $eventId;
-    
+
         if ($args) {
             $url = add_query_arg($args, $url);
         }
-    
+
         return $this->makeRequest($url, $data, 'PATCH', $this->getAuthorizationHeader());
     }
 
@@ -227,6 +231,7 @@ class Client
                 'message' => $message,
                 'url'     => $url,
                 'body'    => $body,
+                'header'  => $headers,
                 'method'  => __METHOD__,
                 'type'    => 'api_error'
             ]);
