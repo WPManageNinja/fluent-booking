@@ -20,14 +20,14 @@
 
 
     <?php
-    $feature_image = '';
-    if ($author['featured_image']) {
-        $feature_image = $author['featured_image'];
-    } else {
-        $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
-    }
+//    $feature_image = '';
+//    if ($author['featured_image']) {
+//        $feature_image = $author['featured_image'];
+//    } else {
+//        $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
+//    }
     ?>
-    <meta property="og:image" content="<?php echo $feature_image; ?>" />
+    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL .'assets/images/default-featured.png'; ?>" />
 
 
     <?php foreach ($css_files as $css_file): ?>

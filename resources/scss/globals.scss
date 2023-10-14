@@ -1536,6 +1536,19 @@
             background: $primaryColor;
         }
     }
+    &.fcal_export_btn {
+        background: #5d5d7a;
+        color: #ffffff;
+        border: none;
+        font-size: 16px;
+        padding: 10px 12px;
+        height: auto;
+        transition: .3s;
+        &:hover {
+            background: #797998;
+            color: #ffffff;
+        }
+    }
 }
 
 .fcal_questions_wrapper {
