@@ -1,7 +1,5 @@
 class StripeCheckout {
     constructor(form, response) {
-        console.log(form)
-        window.form  = form
         this.form = form;
         this.data = response.data;
         this.intent = response.data?.intent;
@@ -33,7 +31,7 @@ class StripeCheckout {
         paymentElement.mount('.fluent_booking_payment_methods');
 
         const paymentMethods = document.querySelector('.fluent_booking_payment_methods');
-        // paymentMethods.innerHTML = '<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>';
+        paymentProcessor.appendChild('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
 
         const submit = this.form.querySelector('.fcal_submit');
         submit.style.display = 'none';
