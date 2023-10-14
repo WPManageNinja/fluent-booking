@@ -31,7 +31,11 @@ class StripeCheckout {
         paymentElement.mount('.fluent_booking_payment_methods');
 
         const paymentMethods = document.querySelector('.fluent_booking_payment_methods');
-        paymentProcessor.appendChild('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
+
+        const loadingTextNode = document.createElement("p");
+        loadingTextNode.id = 'fluent_booking_loading_payment_processor';
+        loadingTextNode.textContent = 'Loading Payment Processor...';
+        paymentProcessor.appendChild(loadingTextNode);
 
         const submit = this.form.querySelector('.fcal_submit');
         submit.style.display = 'none';
