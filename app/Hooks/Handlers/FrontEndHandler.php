@@ -133,7 +133,7 @@ class FrontEndHandler
         if ($isPhoneRequired) {
             $rules['phone_number'] = 'required';
         }
-        
+
         $isAddressRequired = $calendarSlot->isAddressRequired();
         if ($isAddressRequired) {
             $rules['address'] = 'required';
@@ -174,6 +174,7 @@ class FrontEndHandler
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
+            'address'          => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'source'           => 'web',
