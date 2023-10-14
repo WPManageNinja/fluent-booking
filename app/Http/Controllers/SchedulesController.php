@@ -209,7 +209,13 @@ class SchedulesController extends Controller
             return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
-        $attendees = Booking::where('group_id', $booking->group_id)->paginate();
+        $attendees = Booking::where('group_id', $booking->group_id);
+        $search    = sanitize_text_field($request->get('search'));
+
+        if (!empty($search)) {
+            $attendees = $attendees->searchBy($search);
+        }
+        $attendees = $attendees->paginate();
 
         foreach ($attendees as $attendee) {
             $attendee = $this->formatBooking($attendee);
