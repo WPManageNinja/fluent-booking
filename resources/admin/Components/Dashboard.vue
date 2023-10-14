@@ -222,8 +222,8 @@ export default {
             const startDate = this.filterDate ? this.filterDate[0] : '';
             const endDate = this.filterDate ? this.filterDate[1] : '';
             this.$get('reports', {
-                    startDate: this.convertDate(startDate),
-                    endDate: this.convertDate(endDate)
+                    startTime: this.convertDate(startDate),
+                    endTime: this.convertDate(endDate)
                 })
                 .then(response => {
                     this.widgets = response.overview;
