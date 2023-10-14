@@ -31,7 +31,12 @@ class StripeCheckout {
         paymentElement.mount('.fluent_booking_payment_methods');
 
         const paymentMethods = document.querySelector('.fluent_booking_payment_methods');
-        paymentProcessor.appendChild('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
+
+        const loadingMessage = document.createElement('p');
+        loadingMessage.id = 'fluent_booking_loading_payment_processor';
+        loadingMessage.textContent = 'Loading Payment Processor...';
+
+        paymentProcessor.appendChild(loadingMessage);
 
         const submit = this.form.querySelector('.fcal_submit');
         submit.style.display = 'none';
@@ -76,7 +81,7 @@ class StripeCheckout {
                                 });
                             });
                         }
-                        stripePayButton.textContent = 'Pay Now';
+                        stripePayButton.textContent = 'Confirm Payment';
                         stripePayButton.disabled = false;
                     });
                 }).catch(error => {
