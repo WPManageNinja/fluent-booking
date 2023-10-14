@@ -28,8 +28,7 @@ class PaymentHelper
             ),
             is_array($args)? $args:[]
         );
-        return add_query_arg($queryArgs, $booking->source_url);
-
+        return add_query_arg($queryArgs, site_url());
     }
 
     public static function getReceiptTemplate($items): array
