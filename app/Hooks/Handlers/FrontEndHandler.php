@@ -204,7 +204,7 @@ class FrontEndHandler
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
-            if(is_wp_error($booking)) {
+            if (is_wp_error($booking)) {
                 throw new \Exception($booking->get_error_message(), 422);
             }
 
@@ -296,10 +296,10 @@ class FrontEndHandler
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
 
-        if($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
+        if ($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
             $total = 0;
             foreach ($paymentSettings['items'] as $payment) {
-                $total += (int) $payment['value'];
+                $total += (int)$payment['value'];
             }
 
             $currency = CurrenciesHelper::getCurrencySign();
@@ -308,17 +308,16 @@ class FrontEndHandler
             $calendarEvent->total_payment = '';
         }
 
-
         $eventData = [
-            'id' => $calendarEvent->id,
-            'max_lookup_date' => $calendarEvent->max_lookup_date,
-            'min_lookup_date' => $calendarEvent->min_lookup_date,
-            'duration' => $calendarEvent->duration,
-            'title' => $calendarEvent->title,
-            'location_settings' => $calendarEvent->location_settings,
+            'id'                 => $calendarEvent->id,
+            'max_lookup_date'    => $calendarEvent->max_lookup_date,
+            'min_lookup_date'    => $calendarEvent->min_lookup_date,
+            'duration'           => $calendarEvent->duration,
+            'title'              => $calendarEvent->title,
+            'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,
-            'description' => $calendarEvent->description,
-            'pre_selects' => (object) []
+            'description'        => $calendarEvent->description,
+            'pre_selects'        => (object)[]
         ];
 
         $author = $calendar->getAuthorProfile(true);
