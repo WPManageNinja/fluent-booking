@@ -227,12 +227,7 @@ export default {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
         getLocationSettings() {
-            return [{
-                type: this.slot.location_settings[0].type,
-                title: this.slot.location_settings[0].title,
-                description: this.slot.location_settings[0].description,
-                host_phone_number: this.slot.location_settings[0].host_phone_number
-            }]
+            return this.slot.location_settings;
         },
         checkValidattion() {
             const location = this.slot.location_settings[0];

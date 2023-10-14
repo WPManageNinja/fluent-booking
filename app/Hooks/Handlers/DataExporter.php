@@ -5,12 +5,9 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Services\PermissionManager;
-use FluentBooking\Framework\Request\Request;
 
 class DataExporter
 {
-    private $request;
-
 
     public function exportBookingHosts()
     {
