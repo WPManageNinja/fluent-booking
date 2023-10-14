@@ -54,6 +54,18 @@ class Booking extends Model
         'utm_term'
     ];
 
+
+
+    /**
+     * $searchable Columns in table to search
+     * @var array
+     */
+    protected $searchable = [
+        'email',
+        'first_name',
+        'last_name'
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -356,5 +368,37 @@ class Booking extends Model
         }
 
         return $default;
+    }
+
+
+
+    /**
+     * Local scope to filter hosts by search/query string
+     * @param string $search
+     */
+    public function scopeSearchBy($query, $search)
+    {
+        if ($search) {
+            $fields = $this->searchable;
+            $query->where(function ($query) use ($fields, $search) {
+                $query->where(array_shift($fields), 'LIKE', "%$search%");
+
+                $nameArray = explode(' ', $search);
+                if (count($nameArray) >= 2) {
+                    $query->orWhere(function ($q) use ($nameArray) {
+                        $fname = array_shift($nameArray);
+                        $lastName = implode(' ', $nameArray);
+                        $q->where('first_name', 'LIKE', "%$fname%")
+                            ->orWhere('last_name', 'LIKE', "%$lastName%");
+                    });
+                }
+
+                foreach ($fields as $field) {
+                    $query->orWhere($field, 'LIKE', "%$search%");
+                }
+            });
+        }
+
+        return $query;
     }
 }
