@@ -1,70 +1,93 @@
 class StripeCheckout {
-    constructor ($form, $response) {
-        this.form = jQuery($form)
-        this.data = $response.data
-        this.intent = $response.data?.intent
+    constructor(form, response) {
+        this.form = form;
+        this.data = response.data;
+        this.intent = response.data?.intent;
     }
 
-    init () {
-        this.form.find('.fcal_form_item').hide()
-        this.form.find('.fluent_booking_payment_processor').css('display', 'block')
+    init() {
+        const formItems = this.form.querySelectorAll('.fcal_form_item');
+        formItems.forEach(item => {
+            item.style.display = 'none';
+        });
 
-        let submitButton = "<button id='fluent_booking_stipe_pay' style='margin-top:23px;!important' type='submit'>Pay Now</button>";
+        const paymentProcessor = this.form.querySelector('.fluent_booking_payment_processor');
+        paymentProcessor.style.display = 'block';
 
-        var stripe = Stripe(this.data?.data?.payment_args?.public_key);
+        const submitButton = document.createElement('button');
+        submitButton.id = 'fluent_booking_stipe_pay';
+        submitButton.style.marginTop = '23px';
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Pay Now';
+
+        const stripe = Stripe(this.data?.data?.payment_args?.public_key);
 
         const elements = stripe.elements({
-            clientSecret: this.intent.client_secret
+            clientSecret: this.intent.client_secret,
         });
 
-        const paymentElement = elements.create('payment', {
-        });
+        const paymentElement = elements.create('payment', {});
 
         paymentElement.mount('.fluent_booking_payment_methods');
 
-        jQuery('.fluent_booking_payment_methods').append('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
-        this.form.find('.fcal_submit').hide();
-        let that= this;
+        const paymentMethods = document.querySelector('.fluent_booking_payment_methods');
+        paymentProcessor.appendChild('<p id="fluent_booking_loading_payment_processor">Loading Payment Processor...</p>');
 
-        paymentElement.on('ready', function(event) {
-            jQuery('#fluent_booking_loading_payment_processor').remove();
-            jQuery('.fluent_booking_payment_methods').append(submitButton);
+        const submit = this.form.querySelector('.fcal_submit');
+        submit.style.display = 'none';
 
-            jQuery('#fluent_booking_stipe_pay').on('click', function(e) {
-                e.preventDefault()
-                elements.submit().then(result=> {
-                    jQuery(this).text('Processing...');
-                    jQuery(this).attr('disabled', true);
-                    const pay = stripe.confirmPayment({
+        const that = this;
+
+        paymentElement.on('ready', function (event) {
+            const loadingPaymentProcessor = document.querySelector('#fluent_booking_loading_payment_processor');
+            if (loadingPaymentProcessor) {
+                loadingPaymentProcessor.remove();
+            }
+
+            paymentMethods.appendChild(submitButton);
+
+            const stripePayButton = document.querySelector('#fluent_booking_stipe_pay');
+            stripePayButton.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                elements.submit().then(result => {
+                    stripePayButton.textContent = 'Processing...';
+                    stripePayButton.disabled = true;
+
+                    const confirmParams = {
+                        // return_url: that.data?.data?.payment_args?.success_url
+                    };
+
+                    stripe.confirmPayment({
                         elements,
-                        confirmParams: {
-                            // redirect: 'if_required'
-                            // return_url: that.data?.data?.payment_args?.success_url
-                        },
+                        confirmParams,
                         redirect: 'if_required'
-                    }).then((result) => {
+                    }).then(result => {
                         if (result?.paymentIntent?.id) {
-                            jQuery.post(window.fluentCalendarPublicVars.ajaxurl, {
-                                action: 'fluent_cal_confirm_stripe_payment',
-                                intentId: result?.paymentIntent?.id
-                            }).then((response) => {
-                                window.location.href =  that.data?.data?.payment_args?.success_url;
+                            fetch(window.fluentCalendarPublicVars.ajaxurl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: `action=fluent_cal_confirm_stripe_payment&intentId=${result?.paymentIntent?.id}`,
+                            }).then(response => {
+                                response.json().then(data => {
+                                    window.location.href = that.data?.data?.payment_args?.success_url;
+                                });
                             });
                         }
-                        jQuery(this).text('Pay Now');
-                        jQuery(this).attr('disabled', false);
-                    })
-
+                        stripePayButton.textContent = 'Pay Now';
+                        stripePayButton.disabled = false;
+                    });
                 }).catch(error => {
-                    jQuery(this).text('Pay Now');
-                    jQuery(this).attr('disabled', false);
-                })
-
-            })
+                    stripePayButton.textContent = 'Pay Now';
+                    stripePayButton.disabled = false;
+                });
+            });
         });
     }
-  }
-  
-  window.addEventListener("fluent_booking_payment_next_action_stripe", function (e) {
+}
+
+window.addEventListener('fluent_booking_payment_next_action_stripe', function (e) {
     new StripeCheckout(e.detail.form, e.detail.response).init();
-  });
+});

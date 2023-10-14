@@ -29,6 +29,12 @@ class AdminMenuHandler
 
         $appUrlBase = Helper::getAppBaseUrl();
 
+        $menuPriority = 26;
+
+        if (defined('FLUENTCRM')) {
+            $menuPriority = 4;
+        }
+
         add_menu_page(
             __('Fluent Booking', 'fluent-booking'),
             __('Fluent Booking', 'fluent-booking'),
@@ -36,7 +42,7 @@ class AdminMenuHandler
             'fluent-booking',
             [$this, 'render'],
             $this->getMenuIcon(),
-            26
+            $menuPriority
         );
 
         add_submenu_page(
