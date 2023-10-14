@@ -334,18 +334,12 @@ class CalendarSlot extends Model
             return '';
         }
 
-        $default = Arr::get($this->location_settings, '0');
+        $default = Arr::get($this, 'location_settings');
         if (!$default) {
             return '';
         }
 
-        $driver = Arr::get($default, 'type');
-
-        if (!$driver) {
-            return '';
-        }
-
-        return LocationService::getLocationIconHeadingHtml($driver, $default, $this);
+        return LocationService::getLocationIconHeadingHtml($default, $this);
     }
 
 }
