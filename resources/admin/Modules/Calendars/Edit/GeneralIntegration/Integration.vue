@@ -53,7 +53,7 @@
         <div v-else class="fcal_settings_body">
 
         <template v-if="!show_edit">
-            <div v-if="integrations" class="fcal_integration_items">
+            <div v-if="integrations.length" class="fcal_integration_items">
                 <div class="fcal_integration_item" v-for="integration in integrations" :key="integration.id">
                     <div class="fcal_card_wrap">
                         <div class="fcal_integration_icon">
