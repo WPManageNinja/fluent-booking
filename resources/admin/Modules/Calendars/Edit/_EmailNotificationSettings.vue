@@ -20,7 +20,7 @@
                     <div class="header_right">
                         <span v-if="!notification.enabled" class="fcal_plain_btn disable"> Disabled </span>
                         <span>
-                            <el-button @click="toggleEdit(notification)" class="fcal_plain_btn">
+                            <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
                                 <el-icon><EditPen/></el-icon> Edit
                             </el-button>
                         </span>
@@ -36,15 +36,15 @@
         <el-dialog
             v-model="showEdit"
             v-if="showEdit"
-            title="Edit Notification"
+            :title="(editingNotification) ? 'Edit: ' + editingNotification.title : 'Edit Notification'"
             class="fcal_modal fcal_notification_modal"
             :close-on-click-modal="false"
         >
-            <EditNotificationSettings v-if="editingNotification.email" :email="editingNotification.email"/>
+            <EditNotificationSettings v-if="editingNotification.email" :notification="editingNotification"/>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">Save
-                        Email
+                    <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
+                        Save Email
                     </el-button>
                 </div>
             </template>
@@ -65,7 +65,7 @@ import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 
 export default {
     name: 'NotificationSettings',
-    props: ['slot'],
+    props: ['calendar_event'],
     components: {
         EditNotificationSettings,
         SaveButton,
@@ -84,13 +84,15 @@ export default {
         }
     },
     methods: {
-        toggleEdit(notification) {
-            this.showEdit = !this.showEdit;
-            if (this.showEdit) {
-                this.editingNotification = notification;
-            } else {
-                this.editingNotification = {};
+        toggleEdit(notificationKey) {
+            if(notificationKey) {
+                this.editingNotification = this.notifications[notificationKey];
+                this.showEdit = true;
+                return;
             }
+
+            this.showEdit = false;
+            this.editingKey = '';
         },
         closeEdit() {
             this.showEdit = false;
@@ -98,7 +100,7 @@ export default {
         },
         fetch() {
             this.loading = true;
-            this.$get('calendars/' + this.slot.calendar.id + '/slots/' + this.slot.id + '/notifications', {
+            this.$get('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/notifications', {
                 with: ['smart_codes']
             })
                 .then(response => {
@@ -113,7 +115,7 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.slot.calendar.id + '/slots/' + this.slot.id + '/notifications', {
+            this.$post('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/notifications', {
                 notifications: this.notifications
             })
                 .then(response => {

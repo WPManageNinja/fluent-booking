@@ -201,7 +201,7 @@
             <img src="<?php echo $author['avatar']; ?>"/>
             <div class="author_info">
                 <h1>
-                    <?php echo $author['name']; ?>
+                    <?php echo esc_html($calendar->title); ?>
                 </h1>
                 <?php if ($calendar->description) { ?>
                     <p class="fcal_description"><?php echo $calendar->description; ?></p>
