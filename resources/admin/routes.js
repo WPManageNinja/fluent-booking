@@ -1,4 +1,4 @@
-import Dashboard from './Components/Dashboard.vue';
+import DashboardWrapper from './Components/DashboardWrapper.vue';
 import AllCalendars from './Modules/Calendars/AllCalendars.vue';
 import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
@@ -24,7 +24,7 @@ export var routes = [
     {
         path: '/',
         name: 'dashboard',
-        component: Dashboard,
+        component: DashboardWrapper,
         meta: {
             active_menu: 'dashboard'
         }

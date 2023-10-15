@@ -8,7 +8,7 @@
             >
                 <el-select
                     v-model="slot.location_settings[i].type"
-                    popper-class="fcal_select"
+                    popper-class="fcal_select fcal_location_select"
                     @change="isLocationInfoRequired(slot.location_settings[i], i)"
                 >
                     <el-option-group
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">Add a Location</el-link>
+        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">Add another Location Choice</el-link>
 
         <el-dialog
             v-if="dialogVisible"

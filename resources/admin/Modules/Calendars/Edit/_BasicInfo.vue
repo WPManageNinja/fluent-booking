@@ -6,7 +6,6 @@
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
-
                 <el-form-item
                     v-if="is_board"
                     label="Event Type">
@@ -68,7 +67,7 @@
                     <el-input
                         v-model="slot.description"
                         type="textarea"
-                        :rows="3"
+                        :rows="2"
                         placeholder="Enter Description here"
                     />
                 </el-form-item>
