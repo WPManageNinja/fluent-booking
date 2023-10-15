@@ -11,7 +11,7 @@ class GlobalPaymentHandler
 {
     public function register()
     {
-        add_action('fluent_booking_loaded', [$this, 'init']);
+        add_action('init', [$this, 'init']);
     }
 
     public function init()
