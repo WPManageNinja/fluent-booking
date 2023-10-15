@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 
 class StripeSettings
@@ -14,10 +15,6 @@ class StripeSettings
     public function __construct()
     {
         $settings = get_option($this->methodHandler, []);
-
-        if (!$settings) {
-            $defaults['provider'] = 'connect';
-        }
 
         $settings = wp_parse_args($settings, static::getDefaults());
 
