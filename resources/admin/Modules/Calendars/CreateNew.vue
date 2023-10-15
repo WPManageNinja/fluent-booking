@@ -1,6 +1,6 @@
 <template>
-    <div class="fcal_create_calendar_wrap">
-        <div class="fcal_welcom_banner">
+    <div class="fcal_create_calendar_wrap fcal_onboard_wrap">
+        <div v-if="is_board" class="fcal_welcom_banner">
             <h1>
                 <svg xmlns="http://www.w3.org/2000/svg" width="27" height="29" viewBox="0 0 27 29" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M8.85634 27.063C6.32888 26.3537 3.68272 25.9959 1.11577 25.6681C0.562888 25.5994 0.0495755 25.9829 0.010084 26.5231C-0.0688991 27.0638 0.326248 27.5582 0.839638 27.6269C3.3276 27.9424 5.89432 28.2801 8.30331 28.9629C8.8167 29.111 9.36981 28.8061 9.52778 28.2817C9.68574 27.7576 9.36973 27.2115 8.85634 27.063Z" fill="white"/>
@@ -13,18 +13,37 @@
             <PartyIcon class="party_icon" />
         </div>
         <div class="fcal_create_calendar_header">
-            <h1>Create a new booking calendar</h1>
+            <h1 v-if="is_board">{{ headerTitle }}</h1>
+            <h1 v-else style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
+                <el-icon><Back /></el-icon> Add {{ calendar.slot.event_type=='single'?'One-to-One':'Group' }} Booking Type
+            </h1>
         </div>
 
-        <div v-if="calendar.slot" class="fcal_create_calendar_body">
-            <div class="fcal_create_calendar_basic_info">
-                <basic-info ref="basicInfo" :is_board="is_board" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
+        <div v-if="calendar.slot" class="fcal_create_calendar_body" :class="step==2 ? 'fcal_step_2_active' : ''">
+
+            <div class="fcal_onboard_steps">
+                <div v-if="step==1" class="fcal_onboard_step step-1">
+                    <div class="fcal_create_calendar_basic_info">
+                        <basic-info ref="basicInfo" :is_board="is_board" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
+                    </div>
+                    <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
+                        <time-zone-selector v-model="calendar.author_timezone"/>
+                    </el-form-item>
+                </div>
+
+                <div v-if="step==2 && is_board" class="fcal_onboard_step step-2">
+                    <WeeklySchedules
+                        :weekly_schedules="calendar.slot?.weekly_schedules"
+                        title="Weekly Hours"
+                    />
+                </div>
             </div>
-            <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
-                <time-zone-selector v-model="calendar.author_timezone"/>
-            </el-form-item>
+
             <div class="fcal_create_calendar_form_footer">
-                <SaveButton :saving="saving" label="Continue" @save="createCalendar"/>
+                <el-button v-if="step==1 && is_board" class="fcal_primary_btn" @click="handleStep(2)">Continue</el-button>
+                <el-button v-if="step==2 && is_board" class="fcal_plain_btn" @click="handleStep(1)">Back</el-button>
+                <SaveButton v-if="step==2" :saving="saving" label="Continue" @save="createCalendar"/>
+                <SaveButton v-if="!is_board" :saving="saving" label="Continue" @save="createCalendar"/>
             </div>
         </div>
     </div>
@@ -36,7 +55,7 @@ import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import LocationSelector from './Edit/_LocationSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
-import { Right } from '@element-plus/icons-vue';
+import { Right, Back } from '@element-plus/icons-vue';
 import BasicInfo from './Edit/_BasicInfo';
 import PartyIcon from "@/Pieces/PartyIcon";
 
@@ -51,7 +70,8 @@ export default {
         HostSelector,
         SaveButton,
         Right,
-        BasicInfo
+        BasicInfo,
+        Back
     },
     data() {
         return {
@@ -90,7 +110,9 @@ export default {
                     }
                 }
             },
-            saving: false
+            saving: false,
+            step: 1,
+            headerTitle: 'Create a new booking calendar'
         }
     },
     methods: {
@@ -188,6 +210,15 @@ export default {
                     this.checking_slug = false;
                 });
 
+        },
+        handleStep(index) {
+            this.step = index;
+            console.log(this.step);
+            if (this.step == 1) {
+                this.headerTitle = 'Create a new booking calendar';
+            } else if (this.step == 2) {
+                this.headerTitle = 'Create Your Availability';
+            }
         }
     },
     mounted() {
