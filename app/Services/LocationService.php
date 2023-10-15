@@ -86,20 +86,6 @@ class LocationService
         return $locationData;
     }
 
-    public static function getLocationOptions($calendarSlot)
-    {
-        $locationSettings = Arr::get($calendarSlot, 'location_settings');
-
-        $locationOptions = [];
-        foreach ($locationSettings as $location) {
-            $locationOptions[] = [
-                'type'  => Arr::get($location, 'type'),
-                'title' => Arr::get($location, 'title')
-            ];
-
-        }
-        return $locationOptions;
-    }
     public static function getBookingLocationUrl(Booking $booking)
     {
         $details = $booking->location_details;
