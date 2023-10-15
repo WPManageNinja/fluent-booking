@@ -103,24 +103,167 @@ class BookingService
         return $booking;
     }
 
-    public static function getBookingConfirmationHtml($booking, $calendarSlot = null, $withActions = false)
+    public static function getBookingConfirmationHtml(Booking $booking, $actionType = 'confirmation')
     {
-        if (!$calendarSlot) {
-            $calendarSlot = $booking->slot;
-        }
-
-        $author = $calendarSlot->getAuthorProfile(true);
-
-        $confirmationData = [
-            'author'       => $author,
-            'sub_heading'  => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
-            'slot'         => $calendarSlot,
-            'booking'      => $booking,
-            'message'      => 'A confirmation has been sent to your email address along with meeting location details.',
-            'with_actions' => $withActions
+        $validActions = [
+            'confirmation',
+            'cancel',
+            'reschedule'
         ];
 
+        if (!in_array($actionType, $validActions)) {
+            $actionType = 'confirmation';
+        }
+
+        $calendarSlot = $booking->calendar_event;
+
+        $author = $booking->getHostDetails(false);
+
+        $guestName = trim($booking->first_name . ' ' . $booking->last_name);
+
+        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', $calendarSlot->title, $guestName, $author['name']);
+
+        $sections = [
+            'what'  => [
+                'title'   => __('What', 'fluent-booking'),
+                'content' => $meetingTitle
+            ],
+            'when'  => [
+                'title'   => __('When', 'fluent-booking'),
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true)
+            ],
+            'who'   => [
+                'title'   => __('Who', 'fluent-booking'),
+                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
+            ],
+            'where' => [
+                'title'   => __('Where', 'fluent-booking'),
+                'content' => $booking->getLocationDetailsHtml()
+            ]
+        ];
+
+        if ($booking->status == 'cancelled') {
+            // add cancellation reason at the beginning
+            $sections = array_merge([
+                'cancellation_reason' => [
+                    'title'   => __('Cancellation Reason', 'fluent-booking'),
+                    'content' => $booking->getCancelReason(true)
+                ]
+            ], $sections);
+        }
+
+        if ($booking->message) {
+            $sections['note'] = [
+                'title'   => __('Additional Note', 'fluent-booking'),
+                'content' => wpautop($booking->message)
+            ];
+        }
+
+        $subHeading = '';
+        if ($booking->status == 'scheduled') {
+            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
+        }
+
+        $confirmationData = [
+            'author'      => $author,
+            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
+            'sub_heading' => $subHeading,
+            'sections'    => $sections,
+            'slot'        => $calendarSlot,
+            'booking'     => $booking,
+            'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
+            'action_type' => $actionType,
+            'can_cancel'  => $booking->canCancel(),
+            'bookmarks'   => []
+        ];
+
+        if ($booking->canCancel()) {
+            $confirmationData['action_url'] = add_query_arg([
+                'action'       => 'fcal_cancel_meeting',
+                'meeting_hash' => $booking->hash,
+                'scope'        => Arr::get($_REQUEST, 'scope')
+            ], admin_url('admin-ajax.php'));
+        }
+
+        if ($booking->status == 'scheduled') {
+            $assetsUrl = App::getInstance('url.assets');
+            $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
+                'google'   => [
+                    'title' => 'Google Calendar',
+                    'url'   => add_query_arg([
+                        'dates'    => date('Ymd\THis\Z', strtotime($booking->start_time)) . '/' . date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'text'     => $meetingTitle,
+                        'details'  => $booking->title,
+                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
+                    ], 'https://calendar.google.com/calendar/r/eventedit'),
+                    'icon'  => $assetsUrl . 'images/google-icon.svg'
+                ],
+                'outlook'  => [
+                    'title' => 'Outlook',
+                    'url'   => add_query_arg([
+                        'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
+                        'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'subject'  => $meetingTitle,
+                        'path'     => '/calendar/action/compose',
+                        'body'     => $booking->title,
+                        'rru'      => 'addevent',
+                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
+                    ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
+                    'icon'  => $assetsUrl . 'images/outlook.svg'
+                ],
+                'msoffice' => [
+                    'title' => 'Microsoft Office',
+                    'url'   => add_query_arg([
+                        'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
+                        'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'subject'  => $meetingTitle,
+                        'path'     => '/calendar/action/compose',
+                        'body'     => $booking->title,
+                        'rru'      => 'addevent',
+                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
+                    ], 'https://outlook.office.com/calendar/0/deeplink/compose'),
+                    'icon'  => $assetsUrl . 'images/msoffice.svg'
+                ],
+                'other'    => [
+                    'title' => 'Other Calendar',
+                    'url'   => $booking->getIcsDownloadUrl(),
+                    'icon'  => $assetsUrl . 'images/ics.svg'
+                ]
+            ], $booking);
+        }
+
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+    }
+
+    public static function generateBookingICS(Booking $booking)
+    {
+        $host = $booking->getHostDetails(false);
+        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', $booking->calendar_event->title, trim($booking->first_name . ' ' . $booking->last_name), $host['name']);
+
+        // Initialize the ICS content
+        $icsContent = "BEGIN:VCALENDAR\r\n";
+        $icsContent .= "VERSION:2.0\r\n";
+        $icsContent .= "PRODID:-//Your Organization//Your Application//EN\r\n";
+
+        $icsContent .= "BEGIN:VEVENT\r\n";
+        $icsContent .= "UID:" . md5($booking->hash) . "\r\n"; // Unique ID for the event
+
+        // Event details
+        $icsContent .= "SUMMARY:" . $booking->calendar_event->title . "\r\n";
+        $icsContent .= "DESCRIPTION:" . $meetingTitle . "\r\n";
+
+        // Date and time formatting (assuming eventStart and eventEnd are DateTime objects)
+        $icsContent .= "DTSTART:" . date('Ymd\THis\Z', strtotime($booking->start_time)) . "\r\n";
+        $icsContent .= "DTEND:" . date('Ymd\THis\Z', strtotime($booking->end_time)) . "\r\n";
+
+        $icsContent .= "LOCATION:" . LocationService::getBookingLocationUrl($booking) . "\r\n";
+
+        $icsContent .= "END:VEVENT\r\n";
+
+        // Close the VCALENDAR component
+        $icsContent .= "END:VCALENDAR\r\n";
+
+        return $icsContent;
     }
 
 }

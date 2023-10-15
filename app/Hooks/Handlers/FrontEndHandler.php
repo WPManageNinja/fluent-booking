@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingFieldService;
@@ -23,6 +24,10 @@ class FrontEndHandler
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
+
+
+        add_action('wp_ajax_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
+        add_action('wp_ajax_nopriv_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
 
         add_action('wp_ajax_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
         add_action('wp_ajax_nopriv_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
@@ -92,17 +97,51 @@ class FrontEndHandler
         if (is_user_logged_in()) {
             $currentUser = wp_get_current_user();
             $name = trim($currentUser->first_name . ' ' . $currentUser->last_name);
+
+            if (!$name) {
+                $name = $currentUser->display_name;
+            }
+
             $currentPerson = [
-                'name'    => $name ? $name : $currentUser->display_name,
+                'name'    => $name,
                 'email'   => $currentUser->user_email,
                 'user_id' => $currentUser->ID
             ];
+        } else {
+            // Check for url params
+            if (isset($_REQUEST['invitee_name'])) {
+                $currentPerson['name'] = sanitize_text_field($_REQUEST['invitee_name']);
+            }
+
+            if (isset($_REQUEST['invitee_email'])) {
+                $email = sanitize_email($_REQUEST['invitee_email']);
+                if (is_email($email)) {
+                    $currentPerson['email'] = $email;
+                }
+            }
         }
+
+        if (empty($currentPerson['email'])) {
+            // Let's try to get from FluentCRM is exists
+            if (defined('FLUENTCRM')) {
+                $contactApi = FluentCrmApi('contacts');
+                $contact = $contactApi->getCurrentContact();
+                if ($contact) {
+                    $currentPerson['email'] = $contact->email;
+                    $currentPerson['name'] = $contact->full_name;
+                }
+            }
+        }
+
+
+        $globalSettings = Helper::getGlobalSettings();
+        $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
         return [
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
-            'current_person' => $currentPerson
+            'current_person' => $currentPerson,
+            'start_day'      => $startDay
         ];
     }
 
@@ -224,22 +263,11 @@ class FrontEndHandler
             return;
         }
 
-        $author = $calendarSlot->getAuthorProfile(true);
-
-        $confirmationData = [
-            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
-            'slot'        => $calendarSlot,
-            'booking'     => $booking,
-            'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
-        ];
-
-        $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
-
-        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',
-            'response_html' => $responseHtml
+            'response_html' => $html
         ], 200);
     }
 
@@ -337,5 +365,51 @@ class FrontEndHandler
             'author_profile' => $author,
             'form_fields'    => $formFields,
         ], $calendarEvent);
+    }
+
+    public function ajaxHandleCancelMeeting()
+    {
+        $data = $_REQUEST;
+
+        $meetingHash = Arr::get($_REQUEST, 'meeting_hash');
+
+        $meeting = Booking::where('hash', $meetingHash)->first();
+
+        if (!$meeting) {
+            wp_send_json([
+                'message' => __('Sorry! meeting could not be found', 'fluent-booking')
+            ], 422);
+        }
+
+        $message = sanitize_textarea_field(Arr::get($data, 'cancellation_reason', ''));
+
+        if (!$message) {
+            wp_send_json([
+                'message' => __('Please provide a reason for cancellation', 'fluent-booking')
+            ], 422);
+        }
+
+
+        $result = $meeting->cancelMeeting($message, 'guest', get_current_user_id());
+
+        if (is_wp_error($result)) {
+            if (!wp_doing_ajax()) {
+                wp_redirect($meeting->getConfirmationUrl());
+                exit();
+            }
+
+            wp_send_json([
+                'message' => $result->get_error_message()
+            ], 422);
+        }
+
+        if (wp_doing_ajax()) {
+            wp_send_json([
+                'message' => __('Meeting has been cancelled', 'fluent-booking')
+            ], 200);
+        }
+
+        wp_redirect($meeting->getConfirmationUrl());
+        exit;
     }
 }

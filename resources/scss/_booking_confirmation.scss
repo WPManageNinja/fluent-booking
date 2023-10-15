@@ -1,0 +1,80 @@
+.fcal_confirm_header {
+  text-align: center;
+  h3 {
+    font-size: 21px;
+  }
+}
+.fcal_confirmation {
+  .fcal_confirm_header {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+    h3 {
+      font-weight: 500;
+    }
+    p {
+      margin: 5px 0;
+    }
+  }
+  .fcal_confirm_section {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    flex-direction: column;
+  }
+
+  .fcal_confirm_section_title {
+    width: 200px;
+  }
+
+  .fcal_confirm_section {
+    h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .fcal_booking_manage {
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 2px solid #e5e7eb;
+  }
+}
+ul.fcal_listed {
+  margin: 0;
+  list-style: none;
+  li {
+    display: block;
+  }
+}
+span.fcal_host_badge {
+  background: #dee9fc;
+  padding: 3px 10px;
+  border-radius: 5px;
+  margin-left: 6px;
+  font-size: 80%;
+  color: #253985;
+}
+
+
+.fcal_to_calendars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  margin-top: 0 !important;
+  .fcal_cal_items {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    a {
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid #e5e7eb;
+    }
+  }
+}

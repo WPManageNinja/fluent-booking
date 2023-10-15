@@ -20,7 +20,7 @@ class LandingPageHandler
             add_action('template_redirect', [$this, 'handleSlugDefinedPage'], 1);
         }
 
-        if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
+        if (isset($_GET['fluent-booking'])) {
             add_action('init', [$this, 'handleUrlParamsPage']);
         }
     }
@@ -42,11 +42,12 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
+        $route = sanitize_text_field($_GET['fluent-booking']);
 
-        if (isset($_REQUEST['type'])) {
-            if ($_REQUEST['type'] == 'confirmation') {
-                $this->handleConfirmationPage();
-            }
+
+        if ($route == 'booking') {
+            $this->handleAfterBookingPage();
+            return;
         }
 
         if (empty($_REQUEST['host'])) {
@@ -138,7 +139,7 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function renderBookingView($calendar, $calendarEvent)
+    private function renderBookingView($calendar, $calendarEvent, $existingBooking = null)
     {
         $settings = LandingPageHelper::getSettings($calendar, 'public');
         if ($settings['show_type'] != 'all') {
@@ -175,6 +176,12 @@ class LandingPageHandler
 
         $assetUrl = App::getInstance('url.assets');
 
+        $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
+
+        if ($existingBooking) {
+            // $eventVars
+        }
+
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
@@ -190,7 +197,7 @@ class LandingPageHandler
                 $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
-                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent),
+                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
                 'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
@@ -207,10 +214,35 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function showBookingConfimationPage($booking, $calendarEvent)
+    private function showBookingConfimationPage($booking, $actionType = 'confirmation')
     {
+
+        $validActions = [
+            'confirmation',
+            'cancel',
+            'reschedule'
+        ];
+
+        if (!in_array($actionType, $validActions)) {
+            $actionType = 'confirmation';
+        }
+
+
+        if ($actionType == 'reschedule') {
+            $this->handleRescheduleView($booking);
+        }
+
+        if ($actionType == 'confirmation' && !empty($_REQUEST['ics']) && $_REQUEST['ics'] == 'download') {
+            $icsText = BookingService::generateBookingICS($booking);
+            // Output the ICS text
+            header('Content-Type: text/calendar; charset=utf-8');
+            header('Content-Disposition: attachment; filename=event.ics');
+            echo $icsText;
+        }
+
+        $calendarEvent = $booking->calendar_event;
         global $wp;
-        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $calendarEvent, true);
+        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $actionType);
 
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
@@ -226,7 +258,12 @@ class LandingPageHandler
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
+            'action_type' => $actionType
         ];
+
+        if ($actionType == 'cancel') {
+            $data['js_files'][] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
+        }
 
         $app = App::getInstance();
         status_header(200);
@@ -234,18 +271,23 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function handleConfirmationPage()
+    private function handleAfterBookingPage()
     {
-        $bookingHash = sanitize_text_field($_REQUEST['booking_token']);
+        $bookingHash = sanitize_text_field($_REQUEST['meeting_hash']);
         $booking = Booking::where('hash', $bookingHash)->first();
 
         if (!$booking) {
             return;
         }
 
-        $calendarSlot = $booking->calendar_event;
+        $type = Arr::get($_REQUEST, 'type', 'confirmation');
 
-        $this->showBookingConfimationPage($booking, $calendarSlot);
+        $this->showBookingConfimationPage($booking, $type);
+    }
+
+    private function handleRescheduleView(Booking $booking)
+    {
+        $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
 
 }

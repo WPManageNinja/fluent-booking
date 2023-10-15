@@ -27,32 +27,30 @@ class StripeCheckout {
         });
 
         const paymentElement = elements.create('payment', {});
+        const paymentMethods = this.form.querySelector('.fluent_booking_payment_methods');
 
-        paymentElement.mount('.fluent_booking_payment_methods');
-
-        const paymentMethods = document.querySelector('.fluent_booking_payment_methods');
+        paymentElement.mount(paymentMethods);
 
         const loadingMessage = document.createElement('p');
-        loadingMessage.id = 'fluent_booking_loading_payment_processor';
+        loadingMessage.classList.add('fluent_booking_loading_payment_processor') ;
         loadingMessage.textContent = 'Loading Payment Processor...';
 
         paymentProcessor.appendChild(loadingMessage);
-
 
         const submit = this.form.querySelector('.fcal_submit');
         submit.style.display = 'none';
 
         const that = this;
 
-        paymentElement.on('ready', function (event) {
-            const loadingPaymentProcessor = document.querySelector('#fluent_booking_loading_payment_processor');
+        paymentElement.on('ready',  (event)=> {
+            const loadingPaymentProcessor = this.form.querySelector('.fluent_booking_loading_payment_processor');
             if (loadingPaymentProcessor) {
                 loadingPaymentProcessor.remove();
             }
 
             paymentMethods.appendChild(submitButton);
 
-            const stripePayButton = document.querySelector('#fluent_booking_stipe_pay');
+            const stripePayButton = this.form.querySelector('#fluent_booking_stipe_pay');
             stripePayButton.addEventListener('click', function (e) {
                 e.preventDefault();
 
