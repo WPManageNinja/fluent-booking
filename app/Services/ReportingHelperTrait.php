@@ -34,7 +34,6 @@ trait ReportingHelperTrait
     protected function getFrequency($from, $to)
     {
         $numDays = $to->diff($from)->format("%a");
-        error_log($numDays);
 
         if ($numDays > 62 && $numDays <= 92) {
             return static::$weekly;
