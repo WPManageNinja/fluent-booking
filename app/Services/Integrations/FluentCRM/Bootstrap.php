@@ -57,7 +57,7 @@ class Bootstrap extends IntegrationManagerController
         return [
             'name'              => '',
             'first_name'        => '{{guest.first_name}}',
-            'last_name'         => '{{guest.first_name}}',
+            'last_name'         => '{{guest.last_name}}',
             'email'             => '{{guest.email}}',
             'other_fields'      => [
                 [
