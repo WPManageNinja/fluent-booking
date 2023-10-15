@@ -16,7 +16,7 @@ class GlobalPaymentHandler
 
     public function init()
     {
-        (new Stripe())->init();
+        (new Stripe())->register();
 
         //This hook will allow others to register their payment method with ours
         do_action('fluent_booking/register_payment_methods');
