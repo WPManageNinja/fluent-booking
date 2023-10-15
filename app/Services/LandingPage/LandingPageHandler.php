@@ -139,7 +139,7 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function renderBookingView($calendar, $calendarEvent)
+    private function renderBookingView($calendar, $calendarEvent, $existingBooking = null)
     {
         $settings = LandingPageHelper::getSettings($calendar, 'public');
         if ($settings['show_type'] != 'all') {
@@ -176,6 +176,12 @@ class LandingPageHandler
 
         $assetUrl = App::getInstance('url.assets');
 
+        $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
+
+        if($existingBooking) {
+           // $eventVars
+        }
+
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
@@ -191,7 +197,7 @@ class LandingPageHandler
                 $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
-                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent),
+                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
                 'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
@@ -219,6 +225,11 @@ class LandingPageHandler
 
         if (!in_array($actionType, $validActions)) {
             $actionType = 'confirmation';
+        }
+
+
+        if ($actionType == 'reschedule') {
+            $this->handleRescheduleView($booking);
         }
 
         $calendarEvent = $booking->calendar_event;
@@ -262,6 +273,11 @@ class LandingPageHandler
         $type = Arr::get($_REQUEST, 'type', 'confirmation');
 
         $this->showBookingConfimationPage($booking, $type);
+    }
+
+    private function handleRescheduleView(Booking $booking)
+    {
+        $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
 
 }
