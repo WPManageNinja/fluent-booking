@@ -449,7 +449,10 @@ class FrontEndHandler
         ];
 
         //dd($eventVars['form_fields']);
-        return apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
+        $fields =  apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
+
+        $fields['form_fields'] = array_values($eventVars['form_fields']);
+        return $fields;
     }
 
     public function ajaxHandleCancelMeeting()
