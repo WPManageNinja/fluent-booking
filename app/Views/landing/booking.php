@@ -59,17 +59,7 @@ use FluentBooking\App\Models\Booking;
 
 
 <div class="calendar_wrap">
-    <div class="fcal_cal_wrap">
-
-        <?php
-        if ($on_rescheduling) {
-            echo "<p>".__('You are rescheduling your event','fluent-booking')."</p>";
-            echo "<p>".__('Start Date','fluent-booking').$existing_booking->start_time."</p>";
-            echo "<p>".__('End Date','fluent-booking').$existing_booking->end_time."</p>";
-        }
-        ?>
-    </div>
-
+    <?php do_action('fluent_booking/before_calendar_event_landing_page', $calendar_event); ?>
     <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int)$calendar->id; ?>"
          data-event_id="<?php echo (int)$calendar_event->id; ?>">
         <h3>Loading...</h3>
