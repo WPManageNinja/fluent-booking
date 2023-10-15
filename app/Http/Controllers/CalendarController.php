@@ -365,7 +365,8 @@ class CalendarController extends Controller
             'settings.weekly_schedules'             => 'required_if:settings.schedule_type,weekly_schedules',
             'event_type'                            => 'required',
             'location_settings.*.type'              => 'required',
-            'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
+            'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
+            'location_settings.*.description'       => 'required_if:location_settings.*.type,address_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ]);
 

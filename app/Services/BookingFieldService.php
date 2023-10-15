@@ -73,11 +73,27 @@ class BookingFieldService
             ],
         ];
 
+        if ($calendarSlot->isLocationFieldRequired()) {
+            $requiredIndexes[] = 'location';
+            $defaultFields['location'] = [
+                'index'          => 4,
+                'type'           => 'radio',
+                'name'           => 'location',
+                'label'          => __('Location', 'fluent-booking'),
+                'options'        => LocationService::getLocationOptions($calendarSlot),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => true,
+                'placeholder'    => esc_attr__('Location', 'fluent-booking'),
+            ];
+        }
+
         if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
-                'index'          => 4,
-                'type'           => 'phone',
+                'index'          => 5,
+                'type'           => 'text',
                 'name'           => 'phone_number',
                 'label'          => __('Your Phone Number', 'fluent-booking'),
                 'required'       => true,
@@ -91,7 +107,7 @@ class BookingFieldService
         if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
             $defaultFields['address'] = [
-                'index'          => 4,
+                'index'          => 6,
                 'type'           => 'text',
                 'name'           => 'address',
                 'label'          => __('Your Address', 'fluent-booking'),

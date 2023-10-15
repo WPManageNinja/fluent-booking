@@ -266,21 +266,18 @@ class FrontEndHandler
             $rules['address'] = 'required';
         }
 
+        $isLocationRequired = $calendarSlot->isLocationFieldRequired();
+        if ($isLocationRequired) {
+            $rules['location_field_details'] = 'required';
+        }
 
-        $rulesData = [
-            'rules'    => $rules,
-            'messages' => [
-                'name.required'       => 'Please enter your name',
-                'email.required'      => 'Please enter your email address',
-                'email.email'         => 'Please enter provide a valid email address',
-                'timezone.required'   => 'Please select timezone first',
-                'start_date.required' => 'Please select a date and time',
-            ]
-        ];
-
-        $rulesData = apply_filters('fluent_booking/schedule_validation_rules_data', $rulesData, $postedData, $calendarSlot);
-
-        $validator = $app->validator->make($postedData, $rulesData['rules'], $rulesData['messages']);
+        $validator = $app->validator->make($postedData, $rules, [
+            'name.required'       => 'Please enter your name',
+            'email.required'      => 'Please enter your email address',
+            'email.email'         => 'Please enter provide a valid email address',
+            'timezone.required'   => 'Please select timezone first',
+            'start_date.required' => 'Please select a date and time',
+        ]);
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'message' => 'Please fill up the required data',
@@ -316,7 +313,9 @@ class FrontEndHandler
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'source'           => 'web',
-            'event_type'       => $calendarSlot->event_type
+            'event_type'       => $calendarSlot->event_type,
+            'location'         => sanitize_text_field(Arr::get($postedData, 'location')),
+            'location_field_details' => sanitize_text_field(Arr::get($postedData, 'location_field_details', ''))
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
