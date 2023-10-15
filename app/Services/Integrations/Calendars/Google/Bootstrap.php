@@ -24,7 +24,7 @@ class Bootstrap
         add_filter('fluent_booking/settings_menu_items', function ($menuItems) {
             $app = App::getInstance();
             $menuItems['google_calendar'] = [
-                'title'          => __('Google Calendar', 'fluent-booking'),
+                'title'          => __('Google Calendar / Meet', 'fluent-booking'),
                 'icon_url'       => $app['url.assets'] . 'images/google-calendar.svg',
                 'component_type' => 'GlobalSettingsComponent',
                 'route'          => [
