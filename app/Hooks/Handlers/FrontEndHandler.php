@@ -105,7 +105,7 @@ class FrontEndHandler
         }
 
         $globalSettings = Helper::getGlobalSettings();
-        $startDay =  Arr::get($globalSettings, 'administration.start_day', 'mon');
+        $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
         return [
             'ajaxurl'        => admin_url('admin-ajax.php'),
@@ -338,22 +338,35 @@ class FrontEndHandler
 
         if (!$meeting) {
             wp_send_json([
-                'message' => 'Sorry! meeting could not be found'
+                'message' => __('Sorry! meeting could not be found', 'fluent-booking')
             ], 422);
-        }
-
-        if ($meeting->status != 'scheduled' || $meeting->status != 'pending') {
-            wp_redirect($meeting->getConfirmationUrl());
-            exit;
         }
 
         $message = sanitize_textarea_field(Arr::get($data, 'cancellation_reason', ''));
 
-        $meeting->cancelMeeting($message, 'guest', get_current_user_id());
-        
+        if (!$message) {
+            wp_send_json([
+                'message' => __('Please provide a reason for cancellation', 'fluent-booking')
+            ], 422);
+        }
+
+
+        $result = $meeting->cancelMeeting($message, 'guest', get_current_user_id());
+
+        if (is_wp_error($result)) {
+            if (!wp_doing_ajax()) {
+                wp_redirect($meeting->getConfirmationUrl());
+                exit();
+            }
+
+            wp_send_json([
+                'message' => $result->get_error_message()
+            ], 422);
+        }
+
         if (wp_doing_ajax()) {
             wp_send_json([
-                'message' => 'Meeting has been cancelled'
+                'message' => __('Meeting has been cancelled', 'fluent-booking')
             ], 200);
         }
 

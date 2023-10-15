@@ -128,17 +128,27 @@ class BookingService
             ],
             'when'  => [
                 'title'   => __('When', 'fluent-booking'),
-                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone)
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true)
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking'),
-                'content' => '<span class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></span><span class="fcal_guest_name">' . $guestName . '</span>'
+                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
                 'title'   => __('Where', 'fluent-booking'),
                 'content' => $booking->getLocationDetailsHtml()
             ]
         ];
+
+        if($booking->status == 'cancelled') {
+            // add cancellation reason at the beginning
+            $sections = array_merge([
+                'cancellation_reason' => [
+                    'title'   => __('Cancellation Reason', 'fluent-booking'),
+                    'content' => $booking->getCancelReason(true)
+                ]
+            ], $sections);
+        }
 
         if ($booking->message) {
             $sections['note'] = [
@@ -147,18 +157,24 @@ class BookingService
             ];
         }
 
+        $subHeading = '';
+        if($booking->status == 'scheduled') {
+            $subHeading  = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
+        }
+
         $confirmationData = [
             'author'      => $author,
             'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
-            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
+            'sub_heading' => $subHeading,
             'sections'    => $sections,
             'slot'        => $calendarSlot,
             'booking'     => $booking,
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
-            'action_type' => $actionType
+            'action_type' => $actionType,
+            'can_cancel' => $booking->canCancel()
         ];
 
-        if ($actionType == 'cancel') {
+        if ($booking->canCancel()) {
             $confirmationData['action_url'] = add_query_arg([
                 'action'       => 'fcal_cancel_meeting',
                 'meeting_hash' => $booking->hash,

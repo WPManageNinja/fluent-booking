@@ -26,10 +26,36 @@ document.addEventListener('DOMContentLoaded', function () {
                     formDataObject[key] = value;
                 });
 
+                // Add Class to fcal_cancel_btn class element
+                const cancelBtn = document.querySelector('.fcal_cancel_btn');
+                cancelBtn.classList.add('fcal_cancel_btn_loading');
+                cancelBtn.setAttribute('disabled', 'disabled');
+
+                // remove error message if exists
+                const errorMessage = document.querySelector('.fcal_error_message');
+                if (errorMessage) {
+                    errorMessage.remove();
+                }
+
                 // send ajax request to server to action url
                 request('POST', form.action, formDataObject)
                     .then(function (response) {
-
+                        if(response.message) {
+                            // replace the form with success message
+                            form.innerHTML = response.message;
+                        }
+                    })
+                    .catch((errors) => {
+                        let message = errors.response?.message || 'Something is wrong!';
+                        // add error message to the form bottom
+                        const errorElement = document.createElement('div');
+                        errorElement.classList.add('fcal_error_message');
+                        errorElement.innerHTML = message;
+                        form.appendChild(errorElement);
+                    })
+                    .finally(() => {
+                        cancelBtn.classList.remove('fcal_cancel_btn_loading');
+                        cancelBtn.removeAttribute('disabled');
                     });
             });
 

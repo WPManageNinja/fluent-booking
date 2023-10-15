@@ -1,4 +1,5 @@
 @import "saas.scss";
+@import "../scss/booking_confirmation";
 
 .confirmation_page {
   max-width: 600px;
@@ -9,14 +10,6 @@
   box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
   padding: 20px;
 }
-
-.fcal_confirm_header {
-  text-align: center;
-  h3 {
-    font-size: 21px;
-  }
-}
-
 
 .confirmation_page {
   ul.fcal_conform_items {
@@ -48,46 +41,6 @@
 .fcal_confirmation_message {
   text-align: center;
   padding: 15px 0;
-}
-
-.fcal_confirmation {
-  .fcal_confirm_header {
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e5e7eb;
-    margin-bottom: 20px;
-    h3 {
-      font-weight: 500;
-    }
-    p {
-      margin: 5px 0;
-    }
-  }
-  .fcal_confirm_section {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px 0;
-    flex-direction: column;
-  }
-
-  .fcal_confirm_section_title {
-    width: 200px;
-  }
-
-  .fcal_confirm_section {
-    h4 {
-      font-size: 16px;
-      font-weight: bold;
-    }
-    p {
-      margin: 0;
-    }
-  }
-
-  .fcal_booking_manage {
-    margin-top: 20px;
-    padding: 20px 0;
-    border-top: 2px solid #e5e7eb;
-  }
 }
 
 .fcal_cancellation_wrap {
@@ -136,4 +89,13 @@
       border: 1px solid #292929;
     }
   }
+  .fcal_error_message {
+    margin-top: 30px;
+    color: #ff2222;
+    text-align: center;
+  }
 }
+.fcal_normal_booking_footer {
+  text-align: center;
+}
+
