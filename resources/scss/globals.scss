@@ -473,6 +473,7 @@
                     &.end-date {
                         .el-date-table-cell {
                             .el-date-table-cell__text {
+                                color: #fff;
                                 background: $primaryColor;
                                 border-radius: 0 8px 8px 0;
                             }
@@ -481,6 +482,7 @@
                     &.start-date {
                         .el-date-table-cell {
                             .el-date-table-cell__text {
+                                color: #fff;
                                 border-radius: 12px 0 0 12px;
                                 background: $primaryColor;
                             }

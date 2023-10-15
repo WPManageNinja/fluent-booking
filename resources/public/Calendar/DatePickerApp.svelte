@@ -219,15 +219,14 @@
 
         let [hours, minutes] = time.split(':');
 
-        if (hours === '12') {
+        if (formatHr === '24' && hours === '12') {
             hours = '00';
         }
 
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
-        const result = `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
-        return result;
+        return `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
     }
 
 
