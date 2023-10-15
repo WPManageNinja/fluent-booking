@@ -3,12 +3,15 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
+use FluentBooking\App\Services\ReportingHelperTrait;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\Framework\Validator\ValidationException;
 
 class ReportController extends Controller
 {
+    use ReportingHelperTrait;
     public function getReports(Request $request)
     {
         $startTime = $request->get('startTime');
@@ -80,6 +83,45 @@ class ReportController extends Controller
             'overview'      => $widgets,
             'latest_books'  => $this->getLatestBooks(),
             'next_meetings' => $this->getNextMeetings()
+        ];
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getGraphReports(Request $request)
+    {
+
+        list($startDate, $endDate) = $request->get('date_range') ?: ['', ''];
+
+        $period        = $this->makeDatePeriod(
+            $from      = $this->makeFromDate($startDate),
+            $to        = $this->makeToDate($endDate),
+            $frequency = $this->getFrequency($from, $to)
+        );
+
+        list($groupBy, $orderBy) = $this->getGroupAndOrder($frequency);
+
+        // Define a function to fetch booking data based on status
+        $fetchBookingsByStatus = function ($status) use ($period, $groupBy, $orderBy, $frequency, $from, $to) {
+            return Booking::select($this->prepareSelect($frequency))
+                ->where('status', $status)
+                ->whereBetween('created_at', [$from->format('Y-m-d'), $to->format('Y-m-d')])
+                ->groupBy($groupBy)
+                ->orderBy($orderBy, 'ASC')
+                ->get();
+        };
+
+        // Fetch bookings for different statuses
+        $totalBooked    = $fetchBookingsByStatus('scheduled');
+        $totalCompleted = $fetchBookingsByStatus('completed');
+        $totalCancelled = $fetchBookingsByStatus('cancelled');
+
+        return [
+            'booked_stats'    => $this->getResult($period, $totalBooked),
+            'completed_stats' => $this->getResult($period, $totalCompleted),
+            'cancelled_stats' => $this->getResult($period, $totalCancelled)
         ];
     }
 
@@ -255,7 +297,7 @@ class ReportController extends Controller
         $activityQuery = BookingActivity::query();
 
         if (!PermissionManager::hasAllCalendarAccess()) {
-            $activityQuery->whereHas('booking.calendar', function ($q) use ($hostId) {
+            $activityQuery->whereHas('booking.calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
         }

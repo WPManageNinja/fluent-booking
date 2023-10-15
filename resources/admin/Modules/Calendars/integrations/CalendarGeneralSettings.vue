@@ -2,7 +2,7 @@
     <div class="fcal_settings_landing_page">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>General Calendar Settings</h2>
+                <h2>General Host Settings</h2>
                 <p class="short-desc">Manage general settings for this calendar</p>
             </div>
             <div class="fcal_settings_actions">
