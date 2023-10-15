@@ -58,8 +58,12 @@ p {
   transition: all 0.22s ease-out;
 }
 
+.calendar_wrap {
+  margin: 66px 0 30px;
+}
+
 .fluent_booking_app {
-  margin: 66px auto 30px;
+  margin: 0 auto;
   box-sizing: border-box;
   * {
     box-sizing: border-box;
@@ -132,4 +136,10 @@ p {
   border-radius: 8px;
   box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
   background: #fff;
+}
+
+.fcal_rescheduling_wrap {
+  margin: 20px auto;
+  max-width: 752px;
+  text-align: center;
 }
