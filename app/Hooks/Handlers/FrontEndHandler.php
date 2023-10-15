@@ -100,7 +100,7 @@ class FrontEndHandler
         }
 
         $globalSettings = Helper::getGlobalSettings();
-        $startDay =  Arr::get($globalSettings, 'administration.start_day', 'sun');
+        $startDay =  Arr::get($globalSettings, 'administration.start_day', 'mon');
 
         return [
             'ajaxurl'        => admin_url('admin-ajax.php'),
