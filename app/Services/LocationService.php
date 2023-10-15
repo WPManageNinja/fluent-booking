@@ -14,6 +14,9 @@ class LocationService
         $app = App::getInstance();
 
         foreach ($details as $location) {
+
+            $displayOnBooking = Arr::get($location, 'display_on_booking') == 'yes';
+
             $html .= '<div class="slot_location fcal_icon_item fcal_img_item fcal_loc_google_meet">';
             if ($location['type'] == 'google_meet') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Google Meet" />';
@@ -23,7 +26,7 @@ class LocationService
                 $html .= '<span class="fcal_loc_text">' . __('Zoom Video', 'fluent-booking') . '</span>';
             } else if ($location['type'] == 'online_meeting') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Zoom Icon" />';
-                if ($location['display_on_booking'] == 'yes') {
+                if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['meeting_link'] . '</span>';
                 }
             } else if ($location['type'] == 'in_person_guest') {
@@ -32,12 +35,12 @@ class LocationService
             } else if ($location['type'] == 'custom') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
                 $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
-                if ($location['display_on_booking'] == 'yes') {
+                if ($displayOnBooking == 'yes') {
                     $html .=  '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 }
             } else if($location['type'] == 'in_person_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
-                if ($location['display_on_booking'] == 'yes') {
+                if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 } else {
                     $html .= '<span class="fcal_loc_text"> In Person (Organizer Address) </span>';
@@ -124,12 +127,12 @@ class LocationService
         return $locationData;
     }
 
-    public static function getLocationDetails($locationFields, $address = '', $selectedLocation, $locationFieldDetails = '')
+    public static function getLocationDetails($locationFields, $address, $location, $locationFieldDetails = '')
     {
         if (count($location) > 1) {
             $locationData = self::updateSingleLocationDetails($locationFields, $address);
         } else {
-            $locationData = self::updateMultipleLocationDetails($locationFields, $selectedLocation, $locationFieldDetails);
+            $locationData = self::updateMultipleLocationDetails($locationFields, $location, $locationFieldDetails);
         }
         return $locationData;
     }
