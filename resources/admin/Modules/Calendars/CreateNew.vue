@@ -9,7 +9,7 @@
                 </svg>
                 Congratulations!
             </h1>
-            <p>You've successfully Installed The Plugin. Please Create Your First Booking System.</p>
+            <p>Thank you for choosing FluentBooking. Let's create your first booking event (will take less than a minute!)</p>
             <PartyIcon class="party_icon" />
         </div>
         <div class="fcal_create_calendar_header">
@@ -146,7 +146,7 @@ export default {
             }
         },
         checkValidattion() {
-            const location = this.slot.location_settings[0];
+            const location = this.calendar.slot.location_settings[0];
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;
