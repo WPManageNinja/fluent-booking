@@ -11,6 +11,7 @@ use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Collection;
 
 class LandingPageHandler
 {
@@ -180,7 +181,6 @@ class LandingPageHandler
 
         $onRescheduling = App::getInstance('request')->get('type') === 'reschedule';
 
-
         $data = [
             'calendar' => $calendar,
             'calendar_event' => $calendarEvent,
@@ -195,28 +195,18 @@ class LandingPageHandler
                 includes_url('js/jquery/jquery.min.js'),
                 $assetUrl . 'public/js/app.js',
             ],
+            'js_vars' => [
+                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
+                'fluentCalendarPublicVars' => (new FrontEndHandler())->getGlobalVars()
+            ]
         ];
-
-        $jsVars = [
-            'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
-            'fluentCalendarPublicVars' => (new FrontEndHandler())->getGlobalVars()
-        ];
-
-        if ($onRescheduling) {
-            $onReschedulingData = [
-                'on_rescheduling' => $onRescheduling,
-                'existing_booking' => $existingBooking->toArray()
-            ];
-            $jsVars += $onReschedulingData;
-            $data += $onReschedulingData;
-        }
-        $data['js_vars'] = $jsVars;
-
 
         if ($calendarEvent->type == 'paid') {
             $data['js_files'][] = 'https://js.stripe.com/v3/';
             $data['js_files'][] = $assetUrl . 'public/js/stripe-checkout.js';
         }
+
+        $data = apply_filters('fluent_booking/event_landing_page_vars', $data, $calendar, $calendarEvent, $existingBooking);
 
         $app = App::getInstance();
 
@@ -295,6 +285,56 @@ class LandingPageHandler
 
     private function handleRescheduleView(Booking $booking)
     {
+        add_filter('fluent_calendar_public_event_vars', function ($eventVars) use ($booking) {
+            $eventVars += [
+                'on_rescheduling' =>true,
+                'existing_booking' => $booking->toArray()
+            ];
+
+            $onlyFields = [
+                'name', 'email'
+            ];
+
+            $formFields = $eventVars['form_fields'];
+
+            $formFields = Collection::make($formFields)->filter(function ($field) use ($onlyFields) {
+                return in_array($field['name'], $onlyFields);
+            })->map(function ($item) {
+                $item['disabled'] = true;
+                return $item;
+            })->toArray();
+
+            $formFields[] = [
+                'type' => 'textarea',
+                'name' => '_rescheduling_reason',
+                'label' => __('Reason of rescheduling', 'fluent-booking'),
+                'placeholder' => __('Rescheduling Reason', 'fluent-booking'),
+                'required' => true,
+                'disabled' => false,
+                'enabled' => true
+            ];
+
+            $formFields[] = [
+                'type' => 'hidden',
+                'name' => 'rescheduling_hash',
+                'enabled' => true
+            ];
+
+            $eventVars['form_fields'] = $formFields;
+
+            return $eventVars;
+        }, 10, 1);
+
+        add_filter('fluent_calendar/global_booking_vars', function ($vars) use ($booking) {
+            $vars['current_person'] = [
+                'name' => trim($booking->first_name .' '.$booking->last_name),
+                'email' => $booking->email,
+                'rescheduling_hash' => $booking->hash
+            ];
+
+            return $vars;
+        });
+
         $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
 

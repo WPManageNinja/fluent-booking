@@ -182,6 +182,8 @@ class BookingService
             ], admin_url('admin-ajax.php'));
         }
 
+        $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
+
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
     }
 
