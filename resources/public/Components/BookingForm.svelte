@@ -56,7 +56,7 @@
             <!--{/if}-->
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">
-                    <h3 class="label">Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
+                    <h3 class="label">{i18('Total Payment')} : {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
                     {#if appData?.payment_methods?.template}
                         <div class="fcal_form_payment_item">
                             {@html appData.payment_methods.template}
@@ -88,7 +88,7 @@
 </div>
 <script>
     import {Pulse} from 'svelte-loading-spinners';
-    import {util, getErrorText} from '../util.js';
+    import {util, i18, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
