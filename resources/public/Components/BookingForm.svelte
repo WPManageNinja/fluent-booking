@@ -174,7 +174,6 @@
                 }
 
                 dispatch('bookingConfirmed', res);
-
             })
             .catch(err => {
                 errors = getErrorText(err.response);

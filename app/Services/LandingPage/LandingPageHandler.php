@@ -273,7 +273,12 @@ class LandingPageHandler
 
     private function handleAfterBookingPage()
     {
-        $bookingHash = sanitize_text_field($_REQUEST['meeting_hash']);
+        $bookingHash = sanitize_text_field(Arr::get($_REQUEST, 'meeting_hash'));
+
+        if(!$bookingHash) {
+            return;
+        }
+
         $booking = Booking::where('hash', $bookingHash)->first();
 
         if (!$booking) {
