@@ -241,12 +241,7 @@ class LandingPageHandler
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
-            'action_type' => $actionType,
-            'action_url'  => wp_parse_args([
-                'action'       => 'fcal_cancel_booking',
-                'meeting_hash' => $booking->hash,
-                'scope'        => Arr::get($_REQUEST, 'scope')
-            ], admin_url('admin-ajax.php'))
+            'action_type' => $actionType
         ];
 
         $app = App::getInstance();

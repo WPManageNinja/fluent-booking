@@ -335,6 +335,45 @@ class Booking extends Model
         ]);
     }
 
+    public function cancelMeeting($reason = '', $cancelledByType = 'guest', $cancelledByUserId = null)
+    {
+        if ($this->status == 'cancelled') {
+            return $this;
+        }
+
+        $cancellableStatuses = [
+            'scheduled',
+            'pending'
+        ];
+
+        if (!in_array($this->status, $cancellableStatuses)) {
+            return new \WP_Error('invalid_status', 'This booking is not cancellable.');
+        }
+
+        $this->status = 'cancelled';
+        if ($cancelledByUserId) {
+            $this->cancelled_by = $cancelledByUserId;
+        }
+
+        if (!$cancelledByUserId) {
+            $cancelledByUserId = get_current_user_id();
+        }
+
+        $this->save();
+        $this->updateMeta('cancelled_by_type', $cancelledByType);
+
+        if ($reason) {
+            $userName = $cancelledByType;
+            if ($cancelledByUserId && $user = get_user_by('ID', $cancelledByUserId)) {
+                $userName = $user->display_name;
+            }
+
+            $this->addCancelReason(sprintf('Meeting has been cancelled by %s', $userName), $reason);
+        }
+
+        do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
+    }
+
     public function getActivities()
     {
         return BookingActivity::where('booking_id', $this->id)

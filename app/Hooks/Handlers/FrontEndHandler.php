@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingFieldService;
@@ -23,6 +24,10 @@ class FrontEndHandler
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
+
+
+        add_action('wp_ajax_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
+        add_action('wp_ajax_nopriv_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
 
         add_action('wp_ajax_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
         add_action('wp_ajax_nopriv_fluent_cal_get_available_dates', [$this, 'ajaxGetAvailableDates']);
@@ -317,5 +322,38 @@ class FrontEndHandler
             'author_profile' => $author,
             'form_fields'    => $formFields,
         ], $calendarEvent);
+    }
+
+    public function ajaxHandleCancelMeeting()
+    {
+        $data = $_REQUEST;
+
+        $meetingHash = Arr::get($_REQUEST, 'meeting_hash');
+
+        $meeting = Booking::where('hash', $meetingHash)->first();
+
+        if (!$meeting) {
+            wp_send_json([
+                'message' => 'Sorry! meeting could not be found'
+            ], 422);
+        }
+
+        if ($meeting->status != 'scheduled' || $meeting->status != 'pending') {
+            wp_redirect($meeting->getConfirmationUrl());
+            exit;
+        }
+
+        $message = sanitize_textarea_field(Arr::get($data, 'cancellation_reason', ''));
+
+        $meeting->cancelMeeting($message, 'guest', get_current_user_id());
+        
+        if (wp_doing_ajax()) {
+            wp_send_json([
+                'message' => 'Meeting has been cancelled'
+            ], 200);
+        }
+
+        wp_redirect($meeting->getConfirmationUrl());
+        exit;
     }
 }
