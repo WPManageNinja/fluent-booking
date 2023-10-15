@@ -158,6 +158,13 @@ class FluentFormInit
 
         $booking = BookingService::createBooking($bookingData, $calendarSlot);
 
+        do_action('fluent_booking/log_booking_activity', [
+            'title'       => 'FluentForm Integration Feed',
+            'type'        => 'activity',
+            'description' => 'Booked From FluentForm',
+            'booking_id'  => $booking->id
+        ]);
+
         $this->bookingIds[] = $booking->id;
     }
 
