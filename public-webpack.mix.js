@@ -28,4 +28,7 @@ mix.js('resources/public/fluentform.js', 'assets/public/js')
     })
     .options({ autoprefixer: false });
 
+
+mix.js('resources/public/public-manage-meeting.js', 'assets/public/js');
+
 mix.disableNotifications();

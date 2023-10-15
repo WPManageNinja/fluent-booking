@@ -217,7 +217,7 @@ class LandingPageHandler
             'reschedule'
         ];
 
-        if(!in_array($actionType, $validActions)) {
+        if (!in_array($actionType, $validActions)) {
             $actionType = 'confirmation';
         }
 
@@ -234,12 +234,19 @@ class LandingPageHandler
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
-            'js_files'    => [],
+            'js_files'    => [
+                App::getInstance('url.assets') . 'public/js/public-manage-meeting.js'
+            ],
             'js_vars'     => [],
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
-            'action_type' => $actionType
+            'action_type' => $actionType,
+            'action_url'  => wp_parse_args([
+                'action'       => 'fcal_cancel_booking',
+                'meeting_hash' => $booking->hash,
+                'scope'        => Arr::get($_REQUEST, 'scope')
+            ], admin_url('admin-ajax.php'))
         ];
 
         $app = App::getInstance();
