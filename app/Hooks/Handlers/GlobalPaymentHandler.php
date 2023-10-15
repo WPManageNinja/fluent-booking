@@ -11,12 +11,12 @@ class GlobalPaymentHandler
 {
     public function register()
     {
-        add_action('fluent_booking_loaded', [$this, 'init']);
+        add_action('init', [$this, 'init']);
     }
 
     public function init()
     {
-        (new Stripe())->init();
+        (new Stripe())->register();
 
         //This hook will allow others to register their payment method with ours
         do_action('fluent_booking/register_payment_methods');
@@ -37,8 +37,11 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['ff_stripe_connect'])) {
-            $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code']);
+        if (isset($_GET['ff_stripe_connect']) && isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') {
+            if (!current_user_can('manage_options')) {
+                return;
+            }
+            $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']);
             ConnectConfig::verifyAuthorizeSuccess($data);
         }
     }

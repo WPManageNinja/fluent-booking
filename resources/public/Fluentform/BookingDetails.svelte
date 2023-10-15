@@ -1,6 +1,7 @@
 <script>
-    import { util } from '../util.js';
+    import { util, i18 } from '../util.js';
     import { createEventDispatcher } from 'svelte';
+
 
     export let appData, timezone, selectedDate;
 
@@ -55,7 +56,7 @@
                         <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"/>
                     </g>
                 </svg>
-                <span>{appData.slot.duration} minutes</span>
+                <span>{appData.slot.duration} {i18('Minutes')}</span>
             </div>
         </div>
         {#if appData.slot.location_settings[0]?.type == 'phone_organizer'}

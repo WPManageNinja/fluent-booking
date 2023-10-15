@@ -28,10 +28,12 @@
                     <p>{{ toCurrentTimezone(booking.created_at, 'DD MMM YYYY, hh:mma') }}</p>
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
-                    <h3 v-if="field.value && field.value != 'undefined'">{{ field.label }}</h3>
-                    <div v-if="field.value &&  field.value != 'undefined'" class="fcal_spot_details_value">
-                        <p>{{ field.value }}</p>
-                    </div>
+                    <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
+                        <h3 >{{ field.label }}</h3>
+                        <div class="fcal_spot_details_value">
+                            <p>{{ field.value }}</p>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -41,6 +43,9 @@
 <script>
 export default {
     name: "SingleInviteeInfo",
-    props: ['booking']
+    props: ['booking'],
+    mounted() {
+        console.log(this.booking.custom_form_data);
+    }
 }
 </script>

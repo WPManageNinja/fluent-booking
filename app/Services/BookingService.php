@@ -63,7 +63,11 @@ class BookingService
 
         $bookingAddress = Arr::get($data, 'address');
 
-        $bookingData['location_details'] = LocationService::getLocationDetails($calendarSlot->location_settings, $bookingAddress);
+        $location = Arr::get($data, 'location');
+
+        $locationFieldDetails = Arr::get($data, 'location_field_details');
+
+        $bookingData['location_details'] = LocationService::getLocationDetails($calendarSlot->location_settings, $bookingAddress, $location, $locationFieldDetails);
 
         $event = Booking::select('group_id')
             ->where('event_id', $calendarSlot->id)
@@ -185,6 +189,7 @@ class BookingService
             ], admin_url('admin-ajax.php'));
         }
 
+
         if ($booking->status == 'scheduled') {
             $assetsUrl = App::getInstance('url.assets');
             $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
@@ -231,6 +236,8 @@ class BookingService
                 ]
             ], $booking);
         }
+      
+        $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
     }

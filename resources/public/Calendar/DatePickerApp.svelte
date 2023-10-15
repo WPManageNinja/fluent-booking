@@ -1,7 +1,8 @@
 <script>
-    import {util} from '../util';
+    import {util, i18} from '../util';
     import {Pulse} from 'svelte-loading-spinners';
     import TimeZoneSelector from "./TimezoneSelector.svelte";
+
 
     export let slot;
     export let settings;
@@ -57,6 +58,7 @@
     let start_time;
 
     $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
+
 
     function maybeMaxDateDisabled() {
         let result = false;
@@ -290,7 +292,7 @@
             />
 
             <div class="fcal_timezone_select">
-                <label for="fcal_timezone_selector">Timezone</label>
+                <label for="fcal_timezone_selector">{i18('Timezone')}</label>
                 <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
             </div>
         </div>

@@ -1,8 +1,10 @@
 <script>
-    import {util} from './util';
+    import {util, i18} from './util';
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
+
+    window['fcal_translate'] = i18;
 
     export let appData;
 
@@ -11,21 +13,19 @@
     const author = appData.author_profile;
     const isFluentform = appData.is_fluentform;
 
-    let selectedDate = false;
-    let timezone = '';
     let appReady = false;
-    let isBookingDone = false;
     let bookingConfirmationHtml = '';
+    let calendarHeight = '';
     let component = null;
+    let isBookingDone = false;
     let isMobile = false;
     let isXsDevice = false;
-    let calendarHeight = '';
-
-
-
+    let selectedDate = false;
     let showingPayments = false;
+    let timezone = '';
 
     onMount(() => {
+
         timezone = util.dayjs.tz.guess();
 
         appReady = true;
@@ -148,7 +148,7 @@
                                             <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"/>
                                         </g>
                                     </svg>
-                                    <span>{slot.duration} minutes</span>
+                                    <span>{slot.duration} {i18('minutes')}</span>
                                 </div>
 
                                 {#if slot.location_settings.length > 1}
@@ -247,7 +247,7 @@
                                 <div class="fcal_date_event_details_header">
                                     <h2>
                                         {#if showingPayments}
-                                            Payment Details
+                                            {i18('Payment Details')}
                                         {:else}
                                             <div aria-label="Back to Date Selection" on:click={(e) => {
                                                 resetSelection()
@@ -260,7 +260,7 @@
                                                     </svg>
                                                 </i>
                                             </div>
-                                            Enter Details
+                                            {i18('Enter Details')}
                                         {/if}
                                     </h2>
                                 </div>

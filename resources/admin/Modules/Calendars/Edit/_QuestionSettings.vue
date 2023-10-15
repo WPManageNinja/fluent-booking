@@ -46,7 +46,6 @@
             v-if="showModal"
             :field="field"
             :fields="fields"
-            :phoneRequired="isPhoneRequired"
             :showModal="showModal"
             @closeModal="closeModal"
             @updateFieldData="updateFieldData"
@@ -76,8 +75,7 @@ export default {
             saving: false,
             field: '',
             fields : [],
-            showModal: false,
-            isPhoneRequired: ''
+            showModal: false
         }
     },
     watch: {
@@ -174,7 +172,6 @@ export default {
     },
     mounted() {
         this.fetchFields();
-        this.isPhoneRequired = this.slot.location_settings[0]?.type == 'phone_guest';
     }
 }
 </script>

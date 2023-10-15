@@ -8,21 +8,28 @@
             </div>
         {/if}
         <form on:submit|preventDefault={submitForm}>
-            <!--{#if !showPayments}-->
             {#each formFields as field}
                 {#if field.enabled}
                     <div class="fcal_form_item">
                         <label class="fcal_input_content">
-                            <div class="fcal_input_label">
-                                {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
-                                    {field.label}
-                                {/if}
-                                {#if field.required}<span>*</span>{/if}
-                            </div>
+                            {#if field.label}
+                                <div class="fcal_input_label">
+                                    {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
+                                        {field.label}
+                                    {/if}
+                                    {#if field.required}<span>*</span>{/if}
+                                </div>
+                            {/if}
                             {#if field.type === 'text'}
                                 <div class={'fcal_input_wrap '+field.name}>
                                     {#if field.name == 'address'}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-map-pin">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                            <circle cx="12" cy="10" r="3"/>
+                                        </svg>
                                     {/if}
                                     <input disabled="{field.disabled}" class="fcal_input" type="text"
                                            placeholder="{field.placeholder}" bind:value={form[field.name]}/>
@@ -35,34 +42,25 @@
                                        placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                             {:else if field.name === 'location'}
                                 <div class="fcal_input_location_wrap">
-                                    <select bind:value={form[field.name]}>
-                                        <option value="" disabled selected>{field.placeholder}</option>
-                                        {#each field.options as option}
-                                            <option value={option.type}>
-                                                {#if option.type=='in_person_guest'}
-                                                    In Person (Attendee Address)
-                                                {:else if option.type == 'in_person_organizer'}
-                                                    In Person (Organizer Address)
-                                                {:else if option.type == 'phone_guest'}
-                                                    Attendee Phone Number
-                                                {:else if option.type == 'phone_organizer'}
-                                                    Organizer Phone Number
-                                                {:else if option.type == 'zoom_meeting'}
-                                                    Zoom Video
-                                                {:else if option.type == 'google_meet'}
-                                                    Google Meet
-                                                {:else if option.type == 'custom'}
-                                                    {option.title}
-                                                {/if}
-                                            </option>
-                                        {/each}
-                                    </select>
-                                    {#if form[field.name] == 'phone_organizer'}
-                                        <input type="number" name="location_details" />
-                                    {/if}
-                                    {#if form[field.name] == 'in_person_organizer' || form[field.name] == 'custom'}
+                                    {#each field.options as option}
+                                        <label class="fcal_location_radio_list">
+                                            {option.title}
+                                            <input type="radio" name={field.name} value={option.type}
+                                                   bind:group={form[field.name]}/>
+                                            <span class="fcal_radio_icon"></span>
+                                        </label>
+                                    {/each}
+                                    {#if form[field.name] == 'phone_guest' || form[field.name] == 'custom'}
+                                        <input type="text" name="location_details"/>
+                                    {:else if form[field.name] == 'in_person_guest' || form[field.name] == 'custom'}
                                         <div class="fcal_input_wrap address">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-map-pin">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                                <circle cx="12" cy="10" r="3"/>
+                                            </svg>
                                             <input disabled="{field.disabled}" class="fcal_input" type="text"
                                                    placeholder="{field.placeholder}" name="location_details"/>
                                         </div>
@@ -83,6 +81,8 @@
                                 </select>
                             {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
                                 <Payments field={field}/>
+                            {:else if field.type === 'hidden' }
+                                <input type="hidden" bind:value={form[field.name]}/>
                             {/if}
                         </label>
                     </div>
@@ -91,7 +91,8 @@
             <!--{/if}-->
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">
-                    <h3 class="label">Total Payment: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
+                    <h3 class="label">{i18('Total Payment')}
+                        : {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
                     {#if appData?.payment_methods?.template}
                         <div class="fcal_form_payment_item">
                             {@html appData.payment_methods.template}
@@ -123,7 +124,7 @@
 </div>
 <script>
     import {Pulse} from 'svelte-loading-spinners';
-    import {util, getErrorText} from '../util.js';
+    import {util, i18, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";

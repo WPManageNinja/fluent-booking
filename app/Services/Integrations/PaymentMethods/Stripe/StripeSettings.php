@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 
 class StripeSettings
@@ -16,13 +17,21 @@ class StripeSettings
         $settings = get_option($this->methodHandler, []);
 
         if (!$settings) {
-            $defaults['provider'] = 'connect';
+            $settings['provider'] = 'connect';
         }
 
         $settings = wp_parse_args($settings, static::getDefaults());
 
         if ($settings['provider'] == 'connect' && apply_filters('fluent_booking_form_disable_stripe_connect', false)) {
             $settings['provider'] = 'api_keys';
+        }
+
+        if (isset($settings['test_secret_key'])) {
+            $settings['test_secret_key'] = Helper::decryptKey($settings['test_secret_key']);
+        }
+
+        if (isset($settings['live_secret_key'])) {
+            $settings['live_secret_key'] = Helper::decryptKey($settings['live_secret_key']);
         }
 
         $this->settings = $settings;
@@ -33,20 +42,20 @@ class StripeSettings
      */
     public static function getDefaults()
     {
-        $currency = (new CurrenciesHelper())->getGlobalCurrency();
+        $currency = CurrenciesHelper::getGlobalCurrency();
 
         return [
-            'is_active'             => 'no',
-            'test_publishable_key'  => '',
-            'test_secret_key'       => '',
-            'live_publishable_key'  => '',
-            'live_secret_key'       => '',
-            'payment_mode'          => 'test',
-            'provider'              => 'api_keys',
-            'test_account_id'       => '',
-            'live_account_id'       => '',
-            'checkout_mode'         => 'onsite',
-            'currency'              => $currency,
+            'is_active'            => 'no',
+            'test_publishable_key' => '',
+            'test_secret_key'      => '',
+            'live_publishable_key' => '',
+            'live_secret_key'      => '',
+            'payment_mode'         => 'test',
+            'provider'             => 'api_keys',
+            'test_account_id'      => '',
+            'live_account_id'      => '',
+            'checkout_mode'        => 'onsite',
+            'currency'             => $currency,
         ];
     }
 
@@ -69,17 +78,17 @@ class StripeSettings
     {
         if ($this->getMode() === 'live') {
             return $this->get()['live_publishable_key'];
-        } else {
-            return $this->get()['test_publishable_key'];
         }
+
+        return $this->get()['test_publishable_key'];
     }
 
     public function getApiKey()
     {
         if ($this->getMode() === 'live') {
             return $this->get()['live_secret_key'];
-        } else {
-            return $this->get()['test_secret_key'];
         }
+
+        return $this->get()['test_secret_key'];
     }
 }
