@@ -1398,7 +1398,6 @@ class Helper
             ];
         }
 
-
         return apply_filters('fluent_booking/editor_shortcodes_groups', $groups, $isHtmlSupported);
     }
 

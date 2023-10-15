@@ -63,7 +63,7 @@ class ConnectConfig
         if (is_wp_error($response)) {
             $message = $response->get_error_message();
             echo '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
-            return;
+            die();
         }
 
         $response = json_decode(wp_remote_retrieve_body($response), true);
