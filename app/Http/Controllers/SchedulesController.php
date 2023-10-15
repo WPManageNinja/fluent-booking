@@ -268,7 +268,7 @@ class SchedulesController extends Controller
         $booking->location = $booking->getLocationDetailsHtml();
         $booking->custom_form_data = $booking->getCustomFormData();
 
-        if ($booking->payment_status) {
+        if ($booking->payment_method) {
             $booking->payment_order->load(['items', 'transaction']);
             $booking->currency = CurrenciesHelper::getCurrencySign();
         }

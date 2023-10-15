@@ -63,7 +63,11 @@ class BookingService
 
         $bookingAddress = Arr::get($data, 'address');
 
-        $bookingData['location_details'] = LocationService::getLocationDetails($calendarSlot->location_settings, $bookingAddress);
+        $location = Arr::get($data, 'location');
+
+        $locationFieldDetails = Arr::get($data, 'location_field_details');
+
+        $bookingData['location_details'] = LocationService::getLocationDetails($calendarSlot->location_settings, $bookingAddress, $location, $locationFieldDetails);
 
         $event = Booking::select('group_id')
             ->where('event_id', $calendarSlot->id)

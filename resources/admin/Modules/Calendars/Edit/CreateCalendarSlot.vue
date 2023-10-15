@@ -72,8 +72,11 @@ export default {
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;
-            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+            } else if ((location.type == 'custom') && !location.title)  {
                 this.$handleError('Location Title is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
+                this.$handleError('Location Description is required');
                 return false;
             } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
                 this.$handleError('Phone Number is required');

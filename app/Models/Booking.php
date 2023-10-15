@@ -230,6 +230,14 @@ class Booking extends Model
             return $html;
         }
 
+        if ($locationType == 'online_meeting') {
+            $html = '<b>Online Meeting</b> ';
+            if ($meetingLink = Arr::get($details, 'meeting_link')) {
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
+            }
+            return $html;
+        }
+
         if ($locationType == 'zoom_meeting') {
             $html = '<b>Zoom Video</b> ';
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {

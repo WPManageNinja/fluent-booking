@@ -6,6 +6,19 @@
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
+
+                <el-form-item
+                    v-if="is_board"
+                    label="Event Type">
+                    <el-select
+                        v-model="slot.event_type"
+                        popper-class="fcal_select"
+                    >
+                        <el-option value="single" label="One to One" />
+                        <el-option value="group" label="Group"/>
+                    </el-select>
+                </el-form-item>
+
                 <el-form-item label="Event Name *" class="fcal_color_select_wrap">
                     <el-input
                         v-model="slot.title"
@@ -84,11 +97,13 @@
 <script type="text/babel">
 import LocationSelector from "./_LocationSelector.vue";
 import EventIcon from "../../../Components/Icons/EventIcon";
+import HostSelector from "@/Pieces/HostSelector";
 
 export default {
     name: 'EventBasicInfo',
-    props: ['slot', 'event_type'],
+    props: ['slot', 'event_type', 'is_board'],
     components: {
+        HostSelector,
         LocationSelector,
         EventIcon
     },
