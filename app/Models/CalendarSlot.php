@@ -98,15 +98,22 @@ class CalendarSlot extends Model
         if (count($locationSettings) > 1) {
             return true;
         }
+        return false;
     }
 
     public function isPhoneRequired()
     {
+        if ($this->isLocationFieldRequired()) {
+            return false;
+        }
         return Arr::get($this->location_settings, '0.type') == 'phone_guest';
     }
 
     public function isAddressRequired()
     {
+        if ($this->isLocationFieldRequired()) {
+            return false;
+        }
         return Arr::get($this->location_settings, '0.type') == 'in_person_guest';
     }
 
@@ -359,6 +366,33 @@ class CalendarSlot extends Model
         }
 
         return LocationService::getLocationIconHeadingHtml($default, $this);
+    }
+
+    public function getPricingTotal()
+    {
+        if ($this->type != 'paid') {
+            return 0;
+        }
+
+        if (!Helper::isPaymentEnabled()) {
+            return 'ssss';
+        }
+
+        $paymentSettings = $this->getMeta('payment_settings', []);
+
+        if (!$paymentSettings || Arr::get($paymentSettings, 'enabled') != 'yes') {
+            return 0;
+        }
+
+        $items = Arr::get($paymentSettings, 'items', []);
+
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item['value'];
+        }
+
+        return $total;
     }
 
 }

@@ -5,39 +5,61 @@
                 <span class="fcal_status_badge" :style="{background: slot.color_schema}"></span> {{ slot.title }}
                 <div class="fcal_slot_config">
                     <el-dropdown @command="handleCommand" trigger="click" popper-class="fcal_select">
-                        <el-icon class="fcal_slog_setting_icon"><More /></el-icon>
+                        <el-icon class="fcal_slog_setting_icon">
+                            <More/>
+                        </el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item command="disable" v-if="slot.status == 'active'"><el-icon><SwitchButton /></el-icon> Disable</el-dropdown-item>
+                                <el-dropdown-item command="disable" v-if="slot.status == 'active'">
+                                    <el-icon>
+                                        <SwitchButton/>
+                                    </el-icon>
+                                    Disable
+                                </el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
-                                <el-dropdown-item command="delete"><el-icon><Delete /></el-icon> Delete</el-dropdown-item>
+                                <el-dropdown-item command="delete">
+                                    <el-icon>
+                                        <Delete/>
+                                    </el-icon>
+                                    Delete
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
             </h3>
             <p class="fcal_slot_meta">
-                <span class="fcal_slot_meta_mins"><el-icon><Clock /></el-icon> {{ slot.duration }} minutes</span>
+                <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} minutes</span>
                 <span class="fcal_slog_meta_event">
                     <span class="icons">
-                        <el-icon><User /></el-icon>
-                        <el-icon><Right /></el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
                         <span class="right">
-                            <el-icon><User /></el-icon>
-                            <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User /></el-icon>
+                            <el-icon><User/></el-icon>
+                            <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User/></el-icon>
                         </span>
                     </span> {{ eventType }}
+                </span>
+                <span v-if="slot.price_total" class="fcal_slog_meta_event">
+                    <el-icon><CreditCard/></el-icon>
+                    <span>{{currencyFormat(slot.price_total)}}</span>
                 </span>
             </p>
         </div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button class="fcal_plain_btn" @click="viewShareCalendar(slot)">
-                    <el-icon><Share /></el-icon> Share
+                    <el-icon>
+                        <Share/>
+                    </el-icon>
+                    Share
                 </el-button>
 
                 <el-button class="fcal_plain_btn" @click="editSlot">
-                    <el-icon><EditPen /></el-icon> Edit
+                    <el-icon>
+                        <EditPen/>
+                    </el-icon>
+                    Edit
                 </el-button>
 
             </div>
@@ -51,9 +73,9 @@
                 </el-button>
             </div>
         </div>
-        <ShareCalendarBlock 
-            v-if="shareSlot" 
-            :slot="shareSlot" 
+        <ShareCalendarBlock
+            v-if="shareSlot"
+            :slot="shareSlot"
             :openShare="openShare"
             :calendarId="calendarId"
             @closeShare="closeShareCalendar"
@@ -62,14 +84,8 @@
 </template>
 
 <script type="text/babel">
-import { copyToClipBoard } from '@/Bits/data_config.js';
-import { CopyDocument, More, Share, ArrowDown, User, Clock, Right, EditPen, Delete, SwitchButton } from '@element-plus/icons-vue';
-import ShareCalendarBlock from './ShareCalendarBlock';
-export default {
-    name: 'EachSlot',
-    props: ['slot', 'calendarId'],
-    $emits: ['slotDeleted'],
-    components: {
+import {copyToClipBoard} from '@/Bits/data_config.js';
+import {
     CopyDocument,
     More,
     Share,
@@ -80,8 +96,28 @@ export default {
     EditPen,
     Delete,
     SwitchButton,
-    ShareCalendarBlock
-},
+    CreditCard
+} from '@element-plus/icons-vue';
+import ShareCalendarBlock from './ShareCalendarBlock';
+
+export default {
+    name: 'EachSlot',
+    props: ['slot', 'calendarId'],
+    $emits: ['slotDeleted'],
+    components: {
+        CopyDocument,
+        More,
+        Share,
+        ArrowDown,
+        User,
+        Clock,
+        Right,
+        EditPen,
+        Delete,
+        SwitchButton,
+        CreditCard,
+        ShareCalendarBlock
+    },
     data() {
         return {
             working: false,
@@ -98,13 +134,13 @@ export default {
     methods: {
         editSlot() {
             this.$router.push({
-                name: 'slot_settings', 
+                name: 'slot_settings',
                 params: {calendar_id: this.slot.calendar_id, event_id: this.slot.id}
             })
         },
         viewShareCalendar(slot) {
             this.openShare = true;
-            this.shareSlot = slot;  
+            this.shareSlot = slot;
         },
         closeShareCalendar() {
             this.openShare = false;
@@ -114,7 +150,7 @@ export default {
             copyToClipBoard(text);
             this.isCopied = true;
 
-            if(this.slot.public_url) {
+            if (this.slot.public_url) {
                 this.$handleSuccess('URL has been copied to your clipboard');
             } else {
                 this.$handleSuccess('Shortcode has been copied to your clipboard');
@@ -141,15 +177,15 @@ export default {
                 });
         },
         handleCommand(command) {
-            if(command == 'enable') {
+            if (command == 'enable') {
                 this.updateStatus('active');
                 return;
             }
-            if(command == 'disable') {
+            if (command == 'disable') {
                 this.updateStatus('draft');
                 return;
             }
-            if(command == 'delete') {
+            if (command == 'delete') {
                 this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted',
                     'Delete Booking Type', {
                         confirmButtonText: 'Delete',
@@ -166,7 +202,7 @@ export default {
                                 this.$handleError(errors);
                             });
                     })
-                    return;
+                return;
             }
         }
     }

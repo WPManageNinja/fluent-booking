@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
 
 class CurrenciesHelper
 {
-
     public static function getGlobalCurrency()
     {
         $globalPaymentSettings = get_option('fluent_booking_global_payment_settings', []);

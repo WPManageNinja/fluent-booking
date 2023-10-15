@@ -93,7 +93,7 @@ class BookingFieldService
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
                 'index'          => 5,
-                'type'           => 'phone',
+                'type'           => 'text',
                 'name'           => 'phone_number',
                 'label'          => __('Your Phone Number', 'fluent-booking'),
                 'required'       => true,
@@ -121,6 +121,8 @@ class BookingFieldService
 
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
 
+
+
         if ($calendarSlot->type == 'paid'){
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
@@ -135,7 +137,7 @@ class BookingFieldService
                     'enabled'        => true,
                     'system_defined' => true,
                     'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
-                    'label' => 'Payment Summary',
+                    'label'          => __('Payment Summary', 'fluent-booking'),
                     'currency_sign' => CurrenciesHelper::getGlobalCurrencySign(),
                 ];
             }
@@ -147,6 +149,7 @@ class BookingFieldService
 
         $validFields = [];
 
+
         foreach ($existingFields as $existingField) {
             $name = $existingField['name'];
             if (in_array($name, $requiredIndexes)) {
@@ -154,7 +157,7 @@ class BookingFieldService
                 $requiredIndexes = array_diff($requiredIndexes, [$name]);
             }
 
-            $validFields[] = $existingField;
+            $validFields[$name] = $existingField;
         }
 
         if ($requiredIndexes) {
@@ -162,7 +165,6 @@ class BookingFieldService
                 $validFields[] = $defaultFields[$requiredIndex];
             }
         }
-
         return $validFields;
     }
 

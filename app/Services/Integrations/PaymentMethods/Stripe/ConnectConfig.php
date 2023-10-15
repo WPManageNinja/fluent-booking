@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\Account;
 
@@ -19,13 +20,14 @@ class ConnectConfig
         $hash = md5(site_url() . wp_generate_uuid4() . time());
 
         $liveArgs = [
-            'url_base' => rawurlencode(admin_url('admin.php?stripe&')),
+            'url_base' => rawurlencode(admin_url('admin.php?stripe&source=fluent_booking&')),
             'mode'     => 'live',
-            'hash'     => $hash
+            'hash'     => $hash,
+            'source'   => 'fluent_calendar'
         ];
 
         $testArgs = [
-            'url_base' => rawurlencode(admin_url('admin.php?stripe&')),
+            'url_base' => rawurlencode(admin_url('admin.php?stripe&source=fluent_booking&')),
             'mode'     => 'test',
             'hash'     => $hash
         ];
@@ -61,7 +63,7 @@ class ConnectConfig
         if (is_wp_error($response)) {
             $message = $response->get_error_message();
             echo '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
-            return;
+            die();
         }
 
         $response = json_decode(wp_remote_retrieve_body($response), true);
@@ -95,17 +97,12 @@ class ConnectConfig
 
         (new Stripe())->updateSettings($settings);
 
-        ?>
-        <script type="text/javascript">
-            window.location = "<?php echo esc_url(admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/payment/stripe')); ?>"
-        </script>
-        <?php
-
+        wp_redirect(Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe'));
+        exit;
     }
 
     private static function getAccountInfo($settings, $mode)
     {
-
         if ($settings['is_active'] != 'yes') {
             return false;
         }

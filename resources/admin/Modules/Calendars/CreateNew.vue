@@ -18,9 +18,7 @@
                 <el-icon><Back /></el-icon> Add {{ calendar.slot.event_type=='single'?'One-to-One':'Group' }} Booking Type
             </h1>
         </div>
-
         <div v-if="calendar.slot" class="fcal_create_calendar_body" :class="step==2 ? 'fcal_step_2_active' : ''">
-
             <div class="fcal_onboard_steps">
                 <div v-if="step==1" class="fcal_onboard_step step-1">
                     <div class="fcal_create_calendar_basic_info">
@@ -148,12 +146,15 @@ export default {
             }
         },
         checkValidattion() {
-            const location = this.calendar.slot.location_settings[0];
+            const location = this.slot.location_settings[0];
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;
-            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.title)  {
+            } else if ((location.type == 'custom') && !location.title)  {
                 this.$handleError('Location Title is required');
+                return false;
+            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
+                this.$handleError('Location Description is required');
                 return false;
             } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
                 this.$handleError('Phone Number is required');

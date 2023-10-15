@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\BookingMeta;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\PermissionManager;
 
@@ -654,6 +655,49 @@ class Helper
     }
 
 
+    public static function getGlobalPaymentSettings()
+    {
+        static $settings;
+
+        if ($settings) {
+            return $settings;
+        }
+
+        $settings = get_option('fluent_booking_global_payment_settings', []);
+
+        if (!$settings) {
+            $settings = [
+                'currency'  => 'USD',
+                'is_active' => 'no'
+            ];
+        }
+
+        return $settings;
+    }
+
+    public static function isPaymentEnabled($calendarEvent = null)
+    {
+        $settings = self::getGlobalPaymentSettings();
+        if ($settings['is_active'] == 'yes') {
+            return true;
+        }
+
+        if ($calendarEvent) {
+            if ($calendarEvent->type != 'paid') {
+                return false;
+            }
+
+            $exist = Meta::where('object_type', 'calendar_slot')
+                ->where('object_id', $calendarEvent->id)
+                ->where('key', 'payment_settings')
+                ->first();
+
+            return $exist && $exist->value && Arr::get($exist->value, 'enabled') == 'yes';
+        }
+
+        return false;
+    }
+
     /**
      * Sanitize form inputs recursively.
      *
@@ -1178,7 +1222,7 @@ class Helper
                 'title'   => __('Booking Confirmation Email to Attendee', 'fluent-booking'),
                 'email'   => [
                     'subject' => 'Booking Confirmation between {{host.name}} & {{guest.full_name}}',
-                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">Need to make a change? <a href="##booking.reschedule_url##">Reschedule</a> or <a href="##booking.cancelation_url##">Cancel</a></p>'
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking') . '<a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking') . '</a></p>'
                 ],
             ],
             'booking_conf_host'     => [
@@ -1196,7 +1240,7 @@ class Helper
                 'title'   => __('Configure Meeting Reminder to Attendee', 'fluent-booking'),
                 'email'   => [
                     'subject' => 'Meeting Reminder with {{host.name}} @ {{booking.start_date_time_for_attendee}}',
-                    'body'    => '<h2 style="text-align: center;">Reminder: Your meeting will start in {{booking.start_time_human_format}}</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><h3><strong>When</strong></h3><p>{{booking.full_start_end_guest_timezone}}</p><h3><strong>Who</strong></h3><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">Need to make a change? <a href="##booking.reschedule_url##">Reschedule</a> or <a href="##booking.cancelation_url##">Cancel</a></p>',
+                    'body'    => '<h2 style="text-align: center;">Reminder: Your meeting will start in {{booking.start_time_human_format}}</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><h3><strong>When</strong></h3><p>{{booking.full_start_end_guest_timezone}}</p><h3><strong>Who</strong></h3><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking') . '<a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking') . '</a></p>',
                     'times'   => [
                         [
                             'unit'  => 'minutes',
@@ -1354,74 +1398,71 @@ class Helper
             ];
         }
 
-
         return apply_filters('fluent_booking/editor_shortcodes_groups', $groups, $isHtmlSupported);
     }
 
     public static function encryptKey($value)
     {
-        if (!$value) {
+        if(!$value) {
             return $value;
         }
 
-        if (!extension_loaded('openssl')) {
+        if ( ! extension_loaded( 'openssl' ) ) {
             return $value;
         }
 
-        $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+        $salt = (defined( 'LOGGED_IN_SALT' ) && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
 
         if (defined('FLUENT_BOOKING_ENCRYPTION_KEY')) {
             $key = FLUENT_BOOKING_ENCRYPTION_KEY;
         } else {
-            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+            $key = ( defined( 'LOGGED_IN_KEY' ) && '' !== LOGGED_IN_KEY ) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
         }
 
-
         $method = 'aes-256-ctr';
-        $ivlen = openssl_cipher_iv_length($method);
-        $iv = openssl_random_pseudo_bytes($ivlen);
+        $ivlen  = openssl_cipher_iv_length( $method );
+        $iv     = openssl_random_pseudo_bytes( $ivlen );
 
-        $raw_value = openssl_encrypt($value . $salt, $method, $key, 0, $iv);
-        if (!$raw_value) {
+        $raw_value = openssl_encrypt( $value . $salt, $method, $key, 0, $iv );
+        if ( ! $raw_value ) {
             return false;
         }
 
-        return base64_encode($iv . $raw_value); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+        return base64_encode( $iv . $raw_value ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
     }
 
-    public static function decryptKey($raw_value)
-    {
+    public static function decryptKey( $raw_value ) {
 
-        if (!$raw_value) {
+        if(!$raw_value) {
             return $raw_value;
         }
 
-        if (!extension_loaded('openssl')) {
+        if ( ! extension_loaded( 'openssl' ) ) {
             return $raw_value;
         }
 
-        $raw_value = base64_decode($raw_value, true); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+        $raw_value = base64_decode( $raw_value, true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
         $method = 'aes-256-ctr';
-        $ivlen = openssl_cipher_iv_length($method);
-        $iv = substr($raw_value, 0, $ivlen);
+        $ivlen  = openssl_cipher_iv_length( $method );
+        $iv     = substr( $raw_value, 0, $ivlen );
 
-        $raw_value = substr($raw_value, $ivlen);
-
-        $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+        $raw_value = substr( $raw_value, $ivlen );
 
         if (defined('FLUENT_BOOKING_ENCRYPTION_KEY')) {
             $key = FLUENT_BOOKING_ENCRYPTION_KEY;
         } else {
-            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+            $key = ( defined( 'LOGGED_IN_KEY' ) && '' !== LOGGED_IN_KEY ) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
         }
 
-        $value = openssl_decrypt($raw_value, $method, $key, 0, $iv);
-        if (!$value || substr($value, -strlen($salt)) !== $salt) {
+        $salt = (defined( 'LOGGED_IN_SALT' ) && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+
+        $value = openssl_decrypt( $raw_value, $method, $key, 0, $iv );
+        if ( ! $value || substr( $value, - strlen( $salt ) ) !== $salt ) {
             return false;
         }
 
-        return substr($value, 0, -strlen($salt));
+        return substr( $value, 0, - strlen( $salt ) );
     }
 
     public static function debugLog($data)
