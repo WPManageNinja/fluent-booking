@@ -23,7 +23,11 @@ class Stripe extends BasePaymentMethod
             '#136196',
             $this->getLogo()
         );
+    }
 
+    public function register()
+    {
+        $this->init();;
         add_filter('fluent_booking/get_payment_connect_info_' . $this->slug, [$this, 'getConnectInfo']);
         add_filter('fluent_booking/get_payment_settings_disconnect_' . $this->slug, [$this, 'disconnect']);
         add_action('fluent-booking/before_render_payment_method_' . $this->slug, [$this, 'loadCheckoutJs'], 10, 1);
@@ -31,7 +35,6 @@ class Stripe extends BasePaymentMethod
         add_action('wp_ajax_nopriv_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
         add_action('wp_ajax_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
         add_filter('fluent_booking/payment/payment_settings_before_update_stripe', [$this, 'beforeUpdateSettings'], 10, 1);
-
     }
 
     public function disconnect($data)
