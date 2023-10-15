@@ -1,7 +1,7 @@
 @import "saas.scss";
 
 .confirmation_page {
-  max-width: 800px;
+  max-width: 600px;
   margin: 66px auto 30px;
   background: white;
   border: 1px solid rgba(26, 26, 26, 0.1);
@@ -50,3 +50,90 @@
   padding: 15px 0;
 }
 
+.fcal_confirmation {
+  .fcal_confirm_header {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+    h3 {
+      font-weight: 500;
+    }
+    p {
+      margin: 5px 0;
+    }
+  }
+  .fcal_confirm_section {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    flex-direction: column;
+  }
+
+  .fcal_confirm_section_title {
+    width: 200px;
+  }
+
+  .fcal_confirm_section {
+    h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .fcal_booking_manage {
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 2px solid #e5e7eb;
+  }
+}
+
+.fcal_cancellation_wrap {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  flex-direction: column;
+  color: #111827;
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+  }
+  label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .fcal_form_actions {
+    display: flex;
+    column-gap: 15px;
+    align-items: stretch;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .fcal_btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    text-decoration: none;
+    color: #111827;
+    background-color: #f9fafb;
+    &:hover {
+      opacity: 0.8;
+      border-color: #9ca3af;
+      color: black;
+    }
+    &.fcal_btn_primary {
+      background-color: #292929;
+      color: white;
+      border: 1px solid #292929;
+    }
+  }
+}

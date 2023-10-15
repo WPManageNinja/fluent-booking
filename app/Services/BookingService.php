@@ -103,22 +103,68 @@ class BookingService
         return $booking;
     }
 
-    public static function getBookingConfirmationHtml($booking, $calendarSlot = null, $withActions = false)
+    public static function getBookingConfirmationHtml(Booking $booking, $actionType = 'confirmation')
     {
-        if (!$calendarSlot) {
-            $calendarSlot = $booking->slot;
+        $validActions = [
+            'confirmation',
+            'cancel',
+            'reschedule'
+        ];
+
+        if (!in_array($actionType, $validActions)) {
+            $actionType = 'confirmation';
         }
+
+        $calendarSlot = $booking->calendar_event;
 
         $author = $calendarSlot->getAuthorProfile(true);
 
-        $confirmationData = [
-            'author'       => $author,
-            'sub_heading'  => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
-            'slot'         => $calendarSlot,
-            'booking'      => $booking,
-            'message'      => 'A confirmation has been sent to your email address along with meeting location details.',
-            'with_actions' => $withActions
+        $guestName = trim($booking->first_name . ' ' . $booking->last_name);
+
+        $sections = [
+            'what'  => [
+                'title'   => __('What', 'fluent-booking'),
+                'content' => sprintf('%1s Meeting between %2s and %3s', $calendarSlot->title, $guestName, $author['name'])
+            ],
+            'when'  => [
+                'title'   => __('When', 'fluent-booking'),
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone)
+            ],
+            'who'   => [
+                'title'   => __('Who', 'fluent-booking'),
+                'content' => '<span class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></span><span class="fcal_guest_name">' . $guestName . '</span>'
+            ],
+            'where' => [
+                'title'   => __('Where', 'fluent-booking'),
+                'content' => $booking->getLocationDetailsHtml()
+            ]
         ];
+
+        if ($booking->message) {
+            $sections['note'] = [
+                'title'   => __('Additional Note', 'fluent-booking'),
+                'content' => wpautop($booking->message)
+            ];
+        }
+
+        $confirmationData = [
+            'author'      => $author,
+            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
+            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
+            'sections'    => $sections,
+            'slot'        => $calendarSlot,
+            'booking'     => $booking,
+            'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
+            'action_type' => $actionType
+        ];
+
+        if ($actionType == 'cancel') {
+            $confirmationData['action_url'] = add_query_arg([
+                'action'       => 'fcal_cancel_meeting',
+                'meeting_hash' => $booking->hash,
+                'scope'        => Arr::get($_REQUEST, 'scope')
+            ], admin_url('admin-ajax.php'));
+        }
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
     }
