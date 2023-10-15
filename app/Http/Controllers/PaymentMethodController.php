@@ -32,13 +32,19 @@ class PaymentMethodController extends Controller
     public function store(Request $request)
     {
 
-        if($request->get('method') == 'stripe') {
+        if ($request->get('method') == 'stripe') {
             $settings = $request->get('settings', []);
             $isActive = Arr::get($settings, 'is_active') === 'yes';
             $paymentMode = Arr::get($settings, 'payment_mode', 'test');
 
-            if($isActive) {
-                if(empty($settings[$paymentMode.'_publishable_key']) || empty($settings[$paymentMode.'_secret_key'])) {
+            if ($isActive) {
+                if (empty($settings[$paymentMode . '_publishable_key']) || empty($settings[$paymentMode . '_secret_key'])) {
+                    return $this->sendError([
+                        'message' => 'Please connect your Stripe account first.'
+                    ]);
+                }
+
+                if (!Arr::get($settings, 'currency')) {
                     return $this->sendError([
                         'message' => 'Please connect your Stripe account first.'
                     ]);
@@ -47,10 +53,13 @@ class PaymentMethodController extends Controller
         }
 
         $data = $request->settings;
+
         $currency = Arr::get($data, 'currency');
-        if ($currency) {
-            update_option('fluent_booking_global_payment_settings', ['currency' => $currency]);
-        }
+        $isActive = Arr::get($data, 'is_active');
+        update_option('fluent_booking_global_payment_settings', [
+            'currency'  => sanitize_textarea_field($currency),
+            'is_active' => ($isActive == 'yes') ? 'yes' : 'no'
+        ], 'no');
 
         $method = sanitize_text_field($request->method);
 
@@ -122,7 +131,7 @@ class PaymentMethodController extends Controller
         $res = $event->updateMeta('payment_settings', $data);
 
         return $this->sendSuccess([
-                'data' => $res->toArray(),
+                'data'    => $res->toArray(),
                 'message' => __('Settings updated successfully', 'fluent-booking')
             ]
         );

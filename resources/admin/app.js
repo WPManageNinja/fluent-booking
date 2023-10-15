@@ -1,13 +1,14 @@
 import {createApp} from 'vue'
 import {createRouter, createWebHashHistory} from 'vue-router';
-import { routes } from './routes';
+import {routes} from './routes';
 import DashboardApplication from "./Application.vue";
 import Rest from './Bits/Rest.js';
 import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
-import { Plus, Delete, Location } from "@element-plus/icons-vue";
+import {Plus, Delete, Location} from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
+
 global.Errors = Errors;
 
 const utc = require('dayjs/plugin/utc')
@@ -140,10 +141,28 @@ app.mixin({
             return str;
         },
         ucFirst(str) {
-            if(!str) {
+            if (!str) {
                 return '';
             }
             return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+        currencyFormat(amount, isCents = false) {
+            if (!amount) {
+                return '';
+            }
+
+            const currencySign = window.fluentFrameworkAdmin.currency_sign;
+
+            if (isCents) {
+                amount = amount / 100;
+            }
+
+            // if amount is float then convert it to 2 decimal
+            if (amount % 1 !== 0) {
+                amount = parseFloat(amount).toFixed(2);
+            }
+            
+            return currencySign + amount;
         }
     }
 });
@@ -171,7 +190,7 @@ router.afterEach((to, from) => {
     jQuery('.toplevel_page_fluent_frame li').removeClass('current'); // change fluent_frame with your plugin slug
     jQuery('.toplevel_page_fluent_frame li.fluent_frame_' + activeMenu).addClass('current'); // change fluent_frame with your plugin slug
 
-    if(to.meta.title) {
+    if (to.meta.title) {
         jQuery('head title').text(to.meta.title + ' - FluentBooking'); // Change it with your app name
     }
 

@@ -352,4 +352,31 @@ class CalendarSlot extends Model
         return LocationService::getLocationIconHeadingHtml($default, $this);
     }
 
+    public function getPricingTotal()
+    {
+        if ($this->type != 'paid') {
+            return 0;
+        }
+
+        if (!Helper::isPaymentEnabled()) {
+            return 'ssss';
+        }
+
+        $paymentSettings = $this->getMeta('payment_settings', []);
+
+        if (!$paymentSettings || Arr::get($paymentSettings, 'enabled') != 'yes') {
+            return 0;
+        }
+
+        $items = Arr::get($paymentSettings, 'items', []);
+
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item['value'];
+        }
+
+        return $total;
+    }
+
 }
