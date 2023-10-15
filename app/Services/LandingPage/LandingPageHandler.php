@@ -123,13 +123,13 @@ class LandingPageHandler
         $authorProfile = $calendar->getAuthorProfile(true);
 
         $data = [
-            'calendar' => $calendar,
-            'events' => $activeEvents,
-            'author' => $authorProfile,
-            'title' => $authorProfile['name'],
+            'calendar'    => $calendar,
+            'events'      => $activeEvents,
+            'author'      => $authorProfile,
+            'title'       => $authorProfile['name'],
             'description' => $metaDescription,
-            'url' => home_url($wp->request),
-            'css_files' => [
+            'url'         => home_url($wp->request),
+            'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
         ];
@@ -171,7 +171,7 @@ class LandingPageHandler
         if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) {
             $calendarEvent->pre_selects = [
                 'month' => date('m', strtotime($calendarEvent->min_lookup_date)),
-                'year' => date('Y', strtotime($calendarEvent->min_lookup_date))
+                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date))
             ];
         }
 
@@ -181,22 +181,22 @@ class LandingPageHandler
 
 
         $data = [
-            'calendar' => $calendar,
+            'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
-            'author' => $authorProfile,
-            'title' => $calendarEvent->title . ' with ' . $authorProfile['name'],
-            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
-            'url' => home_url($wp->request),
-            'css_files' => [
+            'author'         => $authorProfile,
+            'title'          => $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'description'    => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
+            'url'            => home_url($wp->request),
+            'css_files'      => [
                 $assetUrl . 'public/saas.css'
             ],
-            'js_files' => [
+            'js_files'       => [
                 includes_url('js/jquery/jquery.min.js'),
                 $assetUrl . 'public/js/app.js',
             ],
-            'js_vars' => [
+            'js_vars'        => [
                 'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
-                'fluentCalendarPublicVars' => (new FrontEndHandler())->getGlobalVars()
+                'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
 
@@ -247,17 +247,17 @@ class LandingPageHandler
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
         $data = [
-            'title' => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
-            'body' => $responseHtml,
+            'title'       => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'body'        => $responseHtml,
             'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
-            'css_files' => [
+            'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
-            'js_files' => [],
-            'js_vars' => [],
-            'author' => $authorProfile,
-            'slot' => $calendarEvent,
-            'url' => home_url($wp->request),
+            'js_files'    => [],
+            'js_vars'     => [],
+            'author'      => $authorProfile,
+            'slot'        => $calendarEvent,
+            'url'         => home_url($wp->request),
             'action_type' => $actionType
         ];
 
@@ -281,7 +281,6 @@ class LandingPageHandler
         }
 
         $type = Arr::get($_REQUEST, 'type', 'confirmation');
-
         $this->showBookingConfimationPage($booking, $type);
     }
 
@@ -302,18 +301,18 @@ class LandingPageHandler
             })->toArray();
 
             $formFields[] = [
-                'type' => 'textarea',
-                'name' => '_rescheduling_reason',
-                'label' => __('Reason of rescheduling', 'fluent-booking'),
+                'type'        => 'textarea',
+                'name'        => '_rescheduling_reason',
+                'label'       => __('Reason of rescheduling', 'fluent-booking'),
                 'placeholder' => __('Rescheduling Reason', 'fluent-booking'),
-                'required' => true,
-                'disabled' => false,
-                'enabled' => true
+                'required'    => true,
+                'disabled'    => false,
+                'enabled'     => true
             ];
 
             $formFields[] = [
-                'type' => 'hidden',
-                'name' => 'rescheduling_hash',
+                'type'    => 'hidden',
+                'name'    => 'rescheduling_hash',
                 'enabled' => true
             ];
 
@@ -326,8 +325,8 @@ class LandingPageHandler
 
         add_filter('fluent_calendar/global_booking_vars', function ($vars) use ($booking) {
             $vars['current_person'] = [
-                'name' => trim($booking->first_name .' '.$booking->last_name),
-                'email' => $booking->email,
+                'name'              => trim($booking->first_name . ' ' . $booking->last_name),
+                'email'             => $booking->email,
                 'rescheduling_hash' => $booking->hash
             ];
 
@@ -337,7 +336,9 @@ class LandingPageHandler
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3>You are rescheduling the booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?> (<?php echo $booking->person_time_zone; ?>) </h3>
+                <h3>You are rescheduling the
+                    booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?>
+                    (<?php echo $booking->person_time_zone; ?>) </h3>
             </div>
             <?php
         });
