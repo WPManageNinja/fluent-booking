@@ -64,3 +64,15 @@ export const getErrorText = function (response) {
 
     return errorMessage;
 }
+
+export const i18 = function (str) {
+    let transString = window.fluentCalendarPublicVars?.i18[str];
+    let slug = str.toLowerCase();
+    slug = slug.replace(/\s+/g, '-');
+    if (transString) {
+        return transString;
+    } else if (window.fluentCalendarPublicVars?.i18[slug]) {
+        return str;
+    }
+    return str;
+}

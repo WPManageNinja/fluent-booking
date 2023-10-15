@@ -18,7 +18,7 @@ class StripeCheckout {
         submitButton.id = 'fluent_booking_stipe_pay';
         submitButton.style.marginTop = '23px';
         submitButton.type = 'submit';
-        submitButton.textContent = 'Pay Now';
+        submitButton.textContent = window.fcal_translate('Pay Now');
 
         const stripe = Stripe(this.data?.data?.payment_args?.public_key);
 
@@ -80,11 +80,11 @@ class StripeCheckout {
                                 });
                             });
                         }
-                        stripePayButton.textContent = 'Confirm Payment';
+                        stripePayButton.textContent = window.fcal_translate('Confirm Payment');
                         stripePayButton.disabled = false;
                     });
                 }).catch(error => {
-                    stripePayButton.textContent = 'Pay Now';
+                    stripePayButton.textContent = window.fcal_translate('Pay Now');
                     stripePayButton.disabled = false;
                 });
             });

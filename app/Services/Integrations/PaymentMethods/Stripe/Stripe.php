@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe;
 
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\BasePaymentMethod;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\API;
@@ -29,6 +30,7 @@ class Stripe extends BasePaymentMethod
 
         add_action('wp_ajax_nopriv_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
         add_action('wp_ajax_fluent_cal_confirm_stripe_payment', [$this, 'confirmStripePayment']);
+        add_filter('fluent_booking/payment/payment_settings_before_update_stripe', [$this, 'beforeUpdateSettings'], 10, 1);
 
     }
     
@@ -68,6 +70,18 @@ class Stripe extends BasePaymentMethod
             methods around the world—all with a single integration";
     }
 
+    public function beforeUpdateSettings($data)
+    {
+        //encrypt secret keys by Helper::encrypt
+//        if (isset($data['test_secret_key'])) {
+//            $data['test_secret_key'] = Helper::encryptKey($data['test_secret_key']);
+//        }
+//        if (isset($data['live_secret_key'])) {
+//            $data['live_secret_key'] = Helper::encryptKey($data['live_secret_key']);
+//        }
+        return $data;
+    }
+
     public function getSettings()
     {
         return (new StripeSettings())->get();
@@ -91,7 +105,6 @@ class Stripe extends BasePaymentMethod
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
-//            'payment_method_type' => ['card'],
             'client_reference_id' => $hash,
             'items' => $items,
             'amount' => (int) round($paymentTotal),
