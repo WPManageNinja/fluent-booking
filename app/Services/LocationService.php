@@ -28,6 +28,8 @@ class LocationService
                 $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
             } else if ($location['type'] == 'phone_guest') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
+                $html .= '<span class="fcal_loc_text">' . __('Attendee Phone Number', 'fluent-booking') . '</span>';
+
             } else if ($location['type'] == 'phone_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
                 $html .= '<span class="fcal_loc_text">' . __('Phone Call', 'fluent-booking') . '</span>';
@@ -56,5 +58,16 @@ class LocationService
         }
 
         return $locationData;
+    }
+
+    public static function getLocationOptions($calendarSlot)
+    {
+        $locationSettings = Arr::get($calendarSlot, 'location_settings');
+
+        $locationOptions = [];
+        foreach ($locationSettings as $location) {
+            $locationOptions[] = Arr::get($location, 'type');
+        }
+        return $locationOptions;
     }
 }

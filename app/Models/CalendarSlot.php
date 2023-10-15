@@ -91,6 +91,15 @@ class CalendarSlot extends Model
         return $data;
     }
 
+    public function isLocationFieldRequired()
+    {
+        $locationSettings = Arr::get($this, 'location_settings');
+
+        if (count($locationSettings) > 1) {
+            return true;
+        }
+    }
+
     public function isPhoneRequired()
     {
         return Arr::get($this->location_settings, '0.type') == 'phone_guest';

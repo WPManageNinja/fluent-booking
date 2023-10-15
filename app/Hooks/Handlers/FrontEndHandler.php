@@ -139,6 +139,11 @@ class FrontEndHandler
             $rules['address'] = 'required';
         }
 
+        $isLocationRequired = $calendarSlot->isLocationFieldRequired();
+        if ($isLocationRequired) {
+            $rules['location_field_details'] = 'required';
+        }
+
         $validator = $app->validator->make($postedData, $rules, [
             'name.required'       => 'Please enter your name',
             'email.required'      => 'Please enter your email address',
@@ -199,6 +204,10 @@ class FrontEndHandler
 
         if (isset($postedData['payment_method'])) {
             $customFieldsData['payment_method'] = $postedData['payment_method'];
+        }
+
+        if (isset($postedData['location_field_details'])) {
+            $customFieldsData['location_field_details'] = $postedData['location_field_details'];
         }
 
         try {
