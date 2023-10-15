@@ -136,7 +136,7 @@ class EmailNotificationService
      */
     public static function bookingCancelledEmail(Booking $booking, $email, $emailTo)
     {
-        $calendarEvent = $booking->calendar_event();
+        $calendarEvent = $booking->calendar_event;
 
         $author = $calendarEvent->getAuthorProfile(false);
 

@@ -69,7 +69,7 @@ class SchedulesController extends Controller
         $schedules = $query->paginate();
 
         foreach ($schedules as $schedule) {
-             $this->formatBooking($schedule);
+            $this->formatBooking($schedule);
         }
 
         $data = [
@@ -144,7 +144,10 @@ class SchedulesController extends Controller
             }
 
             if ($value == 'cancelled') {
-                $updateData['cancelled_by'] = get_current_user_id();
+                $booking->cancelMeeting($value, 'host', get_current_user_id());
+                return [
+                    'message' => __('The booking has been cancelled', 'fluent-booking')
+                ];
             }
         }
 
@@ -153,13 +156,7 @@ class SchedulesController extends Controller
         $booking->save();
 
         if ($column === 'status' && $oldSBooking->status != $booking->status) {
-
-            if ($value == 'cancelled') {
-                $title = sprintf(__('Cancelled By %s', 'fluent-booking'), Helper::getUserDisplayName());
-                $booking->addCancelReason($title, sanitize_textarea_field($request->get('cancel_reason')));
-            }
-
-            do_action('fluent_booking/booking_schedule_' . $value, $booking);
+            do_action('fluent_booking/booking_schedule_' . $value, $booking, $booking->calendar_event);
         }
 
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
@@ -210,7 +207,7 @@ class SchedulesController extends Controller
         }
 
         $attendees = Booking::where('group_id', $booking->group_id);
-        $search    = sanitize_text_field($request->get('search'));
+        $search = sanitize_text_field($request->get('search'));
 
         if (!empty($search)) {
             $attendees = $attendees->searchBy($search);
@@ -292,7 +289,7 @@ class SchedulesController extends Controller
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         $booking->slot = $booking->calendar_event;
-        
+
         return $booking;
     }
 

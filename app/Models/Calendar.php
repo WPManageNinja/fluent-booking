@@ -79,6 +79,7 @@ class Calendar extends Model
             return [
                 'avatar'         => $this->getMeta('profile_photo_url'),
                 'name'           => 'Unknown',
+                'email'          => '',
                 'featured_image' => $this->getMeta('featured_image_url')
             ];
         }
@@ -95,7 +96,7 @@ class Calendar extends Model
             $photo = apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user);
         }
 
-        return [
+        $data = [
             'name'           => $name,
             'author_slug'    => $user->user_nicename,
             'first_name'     => $user->first_name,
@@ -103,19 +104,25 @@ class Calendar extends Model
             'avatar'         => $photo,
             'featured_image' => $this->getMeta('featured_image_url')
         ];
+
+        if(!$public) {
+            $data['email'] = $user->user_email;
+        }
+
+        return $data;
     }
 
     public function getLocationFields()
     {
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
-                'label' => 'Conferencing',
+                'label'   => 'Conferencing',
                 'options' => [],
             ],
-            'in_person' => [
-                'label' => 'In Person',
+            'in_person'    => [
+                'label'   => 'In Person',
                 'options' => [
-                    'in_person_guest' => [
+                    'in_person_guest'     => [
                         'title' => 'In Person (Attendee Address)',
                     ],
                     'in_person_organizer' => [
@@ -123,10 +130,10 @@ class Calendar extends Model
                     ],
                 ],
             ],
-            'phone' => [
-                'label' => 'Phone',
+            'phone'        => [
+                'label'   => 'Phone',
                 'options' => [
-                    'phone_guest' => [
+                    'phone_guest'     => [
                         'title' => 'Attendee Phone Number',
                     ],
                     'phone_organizer' => [
@@ -134,8 +141,8 @@ class Calendar extends Model
                     ],
                 ],
             ],
-            'other' => [
-                'label' => 'Other',
+            'other'        => [
+                'label'   => 'Other',
                 'options' => [
                     'custom' => [
                         'title' => 'Custom',

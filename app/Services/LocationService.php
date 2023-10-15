@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\Framework\Support\Arr;
 
 class LocationService
@@ -73,5 +74,19 @@ class LocationService
 
         }
         return $locationOptions;
+    }
+    public static function getBookingLocationUrl(Booking $booking)
+    {
+        $details = $booking->location_details;
+
+        if (!$details || empty($details['type'])) {
+            return $booking->getConfirmationUrl();
+        }
+
+        if (!empty($details['online_platform_link'])) {
+            return Arr::get($details, 'online_platform_link');
+        }
+
+        return $booking->getConfirmationUrl();
     }
 }

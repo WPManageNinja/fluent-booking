@@ -18,7 +18,6 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
     <meta property="og:author" content="<?php echo $author['name']; ?>">
 
-
     <?php
 //    $feature_image = '';
 //    if ($author['featured_image']) {
@@ -31,7 +30,7 @@
 
 
     <?php foreach ($css_files as $css_file): ?>
-    <link rel="stylesheet" href="<?php echo $css_file; ?>" media="screen" />
+    <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" media="screen" />
     <?php endforeach; ?>
 </head>
 <body>

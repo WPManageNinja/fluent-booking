@@ -1447,7 +1447,8 @@ class Helper
                 'admin_email'            => '{{wp.admin_email}}',
                 'summary_notification'   => 'no',
                 'notification_frequency' => 'daily',
-                'notification_day'       => 'mon'
+                'notification_day'       => 'mon',
+                'start_day'              => 'sun',
             ]
         ];
 
@@ -1499,5 +1500,10 @@ class Helper
          * @param array $verifiedSenders
          */
         return apply_filters('fluent_booking/verfied_email_senders', $verifiedSenders);
+    }
+
+    public static function getBookingReceiptLandingBaseUrl()
+    {
+        return apply_filters('fluent_booking/booking_receipt_landing_base_url', site_url('/'));
     }
 }

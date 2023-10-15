@@ -26,6 +26,18 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
+                        <el-row>
+                          <el-form-item label="Calendar start from">
+                          <el-select v-model="administration.start_day" class="m-2" placeholder="Select" size="large">
+                            <el-option
+                                v-for="item in weekdays"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                          </el-select>
+                          </el-form-item>
+                        </el-row>
 
                         <template v-if="administration.summary_notification == 'yes'">
                             <el-row :gutter="30">
@@ -105,6 +117,36 @@ export default {
             emailing: {},
             emailingFields: {},
             administration: {},
+            weekdays: [
+              {
+                value: 'mon',
+                label: 'Monday'
+              },
+              {
+                value: 'tue',
+                label: 'Tuesday'
+              },
+              {
+                value: 'wed',
+                label: 'Wednesday'
+              },
+              {
+                value: 'thu',
+                label: 'Thursday'
+              },
+              {
+                value: 'fri',
+                label: 'Friday'
+              },
+              {
+                value: 'sat',
+                label: 'Saturday'
+              },
+              {
+                value: 'sun',
+                label: 'Sunday'
+              }
+            ],
             loading: false,
             saving: false,
         }

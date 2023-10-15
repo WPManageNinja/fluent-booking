@@ -5,6 +5,7 @@ namespace FluentBooking\App\Models;
 use FluentBooking\App\Models\Model;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class Booking extends Model
@@ -55,7 +56,6 @@ class Booking extends Model
     ];
 
 
-
     /**
      * $searchable Columns in table to search
      * @var array
@@ -70,7 +70,7 @@ class Booking extends Model
     {
         parent::boot();
 
-        static::creating( function ($model) {
+        static::creating(function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
             }
@@ -121,7 +121,7 @@ class Booking extends Model
 
     public function getCustomFormData($isFormatted = true)
     {
-        if($isFormatted) {
+        if ($isFormatted) {
             return BookingFieldService::getFormattedCustomBookingData($this);
         }
 
@@ -178,11 +178,16 @@ class Booking extends Model
         return $query->where('status', $status);
     }
 
-    public function getFullBookingDateTimeText($timeZone = 'UTC')
+    public function getFullBookingDateTimeText($timeZone = 'UTC', $isHtml = false)
     {
         $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
         $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
         $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
+
+        if ($isHtml && $this->status == 'cancelled') {
+            $html = '<del>' . $html . '</del>';
+        }
+
         return $html;
     }
 
@@ -294,11 +299,17 @@ class Booking extends Model
         return $this->hasOne(Order::class, 'parent_id');
     }
 
-    public function getCancelReason()
+    public function getCancelReason($isHtml = false)
     {
-        return BookingActivity::where('booking_id', $this->id)
+        $row = BookingActivity::where('booking_id', $this->id)
             ->where('type', 'cancel_reason')
             ->first();
+
+        if ($isHtml && $row) {
+            return $row->description;
+        }
+
+        return $row;
     }
 
     public function getCancelReasonDescription()
@@ -333,6 +344,45 @@ class Booking extends Model
             'title'       => $title,
             'description' => $reason
         ]);
+    }
+
+    public function cancelMeeting($reason = '', $cancelledByType = 'guest', $cancelledByUserId = null)
+    {
+        if ($this->status == 'cancelled') {
+            return $this;
+        }
+
+        $cancellableStatuses = [
+            'scheduled',
+            'pending'
+        ];
+
+        if (!in_array($this->status, $cancellableStatuses)) {
+            return new \WP_Error('invalid_status', 'This booking is not cancellable.');
+        }
+
+        $this->status = 'cancelled';
+        if ($cancelledByUserId) {
+            $this->cancelled_by = $cancelledByUserId;
+        }
+
+        if (!$cancelledByUserId) {
+            $cancelledByUserId = get_current_user_id();
+        }
+
+        $this->save();
+        $this->updateMeta('cancelled_by_type', $cancelledByType);
+
+        if ($reason) {
+            $userName = $cancelledByType;
+            if ($cancelledByUserId && $user = get_user_by('ID', $cancelledByUserId)) {
+                $userName = $user->display_name;
+            }
+
+            $this->addCancelReason(sprintf('Meeting has been cancelled by %s', $userName), $reason);
+        }
+
+        do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
     }
 
     public function getActivities()
@@ -375,7 +425,6 @@ class Booking extends Model
     }
 
 
-
     /**
      * Local scope to filter hosts by search/query string
      * @param string $search
@@ -404,5 +453,71 @@ class Booking extends Model
         }
 
         return $query;
+    }
+
+    public function getConfirmationUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'confirmation',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function getIcsDownloadUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'confirmation',
+            'ics'            => 'download',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function getRescheduleUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'reschedule',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function getCancelUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'cancel',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function canCancel()
+    {
+        return in_array($this->status, ['scheduled', 'pending']);
+    }
+
+    public function getHostDetails($isPublic = true)
+    {
+        if ($this->host_user_id && $user = get_user_by('ID', $this->host_user_id)) {
+            $name = trim($user->first_name . ' ' . $user->last_name);
+            if (!$name) {
+                $name = $user->display_name;
+            }
+            $data = [
+                'name'       => $name,
+                'email'      => $user->user_email,
+                'first_name' => $user->first_name,
+                'last_name'  => $user->last_name,
+            ];
+        } else {
+            $data = $this->calendar->getAuthorProfile(false);
+        }
+
+        if ($isPublic) {
+            unset($data['email']);
+        }
+
+        return $data;
     }
 }
