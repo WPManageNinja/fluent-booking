@@ -36,16 +36,17 @@
                     Landing Page
                 </template>
                 <div v-if="activeTab == 'landing-page'" class="fcal_create_calendar_body">
-                    <div v-if="landingPageUrl">
+                    <div v-if="slot.public_url">
                         <el-input
-                            v-model="landingPageUrl">
+                            v-model="slot.public_url"
+                            :disabled="true">
                             <template #append>
-                                <a target="_blank" :href="landingPageUrl">
+                                <a target="_blank" :href="slot.public_url">
                                     <el-button type="default">
                                         <el-icon><Link /></el-icon> View
                                     </el-button>
                                 </a>                                
-                                <el-button type="default" @click="copyLandingPageUrl(landingPageUrl)">
+                                <el-button type="default" @click="copyLandingPageUrl(slot.public_url)">
                                     <el-icon><CopyDocument /></el-icon> Copy
                                 </el-button>
                             </template>
@@ -87,7 +88,7 @@ import { copyToClipBoard } from '@/Bits/data_config.js';
 
 export default {
     name: 'ShareCalendarBlock',
-    props: ['slot', 'openShare', 'publicUrl', 'calendarId'],
+    props: ['slot', 'openShare', 'calendarId'],
     emits: ['closeShare'],
     components: {
         Clock,
@@ -98,7 +99,6 @@ export default {
         return {
             showShare: this.openShare,
             activeTab: 'copy-shortcode',
-            landingPageUrl: this.publicUrl
         }
     },
     watch: {

@@ -36,7 +36,7 @@
         </div>
         <div class="fcal_cal_slots">
             <div class="fcal_cal_slot" v-for="(slot, slotIndex) in calendar.slots" :key="slot.id">
-                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id" :publicUrl="calendarPublicUrl"/>
+                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id"/>
             </div>
         </div>
         <el-dialog v-model="showSettings" title="Calendar Settings">
@@ -107,14 +107,6 @@ export default {
         return {
             showSettings: false,
             isNewBookingOpen: false
-        }
-    },
-    computed: {
-        calendarPublicUrl() {
-            if (this.calendar.visibility == 'public' && this.calendar.public_url) {
-                return this.calendar.public_url;
-            }
-            return '';
         }
     },
     methods: {

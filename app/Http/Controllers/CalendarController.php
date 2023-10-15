@@ -30,7 +30,7 @@ class CalendarController extends Controller
             $calendar->public_url = $calendar->getLandingPageUrl();
             foreach ($calendar->slots as $slot) {
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
-
+                $slot->public_url = $slot->getPublicUrl();
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
