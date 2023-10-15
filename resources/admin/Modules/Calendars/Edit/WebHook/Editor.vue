@@ -234,9 +234,7 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response.message);
-                    if(!this.editing_feed.id) {
-                        this.$emit('backToWebhook');
-                    }
+                    this.$emit('backToWebhook');
                 })
                 .catch(errors => {
                     this.$handleError(errors);
