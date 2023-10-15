@@ -20,7 +20,7 @@
     let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     //day start calculation
-    var startDayIndex = 1;
+    let startDayIndex = 1;
     var dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
     const start_day = window.fluentCalendarPublicVars?.start_day;
     if (start_day) {
