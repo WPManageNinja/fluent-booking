@@ -1503,6 +1503,45 @@
       }
     }
   }
+  .fcal_welcom_banner {
+    background: $primaryColor;
+    border-radius: 10px;
+    max-width: 1222px;
+    margin: auto;
+    padding: 40px 140px;
+    position: relative;
+    @media (max-width: 740px) {
+      padding: 30px 50px;
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 44px;
+      color: #ffffff;
+      margin: 0 0 10px;
+      position: relative;
+      svg {
+        position: absolute;
+        left: -20px;
+        top: -7px;
+      }
+      @media (max-width: 485px) {
+        font-size: 28px;
+      }
+    }
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #DDEBFC;
+      margin: 0;
+    }
+    .party_icon {
+      position: absolute;
+      right: 60px;
+      top: 33px;
+    }
+  }
 
   .fcal_weekly_existing_schedule {
     margin: 0;

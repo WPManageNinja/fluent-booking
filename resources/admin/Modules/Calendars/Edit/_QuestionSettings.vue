@@ -122,7 +122,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message'];
+            const allowedFields = ['name', 'email', 'message', 'address', 'location'];
             if (this.isPhoneRequired) {
                 allowedFields.push('phone');
             }
