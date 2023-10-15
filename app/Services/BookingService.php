@@ -103,7 +103,7 @@ class BookingService
         return $booking;
     }
 
-    public static function getBookingConfirmationHtml($booking, $calendarSlot = null, $withActions = false)
+    public static function getBookingConfirmationHtml(Booking $booking, $calendarSlot = null, $withActions = false)
     {
         if (!$calendarSlot) {
             $calendarSlot = $booking->slot;
@@ -111,9 +111,39 @@ class BookingService
 
         $author = $calendarSlot->getAuthorProfile(true);
 
+        $guestName = trim($booking->first_name.' '.$booking->last_name);
+
+        $sections = [
+            'what' => [
+                'title' => __('What', 'fluent-booking'),
+                'content' => sprintf('%1s Meeting between %2s and %3s', $calendarSlot->title, $guestName, $author['name'])
+            ],
+            'when' => [
+                'title' => __('When', 'fluent-booking'),
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone)
+            ],
+            'who' => [
+                'title' => __('Who', 'fluent-booking'),
+                'content' => '<span class="fcal_host_name">'.$author['name'].'<span class="fcal_host_badge">Host</span></span><span class="fcal_guest_name">'.$guestName.'</span>'
+            ],
+            'where' => [
+                'title' => __('Where', 'fluent-booking'),
+                'content' => $booking->getLocationDetailsHtml()
+            ]
+        ];
+
+        if($booking->message) {
+            $sections['note'] = [
+                'title' => __('Additional Note', 'fluent-booking'),
+                'content' => wpautop($booking->message)
+            ];
+        }
+        
         $confirmationData = [
             'author'       => $author,
+            'title'        => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
             'sub_heading'  => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
+            'sections'     => $sections,
             'slot'         => $calendarSlot,
             'booking'      => $booking,
             'message'      => 'A confirmation has been sent to your email address along with meeting location details.',

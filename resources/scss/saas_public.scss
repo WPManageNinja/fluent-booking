@@ -1,7 +1,7 @@
 @import "saas.scss";
 
 .confirmation_page {
-  max-width: 800px;
+  max-width: 600px;
   margin: 66px auto 30px;
   background: white;
   border: 1px solid rgba(26, 26, 26, 0.1);
@@ -50,3 +50,43 @@
   padding: 15px 0;
 }
 
+.fcal_confirmation {
+  .fcal_confirm_header {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+    h3 {
+      font-weight: 500;
+    }
+    p {
+      margin: 5px 0;
+    }
+  }
+  .fcal_confirm_section {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    flex-direction: column;
+  }
+
+  .fcal_confirm_section_title {
+    width: 200px;
+  }
+
+  .fcal_confirm_section {
+    h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .fcal_booking_manage {
+    margin-top: 20px;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 2px solid #e5e7eb;
+  }
+}

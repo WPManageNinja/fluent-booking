@@ -1,6 +1,8 @@
 <?php
 namespace FluentBooking\App\Services\Integrations\PaymentMethods;
 
+use FluentBooking\App\Models\Booking;
+
 class PaymentHelper
 {
     public $slug = '';
@@ -17,18 +19,17 @@ class PaymentHelper
         return add_query_arg($listener, is_array($args)?$args:[]);
     }
 
-    public function successUrl($booking, $args = null)
+    public function successUrl(Booking $booking, $args = null)
     {
+
         $queryArgs =  array_merge(
             array(
-                'fluent-booking'=> 'calendar',
-                'type' => 'confirmation',
-                'booking_token' => $booking->hash,
-                'method' => $this->slug,
+                'payment_method' => $this->slug,
+                'payment_success' => 'yes'
             ),
             is_array($args)? $args:[]
         );
-        return add_query_arg($queryArgs, site_url());
+        return add_query_arg($queryArgs, $booking->getConfirmationUrl());
     }
 
     public static function getReceiptTemplate($items): array
