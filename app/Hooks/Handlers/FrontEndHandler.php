@@ -97,12 +97,42 @@ class FrontEndHandler
         if (is_user_logged_in()) {
             $currentUser = wp_get_current_user();
             $name = trim($currentUser->first_name . ' ' . $currentUser->last_name);
+
+            if (!$name) {
+                $name = $currentUser->display_name;
+            }
+
             $currentPerson = [
-                'name'    => $name ? $name : $currentUser->display_name,
+                'name'    => $name,
                 'email'   => $currentUser->user_email,
                 'user_id' => $currentUser->ID
             ];
+        } else {
+            // Check for url params
+            if (isset($_REQUEST['invitee_name'])) {
+                $currentPerson['name'] = sanitize_text_field($_REQUEST['invitee_name']);
+            }
+
+            if (isset($_REQUEST['invitee_email'])) {
+                $email = sanitize_email($_REQUEST['invitee_email']);
+                if (is_email($email)) {
+                    $currentPerson['email'] = $email;
+                }
+            }
         }
+
+        if (empty($currentPerson['email'])) {
+            // Let's try to get from FluentCRM is exists
+            if (defined('FLUENTCRM')) {
+                $contactApi = FluentCrmApi('contacts');
+                $contact = $contactApi->getCurrentContact();
+                if ($contact) {
+                    $currentPerson['email'] = $contact->email;
+                    $currentPerson['name'] = $contact->full_name;
+                }
+            }
+        }
+
 
         $globalSettings = Helper::getGlobalSettings();
         $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
