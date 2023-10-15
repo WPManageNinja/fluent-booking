@@ -11,7 +11,7 @@ class GlobalPaymentHandler
 {
     public function register()
     {
-        add_action('fluent_booking_loaded', [$this, 'init']);
+        add_action('init', [$this, 'init']);
     }
 
     public function init()
@@ -37,7 +37,7 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['ff_stripe_connect']) && isset($_GET['source'])  && $_GET['source'] == 'fluent_calendar') {
+        if (isset($_GET['ff_stripe_connect']) && isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') {
             if (!current_user_can('manage_options')) {
                 return;
             }
