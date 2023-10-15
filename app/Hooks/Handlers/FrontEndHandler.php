@@ -436,20 +436,6 @@ class FrontEndHandler
         $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
         $formFields = BookingFieldService::getBookingFields($calendarEvent);
 
-        $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
-
-        if ($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
-            $total = 0;
-            foreach ($paymentSettings['items'] as $payment) {
-                $total += (int)$payment['value'];
-            }
-
-            $currency = CurrenciesHelper::getCurrencySign();
-            $calendarEvent->total_payment = $calendarEvent->defaultPaymentIcon($currency, $total);
-        } else {
-            $calendarEvent->total_payment = '';
-        }
-
         $eventData = [
             'id'                 => $calendarEvent->id,
             'max_lookup_date'    => $calendarEvent->max_lookup_date,
@@ -459,8 +445,22 @@ class FrontEndHandler
             'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,
             'description'        => $calendarEvent->description,
-            'pre_selects'        => (object)[]
+            'pre_selects'        => null,
+            'settings'           => $calendarEvent->settings
         ];
+
+        $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
+
+        if ($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
+            $total = 0;
+            foreach ($paymentSettings['items'] as $payment) {
+                $total += (int)$payment['value'];
+            }
+            $currency = CurrenciesHelper::getCurrencySign();
+            $eventData['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
+        } else {
+            $eventData['total_payment'] = '';
+        }
 
         $author = $calendar->getAuthorProfile(true);
         $author['name'] = $calendar->title;

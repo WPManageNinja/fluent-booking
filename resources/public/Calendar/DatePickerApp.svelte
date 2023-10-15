@@ -11,6 +11,7 @@
 
     import Calendar from "./Calendar.svelte";
     import {createEventDispatcher, onMount} from 'svelte';
+
     const isFluentform = appData.is_fluentform;
 
     const id = appData.id;
@@ -26,7 +27,7 @@
     const start_day = window.fluentCalendarPublicVars?.start_day;
     if (start_day) {
         startDayIndex = 8 - dayNames.indexOf(start_day);
-        let firstThree = dayNames.splice(0, 8- startDayIndex);
+        let firstThree = dayNames.splice(0, 8 - startDayIndex);
         dayNames = dayNames.concat(firstThree);
     }
 
@@ -105,7 +106,7 @@
                 timezone = response.timezone;
                 availableDates = response.available_slots;
 
-                if(firstLoading && slot.pre_selects.day) {
+                if (firstLoading && slot.pre_selects.day) {
                     selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
                     dayClick({
                         date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day
@@ -155,6 +156,11 @@
         if (availableDates[day.date]) {
             daySlots = availableDates[day.date];
             selectedDate = day.date;
+
+            if (daySlots.length == 1) {
+                selectedDateTime = daySlots[0];
+            }
+
             dispatch('dayClicked', selectedDate);
         } else {
             daySlots = [];
@@ -188,7 +194,6 @@
         }
         loadAvailableDates();
     }
-
 
 
     function slotSpotConfirmed() {
@@ -297,57 +302,59 @@
             </div>
         </div>
 
-            <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
-                <div class="fcal_slot_picker_header">
-                    { util.dayjs(selectedDate).format('dddd, MMM DD') }
+        <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
+            <div class="fcal_slot_picker_header">
+                { util.dayjs(selectedDate).format('dddd, MMM DD') }
 
-                    <div class="fcal_slot_picker_header_action">
-                        <div class="format-hour">
-                            <input type="radio" id="12" bind:group={formatHours} value="12" />
-                            <label for="12">12h</label>
-                        </div>
-                        <div class="format-hour">
-                            <input type="radio" id="24" bind:group={formatHours} value="24" />
-                            <label for="24">24h</label>
-                        </div>
+                <div class="fcal_slot_picker_header_action">
+                    <div class="format-hour">
+                        <input type="radio" id="12" bind:group={formatHours} value="12"/>
+                        <label for="12">12h</label>
                     </div>
-                </div>
-                <div class="fcal_slot_items">
-                    <div class="fcal_spot_lists">
-                        {#each daySlots as day}
-                            <div
-                                class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
-                                <div aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
-                                     on:keypress="{(e) => {selectedDateTime = day}}"
-                                     class="fcal_spot_name">
-                                     <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
-                                        {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
-                                    </div>
-                                    {#if day.remaining && selectedDateTime != day }
-                                        <div class="fcal_spot_remaining">{day.remaining} spots left</div>
-                                    {/if}
-                                </div>
-                                {#if selectedDateTime && selectedDateTime.start == day.start}
-                                    {#if isFluentform}
-                                        <span class="fcal_spot_confirm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="60px" height="60px"><path d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z"/></svg>
-                                        </span>
-                                    {:else }
-                                        <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                             on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
-                                        </div>
-                                    {/if}
-                                {/if}
-                            </div>
-                        {/each}
+                    <div class="format-hour">
+                        <input type="radio" id="24" bind:group={formatHours} value="24"/>
+                        <label for="24">24h</label>
                     </div>
                 </div>
             </div>
+            <div class="fcal_slot_items">
+                <div class="fcal_spot_lists">
+                    {#each daySlots as day}
+                        <div
+                            class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
+                            <div aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
+                                 on:keypress="{(e) => {selectedDateTime = day}}"
+                                 class="fcal_spot_name">
+                                <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
+                                    {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
+                                </div>
+                                {#if day.remaining && selectedDateTime != day }
+                                    <div class="fcal_spot_remaining">{day.remaining} spots left</div>
+                                {/if}
+                            </div>
+                            {#if selectedDateTime && selectedDateTime.start == day.start}
+                                {#if isFluentform}
+                                        <span class="fcal_spot_confirm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="60px"
+                                                 height="60px"><path
+                                                d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z"/></svg>
+                                        </span>
+                                {:else }
+                                    <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
+                                         on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
+                                    </div>
+                                {/if}
+                            {/if}
+                        </div>
+                    {/each}
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
 {#if isFluentform}
     <div>
-        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, start_time })} />
+        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, start_time })}/>
     </div>
 {/if}
