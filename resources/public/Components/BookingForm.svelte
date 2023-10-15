@@ -41,33 +41,9 @@
                                 <input disabled="{field.disabled}" class="fcal_input" type="number"
                                        placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                             {:else if field.name === 'location'}
-                                <div class="fcal_input_location_wrap">
-                                    {#each field.options as option}
-                                        <label class="fcal_location_radio_list">
-                                            {option.title}
-                                            <input type="radio" name={field.name} value={option.type}
-                                                   bind:group={form[field.name]}/>
-                                            <span class="fcal_radio_icon"></span>
-                                        </label>
-                                    {/each}
-                                    {#if form[field.name] == 'phone_guest' || form[field.name] == 'custom'}
-                                        <input type="text" name="location_details"/>
-                                    {:else if form[field.name] == 'in_person_guest' || form[field.name] == 'custom'}
-                                        <div class="fcal_input_wrap address">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                 stroke-linecap="round" stroke-linejoin="round"
-                                                 class="feather feather-map-pin">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
-                                            </svg>
-                                            <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                                   placeholder="{field.placeholder}" name="location_details"/>
-                                        </div>
-                                    {/if}
-                                </div>
+                                <LocationField field={field} form="{form}"/>
                             {:else if field.type === 'phone'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="number"
+                                <input disabled="{field.disabled}" class="fcal_input" type="text"
                                        placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                             {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
@@ -99,18 +75,16 @@
                         </div>
                     {/if}
                 </div>
-
             {/if}
             <div class="fcal_form_item fcal_submit">
                 {#if !hasPaymentItem()}
                     <button disabled="{submitting}" type="submit"
                             class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        Schedule Meeting
+                        {i18('Schedule Meeting')}
                     </button>
                 {:else}
-                    <button disabled="{submitting}" type="submit"
-                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        Continue to payments
+                    <button disabled="{submitting}" type="submit" class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                        {i18('Continue to Payments')}
                     </button>
                 {/if}
             </div>
@@ -128,6 +102,7 @@
     import {createEventDispatcher} from 'svelte';
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
+    import LocationField from "./_LocationField.svelte";
 
     export let timezone;
     export let formFields;
@@ -163,8 +138,7 @@
 
     function submitForm(e) {
         const formFields = e.target.elements;
-        const selectedLocation = formFields?.location_details.value;
-        const selectedMethod = formFields?.stripe_payment_method?.value;
+        const selectedMethod = (formFields?.stripe_payment_method?.value) ? formFields.stripe_payment_method.value : '';
         dispatch('onPaymentsVisibilityChanged', true);
         const postdata = {
             ...form,
@@ -173,7 +147,6 @@
             event_id: slot.id,
             source_url: currentUrl,
             payment_method: selectedMethod,
-            location_field_details: selectedLocation,
             action: 'fluent_cal_schedule_meeting'
         }
 

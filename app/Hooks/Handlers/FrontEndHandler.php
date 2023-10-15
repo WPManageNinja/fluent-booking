@@ -219,14 +219,16 @@ class FrontEndHandler
             'current_person' => $currentPerson,
             'start_day'      => $startDay,
             'i18'            => [
-                'Timezone' => __('Timezone', 'fluent-booking'),
-                'minutes'  => __('minutes', 'fluent-booking'),
-                'Enter Details' => __('Enter Details', 'fluent-booking'),
-                'Payment Details' => __('Payment Details', 'fluent-booking'),
-                'Total Payment' => __('Total Payment', 'fluent-booking'),
-                'Pay Now'       => __('Pay Now', 'fluent-booking'),
-                'Confirm Payment' => __('Confirm Payment', 'fluent-booking'),
-                'processing' => __('Processing', 'fluent-booking'),
+                'Timezone'             => __('Timezone', 'fluent-booking'),
+                'minutes'              => __('minutes', 'fluent-booking'),
+                'Enter Details'        => __('Enter Details', 'fluent-booking'),
+                'Payment Details'      => __('Payment Details', 'fluent-booking'),
+                'Total Payment'        => __('Total Payment', 'fluent-booking'),
+                'Pay Now'              => __('Pay Now', 'fluent-booking'),
+                'Confirm Payment'      => __('Confirm Payment', 'fluent-booking'),
+                'processing'           => __('Processing', 'fluent-booking'),
+                'Schedule Meeting'     => __('Schedule Meeting', 'fluent-booking'),
+                'Continue to Payments' => __('Continue to Payments', 'fluent-booking')
             ]
         ]);
     }
@@ -256,28 +258,41 @@ class FrontEndHandler
             'start_date' => 'required'
         ];
 
-        $isPhoneRequired = $calendarSlot->isPhoneRequired();
-        if ($isPhoneRequired) {
-            $rules['phone_number'] = 'required';
-        }
-
-        $isAddressRequired = $calendarSlot->isAddressRequired();
-        if ($isAddressRequired) {
-            $rules['address'] = 'required';
-        }
-
-        $isLocationRequired = $calendarSlot->isLocationFieldRequired();
-        if ($isLocationRequired) {
-            $rules['location_field_details'] = 'required';
-        }
-
-        $validator = $app->validator->make($postedData, $rules, [
+        $messages = [
             'name.required'       => 'Please enter your name',
             'email.required'      => 'Please enter your email address',
             'email.email'         => 'Please enter provide a valid email address',
             'timezone.required'   => 'Please select timezone first',
             'start_date.required' => 'Please select a date and time',
-        ]);
+        ];
+
+        if ($calendarSlot->isPhoneRequired()) {
+            $rules['phone_number'] = 'required';
+            $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking');
+        } else if ($calendarSlot->isAddressRequired()) {
+            $rules['address'] = 'required';
+            $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking');
+        } else if ($calendarSlot->isLocationFieldRequired()) {
+            $rules['location_config.driver'] = 'required';
+            $messages['location_config.driver'] = __('Please select location', 'fluent-booking');
+            $selectedLocationDriver = Arr::get($postedData, 'location_config.driver');
+            // is user input required
+            if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
+                $rules['location_config.user_location_input'] = 'required';
+                if ($selectedLocationDriver == 'in_person_guest') {
+                    $messages['location_config.user_location_input.required'] = __('Please provide your address', 'fluent-booking');
+                } else {
+                    $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking');
+                }
+            }
+        }
+
+        $validationConfig = apply_filters('fluent_booking/schedule_validation_rules_data', [
+            'rules'    => $rules,
+            'messages' => $messages
+        ], $postedData, $calendarSlot);
+
+        $validator = $app->validator->make($postedData, $validationConfig['rules'], $validationConfig['messages']);
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'message' => 'Please fill up the required data',
@@ -286,11 +301,7 @@ class FrontEndHandler
             return;
         }
 
-
-        $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
-
-        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', $customFieldsData, $customFieldsData, $calendarSlot);
-
+        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', BookingFieldService::getCustomFieldsData($postedData, $calendarSlot), $customFieldsData, $calendarSlot);
         if (is_wp_error($customFieldsData)) {
             wp_send_json([
                 'message' => $customFieldsData->get_error_message(),
@@ -314,13 +325,15 @@ class FrontEndHandler
             'status'           => 'scheduled',
             'source'           => 'web',
             'event_type'       => $calendarSlot->event_type,
-            'location'         => sanitize_text_field(Arr::get($postedData, 'location')),
-            'location_field_details' => sanitize_text_field(Arr::get($postedData, 'location_field_details', ''))
         ];
 
-        $sourceUrl = Arr::get($postedData, 'source_url', '');
+        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []));
+        if ($selectedLocation['type'] == 'phone_guest') {
+            $bookingData['phone'] = $selectedLocation['description'];
+        }
+        $bookingData['location_details'] = $selectedLocation;
 
-        if ($sourceUrl) {
+        if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
         }
 
@@ -330,20 +343,15 @@ class FrontEndHandler
 
         if (!$isSpotAvailable) {
             wp_send_json([
-                'message' => 'This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.'
+                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
             ], 422);
         }
 
-        if (isset($postedData['payment_method'])) {
+        if (!empty($postedData['payment_method'])) {
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
-        if (isset($postedData['location_field_details'])) {
-            $customFieldsData['location_field_details'] = $postedData['location_field_details'];
-        }
-
         do_action('fluent_calendar/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
-
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
@@ -358,7 +366,7 @@ class FrontEndHandler
             ], 422);
             return;
         }
-
+        
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
@@ -463,7 +471,7 @@ class FrontEndHandler
         ];
 
         //dd($eventVars['form_fields']);
-        $fields =  apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
+        $fields = apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
 
         $fields['form_fields'] = array_values($eventVars['form_fields']);
         return $fields;

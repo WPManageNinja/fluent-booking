@@ -73,15 +73,15 @@
                 </el-form-item>
                 <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" label="Location Description">
                     <el-input v-model="modalSettings.description" type="textarea" placeholder="Location Description *" />
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Description on booking page"/>
                 </el-form-item>
                 <el-form-item v-if="modalSettings.type == 'phone_organizer'" label="Your Phone Number * (with country code)">
                     <el-input v-model="modalSettings.host_phone_number" type="text" placeholder="Your Phone Number"/>
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Phone number on booking page"/>
                 </el-form-item>
                 <el-form-item v-if="modalSettings.type == 'online_meeting'" label="Online Meeting Link *">
                     <el-input v-model="modalSettings.meeting_link" type="text" placeholder="Your Meeting Link"/>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display on booking page"/>
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Link on booking page"/>
                 </el-form-item>
             </el-form>
             <template #footer>

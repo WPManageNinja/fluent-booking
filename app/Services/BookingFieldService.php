@@ -10,25 +10,36 @@ use FluentBooking\Framework\Support\Arr;
 
 class BookingFieldService
 {
-    public static function getCustomFieldsData($fieldValues, CalendarSlot $slot)
+    public static function getCustomFieldsData($postedData, CalendarSlot $slot)
     {
-        $mainFields = ['name', 'email', 'phone_number', 'message', 'address'];
+        $customFields = self::getCustomFields($slot, true);
 
-        $customFields = self::getBookingFields($slot);
+        $errors = [];
 
         $formattedValues = [];
-        foreach ($customFields as $field) {
-            if (!in_array($field['name'], $mainFields) && $field['enabled']) {
-                $value = $fieldValues[$field['name']];
-                if (empty($value) && $field['required']) {
-                    return new \WP_Error('required_field', 'Required Field is missing', [
-                        'field' => $field['label']
-                    ]);
-                }
 
-                $formattedValues[$field['name']] = sanitize_text_field($value);
+        foreach ($customFields as $fieldKey => $customField) {
+            $value = Arr::get($postedData, $fieldKey);
+            if (!$value) {
+                $errors[$fieldKey . '.required'] = sprintf('%s is required', $customField['label']);
+                continue;
             }
+
+            if (is_array($value)) {
+                $value = array_map('sanitize_text_field', $value);
+            } else if ($customField['type'] == 'textarea') {
+                $value = sanitize_textarea_field($value);
+            } else {
+                $value = sanitize_text_field($value);
+            }
+
+            $formattedValues[$fieldKey] = $value;
         }
+
+        if ($errors) {
+            return new \WP_Error('required_field', __('Please fill up the required data', 'fluent-booking'), $errors);
+        }
+
         return $formattedValues;
     }
 
@@ -122,12 +133,11 @@ class BookingFieldService
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
 
 
-
-        if ($calendarSlot->type == 'paid'){
+        if ($calendarSlot->type == 'paid') {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
 
-            if($isEnables) {
+            if ($isEnables) {
                 $requiredIndexes[] = 'payment_method';
                 $defaultFields['payment_method'] = [
                     'index'          => 20,
@@ -138,7 +148,7 @@ class BookingFieldService
                     'system_defined' => true,
                     'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
                     'label'          => __('Payment Summary', 'fluent-booking'),
-                    'currency_sign' => CurrenciesHelper::getGlobalCurrencySign(),
+                    'currency_sign'  => CurrenciesHelper::getGlobalCurrencySign(),
                 ];
             }
         }
@@ -148,7 +158,6 @@ class BookingFieldService
         }
 
         $validFields = [];
-
 
         foreach ($existingFields as $existingField) {
             $name = $existingField['name'];
@@ -187,12 +196,12 @@ class BookingFieldService
             return [];
         }
 
-        $labels = self::getBookingFieldLabels($booking->slot);
+        $labels = self::getBookingFieldLabels($booking->calendar_event);
 
         $formattedData = [];
 
         foreach ($customFormData as $dataKey => $value) {
-            if(isset($labels[$dataKey])) {
+            if (isset($labels[$dataKey])) {
                 $label = $labels[$dataKey];
             } else {
                 $label = $dataKey;
@@ -204,5 +213,29 @@ class BookingFieldService
         }
 
         return $formattedData;
+    }
+
+    public static function getCustomFields($calendarSlot, $withConfig = false)
+    {
+        $existingFields = $calendarSlot->getMeta('booking_fields', []);
+
+        if (!$existingFields) {
+            return [];
+        }
+
+        $customFields = [];
+
+        foreach ($existingFields as $existingField) {
+            if (Arr::get($existingField, 'system_defined') || !Arr::isTrue($existingField, 'enabled')) {
+                continue;
+            }
+            if ($withConfig) {
+                $customFields[$existingField['name']] = $existingField;
+            } else {
+                $customFields[$existingField['name']] = $existingField['label'];
+            }
+        }
+
+        return $customFields;
     }
 }

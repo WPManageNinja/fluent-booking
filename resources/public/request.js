@@ -1,5 +1,18 @@
+function buildFormData(formData, data, parentKey) {
+    if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File) && !(data instanceof Blob)) {
+        Object.keys(data).forEach(key => {
+            buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+        });
+    } else {
+        const value = data == null ? '' : data;
+
+        formData.append(parentKey, value);
+    }
+    return formData;
+}
+
 export const request = function (method, url, data = {} = false) {
-    const formData = new FormData();
+    let formData = new FormData();
 
     if (method === 'GET') {
         // add query_timestamp to url check if it already has nay get params
@@ -10,9 +23,7 @@ export const request = function (method, url, data = {} = false) {
         });
     } else {
         data.query_timestamp = Date.now();
-        Object.keys(data).forEach(key => {
-            formData.append(key, data[key]);
-        });
+        formData = buildFormData(formData, data);
     }
 
     return new Promise((resolve, reject) => {

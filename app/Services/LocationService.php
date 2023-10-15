@@ -25,20 +25,22 @@ class LocationService
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/zoom.svg" alt="Zoom Icon" />';
                 $html .= '<span class="fcal_loc_text">' . __('Zoom Video', 'fluent-booking') . '</span>';
             } else if ($location['type'] == 'online_meeting') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Zoom Icon" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/link.svg" alt="Online Meeting" />';
                 if ($displayOnBooking == 'yes') {
-                    $html .= '<span class="fcal_loc_text">' . $location['meeting_link'] . '</span>';
+                    $html .= '<span class="fcal_loc_text">' . '<span class="fcal_loc_title">' . $location['meeting_link'] . '</span>';
+                } else {
+                    $html .= '<span class="fcal_loc_text">' . __('Online Meeting', 'fluent-booking') . '</span>';
                 }
             } else if ($location['type'] == 'in_person_guest') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
-                $html .= '<span class="fcal_loc_text">' . __('Your Provided Address', 'fluent-booking') . '</span>';
+                $html .= '<span class="fcal_loc_text">' . __('In Person (Attendee Address)', 'fluent-booking') . '</span>';
             } else if ($location['type'] == 'custom') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
                 $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
                 if ($displayOnBooking == 'yes') {
-                    $html .=  '<span class="fcal_loc_text">' . $location['description'] . '</span>';
+                    $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 }
-            } else if($location['type'] == 'in_person_organizer') {
+            } else if ($location['type'] == 'in_person_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
@@ -48,10 +50,14 @@ class LocationService
             } else if ($location['type'] == 'phone_guest') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
                 $html .= '<span class="fcal_loc_text">' . __('Attendee Phone Number', 'fluent-booking') . '</span>';
-
             } else if ($location['type'] == 'phone_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
-                $html .= '<span class="fcal_loc_text">' . __('Phone Call', 'fluent-booking') . '</span>';
+
+                if ($displayOnBooking == 'yes') {
+                    $html .= '<span class="fcal_loc_text">' . $location['host_phone_number'] . '</span>';
+                } else {
+                    $html .= '<span class="fcal_loc_text">' . __('Phone Call', 'fluent-booking') . '</span>';
+                }
             }
             $html .= '</div>';
 
@@ -100,7 +106,7 @@ class LocationService
 
         return $booking->getConfirmationUrl();
     }
-    
+
     public static function updateMultipleLocationDetails($locationFields, $location, $details)
     {
         $locationData['type'] = $location;
@@ -127,14 +133,83 @@ class LocationService
         return $locationData;
     }
 
-    public static function getLocationDetails($locationFields, $address, $location, $locationFieldDetails = '')
+    public static function getLocationDetails($calendarEvent, $userInput = [])
     {
-        if (count($location) > 1) {
-            $locationData = self::updateSingleLocationDetails($locationFields, $address);
-        } else {
-            $locationData = self::updateMultipleLocationDetails($locationFields, $location, $locationFieldDetails);
+        $userInput = array_map('sanitize_text_field', $userInput);
+
+        $locations = $calendarEvent->location_settings;
+
+        if (empty($locations)) {
+            return [
+                'type'        => 'custom',
+                'description' => ''
+            ];
         }
-        return $locationData;
+
+        if (count($locations) == 1) {
+            // return the first location
+            return $locations[0];
+        }
+
+        $keyedLocations = [];
+        foreach ($locations as $location) {
+            $keyedLocations[$location['type']] = $location;
+        }
+
+        $driver = Arr::get($userInput, 'driver');
+
+        if (empty($keyedLocations[$driver])) {
+            return [
+                'type'        => 'custom',
+                'description' => ''
+            ];
+        }
+
+        // custom user input location types
+        $userInputTypes = ['in_person_guest', 'phone_guest'];
+
+        if (in_array($driver, $userInputTypes)) {
+            return [
+                'type'        => $driver,
+                'description' => Arr::get($userInput, 'user_location_input')
+            ];
+        }
+
+        // Check provided description location type to store as description
+        $customTypes = ['custom', 'phone_organizer', 'in_person_organizer'];
+        if (in_array($driver, $customTypes)) {
+            $fieldMaps = [
+                'custom'              => 'description',
+                'in_person_organizer' => 'description',
+                'phone_organizer'     => 'host_phone_number'
+            ];
+
+            $key = $fieldMaps[$driver];
+
+            return [
+                'type'        => $driver,
+                'description' => Arr::get($keyedLocations, $driver . '.' . $key)
+            ];
+        }
+
+        if ($driver == 'online_meeting') {
+            return [
+                'type'                 => $driver,
+                'online_platform_link' => Arr::get($keyedLocations, $driver . '.meeting_link')
+            ];
+        }
+
+        return [
+            'type'        => $driver,
+            'description' => ''
+        ];
+    }
+
+    public static function getLocationsConfig()
+    {
+        return [
+            ''
+        ];
     }
 
     public static function getLocationOptions($calendarSlot)
