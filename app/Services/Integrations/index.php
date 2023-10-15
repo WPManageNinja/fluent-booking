@@ -11,8 +11,6 @@ add_action('init', function () {
         (new \FluentBooking\App\Services\Integrations\FluentCRM\Bootstrap());
     }
 
-   // (new \FluentBooking\App\Services\Integrations\GoogleCalendar\GoogleCalendar());
-
 });
 
 

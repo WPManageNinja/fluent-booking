@@ -234,10 +234,10 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         $settings = $this->getSettings();
         $settings = wp_parse_args($data, $settings);
-
+        
         $settings = apply_filters('fluent_booking/payment/payment_settings_before_update_' . $this->slug, $settings);
 
-        update_option($this->methodHandler, $settings);
+        update_option($this->methodHandler, $settings, 'no');
 
         return $this->getSettings();
     }

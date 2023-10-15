@@ -13,8 +13,6 @@
  * @var $app FluentBooking\Framework\Foundation\Application
  */
 
-use FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler;
-
 /*
  * Register all the grouped action handlers
  */
@@ -36,7 +34,7 @@ $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
 
-(new GlobalPaymentHandler)->register();
+(new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 
 (new FluentBooking\App\Services\PluginManager\Bootstrap())->register();
 
