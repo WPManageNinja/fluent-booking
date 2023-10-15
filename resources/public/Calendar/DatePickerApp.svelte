@@ -16,8 +16,18 @@
 
     let dispatch = createEventDispatcher();
 
-    var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
     let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    //day start calculation
+    var startDayIndex = 1;
+    var dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    const start_day = window.fluentCalendarPublicVars?.start_day;
+    if (start_day) {
+        startDayIndex = 8 - dayNames.indexOf(start_day);
+        let firstThree = dayNames.splice(0, 8- startDayIndex);
+        dayNames = dayNames.concat(firstThree);
+    }
 
     let headers = [];
     let now = new Date();
@@ -118,7 +128,7 @@
     function initMonth() {
         days = [];
         //	find the last Monday of the previous month
-        const firstDay = new Date(year, month, 1).getDay();
+        const firstDay = new Date(year, month, startDayIndex).getDay();
 
         const daysInThisMonth = new Date(year, month + 1, 0).getDate();
         const daysInLastMonth = new Date(year, month, 0).getDate();

@@ -1447,7 +1447,8 @@ class Helper
                 'admin_email'            => '{{wp.admin_email}}',
                 'summary_notification'   => 'no',
                 'notification_frequency' => 'daily',
-                'notification_day'       => 'mon'
+                'notification_day'       => 'mon',
+                'start_day'              => 'sun',
             ]
         ];
 
