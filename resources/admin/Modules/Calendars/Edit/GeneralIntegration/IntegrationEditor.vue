@@ -308,7 +308,7 @@
                     @click="saveNotification"
                     icon="el-icon-success"
                 >
-                    {{ $t('Save Feed') }}
+                    Save Feed
                 </el-button>
             </template>
         </el-form>
@@ -474,7 +474,7 @@ export default {
             this.$post(url, data)
                 .then(response => {
                     this.$handleSuccess(response);
-                    // this.$emit('back');
+                    this.$emit('back');
                 })
                 .catch((error) => {
                     const getError = error?.errors || error?.data?.errors

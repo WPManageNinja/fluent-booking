@@ -212,6 +212,8 @@ export default {
         },
         backToWebhook() {
             this.show_edit = false;
+            this.editing_feed = null;
+            this.getFeeds();
         },
         getEventName(name) {
             if (name == 'after_booking_scheduled') {

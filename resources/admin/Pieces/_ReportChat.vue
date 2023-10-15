@@ -1,5 +1,32 @@
 <template>
-    <VueApexCharts :options="options" height="375" :series="options.series" />
+    <div class="fcal_dashboard_chat fcal_dashboard_box">
+        <div class="fcal_section_header">
+            <div class="fcal_title">
+                <h3>Booking Trends</h3>
+            </div>
+            <div class="fcal_actions">
+                <el-date-picker
+                    v-model="filterChartsDate"
+                    type="daterange"
+                    unlink-panels
+                    clearable
+                    range-separator="-"
+                    start-placeholder="Start date"
+                    end-placeholder="End date"
+                    :shortcuts="shortcuts"
+                    placeholder="Select Date"
+                    popper-class="fcal_daterange_popover"
+                    format="YYYY/MM/DD"
+                    value-format="YYYY-MM-DD"
+                    @change="fetchGraphReports"
+                />
+            </div>
+        </div>
+        <el-skeleton v-if="loading" animated />
+        <div v-else>
+            <VueApexCharts :options="options" height="375" :series="options.series" />
+        </div>
+    </div>
 </template>
 
 <script>
@@ -13,6 +40,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             options: {
                 chart: {
                     type: 'area',
@@ -31,15 +59,80 @@ export default {
                         }
                     },
                 },
-                series: [{
-                    name: 'sales',
-                    data: [30,40,35,50,49,60,70,91,125]
-                }],
+                series: [
+                    {
+                        name: 'Booked',
+                        data: []
+                    },
+                    {
+                        name: 'Completed',
+                        data: []
+                    },
+                    {
+                        name: 'Cancelled',
+                        data: []
+                    }
+                ],
                 xaxis: {
-                    categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug','Sep']
+                    categories: []
                 }
-            }
+            },
+            filterChartsDate: '',
+            shortcuts: [
+                {
+                    text: 'Last week',
+                    value: () => {
+                        const end = new Date()
+                        const start = new Date()
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                        return [start, end]
+                    },
+                },
+                {
+                    text: 'Last month',
+                    value: () => {
+                        const end = new Date()
+                        const start = new Date()
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                        return [start, end]
+                    },
+                }
+            ],
         }
+    },
+    methods: {
+        fetchGraphReports() {
+            this.loading = true;
+            this.$get('reports/graph-reports', {
+                date_range: this.filterChartsDate
+            })
+                .then(response => {
+                    const { booked_stats, completed_stats, cancelled_stats } = response;
+
+                    // Helper function to extract data from an object and return as arrays
+                    const extractData = (stats) => Object.entries(stats).map(([key, value]) => ({ key, value }));
+
+                    // Extract data and categories for booked, completed, and cancelled stats
+                    const bookedData    = extractData(booked_stats);
+                    const completedData = extractData(completed_stats);
+                    const cancelledData = extractData(cancelled_stats);
+
+                    // Update the options object
+                    this.options.xaxis.categories = bookedData.map((item) => item.key);
+                    this.options.series[0].data = bookedData.map((item) => item.value);
+                    this.options.series[1].data = completedData.map((item) => item.value);
+                    this.options.series[2].data = cancelledData.map((item) => item.value);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
+    },
+    mounted() {
+        this.fetchGraphReports();
     }
 }
 </script>

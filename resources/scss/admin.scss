@@ -252,8 +252,9 @@
       .fcal_section_header {
         .fcal_actions {
           .el-date-editor {
-            border: none;
-            padding: 0;
+            padding: 3px 16px;
+            box-shadow: none;
+            border: 1px solid #D6DAE1;
 
             .el-input__wrapper {
               padding: 3px 16px;

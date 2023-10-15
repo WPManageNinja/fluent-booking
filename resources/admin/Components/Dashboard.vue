@@ -49,22 +49,7 @@
         </div>
 
         <div class="fcal_dashboard_chat_wrap">
-            <div class="fcal_dashboard_chat fcal_dashboard_box">
-                <div class="fcal_section_header">
-                    <div class="fcal_title">
-                        <h3>Booking Trends</h3>
-                    </div>
-                    <div class="fcal_actions">
-                        <el-date-picker
-                            v-model="filterDate2"
-                            type="date"
-                            placeholder="Select Date"
-                            popper-class="fcal_daterange_popover"
-                        />
-                    </div>
-                </div>
-                <ReportChat/>
-            </div>
+            <ReportChat/>
 
             <div class="fcal_dashboard_report_sidebar">
                 <div class="fcal_schedule_event_infos">
@@ -142,7 +127,7 @@ export default {
     data() {
         return {
             filterDate: '',
-            filterDate2: '',
+            filterChartsDate: '',
             shortcuts: [
                 {
                     text: 'Last week',
@@ -229,7 +214,6 @@ export default {
                     this.widgets = response.overview;
                     this.latestBookedLists = response.latest_books;
                     this.nextMeetings = response.next_meetings;
-                    console.log(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);

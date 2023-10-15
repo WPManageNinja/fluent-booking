@@ -338,7 +338,12 @@ class FrontEndHandler
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
+        if (isset($postedData['location_field_details'])) {
+            $customFieldsData['location_field_details'] = $postedData['location_field_details'];
+        }
+
         do_action('fluent_calendar/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
+
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
