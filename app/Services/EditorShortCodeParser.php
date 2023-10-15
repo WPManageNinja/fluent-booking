@@ -92,17 +92,11 @@ class EditorShortCodeParser
         }
 
         if ($key == 'cancelation_url') {
-            return add_query_arg([
-                'fluent-booking' => 'cancel-booking',
-                'booking_token'  => $booking->hash
-            ], site_url('index.php'));
+            return $booking->getCancelUrl();
         }
 
         if ($key == 'reschedule_url') {
-            return add_query_arg([
-                'fluent-booking' => 'reschedule-booking',
-                'booking_token'  => $booking->hash
-            ], site_url('index.php'));
+            return $booking->getRescheduleUrl();
         }
 
         if ($key == 'location_details_html') {
@@ -227,7 +221,7 @@ class EditorShortCodeParser
             return static::parseFromArray($parsable);
         }
 
-        return static::parseFromString($parsable);        
+        return static::parseFromString($parsable);
     }
 
     protected static function parseFromArray($parsable)
