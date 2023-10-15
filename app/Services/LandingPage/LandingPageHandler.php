@@ -179,7 +179,6 @@ class LandingPageHandler
 
         $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
 
-        $onRescheduling = App::getInstance('request')->get('type') === 'reschedule';
 
         $data = [
             'calendar' => $calendar,
@@ -231,6 +230,14 @@ class LandingPageHandler
 
         if ($actionType == 'reschedule') {
             $this->handleRescheduleView($booking);
+        }
+
+        if ($actionType == 'confirmation' && !empty($_REQUEST['ics']) && $_REQUEST['ics'] == 'download') {
+            $icsText = BookingService::generateBookingICS($booking);
+            // Output the ICS text
+            header('Content-Type: text/calendar; charset=utf-8');
+            header('Content-Disposition: attachment; filename=event.ics');
+            echo $icsText;
         }
 
         $calendarEvent = $booking->calendar_event;
