@@ -42,7 +42,7 @@
                 </span>
                 <span v-if="slot.price_total" class="fcal_slog_meta_event">
                     <el-icon><CreditCard/></el-icon>
-                    <span>{{appVars.currency_sign}} {{slot.price_total}}</span>
+                    <span>{{currencyFormat(slot.price_total)}}</span>
                 </span>
             </p>
         </div>
