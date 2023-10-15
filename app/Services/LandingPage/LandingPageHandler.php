@@ -211,11 +211,6 @@ class LandingPageHandler
         $app = App::getInstance();
 
         status_header(200);
-        if ($onRescheduling) {
-            $data['on_rescheduling'] = true;
-            $data['existing_booking'] = $existingBooking;
-        }
-
         $app->view->render('landing.booking', $data);
         exit(200);
     }
@@ -286,11 +281,6 @@ class LandingPageHandler
     private function handleRescheduleView(Booking $booking)
     {
         add_filter('fluent_calendar_public_event_vars', function ($eventVars) use ($booking) {
-            $eventVars += [
-                'on_rescheduling' =>true,
-                'existing_booking' => $booking->toArray()
-            ];
-
             $onlyFields = [
                 'name', 'email'
             ];
@@ -320,7 +310,9 @@ class LandingPageHandler
                 'enabled' => true
             ];
 
-            $eventVars['form_fields'] = $formFields;
+            $eventVars['form_fields'] = array_values($formFields);
+            unset($eventVars['payment_items']);
+            unset($eventVars['payment_methods']);
 
             return $eventVars;
         }, 10, 1);
@@ -335,7 +327,14 @@ class LandingPageHandler
             return $vars;
         });
 
+        add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
+            ?>
+            <div class="fcal_rescheduling_wrap">
+                <h3>Your rescheduling the booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?> (<?php echo $booking->person_time_zone; ?>) </h3>
+            </div>
+            <?php
+        });
+
         $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
-
 }

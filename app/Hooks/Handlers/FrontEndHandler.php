@@ -42,30 +42,33 @@ class FrontEndHandler
                 return;
             }
 
-            $reschedulingMessage = sanitize_textarea(Arr::get($data, '_rescheduling_reason'));
-            if(!$reschedulingMessage) {
-                wp_json_response([
-                    'message' => __('Please provide a rescheduling reason', 'fluent-booking')
-                ], 422);
-            }
-
             add_filter('fluent_booking/schedule_custom_field_data', function ($array) {
                 return [];
             });
 
-            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData) {
-                $existingHash = Arr::get($postedData['rescheduling_hash']);
+            add_filter('fluent_booking/schedule_validation_rules_data', function ($data) {
+                return [
+                    'messages' => [
+                        '_rescheduling_reason.required' => __('Please provide a rescheduling reason', 'fluent-booking')
+                    ],
+                    'rules'    => [
+                        '_rescheduling_reason' => 'required'
+                    ]
+                ];
+            });
 
+            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData) {
+                $existingHash = Arr::get($postedData, 'rescheduling_hash');
                 $existingBooking = Booking::where('hash', $existingHash)->first();
 
-                if(!$existingBooking) {
-                    wp_json_response([
+                if (!$existingBooking) {
+                    wp_send_json([
                         'message' => __('Invalid rescheduling request', 'fluent-booking')
                     ], 422);
                 }
 
-                if($existingBooking->status != 'scheduled') {
-                    wp_json_response([
+                if ($existingBooking->status != 'scheduled') {
+                    wp_send_json([
                         'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking')
                     ], 422);
                 }
@@ -79,12 +82,11 @@ class FrontEndHandler
                 $existingBooking->end_time = $endDateTime;
                 $existingBooking->save();
 
-                $reschedulingMessage = sanitize_textarea(Arr::get($postedData, '_rescheduling_reason'));
-
+                $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
                 $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
 
                 do_action('fluent_booking/log_booking_activity', [
-                    'title' => 'Meeting rescheduled',
+                    'title'       => 'Meeting rescheduled',
                     'description' => 'Meeting has been rescheduled from Web UI'
                 ]);
 
@@ -98,10 +100,9 @@ class FrontEndHandler
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
-                    'message' => 'Booking has been confirmed',
+                    'message'       => 'Booking has been confirmed',
                     'response_html' => $html
                 ], 200);
-
 
             }, 10, 2);
         });
@@ -111,7 +112,7 @@ class FrontEndHandler
     public function handleShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'id' => 0,
+            'id'             => 0,
             'disable_author' => 'no'
         ], $atts);
 
@@ -144,7 +145,7 @@ class FrontEndHandler
         );
 
         return App::make('view')->make('public.calendar', [
-            'slot' => $slot,
+            'slot'     => $slot,
             'calendar' => $calendar
         ]);
     }
@@ -165,7 +166,7 @@ class FrontEndHandler
     public function getGlobalVars()
     {
         $currentPerson = [
-            'name' => '',
+            'name'  => '',
             'email' => ''
         ];
 
@@ -173,8 +174,8 @@ class FrontEndHandler
             $currentUser = wp_get_current_user();
             $name = trim($currentUser->first_name . ' ' . $currentUser->last_name);
             $currentPerson = [
-                'name' => $name ? $name : $currentUser->display_name,
-                'email' => $currentUser->user_email,
+                'name'    => $name ? $name : $currentUser->display_name,
+                'email'   => $currentUser->user_email,
                 'user_id' => $currentUser->ID
             ];
         }
@@ -183,10 +184,10 @@ class FrontEndHandler
         $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
         return apply_filters('fluent_calendar/global_booking_vars', [
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'timezones' => DateTimeHelper::getFlatGroupedTimeZones(),
+            'ajaxurl'        => admin_url('admin-ajax.php'),
+            'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson,
-            'start_day' => $startDay
+            'start_day'      => $startDay
         ]);
     }
 
@@ -209,9 +210,9 @@ class FrontEndHandler
         do_action('fluent_booking/starting_scheduling_ajax', $postedData);
 
         $rules = [
-            'name' => 'required',
-            'email' => 'required|email',
-            'timezone' => 'required',
+            'name'       => 'required',
+            'email'      => 'required|email',
+            'timezone'   => 'required',
             'start_date' => 'required'
         ];
 
@@ -227,25 +228,23 @@ class FrontEndHandler
 
 
         $rulesData = [
-            'rules' => $rules,
+            'rules'    => $rules,
             'messages' => [
-                'name.required' => 'Please enter your name',
-                'email.required' => 'Please enter your email address',
-                'email.email' => 'Please enter provide a valid email address',
-                'timezone.required' => 'Please select timezone first',
+                'name.required'       => 'Please enter your name',
+                'email.required'      => 'Please enter your email address',
+                'email.email'         => 'Please enter provide a valid email address',
+                'timezone.required'   => 'Please select timezone first',
                 'start_date.required' => 'Please select a date and time',
             ]
         ];
 
         $rulesData = apply_filters('fluent_booking/schedule_validation_rules_data', $rulesData, $postedData, $calendarSlot);
 
-        dd($rulesData);
-
         $validator = $app->validator->make($postedData, $rulesData['rules'], $rulesData['messages']);
         if ($validator->validate()->fails()) {
             wp_send_json([
                 'message' => 'Please fill up the required data',
-                'errors' => $validator->errors()
+                'errors'  => $validator->errors()
             ], 422);
             return;
         }
@@ -258,7 +257,7 @@ class FrontEndHandler
         if (is_wp_error($customFieldsData)) {
             wp_send_json([
                 'message' => $customFieldsData->get_error_message(),
-                'errors' => $customFieldsData->get_error_data()
+                'errors'  => $customFieldsData->get_error_data()
             ], 422);
             return;
         }
@@ -268,16 +267,16 @@ class FrontEndHandler
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
-            'start_time' => $startDateTime,
-            'name' => sanitize_text_field($postedData['name']),
-            'email' => sanitize_email($postedData['email']),
-            'message' => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
-            'phone' => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
-            'address' => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
-            'ip_address' => Helper::getIp(),
-            'status' => 'scheduled',
-            'source' => 'web',
-            'event_type' => $calendarSlot->event_type
+            'start_time'       => $startDateTime,
+            'name'             => sanitize_text_field($postedData['name']),
+            'email'            => sanitize_email($postedData['email']),
+            'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
+            'address'          => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
+            'ip_address'       => Helper::getIp(),
+            'status'           => 'scheduled',
+            'source'           => 'web',
+            'event_type'       => $calendarSlot->event_type
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -319,7 +318,7 @@ class FrontEndHandler
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
-            'message' => 'Booking has been confirmed',
+            'message'       => 'Booking has been confirmed',
             'response_html' => $html
         ], 200);
     }
@@ -359,8 +358,8 @@ class FrontEndHandler
         if (is_wp_error($availableSpots)) {
             wp_send_json([
                 'available_slots' => [],
-                'timezone' => $timeZone,
-                'invalid_dates' => true,
+                'timezone'        => $timeZone,
+                'invalid_dates'   => true,
                 'max_lookup_date' => $slot->getMaxLookUpDate(),
             ], 200);
         }
@@ -370,7 +369,7 @@ class FrontEndHandler
 
         wp_send_json([
             'available_slots' => $availableSpots,
-            'timezone' => $timeZone,
+            'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
         ], 200);
     }
@@ -399,24 +398,24 @@ class FrontEndHandler
         }
 
         $eventData = [
-            'id' => $calendarEvent->id,
-            'max_lookup_date' => $calendarEvent->max_lookup_date,
-            'min_lookup_date' => $calendarEvent->min_lookup_date,
-            'duration' => $calendarEvent->duration,
-            'title' => $calendarEvent->title,
-            'location_settings' => $calendarEvent->location_settings,
+            'id'                 => $calendarEvent->id,
+            'max_lookup_date'    => $calendarEvent->max_lookup_date,
+            'min_lookup_date'    => $calendarEvent->min_lookup_date,
+            'duration'           => $calendarEvent->duration,
+            'title'              => $calendarEvent->title,
+            'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,
-            'description' => $calendarEvent->description,
-            'pre_selects' => (object)[]
+            'description'        => $calendarEvent->description,
+            'pre_selects'        => (object)[]
         ];
 
         $author = $calendar->getAuthorProfile(true);
         $author['name'] = $calendar->title;
 
         $eventVars = [
-            'slot' => $calendarEvent,
+            'slot'           => $calendarEvent,
             'author_profile' => $author,
-            'form_fields' => $formFields,
+            'form_fields'    => $formFields,
         ];
 
         //dd($eventVars['form_fields']);
