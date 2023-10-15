@@ -28,22 +28,10 @@
                         </span>
                     </span> {{ eventType }}
                 </span>
-
-            </p>
-            <p v-if="slot.public_url" class="fcal_slot_meta">
-                <span v-if="slot.status == 'draft'">View Booking Page</span>
-                <a :href="slot.public_url" target="_blank" rel="noopener" v-else>View Booking Page</a>
             </p>
         </div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
-                <el-button v-if="slot.public_url" @click="copyTo(slot.public_url)" class="fcal_copy_btn">
-                    <el-icon>
-                        <CopyDocument/>
-                    </el-icon>
-                    <span v-if="!isCopied">Copy Link</span>
-                    <span v-else>Copied!</span>
-                </el-button>
                 <el-button class="fcal_plain_btn" @click="viewShareCalendar(slot)">
                     <el-icon><Share /></el-icon> Share
                 </el-button>
@@ -67,7 +55,6 @@
             v-if="shareSlot" 
             :slot="shareSlot" 
             :openShare="openShare"
-            :publicUrl="publicUrl"
             :calendarId="calendarId"
             @closeShare="closeShareCalendar"
         />
@@ -80,7 +67,7 @@ import { CopyDocument, More, Share, ArrowDown, User, Clock, Right, EditPen, Dele
 import ShareCalendarBlock from './ShareCalendarBlock';
 export default {
     name: 'EachSlot',
-    props: ['slot', 'calendarId', 'publicUrl'],
+    props: ['slot', 'calendarId'],
     $emits: ['slotDeleted'],
     components: {
     CopyDocument,

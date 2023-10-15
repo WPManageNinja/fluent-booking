@@ -134,7 +134,6 @@
             v-if="openShare" 
             :slot="slot" 
             :openShare="openShare"
-            :publicUrl="slot.public_url"
             :calendarId="calendar_id"
             @closeShare="openShare = false"
         />
