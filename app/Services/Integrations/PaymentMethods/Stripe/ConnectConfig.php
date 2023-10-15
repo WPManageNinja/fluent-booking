@@ -19,13 +19,14 @@ class ConnectConfig
         $hash = md5(site_url() . wp_generate_uuid4() . time());
 
         $liveArgs = [
-            'url_base' => rawurlencode(admin_url('admin.php?stripe&')),
+            'url_base' => rawurlencode(admin_url('admin.php?stripe&source=fluent_calendar&')),
             'mode'     => 'live',
-            'hash'     => $hash
+            'hash'     => $hash,
+            'source'   => 'fluent_calendar'
         ];
 
         $testArgs = [
-            'url_base' => rawurlencode(admin_url('admin.php?stripe&')),
+            'url_base' => rawurlencode(admin_url('admin.php?stripe&source=fluent_calendar&')),
             'mode'     => 'test',
             'hash'     => $hash
         ];

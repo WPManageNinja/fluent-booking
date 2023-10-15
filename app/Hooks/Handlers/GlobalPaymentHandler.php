@@ -37,8 +37,11 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['ff_stripe_connect'])) {
-            $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code']);
+        if (isset($_GET['ff_stripe_connect']) && isset($_GET['source'])  && $_GET['source'] == 'fluent_calendar') {
+            if (!current_user_can('manage_options')) {
+                return;
+            }
+            $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']);
             ConnectConfig::verifyAuthorizeSuccess($data);
         }
     }

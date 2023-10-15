@@ -217,8 +217,18 @@ class FrontEndHandler
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson,
-            'start_day'      => $startDay
-        ]);
+            'start_day'      => $startDay,
+            'i18'            => [
+                'Timezone' => __('Timezone', 'fluent-booking'),
+                'minutes'  => __('minutes', 'fluent-booking'),
+                'Enter Details' => __('Enter Details', 'fluent-booking'),
+                'Payment Details' => __('Payment Details', 'fluent-booking'),
+                'Total Payment' => __('Total Payment', 'fluent-booking'),
+                'Pay Now'       => __('Pay Now', 'fluent-booking'),
+                'Confirm Payment' => __('Confirm Payment', 'fluent-booking'),
+                'processing' => __('Processing', 'fluent-booking'),
+            ]
+        ];
     }
 
     public function ajaxScheduleMeeting()

@@ -121,7 +121,7 @@ class ApiRequest
         if ('charges' === $api && 'POST' === $method) {
             $customer = !empty($request['customer']) ? $request['customer'] : '';
             $source = !empty($request['source']) ? $request['source'] : $customer;
-            $idempotency_key = apply_filters('fluentcart_stripe_idempotency_key', Arr::get($request, 'metadata.fluentform_tid') . '-' . $source . '-' . $api, $request);
+            $idempotency_key = apply_filters('fluent_booking_stripe_idempotency_key', Arr::get($request, 'metadata.fluentform_tid') . '-' . $source . '-' . $api, $request);
             $headers['Idempotency-Key'] = $idempotency_key;
         }
         $response = wp_safe_remote_post(
@@ -129,7 +129,7 @@ class ApiRequest
             array(
                 'method' => $method,
                 'headers' => $headers,
-                'body' => apply_filters('fluentcart_stripe_request_body', $request, $api),
+                'body' => apply_filters('fluent_booking_stripe_request_body', $request, $api),
                 'timeout' => 50,
             )
         );
