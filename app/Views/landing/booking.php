@@ -57,7 +57,6 @@ use FluentBooking\App\Models\Booking;
 </head>
 <body>
 
-
 <div class="calendar_wrap">
     <?php do_action('fluent_booking/before_calendar_event_landing_page', $calendar_event); ?>
     <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int)$calendar->id; ?>"

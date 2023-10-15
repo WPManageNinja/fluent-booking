@@ -337,7 +337,7 @@ class LandingPageHandler
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3>Your rescheduling the booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?> (<?php echo $booking->person_time_zone; ?>) </h3>
+                <h3>You are rescheduling the booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?> (<?php echo $booking->person_time_zone; ?>) </h3>
             </div>
             <?php
         });
