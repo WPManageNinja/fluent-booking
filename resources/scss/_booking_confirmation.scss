@@ -58,3 +58,23 @@ span.fcal_host_badge {
   font-size: 80%;
   color: #253985;
 }
+
+
+.fcal_to_calendars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  margin-top: 0 !important;
+  .fcal_cal_items {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    a {
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid #e5e7eb;
+    }
+  }
+}
