@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\BookingMeta;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\PermissionManager;
 
@@ -653,6 +654,49 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
+
+    public static function getGlobalPaymentSettings()
+    {
+        static $settings;
+
+        if ($settings) {
+            return $settings;
+        }
+
+        $settings = get_option('fluent_booking_global_payment_settings', []);
+
+        if (!$settings) {
+            $settings = [
+                'currency'  => 'USD',
+                'is_active' => 'no'
+            ];
+        }
+
+        return $settings;
+    }
+
+    public static function isPaymentEnabled($calendarEvent = null)
+    {
+        $settings = self::getGlobalPaymentSettings();
+        if ($settings['is_active'] == 'yes') {
+            return true;
+        }
+
+        if ($calendarEvent) {
+            if ($calendarEvent->type != 'paid') {
+                return false;
+            }
+
+            $exist = Meta::where('object_type', 'calendar_slot')
+                ->where('object_id', $calendarEvent->id)
+                ->where('key', 'payment_settings')
+                ->first();
+
+            return $exist && $exist->value && Arr::get($exist->value, 'enabled') == 'yes';
+        }
+
+        return false;
+    }
 
     /**
      * Sanitize form inputs recursively.
