@@ -122,13 +122,13 @@ class LandingPageHandler
         $authorProfile = $calendar->getAuthorProfile(true);
 
         $data = [
-            'calendar'    => $calendar,
-            'events'      => $activeEvents,
-            'author'      => $authorProfile,
-            'title'       => $authorProfile['name'],
+            'calendar' => $calendar,
+            'events' => $activeEvents,
+            'author' => $authorProfile,
+            'title' => $authorProfile['name'],
             'description' => $metaDescription,
-            'url'         => home_url($wp->request),
-            'css_files'   => [
+            'url' => home_url($wp->request),
+            'css_files' => [
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
         ];
@@ -170,7 +170,7 @@ class LandingPageHandler
         if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) {
             $calendarEvent->pre_selects = [
                 'month' => date('m', strtotime($calendarEvent->min_lookup_date)),
-                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date))
+                'year' => date('Y', strtotime($calendarEvent->min_lookup_date))
             ];
         }
 
@@ -178,29 +178,40 @@ class LandingPageHandler
 
         $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
 
-        if($existingBooking) {
-           // $eventVars
-        }
+        $onRescheduling = App::getInstance('request')->get('type') === 'reschedule';
+
 
         $data = [
-            'calendar'       => $calendar,
+            'calendar' => $calendar,
             'calendar_event' => $calendarEvent,
-            'author'         => $authorProfile,
-            'title'          => $calendarEvent->title . ' with ' . $authorProfile['name'],
-            'description'    => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
-            'url'            => home_url($wp->request),
-            'css_files'      => [
+            'author' => $authorProfile,
+            'title' => $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
+            'url' => home_url($wp->request),
+            'css_files' => [
                 $assetUrl . 'public/saas.css'
             ],
-            'js_files'       => [
+            'js_files' => [
                 includes_url('js/jquery/jquery.min.js'),
                 $assetUrl . 'public/js/app.js',
             ],
-            'js_vars'        => [
-                'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
-                'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
-            ]
         ];
+
+        $jsVars = [
+            'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
+            'fluentCalendarPublicVars' => (new FrontEndHandler())->getGlobalVars()
+        ];
+
+        if ($onRescheduling) {
+            $onReschedulingData = [
+                'on_rescheduling' => $onRescheduling,
+                'existing_booking' => $existingBooking->toArray()
+            ];
+            $jsVars += $onReschedulingData;
+            $data += $onReschedulingData;
+        }
+        $data['js_vars'] = $jsVars;
+
 
         if ($calendarEvent->type == 'paid') {
             $data['js_files'][] = 'https://js.stripe.com/v3/';
@@ -210,6 +221,11 @@ class LandingPageHandler
         $app = App::getInstance();
 
         status_header(200);
+        if ($onRescheduling) {
+            $data['on_rescheduling'] = true;
+            $data['existing_booking'] = $existingBooking;
+        }
+
         $app->view->render('landing.booking', $data);
         exit(200);
     }
@@ -239,21 +255,21 @@ class LandingPageHandler
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
         $data = [
-            'title'       => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
-            'body'        => $responseHtml,
+            'title' => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'body' => $responseHtml,
             'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
-            'css_files'   => [
+            'css_files' => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
-            'js_files'    => [],
-            'js_vars'     => [],
-            'author'      => $authorProfile,
-            'slot'        => $calendarEvent,
-            'url'         => home_url($wp->request),
+            'js_files' => [],
+            'js_vars' => [],
+            'author' => $authorProfile,
+            'slot' => $calendarEvent,
+            'url' => home_url($wp->request),
             'action_type' => $actionType
         ];
 
-        if($actionType == 'cancel') {
+        if ($actionType == 'cancel') {
             $data['js_files'][] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
         }
 

@@ -38,6 +38,8 @@
   "scripts": {
     "watch": "npx mix watch",
     "dev": "npx mix watch",
-    "watch-front": "npx mix --mix-config=public-webpack.mix.js watch"
+    "watch-front": "npx mix --mix-config=public-webpack.mix.js watch",
+    "front": "npm run watch-front",
+    "back": "npm run dev"
   }
 }
