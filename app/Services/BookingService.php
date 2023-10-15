@@ -103,11 +103,20 @@ class BookingService
         return $booking;
     }
 
-    public static function getBookingConfirmationHtml(Booking $booking, $calendarSlot = null, $withActions = false)
+    public static function getBookingConfirmationHtml(Booking $booking, $actionType = 'confirmation')
     {
-        if (!$calendarSlot) {
-            $calendarSlot = $booking->slot;
+
+        $validActions = [
+            'confirmation',
+            'cancel',
+            'reschedule'
+        ];
+
+        if(!in_array($actionType, $validActions)) {
+            $actionType = 'confirmation';
         }
+
+        $calendarSlot = $booking->calendar_event;
 
         $author = $calendarSlot->getAuthorProfile(true);
 
@@ -138,7 +147,7 @@ class BookingService
                 'content' => wpautop($booking->message)
             ];
         }
-        
+
         $confirmationData = [
             'author'       => $author,
             'title'        => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
@@ -147,7 +156,7 @@ class BookingService
             'slot'         => $calendarSlot,
             'booking'      => $booking,
             'message'      => 'A confirmation has been sent to your email address along with meeting location details.',
-            'with_actions' => $withActions
+            'action_type' => $actionType
         ];
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);

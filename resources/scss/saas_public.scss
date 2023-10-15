@@ -90,3 +90,52 @@
     border-top: 2px solid #e5e7eb;
   }
 }
+
+
+.fcal_form_cancellation {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  flex-direction: column;
+  color: #111827;
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+  }
+  label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .fcal_form_actions {
+    display: flex;
+    column-gap: 15px;
+    align-items: stretch;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .fcal_btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    text-decoration: none;
+    color: #111827;
+    background-color: #f9fafb;
+    &:hover {
+      opacity: 0.8;
+      border-color: #9ca3af;
+      color: black;
+    }
+    &.fcal_btn_primary {
+      background-color: #292929;
+      color: white;
+      border: 1px solid #292929;
+    }
+  }
+}

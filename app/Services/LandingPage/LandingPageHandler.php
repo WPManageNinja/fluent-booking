@@ -208,11 +208,22 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function showBookingConfimationPage($booking, $type = 'confirmation')
+    private function showBookingConfimationPage($booking, $actionType = 'confirmation')
     {
+
+        $validActions = [
+            'confirmation',
+            'cancel',
+            'reschedule'
+        ];
+
+        if(!in_array($actionType, $validActions)) {
+            $actionType = 'confirmation';
+        }
+
         $calendarEvent = $booking->calendar_event;
         global $wp;
-        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $calendarEvent, true);
+        $responseHtml = BookingService::getBookingConfirmationHtml($booking, $actionType);
 
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
@@ -228,6 +239,7 @@ class LandingPageHandler
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
+            'action_type' => $actionType
         ];
 
         $app = App::getInstance();
