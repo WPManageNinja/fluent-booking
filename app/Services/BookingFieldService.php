@@ -138,6 +138,18 @@ class BookingFieldService
             $existingFields[$name] = $dbField;
         }
 
+        if(empty($defaultFields['location'])) {
+            unset($existingFields['location']);
+        }
+
+        if(empty($defaultFields['phone_number'])) {
+            unset($existingFields['phone_number']);
+        }
+
+        if(empty($defaultFields['address'])) {
+            unset($existingFields['address']);
+        }
+
         foreach ($requiredIndexes as $index) {
             if (empty($existingFields[$index]) && !empty($defaultFields[$index])) {
                 $existingFields[$index] = $defaultFields[$index];
