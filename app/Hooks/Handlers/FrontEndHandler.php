@@ -215,22 +215,11 @@ class FrontEndHandler
             return;
         }
 
-        $author = $calendarSlot->getAuthorProfile(true);
-
-        $confirmationData = [
-            'sub_heading' => sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']),
-            'slot'        => $calendarSlot,
-            'booking'     => $booking,
-            'message'     => 'A confirmation has been sent to your email address along with meeting location details.'
-        ];
-
-        $confirmationData = apply_filters('fluent_booking/booking_confirmation_data', $confirmationData, $booking, $calendarSlot);
-
-        $responseHtml = (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
+        $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',
-            'response_html' => $responseHtml
+            'response_html' => $html
         ], 200);
     }
 
