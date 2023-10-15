@@ -184,7 +184,7 @@ class Booking extends Model
         $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
         $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
 
-        if($isHtml && $this->status == 'cancelled') {
+        if ($isHtml && $this->status == 'cancelled') {
             $html = '<del>' . $html . '</del>';
         }
 
@@ -305,7 +305,7 @@ class Booking extends Model
             ->where('type', 'cancel_reason')
             ->first();
 
-        if($isHtml && $row) {
+        if ($isHtml && $row) {
             return $row->description;
         }
 
@@ -464,6 +464,16 @@ class Booking extends Model
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
+    public function getIcsDownloadUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'confirmation',
+            'ics'            => 'download',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
     public function getRescheduleUrl()
     {
         return add_query_arg([
@@ -485,5 +495,29 @@ class Booking extends Model
     public function canCancel()
     {
         return in_array($this->status, ['scheduled', 'pending']);
+    }
+
+    public function getHostDetails($isPublic = true)
+    {
+        if ($this->host_user_id && $user = get_user_by('ID', $this->host_user_id)) {
+            $name = trim($user->first_name . ' ' . $user->last_name);
+            if (!$name) {
+                $name = $user->display_name;
+            }
+            $data = [
+                'name'       => $name,
+                'email'      => $user->user_email,
+                'first_name' => $user->first_name,
+                'last_name'  => $user->last_name,
+            ];
+        } else {
+            $data = $this->calendar->getAuthorProfile(false);
+        }
+
+        if ($isPublic) {
+            unset($data['email']);
+        }
+
+        return $data;
     }
 }
