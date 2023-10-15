@@ -183,7 +183,9 @@ class FrontEndHandler
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'source'           => 'web',
-            'event_type'       => $calendarSlot->event_type
+            'event_type'       => $calendarSlot->event_type,
+            'location'         => sanitize_text_field(Arr::get($postedData, 'location')),
+            'location_field_details' => sanitize_text_field(Arr::get($postedData, 'location_field_details', ''))
         ];
 
         $sourceUrl = Arr::get($postedData, 'source_url', '');
@@ -204,10 +206,6 @@ class FrontEndHandler
 
         if (isset($postedData['payment_method'])) {
             $customFieldsData['payment_method'] = $postedData['payment_method'];
-        }
-
-        if (isset($postedData['location_field_details'])) {
-            $customFieldsData['location_field_details'] = $postedData['location_field_details'];
         }
 
         try {

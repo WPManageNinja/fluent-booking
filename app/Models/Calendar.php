@@ -134,6 +134,14 @@ class Calendar extends Model
                     ],
                 ],
             ],
+            'online' => [
+                'label' => 'Online',
+                'options' => [
+                    'online_meeting' => [
+                        'title' => 'Online Meeting',
+                    ],
+                ],
+            ],
             'other' => [
                 'label' => 'Other',
                 'options' => [

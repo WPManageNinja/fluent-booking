@@ -70,7 +70,7 @@
 import { CloseBold } from '@element-plus/icons-vue';
 export default {
     name: 'EditCustomFieldModal',
-    props: ['field', 'fields', 'phoneRequired', 'showModal'],
+    props: ['field', 'fields', 'showModal'],
     emits: ['closeModal', 'updateFieldData'],
     data() {
         return {
@@ -113,14 +113,7 @@ export default {
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
-        },
-        isMandatoryField() {
-            const allowedFields = ['name', 'email'];
-            if (this.phoneRequired) {
-                allowedFields.push('phone');
-            }
-            return allowedFields.includes(this.fieldData.name);
-        },
+        }
     },
     methods: {
         saveChanges() {
