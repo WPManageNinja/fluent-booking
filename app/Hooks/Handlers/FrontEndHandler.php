@@ -99,10 +99,14 @@ class FrontEndHandler
             ];
         }
 
+        $globalSettings = Helper::getGlobalSettings();
+        $startDay =  Arr::get($globalSettings, 'administration.start_day', 'sun');
+
         return [
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
-            'current_person' => $currentPerson
+            'current_person' => $currentPerson,
+            'start_day'      => $startDay
         ];
     }
 
