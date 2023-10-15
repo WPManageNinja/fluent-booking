@@ -30,7 +30,8 @@
 
     <?php if ($action_type == 'cancel'): ?>
         <div class="fcal_booking_manage fcal_action_<?php esc_attr_e($action_type); ?>">
-            <div class="fcal_form_cancellation">
+            <form class="fcal_form_cancellation">
+                <form method="POST" action="<?php echo $action_url; ?>"></form>
                 <label for="cancellation_reason">Reason for cancellation</label>
                 <div class="fcal_form_field">
                     <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking'); ?>"
@@ -42,7 +43,7 @@
                     <button class="fcal_btn fcal_btn_primary"
                             type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking'); ?></button>
                 </div>
-            </div>
+            </form>
         </div>
     <?php else: ?>
         <div class="fcal_booking_manage">
