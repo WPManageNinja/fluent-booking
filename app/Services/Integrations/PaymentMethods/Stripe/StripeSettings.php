@@ -26,6 +26,14 @@ class StripeSettings
             $settings['provider'] = 'api_keys';
         }
 
+        if (isset($settings['test_secret_key'])) {
+            $settings['test_secret_key'] = Helper::decryptKey($settings['test_secret_key']);
+        }
+
+        if (isset($settings['live_secret_key'])) {
+            $settings['live_secret_key'] = Helper::decryptKey($settings['live_secret_key']);
+        }
+
         $this->settings = $settings;
     }
 
