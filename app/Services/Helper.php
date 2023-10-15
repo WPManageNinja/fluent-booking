@@ -1501,4 +1501,9 @@ class Helper
          */
         return apply_filters('fluent_booking/verfied_email_senders', $verifiedSenders);
     }
+
+    public static function getBookingReceiptLandingBaseUrl()
+    {
+        return apply_filters('fluent_booking/booking_receipt_landing_base_url', site_url('/'));
+    }
 }

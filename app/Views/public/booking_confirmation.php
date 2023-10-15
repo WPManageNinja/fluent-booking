@@ -1,38 +1,54 @@
+<?php
+/*
+ * @var $booking \FluentBooking\App\Models\Booking
+ */
+?>
 <div class="fcal_confirmation">
     <?php do_action('fluent_booking/booking_details_header', $booking); ?>
     <div class="fcal_confirm_header">
-        <h3><?php echo __('Booking Confirmed', 'fluent-booking'); ?></h3>
+        <?php if ($booking->status == 'scheduled'): ?>
+            <div class="fcal_check_holder" style="min-height: 50px;">
+                <img style="max-width: 44px;"
+                     src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); ?>/images/check-mark.png; ?>">
+            </div>
+        <?php endif; ?>
+        <h3><?php echo esc_html($title); ?></h3>
         <p><?php echo wp_kses_post($sub_heading); ?></p>
     </div>
     <div class="fcal_confirm_body">
-        <ul class="fcal_conform_items">
-            <li class="fcal_conform_slot_name">
-                <span class="fcal_slot_name_icon" style="background: <?php echo esc_attr($slot->color_schema); ?>"></span>
-                <span class="fcal_slot_item_value"><?php echo esc_attr($slot->title); ?></span>
-            </li>
-            <li>
-                <div class="slot_time_range fcal_icon_item">
-                    <svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 29.237 29.237" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.05847399999999999"></g><g id="SVGRepo_iconCarrier"><g><g><path d="M7.685,24.819H8.28v-2.131h3.688v2.131h0.596v-2.131h3.862v2.131h0.597v-2.131h4.109v2.131h0.595 v-2.131h3.417v-0.594h-3.417v-3.861h3.417v-0.596h-3.417v-3.519h3.417v-0.594h-3.417v-2.377h-0.595v2.377h-4.109v-2.377h-0.597 v2.377h-3.862v-2.377h-0.596v2.377H8.279v-2.377H7.685v2.377H3.747v0.594h3.938v3.519H3.747v0.596h3.938v3.861H3.747v0.594h3.938 V24.819z M12.563,22.094v-3.861h3.862v3.861H12.563z M21.132,22.094h-4.109v-3.861h4.109V22.094z M21.132,14.118v3.519h-4.109 v-3.519C17.023,14.119,21.132,14.119,21.132,14.118z M16.426,14.118v3.519h-3.862v-3.519 C12.564,14.119,16.426,14.119,16.426,14.118z M8.279,14.118h3.688v3.519H8.279V14.118z M8.279,18.233h3.688v3.861H8.279V18.233z" style="fill: rgb(1, 0, 2);"></path><path d="M29.207,2.504l-4.129,0.004L24.475,2.51v2.448c0,0.653-0.534,1.187-1.188,1.187h-1.388 c-0.656,0-1.188-0.533-1.188-1.187V2.514l-1.583,0.002v2.442c0,0.653-0.535,1.187-1.191,1.187h-1.388 c-0.655,0-1.188-0.533-1.188-1.187V2.517l-1.682,0.004v2.438c0,0.653-0.534,1.187-1.189,1.187h-1.389 c-0.653,0-1.188-0.533-1.188-1.187V2.525H8.181v2.434c0,0.653-0.533,1.187-1.188,1.187H5.605c-0.656,0-1.189-0.533-1.189-1.187 V2.53L0,2.534v26.153h2.09h25.06l2.087-0.006L29.207,2.504z M27.15,26.606H2.09V9.897h25.06V26.606z" style="fill: rgb(1, 0, 2);"></path><path d="M5.605,5.303h1.388c0.163,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.133-0.297-0.296-0.297H5.605 c-0.165,0-0.298,0.132-0.298,0.297v4.16C5.307,5.17,5.44,5.303,5.605,5.303z" style="fill: rgb(1, 0, 2);"></path><path d="M11.101,5.303h1.389c0.164,0,0.297-0.133,0.297-0.297v-4.16c-0.001-0.165-0.134-0.297-0.298-0.297 H11.1c-0.163,0-0.296,0.132-0.296,0.297v4.16C10.805,5.17,10.938,5.303,11.101,5.303z" style="fill: rgb(1, 0, 2);"></path><path d="M16.549,5.303h1.388c0.166,0,0.299-0.133,0.299-0.297v-4.16c-0.001-0.165-0.133-0.297-0.299-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C16.252,5.17,16.385,5.303,16.549,5.303z" style="fill: rgb(1, 0, 2);"></path><path d="M21.899,5.303h1.388c0.164,0,0.296-0.133,0.296-0.297v-4.16c0-0.165-0.132-0.297-0.296-0.297 h-1.388c-0.164,0-0.297,0.132-0.297,0.297v4.16C21.603,5.17,21.735,5.303,21.899,5.303z" style="fill: rgb(1, 0, 2);"></path></g></g></g></svg>
-                    <span><?php echo esc_attr($booking->getFullBookingDateTimeText($booking->person_time_zone)); ?></span>
+        <?php foreach ($sections as $section): ?>
+            <div class="fcal_confirm_section">
+                <div class="fcal_confirm_section_title">
+                    <h4><?php echo esc_html($section['title']); ?></h4>
                 </div>
-            </li>
-            <li>
-                <div class="fcal_icon_item">
-                    <svg fill="#000000" width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"></path></g></svg>
-                    <span><?php echo esc_attr($booking->slot_minutes); ?> minutes</span>
+                <div class="fcal_confirm_section_content">
+                    <?php echo wp_kses_post($section['content']); ?>
                 </div>
-            </li>
-            <li>
-                <div class="slot_time_range fcal_icon_item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path fill="#444" d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm5.2 5.3c.4 0 .7.3 1.1.3-.3.4-1.6.4-2-.1.3-.1.5-.2.9-.2zM1 8c0-.4 0-.8.1-1.3.1 0 .2.1.3.1 0 0 .1.1.1.2 0 .3.3.5.5.5.8.1 1.1.8 1.8 1 .2.1.1.3 0 .5-.6.8-.1 1.4.4 1.9.5.4.5.8.6 1.4 0 .7.1 1.5.4 2.2C2.7 13.3 1 10.9 1 8zm7 7c-.7 0-1.5-.1-2.1-.3-.1-.2-.1-.4 0-.6.4-.8.8-1.5 1.3-2.2.2-.2.4-.4.4-.7 0-.2.1-.5.2-.7.3-.5.2-.8-.2-.9-.8-.2-1.2-.9-1.8-1.2s-1.2-.5-1.7-.2c-.2.1-.5.2-.5-.1 0-.4-.5-.7-.4-1.1-.1 0-.2 0-.3.1s-.2.2-.4.1c-.2-.2-.1-.4-.1-.6.1-.2.2-.3.4-.4.4-.1.8-.1 1 .4.3-.9.9-1.4 1.5-1.8 0 0 .8-.7.9-.7s.2.2.4.3c.2 0 .3 0 .3-.2.1-.5-.2-1.1-.6-1.2 0-.1.1-.1.1-.1.3-.1.7-.3.6-.6 0-.4-.4-.6-.8-.6-.2 0-.4 0-.6.1-.4.2-.9.4-1.5.4C5.2 1.4 6.6 1 8 1h.8c-.6.1-1.2.3-1.6.5.6.1.7.4.5.9-.1.2 0 .4.2.5s.4.1.5-.1c.2-.3.6-.4.9-.5.4-.1.7-.3 1-.7 0-.1.1-.1.2-.2.6.2 1.2.6 1.8 1-.1 0-.1.1-.2.1-.2.2-.5.3-.2.7.1.2 0 .3-.1.4-.2.1-.3 0-.4-.1s-.1-.3-.4-.3c-.1.2-.4.3-.4.6.5 0 .4.4.5.7-.6.1-.8.4-.5.9.1.2-.1.3-.2.4-.4.6-.8 1-.8 1.7s.5 1.4 1.3 1.3c.9-.1.9-.1 1.2.7 0 .1.1.2.1.3.1.2.2.4.1.6-.3.8.1 1.4.4 2 .1.2.2.3.3.4-1.3 1.4-3 2.2-5 2.2z"></path></svg>
-                    <span><?php echo esc_attr($booking->person_time_zone); ?></span>
-                </div>
-            </li>
-        </ul>
+            </div>
+        <?php endforeach; ?>
 
-        <div class="fcal_confirmation_message">
-            <?php echo wp_kses_post($message); ?>
-        </div>
+        <?php if ($action_type == 'cancel'): ?>
+            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
+                <form id="fcal_cancellation_form" action="<?php echo $action_url; ?>" method="POST" class="fcal_form_cancellation">
+                    <label for="cancellation_reason">Reason for cancellation</label>
+                    <div class="fcal_form_field">
+                    <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking'); ?>"
+                              name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
+                    </div>
+                    <div class="fcal_form_actions">
+                        <a href="<?php echo $booking->getConfirmationUrl(); ?>"
+                           class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking'); ?></a>
+                        <button class="fcal_btn fcal_btn_primary"
+                                type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking'); ?></button>
+                    </div>
+                </form>
+            </div>
+        <?php else: ?>
+            <div class="fcal_booking_manage">
+                Need to make a change? <a href="<?php echo $booking->getRescheduleUrl(); ?>">Reschedule</a> or <a
+                    href="<?php echo $booking->getCancelUrl(); ?>">Cancel</a>
+            </div>
+        <?php endif; ?>
     </div>
-
     <?php do_action('fluent_booking/booking_confirmation_footer', $booking); ?>
 </div>
