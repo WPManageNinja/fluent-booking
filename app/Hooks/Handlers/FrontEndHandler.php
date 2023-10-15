@@ -228,7 +228,7 @@ class FrontEndHandler
                 'Confirm Payment' => __('Confirm Payment', 'fluent-booking'),
                 'processing' => __('Processing', 'fluent-booking'),
             ]
-        ];
+        ]);
     }
 
     public function ajaxScheduleMeeting()
