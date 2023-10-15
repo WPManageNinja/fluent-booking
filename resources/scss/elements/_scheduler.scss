@@ -111,6 +111,10 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 24px;
+        .fcal_cal_empty_slots {
+          font-size: 16px;
+          padding: 10px 0;
+        }
 
         @media all and (max-width: 1060px) {
           grid-template-columns: repeat(2, 1fr);
@@ -1510,6 +1514,9 @@
     margin: auto;
     padding: 40px 140px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     @media (max-width: 740px) {
       padding: 30px 50px;
     }
@@ -2711,6 +2718,7 @@
           font-weight: 400;
           line-height: 24px;
           color: #445164;
+          overflow-wrap: anywhere;
 
           a {
             color: $primaryColor;
