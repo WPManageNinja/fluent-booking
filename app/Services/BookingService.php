@@ -185,6 +185,7 @@ class BookingService
             ], admin_url('admin-ajax.php'));
         }
 
+
         if ($booking->status == 'scheduled') {
             $assetsUrl = App::getInstance('url.assets');
             $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
@@ -231,6 +232,8 @@ class BookingService
                 ]
             ], $booking);
         }
+      
+        $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
     }
