@@ -52,6 +52,21 @@
                 </div>
             <?php endif; ?>
         <?php endif; ?>
+
+        <?php if ($bookmarks): ?>
+            <div class="fcal_booking_manage fcal_to_calendars">
+                <span><?php _e('Add to calendar', 'fluent-booking'); ?></span>
+                <div class="fcal_cal_items">
+                    <?php foreach ($bookmarks as $bookmark): ?>
+                    <div title="<?php esc_attr_e($bookmark['title']); ?>">
+                        <a href="<?php echo $bookmark['url']; ?>" target="_blank" rel="noopener">
+                            <img style="width: 20px; height: 20px;" src="<?php echo $bookmark['icon']; ?>" alt="<?php esc_attr_e($bookmark['title']); ?>"/>
+                        </a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
     <?php do_action('fluent_booking/booking_confirmation_footer', $booking); ?>
 </div>
