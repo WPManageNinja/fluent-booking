@@ -98,6 +98,10 @@ class EditorShortCodeParser
         if ($key == 'reschedule_url') {
             return $booking->getRescheduleUrl();
         }
+        
+        if ($key == 'admin_booking_url') {
+            return Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
+        }
 
         if ($key == 'location_details_html') {
             return $booking->getLocationDetailsHtml();

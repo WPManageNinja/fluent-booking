@@ -28,8 +28,6 @@ class AdminMenuHandler
     {
         $capability = 'manage_options';
 
-        $appUrlBase = Helper::getAppBaseUrl();
-
         $menuPriority = 26;
 
         if (defined('FLUENTCRM')) {
@@ -105,43 +103,35 @@ class AdminMenuHandler
 
         $baseUrl = Helper::getAppBaseUrl();
 
-        if ($this->isNew()) {
-            $menuItems = [
-                [
-                    'key'       => 'dashboard',
-                    'label'     => __('Getting Started', 'fluent-booking'),
-                    'permalink' => $baseUrl
-                ],
-            ];
-        } else {
-            $menuItems = [
-                [
-                    'key'       => 'dashboard',
-                    'label'     => __('Dashboard', 'fluent-booking'),
-                    'permalink' => $baseUrl
-                ],
-                [
-                    'key'       => 'calendars',
-                    'label'     => __('Booking Calendars', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'calendars'
-                ],
-                [
-                    'key'       => 'scheduled_events',
-                    'label'     => __('Bookings', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
-                ],
-                [
-                    'key'       => 'availability',
-                    'label'     => __('Availability', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'availability'
-                ],
-                [
-                    'key'       => 'settings',
-                    'label'     => __('Settings', 'fluent-booking'),
-                    'permalink' => $baseUrl . 'settings/general-settings'
-                ]
-            ];
-        }
+        $isNew = $this->isNew();
+
+        $menuItems = [
+            [
+                'key'       => 'dashboard',
+                'label'     => $isNew ? __('Getting Started') : __('Dashboard', 'fluent-booking'),
+                'permalink' => $baseUrl
+            ],
+            [
+                'key'       => 'calendars',
+                'label'     => __('Booking Calendars', 'fluent-booking'),
+                'permalink' => $baseUrl . 'calendars'
+            ],
+            [
+                'key'       => 'scheduled_events',
+                'label'     => __('Bookings', 'fluent-booking'),
+                'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
+            ],
+            [
+                'key'       => 'availability',
+                'label'     => __('Availability', 'fluent-booking'),
+                'permalink' => $baseUrl . 'availability'
+            ],
+            [
+                'key'       => 'settings',
+                'label'     => __('Settings', 'fluent-booking'),
+                'permalink' => $baseUrl . 'settings/general-settings'
+            ]
+        ];
 
         $assets = $app['url.assets'];
 
@@ -224,33 +214,33 @@ class AdminMenuHandler
         $editorShortcodesForHtml = Helper::getEditorShortCodes(true);
 
         return apply_filters('fluent_booking/admin_vars', [
-            'slug'               => $slug = $app->config->get('app.slug'),
-            'nonce'              => wp_create_nonce($slug),
-            'rest'               => $this->getRestInfo($app),
-            'brand_logo'         => $this->getMenuIcon(),
-            'asset_url'          => $assets,
-            'event_colors'       => $eventColors,
-            'meeting_durations'  => $meetingDurations,
-            'schedule_schema'    => $scheduleSchema,
-            'location_fields'    => $locationFields,
-            'custom_field_types' => $customFieldTypes,
-            'editor_shortcodes'  => $editorShortcodes,
-            'editor_shortcodes_for_html'  => $editorShortcodesForHtml,
-            'me'                 => [
+            'slug'                       => $slug = $app->config->get('app.slug'),
+            'nonce'                      => wp_create_nonce($slug),
+            'rest'                       => $this->getRestInfo($app),
+            'brand_logo'                 => $this->getMenuIcon(),
+            'asset_url'                  => $assets,
+            'event_colors'               => $eventColors,
+            'meeting_durations'          => $meetingDurations,
+            'schedule_schema'            => $scheduleSchema,
+            'location_fields'            => $locationFields,
+            'custom_field_types'         => $customFieldTypes,
+            'editor_shortcodes'          => $editorShortcodes,
+            'editor_shortcodes_for_html' => $editorShortcodesForHtml,
+            'me'                         => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'     => $currentUser->user_email,
                 'is_admin'  => $hasAllAccess
             ],
-            'is_new'             => $isNew,
-            'require_slug'       => $requireSlug,
-            'site_url'           => site_url('/'),
-            'timezones'          => DateTimeHelper::getTimeZones(true),
-            'supported_features' => apply_filters('fluent_booking/supported_featured', [
+            'is_new'                     => $isNew,
+            'require_slug'               => $requireSlug,
+            'site_url'                   => site_url('/'),
+            'timezones'                  => DateTimeHelper::getTimeZones(true),
+            'supported_features'         => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ]),
-            'currency' => CurrenciesHelper::getGlobalCurrency(),
-            'currency_sign' => CurrenciesHelper::getGlobalCurrencySign(),
+            'currency'                   => CurrenciesHelper::getGlobalCurrency(),
+            'currency_sign'              => CurrenciesHelper::getGlobalCurrencySign(),
         ]);
     }
 
