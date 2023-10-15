@@ -55,7 +55,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->delete('/{id}/slots/{event_id}/webhooks/{webhook_id}', 'WebhookController@deleteFeed')->int('id')->int('event_id')->int('webhook_id');
 
     // Payment settings route
-    $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarSettings')->int('id')->int('event_id');
+    $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarEventSettings')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
 
     /*

@@ -98,9 +98,7 @@ class BookingFieldService
                 'disable_alter'  => true,
                 'placeholder'    => esc_attr__('Location', 'fluent-booking'),
             ];
-        }
-
-        if ($calendarSlot->isPhoneRequired()) {
+        } else if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
                 'index'          => 5,
@@ -113,9 +111,7 @@ class BookingFieldService
                 'disable_alter'  => true,
                 'placeholder'    => esc_attr__('Phone Number', 'fluent-booking'),
             ];
-        }
-
-        if ($calendarSlot->isAddressRequired()) {
+        } else if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
             $defaultFields['address'] = [
                 'index'          => 6,
@@ -130,51 +126,55 @@ class BookingFieldService
             ];
         }
 
-        $existingFields = $calendarSlot->getMeta('booking_fields', []);
+        $dbFields = $calendarSlot->getMeta('booking_fields', []);
 
+        if (!$dbFields) {
+            $dbFields = array_values($defaultFields);
+        }
 
-        if ($calendarSlot->type == 'paid') {
+        $existingFields = [];
+        foreach ($dbFields as $dbField) {
+            $name = $dbField['name'];
+            $existingFields[$name] = $dbField;
+        }
+
+        foreach ($requiredIndexes as $index) {
+            if (empty($existingFields[$index]) && !empty($defaultFields[$index])) {
+                $existingFields[$index] = $defaultFields[$index];
+            }
+        }
+
+        if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
-
             if ($isEnables) {
-                $requiredIndexes[] = 'payment_method';
-                $defaultFields['payment_method'] = [
-                    'index'          => 20,
-                    'type'           => 'payment',
-                    'name'           => 'payment_method',
-                    'required'       => false,
-                    'enabled'        => true,
-                    'system_defined' => true,
-                    'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
-                    'label'          => __('Payment Summary', 'fluent-booking'),
-                    'currency_sign'  => CurrenciesHelper::getGlobalCurrencySign(),
-                ];
+                $exist = Arr::get($existingFields, 'payment_method', []);
+                if (!$exist) {
+                    $exist = [
+                        'index'          => 20,
+                        'type'           => 'payment',
+                        'name'           => 'payment_method',
+                        'required'       => false,
+                        'enabled'        => true,
+                        'system_defined' => true,
+                        'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
+                        'label'          => __('Payment Summary', 'fluent-booking'),
+                        'currency_sign'  => CurrenciesHelper::getGlobalCurrencySign(),
+                    ];
+                } else {
+                    $exist['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
+                    $exist['payment_items'] = PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
+                }
+
+                $existingFields['payment_method'] = $exist;
+            } else {
+                unset($existingFields['payment_method']);
             }
+        } else {
+            unset($existingFields['payment_method']);
         }
 
-        if (!$existingFields) {
-            return array_values($defaultFields);
-        }
-
-        $validFields = [];
-
-        foreach ($existingFields as $existingField) {
-            $name = $existingField['name'];
-            if (in_array($name, $requiredIndexes)) {
-                // remove from required indexes
-                $requiredIndexes = array_diff($requiredIndexes, [$name]);
-            }
-
-            $validFields[$name] = $existingField;
-        }
-
-        if ($requiredIndexes) {
-            foreach ($requiredIndexes as $requiredIndex) {
-                $validFields[] = $defaultFields[$requiredIndex];
-            }
-        }
-        return $validFields;
+        return array_values($existingFields);
     }
 
     public static function getBookingFieldLabels(CalendarSlot $calendarSlot)

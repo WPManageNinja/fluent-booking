@@ -2728,3 +2728,7 @@ p.fcal_human_text {
         margin-right: 5px;
     }
 }
+
+.el-input-group--prepend .el-input__wrapper {
+    border-radius: 0 !important;
+}

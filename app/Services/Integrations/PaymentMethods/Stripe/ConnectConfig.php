@@ -194,7 +194,7 @@ class ConnectConfig
         } else {
             $stripeSettings['payment_mode'] = $alternateMode;
         }
-
+        
         $sendResponse = (new Stripe())->updateSettings($stripeSettings);
 
         if ($sendResponse) {

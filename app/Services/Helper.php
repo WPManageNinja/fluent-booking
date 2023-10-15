@@ -678,7 +678,7 @@ class Helper
     public static function isPaymentEnabled($calendarEvent = null)
     {
         $settings = self::getGlobalPaymentSettings();
-        if ($settings['is_active'] == 'yes') {
+        if (Arr::get($settings, 'is_active') == 'yes') {
             return true;
         }
 
