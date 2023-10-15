@@ -9,6 +9,7 @@
                     Payment Settings
                 </h2>
                 <el-button
+                    v-if="global_enabled"
                     :disabled="saving"
                     v-loading="saving"
                     type="primary"
@@ -19,31 +20,29 @@
             </div>
         </div>
         <div class="fcal_settings_body" style="min-height: calc(100vh - 320px);">
-            <el-form :model="paymentSettings" label-position="left">
+            <el-skeleton v-if="loading" animated :rows="3"></el-skeleton>
+            <el-form v-else :model="paymentSettings" label-position="top">
                 <el-form-item>
                     <el-checkbox true-label="yes" false-label="no" v-model="paymentSettings.enabled">
                         Enable this event as Paid and collect payment on booking
                     </el-checkbox>
                 </el-form-item>
                 <template v-if="paymentSettings.enabled === 'yes'">
-                    <el-form-item class="fcal_payment_flex_row">
-                        <span class="header_left">Booking Payments</span>
+                    <el-form-item label="Booking Payment Items">
                         <div>
-                            <el-row style="margin-bottom: 12px;" :gutter="20"
-                                    v-for="(item, index) in paymentSettings.items">
-                                <el-col :span="16">
-                                    <el-input v-model="item.title"></el-input>
+                            <el-row style="margin-bottom: 20px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
+                                <el-col :span="14">
+                                    <el-input placeholder="Item Name" v-model="item.title"></el-input>
                                 </el-col>
-                                <el-col :span="6">
-                                    <el-input min="0" type="number" v-model="item.value"></el-input>
+                                <el-col :span="8">
+                                    <el-input class="fcal_group_input" min="0" type="number" v-model="item.value">
+                                        <template #prepend>{{ appVars.currency_sign }}</template>
+                                    </el-input>
                                 </el-col>
                                 <el-col :span="2">
-              <span v-if="index > 0"
-                    @click="()=>{
-                paymentSettings.items.splice(index, 1);
-              }" style="cursor: pointer; font-weight: bold;">
-                   <el-icon><Delete/></el-icon>
-              </span>
+                                      <span v-if="index > 0" @click="()=>{ paymentSettings.items.splice(index, 1); }" style="cursor: pointer; font-weight: bold;">
+                                           <el-icon><Delete/></el-icon>
+                                      </span>
                                 </el-col>
                             </el-row>
                             <el-link @click="addItem" style="cursor: pointer;">
@@ -54,26 +53,7 @@
                             </el-link>
                         </div>
                     </el-form-item>
-<!--                    <el-form-item class="fcal_payment_flex_row">-->
-<!--                        <span class="header_left">Currency</span>-->
-<!--                        <div class="header_right">-->
-<!--                            <el-select-->
-<!--                                filterable-->
-<!--                                v-model="paymentSettings.currency"-->
-<!--                                placeholder="Select"-->
-<!--                                popper-class="fcal_select"-->
-<!--                            >-->
-<!--                                <el-option-->
-<!--                                    v-for="item in currencies"-->
-<!--                                    :key="item.value"-->
-<!--                                    :label="item.label"-->
-<!--                                    :value="item.value"-->
-<!--                                />-->
-<!--                            </el-select>-->
-<!--                        </div>-->
-<!--                    </el-form-item>-->
                 </template>
-
             </el-form>
         </div>
     </div>
@@ -90,15 +70,16 @@ export default {
         return {
             loading: false,
             saving: false,
+            global_enabled: false,
+            global_config_link: '',
             paymentSettings: {
-                enabled: 'yes',
+                enabled: 'no',
                 items: [
                     {
                         title: 'Booking Fee',
-                        value: '10',
+                        value: 100,
                     },
                 ],
-                // currency: 'USD'
             },
             currencies: [],
             calendarId: '',
@@ -106,23 +87,13 @@ export default {
         };
     },
     methods: {
-        // getCurrencies() {
-        //     this.$get('integrations/settings/payment-methods/currencies')
-        //         .then((response) => {
-        //             this.currencies = response.data;
-        //         }).then(() => {
-        //         this.loading = false;
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     });
-        // },
         getSettings() {
             this.loading = false;
             this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/payment-settings`, {})
                 .then((response) => {
-                    if (response.data) {
-                        this.paymentSettings = response.data;
-                    }
+                    this.paymentSettings = response.settings;
+                    this.global_enabled = response.global_enabled;
+                    this.global_config_link = response.global_config_link;
                 })
                 .catch((errors) => {
                     this.$handleError(errors);
@@ -144,7 +115,7 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
-                })
+                });
         },
         addItem() {
             this.paymentSettings.items.push({

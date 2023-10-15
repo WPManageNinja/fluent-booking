@@ -5,6 +5,7 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Http\Controllers\Controller;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
@@ -101,12 +102,36 @@ class PaymentMethodController extends Controller
         );
     }
 
-    public function getCalendarSettings($id, $event_id)
+    public function getCalendarEventSettings($id, $event_id)
     {
         $calendarSlot = CalendarSlot::findOrFail($event_id);
-        return $this->sendSuccess([
-            'data' => $calendarSlot->getMeta('payment_settings')
-        ]);
+
+        $settings = $calendarSlot->getMeta('payment_settings', []);
+
+        if (!$settings) {
+            $settings = [
+                'enabled' => 'no',
+                'items'   => [
+                    [
+                        'title' => __('Booking Fee', 'fluent-booking'),
+                        'value' => 100,
+                    ]
+                ]
+            ];
+        }
+
+        $data = [
+            'settings' => $settings
+        ];
+
+        if (Helper::isPaymentEnabled()) {
+            $data['global_enabled'] = true;
+        } else {
+            $data['global_enabled'] = false;
+            $data['global_config_link'] = Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe');
+        }
+
+        return $data;
     }
 
     public function updateSettings($id, $event_id)

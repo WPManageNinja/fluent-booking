@@ -366,12 +366,13 @@ class FrontEndHandler
             ], 422);
             return;
         }
-        
+
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
             'message'       => 'Booking has been confirmed',
-            'response_html' => $html
+            'response_html' => $html,
+            'booking_hash'  => $booking->hash
         ], 200);
     }
 

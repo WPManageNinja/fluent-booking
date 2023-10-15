@@ -103,7 +103,7 @@ class CalendarSlot extends Model
 
     public function isPhoneRequired()
     {
-        if(count($this->location_settings) == 1) {
+        if (count($this->location_settings) == 1) {
             return Arr::get($this->location_settings, '0.type') == 'phone_guest';
         }
 
@@ -112,7 +112,7 @@ class CalendarSlot extends Model
 
     public function isAddressRequired()
     {
-        if(count($this->location_settings) == 1) {
+        if (count($this->location_settings) == 1) {
             return Arr::get($this->location_settings, '0.type') == 'in_person_guest';
         }
 
@@ -377,7 +377,7 @@ class CalendarSlot extends Model
         }
 
         if (!Helper::isPaymentEnabled()) {
-            return 'ssss';
+            return 0;
         }
 
         $paymentSettings = $this->getMeta('payment_settings', []);
@@ -387,7 +387,6 @@ class CalendarSlot extends Model
         }
 
         $items = Arr::get($paymentSettings, 'items', []);
-
         $total = 0;
 
         foreach ($items as $item) {
