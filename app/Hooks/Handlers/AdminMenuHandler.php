@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\User;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\PermissionManager;
 
 class AdminMenuHandler
@@ -247,7 +248,9 @@ class AdminMenuHandler
             'timezones'          => DateTimeHelper::getTimeZones(true),
             'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
-            ])
+            ]),
+            'currency' => CurrenciesHelper::getGlobalCurrency(),
+            'currency_sign' => CurrenciesHelper::getGlobalCurrencySign(),
         ]);
     }
 
