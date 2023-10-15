@@ -35,32 +35,16 @@
                                        placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                             {:else if field.name === 'location'}
                                 <div class="fcal_input_location_wrap">
-                                    <select bind:value={form[field.name]}>
-                                        <option value="" disabled selected>{field.placeholder}</option>
-                                        {#each field.options as option}
-                                            <option value={option.type}>
-                                                {#if option.type=='in_person_guest'}
-                                                    In Person (Attendee Address)
-                                                {:else if option.type == 'in_person_organizer'}
-                                                    In Person (Organizer Address)
-                                                {:else if option.type == 'phone_guest'}
-                                                    Attendee Phone Number
-                                                {:else if option.type == 'phone_organizer'}
-                                                    Organizer Phone Number
-                                                {:else if option.type == 'zoom_meeting'}
-                                                    Zoom Video
-                                                {:else if option.type == 'google_meet'}
-                                                    Google Meet
-                                                {:else if option.type == 'custom'}
-                                                    {option.title}
-                                                {/if}
-                                            </option>
-                                        {/each}
-                                    </select>
-                                    {#if form[field.name] == 'phone_organizer'}
-                                        <input type="number" name="location_details" />
-                                    {/if}
-                                    {#if form[field.name] == 'in_person_organizer' || form[field.name] == 'custom'}
+                                    {#each field.options as option}
+                                        <label class="fcal_location_radio_list">
+                                            {option.title}
+                                            <input type="radio" name={field.name} value={option.type} bind:group={form[field.name]} />
+                                            <span class="fcal_radio_icon"></span>
+                                        </label>
+                                    {/each}
+                                    {#if form[field.name] == 'phone_guest' || form[field.name] == 'custom'}
+                                        <input type="text" name="location_details" />
+                                    {:else if form[field.name] == 'in_person_guest' || form[field.name] == 'custom'}
                                         <div class="fcal_input_wrap address">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                             <input disabled="{field.disabled}" class="fcal_input" type="text"
