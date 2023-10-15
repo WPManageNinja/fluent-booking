@@ -121,7 +121,7 @@ class BookingFieldService
                     'enabled'        => true,
                     'system_defined' => true,
                     'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
-                    'label' => 'Payment Summary',
+                    'label'          => __('Payment Summary', 'fluent-booking'),
                     'currency_sign' => CurrenciesHelper::getGlobalCurrencySign(),
                 ];
             }

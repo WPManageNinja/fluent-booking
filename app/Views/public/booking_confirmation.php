@@ -47,7 +47,7 @@
                 </div>
             <?php else: ?>
                 <div class="fcal_booking_manage fcal_normal_booking_footer">
-                    Need to make a change? <a href="<?php echo $booking->getRescheduleUrl(); ?>">Reschedule</a> or <a
+                    <?php echo __('Need to make a change?', 'fluent-booking') ?> <a href="<?php echo $booking->getRescheduleUrl(); ?>">Reschedule</a> or <a
                         href="<?php echo $booking->getCancelUrl(); ?>">Cancel</a>
                 </div>
             <?php endif; ?>
