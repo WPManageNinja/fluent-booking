@@ -5,6 +5,7 @@ namespace FluentBooking\App\Models;
 use FluentBooking\App\Models\Model;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class Booking extends Model
@@ -55,7 +56,6 @@ class Booking extends Model
     ];
 
 
-
     /**
      * $searchable Columns in table to search
      * @var array
@@ -70,7 +70,7 @@ class Booking extends Model
     {
         parent::boot();
 
-        static::creating( function ($model) {
+        static::creating(function ($model) {
             if (!isset($model->person_user_id) && $userId = get_current_user_id()) {
                 $model->person_user_id = $userId;
             }
@@ -121,7 +121,7 @@ class Booking extends Model
 
     public function getCustomFormData($isFormatted = true)
     {
-        if($isFormatted) {
+        if ($isFormatted) {
             return BookingFieldService::getFormattedCustomBookingData($this);
         }
 
@@ -375,7 +375,6 @@ class Booking extends Model
     }
 
 
-
     /**
      * Local scope to filter hosts by search/query string
      * @param string $search
@@ -404,5 +403,32 @@ class Booking extends Model
         }
 
         return $query;
+    }
+
+    public function getConfirmationUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'confirmation',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function getRescheduleUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'reschedule',
+        ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function getCancelUrl()
+    {
+        return add_query_arg([
+            'fluent-booking' => 'booking',
+            'meeting_hash'   => $this->hash,
+            'type'           => 'cancel',
+        ], Helper::getBookingReceiptLandingBaseUrl());
     }
 }

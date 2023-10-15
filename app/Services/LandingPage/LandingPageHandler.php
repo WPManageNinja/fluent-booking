@@ -20,7 +20,7 @@ class LandingPageHandler
             add_action('template_redirect', [$this, 'handleSlugDefinedPage'], 1);
         }
 
-        if (isset($_GET['fluent-booking']) && $_GET['fluent-booking'] == 'calendar') {
+        if (isset($_GET['fluent-booking'])) {
             add_action('init', [$this, 'handleUrlParamsPage']);
         }
     }
@@ -42,11 +42,12 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
+        $route = sanitize_text_field($_GET['fluent-booking']);
 
-        if (isset($_REQUEST['type'])) {
-            if ($_REQUEST['type'] == 'confirmation') {
-                $this->handleConfirmationPage();
-            }
+
+        if ($route == 'booking') {
+            $this->handleAfterBookingPage();
+            return;
         }
 
         if (empty($_REQUEST['host'])) {
@@ -207,8 +208,9 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function showBookingConfimationPage($booking, $calendarEvent)
+    private function showBookingConfimationPage($booking, $type = 'confirmation')
     {
+        $calendarEvent = $booking->calendar_event;
         global $wp;
         $responseHtml = BookingService::getBookingConfirmationHtml($booking, $calendarEvent, true);
 
@@ -234,18 +236,18 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function handleConfirmationPage()
+    private function handleAfterBookingPage()
     {
-        $bookingHash = sanitize_text_field($_REQUEST['booking_token']);
+        $bookingHash = sanitize_text_field($_REQUEST['meeting_hash']);
         $booking = Booking::where('hash', $bookingHash)->first();
 
         if (!$booking) {
             return;
         }
 
-        $calendarSlot = $booking->calendar_event;
+        $type = Arr::get($_REQUEST, 'type', 'confirmation');
 
-        $this->showBookingConfimationPage($booking, $calendarSlot);
+        $this->showBookingConfimationPage($booking, $type);
     }
 
 }
