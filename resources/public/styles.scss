@@ -32,6 +32,11 @@ $lightDark: #6b7280;
           color: #445164;
           margin-bottom: 10px;
         }
+        .fcal_input_location_wrap {
+          select {
+            margin-bottom: 6px;
+          }
+        }
 
         .fcal_input_wrap {
             &.address {

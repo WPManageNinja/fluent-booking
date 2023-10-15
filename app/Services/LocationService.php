@@ -66,7 +66,11 @@ class LocationService
 
         $locationOptions = [];
         foreach ($locationSettings as $location) {
-            $locationOptions[] = Arr::get($location, 'type');
+            $locationOptions[] = [
+                'type'  => Arr::get($location, 'type'),
+                'title' => Arr::get($location, 'title')
+            ];
+
         }
         return $locationOptions;
     }
