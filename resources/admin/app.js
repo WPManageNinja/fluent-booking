@@ -161,7 +161,7 @@ app.mixin({
             if (amount % 1 !== 0) {
                 amount = parseFloat(amount).toFixed(2);
             }
-            
+
             return currencySign + amount;
         }
     }
