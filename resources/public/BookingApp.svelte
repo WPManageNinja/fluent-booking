@@ -11,21 +11,19 @@
     const author = appData.author_profile;
     const isFluentform = appData.is_fluentform;
 
-    let selectedDate = false;
-    let timezone = '';
     let appReady = false;
-    let isBookingDone = false;
     let bookingConfirmationHtml = '';
+    let calendarHeight = '';
     let component = null;
+    let isBookingDone = false;
     let isMobile = false;
     let isXsDevice = false;
-    let calendarHeight = '';
-
-
-
+    let selectedDate = false;
     let showingPayments = false;
+    let timezone = '';
 
     onMount(() => {
+
         timezone = util.dayjs.tz.guess();
 
         appReady = true;

@@ -9,16 +9,19 @@
         {/if}
         <form on:submit|preventDefault={submitForm}>
             <!--{#if !showPayments}-->
+
                 {#each formFields as field}
                     {#if field.enabled}
                         <div class="fcal_form_item">
                             <label class="fcal_input_content">
+                                {#if field.label}
                                 <div class="fcal_input_label">
                                     {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
                                         {field.label}
                                     {/if}
                                     {#if field.required}<span>*</span>{/if}
                                 </div>
+                                {/if}
                                 {#if field.type === 'text'}
                                     <div class={'fcal_input_wrap '+field.name}>
                                         {#if field.name == 'address'}
@@ -48,6 +51,8 @@
                                     </select>
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
                                     <Payments field={field}/>
+                                {:else if field.type === 'hidden' }
+                                    <input type="hidden" bind:value={form[field.name]}/>
                                 {/if}
                             </label>
                         </div>

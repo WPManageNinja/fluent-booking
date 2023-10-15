@@ -105,6 +105,8 @@ class BookingFieldService
 
         $existingFields = $calendarSlot->getMeta('booking_fields', []);
 
+
+
         if ($calendarSlot->type == 'paid'){
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
@@ -131,6 +133,7 @@ class BookingFieldService
 
         $validFields = [];
 
+
         foreach ($existingFields as $existingField) {
             $name = $existingField['name'];
             if (in_array($name, $requiredIndexes)) {
@@ -138,7 +141,7 @@ class BookingFieldService
                 $requiredIndexes = array_diff($requiredIndexes, [$name]);
             }
 
-            $validFields[] = $existingField;
+            $validFields[$name] = $existingField;
         }
 
         if ($requiredIndexes) {
@@ -146,7 +149,6 @@ class BookingFieldService
                 $validFields[] = $defaultFields[$requiredIndex];
             }
         }
-
         return $validFields;
     }
 
