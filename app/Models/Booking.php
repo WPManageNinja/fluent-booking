@@ -178,11 +178,16 @@ class Booking extends Model
         return $query->where('status', $status);
     }
 
-    public function getFullBookingDateTimeText($timeZone = 'UTC')
+    public function getFullBookingDateTimeText($timeZone = 'UTC', $isHtml = false)
     {
         $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
         $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
         $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
+
+        if($isHtml && $this->status == 'cancelled') {
+            $html = '<del>' . $html . '</del>';
+        }
+
         return $html;
     }
 
@@ -294,11 +299,17 @@ class Booking extends Model
         return $this->hasOne(Order::class, 'parent_id');
     }
 
-    public function getCancelReason()
+    public function getCancelReason($isHtml = false)
     {
-        return BookingActivity::where('booking_id', $this->id)
+        $row = BookingActivity::where('booking_id', $this->id)
             ->where('type', 'cancel_reason')
             ->first();
+
+        if($isHtml && $row) {
+            return $row->description;
+        }
+
+        return $row;
     }
 
     public function getCancelReasonDescription()
@@ -469,5 +480,10 @@ class Booking extends Model
             'meeting_hash'   => $this->hash,
             'type'           => 'cancel',
         ], Helper::getBookingReceiptLandingBaseUrl());
+    }
+
+    public function canCancel()
+    {
+        return in_array($this->status, ['scheduled', 'pending']);
     }
 }

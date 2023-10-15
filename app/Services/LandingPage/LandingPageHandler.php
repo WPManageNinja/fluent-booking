@@ -245,15 +245,17 @@ class LandingPageHandler
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
-            'js_files'    => [
-                App::getInstance('url.assets') . 'public/js/public-manage-meeting.js'
-            ],
+            'js_files'    => [],
             'js_vars'     => [],
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
             'action_type' => $actionType
         ];
+
+        if($actionType == 'cancel') {
+            $data['js_files'][] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
+        }
 
         $app = App::getInstance();
         status_header(200);

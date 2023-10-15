@@ -135,13 +135,21 @@ class NotificationHandler
             return;
         }
 
-        if ($booking->cancelled_by && Arr::isTrue($notifications, 'cancelled_by_host.enabled')) {
+        $cancelledBy = $booking->getMeta('cancelled_by_type', 'host');
+
+        if ($cancelledBy == 'host') {
+            if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
+                $email = Arr::get($notifications, 'cancelled_by_attendee.email', []);
+                EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
+            }
+            return;
+        }
+
+        if (Arr::isTrue($notifications, 'cancelled_by_host.enabled')) {
             // This from the host
             $email = Arr::get($notifications, 'cancelled_by_host.email', []);
             EmailNotificationService::bookingCancelledEmail($booking, $email, 'guest');
-        } elseif (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
-            $email = Arr::get($notifications, 'cancelled_by_attendee.email', []);
-            EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
         }
+
     }
 }
