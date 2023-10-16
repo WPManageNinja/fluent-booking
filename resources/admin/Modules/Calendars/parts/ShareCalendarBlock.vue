@@ -23,9 +23,10 @@
         >
             <el-tab-pane name="copy-shortcode">
                 <template #label>
-                    Copy Shortcode
+                    Shortcode
                 </template>
                 <div v-if="activeTab == 'copy-shortcode'" class="fcal_create_calendar_body" style="text-align: center;">
+                    <p>Copy and use the shortcode Page/Post of your website</p>
                     <el-button class="fcal_plain_btn fcal_copy_btn" @click="copyTo(slot?.id)">
                         <el-icon><CopyDocument /></el-icon> [fluent_booking id="{{ slot?.id }}"]
                     </el-button>
