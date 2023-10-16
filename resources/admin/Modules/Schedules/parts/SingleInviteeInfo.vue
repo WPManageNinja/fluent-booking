@@ -43,9 +43,6 @@
 <script>
 export default {
     name: "SingleInviteeInfo",
-    props: ['booking'],
-    mounted() {
-        console.log(this.booking.custom_form_data);
-    }
+    props: ['booking']
 }
 </script>
