@@ -191,7 +191,7 @@ class LandingPageHandler
                 $assetUrl . 'public/saas.css'
             ],
             'js_files'       => [
-                includes_url('js/jquery/jquery.min.js'),
+            //    $assetUrl . 'public/js/phone-field.js',
                 $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
@@ -208,6 +208,12 @@ class LandingPageHandler
         $data = apply_filters('fluent_booking/event_landing_page_vars', $data, $calendar, $calendarEvent, $existingBooking);
 
         $app = App::getInstance();
+
+        add_action('fluent_booking/author_landing_head', function () {
+            ?>
+
+            <?php
+        });
 
         status_header(200);
         $app->view->render('landing.booking', $data);
@@ -275,7 +281,7 @@ class LandingPageHandler
     {
         $bookingHash = sanitize_text_field(Arr::get($_REQUEST, 'meeting_hash'));
 
-        if(!$bookingHash) {
+        if (!$bookingHash) {
             return;
         }
 
