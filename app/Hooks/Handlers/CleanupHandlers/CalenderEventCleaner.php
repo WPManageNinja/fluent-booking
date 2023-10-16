@@ -17,13 +17,13 @@ class CalenderEventCleaner
             return;
         }
 
-        $booking = Booking::query()->where('event_id', $calendarEvent->id)
+        $bookings = Booking::query()->where('event_id', $calendarEvent->id)
             ->when($calendar, function ($query, $booking) {
                 $query->where('calendar_id', $booking->id);
             })
-            ->first();
+            ->get();
 
-        if ($booking) {
+        foreach ($bookings as $booking){
             do_action('fluent_booking/before_delete_booking', $booking);
             $booking->delete();
             do_action('fluent_booking/after_delete_booking', $booking);
