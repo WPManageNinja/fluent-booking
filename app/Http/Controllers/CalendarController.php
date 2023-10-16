@@ -582,20 +582,13 @@ class CalendarController extends Controller
         ];
     }
 
-    public function deleteCalendarSlot(Request $request, $calendarId, $calendarEventId)
+    public function deleteCalendarEvent(Request $request, $calendarId, $calendarEventId)
     {
-        $calendar = Calendar::findOrFail($calendarId);
-        $calendarEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($calendarEventId);
+        $calendar = Calendar::query()->findOrFail($calendarId);
+        $calendarEvent = CalendarSlot::query()->where('calendar_id', $calendar->id)->findOrFail($calendarEventId);
 
         do_action('fluent_booking/before_delete_calendar_event', $calendarEvent, $calendar);
-
-        // Let's delete all the events related to this slot
-        Booking::where('event_id', $calendarEvent->id)
-            ->where('calendar_id', $calendar->id)
-            ->delete();
-
         $calendarEvent->delete();
-
         do_action('fluent_booking/after_delete_calendar_event', $calendarEventId, $calendar);
 
         return [
