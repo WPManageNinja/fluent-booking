@@ -2,10 +2,10 @@
     <div class="fcal_create_calendar_wrap fcal_onboard_wrap">
         <div v-if="is_board" class="fcal_welcom_banner">
             <h1>
-                <svg xmlns="http://www.w3.org/2000/svg" width="27" height="29" viewBox="0 0 27 29" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.85634 27.063C6.32888 26.3537 3.68272 25.9959 1.11577 25.6681C0.562888 25.5994 0.0495755 25.9829 0.010084 26.5231C-0.0688991 27.0638 0.326248 27.5582 0.839638 27.6269C3.3276 27.9424 5.89432 28.2801 8.30331 28.9629C8.8167 29.111 9.36981 28.8061 9.52778 28.2817C9.68574 27.7576 9.36973 27.2115 8.85634 27.063Z" fill="white"/>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5174 17.0071C12.4498 12.8561 7.86874 9.23949 3.8801 4.97717C3.52467 4.5791 2.89281 4.55777 2.49789 4.92939C2.10298 5.3014 2.06364 5.92694 2.45856 6.32501C6.4472 10.5996 11.0282 14.2281 15.0958 18.3913C15.4908 18.7799 16.1225 18.7854 16.5174 18.4031C16.8728 18.0212 16.9123 17.3957 16.5174 17.0071Z" fill="white"/>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.1398 1.0409C24.2582 3.41671 24.3765 5.79252 24.495 8.16873C24.495 8.71292 24.9691 9.13311 25.522 9.10665C26.0749 9.0798 26.4695 8.61656 26.4695 8.07198C26.3511 5.69222 26.2328 3.31285 26.1143 0.933484C26.0749 0.389291 25.6009 -0.028135 25.048 0.00148363C24.5346 0.0311023 24.1003 0.497104 24.1398 1.0409Z" fill="white"/>
+                <svg class="welcome-svg" xmlns="http://www.w3.org/2000/svg" width="27" height="29" viewBox="0 0 27 29" fill="none">
+                    <path class="path1" fill-rule="evenodd" clip-rule="evenodd" d="M8.85634 27.063C6.32888 26.3537 3.68272 25.9959 1.11577 25.6681C0.562888 25.5994 0.0495755 25.9829 0.010084 26.5231C-0.0688991 27.0638 0.326248 27.5582 0.839638 27.6269C3.3276 27.9424 5.89432 28.2801 8.30331 28.9629C8.8167 29.111 9.36981 28.8061 9.52778 28.2817C9.68574 27.7576 9.36973 27.2115 8.85634 27.063Z" fill="white"/>
+                    <path class="path1" fill-rule="evenodd" clip-rule="evenodd" d="M16.5174 17.0071C12.4498 12.8561 7.86874 9.23949 3.8801 4.97717C3.52467 4.5791 2.89281 4.55777 2.49789 4.92939C2.10298 5.3014 2.06364 5.92694 2.45856 6.32501C6.4472 10.5996 11.0282 14.2281 15.0958 18.3913C15.4908 18.7799 16.1225 18.7854 16.5174 18.4031C16.8728 18.0212 16.9123 17.3957 16.5174 17.0071Z" fill="white"/>
+                    <path class="path1" fill-rule="evenodd" clip-rule="evenodd" d="M24.1398 1.0409C24.2582 3.41671 24.3765 5.79252 24.495 8.16873C24.495 8.71292 24.9691 9.13311 25.522 9.10665C26.0749 9.0798 26.4695 8.61656 26.4695 8.07198C26.3511 5.69222 26.2328 3.31285 26.1143 0.933484C26.0749 0.389291 25.6009 -0.028135 25.048 0.00148363C24.5346 0.0311023 24.1003 0.497104 24.1398 1.0409Z" fill="white"/>
                 </svg>
                 Congratulations!
             </h1>
@@ -138,10 +138,16 @@ export default {
         },
         checkValidattion() {
             const location = this.calendar.slot.location_settings[0];
+
+            if(!location) {
+                this.$handleError('Please provide a location first');
+                return false;
+            }
+
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;
-            } else if ((location.type == 'custom') && !location.title)  {
+            } else if ((location.type == 'custom') && !location.custom_title)  {
                 this.$handleError('Location Title is required');
                 return false;
             } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {

@@ -85,6 +85,7 @@
 
         <div class="fcal_settings_body" v-else>
             <Editor
+                :smart_codes="smart_codes"
                 :editing_feed="editing_feed"
                 :calendar_event="calendar_event"
                 :event_triggers="event_triggers"
@@ -128,15 +129,22 @@ export default {
             slots: [],
             show_edit: false,
             editing_item: null,
+            smart_codes: {
+                texts: {},
+                html: {}
+            }
         }
     },
     methods: {
         getFeeds() {
             this.loading = true;
-            this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`)
+            this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, {
+                with: ['smart_codes']
+            })
                 .then(response => {
                     this.event_triggers = response.event_triggers;
                     this.feeds = response.feeds;
+                    this.smart_codes = response.smart_codes;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
