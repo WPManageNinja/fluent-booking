@@ -471,10 +471,10 @@ class FrontEndHandler
             'form_fields'    => $formFields,
         ];
 
-        //dd($eventVars['form_fields']);
+        $fields['form_fields'] = array_values($eventVars['form_fields']);
+
         $fields = apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
 
-        $fields['form_fields'] = array_values($eventVars['form_fields']);
         return $fields;
     }
 
