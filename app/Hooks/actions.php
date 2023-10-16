@@ -19,7 +19,7 @@
 
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
-(new \FluentBooking\App\Hooks\Handlers\CleanupHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
