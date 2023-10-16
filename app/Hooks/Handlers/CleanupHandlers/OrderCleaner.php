@@ -25,7 +25,7 @@ class OrderCleaner
             ->where('object_id', $order->id)
             ->delete();
 
-        OrderItems::query()->where('order_id', $order)
+        OrderItems::query()->where('order_id', $order->id)
             ->when($booking, function ($query, $booking) {
                 $query->where('booking_id', $booking->id);
             })->delete();
