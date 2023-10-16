@@ -9,9 +9,15 @@
                 <div class="fcal_schedule_details_header_action">
                     <el-input
                         v-model="search"
-                        @change="fetchGuests"
+                        @keyup.enter="fetchGuests"
                         clearable
-                        placeholder="Search Host" />
+                        placeholder="Search Host">
+                        <template #append>
+                            <el-button @click="fetchGuests">
+                                <el-icon><Search /></el-icon>
+                            </el-button>
+                        </template>
+                    </el-input>
                     <el-tooltip
                         class="fcal_tooltip_box"
                         effect="dark"
@@ -115,7 +121,7 @@
 </template>
 
 <script>
-import { MoreFilled, Close, Download } from '@element-plus/icons-vue';
+import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import PaymentLogs from "./PaymentLogs";
 export default {
@@ -126,7 +132,8 @@ export default {
         Pagination,
         MoreFilled,
         Close,
-        Download
+        Download,
+        Search
     },
     data() {
         return {
