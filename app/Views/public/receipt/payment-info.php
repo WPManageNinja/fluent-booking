@@ -1,5 +1,5 @@
 <div class="fluent_booking_payment_info">
-    <table>
+    <table width="100%">
         <tbody>
             <tr>
                 <td>
