@@ -301,7 +301,7 @@ class FrontEndHandler
             return;
         }
 
-        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', BookingFieldService::getCustomFieldsData($postedData, $calendarSlot), $customFieldsData, $calendarSlot);
+        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', BookingFieldService::getCustomFieldsData($postedData, $calendarSlot), $customFieldsData=[], $calendarSlot);
         if (is_wp_error($customFieldsData)) {
             wp_send_json([
                 'message' => $customFieldsData->get_error_message(),
