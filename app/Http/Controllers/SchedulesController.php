@@ -60,6 +60,8 @@ class SchedulesController extends Controller
             $query = $query->orderBy('start_time', 'ASC');
         } else if ($period == 'latest_bookings') {
             $query = $query->orderBy('created_at', 'DESC');
+        } else if ($period == 'no_show') {
+            $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');;
         } else {
             $query = $query->orderBy('start_time', 'DESC');
         }
@@ -98,7 +100,8 @@ class SchedulesController extends Controller
                 $pendingCount = Booking::where('status', 'pending')->count();
             }
 
-            $data['pending_count'] = $pendingCount;
+            $data['no_show_count']   = Booking::where('status', 'no_show')->count();
+            $data['pending_count']   = $pendingCount;
             $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
         }
 

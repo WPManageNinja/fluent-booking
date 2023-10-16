@@ -1807,6 +1807,27 @@
         }
     }
 
+
+    .fcal_empty_text {
+        margin: 0;
+        font-size: 16px;
+        color: #606266;
+        font-weight: 400;
+        a {
+            text-decoration: none;
+            color: $primaryColor;
+            font-weight: 500;
+            position: relative;
+            .anim-icon {
+                position: absolute;
+                top: -6px;
+                right: -22px;
+                font-size: 21px;
+                animation: handAnim 1s infinite linear;
+            }
+        }
+    }
+
     .el-breadcrumb {
         .el-breadcrumb__item {
             &:first-child {
@@ -2344,7 +2365,7 @@
                     }
                     .el-input {
                         .el-input__wrapper {
-                            padding: 8px 20px;
+                            padding: 6px 20px;
                             border-radius: 8px;
                             .el-input__inner {
                                 height: auto;
@@ -2353,12 +2374,139 @@
                                 padding: 0;
                             }
                         }
+                        &.el-input-group--prepend {
+                            &.fcal_group_input {
+                                .el-input-group__prepend {
+                                    border-top-left-radius: 8px;
+                                    border-bottom-left-radius: 8px;
+                                }
+                                .el-input__wrapper {
+                                    border-top-right-radius: 8px !important;
+                                    border-bottom-right-radius: 8px !important;
+                                }
+                            }
+                        }
+                    }
+                    .action_btn {
+                        > span {
+                            cursor: pointer;
+                            display: block;
+                            line-height: 44px;
+                            height: 42px;
+                            font-size: 16px;
+                            &:hover {
+                                color: var(--el-color-danger);
+                            }
+                        }
                     }
                     .el-checkbox-group {
                         .el-checkbox {
                             margin-right: 20px;
                             &:last-child {
                                 margin-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .fcal_edit_integration {
+        .fcal_webhook_form {
+            .el-form-item__content {
+                .el-input {
+                    .el-input__wrapper {
+                        padding: 6px 20px;
+                        border-radius: 8px;
+                        input {
+                            height: auto;
+                            display: block;
+                            margin: 0;
+                            padding: 0;
+                        }
+                    }
+                    &.el-input-group--append {
+                        .el-input__wrapper {
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                        .el-input-group__append {
+                            border-top-right-radius: 8px;
+                            border-bottom-right-radius: 8px;
+                        }
+                    }
+                }
+                .el-select {
+                    .el-select__tags {
+                        .el-select__input {
+                            &:focus {
+                                outline: none;
+                                box-shadow: none;
+                                border: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .fcal_table {
+                border-collapse: separate;
+                border-spacing: 0;
+                border-radius: 8px;
+                border: 1px solid #D6DAE1;
+                overflow: hidden;
+                thead {
+                    tr {
+                        background: none;
+                        th {
+                            background: none;
+                            font-size: 14px;
+                            font-weight: 700;
+                            line-height: 26px;
+                            color: #323232;
+                            padding: 8px 20px;
+                            background: #EAECF0;
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        &:last-child {
+                            td {
+                                border-bottom: none;
+                            }
+                        }
+                        td {
+                            padding: 8px 20px;
+                            border-bottom: 1px solid #e9ecf0;
+                            .el-form-item__label {
+                                margin: 0;
+                            }
+                        }
+                    }
+                }
+            }
+            .dropdown_label_repeater {
+                .fcal_table {
+                    tbody {
+                        tr {
+                            td {
+                                .action-btns {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: flex-end;
+                                    gap: 6px;
+                                    i {
+                                        width: 32px;
+                                        height: 32px;
+                                        border-radius: 4px;
+                                        background: #eaecf0;
+                                        color: $dark;
+                                        margin: 0;
+                                        transition: .3s;
+                                    }
+                                }
                             }
                         }
                     }
@@ -2731,4 +2879,16 @@ p.fcal_human_text {
 
 .el-input-group--prepend .el-input__wrapper {
     border-radius: 0 !important;
+}
+
+@keyframes handAnim {
+    0% {
+        right: -22px;
+    }
+    50% {
+        right: -28px;
+    }
+    100% {
+        right: -22px;
+    }
 }

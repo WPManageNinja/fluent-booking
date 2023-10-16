@@ -10,6 +10,14 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
+                                <el-dropdown-item @click="updateScheduleStatus('completed')">
+                                    <el-icon><Check /></el-icon>
+                                    Mark As Completed
+                                </el-dropdown-item>
+                                <el-dropdown-item v-if="showing_booking.status!='no_show'" @click="updateScheduleStatus('no_show')">
+                                    <el-icon><Hide /></el-icon>
+                                    No Show
+                                </el-dropdown-item>
                                 <el-dropdown-item @click="cancelDialog = true">
                                     <el-icon>
                                         <Close/>
@@ -127,7 +135,7 @@
 </template>
 
 <script type="text/babel">
-import {Back, MoreFilled, Refresh, Close, EditPen} from '@element-plus/icons-vue';
+import {Back, MoreFilled, Refresh, Close, EditPen, Check, Hide} from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import FluentCrmProfile from "./FluentCrmProfile";
 import GroupBookingGuests from './GroupBookingGuests';
@@ -153,6 +161,8 @@ export default {
         Refresh,
         Close,
         EditPen,
+        Check,
+        Hide
     },
     data() {
         return {

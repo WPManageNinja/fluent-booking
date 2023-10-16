@@ -10,8 +10,11 @@
                 <el-skeleton :rows="5" animated />
             </div>
             <div v-else class="fcal_booking_activities_list">
-                <div v-if="activities.length" v-for="activity in activities" :key="activity.id" class="fcal_booking_activity">
-                    <el-icon class="fcal_activity_complete_icon"><Check /></el-icon>
+                <div v-if="activities.length" v-for="activity in activities" :key="activity.id" class="fcal_booking_activity" :class="activity.type">
+                    <el-icon class="fcal_activity_complete_icon">
+                        <Close v-if="activity.type=='cancel_reason'" />
+                        <Check v-else />
+                    </el-icon>
 
                     <div class="fcal_booking_activity_time">
                         {{ toCurrentTimezone(activity.created_at, 'DD MMM YYYY, hh:mma') }}
@@ -32,13 +35,14 @@
 </template>
 
 <script type="text/babel">
-import { Check } from '@element-plus/icons-vue';
+import { Check, Close } from '@element-plus/icons-vue';
 
 export default {
     name: 'BookingActivities',
     props: ['booking_id'],
     components: {
-        Check
+        Check,
+        Close
     },
     watch: {
         booking_id() {
