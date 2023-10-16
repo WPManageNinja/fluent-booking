@@ -3,7 +3,6 @@
     
     export let timezone;
     
-    const optionIdentifier = 'value';
     const timezones = window.fluentCalendarPublicVars.timezones;
 
     const groupBy = (item) => item.group;
@@ -24,7 +23,6 @@
 
 <Select on:input={handleTimeZoneChange} {groupBy}
     {floatingConfig}
-    {optionIdentifier}
     clearable={false}
     value={timezone}
     items={timezones}
