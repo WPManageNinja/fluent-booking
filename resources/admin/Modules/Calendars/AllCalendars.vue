@@ -15,9 +15,12 @@
             <SkeletonLoader v-if="loading" />
 
             <div v-else class="fcal_calendars_wrap">
-                <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                    <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" />
-                </div>
+                <template v-if="calendars.length">
+                    <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
+                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" />
+                    </div>
+                </template>
+                <el-empty v-else class="fcal_empty" description="No Calendars found"/>
             </div>
 
             <div class="fcal_right fcal_tm20">
