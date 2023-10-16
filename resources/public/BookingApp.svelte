@@ -240,10 +240,8 @@
                         <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                             <DayPickerApp
                                 {appData}
-                                {isFluentform}
                                 {slot}
                                 {settings}
-                                showPayments={showingPayments}
                                 bind:timezone={timezone}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
@@ -280,7 +278,6 @@
                                     {appData}
                                     {slot}
                                     {timezone}
-                                    showPayments={showingPayments}
                                     on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
                                     bind:spot={selectedDate}
                                     bind:formFields={appData.form_fields}
