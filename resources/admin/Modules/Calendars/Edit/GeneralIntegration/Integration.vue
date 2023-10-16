@@ -123,6 +123,7 @@
                 :inputs="fields"
                 :has_pro="has_pro"
                 @back="hideEditor"
+                :smart_codes="smart_codes"
             />
         </div>
     </div>
@@ -178,6 +179,10 @@ export default {
                 integration_id: '',
                 integration_name: ''
             },
+            smart_codes: {
+                texts: {},
+                html: {}
+            }
         };
     },
     methods: {
@@ -255,7 +260,7 @@ export default {
                     this.integrations = response.feeds;
                     this.available_integrations = response.available_integrations;
                     this.all_module_config_url = response.all_module_config_url;
-                    // this.$success(response.message);
+                    this.smart_codes = response.smart_codes
                 })
                 .catch(error => {
                     this.errors.record(error);
