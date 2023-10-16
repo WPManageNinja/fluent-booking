@@ -340,8 +340,7 @@ class EditorShortCodeParser
             if (false !== strpos($match, 'guest.')) {
                 $guestProperty = substr($match, strlen('guest.'));
                 $value = static::getGuestData($guestProperty);
-            }
-            if (false !== strpos($match, 'booking.custom.')) {
+            } else if (false !== strpos($match, 'booking.custom.')) {
                 $customBookingProp = substr($match, strlen('booking.custom.'));
                 $value = static::getBookingCustomData($customBookingProp);
             } elseif (false !== strpos($match, 'booking.')) {
