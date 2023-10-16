@@ -58,7 +58,13 @@
 
         methods: {
             handleSubjectCommand(command) {
-                this.$emit('update:modelValue', this.fieldValue + command);
+
+                let value = command;
+                if(this.fieldValue) {
+                    value = this.fieldValue + command;
+                }
+
+                this.$emit('update:modelValue', value);
                 this.subjectPopupVisible = false;
             },
 

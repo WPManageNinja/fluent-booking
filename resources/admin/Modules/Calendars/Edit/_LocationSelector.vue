@@ -141,10 +141,10 @@ export default {
         },
         isEditable() {
             return (locationType) => {
-                if (locationType == 'in_person_guest' || locationType == 'phone_guest' || locationType == 'google_meet') {
-                    return false;
+                if (locationType == 'in_person_organizer' || locationType == 'phone_organizer' || locationType == 'custom' || locationType == 'online_meeting') {
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
     },
@@ -179,6 +179,10 @@ export default {
             this.modalSettings = {};
         },
         cancelDetails(index) {
+            if (this.slot.location_settings.length <= 1) {
+                this.dialogVisible = false;
+                return;
+            } 
             const location = this.modalSettings;
             if ((location.type == 'custom') && (!location.title || !location.description)) {
                 this.deleteLocation(index);

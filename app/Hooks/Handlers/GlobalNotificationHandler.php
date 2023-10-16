@@ -116,6 +116,7 @@ class GlobalNotificationHandler
                 // It's sync
                 $processedValues = $feed['settings'];
                 $processedValues = EditorShortCodeParser::parse($processedValues, $booking);
+
                 $feed['processedValues'] = $processedValues;
                 do_action('fluent_booking/integration_notify_' . $feed['key'], $feed, $booking, $calendarEvent);
             }
