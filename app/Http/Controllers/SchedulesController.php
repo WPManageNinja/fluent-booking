@@ -65,6 +65,13 @@ class SchedulesController extends Controller
         }
 
         $query->groupBy('group_id');
+        $search = Arr::get($filters, 'search');
+
+        if (!empty($search)) {
+            $author = 'all';
+            $query = $query->orderBy('start_time', 'DESC');
+            $query = $query->searchBy($search);
+        }
 
         $schedules = $query->paginate();
 
