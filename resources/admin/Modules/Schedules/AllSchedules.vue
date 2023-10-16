@@ -25,9 +25,17 @@
                 <div class="fcal_section_actions">
                     <el-input
                         v-model="filters.search"
-                        @keydown="fetchSchedules"
+                        @keyup.enter="fetchSchedules"
                         clearable
-                        placeholder="Search Booking" />
+                        placeholder="Search Booking"
+                        class="fcal_search_input"
+                    >
+                        <template #append>
+                            <el-button @click="fetchGuests">
+                                <el-icon><Search /></el-icon>
+                            </el-button>
+                        </template>
+                    </el-input>
 
                     <el-select v-if="filters.author == 'me'"
                         v-model="filters.event_type"
@@ -151,7 +159,7 @@ import Pagination from "../../Pieces/Pagination.vue";
 import BookingCard from "./parts/BookingCard.vue";
 import ScheduleBookingDetails from './parts/ScheduleBookingDetails.vue';
 import each from 'lodash/each';
-import {Back, Filter, CircleClose, ArrowLeft} from '@element-plus/icons-vue';
+import {Back, Filter, CircleClose, ArrowLeft, Search} from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
@@ -162,7 +170,8 @@ export default {
         Filter,
         Back,
         CircleClose,
-        ArrowLeft
+        ArrowLeft,
+        Search
     },
     data() {
         return {

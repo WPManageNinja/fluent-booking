@@ -119,9 +119,6 @@
 
     let errors = '';
 
-    //  export let showPayments;
-
-
     const currentUrl = window.location.href;
 
     function hasPaymentItem() {
