@@ -152,6 +152,7 @@ class FluentFormInit
             'email'            => sanitize_email($data['email']),
             'person_time_zone' => sanitize_text_field($data['timezone']),
             'source'           => 'fluentform',
+            'status'           => 'scheduled',
             'source_url'       => sanitize_url($data['source_url']),
             'ip_address'       => Helper::getIp()
         ];

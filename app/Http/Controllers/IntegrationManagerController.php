@@ -104,7 +104,7 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         }
     }
 
-    public function notify($feed, $booking, $slot)
+    public function notify($feed, $booking, $calendarEvent)
     {
         // Do something here in your integration class
     }
@@ -156,9 +156,9 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         return $data;
     }
 
-    public function prepareIntegrationFeed($setting, $feed, $formId)
+    public function prepareIntegrationFeed($setting, $feed, $calendarEventId)
     {
-        $defaults = $this->getIntegrationDefaults([], $formId);
+        $defaults = $this->getIntegrationDefaults([], $calendarEventId);
 
         foreach ($setting as $settingKey => $settingValue) {
             if ('true' == $settingValue) {
@@ -182,15 +182,15 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
         return wp_parse_args($setting, $defaults);
     }
 
-    abstract public function getIntegrationDefaults($settings, $formId);
+    abstract public function getIntegrationDefaults($settings, $calendarEventId);
 
-    abstract public function pushIntegration($integrations, $formId);
+    abstract public function pushIntegration($integrations, $calendarEventId);
 
-    abstract public function getSettingsFields($settings, $formId);
+    abstract public function getSettingsFields($settings, $calendarEventId);
 
-    abstract public function getMergeFields($list, $listId, $formId);
+    abstract public function getMergeFields($list, $listId, $calendarEventId);
 
-    public function setFeedAttributes($feed, $formId)
+    public function setFeedAttributes($feed, $calendarEventId)
     {
         $feed['provider'] = $this->integrationKey;
         $feed['provider_logo'] = $this->logo;

@@ -3,6 +3,8 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use Exception;
+use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\CalendarIntegrationService;
 
 class CalendarIntegrationController extends Controller
@@ -10,9 +12,16 @@ class CalendarIntegrationController extends Controller
     public function index(CalendarIntegrationService $integrationService, $calendarId, $eventId)
     {
         try {
-            return $this->sendSuccess(
-                $integrationService->get($eventId)
-            );
+
+            $calendarEvent = CalendarSlot::findOrFail($eventId);
+            $settings = $integrationService->get($eventId);
+
+            $settings['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
+
+            return $this->sendSuccess($settings);
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage(),

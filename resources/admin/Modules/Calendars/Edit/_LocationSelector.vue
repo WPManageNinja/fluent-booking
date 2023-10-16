@@ -69,7 +69,7 @@
                 class="fcal_location_form"
             >
                 <el-form-item v-if="modalSettings.type == 'custom'" label="Location Title *">
-                    <el-input v-model="modalSettings.custom_title" type="text" placeholder="Location Title" />
+                    <el-input v-model="modalSettings.title" type="text" placeholder="Location Title" />
                 </el-form-item>
                 <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" label="Location Description">
                     <el-input v-model="modalSettings.description" type="textarea" placeholder="Location Description *" />
@@ -141,10 +141,10 @@ export default {
         },
         isEditable() {
             return (locationType) => {
-                if (locationType == 'in_person_guest' || locationType == 'phone_guest' || locationType == 'google_meet') {
-                    return false;
+                if (locationType == 'in_person_organizer' || locationType == 'phone_organizer' || locationType == 'custom' || locationType == 'online_meeting') {
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
     },
@@ -162,7 +162,7 @@ export default {
         },
         updateDetails() {
             const location = this.modalSettings;
-            if ((location.type == 'custom') && !location.custom_title)  {
+            if ((location.type == 'custom') && !location.title)  {
                 this.$handleError('Location Title is required');
                 return false;
             } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
@@ -179,6 +179,10 @@ export default {
             this.modalSettings = {};
         },
         cancelDetails(index) {
+            if (this.slot.location_settings.length <= 1) {
+                this.dialogVisible = false;
+                return;
+            } 
             const location = this.modalSettings;
             if ((location.type == 'custom') && (!location.title || !location.description)) {
                 this.deleteLocation(index);

@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services;
 
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class EditorShortCodeParser
@@ -9,11 +10,13 @@ class EditorShortCodeParser
     protected static $requireHtml = true;
 
     protected static $store = [
-        'booking'          => null,
-        'calendar_booking' => null,
-        'calendar'         => null,
-        'host'             => null,
-        'user'             => null,
+        'booking'             => null,
+        'calendar_booking'    => null,
+        'calendar'            => null,
+        'host'                => null,
+        'user'                => null,
+        'custom_booking_data' => null,
+        'payment_order'       => null
     ];
 
     public static function parse($parsable, $booking, $requireHtml = true)
@@ -37,6 +40,8 @@ class EditorShortCodeParser
         static::$store['booking_event'] = $bookingEvent;
         static::$store['calendar'] = $booking->calendar;
         static::$store['host'] = $bookingEvent->getAuthorProfile(false);
+        static::$store['custom_booking_data'] = null;
+        static::$store['payment_order'] = null;
     }
 
     protected static function getBookingData($key)
@@ -98,7 +103,7 @@ class EditorShortCodeParser
         if ($key == 'reschedule_url') {
             return $booking->getRescheduleUrl();
         }
-        
+
         if ($key == 'admin_booking_url') {
             return Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         }
@@ -113,6 +118,24 @@ class EditorShortCodeParser
 
         if (property_exists($booking, $key)) {
             return $booking->{$key};
+        }
+
+        return '';
+    }
+
+    protected static function getBookingCustomData($key)
+    {
+        $booking = static::$store['booking'];
+        if (!$booking) {
+            return '';
+        }
+
+        if (self::$store['custom_booking_data'] === null) {
+            self::$store['custom_booking_data'] = $booking->getMeta('custom_fields_data', []);
+        }
+
+        if (self::$store['custom_booking_data']) {
+            return Arr::get(self::$store['custom_booking_data'], $key);
         }
 
         return '';
@@ -183,6 +206,64 @@ class EditorShortCodeParser
 
         if (property_exists($calendar, $key)) {
             return $calendar->{$key};
+        }
+
+        return '';
+    }
+
+    protected static function getPaymentData($key)
+    {
+        $booking = static::$store['booking'];
+
+        if (is_null($booking)) {
+            return '';
+        }
+
+        if (!$booking->payment_status) {
+            return '';
+        }
+
+        if (is_null(static::$store['payment_order'])) {
+            static::$store['payment_order'] = $booking->payment_order;
+        }
+
+        if (!static::$store['payment_order']) {
+            return '';
+        }
+
+        $order = static::$store['payment_order'];
+
+        if ($key == 'payment_total') {
+            $isZeroDecimal = CurrenciesHelper::isZeroDecimal($order->currency);
+            if ($isZeroDecimal) {
+                return $order->total_amount;
+            } else {
+                return $order->total_amount / 100;
+            }
+        }
+
+        if ($key == 'payment_status') {
+            return $order->status;
+        }
+
+        if ($key == 'payment_method') {
+            return $order->payment_method;
+        }
+
+        if ($key == 'payment_currency') {
+            return $order->currency;
+        }
+
+        if ($key == 'payment_date') {
+            return $order->created_at;
+        }
+
+        if ($key == 'receipt_html') {
+            return '';
+        }
+
+        if (property_exists($order, $key)) {
+            return $order->{$key};
         }
 
         return '';
@@ -259,6 +340,9 @@ class EditorShortCodeParser
             if (false !== strpos($match, 'guest.')) {
                 $guestProperty = substr($match, strlen('guest.'));
                 $value = static::getGuestData($guestProperty);
+            } else if (false !== strpos($match, 'booking.custom.')) {
+                $customBookingProp = substr($match, strlen('booking.custom.'));
+                $value = static::getBookingCustomData($customBookingProp);
             } elseif (false !== strpos($match, 'booking.')) {
                 $bookingProperty = substr($match, strlen('booking.'));
                 $value = static::getBookingData($bookingProperty);
@@ -271,6 +355,9 @@ class EditorShortCodeParser
             } elseif (false !== strpos($match, 'calendar.')) {
                 $calendarProperty = substr($match, strlen('calendar.'));
                 $value = static::getCalendarData($calendarProperty);
+            } else if (false !== strpos($match, 'payment.')) {
+                $paymentProperty = substr($match, strlen('payment.'));
+                $value = static::getPaymentData($paymentProperty);
             } else {
                 $value = static::getOtherData($match);
             }

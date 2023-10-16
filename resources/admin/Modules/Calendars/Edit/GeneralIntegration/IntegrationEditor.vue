@@ -351,7 +351,7 @@ export default {
         InfoFilled,
         'wp_editor': wpEditor
     },
-    props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro'],
+    props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro', 'smart_codes'],
     watch: {},
     data() {
         return {
@@ -365,7 +365,7 @@ export default {
             attachedForms: [],
             fromChainedAjax: false,
             refreshQuery: null,
-            editorShortcodes: this.appVars.editor_shortcodes
+            editorShortcodes: this.smart_codes.texts
         }
     },
     computed: {
