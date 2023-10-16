@@ -493,10 +493,10 @@ class CalendarController extends Controller
             'notifications' => $calendarEvent->getNotifications(true)
         ];
 
-        if(in_array('smart_codes', $request->get('with', []))) {
+        if (in_array('smart_codes', $request->get('with', []))) {
             $data['smart_codes'] = [
                 'texts' => Helper::getEditorShortCodes($calendarEvent),
-                'html' => Helper::getEditorShortCodes($calendarEvent, true)
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
             ];
         }
 
@@ -582,20 +582,24 @@ class CalendarController extends Controller
         ];
     }
 
-    public function deleteCalendarSlot(Request $request, $calendarId, $slotId)
+    public function deleteCalendarSlot(Request $request, $calendarId, $calendarEventId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $slot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($calendarEventId);
+
+        do_action('fluent_booking/before_delete_calendar_event', $calendarEvent, $calendar);
 
         // Let's delete all the events related to this slot
-        Booking::where('event_id', $slot->id)
+        Booking::where('event_id', $calendarEvent->id)
             ->where('calendar_id', $calendar->id)
             ->delete();
 
-        $slot->delete();
+        $calendarEvent->delete();
+
+        do_action('fluent_booking/after_delete_calendar_event', $calendarEventId, $calendar);
 
         return [
-            'message' => __('Slot has been deleted', 'fluent-booking')
+            'message' => __('Calendar Event has been deleted', 'fluent-booking')
         ];
     }
 
@@ -615,19 +619,10 @@ class CalendarController extends Controller
     public function deleteCalendar(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $slots = CalendarSlot::where('calendar_id', $calendar->id);
-        $bookings = Booking::where('calendar_id', $calendar->id);
-        $availability = Availability::where('object_id', $calendar->user_id);
-
-        // Let's delete all the data related to this caledar
-        $bookings->delete();
-
-        $slots->delete();
-
-        $availability->delete();
-
+        do_action('fluent_booking/before_delete_calendar', $calendar);
         $calendar->delete();
-
+        do_action('fluent_booking/after_delete_calendar', $calendarId);
+        
         return [
             'message' => __('Calendar Deleted Successfully!', 'fluent-booking')
         ];
