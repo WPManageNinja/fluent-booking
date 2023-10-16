@@ -69,3 +69,9 @@ add_action('init', function () {
     wp_redirect(admin_url('admin.php?page=fluent-booking#/'));
     exit();
 });
+
+add_shortcode('fluent_booking_receipt', function () {
+    return (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
+});
+
+//https://cart.test/?page_id=1053&hash=fa20e9ba79d07811e9e492ce85747983
