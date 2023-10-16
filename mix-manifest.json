@@ -1,6 +1,5 @@
 {
     "/assets/public/js/app.js": "/assets/public/js/app.js",
     "/assets/public/js/widget.js": "/assets/public/js/widget.js",
-    "/assets/public/js/fluentform.js": "/assets/public/js/fluentform.js",
-    "/assets/public/js/public-manage-meeting.js": "/assets/public/js/public-manage-meeting.js"
+    "/assets/public/js/fluentform.js": "/assets/public/js/fluentform.js"
 }

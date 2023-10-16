@@ -23,6 +23,12 @@
                     </el-radio-group>
                 </div>
                 <div class="fcal_section_actions">
+                    <el-input
+                        v-model="filters.search"
+                        @keydown="fetchSchedules"
+                        clearable
+                        placeholder="Search Booking" />
+
                     <el-select v-if="filters.author == 'me'"
                         v-model="filters.event_type"
                         class="fcal_select"
@@ -165,7 +171,8 @@ export default {
             filters: {
                 period: 'upcoming',
                 author: 'me',
-                event_type: 'all'
+                event_type: 'all',
+                search: ''
             },
             pagination: {
                 total: 0,
@@ -187,7 +194,8 @@ export default {
             pendingCount: 0,
             cancelledCount: 0,
             isHideSidebar: false,
-            currentEventTitle: ''
+            currentEventTitle: '',
+            search: ''
         }
     },
     computed: {

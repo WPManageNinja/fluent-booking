@@ -39,7 +39,7 @@ class PaymentHelper
         $total = 0;
         $template = '';
         if (count($items) === 1) {
-            $template .= '<p class="fcal_payment_item_single">XXXXX'.$items[0]['title'] . ': ' . '<span class="amount">' . $sign . $items[0]['value'] . '</span>' . '</p>';
+            $template .= '<p class="fcal_payment_item_single">'.$items[0]['title'] . ': ' . '<span class="amount">' . $sign . $items[0]['value'] . '</span>' . '</p>';
             $total = $items[0]['value'];
         } else {
             $template = '<table>';
