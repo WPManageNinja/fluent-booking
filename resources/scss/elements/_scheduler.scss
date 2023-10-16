@@ -537,6 +537,10 @@
             font-size: 12px;
             margin: 0;
             font-weight: 500;
+            &.no_show {
+              color: #ff8f3c;
+              background: rgb(255 143 60 / 15%);
+            }
           }
           .fcal_spot_payment_status {
             &.paid {
@@ -626,14 +630,16 @@
 
           .fcal_spot_happening {
             display: block;
-            width: 100%;
+
 
             span {
-              padding: 3px 10px;
-              font-size: 10px;
-              background: black;
+              background: $dark;
               color: white;
-              border-radius: 3px;
+              border-radius: 6px;
+              padding: 2px 10px;
+              font-size: 12px;
+              display: block;
+              line-height: 18px;
 
               &.fcal_happening_now {
                 background: red;
@@ -2705,6 +2711,12 @@
       align-content: flex-start;
       padding: 14px 0 14px 32px;
       position: relative;
+      &.cancel_reason {
+        .fcal_activity_complete_icon {
+          background: var(--el-color-danger);
+          border-color: rgb(247 190 190);
+        }
+      }
 
       &:last-child {
         &:before {

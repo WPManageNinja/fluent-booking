@@ -19,8 +19,8 @@
                 </el-button>
             </div>
         </div>
-        <div class="fcal_settings_body" style="min-height: calc(100vh - 320px);">
-            <el-skeleton v-if="loading" animated :rows="3"></el-skeleton>
+        <div v-if="global_enabled" class="fcal_settings_body" style="min-height: calc(100vh - 320px);">
+            <el-skeleton v-if="loading && !paymentSettings.enabled" animated :rows="3"></el-skeleton>
             <el-form v-else :model="paymentSettings" label-position="top">
                 <el-form-item>
                     <el-checkbox true-label="yes" false-label="no" v-model="paymentSettings.enabled">
@@ -30,7 +30,8 @@
                 <template v-if="paymentSettings.enabled === 'yes'">
                     <el-form-item label="Booking Payment Items">
                         <div>
-                            <el-row style="margin-bottom: 20px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
+                            <el-skeleton v-if="loading" animated />
+                            <el-row v-else style="margin-bottom: 20px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
                                 <el-col :span="14">
                                     <el-input placeholder="Item Name" v-model="item.title"></el-input>
                                 </el-col>
@@ -39,8 +40,8 @@
                                         <template #prepend>{{ appVars.currency_sign }}</template>
                                     </el-input>
                                 </el-col>
-                                <el-col :span="2">
-                                      <span v-if="index > 0" @click="()=>{ paymentSettings.items.splice(index, 1); }" style="cursor: pointer; font-weight: bold;">
+                                <el-col :span="2" class="action_btn">
+                                      <span v-if="index > 0" @click="()=>{ paymentSettings.items.splice(index, 1); }">
                                            <el-icon><Delete/></el-icon>
                                       </span>
                                 </el-col>
@@ -55,6 +56,9 @@
                     </el-form-item>
                 </template>
             </el-form>
+        </div>
+        <div v-if="!global_enabled" class="fcal_settings_body">
+            <p v-if="!paymentSettings" class="fcal_empty_text">In order to see this setting, you need to enable global Stripe payment first from the <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">Settings Page.<span class="anim-icon">👈</span></router-link></p>
         </div>
     </div>
 </template>

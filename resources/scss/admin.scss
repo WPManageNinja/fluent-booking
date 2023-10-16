@@ -146,7 +146,7 @@
       }
 
       .fcal_schedules {
-        max-height: 85vh;
+        max-height: calc(100% - 10px);
         overflow-y: scroll;
 
         &::-webkit-scrollbar {
@@ -969,7 +969,7 @@
     }
   }
 
-  .ff_merge_fields {
+  .fcal_merge_fields {
     width: 100% !important;
   }
 }

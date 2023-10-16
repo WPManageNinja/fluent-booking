@@ -28,14 +28,14 @@
                         </el-row>
                         <el-row>
                           <el-form-item label="Calendar start from">
-                          <el-select v-model="administration.start_day" class="m-2" placeholder="Select" size="large">
-                            <el-option
-                                v-for="item in weekdays"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
-                          </el-select>
+                              <el-select v-model="administration.start_day" popper-class="fcal_select" placeholder="Select">
+                                <el-option
+                                    v-for="item in weekdays"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                />
+                              </el-select>
                           </el-form-item>
                         </el-row>
 
