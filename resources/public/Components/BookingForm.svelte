@@ -64,6 +64,7 @@
                     </div>
                 {/if}
             {/each}
+
             <!--{/if}-->
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">

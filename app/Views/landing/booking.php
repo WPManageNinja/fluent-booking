@@ -38,22 +38,13 @@ use FluentBooking\App\Models\Booking;
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
     <meta property="og:author" content="<?php echo $author['name']; ?>">
 
-    <meta property="og:image" content=""/>
-
-    <?php
-    //    $feature_image = '';
-    //    if ($author['featured_image']) {
-    //        $feature_image = $author['featured_image'];
-    //    } else {
-    //        $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
-    //    }
-    ?>
-    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL . 'assets/images/default-featured.png'; ?>"/>
-
     <?php foreach ($css_files as $css_file): ?>
         <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>"
               media="screen"/>
     <?php endforeach; ?>
+
+    <?php do_action('fluent_booking/author_landing_head', $calendar_event); ?>
+
 </head>
 <body>
 
@@ -75,5 +66,7 @@ use FluentBooking\App\Models\Booking;
 <?php foreach ($js_files as $file): ?>
     <script src="<?php echo $file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" defer="defer"></script>
 <?php endforeach; ?>
+
+<?php do_action('fluent_booking/author_landing_footer', $calendar_event); ?>
 </body>
 </html>
