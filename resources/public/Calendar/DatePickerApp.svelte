@@ -1,17 +1,15 @@
 <script>
     import {util, i18} from '../util';
+    import Calendar from "./Calendar.svelte";
     import {Pulse} from 'svelte-loading-spinners';
     import TimeZoneSelector from "./TimezoneSelector.svelte";
-
+    import {createEventDispatcher, onMount} from 'svelte';
 
     export let slot;
     export let settings;
     export let timezone;
     export let appData;
-
-    import Calendar from "./Calendar.svelte";
-    import {createEventDispatcher, onMount} from 'svelte';
-
+    
     const isFluentform = appData.is_fluentform;
 
     const id = appData.id;
@@ -289,7 +287,6 @@
                 </div>
             </div>
             <Calendar
-                isLoadingDates="{true}"
                 selectedDate="{selectedDate}"
                 {headers}
                 {days}
@@ -298,7 +295,7 @@
 
             <div class="fcal_timezone_select">
                 <label for="fcal_timezone_selector">{i18('Timezone')}</label>
-                <TimeZoneSelector placeholder="Select Timezone" bind:timezone={timezone}/>
+                <TimeZoneSelector bind:timezone={timezone}/>
             </div>
         </div>
 
