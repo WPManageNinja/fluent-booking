@@ -134,7 +134,7 @@
                                 placeholder="Select Value"
                                 popper-class="fcal_select"
                             >
-                                <el-option-group v-for="(group, groupKey) in editorShortcodes"
+                                <el-option-group v-for="(group, groupKey) in smart_codes.texts"
                                                  :key="groupKey"
                                                  :label="group.title">
                                     <el-option
@@ -207,6 +207,15 @@ export default {
         calendar_event: {
             type: Object,
             required: true
+        },
+        smart_codes: {
+            type: Object,
+            default() {
+                return {
+                    texts: {},
+                    html: {}
+                };
+            }
         }
     },
     components: {
@@ -219,8 +228,7 @@ export default {
             settings: this.editing_feed.settings,
             request_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             saving: false,
-            webhook_id: null,
-            editorShortcodes: this.appVars.editor_shortcodes,
+            webhook_id: null
         }
     },
     methods: {

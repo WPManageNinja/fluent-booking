@@ -22,59 +22,62 @@
         <div class="fcal_section_body">
             <el-skeleton v-if="loading" :animated="true" :rows="5"></el-skeleton>
             <div v-else class="fcal_card_items">
-                <div v-for="availability in availabilities" :key="availability.id" class="fcal_card_item">
-                    <div @click="gotoDetails(availability)" class="fcal_card_wrap">
-                        <div class="fcal_card_item_details fcal_availability_card">
-                            <h4>
-                                {{ availability.title }}
-                                <span v-if="availability.settings?.default && filters.author == 'me'"
-                                      class="default-schedule-badge">
+                <template v-if="availabilities.length">
+                    <div v-for="availability in availabilities" :key="availability.id" class="fcal_card_item">
+                        <div @click="gotoDetails(availability)" class="fcal_card_wrap">
+                            <div class="fcal_card_item_details fcal_availability_card">
+                                <h4>
+                                    {{ availability.title }}
+                                    <span v-if="availability.settings?.default && filters.author == 'me'"
+                                          class="default-schedule-badge">
                                     <el-icon><StarFilled/></el-icon> Default
                                 </span>
-                            </h4>
-                            <p class="fcal_human_text" v-html="formatAvailability(availability.settings.weekly_schedules)"></p>
-                            <p class="fcal_icon_line">
-                                <el-icon>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="h-3.5 w-3.5">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="2" x2="22" y1="12" y2="12"></line>
-                                        <path
-                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                    </svg>
-                                </el-icon>
-                                <span>{{ availability.settings?.timezone }}</span>
-                            </p>
-                            <p class="fcal_icon_line">
-                                <el-icon>
-                                    <Location/>
-                                </el-icon>
-                                <span v-if="availability.usage_count">{{ availability.usage_count }} calendar events are using this schedule</span>
-                                <span v-else>No events are using this schedule</span>
-                            </p>
+                                </h4>
+                                <p class="fcal_human_text" v-html="formatAvailability(availability.settings.weekly_schedules)"></p>
+                                <p class="fcal_icon_line">
+                                    <el-icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="h-3.5 w-3.5">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="2" x2="22" y1="12" y2="12"></line>
+                                            <path
+                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                        </svg>
+                                    </el-icon>
+                                    <span>{{ availability.settings?.timezone }}</span>
+                                </p>
+                                <p class="fcal_icon_line">
+                                    <el-icon>
+                                        <Location/>
+                                    </el-icon>
+                                    <span v-if="availability.usage_count">{{ availability.usage_count }} calendar events are using this schedule</span>
+                                    <span v-else>No events are using this schedule</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="fcal_card_actions">
+                            <el-dropdown trigger="click" popper-class="fcal_select">
+                                <el-icon class="el-dropdown-link"><MoreFilled /></el-icon>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item v-if="!availability.settings?.default && filters.author == 'me'"
+                                                          @click="updateDefaultStatus(availability.id)">
+                                            <el-icon><StarFilled /></el-icon> Set as Default
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="cloneAvailability(availability)">
+                                            <el-icon><CopyDocument /></el-icon> Duplicate
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="deleteAvailability(availability.id)">
+                                            <el-icon><Delete /></el-icon> Delete
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
                         </div>
                     </div>
-                    <div class="fcal_card_actions">
-                        <el-dropdown trigger="click" popper-class="fcal_select">
-                            <el-icon class="el-dropdown-link"><MoreFilled /></el-icon>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item v-if="!availability.settings?.default && filters.author == 'me'"
-                                        @click="updateDefaultStatus(availability.id)">
-                                        <el-icon><StarFilled /></el-icon> Set as Default
-                                    </el-dropdown-item>
-                                    <el-dropdown-item @click="cloneAvailability(availability)">
-                                        <el-icon><CopyDocument /></el-icon> Duplicate
-                                    </el-dropdown-item>
-                                    <el-dropdown-item @click="deleteAvailability(availability.id)">
-                                        <el-icon><Delete /></el-icon> Delete
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
-                    </div>
-                </div>
+                </template>
+                <el-empty class="fcal_empty" v-else description="No Availability found"/>
             </div>
             <div class="fcal_right fcal_tm20">
                 <pagination :pagination="pagination" @fetch="fetchAvailabilities"/>
