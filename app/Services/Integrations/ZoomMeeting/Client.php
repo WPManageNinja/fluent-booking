@@ -91,7 +91,6 @@ class Client
 
     public function createMeeting($data)
     {
-
         $header = [];
         $header['Authorization'] = 'Bearer ' . $this->accessToken;
         $header['content-type'] = 'application/json';
@@ -99,6 +98,27 @@ class Client
         $url = 'https://api.zoom.us/v2/users/me/meetings';
         $data = json_encode($data);
         return $this->makeRequest($url, $data, 'POST', $header);
+    }
+
+    public function patchMeeting($meetingId, $data)
+    {
+        $header = [];
+        $header['Authorization'] = 'Bearer ' . $this->accessToken;
+        $header['content-type'] = 'application/json';
+
+        $url = 'https://api.zoom.us/v2/meetings/' . $meetingId;
+        $data = json_encode($data);
+        return $this->makeRequest($url, $data, 'PATCH', $header);
+    }
+
+    public function deleteMeeting($meetingId)
+    {
+        $header = [];
+        $header['Authorization'] = 'Bearer ' . $this->accessToken;
+        $header['content-type'] = 'application/json';
+
+        $url = 'https://api.zoom.us/v2/meetings/' . $meetingId;
+        return $this->makeRequest($url, '', 'DELETE', $header);
     }
 
     public function makeRequest($url, $body = null, $type = 'GET', $headers = null)

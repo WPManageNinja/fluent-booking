@@ -208,6 +208,8 @@ export default {
                 this.slot.location_settings[index].title = 'Organizer Phone Number';
             } else if (location.type == 'online_meeting') {
                 this.slot.location_settings[index].title = 'Online Meeting';
+            } else {
+                return;
             }
             
             this.dialogVisible = true;

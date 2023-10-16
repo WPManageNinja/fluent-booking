@@ -38,6 +38,8 @@ class Bootstrap
          * Booking Level Hooks
          */
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 10, 2);
+        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeCancelZoomMeeting'], 10, 1);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'maybeRescheduleZoomMeeting'], 10, 1);
 
         /*
          * Location Hooks
@@ -294,9 +296,78 @@ class Bootstrap
         exit;
     }
 
-    public function maybeCreateZoomMeeting($booking, $calendarSlot)
+    public function maybeCancelZoomMeeting($booking)
     {
         if (Arr::get($booking->location_details, 'type') !== 'zoom_meeting') {
+            return false; // not our location
+        }
+
+        if ('cancelled' != Arr::get($booking, 'status')) {
+            return false;
+        }
+
+        $calendar = Calendar::where('id', $booking->calendar_id)->first();
+
+        if (!$calendar || !ZoomHelper::isConfigured()) {
+            return;
+        }
+
+        $config = ZoomHelper::getAccessConfig($calendar);
+
+        if (!$config || empty($config['access_token'])) {
+            return;
+        }
+
+        $bookingExist = Booking::where('group_id', $booking->group_id)->count();
+
+        if ($bookingExist > 1) {
+            $this->updateAttendees($calendar,$booking);
+            return;
+        }
+
+        $bookingMeta = $booking->getMeta('__zoom_meeting_details');
+
+        if (!$bookingMeta) {
+            return false; // Nothing to cancel as there is no previous record
+        }
+
+        $meetingId = Arr::get($bookingMeta, 'id');
+        
+        $this->deleteZoomMeeting($calendar, $booking, $meetingId);
+    }
+
+    public function maybeRescheduleZoomMeeting($updatedBooking)
+    {
+        if (Arr::get($updatedBooking, 'location_details.type') !== 'zoom_meeting') {
+            return false; // not our location
+        }
+
+        $calendar = Calendar::where('id', $updatedBooking->calendar_id)->first();
+
+        if (!$calendar || !ZoomHelper::isConfigured()) {
+            return;
+        }
+
+        $config = ZoomHelper::getAccessConfig($calendar);
+
+        if (!$config || empty($config['access_token'])) {
+            return;
+        }
+
+        $bookingMeta = $updatedBooking->getMeta('__zoom_meeting_details');
+
+        if (!$bookingMeta) {
+            return false; // Nothing to cancel as there is no previous record
+        }
+
+        $data['start_time'] = date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time));
+
+        $this->updateZoomMeeting($calendar, $updatedBooking, $bookingMeta, $data);   
+    }
+
+    public function maybeCreateZoomMeeting($booking, $calendarSlot)
+    {
+        if (Arr::get($booking, 'location_details.type') !== 'zoom_meeting') {
             return false; // not our location
         }
 
@@ -311,8 +382,18 @@ class Bootstrap
             return;
         }
 
-        if ($booking->getMeta('__zoom_meeting_details')) {
+        $bookingMeta = $booking->getMeta('__zoom_meeting_details');
+        
+        if ($bookingMeta) {
             return false; // Already created
+        }
+
+        // Handling Group Meeting
+        $bookingExist = Booking::where('group_id', $booking->group_id)->count();
+
+        if ($bookingExist > 1) {
+            $this->updateAttendees($calendar, $booking);
+            return;
         }
 
         // let's prepare the booking data
@@ -372,6 +453,121 @@ class Bootstrap
             'type'        => 'success',
             'title'       => __('Zoom Meeting has been created', 'fluent-booking'),
             'description' => __(sprintf('Zoom Meeting has been scheduled. %s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking') . '</a>'), 'fluent-booking')
+        ]);
+
+        return true;
+    }
+
+    private function updateAttendees($calendar, $booking)
+    {
+        $existingBooking = Booking::where('group_id', $booking->group_id)->first();
+
+        $bookingMeta = $existingBooking->getMeta('__zoom_meeting_details');
+
+        if (!$bookingMeta) {
+            return false;
+        }
+
+        $attendeesEmails = Booking::where('group_id', $booking->group_id)
+            ->where('status', 'scheduled')
+            ->pluck('email')
+            ->toArray();
+
+        $attendees = [];
+        foreach ($attendeesEmails as $email) {
+            $attendees[] = ['email' => $email];
+        }
+        
+        $data = [
+            'settings'     => [
+                'meeting_invitees' => $attendees
+            ],
+        ];
+
+        $this->updateZoomMeeting($calendar, $booking, $bookingMeta, $data);
+    }
+
+    public function updateZoomMeeting($calendar, $booking, $bookingMeta, $data)
+    {
+        $api = ZoomHelper::getCalendarApiClient($calendar);
+
+        if (is_wp_error($api)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __(sprintf('Failed to update meeting with Zoom API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $meetingId = Arr::get($bookingMeta, 'id');
+
+        $response = $api->patchMeeting($meetingId, $data);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __('Failed to update meeting with Zoom API', 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $location = $booking->location_details;
+        $location['online_platform_link'] = Arr::get($bookingMeta, 'join_url');
+        $location['online_platform_start_link'] = Arr::get($bookingMeta, 'start_url');
+        $booking->location_details = $location;
+        $booking->save();
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Zoom Meeting has been updated', 'fluent-booking'),
+            'description' => __('Zoom Meeting has been updated', 'fluent-booking')
+        ]);
+
+        return true;
+    }
+
+    public function deleteZoomMeeting($calendar, $booking, $meetingId)
+    {
+        $api = ZoomHelper::getCalendarApiClient($calendar);
+
+        if (is_wp_error($api)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __(sprintf('Failed to update meeting with Zoom API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        $response = $api->deleteMeeting($meetingId);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => 'Zoom API Error',
+                'description' => __('Failed to delete meeting with Zoom API', 'fluent-booking')
+            ]);
+            return false;
+        }
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Zoom Meeting has been deleted', 'fluent-booking'),
+            'description' => __('Zoom Meeting has been deleted', 'fluent-booking')
         ]);
 
         return true;
