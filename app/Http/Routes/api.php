@@ -39,7 +39,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/slots/{event_id}', 'CalendarController@getSlot')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('event_id');
     $router->put('/{id}/slots/{event_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('event_id');
-    $router->delete('/{id}/slots/{event_id}', 'CalendarController@deleteCalendarSlot')->int('id')->int('event_id');
+    $router->delete('/{id}/slots/{event_id}', 'CalendarController@deleteCalendarEvent')->int('id')->int('event_id');
 
     $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
