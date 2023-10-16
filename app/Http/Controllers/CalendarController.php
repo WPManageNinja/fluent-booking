@@ -62,7 +62,6 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-
         $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
             'author_timezone'                            => 'required',
             'slot.duration'                              => 'required|int',
@@ -134,16 +133,16 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
+        $weeklySchedule = Arr::get($data, 'slot.weekly_schedules');
+
         $defaultSchedule = AvailabilityService::createScheduleSchema(
-            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone
+            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone, 'UTC', $weeklySchedule
         );
 
         $availability = Availability::create($defaultSchedule);
 
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
-
-        $locationSettings = $request->get('location');
 
         $slotData = [
             'title'             => $title,
@@ -163,7 +162,7 @@ class CalendarController extends Controller
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep($locationSettings),
+            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));

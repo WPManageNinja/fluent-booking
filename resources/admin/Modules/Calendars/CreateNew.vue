@@ -29,7 +29,7 @@
                     </el-form-item>
                 </div>
 
-                <div v-if="step==2 && is_board" class="fcal_onboard_step step-2">
+                <div v-if="step==2" class="fcal_onboard_step step-2">
                     <WeeklySchedules
                         :weekly_schedules="calendar.slot?.weekly_schedules"
                         title="Weekly Hours"
@@ -38,10 +38,9 @@
             </div>
 
             <div class="fcal_create_calendar_form_footer">
-                <el-button v-if="step==1 && is_board" class="fcal_primary_btn" @click="handleStep(2)">Continue</el-button>
-                <el-button v-if="step==2 && is_board" class="fcal_plain_btn" @click="handleStep(1)">Back</el-button>
+                <el-button v-if="step==1" class="fcal_primary_btn" @click="handleStep(2)">Continue</el-button>
+                <el-button v-if="step==2" class="fcal_plain_btn" @click="handleStep(1)">Back</el-button>
                 <SaveButton v-if="step==2" :saving="saving" label="Continue" @save="createCalendar"/>
-                <SaveButton v-if="!is_board" :saving="saving" label="Continue" @save="createCalendar"/>
             </div>
         </div>
     </div>
@@ -50,7 +49,6 @@
 <script type="text/babel">
 import WeeklySchedules from './parts/WeeklySchedules.vue';
 import TimeZoneSelector from './parts/TimeZoneSelector.vue';
-import LocationSelector from './Edit/_LocationSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
 import { Right, Back } from '@element-plus/icons-vue';
@@ -64,7 +62,6 @@ export default {
         PartyIcon,
         WeeklySchedules,
         TimeZoneSelector,
-        LocationSelector,
         HostSelector,
         SaveButton,
         Right,
@@ -122,7 +119,6 @@ export default {
             this.updateMeetingDuration();
             this.$post('calendars', {
                 calendar: this.calendar,
-                location: this.getSlotLocation()
             })
                 .then(response => {
                     this.redirectToSetting(response.calendar.id, response.slot.id); 
@@ -139,11 +135,6 @@ export default {
                 name: 'slot_settings',
                 params: { calendar_id: calendarId, event_id: slotId }
             });
-            if (this.appVars.is_new) {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 150);
-            }
         },
         checkValidattion() {
             const location = this.calendar.slot.location_settings[0];
@@ -165,14 +156,6 @@ export default {
         updateMeetingDuration() {
             const duration = this.calendar.slot.duration;
             this.calendar.slot.duration = duration === 'custom' ? this.calendar.slot.custom_duration : duration;
-        },
-        getSlotLocation() {
-            return [{
-                type: this.calendar.slot.location_settings[0].type,
-                title: this.calendar.slot.location_settings[0].title,
-                description: this.calendar.slot.location_settings[0].description,
-                host_phone_number: this.calendar.slot.location_settings[0].host_phone_number
-            }]
         },
         checkSlug() {
             if (!this.calendar.slug) {
@@ -214,7 +197,6 @@ export default {
         },
         handleStep(index) {
             this.step = index;
-            console.log(this.step);
             if (this.step == 1) {
                 this.headerTitle = 'Create a new booking calendar';
             } else if (this.step == 2) {
