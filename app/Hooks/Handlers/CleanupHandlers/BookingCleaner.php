@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Hooks\Handlers\CleanupHandlers;
 
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\BookingHost;
 use FluentBooking\App\Models\BookingMeta;
 use FluentBooking\App\Models\Order;
@@ -23,6 +24,7 @@ class BookingCleaner
 
         BookingMeta::query()->where('booking_id', $booking->id)->delete();
         BookingHost::query()->where('booking_id', $booking->id)->delete();
+        BookingActivity::query()->where('booking_id', $booking->id)->delete();
 
         $order = Order::query()
             ->where('parent_id', $booking->id)
