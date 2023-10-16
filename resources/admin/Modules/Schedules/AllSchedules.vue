@@ -202,6 +202,7 @@ export default {
             },
             pendingCount: 0,
             cancelledCount: 0,
+            noShowCount: 0,
             isHideSidebar: false,
             currentEventTitle: '',
             search: ''
@@ -245,7 +246,7 @@ export default {
         },
         currentPeriod() {
             const period = this.filters.period;
-            return period.charAt(0).toUpperCase() + period.slice(1);;
+            return period.charAt(0).toUpperCase() + period.slice(1);
         },
         statusFilters() {
             const statuses = {
@@ -259,6 +260,9 @@ export default {
 
             if(this.cancelledCount) {
                 statuses.cancelled = 'Cancelled';
+            }
+            if(this.noShowCount) {
+                statuses.no_show = 'No Show';
             }
 
             statuses.latest_bookings = 'Latest Bookings';
@@ -285,6 +289,9 @@ export default {
                     }
                     if(response.cancelled_count) {
                         this.cancelledCount = response.cancelled_count;
+                    }
+                    if(response.no_show_count) {
+                        this.noShowCount = response.no_show_count;
                     }
                     if(response.slotOptions) {
                         this.event_types = response.slotOptions;

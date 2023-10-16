@@ -2,7 +2,7 @@
     <div class="fcal_edit_integration">
         <h3 class="fcal_title">{{ title }}</h3>
 
-        <el-form v-if="!loading_app" label-position="top">
+        <el-form v-if="!loading_app" label-position="top" class="fcal_webhook_form">
             <template v-for="(field, fieldIndex) in settings_fields?.fields">
                 <el-form-item
                     :class="'ff_field_' + field.component"
@@ -36,7 +36,9 @@
                             v-loading="loading_list"
                             @change="loadMergeFields()"
                             v-model="settings.list_id"
-                            :placeholder="field.placeholder">
+                            :placeholder="field.placeholder"
+                            popper-class="fcal_select"
+                        >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
                                 :key="list_key"
@@ -52,7 +54,9 @@
                             v-loading="loading_list"
                             @change="refresh()"
                             v-model="settings.list_id"
-                            :placeholder="field.placeholder">
+                            :placeholder="field.placeholder"
+                            popper-class="fcal_select"
+                        >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
                                 :key="list_key"
@@ -69,7 +73,9 @@
                             clearable
                             :multiple="field.is_multiple"
                             v-model="settings[field.key]"
-                            :placeholder="field.placeholder">
+                            :placeholder="field.placeholder"
+                            popper-class="fcal_select"
+                        >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
                                 :key="list_key"

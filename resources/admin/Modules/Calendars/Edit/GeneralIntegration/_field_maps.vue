@@ -1,6 +1,6 @@
 <template>
-    <div class="ff_merge_fields">
-        <table v-if="appReady" class="ff_inner_table w-100">
+    <div class="fcal_merge_fields">
+        <table v-if="appReady" class="fcal_table">
             <thead>
                 <tr>
                     <th class="text-left" width="50%">{{field.field_label_remote}}</th>
@@ -22,6 +22,7 @@
                                 :placeholder="$t('Select a Field')"
                                 style="width:100%"
                                 clearable
+                                popper-class="fcal_select"
                             >
                                 <el-option
                                     value="{{guest.email}}"
@@ -44,6 +45,7 @@
                                 :placeholder="$t('Select a Field')"
                                 style="width:100%"
                                 clearable
+                                popper-class="fcal_select"
                             >
                                 <el-option
                                     v-for="(option, index) in inputs"

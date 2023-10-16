@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown_label_repeater">
-        <table v-if="!loading" class="ff-table">
+        <table v-if="!loading" class="fcal_table">
             <thead>
             <tr>
                 <th>{{field.field_label || 'Field Label'}}</th>
