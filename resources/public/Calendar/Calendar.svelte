@@ -4,7 +4,7 @@
     {/each}
     {#each days as day}
         {#if day.enabled}
-            <span role="button" aria-label="Select Day {day.name}" class="day day-enabled { (selectedDate === day.date) ? 'day_is_selected' : ''}" on:keypress={()=>daySelected(day)} on:click={()=>daySelected(day)}>
+            <span role="button" tabindex="0" aria-label="Select Day {day.name}" class="day day-enabled { (selectedDate === day.date) ? 'day_is_selected' : ''}" on:keypress={()=>daySelected(day)} on:click={()=>daySelected(day)}>
                 <span>{day.name}</span>
             </span>
         {:else}

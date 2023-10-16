@@ -319,7 +319,7 @@
                     {#each daySlots as day}
                         <div
                             class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
-                            <div role="button" aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
+                            <div role="button" tabindex="0" aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
                                  on:keypress="{(e) => {selectedDateTime = day}}"
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
