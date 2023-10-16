@@ -138,15 +138,15 @@ class BookingFieldService
             $existingFields[$name] = $dbField;
         }
 
-        if(empty($defaultFields['location'])) {
+        if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
         }
 
-        if(empty($defaultFields['phone_number'])) {
+        if (empty($defaultFields['phone_number'])) {
             unset($existingFields['phone_number']);
         }
 
-        if(empty($defaultFields['address'])) {
+        if (empty($defaultFields['address'])) {
             unset($existingFields['address']);
         }
 
@@ -189,12 +189,16 @@ class BookingFieldService
         return array_values($existingFields);
     }
 
-    public static function getBookingFieldLabels(CalendarSlot $calendarSlot)
+    public static function getBookingFieldLabels(CalendarSlot $calendarSlot, $enabledOnly = false)
     {
         $fields = self::getBookingFields($calendarSlot);
         $labels = [];
 
         foreach ($fields as $field) {
+            if ($enabledOnly && !Arr::isTrue($field, 'enabled')) {
+                continue;
+            }
+
             $labels[$field['name']] = $field['label'];
         }
 

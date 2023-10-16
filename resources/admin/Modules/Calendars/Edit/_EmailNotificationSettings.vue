@@ -40,7 +40,7 @@
             class="fcal_modal fcal_notification_modal"
             :close-on-click-modal="false"
         >
-            <EditNotificationSettings v-if="editingNotification.email" :notification="editingNotification"/>
+            <EditNotificationSettings :smart_codes="smart_codes" v-if="editingNotification.email" :notification="editingNotification"/>
             <template #footer>
                 <div class="dialog-footer">
                     <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
@@ -80,7 +80,11 @@ export default {
             notifications: {},
             loading: false,
             saving: false,
-            stepIndex: 3
+            stepIndex: 3,
+            smart_codes: {
+                texts: {},
+                html: {}
+            }
         }
     },
     methods: {
@@ -100,11 +104,12 @@ export default {
         },
         fetch() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/notifications', {
+            this.$get('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/email-notifications', {
                 with: ['smart_codes']
             })
                 .then(response => {
                     this.notifications = response.notifications;
+                    this.smart_codes = response.smart_codes;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -115,7 +120,7 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/notifications', {
+            this.$post('calendars/' + this.calendar_event.calendar.id + '/slots/' + this.calendar_event.id + '/email-notifications', {
                 notifications: this.notifications
             })
                 .then(response => {

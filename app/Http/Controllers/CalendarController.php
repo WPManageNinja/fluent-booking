@@ -478,9 +478,10 @@ class CalendarController extends Controller
 
     }
 
-    public function getSlotNotifications(Request $request, $calendarId, $slotId)
+    public function getSlotEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
 
         /*
          * Confirmation Email to Attendee
@@ -489,12 +490,21 @@ class CalendarController extends Controller
          * Cancelled By Organizer to Attendee
          * Cancelled By Attendee to Organizer
          */
-        return [
+        $data = [
             'notifications' => $calendarEvent->getNotifications(true)
         ];
+
+        if(in_array('smart_codes', $request->get('with', []))) {
+            $data['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html' => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
+        }
+
+        return $data;
     }
 
-    public function saveSlotNotifications(Request $request, $calendarId, $slotId)
+    public function saveSlotEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
