@@ -274,13 +274,13 @@
                     <h3>{monthNames[month]} <span>{year}</span></h3>
                 </div>
                 <div class="calendar_nav">
-                    <button type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
+                    <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                         </svg>
                     </button>
-                    <button type="button" class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
+                    <button aria-label="Next Month" type="button" class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
@@ -322,7 +322,7 @@
                     {#each daySlots as day}
                         <div
                             class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
-                            <div aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
+                            <div role="button" aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
                                  on:keypress="{(e) => {selectedDateTime = day}}"
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
