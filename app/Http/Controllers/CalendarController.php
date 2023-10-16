@@ -335,7 +335,7 @@ class CalendarController extends Controller
             'color_schema'      => '#0099ff',
             'calendar'          => $calendar,
             'settings'          => $settingsSchema,
-            'max_book_per_slot' => 2,
+            'max_book_per_slot' => 1,
             'location_settings' => [
                 [
                     'type'              => '',
