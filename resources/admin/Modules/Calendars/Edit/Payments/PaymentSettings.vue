@@ -58,7 +58,7 @@
             </el-form>
         </div>
         <div v-if="!global_enabled" class="fcal_settings_body">
-            <p v-if="!paymentSettings" class="fcal_empty_text">In order to see this setting, you need to enable global Stripe payment first from the <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">Settings Page.<span class="anim-icon">👈</span></router-link></p>
+            <p class="fcal_empty_text">In order to see this setting, you need to enable global Stripe payment first from the <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">Settings Page.<span class="anim-icon">👈</span></router-link></p>
         </div>
     </div>
 </template>
