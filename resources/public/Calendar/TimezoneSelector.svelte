@@ -3,7 +3,6 @@
     
     export let timezone;
     
-    const optionIdentifier = 'value';
     const timezones = window.fluentCalendarPublicVars.timezones;
 
     const groupBy = (item) => item.group;
@@ -20,11 +19,15 @@
         strategy: 'fixed',
     }
 
+    const inputAtts = {
+        id: 'fcal_timezone_selector'
+    }
+
 </script>
 
 <Select on:input={handleTimeZoneChange} {groupBy}
+        id="fcal_timezone_selector"
     {floatingConfig}
-    {optionIdentifier}
     clearable={false}
     value={timezone}
     items={timezones}
