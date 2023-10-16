@@ -121,9 +121,6 @@ export default {
         },
         isMandatoryField(name) {
             const allowedFields = ['name', 'email', 'message', 'address', 'location'];
-            if (this.isPhoneRequired) {
-                allowedFields.push('phone');
-            }
             return allowedFields.includes(name);
         },
         moveUp(index) {
