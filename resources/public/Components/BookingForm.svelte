@@ -125,7 +125,7 @@
     const currentUrl = window.location.href;
 
     function hasPaymentItem() {
-        return appData?.payment_items ?? false;
+        return !!(appData?.payment_items && appData?.payment_methods?.template);
     }
 
     let getSubTotal = (items) => {
