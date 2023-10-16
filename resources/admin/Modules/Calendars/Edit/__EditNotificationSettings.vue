@@ -3,7 +3,7 @@
         <el-form-item label="Subject">
             <popover
                 groupTitle="Shortcodes"
-               :data="editorShortcodes"
+               :data="smart_codes.texts"
                 placement="bottom-end"
                 :isVisible="subjectPopupVisible"
                 class="fcal_popover_shortcode"
@@ -25,7 +25,7 @@
                     v-if="hasWpEditor"
                     class="popover-wrapper"
                     groupTitle="Shortcodes"
-                    :data="editorShortcodesHtml"
+                    :data="smart_codes.html"
                     :isVisible="bodyPopupVisible"
                     @command="handleBodyCommand">
                     <template #popoverButton>
@@ -100,14 +100,21 @@ export default {
                 return 'wp_editor_'+ Date.now() + parseInt( Math.random() * 1000 );
             }
         },
+        smart_codes: {
+            type: Array,
+            default() {
+                return {
+                    texts: {},
+                    html: {}
+                };
+            }
+        }
     },
     data() {
         return {
             subjectPopupVisible: false,
             bodyPopupVisible: false,
             hasWpEditor: !!window.wp.editor,
-            editorShortcodes: this.appVars.editor_shortcodes,
-            editorShortcodesHtml: this.appVars.editor_shortcodes_for_html,
             PlusIcon: markRaw(Plus),
             MoreIcon: markRaw(More),
             CloseBoldIcon: markRaw(CloseBold),
