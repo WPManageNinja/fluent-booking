@@ -11,6 +11,9 @@ class CleanupHandler
     public function register()
     {
         add_action( 'delete_user', [$this, 'handleDeleteUser'], 10, 2);
+
+        add_action('fluent_booking/before_delete_calendar', [$this, 'handleDeleteCalendar'], 10, 1);
+
     }
 
     public function handleDeleteUser($userId, $reassignId)
@@ -21,20 +24,38 @@ class CleanupHandler
             return;
         }
 
-        $slots = CalendarSlot::where('user_id', $userId)->get();
+        $calendars = Calendar::where('user_id', $userId)->get();
 
-        if($slots->isEmpty()) {
-            Calendar::where('user_id', $userId)->delete();
-            return;
+        foreach ($calendars as $calendar) {
+            $this->removeCalendarAssets($calendar->id);
+            $calendar->delete();
         }
+        return;
+    }
 
-        foreach ($slots as $slot) {
-            Booking::where('event_id', $slot->id)
-                ->where('calendar_id', $slot->calendar_id)
-                ->delete();
-            $slot->delete();
-        }
+    public function handleDeleteCalendar($calendar)
+    {
+        //
+    }
 
-        Calendar::where('user_id', $userId)->delete();
+    protected function removeCalendarAssets($calendarId)
+    {
+
+        // Remove the Booking Activities
+
+        // Remove the Booking Meta
+
+        // Remove Associate Order, Transactions, OrderItems
+
+        // delete bookings
+        Booking::where('calendar_id', $calendarId)
+            ->delete();
+
+        // Remove the Calendar meta
+
+        // Remove All CalendarSlots
+
+        // Remove All Calendar Slots Meta
+
     }
 }

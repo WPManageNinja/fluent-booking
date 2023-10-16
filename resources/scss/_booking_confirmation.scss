@@ -23,8 +23,14 @@
     flex-direction: column;
   }
 
+  .fcal_confirm_section_content {
+    font-size: 14px;
+    color: #666666;
+  }
   .fcal_confirm_section_title {
     width: 200px;
+    line-height: 24px;
+    margin-bottom: 2px;
   }
 
   .fcal_confirm_section {

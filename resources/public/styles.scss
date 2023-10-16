@@ -315,6 +315,14 @@ $lightDark: #6b7280;
       -webkit-transition: .5s;
       -moz-transition: .5s;
       -o-transition: .5s;
+
+      .fcal_fluent_form_selected_time {
+        font-size: 14px;
+        margin-top: 8px;
+        b {
+          font-weight: 600;
+        }
+      }
     }
 
     .fcal_date_event_details {
