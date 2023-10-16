@@ -20,7 +20,7 @@ class BookingFieldService
 
         foreach ($customFields as $fieldKey => $customField) {
             $value = Arr::get($postedData, $fieldKey);
-            if (!$value) {
+            if (!$value && Arr::isTrue($customField, 'required')) {
                 $errors[$fieldKey . '.required'] = sprintf('%s is required', $customField['label']);
                 continue;
             }
