@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown_label_repeater">
-        <table class="ff-table">
+        <table class="fcal_table">
             <thead>
             <tr>
                 <th>{{rendered_labels.remote_text}}</th>
@@ -11,7 +11,7 @@
             <tbody>
             <tr v-for="(item, itemIndex) in settings[field.key]" :key="'item_'+itemIndex">
                 <td>
-                    <el-select class="w-100" v-model="item.label">
+                    <el-select class="w-100" popper-class="fcal_select" v-model="item.label">
                         <el-option
                             v-for="(optionLabel, optionValue) in field.options"
                             :key="optionValue"

@@ -9,13 +9,14 @@
             </div>
             <div class="fcal_spot_desc">
                 <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
-                <div v-if="booking.happening_status" class="fcal_spot_happening">
-                    <span :class="'fcal_'+booking.happening_status">
-                        {{ getTextFromSlug(booking.happening_status) }}
-                    </span>
-                </div>
                 <div class="fcal_spot_desc_sub_info">
-                    <span class="fcal_spot_period_status" v-if="currentStatus">
+                    <div v-if="booking.happening_status" class="fcal_spot_happening">
+                        <span :class="'fcal_'+booking.happening_status">
+                            {{ getTextFromSlug(booking.happening_status) }}
+                        </span>
+                    </div>
+
+                    <span class="fcal_spot_period_status" :class="booking.status=='no_show'?'no_show':''" v-if="currentStatus">
                         {{ currentStatus }}
                     </span>
                     <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ ucFirst(booking.payment_status) }} | {{currencyFormat(booking.payment_order?.total_amount, true)}}</p>
@@ -72,7 +73,8 @@ export default {
                 scheduled: 'Upcoming',
                 completed: 'Completed',
                 cancelled: 'Cancelled',
-                pending: 'Pending'
+                pending: 'Pending',
+                no_show: 'No Show'
             };
             if (this.period === 'latest_bookings' || this.period === 'all') {
                 return statusLabels[this.booking.status] || '';
