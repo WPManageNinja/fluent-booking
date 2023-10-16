@@ -9,8 +9,8 @@
             </div>
             <div class="fcal_spot_desc">
                 <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
-                <div v-if="booking.happening_status" class="fcal_spothappening">
-                    <span :class="'fcal'+booking.happening_status">
+                <div v-if="booking.happening_status" class="fcal_spot_happening">
+                    <span :class="'fcal_'+booking.happening_status">
                         {{ getTextFromSlug(booking.happening_status) }}
                     </span>
                 </div>
