@@ -25,3 +25,45 @@ if (!function_exists('dd')) {
         die();
     }
 }
+
+function fcalFormattedAmount($amountInCents, $currencySettings)
+{
+
+    $default = [
+        'currency_sign' => '',
+        'currency_position' => 'left',
+        'decimal_separator' => '.',
+        'thousand_separator' => ',',
+        'currency_separator' => 'dot_comma',
+        'decimal_points' => 2,
+    ];
+
+    $currencySettings = array_merge($default, $currencySettings);
+
+    $position =  $currencySettings['currency_position'];
+    $symbol = $currencySettings['currency_sign'];
+    $decimalPoints = $currencySettings['decimal_points'];
+    $decmalSeparator = $currencySettings['decimal_separator'];
+    $thousandSeparator = $currencySettings['thousand_separator'];
+
+    if ($currencySettings['currency_separator'] != 'dot_comma') {
+        $decmalSeparator = ',';
+        $thousandSeparator = '.';
+    }
+    if ($amountInCents % 100 == 0 && $currencySettings['decimal_points'] == 0) {
+        $decimalPoints = 0;
+    }
+
+    $amount = number_format($amountInCents / 100, $decimalPoints, $decmalSeparator, $thousandSeparator);
+
+    if ('left' === $position) {
+        return $symbol . $amount;
+    } elseif ('left_space' === $position) {
+        return $symbol . ' ' . $amount;
+    } elseif ('right' === $position) {
+        return $amount . $symbol;
+    } elseif ('right_space' === $position) {
+        return $amount . ' ' . $symbol;
+    }
+    return $amount;
+}

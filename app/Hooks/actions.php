@@ -19,7 +19,7 @@
 
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
-(new \FluentBooking\App\Hooks\Handlers\CleanupHandler())->register();
+(new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
@@ -69,3 +69,14 @@ add_action('init', function () {
     wp_redirect(admin_url('admin.php?page=fluent-booking#/'));
     exit();
 });
+
+add_shortcode('fluent_booking_receipt', function () {
+    $html =  (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
+//    add_filter( 'wp_mail_content_type',function($contentType) {
+//        return "text/html";
+//    });
+//    wp_mail( 'admin@test.com', 'Mail test for Fluent Booking receipt', $html, '', [] );
+    return $html;
+});
+
+//https://cart.test/?page_id=1053&hash=fa20e9ba79d07811e9e492ce85747983
