@@ -63,7 +63,7 @@ class ReportController extends Controller
         if (!empty($paymentWidget['totalPayment'])) {
             $widgets[] = [
                 'title'   => __('Total Payment', 'fluent-booking'),
-                'number'  => $paymentWidget['totalPayment']/100,
+                'number'  => $paymentWidget['totalPayment'],
                 'content' => $paymentWidget['paymentComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
                                 <path d="M27.9166 5.93398V3.33398C27.9166 2.65065 27.35 2.08398 26.6666 2.08398C25.9833 2.08398 25.4166 2.65065 25.4166 3.33398V5.83398H14.5833V3.33398C14.5833 2.65065 14.0166 2.08398 13.3333 2.08398C12.65 2.08398 12.0833 2.65065 12.0833 3.33398V5.93398C7.58331 6.35065 5.39998 9.03398 5.06664 13.0173C5.03331 13.5007 5.43331 13.9007 5.89998 13.9007H34.1C34.5833 13.9007 34.9833 13.484 34.9333 13.0173C34.6 9.03398 32.4166 6.35065 27.9166 5.93398Z" fill="white"/>
@@ -277,7 +277,7 @@ class ReportController extends Controller
             });
         }
 
-        $total = $orderQuery->selectRaw('SUM(total_amount * 100) as total')->first()->total;
+        $total = $orderQuery->selectRaw('SUM(total_amount / 100) as total')->first()->total;
         
         $paymentStats['totalPayment'] = intval($total);
         $paymentStats['paymentComparison'] = 'More than last month';
