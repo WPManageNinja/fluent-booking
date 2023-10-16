@@ -71,7 +71,12 @@ add_action('init', function () {
 });
 
 add_shortcode('fluent_booking_receipt', function () {
-    return (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
+    $html =  (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
+//    add_filter( 'wp_mail_content_type',function($contentType) {
+//        return "text/html";
+//    });
+//    wp_mail( 'admin@test.com', 'Mail test for Fluent Booking receipt', $html, '', [] );
+    return $html;
 });
 
 //https://cart.test/?page_id=1053&hash=fa20e9ba79d07811e9e492ce85747983
