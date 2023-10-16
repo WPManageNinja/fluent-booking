@@ -101,7 +101,8 @@ class FrontEndHandler
 
                 wp_send_json([
                     'message'       => 'Booking has been confirmed',
-                    'response_html' => $html
+                    'response_html' => $html,
+                    'booking_hash'  => $existingBooking->hash
                 ], 200);
 
             }, 10, 2);
