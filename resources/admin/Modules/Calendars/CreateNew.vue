@@ -147,6 +147,12 @@ export default {
         },
         checkValidattion() {
             const location = this.calendar.slot.location_settings[0];
+
+            if(!location) {
+                this.$handleError('Please provide a location first');
+                return false;
+            }
+
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;

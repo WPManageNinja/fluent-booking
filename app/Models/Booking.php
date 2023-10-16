@@ -208,14 +208,18 @@ class Booking extends Model
             return '--';
         }
 
-        $locationType = $details['type'];
+        $locationType = Arr::get($details, 'type');
+
+        if (!$locationType) {
+            return '--';
+        }
 
         if ($locationType == 'in_person_guest') {
-            return '<b>Invitee Address: </b>' . Arr::get($details, 'guest_address');
+            return '<b>' . __('Invitee Address:', 'fluent-booking') . ' </b>' . Arr::get($details, 'guest_address');
         }
 
         if ($locationType == 'in_person_organizer') {
-            $html = '<b>' . $details['title'] . '</b>';
+            $html = '<b>' . Arr::get($details, 'title') . ' </b>';
             if ($description = Arr::get($details, 'description')) {
                 $html .= wpautop($description);
             }
@@ -231,7 +235,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'online_meeting') {
-            $html = '<b>Online Meeting</b> ';
+            $html = '<b>' . __('Online Meeting', 'fluent-booking') . '</b> ';
             if ($meetingLink = Arr::get($details, 'meeting_link')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
             }
@@ -247,11 +251,11 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_guest') {
-            return '<b>Phone Call: </b>' . $this->phone;
+            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . $this->phone;
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>Phone Call: </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
+            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
