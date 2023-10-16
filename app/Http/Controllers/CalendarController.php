@@ -62,7 +62,6 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-
         $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
             'author_timezone'                            => 'required',
             'slot.duration'                              => 'required|int',
@@ -134,16 +133,16 @@ class CalendarController extends Controller
             $data['author_timezone'] = 'UTC';
         }
 
+        $weeklySchedule = Arr::get($data, 'slot.weekly_schedules');
+
         $defaultSchedule = AvailabilityService::createScheduleSchema(
-            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone
+            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone, 'UTC', $weeklySchedule
         );
 
         $availability = Availability::create($defaultSchedule);
 
         $slot = $data['slot'];
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
-
-        $locationSettings = $request->get('location');
 
         $slotData = [
             'title'             => $title,
@@ -163,7 +162,7 @@ class CalendarController extends Controller
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep($locationSettings),
+            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
@@ -335,7 +334,7 @@ class CalendarController extends Controller
             'color_schema'      => '#0099ff',
             'calendar'          => $calendar,
             'settings'          => $settingsSchema,
-            'max_book_per_slot' => 2,
+            'max_book_per_slot' => 1,
             'location_settings' => [
                 [
                     'type'              => '',
@@ -478,9 +477,10 @@ class CalendarController extends Controller
 
     }
 
-    public function getSlotNotifications(Request $request, $calendarId, $slotId)
+    public function getSlotEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
 
         /*
          * Confirmation Email to Attendee
@@ -489,12 +489,21 @@ class CalendarController extends Controller
          * Cancelled By Organizer to Attendee
          * Cancelled By Attendee to Organizer
          */
-        return [
+        $data = [
             'notifications' => $calendarEvent->getNotifications(true)
         ];
+
+        if (in_array('smart_codes', $request->get('with', []))) {
+            $data['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
+        }
+
+        return $data;
     }
 
-    public function saveSlotNotifications(Request $request, $calendarId, $slotId)
+    public function saveSlotEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
@@ -573,20 +582,24 @@ class CalendarController extends Controller
         ];
     }
 
-    public function deleteCalendarSlot(Request $request, $calendarId, $slotId)
+    public function deleteCalendarSlot(Request $request, $calendarId, $calendarEventId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $slot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($calendarEventId);
+
+        do_action('fluent_booking/before_delete_calendar_event', $calendarEvent, $calendar);
 
         // Let's delete all the events related to this slot
-        Booking::where('event_id', $slot->id)
+        Booking::where('event_id', $calendarEvent->id)
             ->where('calendar_id', $calendar->id)
             ->delete();
 
-        $slot->delete();
+        $calendarEvent->delete();
+
+        do_action('fluent_booking/after_delete_calendar_event', $calendarEventId, $calendar);
 
         return [
-            'message' => __('Slot has been deleted', 'fluent-booking')
+            'message' => __('Calendar Event has been deleted', 'fluent-booking')
         ];
     }
 
@@ -606,19 +619,10 @@ class CalendarController extends Controller
     public function deleteCalendar(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
-        $slots = CalendarSlot::where('calendar_id', $calendar->id);
-        $bookings = Booking::where('calendar_id', $calendar->id);
-        $availability = Availability::where('object_id', $calendar->user_id);
-
-        // Let's delete all the data related to this caledar
-        $bookings->delete();
-
-        $slots->delete();
-
-        $availability->delete();
-
+        do_action('fluent_booking/before_delete_calendar', $calendar);
         $calendar->delete();
-
+        do_action('fluent_booking/after_delete_calendar', $calendarId);
+        
         return [
             'message' => __('Calendar Deleted Successfully!', 'fluent-booking')
         ];

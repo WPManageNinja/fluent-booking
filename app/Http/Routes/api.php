@@ -43,8 +43,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
-    $router->get('/{id}/slots/{event_id}/notifications', 'CalendarController@getSlotNotifications')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/notifications', 'CalendarController@saveSlotNotifications')->int('id')->int('event_id');
+    $router->get('/{id}/slots/{event_id}/email-notifications', 'CalendarController@getSlotEmailNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/email-notifications', 'CalendarController@saveSlotEmailNotifications')->int('id')->int('event_id');
 
     $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');

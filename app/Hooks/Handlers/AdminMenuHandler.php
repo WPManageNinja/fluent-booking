@@ -210,8 +210,6 @@ class AdminMenuHandler
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $customFieldTypes = Helper::getCustomFieldTypes();
         $locationFields = (new Calendar())->getLocationFields();
-        $editorShortcodes = Helper::getEditorShortCodes();
-        $editorShortcodesForHtml = Helper::getEditorShortCodes(true);
 
         return apply_filters('fluent_booking/admin_vars', [
             'slug'                       => $slug = $app->config->get('app.slug'),
@@ -224,8 +222,6 @@ class AdminMenuHandler
             'schedule_schema'            => $scheduleSchema,
             'location_fields'            => $locationFields,
             'custom_field_types'         => $customFieldTypes,
-            'editor_shortcodes'          => $editorShortcodes,
-            'editor_shortcodes_for_html' => $editorShortcodesForHtml,
             'me'                         => [
                 'id'        => $currentUser->ID,
                 'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),

@@ -4,6 +4,7 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 
@@ -28,8 +29,12 @@ class WebhookController extends Controller
 
 
         return [
-            'feeds'           => $formattedFeeds,
-            'event_triggers'  => $this->eventTriggers()
+            'feeds'          => $formattedFeeds,
+            'event_triggers' => $this->eventTriggers(),
+            'smart_codes'    => [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ]
         ];
     }
 
