@@ -7,9 +7,6 @@ use FluentCrm\App\Models\Lists;
 use FluentCrm\App\Models\Subscriber;
 use FluentBooking\Framework\Support\Arr;
 use FluentCrm\App\Models\CustomContactField;
-use FluentCrm\App\Services\Funnel\FunnelHelper;
-use FluentForm\App\Modules\Form\FormFieldsParser;
-use FluentForm\App\Services\FormBuilder\ShortCodeParser;
 use FluentBooking\App\Http\Controllers\IntegrationManagerController;
 
 class Bootstrap extends IntegrationManagerController
@@ -37,7 +34,7 @@ class Bootstrap extends IntegrationManagerController
         add_filter('fluent_booking/notifying_async_fluentcrm', '__return_false');
     }
 
-    public function pushIntegration($integrations, $slotId)
+    public function pushIntegration($integrations, $calendarEventId)
     {
         $integrations[$this->integrationKey] = [
             'title'                 => $this->title . ' Integration',
@@ -52,7 +49,7 @@ class Bootstrap extends IntegrationManagerController
         return $integrations;
     }
 
-    public function getIntegrationDefaults($settings, $slotId)
+    public function getIntegrationDefaults($settings, $calendarEventId)
     {
         return [
             'name'              => '',
