@@ -114,6 +114,8 @@
 
     const form = window.fluentCalendarPublicVars.current_person;
 
+    console.log('Hello');
+
     let submitting = false;
 
     let dispatch = createEventDispatcher();

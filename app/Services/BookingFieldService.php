@@ -139,6 +139,8 @@ class BookingFieldService
 
         if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
+        } else {
+            $existingFields['location']['options'] = $defaultFields['location']['options'];
         }
 
         if (empty($defaultFields['phone_number'])) {
@@ -252,5 +254,23 @@ class BookingFieldService
         }
 
         return $customFields;
+    }
+
+    public static function hasPhoneNumberField($fields)
+    {
+        foreach ($fields as $field) {
+            if ($field['type'] == 'phone') {
+                return true;
+            } else if ($field['name'] == 'location') {
+                if(!empty($field['options'])) {
+                    foreach ($field['options'] as $option) {
+                        if (Arr::get($option, 'type') == 'phone_guest') {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
