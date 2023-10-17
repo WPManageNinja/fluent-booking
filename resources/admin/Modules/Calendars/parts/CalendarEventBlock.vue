@@ -48,7 +48,7 @@
 
         <el-drawer
             v-model="isNewBookingOpen"
-            title="Create New Booking Type"
+            title="Create New Event Type"
             :zIndex="999"
             modal-class="fcal_drawer"
         >

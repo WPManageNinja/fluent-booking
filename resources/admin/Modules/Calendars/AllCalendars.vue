@@ -30,7 +30,7 @@
 
         <el-drawer
             v-model="isNewBookingOpen"
-            title="Create New Booking Type"
+            title="Add New Calendar Host"
             :zIndex="999"
             label-position="top"
             modal-class="fcal_drawer">
