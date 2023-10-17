@@ -24,11 +24,26 @@
             }
         }));
     }
-
     $:handleValueChange(value);
 
+
+
+
+    function onCountryChanged(country) {
+        if (country != null && country.length > 0) {
+            const input = inputRef['$$'].root.querySelector('input.basic-tel-input')
+
+            setTimeout(()=>{
+                input.focus()
+            },100)
+            console.log(input)
+        }
+    }
+    $:onCountryChanged(country);
+
+
+
     function handleChange(e) {
-        console.log(e.detail);
         country = e.detail.iso2;
     }
 
@@ -37,13 +52,14 @@
 
     const itemId = 'iso2';
     const label = 'label';
+    let inputRef;
 
     console.log(normalizedCountries);
 
 </script>
 
 <div class="fcal_phone_wrapper">
-    <Select class="fcal_country_select" on:input={handleChange}
+    <Select class={valid ? 'fcal_country_select' : 'fcal_country_select invalid'}  on:input={handleChange}
             {itemId} {label}
             {floatingConfig}
             clearable={false}
@@ -66,6 +82,7 @@
         bind:value
         bind:valid
         bind:detailedValue
+        bind:this={inputRef}
         class="basic-tel-input {!valid ? 'fcal_invalid' : ''}"
     />
 </div>
