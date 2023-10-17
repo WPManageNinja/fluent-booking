@@ -108,8 +108,7 @@ class BookingFieldService
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
-                'disable_alter'  => true,
-                'placeholder'    => esc_attr__('Phone Number', 'fluent-booking'),
+                'disable_alter'  => true
             ];
         } else if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
