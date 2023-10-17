@@ -21,7 +21,7 @@
                                 </div>
                             {/if}
                             {#if field.type === 'text'}
-                                <div class={'fcal_input_wrap '+field.name}>
+                                <div class={'fcal_input_wrap fcal_field_name_'+field.name}>
                                     {#if field.name == 'address'}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

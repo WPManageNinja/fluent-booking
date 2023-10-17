@@ -1,69 +1,81 @@
 <script>
     export let appData;
+    import {onMount} from 'svelte';
     import Select from 'svelte-select';
     import {TelInput, normalizedCountries} from 'svelte-tel-input';
 
     // E164 formatted value, usually you should store and use this.
-    export let value = null;
+    let value = null;
 
     // Selected country
-    export let country = null;
+    let country = window.fluentCalendarPublicVars.user_country || null;
 
     // Validity
-    export let valid = false;
+    let valid = false;
 
     // Phone number details
-    export let detailedValue = null;
+    let detailedValue = null;
 
-    export let options = {};
+    let currentInput = '';
+
+    let appMounted = null;
+
+    onMount(() => {
+        appMounted = true;
+    });
 
     function handleValueChange(value) {
+        let phoneNumber = '';
+        if (value && value.isValid) {
+            phoneNumber = value.phoneNumber;
+            currentInput = value.phoneNumber
+        } else if (value) {
+            currentInput = value.phoneNumber;
+        }
         appData.elem.dispatchEvent(new CustomEvent('value_changed', {
             detail: {
-                value: value
+                value: phoneNumber
             }
         }));
     }
-    $:handleValueChange(value);
 
-
-
+    $:handleValueChange(detailedValue);
 
     function onCountryChanged(country) {
-        if (country != null && country.length > 0) {
+        if (!appMounted) {
+            return;
+        }
+        if (country && country.length > 0) {
             const input = inputRef['$$'].root.querySelector('input.basic-tel-input')
-
-            setTimeout(()=>{
+            setTimeout(() => {
                 input.focus()
-            },100)
-            console.log(input)
+            }, 100)
         }
     }
+
     $:onCountryChanged(country);
-
-
 
     function handleChange(e) {
         country = e.detail.iso2;
     }
 
     let floatingConfig = {
+        strategy: 'fixed',
     }
 
     const itemId = 'iso2';
     const label = 'label';
     let inputRef;
 
-    console.log(normalizedCountries);
-
 </script>
 
-<div class="fcal_phone_wrapper">
-    <Select class={valid ? 'fcal_country_select' : 'fcal_country_select invalid'}  on:input={handleChange}
+<div class="fcal_phone_wrapper {currentInput ? 'fcal_had_input' : ''}">
+    <Select class={valid ? 'fcal_country_select' : 'fcal_country_select invalid'} on:input={handleChange}
             {itemId} {label}
             {floatingConfig}
             clearable={false}
             value={country}
+            placeholder="Country"
             items={normalizedCountries}
     >
         <div slot="selection" let:selection>
