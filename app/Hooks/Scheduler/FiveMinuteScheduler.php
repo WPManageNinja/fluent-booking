@@ -17,7 +17,5 @@ class FiveMinuteScheduler
             ->update([
                 'status' => 'cancelled'
             ]);
-        $fiveMinutesHook = 'fluent_booking_five_minutes_tasks';
-        wp_schedule_single_event(time() + (60 * 5), $fiveMinutesHook);
     }
 }

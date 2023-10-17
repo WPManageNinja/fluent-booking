@@ -15,7 +15,7 @@ class DeactivationHandler
 
     public function handle()
     {
-        wp_clear_scheduled_hook('fluent_booking_minute_tasks');
+        as_unschedule_action('fluent_booking_minute_tasks');
         wp_clear_scheduled_hook('fluent_booking_five_minutes_tasks');
         wp_clear_scheduled_hook('fluent_booking_hourly_tasks');
     }
