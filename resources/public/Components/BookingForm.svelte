@@ -43,8 +43,7 @@
                             {:else if field.name === 'location'}
                                 <LocationField field={field} form="{form}"/>
                             {:else if field.type === 'phone'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                       placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                <PhoneFieldSkeleton field={field} form="{form}"/>
                             {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
@@ -104,6 +103,7 @@
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
+    import PhoneFieldSkeleton  from "./PhoneFieldSkeleton.svelte";
 
     export let timezone;
     export let formFields;

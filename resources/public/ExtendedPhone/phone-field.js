@@ -2,12 +2,14 @@ import StandAlonePhoneField from './StandAlonePhoneField.svelte';
 import './style.scss';
 
 document.body.addEventListener('fcal_init_phone_field', function (e) {
-    const elem = document.getElementById(e.detail.elementId);
     new StandAlonePhoneField({
-        target: elem,
+        target: e.detail.elem,
         props: {
             appData: {
-                msg: 'OK'
+                elementId: e.detail.elementId,
+                elem: e.detail.elem,
+                form: e.detail.form,
+                field: e.detail.field
             },
         }
     });
