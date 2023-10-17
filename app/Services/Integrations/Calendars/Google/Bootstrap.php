@@ -164,6 +164,9 @@ class Bootstrap
         add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
         add_action('fluent_booking/update_remote_calendar_event_google', [$this, 'updateRemoteCalendarEvent'], 10, 4);
         add_action('fluent_booking/update_attendees_remote_calendar_event_google', [$this, 'updateAttendeesRemoteCalendarEvent'], 10, 3);
+
+        add_action('fluent_booking/existing_event_attendees_async_add', [$this, 'addNewAttendee'], 10, 3);
+        add_action('fluent_booking/existing_event_attendees_async_remove', [$this, 'removeExistingAttendee'], 10, 3);
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -629,42 +632,41 @@ class Bootstrap
             return false; // invalid id of the remote calendar
         }
 
-        $api = new GoogleCalendar($meta);
+        as_enqueue_async_action('fluent_booking/existing_event_attendees_async_' . $action, [
+            $config['remote_calendar_id'],
+            $config['db_id'],
+            $booking->id
+        ], 'fluent-booking');
+    }
 
-        if ($api->lastError) {
-            do_action('fluent_booking/log_booking_activity', [
-                'booking_id'  => $booking->id,
-                'status'      => 'closed',
-                'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
-                'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
-            ]);
+    public function addNewAttendee($calendarId, $dbId, $bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        $calendar = $booking->calendar;
+        if (!$calendar) {
             return false;
         }
-
-        $guestAttendee = array_filter([
-            'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
-            'email'        => $booking->email,
-            'comment'      => $booking->message
-        ]);
 
         $existingBooking = Booking::where('group_id', $booking->group_id)->first();
 
         $bookingMeta = $existingBooking->getMeta('__google_calendar_event');
 
         if (!$bookingMeta) {
-            return false;
+            return false; // Nothing to add as there is no previous response
         }
 
-        if ($action == 'add') {
-            $this->addNewAttendee($config['remote_calendar_id'], $meta, $booking, $bookingMeta, $guestAttendee);
-        } elseif ($action == 'remove') {
-            $this->removeExistingAttendee($config['remote_calendar_id'], $meta, $booking, $bookingMeta, $guestAttendee);
-        }
-    }
+        $googleEventId  = Arr::get($bookingMeta, 'id');
 
-    private function addNewAttendee($calendarId, $meta, $booking, $bookingMeta, $attendee)
-    {
+        $meta = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $calendar->user_id)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+
         $googleEventId  = Arr::get($bookingMeta, 'id');
         $googleMeetLink = Arr::get($bookingMeta, 'google_meet_link');
 
@@ -689,6 +691,12 @@ class Bootstrap
             ]);
             return false;
         }
+
+        $attendee = array_filter([
+            'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
+            'email'        => $booking->email,
+            'comment'      => $booking->message
+        ]);
 
         $attendees = $updatedEvent['attendees'] ?? [];
 
@@ -718,11 +726,36 @@ class Bootstrap
         ]);
     }
 
-    private function removeExistingAttendee($calendarId, $meta, $booking, $bookingMeta, $attendee)
+    public function removeExistingAttendee($calendarId, $dbId, $bookingId)
     {
+        $booking = Booking::findOrFail($bookingId);
+
+        $calendar = $booking->calendar;
+        if (!$calendar) {
+            return false;
+        }
+
+        $existingBooking = Booking::where('group_id', $booking->group_id)->first();
+
+        $bookingMeta = $existingBooking->getMeta('__google_calendar_event');
+
+        if (!$bookingMeta) {
+            return false; // Nothing to add as there is no previous response
+        }
+
         $googleEventId  = Arr::get($bookingMeta, 'id');
+
+        $meta = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $calendar->user_id)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
     
         $api = new GoogleCalendar($meta);
+
 
         $updatedEvent = $api->getEvent($calendarId, $googleEventId);
 
@@ -739,7 +772,7 @@ class Bootstrap
 
         $attendees = $updatedEvent['attendees'] ?? [];
 
-        $attendeeIndex = array_search($attendee['email'], array_column($attendees, 'email'));
+        $attendeeIndex = array_search($booking->email, array_column($attendees, 'email'));
 
         if ($attendeeIndex !== false) {
             unset($attendees[$attendeeIndex]);
