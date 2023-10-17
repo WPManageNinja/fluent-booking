@@ -1,4 +1,5 @@
 <script>
+    export let appData;
     import Select from 'svelte-select';
     import {TelInput, normalizedCountries} from 'svelte-tel-input';
 
@@ -15,6 +16,16 @@
     export let detailedValue = null;
 
     export let options = {};
+
+    function handleValueChange(value) {
+        appData.elem.dispatchEvent(new CustomEvent('value_changed', {
+            detail: {
+                value: value
+            }
+        }));
+    }
+
+    $:handleValueChange(value);
 
     function handleChange(e) {
         console.log(e.detail);
