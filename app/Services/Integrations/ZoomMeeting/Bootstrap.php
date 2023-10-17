@@ -73,12 +73,9 @@ class Bootstrap
         $menuItems['zoom_meeting'] = [
             'title'          => __('Zoom', 'fluent-booking'),
             'icon_url'       => $app['url.assets'] . 'images/zoom.svg',
-            'component_type' => 'GlobalSettingsComponent',
+            'component_type' => 'StandAloneComponent',
             'route'          => [
-                'name'   => 'configure-integrations',
-                'params' => [
-                    'settings_key' => 'zoom_meeting'
-                ]
+                'name'   => 'zoom_integrations'
             ]
         ];
         return $menuItems;
@@ -145,18 +142,10 @@ class Bootstrap
 
     public function addConnectMenu($menuItems, $calendar)
     {
-        if (!ZoomHelper::isConfigured()) {
-            return $menuItems;
-        }
-
         $menuItems['zoom_meeting'] = [
             'type'    => 'route',
             'route'   => [
-                'name'   => 'calendar_general_integration_settings',
-                'params' => [
-                    'id'           => $calendar->id,
-                    'settings_key' => 'zoom_meeting'
-                ]
+                'name'   => 'user_zoom_integration'
             ],
             'label'   => __('Zoom Integration', 'fluent-booking'),
             'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><circle cx="24" cy="24" r="20" fill="#2196f3"/><path fill="#fff" d="M29,31H14c-1.657,0-3-1.343-3-3V17h15c1.657,0,3,1.343,3,3V31z"/><polygon fill="#fff" points="37,31 31,27 31,21 37,17"/></svg>'

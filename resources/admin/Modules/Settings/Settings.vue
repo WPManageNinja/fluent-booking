@@ -45,7 +45,7 @@ export default {
     },
     data() {
         return {
-            loading: false,
+            loading: true,
             menuItems: {}
         }
     },
