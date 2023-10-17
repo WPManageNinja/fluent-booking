@@ -30,7 +30,10 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
 
-
+    // Zoom Integrations - User Level
+    $router->get('/{id}/integrations/zoom-connection', 'ZoomController@getZoomConnectionByCalendarId')->int('id');
+    $router->post('/{id}/integrations/zoom-connection/add', 'ZoomController@addConnectionByCalendarId')->int('id');
+    $router->post('/{id}/integrations/zoom-connection/disconnect', 'ZoomController@disconnectByCalendarId')->int('id');
 
     // General Integrations
     $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
@@ -109,6 +112,13 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
     $router->post('/{host_id}/disconnect', 'IntegrationSettingsController@revoke')->int('host_id');
     $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
 
+    /*
+     * Zoom Integrations
+     */
+    $router->get('zoom/connected-users', 'ZoomController@get');
+    $router->post('zoom/save-user-account', 'ZoomController@save');
+    $router->post('zoom/disconnect', 'ZoomController@disconnectByConnectId');
+
     $router->prefix('settings/payment-methods')->group(function ($router) {
         $router->get('/all', 'PaymentMethodController@index');
 
@@ -120,6 +130,7 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
 
         $router->get('currencies', 'PaymentMethodController@currencies');
     });
+
 });
 
 $router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {

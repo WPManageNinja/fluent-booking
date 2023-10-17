@@ -9,26 +9,19 @@ use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
 class Client
 {
-    public $clientId;
-    public $clientSecret;
-    public $redirectUrl;
-
+    protected $clientId;
+    protected $clientSecret;
+    protected $accountId;
     private $accessToken;
 
     public $revokeUrl = 'https://zoom.us/oauth/revoke';
     public $tokenUrl = 'https://zoom.us/oauth/token';
 
-
-    public function __construct($clientID, $clientSecret, $redirectUrl = null)
+    public function __construct($clientID, $clientSecret, $accountId)
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-
-        if (!$redirectUrl) {
-            $redirectUrl = ZoomHelper::getAppRedirectUrl();
-        }
-
-        $this->redirectUrl = $redirectUrl;
+        $this->accountId = $accountId;
     }
 
     public function setAccessToken($accessToken)
@@ -54,6 +47,20 @@ class Client
         return [
             'Authorization' => 'Bearer ' . $accessToken
         ];
+    }
+
+    public function generateAccessToken()
+    {
+        $url = 'https://zoom.us/oauth/token';
+        $body = array(
+            'grant_type' => 'account_credentials',
+            'account_id' => $this->accountId
+        );
+        $headers = array(
+            'Authorization' => 'Basic ' . base64_encode($this->clientId.':'.$this->clientSecret)
+        );
+
+        return $this->makeRequest($url, $body, 'POST', $headers);
     }
 
     public function generateAuthCode($code)

@@ -83,7 +83,7 @@
 
 <script type="text/babel">
 import {Share} from '@element-plus/icons-vue';
-import PhotoWidget from '../../../Pieces/PhotoWidget.vue'
+import PhotoWidget from '@/Pieces/PhotoWidget.vue'
 export default {
     name: 'LandingPageCalendarSettings',
     props: ['calendar'],
