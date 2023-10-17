@@ -53,7 +53,7 @@ export default {
             if (this.calendar_id) {
                 url = 'calendars/' + this.calendar_id + '/integrations/zoom-connection/add';
             }
-            
+
             this.$post(url, {
                 zoom_credentials: this.form,
                 user_id: this.user_id
