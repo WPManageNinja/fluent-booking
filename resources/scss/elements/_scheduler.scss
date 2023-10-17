@@ -1544,6 +1544,15 @@
             width: 100%;
           }
         }
+        .el-tabs__header {
+          .el-tabs__nav-wrap {
+            .el-tabs__nav {
+              .el-tabs__item {
+                justify-content: flex-start !important;
+              }
+            }
+          }
+        }
       }
     }
   }
