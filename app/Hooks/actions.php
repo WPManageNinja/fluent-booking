@@ -17,12 +17,15 @@
  * Register all the grouped action handlers
  */
 
+use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
+
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
+(new FiveMinuteScheduler())->register();
 
 
 // Load Integrations
@@ -36,8 +39,6 @@ $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
 
-
-
 (new FluentBooking\App\Services\PluginManager\Bootstrap())->register();
 
 add_action('init', function () {
@@ -45,7 +46,7 @@ add_action('init', function () {
         return;
     }
 
-    if(!current_user_can('manage_options')) {
+    if (!current_user_can('manage_options')) {
         return;
     }
 
@@ -71,7 +72,7 @@ add_action('init', function () {
 });
 
 add_shortcode('fluent_booking_receipt', function () {
-    $html =  (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
+    $html = (new \FluentBooking\App\Services\ReceiptHelper())->getReceipt($_REQUEST['hash']);
 //    add_filter( 'wp_mail_content_type',function($contentType) {
 //        return "text/html";
 //    });
