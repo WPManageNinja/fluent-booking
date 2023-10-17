@@ -1,1 +1,17 @@
 @import "flags";
+
+.fcal_phone_wrapper {
+  display: flex;
+
+  .svelte-select {
+    width: 120px !important;
+  }
+
+  .svelte-select-list {
+    min-width: 300px !important;
+  }
+
+  .basic-tel-input.fcal_invalid {
+    border-color: red !important;
+  }
+}

@@ -191,7 +191,7 @@ class LandingPageHandler
                 $assetUrl . 'public/saas.css'
             ],
             'js_files'       => [
-            //    $assetUrl . 'public/js/phone-field.js',
+                $assetUrl . 'public/js/phone-field.js',
                 $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
@@ -209,9 +209,14 @@ class LandingPageHandler
 
         $app = App::getInstance();
 
-        add_action('fluent_booking/author_landing_head', function () {
+        add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
             ?>
-
+            <style>
+                .flag {
+                    background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                    background-size: 100%;
+                }
+            </style>
             <?php
         });
 

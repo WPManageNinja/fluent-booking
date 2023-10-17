@@ -22,7 +22,6 @@
     }
 
     let floatingConfig = {
-        strategy: 'fixed',
     }
 
     const itemId = 'iso2';
@@ -36,7 +35,6 @@
     <Select class="fcal_country_select" on:input={handleChange}
             {itemId} {label}
             {floatingConfig}
-            listOpen="true"
             clearable={false}
             value={country}
             items={normalizedCountries}
@@ -44,14 +42,12 @@
         <div slot="selection" let:selection>
             {#if selection}
                 <span class="flag flag-{selection.iso2.toLowerCase()}"></span>
-                <span class="fcal_country_name">{selection.iso2}</span>
                 <span class="fcal_country_code">+{selection.dialCode}</span>
             {/if}
         </div>
         <div slot="item" let:item>
             <span class="flag flag-{item.iso2.toLowerCase()}"></span>
-            <span class="fcal_country_name">{item.iso2}</span>
-            <span class="fcal_country_code">+{item.dialCode}</span>
+            <span class="fcal_country_name">{item.label}</span>
         </div>
     </Select>
     <TelInput
@@ -59,6 +55,6 @@
         bind:value
         bind:valid
         bind:detailedValue
-        class="basic-tel-input {!valid ? 'invalid' : ''}"
+        class="basic-tel-input {!valid ? 'fcal_invalid' : ''}"
     />
 </div>

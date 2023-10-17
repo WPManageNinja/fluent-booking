@@ -1,24 +1,25 @@
-<div>
-    <div>
-        <div id="{currentFieldId}" class="fcal_custom_phone_field"></div>
-    </div>
-</div>
+<div id="{currentFieldId}" class="fcal_custom_phone_field"></div>
 
 <script>
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
+
+    export let field;
+    export let form;
     // Crate a unique id for this field
     let currentFieldId = 'fcal_phone_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     // callback on load the html of this svelte component
     onMount(() => {
-        // Send a custom event to body to trigger the field creation
+        const elem = document.getElementById(currentFieldId);
         document.body.dispatchEvent(new CustomEvent('fcal_init_phone_field', {
             detail: {
                 elementId: currentFieldId,
+                elem: elem,
+                field: field,
+                form: form
             }
         }));
     });
-
 
 </script>
 
