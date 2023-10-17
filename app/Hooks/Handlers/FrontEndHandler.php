@@ -154,7 +154,7 @@ class FrontEndHandler
             });
         }
 
-        wp_enqueue_script('fluent-booking-public',  $assetUrl. 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
         $this->loadGlobalVars();
         wp_localize_script(
             'fluent-booking-public',
@@ -163,7 +163,7 @@ class FrontEndHandler
         );
 
         return App::make('view')->make('public.calendar', [
-            'calenderEvent'     => $calendarEvent
+            'calenderEvent' => $calendarEvent
         ]);
     }
 
@@ -498,7 +498,7 @@ class FrontEndHandler
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
 
-        return apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
+        return apply_filters('fluent_booking/public_event_vars', $eventVars, $calendarEvent);
     }
 
     public function ajaxHandleCancelMeeting()

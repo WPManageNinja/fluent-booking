@@ -305,7 +305,7 @@ class LandingPageHandler
 
     private function handleRescheduleView(Booking $booking)
     {
-        add_filter('fluent_calendar_public_event_vars', function ($eventVars) use ($booking) {
+        add_filter('fluent_booking/public_event_vars', function ($eventVars) use ($booking) {
             $onlyFields = [
                 'name', 'email'
             ];
@@ -348,6 +348,8 @@ class LandingPageHandler
                 'email'             => $booking->email,
                 'rescheduling_hash' => $booking->hash
             ];
+
+            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking');
 
             return $vars;
         });
