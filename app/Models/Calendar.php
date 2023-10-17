@@ -72,6 +72,17 @@ class Calendar extends Model
         return $this->hasMany(Booking::class, 'calendar_id');
     }
 
+    public function getAuthorPhoto()
+    {
+        $photo = $this->getMeta('profile_photo_url');
+
+        if (!$photo) {
+            $photo = apply_filters('fluent_booking/author_photo', get_avatar_url($this->user_id), $this->user_id);
+        }
+
+        return $photo;
+    }
+
     public function getAuthorProfile($public = true)
     {
         $user = get_user_by('id', $this->user_id);
@@ -90,11 +101,7 @@ class Calendar extends Model
             $name = $user->display_name;
         }
 
-        $photo = $this->getMeta('profile_photo_url');
-
-        if (!$photo) {
-            $photo = apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user);
-        }
+        $photo = $this->getAuthorPhoto();
 
         $data = [
             'name'           => $name,
@@ -105,7 +112,7 @@ class Calendar extends Model
             'featured_image' => $this->getMeta('featured_image_url')
         ];
 
-        if(!$public) {
+        if (!$public) {
             $data['email'] = $user->user_email;
         }
 
@@ -141,16 +148,16 @@ class Calendar extends Model
                     ],
                 ],
             ],
-            'online' => [
-                'label' => 'Online',
+            'online'       => [
+                'label'   => 'Online',
                 'options' => [
                     'online_meeting' => [
                         'title' => 'Online Meeting',
                     ],
                 ],
             ],
-            'other' => [
-                'label' => 'Other',
+            'other'        => [
+                'label'   => 'Other',
                 'options' => [
                     'custom' => [
                         'title' => 'Custom',
