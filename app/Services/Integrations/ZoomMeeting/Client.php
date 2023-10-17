@@ -3,16 +3,17 @@
 namespace FluentBooking\App\Services\Integrations\ZoomMeeting;
 
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\Integrations\ZoomMeeting\ZoomHelper;
 use FluentBooking\Framework\Support\Arr;
-use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
 class Client
 {
     protected $clientId;
+
     protected $clientSecret;
+
     protected $accountId;
-    private $accessToken;
+
+    protected $accessToken;
 
     public $revokeUrl = 'https://zoom.us/oauth/revoke';
     public $tokenUrl = 'https://zoom.us/oauth/token';
@@ -51,37 +52,15 @@ class Client
 
     public function generateAccessToken()
     {
-        $url = 'https://zoom.us/oauth/token';
         $body = array(
             'grant_type' => 'account_credentials',
             'account_id' => $this->accountId
         );
         $headers = array(
-            'Authorization' => 'Basic ' . base64_encode($this->clientId.':'.$this->clientSecret)
+            'Authorization' => 'Basic ' . base64_encode($this->clientId . ':' . $this->clientSecret)
         );
 
-        return $this->makeRequest($url, $body, 'POST', $headers);
-    }
-
-    public function generateAuthCode($code)
-    {
-        $body = [
-            'code'         => $code,
-            'grant_type'   => 'authorization_code',
-            'redirect_uri' => $this->redirectUrl
-        ];
-
-        return $this->makeRequest($this->tokenUrl, $body, 'POST');
-    }
-
-    public function reGenerateToken($refreshToken)
-    {
-        $body = [
-            'refresh_token' => $refreshToken,
-            'grant_type'    => 'refresh_token'
-        ];
-
-        return $this->makeRequest($this->tokenUrl, $body, 'POST');
+        return $this->makeRequest($this->tokenUrl, $body, 'POST', $headers);
     }
 
     public function me()
@@ -98,9 +77,10 @@ class Client
 
     public function createMeeting($data)
     {
-        $header = [];
-        $header['Authorization'] = 'Bearer ' . $this->accessToken;
-        $header['content-type'] = 'application/json';
+        $header = [
+            'Authorization' => 'Bearer ' . $this->accessToken,
+            'content-type'  => 'application/json'
+        ];
 
         $url = 'https://api.zoom.us/v2/users/me/meetings';
         $data = json_encode($data);
