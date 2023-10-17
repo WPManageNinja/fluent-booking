@@ -168,6 +168,13 @@
                             response: res
                         }
                     }));
+                    if (hasPaymentItem) {
+                        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+                        setTimeout(() => {
+                            const adjustHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+                            calendar.style.height = 'auto';
+                        }, 100);
+                    }
                     return;
                 }
 
