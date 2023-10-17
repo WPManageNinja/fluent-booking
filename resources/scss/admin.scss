@@ -61,6 +61,19 @@
           }
         }
       }
+      
+      @media (max-width: 485px) {
+        flex-direction: column;
+        width: 100%;
+        .el-input{
+          .el-input__inner {
+            min-height: 38px;
+          }
+          &.fcal_search_input {
+            max-width: 100%;
+          }
+        }
+      }
     }
   }
 
