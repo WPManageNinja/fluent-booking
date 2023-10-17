@@ -79,7 +79,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         add_filter('fluent_booking/payment_methods_renderer', array($this, 'getMethodsTemplate'), 10, 1);
 
-        add_filter('fluent_calendar_public_event_vars', array($this, 'addPaymentRendererTemplates'), 10, 2);
+        add_filter('fluent_booking/public_event_vars', array($this, 'addPaymentRendererTemplates'), 10, 2);
 
         add_action('fluent_booking/pre_after_booking_pending', array($this, 'afterBookingPending'), 1, 3);
 
