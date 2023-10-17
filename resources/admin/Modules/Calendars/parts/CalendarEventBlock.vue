@@ -19,7 +19,7 @@
                 <el-button
                     @click="isNewBookingOpen = true"
                     class="fcal_primary_btn2">
-                    <span>+</span> New
+                    <span>+</span> New Event Type
                 </el-button>
 
                 <el-dropdown @command="handleCommand" popper-class="fcal_select" trigger="click">
@@ -48,7 +48,7 @@
 
         <el-drawer
             v-model="isNewBookingOpen"
-            title="Create New Booking Type"
+            title="Create New Event Type"
             :zIndex="999"
             modal-class="fcal_drawer"
         >

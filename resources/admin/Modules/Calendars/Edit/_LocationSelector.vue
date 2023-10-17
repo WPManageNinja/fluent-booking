@@ -153,7 +153,6 @@ export default {
             this.locationSettings = {
                 type: '',
                 title: '',
-                custom_title: '',
                 host_phone_number: '',
                 description: '',
                 display_on_booking: 'no',
@@ -208,7 +207,7 @@ export default {
                 this.slot.location_settings[index].title = 'Organizer Phone Number';
             } else if (location.type == 'online_meeting') {
                 this.slot.location_settings[index].title = 'Online Meeting';
-            } else {
+            } else if (location.type != 'custom') {
                 return;
             }
             

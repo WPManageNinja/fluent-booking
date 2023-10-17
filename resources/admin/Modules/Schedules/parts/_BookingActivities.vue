@@ -12,7 +12,7 @@
             <div v-else class="fcal_booking_activities_list">
                 <div v-if="activities.length" v-for="activity in activities" :key="activity.id" class="fcal_booking_activity" :class="activity.type">
                     <el-icon class="fcal_activity_complete_icon">
-                        <Close v-if="activity.type=='cancel_reason'" />
+                        <Close v-if="activity.type=='cancel_reason' || activity.type=='error'" />
                         <Check v-else />
                     </el-icon>
 

@@ -8,13 +8,12 @@
                     <path class="path1" fill-rule="evenodd" clip-rule="evenodd" d="M24.1398 1.0409C24.2582 3.41671 24.3765 5.79252 24.495 8.16873C24.495 8.71292 24.9691 9.13311 25.522 9.10665C26.0749 9.0798 26.4695 8.61656 26.4695 8.07198C26.3511 5.69222 26.2328 3.31285 26.1143 0.933484C26.0749 0.389291 25.6009 -0.028135 25.048 0.00148363C24.5346 0.0311023 24.1003 0.497104 24.1398 1.0409Z" fill="white"/>
                 </svg>
                 Congratulations!
+                <PartyIcon class="party_icon" />
             </h1>
-            <p>Thank you for choosing FluentBooking. Let's create your first booking event (will take less than a minute!)</p>
-            <PartyIcon class="party_icon" />
+            <p>Thank You or Choosing FluentBooking. Let’s - <b>Create Your First Booking Event</b> <br>(Will Take Less Than a Minute!)</p>
         </div>
         <div class="fcal_create_calendar_header">
-            <h1 v-if="is_board">{{ headerTitle }}</h1>
-            <h1 v-else style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
+            <h1 v-if="!is_board" style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
                 <el-icon><Back /></el-icon> Add {{ calendar.slot.event_type=='single'?'One-to-One':'Group' }} Booking Type
             </h1>
         </div>
@@ -30,6 +29,15 @@
                 </div>
 
                 <div v-if="step==2" class="fcal_onboard_step step-2">
+                    <div class="fcal_create_calendar_form_header">
+                        <h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12Z" stroke="#1B2533" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15.7099 15.1798L12.6099 13.3298C12.0699 13.0098 11.6299 12.2398 11.6299 11.6098V7.50977" stroke="#1B2533" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Create Your Availability
+                        </h2>
+                    </div>
                     <WeeklySchedules
                         :weekly_schedules="calendar.slot?.weekly_schedules"
                         title="Weekly Hours"
@@ -106,8 +114,7 @@ export default {
                 }
             },
             saving: false,
-            step: 1,
-            headerTitle: 'Create a new booking calendar'
+            step: 1
         }
     },
     methods: {
@@ -147,7 +154,7 @@ export default {
             if (!location.type) {
                 this.$handleError('Location is required');
                 return false;
-            } else if ((location.type == 'custom') && !location.custom_title)  {
+            } else if ((location.type == 'custom') && !location.title)  {
                 this.$handleError('Location Title is required');
                 return false;
             } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
@@ -202,12 +209,15 @@ export default {
 
         },
         handleStep(index) {
-            this.step = index;
-            if (this.step == 1) {
-                this.headerTitle = 'Create a new booking calendar';
-            } else if (this.step == 2) {
-                this.headerTitle = 'Create Your Availability';
+            if (!this.calendar.slot.title) {
+                this.$handleError('Title Field is required');
+                return;
             }
+            if (!this.checkValidation()) {
+                return;
+            }
+
+            this.step = index;
         }
     },
     mounted() {

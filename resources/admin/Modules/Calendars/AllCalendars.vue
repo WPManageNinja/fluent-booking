@@ -6,7 +6,7 @@
             </div>
             <div class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
-                    <span>+</span> Create New Calendar
+                    <span>+</span> Add New Host
                 </el-button>
             </div>
         </div>
@@ -30,7 +30,7 @@
 
         <el-drawer
             v-model="isNewBookingOpen"
-            title="Create New Booking Type"
+            title="Add New Calendar Host"
             :zIndex="999"
             label-position="top"
             modal-class="fcal_drawer">

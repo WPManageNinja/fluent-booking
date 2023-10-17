@@ -268,11 +268,13 @@
             display: none;
         }
         &.fcal_location_select {
+            border: 1px solid $primaryColor !important;
             ul {
                 > ul {
                     &.el-select-group__wrap {
                         margin-bottom: 0;
-                        padding-bottom: 4px;
+                        padding-bottom: 8px;
+                        border: none;
                     }
                     > li {
                         &:not(.el-select-group__title) {
@@ -287,6 +289,13 @@
                     &.el-select-group__title {
                         margin-bottom: 0;
                         padding: 1px 10px !important;
+                        color: #8f97a2;
+                    }
+                    .el-select-group {
+                        li {
+                            color: #445164;
+                            border-radius: 4px;
+                        }
                     }
                 }
                 ul {
@@ -1451,6 +1460,14 @@
     &.fcal_location_modal {
         .el-dialog__header {
             border-bottom: 1px solid #eaeaea;
+            .el-dialog__headerbtn {
+                &:hover {
+                    color: $primaryColor;
+                    i {
+                        color: $primaryColor;
+                    }
+                }
+            }
         }
         .el-dialog__body {
             padding-bottom: 20px;
@@ -1460,9 +1477,10 @@
                 background: none !important;
                 .el-form-item {
                     .el-form-item__label {
-                        font-size: 16px !important;
+                        font-size: 14px !important;
                         line-height: 24px !important;
                         margin-bottom: 5px !important;
+                        color: $textSecondaryColor;
                     }
                     .el-form-item__content {
                         .el-input {
@@ -1474,6 +1492,9 @@
                             textarea {
                                 height: 80px;
                             }
+                        }
+                        .el-checkbox {
+                            margin-top: 16px;
                         }
                     }
                 }
@@ -1591,8 +1612,14 @@
 
         &:hover {
             border-color: $primaryColor;
-            color: #ffffff;
-            background: $primaryColor;
+            color: $primaryColor;
+            background: rgb(48 106 224 / 10%);
+        }
+    }
+    &.fcal_plain_btn {
+        &:hover {
+            color: $dark;
+            background: #f6f6f7;
         }
     }
     &.fcal_export_btn {
@@ -1802,8 +1829,15 @@
 
         &:hover {
             border-color: $primaryColor;
-            color: #ffffff;
-            background: $primaryColor;
+            color: $primaryColor;
+            background: rgb(48 106 224 / 10%);
+        }
+    }
+    .fcal_plain_btn {
+        &:hover {
+            background: #f6f6f7;
+            color: $dark;
+            border-color: #D6DAE1;
         }
     }
 
