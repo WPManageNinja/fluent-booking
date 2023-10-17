@@ -133,7 +133,7 @@ class LocationService
         return $locationData;
     }
 
-    public static function getLocationDetails($calendarEvent, $userInput = [])
+    public static function getLocationDetails($calendarEvent, $userInput = [], $allInput = [])
     {
         $userInput = array_map('sanitize_text_field', $userInput);
 
@@ -148,7 +148,19 @@ class LocationService
 
         if (count($locations) == 1) {
             // return the first location
-            return $locations[0];
+            $defaultLocation = $locations[0];
+
+            $type = Arr::get($defaultLocation, 'type');
+
+            $userInput = [
+                'driver' => $type
+            ];
+
+            if ($type == 'phone_guest') {
+                $userInput['user_location_input'] = Arr::get($allInput, 'phone_number');
+            } else if ($type == 'in_person_guest') {
+                $userInput['user_location_input'] = Arr::get($allInput, 'address');
+            }
         }
 
         $keyedLocations = [];

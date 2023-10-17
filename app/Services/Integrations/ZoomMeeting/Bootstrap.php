@@ -269,8 +269,6 @@ class Bootstrap
     {
         $bookingMeta = $booking->getMeta('__zoom_meeting_details');
 
-        error_log(print_r($bookingMeta, true));
-
         if (!$bookingMeta) {
             return false; // Nothing to cancel as there is no previous record
         }
