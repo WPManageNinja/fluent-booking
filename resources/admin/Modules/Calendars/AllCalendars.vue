@@ -6,7 +6,7 @@
             </div>
             <div class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
-                    <span>+</span> Create New Calendar
+                    <span>+</span> Add New Host
                 </el-button>
             </div>
         </div>

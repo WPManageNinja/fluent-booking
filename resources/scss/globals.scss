@@ -1612,8 +1612,14 @@
 
         &:hover {
             border-color: $primaryColor;
-            color: #ffffff;
-            background: $primaryColor;
+            color: $primaryColor;
+            background: rgb(48 106 224 / 10%);
+        }
+    }
+    &.fcal_plain_btn {
+        &:hover {
+            color: $dark;
+            background: #f6f6f7;
         }
     }
     &.fcal_export_btn {
@@ -1823,8 +1829,15 @@
 
         &:hover {
             border-color: $primaryColor;
-            color: #ffffff;
-            background: $primaryColor;
+            color: $primaryColor;
+            background: rgb(48 106 224 / 10%);
+        }
+    }
+    .fcal_plain_btn {
+        &:hover {
+            background: #f6f6f7;
+            color: $dark;
+            border-color: #D6DAE1;
         }
     }
 
