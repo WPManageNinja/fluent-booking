@@ -61,7 +61,7 @@ class ReportController extends Controller
             ]
         ];
 
-        if ((isset($paymentWidget['totalPayment']) || $paymentWidget['totalPayment'] === 0)) {
+        if ((isset($paymentWidget['totalPayment']) && $paymentWidget['totalPayment'] === 0)) {
             $currencySign = get_option('fluent_booking_global_payment_settings');
             if (isset($currencySign['currency'])) {
                 $currencySign = $currencySign['currency'];
