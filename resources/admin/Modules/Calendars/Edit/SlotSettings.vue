@@ -282,7 +282,7 @@ export default {
         },
     },
     mounted() {
-        this.$changeTitle('Slot Settings');
+        this.$changeTitle('Event Settings');
         this.getSlot();
     }
 }
