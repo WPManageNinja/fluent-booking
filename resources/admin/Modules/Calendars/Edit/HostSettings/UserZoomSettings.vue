@@ -1,0 +1,73 @@
+<template>
+    <div class="fcal_calendar_settings">
+        <div class="fcal_settings_header">
+            <div class="fcal_settings_head">
+                <h2>Zoom Integrations Settings</h2>
+                <p>Connect your Zoom account to create meeting when a event is booked.</p>
+            </div>
+        </div>
+        <el-skeleton :rows="4" animated v-if="loading"/>
+        <div v-else class="fcal_calendar_body">
+            <div v-if="connection" class="fcal_remote_calendar_block">
+                <each-zoom-account @disconnected="fetchConnection()" :calendar_id="calendar.id" :connectedAccount="connection"/>
+                <p style="padding: 10px 20px;">Your Zoom Account is connected. Please don't forget to set the meeting location as "Zoom Video" if you want to create meeting in zoom.</p>
+            </div>
+            <div v-else class="fcal_box_padded">
+                <h3>Connect your Zoom account to create dynamic meeting in zoom for your bookings.</h3>
+                <el-button @click="showingForm = true" type="primary">
+                    Connect Your Zoom Account
+                </el-button>
+
+                <el-dialog :append-to-body="true" :close-on-click-modal="false" v-model="showingForm"
+                           title="Connect Your Zoom Account" width="50%">
+                    <integration-form @connected="fetchConnection()"
+                                      :calendar_id="calendar.id"
+                                      v-if="showingForm"
+                                      :form_fields="form_fields"/>
+                </el-dialog>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script type="text/babel">
+import EachZoomAccount from "@/Modules/Settings/ZoomIntegration/EachAccount.vue";
+import IntegrationForm from "@/Modules/Settings/ZoomIntegration/IntegrationForm.vue";
+
+export default {
+    name: 'UserZoomSettings',
+    components: {
+        IntegrationForm,
+        EachZoomAccount
+    },
+    props: ['calendar'],
+    data() {
+        return {
+            connection: null,
+            form_fields: {},
+            loading: true,
+            showingForm: false
+        }
+    },
+    methods: {
+        fetchConnection() {
+            this.loading = true;
+            this.$get('calendars/' + this.calendar.id + '/integrations/zoom-connection')
+                .then(response => {
+                    this.connection = response.connection;
+                    this.form_fields = response.form_fields;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
+    },
+    mounted() {
+        this.fetchConnection();
+    }
+}
+</script>

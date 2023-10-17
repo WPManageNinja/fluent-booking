@@ -1,1 +1,51 @@
 @import "flags";
+
+.fcal_phone_wrapper {
+  position: relative;
+
+  .fcal_country_select {
+    position: absolute !important;
+    top: 1px;
+    left: 1px;
+    background: #f9fafb !important;
+    border: 0 !important;
+    border-right: 1px solid #D6DAE1 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    height: calc(100% - 2px) !important;
+    min-height: unset !important;
+
+    input{
+      border: none !important;
+    }
+  }
+
+  .svelte-select {
+    width: 120px !important;
+    .value-container{
+      .selected-item{
+        padding-left: 20px !important;
+        div[slot="selection"]{
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .svelte-select-list {
+    min-width: 300px !important;
+  }
+
+  .basic-tel-input{
+    padding-left: 130px !important;
+    .fcal_invalid {
+      border-color: red !important;
+      width: 100% !important;
+      padding-left: 140px;
+    }
+  }
+
+
+}
