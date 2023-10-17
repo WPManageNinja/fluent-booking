@@ -1,6 +1,6 @@
 <template>
     <div class="fc-connect-details">
-        <h4 class="fc-connect-mode">{{ Stripe }}</h4>
+        <h4 class="fc-connect-mode"></h4>
         <div v-if="!connect || connect.error" class="fc-connect-require">
             <h3> {{ 'Connect Your Stripe Account to your website to accept Payments' }}</h3>
             <a :href="connect_config[mode+'_redirect']" class="el-button is-plain el-button--primary el-button--large">
