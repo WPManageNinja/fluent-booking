@@ -67,7 +67,7 @@ export default {
         getMeetingDuration() {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
-        checkValidattion() {
+        checkValidation() {
             const location = this.slot.location_settings[0];
             if (!location.type) {
                 this.$handleError('Location is required');
@@ -85,7 +85,7 @@ export default {
             return true;
         },
         saveSettings() {
-            if (!this.checkValidattion()) {
+            if (!this.checkValidation()) {
                 return;
             }
             this.saving = true;
