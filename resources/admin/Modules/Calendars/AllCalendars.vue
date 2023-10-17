@@ -37,6 +37,7 @@
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item label="Select Host">
                     <HostSelector v-model="user_id" />
+                    <p>A particular user can have one calendar with multiple events. Please select a user who does not have a calendar yet</p>
                 </el-form-item>
                 <el-button
                     @click="createOneToOneSlot"
