@@ -4,8 +4,14 @@
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">
+                        <div class="img-box">
+                            <el-icon style="font-size: 30px;">
+                                <Operation />
+                            </el-icon>
+                        </div>
                         <div class="content">
                             <h3>General Settings</h3>
+                            <p>Manage your settings related emails, notifications and other general settings</p>
                         </div>
                     </div>
                 </div>

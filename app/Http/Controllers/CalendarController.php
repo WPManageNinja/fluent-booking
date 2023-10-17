@@ -17,7 +17,7 @@ use FluentBooking\Framework\Support\Arr;
 
 class CalendarController extends Controller
 {
-    public function index(Request $request)
+    public function getAllCalendars(Request $request)
     {
         if (PermissionManager::hasAllCalendarAccess()) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
@@ -58,7 +58,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function create(Request $request)
+    public function createCalendar(Request $request)
     {
         $data = $request->get('calendar');
 

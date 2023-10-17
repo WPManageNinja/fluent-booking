@@ -9,6 +9,7 @@ import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import GeneralSettings from "./Modules/Settings/GeneralSettings.vue";
 import ZoomIntegrationSettings from "./Modules/Settings/ZoomIntegration/ZoomIntegrationSettings.vue";
+import TeamManagement from "./Modules/Settings/Team/TeamManagement.vue";
 
 
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
@@ -147,6 +148,15 @@ export var routes = [
                 component: GeneralSettings,
                 meta: {
                     active_menu: 'settings',
+                }
+            },
+            {
+                name: 'team_members',
+                path: 'team-members',
+                component: TeamManagement,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Team Management'
                 }
             },
             {
