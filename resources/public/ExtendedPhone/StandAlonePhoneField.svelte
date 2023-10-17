@@ -1,4 +1,5 @@
 <script>
+    export let appData;
     import Select from 'svelte-select';
     import {TelInput, normalizedCountries} from 'svelte-tel-input';
 
@@ -16,27 +17,51 @@
 
     export let options = {};
 
+    function handleValueChange(value) {
+        appData.elem.dispatchEvent(new CustomEvent('value_changed', {
+            detail: {
+                value: value
+            }
+        }));
+    }
+    $:handleValueChange(value);
+
+
+
+
+    function onCountryChanged(country) {
+        if (country != null && country.length > 0) {
+            const input = inputRef['$$'].root.querySelector('input.basic-tel-input')
+
+            setTimeout(()=>{
+                input.focus()
+            },100)
+            console.log(input)
+        }
+    }
+    $:onCountryChanged(country);
+
+
+
     function handleChange(e) {
-        console.log(e.detail);
         country = e.detail.iso2;
     }
 
     let floatingConfig = {
-        strategy: 'fixed',
     }
 
     const itemId = 'iso2';
     const label = 'label';
+    let inputRef;
 
     console.log(normalizedCountries);
 
 </script>
 
 <div class="fcal_phone_wrapper">
-    <Select class="fcal_country_select" on:input={handleChange}
+    <Select class={valid ? 'fcal_country_select' : 'fcal_country_select invalid'}  on:input={handleChange}
             {itemId} {label}
             {floatingConfig}
-            listOpen="true"
             clearable={false}
             value={country}
             items={normalizedCountries}
@@ -44,14 +69,12 @@
         <div slot="selection" let:selection>
             {#if selection}
                 <span class="flag flag-{selection.iso2.toLowerCase()}"></span>
-                <span class="fcal_country_name">{selection.iso2}</span>
                 <span class="fcal_country_code">+{selection.dialCode}</span>
             {/if}
         </div>
         <div slot="item" let:item>
             <span class="flag flag-{item.iso2.toLowerCase()}"></span>
-            <span class="fcal_country_name">{item.iso2}</span>
-            <span class="fcal_country_code">+{item.dialCode}</span>
+            <span class="fcal_country_name">{item.label}</span>
         </div>
     </Select>
     <TelInput
@@ -59,6 +82,7 @@
         bind:value
         bind:valid
         bind:detailedValue
-        class="basic-tel-input {!valid ? 'invalid' : ''}"
+        bind:this={inputRef}
+        class="basic-tel-input {!valid ? 'fcal_invalid' : ''}"
     />
 </div>
