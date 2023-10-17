@@ -116,13 +116,13 @@ class SanitizeService
         if (!$conditions) {
             return [
                 'value' => 4,
-                'unit' => 'hours'
+                'unit'  => 'hours'
             ];
         }
 
         return [
-            'value' => (int) Arr::get($conditions, 'value', 4),
-            'unit' => sanitize_text_field(Arr::get($conditions, 'unit', 'hours'))
+            'value' => (int)Arr::get($conditions, 'value', 4),
+            'unit'  => sanitize_text_field(Arr::get($conditions, 'unit', 'hours'))
         ];
     }
 
@@ -136,25 +136,27 @@ class SanitizeService
 
     public static function locationSettings($locations)
     {
-        foreach ($locations as &$location) {
-            $location['type'] = sanitize_text_field($location['type']);
-            $location['title'] = sanitize_text_field($location['title']);
+        $sanitizedLocations = [];
+        foreach ($locations as $locationIndex => $location) {
 
-            $description = Arr::get($location, 'description');
-            $hostPhone = Arr::get($location, 'host_phone_number');
-            $meetingLink = Arr::get($location, 'meeting_link');
-            $displayOnBooking = Arr::get($location, 'display_on_booking');
-            
-            if ($description) {
-                $location['description'] = sanitize_text_field($description);
-            } elseif ($hostPhone) {
-                $location['host_phone_number'] = sanitize_text_field($hostPhone);
-            } elseif ($meetingLink) {
-                $location['meeting_link'] = sanitize_text_field($meetingLink);
-            } elseif ($displayOnBooking) {
-                $location['display_on_booking'] = sanitize_text_field($displayOnBooking);
+            $locationType = $location['type'];
+
+            $sanitizedLocation = [
+                'type'               => sanitize_text_field($location['type']),
+                'title'              => sanitize_text_field(Arr::get($location, 'title')),
+                'display_on_booking' => sanitize_text_field(Arr::get($location, 'display_on_booking'))
+            ];
+
+            if ($locationType == 'online_meeting') {
+                $sanitizedLocation['meeting_link'] = sanitize_url(Arr::get($location, 'meeting_link'));
+            } elseif ($locationType == 'custom' || $locationType == 'in_person_organizer') {
+                $sanitizedLocation['description'] = sanitize_textarea_field(Arr::get($location, 'description'));
+            } elseif ($locationType == 'phone_organizer') {
+                $sanitizedLocation['host_phone_number'] = sanitize_text_field(Arr::get($location, 'host_phone_number'));
             }
+
+            $sanitizedLocations[] = $sanitizedLocation;
         }
-        return $locations;
+        return $sanitizedLocations;
     }
 }

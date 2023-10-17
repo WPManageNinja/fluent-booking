@@ -210,11 +210,10 @@ class FrontEndHandler
             }
         }
 
-
         $globalSettings = Helper::getGlobalSettings();
         $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
-        return apply_filters('fluent_calendar/global_booking_vars', [
+        $data = [
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson,
@@ -231,7 +230,13 @@ class FrontEndHandler
                 'Schedule Meeting'     => __('Schedule Meeting', 'fluent-booking'),
                 'Continue to Payments' => __('Continue to Payments', 'fluent-booking')
             ]
-        ]);
+        ];
+
+        if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
+            $data['user_country'] = sanitize_text_field($_REQUEST['HTTP_CF_IPCOUNTRY']);
+        }
+
+        return apply_filters('fluent_calendar/global_booking_vars', $data);
     }
 
     public function ajaxScheduleMeeting()
@@ -330,10 +335,11 @@ class FrontEndHandler
             'event_type'       => $calendarSlot->event_type,
         ];
 
-        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []));
+        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
         if ($selectedLocation['type'] == 'phone_guest') {
             $bookingData['phone'] = $selectedLocation['description'];
         }
+
         $bookingData['location_details'] = $selectedLocation;
 
         if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {

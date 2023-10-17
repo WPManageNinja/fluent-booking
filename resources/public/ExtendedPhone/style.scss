@@ -14,7 +14,6 @@
     border-bottom-right-radius: 0 !important;
     height: calc(100% - 2px) !important;
     min-height: unset !important;
-
     input{
       border: none !important;
     }
@@ -40,12 +39,16 @@
 
   .basic-tel-input{
     padding-left: 130px !important;
-    .fcal_invalid {
-      border-color: red !important;
-      width: 100% !important;
-      padding-left: 140px;
-    }
   }
 
-
+  &.fcal_had_input {
+    .basic-tel-input.fcal_invalid{
+      // make the border color if not on focus
+      &:not(:focus) {
+        border-color: #ec4899 !important;
+      }
+    }
+  }
 }
+
+

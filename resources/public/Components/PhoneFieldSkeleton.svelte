@@ -1,6 +1,5 @@
 <div>
     <div id="{currentFieldId}" class="fcal_custom_phone_field"></div>
-    <span>{form[field.name]}</span>
 </div>
 
 <script>

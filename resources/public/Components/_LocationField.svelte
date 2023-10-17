@@ -8,7 +8,7 @@
         </label>
     {/each}
     {#if form.location_config.driver == 'phone_guest' }
-        <input bind:value={form.location_config.user_location_input} placeholder="{i18('Your phone number')}" type="text"/>
+        <PhoneFieldSkeleton field={ { name: 'user_location_input'} } form={form.location_config}/>
     {:else if form.location_config.driver == 'in_person_guest'}
         <div class="fcal_input_wrap address">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -26,6 +26,7 @@
 </div>
 
 <script>
+    import PhoneFieldSkeleton  from "./PhoneFieldSkeleton.svelte";
     import {i18} from '../util.js';
 
     export let field;

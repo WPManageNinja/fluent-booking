@@ -102,7 +102,7 @@ class BookingFieldService
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
                 'index'          => 5,
-                'type'           => 'text',
+                'type'           => 'phone',
                 'name'           => 'phone_number',
                 'label'          => __('Your Phone Number', 'fluent-booking'),
                 'required'       => true,
