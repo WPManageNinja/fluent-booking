@@ -6,15 +6,16 @@ use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Foundation\Policy;
 
-class UserPolicy extends Policy
+class SettingsPolicy extends Policy
 {
     /**
      * Check user permission for any method
-     * @param  \FluentBooking\Framework\Request\Request $request
+     * @param \FluentBooking\Framework\Request\Request $request
      * @return Boolean
      */
     public function verifyRequest(Request $request)
     {
-        return PermissionManager::currentUserHasAnyPemrmission();
+        return current_user_can('manage_options');
     }
+
 }
