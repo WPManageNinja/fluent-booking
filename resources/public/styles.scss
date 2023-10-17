@@ -1551,3 +1551,7 @@ $lightDark: #6b7280;
     display: block;
   }
 }
+
+input.fcal_input:disabled {
+  background: #f6f6f6;
+}

@@ -187,6 +187,12 @@ class BookingFieldService
             unset($existingFields['payment_method']);
         }
 
+        if(is_user_logged_in()) {
+            $existingFields['email']['disabled'] = true;
+        } else {
+            $existingFields['email']['disabled'] = false;
+        }
+
         return array_values($existingFields);
     }
 
