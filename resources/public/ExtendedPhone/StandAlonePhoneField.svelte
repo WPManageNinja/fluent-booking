@@ -5,13 +5,15 @@
     import {TelInput, normalizedCountries} from 'svelte-tel-input';
 
     // E164 formatted value, usually you should store and use this.
-    let value = null;
+    let value = appData.formValue || null;
 
-    // Selected country
-    let country = window.fluentCalendarPublicVars.user_country || null;
-
-    // Validity
+    let country = null;
     let valid = false;
+    if (value) {
+        valid = true;
+    } else {
+        country = window.fluentCalendarPublicVars.user_country || null;
+    }
 
     // Phone number details
     let detailedValue = null;
