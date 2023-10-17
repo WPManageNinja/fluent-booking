@@ -134,6 +134,11 @@
           border-radius: 8px;
           border: 1px solid #D6DAE1;
           padding: 24px;
+          transition: .3s;
+          &:hover {
+            box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+
+          }
 
           .fcal_status_draft {
             .fcal_slot_body {
@@ -532,7 +537,7 @@
             color: $primaryColor;
             display: inline-block;
             background: rgb(38 83 199 / 10%);
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 2px 10px;
             font-size: 12px;
             margin: 0;
@@ -544,8 +549,8 @@
           }
           .fcal_spot_payment_status {
             &.paid {
-              background: #4faf83;
-              color: #ffffff;
+              background: #e8f5f1;
+              color: #16896b;
             }
           }
           .fcal_spot_payment_amount {
@@ -598,6 +603,10 @@
               font-weight: 400;
               line-height: 20px;
               margin: 0;
+              color: #445164;
+              b {
+                color: $dark;
+              }
 
               + h3 {
                 margin-top: 3px;
@@ -653,12 +662,12 @@
   }
 
   .fcal_schedule_header {
-    padding: 12px 0;
-    background: #F5F6F7;
+    padding: 13px 24px;
+    background: #FAFAFA;
     border-bottom: 1px solid #EAECF0;
 
     h3 {
-      margin: 10px 0 0;
+      margin: 0;
       padding: 0;
       font-size: 16px;
       font-weight: 500;
@@ -668,8 +677,16 @@
   .fcal_schedule_wrapper {
     margin-top: 12px;
     background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #EAECF0;
 
     .fcal_schedule {
+      &:first-child {
+        .fcal_schedule_header {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+      }
       &:last-child {
         margin-bottom: 0;
       }

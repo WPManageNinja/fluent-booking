@@ -61,6 +61,19 @@
           }
         }
       }
+      
+      @media (max-width: 485px) {
+        flex-direction: column;
+        width: 100%;
+        .el-input{
+          .el-input__inner {
+            min-height: 38px;
+          }
+          &.fcal_search_input {
+            max-width: 100%;
+          }
+        }
+      }
     }
   }
 
@@ -410,10 +423,10 @@
         }
 
         &:nth-child(3) {
-          background: #FEF2F2;
+          background: #F8EEFF;
 
           h3 {
-            border-color: #EF444433;
+            border-color: #9126D933;
           }
 
           .icon {

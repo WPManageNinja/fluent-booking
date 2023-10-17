@@ -112,7 +112,7 @@ export default {
     },
     methods: {
         createCalendar() {
-            if (!this.checkValidattion()) {
+            if (!this.checkValidation()) {
                 return;
             }
             this.saving = true;
@@ -136,7 +136,7 @@ export default {
                 params: { calendar_id: calendarId, event_id: slotId }
             });
         },
-        checkValidattion() {
+        checkValidation() {
             const location = this.calendar.slot.location_settings[0];
 
             if(!location) {

@@ -228,7 +228,7 @@ export default {
         getLocationSettings() {
             return this.slot.location_settings;
         },
-        checkValidattion() {
+        checkValidation() {
             const location = this.slot.location_settings[0];
             if (!location.type) {
                 this.$handleError('Location is required');
@@ -246,7 +246,7 @@ export default {
             return true;
         },
         saveSettings() {
-            if (!this.checkValidattion()) {
+            if (!this.checkValidation()) {
                 return;
             }
             this.saving = true;
