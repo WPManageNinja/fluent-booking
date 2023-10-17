@@ -250,7 +250,6 @@
                             />
                         </div>
                         <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
-
                             <div class="fcal_date_event_details_header">
                                 <h2>
                                     {#if showingPayments}
@@ -273,7 +272,7 @@
                                 </h2>
                             </div>
 
-                            {#if !isFluentform }
+                            {#if !isFluentform && selectedDate }
                                 <BookingForm
                                     {appData}
                                     {slot}

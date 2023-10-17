@@ -121,33 +121,49 @@ class FrontEndHandler
             return '';
         }
 
-        $slot = CalendarSlot::query()->find($atts['id']);
+        $calendarEvent = CalendarSlot::query()->find($atts['id']);
 
-        if (!$slot) {
+        if (!$calendarEvent) {
             return '';
         }
 
-        $calendar = $slot->calendar;
+        $calendar = $calendarEvent->calendar;
 
         if (!$calendar) {
             return 'Calendar not found';
         }
 
-        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $assetUrl = App::getInstance('url.assets');
 
-        $this->loadGlobalVars();
-        $localizeData = $this->getCalendarEventVars($calendar, $slot);
+        $localizeData = $this->getCalendarEventVars($calendar, $calendarEvent);
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
 
+        if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
+
+            wp_enqueue_script('fluent-booking-phone-field', App::getInstance('url.assets') . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+            add_action('fluent_booking/short_code_render', function () use ($assetUrl) {
+                ?>
+                <style>
+                    .fcal_phone_wrapper .flag {
+                        background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                        background-size: 100%;
+                    }
+                </style>
+                <?php
+            });
+        }
+
+        wp_enqueue_script('fluent-booking-public',  $assetUrl. 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $this->loadGlobalVars();
         wp_localize_script(
             'fluent-booking-public',
-            'fcal_public_vars_' . $calendar->id . '_' . $slot->id,
+            'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id,
             $localizeData
         );
 
         return App::make('view')->make('public.calendar', [
-            'slot'     => $slot,
-            'calendar' => $calendar
+            'calenderEvent'     => $calendarEvent
         ]);
     }
 
@@ -475,16 +491,14 @@ class FrontEndHandler
         $author['name'] = $calendar->title;
 
         $eventVars = [
-            'slot'           => $calendarEvent,
+            'slot'           => $eventData,
             'author_profile' => $author,
             'form_fields'    => $formFields,
         ];
 
-        $fields['form_fields'] = array_values($eventVars['form_fields']);
+        $eventVars['form_fields'] = array_values($eventVars['form_fields']);
 
-        $fields = apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
-
-        return $fields;
+        return apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
     }
 
     public function ajaxHandleCancelMeeting()
