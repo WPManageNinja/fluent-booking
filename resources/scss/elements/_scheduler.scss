@@ -1239,10 +1239,8 @@
                       border: none;
                       padding: 13px 10px;
                       margin: 0;
-                      &:last-child {
-                        &:hover {
-                          color: var(--el-color-danger);
-                        }
+                      &:hover {
+                        color: $primaryColor;
                       }
                     }
                   }
@@ -1566,6 +1564,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     @media (max-width: 740px) {
       padding: 30px 50px;
     }
@@ -1589,13 +1588,19 @@
       font-size: 16px;
       font-weight: 400;
       line-height: 24px;
-      color: #DDEBFC;
+      color: #ffffff;
       margin: 0;
+      b {
+        font-weight: 600;
+      }
     }
     .party_icon {
       position: absolute;
-      right: 60px;
-      top: 33px;
+      right: -48px;
+      top: 1px;
+      width: 38px;
+      height: 37px;
+      left: auto;
     }
   }
 
@@ -1674,6 +1679,23 @@
     }
   }
 
+  .fcal_onboard_step {
+    .fcal_create_calendar_form_header {
+      border-bottom: 1px solid #EAECF0;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      h2 {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        font-size: 20px;
+        line-height: 28px;
+        color: #1B2533;
+        gap: 10px;
+        font-weight: 500;
+      }
+    }
+  }
 
   .fcal_availability_body {
     .fcal_availability_setting {
@@ -2737,6 +2759,12 @@
       align-content: flex-start;
       padding: 14px 0 14px 32px;
       position: relative;
+      &.error {
+        margin: 0;
+        box-shadow: none;
+        border: none;
+      }
+      &.error,
       &.cancel_reason {
         .fcal_activity_complete_icon {
           background: var(--el-color-danger);

@@ -26,7 +26,7 @@ class ActivationHandler
     public function registerWpCron()
     {
         $fiveMinutesHook = 'fluent_booking_five_minutes_tasks';
-        wp_schedule_single_event( time() + (60 * 5), $fiveMinutesHook );
+        as_schedule_recurring_action( time(), (60 * 5), $fiveMinutesHook,[],'fluent-booking',true );
 
         $dailyHook = 'fluent_booking_hourly_tasks';
         if (!wp_next_scheduled($dailyHook)) {

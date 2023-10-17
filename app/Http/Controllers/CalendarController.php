@@ -162,7 +162,7 @@ class CalendarController extends Controller
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'location_settings' => SanitizeService::locationSettings(Arr::get($slot, 'location_settings', [])),
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
@@ -392,7 +392,7 @@ class CalendarController extends Controller
             'availability_type' => 'existing_schedule',
             'availability_id'   => $availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
-            'location_settings' => wp_kses_post_deep(Arr::get($slot, 'location_settings', [])),
+            'location_settings' => SanitizeService::locationSettings(Arr::get($slot, 'location_settings', [])),
             'max_book_per_slot' => (int)Arr::get($slot, 'max_book_per_slot', 1),
             'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),
         ];
@@ -451,7 +451,8 @@ class CalendarController extends Controller
         $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $slot->availability_id = (int)Arr::get($data, 'availability_id');
         $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
-        $slot->location_settings = wp_kses_post_deep(Arr::get($data, 'location_settings', []));
+        $slot->location_settings = SanitizeService::locationSettings(Arr::get($slot, 'location_settings', []));
+
         $slot->save();
 
         return [

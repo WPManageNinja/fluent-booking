@@ -133,4 +133,28 @@ class SanitizeService
         }
         return '';
     }
+
+    public static function locationSettings($locations)
+    {
+        foreach ($locations as &$location) {
+            $location['type'] = sanitize_text_field($location['type']);
+            $location['title'] = sanitize_text_field($location['title']);
+
+            $description = Arr::get($location, 'description');
+            $hostPhone = Arr::get($location, 'host_phone_number');
+            $meetingLink = Arr::get($location, 'meeting_link');
+            $displayOnBooking = Arr::get($location, 'display_on_booking');
+            
+            if ($description) {
+                $location['description'] = sanitize_text_field($description);
+            } elseif ($hostPhone) {
+                $location['host_phone_number'] = sanitize_text_field($hostPhone);
+            } elseif ($meetingLink) {
+                $location['meeting_link'] = sanitize_text_field($meetingLink);
+            } elseif ($displayOnBooking) {
+                $location['display_on_booking'] = sanitize_text_field($displayOnBooking);
+            }
+        }
+        return $locations;
+    }
 }
