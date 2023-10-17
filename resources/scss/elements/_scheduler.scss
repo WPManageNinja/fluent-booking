@@ -2737,6 +2737,12 @@
       align-content: flex-start;
       padding: 14px 0 14px 32px;
       position: relative;
+      &.error {
+        margin: 0;
+        box-shadow: none;
+        border: none;
+      }
+      &.error,
       &.cancel_reason {
         .fcal_activity_complete_icon {
           background: var(--el-color-danger);
