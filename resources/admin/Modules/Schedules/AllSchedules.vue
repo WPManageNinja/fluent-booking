@@ -259,10 +259,10 @@ export default {
             }
 
             if(this.cancelledCount) {
-                statuses.cancelled = 'Cancelled';
+                statuses.cancelled = 'Cancelled ('+this.cancelledCount+')';
             }
             if(this.noShowCount) {
-                statuses.no_show = 'No Show';
+                statuses.no_show = 'No Show ('+this.noShowCount+')';
             }
 
             statuses.latest_bookings = 'Latest Bookings';
@@ -337,7 +337,8 @@ export default {
             this.$router.push({
                 name: 'scheduled_events',
                 query: {period: this.filters.period}
-            })
+            });
+            this.fetchSchedules();
         },
         handlePeriodChange() {
             this.$router.push({query: this.filters});
