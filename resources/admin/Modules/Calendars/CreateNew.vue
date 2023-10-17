@@ -202,6 +202,14 @@ export default {
 
         },
         handleStep(index) {
+            if (!this.calendar.slot.title) {
+                this.$handleError('Title Field is required');
+                return;
+            }
+            if (!this.checkValidation()) {
+                return;
+            }
+
             this.step = index;
             if (this.step == 1) {
                 this.headerTitle = 'Create a new booking calendar';
