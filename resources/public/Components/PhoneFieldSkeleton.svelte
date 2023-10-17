@@ -11,7 +11,7 @@
     // Crate a unique id for this field
     let currentFieldId = 'fcal_phone_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-    // callback on load the html of this svelte component
+    // callback on a load the html of this svelte component
     onMount(() => {
         const elem = document.getElementById(currentFieldId);
 
