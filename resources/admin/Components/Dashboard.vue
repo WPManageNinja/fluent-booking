@@ -42,7 +42,8 @@
                     class="overview-widget">
                     <h1>{{ widget.number }}</h1>
                     <p>{{ widget.title }}</p>
-                    <h3><span class="stat"><el-icon><Top /></el-icon> {{ widget.stat }}</span>{{ widget.content }}</h3>
+                    <h3><span :class="{'stat': true, 'down': widget.stat < 0}"><el-icon><Top /></el-icon>
+                        {{ widget.stat }}%</span>{{ widget.content }}</h3>
                     <span class="icon" v-html="widget.icon"></span>
                 </div>
             </div>

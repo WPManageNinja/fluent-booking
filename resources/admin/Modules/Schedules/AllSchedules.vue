@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-if="!schedulesLength" description="No bookings found based on your filter"/>
+                            <el-empty v-if="!schedulesLength && !booking_id" description="No bookings found based on your filter"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
