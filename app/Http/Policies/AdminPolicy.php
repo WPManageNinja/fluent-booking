@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Http\Policies;
 
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Foundation\Policy;
 
@@ -9,21 +10,21 @@ class AdminPolicy extends Policy
 {
     /**
      * Check user permission for any method
-     * @param  \FluentBooking\Framework\Request\Request $request
+     * @param \FluentBooking\Framework\Request\Request $request
      * @return Boolean
      */
     public function verifyRequest(Request $request)
     {
-        return current_user_can('manage_options');
+        return PermissionManager::userCan(['invite_team_members']);
     }
-
+    
     /**
      * Check user permission for any method
-     * @param  \FluentBooking\Framework\Request\Request $request
+     * @param \FluentBooking\Framework\Request\Request $request
      * @return Boolean
      */
     public function create(Request $request)
     {
-        return current_user_can('manage_options');
+        return PermissionManager::userCan(['invite_team_members']);
     }
 }
