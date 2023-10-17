@@ -179,7 +179,6 @@ class LandingPageHandler
 
         $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
 
-
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
@@ -191,14 +190,27 @@ class LandingPageHandler
                 $assetUrl . 'public/saas.css'
             ],
             'js_files'       => [
-                $assetUrl . 'public/js/phone-field.js',
                 $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
+                'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars(),
                 'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
-                'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars()
             ]
         ];
+
+        if (BookingFieldService::hasPhoneNumberField($eventVars['form_fields'])) {
+            $data['js_files'][] = $assetUrl . 'public/js/phone-field.js';
+            add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
+                ?>
+                <style>
+                    .fcal_phone_wrapper .flag {
+                        background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                        background-size: 100%;
+                    }
+                </style>
+                <?php
+            });
+        }
 
         if ($calendarEvent->type == 'paid') {
             $data['js_files'][] = 'https://js.stripe.com/v3/';
@@ -209,16 +221,7 @@ class LandingPageHandler
 
         $app = App::getInstance();
 
-        add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
-            ?>
-            <style>
-                .flag {
-                    background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
-                    background-size: 100%;
-                }
-            </style>
-            <?php
-        });
+        $data['existing_booking'] = $existingBooking;
 
         status_header(200);
         $app->view->render('landing.booking', $data);
@@ -356,6 +359,17 @@ class LandingPageHandler
                     booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?>
                     (<?php echo $booking->person_time_zone; ?>) </h3>
             </div>
+            <?php
+        });
+
+        add_action('fluent_booking/author_landing_head', function () {
+            ?>
+            <style>
+                .fluent_booking_app {
+                    margin-top: 0 !important;
+                    padding-top: 0 !important;
+                }
+            </style>
             <?php
         });
 
