@@ -12,10 +12,11 @@ class DeactivationHandler
     {
         $this->app = $app;
     }
-    
+
     public function handle()
     {
         wp_clear_scheduled_hook('fluent_booking_minute_tasks');
+        wp_clear_scheduled_hook('fluent_booking_five_minutes_tasks');
         wp_clear_scheduled_hook('fluent_booking_hourly_tasks');
     }
 

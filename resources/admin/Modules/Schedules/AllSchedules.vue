@@ -31,7 +31,7 @@
                         class="fcal_search_input"
                     >
                         <template #append>
-                            <el-button @click="fetchGuests">
+                            <el-button @click="fetchSchedules">
                                 <el-icon><Search /></el-icon>
                             </el-button>
                         </template>
