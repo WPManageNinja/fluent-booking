@@ -276,13 +276,13 @@ class ReportController extends Controller
 
         $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days"));
 
-        $currentMonthTotal = Order::where('status', 'draft')
+        $currentMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$startTime, $endTime])
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
             ->total;
 
-        $lastMonthTotal = Order::where('status', 'draft')
+        $lastMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$lastMonthStartTime, $startTime])
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
