@@ -121,19 +121,19 @@ class BookingService
 
         $sections = [
             'what'  => [
-                'title'   => __('What', 'fluent-booking'),
+                'title'   => __('What', 'fluent-booking-pro'),
                 'content' => $meetingTitle
             ],
             'when'  => [
-                'title'   => __('When', 'fluent-booking'),
+                'title'   => __('When', 'fluent-booking-pro'),
                 'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true)
             ],
             'who'   => [
-                'title'   => __('Who', 'fluent-booking'),
+                'title'   => __('Who', 'fluent-booking-pro'),
                 'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
-                'title'   => __('Where', 'fluent-booking'),
+                'title'   => __('Where', 'fluent-booking-pro'),
                 'content' => $booking->getLocationDetailsHtml()
             ]
         ];
@@ -142,7 +142,7 @@ class BookingService
             // add cancellation reason at the beginning
             $sections = array_merge([
                 'cancellation_reason' => [
-                    'title'   => __('Cancellation Reason', 'fluent-booking'),
+                    'title'   => __('Cancellation Reason', 'fluent-booking-pro'),
                     'content' => $booking->getCancelReason(true)
                 ]
             ], $sections);
@@ -150,19 +150,19 @@ class BookingService
 
         if ($booking->message) {
             $sections['note'] = [
-                'title'   => __('Additional Note', 'fluent-booking'),
+                'title'   => __('Additional Note', 'fluent-booking-pro'),
                 'content' => wpautop($booking->message)
             ];
         }
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {
-            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
+            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
         $confirmationData = [
             'author'      => $author,
-            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
+            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking-pro'),
             'sub_heading' => $subHeading,
             'sections'    => $sections,
             'slot'        => $calendarSlot,

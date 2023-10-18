@@ -247,7 +247,7 @@
                                     stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                                 <?php echo esc_attr($event->duration);
-                                esc_html_e(' minutes', 'fluent-booking'); ?>
+                                esc_html_e(' minutes', 'fluent-booking-pro'); ?>
                             </span>
                             </div>
                             <button class="book_now">

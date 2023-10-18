@@ -48,7 +48,7 @@ class BookingElement extends BaseFieldManager
                 'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
-                'label'              => __('Fluent Booking Field', 'fluent-booking'),
+                'label'              => __('Fluent Booking Field', 'fluent-booking-pro'),
                 'admin_field_label'  => '',
                 'event_id'            => '',
                 'booking_calendar'   => '',
@@ -61,12 +61,12 @@ class BookingElement extends BaseFieldManager
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
-                        'message' => __('This field is required', 'fluent-booking'),
+                        'message' => __('This field is required', 'fluent-booking-pro'),
                     ],
                 ),
             ),
             'editor_options' => array(
-                'title'      => __('Calendar Booking Field', 'fluent-booking'),
+                'title'      => __('Calendar Booking Field', 'fluent-booking-pro'),
                 'icon_class' => 'ff-edit-repeat',
                 'template'   => 'inputCalendar'
             ),
