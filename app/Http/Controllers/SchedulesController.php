@@ -55,7 +55,7 @@ class SchedulesController extends Controller
         do_action_ref_array('fluent_booking/schedules_query', [&$query]);
 
 
-        $all = false;
+        $all = $author==='all';
         if ($period == 'upcoming') {
             $query = $query->orderBy('start_time', 'ASC');
         } else if ($period == 'latest_bookings') {
@@ -63,7 +63,6 @@ class SchedulesController extends Controller
         } else if ($period == 'no_show') {
             $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');;
         } else {
-            $all = true;
             $query = $query->orderBy('start_time', 'DESC');
         }
         $query->applyComputedStatus($period, $all);
