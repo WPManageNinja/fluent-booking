@@ -38,9 +38,6 @@ require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
-
-(new FluentBooking\App\Services\PluginManager\Bootstrap())->register();
-
 add_action('init', function () {
     if (!isset($_GET['fluent-booking']) || $_GET['fluent-booking'] != 'fluent-booking-beta') {
         return;
