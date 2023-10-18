@@ -32,8 +32,8 @@
                                         <h3 style="font-size: 18px;">Connected Zoom Accounts</h3>
                                     </div>
                                     <div class="fcal_actions">
-                                        <el-button @click="showingForm = true" type="primary">Add New User Account
-                                        </el-button>
+<!--                                        <el-button @click="showingForm = true" type="primary">Add New User Account-->
+<!--                                        </el-button>-->
                                     </div>
                                 </div>
                                 <div class="fcal_section_body">

@@ -19,7 +19,8 @@ class CalendarController extends Controller
 {
     public function getAllCalendars(Request $request)
     {
-        if (PermissionManager::hasAllCalendarAccess()) {
+        $permission = PermissionManager::userCan(['manage_other_calendars', 'read_other_calendars']);
+        if ($permission) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
         } else {
             $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
