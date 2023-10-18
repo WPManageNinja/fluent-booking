@@ -46,4 +46,9 @@ class Order extends BaseModel
         return $this->hasOne(Transactions::class, 'object_id');
     }
 
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'parent_id', 'id');
+    }
+
 }

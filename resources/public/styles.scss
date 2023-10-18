@@ -721,7 +721,7 @@ $lightDark: #6b7280;
     }
 
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 20px;
     color: #1B2533;
   }
@@ -758,6 +758,7 @@ $lightDark: #6b7280;
     display: flex;
     align-items: center;
     gap: 6px;
+    font-size: 14px;
     svg {
       width: 16px;
       path,
@@ -1145,6 +1146,10 @@ $lightDark: #6b7280;
     align-items: center;
     gap: 6px;
     margin-bottom: 5px;
+    font-size: 14px;
+    svg {
+      width: 16px;
+    }
   }
 }
 
