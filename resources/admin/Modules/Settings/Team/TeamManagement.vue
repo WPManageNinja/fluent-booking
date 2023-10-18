@@ -75,7 +75,9 @@
             :close-on-click-modal="false"
             :before-close="() => { showModal = false; editingMember = null; }"
             title="Edit Team Member"
-            width="50%">
+            width="50%"
+            class="fcal_dialog"
+        >
             <el-form v-if="editingMember" label-position="top">
                 <el-form-item label="Access Permissions for this user">
                     <el-checkbox-group class="fcal_checkable_lined" v-model="editingMember.permissions">

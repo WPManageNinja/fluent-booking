@@ -61,7 +61,7 @@ class ReportController extends Controller
             ]
         ];
 
-        if ((isset($paymentWidget['totalPayment']) && $paymentWidget['totalPayment'] === 0)) {
+        if ((isset($paymentWidget['totalPayment']) && $paymentWidget['totalPayment'] !== 0)) {
             $currencySign = get_option('fluent_booking_global_payment_settings');
             if (isset($currencySign['currency'])) {
                 $currencySign = $currencySign['currency'];
@@ -133,6 +133,19 @@ class ReportController extends Controller
 
         // Define a function to fetch booking data based on status
         $fetchBookingsByStatus = function ($status) use ($period, $groupBy, $orderBy, $frequency, $from, $to) {
+
+            $isAdmin = PermissionManager::userCanSeeAllBookings();
+            if(!$isAdmin) {
+
+                return Booking::select($this->prepareSelect($frequency))
+                    ->where('status', $status)
+                    ->whereBetween('created_at', [$from->format('Y-m-d'), $to->format('Y-m-d')])
+                    ->where('host_user_id', get_current_user_id())
+                    ->groupBy($groupBy)
+                    ->orderBy($orderBy, 'ASC')
+                    ->get();
+            }
+
             return Booking::select($this->prepareSelect($frequency))
                 ->where('status', $status)
                 ->whereBetween('created_at', [$from->format('Y-m-d'), $to->format('Y-m-d')])
@@ -336,8 +349,7 @@ class ReportController extends Controller
     public function getLatestBooks()
     {
         $bookingQuery = Booking::query();
-        
-        $isAdmin = PermissionManager::hasAllCalendarAccess();
+        $isAdmin = PermissionManager::userCanSeeAllBookings();
 
         if (!$isAdmin) {
             $bookingQuery->whereHas('calendar', function ($q) {
