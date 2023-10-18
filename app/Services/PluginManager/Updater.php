@@ -350,7 +350,7 @@ class Updater
                 // Restore our filter
                 add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
-                wp_redirect(admin_url('plugins.php?s=fluentcampaign-pro&plugin_status=all'));
+                wp_redirect(admin_url('plugins.php?s=fluent-booking&plugin_status=all'));
                 exit();
             }
         }
