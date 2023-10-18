@@ -266,6 +266,7 @@ $lightDark: #6b7280;
     }
 
     .fcal_author_name {
+      text-transform: capitalize;
       font-size: 16px;
       font-weight: 500;
       line-height: 24px;
@@ -673,15 +674,10 @@ $lightDark: #6b7280;
 
   .fcal_icon_item {
     display: flex;
-    align-items: center;
     column-gap: 8px;
     color: #1B2533;
     svg {
-      fill: #697483;
 
-      path {
-        fill: #697483;
-      }
     }
 
     img {
@@ -701,11 +697,7 @@ $lightDark: #6b7280;
 
     &.slot_time_range {
       svg {
-        fill: #697483;
 
-        path {
-          fill: #697483 !important;
-        }
       }
     }
 
@@ -715,7 +707,7 @@ $lightDark: #6b7280;
         stroke: none;
 
         path {
-          fill: #697483 !important;
+
         }
       }
     }
