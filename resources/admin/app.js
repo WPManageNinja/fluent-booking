@@ -93,6 +93,8 @@ app.mixin({
                 message: errorMessage,
                 dangerouslyUseHTMLString: true
             });
+
+            return errorMessage;
         },
         $handleSuccess(response) {
             let successMsg = 'Success';
@@ -111,6 +113,8 @@ app.mixin({
                 message: successMsg,
                 dangerouslyUseHTMLString: true
             });
+
+            return successMsg;
         },
         toCurrentTimezone(date, format) {
             return dayjs(date).utc('z').local().tz(this.currentTimezone).format(format);

@@ -141,6 +141,9 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
     $router->get('/team', 'AdminController@getTeamMembers');
     $router->post('/team', 'AdminController@updateMemberPermission');
 
+    $router->get('license', 'LicenseController@getStatus');
+    $router->post('license', 'LicenseController@saveLicense');
+    $router->delete('license', 'LicenseController@deactivateLicense');
 });
 
 $router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {
