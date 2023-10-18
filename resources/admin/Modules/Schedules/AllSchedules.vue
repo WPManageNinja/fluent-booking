@@ -259,10 +259,10 @@ export default {
             }
 
             if(this.cancelledCount) {
-                statuses.cancelled = 'Cancelled ('+this.cancelledCount+')';
+                statuses.cancelled = 'Cancelled';
             }
             if(this.noShowCount) {
-                statuses.no_show = 'No Show ('+this.noShowCount+')';
+                statuses.no_show = 'No Show';
             }
 
             statuses.latest_bookings = 'Latest Bookings';
