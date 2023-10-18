@@ -300,17 +300,39 @@ class ReportController extends Controller
 
         $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days"));
 
+        $current_user_email = null;
+
+        $cantSeeTotal = PermissionManager::userCan(['read_all_bookings', 'manage_all_bookings', 'read_other_calendars', 'manage_other_calendars']);
+
+        if(!$cantSeeTotal) {
+            $current_user_email = wp_get_current_user()->user_email;
+        }
+
+
         $currentMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$startTime, $endTime])
+            ->when($current_user_email, function($query,$email){
+                return $query->whereHas('booking', function ($query) use($email){
+                    $query->where('email', $email);
+                });
+            })
+
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
             ->total;
 
         $lastMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$lastMonthStartTime, $startTime])
+            ->when($current_user_email, function($query,$email){
+                return $query->whereHas('booking', function ($query) use($email){
+                    $query->where('email', $email);
+                });
+            })
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
             ->total;
+
+
 
         $paymentPercentage = $this->getPercentage($currentMonthTotal, $lastMonthTotal);
 
