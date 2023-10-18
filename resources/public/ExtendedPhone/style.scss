@@ -35,6 +35,14 @@
 
   .svelte-select-list {
     min-width: 300px !important;
+    padding-left: 0 !important;
+    .list-item{
+      div[slot="item"]{
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+    }
   }
 
   .basic-tel-input{
