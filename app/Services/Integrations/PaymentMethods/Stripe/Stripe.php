@@ -121,7 +121,7 @@ class Stripe extends BasePaymentMethod
         );
 
         //Subscription only available for hosted, will implement onsite later
-        if ($stripeSetting['checkout_mode'] === 'onsite') {
+        if ($stripeSetting['checkout_mode'] === apply_filters('fluent_booking_global_checkout_mode', 'onsite')) {
             $paymentArgs['public_key'] = $publicKey;
             $this->handleOnsitePayment($orderItem, $paymentArgs, $apiKey);
         } else {
@@ -250,21 +250,26 @@ class Stripe extends BasePaymentMethod
         return $total * 100;
     }
 
-    public function intentData($orderItem, $args)
+    public function intentData($booking, $args)
     {
         $currency = CurrenciesHelper::getGlobalCurrency();
+
+        $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         $sessionPayload = array(
             'amount'   => intval($args['amount']),
             'currency' => $currency,
             'metadata' => [
                 'ref_id' => $args['client_reference_id'],
+                'name' => $booking->first_name . ' ' . $booking->last_name,
+                'booking_id' => $booking->id,
+                'booking_url' => $bookingUrl,
             ],
         );
 
         return $sessionPayload;
     }
 
-    public function sessionData($args)
+    public function sessionData($booking, $args)
     {
         $items = $args['items'];
         $currency = CurrenciesHelper::getGlobalCurrency();
@@ -284,6 +289,7 @@ class Stripe extends BasePaymentMethod
             ];
         }
 
+        $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         $invoiceData = [
             'account_tax_ids'   => [],
             'custom_fields'     => [],
@@ -291,6 +297,9 @@ class Stripe extends BasePaymentMethod
             'footer'            => '',
             'metadata'          => [
                 'ref_id' => $args['client_reference_id'],
+                'name' => $booking->first_name . ' ' . $booking->last_name,
+                'booking_id' => $booking->id,
+                'booking_url' => $bookingUrl,
             ],
             'rendering_options' => [],
         ];
@@ -327,7 +336,7 @@ class Stripe extends BasePaymentMethod
     public function handleHostedPayment($orderItem, $paymentArgs, $apiKey)
     {
         try {
-            $sessionData = $this->sessionData($paymentArgs);
+            $sessionData = $this->sessionData($orderItem, $paymentArgs);
 
             $sessionData = apply_filters('fluent-booking/payment/stripe_checkout_session_args', $sessionData);
 
