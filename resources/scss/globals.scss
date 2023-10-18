@@ -262,13 +262,14 @@
     &.fcal_select {
         padding: 8px !important;
         border-radius: 8px;
-        border: none !important;
+        //border: none !important;
         box-shadow: 0 8px 30px rgb(27 37 51 / 10%) !important;
+        border: 1px solid #EAECF0 !important;
         .el-popper__arrow {
             display: none;
         }
         &.fcal_location_select {
-            border: 1px solid $primaryColor !important;
+            border: 1px solid #EAECF0 !important;
             ul {
                 > ul {
                     &.el-select-group__wrap {
@@ -2628,6 +2629,9 @@
             }
             .el-form-item__content {
                 width: 100%;
+                > p {
+                    margin: 4px 0 0;
+                }
                 .el-select {
                     .el-input {
                         .el-input__wrapper {
@@ -2635,7 +2639,7 @@
                             outline: none;
                             border: 1px solid #D6DAE1;
                             border-radius: 8px;
-                            padding: 8px 16px;
+                            padding: 4px 16px;
                             &.is-focus {
                                 border-color: $primaryColor;
                             }
