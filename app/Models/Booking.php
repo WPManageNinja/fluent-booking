@@ -152,7 +152,7 @@ class Booking extends Model
         return $query->where('end_time', '<', date('Y-m-d H:i:s'));
     }
 
-    public function scopeApplyComputedStatus($query, $status, $skipDate = false)
+    public function scopeApplyComputedStatus($query, $status)
     {
         $validStatuses = [
             'upcoming',
@@ -171,9 +171,9 @@ class Booking extends Model
         }
 
         if ($status == 'completed') {
-            return $query->when(!$skipDate, function ($query) {
-                $query->where('end_time', '<', date('Y-m-d H:i:s'));
-            })->whereIn('status', ['scheduled', 'completed']); // maybe cron did not mark few as completed yet
+            return $query
+                ->whereIn('status', ['scheduled', 'completed'])
+                ->orWhere('end_time', '<', date('Y-m-d H:i:s')); // maybe cron did not mark few as completed yet
         }
 
         return $query->where('status', $status);
