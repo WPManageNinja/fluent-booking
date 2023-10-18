@@ -987,7 +987,11 @@
                             }
                         }
                       }
-
+                    .el-checkbox {
+                        .el-checkbox__label {
+                            white-space: break-spaces;
+                        }
+                    }
                     &.fcal_question_options {
                         .el-form-item__content {
                             > .el-link {

@@ -83,7 +83,9 @@
                     <el-checkbox-group class="fcal_checkable_lined" v-model="editingMember.permissions">
                         <el-checkbox v-for="(permission, permissionKey) in permission_sets" :key="permissionKey"
                                      :disabled="permissionKey == 'manage_own_calendar'"
-                                     :label="permissionKey">
+                                     :label="permissionKey"
+                                     class="fcal_checkbox"
+                        >
                             {{ permission }} <span
                             v-if="permissionKey == 'manage_own_calendar'">(Required Permission)</span>
                         </el-checkbox>

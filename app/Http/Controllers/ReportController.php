@@ -247,11 +247,22 @@ class ReportController extends Controller
 
     private function getAllBookingWidgetNumbers()
     {
-        $totalBooked = Booking::count();
+
+        $permissionAccess = PermissionManager::userCan(['read_all_bookings', 'manage_all_bookings', 'read_other_calendars', 'manage_other_calendars']);
+
+        if ($permissionAccess) {
+            $totalBooked = Booking::count();
+
+            $bookingCompleted = Booking::where('status', 'completed')->count();
+            $bookingCancelled = Booking::where('status', 'cancelled')->count();
+        } else {
+            $totalBooked = Booking::where('host_user_id', get_current_user_id())->count();
+
+            $bookingCompleted = Booking::where('status', 'completed')->where('host_user_id', get_current_user_id())->count();
+            $bookingCancelled = Booking::where('status', 'cancelled')->where('host_user_id', get_current_user_id())->count();
+        }
         $totalGuests = Booking::distinct()->count('email');
 
-        $bookingCompleted = Booking::where('status', 'completed')->count();
-        $bookingCancelled = Booking::where('status', 'cancelled')->count();
 
         return [
             'totalBooked'      => $totalBooked,
