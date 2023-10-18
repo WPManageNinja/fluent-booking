@@ -528,6 +528,48 @@ class CalendarController extends Controller
         ];
     }
 
+    public function getSlotSmsNotifications(Request $request, $calendarId, $slotId)
+    {
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $data = [
+            'notifications' => $calendarEvent->getSmsNotifications(true)
+        ];
+
+        if (in_array('smart_codes', $request->get('with', []))) {
+            $data['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
+        }
+
+        return $data;
+    }
+
+    public function saveSlotSmsNotifications(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $notifications = $request->get('notifications', []);
+
+        $formattedNotifications = [];
+
+        foreach ($notifications as $key => $value) {
+            $formattedNotifications[$key] = [
+                'title'   => sanitize_text_field($value['title']),
+                'enabled' => Arr::isTrue($value, 'enabled'),
+                'sms'     => $this->sanitize_notification_data($value['sms']),
+                'is_host' => Arr::isTrue($value, 'is_host')
+            ];
+        }
+
+        $slot->setSmsNotifications($formattedNotifications);
+
+        return [
+            'message' => __('Notifications has been saved', 'fluent-booking')
+        ];
+    }
+
     public function getSlotBookingFields(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
@@ -604,6 +646,7 @@ class CalendarController extends Controller
             'unit'                  => 'sanitize_text_field',
             'subject'               => 'sanitize_text_field',
             'body'                  => 'fcal_sanitize_html',
+            'number'                => 'sanitize_text_field',
             'additional_recipients' => 'sanitize_text_field'
         ];
 

@@ -66,6 +66,19 @@
                 </div>
             </el-tab-pane>
 
+            <el-tab-pane name="sms-notifications">
+                <template #label>
+                    <el-icon>
+                        <Notification/>
+                    </el-icon>
+                    SMS Notifications
+                </template>
+                <div v-if="activeTab == 'sms-notifications'" class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading"/>
+                    <SmsNotificationSettings v-else :calendar_event="slot"/>
+                </div>
+            </el-tab-pane>
+
             <el-tab-pane name="question-settings">
                 <template #label>
                     <el-icon><QuestionIcon/></el-icon> Booking Questions
@@ -142,7 +155,8 @@
 
 <script type="text/babel">
 import BasicInfo from './_BasicInfo'
-import EmailNotificationSettings from './_EmailNotificationSettings.vue'
+import EmailNotificationSettings from './_EmailNotificationSettings';
+import SmsNotificationSettings from './_SmsNotificationSettings';
 import ScheduleSettings from "./_ScheduleSettings";
 import QuestionSettings from "./_QuestionSettings.vue";
 import EventIcon from '../../../Components/Icons/EventIcon';
@@ -154,7 +168,7 @@ import WebhookSettings from "./WebHook/WebhookSettings.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import PaymentSettings from "./Payments/PaymentSettings.vue";
 import Integration from './GeneralIntegration/Integration.vue';
-import {Back, Link, Message, View, Share, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
+import {Back, Link, Message, Notification, Share, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
 import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {
@@ -167,6 +181,7 @@ export default {
         BasicInfo,
         SaveButton,
         EmailNotificationSettings,
+        SmsNotificationSettings,
         QuestionSettings,
         EventIcon,
         ScheduleIcon,
@@ -180,7 +195,8 @@ export default {
         Money,
         Message,
         Connection,
-        Integration
+        Integration,
+        Notification
     },
     data() {
         return {

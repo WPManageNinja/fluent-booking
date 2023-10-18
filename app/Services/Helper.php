@@ -1352,7 +1352,7 @@ class Helper
                         '{{guest.last_name}}'      => 'Guest Last Name',
                         '{{guest.full_name}}'      => 'Guest Full Name',
                         '{{guest.email}}'          => 'Guest Email',
-                        '{{booking.phone}}'    => 'Guest Main Phone Number (if provided)',
+                        '{{booking.phone}}'        => 'Guest Main Phone Number (if provided)',
                         '{{guest.note}}'           => 'Guest Note',
                         '{{guest.timezone}}'       => 'Guest Timezone',
                         '{{guest.form_data_html}}' => 'Guest Form Submitted Data (HTML)'
