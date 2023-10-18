@@ -58,12 +58,18 @@
                                 </el-icon>
                             </el-button>
 
-                            <el-button v-if="!member.is_calendar_user" type="danger" size="small"
-                                       class="fcal_danger_btn">
-                                <el-icon>
-                                    <Delete/>
-                                </el-icon>
-                            </el-button>
+                            <el-popconfirm
+                                popper-class="fcal_confirm_dialog"
+                                title="Are you sure to delete this?" @confirm="deleteTeamMember(member)">
+                                <template #reference>
+                                    <el-button v-if="!member.is_calendar_user" type="danger" size="small"
+                                               class="fcal_danger_btn">
+                                        <el-icon>
+                                            <Delete/>
+                                        </el-icon>
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
@@ -209,6 +215,20 @@ export default {
                 .finally(() => {
                     this.saving = false;
                     this.showAddModal = false;
+                });
+        },
+        deleteTeamMember(member) {
+            this.saving = true;
+            this.$del('settings/team/'+member.id,)
+                .then(response => {
+                    this.fetch();
+                    this.$notify.success(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
                 });
         }
     },

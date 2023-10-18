@@ -20,7 +20,7 @@ class MeetingPolicy extends Policy
         }
 
         if ($request->method() == 'GET') {
-            if (PermissionManager::userCan(['read_all_bookings', 'manage_all_bookings'])) {
+            if (PermissionManager::userCan(['manage_own_calendar','read_all_bookings', 'manage_all_bookings'])) {
                 return true;
             }
             if ($request->id) {
