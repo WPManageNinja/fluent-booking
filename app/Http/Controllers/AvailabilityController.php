@@ -29,7 +29,7 @@ class AvailabilityController extends Controller
             $host = (int)$host;
         }
 
-        if (!PermissionManager::hasAllCalendarAccess()) {
+        if (!PermissionManager::userCan(['read_and_use_other_availabilities','manage_other_availabilities'])) {
             $host = get_current_user_id();
         }
 

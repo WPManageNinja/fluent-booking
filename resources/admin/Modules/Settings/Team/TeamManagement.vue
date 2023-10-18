@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="right">
-                    <el-button type="primary" @click="addingMember = true">+ Team Member</el-button>
+                    <el-button type="primary" @click="showAddModal = true">+ Team Member</el-button>
                 </div>
             </div>
             <el-skeleton animated v-if="loading"></el-skeleton>
@@ -83,7 +83,9 @@
                     <el-checkbox-group class="fcal_checkable_lined" v-model="editingMember.permissions">
                         <el-checkbox v-for="(permission, permissionKey) in permission_sets" :key="permissionKey"
                                      :disabled="permissionKey == 'manage_own_calendar'"
-                                     :label="permissionKey">
+                                     :label="permissionKey"
+                                     class="fcal_checkbox"
+                        >
                             {{ permission }} <span
                             v-if="permissionKey == 'manage_own_calendar'">(Required Permission)</span>
                         </el-checkbox>
@@ -94,25 +96,60 @@
                 <el-button type="primary" @click="updatePermissions()">Update Access Permissions</el-button>
             </template>
         </el-dialog>
+        <el-dialog
+            v-model="showAddModal"
+            :append-to-body="true"
+            :close-on-click-modal="false"
+            :before-close="() => { showAddModal = false; showAddModal = null; }"
+            title="Add Team Member"
+            width="50%"
+            class="fcal_dialog"
+        >
+            <el-form v-if="showAddModal" label-position="top">
+                <el-form-item label="Select Member">
+                    <HostSelector v-model="user_id"/>
+                </el-form-item>
+                <el-form-item label="Access Permissions for this user">
+                    <el-checkbox-group class="fcal_checkable_lined" v-model="addingMember.permissions">
+                        <el-checkbox v-for="(permission, permissionKey) in permission_sets" :key="permissionKey"
+                                     :disabled="permissionKey == 'manage_own_calendar'"
+                                     :label="permissionKey"
+                                     class="fcal_checkbox"
+                        >
+                            {{ permission }} <span
+                            v-if="permissionKey == 'manage_own_calendar'">(Required Permission)</span>
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <el-button type="primary" @click="addMember()">Add Team Member</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script type="text/babel">
 import TeamIcon from '@/Components/Icons/TeamIcon.vue';
 import {Edit, Lock, Delete} from '@element-plus/icons-vue';
+import HostSelector from "@/Pieces/HostSelector";
 
 export default {
     name: 'TeamManagement',
-    components: {TeamIcon, Edit, Lock, Delete},
+    components: {HostSelector, TeamIcon, Edit, Lock, Delete},
     data() {
         return {
             members: [],
             permission_sets: {},
             loading: false,
-            addingMember: false,
+            addingMember: {
+                permissions: []
+            },
+            showAddModal: false,
             editingMember: null,
             showModal: false,
-            saving: false
+            saving: false,
+            user_id: ''
         }
     },
     methods: {
@@ -154,6 +191,24 @@ export default {
                 .finally(() => {
                     this.saving = false;
                     this.showModal = false;
+                });
+        },
+        addMember() {
+            this.saving = true;
+            this.$post('settings/team', {
+                user_id: this.user_id,
+                permissions: this.addingMember.permissions
+            })
+                .then(response => {
+                    this.fetch();
+                    this.$notify.success(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                    this.showAddModal = false;
                 });
         }
     },
