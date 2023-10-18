@@ -7,7 +7,7 @@ class Bootstrap
     public function register()
     {
         $apiUrl = 'https://fluentbooking.com/wp-admin/admin-ajax.php?action=fluent_booking_beta_testers&time='.time();
-        new Updater($apiUrl, FLUENT_BOOKING_DIR_FILE, array(
+        new Updater($apiUrl, FLUENT_BOOKING_PRO_DIR_FILE, array(
             'version'   => FLUENT_BOOKING_VERSION,
             'license'   => 'fake_license_key',
             'item_name' => 'FluentBooking',
