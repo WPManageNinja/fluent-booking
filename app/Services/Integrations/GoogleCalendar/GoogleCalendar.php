@@ -176,7 +176,7 @@ class GoogleCalendar extends IntegrationManager
     {
         $menu['configurations']['submenu'][] = [
             'key'       => 'google_calendar',
-            'label'     => __('Google Calendar', 'fluent-booking'),
+            'label'     => __('Google Calendar', 'fluent-booking-pro'),
         ];
         return $menu;
     }

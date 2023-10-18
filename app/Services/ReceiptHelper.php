@@ -30,7 +30,7 @@ class ReceiptHelper
     public function render($order)
     {
         if (!$order) {
-            return '<p class="fluent_booking_invalid_receipt">' . __('Invalid submission. No receipt found', 'fluent-booking') . '</p>';
+            return '<p class="fluent_booking_invalid_receipt">' . __('Invalid submission. No receipt found', 'fluent-booking-pro') . '</p>';
         }
 
         //to-do will be available from settings
@@ -124,7 +124,7 @@ class ReceiptHelper
         }
 
         $header = '<div>';
-        $header .= '<h4>' . __('Items Details', 'fluent-booking') . '</h4>';
+        $header .= '<h4>' . __('Items Details', 'fluent-booking-pro') . '</h4>';
         ob_start();
         $this->app->view->render('public.receipt.order-items-table', array(
             'order' => $order,
@@ -148,15 +148,15 @@ class ReceiptHelper
 
         $items = [
             [
-                'label' => __('First Name', 'fluent-booking'),
+                'label' => __('First Name', 'fluent-booking-pro'),
                 'value' => $booking->first_name,
             ],
             [
-                'label' =>  __('Last Name', 'fluent-booking'),
+                'label' =>  __('Last Name', 'fluent-booking-pro'),
                 'value' => $booking->last_name,
             ],
             [
-                'label' => __('Email', 'fluent-booking'),
+                'label' => __('Email', 'fluent-booking-pro'),
                 'value' => $booking->email,
             ]
         ];

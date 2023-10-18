@@ -328,7 +328,7 @@ class TimeSlotService
         $startDate = $slot->getMinBookableDateTime($startDate);
 
         if (strtotime($startDate) > strtotime($endDate)) {
-            return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking'));
+            return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
 
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);

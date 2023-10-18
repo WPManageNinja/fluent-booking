@@ -113,7 +113,7 @@ class PaymentMethodController extends Controller
                 'enabled' => 'no',
                 'items'   => [
                     [
-                        'title' => __('Booking Fee', 'fluent-booking'),
+                        'title' => __('Booking Fee', 'fluent-booking-pro'),
                         'value' => 100,
                     ]
                 ]
@@ -157,7 +157,7 @@ class PaymentMethodController extends Controller
 
         return $this->sendSuccess([
                 'data'    => $res->toArray(),
-                'message' => __('Settings updated successfully', 'fluent-booking')
+                'message' => __('Settings updated successfully', 'fluent-booking-pro')
             ]
         );
 
