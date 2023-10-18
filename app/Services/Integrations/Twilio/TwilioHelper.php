@@ -70,8 +70,8 @@ class TwilioHelper
                 'title'   => __('Booking Confirmation SMS to Attendee', 'fluent-booking'),
                 'sms'   => [
                     'number' => '{{booking.phone}}',
-                    'body'   => 'Your event has been scheduled'
-                    // 'body'   => 'Your event has been scheduled\nEvent Name: {{booking.event_name}} with {{host.name}} At {{booking.full_start_end_guest_timezone}}\nWhere: {{booking.location_details_html}}'
+                    // 'body'   => 'Your event has been scheduled'
+                    'body'   => 'Your event has been scheduled\nEvent Name: {{booking.event_name}} with {{host.name}} At {{booking.full_start_end_guest_timezone}}\nWhere: {{booking.location_details_html}}'
                 ],
             ],
             'booking_conf_host'     => [
@@ -80,8 +80,8 @@ class TwilioHelper
                 'title'   => __('Booking Confirmation SMS to Organizer (You)', 'fluent-booking'),
                 'sms'   => [
                     'number' => '',
-                    'body'   => 'An event has been scheduled',
-                    // 'body'   => 'An event has been scheduled \n Event Name: {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_guest_timezone}} \n Where: {{booking.location_details_html}}'
+                    // 'body'   => 'An event has been scheduled',
+                    'body'   => 'An event has been scheduled \n Event Name: {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_guest_timezone}} \n Where: {{booking.location_details_html}}'
                 ],
             ],
             'reminder_to_attendee'  => [
@@ -89,8 +89,8 @@ class TwilioHelper
                 'title'   => __('Configure Meeting Reminder to Attendee', 'fluent-booking'),
                 'sms'   => [
                     'number' => '{{booking.phone}}',
-                    'body'   => 'Reminder: Your meeting will start in few minutes',
-                    // 'body'    => 'Reminder: Your meeting will start in {{booking.start_time_human_format}} \n Event Name {{booking.event_name}} with {{host.name}} \n At {{booking.full_start_end_guest_timezone}}  \n Where: {{booking.location_details_html}}',
+                    // 'body'   => 'Reminder: Your meeting will start in few minutes',
+                    'body'    => 'Reminder: Your meeting will start in {{booking.start_time_human_format}} \n Event Name {{booking.event_name}} with {{host.name}} \n At {{booking.full_start_end_guest_timezone}}  \n Where: {{booking.location_details_html}}',
                     'times'   => [
                         [
                             'unit'  => 'minutes',
@@ -105,8 +105,8 @@ class TwilioHelper
                 'title'   => __('Configure Meeting Reminder to Organizer (You)', 'fluent-booking'),
                 'sms'   => [
                     'number' => '',
-                    'body'   => 'Reminder: Your meeting will start in few minutes',
-                    // 'body'    => 'Reminder: Your meeting will start in {{booking.start_time_human_format}} \n Event Name {{booking.event_name}} with {{host.name}} \n At {{booking.full_start_end_guest_timezone}}  \n Where: {{booking.location_details_html}}',
+                    // 'body'   => 'Reminder: Your meeting will start in few minutes',
+                    'body'    => 'Reminder: Your meeting will start in {{booking.start_time_human_format}} \n Event Name {{booking.event_name}} with {{host.name}} \n At {{booking.full_start_end_guest_timezone}}  \n Where: {{booking.location_details_html}}',
                     'times'  => [
                         [
                             'unit'  => 'minutes',
@@ -121,8 +121,8 @@ class TwilioHelper
                 'title'   => __('Booking Cancelled by Attendee (SMS to Organizer)', 'fluent-booking'),
                 'sms'   => [
                     'number' => '{{booking.phone}}',
-                    'body'   => 'An scheduled meeting has been canceled',
-                    // 'body'   => 'Your scheduled meeting has been canceled. \n Meeting Details: Event Name {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_host_timezone}} \n Cancellation Reason: {{booking.cancel_reason}} \n Where{{booking.location_details_html}}'
+                    // 'body'   => 'An scheduled meeting has been canceled',
+                    'body'   => 'Your scheduled meeting has been canceled. \n Meeting Details: Event Name {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_host_timezone}} \n Cancellation Reason: {{booking.cancel_reason}} \n Where{{booking.location_details_html}}'
                 ],
             ],
             'cancelled_by_host'     => [
@@ -130,8 +130,8 @@ class TwilioHelper
                 'title'   => __('Booking Cancelled by Organizer (SMS to Attendee)', 'fluent-booking'),
                 'sms'   => [
                     'number' => '{{booking.phone}}',
-                    'body'   => 'Your scheduled meeting has been canceled',
-                    // 'body'   => 'Your scheduled meeting has been canceled. \n Meeting Details: Event Name {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_host_timezone}} \n Cancellation Reason: {{booking.cancel_reason}} \n Where{{booking.location_details_html}}'
+                    // 'body'   => 'Your scheduled meeting has been canceled',
+                    'body'   => 'Your scheduled meeting has been canceled. \n Meeting Details: Event Name {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_host_timezone}} \n Cancellation Reason: {{booking.cancel_reason}} \n Where{{booking.location_details_html}}'
                 ],
             ]
         ]);

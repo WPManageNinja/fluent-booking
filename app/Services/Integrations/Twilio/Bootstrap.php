@@ -49,7 +49,9 @@ class Bootstrap
     {
         $config = TwilioHelper::getApiConfig();
 
-        $config['auth_token'] = '********************';
+        if ($config['auth_token']) {
+            $config['auth_token'] = '********************';
+        }
 
         return $config;
     }
@@ -200,6 +202,7 @@ class Bootstrap
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
+            error_log(print_r($smsData, 1));
             $this->sendSmsNotification($booking, $smsData);
         }
 
