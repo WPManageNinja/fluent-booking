@@ -17,8 +17,7 @@ class PermissionManager
             'read_other_calendars'               => 'Read Access of Other Users Calendars',
             'manage_other_calendars'             => 'Manage Other Users Calendars',
             'read_and_use_other_availabilities' => 'Read & Use Access of All Availabilities',
-            'manage_other_availabilities'        => 'Manage All Availabilities',
-            'invite_team_members'                => 'Invite Other Team Members'
+            'manage_other_availabilities'        => 'Manage All Availabilities'
         ];
     }
 
@@ -39,17 +38,12 @@ class PermissionManager
             return false;
         }
 
-        if ($calendar->user_id === get_current_user_id()) {
+        if ($calendar->user_id == get_current_user_id()) {
             return true;
         }
 
-        $userPermissions = self::getUserPermissions();
 
-        if (!$userPermissions) {
-            return false;
-        }
-
-        return in_array('read_other_calendars', $userPermissions) || in_array('manage_other_calendars', $userPermissions);
+        return self::userCan(['read_other_calendars', 'manage_other_calendars']);
     }
 
     public static function canWriteCalendar($calendarId)
@@ -64,22 +58,16 @@ class PermissionManager
             return false;
         }
 
-        if ($calendar->user_id === get_current_user_id()) {
+        if ($calendar->user_id == get_current_user_id()) {
             return true;
         }
 
-        $userPermissions = self::getUserPermissions();
-
-        if (!$userPermissions) {
-            return false;
-        }
-
-        return in_array('manage_other_calendars', $userPermissions);
+        return self::userCan('manage_other_calendars');
     }
 
     public static function hasCalendarAccess($calendar)
     {
-        return current_user_can('manage_options') || $calendar->user_id === get_current_user_id();
+        return current_user_can('manage_options') || $calendar->user_id == get_current_user_id();
     }
 
     public static function currentUserHasAnyPemrmission()
@@ -242,4 +230,8 @@ class PermissionManager
         return Arr::get($roles, 0);
     }
 
+    public static function userCanSeeAllBookings()
+    {
+        return self::userCan(['read_all_bookings', 'manage_all_bookings']);
+    }
 }

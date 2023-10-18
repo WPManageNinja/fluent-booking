@@ -63,7 +63,6 @@ class CalendarPolicy extends Policy
         return $calendar->user_id === get_current_user_id();
     }
 
-
     public function deleteCalendarEvent(Request $request)
     {
         return $this->deleteCalendar($request);
