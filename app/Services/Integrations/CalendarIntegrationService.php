@@ -96,11 +96,11 @@ class CalendarIntegrationService
 
             $errors = [];
             if(empty($metaValue['email'])) {
-                $errors['email'] = [__('Email is required', 'fluent-booking')];
+                $errors['email'] = [__('Email is required', 'fluent-booking-pro')];
             }
 
             if(empty($metaValue['event_trigger'])) {
-                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking')];
+                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking-pro')];
             }
 
             if($errors) {

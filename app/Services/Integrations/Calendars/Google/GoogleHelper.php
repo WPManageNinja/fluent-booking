@@ -88,7 +88,7 @@ class GoogleHelper
         $jwtPayload = json_decode($tokenPayload, true);
 
         if (empty($jwtPayload['email'])) {
-            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for google authentication. Please try again', 'fluent-booking'));
+            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for google authentication. Please try again', 'fluent-booking-pro'));
         }
 
         return Arr::get($jwtPayload, 'email');
