@@ -14,7 +14,7 @@ Domain Path: /language
 define('FLUENT_BOOKING_DIR', plugin_dir_path(__FILE__));
 define('FLUENT_BOOKING_URL', plugin_dir_url(__FILE__));
 define('FLUENT_BOOKING_ASSETS_VERSION', time());
-define('FLUENT_BOOKING_DIR_FILE', __FILE__);
+define('FLUENT_BOOKING_PRO_DIR_FILE', __FILE__);
 define('FLUENT_BOOKING_VERSION', '0.6');
 
 require __DIR__.'/vendor/autoload.php';
