@@ -3,7 +3,9 @@
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
             <h2>
-                <NoficationIcon/>
+                <el-icon>
+                    <Message/>
+                </el-icon>
                 Email Notification Settings
             </h2>
         </div>
@@ -59,7 +61,7 @@
 
 <script type="text/babel">
 import EditNotificationSettings from './__EditNotificationSettings.vue';
-import {EditPen, Close} from '@element-plus/icons-vue';
+import {EditPen, Close, Message} from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 
@@ -71,7 +73,8 @@ export default {
         SaveButton,
         NoficationIcon,
         EditPen,
-        Close
+        Close,
+        Message
     },
     data() {
         return {
