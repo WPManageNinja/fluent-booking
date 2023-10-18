@@ -242,6 +242,10 @@ class EditorShortCodeParser
             }
         }
 
+        if ($key == 'receipt_html') {
+            return (new ReceiptHelper())->getReceipt($booking->hash);
+        }
+
         if ($key == 'payment_status') {
             return $order->status;
         }
