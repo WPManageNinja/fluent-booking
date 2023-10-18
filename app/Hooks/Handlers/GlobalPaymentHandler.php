@@ -48,12 +48,11 @@ class GlobalPaymentHandler
                 $ret = ConnectConfig::verifyAuthorizeSuccess($data);
             }
 
-            if($ret){
+            if ($ret){
                 echo $ret;
-            }else{
-                wp_redirect(admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/payment/stripe'));
+                exit();
             }
-
+            wp_redirect(admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/payment/stripe'));
         }
 
     }
