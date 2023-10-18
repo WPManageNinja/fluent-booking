@@ -28,7 +28,8 @@
                 <p>Connect your favourite tools with your booking scheduled, completed or cancelled actions</p>
             </div>
             <div v-if="!isEmpty(available_integrations)" class="fcal_actions">
-                <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click">
+                <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click"
+                             popper-class="fcal_select">
                     <el-button type="info">
                         {{ $t('Add New Integration') }}
 
