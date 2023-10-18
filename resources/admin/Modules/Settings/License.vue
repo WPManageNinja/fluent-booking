@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <p class="text-align-center" style="color: red;" v-html="errorMessage"></p>
+            <p class="fcal_warning" v-html="errorMessage"></p>
         </div>
     </div>
 </template>

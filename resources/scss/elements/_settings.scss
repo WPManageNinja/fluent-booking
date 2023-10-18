@@ -820,7 +820,7 @@
         line-height: 22px;
     }
     .el-input {
-        margin: 0 0 5px;
+        margin: 0 0 20px;
         .el-input__wrapper {
             border-radius: 8px 0 0 8px;
             border: 1px solid #D6DAE1;
@@ -845,18 +845,26 @@
                 height: 100%;
                 border-radius: 0 8px 8px 0;
                 color: #ffffff;
+                > span {
+                    gap: 4px;
+                }
             }
         }
     }
     p {
         margin: 0;
         color: #445164;
+        font-size: 14px;
         a {
             color: $primaryColor;
             text-decoration: none;
             font-weight: 500;
         }
     }
+}
+.fcal_warning {
+    margin: 6px 0 0;
+    color: red;
 }
 
 @media (max-width: 992px) {
