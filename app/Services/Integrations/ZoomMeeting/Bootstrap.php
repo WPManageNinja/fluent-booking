@@ -56,7 +56,7 @@ class Bootstrap
     {
         $app = App::getInstance();
         $menuItems['zoom_meeting'] = [
-            'title'          => __('Zoom', 'fluent-booking'),
+            'title'          => __('Zoom', 'fluent-booking-pro'),
             'icon_url'       => $app['url.assets'] . 'images/zoom.svg',
             'component_type' => 'StandAloneComponent',
             'route'          => [
@@ -73,7 +73,7 @@ class Bootstrap
             'route'   => [
                 'name' => 'user_zoom_integration'
             ],
-            'label'   => __('Zoom Integration', 'fluent-booking'),
+            'label'   => __('Zoom Integration', 'fluent-booking-pro'),
             'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><circle cx="24" cy="24" r="20" fill="#2196f3"/><path fill="#fff" d="M29,31H14c-1.657,0-3-1.343-3-3V17h15c1.657,0,3,1.343,3,3V31z"/><polygon fill="#fff" points="37,31 31,27 31,21 37,17"/></svg>'
         ];
 
@@ -133,7 +133,7 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => 'Zoom API Error',
-                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking')
+                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -151,8 +151,8 @@ class Bootstrap
             'booking_id'  => $booking->id,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Zoom Meeting has been created', 'fluent-booking'),
-            'description' => __(sprintf('Zoom Meeting has been scheduled. %s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking') . '</a>'), 'fluent-booking')
+            'title'       => __('Zoom Meeting has been created', 'fluent-booking-pro'),
+            'description' => __(sprintf('Zoom Meeting has been scheduled. %s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
         ]);
 
         return true;
@@ -201,7 +201,7 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => 'Zoom API Error',
-                'description' => __('Failed to delete meeting with Zoom API', 'fluent-booking')
+                'description' => __('Failed to delete meeting with Zoom API', 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -210,8 +210,8 @@ class Bootstrap
             'booking_id'  => $booking->id,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Zoom Meeting has been deleted', 'fluent-booking'),
-            'description' => __('Zoom Meeting has been deleted', 'fluent-booking')
+            'title'       => __('Zoom Meeting has been deleted', 'fluent-booking-pro'),
+            'description' => __('Zoom Meeting has been deleted', 'fluent-booking-pro')
         ]);
 
         return true;
@@ -294,7 +294,7 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => 'Zoom API Error',
-                'description' => __('Failed to update meeting with Zoom API', 'fluent-booking')
+                'description' => __('Failed to update meeting with Zoom API', 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -309,8 +309,8 @@ class Bootstrap
             'booking_id'  => $booking->id,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Zoom Meeting has been updated', 'fluent-booking'),
-            'description' => __('Zoom Meeting has been updated with the new data', 'fluent-booking')
+            'title'       => __('Zoom Meeting has been updated', 'fluent-booking-pro'),
+            'description' => __('Zoom Meeting has been updated with the new data', 'fluent-booking-pro')
         ]);
 
         return true;

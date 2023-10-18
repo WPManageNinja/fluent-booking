@@ -8,7 +8,7 @@ Author: Meeting scheduling made easy
 Author URI: https://wpmanageninja.com
 Plugin URI: https://fluentbooking.com
 License: GPLv2 or later
-Text Domain: fluent-booking
+Text Domain: fluent-booking-pro
 Domain Path: /language
 */
 define('FLUENT_BOOKING_DIR', plugin_dir_path(__FILE__));
