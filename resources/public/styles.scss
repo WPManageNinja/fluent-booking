@@ -106,6 +106,19 @@ $lightDark: #6b7280;
                     padding-left: 38px;
                 }
             }
+          &.fcal_field_name_address {
+            position: relative;
+            svg {
+              position: absolute;
+              left: 15px;
+              width: 16px;
+              top: 10px;
+              opacity: 0.5;
+            }
+            input {
+              padding-left: 38px;
+            }
+          }
         }
 
         select {
