@@ -7,45 +7,47 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Integrations\FluentCRM\NewBookingTrigger;
 use FluentBooking\App\Services\Integrations\FluentCRM\CancelBookingTrigger;
 
-class FluentCrmInit {
+class FluentCrmInit
+{
 
-	public function __construct() {
+    public function __construct()
+    {
         $this->registerHooks();
-		$this->registerIntegrations();
-	}
+        $this->registerIntegrations();
+    }
 
-	/**
-	 * Register all the CRM integrations from here
-	 * @return void
-	 */
-	public function registerIntegrations()
-	{
-		$this->addContactMenuSection();
-		$this->addAutomations();
-	}
+    /**
+     * Register all the CRM integrations from here
+     * @return void
+     */
+    public function registerIntegrations()
+    {
+        $this->addContactMenuSection();
+        $this->addAutomations();
+    }
 
     public function registerHooks()
     {
         add_filter('fluentcrm_profile_sections', [$this, 'addProfileSection'], 10, 1);
-        add_filter('fluentcrm_get_form_submissions_fluent_booking', [$this, 'getScheduledMeetings'], 10, 2);      
+        add_filter('fluentcrm_get_form_submissions_fluent_booking', [$this, 'getScheduledMeetings'], 10, 2);
     }
 
-	/**
-	 * load Assets for to Fluent CRM  contact section
-	 * @return void
-	 */
-	public function addContactMenuSection()
-	{
-		add_action( 'fluent_crm/global_appjs_loaded', function () {
-			wp_enqueue_script( 'fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/admin/fluent-crm-in-calendar.js');
-		});
-	}
+    /**
+     * load Assets for to Fluent CRM  contact section
+     * @return void
+     */
+    public function addContactMenuSection()
+    {
+        add_action('fluent_crm/global_appjs_loaded', function () {
+            wp_enqueue_script('fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/admin/fluent-crm-in-calendar.js');
+        });
+    }
 
-	public function addAutomations()
-	{
+    public function addAutomations()
+    {
         new NewBookingTrigger();
         new CancelBookingTrigger();
-	}
+    }
 
     private function getSubscriberId($email)
     {
@@ -66,11 +68,8 @@ class FluentCrmInit {
 
     private function getActionUrl($meeting)
     {
-        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?spot_id=' . $meeting->group_id);
-
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'view' . '</a>';
-        
-        return $link;
+        $url = admin_url('#/scheduled-events?period=upcoming&booking_id=' . $meeting->id);
+        return '<a target="_blank" href="' . esc_url($url) . '">' . 'view' . '</a>';
     }
 
     private function getFormattedTime($meeting)
@@ -82,7 +81,7 @@ class FluentCrmInit {
 
     private function getMeetingTitle($meeting)
     {
-        $host  = $meeting->calendar->getAuthorProfile();
+        $host = $meeting->calendar->getAuthorProfile();
         $title = $meeting->slot->title . ' with ' . $host['name'];
 
         return $title;
@@ -90,9 +89,9 @@ class FluentCrmInit {
 
     public function getScheduledMeetings($data, $subsriber)
     {
-        $app      = fluentCrm();
-        $page     = intval($app->request->get('page', 1));
-        $perPage  = intval($app->request->get('per_page', 10));
+        $app = fluentCrm();
+        $page = intval($app->request->get('page', 1));
+        $perPage = intval($app->request->get('per_page', 10));
 
         $meetings = Booking::with(['slot', 'calendar'])
             ->where('email', $subsriber->email)
@@ -102,33 +101,32 @@ class FluentCrmInit {
 
         $formattedMeetings = [];
 
-        foreach ($meetings->items() as $meeting)
-        {
+        foreach ($meetings->items() as $meeting) {
             if (!$meeting->calendar || !$meeting->slot) {
                 continue;
             }
 
             $formattedMeetings[] = [
-                'id'           => '#'.$meeting->group_id,
-                'title'        => $this->getMeetingTitle($meeting),
-                'status'       => $meeting->status,
-                'meeting_at'   => $this->getFormattedTime($meeting),
-                'action'       => $this->getActionUrl($meeting)
+                'id'         => '#' . $meeting->group_id,
+                'title'      => $this->getMeetingTitle($meeting),
+                'status'     => $meeting->status,
+                'meeting_at' => $this->getFormattedTime($meeting),
+                'action'     => $this->getActionUrl($meeting)
             ];
         }
 
         return [
-            'total' => $meetings->total(),
-            'data'  => $formattedMeetings,
+            'total'          => $meetings->total(),
+            'data'           => $formattedMeetings,
             'columns_config' => [
-                'id' => [
+                'id'         => [
                     'label' => 'ID',
                     'width' => '100px'
                 ],
-                'title' => [
+                'title'      => [
                     'label' => 'Event',
                 ],
-                'status' => [
+                'status'     => [
                     'label' => 'Status',
                     'width' => '150px'
                 ],
@@ -136,7 +134,7 @@ class FluentCrmInit {
                     'label' => 'Meeting At',
                     'width' => '200px'
                 ],
-                'action' => [
+                'action'     => [
                     'label' => 'Action',
                     'width' => '100px'
                 ]
