@@ -140,7 +140,7 @@ class AdminController extends Controller
         $userIds = array_keys($teamMembers);
 
         $otherReadonlyUsers = Meta::where('object_type', 'user_meta')
-            ->where('object_type', '_access_permissions');
+            ->where('key', '_access_permissions');
 
         if ($userIds) {
             $otherReadonlyUsers = $otherReadonlyUsers->whereNotIn('object_id', $userIds);
