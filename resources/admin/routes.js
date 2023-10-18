@@ -8,15 +8,22 @@ import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
 import Settings from "./Modules/Settings/Settings.vue";
 import ConfigureIntegrationSettings from "./Modules/Settings/ConfigureIntegrationSettings.vue";
 import GeneralSettings from "./Modules/Settings/GeneralSettings.vue";
+import ZoomIntegrationSettings from "./Modules/Settings/ZoomIntegration/ZoomIntegrationSettings.vue";
+import TeamManagement from "./Modules/Settings/Team/TeamManagement.vue";
+
 
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
-import RemoteCalendarsSettings from "./Modules/Calendars/integrations/RemoteCalendarsSettings";
-import CalendarGeneralSettings from "./Modules/Calendars/integrations/CalendarGeneralSettings.vue";
+import UserZoomSettings from "./Modules/Calendars/Edit/HostSettings/UserZoomSettings.vue";
+import CalendarGeneralSettings from "./Modules/Calendars/Edit/HostSettings/CalendarGeneralSettings.vue";
+import RemoteCalendarsSettings from "./Modules/Calendars/Edit/HostSettings/RemoteCalendarsSettings";
+
+
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
 import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
 import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
+import License from "./Modules/Settings/License.vue";
 
 import IntegrationEditor from "./Modules/Calendars/Edit/GeneralIntegration/IntegrationEditor.vue";
 
@@ -58,6 +65,15 @@ export var routes = [
                 name: 'calendar_settings',
                 path: 'calendar-settings',
                 component: CalendarGeneralSettings,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Calendar Settings'
+                },
+            },
+            {
+                name: 'user_zoom_integration',
+                path: 'zoom-integration',
+                component: UserZoomSettings,
                 meta: {
                     active_menu: 'calendars',
                     title: 'Calendar Settings'
@@ -136,6 +152,24 @@ export var routes = [
                 }
             },
             {
+                name: 'team_members',
+                path: 'team-members',
+                component: TeamManagement,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Team Management'
+                }
+            },
+            {
+                name: 'zoom_integrations',
+                path: 'zoom-integrations',
+                component: ZoomIntegrationSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Zoom Integrations'
+                }
+            },
+            {
                 name: 'configure-integrations',
                 path: 'configure-integrations/:settings_key',
                 props: true,
@@ -154,6 +188,12 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Configure Integrations'
                 },
+            },
+            {
+                name: 'license',
+                path: 'license',
+                props: true,
+                component: License
             },
         ]
     },

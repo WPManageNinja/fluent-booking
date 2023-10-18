@@ -6,7 +6,7 @@ import Rest from './Bits/Rest.js';
 import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
-import {Plus, Delete, Location} from "@element-plus/icons-vue";
+import {Plus, Delete, Location, Operation, UserFilled} from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
 
 global.Errors = Errors;
@@ -39,7 +39,7 @@ function convertToText(obj) {
 
 const app = createApp(DashboardApplication);
 
-const Icons = [Plus, Delete, Location];
+const Icons = [Plus, Delete, Location, Operation, UserFilled];
 Icons.forEach((icon) => {
     app.component(icon.name, icon);
 });
@@ -93,6 +93,8 @@ app.mixin({
                 message: errorMessage,
                 dangerouslyUseHTMLString: true
             });
+
+            return errorMessage;
         },
         $handleSuccess(response) {
             let successMsg = 'Success';
@@ -111,6 +113,8 @@ app.mixin({
                 message: successMsg,
                 dangerouslyUseHTMLString: true
             });
+
+            return successMsg;
         },
         toCurrentTimezone(date, format) {
             return dayjs(date).utc('z').local().tz(this.currentTimezone).format(format);
@@ -163,6 +167,25 @@ app.mixin({
             }
 
             return currencySign + amount;
+        },
+        hasAccess(permission) {
+            if (window.fluentFrameworkAdmin.me.is_admin) {
+                return true;
+            }
+
+            // check if is array
+            if (Array.isArray(permission)) {
+                let hasAccess = false;
+                permission.forEach((perm) => {
+                    if (!window.fluentFrameworkAdmin.me.permissions.includes(perm)) {
+                        hasAccess = true;
+                    }
+                });
+
+                return hasAccess;
+            }
+
+            return window.fluentFrameworkAdmin.me.permissions.includes(permission);
         }
     }
 });

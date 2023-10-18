@@ -26,8 +26,7 @@ class AdminMenuHandler
 
     public function add()
     {
-        $capability = 'manage_options';
-
+        $capability = PermissionManager::getMenuPermission();
         $menuPriority = 26;
 
         if (defined('FLUENTCRM')) {
@@ -55,8 +54,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Booking Calendars', 'fluent-booking'),
-            __('Booking Calendars', 'fluent-booking'),
+            __('Calendars', 'fluent-booking'),
+            __('Calendars', 'fluent-booking'),
             $capability,
             'admin.php?page=fluent-booking#/calendars',
             ''
@@ -84,7 +83,7 @@ class AdminMenuHandler
             'fluent-booking',
             __('Settings', 'fluent-booking'),
             __('Settings', 'fluent-booking'),
-            $capability,
+            'manage_options',
             'admin.php?page=fluent-booking#/settings/general-settings',
             ''
         );
@@ -113,7 +112,7 @@ class AdminMenuHandler
             ],
             [
                 'key'       => 'calendars',
-                'label'     => __('Booking Calendars', 'fluent-booking'),
+                'label'     => __('Calendars', 'fluent-booking'),
                 'permalink' => $baseUrl . 'calendars'
             ],
             [
@@ -125,13 +124,16 @@ class AdminMenuHandler
                 'key'       => 'availability',
                 'label'     => __('Availability', 'fluent-booking'),
                 'permalink' => $baseUrl . 'availability'
-            ],
-            [
+            ]
+        ];
+
+        if(current_user_can('manage_options')) {
+            $menuItems[] = [
                 'key'       => 'settings',
                 'label'     => __('Settings', 'fluent-booking'),
                 'permalink' => $baseUrl . 'settings/general-settings'
-            ]
-        ];
+            ];
+        }
 
         $assets = $app['url.assets'];
 
@@ -212,31 +214,32 @@ class AdminMenuHandler
         $locationFields = (new Calendar())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
-            'slug'                       => $slug = $app->config->get('app.slug'),
-            'nonce'                      => wp_create_nonce($slug),
-            'rest'                       => $this->getRestInfo($app),
-            'brand_logo'                 => $this->getMenuIcon(),
-            'asset_url'                  => $assets,
-            'event_colors'               => $eventColors,
-            'meeting_durations'          => $meetingDurations,
-            'schedule_schema'            => $scheduleSchema,
-            'location_fields'            => $locationFields,
-            'custom_field_types'         => $customFieldTypes,
-            'me'                         => [
-                'id'        => $currentUser->ID,
-                'full_name' => trim($currentUser->first_name . ' ' . $currentUser->last_name),
-                'email'     => $currentUser->user_email,
-                'is_admin'  => $hasAllAccess
+            'slug'               => $slug = $app->config->get('app.slug'),
+            'nonce'              => wp_create_nonce($slug),
+            'rest'               => $this->getRestInfo($app),
+            'brand_logo'         => $this->getMenuIcon(),
+            'asset_url'          => $assets,
+            'event_colors'       => $eventColors,
+            'meeting_durations'  => $meetingDurations,
+            'schedule_schema'    => $scheduleSchema,
+            'location_fields'    => $locationFields,
+            'custom_field_types' => $customFieldTypes,
+            'me'                 => [
+                'id'          => $currentUser->ID,
+                'full_name'   => trim($currentUser->first_name . ' ' . $currentUser->last_name),
+                'email'       => $currentUser->user_email,
+                'is_admin'    => $hasAllAccess,
+                'permissions' => PermissionManager::getUserPermissions($currentUser, false),
             ],
-            'is_new'                     => $isNew,
-            'require_slug'               => $requireSlug,
-            'site_url'                   => site_url('/'),
-            'timezones'                  => DateTimeHelper::getTimeZones(true),
-            'supported_features'         => apply_filters('fluent_booking/supported_featured', [
+            'is_new'             => $isNew,
+            'require_slug'       => $requireSlug,
+            'site_url'           => site_url('/'),
+            'timezones'          => DateTimeHelper::getTimeZones(true),
+            'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ]),
-            'currency'                   => CurrenciesHelper::getGlobalCurrency(),
-            'currency_sign'              => CurrenciesHelper::getGlobalCurrencySign(),
+            'currency'           => CurrenciesHelper::getGlobalCurrency(),
+            'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign()
         ]);
     }
 

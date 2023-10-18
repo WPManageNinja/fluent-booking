@@ -1016,3 +1016,15 @@
 .fcal_event_status_pending.fcal_schedule_header_bar {
   background: #747474 !important;
 }
+
+
+.fcal_box_padded {
+  max-width: 700px;
+  margin: 30px auto;
+  text-align: center;
+  padding: 20px;
+}
+
+.fcal_checkable_lined > label {
+  display: flex;
+}

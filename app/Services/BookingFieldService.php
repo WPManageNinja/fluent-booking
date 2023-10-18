@@ -102,14 +102,13 @@ class BookingFieldService
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
                 'index'          => 5,
-                'type'           => 'text',
+                'type'           => 'phone',
                 'name'           => 'phone_number',
                 'label'          => __('Your Phone Number', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
-                'disable_alter'  => true,
-                'placeholder'    => esc_attr__('Phone Number', 'fluent-booking'),
+                'disable_alter'  => true
             ];
         } else if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
@@ -140,6 +139,8 @@ class BookingFieldService
 
         if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
+        } else {
+            $existingFields['location']['options'] = $defaultFields['location']['options'];
         }
 
         if (empty($defaultFields['phone_number'])) {
@@ -184,6 +185,12 @@ class BookingFieldService
             }
         } else {
             unset($existingFields['payment_method']);
+        }
+
+        if(is_user_logged_in()) {
+            $existingFields['email']['disabled'] = true;
+        } else {
+            $existingFields['email']['disabled'] = false;
         }
 
         return array_values($existingFields);
@@ -253,5 +260,23 @@ class BookingFieldService
         }
 
         return $customFields;
+    }
+
+    public static function hasPhoneNumberField($fields)
+    {
+        foreach ($fields as $field) {
+            if ($field['type'] == 'phone') {
+                return true;
+            } else if ($field['name'] == 'location') {
+                if(!empty($field['options'])) {
+                    foreach ($field['options'] as $option) {
+                        if (Arr::get($option, 'type') == 'phone_guest') {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

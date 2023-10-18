@@ -88,6 +88,10 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
             $email = Arr::get($notifications, 'booking_conf_host.email', []);
+            $additionalRecipients = Arr::get($email, 'additional_recipients', false);
+            if ($additionalRecipients) {
+                $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
+            }
             EmailNotificationService::emailOnBooked($booking, $email, 'host');
         }
 
@@ -117,9 +121,23 @@ class NotificationHandler
             EmailNotificationService::reminderEmail($booking, $email, $emailTo);
         } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $email = Arr::get($notifications, 'reminder_to_host.email', []);
+            $additionalRecipients = Arr::get($email, 'additional_recipients', false);
+            if ($additionalRecipients) {
+                $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
+            }
             EmailNotificationService::reminderEmail($booking, $email, $emailTo);
         }
 
+    }
+
+    public function getAdditionalRecipients($additionalRecipients)
+    {
+        if ($additionalRecipients) {
+            $recipients = explode(',', $additionalRecipients);
+            $recipients = array_map('trim', $recipients);
+            return array_unique($recipients);
+        }
+        return [];
     }
 
     public function emailOnBookingCancelled(Booking $booking)

@@ -24,8 +24,8 @@
             <el-form-item label="Label *">
                 <el-input v-model="fieldData.label" type="text" placeholder="Label"/>
             </el-form-item>
-            <el-form-item label="Placeholder">
-                <el-input v-model="fieldData.placeholder" type="textarea" placeholder="Placeholder" />
+            <el-form-item v-if="hasPlaceHolder" label="Placeholder">
+                <el-input v-model="fieldData.placeholder" placeholder="Placeholder" />
             </el-form-item>
             <el-form-item v-show="isOptionRequired" label="Options *" class="fcal_question_options">
                 <div class="fcal_question_option" v-for="(option, index) in fieldData.options" :key="index">
@@ -113,6 +113,9 @@ export default {
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
+        },
+        hasPlaceHolder() {
+            return ['text', 'textarea', 'message', 'number', 'email'].includes(this.fieldData.type);
         }
     },
     methods: {

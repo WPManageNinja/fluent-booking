@@ -12,6 +12,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\LocationService;
+use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Collection;
@@ -22,6 +23,9 @@ class FrontEndHandler
     public function register()
     {
         add_shortcode('fluent_booking', [$this, 'handleShortcode']);
+
+        add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
+
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
@@ -121,34 +125,58 @@ class FrontEndHandler
             return '';
         }
 
-        $slot = CalendarSlot::query()->find($atts['id']);
+        $calendarEvent = CalendarSlot::query()->find($atts['id']);
 
-        if (!$slot) {
+        if (!$calendarEvent) {
             return '';
         }
 
-        $calendar = $slot->calendar;
+        $calendar = $calendarEvent->calendar;
 
         if (!$calendar) {
             return 'Calendar not found';
         }
 
-        wp_enqueue_script('fluent-booking-public', App::getInstance('url.assets') . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $assetUrl = App::getInstance('url.assets');
 
-        $this->loadGlobalVars();
-        $localizeData = $this->getCalendarEventVars($calendar, $slot);
+        $localizeData = $this->getCalendarEventVars($calendar, $calendarEvent);
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
 
+        if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
+
+            wp_enqueue_script('fluent-booking-phone-field', App::getInstance('url.assets') . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+            add_action('fluent_booking/short_code_render', function () use ($assetUrl) {
+                ?>
+                <style>
+                    .fcal_phone_wrapper .flag {
+                        background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                        background-size: 100%;
+                    }
+                </style>
+                <?php
+            });
+        }
+
+        wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $this->loadGlobalVars();
         wp_localize_script(
             'fluent-booking-public',
-            'fcal_public_vars_' . $calendar->id . '_' . $slot->id,
+            'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id,
             $localizeData
         );
 
         return App::make('view')->make('public.calendar', [
-            'slot'     => $slot,
-            'calendar' => $calendar
+            'calenderEvent' => $calendarEvent
         ]);
+    }
+
+    public function handleReceiptShortcode($atts, $content)
+    {
+        if (!isset($_REQUEST['hash'])) {
+            return 'Booking hash is missing!';
+        }
+        return (new ReceiptHelper())->getReceipt($_REQUEST['hash']);
     }
 
     private function loadGlobalVars()
@@ -210,11 +238,10 @@ class FrontEndHandler
             }
         }
 
-
         $globalSettings = Helper::getGlobalSettings();
         $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
-        return apply_filters('fluent_calendar/global_booking_vars', [
+        $data = [
             'ajaxurl'        => admin_url('admin-ajax.php'),
             'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
             'current_person' => $currentPerson,
@@ -231,7 +258,13 @@ class FrontEndHandler
                 'Schedule Meeting'     => __('Schedule Meeting', 'fluent-booking'),
                 'Continue to Payments' => __('Continue to Payments', 'fluent-booking')
             ]
-        ]);
+        ];
+
+        if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
+            $data['user_country'] = sanitize_text_field($_REQUEST['HTTP_CF_IPCOUNTRY']);
+        }
+
+        return apply_filters('fluent_calendar/global_booking_vars', $data);
     }
 
     public function ajaxScheduleMeeting()
@@ -330,10 +363,11 @@ class FrontEndHandler
             'event_type'       => $calendarSlot->event_type,
         ];
 
-        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []));
+        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
         if ($selectedLocation['type'] == 'phone_guest') {
             $bookingData['phone'] = $selectedLocation['description'];
         }
+
         $bookingData['location_details'] = $selectedLocation;
 
         if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {
@@ -449,7 +483,8 @@ class FrontEndHandler
             'location_icon_html' => $calendarEvent->location_icon_html,
             'description'        => $calendarEvent->description,
             'pre_selects'        => null,
-            'settings'           => $calendarEvent->settings
+            'settings'           => $calendarEvent->settings,
+            'type'               => $calendarEvent->type,
         ];
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
@@ -469,16 +504,14 @@ class FrontEndHandler
         $author['name'] = $calendar->title;
 
         $eventVars = [
-            'slot'           => $calendarEvent,
+            'slot'           => $eventData,
             'author_profile' => $author,
             'form_fields'    => $formFields,
         ];
 
-        $fields['form_fields'] = array_values($eventVars['form_fields']);
+        $eventVars['form_fields'] = array_values($eventVars['form_fields']);
 
-        $fields = apply_filters('fluent_calendar_public_event_vars', $eventVars, $calendarEvent);
-
-        return $fields;
+        return apply_filters('fluent_booking/public_event_vars', $eventVars, $calendarEvent);
     }
 
     public function ajaxHandleCancelMeeting()

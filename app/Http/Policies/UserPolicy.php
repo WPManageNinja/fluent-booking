@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Http\Policies;
 
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Foundation\Policy;
 
@@ -14,6 +15,6 @@ class UserPolicy extends Policy
      */
     public function verifyRequest(Request $request)
     {
-        return !!get_current_user_id();
+        return PermissionManager::currentUserHasAnyPemrmission();
     }
 }
