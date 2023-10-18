@@ -27,6 +27,23 @@
             </div>
         <?php endforeach; ?>
 
+        <?php if($extra_html): ?>
+        <hr />
+        <div class="fcal_payment_html">
+            <h3 style="margin-bottom: 10px;">Payment Details</h3>
+            <?php echo $extra_html; ?>
+        </div>
+        <style>
+            .fluent_booking_payment_receipt {
+                background: transparent !important;
+                padding: 0 !important;
+            }
+            .fcal_payment_html h4 {
+                margin: 10px 0;
+            }
+        </style>
+        <?php endif; ?>
+
         <?php if ($booking->canCancel()): ?>
             <?php if ($action_type == 'cancel'): ?>
                 <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
