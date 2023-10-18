@@ -120,6 +120,10 @@ class EditorShortCodeParser
             return $booking->{$key};
         }
 
+        if($key == 'phone') {
+            return $booking->{$key};
+        }
+
         return '';
     }
 
