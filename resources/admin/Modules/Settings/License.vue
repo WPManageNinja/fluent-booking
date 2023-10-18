@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_settings_body_inner">
+    <div class="fcal_settings_body_inner fcal_license_settings">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
                 <h3>{{$t('License Management')}}</h3>
@@ -18,12 +18,11 @@
                 <h3>{{$t("Fetching License Information Please wait")}}</h3>
             </div>
 
-            <div v-else class="fc_narrow_box fc_white_inverse text-align-center" :class="'fc_license_'+licenseData.status">
+            <div v-else class="fcal_license_box" :class="'fc_license_'+licenseData.status">
                 <div v-if="licenseData.status == 'expired'">
                     <h3>{{$t("Looks like your license has been expired")}} {{licenseData.expires}}</h3>
                     <a :href="licenseData.renew_url" target="_blank" class="el-button el-button--danger el-button--small">{{$t("Click Here to Renew your License")}}</a>
 
-                    <hr style="margin: 20px 0px;" />
                     <p v-if="!showNewLicenseInput">{{$t('Have a new license Key?')}} <a @click.prevent="showNewLicenseInput = !showNewLicenseInput" href="#">{{$t('Click here')}}</a></p>
                     <div v-else>
                         <h3>{{$t('Your License Key')}}</h3>
@@ -44,7 +43,6 @@
                         <!-- <span style="font-size: 50px;" class="el-icon el-icon-circle-check"></span> -->
                     </div>
                     <h2>{{$t('You license key is valid and activated')}}</h2>
-                    <hr style="margin: 20px 0px;" />
                     <p>{{$t('Want to deactivate this license?')}} <a @click.prevent="deactivateLicense()" href="#">{{$t('Click here')}}</a></p>
                 </div>
                 
@@ -60,8 +58,6 @@
                             </el-button>
                         </template>
                     </el-input>
-
-                    <hr style="margin: 20px 0 30px;" />
                     <p v-if="!showNewLicenseInput">Don't have a license key? <a target="_blank" :href="licenseData.purchase_url">{{$t('Purchase one here')}}</a></p>
                 </div>
             </div>
