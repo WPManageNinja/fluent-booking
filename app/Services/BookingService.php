@@ -170,8 +170,14 @@ class BookingService
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
             'action_type' => $actionType,
             'can_cancel'  => $booking->canCancel(),
-            'bookmarks'   => []
+            'bookmarks'   => [],
+            'extra_html'  => ''
         ];
+
+        if ($booking->payment_status) {
+            $confirmationData['extra_html'] = EditorShortCodeParser::parse('{{payment.receipt_html}}', $booking);
+        }
+
 
         if ($booking->canCancel()) {
             $confirmationData['action_url'] = add_query_arg([
@@ -228,7 +234,7 @@ class BookingService
                 ]
             ], $booking);
         }
-      
+
         $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);
