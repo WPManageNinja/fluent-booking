@@ -42,7 +42,9 @@
                         class="fcal_select"
                         aria-placeholder="Select Event Types"
                         popper-class="fcal_select"
-                        @change="handlePeriodChange()">
+                        @change="handlePeriodChange()"
+                       placement="bottom"
+                    >
                         <template v-if="event_types.length">
                             <el-option value="all" label="All Events" />
                             <el-option v-for="event in event_types" :key="event.id" 
@@ -54,7 +56,9 @@
                         v-model="filters.author"
                         class="fcal_select"
                         popper-class="fcal_select"
-                        @change="handlePeriodChange()">
+                        @change="handlePeriodChange()"
+                        placement="bottom"
+                    >
                         <el-option value="me" label="My Meetings"></el-option>
                         <template v-if="all_hosts.length">
                             <el-option value="all" label="All Meetings" />
