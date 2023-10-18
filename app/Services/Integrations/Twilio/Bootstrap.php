@@ -18,7 +18,7 @@ class Bootstrap
     {
         $app = App::getInstance();
         $menuItems['twilio'] = [
-            'title' => __('SMS by Twilio', 'fluent-booking'),
+            'title' => __('SMS by Twilio', 'fluent-booking-pro'),
             'icon_url' => $app['url.assets'] . 'images/twilio.svg',
             'component_type' => 'GlobalSettingsComponent',
             'route' => [

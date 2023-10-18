@@ -85,7 +85,7 @@ class AdminController extends Controller
             }
 
             if ($currentUserId == $calendar->user_id) {
-                $userName = __('My Meetings', 'fluent-booking');
+                $userName = __('My Meetings', 'fluent-booking-pro');
             }
 
             $allHosts[] = [
@@ -195,7 +195,7 @@ class AdminController extends Controller
         if (user_can($user, 'manage_options')) {
             return $this->sendError([
                 'success' => false,
-                'message' => __('This is an admin user. You can not change permissions', 'fluent-booking')
+                'message' => __('This is an admin user. You can not change permissions', 'fluent-booking-pro')
             ]);
         }
 
@@ -215,7 +215,7 @@ class AdminController extends Controller
             ->where('key', '_access_permissions')
             ->first();
 
-        $message = __('Access Permissions has been updated successfully', 'fluent-booking');
+        $message = __('Access Permissions has been updated successfully', 'fluent-booking-pro');
 
         if ($meta) {
             $meta->value = $validPermissions;
@@ -227,7 +227,7 @@ class AdminController extends Controller
                 'key'    => '_access_permissions',
                 'value'  => $validPermissions
             ]);
-            $message = __('New member has been added with the selected access permissions', 'fluent-booking');
+            $message = __('New member has been added with the selected access permissions', 'fluent-booking-pro');
         }
 
         return [

@@ -322,8 +322,8 @@ class LandingPageHandler
             $formFields[] = [
                 'type'        => 'textarea',
                 'name'        => '_rescheduling_reason',
-                'label'       => __('Reason of rescheduling', 'fluent-booking'),
-                'placeholder' => __('Rescheduling Reason', 'fluent-booking'),
+                'label'       => __('Reason of rescheduling', 'fluent-booking-pro'),
+                'placeholder' => __('Rescheduling Reason', 'fluent-booking-pro'),
                 'required'    => true,
                 'disabled'    => false,
                 'enabled'     => true
@@ -349,7 +349,7 @@ class LandingPageHandler
                 'rescheduling_hash' => $booking->hash
             ];
 
-            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking');
+            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
 
             return $vars;
         });

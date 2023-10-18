@@ -140,7 +140,7 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'schedule' => $createdSchedule,
-            'message'  => __('Schedule has been created successfully', 'fluent-booking'),
+            'message'  => __('Schedule has been created successfully', 'fluent-booking-pro'),
         ]);
     }
 
@@ -169,7 +169,7 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'schedule' => $createdSchedule,
-            'message'  => __('Schedule has been cloned successfully', 'fluent-booking'),
+            'message'  => __('Schedule has been cloned successfully', 'fluent-booking-pro'),
         ]);
     }
 
@@ -196,7 +196,7 @@ class AvailabilityController extends Controller
         do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
 
         return $this->sendSuccess([
-            'message'  => __('Schedule has been updated successfully', 'fluent-booking'),
+            'message'  => __('Schedule has been updated successfully', 'fluent-booking-pro'),
             'schedule' => $schedule,
             'timezone' => $timezone
         ]);
@@ -221,7 +221,7 @@ class AvailabilityController extends Controller
         $schedule->save();
 
         return $this->sendSuccess([
-            'message' => __('Schedule title has been updated successfully', 'fluent-booking'),
+            'message' => __('Schedule title has been updated successfully', 'fluent-booking-pro'),
             'title'   => $schedule->key
         ]);
     }
@@ -243,7 +243,7 @@ class AvailabilityController extends Controller
         AvailabilityService::updateOtherDefaultStatus($schedule, $scheduleId);
 
         return $this->sendSuccess([
-            'message' => __('Status has been updated successfully', 'fluent-booking')
+            'message' => __('Status has been updated successfully', 'fluent-booking-pro')
         ]);
     }
 
@@ -255,7 +255,7 @@ class AvailabilityController extends Controller
 
         if ($isDefault) {
             return $this->sendError([
-                'message' => __('Default Schedule can not be deleted', 'fluent-booking')
+                'message' => __('Default Schedule can not be deleted', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -263,14 +263,14 @@ class AvailabilityController extends Controller
 
         if ($usageCount) {
             return $this->sendError([
-                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount),
+                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking-pro'), $usageCount),
             ], 422);
         }
 
         $schedule->delete();
 
         return $this->sendSuccess([
-            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking')
+            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
         ]);
     }
 }
