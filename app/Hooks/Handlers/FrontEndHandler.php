@@ -12,6 +12,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\LocationService;
+use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Collection;
@@ -22,6 +23,9 @@ class FrontEndHandler
     public function register()
     {
         add_shortcode('fluent_booking', [$this, 'handleShortcode']);
+
+        add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
+
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
@@ -165,6 +169,14 @@ class FrontEndHandler
         return App::make('view')->make('public.calendar', [
             'calenderEvent' => $calendarEvent
         ]);
+    }
+
+    public function handleReceiptShortcode($atts, $content)
+    {
+        if (!isset($_REQUEST['hash'])) {
+            return 'Booking hash is missing!';
+        }
+        return (new ReceiptHelper())->getReceipt($_REQUEST['hash']);
     }
 
     private function loadGlobalVars()
