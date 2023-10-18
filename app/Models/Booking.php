@@ -172,7 +172,7 @@ class Booking extends Model
 
         if ($status == 'completed') {
             return $query->where('end_time', '<', date('Y-m-d H:i:s'))
-                ->whereIn('status', ['scheduled', 'completed']); // maybe cron did not mark few as completed yet
+                ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }
 
         return $query->where('status', $status);

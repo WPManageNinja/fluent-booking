@@ -61,7 +61,7 @@ class SchedulesController extends Controller
         } else if ($period == 'latest_bookings') {
             $query = $query->orderBy('created_at', 'DESC');
         } else if ($period == 'no_show') {
-            $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');;
+            $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');
         } else {
             $query = $query->orderBy('start_time', 'DESC');
         }
