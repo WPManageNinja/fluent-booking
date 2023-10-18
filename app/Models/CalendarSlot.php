@@ -377,15 +377,12 @@ class CalendarSlot extends Model
 
     public function defaultPaymentIcon($currency, $amount)
     {
-        $html = '<div class="fcal_slot_payment_item"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 532 386" fill="none">
-            <rect x="9" y="9" width="514" height="368" rx="33" stroke="black" stroke-width="18"/>
-            <rect width="532" height="13" transform="matrix(1 0 0 -1 0 102)" fill="black"/>
-            <rect width="532" height="12" transform="matrix(1 0 0 -1 0 153)" fill="black"/>
-            <rect x="68" y="231" width="141" height="18" rx="9" fill="black"/>
-            <rect x="68" y="282" width="71" height="18" rx="9" fill="black"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M364.949 297.289C359.227 301.507 352.155 304 344.5 304C325.446 304 310 288.554 310 269.5C310 250.446 325.446 235 344.5 235C352.155 235 359.227 237.493 364.949 241.711C368.167 236.563 372.252 232.014 377 228.266C368.061 221.211 356.772 217 344.5 217C315.505 217 292 240.505 292 269.5C292 298.495 315.505 322 344.5 322C356.772 322 368.061 317.789 377 310.734C372.252 306.986 368.167 302.437 364.949 297.289Z" fill="black"/>
-            <circle cx="409.5" cy="269.5" r="43.5" stroke="black" stroke-width="18"/>
-            </svg> ' . $currency . $amount . '</div>';
+        $html = '<div class="fcal_slot_payment_item">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+<path d="M6.50391 10.7474C6.50391 11.7149 7.24641 12.4949 8.16891 12.4949H10.0514C10.8539 12.4949 11.5064 11.8124 11.5064 10.9724C11.5064 10.0574 11.1089 9.73488 10.5164 9.52488L7.49391 8.47488C6.90141 8.26488 6.50391 7.94238 6.50391 7.02738C6.50391 6.18738 7.15641 5.50488 7.95891 5.50488H9.84141C10.7639 5.50488 11.5064 6.28488 11.5064 7.25238" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9 4.5V13.5" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>' . $currency . $amount . '</div>';
         return $html;
     }
 

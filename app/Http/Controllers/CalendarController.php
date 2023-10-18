@@ -17,9 +17,10 @@ use FluentBooking\Framework\Support\Arr;
 
 class CalendarController extends Controller
 {
-    public function index(Request $request)
+    public function getAllCalendars(Request $request)
     {
-        if (PermissionManager::hasAllCalendarAccess()) {
+        $permission = PermissionManager::userCan(['manage_other_calendars', 'read_other_calendars']);
+        if ($permission) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
         } else {
             $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
@@ -58,7 +59,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function create(Request $request)
+    public function createCalendar(Request $request)
     {
         $data = $request->get('calendar');
 
@@ -414,10 +415,7 @@ class CalendarController extends Controller
         $generalRules = [
             'title'                                 => 'required',
             'duration'                              => 'required|numeric',
-            'title'                                 => 'required',
-            'duration'                              => 'required|numeric',
             'location_settings.*.type'              => 'required',
-            'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
             'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ];
@@ -451,7 +449,7 @@ class CalendarController extends Controller
         $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $slot->availability_id = (int)Arr::get($data, 'availability_id');
         $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
-        $slot->location_settings = SanitizeService::locationSettings(Arr::get($slot, 'location_settings', []));
+        $slot->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
 
         $slot->save();
 

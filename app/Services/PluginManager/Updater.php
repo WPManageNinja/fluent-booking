@@ -3,7 +3,7 @@
 namespace FluentBooking\App\Services\PluginManager;
 
 // Exit if accessed directly
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
@@ -24,15 +24,15 @@ class Updater
     /**
      * Class constructor.
      *
+     * @uses plugin_basename()
+     * @uses hook()
+     *
      * @param string $_api_url The URL pointing to the custom API endpoint.
      * @param string $_plugin_file Path to the plugin file.
      * @param string $_license_status "valid" if valid
      * @param array $_api_data Optional data to send with API calls.
      * @param array $_plugin_update_data Optional data to generate link for activating or purchasing.
      *                                      Needs admin_page_url, purchase_url, plugin_name, license_status to work
-     * @uses hook()
-     *
-     * @uses plugin_basename()
      */
     function __construct($_api_url, $_plugin_file, $_api_data = null, $_plugin_update_data = [])
     {
@@ -44,6 +44,7 @@ class Updater
         $this->response_transient_key = md5(sanitize_key($this->name) . 'response_transient');
 
         $this->version = $_api_data['version'];
+
 
         if (is_array($_plugin_update_data)
             && isset($_plugin_update_data['license_status'], $_plugin_update_data['admin_page_url'], $_plugin_update_data['purchase_url'], $_plugin_update_data['plugin_title'])
@@ -60,21 +61,22 @@ class Updater
     /**
      * Set up WordPress filters to hook into WP's update process.
      *
-     * @return void
      * @uses add_filter()
      *
+     * @return void
      */
     public function init()
     {
         $this->maybe_delete_transients();
 
         add_filter('pre_set_site_transient_update_plugins', array($this, 'check_update'), 51);
-        add_action('delete_site_transient_update_plugins', [$this, 'delete_transients']);
+        add_action( 'delete_site_transient_update_plugins', [ $this, 'delete_transients' ] );
 
         add_filter('plugins_api', array($this, 'plugins_api_filter'), 10, 3);
-        remove_action('after_plugin_row_' . $this->name, 'wp_plugin_update_row');
+        remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row' );
 
-        add_action('after_plugin_row_' . $this->name, [$this, 'show_update_notification'], 10, 2);
+        add_action( 'after_plugin_row_' . $this->name, [ $this, 'show_update_notification' ], 10, 2 );
+
     }
 
     function remove_plugin_update_message()
@@ -141,31 +143,31 @@ class Updater
      */
     public function show_update_notification($file, $plugin)
     {
-        if (is_network_admin()) {
+        if ( is_network_admin() ) {
             return;
         }
 
-        if (!current_user_can('update_plugins')) {
+        if ( ! current_user_can( 'update_plugins' ) ) {
             return;
         }
 
 
-        if ($this->name !== $file) {
+        if ( $this->name !== $file ) {
             return;
         }
 
 
         // Remove our filter on the site transient
-        remove_filter('pre_set_site_transient_update_plugins', [$this, 'check_update']);
+        remove_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
-        $update_cache = get_site_transient('update_plugins');
+        $update_cache = get_site_transient( 'update_plugins' );
 
-        $update_cache = $this->check_transient_data($update_cache);
+        $update_cache = $this->check_transient_data( $update_cache );
 
-        set_site_transient('update_plugins', $update_cache);
+        set_site_transient( 'update_plugins', $update_cache );
 
         // Restore our filter
-        add_filter('pre_set_site_transient_update_plugins', [$this, 'check_update']);
+        add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
     }
 
@@ -173,32 +175,32 @@ class Updater
     /**
      * Updates information on the "View version x.x details" page with custom data.
      *
+     * @uses api_request()
+     *
      * @param mixed $_data
      * @param string $_action
      * @param object $_args
      *
      * @return object $_data
-     * @uses api_request()
-     *
      */
     function plugins_api_filter($_data, $_action = '', $_args = null)
     {
-        if ('plugin_information' !== $_action) {
+        if ( 'plugin_information' !== $_action ) {
             return $_data;
         }
 
-        if (!isset($_args->slug)) {
+        if(!isset($_args->slug)) {
             return $_data;
         }
 
-        if (!in_array($_args->slug, [$this->slug, 'fluent-booking'])) {
+        if(!in_array($_args->slug, [$this->slug, 'fluentcampaign-pro'])) {
             return $_data;
         }
 
-        $cache_key = $this->slug . '_api_request_' . substr(md5(serialize($this->slug)), 0, 15);
-        $api_request_transient = get_site_transient($cache_key);
+        $cache_key = $this->slug.'_api_request_' . substr( md5( serialize( $this->slug ) ), 0, 15 );
+        $api_request_transient = get_site_transient( $cache_key );
 
-        if (empty($api_request_transient)) {
+        if ( empty( $api_request_transient ) ) {
             $to_send = array(
                 'slug'   => $this->slug,
                 'is_ssl' => is_ssl(),
@@ -210,7 +212,7 @@ class Updater
             $api_request_transient = $this->api_request('plugin_information', $to_send);
 
             // Expires in 1 day
-            set_site_transient($cache_key, $api_request_transient, DAY_IN_SECONDS * 2);
+            set_site_transient( $cache_key, $api_request_transient, DAY_IN_SECONDS * 2 );
         }
 
         if (false !== $api_request_transient) {
@@ -242,14 +244,14 @@ class Updater
     /**
      * Calls the API and, if successfull, returns the object delivered by the API.
      *
-     * @param string $_action The requested action.
-     * @param array $_data Parameters for the API action.
-     *
-     * @return false|object
      * @uses get_bloginfo()
      * @uses wp_remote_post()
      * @uses is_wp_error()
      *
+     * @param string $_action The requested action.
+     * @param array $_data Parameters for the API action.
+     *
+     * @return false|object
      */
     private function api_request($_action, $_data)
     {
@@ -287,7 +289,7 @@ class Updater
             $request = json_decode(wp_remote_retrieve_body($request));
         }
         if ($request && isset($request->sections)) {
-            $request->sections = (array) maybe_unserialize($request->sections);
+            $request->sections = maybe_unserialize($request->sections);
             $request->slug = $this->slug;
         } else {
             $request = false;
@@ -320,7 +322,7 @@ class Updater
         if ($response && isset($response->sections['changelog'])) {
             echo '<div style="background:#fff;padding:10px;">' . $response->sections['changelog'] . '</div>';
         }
-
+        
         exit;
     }
 
@@ -332,27 +334,25 @@ class Updater
             $this->delete_transients();
         }
 
-        if (isset($_GET['fluent-booking-pro-check-update'])) {
-            add_action('init', function() {
-                if (current_user_can('update_plugins')) {
-                    $this->delete_transients();
+        if(isset($_GET['fluent-booking-pro-check-update'])) {
+            if ( current_user_can( 'update_plugins' ) ) {
+                $this->delete_transients();
 
-                    // Remove our filter on the site transient
-                    remove_filter('pre_set_site_transient_update_plugins', [$this, 'check_update']);
+                // Remove our filter on the site transient
+                remove_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
-                    $update_cache = get_site_transient('update_plugins');
+                $update_cache = get_site_transient( 'update_plugins' );
 
-                    $update_cache = $this->check_transient_data($update_cache);
+                $update_cache = $this->check_transient_data( $update_cache );
 
-                    set_site_transient('update_plugins', $update_cache);
+                set_site_transient( 'update_plugins', $update_cache );
 
-                    // Restore our filter
-                    add_filter('pre_set_site_transient_update_plugins', [$this, 'check_update']);
+                // Restore our filter
+                add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
-                    wp_redirect(admin_url('plugins.php?s=fluent-booking&plugin_status=all'));
-                    exit();
-                }
-            }, 1);
+                wp_redirect(admin_url('plugins.php?s=fluentcampaign-pro&plugin_status=all'));
+                exit();
+            }
         }
     }
 
@@ -381,7 +381,7 @@ class Updater
     protected function set_transient($cache_key, $value, $expiration = 0)
     {
         if (empty($expiration)) {
-            $expiration = strtotime('+1 hours', current_time('timestamp'));
+            $expiration = strtotime('+12 hours', current_time('timestamp'));
         }
 
         $data = [
@@ -391,4 +391,5 @@ class Updater
 
         update_option($cache_key, $data, 'no');
     }
+
 }

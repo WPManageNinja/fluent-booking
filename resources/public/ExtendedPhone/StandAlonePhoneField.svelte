@@ -1,23 +1,63 @@
 <script>
+    export let appData;
+    import {onMount} from 'svelte';
     import Select from 'svelte-select';
     import {TelInput, normalizedCountries} from 'svelte-tel-input';
 
     // E164 formatted value, usually you should store and use this.
-    export let value = null;
+    let value = appData.formValue || null;
 
-    // Selected country
-    export let country = null;
-
-    // Validity
-    export let valid = false;
+    let country = null;
+    let valid = false;
+    if (value) {
+        valid = true;
+    } else {
+        country = window.fluentCalendarPublicVars.user_country || null;
+    }
 
     // Phone number details
-    export let detailedValue = null;
+    let detailedValue = null;
 
-    export let options = {};
+    let currentInput = '';
+
+    let appMounted = null;
+
+    onMount(() => {
+        appMounted = true;
+    });
+
+    function handleValueChange(value) {
+        let phoneNumber = '';
+        if (value && value.isValid) {
+            phoneNumber = value.phoneNumber;
+            currentInput = value.phoneNumber
+        } else if (value) {
+            currentInput = value.phoneNumber;
+        }
+        appData.elem.dispatchEvent(new CustomEvent('value_changed', {
+            detail: {
+                value: phoneNumber
+            }
+        }));
+    }
+
+    $:handleValueChange(detailedValue);
+
+    function onCountryChanged(country) {
+        if (!appMounted) {
+            return;
+        }
+        if (country && country.length > 0) {
+            const input = inputRef['$$'].root.querySelector('input.basic-tel-input')
+            setTimeout(() => {
+                input.focus()
+            }, 100)
+        }
+    }
+
+    $:onCountryChanged(country);
 
     function handleChange(e) {
-        console.log(e.detail);
         country = e.detail.iso2;
     }
 
@@ -27,31 +67,28 @@
 
     const itemId = 'iso2';
     const label = 'label';
-
-    console.log(normalizedCountries);
+    let inputRef;
 
 </script>
 
-<div class="fcal_phone_wrapper">
-    <Select class="fcal_country_select" on:input={handleChange}
+<div class="fcal_phone_wrapper {currentInput ? 'fcal_had_input' : ''}">
+    <Select class={valid ? 'fcal_country_select' : 'fcal_country_select invalid'} on:input={handleChange}
             {itemId} {label}
             {floatingConfig}
-            listOpen="true"
             clearable={false}
             value={country}
+            placeholder="Country"
             items={normalizedCountries}
     >
         <div slot="selection" let:selection>
             {#if selection}
                 <span class="flag flag-{selection.iso2.toLowerCase()}"></span>
-                <span class="fcal_country_name">{selection.iso2}</span>
                 <span class="fcal_country_code">+{selection.dialCode}</span>
             {/if}
         </div>
         <div slot="item" let:item>
             <span class="flag flag-{item.iso2.toLowerCase()}"></span>
-            <span class="fcal_country_name">{item.iso2}</span>
-            <span class="fcal_country_code">+{item.dialCode}</span>
+            <span class="fcal_country_name">{item.label}</span>
         </div>
     </Select>
     <TelInput
@@ -59,6 +96,7 @@
         bind:value
         bind:valid
         bind:detailedValue
-        class="basic-tel-input {!valid ? 'invalid' : ''}"
+        bind:this={inputRef}
+        class="basic-tel-input {!valid ? 'fcal_invalid' : ''}"
     />
 </div>

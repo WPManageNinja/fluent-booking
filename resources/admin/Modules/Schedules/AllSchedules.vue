@@ -337,7 +337,8 @@ export default {
             this.$router.push({
                 name: 'scheduled_events',
                 query: {period: this.filters.period}
-            })
+            });
+            this.fetchSchedules();
         },
         handlePeriodChange() {
             this.$router.push({query: this.filters});

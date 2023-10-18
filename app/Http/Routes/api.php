@@ -7,13 +7,14 @@
 
 $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($router) {
 
-    $router->get('/', 'CalendarController@index');
-    
-    $router->post('/', 'CalendarController@create');
+    $router->get('/', 'CalendarController@getAllCalendars')->meta('calendar_type', 'booking');
+
+    $router->post('/', 'CalendarController@createCalendar');
     $router->post('check-slug', 'CalendarController@checkSlug');
 
     $router->get('/{id}', 'CalendarController@getCalendar')->int('id');
     $router->post('/{id}', 'CalendarController@updateCalendar')->int('id');
+    $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
     $router->post('/{id}/slots', 'CalendarController@createCalendarSlot')->int('id');
     $router->get('/{id}/slot-schema', 'CalendarController@getSlotSchema')->int('id');
@@ -30,7 +31,10 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
 
-
+    // Zoom Integrations - User Level
+    $router->get('/{id}/integrations/zoom-connection', 'ZoomController@getZoomConnectionByCalendarId')->int('id');
+    $router->post('/{id}/integrations/zoom-connection/add', 'ZoomController@addConnectionByCalendarId')->int('id');
+    $router->post('/{id}/integrations/zoom-connection/disconnect', 'ZoomController@disconnectByCalendarId')->int('id');
 
     // General Integrations
     $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
@@ -40,8 +44,6 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/slots/{event_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('event_id');
     $router->put('/{id}/slots/{event_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('event_id');
     $router->delete('/{id}/slots/{event_id}', 'CalendarController@deleteCalendarEvent')->int('id')->int('event_id');
-
-    $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
     $router->get('/{id}/slots/{event_id}/email-notifications', 'CalendarController@getSlotEmailNotifications')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/email-notifications', 'CalendarController@saveSlotEmailNotifications')->int('id')->int('event_id');
@@ -71,7 +73,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
             $router->get('/', 'CalendarIntegrationController@find')->int('id')->int('slot_id')->int('integration_id');
             $router->post('/', 'CalendarIntegrationController@update')->int('id')->int('slot_id')->int('integration_id');
             $router->delete('/', 'CalendarIntegrationController@delete')->int('id')->int('slot_id')->int('integration_id');
-            
+
             $router->get('/merge-fields', 'CalendarIntegrationController@integrationListComponent');
         });
     });
@@ -82,13 +84,12 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('other-hosts', 'AdminController@getOtherHosts');
 });
 
-$router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router) {
-    $router->get('/', 'SchedulesController@index');
+$router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($router) {
+    $router->get('/', 'SchedulesController@index'); // Need to check permission on the controller method
     $router->get('/{id}', 'SchedulesController@getBooking')->int('id');
     $router->get('/{id}/slot', 'SchedulesController@getScheduleSpot')->int('id');
     $router->put('/{id}', 'SchedulesController@patchBooking')->int('id');
     $router->get('/{id}/activities', 'SchedulesController@getBookingActivities')->int('id');
-
 
     $router->get('/group-bookings/{group_id}/attendees', 'SchedulesController@getGroupAttendees')->int('group_id');
 
@@ -96,13 +97,13 @@ $router->prefix('schedules')->withPolicy('UserPolicy')->group(function ($router)
     $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
-$router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
-    $router->get('slots/{event_id}', 'BookingController@getSlots')->int('event_id');
-    $router->post('slots/{event_id}/schedule', 'BookingController@bookSlot')->int('event_id');
-    $router->get('public_vars', 'WidgetController@getPublicVars');
-});
+//$router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
+//    $router->get('slots/{event_id}', 'BookingController@getSlots')->int('event_id');
+//    $router->post('slots/{event_id}/schedule', 'BookingController@bookSlot')->int('event_id');
+//    $router->get('public_vars', 'WidgetController@getPublicVars');
+//});
 
-$router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($router) {
+$router->prefix('integrations')->withPolicy('SettingsPolicy')->group(function ($router) {
     $router->get('/', 'IntegrationController@index');
     $router->post('/', 'IntegrationController@update');
 
@@ -111,6 +112,13 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
     $router->post('/{host_id}/settings', 'IntegrationSettingsController@update')->int('host_id');
     $router->post('/{host_id}/disconnect', 'IntegrationSettingsController@revoke')->int('host_id');
     $router->get('/menu', 'IntegrationSettingsController@getIntegrationsMenu');
+
+    /*
+     * Zoom Integrations
+     */
+    $router->get('zoom/connected-users', 'ZoomController@get');
+    $router->post('zoom/save-user-account', 'ZoomController@save');
+    $router->post('zoom/disconnect', 'ZoomController@disconnectByConnectId');
 
     $router->prefix('settings/payment-methods')->group(function ($router) {
         $router->get('/all', 'PaymentMethodController@index');
@@ -125,22 +133,34 @@ $router->prefix('integrations')->withPolicy('AdminPolicy')->group(function ($rou
     });
 });
 
-$router->prefix('settings')->withPolicy('UserPolicy')->group(function ($router) {
+$router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($router) {
     $router->get('/general', 'SettingsController@getGeneralSettings');
     $router->post('/general', 'SettingsController@updateGeneralSettings');
     $router->get('/menu', 'SettingsController@getSettingsMenu');
+
+    /*
+     * Team Management Permissions
+     */
+    $router->get('/team', 'AdminController@getTeamMembers');
+    $router->post('/team', 'AdminController@updateMemberPermission');
+
+    $router->get('license', 'LicenseController@getStatus');
+    $router->post('license', 'LicenseController@saveLicense');
+    $router->delete('license', 'LicenseController@deactivateLicense');
 });
 
-$router->prefix('availability')->withPolicy('UserPolicy')->group(function ($router) {
+$router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
     $router->post('/', 'AvailabilityController@createSchedule');
     $router->post('/clone', 'AvailabilityController@cloneSchedule');
+
     $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
     $router->get('/{schedule_id}/usages', 'AvailabilityController@getAvailabilityUsages')->int('schedule_id');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
     $router->post('/{schedule_id}/update-title', 'AvailabilityController@updateScheduleTitle')->int('schedule_id');
     $router->post('/{schedule_id}/update-status', 'AvailabilityController@updateDefaultStatus')->int('schedule_id');
     $router->delete('/{schedule_id}', 'AvailabilityController@deleteSchedule')->int('schedule_id');
+
 });
 
 $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {

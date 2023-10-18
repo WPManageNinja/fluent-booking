@@ -654,7 +654,6 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
-
     public static function getGlobalPaymentSettings()
     {
         static $settings;

@@ -120,7 +120,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message', 'address', 'location'];
+            const allowedFields = ['name', 'email', 'message', 'address', 'location', 'phone_number'];
             return allowedFields.includes(name);
         },
         moveUp(index) {

@@ -104,7 +104,7 @@
                 timezone = response.timezone;
                 availableDates = response.available_slots;
 
-                if (firstLoading && slot.pre_selects.day) {
+                if (firstLoading && slot.pre_selects && slot.pre_selects.day) {
                     selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
                     dayClick({
                         date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day

@@ -2,6 +2,8 @@
 
 namespace FluentBooking\App\Http\Policies;
 
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Foundation\Policy;
 
@@ -9,12 +11,60 @@ class CalendarPolicy extends Policy
 {
     /**
      * Check user permission for any method
-     * @param  \FluentBooking\Framework\Request\Request $request
+     * @param \FluentBooking\Framework\Request\Request $request
      * @return bool
      */
     public function verifyRequest(Request $request)
     {
-        return true;
-        return apply_filters('fluent_booking/verify_calendar_api', current_user_can('manage_options'), $request);
+        if (current_user_can('manage_options')) {
+            return true;
+        }
+
+        $calendarId = $request->id;
+
+        if (!$calendarId) {
+            return apply_filters('fluent_booking/verify_calendar_api', current_user_can('manage_options'), $request);
+        }
+
+        $method = $request->method();
+
+        if ($method == 'GET') {
+            return PermissionManager::canReadCalendar($calendarId);
+        }
+
+        return PermissionManager::canWriteCalendar($calendarId);
+    }
+
+    public function getAllCalendars(Request $request)
+    {
+        return !!PermissionManager::currentUserHasAnyPemrmission();
+    }
+
+    public function createCalendar(Request $request)
+    {
+        return PermissionManager::userCan('invite_team_members');
+    }
+
+    public function checkSlug(Request $request)
+    {
+        return PermissionManager::userCan(['invite_team_members', 'manage_own_calendar']);
+    }
+
+    public function deleteCalendar(Request $request)
+    {
+        if (current_user_can('manage_options')) {
+            return true;
+        }
+
+        $calendarId = $request->id;
+
+        $calendar = Calendar::find($calendarId);
+
+        return $calendar->user_id === get_current_user_id();
+    }
+
+    public function deleteCalendarEvent(Request $request)
+    {
+        return $this->deleteCalendar($request);
     }
 }

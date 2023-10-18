@@ -2,9 +2,9 @@
     <div class="fcal_section fcal_section_narrow">
         <div v-if="hasSupport('multi_users')" class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Booking Calendars</h3>
+                <h3>Calendars</h3>
             </div>
-            <div class="fcal_actions">
+            <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
                     <span>+</span> Add New Host
                 </el-button>
@@ -12,12 +12,12 @@
         </div>
         <div class="fcal_section_body">
 
-            <SkeletonLoader v-if="loading" />
+            <SkeletonLoader v-if="loading"/>
 
             <div v-else class="fcal_calendars_wrap">
                 <template v-if="calendars.length">
                     <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" />
+                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar"/>
                     </div>
                 </template>
                 <el-empty v-else class="fcal_empty" description="No Calendars found"/>
@@ -36,41 +36,61 @@
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item label="Select Host">
-                    <HostSelector v-model="user_id" />
+                    <HostSelector v-model="user_id"/>
+                    <p>A particular user can have one calendar with multiple events. Please select a user who does not
+                        have a calendar yet</p>
                 </el-form-item>
                 <el-button
                     @click="createOneToOneSlot"
                     :disabled="!user_id">
                     <div class="icons-wrap">
-                        <el-icon><User /></el-icon>
-                        <el-icon><Right /></el-icon>
+                        <el-icon>
+                            <User/>
+                        </el-icon>
+                        <el-icon>
+                            <Right/>
+                        </el-icon>
                         <div class="icons">
-                            <el-icon><User /></el-icon>
+                            <el-icon>
+                                <User/>
+                            </el-icon>
                         </div>
                     </div>
                     <div class="content">
                         <h3>One-to-One</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
                         <p>Good for: coffee chats, 1:1 interviews, etc.</p>
-                        <el-icon class="icon-right"><Right /></el-icon>
+                        <el-icon class="icon-right">
+                            <Right/>
+                        </el-icon>
                     </div>
                 </el-button>
                 <el-button
                     @click="createGroupSlot"
                     :disabled="!user_id">
                     <div class="icons-wrap">
-                        <el-icon><User /></el-icon>
-                        <el-icon><Right /></el-icon>
+                        <el-icon>
+                            <User/>
+                        </el-icon>
+                        <el-icon>
+                            <Right/>
+                        </el-icon>
                         <div class="icons">
-                            <el-icon><User /></el-icon>
-                            <el-icon><User /></el-icon>
+                            <el-icon>
+                                <User/>
+                            </el-icon>
+                            <el-icon>
+                                <User/>
+                            </el-icon>
                         </div>
                     </div>
                     <div class="content">
                         <h3>Group</h3>
                         <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
                         <p>Good for: webinars, online classes, etc.</p>
-                        <el-icon class="icon-right"><Right /></el-icon>
+                        <el-icon class="icon-right">
+                            <Right/>
+                        </el-icon>
                     </div>
                 </el-button>
             </div>
@@ -81,7 +101,7 @@
 <script type="text/babel">
 import Pagination from "../../Pieces/Pagination.vue";
 import CalendarEventBlock from "./parts/CalendarEventBlock.vue";
-import { User, Right } from '@element-plus/icons-vue';
+import {User, Right} from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
 

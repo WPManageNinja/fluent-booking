@@ -21,7 +21,7 @@
                                 </div>
                             {/if}
                             {#if field.type === 'text'}
-                                <div class={'fcal_input_wrap '+field.name}>
+                                <div class={'fcal_input_wrap fcal_field_name_'+field.name}>
                                     {#if field.name == 'address'}
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -43,8 +43,7 @@
                             {:else if field.name === 'location'}
                                 <LocationField field={field} form="{form}"/>
                             {:else if field.type === 'phone'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                       placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                <PhoneFieldSkeleton field={field} form="{form}"/>
                             {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
@@ -104,6 +103,7 @@
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
+    import PhoneFieldSkeleton  from "./PhoneFieldSkeleton.svelte";
 
     export let timezone;
     export let formFields;
@@ -168,6 +168,13 @@
                             response: res
                         }
                     }));
+                    if (hasPaymentItem) {
+                        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
+                        setTimeout(() => {
+                            const adjustHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+                            calendar.style.height = 'auto';
+                        }, 100);
+                    }
                     return;
                 }
 

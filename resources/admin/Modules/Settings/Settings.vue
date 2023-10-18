@@ -12,10 +12,22 @@
                             <span>General Settings</span>
                         </router-link>
                     </li>
+                    <li class="fcal_settings_submenu_item">
+                        <router-link class="fcal_img_menu_link" :to="{ name: 'team_members' }">
+                            <el-icon><TeamIcon /></el-icon>
+                            <span>Team</span>
+                        </router-link>
+                    </li>
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="menu.route">
                             <img class="fcal_img_icon" :src="menu.icon_url"/>
                             <span>{{ menu.title }}</span>
+                        </router-link>
+                    </li>
+                    <li class="fcal_settings_submenu_item">
+                        <router-link class="fcal_img_menu_link" :to="{ name: 'license' }">
+                            <el-icon><Lock /></el-icon>
+                            <span>License</span>
                         </router-link>
                     </li>
                 </ul>
@@ -37,15 +49,18 @@
 </template>
 
 <script type="text/babel">
-import {Operation } from '@element-plus/icons-vue';
+import TeamIcon from "@/Components/Icons/TeamIcon.vue";
+import { Lock } from '@element-plus/icons-vue';
+
 export default {
     name: 'Settings',
     components: {
-        Operation
+        Lock,
+        TeamIcon,
     },
     data() {
         return {
-            loading: false,
+            loading: true,
             menuItems: {}
         }
     },

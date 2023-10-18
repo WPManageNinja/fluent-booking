@@ -67,6 +67,7 @@ $dark: #1B2533;
 						}
 					}
 					.fcal_author_name {
+						text-transform: capitalize;
 						font-size: 16px;
 						font-weight: 400;
 						line-height: 24px;
@@ -94,13 +95,7 @@ $dark: #1B2533;
 							fill: #697483;
 							stroke: #697483;
 						}
-						&.slot_location {
-							svg {
-								path {
-									fill: #697483;
-								}
-							}
-						}
+
 					}
 				}
 				.fcal_slot_description {
