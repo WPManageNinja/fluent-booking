@@ -234,4 +234,22 @@ class AdminController extends Controller
             'message' => $message
         ];
     }
+
+    public function deleteMember(Request $request, $id)
+    {
+        if (!$id) {
+            return;
+        }
+
+        Meta::where('object_type', 'user_meta')
+            ->where('object_id', $id)
+            ->where('key', '_access_permissions')
+            ->delete();
+
+        $message = __('Member has been deleted successfull', 'fluent-booking-pro');
+        return [
+            'message' => $message
+        ];
+
+    }
 }
