@@ -57,7 +57,7 @@ class FluentCrmInit {
     {
         $sections['booking'] = [
             'name'    => 'booking',
-            'title'   => __('Bookings', 'fluent-crm'),
+            'title'   => __('Bookings', 'fluent-booking'),
             'handler' => 'route'
         ];
 
