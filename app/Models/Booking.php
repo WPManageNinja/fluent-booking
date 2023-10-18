@@ -172,6 +172,7 @@ class Booking extends Model
 
         if ($status == 'completed') {
             return $query->where('end_time', '<', date('Y-m-d H:i:s'))
+                ->where('status', '!=', 'cancelled')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }
 
