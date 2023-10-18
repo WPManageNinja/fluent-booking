@@ -70,3 +70,18 @@ add_action('init', function () {
     wp_redirect(admin_url('admin.php?page=fluent-booking#/'));
     exit();
 });
+
+add_action('plugins_loaded', function () {
+    $licenseManager = new \FluentBooking\App\Services\PluginManager\LicenseManager();
+    $licenseManager->initUpdater();
+
+    $licenseMessage = $licenseManager->getLicenseMessages();
+
+    if ($licenseMessage) {
+        add_action('admin_notices', function () use ($licenseMessage) {
+            $class = 'notice notice-error fc_message';
+            $message = $licenseMessage['message'];
+            printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), $message);
+        });
+    }
+}, 0);
