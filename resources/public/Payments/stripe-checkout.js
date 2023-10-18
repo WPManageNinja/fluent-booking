@@ -68,6 +68,7 @@ class StripeCheckout {
                         redirect: 'if_required'
                     }).then(result => {
                         if (result?.paymentIntent?.id) {
+                            stripePayButton.disabled = true;
                             fetch(window.fluentCalendarPublicVars.ajaxurl, {
                                 method: 'POST',
                                 headers: {
@@ -80,8 +81,10 @@ class StripeCheckout {
                                 });
                             });
                         }
-                        stripePayButton.textContent = window.fcal_translate('Confirm Payment');
-                        stripePayButton.disabled = false;
+                        if (result?.error) {
+                            stripePayButton.textContent = window.fcal_translate('Pay Now');
+                            stripePayButton.disabled = false;
+                        }
                     });
                 }).catch(error => {
                     stripePayButton.textContent = window.fcal_translate('Pay Now');
