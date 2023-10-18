@@ -172,7 +172,7 @@ class EmailNotificationService
         do_action('fluent_booking/log_booking_note', [
             'title'       => 'Reminder Email Sent',
             'type'        => 'activity',
-            'description' => sprintf(__('%s %s reminder email sent to %s.'), $emailTo),
+            'description' => sprintf(__('Reminder email sent to %s.', 'fluent-booking-pro'), $emailTo),
             'booking_id'  => $booking->id
         ]);
 

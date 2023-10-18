@@ -18,7 +18,7 @@ class Stripe extends BasePaymentMethod
     public function __construct()
     {
         parent::__construct(
-            __('Stripe', 'fluent-booking'),
+            __('Stripe', 'fluent-booking-pro'),
             'stripe',
             '#136196',
             $this->getLogo()
@@ -219,7 +219,7 @@ class Stripe extends BasePaymentMethod
                     'nextAction' => 'stripe',
                     'actionName' => 'custom',
                     'status'     => 'success',
-                    'message'    => __('Order has been placed successfully', 'fluent-booking'),
+                    'message'    => __('Order has been placed successfully', 'fluent-booking-pro'),
                     'data'       => $orderItem,
                     'intent'     => $invoiceResponse,
                 ],
@@ -352,7 +352,7 @@ class Stripe extends BasePaymentMethod
             wp_send_json_success(
                 [
                     'status'      => 'success',
-                    'message'     => __('Order has been placed successfully', 'fluent-booking'),
+                    'message'     => __('Order has been placed successfully', 'fluent-booking-pro'),
                     'data'        => $orderItem,
                     'redirect_to' => $invoiceResponse['url']
                 ],
@@ -369,7 +369,7 @@ class Stripe extends BasePaymentMethod
 
     public function renderDescription()
     {
-        echo '<p>' . esc_html__('Pay with Stripe', 'fluent-booking') . '</p>';
+        echo '<p>' . esc_html__('Pay with Stripe', 'fluent-booking-pro') . '</p>';
     }
 
     public function fields()
@@ -378,15 +378,15 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active'    => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking'),
+                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking-pro'),
                 'type'  => 'inline_checkbox'
             ),
             'payment_mode' => array(
                 'value'   => 'test',
-                'label'   => __('Payment Mode', 'fluent-booking'),
+                'label'   => __('Payment Mode', 'fluent-booking-pro'),
                 'options' => array(
-                    'test' => __('Test Mode', 'fluent-booking'),
-                    'live' => __('Live Mode', 'fluent-booking')
+                    'test' => __('Test Mode', 'fluent-booking-pro'),
+                    'live' => __('Live Mode', 'fluent-booking-pro')
                 ),
                 'type'    => 'radio'
             ),
@@ -401,12 +401,12 @@ class Stripe extends BasePaymentMethod
 //            ),
             'provider'     => array(
                 'value' => 'connect',
-                'label' => __('Provider', 'fluent-booking'),
+                'label' => __('Provider', 'fluent-booking-pro'),
                 'type'  => 'provider'
             ),
             'currency'     => array(
                 'value'   => 'USD',
-                'label'   => __('Currency', 'fluent-booking'),
+                'label'   => __('Currency', 'fluent-booking-pro'),
                 'options' => $currencies,
                 'type'    => 'select'
             ),
@@ -460,7 +460,7 @@ class Stripe extends BasePaymentMethod
             'actionName'       => 'custom',
             'buttonState'      => 'hide',
             'invoice_response' => $invoiceResponse,
-            'message_to_show'  => __('Payment Modal is opening, Please complete the payment', 'fluent-booking'),
+            'message_to_show'  => __('Payment Modal is opening, Please complete the payment', 'fluent-booking-pro'),
         ];
         wp_send_json_success($responseData, 200);
     }

@@ -156,7 +156,7 @@ class SchedulesController extends Controller
             if ($value == 'cancelled') {
                 $booking->cancelMeeting($value, 'host', get_current_user_id());
                 return [
-                    'message' => __('The booking has been cancelled', 'fluent-booking')
+                    'message' => __('The booking has been cancelled', 'fluent-booking-pro')
                 ];
             }
         }
@@ -172,7 +172,7 @@ class SchedulesController extends Controller
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
         return [
-            'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
+            'message' => sprintf(__('%s has been updated', 'fluent-booking-pro'), $column)
         ];
     }
 
@@ -213,7 +213,7 @@ class SchedulesController extends Controller
         $booking = $booking->where('group_id', $groupId)->first();
 
         if (!$booking || $booking->event_type != 'group') {
-            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
+            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking-pro')]);
         }
 
         $attendees = Booking::where('group_id', $booking->group_id);

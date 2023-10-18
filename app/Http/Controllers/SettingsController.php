@@ -97,7 +97,7 @@ class SettingsController extends Controller
         update_option('_fluent_booking_settings', $formattedSettings, 'no');
 
         return [
-            'message'  => __('Settings updated successfully', 'fluent-booking'),
+            'message'  => __('Settings updated successfully', 'fluent-booking-pro'),
             'settings' => $formattedSettings
         ];
     }
