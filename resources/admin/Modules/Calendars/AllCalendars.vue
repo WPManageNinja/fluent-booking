@@ -2,7 +2,7 @@
     <div class="fcal_section fcal_section_narrow">
         <div v-if="hasSupport('multi_users')" class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Booking Calendars</h3>
+                <h3>Calendars</h3>
             </div>
             <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">

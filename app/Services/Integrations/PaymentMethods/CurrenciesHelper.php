@@ -13,7 +13,7 @@ class CurrenciesHelper
     public static function getGlobalCurrency()
     {
         $globalPaymentSettings = get_option('fluent_booking_global_payment_settings', ['currency' => 'USD']);
-        return Arr::get($globalPaymentSettings, 'currency');
+        return Arr::get($globalPaymentSettings, 'currency', 'USD');
     }
 
     public static function getGlobalCurrencySign()
@@ -381,21 +381,21 @@ class CurrenciesHelper
     public static function zeroDecimalCurrencies()
     {
         return apply_filters('fluent_booking/zero_decimal_currencies', array(
-            'BIF' => esc_html__('Burundian Franc', 'fluent-cart'),
-            'CLP' => esc_html__('Chilean Peso', 'fluent-cart'),
-            'DJF' => esc_html__('Djiboutian Franc', 'fluent-cart'),
-            'GNF' => esc_html__('Guinean Franc', 'fluent-cart'),
-            'JPY' => esc_html__('Japanese Yen', 'fluent-cart'),
-            'KMF' => esc_html__('Comorian Franc', 'fluent-cart'),
-            'KRW' => esc_html__('South Korean Won', 'fluent-cart'),
-            'MGA' => esc_html__('Malagasy Ariary', 'fluent-cart'),
-            'PYG' => esc_html__('Paraguayan Guaraní', 'fluent-cart'),
-            'RWF' => esc_html__('Rwandan Franc', 'fluent-cart'),
-            'VND' => esc_html__('Vietnamese Dong', 'fluent-cart'),
-            'VUV' => esc_html__('Vanuatu Vatu', 'fluent-cart'),
-            'XAF' => esc_html__('Central African Cfa Franc', 'fluent-cart'),
-            'XOF' => esc_html__('West African Cfa Franc', 'fluent-cart'),
-            'XPF' => esc_html__('Cfp Franc', 'fluent-cart'),
+            'BIF' => esc_html__('Burundian Franc', 'fluent-booking'),
+            'CLP' => esc_html__('Chilean Peso', 'fluent-booking'),
+            'DJF' => esc_html__('Djiboutian Franc', 'fluent-booking'),
+            'GNF' => esc_html__('Guinean Franc', 'fluent-booking'),
+            'JPY' => esc_html__('Japanese Yen', 'fluent-booking'),
+            'KMF' => esc_html__('Comorian Franc', 'fluent-booking'),
+            'KRW' => esc_html__('South Korean Won', 'fluent-booking'),
+            'MGA' => esc_html__('Malagasy Ariary', 'fluent-booking'),
+            'PYG' => esc_html__('Paraguayan Guaraní', 'fluent-booking'),
+            'RWF' => esc_html__('Rwandan Franc', 'fluent-booking'),
+            'VND' => esc_html__('Vietnamese Dong', 'fluent-booking'),
+            'VUV' => esc_html__('Vanuatu Vatu', 'fluent-booking'),
+            'XAF' => esc_html__('Central African Cfa Franc', 'fluent-booking'),
+            'XOF' => esc_html__('West African Cfa Franc', 'fluent-booking'),
+            'XPF' => esc_html__('Cfp Franc', 'fluent-booking'),
         ));
     }
 
