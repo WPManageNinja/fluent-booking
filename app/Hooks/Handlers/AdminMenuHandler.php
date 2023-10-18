@@ -83,7 +83,7 @@ class AdminMenuHandler
             'fluent-booking',
             __('Settings', 'fluent-booking'),
             __('Settings', 'fluent-booking'),
-            $capability,
+            'manage_options',
             'admin.php?page=fluent-booking#/settings/general-settings',
             ''
         );
@@ -124,13 +124,16 @@ class AdminMenuHandler
                 'key'       => 'availability',
                 'label'     => __('Availability', 'fluent-booking'),
                 'permalink' => $baseUrl . 'availability'
-            ],
-            [
+            ]
+        ];
+
+        if(current_user_can('manage_options')) {
+            $menuItems[] = [
                 'key'       => 'settings',
                 'label'     => __('Settings', 'fluent-booking'),
                 'permalink' => $baseUrl . 'settings/general-settings'
-            ]
-        ];
+            ];
+        }
 
         $assets = $app['url.assets'];
 
