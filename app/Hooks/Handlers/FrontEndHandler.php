@@ -471,7 +471,8 @@ class FrontEndHandler
             'location_icon_html' => $calendarEvent->location_icon_html,
             'description'        => $calendarEvent->description,
             'pre_selects'        => null,
-            'settings'           => $calendarEvent->settings
+            'settings'           => $calendarEvent->settings,
+            'type'               => $calendarEvent->type,
         ];
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
