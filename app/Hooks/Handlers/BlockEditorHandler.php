@@ -55,21 +55,16 @@ class BlockEditorHandler
 
     public function fcal_render_block($attributes)
     {
-        add_action('wp_head', function () use ($attributes) {
-            ?>
-            <style>
-                .fcal_calendar_inner .fcal_side .fcal_author_avatar img {
-                    border-radius: 50% !important;
-                }
-                :root {
-                    --fcal_primary_color: <?php echo esc_attr($attributes['primary_color']); ?> !important;
-                    --fcal_date_radius: <?php echo esc_attr($attributes['date_round']); ?> !important;
-                    --fcal_avatar_radius: <?php echo esc_attr($attributes['avatarStyle']); ?> !important;
-                }
-            </style>
-            <?php
-        });
+        $output = '<style>
+            :root {
+                --fcal_primary_color: ' . esc_attr($attributes['primary_color']) . ' !important;
+                --fcal_date_radius: ' . esc_attr($attributes['date_round']) . ' !important;
+                --fcal_avatar_radius: ' . esc_attr($attributes['avatarStyle']) . ' !important;
+            }
+        </style>';
+
         $slotId = $attributes['slotId'];
-        return do_shortcode("[fluent_booking id=$slotId]");
+        $output .= do_shortcode("[fluent_booking id=$slotId]");
+        return $output;
     }
 }

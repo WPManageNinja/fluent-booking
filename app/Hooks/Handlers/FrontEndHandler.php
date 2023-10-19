@@ -141,6 +141,7 @@ class FrontEndHandler
 
         $localizeData = $this->getCalendarEventVars($calendar, $calendarEvent);
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
+        $localizeData['time_format'] = get_option('_fluent_booking_settings')['time_format'];;
 
         if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
 
@@ -163,7 +164,7 @@ class FrontEndHandler
         wp_localize_script(
             'fluent-booking-public',
             'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id,
-            $localizeData
+            $localizeData,
         );
 
         return App::make('view')->make('public.calendar', [
