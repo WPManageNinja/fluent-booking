@@ -127,6 +127,7 @@ class Bootstrap
             ]);
             return false;
         }
+        return true;
     }
 
     private function getReminderTime($time)
@@ -202,8 +203,16 @@ class Bootstrap
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
-            error_log(print_r($smsData, 1));
-            $this->sendSmsNotification($booking, $smsData);
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Confirmation SMS has been aent to attendee'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
         }
 
         if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
@@ -212,7 +221,16 @@ class Bootstrap
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
-            $this->sendSmsNotification($booking, $smsData);
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Confirmation SMS has been sent to host'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
         }
 
         return true;
@@ -226,19 +244,28 @@ class Bootstrap
             return false;
         }
 
-        $notifications = $booking->getSmsNotifications();
+        $notifications = $booking->calendar_event->getSmsNotifications();
 
         if (!$notifications) {
             return;
         }
-
+        
         if ('guest' == $emailTo && Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_attendee.sms', []);
 
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
-            $this->sendSmsNotification($booking, $smsData);
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'Reminder SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Reminder SMS has been sent to attendee'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
 
         } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_host.sms', []);
@@ -246,9 +273,17 @@ class Bootstrap
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
-            $this->sendSmsNotification($booking, $smsData);
-        }
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
 
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'Reminder SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Reminder SMS has been sent to host'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
+        }
     }
 
     public function smsOnBookingCancelled(Booking $booking)
@@ -277,7 +312,16 @@ class Bootstrap
                 $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
                 $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
     
-                $this->sendSmsNotification($booking, $smsData);
+                $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+                if ($smsSend) {
+                    do_action('fluent_booking/log_booking_note', [
+                        'title'       => 'Cancellation SMS Sent Successfully',
+                        'type'        => 'activity',
+                        'description' => __('Booking Cancellation SMS has been sent to the host'),
+                        'booking_id'  => $booking->id
+                    ]);
+                }
             }
             return;
         }
@@ -288,7 +332,16 @@ class Bootstrap
             $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
-            $this->sendSmsNotification($booking, $smsData);
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'Cancellation SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Cancellation SMS has been sent to the Attendee'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
         }
     }
 }
