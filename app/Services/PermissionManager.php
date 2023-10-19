@@ -201,7 +201,7 @@ class PermissionManager
         $userId = get_current_user_id();
 
         // Check if the user has any calendar
-        $calendar = Calendar::where('user_id',)->first();
+        $calendar = Calendar::where('user_id', $userId)->first();
         if ($calendar) {
             $user = wp_get_current_user();
             $roles = (array)$user->roles;
