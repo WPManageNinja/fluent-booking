@@ -156,10 +156,15 @@ class Stripe extends BasePaymentMethod
 
         $status = Arr::get($response, 'status') === 'succeeded' ? 'paid' : 'pending';
 
+        $last_4 = Arr::get($response, 'charges.data.0.payment_method_details.card.last4', '');
+        $brand = Arr::get($response, 'charges.data.0.payment_method_details.card.brand', '');
+
         $updateData = [
             'status'           => sanitize_text_field($status),
             'vendor_charge_id' => sanitize_text_field($intentId),
-            'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test'
+            'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
+            'card_last_4'       => sanitize_text_field($last_4),
+            'card_brand'       => sanitize_text_field($brand),
         ];
 
         $order = (new OrderHelper())->getOrderByHash($orderHash);
