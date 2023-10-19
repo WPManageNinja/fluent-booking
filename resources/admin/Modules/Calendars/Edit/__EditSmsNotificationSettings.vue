@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="notification.sms" label-position="top">
+    <el-form :model="notification.sms" label-position="top" class="fcal_sms_form">
         <el-form-item label="Number * (with country code)">
             <popover
                 groupTitle="Shortcodes"
@@ -19,21 +19,24 @@
                 </template>
             </popover>
         </el-form-item>
-        <el-form-item label="SMS Body">
+        <el-form-item class="fcal_sms_body">
+            <template #label>
+                <h3 class="el-form-item__label">
+                    SMS Body
+                    <el-button @click="toggleBodyPopup"><el-icon><More /></el-icon></el-button>
+                </h3>
+            </template>
             <popover
                 groupTitle="Shortcodes"
                 :data="smart_codes.texts"
                 placement="bottom-end"
-                :isVisible="numberPopupVisible"
+                :isVisible="bodyPopupVisible"
                 class="fcal_popover_shortcode"
-                @command="handleNumberCommand">
+                @command="handleBodyCommand">
                 <template #popoverButton>
                     <el-input
                         type="textarea"
                         v-model="notification.sms.body">
-                        <template #append>
-                            <el-button :icon="MoreIcon" @click="toggleNumberPopup"></el-button>
-                        </template>
                     </el-input>
                 </template>
             </popover>
@@ -109,9 +112,16 @@ export default {
         toggleNumberPopup() {
             this.numberPopupVisible = !this.numberPopupVisible;
         },
+        toggleBodyPopup() {
+            this.bodyPopupVisible = !this.bodyPopupVisible;
+        },
         handleNumberCommand(command) {
             this.notification.sms.number += command;
             this.numberPopupVisible = false;
+        },
+        handleBodyCommand(command) {
+            this.notification.sms.body += command;
+            this.bodyPopupVisible = false;
         },
         addReminderTime() {
             this.notification.sms.times.push({
