@@ -6,20 +6,21 @@ class BlockEditorHandler
 {
     public function init()
     {
-        $app    = App::getInstance();
-        $assets = $app['url.assets'];
-        $slug   = $app->config->get('app.slug');
-
-        wp_enqueue_script(
-            'fluent-booking/calendar',
-            $assets . 'admin/fluent-booking-index.js',
-            array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element')
-        );
-
-        wp_localize_script('fluent-booking/calendar', 'fluent_booking_block', [
-            'assets_url' => $assets
-        ]);
-
+        add_action('enqueue_block_editor_assets', function () {
+            $app    = App::getInstance();
+            $assets = $app['url.assets'];
+    
+            wp_enqueue_script(
+                'fluent-booking/calendar',
+                $assets . 'admin/fluent-booking-index.js',
+                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element')
+            );
+    
+            wp_localize_script('fluent-booking/calendar', 'fluent_booking_block', [
+                'assets_url' => $assets
+            ]);
+        });
+        
         register_block_type( 'fluent-booking/calendar' , array(
             'editor_script'   => 'fluent-booking/calendar',
             'render_callback' => array($this, 'fcal_render_block'),
