@@ -11,6 +11,7 @@
     export let appData;
     
     const isFluentform = appData.is_fluentform;
+    const isFFConversational = appData.isFFConversational;
 
     const id = appData.id;
 
@@ -39,7 +40,7 @@
     let selectedDate = '';
     let selectedDateTime = {};
     let nextDisabled = false;
-    let formatHours = '12';
+    let formatHours = appData.time_format;
 
     if (slot.pre_selects) {
         month = slot.pre_selects.month - 1;
@@ -209,6 +210,15 @@
         if (selectedDateTime) {
             start_time = selectedDateTime.start;
         }
+
+        if (isFFConversational) {
+            appData.element.dispatchEvent(new CustomEvent('value_changed', {
+                detail: {
+                    value: JSON.stringify({ id, timezone, start_time })
+                }
+            }));
+        }
+
     }
 
     function resetSelection() {
@@ -237,7 +247,7 @@
 
 <div class="fcal_day_picker">
     <div class="fcal_day_picker_head fcal_sec_heading">
-        {#if settings?.label != undefined}
+        {#if !isFFConversational && settings?.label != undefined}
             <h3 class="{settings.validation_rules?.required?.value ? 'fcal_label_required' : ''}">
                 { settings.label }
             </h3>
