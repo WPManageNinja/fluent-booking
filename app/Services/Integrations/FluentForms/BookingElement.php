@@ -100,11 +100,11 @@ class BookingElement extends BaseFieldManager
         return [
             'event_id' => [
                 'template' => 'selectGroup',
-                'label'    => __('Select Calendar', 'fluentform'),
+                'label'    => __('Select Calendar', 'fluent-booking-pro'),
             ],
             'cal_guest_fields' => [
                 'template' => 'CustomSettingsField',
-                'label'    => __('Guest Fields', 'fluentform'),
+                'label'    => __('Guest Fields', 'fluent-booking-pro'),
                 'componentName' => 'FluentCalNameEmailChoiceComponent'
             ],
         ];
