@@ -113,7 +113,7 @@ class AvailabilityService
 
             $hostName = $calendar->user->full_name;
             if ($calendar->user_id == get_current_user_id()) {
-                $hostName = __('My Schedules', 'fluent-booking');
+                $hostName = __('My Schedules', 'fluent-booking-pro');
             }
 
             if (!empty($options)) {

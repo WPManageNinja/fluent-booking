@@ -172,6 +172,7 @@ class Booking extends Model
 
         if ($status == 'completed') {
             return $query->where('end_time', '<', date('Y-m-d H:i:s'))
+                ->where('status', '!=', 'cancelled')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }
 
@@ -215,7 +216,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'in_person_guest') {
-            return '<b>' . __('Invitee Address:', 'fluent-booking') . ' </b>' . Arr::get($details, 'guest_address');
+            return '<b>' . __('Invitee Address:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'guest_address');
         }
 
         if ($locationType == 'in_person_organizer') {
@@ -235,7 +236,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'online_meeting') {
-            $html = '<b>' . __('Online Meeting', 'fluent-booking') . '</b> ';
+            $html = '<b>' . __('Online Meeting', 'fluent-booking-pro') . '</b> ';
             if ($meetingLink = Arr::get($details, 'meeting_link')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
             }
@@ -251,11 +252,11 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_guest') {
-            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . $this->phone;
+            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . $this->phone;
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
+            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
@@ -351,9 +352,9 @@ class Booking extends Model
         }
 
         return BookingActivity::create([
-            'booking_id'  => $this->id,
-            'type'        => 'cancel_reason',
-            'title'       => $title,
+            'booking_id' => $this->id,
+            'type' => 'cancel_reason',
+            'title' => $title,
             'description' => $reason
         ]);
     }
@@ -418,8 +419,8 @@ class Booking extends Model
 
         return BookingMeta::create([
             'booking_id' => $this->id,
-            'meta_key'   => $key,
-            'value'      => $value
+            'meta_key' => $key,
+            'value' => $value
         ]);
     }
 
@@ -471,8 +472,8 @@ class Booking extends Model
     {
         return add_query_arg([
             'fluent-booking' => 'booking',
-            'meeting_hash'   => $this->hash,
-            'type'           => 'confirmation',
+            'meeting_hash' => $this->hash,
+            'type' => 'confirmation',
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
@@ -480,9 +481,9 @@ class Booking extends Model
     {
         return add_query_arg([
             'fluent-booking' => 'booking',
-            'meeting_hash'   => $this->hash,
-            'type'           => 'confirmation',
-            'ics'            => 'download',
+            'meeting_hash' => $this->hash,
+            'type' => 'confirmation',
+            'ics' => 'download',
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
@@ -490,8 +491,8 @@ class Booking extends Model
     {
         return add_query_arg([
             'fluent-booking' => 'booking',
-            'meeting_hash'   => $this->hash,
-            'type'           => 'reschedule',
+            'meeting_hash' => $this->hash,
+            'type' => 'reschedule',
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
@@ -499,8 +500,8 @@ class Booking extends Model
     {
         return add_query_arg([
             'fluent-booking' => 'booking',
-            'meeting_hash'   => $this->hash,
-            'type'           => 'cancel',
+            'meeting_hash' => $this->hash,
+            'type' => 'cancel',
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
@@ -517,10 +518,10 @@ class Booking extends Model
                 $name = $user->display_name;
             }
             $data = [
-                'name'       => $name,
-                'email'      => $user->user_email,
+                'name' => $name,
+                'email' => $user->user_email,
                 'first_name' => $user->first_name,
-                'last_name'  => $user->last_name,
+                'last_name' => $user->last_name,
             ];
         } else {
             $data = $this->calendar->getAuthorProfile(false);

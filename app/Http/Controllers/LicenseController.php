@@ -39,7 +39,7 @@ class LicenseController extends Controller
 
         return [
             'license_data' => $response,
-            'message'      => __('Your license key has been successfully updated', 'fluent_booking'),
+            'message'      => __('Your license key has been successfully updated', 'fluent-booking-pro'),
         ];
     }
 
@@ -57,7 +57,7 @@ class LicenseController extends Controller
 
         return [
             'license_data' => $response,
-            'message'      => __('Your license key has been successfully deactivated', 'fluent_booking'),
+            'message'      => __('Your license key has been successfully deactivated', 'fluent-booking-pro'),
         ];
     }
 }
