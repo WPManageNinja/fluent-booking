@@ -33,7 +33,7 @@ class AvailabilityService
 
     public static function getFormattedSchedule($schedule)
     {
-        $timezone = sanitize_text_field(Arr::get($schedule->value, 'timezone', 'UTC'));
+        $timezone = Arr::get($schedule, 'value.timezone', 'UTC');
 
         $author = $schedule->getAuthor();
 

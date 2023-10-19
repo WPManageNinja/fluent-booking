@@ -376,6 +376,7 @@ class CalendarController extends Controller
             'title'             => $slot['title'],
             'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
             'calendar_id'       => $calendar->id,
+            'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
             'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [

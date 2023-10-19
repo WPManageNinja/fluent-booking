@@ -29,7 +29,7 @@ class AvailabilityPolicy extends Policy
                     return false;
                 }
 
-                return $availability->object_id === get_current_user_id();
+                return (int)$availability->object_id === get_current_user_id();
             }
 
             return PermissionManager::userCan('manage_own_calendar');
@@ -45,7 +45,7 @@ class AvailabilityPolicy extends Policy
                 return false;
             }
 
-            return $availability->object_id === get_current_user_id();
+            return (int)$availability->object_id === get_current_user_id();
         }
 
         return PermissionManager::userCan('manage_own_calendar');

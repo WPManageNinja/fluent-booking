@@ -16,7 +16,7 @@ class PermissionManager
             'manage_all_bookings'                => 'Read & Write Access to All Bookings',
             'read_other_calendars'               => 'Read Access of Other Users Calendars',
             'manage_other_calendars'             => 'Manage Other Users Calendars',
-            'read_and_use_other_availabilities' => 'Read & Use Access of All Availabilities',
+            'read_and_use_other_availabilities'  => 'Read & Use Access of All Availabilities',
             'manage_other_availabilities'        => 'Manage All Availabilities'
         ];
     }

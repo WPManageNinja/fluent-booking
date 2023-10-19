@@ -47,8 +47,7 @@ class AvailabilityController extends Controller
         $formattedSchedules = [];
         foreach ($schedules as $schedule) {
 
-
-            $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
+            $timezone = Arr::get($schedule, 'value.timezone', 'UTC');
 
             $author = $schedule->getAuthor();
 
@@ -126,6 +125,8 @@ class AvailabilityController extends Controller
             $calendar = Calendar::where('user_id', $userId)->first();
             if ($calendar) {
                 $timezone = $calendar->author_timezone;
+            } else {
+                $timezone = 'UTC';
             }
         }
 
@@ -179,13 +180,13 @@ class AvailabilityController extends Controller
 
         $schedule = Availability::findOrFail($scheduleId);
 
-        $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
+        $timezone = Arr::get($schedule, 'value.timezone');
 
         $data = $request->all();
 
         $scheduleData = [
-            'default'          => Arr::isTrue($data, 'schedule.settings.default'),
-            'timezone'         => sanitize_text_field($timezone),
+            'default'          => Arr::isTrue($schedule, 'value.default'),
+            'timezone'         => $timezone,
             'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data, 'schedule.settings.date_overrides', []), $timezone, 'UTC'),
             'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($data, 'schedule.settings.weekly_schedules', []), $timezone, 'UTC'),
         ];
@@ -197,8 +198,7 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'message'  => __('Schedule has been updated successfully', 'fluent-booking-pro'),
-            'schedule' => $schedule,
-            'timezone' => $timezone
+            'schedule' => $schedule
         ]);
     }
 
