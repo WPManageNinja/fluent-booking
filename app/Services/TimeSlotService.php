@@ -189,11 +189,9 @@ class TimeSlotService
         }
 
         $hostIds = $this->calendarSlot->getHostIds();
-        $status = ['pending', 'approved', 'scheduled'];
+        $status  = ['pending', 'approved', 'scheduled', 'completed'];
 
-        $bookings = Booking::whereHas('hosts', function ($query) use ($hostIds) {
-            $query->whereIn('user_id', $hostIds);
-        })
+        $bookings = Booking::whereIn('host_user_id', $hostIds)
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
@@ -225,10 +223,10 @@ class TimeSlotService
             }
 
             $books[$date][] = [
-                'event_id'   => $booking->event_id,
-                'start'     => $booking->start_time,
-                'end'       => $booking->end_time,
-                'remaining' => $remaining,
+                'event_id'    => $booking->event_id,
+                'start'       => $booking->start_time,
+                'end'         => $booking->end_time,
+                'remaining'   => $remaining,
                 'max_booking' => $maxBooking
             ];
         }
