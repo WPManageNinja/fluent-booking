@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-if="!schedulesLength && !booking_id" description="No bookings found based on your filter"/>
+                            <el-empty v-if="!schedulesLength" description="No bookings found based on your filter"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
@@ -227,7 +227,9 @@ export default {
         formattedSchedules() {
             const items = {};
             if(this.filters.period == 'latest_bookings') {
-                items['Sorted by booked at date time'] = this.schedules;
+                if (this.schedules.length) {
+                    items['Sorted by booked at date time'] = this.schedules;
+                }
                 return items;
             }
 
