@@ -20,7 +20,7 @@ class AvailabilityPolicy extends Policy
         }
 
         if ($request->method() == 'GET') {
-            if (PermissionManager::userCan(['read_and_user_other_availabilities', 'manage_other_availabilities', 'read_and_use_other_availabilities'])) {
+            if (PermissionManager::userCan(['manage_own_calendar', 'read_and_user_other_availabilities', 'manage_other_availabilities', 'read_and_use_other_availabilities'])) {
                 return true;
             }
             if ($request->schedule_id) {

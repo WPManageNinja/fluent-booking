@@ -36,9 +36,10 @@ class LocationService
                 $html .= '<span class="fcal_loc_text">' . __('In Person (Attendee Address)', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'custom') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
-                $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
+                } else {
+                    $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
                 }
             } else if ($location['type'] == 'in_person_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
@@ -234,7 +235,11 @@ class LocationService
             $locationType = Arr::get($location, 'type');
 
             if ($locationType == 'custom') {
-                $title = Arr::get($location, 'custom_title');
+                if ($location['display_on_booking'] == 'yes') {
+                    $title = Arr::get($location, 'description');
+                } else {
+                    $title = Arr::get($location, 'title');
+                }
             }
 
             $locationOptions[] = [
