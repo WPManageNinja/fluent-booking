@@ -237,7 +237,7 @@ class Booking extends Model
 
         if ($locationType == 'online_meeting') {
             $html = '<b>' . __('Online Meeting', 'fluent-booking-pro') . '</b> ';
-            if ($meetingLink = Arr::get($details, 'meeting_link')) {
+            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
             }
             return $html;
@@ -256,7 +256,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'host_phone_number') . ' (Host phone number)';
+            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . ' (Host phone number)';
         }
 
         if ($locationType == 'custom') {
