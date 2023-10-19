@@ -91,7 +91,6 @@ class AdminMenuHandler
 
     public function render()
     {
-
         $app = App::getInstance();
 
         $config = $app->config;
