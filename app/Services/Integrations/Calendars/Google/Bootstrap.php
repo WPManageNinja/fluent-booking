@@ -72,6 +72,17 @@ class Bootstrap
                     'readonly'    => true,
                     'copy_btn'    => true,
                 ],
+                'caching_time'  => [
+                    'type'        => 'select',
+                    'options'     => [
+                        '1'  => '1 minute',
+                        '5'  => '5 minutes',
+                        '10' => '10 minutes',
+                        '15' => '15 minutes',
+                    ],
+                    'label'       => __('Caching Time', 'fluent_booking'),
+                    'inline_help' => __('Select for how many minutes the Google Calendar event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in google then you may lower the value', 'fluent_booking')
+                ],
             ];
 
             $config = GoogleHelper::getApiConfig();
@@ -88,7 +99,7 @@ class Bootstrap
                 'title'         => __('Google Calendar / Meet', 'fluent_booking'),
                 'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
                 'description'   => $description,
-                'save_btn_text' => __('Save', 'fluent_booking'),
+                'save_btn_text' => __('Save Google API Configuration', 'fluent_booking'),
                 'fields'        => $fields,
                 'will_encrypt'  => true
             ];
@@ -183,7 +194,7 @@ class Bootstrap
             $remoteCalendars = $this->getRemoteCalendarsList($item, true);
 
             if (is_wp_error($remoteCalendars)) {
-                $errors = $remoteCalendars->get_error_message(). ' Please remove the connection and reconnect again.';
+                $errors = $remoteCalendars->get_error_message() . ' Please remove the connection and reconnect again.';
                 $remoteCalendars = [];
             }
 
@@ -277,9 +288,13 @@ class Bootstrap
 
     public function pushBookedSlots($books, $calendarSlot, $toTimeZone, $bookingRequest, $dateRange)
     {
-        if (!GoogleHelper::isConfigured()) {
+        $config = GoogleHelper::getApiConfig();
+
+        if (empty($config['client_id']) || empty($config['client_secret'])) {
             return $books;
         }
+
+        $cacheTime = Arr::get($config, 'caching_time', 5);
 
         $items = GoogleHelper::getConflictCheckCalendars($calendarSlot->user_id);
 
@@ -324,7 +339,7 @@ class Bootstrap
 
                     // We have to format it appropriately
                     return $events;
-                }, mt_rand(600, 800));
+                }, $cacheTime * 60);
 
                 if ($remoteSlots) {
                     $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
@@ -591,7 +606,7 @@ class Bootstrap
 
         return true;
     }
-    
+
     public function updateAttendeesRemoteCalendarEvent($config, Booking $booking, $action)
     {
         $calendar = $booking->calendar;
@@ -656,7 +671,7 @@ class Bootstrap
             return false; // Nothing to add as there is no previous response
         }
 
-        $googleEventId  = Arr::get($bookingMeta, 'id');
+        $googleEventId = Arr::get($bookingMeta, 'id');
 
         $meta = Meta::where('object_type', '_google_user_token')
             ->where('object_id', $calendar->user_id)
@@ -667,7 +682,7 @@ class Bootstrap
             return false; //  Meta could not be found
         }
 
-        $googleEventId  = Arr::get($bookingMeta, 'id');
+        $googleEventId = Arr::get($bookingMeta, 'id');
         $googleMeetLink = Arr::get($bookingMeta, 'google_meet_link');
 
         if ($googleMeetLink) {
@@ -676,7 +691,7 @@ class Bootstrap
             $booking->location_details = $location;
             $booking->save();
         }
-    
+
         $api = new GoogleCalendar($meta);
 
         $updatedEvent = $api->getEvent($calendarId, $googleEventId);
@@ -743,7 +758,7 @@ class Bootstrap
             return false; // Nothing to add as there is no previous response
         }
 
-        $googleEventId  = Arr::get($bookingMeta, 'id');
+        $googleEventId = Arr::get($bookingMeta, 'id');
 
         $meta = Meta::where('object_type', '_google_user_token')
             ->where('object_id', $calendar->user_id)
@@ -753,7 +768,7 @@ class Bootstrap
         if (!$meta) {
             return false; //  Meta could not be found
         }
-    
+
         $api = new GoogleCalendar($meta);
 
 
@@ -777,7 +792,7 @@ class Bootstrap
         if ($attendeeIndex !== false) {
             unset($attendees[$attendeeIndex]);
         }
-    
+
         $data = [
             'attendees' => array_values($attendees) // Reindex the array after removing the attendee
         ];
