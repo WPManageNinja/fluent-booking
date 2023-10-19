@@ -50,8 +50,9 @@ class BookingService
 
             if ($user) {
                 $data['person_user_id'] = $userId;
-                $data['email'] = $user->user_email;
-
+                if(empty($data['email'])) {
+                    $data['email'] = $user->user_email;
+                }
                 if (empty($data['first_name'])) {
                     $data['first_name'] = $user->first_name;
                     $data['last_name'] = $user->last_name;

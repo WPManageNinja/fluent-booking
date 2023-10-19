@@ -19,60 +19,70 @@
                 <div v-else class="fcal_configure_integration_body fc_global_form_builder">
                     <el-form v-model="administration" label-position="top">
                         <el-row :gutter="30">
-                            <el-col :sm="24" :md="12">
+                            <el-col :sm="24" :md="8">
                                 <el-form-item label="Admin Email">
                                     <el-input v-model="administration.admin_email" placeholder="Admin Email"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :sm="24" :md="12">
-                                <el-form-item label="Summary Email">
-                                    <el-checkbox v-model="administration.summary_notification" true-label="yes"
-                                                 false-label="no"> Enable Booking Summary Notification
-                                    </el-checkbox>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item label="Calendar start from">
+                                    <el-select v-model="administration.start_day" popper-class="fcal_select" placeholder="Select" placement="bottom">
+                                        <el-option
+                                            v-for="item in weekdays"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                        />
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item label="Time Format">
+                                    <el-radio-group v-model="timeFormat">
+                                        <el-radio label="12">12h</el-radio>
+                                        <el-radio label="24">24h</el-radio>
+                                    </el-radio-group>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
-                          <el-form-item label="Calendar start from">
-                              <el-select v-model="administration.start_day" popper-class="fcal_select" placeholder="Select">
-                                <el-option
-                                    v-for="item in weekdays"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                />
-                              </el-select>
-                          </el-form-item>
-                        </el-row>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item label="Summary Email">
+                                <el-checkbox v-model="administration.summary_notification" true-label="yes"
+                                             false-label="no"> Enable Booking Summary Notification
+                                </el-checkbox>
+                            </el-form-item>
+                            </el-col>
 
-                        <template v-if="administration.summary_notification == 'yes'">
-                            <el-row :gutter="30">
-                                <el-col :sm="24" :md="12">
-                                    <el-form-item label="How often to send summary email?">
-                                        <el-select v-model="administration.notification_frequency"
-                                                   placeholder="Select Frequency" popper-class="fcal_select">
-                                            <el-option value="daily" label="Daily"></el-option>
-                                            <el-option value="weekly" label="Weekly"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :sm="24" :md="12">
-                                    <el-form-item v-if="administration.notification_frequency == 'weekly'"
-                                                  label="In which day to send the email?">
-                                        <el-select v-model="administration.notification_day" placeholder="Select Day"
-                                                   popper-class="fcal_select">
-                                            <el-option value="mon" label="Monday"></el-option>
-                                            <el-option value="tue" label="Tuesday"></el-option>
-                                            <el-option value="wed" label="Wednesday"></el-option>
-                                            <el-option value="thu" label="Thursday"></el-option>
-                                            <el-option value="fri" label="Friday"></el-option>
-                                            <el-option value="sat" label="Saturday"></el-option>
-                                            <el-option value="sun" label="Sunday"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </template>
+                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
+                                <el-row :gutter="30">
+                                    <el-col :sm="24" :md="12">
+                                        <el-form-item label="How often to send summary email?">
+                                            <el-select v-model="administration.notification_frequency"
+                                                       placeholder="Select Frequency" popper-class="fcal_select" placement="bottom">
+                                                <el-option value="daily" label="Daily"></el-option>
+                                                <el-option value="weekly" label="Weekly"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :sm="24" :md="12">
+                                        <el-form-item v-if="administration.notification_frequency == 'weekly'"
+                                                      label="In which day to send the email?">
+                                            <el-select v-model="administration.notification_day" placeholder="Select Day"
+                                                       popper-class="fcal_select" placement="bottom">
+                                                <el-option value="mon" label="Monday"></el-option>
+                                                <el-option value="tue" label="Tuesday"></el-option>
+                                                <el-option value="wed" label="Wednesday"></el-option>
+                                                <el-option value="thu" label="Thursday"></el-option>
+                                                <el-option value="fri" label="Friday"></el-option>
+                                                <el-option value="sat" label="Saturday"></el-option>
+                                                <el-option value="sun" label="Sunday"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
 
                     </el-form>
 
@@ -155,6 +165,7 @@ export default {
             ],
             loading: false,
             saving: false,
+            timeFormat: '12'
         }
     },
     methods: {
@@ -165,6 +176,7 @@ export default {
                     this.emailing = response.emailing;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;
+                    this.timeFormat = response.time_format;
                 })
                 .catch(error => {
                     this.$handleError(error);
@@ -178,6 +190,7 @@ export default {
             this.$post('settings/general', {
                 emailing: this.emailing,
                 administration: this.administration,
+                timeFormat: this.timeFormat,
             })
                 .then(response => {
                     this.$notify.success(response.message);
