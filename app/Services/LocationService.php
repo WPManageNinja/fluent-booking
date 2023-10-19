@@ -67,31 +67,6 @@ class LocationService
 
     }
 
-    public static function updateSingleLocationDetails($locationFields, $address)
-    {
-        $locationType = Arr::get($locationFields, '0.type');
-
-        $locationData['type'] = $locationType;
-
-        if ($$locationType == 'custom') {
-            $locationData['title'] = Arr::get($locationFields, '0.custom_title');
-            $locationData['description'] = Arr::get($locationFields, '0.description');
-        } else if ($locationType == 'in_person_organizer') {
-            $locationData['title'] = Arr::get($locationFields, '0.title');
-            $locationData['description'] = Arr::get($locationFields, '0.description');
-        } elseif ($locationType == 'phone_organizer') {
-            $locationData['title'] = Arr::get($locationFields, '0.title');
-            $locationData['host_phone_number'] = Arr::get($locationFields, '0.host_phone_number');
-        } elseif ($locationType == 'in_person_guest') {
-            $locationData['title'] = Arr::get($locationFields, '0.title');
-            $locationData['guest_address'] = $address;
-        } elseif ($locationType == 'online_meeting') {
-            $locationData['title'] = Arr::get($locationFields, '0.title');
-            $locationData['meeting_link'] = Arr::get($locationFields, '0.meeting_link');
-        }
-        return $locationData;
-    }
-
     public static function getBookingLocationUrl(Booking $booking)
     {
         $details = $booking->location_details;
@@ -105,32 +80,6 @@ class LocationService
         }
 
         return $booking->getConfirmationUrl();
-    }
-
-    public static function updateMultipleLocationDetails($locationFields, $location, $details)
-    {
-        $locationData['type'] = $location;
-
-        $locationDetails = array_filter($locationFields, function ($field) {
-            return $field['type'] == $location;
-        });
-
-        $locationDetails = reset($filteredArray);
-
-        if ($location == 'in_person_organizer') {
-            $locationData['description'] = Arr::get($locationDetails, 'description');
-        } elseif ($location == 'in_person_guest') {
-            $locationData['guest_address'] = $details;
-        } elseif ($location == 'phone_organizer') {
-            $locationData['host_phone_number'] = Arr::get($locationDetails, 'host_phone_number');
-        } elseif ($location == 'phone_guest') {
-            $locationData['guest_address'] = $details;
-        } elseif ($location == 'online_meeting') {
-            $locationData['meeting_link'] = Arr::get($locationDetails, 'meeting_link');
-        } elseif ($location == 'custom') {
-            $locationData['description'] = $details;
-        }
-        return $locationData;
     }
 
     public static function getLocationDetails($calendarEvent, $userInput = [], $allInput = [])
@@ -219,9 +168,7 @@ class LocationService
 
     public static function getLocationsConfig()
     {
-        return [
-            ''
-        ];
+        return [];
     }
 
     public static function getLocationOptions($calendarSlot)
@@ -235,6 +182,10 @@ class LocationService
 
             if ($locationType == 'custom') {
                 $title = Arr::get($location, 'custom_title');
+            }
+
+            if(!$title) {
+                $title = str_replace('_', ' ', ucfirst($locationType));
             }
 
             $locationOptions[] = [
