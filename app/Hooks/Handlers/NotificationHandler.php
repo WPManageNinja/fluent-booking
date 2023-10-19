@@ -110,7 +110,7 @@ class NotificationHandler
             return false;
         }
 
-        $notifications = $booking->getNotifications();
+        $notifications = $booking->calendar_event->getNotifications();
 
         if (!$notifications) {
             return;

@@ -68,8 +68,11 @@ class FluentCrmInit
 
     private function getActionUrl($meeting)
     {
-        $url = admin_url('#/scheduled-events?period=upcoming&booking_id=' . $meeting->id);
-        return '<a target="_blank" href="' . esc_url($url) . '">' . 'view' . '</a>';
+        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?booking_id=' . $meeting->id);
+
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'view' . '</a>';
+        
+        return $link;
     }
 
     private function getFormattedTime($meeting)

@@ -89,6 +89,8 @@
             title="Add New Availability Schedule"
             width="40%"
             class="fcal_dialog"
+            :close-on-press-escape="false"
+            :close-on-click-modal="false"
         >
             <el-form label-position="top">
                 <el-form-item label="Schedule Title *">
@@ -100,7 +102,7 @@
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button class="fcal_plain_btn" @click="creatingNew = false">Cancel</el-button>
+                    <el-button class="fcal_plain_btn" @click="cancelCreate">Cancel</el-button>
                     <SaveButton :saving="saving" label="Add New Schedule" @save="createNew"/>
                 </span>
             </template>
@@ -142,6 +144,10 @@ export default {
             const updatedAilabilities = this.availabilities.filter(schedule => schedule.id !== scheduleId);
             this.availabilities = updatedAilabilities;
         },
+        cancelCreate() {
+            this.newSchedule.title = '';
+            this.creatingNew = false;
+        },
         gotoDetails(schedule) {
             this.$router.push({
                 name: 'availability_details',
@@ -167,6 +173,13 @@ export default {
                 });
         },
         createNew() {
+            if (!this.newSchedule.title) {
+                this.$handleError("Title is required");
+                return;
+            } else if (!this.newSchedule.timezone) {
+                this.$handleError("Timezone is required");
+                return;
+            }
             this.saving = true;
             this.$post('availability', this.newSchedule)
                 .then(response => {
