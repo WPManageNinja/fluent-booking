@@ -13,5 +13,17 @@ export const attributes = {
     calendars: {
         type: 'array',
         default: []
+    },
+    primary_color: {
+        type: 'string',
+        default: '#4587EC'
+    },
+    date_round: {
+        type: 'string',
+        default: '4px'
+    },
+    avatarStyle: {
+        type: 'string',
+        default: '8px'
     }
 };
