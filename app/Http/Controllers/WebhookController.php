@@ -63,14 +63,14 @@ class WebhookController extends Controller
 
             if (!$webhook) {
                 return $this->sendError([
-                    'message' => __('WebHook not found', 'fluent-booking')
+                    'message' => __('WebHook not found', 'fluent-booking-pro')
                 ], 422);
             }
 
             $webhook->value = $settings;
             $webhook->save();
             return [
-                'message' => __('WebHook Successfully Updated', 'fluent-booking'),
+                'message' => __('WebHook Successfully Updated', 'fluent-booking-pro'),
                 'id'      => $webhook->id
             ];
         }
@@ -86,7 +86,7 @@ class WebhookController extends Controller
         $createdHook = Meta::create($data);
 
         return [
-            'message' => __('WebHook Successfully Created', 'fluent-booking'),
+            'message' => __('WebHook Successfully Created', 'fluent-booking-pro'),
             'id'      => $createdHook->id
         ];
     }

@@ -27,6 +27,23 @@
             </div>
         <?php endforeach; ?>
 
+        <?php if($extra_html): ?>
+        <hr />
+        <div class="fcal_payment_html">
+            <h3 style="margin-bottom: 10px;">Payment Details</h3>
+            <?php echo $extra_html; ?>
+        </div>
+        <style>
+            .fluent_booking_payment_receipt {
+                background: transparent !important;
+                padding: 0 !important;
+            }
+            .fcal_payment_html h4 {
+                margin: 10px 0;
+            }
+        </style>
+        <?php endif; ?>
+
         <?php if ($booking->canCancel()): ?>
             <?php if ($action_type == 'cancel'): ?>
                 <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
@@ -34,20 +51,20 @@
                           class="fcal_form_cancellation">
                         <label for="cancellation_reason">Reason for cancellation</label>
                         <div class="fcal_form_field">
-                    <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking'); ?>"
+                    <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking-pro'); ?>"
                               name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
                         </div>
                         <div class="fcal_form_actions">
                             <a href="<?php echo $booking->getConfirmationUrl(); ?>"
-                               class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking'); ?></a>
+                               class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking-pro'); ?></a>
                             <button class="fcal_btn fcal_btn_primary fcal_cancel_btn"
-                                    type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking'); ?></button>
+                                    type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking-pro'); ?></button>
                         </div>
                     </form>
                 </div>
             <?php else: ?>
                 <div class="fcal_booking_manage fcal_normal_booking_footer">
-                    <?php echo __('Need to make a change?', 'fluent-booking') ?> <a href="<?php echo $booking->getRescheduleUrl(); ?>">Reschedule</a> or <a
+                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?> <a href="<?php echo $booking->getRescheduleUrl(); ?>">Reschedule</a> or <a
                         href="<?php echo $booking->getCancelUrl(); ?>">Cancel</a>
                 </div>
             <?php endif; ?>
@@ -55,7 +72,7 @@
 
         <?php if ($bookmarks): ?>
             <div class="fcal_booking_manage fcal_to_calendars">
-                <span><?php _e('Add to calendar', 'fluent-booking'); ?></span>
+                <span><?php _e('Add to calendar', 'fluent-booking-pro'); ?></span>
                 <div class="fcal_cal_items">
                     <?php foreach ($bookmarks as $bookmark): ?>
                     <div title="<?php esc_attr_e($bookmark['title']); ?>">

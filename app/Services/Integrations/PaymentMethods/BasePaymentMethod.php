@@ -88,6 +88,11 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function addPaymentMethodToBookingData($bookingData, $calendarSlot, $customData)
     {
+
+        if (Arr::get($bookingData, 'source') != 'web') {
+            return $bookingData;
+        }
+
         if ($calendarSlot->type === 'paid') {
             $bookingData['status'] = 'pending';
             $bookingData['payment_status'] = 'pending';
