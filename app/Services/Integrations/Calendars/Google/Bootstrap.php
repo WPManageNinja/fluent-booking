@@ -432,6 +432,7 @@ class Bootstrap
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
+            'location'  => strip_tags($booking->getLocationAsText()),
             'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
             'extendedProperties' => [
                 'shared' => [
@@ -442,6 +443,10 @@ class Bootstrap
                 ],
             ],
         ];
+
+        if ($booking->message && $booking->event_type == 'single') {
+            $data['description'] = 'Note: ' . $booking->message;
+        }
 
         $isGoogleMeet = false;
 

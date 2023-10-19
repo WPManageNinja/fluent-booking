@@ -268,6 +268,30 @@ class Booking extends Model
         return '--';
     }
 
+    public function getLocationAsText()
+    {
+        $details = $this->location_details;
+
+        $locationType = Arr::get($details, 'type');
+        $meetingLink  = Arr::get($details, 'online_platform_link');
+
+        $onlinePlatforms = ['google_meet', 'zoom_meeting', 'online_meeting'];
+
+        if (in_array($locationType, $onlinePlatforms) && $meetingLink) {
+            return $meetingLink;
+        }
+
+        if ($locationType == 'phone_organizer') {
+            return Arr::get($details, 'description');
+        }
+        
+        if ($locationType == 'phone_guest') {
+            return $this->phone;
+        }
+
+        return $this->getLocationDetailsHtml();
+    }
+
     public function getMessage()
     {
         if (empty($this->message)) {

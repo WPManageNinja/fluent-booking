@@ -207,6 +207,12 @@ export default {
                 this.slot.location_settings[index].title = 'Organizer Phone Number';
             } else if (location.type == 'online_meeting') {
                 this.slot.location_settings[index].title = 'Online Meeting';
+            } else if (location.type == 'google_meet') {
+                this.slot.location_settings[index].title = 'Google Meet';
+                return;
+            } else if (location.type == 'zoom_meeting') {
+                this.slot.location_settings[index].title = 'Zoom Meeting';
+                return;
             } else if (location.type != 'custom') {
                 return;
             }
