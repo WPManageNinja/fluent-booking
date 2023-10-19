@@ -49,9 +49,9 @@ class LicenseManager
         $checkUpdateUrl = esc_url(admin_url('plugins.php?fluent-booking-pro-check-update=' . time()));
 
         $row_meta = array(
-            'docs'         => '<a href="' . esc_url(apply_filters('fluent_booking_pro/docs_url', 'https://fluentbooking.com/docs/')) . '" aria-label="' . esc_attr__('View FluentBooking documentation', 'fluent_booking_pro') . '">' . esc_html__('Docs', 'fluent_booking_pro') . '</a>',
-            'support'      => '<a href="' . esc_url(apply_filters('fluent_booking_pro/community_support_url', 'https://wpmanageninja.com/support-tickets/#/')) . '" aria-label="' . esc_attr__('Visit Support', 'fluent_booking_pro') . '">' . esc_html__('Help & Support', 'fluent_booking_pro') . '</a>',
-            'check_update' => '<a  style="color: #583fad;font-weight: 600;" href="' . $checkUpdateUrl . '" aria-label="' . esc_attr__('Check Update', 'fluent_booking_pro') . '">' . esc_html__('Check Update', 'fluent_booking_pro') . '</a>',
+            'docs'         => '<a href="' . esc_url(apply_filters('fluent_booking_pro/docs_url', 'https://fluentbooking.com/docs/')) . '" aria-label="' . esc_attr__('View FluentBooking documentation', 'fluent-booking-pro') . '">' . esc_html__('Docs', 'fluent-booking-pro') . '</a>',
+            'support'      => '<a href="' . esc_url(apply_filters('fluent_booking_pro/community_support_url', 'https://wpmanageninja.com/support-tickets/#/')) . '" aria-label="' . esc_attr__('Visit Support', 'fluent-booking-pro') . '">' . esc_html__('Help & Support', 'fluent-booking-pro') . '</a>',
+            'check_update' => '<a  style="color: #583fad;font-weight: 600;" href="' . $checkUpdateUrl . '" aria-label="' . esc_attr__('Check Update', 'fluent-booking-pro') . '">' . esc_html__('Check Update', 'fluent-booking-pro') . '</a>',
         );
 
         return array_merge($links, $row_meta);
@@ -108,7 +108,7 @@ class LicenseManager
 
         if ($status != 'valid') {
             return [
-                'message'         => sprintf(__('The %s license needs to be activated. %sActivate Now%s', 'fluent_booking_pro'),
+                'message'         => sprintf(__('The %s license needs to be activated. %sActivate Now%s', 'fluent-booking-pro'),
                     $this->getVar('plugin_title'), '<a href="' . $this->getVar('activate_url') . '">',
                     '</a>'),
                 'type'            => 'global',
@@ -338,9 +338,9 @@ class LicenseManager
             $renewUrl = $this->getRenewUrl($licenseKey);
             $errorMessage = 'Your license has been expired at ' . $licenseData->expires . ' . Please <a target="_blank" href="' . $renewUrl . '">click here</a> to renew your license';
         } else if ($licenseData['error'] == 'no_activations_left') {
-            $errorMessage = 'No Activation Site left: You have activated all the sites that your license offer. Please go to wpmanageninja.com account and review your sites. You may deactivate your unused sites from wpmanageninja account or you can purchase another license. <a target="_blank" href="' . $this->getVar('purchase_url') . '">' . __('Click Here to purchase another license', 'fluent_booking_pro') . '</a>';
+            $errorMessage = 'No Activation Site left: You have activated all the sites that your license offer. Please go to wpmanageninja.com account and review your sites. You may deactivate your unused sites from wpmanageninja account or you can purchase another license. <a target="_blank" href="' . $this->getVar('purchase_url') . '">' . __('Click Here to purchase another license', 'fluent-booking-pro') . '</a>';
         } else if ($licenseData['error'] == 'missing') {
-            $errorMessage = __('The given license key is not valid. Please verify that your license is correct. You may login to wpmanageninja.com account and get your valid license key for your purchase.', 'fluent_booking_pro');
+            $errorMessage = __('The given license key is not valid. Please verify that your license is correct. You may login to wpmanageninja.com account and get your valid license key for your purchase.', 'fluent-booking-pro');
         }
 
         return $errorMessage;
@@ -355,7 +355,7 @@ class LicenseManager
         }
 
         return '<p>Your ' . $this->getVar('plugin_title') . ' license has been <b>expired at ' . date('d M Y', strtotime($licenseData['expires'])) . '</b>, Please ' .
-            '<a href="' . $renewUrl . '"><b>' . __('Click Here to Renew Your License', 'fluent_booking_pro') . '</b></a>' . '</p>';
+            '<a href="' . $renewUrl . '"><b>' . __('Click Here to Renew Your License', 'fluent-booking-pro') . '</b></a>' . '</p>';
     }
 
     private function urlGetContentFallBack($url)
