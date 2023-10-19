@@ -125,7 +125,7 @@
 
                     <div class="fcal_schedules" :class="isHideSidebar ? 'hide_sidebar' : ''">
                         <div class="fcal_schedule_wrapper">
-                            <div v-for="(daySchedules, scheduleDate) in formattedSchedules"
+                            <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
                                  :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
                                     <h3 class="fcal_schedule_data">{{ formattedDate(scheduleDate) }}</h3>
@@ -198,7 +198,6 @@ export default {
             all_hosts: [],
             event_types: [],
             showAdvancedFilter: false,
-            schedulesLength: null,
             query: {
                 date_to_date: '',
                 eventType: '',
@@ -245,8 +244,10 @@ export default {
                 .forEach((date) => {
                     sortedSchedules[date] = items[date];
                 });
-            this.schedulesLength = Object.keys(sortedSchedules).length;
             return sortedSchedules;
+        },
+        schedulesLength() {
+            return Object.keys(this.formattedSchedules).length;
         },
         currentPeriod() {
             const period = this.filters.period;
