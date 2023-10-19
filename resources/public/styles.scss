@@ -1,9 +1,14 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
 $bodyBg: #f1f2f5;
-$primaryColor: #2653C7;
+$primaryColor: #306ae0;
 $dark: #1B2533;
 $lightDark: #6b7280;
+:root {
+  --fcal_primary_color: #306ae0;
+  --fcal_date_radius: 4px;
+  --fcal_avatar_radius: 8px;
+}
 
 @import "../scss/booking_confirmation";
 
@@ -61,7 +66,7 @@ $lightDark: #6b7280;
                 visibility: hidden;
                 opacity: 0;
                 &:checked~.fcal_radio_icon {
-                    border-color: $primaryColor;
+                    border-color: var(--fcal_primary_color);
                     &::before {
                         transform: scale(1);
                     }
@@ -81,7 +86,7 @@ $lightDark: #6b7280;
                     width: 10px;
                     height: 10px;
                     border-radius: 50%;
-                    background: $primaryColor;
+                    background: var(--fcal_primary_color);
                     position: absolute;
                     left: 3.5px;
                     top: 3.5px;
@@ -146,7 +151,7 @@ $lightDark: #6b7280;
           &:focus {
             outline: none;
             box-shadow: none;
-            border-color: #4587EC;
+            border-color: var(--fcal_primary_color);
           }
         }
 
@@ -175,8 +180,8 @@ $lightDark: #6b7280;
               opacity: 0;
 
               &:checked ~ .fcal_checkbox_mark {
-                background: $primaryColor;
-                border-color: $primaryColor;
+                background: var(--fcal_primary_color);
+                border-color: var(--fcal_primary_color);
 
                 &:before {
                   transform: scale(1) rotate(45deg);
@@ -224,7 +229,7 @@ $lightDark: #6b7280;
         line-height: 20px;
         color: #ffffff;
         padding: 10px 20px;
-        background: #4587EC;
+        background: var(--fcal_primary_color);
         border-radius: 8px;
       }
 
@@ -273,7 +278,7 @@ $lightDark: #6b7280;
         width: 90px;
         height: 90px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: var(--fcal_avatar_radius);
         display: block;
       }
     }
@@ -443,9 +448,9 @@ $lightDark: #6b7280;
             &:hover {
               outline: none;
               background-clip: padding-box;
-              background: #4587EC;
-              border-color: #4587EC;
-              color: #4587EC;
+              background: var(--fcal_primary_color);
+              border-color: var(--fcal_primary_color);
+              color: var(--fcal_primary_color);
 
               svg {
                 fill: #ffffff;
@@ -646,7 +651,7 @@ $lightDark: #6b7280;
 
           &:hover {
             span {
-              background-color: #4587EC;
+              background-color: var(--fcal_primary_color);
               color: white;
             }
           }
@@ -660,7 +665,7 @@ $lightDark: #6b7280;
             height: 40px;
             line-height: 40px;
             margin: 0 auto;
-            border-radius: 4px;
+            border-radius: var(--fcal_date_radius);
             background-color: #e5e7eb;
             transition: .3s;
             -webkit-transition: .3s;
@@ -674,7 +679,7 @@ $lightDark: #6b7280;
           &.day {
             &.day-enabled {
               span {
-                background-color: #4587EC;
+                background-color: var(--fcal_primary_color);
                 color: white;
               }
             }
@@ -784,8 +789,10 @@ $lightDark: #6b7280;
     color: #fff;
     padding: 10px 15px;
     opacity: 0;
+    margin: 0;
     visibility: hidden;
     transition: .2s;
+    list-style: none;
     .title {
       margin-bottom: 10px;
     }
@@ -864,6 +871,8 @@ $lightDark: #6b7280;
       width: 100%;
       align-items: center;
       transition: .3s;
+      position: relative;
+      z-index: 1;
       -webkit-transition: .3s;
       -moz-transition: .3s;
       -ms-transition: .3s;
@@ -872,14 +881,28 @@ $lightDark: #6b7280;
       + .fcal_spot {
         margin-top: 15px;
       }
+      &:before {
+        content: '';
+        background: var(--fcal_primary_color);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        border-radius: 4px;
+        z-index: -1;
+        opacity: 0;
+      }
 
       &:hover {
-        border-color: #4587EC;
-        background: #F0F6FE;
+        border-color: var(--fcal_primary_color);
+        &:before {
+          opacity: 0.1;
+        }
 
         .fcal_spot_name {
           .fcal_spot_time {
-            color: #4587EC;
+            color: var(--fcal_primary_color);
           }
         }
       }
@@ -915,23 +938,25 @@ $lightDark: #6b7280;
       }
 
       &.fcal_spot_selected {
-        background: #F0F6FE;
-        border-color: #4587EC;
+        border-color: var(--fcal_primary_color);
         padding-right: 2px;
+        &:before {
+          opacity: 0.1;
+        }
 
         .fcal_spot_name {
-          color: #4587EC;
+          color: var(--fcal_primary_color);
           font-weight: 700;
 
           .fcal_spot_time {
-            color: #4587EC;
+            color: var(--fcal_primary_color);
             font-weight: 700;
           }
         }
       }
 
       .fcal_spot_confirm {
-        background: #4587EC;
+        background: var(--fcal_primary_color);
         text-align: center;
         padding: 10px 21px;
         border-radius: 4px;
@@ -1198,12 +1223,12 @@ $lightDark: #6b7280;
 }
 
 .fcal_btn_submit {
-  background: rgb(0, 105, 255);
+  background: var(--fcal_primary_color);
   text-align: center;
   padding: 10px 15px;
   border-radius: 4px;
   margin-bottom: 15px;
-  border: 1px solid rgba(0, 105, 255, 0.5);
+  border: 1px solid var(--fcal_primary_color);
   color: white;
   cursor: pointer;
   box-sizing: border-box;
@@ -1403,7 +1428,7 @@ $lightDark: #6b7280;
 
   .fcal_nav_active {
     svg {
-      color: rgb(3 96 230);
+      color: var(--fcal_primary_color);
     }
   }
 }
@@ -1418,7 +1443,7 @@ $lightDark: #6b7280;
   line-height: 20px;
   color: #fff;
   padding: 10px 20px;
-  background: #4587EC;
+  background: var(--fcal_primary_color);
   border-radius: 8px;
 }
 
@@ -1536,12 +1561,12 @@ $lightDark: #6b7280;
     }
   }
   #fluent_booking_stipe_pay {
-    background: #4587EC;
+    background: var(--fcal_primary_color);
     text-align: center;
     padding: 8px 15px;
     border-radius: 4px;
     margin-bottom: 15px;
-    border: 1px solid rgba(0, 105, 255, 0.5);
+    border: 1px solid #306AE07F;
     color: white;
     cursor: pointer;
     box-sizing: border-box;

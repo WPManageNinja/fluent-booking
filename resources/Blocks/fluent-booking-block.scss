@@ -121,13 +121,14 @@ $dark: #1B2533;
 .fcal_block_settings {
 	width: 100%;
 	.fcal_block_inspector_widget {
+		margin-bottom: 20px;
 		h3 {
 			margin-bottom: 5px;
 		}
 		select {
 			border: 1px solid #D6DAE1;
 			border-radius: 8px;
-			padding: 5px 20px;
+			padding: 3px 16px;
 			width: 100%;
 		}
 	}

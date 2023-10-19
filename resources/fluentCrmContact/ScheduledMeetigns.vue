@@ -12,7 +12,7 @@
                         </template>
                     </el-table-column>
                     <template slot="empty">
-                        <p>{{$t('Scheduled Meetings')}} <b>Fluent Booking</b> {{$t('no_scheduled_meetings_found_for_this_subscriber')}}</p>
+                        <p>Scheduled Meetings <b>Fluent Booking</b> No scheduled meetings found for this subscriber</p>
                     </template>
                 </el-table>
                 <div class="fcal_crm_pagination">
