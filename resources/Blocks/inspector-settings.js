@@ -1,5 +1,5 @@
 /*eslint-disable*/
-const { InspectorControls } = wp.blockEditor;
+const { InspectorControls, PanelColorSettings } = wp.blockEditor;
 const {__} = wp.i18n;
 const {
     PanelBody,
@@ -14,7 +14,10 @@ const InspectorSettings = props => {
         attributes: {
             slotId,
             calendarId,
-            calendars
+            calendars,
+            primary_color,
+            date_round,
+            avatarStyle
         }, setAttributes
     } = props;
 
@@ -24,6 +27,26 @@ const InspectorSettings = props => {
         setAttributes( { slotId: ids[0] } );
         setAttributes( { calendarId: ids[1] } );
     }
+
+    const dateStyleChangeHandle = (event) => {
+        setAttributes({date_round: event.target.value});
+    }
+
+    const avatarStyleChangeHandle = (event) => {
+        setAttributes({avatarStyle: event.target.value});
+    }
+
+
+    const colorHandles = [
+        {
+            value: primary_color,
+            onChange: (val) => {
+                setAttributes({primary_color: val})
+            },
+            label: __('Primary Color')
+        }
+    ];
+
 
     return (
         <InspectorControls>
@@ -53,9 +76,38 @@ const InspectorSettings = props => {
                             </select>
                         </div>
 
+                        <div className="fcal_block_inspector_widget">
+                            <h3 className="label">Date Style</h3>
+                            <select
+                                value={date_round}
+                                onChange={dateStyleChangeHandle}
+                            >
+                                <option value="4px">Squire</option>
+                                <option value="50%">Rounded</option>
+                            </select>
+                        </div>
+
+                        <div className="fcal_block_inspector_widget">
+                            <h3 className="label">Avatar Style</h3>
+                            <select
+                                value={avatarStyle}
+                                onChange={avatarStyleChangeHandle}
+                            >
+                                <option value="8px">Squire</option>
+                                <option value="50%">Rounded</option>
+                            </select>
+                        </div>
+
                     </div>
                 </PanelRow>
             </PanelBody>
+
+            <div className="fluent-latest-posts-content-color-settings">
+                <PanelColorSettings
+                    title={__('Customization')}
+                    colorSettings={ colorHandles }
+                />
+            </div>
         </InspectorControls>
     );
 };
