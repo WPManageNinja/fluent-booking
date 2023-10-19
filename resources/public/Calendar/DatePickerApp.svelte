@@ -39,7 +39,7 @@
     let selectedDate = '';
     let selectedDateTime = {};
     let nextDisabled = false;
-    let formatHours = '12';
+    let formatHours = appData.time_format;
 
     if (slot.pre_selects) {
         month = slot.pre_selects.month - 1;
