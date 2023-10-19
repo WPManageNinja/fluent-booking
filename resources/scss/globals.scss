@@ -1104,6 +1104,21 @@
                     width: 100%;
                 }
             }
+            &.fcal_sms_form {
+                .el-form-item {
+                    &.fcal_sms_body  {
+                        position: relative;
+                        .el-form-item__label {
+                            font-size: 14px !important;
+                            color: #1B2533 !important;
+                            justify-content: space-between;
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
         }
     }
     &.fcal_override_dropdown {
