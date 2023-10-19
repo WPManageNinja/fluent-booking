@@ -10,6 +10,7 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Services\Integrations\FluentForms\BookingElement;
 use FluentBooking\App\Services\Integrations\FluentForms\FormDataUpdate;
 
@@ -32,6 +33,19 @@ class FluentFormInit
         add_action('fluentform/before_form_validation', [$this, 'handleValidations'], 10, 2);
         add_action('fluentform/before_insert_submission', [$this, 'handleBookings'], 10);
         add_action('fluentform/notify_on_form_submit', [$this, 'updateSubmissionId'], 10, 1);
+        add_action('fluentform/conversational_question', [$this, 'loadConversationalAsset'], 10, 3);
+
+        add_filter('fluentform/conversational_field_types', function ($fieldTypes) {
+            $fieldTypes['fcal_booking'] = 'FlowFormCustomType';
+
+            return $fieldTypes;
+        });
+        
+        add_filter('fluentform/conversational_accepted_field_elements', function ($elements) {
+            $elements[] = 'fcal_booking';
+
+            return $elements;
+        });
     }
 
     public function registerIntegrations()
@@ -194,11 +208,19 @@ class FluentFormInit
             try {
                 $this->validateBooking($key, $data);
             } catch (\Exception $e) {
-                wp_send_json([
+                $response = [
                     'id'       => $data['id'],
                     'messages' => $e->getMessage(),
                     'errors'   => 'Booking Failed'
-                ], $e->getCode());
+                ];
+
+                $ffConversational = Arr::isTrue($formData, 'isFFConversational');
+
+                if ($ffConversational) {
+                    $response = ['errors' => [$key => ['error' => $e->getMessage()]]];
+                }
+
+                wp_send_json($response, $e->getCode());
             }
         }
     }
@@ -219,5 +241,24 @@ class FluentFormInit
                     $e->getMessage()
                 ], $e->getCode());
             }
+    }
+
+    public function loadConversationalAsset($question, $field, $form)
+    {
+        if ('fcal_booking' === $field['element']) {
+            [$localizeData] = (new BookingElement)->getLocalizedData($field, $form);
+
+            wp_enqueue_script(
+                'fluent_booking', 
+                FLUENT_BOOKING_URL . 'assets/public/js/fluentform-conversational.js', 
+                [], 
+                FLUENT_BOOKING_ASSETS_VERSION, 
+                true
+            );
+
+            wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
+
+            wp_localize_script('fluent_booking', 'fluentCalendarPublicVars', (new FrontEndHandler())->getGlobalVars());
+        }
     }
 }
