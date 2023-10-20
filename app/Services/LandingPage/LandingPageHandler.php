@@ -179,6 +179,8 @@ class LandingPageHandler
 
         $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
 
+        $eventVars['time_format'] = get_option('_fluent_booking_settings')['time_format'];
+
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
