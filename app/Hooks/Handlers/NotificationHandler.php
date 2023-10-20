@@ -11,9 +11,10 @@ class NotificationHandler
 {
     public function register()
     {
-        add_action('fluent_booking/after_booking_scheduled', array($this, 'pushBookingScheduledToQueue'), 10, 2);
+        add_action('fluent_booking/after_booking_scheduled', [$this, 'pushBookingScheduledToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'emailOnBookingRescheduled'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
     }
 
@@ -167,6 +168,36 @@ class NotificationHandler
         if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $email = Arr::get($notifications, 'cancelled_by_attendee.email', []);
             EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
+        }
+    }
+
+    public function emailOnBookingRescheduled(Booking $booking)
+    {
+        $calendarEvent = $booking->calendar_event;
+        if (!$calendarEvent) {
+            return;
+        }
+
+        $notifications = $calendarEvent->getNotifications();
+
+        if (!$notifications) {
+            return;
+        }
+
+        $rescheduledBy = $booking->getMeta('rescheduled_by_type', 'host');
+
+        if ($rescheduledBy == 'host') {
+            if (Arr::isTrue($notifications, 'rescheduled_by_host.enabled')) {
+                // This from the host
+                $email = Arr::get($notifications, 'rescheduled_by_host.email', []);
+                EmailNotificationService::bookingRescheduledEmail($booking, $email, 'guest');
+            }
+            return;
+        }
+
+        if (Arr::isTrue($notifications, 'rescheduled_by_attendee.enabled')) {
+            $email = Arr::get($notifications, 'rescheduled_by_attendee.email', []);
+            EmailNotificationService::bookingRescheduledEmail($booking, $email, 'host');
         }
     }
 }

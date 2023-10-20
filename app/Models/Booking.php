@@ -201,6 +201,15 @@ class Booking extends Model
         return $html;
     }
 
+    public function getPreviousMeetingTime($timeZone = 'UTC')
+    {
+        $previousMeetingTime = $this->getMeta('previous_meeting_time');
+        $html = DateTimeHelper::convertFromUtc($previousMeetingTime, $timeZone, 'D M d, Y');
+        $html .= ' ' . DateTimeHelper::convertFromUtc($previousMeetingTime, $timeZone, 'h:ia');
+
+        return $html;
+    }
+
     public function getLocationDetailsHtml()
     {
         $details = $this->location_details;
@@ -420,6 +429,11 @@ class Booking extends Model
         }
 
         do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
+    }
+
+    public function getRescheduleReason()
+    {
+        return $this->getMeta('reschedule_reason', '');
     }
 
     public function getActivities()

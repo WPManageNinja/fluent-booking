@@ -1270,8 +1270,8 @@ class Helper
                 'title'   => __('Booking Cancelled by Attendee (email to Organizer)', 'fluent-booking-pro'),
                 'email'   => [
                     'additional_recipients' => '',
-                    'subject'               => 'Your booking was cancelled with {{guest.full_name}}',
-                    'body'                  => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                    'subject'               => 'A booking was cancelled with {{guest.full_name}}',
+                    'body'                  => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>A scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'cancelled_by_host'     => [
@@ -1280,6 +1280,24 @@ class Helper
                 'email'   => [
                     'subject' => 'Your booking was cancelled with {{host.name}}',
                     'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p>'
+                ],
+            ],
+            'rescheduled_by_attendee' => [
+                'enabled' => true,
+                'is_host' => true,
+                'title'   => __('Booking Rescheduled by Attendee (email to Organizer)', 'fluent-booking-pro'),
+                'email'   => [
+                    'additional_recipients' => '',
+                    'subject'               => 'A booking was rescheduled with {{guest.full_name}}',
+                    'body'                  => '<h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>A scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                ],
+            ],
+            'rescheduled_by_host'     => [
+                'enabled' => true,
+                'title'   => __('Booking Rescheduled by Organizer (email to Attendee)', 'fluent-booking-pro'),
+                'email'   => [
+                    'subject' => 'Your booking was rescheduled with {{host.name}}',
+                    'body'    => '<h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p>'
                 ],
             ]
         ]);
@@ -1319,6 +1337,7 @@ class Helper
                         '##booking.reschedule_url##'                => 'Booking Reschedule URL',
                         '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
                         '{{booking.booking_hash}}'                  => 'Unique Booking Hash',
+                        '{{booking.reschedule_reason}}'             => 'Event Reschedule Reason'
                     ]
                 ],
                 'host'    => [
@@ -1351,7 +1370,7 @@ class Helper
                         '{{guest.last_name}}'      => 'Guest Last Name',
                         '{{guest.full_name}}'      => 'Guest Full Name',
                         '{{guest.email}}'          => 'Guest Email',
-                        '{{booking.phone}}'    => 'Guest Main Phone Number (if provided)',
+                        '{{booking.phone}}'        => 'Guest Main Phone Number (if provided)',
                         '{{guest.note}}'           => 'Guest Note',
                         '{{guest.timezone}}'       => 'Guest Timezone',
                         '{{guest.form_data_html}}' => 'Guest Form Submitted Data (HTML)'
@@ -1374,7 +1393,8 @@ class Helper
                         '##booking.cancelation_url##'               => 'Booking Cancellation URL',
                         '##booking.reschedule_url##'                => 'Booking Reschedule URL',
                         '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
-                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash'
+                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash',
+                        '{{booking.reschedule_reason}}'             => 'Event Reschedule Reason'
                     ]
                 ],
                 'host'    => [
