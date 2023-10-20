@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fluent Booking Pro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 12:35+0000\n"
+"POT-Creation-Date: 2023-10-18 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Access Permissions has been updated successfully"
 msgstr ""
 
-#: app/Views/public/booking_confirmation.php:58
+#: app/Views/public/booking_confirmation.php:75
 msgid "Add to calendar"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: app/Views/public/booking_confirmation.php:44
+#: app/Views/public/booking_confirmation.php:61
 msgid "Cancel Booking"
 msgstr ""
 
@@ -258,6 +258,10 @@ msgstr ""
 msgid "Failed to update meeting with Zoom API"
 msgstr ""
 
+#: app/Services/Integrations/CalendarIntegrationService.php:84
+msgid "Feed name is required"
+msgstr ""
+
 #: app/Http/Controllers/CalendarController.php:580
 msgid "Fields has been updated"
 msgstr ""
@@ -311,6 +315,10 @@ msgstr ""
 
 #: app/Services/LocationService.php:23
 msgid "Google Meet"
+msgstr ""
+
+#: app/Services/Integrations/FluentForms/BookingElement.php:107
+msgid "Guest Fields"
 msgstr ""
 
 #: app/Services/Integrations/PaymentMethods/CurrenciesHelper.php:387
@@ -407,11 +415,11 @@ msgid "My Schedules"
 msgstr ""
 
 #: app/Services/Helper.php:1224 app/Services/Helper.php:1242
-#: app/Views/public/booking_confirmation.php:50
+#: app/Views/public/booking_confirmation.php:67
 msgid "Need to make a change?"
 msgstr ""
 
-#: app/Views/public/booking_confirmation.php:42
+#: app/Views/public/booking_confirmation.php:59
 msgid "Nevermind"
 msgstr ""
 
@@ -496,7 +504,7 @@ msgstr ""
 msgid "Please provide a rescheduling reason"
 msgstr ""
 
-#: app/Views/public/booking_confirmation.php:37
+#: app/Views/public/booking_confirmation.php:54
 msgid "Please provide cancellation reason"
 msgstr ""
 
@@ -584,6 +592,10 @@ msgstr ""
 
 #: app/Http/Controllers/AvailabilityController.php:224
 msgid "Schedule title has been updated successfully"
+msgstr ""
+
+#: app/Services/Integrations/FluentForms/BookingElement.php:103
+msgid "Select Calendar"
 msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:84

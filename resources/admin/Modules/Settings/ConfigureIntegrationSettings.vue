@@ -20,6 +20,7 @@
                             <el-form v-model="settings" label-position="top">
                                 <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
                                     <el-input
+                                        v-if="field.type == 'text'"
                                         v-model="settings[fieldKey]"
                                         :type="field.type"
                                         :placeholder="field.placeholder"
@@ -30,6 +31,17 @@
                                             </el-button>
                                         </template>
                                     </el-input>
+
+                                    <el-select  v-else-if="field.type='select'" v-model="settings[fieldKey]">
+                                        <el-option
+                                            v-for="(item, itemValue) in field.options"
+                                            :key="itemValue"
+                                            :label="item"
+                                            :value="itemValue">
+                                        </el-option>
+                                    </el-select>
+
+                                    <p v-if="field.inline_help" v-html="field.inline_help"></p>
                                 </el-form-item>
                                 <SaveButton v-if="fieldSettings.fields" :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                             </el-form>
