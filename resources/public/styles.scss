@@ -1163,6 +1163,9 @@ $lightDark: #6b7280;
     display: block;
     margin-bottom: 5px;
   }
+  .svelte-select {
+    padding-left: 20px !important;
+  }
 }
 
 .fcal_date_wrapper {
@@ -1331,6 +1334,26 @@ $lightDark: #6b7280;
 
 .fcal_on_mobile {
   height: auto !important;
+  &.fcal_calendar_inner {
+    width: 100%;
+    max-width: 400px;
+    .fcal_date_wrapper {
+      width: 100%;
+      .fcal_day_picker_wrap {
+        .fcal_day_picker {
+          .fcal_calendar_slot_wrap {
+            &.is_active {
+              .fcal_slot_picker {
+                &.is_active {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   .fcal_slot_picker_header {
     text-align: center;
