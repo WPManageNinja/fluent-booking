@@ -127,7 +127,7 @@ class BookingService
             ],
             'when'  => [
                 'title'   => __('When', 'fluent-booking-pro'),
-                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true)
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true) . ' (' . $booking->person_time_zone . ')'
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking-pro'),
