@@ -2,7 +2,11 @@ import BookingApp from './BookingApp.svelte';
 import './styles.scss';
 import './saas.scss';
 
-document.body.addEventListener('ffc_init_booking_field', function (e) {
+document.body.addEventListener('ffc_init_custom_field', function (e) {
+    if ('fcal_booking' !== e.detail?.question?.ff_input_type) {
+        return;
+    }
+    
     let element = e.detail.element;
 
     if (element.dataset.app_booted) {
