@@ -76,24 +76,37 @@ class CalendarController extends Controller
             'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ], $data));
 
+        $userId = (int) $data['user_id'];
+
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
-        if (!empty($data['user_id'])) {
+        if (!empty($data['user_id']) && PermissionManager::userCan('invite_team_members')) {
             $user = get_user_by('ID', $data['user_id']);
-
-            $userName = $user->user_login;
-            if (is_email($userName)) {
-                $userName = explode('@', $userName);
-                $userName = $userName[0] . '-' . time();
-            }
-            $data['slug'] = sanitize_title($userName, '', 'display');
-
-            if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
-                $data['slug'] .= '-' . time();
-            }
-
         } else {
             $user = get_user_by('ID', get_current_user_id());
+        }
+
+        if(!$user) {
+            return $this->sendError([
+                'message' => __('User not found', 'fluent-booking-pro')
+            ], 422);
+        }
+
+        if (Calendar::where('user_id', $userId)->first()) {
+            return $this->sendError([
+                'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
+            ], 422);
+        }
+
+        $userName = $user->user_login;
+        if (is_email($userName)) {
+            $userName = explode('@', $userName);
+            $userName = $userName[0] . '-' . time();
+        }
+        $data['slug'] = sanitize_title($userName, '', 'display');
+
+        if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
+            $data['slug'] .= '-' . time();
         }
 
         if (!empty($data['slug'])) {
@@ -119,8 +132,6 @@ class CalendarController extends Controller
         } else {
             $calendar = Calendar::where('user_id', $user->ID)->first();
         }
-
-
 
         if (!$calendar) {
             return $this->sendError([
@@ -616,7 +627,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/before_delete_calendar', $calendar);
         $calendar->delete();
         do_action('fluent_booking/after_delete_calendar', $calendarId);
-        
+
         return [
             'message' => __('Calendar Deleted Successfully!', 'fluent-booking-pro')
         ];
