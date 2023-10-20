@@ -212,7 +212,7 @@
         }
 
         if (isFFConversational) {
-            appData.element.dispatchEvent(new CustomEvent('value_changed', {
+            appData.element.dispatchEvent(new CustomEvent('value.update', {
                 detail: {
                     value: JSON.stringify({ id, timezone, start_time })
                 }
