@@ -447,7 +447,7 @@ class Bootstrap
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'location'  => strip_tags($booking->getLocationAsText()),
+            'location'  => $booking->getLocationAsText(),
             'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
             'extendedProperties' => [
                 'shared' => [
