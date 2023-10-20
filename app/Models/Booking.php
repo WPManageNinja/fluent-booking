@@ -289,7 +289,7 @@ class Booking extends Model
             return $this->phone;
         }
 
-        return $this->getLocationDetailsHtml();
+        return strip_tags($this->getLocationDetailsHtml());
     }
 
     public function getMessage()

@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 5.0
 Tested up to: 6.3
 Requires PHP: 7.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,15 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.0.1 (Date: 19 Oct 2023)
+- Added External Location details like Zoom / Custom Address / Phone Number to Google Calendar
+- Added Caching time settings for Google Calendar event conflict check
+- Added Block Options to customize the calendar & booking form
+- Set default 12h / 24h time format from settings
+- Multiple Locations selection issue fixed
+- Timezone issue fixed on Availability
+- Reminder Email Notification Fixed
 
 1.0.0 (Date: 18 Oct 2023)
 - Initial release

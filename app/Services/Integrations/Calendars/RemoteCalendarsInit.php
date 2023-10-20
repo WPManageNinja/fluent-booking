@@ -14,7 +14,7 @@ class RemoteCalendarsInit
     {
         (new \FluentBooking\App\Services\Integrations\Calendars\Google\Bootstrap())->register();
 
-        add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 10, 2);
+        add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 11, 2);
 
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'checkForRemoteCalendarEventCancel'], 10, 1);
 

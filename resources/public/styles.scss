@@ -556,6 +556,27 @@ $lightDark: #6b7280;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
+        .is-today {
+          line-height: 40px;
+          width: 40px;
+          margin: auto;
+          display: block;
+          position: relative;
+          z-index: 1;
+          color: var(--fcal_primary_color);
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: var(--fcal_date_radius);
+            z-index: -1;
+            background: var(--fcal_primary_color);
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+          }
+        }
 
         &:nth-of-type(7n + 7) {
           border-right: 0;
@@ -865,13 +886,13 @@ $lightDark: #6b7280;
     .fcal_spot {
       display: flex;
       justify-content: space-between;
-      padding: 0;
       border: 1px solid #ADB5C2;
       border-radius: 4px;
       width: 100%;
-      align-items: center;
+      //align-items: center;
       transition: .3s;
       position: relative;
+      padding: 2px 2px 2px 0;
       z-index: 1;
       -webkit-transition: .3s;
       -moz-transition: .3s;
@@ -914,7 +935,7 @@ $lightDark: #6b7280;
         justify-content: space-between;
         width: 100%;
         align-items: center;
-        padding: 12px 24px;
+        padding: 10px 24px;
         font-size: 15px;
 
         .fcal_spot_time {
@@ -939,7 +960,6 @@ $lightDark: #6b7280;
 
       &.fcal_spot_selected {
         border-color: var(--fcal_primary_color);
-        padding-right: 2px;
         &:before {
           opacity: 0.1;
         }
@@ -1164,6 +1184,9 @@ $lightDark: #6b7280;
     display: block;
     margin-bottom: 5px;
   }
+  .svelte-select {
+    padding-left: 20px !important;
+  }
 }
 
 .fcal_date_wrapper {
@@ -1332,6 +1355,26 @@ $lightDark: #6b7280;
 
 .fcal_on_mobile {
   height: auto !important;
+  &.fcal_calendar_inner {
+    width: 100%;
+    max-width: 400px;
+    .fcal_date_wrapper {
+      width: 100%;
+      .fcal_day_picker_wrap {
+        .fcal_day_picker {
+          .fcal_calendar_slot_wrap {
+            &.is_active {
+              .fcal_slot_picker {
+                &.is_active {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   .fcal_slot_picker_header {
     text-align: center;
