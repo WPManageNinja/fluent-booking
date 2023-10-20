@@ -96,7 +96,6 @@ class CalendarController extends Controller
             $user = get_user_by('ID', get_current_user_id());
         }
 
-
         if (!empty($data['slug'])) {
             $slug = trim(sanitize_text_field($data['slug']));
             if (!Helper::isCalendarSlugAvailable($slug, true)) {
@@ -120,6 +119,8 @@ class CalendarController extends Controller
         } else {
             $calendar = Calendar::where('user_id', $user->ID)->first();
         }
+
+
 
         if (!$calendar) {
             return $this->sendError([
@@ -170,9 +171,9 @@ class CalendarController extends Controller
 
         $slot = CalendarSlot::create($slotData);
 
+        do_action('fluent_booking/after_create_calendar', $calendar);
         do_action('fluent_booking/after_create_calendar_slot', $slot, $calendar);
 
-        do_action('fluent_booking/after_create_calendar', $calendar);
 
         return [
             'calendar'     => $calendar,

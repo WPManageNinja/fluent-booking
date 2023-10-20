@@ -36,6 +36,7 @@ class LandingPageHandler
         if ($urlParts[0] != FLUENT_BOOKING_LANDING_SLUG || count($urlParts) < 2) {
             return;
         }
+        
         $authorSlug = sanitize_text_field($urlParts[1]);
 
         $this->routeView($authorSlug, Arr::get($urlParts, 2, null));
@@ -254,6 +255,7 @@ class LandingPageHandler
             header('Content-Type: text/calendar; charset=utf-8');
             header('Content-Disposition: attachment; filename=event.ics');
             echo $icsText;
+            die();
         }
 
         $calendarEvent = $booking->calendar_event;
