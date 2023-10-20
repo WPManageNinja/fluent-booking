@@ -240,6 +240,7 @@ class AdminMenuHandler
             'currency'           => CurrenciesHelper::getGlobalCurrency(),
             'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign()
         ]);
+
     }
 
     protected function getRestInfo($app)

@@ -205,8 +205,7 @@ class PermissionManager
 
         if ($calendar) {
             $user = wp_get_current_user();
-            $roles = (array)$user->roles;
-
+            $roles = (array) $user->roles;
             return Arr::get($roles, 0);
         }
 
@@ -219,10 +218,6 @@ class PermissionManager
 
         $user = wp_get_current_user();
         $roles = (array) $user->roles;
-
-        if (in_array('subscriber', $roles)) {
-            return '';
-        }
 
         return Arr::get($roles, 0);
     }
