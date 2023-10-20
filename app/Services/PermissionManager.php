@@ -11,13 +11,13 @@ class PermissionManager
     public static function allPermissionSets()
     {
         return [
-            'manage_own_calendar'                => 'Manage only own Calendar, Events, Bookings & Availability',
-            'read_all_bookings'                  => 'Read Access to All Bookings',
-            'manage_all_bookings'                => 'Read & Write Access to All Bookings',
-            'read_other_calendars'               => 'Read Access of Other Users Calendars',
-            'manage_other_calendars'             => 'Manage Other Users Calendars',
-            'read_and_use_other_availabilities'  => 'Read & Use Access of All Availabilities',
-            'manage_other_availabilities'        => 'Manage All Availabilities'
+            'manage_own_calendar'               => 'Manage only own Calendar, Events, Bookings & Availability',
+            'read_all_bookings'                 => 'Read Access to All Bookings',
+            'manage_all_bookings'               => 'Read & Write Access to All Bookings',
+            'read_other_calendars'              => 'Read Access of Other Users Calendars',
+            'manage_other_calendars'            => 'Manage Other Users Calendars',
+            'read_and_use_other_availabilities' => 'Read & Use Access of All Availabilities',
+            'manage_other_availabilities'       => 'Manage All Availabilities'
         ];
     }
 
@@ -202,13 +202,10 @@ class PermissionManager
 
         // Check if the user has any calendar
         $calendar = Calendar::where('user_id', $userId)->first();
+
         if ($calendar) {
             $user = wp_get_current_user();
             $roles = (array)$user->roles;
-
-            if (in_array('subscriber', $roles)) {
-                return '';
-            }
 
             return Arr::get($roles, 0);
         }
@@ -221,7 +218,7 @@ class PermissionManager
         }
 
         $user = wp_get_current_user();
-        $roles = (array)$user->roles;
+        $roles = (array) $user->roles;
 
         if (in_array('subscriber', $roles)) {
             return '';
