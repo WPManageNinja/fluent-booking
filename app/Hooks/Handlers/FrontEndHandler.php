@@ -143,7 +143,6 @@ class FrontEndHandler
 
         $localizeData = $this->getCalendarEventVars($calendar, $calendarEvent);
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
-        $localizeData['time_format'] = get_option('_fluent_booking_settings')['time_format'];;
 
         if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
 
@@ -488,6 +487,7 @@ class FrontEndHandler
             'pre_selects'        => null,
             'settings'           => $calendarEvent->settings,
             'type'               => $calendarEvent->type,
+            'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12')
         ];
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
