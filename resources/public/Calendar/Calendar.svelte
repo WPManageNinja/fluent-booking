@@ -5,11 +5,11 @@
     {#each days as day}
         {#if day.enabled}
             <span role="button" tabindex="0" aria-label="Select Day {day.name}" class="day day-enabled { (selectedDate === day.date) ? 'day_is_selected' : ''}" on:keypress={()=>daySelected(day)} on:click={()=>daySelected(day)}>
-                <span>{day.name}</span>
+                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{day.name}</span>
             </span>
         {:else}
             <span class="day day-disabled">
-                <span>{day.name}</span>
+                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{day.name}</span>
             </span>
         {/if}
     {/each}
@@ -27,6 +27,14 @@
     function daySelected(day) {
         selectedDate = day.date;
         dispatch('dayClick', day);
+    }
+
+    let currentDate = new Date();
+    function formatDate(date) {
+        const year  = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day   = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
 </script>
