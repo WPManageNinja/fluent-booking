@@ -865,13 +865,13 @@ $lightDark: #6b7280;
     .fcal_spot {
       display: flex;
       justify-content: space-between;
-      padding: 0;
       border: 1px solid #ADB5C2;
       border-radius: 4px;
       width: 100%;
-      align-items: center;
+      //align-items: center;
       transition: .3s;
       position: relative;
+      padding: 2px 2px 2px 0;
       z-index: 1;
       -webkit-transition: .3s;
       -moz-transition: .3s;
@@ -914,7 +914,7 @@ $lightDark: #6b7280;
         justify-content: space-between;
         width: 100%;
         align-items: center;
-        padding: 12px 24px;
+        padding: 10px 24px;
         font-size: 15px;
 
         .fcal_spot_time {
@@ -939,7 +939,6 @@ $lightDark: #6b7280;
 
       &.fcal_spot_selected {
         border-color: var(--fcal_primary_color);
-        padding-right: 2px;
         &:before {
           opacity: 0.1;
         }
