@@ -21,6 +21,13 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
+1.0.2 (Date: 20 Oct 2023)
+- Added Email Notification on Booking Reschedule
+- Minor UI Improvements
+- Added Time Format Pre-Selected based on settings
+- Zoom Link issue with Google Calendar fixed
+- Current date highlighted on the calendar
+
 1.0.1 (Date: 19 Oct 2023)
 - Added External Location details like Zoom / Custom Address / Phone Number to Google Calendar
 - Added Caching time settings for Google Calendar event conflict check
