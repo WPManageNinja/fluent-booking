@@ -119,6 +119,7 @@ class BookingElement extends BaseFieldManager
     public function render($data, $form)
     {
         [$localizeData, $element_id] = $this->getLocalizedData($data, $form);
+        $localizeData['time_format'] = get_option('_fluent_booking_settings')['time_format'];
 
         wp_enqueue_script(
             'fluentform-calendar-public',

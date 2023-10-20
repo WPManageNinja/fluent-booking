@@ -104,6 +104,11 @@
 
     function dayClicked(day) {
         component.parentNode.classList.add("f_cal_day_selected");
+
+        const calendarHolder = document.querySelector(".fcal_holder.f_cal_day_selected").offsetWidth;
+        if (calendarHolder <= 660) {
+            isMobile = true;
+        }
     }
 
     function resetSelection() {
