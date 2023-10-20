@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fluent Booking Pro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 13:09+0000\n"
+"POT-Creation-Date: 2023-10-20 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Add to calendar"
 msgstr ""
 
-#: app/Services/BookingService.php:153
+#: app/Services/BookingService.php:154
 msgid "Additional Note"
 msgstr ""
 
@@ -47,18 +47,18 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:724
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:802
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:746
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:824
 msgid "Attendee Added in Google Calendar Event"
 msgstr ""
 
-#: app/Services/LocationService.php:52
+#: app/Services/LocationService.php:53
 msgid "Attendee Phone Number"
 msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:75
 #: app/Hooks/Handlers/AdminMenuHandler.php:76
-#: app/Hooks/Handlers/AdminMenuHandler.php:125
+#: app/Hooks/Handlers/AdminMenuHandler.php:124
 msgid "Availability"
 msgstr ""
 
@@ -86,9 +86,17 @@ msgstr ""
 msgid "Booking has been confirmed"
 msgstr ""
 
+#: app/Services/Helper.php:1288
+msgid "Booking Rescheduled by Attendee (email to Organizer)"
+msgstr ""
+
+#: app/Services/Helper.php:1297
+msgid "Booking Rescheduled by Organizer (email to Attendee)"
+msgstr ""
+
 #: app/Hooks/Handlers/AdminMenuHandler.php:66
 #: app/Hooks/Handlers/AdminMenuHandler.php:67
-#: app/Hooks/Handlers/AdminMenuHandler.php:120
+#: app/Hooks/Handlers/AdminMenuHandler.php:119
 msgid "Bookings"
 msgstr ""
 
@@ -96,33 +104,29 @@ msgstr ""
 msgid "Burundian Franc"
 msgstr ""
 
-#: app/Services/Integrations/FluentForms/BookingElement.php:69
-msgid "Calendar Booking Field"
-msgstr ""
-
-#: app/Http/Controllers/CalendarController.php:126
+#: app/Http/Controllers/CalendarController.php:127
 msgid "Calendar could not be found. Please try again"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:619
+#: app/Http/Controllers/CalendarController.php:621
 msgid "Calendar Deleted Successfully!"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:594
+#: app/Http/Controllers/CalendarController.php:596
 msgid "Calendar Event has been deleted"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:281
+#: app/Http/Controllers/CalendarController.php:282
 msgid "Calendar has been updated successfully"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:205
+#: app/Http/Controllers/CalendarController.php:206
 msgid "Calendar Settings"
 msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:57
 #: app/Hooks/Handlers/AdminMenuHandler.php:58
-#: app/Hooks/Handlers/AdminMenuHandler.php:115
+#: app/Hooks/Handlers/AdminMenuHandler.php:114
 msgid "Calendars"
 msgstr ""
 
@@ -139,7 +143,7 @@ msgstr ""
 msgid "Cancel Booking"
 msgstr ""
 
-#: app/Services/BookingService.php:145
+#: app/Services/BookingService.php:146
 msgid "Cancellation Reason"
 msgstr ""
 
@@ -155,8 +159,20 @@ msgstr ""
 msgid "Cfp Franc"
 msgstr ""
 
+#: app/Services/PluginManager/LicenseManager.php:54
+msgid "Check Update"
+msgstr ""
+
 #: app/Services/Integrations/PaymentMethods/CurrenciesHelper.php:385
 msgid "Chilean Peso"
+msgstr ""
+
+#: app/Services/PluginManager/LicenseManager.php:341
+msgid "Click Here to purchase another license"
+msgstr ""
+
+#: app/Services/PluginManager/LicenseManager.php:358
+msgid "Click Here to Renew Your License"
 msgstr ""
 
 #: app/Services/Integrations/PaymentMethods/CurrenciesHelper.php:389
@@ -167,7 +183,7 @@ msgstr ""
 msgid "Completed Bookings"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:135
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:146
 msgid "Configure Google Calendar/Meet to sync your events"
 msgstr ""
 
@@ -179,15 +195,15 @@ msgstr ""
 msgid "Configure Meeting Reminder to Organizer (You)"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:256
+#: app/Hooks/Handlers/FrontEndHandler.php:258
 msgid "Confirm Payment"
 msgstr ""
 
-#: app/Services/LandingPage/LandingPageHandler.php:352
+#: app/Services/LandingPage/LandingPageHandler.php:354
 msgid "Confirm Reschedule"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:136
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:147
 msgid "Connect with Google Calendar"
 msgstr ""
 
@@ -195,22 +211,22 @@ msgstr ""
 msgid "Contact has been created in FluentCRM. Contact ID: "
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:259
+#: app/Hooks/Handlers/FrontEndHandler.php:261
 msgid "Continue to Payments"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:409
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:414
 msgid "Currency"
 msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:48
 #: app/Hooks/Handlers/AdminMenuHandler.php:49
-#: app/Hooks/Handlers/AdminMenuHandler.php:110
+#: app/Hooks/Handlers/AdminMenuHandler.php:109
 msgid "Dashboard"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:457
-#: app/Http/Controllers/CalendarController.php:474
+#: app/Http/Controllers/CalendarController.php:459
+#: app/Http/Controllers/CalendarController.php:476
 msgid "Data has been updated"
 msgstr ""
 
@@ -226,6 +242,10 @@ msgstr ""
 msgid "Djiboutian Franc"
 msgstr ""
 
+#: app/Services/PluginManager/LicenseManager.php:52
+msgid "Docs"
+msgstr ""
+
 #: app/Services/ReceiptHelper.php:159
 msgid "Email"
 msgstr ""
@@ -234,11 +254,11 @@ msgstr ""
 msgid "Email is required"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:381
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:386
 msgid "Enable Stripe payment payment for booking payment"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:252
+#: app/Hooks/Handlers/FrontEndHandler.php:254
 msgid "Enter Details"
 msgstr ""
 
@@ -246,7 +266,7 @@ msgstr ""
 msgid "Event trigger is required"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:225
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:236
 msgid "Failed to connect Calendar API"
 msgstr ""
 
@@ -262,7 +282,7 @@ msgstr ""
 msgid "Feed name is required"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:580
+#: app/Http/Controllers/CalendarController.php:582
 msgid "Fields has been updated"
 msgstr ""
 
@@ -275,10 +295,6 @@ msgstr ""
 msgid "Fluent Booking"
 msgstr ""
 
-#: app/Services/Integrations/FluentForms/BookingElement.php:51
-msgid "Fluent Booking Field"
-msgstr ""
-
 #. Name of the plugin
 msgid "Fluent Booking Pro"
 msgstr ""
@@ -287,17 +303,21 @@ msgstr ""
 msgid "Fluent Booking WordPress Plugin"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:110
+#: app/Services/Integrations/FluentForms/BookingElement.php:51
+#: app/Services/Integrations/FluentForms/BookingElement.php:69
+msgid "FluentBooking Field"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:109
 msgid "Getting Started"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:258
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:269
 msgid "Google API Error"
 msgstr ""
 
 #: app/Http/Controllers/IntegrationSettingsController.php:43
-#: app/Services/Integrations/GoogleCalendar/GoogleCalendar.php:179
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:134
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:145
 msgid "Google Calendar"
 msgstr ""
 
@@ -305,11 +325,11 @@ msgstr ""
 msgid "Google Calendar / Meet"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:497
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:519
 msgid "Google Calendar event created"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:588
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:610
 msgid "Google Calendar event updated"
 msgstr ""
 
@@ -325,6 +345,10 @@ msgstr ""
 msgid "Guinean Franc"
 msgstr ""
 
+#: app/Services/PluginManager/LicenseManager.php:53
+msgid "Help & Support"
+msgstr ""
+
 #. URI of the plugin
 msgid "https://fluentbooking.com"
 msgstr ""
@@ -337,7 +361,7 @@ msgstr ""
 msgid "In Person (Attendee Address)"
 msgstr ""
 
-#: app/Services/TimeSlotService.php:331
+#: app/Services/TimeSlotService.php:329
 msgid "Invalid date range"
 msgstr ""
 
@@ -353,7 +377,7 @@ msgstr ""
 msgid "Invalid submission. No receipt found"
 msgstr ""
 
-#: app/Models/Booking.php:218
+#: app/Models/Booking.php:228
 msgid "Invitee Address:"
 msgstr ""
 
@@ -369,7 +393,7 @@ msgstr ""
 msgid "Japanese Yen"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:259
+#: app/Http/Controllers/CalendarController.php:260
 msgid "Landing Page settings has been updated"
 msgstr ""
 
@@ -381,7 +405,7 @@ msgstr ""
 msgid "Line Total"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:389
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:394
 msgid "Live Mode"
 msgstr ""
 
@@ -394,7 +418,7 @@ msgstr ""
 msgid "Malagasy Ariary"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:555
+#: app/Hooks/Handlers/FrontEndHandler.php:558
 msgid "Meeting has been cancelled"
 msgstr ""
 
@@ -402,7 +426,11 @@ msgstr ""
 msgid "Meeting scheduling made easy"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:251
+#: app/Http/Controllers/AdminController.php:249
+msgid "Member has been deleted successfull"
+msgstr ""
+
+#: app/Hooks/Handlers/FrontEndHandler.php:253
 msgid "minutes"
 msgstr ""
 
@@ -423,7 +451,7 @@ msgstr ""
 msgid "Nevermind"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:404
+#: app/Http/Controllers/CalendarController.php:406
 msgid "New Event Type has been created successfully"
 msgstr ""
 
@@ -431,16 +459,16 @@ msgstr ""
 msgid "New member has been added with the selected access permissions"
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:525
+#: app/Http/Controllers/CalendarController.php:527
 msgid "Notifications has been saved"
 msgstr ""
 
-#: app/Models/Booking.php:238 app/Services/LocationService.php:32
+#: app/Models/Booking.php:248 app/Services/LocationService.php:32
 msgid "Online Meeting"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:222
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:355
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:227
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:360
 msgid "Order has been placed successfully"
 msgstr ""
 
@@ -452,15 +480,15 @@ msgstr ""
 msgid "Paraguayan Guaraní"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:255
+#: app/Hooks/Handlers/FrontEndHandler.php:257
 msgid "Pay Now"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:372
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:377
 msgid "Pay with Stripe"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:253
+#: app/Hooks/Handlers/FrontEndHandler.php:255
 msgid "Payment Details"
 msgstr ""
 
@@ -468,11 +496,11 @@ msgstr ""
 msgid "Payment Method:"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:463
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:468
 msgid "Payment Modal is opening, Please complete the payment"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:386
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:391
 msgid "Payment Mode"
 msgstr ""
 
@@ -484,11 +512,11 @@ msgstr ""
 msgid "Payment Summary"
 msgstr ""
 
-#: app/Services/LocationService.php:59
+#: app/Services/LocationService.php:60
 msgid "Phone Call"
 msgstr ""
 
-#: app/Models/Booking.php:254 app/Models/Booking.php:258
+#: app/Models/Booking.php:264 app/Models/Booking.php:268
 msgid "Phone Call:"
 msgstr ""
 
@@ -496,7 +524,7 @@ msgstr ""
 msgid "Please fill up the required data"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:535
+#: app/Hooks/Handlers/FrontEndHandler.php:538
 msgid "Please provide a reason for cancellation"
 msgstr ""
 
@@ -508,20 +536,20 @@ msgstr ""
 msgid "Please provide cancellation reason"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:308
+#: app/Hooks/Handlers/FrontEndHandler.php:310
 msgid "Please provide your Address"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:317
+#: app/Hooks/Handlers/FrontEndHandler.php:319
 msgid "Please provide your address"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:305
-#: app/Hooks/Handlers/FrontEndHandler.php:319
+#: app/Hooks/Handlers/FrontEndHandler.php:307
+#: app/Hooks/Handlers/FrontEndHandler.php:321
 msgid "Please provide your phone number"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:311
+#: app/Hooks/Handlers/FrontEndHandler.php:313
 msgid "Please select location"
 msgstr ""
 
@@ -529,11 +557,11 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:257
+#: app/Hooks/Handlers/FrontEndHandler.php:259
 msgid "Processing"
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:404
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:409
 msgid "Provider"
 msgstr ""
 
@@ -541,7 +569,7 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-#: app/Services/LandingPage/LandingPageHandler.php:325
+#: app/Services/LandingPage/LandingPageHandler.php:327
 msgid "Reason of rescheduling"
 msgstr ""
 
@@ -550,11 +578,11 @@ msgstr ""
 msgid "Reminder email sent to %s."
 msgstr ""
 
-#: app/Http/Controllers/CalendarController.php:216
+#: app/Http/Controllers/CalendarController.php:217
 msgid "Remote Calendars"
 msgstr ""
 
-#: app/Services/Integrations/Calendars/Google/Bootstrap.php:247
+#: app/Services/Integrations/Calendars/Google/Bootstrap.php:258
 msgid "Required scopes missing"
 msgstr ""
 
@@ -562,7 +590,7 @@ msgstr ""
 msgid "Reschedule"
 msgstr ""
 
-#: app/Services/LandingPage/LandingPageHandler.php:326
+#: app/Services/LandingPage/LandingPageHandler.php:328
 msgid "Rescheduling Reason"
 msgstr ""
 
@@ -574,19 +602,19 @@ msgstr ""
 msgid "Schedule Availability has been deleted successfully"
 msgstr ""
 
-#: app/Http/Controllers/AvailabilityController.php:172
+#: app/Http/Controllers/AvailabilityController.php:173
 msgid "Schedule has been cloned successfully"
 msgstr ""
 
-#: app/Http/Controllers/AvailabilityController.php:143
+#: app/Http/Controllers/AvailabilityController.php:144
 msgid "Schedule has been created successfully"
 msgstr ""
 
-#: app/Http/Controllers/AvailabilityController.php:199
+#: app/Http/Controllers/AvailabilityController.php:200
 msgid "Schedule has been updated successfully"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:258
+#: app/Hooks/Handlers/FrontEndHandler.php:260
 msgid "Schedule Meeting"
 msgstr ""
 
@@ -600,7 +628,7 @@ msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:84
 #: app/Hooks/Handlers/AdminMenuHandler.php:85
-#: app/Hooks/Handlers/AdminMenuHandler.php:133
+#: app/Hooks/Handlers/AdminMenuHandler.php:132
 msgid "Settings"
 msgstr ""
 
@@ -609,7 +637,7 @@ msgid "Settings has been successfully saved."
 msgstr ""
 
 #: app/Http/Controllers/PaymentMethodController.php:160
-#: app/Http/Controllers/SettingsController.php:100
+#: app/Http/Controllers/SettingsController.php:101
 msgid "Settings updated successfully"
 msgstr ""
 
@@ -617,7 +645,7 @@ msgstr ""
 msgid "SMS by Twilio"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:527
+#: app/Hooks/Handlers/FrontEndHandler.php:530
 msgid "Sorry! meeting could not be found"
 msgstr ""
 
@@ -660,16 +688,28 @@ msgstr ""
 msgid "Successfully deleted the Integration."
 msgstr ""
 
-#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:388
+#: app/Services/Integrations/PaymentMethods/Stripe/Stripe.php:393
 msgid "Test Mode"
+msgstr ""
+
+#: app/Services/PluginManager/LicenseManager.php:111
+#, php-format
+msgid "The %s license needs to be activated. %sActivate Now%s"
 msgstr ""
 
 #: app/Http/Controllers/SchedulesController.php:159
 msgid "The booking has been cancelled"
 msgstr ""
 
+#: app/Services/PluginManager/LicenseManager.php:343
+msgid ""
+"The given license key is not valid. Please verify that your license is "
+"correct. You may login to wpmanageninja.com account and get your valid "
+"license key for your purchase."
+msgstr ""
+
 #: app/Http/Controllers/CalendarController.php:53
-#: app/Http/Controllers/CalendarController.php:104
+#: app/Http/Controllers/CalendarController.php:103
 msgid "The provided slug is not available. Please choose a different one"
 msgstr ""
 
@@ -687,13 +727,13 @@ msgid "This is an admin user. You can not change permissions"
 msgstr ""
 
 #: app/Http/Controllers/BookingController.php:116
-#: app/Hooks/Handlers/FrontEndHandler.php:383
+#: app/Hooks/Handlers/FrontEndHandler.php:385
 msgid ""
 "This selected time slot is not available. Maybe someone booked the spot just "
 "a few seconds ago."
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:250
+#: app/Hooks/Handlers/FrontEndHandler.php:252
 msgid "Timezone"
 msgstr ""
 
@@ -710,7 +750,7 @@ msgid "Total Guests"
 msgstr ""
 
 #: app/Http/Controllers/ReportController.php:72
-#: app/Hooks/Handlers/FrontEndHandler.php:254
+#: app/Hooks/Handlers/FrontEndHandler.php:256
 msgid "Total Payment"
 msgstr ""
 
@@ -724,6 +764,14 @@ msgstr ""
 
 #: app/Services/Integrations/PaymentMethods/CurrenciesHelper.php:394
 msgid "Vietnamese Dong"
+msgstr ""
+
+#: app/Services/PluginManager/LicenseManager.php:52
+msgid "View FluentBooking documentation"
+msgstr ""
+
+#: app/Services/PluginManager/LicenseManager.php:53
+msgid "Visit Support"
 msgstr ""
 
 #: app/Http/Controllers/WebhookController.php:66
@@ -742,7 +790,7 @@ msgstr ""
 msgid "West African Cfa Franc"
 msgstr ""
 
-#: app/Services/BookingService.php:124
+#: app/Services/BookingService.php:125
 msgid "What"
 msgstr ""
 
@@ -750,19 +798,19 @@ msgstr ""
 msgid "What is this meeting about?"
 msgstr ""
 
-#: app/Services/BookingService.php:128
+#: app/Services/BookingService.php:129
 msgid "When"
 msgstr ""
 
-#: app/Services/BookingService.php:136
+#: app/Services/BookingService.php:137
 msgid "Where"
 msgstr ""
 
-#: app/Services/BookingService.php:132
+#: app/Services/BookingService.php:133
 msgid "Who"
 msgstr ""
 
-#: app/Services/BookingService.php:160
+#: app/Services/BookingService.php:161
 #: app/Http/Controllers/BookingController.php:131
 #, php-format
 msgid "You are scheduled with %s"
@@ -785,7 +833,7 @@ msgstr ""
 msgid "Your license key has been successfully updated"
 msgstr ""
 
-#: app/Hooks/Handlers/FrontEndHandler.php:100
+#: app/Hooks/Handlers/FrontEndHandler.php:102
 msgid "Your meeting has been rescheduled"
 msgstr ""
 
