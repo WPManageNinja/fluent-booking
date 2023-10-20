@@ -783,6 +783,7 @@
             margin: 0;
             border: none;
             border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #ecedee;
 
             .el-dialog__headerbtn {
                 color: #1B2533;
@@ -834,6 +835,8 @@
             padding-bottom: 0;
             .dialog-footer {
                 padding: 10px;
+                display: flex;
+                justify-content: flex-end;
                 .el-button {
                     padding: 10px 20px;
                     transition: .2s;
