@@ -142,15 +142,22 @@ class CalendarSlot extends Model
 
         if ($statuses) {
 
-            if ($isEdit) {
-                $defaults = Helper::getDefaultEmailNotificationSettings();
+            $defaults = Helper::getDefaultEmailNotificationSettings();
 
+            if ($isEdit) {
                 foreach ($defaults as $key => $default) {
                     if (isset($statuses[$key])) {
                         $statuses[$key]['title'] = $default['title'];
                     }
                 }
+            }
 
+            if (!Arr::get($statuses, 'rescheduled_by_host')) {
+                $statuses['rescheduled_by_host'] = $defaults['rescheduled_by_host'];
+            }
+
+            if (!Arr::get($statuses, 'rescheduled_by_attendee')) {
+                $statuses['rescheduled_by_attendee'] = $defaults['rescheduled_by_attendee'];
             }
 
             return $statuses;

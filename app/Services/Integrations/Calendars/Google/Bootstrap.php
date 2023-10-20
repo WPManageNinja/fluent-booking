@@ -374,7 +374,7 @@ class Bootstrap
         if (!$calendar) {
             return false;
         }
-
+        
         if ($booking->getMeta('__google_calendar_event')) {
             return false; // Already created
         }
@@ -407,6 +407,8 @@ class Bootstrap
         if (!$isValid) {
             return false; // invalid id of the remote calendar
         }
+
+        $booking = Booking::find($booking->id);
 
         $api = new GoogleCalendar($meta);
 

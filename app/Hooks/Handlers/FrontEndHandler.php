@@ -76,10 +76,10 @@ class FrontEndHandler
                         'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking-pro')
                     ], 422);
                 }
-
+ 
                 $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
 
-                $previousBooking = $existingBooking;
+                $previousBooking = clone $existingBooking;
 
                 $existingBooking->start_time = $bookingData['start_time'];
                 $existingBooking->person_time_zone = $bookingData['person_time_zone'];
@@ -88,10 +88,12 @@ class FrontEndHandler
 
                 $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
                 $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
+                $existingBooking->updateMeta('rescheduled_by_type', 'guest');
+                $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
 
                 do_action('fluent_booking/log_booking_activity', [
-                    'title'       => 'Meeting rescheduled',
-                    'description' => 'Meeting has been rescheduled from Web UI'
+                    'title'       => 'Meeting Rescheduled',
+                    'description' => 'Meeting has been rescheduled by guest from Web UI'
                 ]);
 
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
