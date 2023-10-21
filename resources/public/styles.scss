@@ -567,16 +567,16 @@ $lightDark: #6b7280;
           z-index: 1;
           color: var(--fcal_primary_color);
           &:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            border-radius: var(--fcal_date_radius);
-            z-index: -1;
             background: var(--fcal_primary_color);
-            width: 100%;
-            height: 100%;
-            opacity: 0.2;
+            border-radius: var(--fcal_date_radius);
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 6px;
+            z-index: -1;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
           }
         }
 
