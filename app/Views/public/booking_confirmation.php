@@ -8,8 +8,7 @@
     <div class="fcal_confirm_header">
         <?php if ($booking->status == 'scheduled'): ?>
             <div class="fcal_check_holder" style="min-height: 50px;">
-                <img style="max-width: 44px;"
-                     src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); ?>/images/check-mark.png; ?>">
+                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); ?>/images/check-mark.png" />
             </div>
         <?php endif; ?>
         <h3><?php echo esc_html($title); ?></h3>

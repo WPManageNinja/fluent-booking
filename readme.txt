@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 5.0
 Tested up to: 6.3
 Requires PHP: 7.3
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1.0.2 (Date: 20 Oct 2023)
+1.0.3 (Date: 20 Oct 2023)
 - Added Email Notification on Booking Reschedule
 - Minor UI Improvements
 - Added Time Format Pre-Selected based on settings
