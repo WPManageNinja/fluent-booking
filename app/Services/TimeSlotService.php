@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\DateTime;
 
 class TimeSlotService
 {
@@ -189,7 +190,7 @@ class TimeSlotService
         }
 
         $hostIds = $this->calendarSlot->getHostIds();
-        $status  = ['pending', 'approved', 'scheduled', 'completed'];
+        $status = ['pending', 'approved', 'scheduled', 'completed'];
 
         $bookings = Booking::whereIn('host_user_id', $hostIds)
             ->whereBetween('start_time', $dateRange)
@@ -315,8 +316,11 @@ class TimeSlotService
         $slot = $this->calendarSlot;
         $calendar = $this->calendar;
 
-        if (strtotime($startDate) < time()) {
-            $startDate = date('Y-m-d H:i:s');
+        $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
+        $currentAuthorDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone);
+
+        if (strtotime($startDate) < strtotime($currentAuthorDateTime)) {
+            $startDate = $currentAuthorDateTime;
         }
 
         $eventType = $slot->event_type;
@@ -324,7 +328,6 @@ class TimeSlotService
         $maxBooking = $slot->getMaxBookingPerSlot();
         $endDate = $slot->getMaxBookableDateTime($startDate);
         $startDate = $slot->getMinBookableDateTime($startDate);
-
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
@@ -332,13 +335,19 @@ class TimeSlotService
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
 
+
         $slots = $this->getDates($startDate, $endDate);
 
         $convertedSpots = [];
 
+        $minBookableTimestamp = strtotime($startDate);
+
         foreach ($slots as $spots) {
 
             foreach ($spots as $spot) {
+                if(strtotime($spot['start']) < $minBookableTimestamp) {
+                    continue;
+                }
 
                 $startDate = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone, 'Y-m-d');
 
