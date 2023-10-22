@@ -74,7 +74,7 @@ class GoogleCalendar
                 $settings['last_error'] = $newTokens->get_error_message();
                 $metaModel->value = $settings;
                 $metaModel->save();
-                
+
                 $this->lastError = $newTokens;
                 return;
             }
