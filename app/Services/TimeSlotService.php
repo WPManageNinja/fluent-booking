@@ -35,6 +35,11 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
+        $bufferTimeBefore = Arr::get($this->calendarSlot->settings, 'buffer_time_before', 0);
+        $bufferTimeAfter  = Arr::get($this->calendarSlot->settings, 'buffer_time_after', 0);
+
+        $bufferTime = ($bufferTimeBefore + $bufferTimeAfter) * 60;
+
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
 
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
@@ -90,8 +95,8 @@ class TimeSlotService
                 $isSpotAvailable = true;
 
                 foreach ($currentBookedSlots as $bookedSlot) {
-                    $bookedStart = strtotime($bookedSlot['start']);
-                    $bookedEnd = strtotime($bookedSlot['end']);
+                    $bookedStart = strtotime($bookedSlot['start']) - $bufferTime;
+                    $bookedEnd = strtotime($bookedSlot['end']) + $bufferTime;
 
                     if (
                         ($startTimeStamp >= $bookedStart && $startTimeStamp < $bookedEnd) ||
