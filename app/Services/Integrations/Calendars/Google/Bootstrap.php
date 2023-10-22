@@ -189,6 +189,8 @@ class Bootstrap
         $formattedFeeds = [];
         foreach ($items as $item) {
 
+            CalendarCache::deleteAllParentCache($item->id);
+
             $errors = '';
 
             $remoteCalendars = $this->getRemoteCalendarsList($item, true);
