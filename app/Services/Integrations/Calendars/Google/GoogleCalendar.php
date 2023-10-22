@@ -79,6 +79,8 @@ class GoogleCalendar
                 return;
             }
 
+            Helper::debugLog(['google_calendar' => 'Access Token Refreshed']);
+
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
             if (!empty($newTokens['access_token'])) {
                 $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
