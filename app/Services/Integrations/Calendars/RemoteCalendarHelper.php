@@ -90,9 +90,9 @@ class RemoteCalendarHelper
     public static function showGeneralError($data = [])
     {
         $defaults = [
-            'title' => 'Unknow error',
-            'body' => 'Something went wrong. Please try again later.',
-            'btn_url' => Helper::getAppBaseUrl(),
+            'title'    => 'Unknow error',
+            'body'     => 'Something went wrong. Please try again later.',
+            'btn_url'  => Helper::getAppBaseUrl(),
             'btn_text' => 'Back to dashboard'
         ];
 
@@ -103,5 +103,50 @@ class RemoteCalendarHelper
         header('Content-Type: text/html; charset=utf-8');
         $app->view->render('admin.general_error', $data);
         exit();
+    }
+
+    public static function getRruleDates($rule, $sampleRange, $minDate, $maxDate, $args = [])
+    {
+        try {
+            $durationSeconds = strtotime($sampleRange[1]) - strtotime($sampleRange[0]);
+            if (strtotime($sampleRange[0]) < strtotime($minDate)) {
+                $sampleRange[0] = $minDate;
+            }
+
+            $maxDate = new \DateTime($maxDate);
+            $sampleStart = new \DateTime($sampleRange[0]);
+
+            $parser = \FluentBooking\App\Libs\RRule\RfcParser::parseRRule($rule, $sampleStart);
+            $rrule = new \FluentBooking\App\Libs\RRule\RRule($parser);
+
+            $blocks = [];
+            // Looping through the occurrences
+            foreach ($rrule as $occurrence) {
+                $start = $occurrence;
+
+                if($start > $maxDate) {
+                    break;
+                }
+
+                $startDateTime =  $start->format('Y-m-d H:i:s');
+                $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + $durationSeconds);
+
+                if ($args) {
+                    $blocks[] = wp_parse_args([
+                        'start' => $startDateTime,
+                        'end'   => $endDateTime,
+                    ], $args);
+                } else {
+                    $blocks[] = [
+                        'start' => $startDateTime,
+                        'end'   => $endDateTime
+                    ];
+                }
+            }
+
+            return $blocks;
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
