@@ -68,13 +68,19 @@ class GoogleCalendar
             $settings['refresh_token'] = Helper::decryptKey($settings['refresh_token']);
 
             $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
+
             if (is_wp_error($newTokens)) {
                 $this->lastError = $newTokens;
                 return;
             }
-            
+
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
-            $settings['refresh_token'] = Helper::encryptKey($newTokens['access_token']);
+            if(!empty($newTokens['access_token'])) {
+                $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
+            } else {
+                $settings['access_token'] = Helper::encryptKey($settings['access_token']);
+            }
+
             $settings['expires_in'] = $newTokens['expires_in'];
             $metaModel->value = $settings;
             $metaModel->save();
