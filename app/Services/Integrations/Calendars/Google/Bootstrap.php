@@ -189,6 +189,8 @@ class Bootstrap
         $formattedFeeds = [];
         foreach ($items as $item) {
 
+            CalendarCache::deleteAllParentCache($item->id);
+
             $errors = '';
 
             $remoteCalendars = $this->getRemoteCalendarsList($item, true);
@@ -304,7 +306,10 @@ class Bootstrap
 
         $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
         $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
-        $toDate = new \DateTime('first day of next month 23:59:59', new \DateTimeZone('UTC'));
+
+        $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
+        $toDate->modify('first day of next month');
+        $toDate->setTime(23, 59, 59);
 
         $startDate = $fromDate->format('Y-m-d\TH:i:s\Z');
         $endDate = $toDate->format('Y-m-d\TH:i:s\Z');
