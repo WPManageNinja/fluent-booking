@@ -82,10 +82,10 @@ class GoogleCalendar
             Helper::debugLog(['google_calendar' => 'Access Token Refreshed']);
 
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
-            if (!empty($newTokens['access_token'])) {
-                $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
+            if (!empty($newTokens['refresh_token'])) {
+                $settings['refresh_token'] = Helper::encryptKey($newTokens['refresh_token']);
             } else {
-                $settings['access_token'] = Helper::encryptKey($settings['access_token']);
+                $settings['refresh_token'] = Helper::encryptKey($settings['refresh_token']);
             }
 
             $settings['expires_in'] = $newTokens['expires_in'];
