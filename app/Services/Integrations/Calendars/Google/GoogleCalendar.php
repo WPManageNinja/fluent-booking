@@ -74,10 +74,12 @@ class GoogleCalendar
                 $settings['last_error'] = $newTokens->get_error_message();
                 $metaModel->value = $settings;
                 $metaModel->save();
-                
+
                 $this->lastError = $newTokens;
                 return;
             }
+
+            Helper::debugLog(['google_calendar' => 'Access Token Refreshed']);
 
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
             if (!empty($newTokens['access_token'])) {
