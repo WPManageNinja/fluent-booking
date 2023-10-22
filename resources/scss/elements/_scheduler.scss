@@ -1342,6 +1342,17 @@
                 width: 100%;
               }
             }
+            .fcal_buffer_time_wrap {
+                display: flex;
+                width: 100%;
+                gap: 1rem;
+                .fcal_buffer_time_before {
+                    flex: 50%;
+                }
+                .fcal_buffer_time_after {
+                    flex: 50%;
+                }
+            }
           }
           .el-link--primary {   
             .el-link__inner {

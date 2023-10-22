@@ -1113,7 +1113,7 @@ class Helper
 
     public static function getMeetingDurations()
     {
-        return apply_filters('fluent_booking/event_colors', [
+        return apply_filters('fluent_booking/meeting_durations_schema', [
             [
                 'value' => '15',
                 'label' => '15 Minutes'
@@ -1133,6 +1133,52 @@ class Helper
             [
                 'value' => 'custom',
                 'label' => 'Custom'
+            ]
+        ]);
+    }
+
+    public static function getBufferTimes()
+    {
+        return apply_filters('fluent_booking/buffer_times_schema', [
+            [
+                'value' => '0',
+                'label' => 'No buffer time'
+            ],
+            [
+                'value' => '5',
+                'label' => '5 Minutes'
+            ],
+            [
+                'value' => '10',
+                'label' => '10 Minutes'
+            ],
+            [
+                'value' => '15',
+                'label' => '15 Minutes'
+            ],
+            [
+                'value' => '20',
+                'label' => '20 Minutes'
+            ],
+            [
+                'value' => '30',
+                'label' => '30 Minutes'
+            ],
+            [
+                'value' => '45',
+                'label' => '45 Minutes'
+            ],
+            [
+                'value' => '60',
+                'label' => '60 Minutes'
+            ],
+            [
+                'value' => '90',
+                'label' => '90 Minutes'
+            ],
+            [
+                'value' => '120',
+                'label' => '120 Minutes'
             ]
         ]);
     }

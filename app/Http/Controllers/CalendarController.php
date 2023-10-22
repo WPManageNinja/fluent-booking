@@ -318,6 +318,11 @@ class CalendarController extends Controller
 
         $slotSettings['location_fields'] = $slot->calendar->getLocationFields();
 
+        if (!isset($slotSettings['buffer_time_before'], $slotSettings['buffer_time_after'])) {
+            $slotSettings['buffer_time_before'] = '0';
+            $slotSettings['buffer_time_after'] = '0';
+        }
+
         $slot->settings = $slotSettings;
 
         $data = [
@@ -451,6 +456,8 @@ class CalendarController extends Controller
             'range_days'          => (int)(Arr::get($data['settings'], 'range_days', 60)) ?: 60,
             'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
+            'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '')),
+            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', ''))
         ];
 
         $slot->title = sanitize_text_field($data['title']);
