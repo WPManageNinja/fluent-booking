@@ -2,7 +2,9 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Integrations\IntegrationHelper;
 
@@ -116,11 +118,32 @@ class Client
                 continue;
             }
 
-            $formattedLists[] = [
-                'start'  => Arr::get($item, 'start.dateTime'),
-                'end'    => Arr::get($item, 'end.dateTime'),
-                'status' => Arr::get($item, 'status'),
-            ];
+            if(!empty($item['start']['date'])) {
+                $item['start']['dateTime'] = DateTimeHelper::convertToTimeZone($item['start']['date'], $lists['timeZone'], 'UTC', 'Y-m-d\TH:i:s\Z');
+            }
+
+            if(!empty($item['end']['date'])) {
+                $item['end']['dateTime'] = DateTimeHelper::convertToTimeZone($item['end']['date'], $lists['timeZone'], 'UTC', 'Y-m-d\TH:i:s\Z');
+            }
+
+            if ($recurrence = Arr::get($item, 'recurrence.0')) {
+                $recurrenceDate = RemoteCalendarHelper::getRruleDates($recurrence, [
+                    Arr::get($item, 'start.dateTime'),
+                    Arr::get($item, 'end.dateTime'),
+                ], $args['timeMin'], $args['timeMax'], [
+                    'status' => Arr::get($item, 'status'),
+                ]);
+
+                if($recurrenceDate) {
+                    $formattedLists = array_merge($formattedLists, $recurrenceDate);
+                }
+            } else {
+                $formattedLists[] = [
+                    'start'  => Arr::get($item, 'start.dateTime'),
+                    'end'    => Arr::get($item, 'end.dateTime'),
+                    'status' => Arr::get($item, 'status'),
+                ];
+            }
         }
 
         return $formattedLists;
