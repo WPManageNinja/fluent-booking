@@ -68,14 +68,28 @@ class GoogleCalendar
             $settings['refresh_token'] = Helper::decryptKey($settings['refresh_token']);
 
             $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
+
             if (is_wp_error($newTokens)) {
+                $settings['refresh_token'] = Helper::encryptKey($settings['refresh_token']);
+                $settings['last_error'] = $newTokens->get_error_message();
+                $metaModel->value = $settings;
+                $metaModel->save();
+
                 $this->lastError = $newTokens;
                 return;
             }
-            
+
+            Helper::debugLog(['google_calendar' => 'Access Token Refreshed']);
+
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
-            $settings['refresh_token'] = Helper::encryptKey($newTokens['access_token']);
+            if (!empty($newTokens['refresh_token'])) {
+                $settings['refresh_token'] = Helper::encryptKey($newTokens['refresh_token']);
+            } else {
+                $settings['refresh_token'] = Helper::encryptKey($settings['refresh_token']);
+            }
+
             $settings['expires_in'] = $newTokens['expires_in'];
+            $settings['last_error'] = '';
             $metaModel->value = $settings;
             $metaModel->save();
             $this->metaModel = $metaModel;
@@ -85,7 +99,7 @@ class GoogleCalendar
     public function updateSettinsValueByKey($key, $value)
     {
 
-        if($key == 'access_token') {
+        if ($key == 'access_token') {
             $value = Helper::encryptKey($value);
         }
 

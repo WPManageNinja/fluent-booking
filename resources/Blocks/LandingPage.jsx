@@ -13,7 +13,8 @@ export const LandingPage = props => {
         attributes: {
             slotId,
             calendars,
-            calendarId
+            calendarId,
+            avatarStyle
         }, setAttributes,
     } = props;
 
@@ -87,7 +88,7 @@ export const LandingPage = props => {
                             <div className="fcal_block_preview_aside">
                                 <div className="fcal_author">
                                     <div className="fcal_author_avatar">
-                                        <img src={calendar.author_profile?.avatar} alt={calendar.author_profile?.name} />
+                                        <img style={{borderRadius: avatarStyle?avatarStyle:'8px'}} src={calendar.author_profile?.avatar} alt={calendar.author_profile?.name} />
                                     </div>
                                     <h3 className="fcal_author_name">{calendar.author_profile?.name}</h3>
                                 </div>

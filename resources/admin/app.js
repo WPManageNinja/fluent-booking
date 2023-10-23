@@ -8,6 +8,7 @@ import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
 import {Plus, Delete, Location, Operation, UserFilled} from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
+import {applyFilters, addFilter} from '@wordpress/hooks';
 
 global.Errors = Errors;
 
@@ -186,7 +187,9 @@ app.mixin({
             }
 
             return window.fluentFrameworkAdmin.me.permissions.includes(permission);
-        }
+        },
+        applyFilters,
+        addFilter
     }
 });
 

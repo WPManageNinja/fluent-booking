@@ -376,7 +376,7 @@ class Bootstrap extends IntegrationManagerController
 
             $this->addLog(
                 $feed['settings']['name'],
-                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent-booking') . $subscriber->id,
+                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent-booking-pro') . $subscriber->id,
                 $booking->id,
                 'success'
             );
@@ -417,7 +417,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->addLog(
             $feed['settings']['name'],
-            __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent-crm') . $subscriber->id,
+            __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent-booking') . $subscriber->id,
             $booking->id,
             'success'
         );

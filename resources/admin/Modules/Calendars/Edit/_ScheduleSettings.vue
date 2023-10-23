@@ -98,6 +98,33 @@
                     <SchedulingConditions :settings="slot.settings"/>
                 </el-form-item>
 
+                <el-form-item label="Want to add buffer time before or after your events?">
+                    <div class="fcal_buffer_time_wrap">
+                        <div class="fcal_buffer_time_before">
+                            <span class="sub-label">Before Event</span>
+                            <el-select v-model="slot.settings.buffer_time_before" placeholder="Select" popper-class="fcal_select">
+                                <el-option
+                                    v-for="time in bufferTimes"
+                                    :key="time.value"
+                                    :label="time.label"
+                                    :value="time.value"
+                                />
+                            </el-select>
+                        </div>
+                        <div class="fcal_buffer_time_after">
+                            <span class="sub-label">After Event</span>
+                            <el-select v-model="slot.settings.buffer_time_after" placeholder="Select" popper-class="fcal_select">
+                                <el-option
+                                    v-for="time in bufferTimes"
+                                    :key="time.value"
+                                    :label="time.label"
+                                    :value="time.value"
+                                />
+                            </el-select>
+                        </div>
+                    </div>
+                </el-form-item>
+
             </el-form>
         </div>
     </div>
@@ -131,6 +158,11 @@ export default {
                     author_timezone: ''
                 },
             }
+        }
+    },
+    data() {
+        return {
+            bufferTimes: this.appVars.buffer_times
         }
     },
     computed: {

@@ -143,6 +143,7 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
      */
     $router->get('/team', 'AdminController@getTeamMembers');
     $router->post('/team', 'AdminController@updateMemberPermission');
+    $router->delete('/team/{id}', 'AdminController@deleteMember')->int('id');
 
     $router->get('license', 'LicenseController@getStatus');
     $router->post('license', 'LicenseController@saveLicense');

@@ -1342,6 +1342,17 @@
                 width: 100%;
               }
             }
+            .fcal_buffer_time_wrap {
+                display: flex;
+                width: 100%;
+                gap: 1rem;
+                .fcal_buffer_time_before {
+                    flex: 50%;
+                }
+                .fcal_buffer_time_after {
+                    flex: 50%;
+                }
+            }
           }
           .el-link--primary {   
             .el-link__inner {
@@ -2744,6 +2755,14 @@
 
   .fcal_booking_activities_list {
     padding: 0 20px 20px 13px;
+    max-height: 875px;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: red;
+    }
 
     .fcal_no_activities {
       padding: 20px 0;

@@ -47,8 +47,7 @@ class AvailabilityController extends Controller
         $formattedSchedules = [];
         foreach ($schedules as $schedule) {
 
-
-            $timezone = sanitize_text_field(Arr::get($schedule, 'value.timezone', 'UTC'));
+            $timezone = Arr::get($schedule, 'value.timezone', 'UTC');
 
             $author = $schedule->getAuthor();
 
@@ -126,6 +125,8 @@ class AvailabilityController extends Controller
             $calendar = Calendar::where('user_id', $userId)->first();
             if ($calendar) {
                 $timezone = $calendar->author_timezone;
+            } else {
+                $timezone = 'UTC';
             }
         }
 
@@ -140,7 +141,7 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'schedule' => $createdSchedule,
-            'message'  => __('Schedule has been created successfully', 'fluent-booking'),
+            'message'  => __('Schedule has been created successfully', 'fluent-booking-pro'),
         ]);
     }
 
@@ -169,7 +170,7 @@ class AvailabilityController extends Controller
 
         return $this->sendSuccess([
             'schedule' => $createdSchedule,
-            'message'  => __('Schedule has been cloned successfully', 'fluent-booking'),
+            'message'  => __('Schedule has been cloned successfully', 'fluent-booking-pro'),
         ]);
     }
 
@@ -179,13 +180,13 @@ class AvailabilityController extends Controller
 
         $schedule = Availability::findOrFail($scheduleId);
 
-        $timezone = Calendar::where('user_id', $userId)->value('author_timezone');
+        $timezone = Arr::get($schedule, 'value.timezone');
 
         $data = $request->all();
 
         $scheduleData = [
-            'default'          => Arr::isTrue($data, 'schedule.settings.default'),
-            'timezone'         => sanitize_text_field($timezone),
+            'default'          => Arr::isTrue($schedule, 'value.default'),
+            'timezone'         => $timezone,
             'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data, 'schedule.settings.date_overrides', []), $timezone, 'UTC'),
             'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($data, 'schedule.settings.weekly_schedules', []), $timezone, 'UTC'),
         ];
@@ -196,9 +197,8 @@ class AvailabilityController extends Controller
         do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
 
         return $this->sendSuccess([
-            'message'  => __('Schedule has been updated successfully', 'fluent-booking'),
-            'schedule' => $schedule,
-            'timezone' => $timezone
+            'message'  => __('Schedule has been updated successfully', 'fluent-booking-pro'),
+            'schedule' => $schedule
         ]);
     }
 
@@ -221,7 +221,7 @@ class AvailabilityController extends Controller
         $schedule->save();
 
         return $this->sendSuccess([
-            'message' => __('Schedule title has been updated successfully', 'fluent-booking'),
+            'message' => __('Schedule title has been updated successfully', 'fluent-booking-pro'),
             'title'   => $schedule->key
         ]);
     }
@@ -243,7 +243,7 @@ class AvailabilityController extends Controller
         AvailabilityService::updateOtherDefaultStatus($schedule, $scheduleId);
 
         return $this->sendSuccess([
-            'message' => __('Status has been updated successfully', 'fluent-booking')
+            'message' => __('Status has been updated successfully', 'fluent-booking-pro')
         ]);
     }
 
@@ -255,7 +255,7 @@ class AvailabilityController extends Controller
 
         if ($isDefault) {
             return $this->sendError([
-                'message' => __('Default Schedule can not be deleted', 'fluent-booking')
+                'message' => __('Default Schedule can not be deleted', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -263,14 +263,14 @@ class AvailabilityController extends Controller
 
         if ($usageCount) {
             return $this->sendError([
-                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount),
+                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking-pro'), $usageCount),
             ], 422);
         }
 
         $schedule->delete();
 
         return $this->sendSuccess([
-            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking')
+            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
         ]);
     }
 }

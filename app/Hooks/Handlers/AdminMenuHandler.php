@@ -34,8 +34,8 @@ class AdminMenuHandler
         }
 
         add_menu_page(
-            __('Fluent Booking', 'fluent-booking'),
-            __('Fluent Booking', 'fluent-booking'),
+            __('Fluent Booking', 'fluent-booking-pro'),
+            __('Fluent Booking', 'fluent-booking-pro'),
             $capability,
             'fluent-booking',
             [$this, 'render'],
@@ -45,8 +45,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Dashboard', 'fluent-booking'),
-            __('Dashboard', 'fluent-booking'),
+            __('Dashboard', 'fluent-booking-pro'),
+            __('Dashboard', 'fluent-booking-pro'),
             $capability,
             'fluent-booking',
             ''
@@ -54,8 +54,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Calendars', 'fluent-booking'),
-            __('Calendars', 'fluent-booking'),
+            __('Calendars', 'fluent-booking-pro'),
+            __('Calendars', 'fluent-booking-pro'),
             $capability,
             'admin.php?page=fluent-booking#/calendars',
             ''
@@ -63,8 +63,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Bookings', 'fluent-booking'),
-            __('Bookings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking-pro'),
+            __('Bookings', 'fluent-booking-pro'),
             $capability,
             'admin.php?page=fluent-booking#/scheduled-events',
             ''
@@ -72,8 +72,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Availability', 'fluent-booking'),
-            __('Availability', 'fluent-booking'),
+            __('Availability', 'fluent-booking-pro'),
+            __('Availability', 'fluent-booking-pro'),
             $capability,
             'admin.php?page=fluent-booking#/availability',
             ''
@@ -81,8 +81,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Settings', 'fluent-booking'),
-            __('Settings', 'fluent-booking'),
+            __('Settings', 'fluent-booking-pro'),
+            __('Settings', 'fluent-booking-pro'),
             'manage_options',
             'admin.php?page=fluent-booking#/settings/general-settings',
             ''
@@ -91,7 +91,6 @@ class AdminMenuHandler
 
     public function render()
     {
-
         $app = App::getInstance();
 
         $config = $app->config;
@@ -107,22 +106,22 @@ class AdminMenuHandler
         $menuItems = [
             [
                 'key'       => 'dashboard',
-                'label'     => $isNew ? __('Getting Started') : __('Dashboard', 'fluent-booking'),
+                'label'     => $isNew ? __('Getting Started', 'fluent-booking-pro') : __('Dashboard', 'fluent-booking-pro'),
                 'permalink' => $baseUrl
             ],
             [
                 'key'       => 'calendars',
-                'label'     => __('Calendars', 'fluent-booking'),
+                'label'     => __('Calendars', 'fluent-booking-pro'),
                 'permalink' => $baseUrl . 'calendars'
             ],
             [
                 'key'       => 'scheduled_events',
-                'label'     => __('Bookings', 'fluent-booking'),
+                'label'     => __('Bookings', 'fluent-booking-pro'),
                 'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
             ],
             [
                 'key'       => 'availability',
-                'label'     => __('Availability', 'fluent-booking'),
+                'label'     => __('Availability', 'fluent-booking-pro'),
                 'permalink' => $baseUrl . 'availability'
             ]
         ];
@@ -130,7 +129,7 @@ class AdminMenuHandler
         if(current_user_can('manage_options')) {
             $menuItems[] = [
                 'key'       => 'settings',
-                'label'     => __('Settings', 'fluent-booking'),
+                'label'     => __('Settings', 'fluent-booking-pro'),
                 'permalink' => $baseUrl . 'settings/general-settings'
             ];
         }
@@ -155,7 +154,7 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
 
         wp_enqueue_style(
-            $slug . '_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION
+            'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION
         );
 
         do_action($slug . '_loading_app');
@@ -210,6 +209,7 @@ class AdminMenuHandler
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
+        $bufferTimes = Helper::getBufferTimes();
         $customFieldTypes = Helper::getCustomFieldTypes();
         $locationFields = (new Calendar())->getLocationFields();
 
@@ -221,6 +221,7 @@ class AdminMenuHandler
             'asset_url'          => $assets,
             'event_colors'       => $eventColors,
             'meeting_durations'  => $meetingDurations,
+            'buffer_times'       => $bufferTimes,
             'schedule_schema'    => $scheduleSchema,
             'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,
@@ -241,6 +242,7 @@ class AdminMenuHandler
             'currency'           => CurrenciesHelper::getGlobalCurrency(),
             'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign()
         ]);
+
     }
 
     protected function getRestInfo($app)

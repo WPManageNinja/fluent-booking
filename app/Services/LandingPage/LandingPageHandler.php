@@ -36,6 +36,7 @@ class LandingPageHandler
         if ($urlParts[0] != FLUENT_BOOKING_LANDING_SLUG || count($urlParts) < 2) {
             return;
         }
+        
         $authorSlug = sanitize_text_field($urlParts[1]);
 
         $this->routeView($authorSlug, Arr::get($urlParts, 2, null));
@@ -252,6 +253,7 @@ class LandingPageHandler
             header('Content-Type: text/calendar; charset=utf-8');
             header('Content-Disposition: attachment; filename=event.ics');
             echo $icsText;
+            die();
         }
 
         $calendarEvent = $booking->calendar_event;
@@ -322,8 +324,8 @@ class LandingPageHandler
             $formFields[] = [
                 'type'        => 'textarea',
                 'name'        => '_rescheduling_reason',
-                'label'       => __('Reason of rescheduling', 'fluent-booking'),
-                'placeholder' => __('Rescheduling Reason', 'fluent-booking'),
+                'label'       => __('Reason of rescheduling', 'fluent-booking-pro'),
+                'placeholder' => __('Rescheduling Reason', 'fluent-booking-pro'),
                 'required'    => true,
                 'disabled'    => false,
                 'enabled'     => true
@@ -349,7 +351,7 @@ class LandingPageHandler
                 'rescheduling_hash' => $booking->hash
             ];
 
-            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking');
+            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
 
             return $vars;
         });

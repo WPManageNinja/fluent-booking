@@ -1,12 +1,19 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
 $bodyBg: #f1f2f5;
-$primaryColor: #2653C7;
+$primaryColor: #306ae0;
 $dark: #1B2533;
 $lightDark: #6b7280;
+:root {
+  --fcal_primary_color: #306ae0;
+  --fcal_date_radius: 4px;
+  --fcal_avatar_radius: 8px;
+}
 
 @import "../scss/booking_confirmation";
-
+.fluent_booking_app {
+  padding-top: 0;
+}
 .fcal_cal_wrap {
   max-width: 100% !important;
   box-sizing: border-box;
@@ -61,7 +68,7 @@ $lightDark: #6b7280;
                 visibility: hidden;
                 opacity: 0;
                 &:checked~.fcal_radio_icon {
-                    border-color: $primaryColor;
+                    border-color: var(--fcal_primary_color);
                     &::before {
                         transform: scale(1);
                     }
@@ -81,7 +88,7 @@ $lightDark: #6b7280;
                     width: 10px;
                     height: 10px;
                     border-radius: 50%;
-                    background: $primaryColor;
+                    background: var(--fcal_primary_color);
                     position: absolute;
                     left: 3.5px;
                     top: 3.5px;
@@ -106,6 +113,19 @@ $lightDark: #6b7280;
                     padding-left: 38px;
                 }
             }
+          &.fcal_field_name_address {
+            position: relative;
+            svg {
+              position: absolute;
+              left: 15px;
+              width: 16px;
+              top: 10px;
+              opacity: 0.5;
+            }
+            input {
+              padding-left: 38px;
+            }
+          }
         }
 
         select {
@@ -133,7 +153,7 @@ $lightDark: #6b7280;
           &:focus {
             outline: none;
             box-shadow: none;
-            border-color: #4587EC;
+            border-color: var(--fcal_primary_color);
           }
         }
 
@@ -162,8 +182,8 @@ $lightDark: #6b7280;
               opacity: 0;
 
               &:checked ~ .fcal_checkbox_mark {
-                background: $primaryColor;
-                border-color: $primaryColor;
+                background: var(--fcal_primary_color);
+                border-color: var(--fcal_primary_color);
 
                 &:before {
                   transform: scale(1) rotate(45deg);
@@ -211,7 +231,7 @@ $lightDark: #6b7280;
         line-height: 20px;
         color: #ffffff;
         padding: 10px 20px;
-        background: #4587EC;
+        background: var(--fcal_primary_color);
         border-radius: 8px;
       }
 
@@ -260,7 +280,7 @@ $lightDark: #6b7280;
         width: 90px;
         height: 90px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: var(--fcal_avatar_radius);
         display: block;
       }
     }
@@ -430,9 +450,9 @@ $lightDark: #6b7280;
             &:hover {
               outline: none;
               background-clip: padding-box;
-              background: #4587EC;
-              border-color: #4587EC;
-              color: #4587EC;
+              background: var(--fcal_primary_color);
+              border-color: var(--fcal_primary_color);
+              color: var(--fcal_primary_color);
 
               svg {
                 fill: #ffffff;
@@ -538,6 +558,27 @@ $lightDark: #6b7280;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
+        .is-today {
+          line-height: 40px;
+          width: 40px;
+          margin: auto;
+          display: block;
+          position: relative;
+          z-index: 1;
+          color: var(--fcal_primary_color);
+          &:before {
+            background: var(--fcal_primary_color);
+            border-radius: var(--fcal_date_radius);
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 6px;
+            z-index: -1;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
 
         &:nth-of-type(7n + 7) {
           border-right: 0;
@@ -633,7 +674,7 @@ $lightDark: #6b7280;
 
           &:hover {
             span {
-              background-color: #4587EC;
+              background-color: var(--fcal_primary_color);
               color: white;
             }
           }
@@ -647,7 +688,7 @@ $lightDark: #6b7280;
             height: 40px;
             line-height: 40px;
             margin: 0 auto;
-            border-radius: 4px;
+            border-radius: var(--fcal_date_radius);
             background-color: #e5e7eb;
             transition: .3s;
             -webkit-transition: .3s;
@@ -661,7 +702,7 @@ $lightDark: #6b7280;
           &.day {
             &.day-enabled {
               span {
-                background-color: #4587EC;
+                background-color: var(--fcal_primary_color);
                 color: white;
               }
             }
@@ -771,8 +812,10 @@ $lightDark: #6b7280;
     color: #fff;
     padding: 10px 15px;
     opacity: 0;
+    margin: 0;
     visibility: hidden;
     transition: .2s;
+    list-style: none;
     .title {
       margin-bottom: 10px;
     }
@@ -845,12 +888,14 @@ $lightDark: #6b7280;
     .fcal_spot {
       display: flex;
       justify-content: space-between;
-      padding: 0;
       border: 1px solid #ADB5C2;
       border-radius: 4px;
       width: 100%;
-      align-items: center;
+      //align-items: center;
       transition: .3s;
+      position: relative;
+      padding: 2px 2px 2px 0;
+      z-index: 1;
       -webkit-transition: .3s;
       -moz-transition: .3s;
       -ms-transition: .3s;
@@ -859,14 +904,28 @@ $lightDark: #6b7280;
       + .fcal_spot {
         margin-top: 15px;
       }
+      &:before {
+        content: '';
+        background: var(--fcal_primary_color);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        border-radius: 4px;
+        z-index: -1;
+        opacity: 0;
+      }
 
       &:hover {
-        border-color: #4587EC;
-        background: #F0F6FE;
+        border-color: var(--fcal_primary_color);
+        &:before {
+          opacity: 0.1;
+        }
 
         .fcal_spot_name {
           .fcal_spot_time {
-            color: #4587EC;
+            color: var(--fcal_primary_color);
           }
         }
       }
@@ -878,7 +937,7 @@ $lightDark: #6b7280;
         justify-content: space-between;
         width: 100%;
         align-items: center;
-        padding: 12px 24px;
+        padding: 10px 24px;
         font-size: 15px;
 
         .fcal_spot_time {
@@ -902,23 +961,24 @@ $lightDark: #6b7280;
       }
 
       &.fcal_spot_selected {
-        background: #F0F6FE;
-        border-color: #4587EC;
-        padding-right: 2px;
+        border-color: var(--fcal_primary_color);
+        &:before {
+          opacity: 0.1;
+        }
 
         .fcal_spot_name {
-          color: #4587EC;
+          color: var(--fcal_primary_color);
           font-weight: 700;
 
           .fcal_spot_time {
-            color: #4587EC;
+            color: var(--fcal_primary_color);
             font-weight: 700;
           }
         }
       }
 
       .fcal_spot_confirm {
-        background: #4587EC;
+        background: var(--fcal_primary_color);
         text-align: center;
         padding: 10px 21px;
         border-radius: 4px;
@@ -975,7 +1035,7 @@ $lightDark: #6b7280;
 }
 
 .fcal_slot_picker {
-  min-width: 290px;
+  min-width: 270px;
   position: relative;
   position: absolute;
   visibility: hidden;
@@ -1126,6 +1186,9 @@ $lightDark: #6b7280;
     display: block;
     margin-bottom: 5px;
   }
+  .svelte-select {
+    padding-left: 20px !important;
+  }
 }
 
 .fcal_date_wrapper {
@@ -1185,12 +1248,12 @@ $lightDark: #6b7280;
 }
 
 .fcal_btn_submit {
-  background: rgb(0, 105, 255);
+  background: var(--fcal_primary_color);
   text-align: center;
   padding: 10px 15px;
   border-radius: 4px;
   margin-bottom: 15px;
-  border: 1px solid rgba(0, 105, 255, 0.5);
+  border: 1px solid var(--fcal_primary_color);
   color: white;
   cursor: pointer;
   box-sizing: border-box;
@@ -1294,6 +1357,26 @@ $lightDark: #6b7280;
 
 .fcal_on_mobile {
   height: auto !important;
+  &.fcal_calendar_inner {
+    width: 100%;
+    max-width: 400px;
+    .fcal_date_wrapper {
+      width: 100%;
+      .fcal_day_picker_wrap {
+        .fcal_day_picker {
+          .fcal_calendar_slot_wrap {
+            &.is_active {
+              .fcal_slot_picker {
+                &.is_active {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   .fcal_slot_picker_header {
     text-align: center;
@@ -1390,7 +1473,7 @@ $lightDark: #6b7280;
 
   .fcal_nav_active {
     svg {
-      color: rgb(3 96 230);
+      color: var(--fcal_primary_color);
     }
   }
 }
@@ -1405,7 +1488,7 @@ $lightDark: #6b7280;
   line-height: 20px;
   color: #fff;
   padding: 10px 20px;
-  background: #4587EC;
+  background: var(--fcal_primary_color);
   border-radius: 8px;
 }
 
@@ -1523,12 +1606,12 @@ $lightDark: #6b7280;
     }
   }
   #fluent_booking_stipe_pay {
-    background: #4587EC;
+    background: var(--fcal_primary_color);
     text-align: center;
     padding: 8px 15px;
     border-radius: 4px;
     margin-bottom: 15px;
-    border: 1px solid rgba(0, 105, 255, 0.5);
+    border: 1px solid #306AE07F;
     color: white;
     cursor: pointer;
     box-sizing: border-box;

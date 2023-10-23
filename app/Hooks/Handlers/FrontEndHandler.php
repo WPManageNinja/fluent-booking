@@ -53,7 +53,7 @@ class FrontEndHandler
             add_filter('fluent_booking/schedule_validation_rules_data', function ($data) {
                 return [
                     'messages' => [
-                        '_rescheduling_reason.required' => __('Please provide a rescheduling reason', 'fluent-booking')
+                        '_rescheduling_reason.required' => __('Please provide a rescheduling reason', 'fluent-booking-pro')
                     ],
                     'rules'    => [
                         '_rescheduling_reason' => 'required'
@@ -67,19 +67,19 @@ class FrontEndHandler
 
                 if (!$existingBooking) {
                     wp_send_json([
-                        'message' => __('Invalid rescheduling request', 'fluent-booking')
+                        'message' => __('Invalid rescheduling request', 'fluent-booking-pro')
                     ], 422);
                 }
 
                 if ($existingBooking->status != 'scheduled') {
                     wp_send_json([
-                        'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking')
+                        'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking-pro')
                     ], 422);
                 }
-
+ 
                 $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
 
-                $previousBooking = $existingBooking;
+                $previousBooking = clone $existingBooking;
 
                 $existingBooking->start_time = $bookingData['start_time'];
                 $existingBooking->person_time_zone = $bookingData['person_time_zone'];
@@ -88,16 +88,18 @@ class FrontEndHandler
 
                 $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
                 $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
+                $existingBooking->updateMeta('rescheduled_by_type', 'guest');
+                $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
 
                 do_action('fluent_booking/log_booking_activity', [
-                    'title'       => 'Meeting rescheduled',
-                    'description' => 'Meeting has been rescheduled from Web UI'
+                    'title'       => 'Meeting Rescheduled',
+                    'description' => 'Meeting has been rescheduled by guest from Web UI'
                 ]);
 
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
-                    $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking');
+                    $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking-pro');
                     return $data;
                 });
 
@@ -163,7 +165,7 @@ class FrontEndHandler
         wp_localize_script(
             'fluent-booking-public',
             'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id,
-            $localizeData
+            $localizeData,
         );
 
         return App::make('view')->make('public.calendar', [
@@ -247,16 +249,16 @@ class FrontEndHandler
             'current_person' => $currentPerson,
             'start_day'      => $startDay,
             'i18'            => [
-                'Timezone'             => __('Timezone', 'fluent-booking'),
-                'minutes'              => __('minutes', 'fluent-booking'),
-                'Enter Details'        => __('Enter Details', 'fluent-booking'),
-                'Payment Details'      => __('Payment Details', 'fluent-booking'),
-                'Total Payment'        => __('Total Payment', 'fluent-booking'),
-                'Pay Now'              => __('Pay Now', 'fluent-booking'),
-                'Confirm Payment'      => __('Confirm Payment', 'fluent-booking'),
-                'processing'           => __('Processing', 'fluent-booking'),
-                'Schedule Meeting'     => __('Schedule Meeting', 'fluent-booking'),
-                'Continue to Payments' => __('Continue to Payments', 'fluent-booking')
+                'Timezone'             => __('Timezone', 'fluent-booking-pro'),
+                'minutes'              => __('minutes', 'fluent-booking-pro'),
+                'Enter Details'        => __('Enter Details', 'fluent-booking-pro'),
+                'Payment Details'      => __('Payment Details', 'fluent-booking-pro'),
+                'Total Payment'        => __('Total Payment', 'fluent-booking-pro'),
+                'Pay Now'              => __('Pay Now', 'fluent-booking-pro'),
+                'Confirm Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
+                'processing'           => __('Processing', 'fluent-booking-pro'),
+                'Schedule Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
+                'Continue to Payments' => __('Continue to Payments', 'fluent-booking-pro')
             ]
         ];
 
@@ -302,21 +304,21 @@ class FrontEndHandler
 
         if ($calendarSlot->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
-            $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking');
+            $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
         } else if ($calendarSlot->isAddressRequired()) {
             $rules['address'] = 'required';
-            $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking');
+            $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking-pro');
         } else if ($calendarSlot->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
-            $messages['location_config.driver'] = __('Please select location', 'fluent-booking');
+            $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
             $selectedLocationDriver = Arr::get($postedData, 'location_config.driver');
             // is user input required
             if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
                 $rules['location_config.user_location_input'] = 'required';
                 if ($selectedLocationDriver == 'in_person_guest') {
-                    $messages['location_config.user_location_input.required'] = __('Please provide your address', 'fluent-booking');
+                    $messages['location_config.user_location_input.required'] = __('Please provide your address', 'fluent-booking-pro');
                 } else {
-                    $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking');
+                    $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking-pro');
                 }
             }
         }
@@ -380,7 +382,7 @@ class FrontEndHandler
 
         if (!$isSpotAvailable) {
             wp_send_json([
-                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
+                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -485,6 +487,7 @@ class FrontEndHandler
             'pre_selects'        => null,
             'settings'           => $calendarEvent->settings,
             'type'               => $calendarEvent->type,
+            'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12')
         ];
 
         $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
@@ -524,7 +527,7 @@ class FrontEndHandler
 
         if (!$meeting) {
             wp_send_json([
-                'message' => __('Sorry! meeting could not be found', 'fluent-booking')
+                'message' => __('Sorry! meeting could not be found', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -532,7 +535,7 @@ class FrontEndHandler
 
         if (!$message) {
             wp_send_json([
-                'message' => __('Please provide a reason for cancellation', 'fluent-booking')
+                'message' => __('Please provide a reason for cancellation', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -552,7 +555,7 @@ class FrontEndHandler
 
         if (wp_doing_ajax()) {
             wp_send_json([
-                'message' => __('Meeting has been cancelled', 'fluent-booking')
+                'message' => __('Meeting has been cancelled', 'fluent-booking-pro')
             ], 200);
         }
 

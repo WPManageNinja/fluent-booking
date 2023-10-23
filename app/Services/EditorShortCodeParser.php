@@ -86,6 +86,14 @@ class EditorShortCodeParser
             return $booking->getCancelReasonDescription();
         }
 
+        if ($key == 'reschedule_reason') {
+            return $booking->getRescheduleReason();
+        }
+
+        if ($key == 'previous_meeting_time') {
+            return $booking->getPreviousMeetingTime($calendar->author_timezone) . ' (' . $calendar->author_timezone . ')';
+        }
+
         if ($key == 'start_time_human_format') {
             if (time() > strtotime($booking->start_time)) {
                 $suffix = ' ago';

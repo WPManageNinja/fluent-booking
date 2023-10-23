@@ -81,7 +81,7 @@ class CalendarIntegrationService
             $metaKey = $integrationData->key;
         } else {
             if (empty($metaValue['name'])) {
-                $errors['name'] = [__('Feed name is required', 'fluentform')];
+                $errors['name'] = [__('Feed name is required', 'fluent-booking-pro')];
                 throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent_booking'), 422, null, $errors);
             }
             $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue, $integrationId, $slotId);
@@ -96,11 +96,11 @@ class CalendarIntegrationService
 
             $errors = [];
             if(empty($metaValue['email'])) {
-                $errors['email'] = [__('Email is required', 'fluent-booking')];
+                $errors['email'] = [__('Email is required', 'fluent-booking-pro')];
             }
 
             if(empty($metaValue['event_trigger'])) {
-                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking')];
+                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking-pro')];
             }
 
             if($errors) {
