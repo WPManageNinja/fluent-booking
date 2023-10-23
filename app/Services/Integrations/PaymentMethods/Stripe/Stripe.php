@@ -383,7 +383,7 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active'    => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking-pro'),
+                'label' => __('Enable Stripe payment for booking payment', 'fluent-booking-pro'),
                 'type'  => 'inline_checkbox'
             ),
             'payment_mode' => array(
