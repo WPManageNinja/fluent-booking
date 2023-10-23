@@ -182,6 +182,14 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
+    public function getTotalBufferTime()
+    {
+        $bufferTimeBefore = Arr::get($this->settings, 'buffer_time_before', 0);
+        $bufferTimeAfter  = Arr::get($this->settings, 'buffer_time_after', 0);
+
+        return $bufferTimeBefore + $bufferTimeAfter;
+    }
+
     public function getMaxBookableDateTime($startDate)
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
