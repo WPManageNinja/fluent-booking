@@ -39,7 +39,7 @@ class ReportController extends Controller
 
         $widgets = [
             [
-                'title'   => __('Total Bookings', 'fluent-booking'),
+                'title'   => __('Total Bookings', 'fluent-booking-pro'),
                 'number'  => $bookingWidgetNumbers['totalBooked'],
                 'content' => $bookingWidgetStats['bookedComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -49,7 +49,7 @@ class ReportController extends Controller
                 'stat'    => $bookingWidgetStats['bookedStat']
             ],
             [
-                'title'   => __('Completed Bookings', 'fluent-booking'),
+                'title'   => __('Completed Bookings', 'fluent-booking-pro'),
                 'number'  => $bookingWidgetNumbers['bookingCompleted'],
                 'content' => $bookingWidgetStats['completedComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -69,7 +69,7 @@ class ReportController extends Controller
                 $currencySign = 'USD';
             }
             $widgets[] = [
-                'title'   => __('Total Payment', 'fluent-booking'),
+                'title'   => __('Total Payment', 'fluent-booking-pro'),
                 'number'  => CurrenciesHelper::getCurrencySign($currencySign).$paymentWidget['totalPayment'],
                 'content' => $paymentWidget['paymentComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -81,7 +81,7 @@ class ReportController extends Controller
             ];
         } else {
             $widgets[] = [
-                'title'   => __('Cancelled Bookings', 'fluent-booking'),
+                'title'   => __('Cancelled Bookings', 'fluent-booking-pro'),
                 'number'  => $bookingWidgetNumbers['bookingCancelled'],
                 'content' => $bookingWidgetStats['cancelledComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -94,7 +94,7 @@ class ReportController extends Controller
         }
 
         $widgets[] = [
-            'title'   => __('Total Guests', 'fluent-booking'),
+            'title'   => __('Total Guests', 'fluent-booking-pro'),
             'number'  => $bookingWidgetNumbers['totalGuests'],
             'content' => $bookingWidgetStats['guestComparison'],
             'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">

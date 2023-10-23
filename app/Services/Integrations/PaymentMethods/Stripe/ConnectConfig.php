@@ -62,8 +62,8 @@ class ConnectConfig
 
         if (is_wp_error($response)) {
             $message = $response->get_error_message();
-            echo '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
-            die();
+            return '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
+
         }
 
         $response = json_decode(wp_remote_retrieve_body($response), true);
@@ -73,8 +73,8 @@ class ConnectConfig
             if (!$message) {
                 $message = 'Invalid Stripe Request. Please configure stripe payment gateway again';
             }
-            echo '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
-            return;
+            return  '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
+
         }
 
         $settings = (new StripeSettings())->get();
@@ -97,8 +97,7 @@ class ConnectConfig
 
         (new Stripe())->updateSettings($settings);
 
-        wp_redirect(Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe'));
-        exit;
+        return false;
     }
 
     private static function getAccountInfo($settings, $mode)

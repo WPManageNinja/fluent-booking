@@ -10,6 +10,7 @@
         :loading="loading"
         @change="$emit('update:modelValue', selected_host_id)"
         popper-class="fcal_select"
+        placement="bottom"
     >
         <el-option
             v-for="item in hosts"

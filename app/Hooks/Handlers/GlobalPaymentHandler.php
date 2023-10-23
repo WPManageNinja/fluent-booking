@@ -37,13 +37,24 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['ff_stripe_connect']) && isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') {
+        if (isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') {
             if (!current_user_can('manage_options')) {
                 return;
             }
-            $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']);
-            ConnectConfig::verifyAuthorizeSuccess($data);
+
+            $ret = false;
+            if (isset($_GET['ff_stripe_connect'])) {
+                $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']);
+                $ret = ConnectConfig::verifyAuthorizeSuccess($data);
+            }
+
+            if ($ret){
+                echo $ret;
+                exit();
+            }
+            wp_redirect(admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/payment/stripe'));
         }
+
     }
 
     public function connectInfo($method)

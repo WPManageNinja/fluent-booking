@@ -42,7 +42,20 @@ class CalendarPolicy extends Policy
 
     public function createCalendar(Request $request)
     {
-        return PermissionManager::userCan('invite_team_members');
+        if (PermissionManager::userCan('invite_team_members')) {
+            return true;
+        }
+
+        if (PermissionManager::userCan('manage_own_calendar')) {
+
+            $exist = Calendar::where('user_id', get_current_user_id())->first();
+            if (!$exist) {
+                return true;
+            }
+
+            return true;
+        }
+
     }
 
     public function checkSlug(Request $request)

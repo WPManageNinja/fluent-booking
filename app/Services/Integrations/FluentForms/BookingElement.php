@@ -48,7 +48,7 @@ class BookingElement extends BaseFieldManager
                 'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
-                'label'              => __('Fluent Booking Field', 'fluent-booking'),
+                'label'              => __('FluentBooking Field', 'fluent-booking-pro'),
                 'admin_field_label'  => '',
                 'event_id'            => '',
                 'booking_calendar'   => '',
@@ -61,13 +61,13 @@ class BookingElement extends BaseFieldManager
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
-                        'message' => __('This field is required', 'fluent-booking'),
+                        'message' => __('This field is required', 'fluent-booking-pro'),
                     ],
                 ),
             ),
             'editor_options' => array(
-                'title'      => __('Calendar Booking Field', 'fluent-booking'),
-                'icon_class' => 'ff-edit-repeat',
+                'title'      => __('FluentBooking Field', 'fluent-booking-pro'),
+                'icon_class' => 'el-icon-date',
                 'template'   => 'inputCalendar'
             ),
         ];
@@ -100,11 +100,11 @@ class BookingElement extends BaseFieldManager
         return [
             'event_id' => [
                 'template' => 'selectGroup',
-                'label'    => __('Select Calendar', 'fluentform'),
+                'label'    => __('Select Calendar', 'fluent-booking-pro'),
             ],
             'cal_guest_fields' => [
                 'template' => 'CustomSettingsField',
-                'label'    => __('Guest Fields', 'fluentform'),
+                'label'    => __('Guest Fields', 'fluent-booking-pro'),
                 'componentName' => 'FluentCalNameEmailChoiceComponent'
             ],
         ];
@@ -117,6 +117,29 @@ class BookingElement extends BaseFieldManager
      * @return void
      */
     public function render($data, $form)
+    {
+        [$localizeData, $element_id] = $this->getLocalizedData($data, $form);
+        $localizeData['time_format'] = get_option('_fluent_booking_settings')['time_format'];
+
+        wp_enqueue_script(
+            'fluentform-calendar-public',
+            App::getInstance('url.assets') . 'public/js/fluentform.js', [],
+            App::getInstance('config')->get('app.version'), true
+        );
+
+        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, $localizeData);
+
+        wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars',
+            (new FrontEndHandler())->getGlobalVars()
+        );
+
+        App::make('view')->render('public.fluentform.calendar', [
+            'element_id'    => $element_id,
+            'calendar_app'  => 'fluentform_calendar_app'
+        ]);
+    }
+
+    public function getLocalizedData($data, $form)
     {
         $element_id = $this->makeElementId($data, $form);
 
@@ -151,22 +174,7 @@ class BookingElement extends BaseFieldManager
         $localizeData['disable_author'] = true;
         $localizeData['form_instance'] = $form->instance_css_class;
 
-        wp_enqueue_script(
-            'fluentform-calendar-public',
-            App::getInstance('url.assets') . 'public/js/fluentform.js', [],
-            App::getInstance('config')->get('app.version'), true
-        );
-
-        wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, $localizeData);
-
-        wp_localize_script('fluentform-calendar-public', 'fluentCalendarPublicVars',
-            (new FrontEndHandler())->getGlobalVars()
-        );
-
-        App::make('view')->render('public.fluentform.calendar', [
-            'element_id'    => $element_id,
-            'calendar_app'  => 'fluentform_calendar_app'
-        ]);
+        return [$localizeData, $element_id];
     }
     
     public function renderResponse($response, $field, $form_id)

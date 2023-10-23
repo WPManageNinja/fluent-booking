@@ -4,6 +4,7 @@ namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
 use FluentBooking\App\Services\BookingFieldService;
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
@@ -143,15 +144,22 @@ class CalendarSlot extends Model
 
         if ($statuses) {
 
-            if ($isEdit) {
-                $defaults = Helper::getDefaultEmailNotificationSettings();
+            $defaults = Helper::getDefaultEmailNotificationSettings();
 
+            if ($isEdit) {
                 foreach ($defaults as $key => $default) {
                     if (isset($statuses[$key])) {
                         $statuses[$key]['title'] = $default['title'];
                     }
                 }
+            }
 
+            if (!Arr::get($statuses, 'rescheduled_by_host')) {
+                $statuses['rescheduled_by_host'] = $defaults['rescheduled_by_host'];
+            }
+
+            if (!Arr::get($statuses, 'rescheduled_by_attendee')) {
+                $statuses['rescheduled_by_attendee'] = $defaults['rescheduled_by_attendee'];
             }
 
             return $statuses;
@@ -207,6 +215,14 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
+    public function getTotalBufferTime()
+    {
+        $bufferTimeBefore = Arr::get($this->settings, 'buffer_time_before', 0);
+        $bufferTimeAfter  = Arr::get($this->settings, 'buffer_time_after', 0);
+
+        return $bufferTimeBefore + $bufferTimeAfter;
+    }
+
     public function getMaxBookableDateTime($startDate)
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
@@ -243,17 +259,22 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
-        if ($rangeType == 'range_indefinite') {
-            return $startDate;
-        }
-
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($range[0]) >= strtotime($startDate)) {
-                    return date('Y-m-d H:i:s', strtotime($range[0]));
+                    $startDate = date('Y-m-d H:i:s', strtotime($range[0]));
                 }
             }
+        }
+
+        $cutOutSeconds = $this->getCutoutSeconds();
+        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone);
+
+        $totalCutStamp = strtotime($currentAuthorTimezoneDateTime) + $cutOutSeconds;
+
+        if(strtotime($startDate) < $totalCutStamp) {
+            $startDate = date('Y-m-d H:i:s', $totalCutStamp);
         }
 
         return $startDate;

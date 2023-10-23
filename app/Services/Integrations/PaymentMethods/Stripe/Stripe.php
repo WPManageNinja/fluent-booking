@@ -18,7 +18,7 @@ class Stripe extends BasePaymentMethod
     public function __construct()
     {
         parent::__construct(
-            __('Stripe', 'fluent-booking'),
+            __('Stripe', 'fluent-booking-pro'),
             'stripe',
             '#136196',
             $this->getLogo()
@@ -121,7 +121,7 @@ class Stripe extends BasePaymentMethod
         );
 
         //Subscription only available for hosted, will implement onsite later
-        if ($stripeSetting['checkout_mode'] === 'onsite') {
+        if ($stripeSetting['checkout_mode'] === apply_filters('fluent_booking_global_checkout_mode', 'onsite')) {
             $paymentArgs['public_key'] = $publicKey;
             $this->handleOnsitePayment($orderItem, $paymentArgs, $apiKey);
         } else {
@@ -156,10 +156,15 @@ class Stripe extends BasePaymentMethod
 
         $status = Arr::get($response, 'status') === 'succeeded' ? 'paid' : 'pending';
 
+        $last_4 = Arr::get($response, 'charges.data.0.payment_method_details.card.last4', '');
+        $brand = Arr::get($response, 'charges.data.0.payment_method_details.card.brand', '');
+
         $updateData = [
             'status'           => sanitize_text_field($status),
             'vendor_charge_id' => sanitize_text_field($intentId),
-            'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test'
+            'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
+            'card_last_4'       => sanitize_text_field($last_4),
+            'card_brand'       => sanitize_text_field($brand),
         ];
 
         $order = (new OrderHelper())->getOrderByHash($orderHash);
@@ -219,7 +224,7 @@ class Stripe extends BasePaymentMethod
                     'nextAction' => 'stripe',
                     'actionName' => 'custom',
                     'status'     => 'success',
-                    'message'    => __('Order has been placed successfully', 'fluent-booking'),
+                    'message'    => __('Order has been placed successfully', 'fluent-booking-pro'),
                     'data'       => $orderItem,
                     'intent'     => $invoiceResponse,
                 ],
@@ -250,21 +255,26 @@ class Stripe extends BasePaymentMethod
         return $total * 100;
     }
 
-    public function intentData($orderItem, $args)
+    public function intentData($booking, $args)
     {
         $currency = CurrenciesHelper::getGlobalCurrency();
+
+        $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         $sessionPayload = array(
             'amount'   => intval($args['amount']),
             'currency' => $currency,
             'metadata' => [
                 'ref_id' => $args['client_reference_id'],
+                'name' => $booking->first_name . ' ' . $booking->last_name,
+                'booking_id' => $booking->id,
+                'booking_url' => $bookingUrl,
             ],
         );
 
         return $sessionPayload;
     }
 
-    public function sessionData($args)
+    public function sessionData($booking, $args)
     {
         $items = $args['items'];
         $currency = CurrenciesHelper::getGlobalCurrency();
@@ -284,6 +294,7 @@ class Stripe extends BasePaymentMethod
             ];
         }
 
+        $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         $invoiceData = [
             'account_tax_ids'   => [],
             'custom_fields'     => [],
@@ -291,6 +302,9 @@ class Stripe extends BasePaymentMethod
             'footer'            => '',
             'metadata'          => [
                 'ref_id' => $args['client_reference_id'],
+                'name' => $booking->first_name . ' ' . $booking->last_name,
+                'booking_id' => $booking->id,
+                'booking_url' => $bookingUrl,
             ],
             'rendering_options' => [],
         ];
@@ -327,7 +341,7 @@ class Stripe extends BasePaymentMethod
     public function handleHostedPayment($orderItem, $paymentArgs, $apiKey)
     {
         try {
-            $sessionData = $this->sessionData($paymentArgs);
+            $sessionData = $this->sessionData($orderItem, $paymentArgs);
 
             $sessionData = apply_filters('fluent-booking/payment/stripe_checkout_session_args', $sessionData);
 
@@ -343,7 +357,7 @@ class Stripe extends BasePaymentMethod
             wp_send_json_success(
                 [
                     'status'      => 'success',
-                    'message'     => __('Order has been placed successfully', 'fluent-booking'),
+                    'message'     => __('Order has been placed successfully', 'fluent-booking-pro'),
                     'data'        => $orderItem,
                     'redirect_to' => $invoiceResponse['url']
                 ],
@@ -360,7 +374,7 @@ class Stripe extends BasePaymentMethod
 
     public function renderDescription()
     {
-        echo '<p>' . esc_html__('Pay with Stripe', 'fluent-booking') . '</p>';
+        echo '<p>' . esc_html__('Pay with Stripe', 'fluent-booking-pro') . '</p>';
     }
 
     public function fields()
@@ -369,15 +383,15 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active'    => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking'),
+                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking-pro'),
                 'type'  => 'inline_checkbox'
             ),
             'payment_mode' => array(
                 'value'   => 'test',
-                'label'   => __('Payment Mode', 'fluent-booking'),
+                'label'   => __('Payment Mode', 'fluent-booking-pro'),
                 'options' => array(
-                    'test' => __('Test Mode', 'fluent-booking'),
-                    'live' => __('Live Mode', 'fluent-booking')
+                    'test' => __('Test Mode', 'fluent-booking-pro'),
+                    'live' => __('Live Mode', 'fluent-booking-pro')
                 ),
                 'type'    => 'radio'
             ),
@@ -392,12 +406,12 @@ class Stripe extends BasePaymentMethod
 //            ),
             'provider'     => array(
                 'value' => 'connect',
-                'label' => __('Provider', 'fluent-booking'),
+                'label' => __('Provider', 'fluent-booking-pro'),
                 'type'  => 'provider'
             ),
             'currency'     => array(
                 'value'   => 'USD',
-                'label'   => __('Currency', 'fluent-booking'),
+                'label'   => __('Currency', 'fluent-booking-pro'),
                 'options' => $currencies,
                 'type'    => 'select'
             ),
@@ -451,7 +465,7 @@ class Stripe extends BasePaymentMethod
             'actionName'       => 'custom',
             'buttonState'      => 'hide',
             'invoice_response' => $invoiceResponse,
-            'message_to_show'  => __('Payment Modal is opening, Please complete the payment', 'fluent-booking'),
+            'message_to_show'  => __('Payment Modal is opening, Please complete the payment', 'fluent-booking-pro'),
         ];
         wp_send_json_success($responseData, 200);
     }

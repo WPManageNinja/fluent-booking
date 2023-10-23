@@ -33,7 +33,7 @@ class AvailabilityService
 
     public static function getFormattedSchedule($schedule)
     {
-        $timezone = sanitize_text_field(Arr::get($schedule->value, 'timezone', 'UTC'));
+        $timezone = Arr::get($schedule, 'value.timezone', 'UTC');
 
         $author = $schedule->getAuthor();
 
@@ -113,7 +113,7 @@ class AvailabilityService
 
             $hostName = $calendar->user->full_name;
             if ($calendar->user_id == get_current_user_id()) {
-                $hostName = __('My Schedules', 'fluent-booking');
+                $hostName = __('My Schedules', 'fluent-booking-pro');
             }
 
             if (!empty($options)) {

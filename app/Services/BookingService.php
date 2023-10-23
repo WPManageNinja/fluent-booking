@@ -50,8 +50,9 @@ class BookingService
 
             if ($user) {
                 $data['person_user_id'] = $userId;
-                $data['email'] = $user->user_email;
-
+                if(empty($data['email'])) {
+                    $data['email'] = $user->user_email;
+                }
                 if (empty($data['first_name'])) {
                     $data['first_name'] = $user->first_name;
                     $data['last_name'] = $user->last_name;
@@ -121,19 +122,19 @@ class BookingService
 
         $sections = [
             'what'  => [
-                'title'   => __('What', 'fluent-booking'),
+                'title'   => __('What', 'fluent-booking-pro'),
                 'content' => $meetingTitle
             ],
             'when'  => [
-                'title'   => __('When', 'fluent-booking'),
-                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true)
+                'title'   => __('When', 'fluent-booking-pro'),
+                'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true) . ' (' . $booking->person_time_zone . ')'
             ],
             'who'   => [
-                'title'   => __('Who', 'fluent-booking'),
+                'title'   => __('Who', 'fluent-booking-pro'),
                 'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
-                'title'   => __('Where', 'fluent-booking'),
+                'title'   => __('Where', 'fluent-booking-pro'),
                 'content' => $booking->getLocationDetailsHtml()
             ]
         ];
@@ -142,7 +143,7 @@ class BookingService
             // add cancellation reason at the beginning
             $sections = array_merge([
                 'cancellation_reason' => [
-                    'title'   => __('Cancellation Reason', 'fluent-booking'),
+                    'title'   => __('Cancellation Reason', 'fluent-booking-pro'),
                     'content' => $booking->getCancelReason(true)
                 ]
             ], $sections);
@@ -150,19 +151,19 @@ class BookingService
 
         if ($booking->message) {
             $sections['note'] = [
-                'title'   => __('Additional Note', 'fluent-booking'),
+                'title'   => __('Additional Note', 'fluent-booking-pro'),
                 'content' => wpautop($booking->message)
             ];
         }
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {
-            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
+            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
         $confirmationData = [
             'author'      => $author,
-            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking'),
+            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking-pro'),
             'sub_heading' => $subHeading,
             'sections'    => $sections,
             'slot'        => $calendarSlot,
@@ -170,8 +171,14 @@ class BookingService
             'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
             'action_type' => $actionType,
             'can_cancel'  => $booking->canCancel(),
-            'bookmarks'   => []
+            'bookmarks'   => [],
+            'extra_html'  => ''
         ];
+
+        if ($booking->payment_status) {
+            $confirmationData['extra_html'] = EditorShortCodeParser::parse('{{payment.receipt_html}}', $booking);
+        }
+
 
         if ($booking->canCancel()) {
             $confirmationData['action_url'] = add_query_arg([
@@ -228,7 +235,7 @@ class BookingService
                 ]
             ], $booking);
         }
-      
+
         $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
 
         return (string)App::make('view')->make('public.booking_confirmation', $confirmationData);

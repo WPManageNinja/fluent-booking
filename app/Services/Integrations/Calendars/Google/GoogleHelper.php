@@ -14,15 +14,16 @@ class GoogleHelper
             return [
                 'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
                 'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
-                'constant_defined' => true
+                'constant_defined' => true,
+                'caching_time'     => defined('FLUENT_BOOKING_G_API_CACHING_TIME') ? FLUENT_BOOKING_G_API_CACHING_TIME : '5'
             ];
         }
 
         $defaults = [
             'client_id'     => '',
-            'client_secret' => ''
+            'client_secret' => '',
+            'caching_time'  => '5'
         ];
-
 
         $settings = get_option('_fcal_google_calendar_client_details', []);
 
@@ -33,7 +34,6 @@ class GoogleHelper
         }
 
         return $settings;
-
     }
 
     public static function updateApiConfig($settings)
@@ -46,7 +46,7 @@ class GoogleHelper
             ];
         }
 
-        $settings = Arr::only($settings, ['client_id', 'client_secret']);
+        $settings = Arr::only($settings, ['client_id', 'client_secret', 'caching_time']);
 
         if (!empty($settings['client_secret'])) {
 
@@ -88,7 +88,7 @@ class GoogleHelper
         $jwtPayload = json_decode($tokenPayload, true);
 
         if (empty($jwtPayload['email'])) {
-            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for google authentication. Please try again', 'fluent-booking'));
+            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for google authentication. Please try again', 'fluent-booking-pro'));
         }
 
         return Arr::get($jwtPayload, 'email');
@@ -150,7 +150,7 @@ class GoogleHelper
 
         static $hash = null;
 
-        if($hash) {
+        if ($hash) {
             return $hash;
         }
 

@@ -42,7 +42,9 @@
                         class="fcal_select"
                         aria-placeholder="Select Event Types"
                         popper-class="fcal_select"
-                        @change="handlePeriodChange()">
+                        @change="handlePeriodChange()"
+                       placement="bottom"
+                    >
                         <template v-if="event_types.length">
                             <el-option value="all" label="All Events" />
                             <el-option v-for="event in event_types" :key="event.id" 
@@ -54,7 +56,9 @@
                         v-model="filters.author"
                         class="fcal_select"
                         popper-class="fcal_select"
-                        @change="handlePeriodChange()">
+                        @change="handlePeriodChange()"
+                        placement="bottom"
+                    >
                         <el-option value="me" label="My Meetings"></el-option>
                         <template v-if="all_hosts.length">
                             <el-option value="all" label="All Meetings" />
@@ -121,7 +125,7 @@
 
                     <div class="fcal_schedules" :class="isHideSidebar ? 'hide_sidebar' : ''">
                         <div class="fcal_schedule_wrapper">
-                            <div v-for="(daySchedules, scheduleDate) in formattedSchedules"
+                            <div v-if="schedulesLength" v-for="(daySchedules, scheduleDate) in formattedSchedules"
                                  :key="scheduleDate" class="fcal_schedule">
                                 <div class="fcal_schedule_header">
                                     <h3 class="fcal_schedule_data">{{ formattedDate(scheduleDate) }}</h3>
@@ -137,7 +141,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-if="!schedulesLength && !booking_id" description="No bookings found based on your filter"/>
+                            <el-empty v-if="!schedulesLength" description="No bookings found based on your filter"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>
@@ -194,7 +198,6 @@ export default {
             all_hosts: [],
             event_types: [],
             showAdvancedFilter: false,
-            schedulesLength: null,
             query: {
                 date_to_date: '',
                 eventType: '',
@@ -224,7 +227,9 @@ export default {
         formattedSchedules() {
             const items = {};
             if(this.filters.period == 'latest_bookings') {
-                items['Sorted by booked at date time'] = this.schedules;
+                if (this.schedules.length) {
+                    items['Sorted by booked at date time'] = this.schedules;
+                }
                 return items;
             }
 
@@ -241,8 +246,10 @@ export default {
                 .forEach((date) => {
                     sortedSchedules[date] = items[date];
                 });
-            this.schedulesLength = Object.keys(sortedSchedules).length;
             return sortedSchedules;
+        },
+        schedulesLength() {
+            return Object.keys(this.formattedSchedules).length;
         },
         currentPeriod() {
             const period = this.filters.period;

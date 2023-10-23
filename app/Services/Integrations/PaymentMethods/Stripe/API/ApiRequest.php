@@ -134,7 +134,7 @@ class ApiRequest
             )
         );
         if (is_wp_error($response) || empty($response['body'])) {
-            return new \WP_Error('stripe_error', __('There was a problem connecting to the Stripe API endpoint.', 'fluent-booking'));
+            return new \WP_Error('stripe_error', __('There was a problem connecting to the Stripe API endpoint.', 'fluent-booking-pro'));
         }
 
         $body = json_decode(wp_remote_retrieve_body($response));
@@ -176,7 +176,7 @@ class ApiRequest
             )
         );
         if (is_wp_error($response) || empty($response['body'])) {
-            return new \WP_Error('stripe_error', __('There was a problem connecting to the Stripe API endpoint.', 'fluent-booking'));
+            return new \WP_Error('stripe_error', __('There was a problem connecting to the Stripe API endpoint.', 'fluent-booking-pro'));
         }
         return json_decode($response['body']);
     }
