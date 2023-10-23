@@ -264,9 +264,6 @@ class ReportController extends Controller
             $totalGuests = Booking::distinct()->where('host_user_id', get_current_user_id())->count('email');
         }
 
-
-
-
         return [
             'totalBooked'      => $totalBooked,
             'totalGuests'      => $totalGuests,
@@ -319,7 +316,6 @@ class ReportController extends Controller
                     $query->where('email', $email);
                 });
             })
-
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
             ->total;
@@ -334,8 +330,6 @@ class ReportController extends Controller
             ->selectRaw('SUM(total_amount / 100) as total')
             ->first()
             ->total;
-
-
 
         $paymentPercentage = $this->getPercentage($currentMonthTotal, $lastMonthTotal);
 

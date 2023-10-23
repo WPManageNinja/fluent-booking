@@ -18,6 +18,7 @@
  */
 
 use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
+use FluentBooking\App\Hooks\Scheduler\DailyScheduler;
 
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
@@ -26,7 +27,7 @@ use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
 (new FiveMinuteScheduler())->register();
-
+(new DailyScheduler())->register();
 
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
