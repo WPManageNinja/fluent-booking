@@ -6,7 +6,7 @@
                     <el-icon>
                         <Money/>
                     </el-icon>
-                    Payment Settings
+                    {{ $t('Payment Settings') }}
                 </h2>
                 <el-button
                     v-if="global_enabled"
@@ -15,7 +15,7 @@
                     type="primary"
                     @click="update()"
                 >
-                    Update Settings
+                    {{ $t('Update Settings') }}
                 </el-button>
             </div>
         </div>

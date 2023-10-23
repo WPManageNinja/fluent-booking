@@ -2,7 +2,7 @@
     <div class="fcal_settings_body_inner fcal_settings_availability fcal_settings_availability_details">
         <div class="fcal_section_header">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><a @click="goBackToList">Availability</a></el-breadcrumb-item>
+                <el-breadcrumb-item><a @click="goBackToList">{{ $t('Availability') }}</a></el-breadcrumb-item>
                 <el-breadcrumb-item v-if="scheduleInfo">{{ scheduleInfo.host_name }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -15,18 +15,18 @@
                     <el-form-item class="fcal_availability_header">
                         <h3> {{ scheduleInfo.title }} <el-icon style="cursor: pointer" @click="toggleEditTitle"><EditPen /></el-icon>
                             <span v-if="scheduleInfo?.settings?.default" class="default-schedule-badge">
-                                <el-icon><StarFilled /></el-icon> Default schedule
+                                <el-icon><StarFilled /></el-icon> {{ $t('Default schedule') }}
                             </span>
                         </h3>
                         <div class="fcal_edit_availability_title">
-                            <el-input v-if="editScheduleTitleShow" v-model="scheduleInfo.title" placeholder="Enter Schedule Title">
+                            <el-input v-if="editScheduleTitleShow" v-model="scheduleInfo.title" :placeholder="$t('Enter Schedule Title')">
                                 <template #append>
-                                    <el-button @click="updateTitle">Update</el-button>
+                                    <el-button @click="updateTitle">{{ $t('Update') }}</el-button>
                                 </template>
                             </el-input>
                         </div>
 
-                        <span class="sub-label">Edit the schedule below so that you can apply to your event/booking types</span>
+                        <span class="sub-label">{{ $t('edit_schedule_description') }}</span>
 
                         <el-dropdown
                             trigger="click"
@@ -38,16 +38,18 @@
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item>
-                                        <el-button plain text @click="handleCommand('set_default')"><el-icon><StarFilled /></el-icon> Set as Default</el-button>
+                                        <el-button plain text @click="handleCommand('set_default')"><el-icon><StarFilled /></el-icon>
+                                            {{ $t('Set as Default') }}</el-button>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon> Delete</el-button>
+                                        <el-button plain text @click="handleCommand( 'delete')"><el-icon><Delete /></el-icon>
+                                            {{ $t('Delete') }}</el-button>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
                     </el-form-item>
-                    <el-form-item class="fcal_availability_header" label="Timezone:">
+                    <el-form-item class="fcal_availability_header" :label="$t('Timezone:')">
                     <div class="timezone">
                         <div class="fcal_timezone_text">
                             <el-icon><TimezoneIcon/></el-icon>
@@ -62,12 +64,12 @@
                         <div class="fcal_availability_setting">
                             <WeeklySchedules
                                 :weekly_schedules="scheduleInfo.settings?.weekly_schedules"
-                                title="Weekly Hours"
+                                :title="$t('Weekly Hours')"
                             />
                             <date-over-rides
                                 v-if="scheduleInfo?.settings"
                                 :settings="scheduleInfo?.settings"
-                                title="Add date overrides"
+                                :title="$t('Add date overrides')"
                             />
                         </div>
                     </div>
@@ -82,7 +84,7 @@
         <div v-else class="fcal_uses_lists_wrap">
             <div class="fcal_section_header">
                 <div class="fcal_title">
-                    <h3>Usages List</h3>
+                    <h3>{{ $t('Usages List') }}</h3>
                 </div>
             </div>
 
@@ -108,14 +110,14 @@
                             </div>
                             <div class="fcal_card_actions">
                                 <el-button class="fcal_plain_btn">
-                                    View Event
+                                    {{ $t('View Event') }}
                                 </el-button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <p v-else class="fcal_no_usage_list">
-                    No events are using this schedule
+                    {{ $t('No events are using this schedule') }}
                 </p>
                 <div class="fcal_right fcal_tm20">
                     <pagination :pagination="pagination" @fetch="fetchAvailabilityUsages"/>

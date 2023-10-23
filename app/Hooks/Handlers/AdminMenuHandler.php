@@ -9,6 +9,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\TransStrings;
 
 class AdminMenuHandler
 {
@@ -240,7 +241,8 @@ class AdminMenuHandler
                 'multi_users' => true
             ]),
             'currency'           => CurrenciesHelper::getGlobalCurrency(),
-            'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign()
+            'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign(),
+            'trans'              => TransStrings::getStrings()
         ]);
 
     }
