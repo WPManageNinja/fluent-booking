@@ -12,7 +12,7 @@ class FiveMinuteScheduler
     public function handle()
     {
         \FluentBooking\App\Models\Booking::query()
-            ->whereDate('created_at', '<=', strtotime('-5 minutes'))
+            ->whereDate('created_at', '<=', date('Y-m-d H:i:s', current_time('timestamp') - 300))
             ->where('status', 'pending')
             ->update([
                 'status' => 'cancelled'
