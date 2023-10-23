@@ -346,7 +346,7 @@ class Bootstrap
                     return $events;
                 }, $cacheTime * 60);
 
-                if ($remoteSlots) {
+                if ($remoteSlots && !is_wp_error( $remoteSlots )) {
                     $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
                 }
             }
