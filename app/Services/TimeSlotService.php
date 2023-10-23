@@ -190,8 +190,8 @@ class TimeSlotService
     protected function getBookedSlots($dateRange, $toTimeZone = false, $bookingRequest = false)
     {
         if ($toTimeZone) {
-            $dateRange[0] = DateTimeHelper::convertToTimeZone($dateRange[0], $toTimeZone, 'UTC');
-            $dateRange[1] = DateTimeHelper::convertToTimeZone($dateRange[1], $toTimeZone, 'UTC');
+            $dateRange[0] = DateTimeHelper::convertToUtc($dateRange[0], $toTimeZone);
+            $dateRange[1] = DateTimeHelper::convertToUtc($dateRange[1], $toTimeZone);
         }
 
         $hostIds = $this->calendarSlot->getHostIds();
@@ -205,7 +205,6 @@ class TimeSlotService
             ->groupBy('group_id');
 
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
-
         $books = [];
 
         foreach ($bookings as $booking) {
