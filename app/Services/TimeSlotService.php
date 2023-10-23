@@ -35,11 +35,6 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $bufferTimeBefore = Arr::get($this->calendarSlot->settings, 'buffer_time_before', 0);
-        $bufferTimeAfter  = Arr::get($this->calendarSlot->settings, 'buffer_time_after', 0);
-
-        $bufferTime = ($bufferTimeBefore + $bufferTimeAfter) * 60;
-
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
 
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
@@ -95,8 +90,8 @@ class TimeSlotService
                 $isSpotAvailable = true;
 
                 foreach ($currentBookedSlots as $bookedSlot) {
-                    $bookedStart = strtotime($bookedSlot['start']) - $bufferTime;
-                    $bookedEnd = strtotime($bookedSlot['end']) + $bufferTime;
+                    $bookedStart = strtotime($bookedSlot['start']);
+                    $bookedEnd = strtotime($bookedSlot['end']);
 
                     if (
                         ($startTimeStamp >= $bookedStart && $startTimeStamp < $bookedEnd) ||
@@ -190,8 +185,8 @@ class TimeSlotService
     protected function getBookedSlots($dateRange, $toTimeZone = false, $bookingRequest = false)
     {
         if ($toTimeZone) {
-            $dateRange[0] = DateTimeHelper::convertToTimeZone($dateRange[0], $toTimeZone, 'UTC');
-            $dateRange[1] = DateTimeHelper::convertToTimeZone($dateRange[1], $toTimeZone, 'UTC');
+            $dateRange[0] = DateTimeHelper::convertToUtc($dateRange[0], $toTimeZone);
+            $dateRange[1] = DateTimeHelper::convertToUtc($dateRange[1], $toTimeZone);
         }
 
         $hostIds = $this->calendarSlot->getHostIds();
@@ -205,6 +200,7 @@ class TimeSlotService
             ->groupBy('group_id');
 
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
+        $bufferTime = $this->calendarSlot->getTotalBufferTime();
 
         $books = [];
 
@@ -226,6 +222,8 @@ class TimeSlotService
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
                 }
+                $booking->start_time = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes"));
+                $booking->end_time   = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes"));
             }
 
             $books[$date][] = [
