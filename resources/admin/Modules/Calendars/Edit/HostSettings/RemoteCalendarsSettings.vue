@@ -2,9 +2,8 @@
     <div class="fcal_calendar_settings">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>Remote Calendar Sync Settings</h2>
-                <p>Set the calendars to check for conflicts to prevent double bookings and add events to your remote
-                    calendar.</p>
+                <h2>{{ $t('Remote Calendar Sync Settings') }}</h2>
+                <p>{{ $t('set_calendars_to_check_for_conflicts') }}</p>
             </div>
             <div v-if="!isEmpty(feeds)" class="fcal_settings_actions">
                 <el-popover placement="bottom-end" width="300" trigger="click">
@@ -13,7 +12,7 @@
                             <el-icon>
                                 <Plus/>
                             </el-icon>
-                            <span>Add</span>
+                            <span>{{ $t('Add') }}</span>
                         </el-button>
                     </template>
                     <div v-for="driver in configuredProviders" :key="driver.key">
@@ -31,13 +30,13 @@
                 <div v-if="insertableCalendars.length" class="fcal_hightlight_box fcal_create_event_selector">
                     <el-row align="middle" :gutter="30">
                         <el-col :md="14" :xs="24">
-                            <h3>Create events on</h3>
-                            <p>Select remote calendar in where to add new events to when you're booked.</p>
+                            <h3>{{ $t('Create events on') }}</h3>
+                            <p>{{ $t("Select remote calendar in where to add new events to when you're booked.") }}</p>
                         </el-col>
                         <el-col :md="10" :xs="24">
                             <el-select :disabled="saving" v-loading="saving" @change="updateSettings()" clearable
                                        v-model="settings.remote_calendar_config" value-key="id"
-                                       placeholder="Select a Remote Calendar">
+                                       :placeholder="$t('Select a Remote Calendar')">
                                 <el-option
                                     v-for="item in insertableCalendars"
                                     :key="item.details.id"
@@ -56,7 +55,7 @@
             </template>
 
             <div v-else-if="!isEmpty(configuredProviders)">
-                <h3>To use Remote Calendar Sync feature please connect with one of the following calendar providers</h3>
+                <h3>{{ $t('connect_following_calendar_providers_to_sync_remote_calendar') }}</h3>
                 <div v-for="driver in configuredProviders" :key="driver.key" class="">
                     <div class="fcal_remote_calendar_block fcal_promt_box">
                         <div class="fcal_remote_header">
@@ -77,7 +76,7 @@
             </div>
 
             <div v-else-if="!isEmpty(providers) && !feeds.length">
-                <h3>To use Remote Calendar Sync feature please configure your apps first</h3>
+                <h3>{{ $t('To use Remote Calendar Sync feature please configure your apps first') }}</h3>
                 <div v-for="driver in providers" :key="driver.key" class="">
                     <div class="fcal_remote_calendar_block fcal_promt_box">
                         <div class="fcal_remote_header">

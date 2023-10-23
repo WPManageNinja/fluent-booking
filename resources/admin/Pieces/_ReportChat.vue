@@ -2,7 +2,7 @@
     <div class="fcal_dashboard_chat fcal_dashboard_box">
         <div class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Booking Trends</h3>
+                <h3>{{ $t('Booking Trends') }}</h3>
             </div>
             <div class="fcal_actions">
                 <el-date-picker
@@ -11,10 +11,10 @@
                     unlink-panels
                     clearable
                     range-separator="-"
-                    start-placeholder="Start date"
-                    end-placeholder="End date"
+                    :start-placeholder="$t('Start date')"
+                    :end-placeholder="$t('End date')"
                     :shortcuts="shortcuts"
-                    placeholder="Select Date"
+                    :placeholder="$t('Select Date')"
                     popper-class="fcal_daterange_popover"
                     format="YYYY/MM/DD"
                     value-format="YYYY-MM-DD"

@@ -81,20 +81,20 @@
                                 </el-select>
                                 <template v-else-if="flat_properties[condition.data_key].type == 'option_selector'">
                                     <option-selector :field="{
-                                    placeholder: 'Select',
+                                    placeholder: $t('Select'),
                                     is_multiple: flat_properties[condition.data_key].multiple,
                                     option_key: flat_properties[condition.data_key].option_key
                                 }" v-model="condition.data_value"></option-selector>
                                 </template>
                                 <template v-else-if="flat_properties[condition.data_key].type == 'rest_selector'">
                                     <ajax-selector :field="{
-                                    placeholder: 'Select',
+                                    placeholder: $t('Select'),
                                     is_multiple: flat_properties[condition.data_key].multiple,
                                     option_key: flat_properties[condition.data_key].option_key
                                 }" v-model="condition.data_value"></ajax-selector>
                                 </template>
                             </div>
-                            <div v-else>{{$t('Select data source and operator first')}}</div>
+                            <div v-else>{{ $t('Select data source and operator first') }}</div>
                         </td>
                         <td style="text-align: right;">
                             <el-button @click="addCondition(groupIndex)" type="success" size="mini" icon="el-icon-plus"></el-button>
