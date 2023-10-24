@@ -25,6 +25,20 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarEventSettings')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
 
+    /*
+    * Calendar Integrations
+    */
+    $router->prefix('{id}/slots/{slot_id}/integrations')->group(function ($router) {
+        $router->get('/', 'CalendarIntegrationController@index')->int('id')->int('slot_id');
+
+        $router->prefix('{integration_id}')->group(function ($router) {
+            $router->get('/', 'CalendarIntegrationController@find')->int('id')->int('slot_id')->int('integration_id');
+            $router->post('/', 'CalendarIntegrationController@update')->int('id')->int('slot_id')->int('integration_id');
+            $router->delete('/', 'CalendarIntegrationController@delete')->int('id')->int('slot_id')->int('integration_id');
+
+            $router->get('/merge-fields', 'CalendarIntegrationController@integrationListComponent');
+        });
+    });
 
 });
 
