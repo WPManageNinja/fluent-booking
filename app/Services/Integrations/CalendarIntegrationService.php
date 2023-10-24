@@ -66,6 +66,8 @@ class CalendarIntegrationService
         $status = Arr::get($attr, 'status', true);
         $metaValue = Arr::get($attr, 'integration');
 
+        $errors = [];
+
         if ('stringify' == $dataType) {
             $metaValue = \json_decode($metaValue, true);
         } else {
@@ -82,7 +84,7 @@ class CalendarIntegrationService
         } else {
             if (empty($metaValue['name'])) {
                 $errors['name'] = [__('Feed name is required', 'fluent-booking-pro')];
-                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent_booking'), 422, null, $errors);
+                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent-booking-pro'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
             $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue, $integrationId, $slotId);
             $metaKey = $integrationName . '_feeds';
@@ -94,7 +96,6 @@ class CalendarIntegrationService
         if ($metaValue['enabled']) {
             // Required fields
 
-            $errors = [];
             if(empty($metaValue['email'])) {
                 $errors['email'] = [__('Email is required', 'fluent-booking-pro')];
             }
@@ -104,7 +105,7 @@ class CalendarIntegrationService
             }
 
             if($errors) {
-                throw new ValidationException(__('Validation Failed! Please fill up required fields', 'fluent_booking'), 422, null, $errors);
+                throw new ValidationException(__('Validation Failed! Please fill up required fields', 'fluent-booking-pro'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
         }
 

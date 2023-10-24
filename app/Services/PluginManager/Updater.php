@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * phpcs:ignoreFile
+ */
+
 namespace FluentBooking\App\Services\PluginManager;
 
 // Exit if accessed directly

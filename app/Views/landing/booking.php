@@ -59,7 +59,7 @@ use FluentBooking\App\Models\Booking;
 
 <script>
     <?php foreach ($js_vars as $varKey => $values): ?>
-    var <?php echo $varKey; ?> = <?php echo json_encode($values); ?>;
+    var <?php echo $varKey; ?> = <?php echo wp_json_encode($values); ?>;
     <?php endforeach; ?>
 </script>
 
