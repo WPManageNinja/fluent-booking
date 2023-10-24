@@ -16,7 +16,7 @@ return function ($file) {
         ($app->make(DeactivationHandler::class))->handle();
     });
 
-    require_once( FLUENT_BOOKING_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
+    require_once( FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php' );
  
     add_action('plugins_loaded', function () use ($app) {
         do_action('fluent_booking_loaded', $app);

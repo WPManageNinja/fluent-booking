@@ -4,20 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "216013ada8f77bbfc4494179499bc485",
+    "content-hash": "0a72364d9daaa2deb241e11d2c4caaf1",
     "packages": [
         {
-            "name": "wpfluent/framework",
-            "version": "2.1.15",
+            "name": "woocommerce/action-scheduler",
+            "version": "3.6.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:wpfluent/framework.git",
-                "reference": "e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204"
+                "url": "https://github.com/woocommerce/action-scheduler.git",
+                "reference": "e7dafe215be5ef823392204535ee2e241f99a8cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204",
-                "reference": "e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/e7dafe215be5ef823392204535ee2e241f99a8cb",
+                "reference": "e7dafe215be5ef823392204535ee2e241f99a8cb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5",
+                "woocommerce/woocommerce-sniffs": "0.1.0",
+                "wp-cli/wp-cli": "~2.5.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "type": "wordpress-plugin",
+            "extra": {
+                "scripts-description": {
+                    "test": "Run unit tests",
+                    "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+                    "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Action Scheduler for WordPress and WooCommerce",
+            "homepage": "https://actionscheduler.org/",
+            "support": {
+                "issues": "https://github.com/woocommerce/action-scheduler/issues",
+                "source": "https://github.com/woocommerce/action-scheduler/tree/3.6.4"
+            },
+            "time": "2023-10-11T18:24:47+00:00"
+        },
+        {
+            "name": "wpfluent/framework",
+            "version": "2.1.20",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpfluent/framework.git",
+                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
+                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
                 "shasum": ""
             },
             "require": {
@@ -46,10 +86,10 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.1.15",
+                "source": "https://github.com/wpfluent/framework/tree/2.1.20",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
-            "time": "2023-10-07T20:03:20+00:00"
+            "time": "2023-10-23T17:20:38+00:00"
         }
     ],
     "packages-dev": [],

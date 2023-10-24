@@ -27,8 +27,8 @@ class ReportController extends Controller
 
             $bookingWidgetNumbers = $this->getBookingWidgetNumbers($startTime, $endTime);
         } else {
-            $startTime = date('Y-m-d H:i:s', strtotime('-30 days'));
-            $endTime   = date('Y-m-d H:i:s', strtotime('now UTC'));
+            $startTime = date('Y-m-d H:i:s', strtotime('-30 days')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $endTime   = date('Y-m-d H:i:s', strtotime('now UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
             $bookingWidgetNumbers = $this->getAllBookingWidgetNumbers();
         }
@@ -173,7 +173,7 @@ class ReportController extends Controller
 
         $differenceInDays = ($endTimeStamp - $startTimeStamp) / (60 * 60 * 24);
 
-        $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days"));
+        $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $bookingStats = $this->getBookingStats($startTime, $endTime, $lastMonthStartTime, $startTime);
 
@@ -298,7 +298,7 @@ class ReportController extends Controller
 
         $differenceInDays = ($endTimeStamp - $startTimeStamp) / (60 * 60 * 24);
 
-        $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days"));
+        $lastMonthStartTime = date('Y-m-d H:i:s', strtotime("$startTime - $differenceInDays days")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $current_user_email = null;
 

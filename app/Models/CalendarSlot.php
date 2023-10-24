@@ -195,16 +195,16 @@ class CalendarSlot extends Model
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_indefinite') {
-            return date('Y-m-t 23:59:59', strtotime($startDate));
+            return date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        $maxDate = date('Y-m-t 23:59:59', strtotime($startDate));
+        $maxDate = date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($maxDate) > strtotime($range[1])) {
-                    $maxDate = date('Y-m-d 23:59:59', strtotime($range[1]));
+                    $maxDate = date('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 }
             }
         } else {
@@ -212,11 +212,11 @@ class CalendarSlot extends Model
             if (!$rangeDays) {
                 $rangeDays = 60;
             }
-            $maxDate = date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS);
+            $maxDate = date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        if (strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) {
-            return date('Y-m-t 23:59:59', strtotime($startDate));
+        if (strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         return $maxDate;
@@ -230,18 +230,18 @@ class CalendarSlot extends Model
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($range[0]) >= strtotime($startDate)) {
-                    $startDate = date('Y-m-d H:i:s', strtotime($range[0]));
+                    $startDate = date('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 }
             }
         }
 
         $cutOutSeconds = $this->getCutoutSeconds();
-        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone);
+        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $totalCutStamp = strtotime($currentAuthorTimezoneDateTime) + $cutOutSeconds;
 
         if(strtotime($startDate) < $totalCutStamp) {
-            $startDate = date('Y-m-d H:i:s', $totalCutStamp);
+            $startDate = date('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         return $startDate;
@@ -258,7 +258,7 @@ class CalendarSlot extends Model
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                return date('Y-m-d 23:59:59', strtotime($range[1]));
+                return date('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
@@ -267,7 +267,7 @@ class CalendarSlot extends Model
             $rangeDays = 60;
         }
 
-        return date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS);
+        return date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getMinLookUpDate()
@@ -277,11 +277,11 @@ class CalendarSlot extends Model
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                return date('Y-m-d H:i:s', strtotime($range[0]));
+                return date('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
-        return date('Y-m-d H:i:s');
+        return date('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getCutoutSeconds()

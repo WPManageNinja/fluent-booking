@@ -226,7 +226,7 @@ class Client
             if ($type == 'GET') {
                 $url = add_query_arg($body, $url);
             } else {
-                $args['body'] = json_encode($body);
+                $args['body'] = wp_json_encode($body);
             }
         }
 

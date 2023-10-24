@@ -16,7 +16,7 @@ class DataExporter
             die('You do not have permission to export data');
         }
 
-        $groupId = (int)$_REQUEST['group_id'];
+        $groupId = (int)$_REQUEST['group_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$groupId) {
             die('Please provide Group ID');

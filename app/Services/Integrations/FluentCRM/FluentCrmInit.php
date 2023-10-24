@@ -39,7 +39,7 @@ class FluentCrmInit
     public function addContactMenuSection()
     {
         add_action('fluent_crm/global_appjs_loaded', function () {
-            wp_enqueue_script('fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/admin/fluent-crm-in-calendar.js');
+            wp_enqueue_script('fluent_booking_in_crm', FLUENT_BOOKING_URL . 'assets/admin/fluent-crm-in-calendar.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
         });
     }
 

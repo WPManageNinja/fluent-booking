@@ -440,6 +440,28 @@ class Str
     }
 
     /**
+     * Converts a non-boolean value to boolean
+     * @param  string|int $str
+     * @return bool|null
+     */
+    public static function toBool($str)
+    {
+        if (is_bool($str)) {
+            return $str;
+        }
+      
+        $truthy = ['yes', 'on', 'true', '1', 1];
+
+        $falsy = ['no', 'off', 'false', '0', 0, ''];
+
+        if (in_array($str, $truthy, true)) {
+            return true;
+        } elseif (in_array($str, $falsy, true)) {
+            return false;
+        }
+    }
+
+    /**
      * Determine if a given string is 7 bit ASCII.
      *
      * @param  string  $value

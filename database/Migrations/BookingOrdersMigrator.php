@@ -15,7 +15,7 @@ class BookingOrdersMigrator
         $table = $wpdb->prefix . static::$tableName;
         $indexPrefix = $wpdb->prefix . 'fct_ord_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table (
                 `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'draft',

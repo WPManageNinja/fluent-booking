@@ -9,46 +9,34 @@
     <meta name="description" content="<?php echo esc_attr($description); ?>">
     <meta name="robots" content="noindex">
 
-    <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>" />
+    <link rel="icon" type="image/x-icon" href="<?php echo esc_url($author['avatar']); ?>" />
 
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo esc_url($url); ?>">
-    <meta property="og:site_name" content="ConvertLeap">
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:author" content="<?php echo $author['name']; ?>">
-
-    <?php
-//    $feature_image = '';
-//    if ($author['featured_image']) {
-//        $feature_image = $author['featured_image'];
-//    } else {
-//        $feature_image = FLUENT_BOOKING_URL .'assets/images/default-featured.png';
-//    }
-    ?>
-    <meta property="og:image" content="<?php echo FLUENT_BOOKING_URL .'assets/images/default-featured.png'; ?>" />
-
+    <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>">
 
     <?php foreach ($css_files as $css_file): ?>
-    <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>" media="screen" />
+    <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" media="all" />
     <?php endforeach; ?>
 </head>
 <body>
 
 <div class="confirmation_page">
     <div class="fcal_conf_wrap">
-        <?php echo $body; ?>
+        <?php echo wp_kses_post($body); ?>
     </div>
 </div>
 
 <script>
     <?php foreach ($js_vars as $varKey => $values): ?>
-    var <?php echo $varKey; ?> = <?php echo json_encode($values); ?>;
+    var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
     <?php endforeach; ?>
 </script>
 
 <?php foreach ($js_files as $file): ?>
-    <script src="<?php echo $file; ?>" defer="defer"></script>
+    <script src="<?php echo esc_url($file); ?>" defer="defer"></script>
 <?php endforeach; ?>
 </body>
 </html>

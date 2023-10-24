@@ -13,7 +13,9 @@ class BlockEditorHandler
             wp_enqueue_script(
                 'fluent-booking/calendar',
                 $assets . 'admin/fluent-booking-index.js',
-                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element')
+                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element'),
+                FLUENT_BOOKING_ASSETS_VERSION,
+                true
             );
     
             wp_localize_script('fluent-booking/calendar', 'fluent_booking_block', [
