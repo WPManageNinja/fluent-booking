@@ -12,7 +12,7 @@
                             <span>General Settings</span>
                         </router-link>
                     </li>
-                    <li class="fcal_settings_submenu_item">
+                    <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="{ name: 'team_members' }">
                             <el-icon><TeamIcon /></el-icon>
                             <span>Team</span>
@@ -24,7 +24,7 @@
                             <span>{{ menu.title }}</span>
                         </router-link>
                     </li>
-                    <li class="fcal_settings_submenu_item">
+                    <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="{ name: 'license' }">
                             <el-icon><Lock /></el-icon>
                             <span>License</span>

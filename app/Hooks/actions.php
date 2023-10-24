@@ -17,22 +17,17 @@
  * Register all the grouped action handlers
  */
 
-use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
-use FluentBooking\App\Hooks\Scheduler\DailyScheduler;
-
-(new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
-(new FiveMinuteScheduler())->register();
-(new DailyScheduler())->register();
-
-// Load Integrations
-require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
-
+(new \FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler())->register();
+(new \FluentBooking\App\Hooks\Scheduler\DailyScheduler())->register();
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
+
+// Global Notification Handler
+(new \FluentBooking\App\Hooks\Handlers\GlobalNotificationHandler())->register();
 
 $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
