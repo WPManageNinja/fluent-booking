@@ -4,7 +4,6 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
-use FluentBooking\Framework\Support\Arr;
 
 class ReceiptHelper
 {
