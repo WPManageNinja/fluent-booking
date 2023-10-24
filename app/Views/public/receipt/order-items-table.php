@@ -49,7 +49,7 @@ $currencySetting = [
         <?php $discountTotal = 0;
         if (isset($order->discounts['applied']) && count($order->discounts['applied'])) : ?>
             <tr class="fluent_booking_total_row">
-                <th style="text-align: right" colspan="3"><?php _e('Sub-Total', 'fluent-booking-pro'); ?></th>
+                <th style="text-align: right" colspan="3"><?php esc_html_e('Sub-Total', 'fluent-booking-pro'); ?></th>
                 <td><?php echo esc_html(fcalFormattedAmount($subTotal, $currencySetting)); ?></td>
             </tr>
             <?php
@@ -64,7 +64,7 @@ $currencySetting = [
             <?php endforeach; ?>
         <?php endif; ?>
         <tr class="fluent_booking_total_payment_row">
-            <th style="text-align: right" colspan="3"><?php _e('Total', 'fluent-booking-pro'); ?></th>
+            <th style="text-align: right" colspan="3"><?php esc_html_e('Total', 'fluent-booking-pro'); ?></th>
             <td>
                 <?php if (isset($hasSubscription) && $hasSubscription) : ?> 
                     <?php echo esc_attr(fcalFormattedAmount($order->total_amount, $currencySetting)); ?>
