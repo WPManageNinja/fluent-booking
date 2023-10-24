@@ -26,7 +26,7 @@
     <?php } ?>
 
     <?php foreach ($css_files as $css_file): ?>
-        <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>"
+        <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_html(FLUENT_BOOKING_ASSETS_VERSION); ?>"
               media="screen"/>
     <?php endforeach; ?>
 
