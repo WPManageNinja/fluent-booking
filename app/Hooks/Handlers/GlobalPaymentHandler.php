@@ -88,5 +88,4 @@ class GlobalPaymentHandler
     {
         return apply_filters('fluent_booking/payment/get_all_methods', []);
     }
-
 }
