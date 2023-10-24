@@ -152,13 +152,43 @@ class Request
      * @param  mixed $default
      * @return mixed
      */
-    public function getSafe($key = null, $callback = null, $default = null)
+    public function getSafe($key, $callback = null, $default = null)
     {
-        $value = $this->get($key, $default);
+        $array = $result = [];
 
-        $value = $callback ? $callback($value) : $value;
+        $key = is_array($key) ? $key : [$key];
 
-        return $value;
+        if ($callback) {
+            $callback = is_array($callback) ? $callback : [$callback];
+            foreach ($key as $k => $field) {
+                $array[$field] = $callback;
+            }
+        } else {
+            foreach ($key as $k => $v) {
+                
+                if (is_int($k)) {
+                    $k = $v;
+                    $v = function($v) { return $v; };
+                }
+
+                $array[$k] = is_array($v) ? $v : [$v];
+            }
+        }
+
+        foreach ($array as $field => $callbacks) {
+
+            $value = $this->get($field, $default);
+
+            if ($value !== null) {
+                while ($callback = array_shift($callbacks)) {
+                    $value = $callback($value);
+                }
+
+                $result[$field] = $value;
+            }
+        }
+
+        return count($result) > 1 ? $result : reset($result);
     }
 
     /**

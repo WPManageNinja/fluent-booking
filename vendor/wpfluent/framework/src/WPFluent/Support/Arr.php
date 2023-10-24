@@ -426,6 +426,28 @@ class Arr
     }
 
     /**
+     * Determines if the given key contains a boolean value.
+     *
+     * Returns true for true, 1, "1", "true", "on" and "yes"
+     * Returns false for false, "0", "false", "off", "no", and ""
+     * Returns for all non-boolean values.
+     *
+     * @param  array  $array
+     * @param  string $key
+     * 
+     * @return bool|null
+     * @see https://www.php.net/manual/en/filter.filters.validate.php
+     */
+    public static function isTrue($array, $key)
+    {
+        return filter_var(
+            static::get($array, $key),
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_NULL_ON_FAILURE
+        );
+    }
+
+    /**
      * Get a subset of the items from the given array.
      *
      * @param  array  $array
@@ -761,10 +783,5 @@ class Arr
     public static function map($value, $callback)
     {
         return map_deep($value, $callback);
-    }
-
-    public static function isTrue($array, $key) {
-        $value = static::get($array, $key);
-        return $value === true || $value === 'true' || $value == 1;
     }
 }
