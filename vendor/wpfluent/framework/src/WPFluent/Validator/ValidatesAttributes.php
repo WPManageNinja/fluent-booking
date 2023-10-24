@@ -486,4 +486,25 @@ trait ValidatesAttributes
         return $this->validateNumeric($attribute, $value) 
                     && strlen((string) $value) == $parameters[0];
     }
+
+    /**
+     * Validate that an attribute is an array.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array  $parameters
+     * @return bool
+     */
+    public function validateArray($attribute, $value, $parameters = [])
+    {
+        if (! is_array($value)) {
+            return false;
+        }
+
+        if (empty($parameters)) {
+            return true;
+        }
+
+        return empty(array_diff_key($value, array_fill_keys($parameters, '')));
+    }
 }

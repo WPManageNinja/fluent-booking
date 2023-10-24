@@ -46,24 +46,6 @@ class WPException extends Exception {
 	}
 
 	/**
-	 * Get the code
-	 * @return int
-	 */
-	public function getCode()
-	{
-		return $this->code;
-	}
-
-	/**
-	 * Get the exception message
-	 * @return string
-	 */
-	public function getMessage()
-	{
-		return $this->message;
-	}
-
-	/**
 	 * Get the error messages
 	 * @return array
 	 */
