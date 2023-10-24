@@ -76,7 +76,7 @@
                 </div>
             </el-tab-pane>
 
-            <el-tab-pane name="payment-settings">
+            <el-tab-pane v-if="appVars.has_pro" name="payment-settings">
                 <template #label>
                     <el-icon>
                         <Money/>
@@ -93,7 +93,7 @@
                 </div>
             </el-tab-pane>
 
-            <el-tab-pane name="webhooks-settings">
+            <el-tab-pane v-if="appVars.has_pro" name="webhooks-settings">
                 <template #label>
                     <el-icon>
                         <Link/>
@@ -110,7 +110,7 @@
                 </div>
             </el-tab-pane>
 
-            <el-tab-pane name="integrations">
+            <el-tab-pane v-if="appVars.has_pro" name="integrations">
               <template #label>
                 <el-icon>
                     <Connection/>
