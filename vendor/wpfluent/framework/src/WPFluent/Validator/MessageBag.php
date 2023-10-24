@@ -12,6 +12,7 @@ trait MessageBag
      * @var array
      */
     protected $bag = [
+        'array'       => 'The :attribute must be an array.',
         'alpha'       => 'The :attribute must contain only alphabetic characters.',
         'alphanum'       => 'The :attribute must contain only alphanumeric characters.',
         'alphadash'       => 'The :attribute must contain only alphanumeric and _- characters.',
@@ -342,5 +343,20 @@ trait MessageBag
         $text = $this->getReplacementText($attribute.'.digits', 'digits');
 
         return str_replace([':attribute', ':digits'], [$attribute, $parameters[0]], $text);
+    }
+
+    /**
+     * Replace all place-holders for the array rule.
+     *
+     * @param $attribute
+     * @param $parameters
+     *
+     * @return string
+     */
+    protected function replaceArray($attribute, $parameters)
+    {
+        $text = $this->getReplacementText($attribute.'.array', 'array');
+
+        return str_replace([':attribute', ':array'], [$attribute], $text);
     }
 }

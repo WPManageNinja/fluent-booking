@@ -244,7 +244,7 @@ class BookingService
     public static function generateBookingICS(Booking $booking)
     {
         $host = $booking->getHostDetails(false);
-        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', $booking->calendar_event->title, trim($booking->first_name . ' ' . $booking->last_name), $host['name']);
+        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', esc_html($booking->calendar_event->title), esc_html(trim($booking->first_name . ' ' . $booking->last_name)), esc_attr($host['name']));
 
         // Initialize the ICS content
         $icsContent = "BEGIN:VCALENDAR\r\n";
@@ -255,14 +255,14 @@ class BookingService
         $icsContent .= "UID:" . md5($booking->hash) . "\r\n"; // Unique ID for the event
 
         // Event details
-        $icsContent .= "SUMMARY:" . $booking->calendar_event->title . "\r\n";
+        $icsContent .= "SUMMARY:" . esc_html($booking->calendar_event->title) . "\r\n";
         $icsContent .= "DESCRIPTION:" . $meetingTitle . "\r\n";
 
         // Date and time formatting (assuming eventStart and eventEnd are DateTime objects)
         $icsContent .= "DTSTART:" . date('Ymd\THis\Z', strtotime($booking->start_time)) . "\r\n";
         $icsContent .= "DTEND:" . date('Ymd\THis\Z', strtotime($booking->end_time)) . "\r\n";
 
-        $icsContent .= "LOCATION:" . LocationService::getBookingLocationUrl($booking) . "\r\n";
+        $icsContent .= "LOCATION:" . wp_kses_post(LocationService::getBookingLocationUrl($booking)) . "\r\n";
 
         $icsContent .= "END:VEVENT\r\n";
 

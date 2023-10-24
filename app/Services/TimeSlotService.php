@@ -25,8 +25,8 @@ class TimeSlotService
     {
         $period = $this->calendarSlot->duration;
 
-        $fromDate = $fromDate ? $fromDate : date('Y-m-d');
-        $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate));
+        $fromDate = $fromDate ? $fromDate : date('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
         $daySlots = $this->getWeekDaySlots();
@@ -35,7 +35,7 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d');
+        $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
 
@@ -51,7 +51,7 @@ class TimeSlotService
             if ($overrides && isset($overrides[$date])) {
                 $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
             } else {
-                $day = strtolower(date('D', strtotime($date)));
+                $day = strtolower(date('D', strtotime($date))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 if (empty($daySlots[$day])) {
                     continue;
                 }
@@ -69,7 +69,7 @@ class TimeSlotService
             $validSlots = [];
 
             foreach ($availableSlots as $start) {
-                $end = date('H:i', strtotime($start) + 60 * $period);
+                $end = date('H:i', strtotime($start) + 60 * $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $slot = [
                     'start' => $date . ' ' . $start . ':00',
                     'end'   => $date . ' ' . $end . ':00'
@@ -128,12 +128,12 @@ class TimeSlotService
         $fromTimeStamp = strtotime($fromTime);
         $toTimeStamp = strtotime($toTime);
 
-        $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp);
-        $toTime = date('Y-m-d 23:59:59', $toTimeStamp);
+        $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $toTime = date('Y-m-d 23:59:59', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $slots = $this->getDates($fromTime, $toTime, true);
 
-        $date = date('Y-m-d', $fromTimeStamp);
+        $date = date('Y-m-d', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $availableSlots = $slots[$date] ?? [];
 
@@ -161,11 +161,11 @@ class TimeSlotService
     protected function getCurrentDateRange($startDate = false, $endDate = false)
     {
         if (!$startDate) {
-            $startDate = date('Y-m-d');
+            $startDate = date('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         if (!$endDate) {
-            $endDate = date('Y-m-t 23:59:59', strtotime($startDate));
+            $endDate = date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         $currentDate = strtotime($startDate);
@@ -175,7 +175,7 @@ class TimeSlotService
         $date_array = [];
 
         while ($currentDate <= $endDate) {
-            $date_array[] = date('Y-m-d', $currentDate);
+            $date_array[] = date('Y-m-d', $currentDate); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $currentDate += $oneDay;
         }
 
@@ -212,7 +212,7 @@ class TimeSlotService
             $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
             $booking->end_time = DateTimeHelper::convertToTimeZone($booking->end_time, 'UTC', $toTimeZone);
 
-            $date = date('Y-m-d', strtotime($booking->start_time));
+            $date = date('Y-m-d', strtotime($booking->start_time)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
             $books[$date] = $books[$date] ?? [];
 
@@ -222,8 +222,8 @@ class TimeSlotService
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
                 }
-                $booking->start_time = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes"));
-                $booking->end_time   = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes"));
+                $booking->start_time = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $booking->end_time   = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
 
             $books[$date][] = [
@@ -274,7 +274,7 @@ class TimeSlotService
                 $end = strtotime($slot['end']);
 
                 while ($start < $end) {
-                    $daySlots[] = date('H:i', $start);
+                    $daySlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     $start += $period * 60;
                 }
             }
@@ -305,7 +305,7 @@ class TimeSlotService
             $end = strtotime($slot['end']);
 
             while ($start < $end) {
-                $formattedSlots[] = date('H:i', $start);
+                $formattedSlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $start += $period * 60;
             }
         }
@@ -320,7 +320,7 @@ class TimeSlotService
         $calendar = $this->calendar;
 
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
-        $currentAuthorDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone);
+        $currentAuthorDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if (strtotime($startDate) < strtotime($currentAuthorDateTime)) {
             $startDate = $currentAuthorDateTime;

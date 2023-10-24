@@ -23,7 +23,7 @@ class Model extends BaseModel
 
     public function getPerPage()
     {
-        return (isset($_REQUEST['per_page'])) ? intval($_REQUEST['per_page']) : 15;
+        return (isset($_REQUEST['per_page'])) ? intval($_REQUEST['per_page']) : 15; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     }
 
     /**
@@ -33,7 +33,7 @@ class Model extends BaseModel
      */
     public function freshTimestamp()
     {
-        return new \DateTime(date('Y-m-d H:i:s'));
+        return new \DateTime(date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getTimezone()

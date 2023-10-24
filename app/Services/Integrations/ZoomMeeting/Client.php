@@ -83,7 +83,7 @@ class Client
         ];
 
         $url = 'https://api.zoom.us/v2/users/me/meetings';
-        $data = json_encode($data);
+        $data = wp_json_encode($data);
         return $this->makeRequest($url, $data, 'POST', $header);
     }
 
@@ -94,7 +94,7 @@ class Client
         $header['content-type'] = 'application/json';
 
         $url = 'https://api.zoom.us/v2/meetings/' . $meetingId;
-        $data = json_encode($data);
+        $data = wp_json_encode($data);
         return $this->makeRequest($url, $data, 'PATCH', $header);
     }
 

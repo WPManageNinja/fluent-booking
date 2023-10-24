@@ -55,7 +55,7 @@ class API
 
     public function verifyIPN()
     {
-        if (!isset($_REQUEST['fluent_booking_payment_listener'])) {
+        if (!isset($_REQUEST['fluent_booking_payment_listener'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return;
         }
 

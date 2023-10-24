@@ -1,25 +1,68 @@
 {
     "packages": [
         {
-            "name": "wpfluent/framework",
-            "version": "2.1.15",
-            "version_normalized": "2.1.15.0",
+            "name": "woocommerce/action-scheduler",
+            "version": "3.6.4",
+            "version_normalized": "3.6.4.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:wpfluent/framework.git",
-                "reference": "e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204"
+                "url": "https://github.com/woocommerce/action-scheduler.git",
+                "reference": "e7dafe215be5ef823392204535ee2e241f99a8cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204",
-                "reference": "e6e17dbdae0d9b01b45f5db8ad89e6aaa8c06204",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/e7dafe215be5ef823392204535ee2e241f99a8cb",
+                "reference": "e7dafe215be5ef823392204535ee2e241f99a8cb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5",
+                "woocommerce/woocommerce-sniffs": "0.1.0",
+                "wp-cli/wp-cli": "~2.5.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "time": "2023-10-11T18:24:47+00:00",
+            "type": "wordpress-plugin",
+            "extra": {
+                "scripts-description": {
+                    "test": "Run unit tests",
+                    "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+                    "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Action Scheduler for WordPress and WooCommerce",
+            "homepage": "https://actionscheduler.org/",
+            "support": {
+                "issues": "https://github.com/woocommerce/action-scheduler/issues",
+                "source": "https://github.com/woocommerce/action-scheduler/tree/3.6.4"
+            },
+            "install-path": "../woocommerce/action-scheduler"
+        },
+        {
+            "name": "wpfluent/framework",
+            "version": "2.1.20",
+            "version_normalized": "2.1.20.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpfluent/framework.git",
+                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
+                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.3|^8.0"
             },
-            "time": "2023-10-07T20:03:20+00:00",
+            "time": "2023-10-23T17:20:38+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -43,7 +86,7 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.1.15",
+                "source": "https://github.com/wpfluent/framework/tree/2.1.20",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
             "install-path": "../wpfluent/framework"

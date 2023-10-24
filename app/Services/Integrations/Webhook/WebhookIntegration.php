@@ -121,7 +121,7 @@ class WebhookIntegration
         $response = wp_remote_request($remoteUrl, apply_filters('fluent_booking/booking_webhook_request', [
             'method'      => $sendingMethod,
             'headers'     => $headers,
-            'body'        => $isJson ? json_encode($body) : $body,
+            'body'        => $isJson ? wp_json_encode($body) : $body,
             'redirection' => 0,
             'timeout'     => 20,
             'sslverify'   => false,

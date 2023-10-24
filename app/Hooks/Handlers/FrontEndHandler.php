@@ -76,7 +76,7 @@ class FrontEndHandler
                         'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking-pro')
                     ], 422);
                 }
- 
+
                 $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
 
                 $previousBooking = clone $existingBooking;
@@ -152,7 +152,7 @@ class FrontEndHandler
                 ?>
                 <style>
                     .fcal_phone_wrapper .flag {
-                        background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                        background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
                         background-size: 100%;
                     }
                 </style>
@@ -161,6 +161,7 @@ class FrontEndHandler
         }
 
         wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
         $this->loadGlobalVars();
         wp_localize_script(
             'fluent-booking-public',
@@ -175,10 +176,13 @@ class FrontEndHandler
 
     public function handleReceiptShortcode($atts, $content)
     {
-        if (!isset($_REQUEST['hash'])) {
+        if (!isset($_REQUEST['hash'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return 'Booking hash is missing!';
         }
-        return (new ReceiptHelper())->getReceipt($_REQUEST['hash']);
+
+        $hash = sanitize_text_field($_REQUEST['hash']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        return (new ReceiptHelper())->getReceipt($hash);
     }
 
     private function loadGlobalVars()
@@ -215,13 +219,16 @@ class FrontEndHandler
                 'user_id' => $currentUser->ID
             ];
         } else {
+
+            $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
             // Check for url params
-            if (isset($_REQUEST['invitee_name'])) {
-                $currentPerson['name'] = sanitize_text_field($_REQUEST['invitee_name']);
+            if ($name = sanitize_text_field(Arr::get($request, 'invitee_name'))) {
+                $currentPerson['name'] = $name;
             }
 
-            if (isset($_REQUEST['invitee_email'])) {
-                $email = sanitize_email($_REQUEST['invitee_email']);
+            if ($email = Arr::get($request, 'invitee_email')) {
+                $email = sanitize_email($email);
                 if (is_email($email)) {
                     $currentPerson['email'] = $email;
                 }
@@ -263,7 +270,7 @@ class FrontEndHandler
         ];
 
         if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
-            $data['user_country'] = sanitize_text_field($_REQUEST['HTTP_CF_IPCOUNTRY']);
+            $data['user_country'] = sanitize_text_field($_REQUEST['HTTP_CF_IPCOUNTRY']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         }
 
         return apply_filters('fluent_calendar/global_booking_vars', $data);
@@ -273,7 +280,7 @@ class FrontEndHandler
     {
         $app = App::getInstance();
 
-        $slotId = (int)$_REQUEST['event_id'];
+        $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $calendarSlot = CalendarSlot::find($slotId);
 
@@ -283,7 +290,7 @@ class FrontEndHandler
             ], 422);
         }
 
-        $postedData = $_REQUEST;
+        $postedData = $_REQUEST;  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         do_action('fluent_booking/starting_scheduling_ajax', $postedData);
 
@@ -396,7 +403,7 @@ class FrontEndHandler
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
 
             if (is_wp_error($booking)) {
-                throw new \Exception($booking->get_error_message(), 422);
+                throw new \Exception(wp_kses_post($booking->get_error_message()), 422);
             }
 
         } catch (\Exception $e) {
@@ -417,7 +424,7 @@ class FrontEndHandler
 
     public function ajaxGetAvailableDates()
     {
-        $slotId = (int)$_REQUEST['event_id'];
+        $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $slot = CalendarSlot::findOrfail($slotId);
 
         if (!$slot || $slot->status != 'active') {
@@ -427,13 +434,13 @@ class FrontEndHandler
         }
 
         $calendar = $slot->calendar;
-        $startDate = Arr::get($_REQUEST, 'start_date');
+        $startDate = Arr::get($_REQUEST, 'start_date'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
             $startDate = date('Y-m-d H:i:s');
         }
 
-        $timeZone = Arr::get($_REQUEST, 'timezone');
+        $timeZone = Arr::get($_REQUEST, 'timezone'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$timeZone) {
             $timeZone = wp_timezone_string();
@@ -519,9 +526,9 @@ class FrontEndHandler
 
     public function ajaxHandleCancelMeeting()
     {
-        $data = $_REQUEST;
+        $data = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $meetingHash = Arr::get($_REQUEST, 'meeting_hash');
+        $meetingHash = Arr::get($data, 'meeting_hash');
 
         $meeting = Booking::where('hash', $meetingHash)->first();
 

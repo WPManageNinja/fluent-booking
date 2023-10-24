@@ -17,7 +17,7 @@ class ComposerScript
     public static function postUpdate(Event $event)
     {
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        $composerJson = json_decode(file_get_contents($vendorDir . '/../composer.json'), true);
+        $composerJson = json_decode(file_get_contents($vendorDir . '/../composer.json'), true); // phpcs:ignore
         $namespace = $composerJson['extra']['wpfluent']['namespace']['current'];
 
         if (!$namespace) {
@@ -35,14 +35,14 @@ class ComposerScript
 
             $fileName = $file->getPathname();
 
-            $content = file_get_contents($fileName);
+            $content = file_get_contents($fileName); // phpcs:ignore
             $content = str_replace(
                 'WPFluent\\',
                 $namespace . '\\Framework\\',
                 $content
             );
 
-            file_put_contents($fileName, $content);
+            file_put_contents($fileName, $content); // phpcs:ignore
         }
     }
 }
