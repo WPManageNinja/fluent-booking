@@ -50,7 +50,7 @@ class OrderHelper
             $orderItem['quantity'] = 1;
             $orderItem['item_total'] = $itemPrice * 1;
             $orderItem['rate'] = 1;
-            $orderItem['line_meta'] = json_encode($item);
+            $orderItem['line_meta'] = wp_json_encode($item);
             $order->items()->create($orderItem);
         }
 

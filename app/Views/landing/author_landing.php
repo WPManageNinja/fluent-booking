@@ -9,14 +9,15 @@
     <meta name="description" content="<?php echo esc_attr($description); ?>">
     <meta name="robots" content="noindex"/>
 
-    <link rel="icon" type="image/x-icon" href="<?php echo $author['avatar']; ?>">
+    <?php if(!empty($author['avatar'])): ?>
+    <link rel="icon" type="image/x-icon" href="<?php echo esc_url($author['avatar']); ?>">
+    <?php endif; ?>
 
     <meta property="og:title" content="<?php echo esc_attr($title); ?>"/>
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo esc_url($url); ?>"/>
-    <meta property="og:site_name" content="ConvertLeap">
     <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
-    <meta property="og:author" content="<?php echo $author['name']; ?>"/>
+    <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>"/>
 
     <?php
     if (!empty($author['featured_image'])) {
@@ -25,7 +26,7 @@
     <?php } ?>
 
     <?php foreach ($css_files as $css_file): ?>
-        <link rel="stylesheet" href="<?php echo $css_file; ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>"
+        <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo FLUENT_BOOKING_ASSETS_VERSION; ?>"
               media="screen"/>
     <?php endforeach; ?>
 
@@ -214,13 +215,13 @@
 <div class="fcal_calendar_wrap">
     <div class="fluent_booking_app">
         <div class="fcal_author_header">
-            <img src="<?php echo $author['avatar']; ?>"/>
+            <img src="<?php echo esc_url($author['avatar']); ?>"/>
             <div class="author_info">
                 <h1>
                     <?php echo esc_html($calendar->title); ?>
                 </h1>
                 <?php if ($calendar->description) { ?>
-                    <p class="fcal_description"><?php echo $calendar->description; ?></p>
+                    <p class="fcal_description"><?php echo wp_kses_post($calendar->description); ?></p>
                 <?php } ?>
             </div>
         </div>
@@ -228,14 +229,14 @@
             <div class="fcal_slots">
                 <?php foreach ($events as $event): ?>
                     <div class="fcal_slot">
-                        <a href="<?php echo $event->public_url; ?>" class="fcal_card">
+                        <a href="<?php echo esc_url($event->public_url); ?>" class="fcal_card">
                             <div class="fcal_slot_content">
                                 <h2>
                                     <span class="fcal_slot_color_schema"
                                           style="background: <?php echo esc_attr($event->color_schema); ?>;"></span>
-                                    <?php echo $event->title; ?>
+                                    <?php echo esc_html($event->title); ?>
                                 </h2>
-                                <p class="fcal_description"><?php echo $event->description; ?></p>
+                                <p class="fcal_description"><?php echo wp_kses_post($event->description); ?></p>
                                 <span class="fcal_slot_duration">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"
                                      fill="none">

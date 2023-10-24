@@ -1,4 +1,4 @@
-<div id="<?php echo $slug; ?>-app" class="warp fconnector_app">
+<div id="<?php echo esc_attr($slug); ?>-app" class="warp fconnector_app">
     <div class="fframe_app">
         <div class="fframe_main-menu-items">
             <div class="menu_logo_holder">
@@ -16,7 +16,7 @@
                     <li data-key="<?php echo esc_attr($item['key']); ?>" class="fframe_menu_item <?php echo ($hasSubMenu) ? 'fframe_has_sub_items' : ''; ?> fframe_item_<?php echo esc_attr($item['key']); ?>">
                         <a class="fframe_menu_primary" href="<?php echo esc_url($item['permalink']); ?>">
                             <?php // echo $item['icon']; ?>
-							<?php echo sanitize_text_field($item['label']); ?>
+							<?php echo esc_attr($item['label']); ?>
 							<?php if($hasSubMenu){ ?>
                                 <span class="dashicons dashicons-arrow-down-alt2"></span>
 							<?php } ?></a>
@@ -37,7 +37,7 @@
                         <?php $hasSubMenu = !empty($item['sub_items']); ?>
                         <li data-key="<?php echo esc_attr($item['key']); ?>" class="fframe_menu_item <?php echo ($hasSubMenu) ? 'fframe_has_sub_items' : ''; ?> fframe_item_<?php echo esc_attr($item['key']); ?>">
                             <a class="fframe_menu_primary" href="<?php echo esc_url($item['permalink']); ?>">
-                                <?php echo sanitize_text_field($item['label']); ?>
+                                <?php echo esc_attr($item['label']); ?>
                                 <?php if($hasSubMenu){ ?>
                                     <span class="dashicons dashicons-arrow-down-alt2"></span>
                                 <?php } ?></a>

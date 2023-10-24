@@ -104,10 +104,10 @@ class RemoteCalendarsInit
 
         $data = [
             'start' => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time))
+                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ],
             'end'   => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->end_time))
+                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->end_time)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ],
         ];
 

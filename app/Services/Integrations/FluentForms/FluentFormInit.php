@@ -124,7 +124,7 @@ class FluentFormInit
         }
         
         if ($isRequired && !isset($data['start_time'])) {
-            throw new \Exception(Arr::get($data, 'rules.required.message'), 422);
+            throw new \Exception(esc_html(Arr::get($data, 'rules.required.message')), 422);
         }
 
         $rules = [
@@ -144,7 +144,7 @@ class FluentFormInit
         }
 
         $startDateTime = DateTimeHelper::convertToUtc($data['start_time'], $data['timezone']);
-        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
+        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions
 
         $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
