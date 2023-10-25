@@ -21,7 +21,7 @@
                     <h4><?php echo esc_html($section['title']); ?></h4>
                 </div>
                 <div class="fcal_confirm_section_content">
-                    <?php echo wp_kses_post($section['content']); ?>
+                    <?php echo $section['content']; ?>
                 </div>
             </div>
         <?php endforeach; ?>

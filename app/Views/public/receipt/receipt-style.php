@@ -1,4 +1,3 @@
-<?php // for receipt styles ?>
 <style>
     .fluent_booking_payment_receipt{
         display: block !important;
