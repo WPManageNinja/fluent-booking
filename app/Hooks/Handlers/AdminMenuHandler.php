@@ -127,7 +127,7 @@ class AdminMenuHandler
             ]
         ];
 
-        if(current_user_can('manage_options')) {
+        if (current_user_can('manage_options')) {
             $menuItems[] = [
                 'key'       => 'settings',
                 'label'     => __('Settings', 'fluent-booking-pro'),
@@ -206,7 +206,6 @@ class AdminMenuHandler
             $hasAllAccess = true;
         }
 
-        $user = User::find($currentUser->ID);
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
@@ -242,6 +241,7 @@ class AdminMenuHandler
             ]),
             'currency'           => CurrenciesHelper::getGlobalCurrency(),
             'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign(),
+            'has_pro'            => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
             'trans'              => TransStrings::getStrings()
         ]);
 
