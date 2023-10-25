@@ -33,7 +33,7 @@ class ActivationHandler
             wp_schedule_event(time(), 'hourly', $hourlyHook);
         }
 
-        $dailyHook = 'fluent_booking_daily_tasks';
+        $dailyHook = 'fluent_booking/daily_tasks';
         if (!wp_next_scheduled($dailyHook)) {
             wp_schedule_event(time(), 'daily', $dailyHook);
         }

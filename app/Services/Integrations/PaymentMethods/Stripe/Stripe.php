@@ -131,11 +131,11 @@ class Stripe extends BasePaymentMethod
 
     public function confirmStripePayment()
     {
-        if (!isset($_REQUEST['intentId'])) {
+        if (!isset($_REQUEST['intentId'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return;
         }
 
-        $intentId = $_REQUEST['intentId'];
+        $intentId = $_REQUEST['intentId']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $path = 'payment_intents/' . $intentId;
 
         $api = new API();
@@ -383,7 +383,7 @@ class Stripe extends BasePaymentMethod
         return array(
             'is_active'    => array(
                 'value' => 'no',
-                'label' => __('Enable Stripe payment for booking payment', 'fluent-booking-pro'),
+                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking-pro'),
                 'type'  => 'inline_checkbox'
             ),
             'payment_mode' => array(
@@ -472,8 +472,8 @@ class Stripe extends BasePaymentMethod
 
     public function loadCheckoutJs($my_data)
     {
-        wp_enqueue_script('fluent-booking-checkout-sdk-' . $this->slug, 'https://js.stripe.com/v3/', null, false);
-        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-' . $this->slug], false);
+        wp_enqueue_script('fluent-booking-checkout-sdk-' . $this->slug, 'https://js.stripe.com/v3/', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        wp_enqueue_script('fluent-booking-checkout-handler-' . $this->slug, FLUENT_BOOKING_URL . 'assets/public/js/stripe-checkout.js', ['fluent-booking-checkout-sdk-' . $this->slug], FLUENT_BOOKING_ASSETS_VERSION, true);
     }
 
     public function render($method)

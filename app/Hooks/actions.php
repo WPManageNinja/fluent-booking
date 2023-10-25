@@ -18,6 +18,7 @@
  */
 
 use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
+use FluentBooking\App\Hooks\Scheduler\DailyScheduler;
 
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
@@ -26,59 +27,14 @@ use FluentBooking\App\Hooks\Scheduler\FiveMinuteScheduler;
 (new \FluentBooking\App\Hooks\Handlers\LogHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\AdminMenuHandler())->register();
 (new FiveMinuteScheduler())->register();
-
+(new DailyScheduler())->register();
 
 // Load Integrations
 require_once FLUENT_BOOKING_DIR . 'app/Services/Integrations/index.php';
 
-
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
-
 
 $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
-add_action('init', function () {
-    if (!isset($_GET['fluent-booking']) || $_GET['fluent-booking'] != 'fluent-booking-beta') {
-        return;
-    }
 
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-
-    $tables = [
-        'fcal_booking_activity',
-        'fcal_booking_hosts',
-        'fcal_booking_meta',
-        'fcal_bookings',
-        'fcal_calendar_events',
-        'fcal_calendars',
-        'fcal_meta'
-    ];
-
-    global $wpdb;
-    foreach ($tables as $table) {
-        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}{$table}");
-    }
-    // run the migrations
-    require_once FLUENT_BOOKING_DIR . 'database/DBMigrator.php';
-    \FluentBooking\Database\DBMigrator::run();
-    wp_redirect(admin_url('admin.php?page=fluent-booking#/'));
-    exit();
-});
-
-add_action('plugins_loaded', function () {
-    $licenseManager = new \FluentBooking\App\Services\PluginManager\LicenseManager();
-    $licenseManager->initUpdater();
-
-    $licenseMessage = $licenseManager->getLicenseMessages();
-
-    if ($licenseMessage) {
-        add_action('admin_notices', function () use ($licenseMessage) {
-            $class = 'notice notice-error fc_message';
-            $message = $licenseMessage['message'];
-            printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), $message);
-        });
-    }
-}, 0);

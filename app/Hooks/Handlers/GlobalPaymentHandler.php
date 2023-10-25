@@ -29,7 +29,7 @@ class GlobalPaymentHandler
     {
         if (isset($_REQUEST['fluent_booking_payment_listener'])) {
             add_action('wp', function () {
-                $paymentMethod = sanitize_text_field($_REQUEST['method']);
+                $paymentMethod = sanitize_text_field($_REQUEST['method']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 do_action('fluent_booking/payment/ipn_endpoint_' . $paymentMethod);
             });
         }
@@ -37,19 +37,19 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') {
+        if (isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if (!current_user_can('manage_options')) {
                 return;
             }
 
             $ret = false;
-            if (isset($_GET['ff_stripe_connect'])) {
-                $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']);
+            if (isset($_GET['ff_stripe_connect'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                $data = Arr::only($_GET, ['ff_stripe_connect', 'mode', 'state', 'code', 'source']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 $ret = ConnectConfig::verifyAuthorizeSuccess($data);
             }
 
             if ($ret){
-                echo $ret;
+                echo wp_kses_post($ret);
                 exit();
             }
             wp_redirect(admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/payment/stripe'));
@@ -86,8 +86,7 @@ class GlobalPaymentHandler
 
     public static function getAllMethods()
     {
-        $methods = apply_filters('fluent_booking/payment/get_all_methods', []);
-        return $methods;
+        return apply_filters('fluent_booking/payment/get_all_methods', []);
     }
 
 }

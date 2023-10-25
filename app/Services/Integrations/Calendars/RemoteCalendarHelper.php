@@ -129,7 +129,7 @@ class RemoteCalendarHelper
                 }
 
                 $startDateTime =  $start->format('Y-m-d H:i:s');
-                $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + $durationSeconds);
+                $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 if ($args) {
                     $blocks[] = wp_parse_args([

@@ -18,7 +18,7 @@ class AdminMenuHandler
         add_action('admin_menu', [$this, 'add']);
 
         add_action('admin_enqueue_scripts', function () {
-            if (!isset($_REQUEST['page']) || $_REQUEST['page'] != 'fluent-booking') {
+            if (!isset($_REQUEST['page']) || $_REQUEST['page'] != 'fluent-booking') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 return;
             }
             $this->enqueueAssets();
