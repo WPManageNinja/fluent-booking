@@ -116,8 +116,8 @@ class RemoteCalendarHelper
             $maxDate = new \DateTime($maxDate);
             $sampleStart = new \DateTime($sampleRange[0]);
 
-            $parser = \FluentBooking\App\Libs\RRule\RfcParser::parseRRule($rule, $sampleStart);
-            $rrule = new \FluentBooking\App\Libs\RRule\RRule($parser);
+            $parser = \FluentBooking\App\Services\Libs\RRule\RfcParser::parseRRule($rule, $sampleStart);
+            $rrule = new \FluentBooking\App\Services\Libs\RRule\RRule($parser);
 
             $blocks = [];
             // Looping through the occurrences

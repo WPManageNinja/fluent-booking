@@ -9,7 +9,7 @@
  * @link https://github.com/rlanvin/php-rrule
  */
 
-namespace FluentBooking\App\Libs\RRule;
+namespace FluentBooking\App\Services\Libs\RRule;
 
 /**
  * Recurrence set

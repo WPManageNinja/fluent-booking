@@ -6,18 +6,15 @@ use FluentBooking\Database\Migrations\BookingActivityMigrator;
 use FluentBooking\Database\Migrations\BookingMigrator;
 use FluentBooking\Database\Migrations\BookingMetaMigrator;
 use FluentBooking\Database\Migrations\BookingHostMigrator;
-use FluentBooking\Database\Migrations\BookingOrdersMigrator;
-use FluentBooking\Database\Migrations\BookingTransactionsMigrator;
 use FluentBooking\Database\Migrations\CalendarMigrator;
 use FluentBooking\Database\Migrations\CalendarSlotsMigrator;
 use FluentBooking\Database\Migrations\MetaMigrator;
-use FluentBooking\Database\Migrations\OrdersItemsMigrator;
 
 class DBMigrator
 {
     public static function run($network_wide = false)
     {
-        require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
         if (is_multisite() && $network_wide) {
             global $wpdb;
@@ -39,11 +36,16 @@ class DBMigrator
         BookingMigrator::migrate();
         BookingMetaMigrator::migrate();
         BookingHostMigrator::migrate();
-        BookingOrdersMigrator::migrate();
         MetaMigrator::migrate();
         BookingActivityMigrator::migrate();
-        BookingOrdersMigrator::migrate();
-        BookingTransactionsMigrator::migrate();
-        OrdersItemsMigrator::migrate();
+
+        self::migratePaymentTables();
+    }
+
+    public static function migratePaymentTables()
+    {
+        \FluentBooking\Database\Migrations\BookingOrdersMigrator::migrate();
+        \FluentBooking\Database\Migrations\BookingTransactionsMigrator::migrate();
+        \FluentBooking\Database\Migrations\OrdersItemsMigrator::migrate();
     }
 }
