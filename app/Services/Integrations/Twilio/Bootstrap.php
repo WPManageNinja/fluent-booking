@@ -19,6 +19,7 @@ class Bootstrap
 
         add_action('fluent_booking/after_booking_scheduled', [$this, 'pushBookingScheduledToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_scheduled_sms_async', [$this, 'bookingScheduledSms'], 10, 1);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'smsOnBookingRescheduled'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder_sms', [$this, 'bookingReminderSms'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'smsOnBookingCancelled'], 10, 1);
     }
@@ -41,8 +42,8 @@ class Bootstrap
     }
 
     public function saveOauthClientSettings($settings)
-    {
-        TwilioHelper::updateApiConfig($settings);
+    {        
+        return TwilioHelper::updateApiConfig($settings);
     }
 
     public function getOauthClientSettings($settings)
@@ -81,13 +82,18 @@ class Bootstrap
         $description = '<p>Please read the step-by-step documentation to setup Account SID and Auth Token and get the Sender Number for your app. <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/twilio-integration-with-fluentbooking/">Go to the documentation article</a></p>';
 
         return [
-            'logo'          => $app['url.assets'] . 'images/twilio.svg',
-            'title'         => __('Twilio SMS Integration', 'fluent-booking'),
-            'subtitle'      => __('Configure Twilio API to send SMS notifications on booking events', 'fluent-booking'),
-            'description'   => $description,
-            'save_btn_text' => __('Save Settings', 'fluent-booking'),
-            'fields'        => $fields,
-            'will_encrypt'  => true
+            'logo'            => $app['url.assets'] . 'images/twilio.svg',
+            'title'           => __('Twilio SMS Integration', 'fluent-booking'),
+            'subtitle'        => __('Configure Twilio API to send SMS notifications on booking events', 'fluent-booking'),
+            'description'     => $description,
+            'is_connected'    => TwilioHelper::isConnected(),
+            'is_configured'   => TwilioHelper::isConfigured(),
+            'check_validation'=> true,
+            'valid_message'   => __('Your Twilio API integration is up and running.', 'fluent-booking'),
+            'invalid_message' => __('Your Twilio API Key is not valid.', 'fluent-booking'),
+            'save_btn_text'   => __('Save Settings', 'fluent-booking'),
+            'fields'          => $fields,
+            'will_encrypt'    => true
         ];
     }
 
@@ -163,7 +169,7 @@ class Bootstrap
 
     public function pushBookingScheduledToQueue($booking, $bookingEvent)
     {
-        if (!TwilioHelper::isConfigured()) {
+        if (!TwilioHelper::isConnected()) {
             return;
         }
         
@@ -200,7 +206,7 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled')) {
             $sms = Arr::get($notifications, 'booking_conf_attendee.sms', []);
 
-            $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+            $smsData['receiver_number'] = Arr::get($booking, 'phone');
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -218,7 +224,9 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
             $sms = Arr::get($notifications, 'booking_conf_host.sms', []);
 
-            $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+            $hostPhone = $booking->calendar->getMeta('host_phone');
+
+            $smsData['receiver_number'] = $sms['receiver'] == 'host_number' ? $hostPhone : $sms['number'];
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -253,7 +261,7 @@ class Bootstrap
         if ('guest' == $emailTo && Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_attendee.sms', []);
 
-            $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+            $smsData['receiver_number'] = Arr::get($booking, 'phone');
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -270,7 +278,9 @@ class Bootstrap
         } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_host.sms', []);
 
-            $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+            $hostPhone = $booking->calendar->getMeta('host_phone');
+
+            $smsData['receiver_number'] = $sms['receiver'] == 'host_number' ? $hostPhone : $sms['number'];
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -288,7 +298,7 @@ class Bootstrap
 
     public function smsOnBookingCancelled(Booking $booking)
     {
-        if (!TwilioHelper::isConfigured()) {
+        if (!TwilioHelper::isConnected()) {
             return;
         }
 
@@ -309,7 +319,9 @@ class Bootstrap
                 // This from the host
                 $sms = Arr::get($notifications, 'cancelled_by_host.sms', []);
     
-                $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+                $hostPhone = $booking->calendar->getMeta('host_phone');
+
+                $smsData['receiver_number'] = $sms['receiver'] == 'host_number' ? $hostPhone : $sms['number'];
                 $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
     
                 $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -329,7 +341,7 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $sms = Arr::get($notifications, 'cancelled_by_attendee.sms', []);
 
-            $smsData['receiver_number'] = EditorShortCodeParser::parse($sms['number'], $booking);
+            $smsData['receiver_number'] = Arr::get($booking, 'phone');
             $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -339,6 +351,67 @@ class Bootstrap
                     'title'       => 'Cancellation SMS Sent Successfully',
                     'type'        => 'activity',
                     'description' => __('Booking Cancellation SMS has been sent to the Attendee'),
+                    'booking_id'  => $booking->id
+                ]);
+            }
+        }
+    }
+
+    public function smsOnBookingRescheduled(Booking $booking)
+    {
+        if (!TwilioHelper::isConnected()) {
+            return;
+        }
+
+        $calendarEvent = $booking->calendar_event;
+        if (!$calendarEvent) {
+            return;
+        }
+
+        $notifications = $calendarEvent->getSmsNotifications();
+        if (!$notifications) {
+            return;
+        }
+
+        $rescheduledBy = $booking->getMeta('rescheduled_by_type', 'host');
+
+        if ($rescheduledBy == 'host') {
+            if (Arr::isTrue($notifications, 'rescheduled_by_host.enabled')) {
+                // This from the host
+                $sms = Arr::get($notifications, 'rescheduled_by_host.sms', []);
+                
+                $hostPhone = $booking->calendar->getMeta('host_phone');
+
+                $smsData['receiver_number'] = $sms['receiver'] == 'host_number' ? $hostPhone : $sms['number'];
+                $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+    
+                $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+                if ($smsSend) {
+                    do_action('fluent_booking/log_booking_note', [
+                        'title'       => 'Rescheduling SMS Sent Successfully',
+                        'type'        => 'activity',
+                        'description' => __('Booking Rescheduling SMS has been sent to the host'),
+                        'booking_id'  => $booking->id
+                    ]);
+                }
+            }
+            return;
+        }
+
+        if (Arr::isTrue($notifications, 'rescheduled_by_attendee.enabled')) {
+            $sms = Arr::get($notifications, 'rescheduled_by_attendee.sms', []);
+
+            $smsData['receiver_number'] = Arr::get($booking, 'phone');
+            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+
+            if ($smsSend) {
+                do_action('fluent_booking/log_booking_note', [
+                    'title'       => 'Rescheduling SMS Sent Successfully',
+                    'type'        => 'activity',
+                    'description' => __('Booking Rescheduling SMS has been sent to the Attendee'),
                     'booking_id'  => $booking->id
                 ]);
             }

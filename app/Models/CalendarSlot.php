@@ -10,7 +10,6 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\LocationService;
-use FluentBooking\App\Services\Integrations\Twilio\TwilioHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class CalendarSlot extends Model
@@ -175,10 +174,6 @@ class CalendarSlot extends Model
 
     public function getSmsNotifications($isEdit = false)
     {
-        if (!TwilioHelper::isConfigured()) {
-            return '';
-        }
-
         $statuses = $this->getMeta('sms_notifications');
 
         if ($statuses) {
