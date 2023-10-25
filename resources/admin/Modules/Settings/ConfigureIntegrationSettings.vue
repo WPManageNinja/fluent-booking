@@ -48,13 +48,13 @@
                             <p v-if="fieldSettings && fieldSettings.will_encrypt">
                                 <hr />
                                 <el-icon><Lock /></el-icon>
-                                The above app secret key will be encrypted and stored securely.
+                                {{ $t('The above app secret key will be encrypted and stored securely.') }}
                             </p>
                         </template>
                     </div>
                 </div>
             </div>
-            <el-empty v-else description="No Settings Found for this integration"/>
+            <el-empty v-else :description="$t('No Settings Found for this integration')"/>
         </div>
         <el-skeleton v-else :rows="4" animated/>
     </div>
@@ -123,7 +123,7 @@ export default {
         },
         copyText(text) {
             copyToClipBoard(text);
-            this.$handleSuccess('Copied to clipboard');
+            this.$handleSuccess(this.$t('Copied to clipboard'));
         }
     },
     mounted() {

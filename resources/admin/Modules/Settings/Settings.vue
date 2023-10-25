@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_settings">
         <div class="fcal_settings_header_title">
-            <h3>Global Settings</h3>
+            <h3>{{ $t('Global Settings') }}</h3>
         </div>
         <div class="fcal_settings_body">
             <el-aside v-loading="loading">
@@ -9,13 +9,13 @@
                     <li class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="{ name: 'general_settings' }">
                             <el-icon><Operation /></el-icon>
-                            <span>General Settings</span>
+                            <span>{{ $t('General Settings') }}</span>
                         </router-link>
                     </li>
                     <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="{ name: 'team_members' }">
                             <el-icon><TeamIcon /></el-icon>
-                            <span>Team</span>
+                            <span>{{ $t('Team') }}</span>
                         </router-link>
                     </li>
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
@@ -27,7 +27,7 @@
                     <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
                         <router-link class="fcal_img_menu_link" :to="{ name: 'license' }">
                             <el-icon><Lock /></el-icon>
-                            <span>License</span>
+                            <span>{{ $t('License') }}</span>
                         </router-link>
                     </li>
                 </ul>

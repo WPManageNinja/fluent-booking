@@ -8,8 +8,8 @@
         <template v-if="hasSupport('is_hosted')">
             <el-row :gutter="20">
                 <el-col :md="12" :sm="24">
-                    <el-form-item label="Landing page URL">
-                        <el-input placeholder="Landing page URL" v-model="calendar.slug">
+                    <el-form-item :label="$t('Landing page URL')">
+                        <el-input :placeholder="$t('Landing page URL')" v-model="calendar.slug">
                             <template #prepend>
                                 <span>{{appVars.site_url}}</span>
                             </template>
@@ -17,10 +17,10 @@
                     </el-form-item>
                 </el-col>
                 <el-col :md="12" :sm="24">
-                    <el-form-item label="Landing Page Visibility">
+                    <el-form-item :label="$t('Landing Page Visibility')">
                         <el-radio-group v-model="calendar.visibility">
-                            <el-radio label="public">Publicly Accessible</el-radio>
-                            <el-radio label="private">Disable Landing Page Feature</el-radio>
+                            <el-radio label="public">{{ $t('Publicly Accessible') }}</el-radio>
+                            <el-radio label="private">{{ $t('Disable Landing Page Feature') }}</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
@@ -28,20 +28,20 @@
 
             <el-row :gutter="20">
                 <el-col :md="12" :sm="24">
-                    <el-form-item label="Your First Name">
-                        <el-input placeholder="Your First Name" v-model="calendar.author_profile.first_name"></el-input>
+                    <el-form-item :label="$t('Your First Name')">
+                        <el-input :placeholder="$t('Your First Name')" v-model="calendar.author_profile.first_name"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :md="12" :sm="24">
-                    <el-form-item label="Your Last Name">
-                        <el-input placeholder="Your Last Name" v-model="calendar.author_profile.last_name"></el-input>
+                    <el-form-item :label="$t('Your Last Name')">
+                        <el-input :placeholder="$t('Your Last Name')" v-model="calendar.author_profile.last_name"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </template>
 
         <el-form-item>
-            <el-button v-loading="saving" :disabled="saving" type="primary" @click="saveSettings()">Update Info</el-button>
+            <el-button v-loading="saving" :disabled="saving" type="primary" @click="saveSettings()">{{ $t('Update Info') }}</el-button>
         </el-form-item>
     </el-form>
 </template>

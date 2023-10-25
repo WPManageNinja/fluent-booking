@@ -4,14 +4,14 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog">
-        <p v-if="fieldData.system_defined">This is a system defined field. You can only edit labels</p>
+        <p v-if="fieldData.system_defined">{{ $t('EditCustomFieldModal/system_defined_field_label') }}</p>
         <el-form v-if="openModal" label-position="top" >
             <el-form-item label="Field Type">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"
                     :disabled="fieldData.system_defined"
-                    placeholder="Select Type">
+                    :placeholder="$t('Select Type')">
                     <el-option
                         v-for="(type, index) in fieldsTypes"
                         :key="index"
@@ -21,13 +21,13 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="Label *">
-                <el-input v-model="fieldData.label" type="text" placeholder="Label"/>
+            <el-form-item :label="$t('Label *')">
+                <el-input v-model="fieldData.label" type="text" :placeholder="$t('Label')"/>
             </el-form-item>
-            <el-form-item v-if="hasPlaceHolder" label="Placeholder">
-                <el-input v-model="fieldData.placeholder" placeholder="Placeholder" />
+            <el-form-item v-if="hasPlaceHolder" :label="$t('Placeholder')">
+                <el-input v-model="fieldData.placeholder" :placeholder="$t('Placeholder')" />
             </el-form-item>
-            <el-form-item v-show="isOptionRequired" label="Options *" class="fcal_question_options">
+            <el-form-item v-show="isOptionRequired" :label="$t('Options *')" class="fcal_question_options">
                 <div class="fcal_question_option" v-for="(option, index) in fieldData.options" :key="index">
                     <el-input
                         type="text"
@@ -35,30 +35,30 @@
                         :placeholder="`Option ${index + 1}`"
                         v-model=fieldData.options[index]
                     />
-                    <el-link v-if="isRemovable" type="danger" title="Remove"
+                    <el-link v-if="isRemovable" type="danger" :title="$t('Remove')"
                         :icon="CloseBoldIcon"
                         :underline="false"
                         @click="removeOption(index)">
                     </el-link>
                 </div>
                 <el-link type="primary" :underline="false" @click="addNewOption">
-                    + Add new option
+                    {{ $t('+Add new option') }}
                 </el-link>
             </el-form-item>
             <el-form-item label="Required">
                 <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
-                    <el-radio :label="true">Yes</el-radio>
-                    <el-radio :label="false">No</el-radio>
+                    <el-radio :label="true">{{ $t('Yes') }}</el-radio>
+                    <el-radio :label="false">{{ $t('No') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>
         <template #footer>
             <div class="dialog-footer">
                 <el-button class="fcal_plain_btn" @click="openModal = false">
-                    Cancel
+                    {{ $t('Cancel') }}
                 </el-button>
                 <el-button class="fcal_primary_btn" @click="saveChanges">
-                    Save
+                    {{ $t('Save') }}
                 </el-button>
             </div>
         </template>
@@ -106,7 +106,7 @@ export default {
     },
     computed: {
         modalTitle() {
-            return this.isNewEntry ? 'Add Question' : 'Update Question';
+            return this.isNewEntry ? this.$t('Add Question') : this.$t('Update Question');
         },
         isOptionRequired() {
             return ['dropdown'].includes(this.fieldData.type);

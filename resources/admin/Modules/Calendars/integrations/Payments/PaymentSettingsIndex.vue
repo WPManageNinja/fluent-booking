@@ -2,12 +2,12 @@
     <div class="fcal_settings_body_inner">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>Stripe Payments</h2>
-                <p>Configure stripe to accept payments on your booking events and motenize your time slots</p>
+                <h2>{{ $t('Stripe Payments') }}</h2>
+                <p>{{ $t('PaymentSettingsIndex/configure_stripe_desc') }}</p>
             </div>
             <div class="fcal_settings_actions">
                 <el-button size="large" :loading="saving" @click="saveSettings()" type="primary">
-                    Save Settings
+                    {{ $t('Save Settings') }}
                 </el-button>
             </div>
         </div>

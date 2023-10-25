@@ -1,34 +1,34 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2> <EventIcon/> Event Details </h2>
+            <h2> <EventIcon/> {{ $t('Event Details') }} </h2>
             <el-switch class="fcal_switch" v-model="isEnable" @change="toggleSlotStatus"/>
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
                 <el-form-item
                     v-if="is_board"
-                    label="Event Type">
+                    :label="$t('Event Type')">
                     <el-select
                         v-model="slot.event_type"
                         popper-class="fcal_select"
                     >
-                        <el-option value="single" label="One to One" />
-                        <el-option value="group" label="Group"/>
+                        <el-option value="single" :label="$t('One to One')" />
+                        <el-option value="group" :label="$t('Group')"/>
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="Event Name *" class="fcal_color_select_wrap">
+                <el-form-item :label="$t('Event Name *')" class="fcal_color_select_wrap">
                     <el-input
                         v-model="slot.title"
-                        placeholder="Enter Event Title"
+                        :placeholder="$t('Enter Event Title')"
                     >
                         <template #prepend>
                             <div class="fcal_color_select">
                                 <span class="fcal_color" :style="'background:'+ slot.color_schema "></span>
                                 <el-select
                                     v-model="slot.color_schema"
-                                    placeholder="Select"
+                                    :placeholder="$t('Select')"
                                     style="width: 77px"
                                     popper-class="fcal_color_select_popover"
                                 >
@@ -43,8 +43,8 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="Meeting Duration *">
-                    <el-select v-model="slot.duration" placeholder="Select" popper-class="fcal_select">
+                <el-form-item :label="$t('Meeting Duration *')">
+                    <el-select v-model="slot.duration" :placeholder="$t('Select')" popper-class="fcal_select">
                         <el-option
                             v-for="item in meetingDuration"
                             :key="item.value"
@@ -63,21 +63,21 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="Description">
+                <el-form-item :label="$t('Description')">
                     <el-input
                         v-model="slot.description"
                         type="textarea"
                         :rows="2"
-                        placeholder="Enter Description here"
+                        :placeholder="$t('Enter Description here')"
                     />
                 </el-form-item>
 
-                <el-form-item label="Location *">
+                <el-form-item :label="$t('Location *')">
                     <location-selector :slot="slot"/>
                 </el-form-item>
 
                 <template v-if="isGroupMeeting">
-                    <el-form-item label="Max invitees in a spot">
+                    <el-form-item :label="$t('Max invitees in a spot')">
                         <el-input type="number" :min="1" v-model="slot.max_book_per_slot"></el-input>
                     </el-form-item>
                     <el-checkbox
@@ -85,7 +85,7 @@
                         @change="toggleDisplaySpots"
                         class="fcal_checkbox"
                         type="checkbox"
-                        label="Display remaining spots on booking page">
+                        :label="$t('Display remaining spots on booking page')">
                     </el-checkbox>
                 </template>
             </el-form>

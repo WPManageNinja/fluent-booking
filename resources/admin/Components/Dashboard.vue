@@ -3,7 +3,7 @@
         <div class="fcal_dashboard_overview fcal_dashboard_box">
             <div class="fcal_section_header">
                 <div class="fcal_title">
-                    <h3>Overview</h3>
+                    <h3>{{ $t('Overview') }}</h3>
                 </div>
                 <div class="fcal_actions">
                     <el-date-picker
@@ -12,8 +12,8 @@
                         unlink-panels
                         clearable
                         range-separator="-"
-                        start-placeholder="Start date"
-                        end-placeholder="End date"
+                        :start-placeholder="$t('Start date')"
+                        :end-placeholder="$t('End date')"
                         :shortcuts="shortcuts"
                         popper-class="fcal_daterange_popover"
                         @change="fetchReports"
@@ -56,7 +56,7 @@
                 <div class="fcal_schedule_event_infos">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
-                            Next Meetings
+                            {{ $t('Next Meetings') }}
                         </h1>
                     </div>
 
@@ -69,11 +69,11 @@
                             </span>
                             <div class="description_and_link">
                                 <span class="title" v-html="scheduleTitle(schedule)"></span>
-                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('view') }}</el-link>
                             </div>
                         </div>
                         <div v-else class="fcal_no_activities">
-                            <p>Next meeting not available</p>
+                            <p>{{ $t('Next meeting not available') }}</p>
                         </div>
                     </div>
                     <div v-else>
@@ -84,7 +84,7 @@
                 <div class="fcal_schedule_event_infos">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
-                            Latest Booked Meetings
+                            {{ $t('Latest Booked Meetings') }}
                         </h1>
                     </div>
 
@@ -94,11 +94,11 @@
                                 <el-icon class="fcal_activity_complete_icon"></el-icon>
 
                                 <div class="description_and_link">
-                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>view</el-link>
+                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('view') }}</el-link>
                                 </div>
                             </div>
                             <div v-else class="fcal_no_activities">
-                                <p>No Latest Booked Event Found</p>
+                                <p>{{ $t('No Latest Booked Event Found') }}</p>
                             </div>
                         </div>
                         <div v-else>

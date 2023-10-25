@@ -26,7 +26,7 @@
                             >
                                 <el-option
                                     value="{{guest.email}}"
-                                    label="Guest Email"
+                                    :label="$t('Guest Email')"
                                 ></el-option>
 
 <!--                                <template v-for="(option, index) in inputs">-->
