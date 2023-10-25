@@ -21,7 +21,7 @@ class LandingPageHandler
             add_action('template_redirect', [$this, 'handleSlugDefinedPage'], 1);
         }
 
-        if (isset($_GET['fluent-booking'])) {
+        if (isset($_GET['fluent-booking'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             add_action('init', [$this, 'handleUrlParamsPage']);
         }
     }
@@ -44,7 +44,7 @@ class LandingPageHandler
 
     public function handleUrlParamsPage()
     {
-        $route = sanitize_text_field($_GET['fluent-booking']);
+        $route = sanitize_text_field($_GET['fluent-booking']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 
         if ($route == 'booking') {
@@ -52,16 +52,16 @@ class LandingPageHandler
             return;
         }
 
-        if (empty($_REQUEST['host'])) {
+        if (empty($_REQUEST['host'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return;
         }
 
-        $authorSlug = sanitize_text_field($_REQUEST['host']);
+        $authorSlug = sanitize_text_field($_REQUEST['host']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $slotSlug = null;
 
-        if (!empty($_REQUEST['event'])) {
-            $slotSlug = sanitize_text_field($_REQUEST['event']);
+        if (!empty($_REQUEST['event'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $slotSlug = sanitize_text_field($_REQUEST['event']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         }
 
         $this->routeView($authorSlug, $slotSlug);
@@ -155,8 +155,8 @@ class LandingPageHandler
         $calendarEvent->max_lookup_date = $calendarEvent->getMaxLookUpDate();
         $calendarEvent->min_lookup_date = $calendarEvent->getMinLookUpDate();
 
-        if (!empty($_REQUEST['booking_id'])) {
-            $bookingHash = sanitize_text_field($_REQUEST['booking_id']);
+        if (!empty($_REQUEST['booking_id'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $bookingHash = sanitize_text_field($_REQUEST['booking_id']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $booking = Booking::where('hash', $bookingHash)
                 ->where('event_id', $calendarEvent->id)
                 ->first();
@@ -169,10 +169,10 @@ class LandingPageHandler
 
         $calendarEvent->pre_selects = false;
 
-        if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) {
+        if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $calendarEvent->pre_selects = [
-                'month' => date('m', strtotime($calendarEvent->min_lookup_date)),
-                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date))
+                'month' => date('m', strtotime($calendarEvent->min_lookup_date)), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ];
         }
 
@@ -185,7 +185,7 @@ class LandingPageHandler
             'calendar_event' => $calendarEvent,
             'author'         => $authorProfile,
             'title'          => $calendarEvent->title . ' with ' . $authorProfile['name'],
-            'description'    => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
+            'description'    => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'url'            => home_url($wp->request),
             'css_files'      => [
                 $assetUrl . 'public/saas.css'
@@ -205,7 +205,7 @@ class LandingPageHandler
                 ?>
                 <style>
                     .fcal_phone_wrapper .flag {
-                        background: url(<?php echo $assetUrl.'images/flags_responsive.png' ?>) no-repeat;
+                        background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
                         background-size: 100%;
                     }
                 </style>
@@ -247,12 +247,12 @@ class LandingPageHandler
             $this->handleRescheduleView($booking);
         }
 
-        if ($actionType == 'confirmation' && !empty($_REQUEST['ics']) && $_REQUEST['ics'] == 'download') {
+        if ($actionType == 'confirmation' && !empty($_REQUEST['ics']) && $_REQUEST['ics'] == 'download') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $icsText = BookingService::generateBookingICS($booking);
             // Output the ICS text
             header('Content-Type: text/calendar; charset=utf-8');
             header('Content-Disposition: attachment; filename=event.ics');
-            echo $icsText;
+            echo $icsText; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             die();
         }
 
@@ -265,7 +265,7 @@ class LandingPageHandler
         $data = [
             'title'       => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
             'body'        => $responseHtml,
-            'description' => substr(strip_shortcodes(strip_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
+            'description' => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas_public.css'
             ],
@@ -289,7 +289,7 @@ class LandingPageHandler
 
     private function handleAfterBookingPage()
     {
-        $bookingHash = sanitize_text_field(Arr::get($_REQUEST, 'meeting_hash'));
+        $bookingHash = sanitize_text_field(Arr::get($_REQUEST, 'meeting_hash')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$bookingHash) {
             return;
@@ -301,7 +301,7 @@ class LandingPageHandler
             return;
         }
 
-        $type = Arr::get($_REQUEST, 'type', 'confirmation');
+        $type = Arr::get($_REQUEST, 'type', 'confirmation'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $this->showBookingConfimationPage($booking, $type);
     }
 
@@ -360,8 +360,8 @@ class LandingPageHandler
             ?>
             <div class="fcal_rescheduling_wrap">
                 <h3>You are rescheduling the
-                    booking: <?php echo $booking->getFullBookingDateTimeText($booking->person_time_zone, true); ?>
-                    (<?php echo $booking->person_time_zone; ?>) </h3>
+                    booking: <?php echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
+                    (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
             <?php
         });

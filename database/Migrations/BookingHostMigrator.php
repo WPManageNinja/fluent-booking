@@ -13,7 +13,7 @@ class BookingHostMigrator
         $charsetCollate = $wpdb->get_charset_collate();
         $table = $wpdb->prefix . static::$tableName;
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` BIGINT(20) UNSIGNED NOT NULL,

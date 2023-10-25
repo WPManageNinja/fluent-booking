@@ -215,14 +215,15 @@ class Bootstrap
 
     public function handleAuthCallback()
     {
-        if (!isset($_GET['code'], $_GET['scope'])) {
+        if (!isset($_GET['code'], $_GET['scope'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             return;
         }
 
-        $code = sanitize_text_field($_GET['code']);
-        $scope = sanitize_text_field($_GET['scope']);
 
-        $userId = sanitize_text_field($_GET['state']);
+        $code = sanitize_text_field($_GET['code']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $scope = sanitize_text_field($_GET['scope']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        $userId = sanitize_text_field($_GET['state']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $calendar = Calendar::where('user_id', $userId)->first();
 
         if (!$calendar || !PermissionManager::hasCalendarAccess($calendar)) {

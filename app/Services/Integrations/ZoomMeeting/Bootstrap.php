@@ -133,7 +133,7 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => 'Zoom API Error',
-                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %1s', esc_attr($response->get_error_message())), 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -152,7 +152,7 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Zoom Meeting has been created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Zoom Meeting has been scheduled. %s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            'description' => __(sprintf('Zoom Meeting has been scheduled. %1s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
         ]);
 
         return true;

@@ -802,7 +802,7 @@ class Helper
 
         return BookingMeta::create([
             'booking_id' => $eventId,
-            'meta_key'   => $metaKey,
+            'meta_key'   => $metaKey, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             'value'      => $value
         ]);
     }
@@ -909,7 +909,7 @@ class Helper
     public static function excerpt($text, $max_length = 160)
     {
         // Strip HTML tags and convert entities to their corresponding characters
-        $text = html_entity_decode(strip_tags($text));
+        $text = html_entity_decode(wp_strip_all_tags($text));
 
         // Remove any line breaks, tabs, or extra whitespace
         $text = preg_replace('/\s+/', ' ', trim($text));

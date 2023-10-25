@@ -16,9 +16,23 @@ return function ($file) {
         ($app->make(DeactivationHandler::class))->handle();
     });
 
-    require_once( FLUENT_BOOKING_DIR . 'app/Services/Libs/action-scheduler/action-scheduler.php' );
+    require_once( FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php' );
  
     add_action('plugins_loaded', function () use ($app) {
-        do_action('fluent_booking_loaded', $app);
+        do_action('fluent_booking/loaded', $app);
+
+        $licenseManager = new \FluentBooking\App\Services\PluginManager\LicenseManager();
+        $licenseManager->initUpdater();
+
+        $licenseMessage = $licenseManager->getLicenseMessages();
+
+        if ($licenseMessage) {
+            add_action('admin_notices', function () use ($licenseMessage) {
+                $class = 'notice notice-error fc_message';
+                $message = $licenseMessage['message'];
+                printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), $message);
+            });
+        }
+
     });
 };
