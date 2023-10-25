@@ -515,6 +515,11 @@ class Booking extends Model
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
+    public function getAdminViewUrl()
+    {
+        return Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id='.$this->id);
+    }
+
     public function getIcsDownloadUrl()
     {
         return add_query_arg([
