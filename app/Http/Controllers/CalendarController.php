@@ -248,7 +248,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($id);
 
-        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image']);
+        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image', 'phone']);
 
         if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
@@ -261,6 +261,7 @@ class CalendarController extends Controller
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
+            $calendar->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
         }
 
 
@@ -577,6 +578,7 @@ class CalendarController extends Controller
                 'title'   => sanitize_text_field($value['title']),
                 'enabled' => Arr::isTrue($value, 'enabled'),
                 'sms'     => $this->sanitize_notification_data($value['sms']),
+                'receiver'=> SanitizeService::checkCollection(Arr::get($value, 'receiver'), ['host_number', 'custom_number']),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }

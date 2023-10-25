@@ -860,6 +860,15 @@
                             }
                         }
                     }
+                    &.fcal_sms_radio {
+                        .el-radio__label {
+                            font-size: 14px;
+                        }
+                        .el-radio__inner {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
                 }
             }
             .fcal_integration_form_footer {
@@ -2080,6 +2089,18 @@
                         color: $primaryColor;
                         font-weight: 500;
                     }
+                }
+                .fcal_integration_validation_text {
+                    .el-icon {
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+        .el-form {
+            .fcal_integration_validation_text {
+                i {
+                    vertical-align: middle;
                 }
             }
         }

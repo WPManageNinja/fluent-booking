@@ -1,24 +1,30 @@
 <template>
     <el-form :model="notification.sms" label-position="top" class="fcal_sms_form">
-        <el-form-item label="Number * (with country code)">
-            <popover
-                groupTitle="Shortcodes"
-               :data="smart_codes.texts"
-                placement="bottom-end"
-                :isVisible="numberPopupVisible"
-                class="fcal_popover_shortcode"
-               @command="handleNumberCommand">
-               <template #popoverButton>
-                    <el-input
-                        type="text"
-                        v-model="notification.sms.number">
-                        <template #append>
-                            <el-button :icon="MoreIcon" @click="toggleNumberPopup"></el-button>
-                        </template>
-                    </el-input>
-                </template>
-            </popover>
+        <el-form-item v-if="notification.is_host" label="Receiver *" class="fcal_sms_radio">
+            <el-radio-group v-model="notification.sms.receiver">
+                <el-radio label="host_number"> Host Number</el-radio>
+                <el-radio label="custom_number">Custom Number</el-radio>
+            </el-radio-group>
         </el-form-item>
+        <el-form-item v-if="notification.sms.receiver == 'host_number'">
+            <el-input
+                v-if="host_phone"
+                type="text"
+                :disabled="true"
+                :value="host_phone">
+            </el-input>
+            <p v-else>
+                Please set the host phone number from <span><el-link @click="goToCalendarSettings">here</el-link></span>
+            </p>
+        </el-form-item>
+        <el-form-item v-if="notification.sms.receiver == 'custom_number'">
+            <el-input
+                type="text"
+                placeholder="Enter number with country code"
+                v-model="notification.sms.number">
+            </el-input>
+        </el-form-item>
+        <p v-if="!notification.is_host">This SMS will be sent to the attendee if phone number is provided during booking</p>
         <el-form-item class="fcal_sms_body">
             <template #label>
                 <h3 class="el-form-item__label">
@@ -90,7 +96,9 @@ export default {
                     html: {}
                 };
             }
-        }
+        },
+        host_phone: {},
+        calendar_id: {}
     },
     data() {
         return {
@@ -109,15 +117,8 @@ export default {
         }
     },
     methods: {
-        toggleNumberPopup() {
-            this.numberPopupVisible = !this.numberPopupVisible;
-        },
         toggleBodyPopup() {
             this.bodyPopupVisible = !this.bodyPopupVisible;
-        },
-        handleNumberCommand(command) {
-            this.notification.sms.number += command;
-            this.numberPopupVisible = false;
         },
         handleBodyCommand(command) {
             this.notification.sms.body += command;
@@ -143,6 +144,12 @@ export default {
             } else if (item.unit in limitValues && item.value > limitValues[item.unit]) {
                 item.value = limitValues[item.unit];
             }
+        },
+        goToCalendarSettings() {
+            this.$router.push({
+                name: 'calendar_settings',
+                params: { id: this.calendar_id }
+            });
         }
     }
 }

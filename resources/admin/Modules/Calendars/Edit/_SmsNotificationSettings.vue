@@ -21,7 +21,6 @@
                             {{ notification.title }}
                         </span>
                         <div class="header_right">
-                            <span v-if="!notification.enabled" class="fcal_plain_btn disable"> Disabled </span>
                             <span>
                                 <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
                                     <el-icon><EditPen/></el-icon> Edit
@@ -43,7 +42,13 @@
                 class="fcal_modal fcal_notification_modal"
                 :close-on-click-modal="false"
             >
-                <EditSmsNotificationSettings :smart_codes="smart_codes" v-if="editingNotification.sms" :notification="editingNotification"/>
+                <EditSmsNotificationSettings 
+                    v-if="editingNotification.sms"
+                    :smart_codes="smart_codes"
+                    :host_phone="host_phone"
+                    :calendar_id="calendar_event.calendar_id"
+                    :notification="editingNotification"
+                />
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
@@ -71,7 +76,7 @@ import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 
 export default {
     name: 'SmsNotificationSettings',
-    props: ['calendar_event'],
+    props: ['calendar_event', 'host_phone'],
     components: {
         EditSmsNotificationSettings,
         SaveButton,

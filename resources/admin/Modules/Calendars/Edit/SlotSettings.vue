@@ -75,7 +75,7 @@
                 </template>
                 <div v-if="activeTab == 'sms-notifications'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
-                    <SmsNotificationSettings v-else :calendar_event="slot"/>
+                    <SmsNotificationSettings v-else :calendar_event="slot" :host_phone="calendar.author_profile.phone"/>
                 </div>
             </el-tab-pane>
 
