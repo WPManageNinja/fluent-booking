@@ -105,7 +105,7 @@ class IntegrationHelper
         ];
 
         if ($body) {
-            $args['body'] = json_encode($body);
+            $args['body'] = wp_json_encode($body);
         }
 
         $request = wp_remote_request($url, $args);

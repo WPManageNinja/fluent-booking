@@ -144,12 +144,12 @@ class Booking extends Model
 
     public function scopeUpcoming($query)
     {
-        return $query->where('end_time', '>=', date('Y-m-d H:i:s'));
+        return $query->where('end_time', '>=', date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function scopePast($query)
     {
-        return $query->where('end_time', '<', date('Y-m-d H:i:s'));
+        return $query->where('end_time', '<', date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function scopeApplyComputedStatus($query, $status)
@@ -166,12 +166,12 @@ class Booking extends Model
         }
 
         if ($status == 'upcoming') {
-            return $query->where('end_time', '>=', date('Y-m-d H:i:s'))
+            return $query->where('end_time', '>=', date('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 ->where('status', 'scheduled');
         }
 
         if ($status == 'completed') {
-            return $query->where('end_time', '<', date('Y-m-d H:i:s'))
+            return $query->where('end_time', '<', date('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 ->where('status', '!=', 'cancelled')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }
@@ -298,7 +298,7 @@ class Booking extends Model
             return $this->phone;
         }
 
-        return strip_tags($this->getLocationDetailsHtml());
+        return wp_strip_all_tags($this->getLocationDetailsHtml());
     }
 
     public function getMessage()
@@ -457,7 +457,7 @@ class Booking extends Model
 
         return BookingMeta::create([
             'booking_id' => $this->id,
-            'meta_key' => $key,
+            'meta_key' => $key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             'value' => $value
         ]);
     }

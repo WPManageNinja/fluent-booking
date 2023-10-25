@@ -18,7 +18,7 @@ class BookingActivityMigrator
         $table = $wpdb->prefix .'fcal_booking_activity';
         $indexPrefix = $wpdb->prefix .'fcal_ba_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $sql = "CREATE TABLE $table (
                 `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` BIGINT UNSIGNED NOT NULL,
