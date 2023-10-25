@@ -2,12 +2,12 @@
     <div class="fcal_settings_landing_page">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>General Host Settings</h2>
-                <p class="short-desc">Manage general settings for this calendar</p>
+                <h2>{{ $t('General Host Settings') }}</h2>
+                <p class="short-desc">{{ $t('Manage general settings for this calendar') }}</p>
             </div>
             <div class="fcal_settings_actions">
                 <a v-if="settings.enabled" :href="share_url" style="text-decoration: none;" target="_blank" rel="noopener noreferrer" class="fcal_plain_btn">
-                    <el-icon><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg></el-icon> <span>View</span>
+                    <el-icon><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg></el-icon> <span>{{ $t('view') }}</span>
                 </a>
             </div>
         </div>
@@ -18,47 +18,45 @@
                     <el-col :span="12">
                         <el-form-item label="Calendar Avatar">
                             <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar" />
-                            <p class="fcal_input_desc">Recommended Image Size: 600x600. Square Orientation</p>
+                            <p class="fcal_input_desc">{{ $t('Recommended Image Size: 600x600.Square Orientation') }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Featured Image">
                             <photo-widget class="fcal_featured_image_upload" style="width: 100%;" v-model="calendar.author_profile.featured_image" />
-                            <p class="fcal_input_desc">Will be shown on landing page social share meta or profile block</p>
+                            <p class="fcal_input_desc">{{ $t('Will be shown on landing page social share meta or profile block') }}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="Host Name / Calendar Title">
+                <el-form-item :label="$t('Host Name / Calendar Title')">
                     <el-input
                         v-model="calendar.title"
                         type="text"
-                        placeholder="Enter Name of this calendar"
+                        :placeholder="$t('Enter Name of this calendar')"
                     />
-                    <p class="fcal_input_desc" v-if="calendar.type == 'simple'">Should be same as the host name</p>
+                    <p class="fcal_input_desc" v-if="calendar.type == 'simple'">{{ $t('Should be same as the host name') }}</p>
                 </el-form-item>
-                <el-form-item label="About">
+                <el-form-item :label="$t('About')">
                     <el-input
                         v-model="calendar.description"
                         type="textarea"
                         :rows="3"
-                        placeholder="Enter description for this person / calendar"
+                        :placeholder="$t('Enter description for this person / calendar')"
                     />
-                    <p class="fcal_input_desc">Will be shown on your calendar landing page / team block UI</p>
+                    <p class="fcal_input_desc">{{ $t('Will be shown on your calendar landing page / team block UI') }}</p>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="settings.enabled">Enable Landing Page
-                        Features for this calendar
-                    </el-checkbox>
+                    <el-checkbox true-label="yes" false-label="no" v-model="settings.enabled">{{ $t('Enable Landing Page Features for this calendar') }}</el-checkbox>
                 </el-form-item>
                 <template v-if="settings.enabled == 'yes'">
-                    <el-form-item label="Which Booking Forms to Show?">
+                    <el-form-item :label="$t('Which Booking Forms to Show?')">
                         <el-radio-group v-model="settings.show_type">
-                            <el-radio label="all">All Active Booking Forms</el-radio>
-                            <el-radio label="selected_only">Only Selected Active Booking Types</el-radio>
+                            <el-radio label="all">{{ $t('All Active Booking Forms') }}</el-radio>
+                            <el-radio label="selected_only">{{ $t('Only Selected Active Booking Types') }}</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item v-if="settings.show_type == 'selected_only'"
-                                  label="Please select which Booking Forms to show in the page?">
+                                  :label="$t('Please select which Booking Forms to show in the page?')">
                         <el-checkbox-group class="fcal_radio_lined" v-model="settings.enabled_slots">
                             <el-checkbox v-for="slot in calendar.slots" :key="slot.id" :label="slot.id">{{
                                     slot.title
@@ -72,8 +70,8 @@
                         @click="saveSettings()"
                         :disabled="saving"
                         v-loading="saving"
-                        type="primary">Save
-                        Settings
+                        type="primary">
+                        {{ $t('Save Settings') }}
                     </el-button>
                 </el-form-item>
             </el-form>

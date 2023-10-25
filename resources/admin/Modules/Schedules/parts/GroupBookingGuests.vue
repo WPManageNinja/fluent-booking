@@ -3,7 +3,7 @@
         <div class="fcal_schedule_event_infos_body">
             <div class="fcal_schedule_group_header">
                 <h1 class="fcal_header_title">
-                    Event Guests
+                    {{ $t('Event Guests') }}
                 </h1>
 
                 <div class="fcal_schedule_details_header_action">
@@ -11,7 +11,7 @@
                         v-model="search"
                         @keyup.enter="fetchGuests"
                         clearable
-                        placeholder="Search Host">
+                        :placeholder="$t('Search Host')">
                         <template #append>
                             <el-button @click="fetchGuests">
                                 <el-icon><Search /></el-icon>
@@ -21,7 +21,7 @@
                     <el-tooltip
                         class="fcal_tooltip_box"
                         effect="dark"
-                        content="Export Hosts"
+                        :content="$t('Export Hosts')"
                         placement="top-start"
                     >
                         <el-button class="fcal_export_btn" @click="exportHosts(group_id)"><el-icon><Download /></el-icon></el-button>
@@ -34,7 +34,7 @@
                 v-else
                 stripe
                 :data="attendees"
-                empty-text="No Host Found"
+                :empty-text="$t('No Host Found')"
             >
 
                 <el-table-column type="expand">
@@ -42,19 +42,19 @@
                         <div class="fcal_group_booking_guests_wrap">
                             <div class="fcal_schedule_details_event">
                                 <div v-if="scope.row.message" class="fcal_schedule_details_event_item">
-                                    <h3>Message</h3>
+                                    <h3>{{ $t('Message') }}</h3>
                                     <div class="fcal_spot_details_value">
                                         {{ scope.row.message }}
                                     </div>
                                 </div>
                                 <div class="fcal_schedule_details_event_item">
-                                    <h3>Timezone</h3>
+                                    <h3>{{ $t('Timezone') }}</h3>
                                     <div class="fcal_spot_details_value">
                                         {{ scope.row.person_time_zone }}
                                     </div>
                                 </div>
                                 <div class="fcal_schedule_details_event_item">
-                                    <h3>Booking URL</h3>
+                                    <h3>{{ $t('Booking URL') }}</h3>
                                     <div class="fcal_spot_details_value">
                                         <a :href="scope.row.source_url" target="_blank">{{ scope.row.source_url }}</a>
                                     </div>
@@ -78,22 +78,22 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="Name" width="150">
+                <el-table-column :label="$t('Name')" width="150">
                     <template #default="scope">
                         {{ scope.row.first_name }} {{ scope.row.last_name }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Email" width="200">
+                <el-table-column :label="$t('Email')" width="200">
                     <template #default="scope">
                         {{ scope.row.email }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Status" width="120">
+                <el-table-column :label="$t('Status')" width="120">
                     <template #default="scope">
                         {{ scope.row.status }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Booked At" width="150">
+                <el-table-column :label="$t('Booked At')" width="150">
                     <template #default="scope">
                         {{ toCurrentTimezone(scope.row.created_at, 'DD MMM YYYY, hh:mma') }}
                     </template>
@@ -106,7 +106,7 @@
                             </span>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item><el-icon><Close /></el-icon> Cancel</el-dropdown-item>
+                                    <el-dropdown-item><el-icon><Close /></el-icon> {{ $t('Cancel') }}</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>

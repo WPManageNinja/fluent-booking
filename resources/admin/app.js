@@ -139,11 +139,7 @@ app.mixin({
             return !!window.fluentFrameworkAdmin.supported_features[feature];
         },
         $t(str) {
-            // let transString = window.FluentCalendarApp.form_settings_str[str];
-            // if (transString) {
-            //     return transString;
-            // }
-            return str;
+            return window.fluentFrameworkAdmin.trans[str] || str;
         },
         ucFirst(str) {
             if (!str) {

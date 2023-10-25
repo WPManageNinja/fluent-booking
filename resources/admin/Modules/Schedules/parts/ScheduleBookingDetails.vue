@@ -12,17 +12,17 @@
                             <el-dropdown-menu>
                                 <el-dropdown-item @click="updateScheduleStatus('completed')">
                                     <el-icon><Check /></el-icon>
-                                    Mark As Completed
+                                    {{ $t('Mark As Completed') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item v-if="showing_booking.status!='no_show'" @click="updateScheduleStatus('no_show')">
                                     <el-icon><Hide /></el-icon>
-                                    No Show
+                                    {{ $t('No Show') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="cancelDialog = true">
                                     <el-icon>
                                         <Close/>
                                     </el-icon>
-                                    Cancel
+                                    {{ $t('Cancel') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -34,42 +34,42 @@
                 <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
-                            Meeting Information
+                            {{ $t('Meeting Information') }}
                         </h1>
                     </div>
 
                     <div class="fcal_schedule_details_event">
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Meeting Host</h3>
+                            <h3>{{ $t('Meeting Host') }}</h3>
                             <p>{{ showing_booking.author.name }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Meeting Title</h3>
+                            <h3>{{ $t('Meeting Title') }}</h3>
                             <p>{{ showing_booking.calendar_event.title }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Meeting Duration</h3>
-                            <p>{{ showing_booking.slot_minutes }} minutes</p>
+                            <h3>{{ $t('Meeting Duration') }}</h3>
+                            <p>{{ showing_booking.slot_minutes }} {{ $t('minutes') }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
-                            <h3>Location</h3>
+                            <h3>{{ $t('Location') }}</h3>
                             <div v-html="showing_booking.location"></div>
                         </div>
                         <div
                             v-if="showing_booking.event_type != 'group'"
                             class="fcal_schedule_details_event_item">
-                            <h3>Status</h3>
+                            <h3>{{ $t('Status') }}</h3>
                             <p>{{ showing_booking.status }}</p>
                         </div>
                         <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'" class="fcal_schedule_details_event_item">
-                            <h3>Booking URL</h3>
+                            <h3>{{ $t('Booking URL') }}</h3>
                             <div class="fcal_spot_details_value">
                                 <a target="_blank" rel="nofollow"
                                    :href="showing_booking.source_url">{{ showing_booking.source_url }}</a>
                             </div>
                         </div>
                         <div v-if="showing_booking.source != 'web'" class="fcal_schedule_details_event_item">
-                            <h3>Booked From</h3>
+                            <h3>{{ $t('Booked From') }}</h3>
                             <div class="fcal_spot_details_value"
                                  v-html="showing_booking.source">
                             </div>
@@ -79,7 +79,7 @@
                          class="fcal_schedule_details_event_additional fcal_schedule_details_event_item">
                         <editable-booking-data
                             input_type="textarea"
-                            input_label="Internal Note"
+                            :input_label="$t('Internal Note')"
                             data_key="internal_note"
                             @dataUpdated="handleDataUpdated"
                             :booking="showing_booking">
@@ -100,18 +100,17 @@
         <el-dialog
             v-model="cancelDialog"
             width="30%"
-            title="Cancel Meeting"
+            :title="$t('Cancel Meeting')"
             class="fcal_modal"
         >
             <div style="text-align: center;">
                 <h3>{{ showing_booking.calendar_event.title }}</h3>
-                <p class="fcal_meeting_with">with <b>{{ showing_booking.first_name }} {{
+                <p class="fcal_meeting_with">{{ $t('with') }} <b>{{ showing_booking.first_name }} {{
                         showing_booking.last_name
                     }}</b></p>
                 <p class="fcal_meeting_time">{{ meetingTime }}</p>
-                <p>Please confirm that you would like to cancel this event. A cancellation email will also go out to the
-                    invitee</p>
-                <el-input type="textarea" v-model="cancel_reason" placeholder="Reason for cancellation"></el-input>
+                <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
+                <el-input type="textarea" v-model="cancel_reason" :placeholder="$t('Reason for cancellation')"></el-input>
             </div>
             <template #footer>
               <span class="dialog-footer">
@@ -119,14 +118,14 @@
                     @click="cancelDialog = false"
                     class="fcal_plain_btn"
                 >
-                    No, Don't cancel
+                    {{ $t("No, Don't cancel") }}
                 </el-button>
                 <el-button
                     v-loading="updating"
                     :disabled="updating"
                     class="fcal_primary_btn"
                     @click="cancelEvent()">
-                  Yes, Cancel
+                  {{ $t('Yes, Cancel') }}
                 </el-button>
               </span>
             </template>

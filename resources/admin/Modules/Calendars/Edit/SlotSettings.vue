@@ -10,7 +10,7 @@
 
             <div class="fcal_actions">
                 <el-button class="fcal_plain_btn" @click="openShare = true">
-                    <el-icon><Share /></el-icon> Share
+                    <el-icon><Share /></el-icon> {{ $t('Share') }}
                 </el-button>
             </div>
         </div>
@@ -26,7 +26,7 @@
                     <el-icon>
                         <EventIcon/>
                     </el-icon>
-                    Event Details
+                    {{ $t('Event Details') }}
                 </template>
                 <div v-if="activeTab == 'basic-info'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -42,7 +42,7 @@
                     <el-icon>
                         <ScheduleIcon/>
                     </el-icon>
-                    Schedule Settings
+                    {{ $t('Schedule Settings') }}
                 </template>
                 <div v-if="activeTab == 'schedule-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -58,7 +58,7 @@
                     <el-icon>
                         <Message/>
                     </el-icon>
-                    Email Notifications
+                    {{ $t('Email Notifications') }}
                 </template>
                 <div v-if="activeTab == 'email-notifications'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -68,7 +68,7 @@
 
             <el-tab-pane name="question-settings">
                 <template #label>
-                    <el-icon><QuestionIcon/></el-icon> Booking Questions
+                    <el-icon><QuestionIcon/></el-icon> {{ $t('Booking Questions') }}
                 </template>
                 <div v-if="activeTab == 'question-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -81,7 +81,7 @@
                     <el-icon>
                         <Money/>
                     </el-icon>
-                    Payment Settings
+                    {{ $t('Payment Settings') }}
                 </template>
                 <div class="fcal_create_calendar_body" v-if="activeTab === 'payment-settings'">
                     <el-skeleton v-if="loading"/>
@@ -98,7 +98,7 @@
                     <el-icon>
                         <Link/>
                     </el-icon>
-                    Webhooks Feeds
+                    {{ $t('Webhooks Feeds') }}
                 </template>
                 <div v-if="activeTab == 'webhooks-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -115,7 +115,7 @@
                 <el-icon>
                     <Connection/>
                 </el-icon>
-                Integrations
+                  {{ $t('Integrations') }}
               </template>
               <div class="fcal_create_calendar_body" v-if="activeTab === 'integrations'">
                 <el-skeleton v-if="loading"/>

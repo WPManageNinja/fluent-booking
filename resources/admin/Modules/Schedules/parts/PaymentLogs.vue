@@ -3,16 +3,16 @@
         <div class="fcal_schedule_event_infos_body">
             <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_header">
                 <h1 class="fcal_header_title">
-                    Payment History
+                    {{ $t('Payment History') }}
                 </h1>
             </div>
             <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_event">
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Name</h3>
+                    <h3>{{ $t('Name') }}</h3>
                     <p>{{ booking.first_name }} {{ booking.last_name }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Email</h3>
+                    <h3>{{ $t('Email') }}</h3>
                     <p>{{ booking.email }}</p>
                 </div>
             </div>
@@ -20,9 +20,9 @@
             <table class="fcal_payment_history_table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
+                        <th>{{ $t('Name') }}</th>
+                        <th>{{ $t('Quantity') }}</th>
+                        <th>{{ $t('Price') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,39 +35,39 @@
                 <tfoot>
                     <tr>
                         <th></th>
-                        <th>Total:</th>
+                        <th>{{ $t('Total:') }}</th>
                         <td><span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.total_amount / 100) }}</td>
                     </tr>
                 </tfoot>
             </table>
 
             <div v-if="booking.payment_order.transaction && booking.payment_order.transaction.id" class="fcal_payment_transaction_lists">
-                <h2>Transaction Details</h2>
+                <h2>{{ $t('Transaction Details') }}</h2>
                 <div class="fcal_schedule_details_event">
                     <div class="fcal_schedule_details_event_item">
-                        <h3>Payment Method</h3>
+                        <h3>{{ $t('Payment Method') }}</h3>
                         <p class="payment_method">{{ booking.payment_order.transaction.payment_method }}</p>
                     </div>
                     <div v-if="booking.payment_order.transaction.card_last_4" class="fcal_schedule_details_event_item">
-                        <h3>Card Last 4</h3>
+                        <h3>{{ $t('Card Last 4') }}</h3>
                         <p class="card_last_4">
                             <span>{{ booking.payment_order.transaction.card_brand}}</span>...{{ booking.payment_order.transaction.card_last_4 }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
-                        <h3>Payment Total</h3>
+                        <h3>{{ $t('Payment Total') }}</h3>
                         <p>
                             <span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.transaction.total / 100) }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
-                        <h3>Payment Status</h3>
+                        <h3>{{ $t('Payment Status') }}</h3>
                         <p class="payment_status" :class="booking.payment_order.transaction.status">
                             {{ booking.payment_order.transaction.status }}
                         </p>
                     </div>
                     <div v-if="booking.payment_order.transaction.vendor_charge_id" class="fcal_schedule_details_event_item">
-                        <h3>Transaction ID</h3>
+                        <h3>{{ $t('Transaction ID') }}</h3>
                         <p :class="booking.payment_order.transaction.vendor_charge_id">
                             <a :href="'https://dashboard.stripe.com/payments/'+booking.payment_order.transaction.vendor_charge_id" target="_blank">{{booking.payment_order.transaction.vendor_charge_id}}</a>
 

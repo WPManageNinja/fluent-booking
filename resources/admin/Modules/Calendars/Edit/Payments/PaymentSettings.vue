@@ -6,7 +6,7 @@
                     <el-icon>
                         <Money/>
                     </el-icon>
-                    Payment Settings
+                    {{ $t('Payment Settings') }}
                 </h2>
                 <el-button
                     v-if="global_enabled"
@@ -15,7 +15,7 @@
                     type="primary"
                     @click="update()"
                 >
-                    Update Settings
+                    {{ $t('Update Settings') }}
                 </el-button>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <el-form v-else :model="paymentSettings" label-position="top">
                 <el-form-item>
                     <el-checkbox true-label="yes" false-label="no" v-model="paymentSettings.enabled">
-                        Enable this event as Paid and collect payment on booking
+                        {{ $t('PaymentSettings/enable_payment_description') }}
                     </el-checkbox>
                 </el-form-item>
                 <template v-if="paymentSettings.enabled === 'yes'">
@@ -47,7 +47,7 @@
                                 </el-col>
                             </el-row>
                             <el-link @click="addItem" style="cursor: pointer;">
-                                Add more item
+                                {{ $t('Add more item') }}
                                 <el-icon>
                                     <Plus/>
                                 </el-icon>
@@ -58,7 +58,8 @@
             </el-form>
         </div>
         <div v-if="!global_enabled" class="fcal_settings_body">
-            <p class="fcal_empty_text">In order to see this setting, you need to enable global Stripe payment first from the <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">Settings Page.<span class="anim-icon">👈</span></router-link></p>
+            <p class="fcal_empty_text">{{ $t('PaymentSettings/enable_stripe_from_global_settings') }} <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
+                {{ $t('Settings Page') }}.<span class="anim-icon">👈</span></router-link></p>
         </div>
     </div>
 </template>
