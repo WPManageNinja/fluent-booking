@@ -1,14 +1,14 @@
 <template>
     <el-popconfirm
         width="220"
-        confirm-button-text="Confirm"
-        cancel-button-text="No"
+        :confirm-button-text="$t('Confirm')"
+        :cancel-button-text="$t('No')"
         :title="message"
         @confirm="confirm"
     >
         <template #reference>
             <slot name="reference">
-                <el-button>Delete</el-button>
+                <el-button>{{ $t('Delete') }}</el-button>
             </slot>
         </template>
     </el-popconfirm>

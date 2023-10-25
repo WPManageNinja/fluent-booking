@@ -19,7 +19,7 @@
                                 step="00:15"
                                 end="23:45"
                                 :max-time="slot.end"
-                                placeholder="Start"
+                                :placeholder="$t('Start')"
                                 popper-class="fcal_select"
                 />
                 <span class="fcal_sep"></span>
@@ -28,7 +28,7 @@
                                 step="00:15"
                                 :min-time="slot.start"
                                 end="23:45"
-                                placeholder="End"
+                                :placeholder="$t('End')"
                                 popper-class="fcal_select"
                 />
 
@@ -40,7 +40,7 @@
                     @click="removeSlot(index)"
                 />
             </div>
-            <span v-else class="fcal_unavailable_day">Unavailable</span>
+            <span v-else class="fcal_unavailable_day">{{ $t('Unavailable') }}</span>
         </div>
         <div v-if="config.enabled" class="fcal_add_slot">
             <el-button text :icon="PlusIcon" @click="addSlot" />

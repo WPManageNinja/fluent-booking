@@ -13,7 +13,7 @@
             </div>
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="saveSettings">
-                    Continue
+                    {{ $t('Continue') }}
                 </el-button>
             </div>
         </div>

@@ -14,14 +14,14 @@
                                     <el-icon>
                                         <SwitchButton/>
                                     </el-icon>
-                                    Disable
+                                    {{ $t('Disable') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item command="enable" v-else>Enable this event</el-dropdown-item>
+                                <el-dropdown-item command="enable" v-else>{{ $t('Enable this event') }}</el-dropdown-item>
                                 <el-dropdown-item command="delete">
                                     <el-icon>
                                         <Delete/>
                                     </el-icon>
-                                    Delete
+                                    {{ $t('Delete') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -29,7 +29,7 @@
                 </div>
             </h3>
             <p class="fcal_slot_meta">
-                <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} minutes</span>
+                <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} {{ $t('minutes') }}</span>
                 <span class="fcal_slog_meta_event">
                     <span class="icons">
                         <el-icon><User/></el-icon>
@@ -52,14 +52,14 @@
                     <el-icon>
                         <Share/>
                     </el-icon>
-                    Share
+                    {{ $t('Share') }}
                 </el-button>
 
                 <el-button class="fcal_plain_btn" @click="editSlot">
                     <el-icon>
                         <EditPen/>
                     </el-icon>
-                    Edit
+                    {{ $t('Edit') }}
                 </el-button>
 
             </div>
@@ -69,7 +69,7 @@
                     :disabled="working"
                     @click="updateStatus('active')"
                     class="fcal_primary_btn fcal_turn_on_btn">
-                    Turn On
+                    {{ $t('Turn On') }}
                 </el-button>
             </div>
         </div>
@@ -151,9 +151,9 @@ export default {
             this.isCopied = true;
 
             if (this.slot.public_url) {
-                this.$handleSuccess('URL has been copied to your clipboard');
+                this.$handleSuccess(this.$t('URL has been copied to your clipboard'));
             } else {
-                this.$handleSuccess('Shortcode has been copied to your clipboard');
+                this.$handleSuccess(this.$t('Shortcode has been copied to your clipboard'));
             }
 
             setTimeout(() => {
@@ -188,8 +188,8 @@ export default {
             if (command == 'delete') {
                 this.$confirm('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted',
                     'Delete Booking Type', {
-                        confirmButtonText: 'Delete',
-                        cancelButtonText: 'Cancel',
+                        confirmButtonText: this.$t('Delete'),
+                        cancelButtonText: this.$t('Cancel'),
                         type: 'warning'
                     })
                     .then(() => {

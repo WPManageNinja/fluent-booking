@@ -2,24 +2,24 @@
     <div class="fcal_calendar_settings">
         <div class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>Zoom Integrations Settings</h2>
-                <p>Connect your Zoom account to create meeting when a event is booked.</p>
+                <h2>{{ $t('Zoom Integrations Settings') }}</h2>
+                <p>{{ $t('Connect your Zoom account to create meeting when a event is booked.') }}</p>
             </div>
         </div>
         <el-skeleton :rows="4" animated v-if="loading"/>
         <div v-else class="fcal_calendar_body">
             <div v-if="connection" class="fcal_remote_calendar_block">
                 <each-zoom-account @disconnected="fetchConnection()" :calendar_id="calendar.id" :connectedAccount="connection"/>
-                <p style="padding: 10px 20px;">Your Zoom Account is connected. Please don't forget to set the meeting location as "Zoom Video" if you want to create meeting in zoom.</p>
+                <p style="padding: 10px 20px;">{{ $t('UserZoomSettings/zoom_meeting_location_desc') }}</p>
             </div>
             <div v-else class="fcal_box_padded">
-                <h3>Connect your Zoom account to create dynamic meeting in zoom for your bookings.</h3>
+                <h3>{{ $t('UserZoomSettings/connect_zoom_desc') }}</h3>
                 <el-button @click="showingForm = true" type="primary">
-                    Connect Your Zoom Account
+                    {{ $t('Connect Your Zoom Account') }}
                 </el-button>
 
                 <el-dialog :append-to-body="true" :close-on-click-modal="false" v-model="showingForm"
-                           title="Connect Your Zoom Account" width="50%">
+                           :title="$t('Connect Your Zoom Account')" width="50%">
                     <integration-form @connected="fetchConnection()"
                                       :calendar_id="calendar.id"
                                       v-if="showingForm"

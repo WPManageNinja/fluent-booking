@@ -7,7 +7,7 @@
                     <el-icon>
                         <Link/>
                     </el-icon>
-                    Webhook Feeds
+                    {{ $t('Webhook Feeds') }}
                 </h2>
 
                 <el-button
@@ -18,13 +18,13 @@
                     <el-icon>
                         <Back/>
                     </el-icon>
-                    Back
+                    {{ $t('Back') }}
                 </el-button>
                 <el-button v-else class="fcal_primary_btn2" @click="add">
                     <el-icon>
                         <Plus/>
                     </el-icon>
-                    Add New Webhook
+                    {{ $t('Add New Webhook') }}
                 </el-button>
             </div>
         </div>
@@ -60,7 +60,7 @@
                                 </el-icon>
                             </el-button>
                             <el-popconfirm
-                                title="Are you sure to delete this webhook?"
+                                :title="$t('Are you sure to delete this webhook?')"
                                 popper-class="fcal_confirm_dialog"
                                 confirm-button-type="danger"
                                 @confirm="deleteWebhook(feed.id)"
@@ -77,8 +77,8 @@
                     </div>
                 </div>
                 <p v-else>
-                    You don't have any feeds configured. Let's go
-                    <el-link :underline="true" @click="add">create one!</el-link>
+                    {{ $t("You don't have any feeds configured. Let's go") }}
+                    <el-link :underline="true" @click="add">{{ $t('create one!') }}</el-link>
                 </p>
             </template>
         </div>

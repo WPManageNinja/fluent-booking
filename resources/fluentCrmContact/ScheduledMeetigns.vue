@@ -81,7 +81,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .fcal_crm_table_block {
     margin-bottom: 30px;
     border-bottom: 2px solid #607D8B;

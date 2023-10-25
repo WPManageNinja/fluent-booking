@@ -27,7 +27,7 @@
                         v-model="filters.search"
                         @keyup.enter="fetchSchedules"
                         clearable
-                        placeholder="Search Booking"
+                        :placeholder="$t('Search Booking')"
                         class="fcal_search_input"
                     >
                         <template #append>
@@ -40,13 +40,13 @@
                     <el-select v-if="filters.author == 'me'"
                         v-model="filters.event_type"
                         class="fcal_select"
-                        aria-placeholder="Select Event Types"
+                        :aria-placeholder="$t('Select Event Types')"
                         popper-class="fcal_select"
                         @change="handlePeriodChange()"
                        placement="bottom"
                     >
                         <template v-if="event_types.length">
-                            <el-option value="all" label="All Events" />
+                            <el-option value="all" :label="$t('All Events')" />
                             <el-option v-for="event in event_types" :key="event.id" 
                                 :value="event.id" :label="event.label">
                             </el-option>
@@ -59,9 +59,9 @@
                         @change="handlePeriodChange()"
                         placement="bottom"
                     >
-                        <el-option value="me" label="My Meetings"></el-option>
+                        <el-option value="me" :label="$t('My Meetings')"></el-option>
                         <template v-if="all_hosts.length">
-                            <el-option value="all" label="All Meetings" />
+                            <el-option value="all" :label="$t('All Meetings')" />
                             <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
                         </template>
                     </el-select>
@@ -85,10 +85,10 @@
                         <el-select
                             v-model="query.eventType"
                             class="fcal_select"
-                            placeholder="Event Type"
+                            :placeholder="$t('Event Type')"
                             popper-class="fcal_select">
-                            <el-option value="single">Single</el-option>
-                            <el-option value="group">Group</el-option>
+                            <el-option value="single">{{ $t('Single') }}</el-option>
+                            <el-option value="group">{{ $t('Group') }}</el-option>
                         </el-select>
                         <el-select
                             v-model="query.status"
@@ -106,10 +106,10 @@
                             <el-icon>
                                 <CircleClose/>
                             </el-icon>
-                            Discard
+                            {{ $t('Discard') }}
                         </el-button>
                         <el-button class="fcal_primary_btn" @click="fetchSchedules">
-                            Submit
+                            {{ $t('Submit') }}
                         </el-button>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-empty v-if="!schedulesLength" description="No bookings found based on your filter"/>
+                            <el-empty v-if="!schedulesLength" :description="$t('No bookings found based on your filter')"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
                             <pagination :pagination="pagination" @fetch="fetchSchedules"/>

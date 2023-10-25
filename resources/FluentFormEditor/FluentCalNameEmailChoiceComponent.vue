@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_input_groups">
-        <el-form-item label="Select Guest Email Field">
-            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.email_field" placeholder="Select Guest Email Field">
+        <el-form-item :label="$t('Select Guest Email Field')">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.email_field" :placeholder="$t('Select Guest Email Field')">
                 <el-option
                     v-for="(item, itemName) in dependencies"
                     :key="itemName"
@@ -10,8 +10,8 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="Select Guest Name Field">
-            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.name_field" placeholder="Select Guest Name Field">
+        <el-form-item :label="$t('Select Guest Name Field')">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.name_field" :placeholder="$t('Select Guest Name Field')">
                 <el-option
                     v-for="(item, itemName) in dependencies"
                     :key="itemName"
