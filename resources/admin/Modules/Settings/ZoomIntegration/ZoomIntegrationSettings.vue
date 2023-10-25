@@ -48,11 +48,10 @@
             </div>
         </div>
 
-        <el-dialog :append-to-body="true" :close-on-click-modal="false" v-model="showingForm"
+        <el-dialog :append-to-body="true" :close-on-click-modal="false" class="fcal_dialog" v-model="showingForm"
                    title="Add New Zoom User Account" width="50%">
             <integration-form @connected="fetchConnectedUsers()" v-if="showingForm" :form_fields="form_fields" @close="showingForm = false"/>
         </el-dialog>
-
     </div>
 </template>
 
@@ -92,9 +91,6 @@ export default {
                     this.loading = false;
                 });
         },
-        disconnect() {
-
-        }
     },
     mounted() {
         this.fetchConnectedUsers();
