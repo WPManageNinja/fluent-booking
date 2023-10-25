@@ -21,7 +21,7 @@ class BookingElement extends BaseFieldManager
      * @var string
      */
     protected $wrapperClass = 'fcal_booking_elem';
-    
+
     public function __construct()
     {
         parent::__construct(
@@ -30,6 +30,7 @@ class BookingElement extends BaseFieldManager
             ['booking', 'calendar'],
             'advanced'
         );
+
         add_filter('fluentform/response_render_fcal_booking', array($this, 'renderResponse'), 10, 3);
         add_filter('fluentform/select_group_component_ajax_options', array($this, 'getCalendarOptions'));
 
@@ -37,7 +38,7 @@ class BookingElement extends BaseFieldManager
             wp_enqueue_script('fluentcal_ff_editor_extended', FLUENT_BOOKING_URL . 'assets/admin/fluentform.js', [], '1.0.0', true);
         });
     }
-    
+
     function getComponent()
     {
         return [
@@ -50,13 +51,13 @@ class BookingElement extends BaseFieldManager
             'settings'       => array(
                 'label'              => __('FluentBooking Field', 'fluent-booking-pro'),
                 'admin_field_label'  => '',
-                'event_id'            => '',
+                'event_id'           => '',
                 'booking_calendar'   => '',
                 'conditional_logics' => array(),
                 'container_class'    => '',
-                'cal_guest_fields' => [
+                'cal_guest_fields'   => [
                     'email_field' => '',
-                    'name_field' => ''
+                    'name_field'  => ''
                 ],
                 'validation_rules'   => array(
                     'required' => [
@@ -72,7 +73,7 @@ class BookingElement extends BaseFieldManager
             ),
         ];
     }
-    
+
     public function getGeneralEditorElements()
     {
         return [
@@ -85,7 +86,7 @@ class BookingElement extends BaseFieldManager
             'validation_rules',
         ];
     }
-    
+
     public function getAdvancedEditorElements()
     {
         return [
@@ -94,26 +95,26 @@ class BookingElement extends BaseFieldManager
             'conditional_logics'
         ];
     }
-    
+
     public function getEditorCustomizationSettings()
     {
         return [
-            'event_id' => [
+            'event_id'         => [
                 'template' => 'selectGroup',
                 'label'    => __('Select Calendar', 'fluent-booking-pro'),
             ],
             'cal_guest_fields' => [
-                'template' => 'CustomSettingsField',
-                'label'    => __('Guest Fields', 'fluent-booking-pro'),
+                'template'      => 'CustomSettingsField',
+                'label'         => __('Guest Fields', 'fluent-booking-pro'),
                 'componentName' => 'FluentCalNameEmailChoiceComponent'
             ],
         ];
     }
-    
+
     /**
      * Compile and echo the html element
      * @param array $data [element data]
-     * @param stdClass $form [Form Object]
+     * @param object $form [Form Object]
      * @return void
      */
     public function render($data, $form)
@@ -134,8 +135,8 @@ class BookingElement extends BaseFieldManager
         );
 
         App::make('view')->render('public.fluentform.calendar', [
-            'element_id'    => $element_id,
-            'calendar_app'  => 'fluentform_calendar_app'
+            'element_id'   => $element_id,
+            'calendar_app' => 'fluentform_calendar_app'
         ]);
     }
 
@@ -144,13 +145,13 @@ class BookingElement extends BaseFieldManager
         $element_id = $this->makeElementId($data, $form);
 
         $slot_id = (int)Arr::get($data, 'settings.event_id');
-        
+
         $slot = CalendarSlot::find($slot_id);
-        
+
         if (!$slot) {
             return 'Slot Not Found';
         }
-        
+
         $calendar = $slot->calendar;
 
         if (!$slot->calendar) {
@@ -168,7 +169,7 @@ class BookingElement extends BaseFieldManager
         $name = Arr::get($data, 'attributes.name');
 
         $localizeData = (new FrontEndHandler())->getCalendarEventVars($calendar, $slot);
-        
+
         $localizeData['name'] = $name;
         $localizeData['settings'] = $settings;
         $localizeData['disable_author'] = true;
@@ -176,51 +177,66 @@ class BookingElement extends BaseFieldManager
 
         return [$localizeData, $element_id];
     }
-    
-    public function renderResponse($response, $field, $form_id)
+
+    public function renderResponse($data, $field, $form_id)
     {
-        $data = json_decode($response, true);
-
-        $slot_id   = Arr::get($field, 'raw.settings.event_id');
-        $startTime = Arr::get($data, 'start_time');
-        $timezone  = Arr::get($data, 'timezone');
-
-        if (!$startTime || !$timezone) {
-            return '';
+        if (is_string($data)) {
+            $data = json_decode($data, true);
         }
-        
-        $startTimeUtc = DateTimeHelper::convertToUtc($startTime, $timezone);
 
-        $booking = Booking::with('calendar')
-            ->where('event_id', $slot_id)
-            ->where('start_time', $startTimeUtc)
-            ->first();
-            
-        $hostTimezone = Arr::get($booking, 'calendar.author_timezone');
-
-        if (!$booking->id || !$hostTimezone) {
+        if (!$data) {
             return '';
         }
 
-        $formattedTime = DateTimeHelper::convertToTimeZone($startTimeUtc, 'utc', $hostTimezone, 'j M Y, g:i A');
+        $data = (array)$data;
 
-        $url = admin_url('admin.php?page=fluent-booking#/scheduled-events?booking_id=' . $booking->id);
+        $text = Arr::get($data, 'start_time') . ' ( ' . Arr::get($data, 'timezone') . ' )';
 
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . esc_html($formattedTime) . '</a>';
-        
-        return $link;
+        if (defined('FLUENTFORM_RENDERING_ENTRY')) {
+
+            $booking = Booking::find(Arr::get($data, 'booking_id'));
+
+            if($booking && $booking->calendar) {
+                $calendar = $booking->calendar;
+                $html = '<div class="ff_entry_table_wrapper"><table class="ff_entry_table_field ff-table">';
+                $html .= '<tr>';
+                $html .= '<th>Booking ID</th>';
+                $html .= '<td>' . $booking->id .' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
+                $html .= '</tr>';
+                $html .= '<tr>';
+                $html .= '<th>Booking Status</th>';
+                $html .= '<td>' . $booking->status . '</td>';
+                $html .= '</tr>';
+                $html .= '<tr>';
+                $html .= '<th>Date & Time</th>';
+                $html .= '<td>'. $booking->getFullBookingDateTimeText($calendar->author_timezone, true) .' ('.$calendar->author_timezone.')</td>';
+                $html .= '</tr>';
+                $html .= '<tr>';
+                $html .= '<th>Meeting Duration</th>';
+                $html .= '<td>' . $booking->slot_minutes . ' Minutes</td>';
+                $html .= '</tr>';
+                $html .= '<tr>';
+                $html .= '<th>Meeting Host</th>';
+                $html .= '<td>' . $calendar->title . '</td>';
+                $html .= '</tr>';
+                $html .= '</html></div>';
+                return $html;
+            }
+        }
+
+        return $text;
     }
-    
+
     protected function getResponseHtml($response, $fields, $columns)
     {
         return 'HTML Response';
     }
-    
+
     protected function getResponseAsText($response, $fields, $columns)
     {
         return 'Text Response';
     }
-    
+
     public function getCalendarOptions()
     {
         $calendarOptions = Helper::getCalendarOptionsByHost();

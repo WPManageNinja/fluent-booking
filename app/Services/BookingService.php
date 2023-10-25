@@ -60,6 +60,10 @@ class BookingService
             }
         }
 
+        if(empty($data['location_details'])) {
+            $bookingData['location_details'] = LocationService::getLocationDetails($calendarSlot, [], []);
+        }
+
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
         $event = Booking::select('group_id')
