@@ -16,7 +16,7 @@
           v-model="settings[index]"
           filterable
           remote
-          placeholder="Please enter a keyword"
+          :placeholder="$t('Please enter a keyword')"
           :remote-method="query => getSelectOptions({query, index})"
           :loading="searching"
           size="large"
@@ -24,7 +24,7 @@
         <el-option v-for="item in field.options" :key="item.value" :label="item.label" :value="item.value"/>
       </el-select>
 
-      <el-select v-model="settings[index]" filterable placeholder="Select" v-if="field.type === 'select'" size="large">
+      <el-select v-model="settings[index]" filterable :placeholder="$t('Select')" v-if="field.type === 'select'" size="large">
         <el-option v-for="(opt, index) in field.options" :key="index" :label="opt.label" :value="opt.value"/>
       </el-select>
 

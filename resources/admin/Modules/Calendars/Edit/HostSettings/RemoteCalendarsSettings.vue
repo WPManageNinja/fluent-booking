@@ -55,7 +55,7 @@
             </template>
 
             <div v-else-if="!isEmpty(configuredProviders)">
-                <h3>{{ $t('connect_following_calendar_providers_to_sync_remote_calendar') }}</h3>
+                <h3>{{ $t('RemoteCalendarsSettings/connect_calendar_desc') }}</h3>
                 <div v-for="driver in configuredProviders" :key="driver.key" class="">
                     <div class="fcal_remote_calendar_block fcal_promt_box">
                         <div class="fcal_remote_header">

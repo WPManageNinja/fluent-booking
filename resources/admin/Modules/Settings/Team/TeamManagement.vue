@@ -9,12 +9,12 @@
                         </el-icon>
                     </div>
                     <div class="content">
-                        <h3>Team</h3>
-                        <p>Grant Team Members Access to FluentBookings for Calendar and Booking Management.</p>
+                        <h3>{{ $t('Team') }}</h3>
+                        <p>{{ $t('TeamManagement/description') }}</p>
                     </div>
                 </div>
                 <div class="right">
-                    <el-button type="primary" @click="showAddModal = true">+ Team Member</el-button>
+                    <el-button type="primary" @click="showAddModal = true">{{ $t('+Team Member') }}</el-button>
                 </div>
             </div>
             <el-skeleton animated v-if="loading"></el-skeleton>
@@ -60,7 +60,7 @@
 
                             <el-popconfirm
                                 popper-class="fcal_confirm_dialog"
-                                title="Are you sure to delete this?" @confirm="deleteTeamMember(member)">
+                                :title="$t('Are you sure to delete this?')" @confirm="deleteTeamMember(member)">
                                 <template #reference>
                                     <el-button v-if="!member.is_calendar_user" type="danger" size="small"
                                                class="fcal_danger_btn">
@@ -80,12 +80,12 @@
             :append-to-body="true"
             :close-on-click-modal="false"
             :before-close="() => { showModal = false; editingMember = null; }"
-            title="Edit Team Member"
+            :title="$t('Edit Team Member')"
             width="50%"
             class="fcal_dialog"
         >
             <el-form v-if="editingMember" label-position="top">
-                <el-form-item label="Access Permissions for this user">
+                <el-form-item :label="$t('Access Permissions for this user')">
                     <el-checkbox-group class="fcal_checkable_lined" v-model="editingMember.permissions">
                         <el-checkbox v-for="(permission, permissionKey) in permission_sets" :key="permissionKey"
                                      :disabled="permissionKey == 'manage_own_calendar'"
@@ -93,13 +93,13 @@
                                      class="fcal_checkbox"
                         >
                             {{ permission }} <span
-                            v-if="permissionKey == 'manage_own_calendar'">(Required Permission)</span>
+                            v-if="permissionKey == 'manage_own_calendar'">{{ $t('(Required Permission)') }}</span>
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <template #footer>
-                <el-button type="primary" @click="updatePermissions()">Update Access Permissions</el-button>
+                <el-button type="primary" @click="updatePermissions()">{{ $t('Update Access Permissions') }}</el-button>
             </template>
         </el-dialog>
         <el-dialog
@@ -107,15 +107,15 @@
             :append-to-body="true"
             :close-on-click-modal="false"
             :before-close="() => { showAddModal = false; showAddModal = null; }"
-            title="Add Team Member"
+            :title="$t('Add Team Member')"
             width="50%"
             class="fcal_dialog"
         >
             <el-form v-if="showAddModal" label-position="top">
-                <el-form-item label="Select Member">
+                <el-form-item :label="$t('Select Member')">
                     <HostSelector v-model="user_id"/>
                 </el-form-item>
-                <el-form-item label="Access Permissions for this user">
+                <el-form-item :label="$t('Access Permissions for this user')">
                     <el-checkbox-group class="fcal_checkable_lined" v-model="addingMember.permissions">
                         <el-checkbox v-for="(permission, permissionKey) in permission_sets" :key="permissionKey"
                                      :disabled="permissionKey == 'manage_own_calendar'"
@@ -123,13 +123,13 @@
                                      class="fcal_checkbox"
                         >
                             {{ permission }} <span
-                            v-if="permissionKey == 'manage_own_calendar'">(Required Permission)</span>
+                            v-if="permissionKey == 'manage_own_calendar'">{{ $t('(Required Permission)') }}</span>
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <template #footer>
-                <el-button type="primary" @click="addMember()">Add Team Member</el-button>
+                <el-button type="primary" @click="addMember()">{{ $t('Add Team Member') }}</el-button>
             </template>
         </el-dialog>
     </div>

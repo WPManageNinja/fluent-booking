@@ -40,7 +40,7 @@
             </p>
         </template>
         <div v-else>
-            <h3>Failed to load this integration. Please reload this page and try again.</h3>
+            <h3>{{ $t('GeneralIntegrationFeedSettings/failed_to_load_desc') }}</h3>
         </div>
     </div>
 </template>
@@ -80,8 +80,8 @@ export default {
         },
         disconnect() {
             this.$confirm('Are you sure you want to disconnect this integration?', 'Disconnect Integration', {
-                confirmButtonText: 'Confirm, Disconnect',
-                cancelButtonText: 'Cancel',
+                confirmButtonText: this.$t('Confirm, Disconnect'),
+                cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
             }).then(() => {
                 this.disconnecting = true;

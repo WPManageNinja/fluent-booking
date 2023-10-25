@@ -48,12 +48,12 @@
 
                 </div>
 
-                <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">Looks like your remote connection for this location is disabled. Please revise your location selection</div>
+                <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">{{ $t('LocationSelector/disabled_location_description') }}</div>
 
             </div>
         </div>
 
-        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">Add another Location Choice</el-link>
+        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">{{ $t('Add another Location Choice') }}</el-link>
 
         <el-dialog
             v-if="dialogVisible"
@@ -61,36 +61,36 @@
             :close-on-press-escape="false"
             :close-on-click-modal="false"
             width="30%"
-            :title="modalSettings.type ? 'Edit Location' : 'Add Location'"
+            :title="modalSettings.type ? $t('Edit Location') : $t('Add Location')"
             class="fcal_modal fcal_location_modal"
         >
             <el-form
                 label-position="top"
                 class="fcal_location_form"
             >
-                <el-form-item v-if="modalSettings.type == 'custom'" label="Location Title *">
-                    <el-input v-model="modalSettings.title" type="text" placeholder="Location Title" />
+                <el-form-item v-if="modalSettings.type == 'custom'" :label="$t('Location Title *')">
+                    <el-input v-model="modalSettings.title" type="text" :placeholder="$t('Location Title')" />
                 </el-form-item>
-                <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" label="Location Description">
-                    <el-input v-model="modalSettings.description" type="textarea" placeholder="Location Description *" />
-                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Description on booking page"/>
+                <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" :label="$t('Location Description')">
+                    <el-input v-model="modalSettings.description" type="textarea" :placeholder="$t('Location Description *')" />
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" :label="$t('Display Description on booking page')"/>
                 </el-form-item>
-                <el-form-item v-if="modalSettings.type == 'phone_organizer'" label="Your Phone Number * (with country code)">
-                    <el-input v-model="modalSettings.host_phone_number" type="text" placeholder="Your Phone Number"/>
-                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Phone number on booking page"/>
+                <el-form-item v-if="modalSettings.type == 'phone_organizer'" :label="$t('Your Phone Number * (with country code)')">
+                    <el-input v-model="modalSettings.host_phone_number" type="text" :placeholder="$t('Your Phone Number')"/>
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" :label="$t('Display Phone number on booking page')"/>
                 </el-form-item>
-                <el-form-item v-if="modalSettings.type == 'online_meeting'" label="Online Meeting Link *">
-                    <el-input v-model="modalSettings.meeting_link" type="text" placeholder="Your Meeting Link"/>
-                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" label="Display Link on booking page"/>
+                <el-form-item v-if="modalSettings.type == 'online_meeting'" :label="$t('Online Meeting Link *')">
+                    <el-input v-model="modalSettings.meeting_link" type="text" :placeholder="$t('Your Meeting Link')"/>
+                    <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" :label="$t('Display Link on booking page')"/>
                 </el-form-item>
             </el-form>
             <template #footer>
                   <span class="dialog-footer">
                     <el-button class="fcal_plain_btn" @click="cancelDetails(modalSettings.index)">
-                        Cancel
+                        {{ $t('Cancel') }}
                     </el-button>
                     <el-button class="fcal_primary_btn" @click="updateDetails">
-                        Update
+                        {{ $t('Update') }}
                     </el-button>
                   </span>
             </template>
@@ -196,22 +196,22 @@ export default {
         },
         isLocationInfoRequired(location, index) {
             if (location.type == 'in_person_guest') {
-                this.slot.location_settings[index].title = 'In Person (Attendee Address)';
+                this.slot.location_settings[index].title = this.$t('In Person (Attendee Address)');
                 return;
             } else if (location.type == 'in_person_organizer') {
-                this.slot.location_settings[index].title = 'In Person (Organizer Address)';
+                this.slot.location_settings[index].title = this.$t('In Person (Organizer Address)');
             } else if (location.type == 'phone_guest') {
-                this.slot.location_settings[index].title = 'Attendee Phone Number';
+                this.slot.location_settings[index].title = this.$t('Attendee Phone Number');
                 return;
             } else if (location.type == 'phone_organizer') {
-                this.slot.location_settings[index].title = 'Organizer Phone Number';
+                this.slot.location_settings[index].title = this.$t('Organizer Phone Number');
             } else if (location.type == 'online_meeting') {
-                this.slot.location_settings[index].title = 'Online Meeting';
+                this.slot.location_settings[index].title = this.$t('Online Meeting');
             } else if (location.type == 'google_meet') {
-                this.slot.location_settings[index].title = 'Google Meet';
+                this.slot.location_settings[index].title = this.$t('Google Meet');
                 return;
             } else if (location.type == 'zoom_meeting') {
-                this.slot.location_settings[index].title = 'Zoom Meeting';
+                this.slot.location_settings[index].title = this.$t('Zoom Meeting');
                 return;
             } else if (location.type != 'custom') {
                 return;

@@ -5,7 +5,7 @@
             filterable
             @change="timeZoneChanged"
             v-model="selected"
-            placeholder="Select Timezone"
+            :placeholder="$t('Select Timezone')"
             popper-class="fcal_select"
         >
             <el-option-group
@@ -21,7 +21,7 @@
                 />
             </el-option-group>
         </el-select>
-        <span v-if="currentDateTime">Current DateTime: <code>{{currentDateTime}}</code></span>
+        <span v-if="currentDateTime">{{ $t('Current DateTime:') }} <code>{{currentDateTime}}</code></span>
     </div>
 </template>
 
