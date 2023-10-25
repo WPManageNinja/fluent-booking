@@ -2,11 +2,11 @@
     <div class="fcal_section fcal_section_narrow">
         <div v-if="hasSupport('multi_users')" class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Calendars</h3>
+                <h3>{{ $t('Calendars') }}</h3>
             </div>
             <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
                 <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
-                    <span>+</span> Add New Host
+                    <span>+</span> {{ $t('Add New Host') }}
                 </el-button>
             </div>
         </div>
@@ -20,7 +20,7 @@
                         <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar"/>
                     </div>
                 </template>
-                <el-empty v-else class="fcal_empty" description="No Calendars found"/>
+                <el-empty v-else class="fcal_empty" :description="$t('No Calendars found')"/>
             </div>
 
             <div class="fcal_right fcal_tm20">
@@ -30,15 +30,14 @@
 
         <el-drawer
             v-model="isNewBookingOpen"
-            title="Add New Calendar Host"
+            :title="$t('Add New Calendar Host')"
             :zIndex="999"
             label-position="top"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item label="Select Host">
                     <HostSelector v-model="user_id"/>
-                    <p>A particular user can have one calendar with multiple events. Please select a user who does not
-                        have a calendar yet</p>
+                    <p>{{ $t('AllCalendars/create_host_desc') }}</p>
                 </el-form-item>
                 <el-button
                     @click="createOneToOneSlot"
@@ -57,9 +56,9 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>One-to-One</h3>
-                        <h4><strong>One host</strong> <span>with</span> <strong>One invitee</strong></h4>
-                        <p>Good for: coffee chats, 1:1 interviews, etc.</p>
+                        <h3>{{ $t('One-to-One') }}</h3>
+                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                        <p>{{ $t('Good for: coffee chats, 1:1 interviews, etc.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
                         </el-icon>
@@ -85,9 +84,9 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>Group</h3>
-                        <h4><strong>One host</strong> <span>with</span> <strong>Group of invitees</strong></h4>
-                        <p>Good for: webinars, online classes, etc.</p>
+                        <h3>{{ $t('Group') }}</h3>
+                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('Group of invitees') }}</strong></h4>
+                        <p>{{ $t('Good for: webinars, online classes, etc.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
                         </el-icon>

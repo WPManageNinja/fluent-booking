@@ -1,16 +1,16 @@
 <template>
     <div v-if="settings.schedule_conditions" class="fcal_inline_items">
-        <el-input placeholder="eg: 4" type="number" v-model="settings.schedule_conditions.value" />
+        <el-input :placeholder="$t('eg: 4')" type="number" v-model="settings.schedule_conditions.value" />
         <el-select
             v-model="settings.schedule_conditions.unit"
-            placeholder="Select Unit"
+            :placeholder="$t('Select Unit')"
             popper-class="fcal_select"
         >
-            <el-option value="minutes" label="Minutes"></el-option>
-            <el-option value="hours" label="Hours"></el-option>
-            <el-option value="days" label="Days"></el-option>
+            <el-option value="minutes" :label="$t('Minutes')"></el-option>
+            <el-option value="hours" :label="$t('Hours')"></el-option>
+            <el-option value="days" :label="$t('Days')"></el-option>
         </el-select>
-        <span class="help-tx">of an event start time</span>
+        <span class="help-tx">{{ $t('of an event start time') }}</span>
     </div>
 </template>
 

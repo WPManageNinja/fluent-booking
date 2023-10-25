@@ -10,8 +10,8 @@
                             </el-icon>
                         </div>
                         <div class="content">
-                            <h3>General Settings</h3>
-                            <p>Manage your settings related emails, notifications and other general settings</p>
+                            <h3>{{ $t('General Settings') }}</h3>
+                            <p>{{ $t('GeneralSettings/description') }}</p>
                         </div>
                     </div>
                 </div>
@@ -20,13 +20,13 @@
                     <el-form v-model="administration" label-position="top">
                         <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Admin Email">
-                                    <el-input v-model="administration.admin_email" placeholder="Admin Email"></el-input>
+                                <el-form-item :label="$t('Admin Email')">
+                                    <el-input v-model="administration.admin_email" :placeholder="$t('Admin Email')"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Calendar start from">
-                                    <el-select v-model="administration.start_day" popper-class="fcal_select" placeholder="Select" placement="bottom">
+                                <el-form-item :label="$t('Calendar start from')">
+                                    <el-select v-model="administration.start_day" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
                                         <el-option
                                             v-for="item in weekdays"
                                             :key="item.value"
@@ -37,7 +37,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Time Format">
+                                <el-form-item :label="$t('Time Format')">
                                     <el-radio-group v-model="timeFormat">
                                         <el-radio label="12">12h</el-radio>
                                         <el-radio label="24">24h</el-radio>
@@ -49,7 +49,7 @@
                             <el-col :sm="24" :md="8">
                                 <el-form-item label="Summary Email">
                                 <el-checkbox v-model="administration.summary_notification" true-label="yes"
-                                             false-label="no"> Enable Booking Summary Notification
+                                             false-label="no"> {{ $t('Enable Booking Summary Notification') }}
                                 </el-checkbox>
                             </el-form-item>
                             </el-col>
@@ -57,18 +57,18 @@
                             <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
                                 <el-row :gutter="30">
                                     <el-col :sm="24" :md="12">
-                                        <el-form-item label="How often to send summary email?">
+                                        <el-form-item :label="$t('How often to send summary email?')">
                                             <el-select v-model="administration.notification_frequency"
-                                                       placeholder="Select Frequency" popper-class="fcal_select" placement="bottom">
-                                                <el-option value="daily" label="Daily"></el-option>
-                                                <el-option value="weekly" label="Weekly"></el-option>
+                                                       :placeholder="$t('Select Frequency')" popper-class="fcal_select" placement="bottom">
+                                                <el-option value="daily" :label="$t('Daily')"></el-option>
+                                                <el-option value="weekly" :label="$t('Weekly')"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :sm="24" :md="12">
                                         <el-form-item v-if="administration.notification_frequency == 'weekly'"
-                                                      label="In which day to send the email?">
-                                            <el-select v-model="administration.notification_day" placeholder="Select Day"
+                                                      :label="$t('In which day to send the email?')">
+                                            <el-select v-model="administration.notification_day" :placeholder="$t('Select Day')"
                                                        popper-class="fcal_select" placement="bottom">
                                                 <el-option value="mon" label="Monday"></el-option>
                                                 <el-option value="tue" label="Tuesday"></el-option>
@@ -89,7 +89,7 @@
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
                         <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
                                    class="fcal_primary_btn">
-                            Save Settings
+                            {{ $t('Save Settings') }}
                         </el-button>
                     </div>
                 </div>
@@ -100,8 +100,8 @@
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">
                         <div class="content">
-                            <h3>Emailing Settings</h3>
-                            <p>Configure your email settings for booking related emails</p>
+                            <h3>{{ $t('Emailing Settings') }}</h3>
+                            <p>{{ $t('GeneralSettings/email_settings_description') }}</p>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
                         <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
                                    class="fcal_primary_btn">
-                            Save Settings
+                            {{ $t('Save Settings') }}
                         </el-button>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_settings_body_inner fcal_settings_profile">
         <div class="fcal_settings_header">
-            <h3>Profile</h3>
+            <h3>{{ $t('Profile') }}</h3>
         </div>
 
         <div class="fcal_settings_content_wrap">
@@ -18,11 +18,11 @@
                 </el-form-item>
                 <el-form-item>
                     <span class="input-label">
-                        Your Name
+                        {{ $t('Your Name') }}
                         <el-tooltip
                             class="box-item"
                             effect="dark"
-                            content="Enter Your name here"
+                            :content="$t('Enter Your name here')"
                             placement="top"
                         >
                         <span class="help">!</span>
@@ -34,7 +34,7 @@
 
             <div class="fcal_settings_footer">
                 <el-button class="fcal_primary_btn">
-                    Save Changes
+                    {{ $t('Save Changes') }}
                 </el-button>
             </div>
         </div>
@@ -63,7 +63,6 @@ export default {
     methods: {
         updateAvatar(url) {
             this.profile.avatar = url;
-            console.log('changed photo -> ', this.profile.avatar);
         },
     }
 }

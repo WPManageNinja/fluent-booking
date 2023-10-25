@@ -2,15 +2,15 @@
     <div class="fcal_override_date">
         <h2 v-if="title" class="fcal_availability_title">{{ title }}</h2>
         <div class="fcal_override_date_inner">
-            <p v-if="!overrides.length">Add dates when your availability changes from your weekly hours</p>
+            <p v-if="!overrides.length">{{ $t('DateOverRides/description') }}</p>
             <div class="fcal_override_dropdown_wrap" @click.self="modal_visible = false">
                 <el-button class="fcal_primary_btn2" @click="toggleDateOverRide">
-                    Add a date override
+                    {{ $t('Add a date override') }}
                 </el-button>
 
                 <el-dialog
                     v-model="modal_visible"
-                    title="Add date overrides"
+                    :title="$t('Add date overrides')"
                     class="fcal_dialog fcal_override_dropdown"
                 >
                     <el-calendar v-model="current_date" ref="calendar">
@@ -34,27 +34,27 @@
                     </el-calendar>
                     <div class="fcal_override_calendar_footer">
                         <div v-if="current_selects.length" class="fcal_override_calendar_available_hour">
-                            <h3>What hours are you available?</h3>
+                            <h3>{{ $t('What hours are you available ?') }}</h3>
                             <div class="fcal_weekly_schedules">
                                 <DayOverRideConfig :isUnavailable="isUnavailableDate" day_label="" :slots="slots" />
                             </div>
                         </div>
 
                         <div class="fcal_override_calendar_unavailable_check">
-                            <el-checkbox v-model="isUnavailableDate" label="Mark to Unavailable" />
+                            <el-checkbox v-model="isUnavailableDate" :label="$t('Mark to Unavailable')" />
                         </div>
 
                         <div class="fcal_override_calendar_footer_action">
                             <el-button
                                 class="fcal_plain_btn"
                                 @click="modal_visible = false">
-                                Cancel
+                                {{ $t('Cancel') }}
                             </el-button>
                             <el-button
                                 :disabled="!current_selects.length"
                                 class="fcal_primary_btn"
                                 @click="addOverRides()">
-                                Apply
+                                {{ $t('Apply') }}
                             </el-button>
                         </div>
                     </div>

@@ -26,7 +26,7 @@
                     <p v-if="!showNewLicenseInput">{{$t('Have a new license Key?')}} <a @click.prevent="showNewLicenseInput = !showNewLicenseInput" href="#">{{$t('Click here')}}</a></p>
                     <div v-else>
                         <h3>{{$t('Your License Key')}}</h3>
-                        <el-input v-model="licenseKey" placeholder="License Key">
+                        <el-input v-model="licenseKey" :placeholder="$t('License Key')">
                             <template #append>
                                 <el-button type="success" @click="verifyLicense()">
                                     <el-icon><Lock /></el-icon>
@@ -48,9 +48,9 @@
                 
                 <div v-else>
                     <h3>
-                        Please Provide a license key of FluentBooking
+                        {{ $t('Please Provide a license key of') }} FluentBooking
                     </h3>
-                    <el-input v-model="licenseKey" placeholder="License Key">
+                    <el-input v-model="licenseKey" :placeholder="$t('License Key')">
                         <template #append>
                             <el-button type="success" @click="verifyLicense()">
                                 <el-icon><Lock /></el-icon>
@@ -58,7 +58,7 @@
                             </el-button>
                         </template>
                     </el-input>
-                    <p v-if="!showNewLicenseInput">Don't have a license key? <a target="_blank" :href="licenseData.purchase_url">{{$t('Purchase one here')}}</a></p>
+                    <p v-if="!showNewLicenseInput">{{ $t("Don't have a license key?") }} <a target="_blank" :href="licenseData.purchase_url">{{$t('Purchase one here')}}</a></p>
                 </div>
             </div>
 
