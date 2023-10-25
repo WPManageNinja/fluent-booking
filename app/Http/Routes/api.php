@@ -97,12 +97,6 @@ $router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($rout
     $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
-//$router->prefix('public')->withPolicy('PublicPolicy')->group(function ($router) {
-//    $router->get('slots/{event_id}', 'BookingController@getSlots')->int('event_id');
-//    $router->post('slots/{event_id}/schedule', 'BookingController@bookSlot')->int('event_id');
-//    $router->get('public_vars', 'WidgetController@getPublicVars');
-//});
-
 $router->prefix('integrations')->withPolicy('SettingsPolicy')->group(function ($router) {
     $router->get('/', 'IntegrationController@index');
     $router->post('/', 'IntegrationController@update');
