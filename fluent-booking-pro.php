@@ -12,8 +12,12 @@ Text Domain: fluent-booking-pro
 Domain Path: /language
 */
 
-define('FLUENT_BOOKING_PRO_DIR_FILE', __FILE__);
+if (defined('FLUENT_BOOKING_VERSION')) {
+    return;
+}
+
 define('FLUENT_BOOKING_DIR', plugin_dir_path(__FILE__));
+define('FLUENT_BOOKING_PRO_DIR_FILE', __FILE__);
 define('FLUENT_BOOKING_URL', plugin_dir_url(__FILE__));
 define('FLUENT_BOOKING_VERSION', '1.0.5');
 define('FLUENT_BOOKING_ASSETS_VERSION', '1.0.5');
