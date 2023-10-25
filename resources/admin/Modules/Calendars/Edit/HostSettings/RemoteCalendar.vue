@@ -17,8 +17,7 @@
             </div>
         </div>
         <div class="fcal_remote_body">
-            <p class="fcal_remote_sub">Enable the calendars you want to check for conflicts to prevent double
-                bookings.</p>
+            <p class="fcal_remote_sub">{{ $t('enable_calendar_check_conflicts') }}</p>
             <div class="fcal_remote_cal_items">
                 <el-checkbox-group class="fcal_lined_checks" v-model="feed.conflict_check_ids">
                     <el-checkbox :disabled="saving" v-for="cal in feed.remote_calendars" :key="cal.id" :label="cal.id"
@@ -30,7 +29,7 @@
 
                 <div v-if="feed.errors">
                     <hr />
-                    <p style="color: red;" class="fcal_remote_sub">API Error: {{ feed.errors }}</p>
+                    <p style="color: red;" class="fcal_remote_sub">{{ $t('API Error:') }} {{ feed.errors }}</p>
                 </div>
             </div>
         </div>
@@ -71,8 +70,8 @@ export default {
         },
         disconnectCalendar() {
             this.$confirm('Are you sure you want to disconnect this calendar? This action can\'t be undone.', 'Disconnect Calendar', {
-                confirmButtonText: 'Confirm Disconnect',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: this.$t('Confirm Disconnect'),
+                cancelButtonText: this.$t('Cancel')
             })
                 .then(() => {
                     this.working = true;

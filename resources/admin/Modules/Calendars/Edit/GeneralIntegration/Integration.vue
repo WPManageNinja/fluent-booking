@@ -4,8 +4,8 @@
             <div class="fcal_settings_head">
                 <h2>
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item @click="showAll()">Integrations</el-breadcrumb-item>
-                        <el-breadcrumb-item>Edit</el-breadcrumb-item>
+                        <el-breadcrumb-item @click="showAll()">{{ $t('Integrations') }}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ $t('Edit') }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </h2>
             </div>
@@ -17,15 +17,15 @@
                     <el-icon>
                         <Back/>
                     </el-icon>
-                    Back
+                    {{ $t('Back') }}
                 </el-button>
             </div>
         </div>
 
         <div v-else class="fcal_settings_header">
             <div class="fcal_settings_head">
-                <h2>Integrations</h2>
-                <p>Connect your favourite tools with your booking scheduled, completed or cancelled actions</p>
+                <h2>{{ $t('Integrations') }}</h2>
+                <p>{{ $t('integrations_description') }}</p>
             </div>
             <div v-if="!isEmpty(available_integrations)" class="fcal_actions">
                 <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click"
@@ -93,7 +93,7 @@
                                 </el-icon>
                             </el-button>
                             <el-popconfirm
-                                title="Are you sure to delete this?"
+                                :title="$t('Are you sure to delete this?')"
                                 popper-class="fcal_confirm_dialog"
                                 confirm-button-type="danger"
                                 @confirm="removeFeed(integration.id)"
@@ -113,8 +113,7 @@
                     <p style="font-size: 16px;">Currently FluentBooking has integration with FluentCRM. After install <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>, you can configure the integration feed here. More integration will be available soon. For now, you may use webhook feed.</p>
                 </template>
                 <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
-                    <p style="font-size: 16px;">You haven't added any integration feed yet. Add new integration to connect your favourite tools
-                        with your calendar</p>
+                    <p style="font-size: 16px;">{{ $t('empty_integrations_title') }}</p>
                 </div>
             </template>
             <IntegrationEditor

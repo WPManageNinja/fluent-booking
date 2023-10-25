@@ -24,7 +24,7 @@
             </div>
             <div class="fcal_spot_actions">
                 <el-button class="fcal_plain_btn">
-                    View Details
+                    {{ $t('View Details') }}
                 </el-button>
             </div>
         </div>
@@ -70,11 +70,11 @@ export default {
         },
         currentStatus() {
             const statusLabels = {
-                scheduled: 'Upcoming',
-                completed: 'Completed',
-                cancelled: 'Cancelled',
-                pending: 'Pending',
-                no_show: 'No Show'
+                scheduled: this.$t('Upcoming'),
+                completed: this.$t('Completed'),
+                cancelled: this.$t('Cancelled'),
+                pending: this.$t('Pending'),
+                no_show: this.$t('No Show')
             };
             if (this.period === 'latest_bookings' || this.period === 'all') {
                 return statusLabels[this.booking.status] || '';

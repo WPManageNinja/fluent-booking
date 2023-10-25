@@ -2,20 +2,20 @@
     <div class="fcal_section fcal_availability_route fcal_section_narrow">
         <div class="fcal_section_header">
             <div class="fcal_title">
-                <h3>Availability</h3>
-                <p>Configure times when you are available for bookings.</p>
+                <h3>{{ $t('Availability') }}</h3>
+                <p>{{ $t('Configure times when you are available for bookings.') }}</p>
             </div>
             <div class="fcal_actions">
                 <el-radio-group class="fcal_radio_switch" size="large" v-model="filters.author" @change="fetchAvailabilities">
-                    <el-radio-button label="me">My Schedules</el-radio-button>
-                    <el-radio-button label="all">All Schedules</el-radio-button>
+                    <el-radio-button label="me">{{ $t('My Schedules') }}</el-radio-button>
+                    <el-radio-button label="all">{{ $t('All Schedules') }}</el-radio-button>
                 </el-radio-group>
 
                 <el-button @click="creatingNew = true" type="primary">
                     <el-icon>
                         <Plus/>
                     </el-icon>
-                    <span>Add New</span>
+                    <span>{{ $t('Add New') }}</span>
                 </el-button>
             </div>
         </div>
@@ -30,7 +30,7 @@
                                     {{ availability.title }}
                                     <span v-if="availability.settings?.default && filters.author == 'me'"
                                           class="default-schedule-badge">
-                                    <el-icon><StarFilled/></el-icon> Default
+                                    <el-icon><StarFilled/></el-icon> {{ $t('Default') }}
                                 </span>
                                 </h4>
                                 <p class="fcal_human_text" v-html="formatAvailability(availability.settings.weekly_schedules)"></p>
@@ -51,8 +51,8 @@
                                     <el-icon>
                                         <Location/>
                                     </el-icon>
-                                    <span v-if="availability.usage_count">{{ availability.usage_count }} calendar events are using this schedule</span>
-                                    <span v-else>No events are using this schedule</span>
+                                    <span v-if="availability.usage_count">{{ availability.usage_count }} {{ $t('calendar events are using this schedule') }}</span>
+                                    <span v-else>{{ $t('No events are using this schedule') }}</span>
                                 </p>
                             </div>
                         </div>
@@ -63,13 +63,16 @@
                                     <el-dropdown-menu>
                                         <el-dropdown-item v-if="!availability.settings?.default && filters.author == 'me'"
                                                           @click="updateDefaultStatus(availability.id)">
-                                            <el-icon><StarFilled /></el-icon> Set as Default
+                                            <el-icon><StarFilled /></el-icon>
+                                            {{ $t('Set as Default') }}
                                         </el-dropdown-item>
                                         <el-dropdown-item @click="cloneAvailability(availability)">
-                                            <el-icon><CopyDocument /></el-icon> Duplicate
+                                            <el-icon><CopyDocument /></el-icon>
+                                            {{ $t('Duplicate') }}
                                         </el-dropdown-item>
                                         <el-dropdown-item @click="deleteAvailability(availability.id)">
-                                            <el-icon><Delete /></el-icon> Delete
+                                            <el-icon><Delete /></el-icon>
+                                            {{ $t('Delete') }}
                                         </el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
@@ -77,7 +80,7 @@
                         </div>
                     </div>
                 </template>
-                <el-empty class="fcal_empty" v-else description="No Availability found"/>
+                <el-empty class="fcal_empty" v-else :description="$t('No Availability found')"/>
             </div>
             <div class="fcal_right fcal_tm20">
                 <pagination :pagination="pagination" @fetch="fetchAvailabilities"/>
@@ -86,23 +89,23 @@
 
         <el-dialog
             v-model="creatingNew"
-            title="Add New Availability Schedule"
+            :title="$t('Add New Availability Schedule')"
             width="40%"
             class="fcal_dialog"
             :close-on-press-escape="false"
             :close-on-click-modal="false"
         >
             <el-form label-position="top">
-                <el-form-item label="Schedule Title *">
+                <el-form-item :label="$t('Schedule Title *')">
                     <el-input v-model="newSchedule.title"/>
                 </el-form-item>
-                <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
+                <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone">
                     <time-zone-selector v-model="newSchedule.timezone"/>
                 </el-form-item>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button class="fcal_plain_btn" @click="cancelCreate">Cancel</el-button>
+                    <el-button class="fcal_plain_btn" @click="cancelCreate">{{ $t('Cancel') }}</el-button>
                     <SaveButton :saving="saving" label="Add New Schedule" @save="createNew"/>
                 </span>
             </template>
@@ -113,12 +116,12 @@
 <script>
 import SaveButton from "../../Components/Buttons/SaveButton.vue";
 import TimeZoneSelector from "../Calendars/parts/TimeZoneSelector.vue";
-import { StarFilled, MoreFilled, CopyDocument, Delete } from "@element-plus/icons-vue";
+import { StarFilled, MoreFilled, CopyDocument, Delete, Plus } from "@element-plus/icons-vue";
 import Pagination from "../../Pieces/Pagination.vue";
 
 export default {
     name: 'AllAvailabilities',
-    components: {Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton},
+    components: {Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton, Plus},
     data() {
         return {
             loading: false,
@@ -224,8 +227,8 @@ export default {
         },
         deleteAvailability(availabilityId) {
             this.$confirm('Are you sure you want to delete this schedule?', 'Delete Schedule', {
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
+                    confirmButtonText: this.$t('Delete'),
+                    cancelButtonText: this.$t('Cancel'),
                     type: 'warning'
                 }).then(() => {
                     this.$del('availability/' + availabilityId)

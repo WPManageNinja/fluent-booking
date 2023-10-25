@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2><QuestionIcon/> Booking Questions </h2>
+            <h2><QuestionIcon/> {{ $t('Booking Questions') }} </h2>
         </div>
         <div class="fcal_create_calendar_form_body">
             <div class="fcal_questions_wrapper">
@@ -15,9 +15,9 @@
                         <div class="fcal_question_card">
                             <div class="fcal_question_content">
                                 <h2>{{ field.label }}
-                                    <span class="required" title="Required Field" v-if="field.required">Required</span>
-                                    <span class="required" v-if="field.system_defined">System</span>
-                                    <span class="required" v-if="!field.enabled">Hidden</span>
+                                    <span class="required" title="Required Field" v-if="field.required">{{ $t('Required') }}</span>
+                                    <span class="required" v-if="field.system_defined">{{ $t('System') }}</span>
+                                    <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
                                 </h2>
                                 <p>
                                     <span v-if="field.system_defined">{{ field.name }}</span>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="fcal_question_footer">
                     <el-link class="fcal_add_question" :underline="false" @click="addQuestion">
-                        + Add more questions for invitees
+                        {{ $t('+Add more questions for invitees') }}
                     </el-link>
                     <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
                 </div>

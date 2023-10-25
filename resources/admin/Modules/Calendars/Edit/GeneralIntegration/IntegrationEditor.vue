@@ -314,7 +314,7 @@
                     @click="saveNotification"
                     icon="el-icon-success"
                 >
-                    Save Feed
+                    {{ $t('Save Feed') }}
                 </el-button>
             </template>
         </el-form>
