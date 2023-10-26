@@ -14,6 +14,7 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Collection;
 use FluentBooking\Framework\Validator\ValidationException;
@@ -88,8 +89,14 @@ class FrontEndHandler
 
                 $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
                 $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
-                $existingBooking->updateMeta('rescheduled_by_type', 'guest');
                 $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
+
+                $rescheduleBy = 'guest';
+                if ($existingBooking->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings')) {
+                    $rescheduleBy = 'host';
+                }
+
+                $existingBooking->updateMeta('rescheduled_by_type', $rescheduleBy);
 
                 do_action('fluent_booking/log_booking_activity', [
                     'title'       => 'Meeting Rescheduled',

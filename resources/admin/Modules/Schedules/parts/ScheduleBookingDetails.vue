@@ -18,11 +18,23 @@
                                     <el-icon><Hide /></el-icon>
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
+                                <el-dropdown-item @click="rescheduleBooking">
+                                    <el-icon>
+                                        <Refresh/>
+                                    </el-icon>
+                                    {{ $t('Reschedule') }}
+                                </el-dropdown-item>
                                 <el-dropdown-item @click="cancelDialog = true">
                                     <el-icon>
                                         <Close/>
                                     </el-icon>
                                     {{ $t('Cancel') }}
+                                </el-dropdown-item>
+                                <el-dropdown-item @click="deleteDialog = true">
+                                    <el-icon>
+                                        <Delete/>
+                                    </el-icon>
+                                    {{ $t('Delete') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -124,11 +136,43 @@
               </span>
             </template>
         </el-dialog>
+        <el-dialog
+            v-model="deleteDialog"
+            width="30%"
+            :title="$t('Delete Meeting')"
+            class="fcal_modal"
+        >
+            <div style="text-align: center;">
+                <h3>{{ showing_booking.calendar_event.title }}</h3>
+                <p class="fcal_meeting_with">{{ $t('with') }} <b>{{ showing_booking.first_name }} {{
+                        showing_booking.last_name
+                    }}</b></p>
+                <p class="fcal_meeting_time">{{ meetingTime }}</p>
+                <p>{{ $t('ScheduleBookingDetails/delete_booking') }}</p>
+            </div>
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button
+                    @click="deleteDialog = false"
+                    class="fcal_plain_btn"
+                >
+                    {{ $t("No, Don't delete") }}
+                </el-button>
+                <el-button
+                    v-loading="updating"
+                    :disabled="updating"
+                    class="fcal_primary_btn"
+                    @click="deleteEvent()">
+                  {{ $t('Yes, Delete') }}
+                </el-button>
+              </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script type="text/babel">
-import {Back, MoreFilled, Refresh, Close, EditPen, Check, Hide} from '@element-plus/icons-vue';
+import {Back, MoreFilled, Refresh, Close, Delete, EditPen, Check, Hide} from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import FluentCrmProfile from "./FluentCrmProfile";
 import GroupBookingGuests from './GroupBookingGuests';
@@ -155,7 +199,8 @@ export default {
         Close,
         EditPen,
         Check,
-        Hide
+        Hide,
+        Delete
     },
     data() {
         return {
@@ -164,6 +209,7 @@ export default {
             fetching: false,
             showing_booking: this.booking,
             cancelDialog: false,
+            deleteDialog: false,
             cancel_reason: '',
         }
     },
@@ -238,6 +284,23 @@ export default {
         },
         cancelEvent() {
             this.updateScheduleStatus('cancelled');
+        },
+        deleteEvent() {
+            this.$del('schedules/' + this.showing_booking.id)
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.$emit('bookingFetched', null);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.updating = false;
+                    this.deleteDialog = false;
+                });
+        },
+        rescheduleBooking() {
+            window.open(this.showing_booking.reschedule_url, '_blank');
         },
         handleDataUpdated(data) {
             if (this.booking) {
