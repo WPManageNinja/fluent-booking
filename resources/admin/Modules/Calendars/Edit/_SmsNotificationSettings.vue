@@ -6,7 +6,7 @@
                 <el-icon>
                     <Notification/>
                 </el-icon>
-                SMS Notification Settings
+                {{ $t('SMS Notification Settings') }}
             </h2>
         </div>
     </div>
@@ -32,13 +32,13 @@
                 </div>
             </div>
             <div class="fcal_create_calendar_form_footer">
-                <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
+                <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
             </div>
 
             <el-dialog
                 v-model="showEdit"
                 v-if="showEdit"
-                :title="(editingNotification) ? 'Edit: ' + editingNotification.title : 'Edit Notification'"
+                :title="(editingNotification) ? 'Edit: ' + editingNotification.title : $t('Edit Notification')"
                 class="fcal_modal fcal_notification_modal"
                 :close-on-click-modal="false"
             >
@@ -52,14 +52,14 @@
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
-                            Save SMS
+                            {{ $t('Save SMS') }}
                         </el-button>
                     </div>
                 </template>
             </el-dialog>
         </div>
         <div v-else>
-            <p>You didn't configure twilio yet. Please configure from <span><el-link @click="goToTwilioSettings">here</el-link></span> </p>
+            <p>{{ $t('SmsNotificationSettings/configure_twilio_desc') }} <span><el-link @click="goToTwilioSettings">{{ $t('here') }}</el-link></span> </p>
         </div>
     </div>
     <div v-else class="fcal_section_body">

@@ -42,7 +42,7 @@
                         type="text"
                         :placeholder="$t('Enter the Host Phone Number')"
                     />
-                    <p class="fcal_input_desc">This number will be used for sending sms notification</p>
+                    <p class="fcal_input_desc">{{ $t('This number will be used for sending sms notification') }}</p>
                 </el-form-item>
                 <el-form-item :label="$t('About')">
                     <el-input

@@ -28,12 +28,12 @@
                     </el-checkbox>
                 </el-form-item>
                 <template v-if="paymentSettings.enabled === 'yes'">
-                    <el-form-item label="Booking Payment Items">
+                    <el-form-item :label="$t('Booking Payment Items')">
                         <div>
                             <el-skeleton v-if="loading" animated />
                             <el-row v-else style="margin-bottom: 20px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
                                 <el-col :span="14">
-                                    <el-input placeholder="Item Name" v-model="item.title"></el-input>
+                                    <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
                                 </el-col>
                                 <el-col :span="8">
                                     <el-input class="fcal_group_input" min="0" type="number" v-model="item.value">

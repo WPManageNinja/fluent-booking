@@ -230,7 +230,7 @@ export default {
                 .finally(() => (this.saving = false));
         },
         removeFeed(feed_id) {
-            this.$confirm('Are you sure to delete this Feed?')
+            this.$confirm(this.$t('Are you sure to delete this Feed?'))
                 .then(_ => {
                     const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + feed_id;
                     let data = {
@@ -288,13 +288,13 @@ export default {
         },
         getEventName(name) {
             if (name == 'after_booking_scheduled') {
-                return 'Booking Confirmed';
+                return this.$t('Booking Confirmed');
             }
             if (name == 'booking_schedule_completed') {
-                return 'Booking Complated';
+                return this.$t('Booking Completed');
             }
             if (name == 'booking_schedule_cancelled') {
-                return 'Booking Cancelled';
+                return this.$t('Booking Cancelled');
             }
         }
     },

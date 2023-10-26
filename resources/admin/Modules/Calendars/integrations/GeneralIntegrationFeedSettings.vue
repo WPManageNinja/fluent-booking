@@ -79,7 +79,7 @@ export default {
                 });
         },
         disconnect() {
-            this.$confirm('Are you sure you want to disconnect this integration?', 'Disconnect Integration', {
+            this.$confirm(this.$t('Are you sure you want to disconnect this integration?'), this.$t('Disconnect Integration'), {
                 confirmButtonText: this.$t('Confirm, Disconnect'),
                 cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
