@@ -246,13 +246,6 @@
 </script>
 
 <div class="fcal_day_picker">
-    <div class="fcal_day_picker_head fcal_sec_heading">
-        {#if !isFFConversational && settings?.label != undefined}
-            <h3 class="{settings.validation_rules?.required?.value ? 'fcal_label_required' : ''}">
-                { settings.label }
-            </h3>
-        {/if}
-    </div>
     <div class="fcal_time_picker_head fcal_sec_heading">
         <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }}
              on:keypress={(e) => { resetSelection() }} class="fcal_back fcal_go_back">
