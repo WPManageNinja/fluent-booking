@@ -32,7 +32,6 @@ class BookingCleaner
 
         if ($order) {
 
-
             do_action('fluent_booking/before_delete_order', $order, $booking);
             $order->delete();
             do_action('fluent_booking/after_delete_order', $order, $booking);

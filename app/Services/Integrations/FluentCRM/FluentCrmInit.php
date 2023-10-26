@@ -59,7 +59,7 @@ class FluentCrmInit
     {
         $sections['booking'] = [
             'name'    => 'booking',
-            'title'   => __('Bookings', 'fluent-booking'),
+            'title'   => __('Bookings', 'fluent-booking-pro'),
             'handler' => 'route'
         ];
 
@@ -123,22 +123,22 @@ class FluentCrmInit
             'data'           => $formattedMeetings,
             'columns_config' => [
                 'id'         => [
-                    'label' => 'ID',
+                    'label' => __('ID', 'fluent-booking-pro'),
                     'width' => '100px'
                 ],
                 'title'      => [
-                    'label' => 'Event',
+                    'label' => __('Event', 'fluent-booking-pro'),
                 ],
                 'status'     => [
-                    'label' => 'Status',
+                    'label' => __('Status', 'fluent-booking-pro'),
                     'width' => '150px'
                 ],
                 'meeting_at' => [
-                    'label' => 'Meeting At',
+                    'label' => __('Meeting At', 'fluent-booking-pro'),
                     'width' => '200px'
                 ],
                 'action'     => [
-                    'label' => 'Action',
+                    'label' => __('Action', 'fluent-booking-pro'),
                     'width' => '100px'
                 ]
             ]

@@ -99,7 +99,7 @@ class WebhookController extends Controller
             ->delete();
 
         return [
-            'message' => 'Selected Webhook has been deleted'
+            'message' => __('Selected Webhook has been deleted', 'fluent-booking-pro')
         ];
     }
 
@@ -107,7 +107,7 @@ class WebhookController extends Controller
     {
         return [
             [
-                'label' => 'Booking Confirmed',
+                'label' => __('Booking Confirmed', 'fluent-booking-pro'),
                 'value' => 'after_booking_scheduled'
             ],
             [
@@ -115,7 +115,7 @@ class WebhookController extends Controller
                 'value' => 'booking_schedule_cancelled'
             ],
             [
-                'label' => 'Booking Completed',
+                'label' => __('Booking Completed', 'fluent-booking-pro'),
                 'value' => 'booking_schedule_completed'
             ]
         ];

@@ -105,18 +105,18 @@ class ZoomHelper
         return [
             'account_id'    => [
                 'type'        => 'input-text',
-                'label'       => __('Zoom Account ID', 'fluent_booking'),
-                'placeholder' => __('Enter Your Account ID', 'fluent_booking'),
+                'label'       => __('Zoom Account ID', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your Account ID', 'fluent-booking-pro'),
             ],
             'client_id'     => [
                 'type'        => 'input-text',
-                'label'       => __('Zoom App Client ID', 'fluent_booking'),
-                'placeholder' => __('Enter Your App Client ID', 'fluent_booking'),
+                'label'       => __('Zoom App Client ID', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your App Client ID', 'fluent-booking-pro'),
             ],
             'client_secret' => [
                 'type'        => 'input-text',
-                'label'       => __('Zoom App Secret Key', 'fluent_booking'),
-                'placeholder' => __('Enter Your App Secret Key', 'fluent_booking'),
+                'label'       => __('Zoom App Secret Key', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your App Secret Key', 'fluent-booking-pro'),
             ],
         ];
     }

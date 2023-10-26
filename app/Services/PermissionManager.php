@@ -11,13 +11,13 @@ class PermissionManager
     public static function allPermissionSets()
     {
         return [
-            'manage_own_calendar'               => 'Manage only own Calendar, Events, Bookings & Availability',
-            'read_all_bookings'                 => 'Read Access to All Bookings',
-            'manage_all_bookings'               => 'Read & Write Access to All Bookings',
-            'read_other_calendars'              => 'Read Access of Other Users Calendars',
-            'manage_other_calendars'            => 'Manage Other Users Calendars',
-            'read_and_use_other_availabilities' => 'Read & Use Access of All Availabilities',
-            'manage_other_availabilities'       => 'Manage All Availabilities'
+            'manage_own_calendar'               => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking-pro'),
+            'read_all_bookings'                 => __('Read Access to All Bookings', 'fluent-booking-pro'),
+            'manage_all_bookings'               => __('Read & Write Access to All Bookings', 'fluent-booking-pro'),
+            'read_other_calendars'              => __('Read Access of Other Users Calendars', 'fluent-booking-pro'),
+            'manage_other_calendars'            => __('Manage Other Users Calendars', 'fluent-booking-pro'),
+            'read_and_use_other_availabilities' => __('Read & Use Access of All Availabilities', 'fluent-booking-pro'),
+            'manage_other_availabilities'       => __('Manage All Availabilities', 'fluent-booking-pro')
         ];
     }
 
@@ -149,7 +149,7 @@ class PermissionManager
             ]);
 
             if ($formatted) {
-                return ['manage_own_calendar' => 'Manage only own Calendar, Events, Bookings & Availability'];
+                return ['manage_own_calendar' => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking-pro')];
             }
             return ['manage_own_calendar'];
         }
@@ -205,7 +205,7 @@ class PermissionManager
 
         if ($calendar) {
             $user = wp_get_current_user();
-            $roles = (array) $user->roles;
+            $roles = (array)$user->roles;
             return Arr::get($roles, 0);
         }
 
@@ -217,7 +217,7 @@ class PermissionManager
         }
 
         $user = wp_get_current_user();
-        $roles = (array) $user->roles;
+        $roles = (array)$user->roles;
 
         return Arr::get($roles, 0);
     }
