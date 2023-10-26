@@ -68,12 +68,6 @@
                                    :href="showing_booking.source_url">{{ showing_booking.source_url }}</a>
                             </div>
                         </div>
-                        <div v-if="showing_booking.source != 'web'" class="fcal_schedule_details_event_item">
-                            <h3>{{ $t('Booked From') }}</h3>
-                            <div class="fcal_spot_details_value"
-                                 v-html="showing_booking.source">
-                            </div>
-                        </div>
                     </div>
                     <div v-if="showing_booking.event_type == 'single'"
                          class="fcal_schedule_details_event_additional fcal_schedule_details_event_item">
