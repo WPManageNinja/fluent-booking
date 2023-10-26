@@ -109,6 +109,8 @@ class TransStrings
             'Recommended Image Size: 600x600. Square Orientation'  => __('Recommended Image Size: 600x600. Square Orientation', 'fluent-booking-pro'),
             'Will be shown on landing page social share meta or profile block' => __('Will be shown on landing page social share meta or profile block', 'fluent-booking-pro'),
             'Host Name / Calendar Title'                           => __('Host Name / Calendar Title', 'fluent-booking-pro'),
+            'Enter the Host Phone Number'                          => __('Enter the Host Phone Number', 'fluent-booking-pro'),
+            'Host Phone (with country code)'                       => __('Host Phone (with country code)', 'fluent-booking-pro'),
             'Enter Name of this calendar'                          => __('Enter Name of this calendar', 'fluent-booing-pro'),
             'Should be same as the host name'                      => __('Should be same as the host name', 'fluent-booking-pro'),
             'About'                                                => __('About', 'fluent-booking-pro'),

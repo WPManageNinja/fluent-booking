@@ -219,11 +219,27 @@ class TimeSlotService
             $remaining = 0;
 
             if ($this->calendarSlot->id == $booking->event_id) {
+                $beforeBufferTime = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $afterBufferTime  = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
+                    $books[$date][] = [
+                        'event_id'    => $booking->event_id,
+                        'start'       => $beforeBufferTime,
+                        'end'         => $booking->start_time,
+                        'remaining'   => 0,
+                    ];
+                    $books[$date][] = [
+                        'event_id'    => $booking->event_id,
+                        'start'       => $booking->end_time,
+                        'end'         => $afterBufferTime,
+                        'remaining'   => 0,
+                    ];
+                } else {   
+                    $booking->start_time = $beforeBufferTime;
+                    $booking->end_time   = $afterBufferTime;
                 }
-                $booking->start_time = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $booking->end_time   = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
 
             $books[$date][] = [
@@ -231,7 +247,6 @@ class TimeSlotService
                 'start'       => $booking->start_time,
                 'end'         => $booking->end_time,
                 'remaining'   => $remaining,
-                'max_booking' => $maxBooking
             ];
         }
 

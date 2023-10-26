@@ -41,9 +41,9 @@
                     <div class="text-align-center">
                         <el-icon style="font-size: 50px;"><CircleCheck /></el-icon>
                         <!-- <span style="font-size: 50px;" class="el-icon el-icon-circle-check"></span> -->
+                        <h2>{{$t('You license key is valid and activated')}}</h2>
+                        <p>{{$t('Want to deactivate this license?')}} <a @click.prevent="deactivateLicense()" href="#">{{$t('Click here')}}</a></p>
                     </div>
-                    <h2>{{$t('You license key is valid and activated')}}</h2>
-                    <p>{{$t('Want to deactivate this license?')}} <a @click.prevent="deactivateLicense()" href="#">{{$t('Click here')}}</a></p>
                 </div>
                 
                 <div v-else>

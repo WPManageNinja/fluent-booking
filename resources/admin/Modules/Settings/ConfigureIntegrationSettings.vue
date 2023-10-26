@@ -18,7 +18,7 @@
                         <div v-html="fieldSettings.description"></div>
                         <template v-if="fieldSettings.fields">
                             <el-form v-model="settings" label-position="top">
-                                <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
+                                <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label" :class="{'input-with-copy': field.copy_btn}">
                                     <el-input
                                         v-if="field.type == 'text'"
                                         v-model="settings[fieldKey]"
@@ -43,9 +43,20 @@
 
                                     <p v-if="field.inline_help" v-html="field.inline_help"></p>
                                 </el-form-item>
+                                <div v-if="fieldSettings.check_validation" class="fcal_integration_validation_text">
+                                    <p v-if="fieldSettings.is_connected">
+                                        <el-icon><CircleCheckFilled /></el-icon>
+                                        {{ fieldSettings.valid_message }}
+                                        <el-link @click="disconnect">disconnect</el-link>
+                                    </p>
+                                    <p v-else-if="fieldSettings.is_configured">
+                                        <el-icon><CircleCloseFilled /></el-icon>
+                                        {{ fieldSettings.invalid_message }}
+                                    </p>
+                                </div>
                                 <SaveButton v-if="fieldSettings.fields" :saving="saving" :label="fieldSettings.save_btn_text" @save="saveSettings"/>
                             </el-form>
-                            <p v-if="fieldSettings && fieldSettings.will_encrypt">
+                            <p v-if="fieldSettings?.will_encrypt">
                                 <hr />
                                 <el-icon><Lock /></el-icon>
                                 {{ $t('The above app secret key will be encrypted and stored securely.') }}
@@ -63,7 +74,7 @@
 <script>
 import SaveButton from '../../Components/Buttons/SaveButton'
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { Calendar, ArrowRight, CopyDocument, Lock } from '@element-plus/icons-vue';
+import { Calendar, ArrowRight, CopyDocument, CircleCheckFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue';
 export default {
     name: 'ConfigureIntegrationSettings',
     props: ['settings_key'],
@@ -72,6 +83,8 @@ export default {
         SaveButton,
         ArrowRight,
         CopyDocument,
+        CircleCheckFilled,
+        CircleCloseFilled,
         Lock
     },
     data() {
@@ -120,6 +133,10 @@ export default {
             .finally(() => {
                 this.saving = false;
             });
+        },
+        disconnect() {
+            this.settings = {};
+            this.saveSettings();
         },
         copyText(text) {
             copyToClipBoard(text);
