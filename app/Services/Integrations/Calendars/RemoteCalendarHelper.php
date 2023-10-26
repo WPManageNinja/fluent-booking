@@ -109,9 +109,6 @@ class RemoteCalendarHelper
     {
         try {
             $durationSeconds = strtotime($sampleRange[1]) - strtotime($sampleRange[0]);
-            if (strtotime($sampleRange[0]) < strtotime($minDate)) {
-                $sampleRange[0] = $minDate;
-            }
 
             $maxDate = new \DateTime($maxDate);
             $sampleStart = new \DateTime($sampleRange[0]);
@@ -129,6 +126,11 @@ class RemoteCalendarHelper
                 }
 
                 $startDateTime =  $start->format('Y-m-d H:i:s');
+
+                if(strtotime($startDateTime) < strtotime($minDate)) {
+                    continue;
+                }
+
                 $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 if ($args) {
