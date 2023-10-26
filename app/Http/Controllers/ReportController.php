@@ -1,4 +1,5 @@
 <?php
+
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Booking;
@@ -15,20 +16,21 @@ use FluentBooking\Framework\Validator\ValidationException;
 class ReportController extends Controller
 {
     use ReportingHelperTrait;
+
     public function getReports(Request $request)
     {
         $startTime = $request->get('startTime');
-        $endTime   = $request->get('endTime');
+        $endTime = $request->get('endTime');
 
         if ($startTime && $endTime) {
-            $timeZone  = DateTimeHelper::getTimeZone();
+            $timeZone = DateTimeHelper::getTimeZone();
             $startTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
-            $endTime   = DateTimeHelper::convertToUtc($endTime, $timeZone);
+            $endTime = DateTimeHelper::convertToUtc($endTime, $timeZone);
 
             $bookingWidgetNumbers = $this->getBookingWidgetNumbers($startTime, $endTime);
         } else {
             $startTime = date('Y-m-d H:i:s', strtotime('-30 days')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            $endTime   = date('Y-m-d H:i:s', strtotime('now UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $endTime = date('Y-m-d H:i:s', strtotime('now UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
             $bookingWidgetNumbers = $this->getAllBookingWidgetNumbers();
         }
@@ -70,7 +72,7 @@ class ReportController extends Controller
             }
             $widgets[] = [
                 'title'   => __('Total Payment', 'fluent-booking-pro'),
-                'number'  => CurrenciesHelper::getCurrencySign($currencySign).$paymentWidget['totalPayment'],
+                'number'  => CurrenciesHelper::getCurrencySign($currencySign) . $paymentWidget['totalPayment'],
                 'content' => $paymentWidget['paymentComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M15.0235 10.5932C13.8049 10.9264 13.0704 11.8615 13.0704 12.7449C13.0704 13.6283 13.8049 14.5634 15.0235 14.8966V10.5932Z" fill="white"/>
@@ -123,9 +125,9 @@ class ReportController extends Controller
 
         list($startDate, $endDate) = $request->get('date_range') ?: ['', ''];
 
-        $period        = $this->makeDatePeriod(
-            $from      = $this->makeFromDate($startDate),
-            $to        = $this->makeToDate($endDate),
+        $period = $this->makeDatePeriod(
+            $from = $this->makeFromDate($startDate),
+            $to = $this->makeToDate($endDate),
             $frequency = $this->getFrequency($from, $to)
         );
 
@@ -135,7 +137,7 @@ class ReportController extends Controller
         $fetchBookingsByStatus = function ($status) use ($period, $groupBy, $orderBy, $frequency, $from, $to) {
 
             $isAdmin = PermissionManager::userCanSeeAllBookings();
-            if(!$isAdmin) {
+            if (!$isAdmin) {
 
                 return Booking::select($this->prepareSelect($frequency))
                     ->where('status', $status)
@@ -155,7 +157,7 @@ class ReportController extends Controller
         };
 
         // Fetch bookings for different statuses
-        $totalBooked    = $fetchBookingsByStatus('scheduled');
+        $totalBooked = $fetchBookingsByStatus('scheduled');
         $totalCompleted = $fetchBookingsByStatus('completed');
         $totalCancelled = $fetchBookingsByStatus('cancelled');
 
@@ -169,7 +171,7 @@ class ReportController extends Controller
     private function getBookingWidgetStats($startTime, $endTime)
     {
         $startTimeStamp = strtotime($startTime);
-        $endTimeStamp   = strtotime($endTime);
+        $endTimeStamp = strtotime($endTime);
 
         $differenceInDays = ($endTimeStamp - $startTimeStamp) / (60 * 60 * 24);
 
@@ -177,10 +179,10 @@ class ReportController extends Controller
 
         $bookingStats = $this->getBookingStats($startTime, $endTime, $lastMonthStartTime, $startTime);
 
-        $bookingStats['bookedComparison']    = $this->getComparisonMessage($bookingStats['bookedStat']);
+        $bookingStats['bookedComparison'] = $this->getComparisonMessage($bookingStats['bookedStat']);
         $bookingStats['completedComparison'] = $this->getComparisonMessage($bookingStats['completedStat']);
         $bookingStats['cancelledComparison'] = $this->getComparisonMessage($bookingStats['cancelledStat']);
-        $bookingStats['guestComparison']     = $this->getComparisonMessage($bookingStats['guestStat']);
+        $bookingStats['guestComparison'] = $this->getComparisonMessage($bookingStats['guestStat']);
 
         return $bookingStats;
     }
@@ -207,7 +209,7 @@ class ReportController extends Controller
 
         $bookingCancelledCurrentMonth = $lastMonthStartBookings->where('status', 'cancelled')->count();
         $bookingCancelledLastMonth = $currentMonthStartBookings->where('status', 'cancelled')->count();
-        
+
         $bookingStats['bookedStat'] = $this->getPercentage($totalBookedCurrentMonth, $totalBookedLastMonth);
         $bookingStats['completedStat'] = $this->getPercentage($bookingCompletedCurrentMonth, $bookingCompletedLastMonth);
         $bookingStats['cancelledStat'] = $this->getPercentage($bookingCancelledCurrentMonth, $bookingCancelledLastMonth);
@@ -275,18 +277,20 @@ class ReportController extends Controller
     private function getComparisonMessage($change)
     {
         if ($change > 0) {
-            return 'More than last month';
-        } elseif ($change < 0) {
-            return 'Less than last month';
-        } else {
-            return 'Same as last month';
+            return __('More than last month', 'fluent-booking-pro');
         }
+        if ($change < 0) {
+            return __('Less than last month', 'fluent-booking-pro');
+        }
+
+        return __('Same as last month', 'fluent-booking-pro');
+
     }
 
     private function getPaymentWidgets($startTime, $endTime)
     {
         $stripSettings = get_option('fluent_booking_payment_settings_stripe');
-        
+
         $isActive = Arr::get($stripSettings, 'is_active');
 
         if ($isActive == 'no') {
@@ -294,7 +298,7 @@ class ReportController extends Controller
         }
 
         $startTimeStamp = strtotime($startTime);
-        $endTimeStamp   = strtotime($endTime);
+        $endTimeStamp = strtotime($endTime);
 
         $differenceInDays = ($endTimeStamp - $startTimeStamp) / (60 * 60 * 24);
 
@@ -304,15 +308,15 @@ class ReportController extends Controller
 
         $cantSeeTotal = PermissionManager::userCan(['read_all_bookings', 'manage_all_bookings', 'read_other_calendars', 'manage_other_calendars']);
 
-        if(!$cantSeeTotal) {
+        if (!$cantSeeTotal) {
             $current_user_email = wp_get_current_user()->user_email;
         }
 
 
         $currentMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$startTime, $endTime])
-            ->when($current_user_email, function($query,$email){
-                return $query->whereHas('booking', function ($query) use($email){
+            ->when($current_user_email, function ($query, $email) {
+                return $query->whereHas('booking', function ($query) use ($email) {
                     $query->where('email', $email);
                 });
             })
@@ -322,8 +326,8 @@ class ReportController extends Controller
 
         $lastMonthTotal = Order::where('status', 'paid')
             ->whereBetween('created_at', [$lastMonthStartTime, $startTime])
-            ->when($current_user_email, function($query,$email){
-                return $query->whereHas('booking', function ($query) use($email){
+            ->when($current_user_email, function ($query, $email) {
+                return $query->whereHas('booking', function ($query) use ($email) {
                     $query->where('email', $email);
                 });
             })
@@ -358,7 +362,7 @@ class ReportController extends Controller
         }
 
         $nextMeetings = $bookingQuery->groupBy('group_id')->latest()->take(5)->get();
-       
+
         foreach ($nextMeetings as $meeting) {
             if (!$meeting->slot) {
                 $meeting->author = [

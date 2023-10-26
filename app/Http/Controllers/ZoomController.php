@@ -75,7 +75,7 @@ class ZoomController extends Controller
 
         if ($exist) {
             return $this->sendError([
-                'message' => 'Zoom credentials already exist for this user',
+                'message' => __('Zoom credentials already exist for this user', 'fluent-booking-pro'),
             ]);
         }
 
@@ -115,7 +115,7 @@ class ZoomController extends Controller
 
         if (empty($me['email'])) {
             return $this->sendError([
-                'message' => 'Zoom account email is empty'
+                'message' => __('Zoom account email is empty', 'fluent-booking-pro')
             ]);
         }
 
@@ -125,7 +125,7 @@ class ZoomController extends Controller
         ZoomHelper::updateZoomCredentials($userId, $credentials);
 
         return $this->sendSuccess([
-            'message' => 'Zoom credentials has been validated and saved securely'
+            'message' => __('Zoom credentials has been validated and saved securely', 'fluent-booking-pro')
         ]);
     }
 
@@ -158,7 +158,7 @@ class ZoomController extends Controller
 
         if (!$metaItem) {
             return $this->sendError([
-                'message' => 'Zoom credentials not found'
+                'message' => __('Zoom credentials not found', 'fluent-booking-pro')
             ]);
         }
 
@@ -168,7 +168,7 @@ class ZoomController extends Controller
         $metaItem->delete();
 
         return [
-            'message'  => 'Zoom credentials has been disconnected & deleted',
+            'message'  => __('Zoom credentials has been disconnected & deleted', 'fluent-booking-pro'),
             'response' => $response
         ];
     }
@@ -204,7 +204,7 @@ class ZoomController extends Controller
             $currentUserId = get_current_user_id();
             if ($currentUserId != $userId) {
                 $this->sendError([
-                    'message' => 'You do not have permission to access this user\'s Zoom credentials',
+                    'message' => __('You do not have permission to access this user\'s Zoom credentials', 'fluent-booking-pro'),
                     'type'    => 'no_permission'
                 ]);
             }

@@ -404,7 +404,7 @@ class Booking extends Model
         ];
 
         if (!in_array($this->status, $cancellableStatuses)) {
-            return new \WP_Error('invalid_status', 'This booking is not cancellable.');
+            return new \WP_Error('invalid_status', __('This booking is not cancellable.', 'fluent-booking-pro'));
         }
 
         $this->status = 'cancelled';
@@ -425,7 +425,7 @@ class Booking extends Model
                 $userName = $user->display_name;
             }
 
-            $this->addCancelReason(sprintf('Meeting has been cancelled by %s', $userName), $reason);
+            $this->addCancelReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
         }
 
         do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);

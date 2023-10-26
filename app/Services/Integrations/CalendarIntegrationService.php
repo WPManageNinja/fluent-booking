@@ -135,7 +135,7 @@ class CalendarIntegrationService
         }
 
         return [
-            'message'          => __('Integration successfully saved', 'fluent_booking'),
+            'message'          => __('Integration successfully saved', 'fluent-booking-pro'),
             'integration_id'   => $integrationId,
             'integration_name' => $integrationName,
             'created'          => $created,
@@ -156,7 +156,7 @@ class CalendarIntegrationService
             foreach ($feeds as $feed) {
                 $data = $feed->value;
                 $enabled = Arr::get($data, 'enabled');
-                if ($enabled) {
+                if ($enabled == 'true') {
                     $enabled = true;
                 } else {
                     $enabled = false;

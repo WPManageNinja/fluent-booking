@@ -41,13 +41,13 @@ class PaymentMethodController extends Controller
             if ($isActive) {
                 if (empty($settings[$paymentMode . '_publishable_key']) || empty($settings[$paymentMode . '_secret_key'])) {
                     return $this->sendError([
-                        'message' => 'Please connect your Stripe account first.'
+                        'message' => __('Please connect your Stripe account first.', 'fluent-booking-pro')
                     ]);
                 }
 
                 if (!Arr::get($settings, 'currency')) {
                     return $this->sendError([
-                        'message' => 'Please connect your Stripe account first.'
+                        'message' => __('Please connect your Stripe account first.', 'fluent-booking-pro')
                     ]);
                 }
             }
