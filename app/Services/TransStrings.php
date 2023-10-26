@@ -400,7 +400,7 @@ class TransStrings
             'No bookings found based on your filter'                => __('No bookings found based on your filter', 'fluent-booking-pro'),
             'Team'                                                  => __('Team', 'fluent-booking-pro'),
             'TeamManagement/description'                            => __('Grant Team Members Access to FluentBookings for Calendar and Booking Management.', 'fluent-booking-pro'),
-            '+ Team Member'                                         => __('+ Team Member', 'fluent-booking-pro'),
+            'Team Member'                                         => __('Team Member', 'fluent-booking-pro'),
             'Edit Team Member'                                      => __('Edit Team Member', 'fluent-booking-pro'),
             'Access Permissions for this user'                      => __('Access Permissions for this user', 'fluent-booking-pro'),
             '(Required Permission)'                                 => __('(Required Permission)', 'fluent-booking-pro'),
