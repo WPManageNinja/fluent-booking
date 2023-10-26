@@ -1584,7 +1584,8 @@ class Helper
                 'notification_frequency' => 'daily',
                 'notification_day'       => 'mon',
                 'start_day'              => 'sun',
-            ]
+            ],
+            'time_format' => '24'
         ];
 
         $settings = get_option('_fluent_booking_settings', []);

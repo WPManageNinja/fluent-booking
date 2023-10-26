@@ -14,7 +14,10 @@
                     </div>
                 </div>
                 <div class="right">
-                    <el-button type="primary" @click="showAddModal = true">{{ $t('+Team Member') }}</el-button>
+                    <el-button type="primary" @click="initShow()">
+                        <el-icon><Plus /></el-icon>
+                        <span>{{ $t('Team Member') }}</span>
+                    </el-button>
                 </div>
             </div>
             <el-skeleton animated v-if="loading"></el-skeleton>
@@ -137,19 +140,19 @@
 
 <script type="text/babel">
 import TeamIcon from '@/Components/Icons/TeamIcon.vue';
-import {Edit, Lock, Delete} from '@element-plus/icons-vue';
+import {Edit, Lock, Delete, Plus} from '@element-plus/icons-vue';
 import HostSelector from "@/Pieces/HostSelector";
 
 export default {
     name: 'TeamManagement',
-    components: {HostSelector, TeamIcon, Edit, Lock, Delete},
+    components: {HostSelector, TeamIcon, Edit, Lock, Delete, Plus},
     data() {
         return {
             members: [],
             permission_sets: {},
             loading: false,
             addingMember: {
-                permissions: []
+                permissions: ['manage_own_calendar']
             },
             showAddModal: false,
             editingMember: null,
@@ -172,6 +175,10 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        initShow() {
+            this.addingMember.permissions = ['manage_own_calendar'];
+            this.showAddModal = true;
         },
         getPermissionName(permission) {
             // replace _ from permission name

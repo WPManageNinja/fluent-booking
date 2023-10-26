@@ -13,6 +13,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentForm\App\Services\FormBuilder\BaseFieldManager;
+use FluentForm\Framework\Helpers\ArrayHelper;
 
 class BookingElement extends BaseFieldManager
 {
@@ -119,13 +120,26 @@ class BookingElement extends BaseFieldManager
      */
     public function render($data, $form)
     {
+        $elementName = $data['element'];
+
+        $data['attributes']['class'] = @trim('ff-el-form-control ' . Arr::get($data, 'attributes.class'));
+        $data['attributes']['id'] = $this->makeElementId($data, $form);
+        if ($tabIndex = \FluentForm\App\Helpers\Helper::getNextTabIndex()) {
+            $data['attributes']['tabindex'] = $tabIndex;
+        }
+
+        $ariaRequired = 'false';
+        if (Arr::get($data, 'settings.validation_rules.required.value')) {
+            $ariaRequired = 'true';
+        }
+
         [$localizeData, $element_id] = $this->getLocalizedData($data, $form);
-        $localizeData['time_format'] = get_option('_fluent_booking_settings')['time_format'];
+        $localizeData['time_format'] = (Helper::getGlobalSettings())['time_format'];
 
         wp_enqueue_script(
             'fluentform-calendar-public',
             App::getInstance('url.assets') . 'public/js/fluentform.js', [],
-            App::getInstance('config')->get('app.version'), true
+            FLUENT_BOOKING_ASSETS_VERSION, true
         );
 
         wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, $localizeData);
@@ -134,10 +148,9 @@ class BookingElement extends BaseFieldManager
             (new FrontEndHandler())->getGlobalVars()
         );
 
-        App::make('view')->render('public.fluentform.calendar', [
-            'element_id'   => $element_id,
-            'calendar_app' => 'fluentform_calendar_app'
-        ]);
+        $elMarkup = '<div class="fcal_cal_wrap"><div class="fluentform_calendar_app" data-element_id="' . esc_attr($element_id) . '"></div></div>';
+        $html = $this->buildElementMarkup($elMarkup, $data, $form);
+        echo apply_filters('fluentform/rendering_field_html_' . $elementName, $html, $data, $form);
     }
 
     public function getLocalizedData($data, $form)
@@ -196,12 +209,12 @@ class BookingElement extends BaseFieldManager
 
             $booking = Booking::find(Arr::get($data, 'booking_id'));
 
-            if($booking && $booking->calendar) {
+            if ($booking && $booking->calendar) {
                 $calendar = $booking->calendar;
                 $html = '<div class="ff_entry_table_wrapper"><table class="ff_entry_table_field ff-table">';
                 $html .= '<tr>';
                 $html .= '<th>Booking ID</th>';
-                $html .= '<td>' . $booking->id .' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
+                $html .= '<td>' . $booking->id . ' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
                 $html .= '<th>Booking Status</th>';
@@ -209,7 +222,7 @@ class BookingElement extends BaseFieldManager
                 $html .= '</tr>';
                 $html .= '<tr>';
                 $html .= '<th>Date & Time</th>';
-                $html .= '<td>'. $booking->getFullBookingDateTimeText($calendar->author_timezone, true) .' ('.$calendar->author_timezone.')</td>';
+                $html .= '<td>' . $booking->getFullBookingDateTimeText($calendar->author_timezone, true) . ' (' . $calendar->author_timezone . ')</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
                 $html .= '<th>Meeting Duration</th>';
