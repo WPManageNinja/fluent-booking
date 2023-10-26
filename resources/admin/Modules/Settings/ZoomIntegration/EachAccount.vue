@@ -4,13 +4,13 @@
             <img :src="connectedAccount.owner.avatar"/>
             <div class="fcal_driver_heading">
                 <h3>{{ connectedAccount.owner.name }}</h3>
-                <p>Connected Zoom Account Email: <em>{{ connectedAccount.zoom_email }}</em></p>
+                <p>{{ $t('Connected Zoom Account Email:') }} <em>{{ connectedAccount.zoom_email }}</em></p>
             </div>
         </div>
         <div class="fcal_driver_action">
             <el-button v-loading="disconnecting" :disabled="disconnecting"
                        @click="disconnect()" type="danger" plain>
-                Disconnect
+                {{ $t('Disconnect') }}
             </el-button>
         </div>
     </div>

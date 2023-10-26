@@ -37,7 +37,7 @@
                                     <el-option value=">" :label="$t('greater than')"></el-option>
                                     <el-option value="<" :label="$t('less than')"></el-option>
                                     <el-option value=">=" :label="$t('greater than or equal')"></el-option>
-                                    <el-option value="<=" :label="('less than or equal')"></el-option>
+                                    <el-option value="<=" :label="$t('less than or equal')"></el-option>
                                     <el-option value="contains" :label="$t('contains')"></el-option>
                                     <el-option value="doNotContains" :label="$t('do not contains')"></el-option>
                                     <el-option value="startsWith" :label="$t('starts with')"></el-option>
@@ -57,7 +57,7 @@
                 <el-col :md="8">
                     <div class="mb-2">
                         <template v-if="items[key].operator == 'length_equal' || items[key].operator == 'length_less_than' || items[key].operator == 'length_greater_than'">
-                            <el-input type="number" step="1" :placeholder="('Enter length in number')" v-model="items[key].value" />
+                            <el-input type="number" step="1" :placeholder="$t('Enter length in number')" v-model="items[key].value" />
                         </template>
                         <template v-else>
                             <el-select v-if="fields[logic.field] && fields[logic.field].options && Object.keys(fields[logic.field].options).length"

@@ -3,14 +3,14 @@
         <el-row :gutter="24">
             <el-col :sm="24" :md="12">
                 <!--Name-->
-                <el-form-item label="Name" required>
-                    <el-input v-model="settings.name" placeholder="WebHook Feed Name"></el-input>
+                <el-form-item :label="$t('Name')" required>
+                    <el-input v-model="settings.name" :placeholder="$t('WebHook Feed Name')"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :sm="24" :md="12">
                 <!--Request URL-->
-                <el-form-item label="Request URL" required>
-                    <el-input v-model="settings.request_url" type="url" placeholder="WebHook URL"></el-input>
+                <el-form-item :label="$t('Request URL')" required>
+                    <el-input v-model="settings.request_url" type="url" :placeholder="$t('WebHook URL')"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -18,7 +18,7 @@
         <el-row :gutter="24">
             <el-col :sm="24" :md="12">
                 <!--Request Method-->
-                <el-form-item label="Request Method">
+                <el-form-item :label="$t('Request Method')">
                     <el-select v-model="settings.request_method" popper-class="fcal_select">
                         <el-option
                             v-for="method in request_methods"
@@ -31,7 +31,7 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <!--Request Format-->
-                <el-form-item label="Request Format">
+                <el-form-item :label="$t('Request Format')">
                     <el-select v-model="settings.request_format" popper-class="fcal_select">
                         <el-option
                             v-for="format in ['FORM', 'JSON']"
@@ -46,35 +46,35 @@
 
 
         <!--Request Header-->
-        <el-form-item label="Request Header">
+        <el-form-item :label="$t('Request Header')">
             <el-radio-group v-model="settings.with_header">
-                <el-radio label="nop">No Headers</el-radio>
-                <el-radio label="yup">With Headers</el-radio>
+                <el-radio label="nop">{{ $t('No Headers') }}</el-radio>
+                <el-radio label="yup">{{ $t('With Headers') }}</el-radio>
             </el-radio-group>
         </el-form-item>
 
         <!--Request Headers-->
-        <el-form-item required v-if="settings.with_header=='yup'" label="Request Headers">
+        <el-form-item required v-if="settings.with_header=='yup'" :label="$t('Request Headers')">
             <table class="fcal_webhook_request_header_table" width="100%">
                 <thead>
                     <tr>
                         <th class="text-left" width="50%">
-                            <span class="lead-title mb-2">Header Name</span>
+                            <span class="lead-title mb-2">{{ $t('Header Name') }}</span>
                         </th>
                         <th class="text-left" width="50%">
-                            <span class="lead-title mb-2">Header Value</span>
+                            <span class="lead-title mb-2">{{ $t('Header Value') }}</span>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(headerValue, headerKey) in settings.request_headers" :key="headerKey">
                     <td>
-                        <el-input type="text" placeholder="Header Key" v-model="settings.request_headers[headerKey].key"></el-input>
+                        <el-input type="text" :placeholder="$t('Header Key')" v-model="settings.request_headers[headerKey].key"></el-input>
                     </td>
                     <td>
                         <div class="right-field">
                             <el-input
-                                placeholder="Enter Value"
+                                :placeholder="$t('Enter Value')"
                                 clearable
                                 v-model="settings.request_headers[headerKey].value">
                             </el-input>
@@ -97,23 +97,23 @@
         </el-form-item>
 
         <!--Request Body-->
-        <el-form-item required label="Request Body">
+        <el-form-item required :label="$t('Request Body')">
             <el-radio-group v-model="settings.request_body">
-                <el-radio label="all_data">All Data</el-radio>
-                <el-radio label="selected_fields">Selected Fields</el-radio>
+                <el-radio label="all_data">{{ $t('All Data') }}</el-radio>
+                <el-radio label="selected_fields">{{ $t('Selected Fields') }}</el-radio>
             </el-radio-group>
         </el-form-item>
 
         <!--Request Fields-->
-        <el-form-item required v-if="settings.request_body=='selected_fields'" label="Request Fields">
+        <el-form-item required v-if="settings.request_body=='selected_fields'" :label="$t('Request Fields')">
             <table class="fcal_webhook_request_header_table" width="100%">
                 <thead>
                     <tr>
                         <th class="text-left" width="50%">
-                            <span class="lead-title mb-2">Field Name</span>
+                            <span class="lead-title mb-2">{{ $t('Field Name') }}</span>
                         </th>
                         <th class="text-left" width="50%">
-                            <span class="lead-title mb-2">Field Value</span>
+                            <span class="lead-title mb-2">{{ $t('Field Value') }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -123,7 +123,7 @@
                         <el-input
                             clearable
                             v-model="settings.fields[mappedKey].key"
-                            placeholder="Enter Name"></el-input>
+                            :placeholder="$t('Enter Name')"></el-input>
                     </td>
                     <td>
                         <div class="right-field">
@@ -131,7 +131,7 @@
                                 filterable
                                 allow-create
                                 v-model="settings.fields[mappedKey].value"
-                                placeholder="Select Value"
+                                :placeholder="$t('Select Value')"
                                 popper-class="fcal_select"
                             >
                                 <el-option-group v-for="(group, groupKey) in smart_codes.texts"
@@ -168,7 +168,7 @@
 
 
         <!--Request Body-->
-        <el-form-item required label="Event Triggers">
+        <el-form-item required :label="$t('Event Triggers')">
             <el-checkbox-group v-model="settings.event_triggers">
                 <el-checkbox v-for="trigger in event_triggers" :key="trigger.value" :label="trigger.value">
                     {{ trigger.label }}
@@ -177,12 +177,12 @@
         </el-form-item>
 
         <el-form-item>
-            <el-checkbox v-model="settings.enabled">Enable this webhook feed</el-checkbox>
+            <el-checkbox v-model="settings.enabled">{{ $t('Enable this webhook feed') }}</el-checkbox>
         </el-form-item>
 
         <div class="fcal_webhook_form_footer">
             <el-button @click="saveWebHook" class="fcal_primary_btn">
-                Save Feed
+                {{ $t('Save Feed') }}
             </el-button>
         </div>
     </el-form>

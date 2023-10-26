@@ -9,7 +9,7 @@
  * @link https://github.com/rlanvin/php-rrule
  */
 
-namespace FluentBooking\App\Libs\RRule;
+namespace FluentBooking\App\Services\Libs\RRule;
 
 /**
  * Check that a variable is not empty.
@@ -666,22 +666,22 @@ class RRule implements RRuleInterface
 	 */
 	static public function createFromRfcString($string, $force_rset = false)
 	{
-		$class = '\RRule\RSet';
+		$class = '\FluentBooking\App\Services\Libs\RRule\RSet';
 
 		if (! $force_rset) {
 			// try to detect if we have a RRULE or a set
 			$upper_string = strtoupper($string);
 			$nb_rrule = substr_count($upper_string, 'RRULE');
 			if ($nb_rrule == 0) {
-				$class = '\RRule\RRule';
+				$class = '\FluentBooking\App\Services\Libs\RRule\RRule';
 			}
 			elseif ($nb_rrule > 1) {
-				$class = '\RRule\RSet';
+				$class = '\FluentBooking\App\Services\Libs\RRule\RSet';
 			}
 			else {
-				$class = '\RRule\RRule';
+				$class = '\FluentBooking\App\Services\Libs\RRule\RRule';
 				if (strpos($upper_string, 'EXDATE') !== false ||  strpos($upper_string, 'RDATE') !== false ||  strpos($upper_string, 'EXRULE') !== false) {
-					$class = '\RRule\RSet';
+					$class = '\FluentBooking\App\Services\Libs\RRule\RSet';
 				}
 			}
 		}

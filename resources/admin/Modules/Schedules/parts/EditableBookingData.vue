@@ -10,8 +10,8 @@
             <div class="fcal_spot_input">
                 <el-input v-model="booking[data_key]" :type="input_type" />
             </div>
-            <el-button :disabled="updating" v-loading="updating" @click="updateData()">Update</el-button>
-            <el-button text :disabled="updating" @click="editing = false">Cancel</el-button>
+            <el-button :disabled="updating" v-loading="updating" @click="updateData()">{{ $t('Update') }}</el-button>
+            <el-button text :disabled="updating" @click="editing = false">{{ $t('Cancel') }}</el-button>
         </div>
     </div>
 </template>

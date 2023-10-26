@@ -3,28 +3,28 @@
         <div class="fcal_schedule_event_infos_body">
             <div class="fcal_schedule_details_header">
                 <h1 class="fcal_header_title">
-                    Invitees Information
+                    {{ $t('Invitees Information') }}
                 </h1>
             </div>
             <div class="fcal_schedule_details_event">
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Invitee Name</h3>
+                    <h3>{{ $t('Invitee Name') }}</h3>
                     <p>{{ booking.first_name }} {{ booking.last_name }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Invitee Email</h3>
+                    <h3>{{ $t('Invitee Email') }}</h3>
                     <p>{{ booking.email }}</p>
                 </div>
                 <div v-if="booking.message" class="fcal_schedule_details_event_item">
-                    <h3>Message</h3>
+                    <h3>{{ $t('Message') }}</h3>
                     <p>{{ booking.message }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Invitee Timezone</h3>
+                    <h3>{{ $t('Invitee Timezone') }}</h3>
                     <p>{{ booking.person_time_zone }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
-                    <h3>Booked At</h3>
+                    <h3>{{ $t('Booked At') }}</h3>
                     <p>{{ toCurrentTimezone(booking.created_at, 'DD MMM YYYY, hh:mma') }}</p>
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">

@@ -1,8 +1,8 @@
 <template>
     <el-form :model="notification.email" label-position="top">
-        <el-form-item label="Subject">
+        <el-form-item :label="$t('Subject')">
             <popover
-                groupTitle="Shortcodes"
+                :groupTitle="$t('Shortcodes')"
                :data="smart_codes.texts"
                 placement="bottom-end"
                 :isVisible="subjectPopupVisible"
@@ -19,12 +19,12 @@
                 </template>
             </popover>
         </el-form-item>
-        <el-form-item label="Email Body">
+        <el-form-item :label="$t('Email Body')">
             <div class="wp_vue_editor_wrapper">
                 <popover
                     v-if="hasWpEditor"
                     class="popover-wrapper"
-                    groupTitle="Shortcodes"
+                    :groupTitle="$t('Shortcodes')"
                     :data="smart_codes.html"
                     :isVisible="bodyPopupVisible"
                     @command="handleBodyCommand">
@@ -34,7 +34,7 @@
                             :icon="ArrowDownIcon"
                             @click="toggleBodyPopup"
                             class="editor-add-shortcode el-button--soft">
-                            Add Shortcodes
+                            {{ $t('Add Shortcodes') }}
                         </el-button>
                     </template>
                 </popover>
@@ -45,34 +45,34 @@
                 </textarea>
             </div>
         </el-form-item>
-        <el-form-item v-if="notification.email.times" label="Timing">
+        <el-form-item v-if="notification.email.times" :label="$t('Timing')">
             <div v-for="(item, index) in notification.email.times" :key="index" class="fcal_inline_items fcal_reminder_timing">
                 <el-input type="text" v-model="item.value" @input="validateInput(item)"/>
-                <el-select v-model="item.unit" @change="validateInput(item)" placeholder="Select Unit" popper-class="fcal_select">
-                    <el-option value="minutes" label="Minutes Before"></el-option>
-                    <el-option value="hours" label="Hours Before"></el-option>
-                    <el-option value="days" label="Days Before"></el-option>
+                <el-select v-model="item.unit" @change="validateInput(item)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                    <el-option value="minutes" :label="$t('Minutes Before')"></el-option>
+                    <el-option value="hours" :label="$t('Hours Before')"></el-option>
+                    <el-option value="days" :label="$t('Days Before')"></el-option>
                 </el-select>
-                <el-link v-if="isRemovable" type="danger" title="Remove"
+                <el-link v-if="isRemovable" type="danger" :title="$t('Remove')"
                     :icon="CloseBoldIcon"
                     :underline="false"
                     @click="removeReminderTime(index)">
                 </el-link>
             </div>
             <el-link type="primary" :underline="false" @click="addReminderTime">
-                    + Add Another Reminder
+                {{ $t('+Add Another Reminder') }}
             </el-link>
         </el-form-item>
-        <el-form-item label="Additional Recipients" v-if="notification.is_host">
+        <el-form-item :label="$t('Additional Recipients')" v-if="notification.is_host">
             <el-input
                 type="text"
                 v-model="notification.email.additional_recipients"
-                placeholder="Enter email addresses separated by commas">
+                :placeholder="$t('Enter email addresses separated by commas')">
             </el-input>
-            <p>Provided email addresses will set as CC to this email notification</p>
+            <p>{{ $t('EditNotificationSettings/additional_recipients_desc')}}</p>
         </el-form-item>
         <el-form-item label="Status">
-            <el-checkbox v-model="notification.enabled"> Enable this notification email</el-checkbox>
+            <el-checkbox v-model="notification.enabled"> {{ $t('Enable this notification email') }}</el-checkbox>
         </el-form-item>
     </el-form>
 </template>

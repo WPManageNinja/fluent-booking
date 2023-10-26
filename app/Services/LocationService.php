@@ -96,6 +96,10 @@ class LocationService
             ];
         }
 
+        if (empty($allInput)) {
+            $locations = [$locations[0]];
+        }
+
         if (count($locations) == 1) {
             // return the first location
             $defaultLocation = $locations[0];
@@ -189,7 +193,7 @@ class LocationService
                 }
             }
 
-            if(!$title) {
+            if (!$title) {
                 $title = str_replace('_', ' ', ucfirst($locationType));
             }
 

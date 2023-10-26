@@ -4,7 +4,7 @@
         <div class="fcal_create_calendar_form_header"> 
             <h2>
                 <el-icon><Message/></el-icon>
-                Email Notification Settings
+                {{ $t('Email Notification Settings') }}
             </h2>
         </div>
     </div>
@@ -18,10 +18,10 @@
                         {{ notification.title }}
                     </span>
                     <div class="header_right">
-                        <span v-if="!notification.enabled" class="fcal_plain_btn disable"> Disabled </span>
+                        <span v-if="!notification.enabled" class="fcal_plain_btn disable"> {{ $t('Disabled') }} </span>
                         <span>
                             <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
-                                <el-icon><EditPen/></el-icon> Edit
+                                <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
                             </el-button>
                         </span>
                         <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
@@ -36,7 +36,7 @@
         <el-dialog
             v-model="showEdit"
             v-if="showEdit"
-            :title="(editingNotification) ? 'Edit: ' + editingNotification.title : 'Edit Notification'"
+            :title="(editingNotification) ? 'Edit: ' + editingNotification.title : $t('Edit Notification')"
             class="fcal_modal fcal_notification_modal"
             :close-on-click-modal="false"
         >
@@ -44,7 +44,7 @@
             <template #footer>
                 <div class="dialog-footer">
                     <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
-                        Save Email
+                        {{ $t('Save Email') }}
                     </el-button>
                 </div>
             </template>

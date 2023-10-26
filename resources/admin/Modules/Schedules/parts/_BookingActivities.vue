@@ -3,7 +3,7 @@
         <div class="fcal_schedule_event_infos_body">
             <div class="fcal_schedule_details_header">
                 <h1 class="fcal_header_title">
-                    Meeting Activities
+                    {{ $t('Meeting Activities') }}
                 </h1>
             </div>
             <div v-if="loading" class="fcal_loading">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div v-else class="fcal_no_activities">
-                    <p>No activities has been recorded for this booking</p>
+                    <p>{{ $t('No activities has been recorded for this booking') }}</p>
                 </div>
             </div>
         </div>
