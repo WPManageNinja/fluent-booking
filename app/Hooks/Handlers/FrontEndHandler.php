@@ -92,8 +92,8 @@ class FrontEndHandler
                 $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
 
                 do_action('fluent_booking/log_booking_activity', [
-                    'title'       => 'Meeting Rescheduled',
-                    'description' => 'Meeting has been rescheduled by guest from Web UI'
+                    'title'       => __('Meeting Rescheduled', 'fluent-booking-pro'),
+                    'description' => __('Meeting has been rescheduled by guest from Web UI', 'fluent-booking-pro')
                 ]);
 
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
@@ -106,7 +106,7 @@ class FrontEndHandler
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
-                    'message'       => 'Booking has been confirmed',
+                    'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
                 ], 200);
@@ -302,11 +302,11 @@ class FrontEndHandler
         ];
 
         $messages = [
-            'name.required'       => 'Please enter your name',
-            'email.required'      => 'Please enter your email address',
-            'email.email'         => 'Please enter provide a valid email address',
-            'timezone.required'   => 'Please select timezone first',
-            'start_date.required' => 'Please select a date and time',
+            'name.required'       => __('Please enter your name', 'fluent-booking-pro'),
+            'email.required'      => __('Please enter your email address', 'fluent-booking-pro'),
+            'email.email'         => __('Please enter provide a valid email address', 'fluent-booking-pro'),
+            'timezone.required'   => __('Please select timezone first', 'fluent-booking-pro'),
+            'start_date.required' => __('Please select a date and time', 'fluent-booking-pro')
         ];
 
         if ($calendarSlot->isPhoneRequired()) {
@@ -429,7 +429,7 @@ class FrontEndHandler
 
         if (!$slot || $slot->status != 'active') {
             wp_send_json([
-                'message' => 'Sorry, the host is not accepting any new bookings at the moment.'
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ], 422);
         }
 

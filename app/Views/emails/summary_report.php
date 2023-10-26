@@ -122,7 +122,7 @@
                         <td class="alert alert-warning"
                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #306ae0; margin: 0; padding: 20px;"
                             align="center" bgcolor="#FF9F00" valign="top">
-                            <?php printf(esc_html__('Your %s Booking Summary', 'fluent-booking'), ucfirst($frequency)); ?>
+                            <?php printf(esc_html__('Your %s Booking Summary', 'fluent-booking-pro'), ucfirst($frequency)); ?>
                         </td>
                     </tr>
                     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -135,8 +135,8 @@
                                     <td class="content-block"
                                         style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                         valign="top">
-                                        <b><?php _e('Hello There,', 'fluent-booking'); ?></b><br/>
-                                        <?php printf(esc_html__('Let\'s see how many events are booked in the last %d days.', 'fluent-booking'), $days); ?>
+                                        <b><?php _e('Hello There,', 'fluent-booking-pro'); ?></b><br/>
+                                        <?php printf(esc_html__('Let\'s see how many events are booked in the last %d days.', 'fluent-booking-pro'), $days); ?>
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -146,8 +146,8 @@
                                         <table class="summary_table">
                                             <thead>
                                             <tr>
-                                                <th><?php _e('Total New Booked', 'fluent-booking'); ?></th>
-                                                <th><?php _e('Total Meeting Completed', 'fluent-booking'); ?></th>
+                                                <th><?php _e('Total New Booked', 'fluent-booking-pro'); ?></th>
+                                                <th><?php _e('Total Meeting Completed', 'fluent-booking-pro'); ?></th>
                                             </tr>
                                             </thead>
                                             <tbody>
