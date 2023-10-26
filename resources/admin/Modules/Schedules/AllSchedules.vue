@@ -60,8 +60,8 @@
                         placement="bottom"
                     >
                         <el-option value="me" :label="$t('My Meetings')"></el-option>
+                        <el-option v-if="hasAccess('manage_all_bookings')" value="all" :label="$t('All Meetings')" />
                         <template v-if="all_hosts.length">
-                            <el-option value="all" :label="$t('All Meetings')" />
                             <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
                         </template>
                     </el-select>

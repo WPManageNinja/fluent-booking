@@ -388,6 +388,7 @@ class TransStrings
             'Reschedule'                                            => __('Reschedule', 'fluent-booking-pro'),
             "No, Don't delete"                                      => __("No, Don't delete", "fluent-booking-pro"),
             'Yes, Delete'                                           => __('Yes, Delete', 'fluent-booking-pro'),
+            'Delete Meeting'                                        => __('Delete Meeting', 'fluent-booking-pro'),
             'ScheduleBookingDetails/delete_booking'                 => __('Are you sure you want to delete this booking?', 'fluent-booking-pro'),
             'Invitees Information'                                  => __('Invitees Information', 'fluent-booking-pro'),
             'Invitee Name'                                          => __('Invitee Name', 'fluent-booking-pro'),
