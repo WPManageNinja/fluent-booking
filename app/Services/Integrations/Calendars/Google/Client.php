@@ -259,7 +259,7 @@ class Client
         $resBody = json_decode(wp_remote_retrieve_body($request), true);
 
         if ($resCode > 299) {
-            $message = Arr::get($resBody, 'error_description', 'Unexpected error from google api');
+            $message = Arr::get($resBody, 'error_description', __('Unexpected error from google api', 'fluent-booking-pro'));
 
             Helper::debugLog([
                 'message' => $message,

@@ -1116,23 +1116,23 @@ class Helper
         return apply_filters('fluent_booking/meeting_durations_schema', [
             [
                 'value' => '15',
-                'label' => '15 Minutes'
+                'label' => __('15 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '30',
-                'label' => '30 Minutes'
+                'label' => __('30 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '45',
-                'label' => '45 Minutes'
+                'label' => __('45 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '60',
-                'label' => '60 Minutes'
+                'label' => __('60 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => 'custom',
-                'label' => 'Custom'
+                'label' => __('Custom', 'fluent-booking-pro')
             ]
         ]);
     }
@@ -1142,43 +1142,43 @@ class Helper
         return apply_filters('fluent_booking/buffer_times_schema', [
             [
                 'value' => '0',
-                'label' => 'No buffer time'
+                'label' => __('No buffer time', 'fluent-booking-pro')
             ],
             [
                 'value' => '5',
-                'label' => '5 Minutes'
+                'label' => __('5 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '10',
-                'label' => '10 Minutes'
+                'label' => __('10 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '15',
-                'label' => '15 Minutes'
+                'label' => __('15 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '20',
-                'label' => '20 Minutes'
+                'label' => __('20 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '30',
-                'label' => '30 Minutes'
+                'label' => __('30 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '45',
-                'label' => '45 Minutes'
+                'label' => __('45 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '60',
-                'label' => '60 Minutes'
+                'label' => __('60 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '90',
-                'label' => '90 Minutes'
+                'label' => __('90 Minutes', 'fluent-booking-pro')
             ],
             [
                 'value' => '120',
-                'label' => '120 Minutes'
+                'label' => __('120 Minutes', 'fluent-booking-pro')
             ]
         ]);
     }
@@ -1232,27 +1232,27 @@ class Helper
         return apply_filters('fluent_booking/custom_fields_types', [
             [
                 'value' => 'email',
-                'label' => 'Email'
+                'label' => __('Email', 'fluent-booking-pro')
             ],
             [
                 'value' => 'text',
-                'label' => 'Text'
+                'label' => __('Text', 'fluent-booking-pro')
             ],
             [
                 'value' => 'textarea',
-                'label' => 'Textarea'
+                'label' => __('Textarea', 'fluent-booking-pro')
             ],
             [
                 'value' => 'number',
-                'label' => 'Number'
+                'label' => __('Number', 'fluent-booking-pro')
             ],
             [
                 'value' => 'phone',
-                'label' => 'Phone'
+                'label' => __('Phone', 'fluent-booking-pro')
             ],
             [
                 'value' => 'dropdown',
-                'label' => 'Dropdown'
+                'label' => __('Dropdown', 'fluent-booking-pro')
             ]
         ]);
     }

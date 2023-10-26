@@ -358,7 +358,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         $templates['template'] = $radio;
         if (!$hasActiveMethod) {
-            return $data['template'] = '<p style="color:#fb7373; font-size:16px; margin: 0 auto;">Please active at least one payment method!</p>';
+            return $data['template'] = '<p style="color:#fb7373; font-size:16px; margin: 0 auto;">'. __('Please active at least one payment method!', 'fluent-booking-pro') .'</p>';
         }
 
         return $data['template'] = $templates;
