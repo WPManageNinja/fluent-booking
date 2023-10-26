@@ -263,9 +263,9 @@ export default {
                 });
         },
         deleteStatus() {
-            this.$confirm('Are you sure you want to delete this availability?', 'Delete Availability', {
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
+            this.$confirm(this.$t('Are you sure you want to delete this availability?'), this.$t('Delete Availability'), {
+                    confirmButtonText: this.$t('Delete'),
+                    cancelButtonText: this.$t('Cancel'),
                     type: 'warning'
                 }).then(() => {
                     this.$del('availability/' + this.schedule_id)

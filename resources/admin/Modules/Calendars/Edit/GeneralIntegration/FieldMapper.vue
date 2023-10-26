@@ -97,7 +97,7 @@
                 <photo-uploader design_mode="horizontal" enable_clear="yes" v-model="model" />
             </template>
             <template v-else>
-                <p>Invalid Vue Element</p>
+                <p>{{ $t('Invalid Vue Element') }}</p>
                 <pre>{{field}}</pre>
             </template>
 

@@ -68,7 +68,6 @@ export default {
     components: {
         EditNotificationSettings,
         SaveButton,
-        Message,
         EditPen,
         Close,
         Message

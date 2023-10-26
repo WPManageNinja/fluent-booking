@@ -1,7 +1,7 @@
 <template>
     <div class="field_general">
         <popover
-            groupTitle="Shortcodes"
+            :groupTitle="$t('Shortcodes')"
             :data="editorShortcodes"
             placement="bottom-end"
             class="fcal_popover_shortcode"

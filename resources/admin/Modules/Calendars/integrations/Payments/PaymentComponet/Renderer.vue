@@ -62,8 +62,8 @@ onMounted(() => {
                     v-model="settings[index]"
                     active-value="yes"
                     inactive-value="no"
-                    active-text="Active"
-                    inactive-text="Inactive"
+                    :active-text="$t('Active')"
+                    :inactive-text="$t('Inactive')"
                 />
                 <p class="fc-payment-label" v-if="field.tooltip">
                     <el-tooltip placement="top-start">
@@ -163,7 +163,7 @@ onMounted(() => {
           <div class="fc-payment-col" v-else-if="field.type === 'select'">
             <div class="flex items-center">
               <el-form-item :label="field.label">
-                <el-select filterable style="max-width:400px;" v-model="settings[index]" class="m-2" popper-class="fcal_select" placeholder="Select" size="large">
+                <el-select filterable style="max-width:400px;" v-model="settings[index]" class="m-2" popper-class="fcal_select" :placeholder="$t('Select')" size="large">
                   <el-option
                       v-for="item in field.options"
                       :key="item.value"

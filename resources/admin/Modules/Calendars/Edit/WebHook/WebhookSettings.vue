@@ -224,13 +224,13 @@ export default {
         },
         getEventName(name) {
             if (name == 'after_booking_scheduled') {
-                return 'Booking Confirmed';
+                return this.$t('Booking Confirmed');
             }
             if (name == 'booking_schedule_completed') {
-                return 'Booking Complated';
+                return this.$t('Booking Completed');
             }
             if (name == 'booking_schedule_cancelled') {
-                return 'Booking Cancelled';
+                return this.$t('Booking Cancelled');
             }
         }
     },
