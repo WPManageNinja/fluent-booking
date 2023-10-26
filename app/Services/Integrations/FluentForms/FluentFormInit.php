@@ -42,7 +42,9 @@ class FluentFormInit
 
     public function registerIntegrations()
     {
-        new BookingElement();
+        add_action('init', function () {
+            new BookingElement();
+        });
     }
 
     public function handleValidations($error, $field, $formData)
@@ -138,7 +140,7 @@ class FluentFormInit
         return '';
     }
 
-    public function handleFormSubmitted($entryId, $formData, $form)
+    public function handleFormSubmitted($entryId, $formDataX, $form)
     {
         $fields = FormFieldsParser::getInputs($form, ['rules', 'raw', 'name']);
 
@@ -153,6 +155,16 @@ class FluentFormInit
         if (\FluentForm\App\Helpers\Helper::getSubmissionMeta($entryId, 'fluent_booking_id')) {
             return; // Already processed
         }
+
+        $entry = wpFluent()->table('fluentform_submissions')
+            ->where('id', $entryId)
+            ->first();
+
+        if (!$entry) {
+            return;
+        }
+
+        $formData = json_decode($entry->response, true);
 
         foreach ($bookingFields as $bookingField) {
             $fieldName = Arr::get($bookingField, 'raw.attributes.name');
@@ -174,14 +186,6 @@ class FluentFormInit
             $event = CalendarSlot::find($eventId);
 
             if (!$event || $event->status != 'active') {
-                continue;
-            }
-
-            $entry = wpFluent()->table('fluentform_submissions')
-                ->where('id', $entryId)
-                ->first();
-
-            if (!$entry) {
                 continue;
             }
 
@@ -331,8 +335,15 @@ class FluentFormInit
 
             $response = json_decode($submission->response);
 
+
+            $smartCode = '{all_data}';
+
+            if($submission->payment_total) {
+                $smartCode .= '<h3>Related Payments</h3>{payment.receipt}';
+            }
+
             $entryHtmlData = ShortCodeParser::parse(
-                '{all_data}',
+                $smartCode,
                 $submission->id,
                 $response,
                 $submission->form,
