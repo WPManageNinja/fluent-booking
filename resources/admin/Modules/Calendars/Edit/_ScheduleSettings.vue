@@ -1,25 +1,25 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2> <ScheduleIcon/> Schedule Settings </h2>
+            <h2> <ScheduleIcon/> {{ $t('Schedule Settings') }} </h2>
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
                 <el-form-item label="Date range">
-                    <span class="sub-label">Invitees can schedule...</span>
+                    <span class="sub-label">{{ $t('Invitees can schedule...') }}</span>
 
                     <el-radio-group v-model="slot.settings.range_type" class="fcal_date_range_radio">
                         <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_days" size="large">Within future days</el-radio>
+                            <el-radio label="range_days" size="large">{{ $t('Within future days') }}</el-radio>
 
                             <div v-if="slot.settings.range_type == 'range_days'" class="fcal_date_range_radio_condition">
                                 <el-input v-model="slot.settings.range_days" type="number">
-                                    <template #append>Days into the future</template>
+                                    <template #append>{{ $t('Days into the future') }}</template>
                                 </el-input>
                             </div>
                         </div>
                         <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_date_between" size="large">Within a date range</el-radio>
+                            <el-radio label="range_date_between" size="large">{{ $t('Within a date range') }}</el-radio>
 
                             <div v-if="slot.settings.range_type == 'range_date_between'" class="fcal_date_range_radio_condition">
                                 <el-date-picker
@@ -28,26 +28,26 @@
                                     :disabled-date="disabledDate"
                                     value-format="YYYY-MM-DD"
                                     range-separator="To"
-                                    start-placeholder="Start Date"
-                                    end-placeholder="End Date"
+                                    :start-placeholder="$t('Start Date')"
+                                    :end-placeholder="$t('End Date')"
                                     popper-class="fcal_daterange_popover"
                                 />
                             </div>
                         </div>
                         <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_indefinite" size="large">Indefinitely into the future </el-radio>
+                            <el-radio label="range_indefinite" size="large">{{ $t('Indefinitely into the future') }} </el-radio>
                         </div>
                     </el-radio-group>
                 </el-form-item>
                 <el-divider/>
-                <el-form-item label="How do you want to offer your availability for this event type?">
+                <el-form-item :label="$t('ScheduleSettings/availability_type_label')">
                     <el-tabs v-model="slot.availability_type">
-                        <el-tab-pane label="Use an Existing Schedule" name="existing_schedule">
+                        <el-tab-pane :label="$t('Use an Existing Schedule')" name="existing_schedule">
                             <div class="fcal_availability_body">
-                                <h4>Which Schedule Do You Want to Use?</h4>
+                                <h4>{{ $t('Which Schedule Do You Want to Use ?') }}</h4>
                                 <el-select
                                     v-model="slot.availability_id"
-                                    placeholder="Select Schedule"
+                                    :placeholder="$t('Select Schedule')"
                                     popper-class="fcal_select"
                                     class="fcal_timezone"
                                 >
@@ -71,7 +71,7 @@
 
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="Set Custom Hours" name="custom">
+                        <el-tab-pane :label="$t('Set Custom Hours')" name="custom">
                             <div class="fcal_availability_body">
                                 <div class="fcal_timezone_text">
                                     <el-icon><TimezoneIcon/></el-icon>
@@ -80,11 +80,11 @@
                                 <div class="fcal_availability_setting">
                                     <WeeklySchedules
                                         :weekly_schedules="slot.settings.weekly_schedules"
-                                        title="Weekly Hours"
+                                        :title="$t('Weekly Hours')"
                                     />
                                     <date-over-rides
                                         :settings="slot.settings"
-                                        title="Add date overrides"
+                                        :title="$t('Add date overrides')"
                                     />
 
                                 </div>
@@ -94,15 +94,15 @@
                 </el-form-item>
 
                 <el-form-item label="Scheduling conditions" class="fcal_override_scheduling_condition_wrap">
-                    <span class="sub-label">Invitees can't schedule within...</span>
+                    <span class="sub-label">{{ $t("Invitees can't schedule within...") }}</span>
                     <SchedulingConditions :settings="slot.settings"/>
                 </el-form-item>
 
-                <el-form-item label="Want to add buffer time before or after your events?">
+                <el-form-item :label="$t('ScheduleSettings/before/after_event_label')">
                     <div class="fcal_buffer_time_wrap">
                         <div class="fcal_buffer_time_before">
-                            <span class="sub-label">Before Event</span>
-                            <el-select v-model="slot.settings.buffer_time_before" placeholder="Select" popper-class="fcal_select">
+                            <span class="sub-label">{{ $t('Before Event') }}</span>
+                            <el-select v-model="slot.settings.buffer_time_before" :placeholder="$t('Select')" popper-class="fcal_select">
                                 <el-option
                                     v-for="time in bufferTimes"
                                     :key="time.value"
@@ -112,8 +112,8 @@
                             </el-select>
                         </div>
                         <div class="fcal_buffer_time_after">
-                            <span class="sub-label">After Event</span>
-                            <el-select v-model="slot.settings.buffer_time_after" placeholder="Select" popper-class="fcal_select">
+                            <span class="sub-label">{{ $t('After Event') }}</span>
+                            <el-select v-model="slot.settings.buffer_time_after" :placeholder="$t('Select')" popper-class="fcal_select">
                                 <el-option
                                     v-for="time in bufferTimes"
                                     :key="time.value"

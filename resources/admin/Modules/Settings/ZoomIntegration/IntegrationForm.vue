@@ -14,13 +14,13 @@
             <el-icon>
                 <Lock/>
             </el-icon>
-            The above app secret key will be encrypted and stored securely.
+            {{ $t('The above app secret key will be encrypted and stored securely.') }}
         </p>
 
         <div class="fcal_integration_form_footer">
             <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
                        class="fcal_primary_btn">
-                Save & Validate Credentials
+                {{ $t('Save & Validate Credentials') }}
             </el-button>
         </div>
     </div>

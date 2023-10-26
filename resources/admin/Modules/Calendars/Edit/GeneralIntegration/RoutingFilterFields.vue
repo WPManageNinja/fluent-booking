@@ -53,7 +53,7 @@
                                            :label="label" :value="value"
                                 ></el-option>
                             </el-select>
-                            <el-input size="small" v-else placeholder="Enter a value" v-model="routing.value"></el-input>
+                            <el-input size="small" v-else :placeholder="$t('Enter a value')" v-model="routing.value"></el-input>
                         </td>
                         <td>
                             <action-btn>

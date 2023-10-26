@@ -4,7 +4,7 @@
         filterable
         remote
         reserve-keyword
-        placeholder="Search host and select"
+        :placeholder="$t('Search host and select')"
         remote-show-suffix
         :remote-method="fetchHosts"
         :loading="loading"

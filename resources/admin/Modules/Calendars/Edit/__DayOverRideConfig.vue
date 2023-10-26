@@ -10,7 +10,7 @@
                                 step="00:10"
                                 end="23:50"
                                 :max-time="slot.end"
-                                placeholder="Start"
+                                :placeholder="$t('Start')"
                                 popper-class="fcal_select"
                                 :disabled="isUnavailable"
                 />
@@ -20,7 +20,7 @@
                                 step="00:10"
                                 :min-time="slot.start"
                                 end="23:50"
-                                placeholder="End"
+                                :placeholder="$t('End')"
                                 popper-class="fcal_select"
                                 :disabled="isUnavailable"
                 />

@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_availability_setting">
         <div class="fcal_weekly_schedule_wrap">
-            <h2 class="fcal_availability_title">Weekly Hours</h2>
+            <h2 class="fcal_availability_title">{{ $t('Weekly Hours') }}</h2>
             <div class="fcal_weekly_existing_schedule">
                 <div class="fcal_weekly_existing_schedule_header">
                     <div class="fcal_timezone_text">
@@ -10,7 +10,7 @@
                     </div>
 
                     <el-button class="fcal_plain_btn" @click="goToEdit">
-                        <el-icon><Edit /></el-icon> Edit Availability
+                        <el-icon><Edit /></el-icon> {{ $t('Edit Availability') }}
                     </el-button>
                 </div>
                 <ul>
@@ -20,14 +20,14 @@
                             <span v-if="schedule.slots.length" v-for="(time, index) in schedule.slots" :key="index">
                                 {{ time.start }} - {{ time.end }}
                             </span>
-                            <span v-else class="unavailable">Unavailable</span>
+                            <span v-else class="unavailable">{{ $t('Unavailable') }}</span>
                         </span>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="fcal_override_table">
-            <h2 class="fcal_availability_title">Date Overrides</h2>
+            <h2 class="fcal_availability_title">{{ $t('Date Overrides') }}</h2>
             <div class="fcal_override_date">
                 <table v-if="dateOverridesNotEmpty" class="fcal_table_compact fcal_table_stripe">
                     <tbody>
@@ -45,7 +45,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div v-else>No specific date overrides found for this schedule</div>
+                <div v-else>{{ $t('No specific date overrides found for this schedule') }}</div>
             </div>
         </div>
     </div>
