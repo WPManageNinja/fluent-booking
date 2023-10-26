@@ -252,6 +252,22 @@ $lightDark: #6b7280;
 
   &.fcal_on_desktop {
     transition: .3s;
+    .fcal_calendar_slot_wrap {
+      .fcal_slot_picker {
+        overflow: auto;
+        max-height: 100%;
+        &::-webkit-scrollbar {
+          width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background: #e4e4e7;
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+      }
+    }
   }
 
   .fcal_side {
@@ -864,22 +880,7 @@ $lightDark: #6b7280;
 
 
 .fcal_slot_items {
-  max-height: 390px;
-  overflow: auto;
   padding-right: 8px;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #e4e4e7;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
 
   .fcal_spot_lists {
     margin: 0;
@@ -1071,6 +1072,10 @@ $lightDark: #6b7280;
     align-items: center;
     justify-content: space-between;
     padding-right: 12px;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 
     .fcal_slot_picker_header_action {
       display: flex;
@@ -1138,7 +1143,7 @@ $lightDark: #6b7280;
       position: relative !important;
       display: flex;
       flex-direction: column;
-      width: 350px !important;
+      width: calc(100% - 1px) !important;
       max-width: 350px !important;
       padding-left: 20px !important;
 
@@ -1177,6 +1182,7 @@ $lightDark: #6b7280;
 .fcal_timezone_select {
   max-width: 300px;
   margin-top: 30px;
+  padding-left: 1px;
 
   label {
     font-weight: 500;
