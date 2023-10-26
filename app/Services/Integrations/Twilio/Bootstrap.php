@@ -47,10 +47,10 @@ class Bootstrap
 
         return [
             'logo'          => $app['url.assets'] . 'images/twilio.svg',
-            'title'         => __('Twilio SMS Integration', 'fluent_booking'),
-            'subtitle'      => __('Configure Twilio API to send SMS notifications on booking events', 'fluent_booking'),
+            'title'         => __('Twilio SMS Integration', 'fluent-booking-pro'),
+            'subtitle'      => __('Configure Twilio API to send SMS notifications on booking events', 'fluent-booking-pro'),
             'description'   => '<h3>Twilio SMS integration will be available in our next version.</h3>',
-            'save_btn_text' => __('Save Settings', 'fluent_booking'),
+            'save_btn_text' => __('Save Settings', 'fluent-booking-pro'),
             'fields'        => $fields,
             'will_encrypt'  => false
         ];

@@ -71,7 +71,7 @@ class ConnectConfig
         if (empty($response['stripe_user_id'])) {
             $message = Arr::get($response, 'message');
             if (!$message) {
-                $message = 'Invalid Stripe Request. Please configure stripe payment gateway again';
+                $message = __('Invalid Stripe Request. Please configure stripe payment gateway again', 'fluent-booking-pro');
             }
             return  '<div class="fct_message fct_message_error">' . esc_html($message) . '</div>';
 
@@ -161,7 +161,7 @@ class ConnectConfig
         if ($stripeSettings['is_active'] != 'yes') {
             if ($sendResponse) {
                 wp_send_json_error([
-                    'message' => 'Stripe mode is not active'
+                    'message' => __('Stripe mode is not active', 'fluent-booking-pro')
                 ], 422);
             }
             return false;
@@ -171,7 +171,7 @@ class ConnectConfig
         if (empty($stripeSettings[$mode.'_account_id'])) {
             if ($sendResponse) {
                 wp_send_json_error([
-                    'message' => 'Selected Account does not exist'
+                    'message' => __('Selected Account does not exist', 'fluent-booking-pro')
                 ], 422);
             }
             return false;
@@ -198,7 +198,7 @@ class ConnectConfig
 
         if ($sendResponse) {
             wp_send_json_success([
-                'message' => 'Stripe settings has been disconnected',
+                'message' => __('Stripe settings has been disconnected', 'fluent-booking-pro'),
                 'settings' => $stripeSettings
             ], 200);
         }

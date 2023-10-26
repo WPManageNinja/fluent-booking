@@ -136,7 +136,7 @@ class IntegrationSettingsController extends Controller
         do_action('fluent_booking/after_disconnect_remote_calendar', $metaId, $calendar);
 
         return [
-            'message' => 'Your selected remote calendar has been disconnected'
+            'message' => __('Your selected remote calendar has been disconnected', 'fluent-booking-pro')
         ];
     }
 
@@ -149,7 +149,7 @@ class IntegrationSettingsController extends Controller
 
         if (!$data) {
             return $this->sendError([
-                'message' => 'Integration Feed Settings could not be found. Driver missing!'
+                'message' => __('Integration Feed Settings could not be found. Driver missing!', 'fluent-booking-pro')
             ]);
         }
 
@@ -164,7 +164,7 @@ class IntegrationSettingsController extends Controller
         do_action('fluent_booking/disconnect_general_integration_feed_' . $settingsKey, $calendar);
 
         return [
-            'message' => 'Your selected integration feed has been disconnected'
+            'message' => __('Your selected integration feed has been disconnected', 'fluent-booking-pro')
         ];
     }
 

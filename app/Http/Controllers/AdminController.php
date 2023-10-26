@@ -246,7 +246,7 @@ class AdminController extends Controller
             ->where('key', '_access_permissions')
             ->delete();
 
-        $message = __('Member has been deleted successfull', 'fluent-booking-pro');
+        $message = __('Member has been deleted successful', 'fluent-booking-pro');
         return [
             'message' => $message
         ];

@@ -30,9 +30,9 @@ class NewBookingTrigger extends BaseTrigger
     public function getTrigger()
     {
         return [
-            'category'    => __('Booking', 'fluent-booking'),
-            'label'       => __('New Booking (Fluent Booking)', 'fluent-booking'),
-            'description' => __('This Funnel will be initiated when a new booking has been confirmed', 'fluent-booking'),
+            'category'    => __('Booking', 'fluent-booking-pro'),
+            'label'       => __('New Booking (Fluent Booking)', 'fluent-booking-pro'),
+            'description' => __('This Funnel will be initiated when a new booking has been confirmed', 'fluent-booking-pro'),
             'icon'        => 'fc-icon-fluentforms',
         ];
     }
@@ -57,8 +57,8 @@ class NewBookingTrigger extends BaseTrigger
              'run_only_one' => [
                  'type'        => 'yes_no_check',
                  'label'       => '',
-                 'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking'),
-                 'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking'),
+                 'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking-pro'),
+                 'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking-pro'),
                  'options'     => FunnelHelper::getUpdateOptions()
              ],
         ];
@@ -67,13 +67,13 @@ class NewBookingTrigger extends BaseTrigger
      public function getSettingsFields($funnel)
      {
          return [
-             'title'     => __('New Booking Confirm Funnel', 'fluent-booking'),
-             'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking'),
+             'title'     => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
+             'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking-pro'),
              'fields'    => [
                 'event_id'  => [
                     'type'        => 'grouped-select',
-                    'label'       => __('Booking Calendar', 'fluent-booking'),
-                    'placeholder' => __('Select Calendar', 'fluent-booking'),
+                    'label'       => __('Booking Calendar', 'fluent-booking-pro'),
+                    'placeholder' => __('Select Calendar', 'fluent-booking-pro'),
                     'is_multiple' => false,
                     'options'     => $this->getCalendarOptions()
                 ],
@@ -81,8 +81,8 @@ class NewBookingTrigger extends BaseTrigger
                     'type'        => 'option_selectors',
                     'option_key'  => 'editable_statuses',
                     'is_multiple' => false,
-                    'label'       => __('Subscription Status', 'fluent-booking'),
-                    'placeholder' => __('Select Status', 'fluent-booking')
+                    'label'       => __('Subscription Status', 'fluent-booking-pro'),
+                    'placeholder' => __('Select Status', 'fluent-booking-pro')
                 ]
              ]
          ];

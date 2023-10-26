@@ -135,7 +135,7 @@ class CalendarIntegrationService
         }
 
         return [
-            'message'          => __('Integration successfully saved', 'fluent_booking'),
+            'message'          => __('Integration successfully saved', 'fluent-booking-pro'),
             'integration_id'   => $integrationId,
             'integration_name' => $integrationName,
             'created'          => $created,
