@@ -11,6 +11,7 @@
                     <p class="fcal_profile_link" v-else-if="!calendar.public_url"><span style="cursor: pointer;" @click="goToIntegrationSetting">
                         {{ $t('Enable Landing Page') }}
                     </span></p>
+                    <div v-if="calendar.generic_error" v-html="calendar.generic_error"></div>
                 </div>
             </div>
             <div class="fcal_cal_actions">
