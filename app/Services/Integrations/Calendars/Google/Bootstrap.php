@@ -110,7 +110,7 @@ class Bootstrap
                 ->where('object_id', $calendar->user_id)
                 ->first();
 
-            $message = !$meetExist ? ' '.__('(Connect Google Meet First)', 'fluent-booking-pro') : '';
+            $message = !$meetExist ? ' ' . __('(Connect Google Meet First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
@@ -178,6 +178,30 @@ class Bootstrap
 
         add_action('fluent_booking/existing_event_attendees_async_add', [$this, 'addNewAttendee'], 10, 3);
         add_action('fluent_booking/existing_event_attendees_async_remove', [$this, 'removeExistingAttendee'], 10, 3);
+
+
+        add_action('fluent_booking/before_get_all_calendars', function () {
+            if (!GoogleHelper::isConfigured()) {
+                return;
+            }
+            // Show the Google last error
+            add_action('fluent_booking/calendar', function (&$calendar, $type) {
+                if ($type != 'lists') {
+                    return $calendar;
+                }
+
+                $meta = Meta::where('object_type', '_google_user_token')
+                    ->where('object_id', $calendar->user_id)
+                    ->first();
+
+                if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
+                    return $calendar;
+                }
+                $error = Arr::get($meta->value, 'last_error');
+                $calendar->generic_error = '<p style="color: red; margin:0;">Google Calendar API Error: ' . $error . '. <a href="'.Helper::getAppBaseUrl('calendars/'.$calendar->id.'/settings/remote-calendars').'">Click Here to Review</a></p>';
+            }, 10, 2);
+        });
+
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -347,7 +371,7 @@ class Bootstrap
                     return $events;
                 }, $cacheTime * 60);
 
-                if ($remoteSlots && !is_wp_error( $remoteSlots )) {
+                if ($remoteSlots && !is_wp_error($remoteSlots)) {
                     $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
                 }
             }
@@ -380,7 +404,7 @@ class Bootstrap
         if (!$calendar) {
             return false;
         }
-        
+
         if ($booking->getMeta('__google_calendar_event')) {
             return false; // Already created
         }
@@ -455,7 +479,7 @@ class Bootstrap
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'location'  => $booking->getLocationAsText(),
+            'location'           => $booking->getLocationAsText(),
             'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
             'extendedProperties' => [
                 'shared' => [

@@ -198,6 +198,21 @@ class SchedulesController extends Controller
         ];
     }
 
+    public function deleteBooking(Request $request, $bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        do_action('fluent_booking/before_delete_booking', $booking);
+
+        $booking->delete();
+
+        do_action('fluent_booking/after_delete_booking', $bookingId);
+
+        return [
+            'message' => __('Booking Deleted Successfully!', 'fluent-booking')
+        ];
+    }
+
     public function getGroupAttendees(Request $request, $groupId)
     {
         $isAdmin = current_user_can('manage_options');
@@ -277,6 +292,7 @@ class SchedulesController extends Controller
         $booking->happening_status = $booking->getOngoingStatus();
         $booking->location = $booking->getLocationDetailsHtml();
         $booking->custom_form_data = $booking->getCustomFormData();
+        $booking->reschedule_url = $booking->getRescheduleUrl();
 
         if ($booking->payment_method) {
             $booking->payment_order->load(['items', 'transaction']);

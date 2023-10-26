@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\Calendars\Google;
 
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\Framework\Support\Arr;
 
 class GoogleCalendar
 {
@@ -64,8 +65,8 @@ class GoogleCalendar
         $metaModel = $this->metaModel;
         $settings = $metaModel->value;
 
-        if ($settings['expires_in'] - 10 <= time()) {
-            $settings['refresh_token'] = Helper::decryptKey($settings['refresh_token']);
+        if (Arr::get($settings, 'expires_in', 0) - 10 <= time()) {
+            $settings['refresh_token'] = Helper::decryptKey(Arr::get($settings, 'refresh_token'));
 
             $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
 
