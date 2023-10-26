@@ -36,6 +36,14 @@
                     />
                     <p class="fcal_input_desc" v-if="calendar.type == 'simple'">{{ $t('Should be same as the host name') }}</p>
                 </el-form-item>
+                <el-form-item :label="$t('Host Phone (with country code)')">
+                    <el-input
+                        v-model="calendar.author_profile.phone"
+                        type="text"
+                        :placeholder="$t('Enter the Host Phone Number')"
+                    />
+                    <p class="fcal_input_desc">This number will be used for sending sms notification</p>
+                </el-form-item>
                 <el-form-item :label="$t('About')">
                     <el-input
                         v-model="calendar.description"
@@ -119,6 +127,7 @@ export default {
                 calendar_data: {
                     description: this.calendar.description,
                     title: this.calendar.title,
+                    phone: this.calendar.author_profile.phone,
                     calendar_avatar: this.calendar.author_profile.avatar,
                     featured_image: this.calendar.author_profile.featured_image
                 }

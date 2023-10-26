@@ -237,7 +237,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($id);
 
-        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image']);
+        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image', 'phone']);
 
         if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
@@ -250,6 +250,7 @@ class CalendarController extends Controller
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
+            $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
         }
 
 
@@ -521,9 +522,9 @@ class CalendarController extends Controller
 
         foreach ($notifications as $key => $value) {
             $formattedNotifications[$key] = [
-                'title'   => sanitize_text_field($value['title']),
+                'title'   => sanitize_text_field(Arr::get($value, 'title')),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'email'   => $this->sanitize_notification_data($value['email']),
+                'email'   => $this->sanitize_notification_data(Arr::get($value, 'email')),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
@@ -532,6 +533,48 @@ class CalendarController extends Controller
 
         return [
             'message' => __('Notifications has been saved', 'fluent-booking-pro')
+        ];
+    }
+
+    public function getSlotSmsNotifications(Request $request, $calendarId, $slotId)
+    {
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $data = [
+            'notifications' => $calendarEvent->getSmsNotifications(true)
+        ];
+
+        if (in_array('smart_codes', $request->get('with', []))) {
+            $data['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
+        }
+
+        return $data;
+    }
+
+    public function saveSlotSmsNotifications(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $notifications = $request->get('notifications', []);
+
+        $formattedNotifications = [];
+
+        foreach ($notifications as $key => $value) {
+            $formattedNotifications[$key] = [
+                'title'   => sanitize_text_field(Arr::get($value, 'title')),
+                'enabled' => Arr::isTrue($value, 'enabled'),
+                'sms'     => $this->sanitize_notification_data(Arr::get($value, 'sms')),
+                'is_host' => Arr::isTrue($value, 'is_host')
+            ];
+        }
+
+        $slot->setSmsNotifications($formattedNotifications);
+
+        return [
+            'message' => __('Notifications has been saved', 'fluent-booking')
         ];
     }
 
@@ -611,6 +654,9 @@ class CalendarController extends Controller
             'unit'                  => 'sanitize_text_field',
             'subject'               => 'sanitize_text_field',
             'body'                  => 'fcal_sanitize_html',
+            'number'                => 'sanitize_text_field',
+            'reciever'              => 'sanitize_text_field',
+            'send_to'               => 'sanitize_text_field',
             'additional_recipients' => 'sanitize_text_field'
         ];
 

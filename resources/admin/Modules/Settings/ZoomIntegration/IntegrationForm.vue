@@ -17,7 +17,7 @@
             {{ $t('The above app secret key will be encrypted and stored securely.') }}
         </p>
 
-        <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+        <div class="fcal_integration_form_footer">
             <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
                        class="fcal_primary_btn">
                 {{ $t('Save & Validate Credentials') }}
