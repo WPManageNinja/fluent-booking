@@ -140,7 +140,6 @@ class AvailabilityService
             }
         }
         return $defaultSchedule;
-
     }
 
     public static function createScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC', $weeklySchedule = [], $dateOverrides = [])

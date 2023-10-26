@@ -826,6 +826,14 @@
       > * {
         margin: 0;
       }
+      .el-button {
+        padding: 7px 12px !important;
+        height: auto !important;
+        border-radius: 6px !important;
+        i {
+          font-size: 14px !important;
+        }
+      }
     }
   }
 }

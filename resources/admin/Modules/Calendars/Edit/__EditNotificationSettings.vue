@@ -101,7 +101,7 @@ export default {
             }
         },
         smart_codes: {
-            type: Array,
+            type: Object,
             default() {
                 return {
                     texts: {},

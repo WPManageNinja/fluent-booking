@@ -70,7 +70,8 @@ export default {
         SaveButton,
         Message,
         EditPen,
-        Close
+        Close,
+        Message
     },
     data() {
         return {
