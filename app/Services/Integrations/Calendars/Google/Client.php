@@ -114,7 +114,7 @@ class Client
         $formattedLists = [];
         foreach ($lists['items'] as $item) {
             $sharedData = Arr::get($item, 'extendedProperties.shared');
-            if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent_booking' && Arr::get($sharedData, 'site_uid') == $siteUid) {
+            if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent-booking-pro' && Arr::get($sharedData, 'site_uid') == $siteUid) {
                 continue;
             }
 

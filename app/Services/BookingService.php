@@ -12,7 +12,7 @@ class BookingService
     public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
-            throw new \Exception('Email, Start Time and timezone are required to create a booking', 422);
+            throw new \Exception(__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
         }
 
         if (!$calendarSlot) {
@@ -122,7 +122,7 @@ class BookingService
 
         $guestName = trim($booking->first_name . ' ' . $booking->last_name);
 
-        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', $calendarSlot->title, $guestName, $author['name']);
+        $meetingTitle = sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
 
         $sections = [
             'what'  => [
@@ -135,7 +135,7 @@ class BookingService
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking-pro'),
-                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">Host</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
+                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">'.__('Host', 'fluent-booking-pro').'</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
                 'title'   => __('Where', 'fluent-booking-pro'),
@@ -172,7 +172,7 @@ class BookingService
             'sections'    => $sections,
             'slot'        => $calendarSlot,
             'booking'     => $booking,
-            'message'     => 'A confirmation has been sent to your email address along with meeting location details.',
+            'message'     => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking-pro'),
             'action_type' => $actionType,
             'can_cancel'  => $booking->canCancel(),
             'bookmarks'   => [],
