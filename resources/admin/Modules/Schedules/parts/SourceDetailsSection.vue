@@ -9,7 +9,6 @@
             <div>
                 <div v-html="booking.sourceDetails.content"></div>
             </div>
-            <div class="fcal_source_link" v-html="booking.source"></div>
         </div>
     </div>
 </template>

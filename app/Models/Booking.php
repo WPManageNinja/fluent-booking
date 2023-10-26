@@ -97,6 +97,7 @@ class Booking extends Model
 
         static::deleting(function ($model) { // before delete() method call this
             $model->hosts()->delete();
+            $model->booking_meta()->delete();
         });
 
         static::addGlobalScope('main_bookings', function ($builder) {
@@ -117,6 +118,11 @@ class Booking extends Model
     public function calendar_event()
     {
         return $this->belongsTo(CalendarSlot::class, 'event_id');
+    }
+
+    public function booking_meta()
+    {
+        return $this->hasMany(BookingMeta::class, 'booking_id');
     }
 
     public function getCustomFormData($isFormatted = true)
