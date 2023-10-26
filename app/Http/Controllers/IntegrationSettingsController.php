@@ -111,7 +111,7 @@ class IntegrationSettingsController extends Controller
         do_action('fluent_calendar/patch_calendar_config_settings_' . $meta->object_type, $conflictCheckIds, $meta, $calendar);
 
         return [
-            'message' => 'Your settings has been updated'
+            'message' => __('Your settings has been updated', 'fluent-booking-pro')
         ];
     }
 
@@ -123,7 +123,7 @@ class IntegrationSettingsController extends Controller
         RemoteCalendarHelper::updateUserRemoteCreatableCalendarSettings($calendar->user_id, $settings);
 
         return [
-            'message' => 'Your settings has been updated'
+            'message' => __('Your settings has been updated', 'fluent-booking-pro')
         ];
     }
 

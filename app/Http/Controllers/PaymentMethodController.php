@@ -141,7 +141,7 @@ class PaymentMethodController extends Controller
 
         if (!$event) {
             return $this->sendError([
-                'message' => 'Calendar not found'
+                'message' => __('Calendar not found', 'fluent-booking-pro')
             ], 404);
         }
 

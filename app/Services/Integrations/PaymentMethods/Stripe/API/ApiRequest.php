@@ -146,7 +146,7 @@ class ApiRequest
             if(!empty($body->error->code)) {
                 $code = $body->error->code;
             }
-            $message = 'Stripe General Error';
+            $message = __('Stripe General Error', 'fluent-booking-pro');
             if(!empty($body->error->message)) {
                 $message = $body->error->message;
             }

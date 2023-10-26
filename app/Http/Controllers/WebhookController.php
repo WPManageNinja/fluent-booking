@@ -111,7 +111,7 @@ class WebhookController extends Controller
                 'value' => 'after_booking_scheduled'
             ],
             [
-                'label' => 'Booking Canceled',
+                'label' => __('Booking Canceled', 'fluent-booking-pro'),
                 'value' => 'booking_schedule_cancelled'
             ],
             [

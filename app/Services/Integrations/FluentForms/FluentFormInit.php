@@ -227,8 +227,8 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'error',
-                    'title'            => 'Appointment could not be created',
-                    'description'      => 'Appointment could not be created because email is not given or invalid',
+                    'title'            => __('Appointment could not be created', 'fluent-booking-pro'),
+                    'description'      => __('Appointment could not be created because email is not given or invalid', 'fluent-booking-pro'),
                 ]);
                 continue;
             }
@@ -276,7 +276,7 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'info',
-                    'title'            => 'Booking has been created on FluentBooking',
+                    'title'            => __('Booking has been created on FluentBooking', 'fluent-booking-pro'),
                     'description'      => sprintf('A new appointment has been created on FluentBooking. %1sView Booking Details%2s', '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
                 ]);
 
@@ -287,7 +287,7 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'error',
-                    'title'            => 'Failed to create booking',
+                    'title'            => __('Failed to create booking', 'fluent-booking-pro'),
                     'description'      => $exception->getMessage(),
                 ]);
             }
