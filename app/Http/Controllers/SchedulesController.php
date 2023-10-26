@@ -100,8 +100,8 @@ class SchedulesController extends Controller
                 $pendingCount = Booking::where('status', 'pending')->count();
             }
 
-            $data['no_show_count']   = Booking::where('status', 'no_show')->count();
-            $data['pending_count']   = $pendingCount;
+            $data['no_show_count'] = Booking::where('status', 'no_show')->count();
+            $data['pending_count'] = $pendingCount;
             $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
         }
 
@@ -190,8 +190,6 @@ class SchedulesController extends Controller
 
         $booking = $booking->findOrFail($bookingId);
         $booking = $this->formatBooking($booking);
-
-        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         return [
             'schedule' => $booking
@@ -296,9 +294,9 @@ class SchedulesController extends Controller
             $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
         }
 
-        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
-
         $booking->slot = $booking->calendar_event;
+
+        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         return $booking;
     }

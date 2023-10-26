@@ -2,26 +2,23 @@
 
 namespace FluentBooking\App\Services\Integrations\FluentForms;
 
-use FluentBooking\App\App;
-use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
+use FluentForm\App\Models\Submission;
 use FluentForm\App\Modules\Form\FormFieldsParser;
+use FluentForm\App\Services\FormBuilder\ShortCodeParser;
 
 
 class FluentFormInit
 {
     public function init()
     {
-        if (defined('FLUENTFORM')) {
-            $this->registerHooks();
-            $this->registerIntegrations();
-        }
+        $this->registerHooks();
+        $this->registerIntegrations();
     }
 
     public function registerHooks()
@@ -39,6 +36,8 @@ class FluentFormInit
             $elements[] = 'fcal_booking';
             return $elements;
         });
+
+        add_action('fluent_booking/booking_schedule', [$this, 'pushFormDataToBooking'], 10, 1);
     }
 
     public function registerIntegrations()
@@ -54,7 +53,7 @@ class FluentFormInit
 
         $name = Arr::get($field, 'name');
 
-        if(!isset($formData[$name])) {
+        if (!isset($formData[$name])) {
             return $error;
         }
 
@@ -310,6 +309,45 @@ class FluentFormInit
             wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
 
             wp_localize_script('fluent_booking', 'fluentCalendarPublicVars', (new FrontEndHandler())->getGlobalVars());
+        }
+    }
+
+
+    public function pushFormDataToBooking(&$booking)
+    {
+        $submissionId = Arr::get($booking, 'source_id');
+
+        if ('fluentform' != $booking->source || !$submissionId) {
+            return;
+        }
+
+
+        try {
+            $submission = Submission::find($submissionId);
+
+            if (!$submission) {
+                return;
+            }
+
+            $response = json_decode($submission->response);
+
+            $entryHtmlData = ShortCodeParser::parse(
+                '{all_data}',
+                $submission->id,
+                $response,
+                $submission->form,
+                false,
+                true
+            );
+
+            $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">View Form Submission</a></p>';
+
+            $booking->sourceDetails = [
+                'title'   => __('Related Form Data', 'fluent-booking'),
+                'content' => $entryHtmlData
+            ];
+        } catch (\Exception $e) {
+            return;
         }
     }
 }
