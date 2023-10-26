@@ -55,8 +55,14 @@ class FluentFormInit
             return $error;
         }
 
-        $isRequired = Arr::get($field, 'rules.required.value');
         $name = Arr::get($field, 'name');
+
+        if(!isset($formData[$name])) {
+            return $error;
+        }
+
+        $isRequired = Arr::get($field, 'rules.required.value');
+
         $bookingData = Arr::get($formData, $name);
 
         if ($bookingData) {
@@ -72,12 +78,6 @@ class FluentFormInit
                     $error = sprintf(__('%s field is required', 'fluent-booking-pro'), Arr::get($field, 'raw.settings.label'));
                 }
 
-                add_filter('fluentform/validation_errors', function ($errors) use ($field) {
-                    $error = sprintf(__('%s field is required', 'fluent-booking-pro'), Arr::get($field, 'raw.settings.label'));
-                    $errors[] = $error;
-                    return $errors;
-                });
-
                 return $error;
             }
         }
@@ -86,12 +86,7 @@ class FluentFormInit
         $event = CalendarSlot::find($eventId);
 
         if (!$event || $event->status != 'active') {
-            $error = __('Sorry, This host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
-            add_filter('fluentform/validation_errors', function ($errors) use ($error) {
-                $errors[] = $error;
-                return $errors;
-            });
-            return $error;
+            return __('Sorry, This host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
 
         $startTime = $bookingData['start_time'];
@@ -123,10 +118,6 @@ class FluentFormInit
             }
 
             if ($fieldError) {
-                add_filter('fluentform/validation_errors', function ($errors) use ($fieldError) {
-                    $errors[] = $fieldError;
-                    return $errors;
-                });
                 return $fieldError;
             }
         }
