@@ -66,7 +66,7 @@
         }
     }
     .el-select {
-        width: 96px;
+        width: 110px;
         .el-input__wrapper {
             padding: 3px 16px !important;
         }
@@ -860,15 +860,6 @@
                             }
                         }
                     }
-                    &.fcal_sms_radio {
-                        .el-radio__label {
-                            font-size: 14px;
-                        }
-                        .el-radio__inner {
-                            width: 20px;
-                            height: 20px;
-                        }
-                    }
                 }
             }
             .fcal_integration_form_footer {
@@ -972,6 +963,26 @@
                             width: 100%;
                             display: flex;
                             align-items: center;
+                        }
+                    }
+                    &.fcal_sms_radio {
+                        .el-radio__label {
+                            font-size: 14px !important;
+                        }
+                        .el-radio__inner {
+                            width: 20px !important;
+                            height: 20px !important;
+                            &:after {
+                                width: 10px !important;
+                                height: 10px !important;
+                            }
+                        }
+                    }
+                    .el-input {
+                        .el-input__wrapper {
+                            input {
+                                background: none;
+                            }
                         }
                     }
                 }
