@@ -156,7 +156,7 @@ class CalendarIntegrationService
             foreach ($feeds as $feed) {
                 $data = $feed->value;
                 $enabled = Arr::get($data, 'enabled');
-                if ($enabled) {
+                if ($enabled == 'true') {
                     $enabled = true;
                 } else {
                     $enabled = false;

@@ -46,13 +46,12 @@
                         </div>
                         <div class="fcal_card_actions">
                             <el-switch
-                                active-color="#13ce66"
+                                active-color="#306ae0"
                                 @change="handleActive(feed)"
                                 v-model="feed.settings.enabled"
                             ></el-switch>
                             <el-button
-                                size="small"
-                                type="success"
+                                class="fcal_plain_btn"
                                 @click="edit(feed)"
                             >
                                 <el-icon>
@@ -66,7 +65,7 @@
                                 @confirm="deleteWebhook(feed.id)"
                             >
                                 <template #reference>
-                                    <el-button type="danger" size="small" class="fcal_danger_btn">
+                                    <el-button type="danger" class="fcal_danger_btn">
                                         <el-icon>
                                             <Delete/>
                                         </el-icon>

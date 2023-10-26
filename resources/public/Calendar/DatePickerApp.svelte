@@ -6,7 +6,6 @@
     import {createEventDispatcher, onMount} from 'svelte';
 
     export let slot;
-    export let settings;
     export let timezone;
     export let appData;
     
