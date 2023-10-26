@@ -357,6 +357,9 @@ export default {
             localStorage.setItem("hide_schedule_details_sidebar", this.isHideSidebar);
         },
         updateCurrentSchedule(newSchedule) {
+            if (!newSchedule) {
+                this.goBackToList();
+            }
             this.current_schedule = newSchedule;
         }
     },

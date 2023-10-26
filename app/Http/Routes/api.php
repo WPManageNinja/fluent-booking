@@ -51,6 +51,7 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
 $router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($router) {
     $router->get('/', 'SchedulesController@index'); // Need to check permission on the controller method
     $router->get('/{id}', 'SchedulesController@getBooking')->int('id');
+    $router->delete('/{id}', 'SchedulesController@deleteBooking')->int('id');
     $router->get('/{id}/slot', 'SchedulesController@getScheduleSpot')->int('id');
     $router->put('/{id}', 'SchedulesController@patchBooking')->int('id');
     $router->get('/{id}/activities', 'SchedulesController@getBookingActivities')->int('id');
