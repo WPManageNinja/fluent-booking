@@ -120,7 +120,7 @@ class IntegrationHelper
         $resBody = json_decode(wp_remote_retrieve_body($request), true);
 
         if ($resCode != 200 && $resCode != 201) {
-            $message = Arr::get($resBody, 'error.message', 'Something went wrong');
+            $message = Arr::get($resBody, 'error.message', __('Something went wrong', 'fluent-booking-pro'));
             return new \WP_Error($resCode, $message);
         }
 

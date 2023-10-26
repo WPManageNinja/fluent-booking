@@ -35,7 +35,7 @@ class ZoomController extends Controller
             } else {
                 $userData = [
                     'user_id'    => $metaItem->object_id,
-                    'name'       => 'Deleted user',
+                    'name'       => __('Deleted user', 'fluent-booking-pro'),
                     'user_email' => ''
                 ];
             }

@@ -37,7 +37,7 @@ class Bootstrap extends IntegrationManagerController
     public function pushIntegration($integrations, $calendarEventId)
     {
         $integrations[$this->integrationKey] = [
-            'title'                 => $this->title . ' Integration',
+            'title'                 => $this->title . ' ' . __('Integration', 'fluent-booking-pro'),
             'logo'                  => $this->logo,
             'is_active'             => $this->isConfigured(),
             'configure_title'       => __('Configuration required!', 'fluent-booking-pro'),
@@ -91,7 +91,7 @@ class Bootstrap extends IntegrationManagerController
             $fieldOptions[$field['slug']] = $field['label'];
         }
 
-        $fieldOptions['avatar'] = 'Profile Photo';
+        $fieldOptions['avatar'] = __('Profile Photo', 'fluent-booking-pro');
 
         unset($fieldOptions['email']);
         unset($fieldOptions['first_name']);

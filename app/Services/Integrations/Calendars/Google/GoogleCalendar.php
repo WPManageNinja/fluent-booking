@@ -121,7 +121,7 @@ class GoogleCalendar
         $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
 
         if (empty($eventData['start']) || empty($eventData['end'])) {
-            return new \WP_Error('invalid_data', 'start and end data is required');
+            return new \WP_Error('invalid_data', __('start and end data is required', 'fluent-booking-pro'));
         }
 
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
