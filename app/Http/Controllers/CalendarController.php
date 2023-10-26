@@ -250,7 +250,7 @@ class CalendarController extends Controller
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
-            $calendar->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
+            $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
         }
 
 
@@ -522,9 +522,9 @@ class CalendarController extends Controller
 
         foreach ($notifications as $key => $value) {
             $formattedNotifications[$key] = [
-                'title'   => sanitize_text_field($value['title']),
+                'title'   => sanitize_text_field(Arr::get($value, 'title')),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'email'   => $this->sanitize_notification_data($value['email']),
+                'email'   => $this->sanitize_notification_data(Arr::get($value, 'email')),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
@@ -564,10 +564,9 @@ class CalendarController extends Controller
 
         foreach ($notifications as $key => $value) {
             $formattedNotifications[$key] = [
-                'title'   => sanitize_text_field($value['title']),
+                'title'   => sanitize_text_field(Arr::get($value, 'title')),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'sms'     => $this->sanitize_notification_data($value['sms']),
-                'receiver'=> SanitizeService::checkCollection(Arr::get($value, 'receiver'), ['host_number', 'custom_number']),
+                'sms'     => $this->sanitize_notification_data(Arr::get($value, 'sms')),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
@@ -656,6 +655,8 @@ class CalendarController extends Controller
             'subject'               => 'sanitize_text_field',
             'body'                  => 'fcal_sanitize_html',
             'number'                => 'sanitize_text_field',
+            'reciever'              => 'sanitize_text_field',
+            'send_to'               => 'sanitize_text_field',
             'additional_recipients' => 'sanitize_text_field'
         ];
 

@@ -18,7 +18,7 @@
                         <div v-html="fieldSettings.description"></div>
                         <template v-if="fieldSettings.fields">
                             <el-form v-model="settings" label-position="top">
-                                <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label+' *'" :class="{'input-with-copy': field.copy_btn}">
+                                <el-form-item v-for="(field, fieldKey) in fieldSettings.fields" :label="field.label" :class="{'input-with-copy': field.copy_btn}">
                                     <el-input
                                         v-if="field.type == 'text'"
                                         v-model="settings[fieldKey]"

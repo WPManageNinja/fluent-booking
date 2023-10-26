@@ -65,6 +65,12 @@
                     + Add Another Reminder
             </el-link>
         </el-form-item>
+        <el-form-item label="Send *" class="fcal_sms_radio">
+            <el-radio-group v-model="notification.sms.send_to">
+                <el-radio label="phone">SMS</el-radio>
+                <el-radio label="whatsapp">WhatsApp</el-radio>
+            </el-radio-group>
+        </el-form-item>
         <el-form-item label="Status">
             <el-checkbox v-model="notification.enabled"> Enable this sms notification</el-checkbox>
         </el-form-item>

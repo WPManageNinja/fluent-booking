@@ -50,4 +50,39 @@ class User extends Model
         return $this->hasOne(Staff::class, 'object_id');
     }
 
+    public function getMeta($key, $default = null)
+    {
+        $meta = Meta::where('object_type', 'user_meta')
+            ->where('object_id', $this->ID)
+            ->where('key', $key)
+            ->first();
+
+        if (!$meta) {
+            return $default;
+        }
+
+        return $meta->value;
+    }
+
+    public function updateMeta($key, $value)
+    {
+        $exist = Meta::where('object_type', 'user_meta')
+            ->where('object_id', $this->ID)
+            ->where('key', $key)
+            ->first();
+
+        if ($exist) {
+            $exist->value = $value;
+            $exist->save();
+        } else {
+            $exist = Meta::create([
+                'object_type' => 'user_meta',
+                'object_id'   => $this->ID,
+                'key'         => $key,
+                'value'       => $value
+            ]);
+        }
+
+        return $exist;
+    }
 }

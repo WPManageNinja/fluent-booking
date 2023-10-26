@@ -1008,10 +1008,6 @@ $lightDark: #6b7280;
 .svelte-select {
   box-sizing: border-box !important;
   padding-left: 0!important;
-  * {
-    //width: auto !important;
-    //max-width: 100px !important;
-  }
 
   .svelte-select-list {
     border: 1px solid #EAECF0 !important;
@@ -1188,6 +1184,7 @@ $lightDark: #6b7280;
   }
   .svelte-select {
     padding-left: 20px !important;
+    border-radius: 8px !important;
   }
 }
 

@@ -91,7 +91,7 @@ class Calendar extends Model
                 'avatar'         => $this->getMeta('profile_photo_url'),
                 'name'           => 'Unknown',
                 'email'          => '',
-                'phone'          => $this->getMeta('host_phone'),
+                'phone'          => '',
                 'featured_image' => $this->getMeta('featured_image_url')
             ];
         }
@@ -110,7 +110,7 @@ class Calendar extends Model
             'first_name'     => $user->first_name,
             'last_name'      => $user->last_name,
             'avatar'         => $photo,
-            'phone'          => $this->getMeta('host_phone'),
+            'phone'          => $this->user->getMeta('host_phone'),
             'featured_image' => $this->getMeta('featured_image_url')
         ];
 
