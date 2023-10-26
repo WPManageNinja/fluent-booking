@@ -19,6 +19,8 @@ class CalendarController extends Controller
 {
     public function getAllCalendars(Request $request)
     {
+        do_action('fluent_booking/before_get_all_calendars', $request);
+
         $permission = PermissionManager::userCan(['manage_other_calendars', 'read_other_calendars']);
         if ($permission) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
@@ -36,7 +38,7 @@ class CalendarController extends Controller
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
-            do_action_ref_array('fluent_booking/calendar', [&$calendar]);
+            do_action_ref_array('fluent_booking/calendar', [&$calendar, 'lists']);
         }
 
         return [
@@ -276,7 +278,7 @@ class CalendarController extends Controller
 
         $calendar->author_profile = $calendar->getAuthorProfile();
 
-        do_action_ref_array('fluent_booking/calendar', [&$calendar]);
+        do_action_ref_array('fluent_booking/calendar', [&$calendar, 'update']);
 
         return [
             'calendar' => $calendar,

@@ -87,11 +87,11 @@ class Bootstrap
 
             $config = GoogleHelper::getApiConfig();
 
-            $description = '<p>Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">documentation</a></p>';
+            $description = '<p>' . __('Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">' . __('documentation', 'fluent-booking-pro') . '</a></p>';
 
             if (!empty($config['constant_defined'])) {
                 $fields = null;
-                $description = '<p>Google Calendar/Meet integration is configured by wp-config.php constants. No action required here</p>';
+                $description = '<p>' . __('Google Calendar/Meet integration is configured by wp-config.php constants. No action required here', 'fluent-booking-pro') . '</p>';
             }
 
             return [
@@ -110,19 +110,19 @@ class Bootstrap
                 ->where('object_id', $calendar->user_id)
                 ->first();
 
-            $message = !$meetExist ? ' '.__('(Connect Google Meet First)', 'fluent-booking-pro') : '';
+            $message = !$meetExist ? ' ' . __('(Connect Google Meet First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
                 $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
                 if (!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
-                    $message = ' (Set Google Event Creat First)';
+                    $message = __('(Set Google Event Creat First)', 'fluent-booking-pro');
                     $meetExist = false;
                 }
             }
 
             $fields['conferencing']['options']['google_meet'] = [
-                'title'         => 'Google Meet' . $message,
+                'title'         => __('Google Meet', 'fluent-booking-pro') . $message,
                 'disabled'      => !$meetExist,
                 'location_type' => 'conferencing'
             ];
@@ -178,6 +178,30 @@ class Bootstrap
 
         add_action('fluent_booking/existing_event_attendees_async_add', [$this, 'addNewAttendee'], 10, 3);
         add_action('fluent_booking/existing_event_attendees_async_remove', [$this, 'removeExistingAttendee'], 10, 3);
+
+
+        add_action('fluent_booking/before_get_all_calendars', function () {
+            if (!GoogleHelper::isConfigured()) {
+                return;
+            }
+            // Show the Google last error
+            add_action('fluent_booking/calendar', function (&$calendar, $type) {
+                if ($type != 'lists') {
+                    return $calendar;
+                }
+
+                $meta = Meta::where('object_type', '_google_user_token')
+                    ->where('object_id', $calendar->user_id)
+                    ->first();
+
+                if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
+                    return $calendar;
+                }
+                $error = Arr::get($meta->value, 'last_error');
+                $calendar->generic_error = '<p style="color: red; margin:0;">Google Calendar API Error: ' . $error . '. <a href="'.Helper::getAppBaseUrl('calendars/'.$calendar->id.'/settings/remote-calendars').'">Click Here to Review</a></p>';
+            }, 10, 2);
+        });
+
     }
 
     public function pushGoogleFeeds($feeds, $userId)
@@ -196,7 +220,7 @@ class Bootstrap
             $remoteCalendars = $this->getRemoteCalendarsList($item, true);
 
             if (is_wp_error($remoteCalendars)) {
-                $errors = $remoteCalendars->get_error_message() . ' Please remove the connection and reconnect again.';
+                $errors = $remoteCalendars->get_error_message() . ' ' . __('Please remove the connection and reconnect again.', 'fluent-booking-pro');
                 $remoteCalendars = [];
             }
 
@@ -237,9 +261,9 @@ class Bootstrap
         if (is_wp_error($response)) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Failed to connect Calendar API', 'fluent-booking-pro'),
-                'body'     => 'Google API Response Error: ' . $response->get_error_message(),
+                'body'     => __('Google API Response Error:', 'fluent-booking-pro') . ' ' . $response->get_error_message(),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
-                'btn_text' => 'Back to Calendars Configuration'
+                'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
             ]);
             return;
         }
@@ -259,9 +283,9 @@ class Bootstrap
         if ($requiredScopes) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Required scopes missing', 'fluent-booking-pro'),
-                'body'     => 'Looks like you did not allow the required scopes. Please try again with the following scopes: ' . implode(', ', $requiredScopes),
+                'body'     => __('Looks like you did not allow the required scopes. Please try again with the following scopes:', 'fluent-booking-pro') . ' ' . implode(', ', $requiredScopes),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
-                'btn_text' => 'Back to Calendars Configuration'
+                'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
             ]);
         }
 
@@ -347,7 +371,7 @@ class Bootstrap
                     return $events;
                 }, $cacheTime * 60);
 
-                if ($remoteSlots && !is_wp_error( $remoteSlots )) {
+                if ($remoteSlots && !is_wp_error($remoteSlots)) {
                     $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
                 }
             }
@@ -380,7 +404,7 @@ class Bootstrap
         if (!$calendar) {
             return false;
         }
-        
+
         if ($booking->getMeta('__google_calendar_event')) {
             return false; // Already created
         }
@@ -455,7 +479,7 @@ class Bootstrap
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'location'  => $booking->getLocationAsText(),
+            'location'           => $booking->getLocationAsText(),
             'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
             'extendedProperties' => [
                 'shared' => [
@@ -577,7 +601,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -594,7 +618,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to update event in Google calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;

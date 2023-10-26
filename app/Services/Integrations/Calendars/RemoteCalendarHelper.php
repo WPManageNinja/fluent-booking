@@ -90,10 +90,10 @@ class RemoteCalendarHelper
     public static function showGeneralError($data = [])
     {
         $defaults = [
-            'title'    => 'Unknow error',
-            'body'     => 'Something went wrong. Please try again later.',
+            'title'    => __('Unknown error', 'fluent-booking-pro'),
+            'body'     => __('Something went wrong. Please try again later.', 'fluent-booking-pro'),
             'btn_url'  => Helper::getAppBaseUrl(),
-            'btn_text' => 'Back to dashboard'
+            'btn_text' => __('Back to dashboard', 'fluent-booking-pro')
         ];
 
         $data = array_merge($defaults, $data);

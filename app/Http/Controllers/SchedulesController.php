@@ -133,12 +133,12 @@ class SchedulesController extends Controller
         ];
 
         if (!in_array($column, $validColumns)) {
-            return $this->sendError(['message' => 'Invalid column']);
+            return $this->sendError(['message' => __('Invalid column', 'fluent-booking-pro')]);
         }
 
         if ($column === 'email') {
             if (!$value || !is_email($value)) {
-                return $this->sendError(['message' => 'Invalid email address']);
+                return $this->sendError(['message' => __('Invalid email address', 'fluent-booking-pro')]);
             }
             $value = sanitize_email($value);
         } else if ($column === 'internal_note') {
@@ -150,7 +150,7 @@ class SchedulesController extends Controller
         if ($column == 'status') {
             $value = sanitize_text_field($value);
             if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'no_show'])) {
-                return $this->sendError(['message' => 'Invalid status']);
+                return $this->sendError(['message' => __('Invalid status', 'fluent-booking-pro')]);
             }
 
             if ($value == 'cancelled') {

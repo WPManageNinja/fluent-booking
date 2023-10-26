@@ -184,7 +184,7 @@ class FrontEndHandler
     public function handleReceiptShortcode($atts, $content)
     {
         if (!isset($_REQUEST['hash'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            return 'Booking hash is missing!';
+            return __('Booking hash is missing!', 'fluent-booking-pro');
         }
 
         $hash = sanitize_text_field($_REQUEST['hash']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -293,7 +293,7 @@ class FrontEndHandler
 
         if (!$calendarSlot || $calendarSlot->status != 'active') {
             wp_send_json([
-                'message' => 'Sorry, this host is not accepting any new bookings at the moment'
+                'message' => __('Sorry, this host is not accepting any new bookings at the moment', 'fluent-booking-pro')
             ], 422);
         }
 
@@ -345,7 +345,7 @@ class FrontEndHandler
         $validator = $app->validator->make($postedData, $validationConfig['rules'], $validationConfig['messages']);
         if ($validator->validate()->fails()) {
             wp_send_json([
-                'message' => 'Please fill up the required data',
+                'message' => __('Please fill up the required data', 'fluent-booking-pro'),
                 'errors'  => $validator->errors()
             ], 422);
             return;
@@ -423,7 +423,7 @@ class FrontEndHandler
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json([
-            'message'       => 'Booking has been confirmed',
+            'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
             'response_html' => $html,
             'booking_hash'  => $booking->hash
         ], 200);

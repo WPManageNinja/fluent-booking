@@ -132,18 +132,18 @@ class WebhookIntegration
 
         if (is_wp_error($responseCode)) {
             $success = false;
-            $logDescription = 'Failed to send webhook to ' . $remoteUrl . ' due to ' . $responseCode->get_error_message();
+            $logDescription = __('Failed to send webhook to', 'fluent-booking-pro') . ' ' . $remoteUrl . ' due to ' . $responseCode->get_error_message();
         } else if ($success) {
-            $logDescription = 'Webhook sent successfully to ' . $remoteUrl;
+            $logDescription = __('Webhook sent successfully to', 'fluent-booking-pro') . ' ' . $remoteUrl;
         } else {
-            $logDescription = 'Failed to send webhook to ' . $remoteUrl . '. Remote Response Code: ' . wp_remote_retrieve_response_message($response);
+            $logDescription = __('Failed to send webhook to', 'fluent-booking-pro') . ' ' . $remoteUrl . '. Remote Response Code: ' . wp_remote_retrieve_response_message($response);
         }
 
         do_action('fluent_booking/log_booking_activity', [
             'booking_id'  => $booking->id,
             'status'      => 'closed',
             'type'        => $success ? 'success' : 'error',
-            'title'       => $success ? 'Webhook sent successfully' : 'Failed to send webhook',
+            'title'       => $success ? __('Webhook sent successfully', 'fluent-booking-pro') : __('Failed to send webhook', 'fluent-booking-pro'),
             'description' => $logDescription
         ]);
 

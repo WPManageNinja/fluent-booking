@@ -115,7 +115,7 @@ class Stripe extends BasePaymentMethod
             'items'               => $items,
             'amount'              => (int)round($paymentTotal),
             'currency'            => strtolower($currency),
-            'description'         => "Payment for Order",
+            'description'         => __('Payment for Order', 'fluent-booking-pro'),
             'customer_email'      => $orderItem->email,
             'success_url'         => $this->getSuccessUrl($orderItem),
         );
@@ -178,7 +178,7 @@ class Stripe extends BasePaymentMethod
         $orderHash = self::getOrderHash($invoice);
 
         if (!$invoice || is_wp_error($invoice)) {
-            error_log('invoice not found');
+            error_log(__('invoice not found', 'fluent-booking-pro'));
             return;
         }
 
@@ -298,7 +298,7 @@ class Stripe extends BasePaymentMethod
         $invoiceData = [
             'account_tax_ids'   => [],
             'custom_fields'     => [],
-            'description'       => 'Invoice for Order #' . $args['client_reference_id'],
+            'description'       => __('Invoice for Order', 'fluent-booking-pro') . ' #' . $args['client_reference_id'],
             'footer'            => '',
             'metadata'          => [
                 'ref_id' => $args['client_reference_id'],

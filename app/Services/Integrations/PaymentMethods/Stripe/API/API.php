@@ -43,7 +43,7 @@ class API
                 $message = Arr::get($sessionData, 'error.message');
             }
             if (!$message) {
-                $message = 'Unknown Stripe API request error';
+                $message = __('Unknown Stripe API request error', 'fluent-booking-pro');
             }
 
             return new \WP_Error(422, $message, $sessionData);
