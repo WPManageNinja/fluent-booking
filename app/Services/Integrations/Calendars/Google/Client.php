@@ -118,15 +118,25 @@ class Client
                 continue;
             }
 
+            $recurrence = Arr::get($item, 'recurrence.0');
+
             if(!empty($item['start']['date'])) {
-                $item['start']['dateTime'] = DateTimeHelper::convertToTimeZone($item['start']['date'], $lists['timeZone'], 'UTC', 'Y-m-d\TH:i:s\Z');
+                if($recurrence) {
+                    $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d');
+                } else {
+                    $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
+                }
             }
 
             if(!empty($item['end']['date'])) {
-                $item['end']['dateTime'] = DateTimeHelper::convertToTimeZone($item['end']['date'], $lists['timeZone'], 'UTC', 'Y-m-d\TH:i:s\Z');
+                if($recurrence) {
+                    $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d');
+                } else {
+                    $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
+                }
             }
 
-            if ($recurrence = Arr::get($item, 'recurrence.0')) {
+            if ($recurrence) {
                 $recurrenceDate = RemoteCalendarHelper::getRruleDates($recurrence, [
                     Arr::get($item, 'start.dateTime'),
                     Arr::get($item, 'end.dateTime'),
