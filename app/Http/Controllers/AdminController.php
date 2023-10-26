@@ -79,7 +79,7 @@ class AdminController extends Controller
         $allHosts = [];
 
         foreach ($calendars as $calendar) {
-            $userName = 'Deleted User';
+            $userName = __('Deleted User', 'fluent-booking-pro');
             if ($calendar->user) {
                 $userName = $calendar->user->full_name;
             }

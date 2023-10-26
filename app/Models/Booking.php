@@ -237,9 +237,9 @@ class Booking extends Model
         }
 
         if ($locationType == 'google_meet') {
-            $html = '<b>Google Meet </b> ';
+            $html = '<b>' . __('Google Meet', 'fluent-booking-pro') . ' </b> ';
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
             }
             return $html;
         }
@@ -247,15 +247,15 @@ class Booking extends Model
         if ($locationType == 'online_meeting') {
             $html = '<b>' . __('Online Meeting', 'fluent-booking-pro') . '</b> ';
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
             }
             return $html;
         }
 
         if ($locationType == 'zoom_meeting') {
-            $html = '<b>Zoom Video</b> ';
+            $html = '<b>' . __('Zoom Video', 'fluent-booking-pro') . '</b> ';
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">Online Joining URL</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
             }
             return $html;
         }
@@ -265,7 +265,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . ' (Host phone number)';
+            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . __('(Host phone number)', 'fluent-booking-pro');
         }
 
         if ($locationType == 'custom') {

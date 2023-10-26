@@ -211,7 +211,7 @@ class AvailabilityController extends Controller
         $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $schedule->object_id, $schedule->key);
 
         if ($isTitleExist) {
-            $message = $title . ' is already exist';
+            $message = $title . ' ' . __('is already exist', 'fluent-booking-pro');
             return $this->sendError([
                 'message' => $message,
             ], 422);
