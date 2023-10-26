@@ -450,7 +450,13 @@ class TransStrings
             'Show Video'                                            => __('Show Video', 'fluent-booking-pro'),
             'No Data Found'                                         => __('No Data Found', 'fluent-booking-pro'),
             'Select Guest Email Field'                              => __('Select Guest Email Field', 'fluent-booking-pro'),
-            'Select Guest Name Field'                               => __('Select Guest Name Field', 'fluent-booking-pro')
+            'Select Guest Name Field'                               => __('Select Guest Name Field', 'fluent-booking-pro'),
+            'No Calendars found'                                    => __('No Calendars found', 'fluent-booking-pro'),
+            'Which Schedule Do You Want to Use ?'                   => __('Which Schedule Do You Want to Use ?', 'fluent-booking-pro'),
+            '+Add more questions for invitees'                      => __('+Add more questions for invitees', 'fluent-booking-pro'),
+            '+Add new option'                                       => __('+Add new option', 'fluent-booking-pro'),
+            'Save'                                                  => __('Save', 'fluent-booking-pro'),
+            'Time Format'                                           => __('Time Format', 'fluent-booking-pro')
         ];
 
     }
