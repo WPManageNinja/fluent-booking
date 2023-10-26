@@ -6,7 +6,7 @@
         class="fcal_dialog">
         <p v-if="fieldData.system_defined">{{ $t('EditCustomFieldModal/system_defined_field_label') }}</p>
         <el-form v-if="openModal" label-position="top" >
-            <el-form-item label="Field Type">
+            <el-form-item :label="$t('Field Type')">
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.type"
@@ -45,7 +45,7 @@
                     {{ $t('+Add new option') }}
                 </el-link>
             </el-form-item>
-            <el-form-item label="Required">
+            <el-form-item :label="$t('Required')">
                 <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
                     <el-radio :label="true">{{ $t('Yes') }}</el-radio>
                     <el-radio :label="false">{{ $t('No') }}</el-radio>
@@ -121,7 +121,7 @@ export default {
     methods: {
         saveChanges() {
             if (!this.fieldData.label) {
-                this.$handleError("Label field is required");
+                this.$handleError(this.$t('Label field is required'));
                 return;
             }
             this.$emit('updateFieldData', this.fieldData, this.isNewEntry);

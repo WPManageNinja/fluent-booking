@@ -81,7 +81,7 @@ export default {
                 method: this.route_name
             })
                 .then(response => {
-                    this.$notify.success('Settings updated!');
+                    this.$notify.success(this.$t('Settings updated!'));
                 })
                 .catch((errors) => {
                     this.$handleError(errors);

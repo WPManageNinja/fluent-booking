@@ -35,7 +35,7 @@
             label-position="top"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
-                <el-form-item label="Select Host">
+                <el-form-item :label="$t('Select Host')">
                     <HostSelector v-model="user_id"/>
                     <p>{{ $t('AllCalendars/create_host_desc') }}</p>
                 </el-form-item>
