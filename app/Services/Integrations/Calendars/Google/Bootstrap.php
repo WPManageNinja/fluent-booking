@@ -57,18 +57,18 @@ class Bootstrap
             $fields = [
                 'client_id'     => [
                     'type'        => 'text',
-                    'label'       => __('Client ID', 'fluent_booking'),
-                    'placeholder' => __('Enter Your Client ID', 'fluent_booking'),
+                    'label'       => __('Client ID', 'fluent-booking-pro'),
+                    'placeholder' => __('Enter Your Client ID', 'fluent-booking-pro'),
                 ],
                 'client_secret' => [
                     'type'        => 'text',
-                    'label'       => __('Secret Key', 'fluent_booking'),
-                    'placeholder' => __('Enter Your Secret Key', 'fluent_booking'),
+                    'label'       => __('Secret Key', 'fluent-booking-pro'),
+                    'placeholder' => __('Enter Your Secret Key', 'fluent-booking-pro'),
                 ],
                 'redirect_url'  => [
                     'type'        => 'text',
-                    'label'       => __('Redirect URI', 'fluent_booking'),
-                    'placeholder' => __('Enter Your Redirect URI', 'fluent_booking'),
+                    'label'       => __('Redirect URI', 'fluent-booking-pro'),
+                    'placeholder' => __('Enter Your Redirect URI', 'fluent-booking-pro'),
                     'readonly'    => true,
                     'copy_btn'    => true,
                 ],
@@ -80,8 +80,8 @@ class Bootstrap
                         '10' => '10 minutes',
                         '15' => '15 minutes',
                     ],
-                    'label'       => __('Caching Time', 'fluent_booking'),
-                    'inline_help' => __('Select for how many minutes the Google Calendar event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in google then you may lower the value', 'fluent_booking')
+                    'label'       => __('Caching Time', 'fluent-booking-pro'),
+                    'inline_help' => __('Select for how many minutes the Google Calendar event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in google then you may lower the value', 'fluent-booking-pro')
                 ],
             ];
 
@@ -96,10 +96,10 @@ class Bootstrap
 
             return [
                 'logo'          => $app['url.assets'] . 'images/google-calendar.svg',
-                'title'         => __('Google Calendar / Meet', 'fluent_booking'),
-                'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent_booking'),
+                'title'         => __('Google Calendar / Meet', 'fluent-booking-pro'),
+                'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent-booking-pro'),
                 'description'   => $description,
-                'save_btn_text' => __('Save Google API Configuration', 'fluent_booking'),
+                'save_btn_text' => __('Save Google API Configuration', 'fluent-booking-pro'),
                 'fields'        => $fields,
                 'will_encrypt'  => true
             ];
@@ -110,7 +110,7 @@ class Bootstrap
                 ->where('object_id', $calendar->user_id)
                 ->first();
 
-            $message = !$meetExist ? ' (Connect Google Meet First)' : '';
+            $message = !$meetExist ? ' '.__('(Connect Google Meet First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
@@ -270,9 +270,9 @@ class Bootstrap
         if (is_wp_error($calendarEmail)) {
             RemoteCalendarHelper::showGeneralError([
                 'title'    => __('Google API Error', 'fluent-booking-pro'),
-                'body'     => 'We could not authenticate your account. Please try again later.',
+                'body'     => __('We could not authenticate your account. Please try again later.', 'fluent-booking-pro'),
                 'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
-                'btn_text' => 'Back to Calendars Configuration'
+                'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
             ]);
         }
 
@@ -423,7 +423,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -459,7 +459,7 @@ class Bootstrap
             'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
             'extendedProperties' => [
                 'shared' => [
-                    'created_by' => 'fluent_booking',
+                    'created_by' => 'fluent-booking-pro',
                     'site_uid'   => GoogleHelper::getUniqueSiteIdHash(),
                     'event_id'   => $slot->id,
                     'booking_id' => $booking->id
@@ -495,7 +495,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to create event in Google calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -714,7 +714,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -739,7 +739,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -792,7 +792,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
@@ -817,7 +817,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Google Calendar API Error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
                 'description' => __(sprintf('Failed to remove attendee from Google calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;

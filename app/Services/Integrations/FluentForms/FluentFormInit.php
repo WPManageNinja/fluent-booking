@@ -11,8 +11,6 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
-use FluentBooking\App\Services\Integrations\FluentForms\BookingElement;
-use FluentBooking\App\Services\Integrations\FluentForms\FormDataUpdate;
 use FluentForm\App\Modules\Form\FormFieldsParser;
 
 
@@ -46,7 +44,6 @@ class FluentFormInit
     public function registerIntegrations()
     {
         new BookingElement();
-        new FormDataUpdate();
     }
 
     public function handleValidations($error, $field, $formData)

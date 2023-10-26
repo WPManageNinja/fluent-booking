@@ -127,40 +127,40 @@ class Calendar extends Model
                 'options' => [],
             ],
             'in_person'    => [
-                'label'   => 'In Person',
+                'label'   => __('In Person', 'fluent-booking-pro'),
                 'options' => [
                     'in_person_guest'     => [
-                        'title' => 'In Person (Attendee Address)',
+                        'title' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
                     ],
                     'in_person_organizer' => [
-                        'title' => 'In Person (Organizer Address)',
+                        'title' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
                     ],
                 ],
             ],
             'phone'        => [
-                'label'   => 'Phone',
+                'label'   => __('Phone', 'fluent-booking-pro'),
                 'options' => [
                     'phone_guest'     => [
-                        'title' => 'Attendee Phone Number',
+                        'title' => __('Attendee Phone Number', 'fluent-booking-pro'),
                     ],
                     'phone_organizer' => [
-                        'title' => 'Organizer Phone Number',
+                        'title' => __('Organizer Phone Number', 'fluent-booking-pro'),
                     ],
                 ],
             ],
             'online'       => [
-                'label'   => 'Online',
+                'label'   => __('Online', 'fluent-booking-pro'),
                 'options' => [
                     'online_meeting' => [
-                        'title' => 'Online Meeting',
+                        'title' => __('Online Meeting', 'fluent-booking-pro'),
                     ],
                 ],
             ],
             'other'        => [
-                'label'   => 'Other',
+                'label'   => __('Other', 'fluent-booking-pro'),
                 'options' => [
                     'custom' => [
-                        'title' => 'Custom',
+                        'title' => __('Custom', 'fluent-booking-pro'),
                     ],
                 ],
             ],

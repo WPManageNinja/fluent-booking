@@ -63,7 +63,7 @@ class BookingElement extends BaseFieldManager
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
-                        'message' => __('This field is required', 'fluent-booking-pro'),
+                        'message' => __('Appointment Date & Time is required', 'fluent-booking-pro'),
                     ],
                 ),
             ),
@@ -213,23 +213,23 @@ class BookingElement extends BaseFieldManager
                 $calendar = $booking->calendar;
                 $html = '<div class="ff_entry_table_wrapper"><table class="ff_entry_table_field ff-table">';
                 $html .= '<tr>';
-                $html .= '<th>Booking ID</th>';
+                $html .= '<th>'.__('Booking ID', 'fluent-booking-pro').'</th>';
                 $html .= '<td>' . $booking->id . ' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>Booking Status</th>';
+                $html .= '<th>'.__('Booking Status', 'fluent-booking-pro').'</th>';
                 $html .= '<td>' . $booking->status . '</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>Date & Time</th>';
+                $html .= '<th>'.__('Date & Time', 'fluent-booking-pro').'</th>';
                 $html .= '<td>' . $booking->getFullBookingDateTimeText($calendar->author_timezone, true) . ' (' . $calendar->author_timezone . ')</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>Meeting Duration</th>';
+                $html .= '<th>'.__('Meeting Duration', 'fluent-booking-pro').'</th>';
                 $html .= '<td>' . $booking->slot_minutes . ' Minutes</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>Meeting Host</th>';
+                $html .= '<th>'.__('Meeting Host', 'fluent-booking-pro').'</th>';
                 $html .= '<td>' . $calendar->title . '</td>';
                 $html .= '</tr>';
                 $html .= '</html></div>';
