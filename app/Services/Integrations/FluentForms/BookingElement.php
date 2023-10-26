@@ -162,13 +162,13 @@ class BookingElement extends BaseFieldManager
         $slot = CalendarSlot::find($slot_id);
 
         if (!$slot) {
-            return 'Slot Not Found';
+            return __('Slot Not Found', 'fluent-booking-pro');
         }
 
         $calendar = $slot->calendar;
 
         if (!$slot->calendar) {
-            return 'Calendar Not Found';
+            return __('Calendar Not Found', 'fluent-booking-pro');
         }
 
         $slot->max_lookup_date = $slot->getMaxLookUpDate();

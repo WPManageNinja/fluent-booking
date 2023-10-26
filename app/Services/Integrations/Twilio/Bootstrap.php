@@ -138,7 +138,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Twilio API Error',
+                'title'       => __('Twilio API Error', 'fluent-booking-pro'),
                 'description' => __('Failed to send sms with Twilio API', 'fluent-booking')
             ]);
             return false;
@@ -224,7 +224,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'SMS Sent Successfully',
+                    'title'       => __('SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Confirmation SMS has been aent to attendee'),
                     'booking_id'  => $booking->id
@@ -245,7 +245,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'SMS Sent Successfully',
+                    'title'       => __('SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Confirmation SMS has been sent to host'),
                     'booking_id'  => $booking->id
@@ -281,7 +281,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'Reminder SMS Sent Successfully',
+                    'title'       => __('Reminder SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Reminder SMS has been sent to attendee'),
                     'booking_id'  => $booking->id
@@ -301,7 +301,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'Reminder SMS Sent Successfully',
+                    'title'       => __('Reminder SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Reminder SMS has been sent to host'),
                     'booking_id'  => $booking->id
@@ -343,7 +343,7 @@ class Bootstrap
 
                 if ($smsSend) {
                     do_action('fluent_booking/log_booking_note', [
-                        'title'       => 'Cancellation SMS Sent Successfully',
+                        'title'       => __('Cancellation SMS Sent Successfully', 'fluent-booking-pro'),
                         'type'        => 'activity',
                         'description' => __('Booking Cancellation SMS has been sent to the host'),
                         'booking_id'  => $booking->id
@@ -364,7 +364,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'Cancellation SMS Sent Successfully',
+                    'title'       => __('Cancellation SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Cancellation SMS has been sent to the Attendee'),
                     'booking_id'  => $booking->id
@@ -406,7 +406,7 @@ class Bootstrap
 
                 if ($smsSend) {
                     do_action('fluent_booking/log_booking_note', [
-                        'title'       => 'Rescheduling SMS Sent Successfully',
+                        'title'       => __('Rescheduling SMS Sent Successfully', 'fluent-booking-pro'),
                         'type'        => 'activity',
                         'description' => __('Booking Rescheduling SMS has been sent to the host'),
                         'booking_id'  => $booking->id
@@ -427,7 +427,7 @@ class Bootstrap
 
             if ($smsSend) {
                 do_action('fluent_booking/log_booking_note', [
-                    'title'       => 'Rescheduling SMS Sent Successfully',
+                    'title'       => __('Rescheduling SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
                     'description' => __('Booking Rescheduling SMS has been sent to the Attendee'),
                     'booking_id'  => $booking->id
