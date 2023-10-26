@@ -139,6 +139,11 @@ app.mixin({
             return !!window.fluentFrameworkAdmin.supported_features[feature];
         },
         $t(str) {
+            // for testing
+            if (!window.fluentFrameworkAdmin.trans[str]) {
+                console.log(str);
+            }
+            
             return window.fluentFrameworkAdmin.trans[str] || str;
         },
         ucFirst(str) {
