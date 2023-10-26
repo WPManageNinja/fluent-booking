@@ -69,7 +69,7 @@ export default {
                 });
         },
         disconnectCalendar() {
-            this.$confirm('Are you sure you want to disconnect this calendar? This action can\'t be undone.', 'Disconnect Calendar', {
+            this.$confirm(this.$t('RemoteCalendar/disconnect_calendar_description'), this.$t('Disconnect Calendar'), {
                 confirmButtonText: this.$t('Confirm Disconnect'),
                 cancelButtonText: this.$t('Cancel')
             })

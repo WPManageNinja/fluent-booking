@@ -3,7 +3,7 @@
 
         <div class="fcal_header">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ name: 'calendars' }">Booking Types</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ name: 'calendars' }">{{ $t('Booking Types') }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ calendar.author_profile?.name }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ slot?.title }}</el-breadcrumb-item>
             </el-breadcrumb>
@@ -32,7 +32,7 @@
                     <el-skeleton v-if="loading"/>
                     <basic-info v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
-                        <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
+                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                     </div>
                 </div>
             </el-tab-pane>
@@ -48,7 +48,7 @@
                     <el-skeleton v-if="loading"/>
                     <ScheduleSettings v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
-                        <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
+                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                     </div>
                 </div>
             </el-tab-pane>
@@ -71,7 +71,7 @@
                     <el-icon>
                         <Notification/>
                     </el-icon>
-                    SMS Notifications
+                    {{ $t('SMS Notifications') }}
                 </template>
                 <div v-if="activeTab == 'sms-notifications'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
@@ -247,16 +247,16 @@ export default {
         checkValidation() {
             const location = this.slot.location_settings[0];
             if (!location.type) {
-                this.$handleError('Location is required');
+                this.$handleError(this.$t('Location is required'));
                 return false;
             } else if ((location.type == 'custom') && !location.title)  {
-                this.$handleError('Location Title is required');
+                this.$handleError(this.$t('Location Title is required'));
                 return false;
             } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
-                this.$handleError('Location Description is required');
+                this.$handleError(this.$t('Location Description is required'));
                 return false;
             } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
-                this.$handleError('Phone Number is required');
+                this.$handleError(this.$t('Phone Number is required'));
                 return false;
             }
             return true;
@@ -294,11 +294,11 @@ export default {
         copyTo(text) {
             const CopyText = '[fluent_booking id="'+text+'"]';
             copyToClipBoard(CopyText);
-            this.$handleSuccess('Shortcode has been copied to your clipboard');
+            this.$handleSuccess(this.$t('Shortcode has been copied to your clipboard'));
         },
     },
     mounted() {
-        this.$changeTitle('Event Settings');
+        this.$changeTitle(this.$t('Event Settings'));
         this.getSlot();
     }
 }

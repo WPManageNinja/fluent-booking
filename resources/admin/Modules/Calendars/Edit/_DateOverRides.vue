@@ -202,7 +202,7 @@ export default {
         },
         addOverRides() {
             if (!this.current_selects.length) {
-                this.$notify.error('Please select a date first');
+                this.$notify.error(this.$t('Please select a date first'));
                 return;
             }
 

@@ -10,7 +10,7 @@
                 {{ $t('Congratulations!') }}
                 <PartyIcon class="party_icon" />
             </h1>
-            <p>Thank You or Choosing FluentBooking. Let’s - <b>Create Your First Booking Event</b> <br>(Will Take Less Than a Minute!)</p>
+            <p>{{ $t('Thank You or Choosing FluentBooking.Let’s -') }} <b>{{ $t('Create Your First Booking Event') }}</b> <br>{{ $t('(Will Take Less Than a Minute!)') }}</p>
         </div>
         <div class="fcal_create_calendar_header">
             <h1 v-if="!is_board" style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
@@ -24,7 +24,7 @@
                     <div class="fcal_create_calendar_basic_info">
                         <basic-info ref="basicInfo" :is_board="is_board" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
                     </div>
-                    <el-form-item label="Select Your Timezone *" class="fcal_global_timezone">
+                    <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone">
                         <time-zone-selector v-model="calendar.author_timezone"/>
                     </el-form-item>
                 </div>

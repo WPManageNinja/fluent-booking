@@ -70,16 +70,16 @@ export default {
         checkValidation() {
             const location = this.slot.location_settings[0];
             if (!location.type) {
-                this.$handleError('Location is required');
+                this.$handleError(this.$t('Location is required'));
                 return false;
             } else if ((location.type == 'custom') && !location.title)  {
-                this.$handleError('Location Title is required');
+                this.$handleError(this.$t('Location Title is required'));
                 return false;
             } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
-                this.$handleError('Location Description is required');
+                this.$handleError(this.$t('Location Description is required'));
                 return false;
             } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
-                this.$handleError('Phone Number is required');
+                this.$handleError(this.$t('Phone Number is required'));
                 return false;
             }
             return true;
@@ -120,7 +120,7 @@ export default {
         },
     },
     mounted() {
-        this.$changeTitle('Create new Event Type');
+        this.$changeTitle(this.$t('Create new Event Type'));
         this.getSlotSchema();
     }
 }

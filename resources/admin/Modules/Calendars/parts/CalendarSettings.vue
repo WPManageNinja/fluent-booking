@@ -1,7 +1,7 @@
 <template>
     <el-form label-position="top">
-        <el-form-item label="Description">
-            <el-input :rows="4" placeholder="Calendar Description" type="textarea"
+        <el-form-item :label="$t('Description')">
+            <el-input :rows="4" :placeholder="$t('Calendar Description')" type="textarea"
                       v-model="calendar.description"></el-input>
         </el-form-item>
 
