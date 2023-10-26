@@ -2691,6 +2691,16 @@
         }
       }
 
+      .fcal_source_link {
+        padding: 6px 12px 12px 12px;
+        a {
+            font-size: 14px;
+            font-weight: 500;
+            color: #306ae0;
+            text-decoration: none;
+        }
+      }
+
       .fcal_schedule_details_event_additional {
         margin-top: 20px;
 

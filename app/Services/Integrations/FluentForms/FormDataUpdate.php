@@ -46,7 +46,7 @@ class FormDataUpdate
     {
         $url = admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $this->submission->form_id . '#/entries/' . $this->submission->id);
 
-        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'fluentform' . '</a>';
+        $link = '<a target="_blank" href="' . esc_url($url) . '">' . 'view entry details' . '</a>';
 
         $booking->source = $link;
     }
