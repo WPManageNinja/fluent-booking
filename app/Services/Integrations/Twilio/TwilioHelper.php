@@ -11,10 +11,11 @@ class TwilioHelper
     public static function getApiConfig()
     {
         $defaults = [
-            'sender_number' => '',
-            'account_sid'   => '',
-            'auth_token'    => '',
-            'verified'      => false
+            'sender_number'   => '',
+            'sender_whatsapp' => '',
+            'account_sid'     => '',
+            'auth_token'      => '',
+            'verified'        => false
         ];
 
         $settings = get_option('_fcal_twilio_client_details', []);
@@ -30,7 +31,7 @@ class TwilioHelper
 
     public static function updateApiConfig($settings)
     {
-        $settings = Arr::only($settings, ['sender_number', 'account_sid', 'auth_token', 'verified']);
+        $settings = Arr::only($settings, ['sender_number', 'sender_whatsapp', 'account_sid', 'auth_token', 'verified']);
 
         if (!empty($settings['auth_token'])) {
 
