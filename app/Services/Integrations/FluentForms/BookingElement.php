@@ -242,12 +242,12 @@ class BookingElement extends BaseFieldManager
 
     protected function getResponseHtml($response, $fields, $columns)
     {
-        return 'HTML Response';
+        return __('HTML Response', 'fluent-booking-pro');
     }
 
     protected function getResponseAsText($response, $fields, $columns)
     {
-        return 'Text Response';
+        return __('Text Response', 'fluent-booking-pro');
     }
 
     public function getCalendarOptions()

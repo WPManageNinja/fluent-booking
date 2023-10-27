@@ -317,7 +317,7 @@ class Updater
         }
 
         if (!current_user_can('update_plugins')) {
-            wp_die(__('You do not have permission to install plugin updates', 'edd'), __('Error', 'edd'),
+            wp_die(__('You do not have permission to install plugin updates', 'fluent-booking-pro'), __('Error', 'fluent-booking-pro'),
                 array('response' => 403));
         }
 

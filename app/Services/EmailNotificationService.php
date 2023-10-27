@@ -291,7 +291,7 @@ class EmailNotificationService
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Rescheduled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
             'type'        => 'activity',
-            'description' => sprintf(__('Rescheduling email sent to %s'), $emailTo),
+            'description' => sprintf(__('Rescheduling email sent to %s', 'fluent-booking-pro'), $emailTo),
             'booking_id'  => $booking->id
         ]);
 
