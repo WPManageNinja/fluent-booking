@@ -77,7 +77,7 @@
             {floatingConfig}
             clearable={false}
             value={country}
-            placeholder="Country"
+            placeholder="{window.fluentCalendarPublicVars.i18['Country'] || 'Country'}"
             items={normalizedCountries}
     >
         <div slot="selection" let:selection>

@@ -1,5 +1,5 @@
 <script>
-    import {util, i18} from '../util';
+    import {util, i18, getDateTimeStringI18, dateTimeI18} from '../util';
     import Calendar from "./Calendar.svelte";
     import {Pulse} from 'svelte-loading-spinners';
     import TimeZoneSelector from "./TimezoneSelector.svelte";
@@ -15,7 +15,6 @@
     const id = appData.id;
 
     let dispatch = createEventDispatcher();
-
 
     let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -245,21 +244,6 @@
 </script>
 
 <div class="fcal_day_picker">
-    <div class="fcal_time_picker_head fcal_sec_heading">
-        <div aria-label="Back to Date Selection" on:click={(e) => { resetSelection() }}
-             on:keypress={(e) => { resetSelection() }} class="fcal_back fcal_go_back">
-            <i class="fcal_svg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                    <path fill="none" d="M0 0h24v24H0V0z"/>
-                    <path
-                        d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
-                </svg>
-            </i>
-        </div>
-        <h3>Select a Time</h3>
-        <p>{slot.duration} minutes</p>
-        <p>Timezone: {timezone}</p>
-    </div>
     <div class="fcal_calendar_slot_wrap {selectedDate ? 'is_active' : ''}">
         {#if isLoadingDates}
             <div class="fcal_loading_dates">
@@ -271,7 +255,7 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h3>{monthNames[month]} <span>{year}</span></h3>
+                    <h3>{getDateTimeStringI18(monthNames[month], 'month')} <span>{year}</span></h3>
                 </div>
                 <div class="calendar_nav">
                     <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
@@ -303,16 +287,16 @@
 
         <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
             <div class="fcal_slot_picker_header">
-                { util.dayjs(selectedDate).format('dddd, MMM DD') }
+                { dateTimeI18(selectedDate, 'dddd, MMM DD') }
 
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
-                        <input type="radio" id="12" bind:group={formatHours} value="12"/>
-                        <label for="12">12h</label>
+                        <input type="radio" id="12_hours_selector" bind:group={formatHours} value="12"/>
+                        <label for="12_hours_selector">{i18('12h')}</label>
                     </div>
                     <div class="format-hour">
-                        <input type="radio" id="24" bind:group={formatHours} value="24"/>
-                        <label for="24">24h</label>
+                        <input type="radio" id="24_hours_selector" bind:group={formatHours} value="24"/>
+                        <label for="24_hours_selector">{i18('24h')}</label>
                     </div>
                 </div>
             </div>
@@ -328,7 +312,7 @@
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
-                                    <div class="fcal_spot_remaining">{day.remaining} spots left</div>
+                                    <div class="fcal_spot_remaining">{day.remaining} {i18('spots left')}</div>
                                 {/if}
                             </div>
                             {#if selectedDateTime && selectedDateTime.start == day.start}
@@ -340,7 +324,7 @@
                                         </span>
                                 {:else }
                                     <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
-                                         on:click={slotSpotConfirmed} class="fcal_spot_confirm">Next
+                                         on:click={slotSpotConfirmed} class="fcal_spot_confirm"> {i18('Next')}
                                     </div>
                                 {/if}
                             {/if}

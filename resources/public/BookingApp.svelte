@@ -1,5 +1,5 @@
 <script>
-    import {util, i18} from './util';
+    import {util, i18, dateTimeI18} from './util';
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
@@ -160,10 +160,10 @@
                                                      class="feather feather-map-pin">
                                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                                     <circle cx="12" cy="10" r="3"/>
-                                                </svg> {slot.location_settings.length} location options
+                                                </svg> {slot.location_settings.length} {i18('location options')}
 
                                                 <ul class="fcal_location_tooltip">
-                                                    <li class="title">Select on the Next Step</li>
+                                                    <li class="title">{i18('Select on the Next Step')}</li>
                                                     <li>
                                                         {@html slot.location_icon_html}
                                                     </li>
@@ -196,9 +196,14 @@
                                             </svg>
 
                                         <span>
-                                            {util.toDate(selectedDate.start, 'hh:mma')}
-                                            - {util.toDate(selectedDate.end, 'hh:mma')},
-                                            {util.toDate(selectedDate.start, 'dddd, MMMM DD, YYYY')}
+                                            {#if slot.time_format == '24' }
+                                                {util.dateTimeI18(selectedDate.start, 'HH:mm')}
+                                                - {util.dateTimeI18(selectedDate.end, 'HH:mm')},
+                                           {:else}
+                                                {util.dateTimeI18(selectedDate.start, 'hh:mma')}
+                                                - {util.dateTimeI18(selectedDate.end, 'hh:mma')},
+                                           {/if}
+                                            {util.dateTimeI18(selectedDate.start, 'dddd, MMM DD, YYYY')}
                                         </span>
                                     </div>
                                     <div class="slot_time_range slot_timezone fcal_icon_item">
