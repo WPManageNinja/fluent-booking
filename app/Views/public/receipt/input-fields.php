@@ -1,5 +1,5 @@
 <?php if ($items) : ?>
-    <h4>Customer Details</h4>
+    <h4><?php _e('Customer Details', 'fluent-booking-pro'); ?></h4>
     <table class="table fluent_booking_table input_items_table table_bordered">
         <tbody>
         <?php foreach ($items as $item) : ?>

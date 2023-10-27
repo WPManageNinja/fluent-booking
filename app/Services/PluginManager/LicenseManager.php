@@ -154,7 +154,7 @@ class LicenseManager
             if (!$license_data) {
                 return new \WP_Error(
                     423,
-                    'Error when contacting with license server. Please check that your server have curl installed',
+                    __('Error when contacting with license server. Please check that your server have curl installed', 'fluent-booking-pro'),
                     [
                         'response' => $response,
                         'is_error' => true
@@ -174,7 +174,7 @@ class LicenseManager
         $licenseDetails = $this->getLicenseDetails();
 
         if(empty($licenseDetails['license_key'])) {
-            return new \WP_Error(423, 'No license key found');
+            return new \WP_Error(423, __('No license key found', 'fluent-booking-pro'));
         }
 
         $licenseKey = $licenseDetails['license_key'];
@@ -194,7 +194,7 @@ class LicenseManager
 
         // make sure the response came back okay
         if (is_wp_error($response)) {
-            return new \WP_Error(423, 'There was an error deactivating the license, please try again or login at wpmanageninja.com to manually deactivated the license');
+            return new \WP_Error(423, __('There was an error deactivating the license, please try again or login at wpmanageninja.com to manually deactivated the license', 'fluent-booking-pro'));
         }
 
         // decode the license data
@@ -209,7 +209,7 @@ class LicenseManager
             ]);
         }
 
-        return new \WP_Error(423, 'There was an error deactivating the license, please try again or login at wpmanageninja.com to manually deactivated the license');
+        return new \WP_Error(423, __('There was an error deactivating the license, please try again or login at wpmanageninja.com to manually deactivated the license', 'fluent-booking-pro'));
     }
 
     public function isRequireVerify()
@@ -247,7 +247,7 @@ class LicenseManager
         $licenseKey = $this->getSavedLicenseKey();
 
         if (!$licenseKey) {
-            return new \WP_Error(423, 'No license key available');
+            return new \WP_Error(423, __('No license key available', 'fluent-booking-pro'));
         }
 
         $api_params = array(
@@ -332,13 +332,13 @@ class LicenseManager
 
     private function getErrorMessage($licenseData, $licenseKey = false)
     {
-        $errorMessage = 'There was an error activating the license, please verify your license is correct and try again or contact support.';
+        $errorMessage = __('There was an error activating the license, please verify your license is correct and try again or contact support.', 'fluent-booking-pro');
 
         if ($licenseData['error'] == 'expired') {
             $renewUrl = $this->getRenewUrl($licenseKey);
-            $errorMessage = 'Your license has been expired at ' . $licenseData->expires . ' . Please <a target="_blank" href="' . $renewUrl . '">click here</a> to renew your license';
+            $errorMessage = __('Your license has been expired at ', 'fluent-booking-pro') . $licenseData->expires . ' . Please <a target="_blank" href="' . $renewUrl . '">' . __('click here', 'fluent-booking-pro') . '</a> ' . __('to renew your license', 'fluent-booking-pro');
         } else if ($licenseData['error'] == 'no_activations_left') {
-            $errorMessage = 'No Activation Site left: You have activated all the sites that your license offer. Please go to wpmanageninja.com account and review your sites. You may deactivate your unused sites from wpmanageninja account or you can purchase another license. <a target="_blank" href="' . $this->getVar('purchase_url') . '">' . __('Click Here to purchase another license', 'fluent-booking-pro') . '</a>';
+            $errorMessage = __('No Activation Site left: You have activated all the sites that your license offer. Please go to wpmanageninja.com account and review your sites. You may deactivate your unused sites from wpmanageninja account or you can purchase another license.', 'fluent-booking-pro') . ' <a target="_blank" href="' . $this->getVar('purchase_url') . '">' . __('Click Here to purchase another license', 'fluent-booking-pro') . '</a>';
         } else if ($licenseData['error'] == 'missing') {
             $errorMessage = __('The given license key is not valid. Please verify that your license is correct. You may login to wpmanageninja.com account and get your valid license key for your purchase.', 'fluent-booking-pro');
         }
@@ -354,7 +354,7 @@ class LicenseManager
             $renewUrl = $this->getRenewUrl();
         }
 
-        return '<p>Your ' . $this->getVar('plugin_title') . ' license has been <b>expired at ' . date('d M Y', strtotime($licenseData['expires'])) . '</b>, Please ' .
+        return '<p>Your ' . $this->getVar('plugin_title') . ' ' . __('license has been', 'fluent-booking-pro') . ' <b>' . __('expired at', 'fluent-booking-pro') . ' ' . date('d M Y', strtotime($licenseData['expires'])) . '</b>, Please ' .
             '<a href="' . $renewUrl . '"><b>' . __('Click Here to Renew Your License', 'fluent-booking-pro') . '</b></a>' . '</p>';
     }
 
