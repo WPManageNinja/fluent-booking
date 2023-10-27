@@ -325,7 +325,6 @@ class FluentFormInit
             return;
         }
 
-
         try {
             $submission = Submission::find($submissionId);
 
@@ -334,7 +333,6 @@ class FluentFormInit
             }
 
             $response = json_decode($submission->response);
-
 
             $smartCode = '{all_data}';
 
