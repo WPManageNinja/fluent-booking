@@ -140,7 +140,12 @@ class BookingFieldService
         if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
         } else {
-            $existingFields['location']['options'] = $defaultFields['location']['options'];
+
+            if(empty($existingFields['location'])) {
+                $existingFields['location'] = $defaultFields['location'];
+            } else {
+                $existingFields['location']['options'] = $defaultFields['location']['options'];
+            }
         }
 
         if (empty($defaultFields['phone_number'])) {

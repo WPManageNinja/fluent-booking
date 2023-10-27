@@ -180,6 +180,8 @@ class LocationService
     {
         $locationSettings = Arr::get($calendarSlot, 'location_settings');
 
+       // dd($locationSettings);
+
         $locationOptions = [];
         foreach ($locationSettings as $location) {
             $title = Arr::get($location, 'title');
