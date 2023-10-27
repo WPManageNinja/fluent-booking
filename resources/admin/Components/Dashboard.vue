@@ -131,7 +131,7 @@ export default {
             filterChartsDate: '',
             shortcuts: [
                 {
-                    text: 'Last week',
+                    text: this.$t('Last week'),
                     value: () => {
                         const end = new Date()
                         const start = new Date()
@@ -140,7 +140,7 @@ export default {
                     },
                 },
                 {
-                    text: 'Last month',
+                    text: this.$t('Last month'),
                     value: () => {
                         const end = new Date()
                         const start = new Date()
@@ -149,7 +149,7 @@ export default {
                     },
                 },
                 {
-                    text: 'Last 3 months',
+                    text: this.$t('Last 3 months'),
                     value: () => {
                         const end = new Date()
                         const start = new Date()
@@ -176,7 +176,7 @@ export default {
             return (schedule) => {
                 const guestName = schedule.first_name + ' ' + schedule.last_name;
                 const createdAt = this.convertDate(schedule.created_at)
-                return '<b>' + guestName + '</b>' + ' booked a new meeting at ' + createdAt;    
+                return '<b>' + guestName + '</b>' + ' ' + this.$t('booked a new meeting at') + ' ' + createdAt;
             }
         },
         scheduleTitle() {
@@ -184,9 +184,9 @@ export default {
                 const guestName = schedule.first_name + ' ' + schedule.last_name;
                 if (schedule.event_type === 'group') {
                     const booked = schedule.booked_count;
-                    return booked + ' guests with '+ schedule.author.name + 'as group booking type';
+                    return booked + ' ' + this.$t('guests with') + ' '+ schedule.author.name + this.$t('as group booking type');
                 }
-                return '<b>' + schedule?.slot.title +'</b> meeting between ' + guestName + ' & '+ schedule.author.name;        
+                return '<b>' + schedule?.slot.title +'</b> ' + this.$t('meeting between') + ' ' + guestName + ' & '+ schedule.author.name;
             }
         }
     },

@@ -36,7 +36,7 @@
                                             <el-icon>
                                                 <Lock/>
                                             </el-icon>
-                                            <span>Administrator</span>
+                                            <span>{{ $t('Administrator') }}</span>
                                         </li>
                                     </template>
                                     <template v-else-if="member.permissions">

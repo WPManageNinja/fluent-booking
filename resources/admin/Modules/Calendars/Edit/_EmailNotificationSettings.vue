@@ -36,7 +36,7 @@
         <el-dialog
             v-model="showEdit"
             v-if="showEdit"
-            :title="(editingNotification) ? 'Edit: ' + editingNotification.title : $t('Edit Notification')"
+            :title="(editingNotification) ? $t('Edit:') + ' ' + editingNotification.title : $t('Edit Notification')"
             class="fcal_modal fcal_notification_modal"
             :close-on-click-modal="false"
         >

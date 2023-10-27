@@ -84,7 +84,7 @@ class Bootstrap
             ],
         ];
 
-        $description = '<p>Please read the step-by-step documentation to setup Account SID and Auth Token and get the Sender Numbers for your app. <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/twilio-integration-with-fluentbooking/">Go to the documentation article</a></p>';
+        $description = '<p>' . __('Please read the step-by-step documentation to setup Account SID and Auth Token and get the Sender Numbers for your app.', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/twilio-integration-with-fluentbooking/">' . __('Go to the documentation article', 'fluent-booking-pro') . '</a></p>';
 
         return [
             'logo'            => $app['url.assets'] . 'images/twilio.svg',
