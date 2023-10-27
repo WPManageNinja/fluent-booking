@@ -73,6 +73,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <SourceDetailsSection v-if="scope.row.source != 'web'" :booking="scope.row"/>
                             <PaymentLogs v-if="scope.row.payment_order" :booking="scope.row" />
                         </div>
                     </template>
@@ -123,11 +124,13 @@
 <script>
 import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
+import SourceDetailsSection from './SourceDetailsSection';
 import PaymentLogs from "./PaymentLogs";
 export default {
     name: "GroupBookingGuests",
     props: ['group_id'],
     components: {
+        SourceDetailsSection,
         PaymentLogs,
         Pagination,
         MoreFilled,
@@ -159,7 +162,6 @@ export default {
                 .then(response => {
                     this.attendees = response.attendees.data;
                     this.pagination.total = response.attendees.total;
-                    console.log(response.attendees.data);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -170,7 +172,6 @@ export default {
                 });
         },
         exportHosts() {
-            console.log(window.ajaxurl);
             location.href = window.ajaxurl + '?' + jQuery.param({
                 action: 'fluent_booking_export_hosts',
                 group_id: this.group_id

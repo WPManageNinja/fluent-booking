@@ -2681,6 +2681,22 @@
             padding: 0;
           }
         }
+        .fcal_schedule_event_infos {
+            .fcal_schedule_event_infos_body {
+                padding-left: 0;
+            }
+            .ff_all_data {
+                tbody {
+                    tr {
+                        td {
+                            &:last-child {
+                                text-align: left;
+                            }
+                        }
+                    }
+                }
+            }
+        }
       }
 
       &:first-child {
