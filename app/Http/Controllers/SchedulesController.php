@@ -154,7 +154,8 @@ class SchedulesController extends Controller
             }
 
             if ($value == 'cancelled') {
-                $booking->cancelMeeting($value, 'host', get_current_user_id());
+                $cancelReason = $data['cancel_reason'];
+                $booking->cancelMeeting($cancelReason, 'host', get_current_user_id());
                 return [
                     'message' => __('The booking has been cancelled', 'fluent-booking-pro')
                 ];
