@@ -29,14 +29,14 @@
                     <tr v-for="item in booking.payment_order.items" :key="item.id">
                         <td>{{ item.item_name }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td><span v-html="booking.currency"></span>{{ Math.floor(item.item_price / 100) }}</td>
+                        <td><span v-html="currencySign"></span>{{ Math.floor(item.item_price / 100) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
                         <th>{{ $t('Total:') }}</th>
-                        <td><span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.total_amount / 100) }}</td>
+                        <td><span v-html="currencySign"></span>{{ Math.floor(booking.payment_order.total_amount / 100) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -57,7 +57,7 @@
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Total') }}</h3>
                         <p>
-                            <span v-html="booking.currency"></span>{{ Math.floor(booking.payment_order.transaction.total / 100) }}
+                            <span v-html="currencySign"></span>{{ Math.floor(booking.payment_order.transaction.total / 100) }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
@@ -82,6 +82,11 @@
 <script>
 export default {
     name: "PaymentLogs",
-    props: ['booking']
+    props: ['booking'],
+    data() {
+        return {
+            currencySign: window.fluentFrameworkAdmin?.currency_sign
+        }
+    }
 }
 </script>
