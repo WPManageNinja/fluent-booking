@@ -41,11 +41,14 @@
             }, 2000)
         }
         setTimeout(() => {
-            const calendarHolder = document.querySelector(".fcal_calendar_inner").offsetWidth;
-            if (calendarHolder <= 660) {
-                isMobile = true;
+            if (!isFluentform) {
+                const calendarHolder = document.querySelector(".fcal_calendar_inner:not(.fcal_form_calendar)").offsetWidth;
+                console.log(calendarHolder);
+                if (calendarHolder <= 650) {
+                    isMobile = true;
+                }
             }
-        }, 100)
+        }, 1000)
     });
 
     window.onresize = function () {
