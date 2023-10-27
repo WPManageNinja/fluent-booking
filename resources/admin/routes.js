@@ -132,7 +132,7 @@ export var routes = [
         name: 'scheduled_events',
         component: AllSchedules,
         meta: {
-            active_menu: 'scheduled_events'
+            active_menu: 'scheduled-events'
         }
     },
     {

@@ -50,7 +50,7 @@ class AdminMenuHandler
             __('Dashboard', 'fluent-booking-pro'),
             $capability,
             'fluent-booking',
-            ''
+            [$this, 'render']
         );
 
         add_submenu_page(
@@ -58,8 +58,8 @@ class AdminMenuHandler
             __('Calendars', 'fluent-booking-pro'),
             __('Calendars', 'fluent-booking-pro'),
             $capability,
-            'admin.php?page=fluent-booking#/calendars',
-            ''
+            'fluent-booking#/calendars',
+            [$this, 'render']
         );
 
         add_submenu_page(
@@ -67,8 +67,8 @@ class AdminMenuHandler
             __('Bookings', 'fluent-booking-pro'),
             __('Bookings', 'fluent-booking-pro'),
             $capability,
-            'admin.php?page=fluent-booking#/scheduled-events',
-            ''
+            'fluent-booking#/scheduled-events',
+            [$this, 'render']
         );
 
         add_submenu_page(
@@ -76,8 +76,8 @@ class AdminMenuHandler
             __('Availability', 'fluent-booking-pro'),
             __('Availability', 'fluent-booking-pro'),
             $capability,
-            'admin.php?page=fluent-booking#/availability',
-            ''
+            'fluent-booking#/availability',
+            [$this, 'render']
         );
 
         add_submenu_page(
@@ -85,8 +85,8 @@ class AdminMenuHandler
             __('Settings', 'fluent-booking-pro'),
             __('Settings', 'fluent-booking-pro'),
             'manage_options',
-            'admin.php?page=fluent-booking#/settings/general-settings',
-            ''
+            'fluent-booking#/settings/general-settings',
+            [$this, 'render']
         );
     }
 
@@ -116,7 +116,7 @@ class AdminMenuHandler
                 'permalink' => $baseUrl . 'calendars'
             ],
             [
-                'key'       => 'scheduled_events',
+                'key'       => 'scheduled-events',
                 'label'     => __('Bookings', 'fluent-booking-pro'),
                 'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
             ],

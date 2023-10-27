@@ -15,7 +15,6 @@
 					<?php $hasSubMenu = !empty($item['sub_items']); ?>
                     <li data-key="<?php echo esc_attr($item['key']); ?>" class="fframe_menu_item <?php echo ($hasSubMenu) ? 'fframe_has_sub_items' : ''; ?> fframe_item_<?php echo esc_attr($item['key']); ?>">
                         <a class="fframe_menu_primary" href="<?php echo esc_url($item['permalink']); ?>">
-                            <?php // echo $item['icon']; ?>
 							<?php echo esc_attr($item['label']); ?>
 							<?php if($hasSubMenu){ ?>
                                 <span class="dashicons dashicons-arrow-down-alt2"></span>
