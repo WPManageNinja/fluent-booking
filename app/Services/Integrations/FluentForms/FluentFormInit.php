@@ -110,7 +110,7 @@ class FluentFormInit
                 $fieldError = __('Email is required for this appointment. Looks like this field does not have email field selected.', 'fluent-booking-pro');
             } else {
                 $email = Arr::get($formData, $emailFieldKey);
-                if (!$email || is_email($email)) {
+                if (!$email || !is_email($email)) {
                     $fieldError = __('Email is required for this appointment. Please provide a valid email', 'fluent-booking-pro');
                 }
             }
@@ -325,7 +325,6 @@ class FluentFormInit
             return;
         }
 
-
         try {
             $submission = Submission::find($submissionId);
 
@@ -334,7 +333,6 @@ class FluentFormInit
             }
 
             $response = json_decode($submission->response);
-
 
             $smartCode = '{all_data}';
 
