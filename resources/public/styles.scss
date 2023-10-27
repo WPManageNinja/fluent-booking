@@ -1376,6 +1376,20 @@ $lightDark: #6b7280;
                 }
               }
             }
+            .fcal_slot_picker {
+              max-height: 400px;
+              overflow: auto;
+              &::-webkit-scrollbar {
+                width: 5px;
+              }
+              &::-webkit-scrollbar-thumb {
+                background: #e4e4e7;
+                border-radius: 10px;
+              }
+              &::-webkit-scrollbar-track {
+                background: transparent;
+              }
+            }
           }
         }
       }
