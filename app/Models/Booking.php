@@ -231,7 +231,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'in_person_guest') {
-            return '<b>' . __('Invitee Address:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'guest_address');
+            return '<b>' . __('Invitee Address:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description');
         }
 
         if ($locationType == 'in_person_organizer') {
