@@ -209,7 +209,7 @@ class SchedulesController extends Controller
         do_action('fluent_booking/after_delete_booking', $bookingId);
 
         return [
-            'message' => __('Booking Deleted Successfully!', 'fluent-booking')
+            'message' => __('Booking Deleted Successfully!', 'fluent-booking-pro')
         ];
     }
 

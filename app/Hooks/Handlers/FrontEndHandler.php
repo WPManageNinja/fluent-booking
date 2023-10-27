@@ -143,7 +143,7 @@ class FrontEndHandler
         $calendar = $calendarEvent->calendar;
 
         if (!$calendar) {
-            return 'Calendar not found';
+            return __('Calendar not found', 'fluent-booking-pro');
         }
 
         $assetUrl = App::getInstance('url.assets');

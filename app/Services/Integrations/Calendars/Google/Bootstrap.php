@@ -198,7 +198,7 @@ class Bootstrap
                     return $calendar;
                 }
                 $error = Arr::get($meta->value, 'last_error');
-                $calendar->generic_error = '<p style="color: red; margin:0;">Google Calendar API Error: ' . $error . '. <a href="'.Helper::getAppBaseUrl('calendars/'.$calendar->id.'/settings/remote-calendars').'">Click Here to Review</a></p>';
+                $calendar->generic_error = '<p style="color: red; margin:0;">'.__('Google Calendar API Error:', 'fluent-booking-pro').' ' . $error . '. <a href="'.Helper::getAppBaseUrl('calendars/'.$calendar->id.'/settings/remote-calendars').'">'  .__('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
 
@@ -492,7 +492,7 @@ class Bootstrap
         ];
 
         if ($booking->message && $booking->event_type == 'single') {
-            $data['description'] = 'Note: ' . $booking->message;
+            $data['description'] = __('Note: ', 'fluent-booking-pro') . $booking->message;
         }
 
         $isGoogleMeet = false;

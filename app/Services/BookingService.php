@@ -197,7 +197,7 @@ class BookingService
             $assetsUrl = App::getInstance('url.assets');
             $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
                 'google'   => [
-                    'title' => 'Google Calendar',
+                    'title' => __('Google Calendar', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
                         'dates'    => date('Ymd\THis\Z', strtotime($booking->start_time)) . '/' . date('Ymd\THis\Z', strtotime($booking->end_time)),
                         'text'     => $meetingTitle,
@@ -207,7 +207,7 @@ class BookingService
                     'icon'  => $assetsUrl . 'images/google-icon.svg'
                 ],
                 'outlook'  => [
-                    'title' => 'Outlook',
+                    'title' => __('Outlook', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
                         'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
                         'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
@@ -220,7 +220,7 @@ class BookingService
                     'icon'  => $assetsUrl . 'images/outlook.svg'
                 ],
                 'msoffice' => [
-                    'title' => 'Microsoft Office',
+                    'title' => __('Microsoft Office', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
                         'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
                         'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
@@ -233,7 +233,7 @@ class BookingService
                     'icon'  => $assetsUrl . 'images/msoffice.svg'
                 ],
                 'other'    => [
-                    'title' => 'Other Calendar',
+                    'title' => __('Other Calendar', 'fluent-booking-pro'),
                     'url'   => $booking->getIcsDownloadUrl(),
                     'icon'  => $assetsUrl . 'images/ics.svg'
                 ]
@@ -248,7 +248,7 @@ class BookingService
     public static function generateBookingICS(Booking $booking)
     {
         $host = $booking->getHostDetails(false);
-        $meetingTitle = sprintf('%1s Meeting between %2s and %3s', esc_html($booking->calendar_event->title), esc_html(trim($booking->first_name . ' ' . $booking->last_name)), esc_attr($host['name']));
+        $meetingTitle = sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), esc_html($booking->calendar_event->title), esc_html(trim($booking->first_name . ' ' . $booking->last_name)), esc_attr($host['name']));
 
         // Initialize the ICS content
         $icsContent = "BEGIN:VCALENDAR\r\n";

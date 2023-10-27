@@ -576,7 +576,7 @@ class CalendarController extends Controller
         $slot->setSmsNotifications($formattedNotifications);
 
         return [
-            'message' => __('Notifications has been saved', 'fluent-booking')
+            'message' => __('Notifications has been saved', 'fluent-booking-pro')
         ];
     }
 

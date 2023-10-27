@@ -64,23 +64,23 @@ class Bootstrap
         $fields = [
             'sender_number' => [
                 'type'        => 'text',
-                'label'       => __('SMS Number', 'fluent-booking'),
-                'placeholder' => __('Enter Twilio Sender SMS Number', 'fluent-booking'),
+                'label'       => __('SMS Number', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Twilio Sender SMS Number', 'fluent-booking-pro'),
             ],
             'sender_whatsapp' => [
                 'type'        => 'text',
-                'label'       => __('WhatsApp Number (Optional)', 'fluent-booking'),
-                'placeholder' => __('Enter Twilio Sender WhatsApp Number', 'fluent-booking'),
+                'label'       => __('WhatsApp Number (Optional)', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Twilio Sender WhatsApp Number', 'fluent-booking-pro'),
             ],
             'account_sid' => [
                 'type'        => 'text',
-                'label'       => __('Account SID', 'fluent-booking'),
-                'placeholder' => __('Enter Twilio Account SID', 'fluent-booking'),
+                'label'       => __('Account SID', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Twilio Account SID', 'fluent-booking-pro'),
             ],
             'auth_token'  => [
                 'type'        => 'text',
-                'label'       => __('Auth Token', 'fluent-booking'),
-                'placeholder' => __('Enter Twilio API Auth Token', 'fluent-booking'),
+                'label'       => __('Auth Token', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Twilio API Auth Token', 'fluent-booking-pro'),
             ],
         ];
 
@@ -88,15 +88,15 @@ class Bootstrap
 
         return [
             'logo'            => $app['url.assets'] . 'images/twilio.svg',
-            'title'           => __('Twilio SMS Integration', 'fluent-booking'),
-            'subtitle'        => __('Configure Twilio API to send SMS/WhatsApp notifications on booking events', 'fluent-booking'),
+            'title'           => __('Twilio SMS Integration', 'fluent-booking-pro'),
+            'subtitle'        => __('Configure Twilio API to send SMS/WhatsApp notifications on booking events', 'fluent-booking-pro'),
             'description'     => $description,
             'is_connected'    => TwilioHelper::isConnected(),
             'is_configured'   => TwilioHelper::isConfigured(),
             'check_validation'=> true,
-            'valid_message'   => __('Your Twilio API integration is up and running.', 'fluent-booking'),
-            'invalid_message' => __('Your Twilio API Key is not valid.', 'fluent-booking'),
-            'save_btn_text'   => __('Save Settings', 'fluent-booking'),
+            'valid_message'   => __('Your Twilio API integration is up and running.', 'fluent-booking-pro'),
+            'invalid_message' => __('Your Twilio API Key is not valid.', 'fluent-booking-pro'),
+            'save_btn_text'   => __('Save Settings', 'fluent-booking-pro'),
             'fields'          => $fields,
             'will_encrypt'    => true
         ];
@@ -139,7 +139,7 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Twilio API Error', 'fluent-booking-pro'),
-                'description' => __('Failed to send sms with Twilio API', 'fluent-booking')
+                'description' => __('Failed to send sms with Twilio API', 'fluent-booking-pro')
             ]);
             return false;
         }

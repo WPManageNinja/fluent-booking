@@ -125,7 +125,7 @@ class Calendar extends Model
     {
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
-                'label'   => 'Conferencing',
+                'label'   => __('Conferencing', 'fluent-booking-pro'),
                 'options' => [],
             ],
             'in_person'    => [
