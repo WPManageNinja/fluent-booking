@@ -40,6 +40,12 @@
 
             }, 2000)
         }
+        setTimeout(() => {
+            const calendarHolder = document.querySelector(".fcal_calendar_inner").offsetWidth;
+            if (calendarHolder <= 660) {
+                isMobile = true;
+            }
+        }, 100)
     });
 
     window.onresize = function () {

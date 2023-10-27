@@ -509,7 +509,27 @@ class TransStrings
             'Create Your First Booking Event'                       => __('Create Your First Booking Event', 'fluent-booking-pro'),
             '(Will Take Less Than a Minute!)'                       => __('(Will Take Less Than a Minute!)', 'fluent-booking-pro'),
             'scheduled'                                             => __('scheduled', 'fluent-booking-pro'),
-            'Scheduled'                                             => __('Scheduled', 'fluent-booking-pro')
+            'Scheduled'                                             => __('Scheduled', 'fluent-booking-pro'),
+            'Booked'                                                => __('Booked', 'fluent-booking-pro'),
+            'Last week'                                             => __('Last week', 'fluent-booking-pro'),
+            'Last month'                                            => __('Last month', 'fluent-booking-pro'),
+            'Edit:'                                                 => __('Edit:', 'fluent-booking-pro'),
+            'Last 3 months'                                         => __('Last 3 months', 'fluent-booking-pro'),
+            'booked a new meeting at'                               => __('booked a new meeting at', 'fluent-booking-pro'),
+            'guests with'                                           => __('guests with', 'fluent-booking-pro'),
+            'as group booking type'                                 => __('as group booking type', 'fluent-booking-pro'),
+            'meeting between'                                       => __('meeting between', 'fluent-booking-pro'),
+            'ZoomIntegrationSettings/description'                   => __('All connected zoom accounts by you and your team members. You can review who connected their zoom account from Host Settings and manage from here for all of your team members.', 'fluent-booking-pro'),
+            'Please read the documentation'                         => __('Please read the documentation', 'fluent-booking-pro'),
+            'ZoomIntegrationSettings/sub_description'               => __('for step by step guide to know how connect zoom account.', 'fluent-booking-pro'),
+            'ZoomIntegrationSettings/didnot_connect_zoom_desc'      => __('Looks like you did not connect FluentBooking with your Zoom Account yet!', 'fluent-booking-pro'),
+            'ZoomIntegrationSettings/connect_zoom_desc'             => __('Connect your Zoom account to create dynamic meeting in zoom for your bookings.', 'fluent-booking-pro'),
+            'Connected Zoom Accounts'                               => __('Connected Zoom Accounts', 'fluent-booking-pro'),
+            'Add New Zoom User Account'                             => __('Add New Zoom User Account', 'fluent-booking-pro'),
+            'Please'                                                => __('Please', 'fluent-booking-pro'),
+            'read the documentation here'                           => __('read the documentation here', 'fluent-booking-pro'),
+            'zoom_integration_step_by_step_guide'                   => __('for step by step guide to know how you can get api credentials from Zoom Account', 'fluent-booking-pro'),
+            'Administrator'                                         => __('Administrator', 'fluent-booking-pro')
         ];
 
     }
