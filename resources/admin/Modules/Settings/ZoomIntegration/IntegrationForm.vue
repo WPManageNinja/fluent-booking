@@ -2,9 +2,8 @@
     <div>
 
         <div class="fcal_integration_instruction">
-            <p>Please <a target="_blank" rel="noopener"
-                         href="https://fluentbooking.com/docs/zoom-integration-with-fluentbooking/">read the
-                documentation here</a> for step by step guide to know how you can get api credentials from Zoom Account
+            <p>{{ $t('Please') }} <a target="_blank" rel="noopener"
+                         href="https://fluentbooking.com/docs/zoom-integration-with-fluentbooking/">{{ $t('read the documentation here') }}</a> {{ $t('zoom_integration_step_by_step_guide') }}
             </p>
         </div>
 

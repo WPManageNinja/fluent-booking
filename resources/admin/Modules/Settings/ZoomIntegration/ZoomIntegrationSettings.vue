@@ -9,10 +9,10 @@
                                 <img :src="appVars.asset_url + 'images/zoom.svg'"/>
                             </div>
                             <div class="content">
-                                <h3>Zoom Integrations Settings</h3>
+                                <h3>{{ $t('Zoom Integrations Settings') }}</h3>
                                 <p>
-                                    All connected zoom accounts by you and your team members. You can review who connected their zoom account from Host Settings and manage from here for all of your team members.
-                                    <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/zoom-integration-with-fluentbooking/">Please read the documentation</a> for step by step guide to know how connect zoom account.
+                                    {{ $t('ZoomIntegrationSettings/description') }}
+                                    <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/zoom-integration-with-fluentbooking/">{{ $t('Please read the documentation') }}</a> {{ $t('ZoomIntegrationSettings/sub_description') }}
                                 </p>
                             </div>
                         </div>
@@ -21,15 +21,15 @@
                         <el-skeleton v-if="loading" :rows="3" animated></el-skeleton>
                         <template v-else>
                             <div v-if="!connected_users.length" class="fcal_box_padded">
-                                <h3>Looks like you did not connect FluentBooking with your Zoom Account yet!</h3>
-                                <p>Connect your Zoom account to create dynamic meeting in zoom for your bookings.</p>
-                                <el-button @click="showingForm = true" type="primary">Connect Your Zoom Account
+                                <h3>{{ $t('ZoomIntegrationSettings/didnot_connect_zoom_desc') }}</h3>
+                                <p>{{ $t('ZoomIntegrationSettings/connect_zoom_desc') }}</p>
+                                <el-button @click="showingForm = true" type="primary">{{ $t('Connect Your Zoom Account') }}
                                 </el-button>
                             </div>
                             <template v-else>
                                 <div class="fcal_section_header">
                                     <div class="fcal_title">
-                                        <h3 style="font-size: 18px;">Connected Zoom Accounts</h3>
+                                        <h3 style="font-size: 18px;">{{ $t('Connected Zoom Accounts') }}</h3>
                                     </div>
                                     <div class="fcal_actions">
 <!--                                        <el-button @click="showingForm = true" type="primary">Add New User Account-->
@@ -49,7 +49,7 @@
         </div>
 
         <el-dialog :append-to-body="true" :close-on-click-modal="false" class="fcal_dialog" v-model="showingForm"
-                   title="Add New Zoom User Account" width="50%">
+                   :title="$t('Add New Zoom User Account')" width="50%">
             <integration-form @connected="fetchConnectedUsers()" v-if="showingForm" :form_fields="form_fields" @close="showingForm = false"/>
         </el-dialog>
     </div>

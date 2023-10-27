@@ -61,15 +61,15 @@ export default {
                 },
                 series: [
                     {
-                        name: 'Booked',
+                        name: this.$t('Booked'),
                         data: []
                     },
                     {
-                        name: 'Completed',
+                        name: this.$t('Completed'),
                         data: []
                     },
                     {
-                        name: 'Cancelled',
+                        name: this.$t('Cancelled'),
                         data: []
                     }
                 ],
@@ -80,7 +80,7 @@ export default {
             filterChartsDate: '',
             shortcuts: [
                 {
-                    text: 'Last week',
+                    text: this.$t('Last week'),
                     value: () => {
                         const end = new Date()
                         const start = new Date()
@@ -89,7 +89,7 @@ export default {
                     },
                 },
                 {
-                    text: 'Last month',
+                    text: this.$t('Last month'),
                     value: () => {
                         const end = new Date()
                         const start = new Date()
