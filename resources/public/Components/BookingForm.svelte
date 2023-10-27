@@ -11,55 +11,65 @@
             {#each formFields as field}
                 {#if field.enabled}
                     <div class="fcal_form_item">
-                        <label class="fcal_input_content">
-                            {#if field.label}
-                                <div class="fcal_input_label">
-                                    {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
+                        {#if field.name === 'location'}
+                            <div class="fcal_input_content">
+                                {#if field.label}
+                                    <div class="fcal_input_label">
                                         {field.label}
-                                    {/if}
-                                    {#if field.required}<span>*</span>{/if}
-                                </div>
-                            {/if}
-                            {#if field.type === 'text'}
-                                <div class={'fcal_input_wrap fcal_field_name_'+field.name}>
-                                    {#if field.name == 'address'}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-map-pin">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                            <circle cx="12" cy="10" r="3"/>
-                                        </svg>
-                                    {/if}
-                                    <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                                </div>
-                            {:else if field.type === 'email'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="email"
-                                       placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.type === 'number'}
-                                <input disabled="{field.disabled}" class="fcal_input" type="number"
-                                       placeholder="{field.placeholder}" bind:value={form[field.name]}/>
-                            {:else if field.name === 'location'}
+                                        {#if field.required}<span>*</span>{/if}
+                                    </div>
+                                {/if}
                                 <LocationField field={field} form="{form}"/>
-                            {:else if field.type === 'phone'}
-                                <PhoneFieldSkeleton field={field} form="{form}"/>
-                            {:else if field.type === 'textarea'}
+                            </div>
+                        {:else}
+                            <label class="fcal_input_content">
+                                {#if field.label}
+                                    <div class="fcal_input_label">
+                                        {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
+                                            {field.label}
+                                        {/if}
+                                        {#if field.required}<span>*</span>{/if}
+                                    </div>
+                                {/if}
+                                {#if field.type === 'text'}
+                                    <div class={'fcal_input_wrap fcal_field_name_'+field.name}>
+                                        {#if field.name == 'address'}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-map-pin">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                                <circle cx="12" cy="10" r="3"/>
+                                            </svg>
+                                        {/if}
+                                        <input disabled="{field.disabled}" class="fcal_input" type="text"
+                                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                    </div>
+                                {:else if field.type === 'email'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="email"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'number'}
+                                    <input disabled="{field.disabled}" class="fcal_input" type="number"
+                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                {:else if field.type === 'phone'}
+                                    <PhoneFieldSkeleton field={field} form="{form}"/>
+                                {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
-                            {:else if field.type === 'dropdown'}
-                                <select bind:value={form[field.name]}>
-                                    <option value="" disabled selected>{field.placeholder}</option>
-                                    {#each field.options as option (option)}
-                                        <option value={option}>{option}</option>
-                                    {/each}
-                                </select>
-                            {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
-                                <Payments field={field}/>
-                            {:else if field.type === 'hidden' }
-                                <input type="hidden" bind:value={form[field.name]}/>
-                            {/if}
-                        </label>
+                                {:else if field.type === 'dropdown'}
+                                    <select bind:value={form[field.name]}>
+                                        <option value="" disabled selected>{field.placeholder}</option>
+                                        {#each field.options as option (option)}
+                                            <option value={option}>{option}</option>
+                                        {/each}
+                                    </select>
+                                {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
+                                    <Payments field={field}/>
+                                {:else if field.type === 'hidden' }
+                                    <input type="hidden" bind:value={form[field.name]}/>
+                                {/if}
+                            </label>
+                        {/if}
                     </div>
                 {/if}
             {/each}
@@ -67,8 +77,7 @@
             <!--{/if}-->
             {#if hasPaymentItem()}
                 <div class="fluent_booking_payment_processor" style="display:none;">
-                    <h3 class="label">{i18('Total Payment')}
-                        : {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
+                    <h3 class="label">{i18('Total Payment')}: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
                     {#if appData?.payment_methods?.template}
                         <div class="fcal_form_payment_item">
                             {@html appData.payment_methods.template}
@@ -83,7 +92,8 @@
                         {i18('Schedule Meeting')}
                     </button>
                 {:else}
-                    <button disabled="{submitting}" type="submit" class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                    <button disabled="{submitting}" type="submit"
+                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                         {i18('Continue to Payments')}
                     </button>
                 {/if}
@@ -103,7 +113,7 @@
     import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
-    import PhoneFieldSkeleton  from "./PhoneFieldSkeleton.svelte";
+    import PhoneFieldSkeleton from "./PhoneFieldSkeleton.svelte";
 
     export let timezone;
     export let formFields;

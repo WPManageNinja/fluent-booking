@@ -30,7 +30,7 @@ $lightDark: #6b7280;
         margin-top: 16px;
       }
 
-      label {
+      .fcal_input_content {
         display: block;
 
         .fcal_input_label {
@@ -51,6 +51,7 @@ $lightDark: #6b7280;
             padding-left: 30px;
             margin-bottom: 8px;
             cursor: pointer;
+            display: block;
             &:last-child {
                 margin-bottom: 0;
             }
