@@ -1077,35 +1077,35 @@ class Helper
     {
         return apply_filters('fluent_booking/event_colors', [
             [
-                'label' => 'Red-Orange',
+                'label' => __('Red-Orange', 'fluent-booking-pro'),
                 'value' => '#ff4f00'
             ],
             [
-                'label' => 'Deep Lilac',
+                'label' => __('Deep Lilac', 'fluent-booking-pro'),
                 'value' => '#e55cff'
             ],
             [
-                'label' => 'Purple',
+                'label' => __('Purple', 'fluent-booking-pro'),
                 'value' => '#8247f5'
             ],
             [
-                'label' => 'Vivid Blue',
+                'label' => __('Vivid Blue', 'fluent-booking-pro'),
                 'value' => '#0099ff'
             ],
             [
-                'label' => 'Cyan',
+                'label' => __('Cyan', 'fluent-booking-pro'),
                 'value' => '#0ae8f0'
             ],
             [
-                'label' => 'Emerald Green',
+                'label' => __('Emerald Green', 'fluent-booking-pro'),
                 'value' => '#17e885'
             ],
             [
-                'label' => 'Lime Green',
+                'label' => __('Lime Green', 'fluent-booking-pro'),
                 'value' => '#ccf000'
             ],
             [
-                'label' => 'Amber',
+                'label' => __('Amber', 'fluent-booking-pro'),
                 'value' => '#ffa600'
             ]
         ]);
@@ -1354,112 +1354,112 @@ class Helper
         if (!$isHtmlSupported) {
             $groups = [
                 'guest'   => [
-                    'title'      => 'Attendee Data',
+                    'title'      => __('Attendee Data', 'fluent-booking-pro'),
                     'key'        => 'guest',
                     'shortcodes' => [
-                        '{{guest.first_name}}' => 'Guest First Name',
-                        '{{guest.last_name}}'  => 'Guest Last Name',
-                        '{{guest.full_name}}'  => 'Guest Full Name',
-                        '{{guest.email}}'      => 'Guest Email',
-                        '{{guest.note}}'       => 'Guest Note',
-                        '{{booking.phone}}'    => 'Guest Main Phone Number (if provided)',
-                        '{{guest.timezone}}'   => 'Guest Timezone'
+                        '{{guest.first_name}}' => __('Guest First Name', 'fluent-booking-pro'),
+                        '{{guest.last_name}}'  => __('Guest Last Name', 'fluent-booking-pro'),
+                        '{{guest.full_name}}'  => __('Guest Full Name', 'fluent-booking-pro'),
+                        '{{guest.email}}'      => __('Guest Email', 'fluent-booking-pro'),
+                        '{{guest.note}}'       => __('Guest Note', 'fluent-booking-pro'),
+                        '{{booking.phone}}'    => __('Guest Main Phone Number (if provided)', 'fluent-booking-pro'),
+                        '{{guest.timezone}}'   => __('Guest Timezone', 'fluent-booking-pro')
                     ]
                 ],
                 'booking' => [
-                    'title'      => 'Booking Data',
+                    'title'      => __('Booking Data', 'fluent-booking-pro'),
                     'key'        => 'booking',
                     'shortcodes' => [
-                        '{{booking.event_name}}'                    => 'Event Name',
-                        '{{booking.description}}'                   => 'Event Description',
-                        '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
-                        '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
-                        '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
-                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with attendee timezone)',
-                        '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
-                        '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
-                        '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
-                        '##booking.cancelation_url##'               => 'Booking Cancellation URL',
-                        '##booking.reschedule_url##'                => 'Booking Reschedule URL',
-                        '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
-                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash',
-                        '{{booking.reschedule_reason}}'             => 'Event Reschedule Reason'
+                        '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
+                        '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
+                        '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time_for_attendee}}'  => __('Event Date time (with attendee timezone)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time_for_host}}'      => __('Event Date time (with host timezone)', 'fluent-booking-pro'),
+                        '{{booking.cancel_reason}}'                 => __('Event Cancel Reason', 'fluent-booking-pro'),
+                        '{{booking.start_time_human_format}}'       => __('Event Start Time (ex: 2 hours from now)', 'fluent-booking-pro'),
+                        '##booking.cancelation_url##'               => __('Booking Cancellation URL', 'fluent-booking-pro'),
+                        '##booking.reschedule_url##'                => __('Booking Reschedule URL', 'fluent-booking-pro'),
+                        '##booking.admin_booking_url##'             => __('Booking Details Admin URL', 'fluent-booking-pro'),
+                        '{{booking.booking_hash}}'                  => __('Unique Booking Hash', 'fluent-booking-pro'),
+                        '{{booking.reschedule_reason}}'             => __('Event Reschedule Reason', 'fluent-booking-pro')
                     ]
                 ],
                 'host'    => [
-                    'title'      => 'Host Data',
+                    'title'      => __('Host Data', 'fluent-booking-pro'),
                     'key'        => 'host',
                     'shortcodes' => [
-                        '{{host.name}}'     => 'Host Name',
-                        '{{host.email}}'    => 'Host Email',
-                        '{{host.timezone}}' => 'Host Timezone',
+                        '{{host.name}}'     => __('Host Name', 'fluent-booking-pro'),
+                        '{{host.email}}'    => __('Host Email', 'fluent-booking-pro'),
+                        '{{host.timezone}}' => __('Host Timezone', 'fluent-booking-pro'),
                     ]
                 ],
                 'other'   => [
-                    'title'      => 'Other',
+                    'title'      => __('Other', 'fluent-booking-pro'),
                     'key'        => 'other',
                     'shortcodes' => [
-                        '{{event.id}}'             => 'Event ID',
-                        '{{calendar.id}}'          => 'Calendar ID',
-                        '{{calendar.title}}'       => 'Calendar Title',
-                        '{{calendar.description}}' => 'Calendar Description',
+                        '{{event.id}}'             => __('Event ID', 'fluent-booking-pro'),
+                        '{{calendar.id}}'          => __('Calendar ID', 'fluent-booking-pro'),
+                        '{{calendar.title}}'       => __('Calendar Title', 'fluent-booking-pro'),
+                        '{{calendar.description}}' => __('Calendar Description', 'fluent-booking-pro'),
                     ]
                 ]
             ];
         } else {
             $groups = [
                 'guest'   => [
-                    'title'      => 'Attendee Data',
+                    'title'      => __('Attendee Data', 'fluent-booking-pro'),
                     'key'        => 'guest',
                     'shortcodes' => [
-                        '{{guest.first_name}}'     => 'Guest First Name',
-                        '{{guest.last_name}}'      => 'Guest Last Name',
-                        '{{guest.full_name}}'      => 'Guest Full Name',
-                        '{{guest.email}}'          => 'Guest Email',
-                        '{{booking.phone}}'        => 'Guest Main Phone Number (if provided)',
-                        '{{guest.note}}'           => 'Guest Note',
-                        '{{guest.timezone}}'       => 'Guest Timezone',
-                        '{{guest.form_data_html}}' => 'Guest Form Submitted Data (HTML)'
+                        '{{guest.first_name}}'     => __('Guest First Name', 'fluent-booking-pro'),
+                        '{{guest.last_name}}'      => __('Guest Last Name', 'fluent-booking-pro'),
+                        '{{guest.full_name}}'      => __('Guest Full Name', 'fluent-booking-pro'),
+                        '{{guest.email}}'          => __('Guest Email', 'fluent-booking-pro'),
+                        '{{booking.phone}}'        => __('Guest Main Phone Number (if provided)', 'fluent-booking-pro'),
+                        '{{guest.note}}'           => __('Guest Note', 'fluent-booking-pro'),
+                        '{{guest.timezone}}'       => __('Guest Timezone', 'fluent-booking-pro'),
+                        '{{guest.form_data_html}}' => __('Guest Form Submitted Data (HTML)', 'fluent-booking-pro')
                     ]
                 ],
                 'booking' => [
-                    'title'      => 'Booking Data',
+                    'title'      => __('Booking Data', 'fluent-booking-pro'),
                     'key'        => 'booking',
                     'shortcodes' => [
-                        '{{booking.event_name}}'                    => 'Event Name',
-                        '{{booking.description}}'                   => 'Event Description',
-                        '{{booking.full_start_end_guest_timezone}}' => 'Full Start & End Time (with guest timezone)',
-                        '{{booking.full_start_end_host_timezone}}'  => 'Full Start & End Time (with host timezone)',
-                        '{{booking.start_date_time}}'               => 'Event Date Time (UTC)',
-                        '{{booking.start_date_time_for_attendee}}'  => 'Event Date time (with guest timezone)',
-                        '{{booking.start_date_time_for_host}}'      => 'Event Date time (with host timezone)',
-                        '{{booking.location_details_html}}'         => 'Event Location Details (HTML)',
-                        '{{booking.cancel_reason}}'                 => 'Event Cancel Reason',
-                        '{{booking.start_time_human_format}}'       => 'Event Start Time (ex: 2 hours from now)',
-                        '##booking.cancelation_url##'               => 'Booking Cancellation URL',
-                        '##booking.reschedule_url##'                => 'Booking Reschedule URL',
-                        '##booking.admin_booking_url##'             => 'Booking Details Admin URL',
-                        '{{booking.booking_hash}}'                  => 'Unique Booking Hash',
-                        '{{booking.reschedule_reason}}'             => 'Event Reschedule Reason'
+                        '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
+                        '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
+                        '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time_for_attendee}}'  => __('Event Date time (with guest timezone)', 'fluent-booking-pro'),
+                        '{{booking.start_date_time_for_host}}'      => __('Event Date time (with host timezone)', 'fluent-booking-pro'),
+                        '{{booking.location_details_html}}'         => __('Event Location Details (HTML)', 'fluent-booking-pro'),
+                        '{{booking.cancel_reason}}'                 => __('Event Cancel Reason', 'fluent-booking-pro'),
+                        '{{booking.start_time_human_format}}'       => __('Event Start Time (ex: 2 hours from now)', 'fluent-booking-pro'),
+                        '##booking.cancelation_url##'               => __('Booking Cancellation URL', 'fluent-booking-pro'),
+                        '##booking.reschedule_url##'                => __('Booking Reschedule URL', 'fluent-booking-pro'),
+                        '##booking.admin_booking_url##'             => __('Booking Details Admin URL', 'fluent-booking-pro'),
+                        '{{booking.booking_hash}}'                  => __('Unique Booking Hash', 'fluent-booking-pro'),
+                        '{{booking.reschedule_reason}}'             => __('Event Reschedule Reason', 'fluent-booking-pro')
                     ]
                 ],
                 'host'    => [
-                    'title'      => 'Host Data',
+                    'title'      => __('Host Data', 'fluent-booking-pro'),
                     'key'        => 'host',
                     'shortcodes' => [
-                        '{{host.name}}'     => 'Host Name',
-                        '{{host.email}}'    => 'Host Email',
-                        '{{host.timezone}}' => 'Host Timezone',
+                        '{{host.name}}'     => __('Host Name', 'fluent-booking-pro'),
+                        '{{host.email}}'    => __('Host Email', 'fluent-booking-pro'),
+                        '{{host.timezone}}' => __('Host Timezone', 'fluent-booking-pro'),
                     ]
                 ],
                 'other'   => [
-                    'title'      => 'Other',
+                    'title'      => __('Other', 'fluent-booking-pro'),
                     'key'        => 'other',
                     'shortcodes' => [
-                        '{{event.id}}'             => 'Event ID',
-                        '{{event.calendar_id}}'    => 'Calendar ID',
-                        '{{calendar.title}}'       => 'Calendar Title',
-                        '{{calendar.description}}' => 'Calendar Description',
+                        '{{event.id}}'             => __('Event ID', 'fluent-booking-pro'),
+                        '{{event.calendar_id}}'    => __('Calendar ID', 'fluent-booking-pro'),
+                        '{{calendar.title}}'       => __('Calendar Title', 'fluent-booking-pro'),
+                        '{{calendar.description}}' => __('Calendar Description', 'fluent-booking-pro'),
                     ]
                 ]
             ];
@@ -1473,19 +1473,19 @@ class Helper
 
             if (Helper::isPaymentEnabled($calendarEvent)) {
                 $groups['payment'] = [
-                    'title'      => 'Payment Data',
+                    'title'      => __('Payment Data', 'fluent-booking-pro'),
                     'key'        => 'payment',
                     'shortcodes' => [
-                        '{{payment.payment_total}}'  => 'Payment Total',
-                        '{{payment.payment_status}}' => 'Payment Status',
-                        '{{payment.payment_method}}' => 'Payment Method',
-                        '{{payment.currency}}'       => 'Currency',
-                        '{{payment.payment_date}}'   => 'Payment Date',
+                        '{{payment.payment_total}}'  => __('Payment Total', 'fluent-booking-pro'),
+                        '{{payment.payment_status}}' => __('Payment Status', 'fluent-booking-pro'),
+                        '{{payment.payment_method}}' => __('Payment Method', 'fluent-booking-pro'),
+                        '{{payment.currency}}'       => __('Currency', 'fluent-booking-pro'),
+                        '{{payment.payment_date}}'   => __('Payment Date', 'fluent-booking-pro'),
                     ]
                 ];
 
                 if ($isHtmlSupported) {
-                    $groups['payment']['shortcodes']['{{payment.receipt_html}}'] = 'Payment Receipt (HTML)';
+                    $groups['payment']['shortcodes']['{{payment.receipt_html}}'] = __('Payment Receipt (HTML)', 'fluent-booking-pro');
                 }
             }
 

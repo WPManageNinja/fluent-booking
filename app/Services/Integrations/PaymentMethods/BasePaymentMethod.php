@@ -339,7 +339,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         $settings = $this->getSettings();
         if (isset($settings['is_active']) && $settings['is_active'] !== 'yes') {
-            return $data['template'] = '<div class="fluent_booking_payment_methods">Please activate payment first!</div>';
+            return $data['template'] = '<div class="fluent_booking_payment_methods">' . __('Please activate payment first!', 'fluent-booking-pro') . '</div>';
         }
 
         $templates = [
@@ -347,7 +347,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         ];
 
         $hasActiveMethod = false;
-        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods'><div style='display: flex; gap: 20px;'>Pay with:";
+        $radio = "<div class='payment-methods-radio fluent_booking_payment_methods'><div style='display: flex; gap: 20px;'>" . __('Pay with:', 'fluent-booking-pro');
         foreach ($methods as $slug => $methodData) {
             if (isset($methodData['status']) && $methodData['status']) {
                 $hasActiveMethod = true;

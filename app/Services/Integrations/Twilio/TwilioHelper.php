@@ -86,7 +86,7 @@ class TwilioHelper
         $defaultSettings = apply_filters('fluent_booking/default_sms_notification_settings', [
             'booking_conf_attendee' => [
                 'enabled' => false,
-                'title'   => __('Booking Confirmation SMS to Attendee', 'fluent-booking'),
+                'title'   => __('Booking Confirmation SMS to Attendee', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'number' => '',
@@ -96,7 +96,7 @@ class TwilioHelper
             'booking_conf_host'     => [
                 'enabled' => false,
                 'is_host' => true,
-                'title'   => __('Booking Confirmation SMS to Organizer (You)', 'fluent-booking'),
+                'title'   => __('Booking Confirmation SMS to Organizer (You)', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'receiver'=> 'host_number',
@@ -106,7 +106,7 @@ class TwilioHelper
             ],
             'reminder_to_attendee'  => [
                 'enabled' => false,
-                'title'   => __('Configure Meeting Reminder to Attendee', 'fluent-booking'),
+                'title'   => __('Configure Meeting Reminder to Attendee', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'number' => '',
@@ -122,7 +122,7 @@ class TwilioHelper
             'reminder_to_host'      => [
                 'enabled' => false,
                 'is_host' => true,
-                'title'   => __('Configure Meeting Reminder to Organizer (You)', 'fluent-booking'),
+                'title'   => __('Configure Meeting Reminder to Organizer (You)', 'fluent-booking-pro'),
                 'sms'   => [
                     'number' => '',
                     'send_to' => 'phone',
@@ -139,7 +139,7 @@ class TwilioHelper
             'cancelled_by_attendee' => [
                 'enabled' => false,
                 'is_host' => true,
-                'title'   => __('Booking Cancelled by Attendee (SMS to Organizer)', 'fluent-booking'),
+                'title'   => __('Booking Cancelled by Attendee (SMS to Organizer)', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'receiver'=> 'host_number',
@@ -149,7 +149,7 @@ class TwilioHelper
             ],
             'cancelled_by_host'     => [
                 'enabled' => false,
-                'title'   => __('Booking Cancelled by Organizer (SMS to Attendee)', 'fluent-booking'),
+                'title'   => __('Booking Cancelled by Organizer (SMS to Attendee)', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'number' => '',

@@ -280,7 +280,7 @@ class FluentFormInit
                     'component'        => 'FluentBooking',
                     'status'           => 'info',
                     'title'            => __('Booking has been created on FluentBooking', 'fluent-booking-pro'),
-                    'description'      => sprintf('A new appointment has been created on FluentBooking. %1sView Booking Details%2s', '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
+                    'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1sView Booking Details%2s', 'fluent-booking-pro'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
                 ]);
 
             } catch (\Exception $exception) {
@@ -339,7 +339,7 @@ class FluentFormInit
             $smartCode = '{all_data}';
 
             if($submission->payment_total) {
-                $smartCode .= '<h3>Related Payments</h3>{payment.receipt}';
+                $smartCode .= '<h3>' . __('Related Payments', 'fluent-booking-pro') . '</h3>{payment.receipt}';
             }
 
             $entryHtmlData = ShortCodeParser::parse(
@@ -351,10 +351,10 @@ class FluentFormInit
                 true
             );
 
-            $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">View Form Submission</a></p>';
+            $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">' . __('View Form Submission', 'fluent-booking-pro') . '</a></p>';
 
             $booking->sourceDetails = [
-                'title'   => __('Related Form Data', 'fluent-booking'),
+                'title'   => __('Related Form Data', 'fluent-booking-pro'),
                 'content' => $entryHtmlData
             ];
         } catch (\Exception $e) {

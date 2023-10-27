@@ -43,7 +43,7 @@ class Bootstrap
             }
 
             $fields['conferencing']['options']['zoom_meeting'] = [
-                'title'         => 'Zoom Video',
+                'title'         => __('Zoom Video', 'fluent-booking-pro'),
                 'disabled'      => false,
                 'location_type' => 'conferencing'
             ];
@@ -122,7 +122,7 @@ class Bootstrap
             ],
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
             'start_time'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'topic'        => sprintf('%1s meeting with %2s', $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
+            'topic'        => sprintf(__('%1s meeting with %2s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
         ], $booking, $calendarSlot);
 
         $response = $apiClient->createMeeting($data);
@@ -132,8 +132,8 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Zoom API Error',
-                'description' => __(sprintf('Failed to create meeting with Zoom API. API Response: %1s', esc_attr($response->get_error_message())), 'fluent-booking-pro')
+                'title'       => __('Zoom API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf(__('Failed to create meeting with Zoom API. API Response: %1s', 'fluent-booking-pro'), esc_attr($response->get_error_message())), 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -152,7 +152,7 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Zoom Meeting has been created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Zoom Meeting has been scheduled. %1s', '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            'description' => __(sprintf(__('Zoom Meeting has been scheduled. %1s', 'fluent-booking-pro'), '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
         ]);
 
         return true;
@@ -200,7 +200,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Zoom API Error',
+                'title'       => __('Zoom API Error', 'fluent-booking-pro'),
                 'description' => __('Failed to delete meeting with Zoom API', 'fluent-booking-pro')
             ]);
             return false;
@@ -293,7 +293,7 @@ class Bootstrap
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
-                'title'       => 'Zoom API Error',
+                'title'       => __('Zoom API Error', 'fluent-booking-pro'),
                 'description' => __('Failed to update meeting with Zoom API', 'fluent-booking-pro')
             ]);
             return false;

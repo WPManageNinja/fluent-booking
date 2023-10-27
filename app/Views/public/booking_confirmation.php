@@ -29,7 +29,7 @@
         <?php if($extra_html): ?>
         <hr />
         <div class="fcal_payment_html">
-            <h3 style="margin-bottom: 10px;">Payment Details</h3>
+            <h3 style="margin-bottom: 10px;"><?php _e('Payment Details', 'fluent-booking-pro'); ?></h3>
             <?php echo $extra_html; ?>
         </div>
         <style>
