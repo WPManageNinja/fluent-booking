@@ -191,6 +191,8 @@ class SchedulesController extends Controller
         $booking = $booking->findOrFail($bookingId);
         $booking = $this->formatBooking($booking);
 
+        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
+
         return [
             'schedule' => $booking
         ];
@@ -311,8 +313,6 @@ class SchedulesController extends Controller
         }
 
         $booking->slot = $booking->calendar_event;
-
-        do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
         return $booking;
     }
