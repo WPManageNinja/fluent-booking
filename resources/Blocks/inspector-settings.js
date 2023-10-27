@@ -82,7 +82,7 @@ const InspectorSettings = props => {
                                 value={date_round}
                                 onChange={dateStyleChangeHandle}
                             >
-                                <option value="4px">Squire</option>
+                                <option value="4px">Square</option>
                                 <option value="50%">Rounded</option>
                             </select>
                         </div>
@@ -93,7 +93,7 @@ const InspectorSettings = props => {
                                 value={avatarStyle}
                                 onChange={avatarStyleChangeHandle}
                             >
-                                <option value="8px">Squire</option>
+                                <option value="8px">Square</option>
                                 <option value="50%">Rounded</option>
                             </select>
                         </div>
