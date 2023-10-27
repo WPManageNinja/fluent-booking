@@ -32,27 +32,27 @@ class LocationService
                     $html .= '<span class="fcal_loc_text">' . __('Online Meeting', 'fluent-booking-pro') . '</span>';
                 }
             } else if ($location['type'] == 'in_person_guest') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Zoom Icon', 'fluent-booking-pro') . '" />';
                 $html .= '<span class="fcal_loc_text">' . __('In Person (Attendee Address)', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'custom') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Zoom Icon', 'fluent-booking-pro') . '" />';
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 } else {
                     $html .= '<span class="fcal_loc_text">' . $location['title'] . '</span>';
                 }
             } else if ($location['type'] == 'in_person_organizer') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="Zoom Icon" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Zoom Icon', 'fluent-booking-pro') . '" />';
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 } else {
                     $html .= '<span class="fcal_loc_text"> In Person (Organizer Address) </span>';
                 }
             } else if ($location['type'] == 'phone_guest') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="' . __('Phone', 'fluent-booking-pro') . '" />';
                 $html .= '<span class="fcal_loc_text">' . __('Attendee Phone Number', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'phone_organizer') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="Phone" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="' . __('Phone', 'fluent-booking-pro') . '" />';
 
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['host_phone_number'] . '</span>';

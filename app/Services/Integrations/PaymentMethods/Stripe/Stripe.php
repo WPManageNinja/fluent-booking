@@ -69,9 +69,7 @@ class Stripe extends BasePaymentMethod
      */
     public function getDescription()
     {
-        return "Stripe's payments platform lets you accept 
-            credit cards, debit cards, and popular payment 
-            methods around the world—all with a single integration";
+        return __("Stripe's payments platform lets you accept credit cards, debit cards, and popular payment methods around the world—all with a single integration", "fluent-booking-pro");
     }
 
     public function beforeUpdateSettings($data)
@@ -482,7 +480,7 @@ class Stripe extends BasePaymentMethod
         return '
             <input checked value="' . esc_attr($this->slug) . '" name="' . esc_attr($this->slug) . '_payment_method' . '" type="radio"  id="' . esc_attr($this->slug) . '_payment_method">
             <label for="' . esc_attr($this->slug) . '_payment_method">
-              Stripe
+              ' . __('Stripe', 'fluent-booking-pro') . '
             </label>
         ';
     }

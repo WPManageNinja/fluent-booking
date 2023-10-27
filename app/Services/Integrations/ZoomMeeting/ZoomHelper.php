@@ -47,7 +47,7 @@ class ZoomHelper
             ->first();
 
         if (!$meta) {
-            return new \WP_Error('wp_error', 'No zoom credentials found');
+            return new \WP_Error('wp_error', __('No zoom credentials found', 'fluent-booking-pro'));
         }
 
         $config = $meta->value;

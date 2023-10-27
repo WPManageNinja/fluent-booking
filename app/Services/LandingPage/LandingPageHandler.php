@@ -113,7 +113,7 @@ class LandingPageHandler
             if ($activeEvent->description) {
                 $activeEvent->description = Helper::excerpt($activeEvent->description);
             } else {
-                $activeEvent->description = sprintf('Book a meeting with me for %d minutes', $activeEvent->duration);
+                $activeEvent->description = sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $activeEvent->duration);
             }
         }
 
@@ -184,7 +184,7 @@ class LandingPageHandler
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
             'author'         => $authorProfile,
-            'title'          => $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'title'          => $calendarEvent->title . ' ' . __('with', 'fluent-booking-pro') . ' ' . $authorProfile['name'],
             'description'    => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'url'            => home_url($wp->request),
             'css_files'      => [
@@ -263,7 +263,7 @@ class LandingPageHandler
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
         $data = [
-            'title'       => 'Confirmation: ' . $calendarEvent->title . ' with ' . $authorProfile['name'],
+            'title'       => __('Confirmation: ', 'fluent-booking-pro') . $calendarEvent->title . ' ' . __('with', 'fluent-booking-pro') . ' ' . $authorProfile['name'],
             'body'        => $responseHtml,
             'description' => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'css_files'   => [
@@ -359,8 +359,7 @@ class LandingPageHandler
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3>You are rescheduling the
-                    booking: <?php echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
+                <h3> <?php esc_html_e('You are rescheduling the booking:', 'fluent-booking-pro'); echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
                     (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
             <?php
