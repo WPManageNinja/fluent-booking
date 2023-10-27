@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 5.0
 Tested up to: 6.3
 Requires PHP: 7.3
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,17 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.0.6 (Date: 26 Oct 2023)
+- Twilio Integration for SMS & WhatsApp Notification
+- Added Buffer Time before & after the booking slots
+- Translation-Ready - 100% string coverage for translation
+- Fluent Forms Integration Improved
+- Added Booking delete option for Admin
+- Added Booking Reschedule option for Admin
+- Show message if Google Calendar API got disconnected
+- Added support for past recurring events for Google Calendars Sync
+- UI Improvements
 
 1.0.5 (Date: 22 Oct 2023)
 - Fix Google Access Token issue

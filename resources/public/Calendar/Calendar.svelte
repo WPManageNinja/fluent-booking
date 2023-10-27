@@ -1,6 +1,6 @@
 <div class="calendar">
     {#each headers as header}
-        <span class="day-name">{header}</span>
+        <span class="day-name">{getDateTimeStringI18(header, 'day')}</span>
     {/each}
     {#each days as day}
         {#if day.enabled}
@@ -16,6 +16,7 @@
 </div>
 
 <script>
+    import {i18, getDateTimeStringI18} from '../util';
     import {createEventDispatcher} from 'svelte';
 
     export var headers = [];

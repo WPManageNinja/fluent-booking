@@ -222,7 +222,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return false;
     }
 
-    public function capturePayment(OrderTransaction $payment)
+    public function capturePayment($payment)
     {
         $payment->updateStatus('paid');
         return $payment;
