@@ -214,9 +214,13 @@ router.afterEach((to, from) => {
     jQuery('.fframe_menu li').removeClass('active_item');
     jQuery('.fframe_menu li.fframe_item_' + activeMenu).addClass('active_item');
 
-    jQuery('.toplevel_page_fluent_frame li').removeClass('current'); // change fluent_frame with your plugin slug
-    jQuery('.toplevel_page_fluent_frame li.fluent_frame_' + activeMenu).addClass('current'); // change fluent_frame with your plugin slug
+    jQuery('.toplevel_page_fluent-booking li').removeClass('current');
+    jQuery(".toplevel_page_fluent-booking li").find(`a[href*='#/${activeMenu}']`).parent().addClass("current");
 
+    if (activeMenu == 'dashboard') {
+        jQuery(".toplevel_page_fluent-booking li.wp-first-item").addClass("current");
+    }
+    
     if (to.meta.title) {
         jQuery('head title').text(to.meta.title + ' - FluentBooking'); // Change it with your app name
     }
