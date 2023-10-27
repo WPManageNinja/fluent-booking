@@ -80,7 +80,7 @@ class GoogleCalendar
                 return;
             }
 
-            Helper::debugLog(['google_calendar' => 'Access Token Refreshed']);
+            Helper::debugLog(['google_calendar' => __('Access Token Refreshed', 'fluent-booking-pro')]);
 
             $settings['access_token'] = Helper::encryptKey($newTokens['access_token']);
             if (!empty($newTokens['refresh_token'])) {

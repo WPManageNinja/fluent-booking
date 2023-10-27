@@ -70,7 +70,7 @@ class SettingsController extends Controller
                 'wrapper_class' => 'fc_full_width fc_mb_0 fc_wp_editor',
                 'type' => 'wp-editor-field',
                 'label' => __('Email Footer for Booking related emails (optional)', 'fluent-booking-pro'),
-                'inline_help' => 'You may include your business name, address etc here, for example: <br />You have received this email because signed up for an event or made a booking on our website.'
+                'inline_help' => __('You may include your business name, address etc here, for example: <br />You have received this email because signed up for an event or made a booking on our website.', 'fluent-booking-pro')
             ]
         ];
 

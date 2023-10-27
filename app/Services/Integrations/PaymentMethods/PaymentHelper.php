@@ -43,12 +43,12 @@ class PaymentHelper
             $total = $items[0]['value'];
         } else {
             $template = '<table>';
-            $template .= '<thead><tr><th>Item</th><th>Price</th></tr></thead><tbody>';
+            $template .= '<thead><tr><th>' . __('Item', 'fluent-booking-pro') . '</th><th>' . __('Price', 'fluent-booking-pro') . '</th></tr></thead><tbody>';
             foreach ($items as $item) {
                 $total += floatval($item['value']);
                 $template .= '<tr><td>' . $item['title'] . '</td><td>' .$sign . $item['value'] . '</td></tr>';
             }
-            $template .= '</tbody><tfoot><tr><th>Total:</th><th>' . $sign . $total . '</th></tr></tfoot>';
+            $template .= '</tbody><tfoot><tr><th>' . __('Total:', 'fluent-booking-pro') . '</th><th>' . $sign . $total . '</th></tr></tfoot>';
             $template .= '</table>';
         }
 
