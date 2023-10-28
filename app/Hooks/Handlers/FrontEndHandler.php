@@ -573,7 +573,8 @@ class FrontEndHandler
             foreach ($paymentSettings['items'] as $payment) {
                 $total += (int)$payment['value'];
             }
-            $currency = CurrenciesHelper::getCurrencySign();
+            $currency = CurrenciesHelper::getGlobalCurrencySign();
+
             $eventData['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
         } else {
             $eventData['total_payment'] = '';
