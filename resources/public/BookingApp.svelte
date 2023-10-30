@@ -43,7 +43,6 @@
         setTimeout(() => {
             if (!isFluentform) {
                 const calendarHolder = document.querySelector(".fcal_calendar_inner:not(.fcal_form_calendar)").offsetWidth;
-                console.log(calendarHolder);
                 if (calendarHolder <= 650) {
                     isMobile = true;
                 }
