@@ -25,5 +25,9 @@ export const attributes = {
     avatarStyle: {
         type: 'string',
         default: '8px'
+    },
+    hideHostInfo: {
+        type: 'string',
+        default: 'no'
     }
 };

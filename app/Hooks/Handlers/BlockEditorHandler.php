@@ -50,6 +50,10 @@ class BlockEditorHandler
                 'avatarStyle' => [
                     'type'      => 'string',
                     'default'   => '8px'
+                ],
+                'hideHostInfo' => [
+                    'type'      => 'string',
+                    'default'   => 'no'
                 ]
             ]
         ));
@@ -65,8 +69,9 @@ class BlockEditorHandler
             }
         </style>';
 
-        $slotId = $attributes['slotId'];
-        $output .= do_shortcode("[fluent_booking id=$slotId]");
+        $slotId      = $attributes['slotId'];
+        $disableHost = $attributes['hideHostInfo'];
+        $output .= do_shortcode("[fluent_booking id=$slotId disable_author=$disableHost]");
         return $output;
     }
 }
