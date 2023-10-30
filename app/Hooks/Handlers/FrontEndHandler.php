@@ -331,6 +331,7 @@ class FrontEndHandler
                 'Your address'                 => __('Your address', 'fluent-booking-pro'),
                 'Organizer Phone Number'       => __('Organizer Phone Number', 'fluent-booking-pro'),
                 'In Person (Attendee Address)' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
+                'In Person (Organizer Address)'=> __('In Person (Organizer Address)', 'fluent-booking-pro'),
                 'Attendee Phone Number'        => __('Attendee Phone Number', 'fluent-booking-pro'),
                 'Google Meet'                  => __('Google Meet', 'fluent-booking-pro'),
                 'Zoom Meeting'                 => __('Zoom Meeting', 'fluent-booking-pro'),
