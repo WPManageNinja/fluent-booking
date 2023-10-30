@@ -224,18 +224,22 @@ class TimeSlotService
 
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
-                    $books[$date][] = [
-                        'event_id'    => $booking->event_id,
-                        'start'       => $beforeBufferTime,
-                        'end'         => $booking->start_time,
-                        'remaining'   => 0,
-                    ];
-                    $books[$date][] = [
-                        'event_id'    => $booking->event_id,
-                        'start'       => $booking->end_time,
-                        'end'         => $afterBufferTime,
-                        'remaining'   => 0,
-                    ];
+                    if ($beforeBufferTime < $booking->start_time) {
+                        $books[$date][] = [
+                            'event_id'    => $booking->event_id,
+                            'start'       => $beforeBufferTime,
+                            'end'         => $booking->start_time,
+                            'remaining'   => 0,
+                        ];
+                    }
+                    if ($afterBufferTime > $booking->end_time) {
+                        $books[$date][] = [
+                            'event_id'    => $booking->event_id,
+                            'start'       => $booking->end_time,
+                            'end'         => $afterBufferTime,
+                            'remaining'   => 0,
+                        ];
+                    }
                 } else {   
                     $booking->start_time = $beforeBufferTime;
                     $booking->end_time   = $afterBufferTime;
