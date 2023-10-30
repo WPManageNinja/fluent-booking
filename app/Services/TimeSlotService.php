@@ -255,7 +255,7 @@ class TimeSlotService
 
     protected function getWeekDaySlots()
     {
-        $period = $this->calendarSlot->duration;
+        $period = $this->calendarSlot->duration * 60;
 
         $schedule = $this->calendarSlot->settings['weekly_schedules'];
 
@@ -287,10 +287,10 @@ class TimeSlotService
             foreach ($slots as $slot) {
                 $start = strtotime($slot['start']);
                 $end = strtotime($slot['end']);
-
-                while ($start < $end) {
+                
+                while ($start + $period <= $end) {
                     $daySlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    $start += $period * 60;
+                    $start += $period;
                 }
             }
 
