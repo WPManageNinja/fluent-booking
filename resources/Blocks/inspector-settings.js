@@ -4,7 +4,8 @@ const {__} = wp.i18n;
 const {
     PanelBody,
     PanelRow,
-    SelectControl
+    SelectControl,
+    RadioControl
 } = wp.components;
 
 const assets_url = window.fluent_booking_block.assets_url;
@@ -17,7 +18,8 @@ const InspectorSettings = props => {
             calendars,
             primary_color,
             date_round,
-            avatarStyle
+            avatarStyle,
+            hideHostInfo
         }, setAttributes
     } = props;
 
@@ -56,7 +58,7 @@ const InspectorSettings = props => {
                 <PanelRow>
                     <div className="fcal_block_settings">
                         <div className="fcal_block_inspector_widget">
-                            <h3 className="label">Select An Slot</h3>
+                            <h3 className="label">{__('Select An Slot')}</h3>
                             <select
                                 value={[slotId, calendarId]}
                                 onChange={calendarChangeHandler}
@@ -77,7 +79,7 @@ const InspectorSettings = props => {
                         </div>
 
                         <div className="fcal_block_inspector_widget">
-                            <h3 className="label">Date Style</h3>
+                            <h3 className="label">{__('Date Style')}</h3>
                             <select
                                 value={date_round}
                                 onChange={dateStyleChangeHandle}
@@ -88,7 +90,7 @@ const InspectorSettings = props => {
                         </div>
 
                         <div className="fcal_block_inspector_widget">
-                            <h3 className="label">Avatar Style</h3>
+                            <h3 className="label">{__('Avatar Style')}</h3>
                             <select
                                 value={avatarStyle}
                                 onChange={avatarStyleChangeHandle}
@@ -96,6 +98,19 @@ const InspectorSettings = props => {
                                 <option value="8px">Square</option>
                                 <option value="50%">Rounded</option>
                             </select>
+                        </div>
+
+                        <div className="fcal_block_inspector_widget fcal_block_inspector_host_info">
+                            <RadioControl
+                                label={__('Host Info')}
+                                help={__('You can show/hide host info')}
+                                selected={ hideHostInfo }
+                                options={ [
+                                    { label: __('Show'), value: 'no' },
+                                    { label: __('Hide'), value: 'yes' },
+                                ] }
+                                onChange={ ( value ) => setAttributes({hideHostInfo: value} ) }
+                            />
                         </div>
 
                     </div>
