@@ -43,7 +43,7 @@ class SanitizeService
         return $schedules;
     }
 
-    public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $slot = false)
+    public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $event = false)
     {
 
         $todayTimeStamp = strtotime(date('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -87,9 +87,9 @@ class SanitizeService
             }
         }
 
-        if ($isSkipped && $fromTimeZone == 'UTC' && $slot) {
-            $slot->settings['date_overrides'] = $updatedOverRides;
-            $slot->save();
+        if ($isSkipped && $fromTimeZone == 'UTC' && $event) {
+            $event->settings['date_overrides'] = $updatedOverRides;
+            $event->save();
         }
 
         return $validOverrides;
