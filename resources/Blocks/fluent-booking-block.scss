@@ -132,4 +132,26 @@ $dark: #1B2533;
 			width: 100%;
 		}
 	}
+	.fcal_block_inspector_host_info {
+		.components-base-control__field {
+			.components-v-stack {
+				flex-direction: row;
+				justify-content: flex-start;
+				input {
+					transition: .3s;
+					margin-right: 0;
+					&:focus {
+						outline: none;
+						box-shadow: none;
+					}
+					&:before {
+						transition: .3s;
+					}
+				}
+				label {
+					padding-left: 6px;
+				}
+			}
+		}
+	}
 }
