@@ -337,12 +337,25 @@ class TimeSlotService
     {
         $slot = $this->calendarSlot;
         $calendar = $this->calendar;
+        $requestedDate = $startDate;
+
+        // Extract current month and year
+        $requestedDateMonth = date('m', strtotime($requestedDate));
+        $requestedDateYear  = date('Y', strtotime($requestedDate));
 
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $currentAuthorDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if (strtotime($startDate) < strtotime($currentAuthorDateTime)) {
             $startDate = $currentAuthorDateTime;
+        }
+
+        // Extract month and year from the timezone converted start date
+        $startDateMonth = date('m', strtotime($startDate));
+        $startDateYear = date('Y', strtotime($startDate));
+
+        if ($startDateYear < $requestedDateYear || $startDateMonth < $requestedDateMonth) {
+            $startDate = date('Y-m-01 00:00:00', strtotime($requestedDate));
         }
 
         $eventType = $slot->event_type;
@@ -353,10 +366,9 @@ class TimeSlotService
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
-
+        
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
-
 
         $slots = $this->getDates($startDate, $endDate);
 
