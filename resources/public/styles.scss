@@ -329,6 +329,8 @@ $lightDark: #6b7280;
 
   }
 
+
+
   .fcal_date_wrapper {
     width: auto;
     padding: 0;
@@ -1209,6 +1211,18 @@ $lightDark: #6b7280;
     font-size: 14px;
     svg {
       width: 16px;
+    }
+  }
+}
+
+.fcal_calendar_inner.fcal_on_xs {
+  .fcal_side {
+    padding: 15px 10px;
+  }
+  .fcal_date_wrapper .fcal_day_picker {
+    padding: 15px 10px;
+    .svelte-1ac5fol {
+      grid-template-columns: repeat(7, minmax(40px, 6px));
     }
   }
 }
