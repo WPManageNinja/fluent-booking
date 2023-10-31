@@ -84,7 +84,7 @@ class FluentFormInit
         $event = CalendarSlot::find($eventId);
 
         if (!$event || $event->status != 'active') {
-            return __('Sorry, This host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
+            return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
 
         $startTime = $bookingData['start_time'];

@@ -72,9 +72,9 @@
                     <div class="fcal_schedule_meetings_nav">
                         <ul class="fcal_secendary_nav_items">
                             <li @click="changePeriod('upcoming')"
-                                :class="{fcal_active : filters.period == 'upcoming' }">Upcoming
+                                :class="{fcal_active : filters.period == 'upcoming' }">{{ $t('Upcoming') }}
                             </li>
-                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past
+                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">{{ $t('Past') }}
                             </li>
                         </ul>
                     </div>
@@ -153,7 +153,7 @@
                 </div>
             </div>
             <el-skeleton v-else :rows="5" animated/>
-            <p>All dates are shown in {{ currentTimezone }} timezone</p>
+            <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         </div>
     </div>
 </template>
@@ -257,23 +257,23 @@ export default {
         },
         statusFilters() {
             const statuses = {
-                upcoming: 'Upcoming',
-                completed: 'Completed'
+                upcoming: this.$t('Upcoming'),
+                completed: this.$t('Completed')
             }
 
             if(this.pendingCount) {
-                statuses.pending = 'Pending (' + this.pendingCount + ')';
+                statuses.pending = this.$t('Pending')+' (' + this.pendingCount + ')';
             }
 
             if(this.cancelledCount) {
-                statuses.cancelled = 'Cancelled';
+                statuses.cancelled = this.$t('Cancelled');
             }
             if(this.noShowCount) {
-                statuses.no_show = 'No Show';
+                statuses.no_show = this.$t('No Show');
             }
 
-            statuses.latest_bookings = 'Latest Bookings';
-            statuses.all = 'All';
+            statuses.latest_bookings = this.$t('Latest Bookings');
+            statuses.all = this.$t('All');
             return statuses;
         }
     },
