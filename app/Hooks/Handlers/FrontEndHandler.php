@@ -354,7 +354,7 @@ class FrontEndHandler
 
         if (!$calendarSlot || $calendarSlot->status != 'active') {
             wp_send_json([
-                'message' => __('Sorry, this host is not accepting any new bookings at the moment', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ], 422);
         }
 

@@ -18,7 +18,7 @@ class BookingController extends Controller
 
         if ($slot->status != 'active') {
             return $this->sendError([
-                'message' => __('Sorry, this host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ]);
         }
 
@@ -56,7 +56,7 @@ class BookingController extends Controller
 
         if ($calendarSlot->status != 'active') {
             return $this->sendError([
-                'message' => __('Sorry, this host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ]);
         }
 
