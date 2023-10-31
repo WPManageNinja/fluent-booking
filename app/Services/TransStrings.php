@@ -530,7 +530,12 @@ class TransStrings
             'read the documentation here'                                                      => __('read the documentation here', 'fluent-booking-pro'),
             'zoom_integration_step_by_step_guide'                                              => __('for step by step guide to know how you can get api credentials from Zoom Account', 'fluent-booking-pro'),
             'Administrator'                                                                    => __('Administrator', 'fluent-booking-pro'),
-            'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking-pro')
+            'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking-pro'),
+            'Latest Bookings'                                                                  => __('Latest Bookings', 'fluent-booking-pro'),
+            'All'                                                                              => __('All', 'fluent-booking-pro'),
+            'Past'                                                                             => __('Past', 'fluent-booking-pro'),
+            'All dates are shown in'                                                           => __('All dates are shown in', 'fluent-booking-pro'),
+            'timezone'                                                                         => __('timezone', 'fluent-booking-pro')
         ];
 
     }
