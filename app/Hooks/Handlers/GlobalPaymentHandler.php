@@ -11,7 +11,7 @@ class GlobalPaymentHandler
 {
     public function register()
     {
-        add_action('init', [$this, 'init']);
+        add_action('init', [$this, 'init'], 1);
     }
 
     public function init()
@@ -37,7 +37,7 @@ class GlobalPaymentHandler
 
     public function verifyStripeConnect()
     {
-        if (isset($_GET['source'])  && $_GET['source'] == 'fluent_booking') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (isset($_GET['source']) && $_GET['source'] == 'fluent_booking') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if (!current_user_can('manage_options')) {
                 return;
             }
@@ -48,7 +48,7 @@ class GlobalPaymentHandler
                 $ret = ConnectConfig::verifyAuthorizeSuccess($data);
             }
 
-            if ($ret){
+            if ($ret) {
                 echo wp_kses_post($ret);
                 exit();
             }
@@ -80,7 +80,7 @@ class GlobalPaymentHandler
     public function currencies()
     {
         return [
-          'data' =>   CurrenciesHelper::getFormattedCurrencies()
+            'data' => CurrenciesHelper::getFormattedCurrencies()
         ];
     }
 
