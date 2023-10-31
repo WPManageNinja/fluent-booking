@@ -50,7 +50,7 @@ class BookingService
 
             if ($user) {
                 $data['person_user_id'] = $userId;
-                if(empty($data['email'])) {
+                if (empty($data['email'])) {
                     $data['email'] = $user->user_email;
                 }
                 if (empty($data['first_name'])) {
@@ -60,19 +60,21 @@ class BookingService
             }
         }
 
-        if(empty($data['location_details'])) {
+        if (empty($data['location_details'])) {
             $data['location_details'] = LocationService::getLocationDetails($calendarSlot, [], []);
         }
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
-        $event = Booking::select('group_id')
-            ->where('event_id', $calendarSlot->id)
-            ->where('calendar_id', $calendarSlot->calendar_id)
-            ->where('start_time', $bookingData['start_time'])
-            ->first();
+        if ($calendarSlot->type == 'group') {
+            $event = Booking::select('group_id')
+                ->where('event_id', $calendarSlot->id)
+                ->where('calendar_id', $calendarSlot->calendar_id)
+                ->where('start_time', $bookingData['start_time'])
+                ->first();
 
-        $bookingData['group_id'] = $event ? $event->group_id : null;
+            $bookingData['group_id'] = $event ? $event->group_id : null;
+        }
 
         $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
 
@@ -135,7 +137,7 @@ class BookingService
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking-pro'),
-                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">'.__('Host', 'fluent-booking-pro').'</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
+                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">' . __('Host', 'fluent-booking-pro') . '</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
                 'title'   => __('Where', 'fluent-booking-pro'),
@@ -193,7 +195,7 @@ class BookingService
         }
 
 
-        if ($booking->status == 'scheduled') {
+        if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
             $assetsUrl = App::getInstance('url.assets');
             $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
                 'google'   => [

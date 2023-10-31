@@ -35,3 +35,11 @@ add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $cale
 
     return $items;
 }, 1, 2);
+
+
+add_action('init', function () {
+// Woo Integration
+    if (defined('WC_PLUGIN_FILE')) {
+      //  (new \FluentBooking\App\Services\Integrations\Woo\Bootstrap())->register();
+    }
+}, 1);
