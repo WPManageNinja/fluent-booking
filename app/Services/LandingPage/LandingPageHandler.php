@@ -22,7 +22,7 @@ class LandingPageHandler
         }
 
         if (isset($_GET['fluent-booking'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            add_action('init', [$this, 'handleUrlParamsPage'], 10);
+            add_action('init', [$this, 'handleUrlParamsPage'], 100);
         }
     }
 

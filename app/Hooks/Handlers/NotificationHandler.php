@@ -110,7 +110,7 @@ class NotificationHandler
         if (!$booking || $booking->status != 'scheduled') {
             return false;
         }
-        
+
         $notifications = $booking->calendar_event->getNotifications();
 
         if (!$notifications) {
