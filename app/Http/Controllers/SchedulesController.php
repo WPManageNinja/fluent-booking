@@ -33,7 +33,7 @@ class SchedulesController extends Controller
         if ($author == 'me') {
             $author = get_current_user_id();
         } else if ($author !== 'all') {
-            $author = (int)$author;
+            $author = (int) $author;
         }
 
         if (!PermissionManager::hasAllCalendarAccess()) {
@@ -41,14 +41,10 @@ class SchedulesController extends Controller
         }
 
         if ($author && $author !== 'all') {
-            $query->whereHas('calendar', function ($q) use ($author) {
-                $q->where('user_id', $author);
-            });
+            $query->where('host_user_id', $author);
 
             if ($slotId && $slotId !== 'all') {
-                $query->where(function ($q) use ($slotId) {
-                    $q->where('event_id', $slotId);
-                });
+                $query->where('event_id', $slotId);
             }
         }
 
@@ -62,11 +58,14 @@ class SchedulesController extends Controller
             $query = $query->orderBy('created_at', 'DESC');
         } else if ($period == 'no_show') {
             $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');
+        } else if($period == 'latest_bookings') {
+            $query = $query->orderBy('id', 'DESC');
         } else {
             $query = $query->orderBy('start_time', 'DESC');
         }
 
         $query->groupBy('group_id');
+
         $search = Arr::get($filters, 'search');
 
         if (!empty($search)) {

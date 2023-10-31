@@ -27,10 +27,8 @@ class FrontEndHandler
 
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
 
-
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
         add_action('wp_ajax_nopriv_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
-
 
         add_action('wp_ajax_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
         add_action('wp_ajax_nopriv_fcal_cancel_meeting', [$this, 'ajaxHandleCancelMeeting']);
@@ -485,11 +483,11 @@ class FrontEndHandler
 
         $html = BookingService::getBookingConfirmationHtml($booking);
 
-        wp_send_json([
+        wp_send_json(apply_filters('fluent_booking/booking_confirmation_response', [
             'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
             'response_html' => $html,
             'booking_hash'  => $booking->hash
-        ], 200);
+        ], $booking), 200);
     }
 
     public function ajaxGetAvailableDates()

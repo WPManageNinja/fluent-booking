@@ -235,7 +235,7 @@ export default {
         meetingDetails() {
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, 'DD MMM YYYY, hh:mma');
-            return `${this.showing_booking.slot_minutes} minutes meeting with ${guestName} @ ${startTime}`;
+            return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
         },
         meetingTime() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, 'MMMM D, YYYY hh:mma');
