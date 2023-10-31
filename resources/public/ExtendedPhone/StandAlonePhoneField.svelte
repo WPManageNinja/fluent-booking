@@ -77,6 +77,7 @@
             {floatingConfig}
             clearable={false}
             value={country}
+            inputAttributes="{ {autocomplete: 'new-password'} }"
             placeholder="{window.fluentCalendarPublicVars.i18['Country'] || 'Country'}"
             items={normalizedCountries}
     >

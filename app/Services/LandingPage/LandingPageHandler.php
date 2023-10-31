@@ -22,7 +22,7 @@ class LandingPageHandler
         }
 
         if (isset($_GET['fluent-booking'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            add_action('init', [$this, 'handleUrlParamsPage']);
+            add_action('init', [$this, 'handleUrlParamsPage'], 10);
         }
     }
 
@@ -46,13 +46,13 @@ class LandingPageHandler
     {
         $route = sanitize_text_field($_GET['fluent-booking']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-
         if ($route == 'booking') {
             $this->handleAfterBookingPage();
             return;
         }
 
         if (empty($_REQUEST['host'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            do_action('fluent_booking/landing_page_route_'.$route, $_REQUEST);
             return;
         }
 
