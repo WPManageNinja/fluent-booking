@@ -530,7 +530,9 @@ class TransStrings
             'read the documentation here'                                                      => __('read the documentation here', 'fluent-booking-pro'),
             'zoom_integration_step_by_step_guide'                                              => __('for step by step guide to know how you can get api credentials from Zoom Account', 'fluent-booking-pro'),
             'Administrator'                                                                    => __('Administrator', 'fluent-booking-pro'),
-            'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking-pro')
+            'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking-pro'),
+            'Global Feature Modules'                                                           => __('Global Feature Modules', 'fluent-booking-pro'),
+            'global_feature_modules_desc'                                                      => __('Enable/Disable FluentBooking Advanced features or integrations.', 'fluent-booking-pro')
         ];
 
     }

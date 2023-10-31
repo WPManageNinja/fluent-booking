@@ -1262,7 +1262,7 @@ class Helper
         $checkImage = App::getInstance()['url.assets'] . 'images/check-mark.png';
 
         return apply_filters('fluent_booking/default_email_notification_settings', [
-            'booking_conf_attendee' => [
+            'booking_conf_attendee'   => [
                 'enabled' => true,
                 'title'   => __('Booking Confirmation Email to Attendee', 'fluent-booking-pro'),
                 'email'   => [
@@ -1270,7 +1270,7 @@ class Helper
                     'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . '<a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</a></p>'
                 ],
             ],
-            'booking_conf_host'     => [
+            'booking_conf_host'       => [
                 'enabled' => true,
                 'is_host' => true,
                 'title'   => __('Booking Confirmation Email to Organizer (You)', 'fluent-booking-pro'),
@@ -1280,7 +1280,7 @@ class Helper
                     'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">A new event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
-            'reminder_to_attendee'  => [
+            'reminder_to_attendee'    => [
                 'enabled' => false,
                 'title'   => __('Configure Meeting Reminder to Attendee', 'fluent-booking-pro'),
                 'email'   => [
@@ -1294,7 +1294,7 @@ class Helper
                     ]
                 ],
             ],
-            'reminder_to_host'      => [
+            'reminder_to_host'        => [
                 'enabled' => false,
                 'is_host' => true,
                 'title'   => __('Configure Meeting Reminder to Organizer (You)', 'fluent-booking-pro'),
@@ -1310,7 +1310,7 @@ class Helper
                     ]
                 ],
             ],
-            'cancelled_by_attendee' => [
+            'cancelled_by_attendee'   => [
                 'enabled' => true,
                 'is_host' => true,
                 'title'   => __('Booking Cancelled by Attendee (email to Organizer)', 'fluent-booking-pro'),
@@ -1320,7 +1320,7 @@ class Helper
                     'body'                  => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>A scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
-            'cancelled_by_host'     => [
+            'cancelled_by_host'       => [
                 'enabled' => true,
                 'title'   => __('Booking Cancelled by Organizer (email to Attendee)', 'fluent-booking-pro'),
                 'email'   => [
@@ -1585,7 +1585,7 @@ class Helper
                 'notification_day'       => 'mon',
                 'start_day'              => 'sun',
             ],
-            'time_format' => '24'
+            'time_format'    => '24'
         ];
 
         $settings = get_option('_fluent_booking_settings', []);
@@ -1641,5 +1641,40 @@ class Helper
     public static function getBookingReceiptLandingBaseUrl()
     {
         return apply_filters('fluent_booking/booking_receipt_landing_base_url', site_url('/'));
+    }
+
+    public static function getGlobalModuleSettings($cached = true)
+    {
+        static $settings = null;
+
+        if ($cached && $settings !== null) {
+            return $settings;
+        }
+
+        $settings = get_option('_fluent_booking_enabled_modules', []);
+
+        if (empty($settings) || !\is_array($settings)) {
+            $settings = [];
+        }
+
+        return $settings;
+    }
+
+    public static function updateGlobalModuleSettings($settings = [])
+    {
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        update_option('_fluent_booking_enabled_modules', $settings);
+
+        return self::getGlobalModuleSettings(false);
+    }
+
+    public static function isModuleEnabled($module)
+    {
+        $settings = self::getGlobalModuleSettings();
+
+        return isset($settings[$module]) && $settings[$module] === 'yes';
     }
 }
