@@ -78,7 +78,6 @@ class SchedulesController extends Controller
 
         foreach ($schedules as $schedule) {
             $this->formatBooking($schedule);
-            do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
         $data = [
@@ -104,7 +103,7 @@ class SchedulesController extends Controller
             $data['pending_count'] = $pendingCount;
             $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
         }
-        
+
         return $data;
     }
 
@@ -192,9 +191,15 @@ class SchedulesController extends Controller
 
         do_action_ref_array('fluent_booking/booking_schedule', [&$booking]);
 
-        return [
+        $data = [
             'schedule' => $booking
         ];
+
+        if (in_array('all_data', $this->request->get('with', []))) {
+            $data = array_merge($data, $this->getBookingMetaInfo($request, $bookingId));
+        }
+
+        return $data;
     }
 
     public function deleteBooking(Request $request, $bookingId)
@@ -256,6 +261,46 @@ class SchedulesController extends Controller
         ];
     }
 
+    public function getBookingMetaInfo(Request $request, $bookingId)
+    {
+        $booking = Booking::findOrFail($bookingId);
+
+        $activities = BookingActivity::where('booking_id', $booking->id)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $sidebarContents = [];
+        $mainBodyContents = [];
+
+        if (defined('FLUENTCRM')) {
+            $profileHtml = fluentcrm_get_crm_profile_html($booking->email, false);
+            if ($profileHtml) {
+                $sidebarContents[] = [
+                    'id'      => 'fluent_crm_profule',
+                    'title'   => __('CRM Profile', 'fluent-booking-pro'),
+                    'content' => $profileHtml
+                ];
+            }
+        }
+
+        $order = null;
+        if ($booking->payment_method == 'stripe' && $booking->payment_order) {
+            $order = $booking->payment_order;
+            $order->load(['items', 'transaction']);
+            $order->currency_sign = CurrenciesHelper::getCurrencySign($order->currency);
+        }
+
+        $mainBodyContents = apply_filters('fluent_booking/booking_meta_info_main_meta', $mainBodyContents, $booking);
+        $mainBodyContents = apply_filters('fluent_booking/booking_meta_info_main_meta_' . $booking->source, $mainBodyContents, $booking);
+
+        return [
+            'activities'         => $activities,
+            'sidebar_contents'   => $sidebarContents,
+            'payment_order'      => $order,
+            'main_body_contents' => $mainBodyContents
+        ];
+    }
+
 
     public function getCrmProfile(Request $request)
     {
@@ -291,11 +336,6 @@ class SchedulesController extends Controller
         $booking->custom_form_data = $booking->getCustomFormData();
         $booking->reschedule_url = $booking->getRescheduleUrl();
 
-        if ($booking->payment_method == 'stripe' && $booking->payment_order) {
-            $booking->payment_order->load(['items', 'transaction']);
-            $booking->currency = CurrenciesHelper::getGlobalCurrencySign();
-        }
-
         if (!$booking->calendar_event) {
             $booking->author = [
                 'name' => 'unknown'
@@ -304,7 +344,7 @@ class SchedulesController extends Controller
         } else {
             $booking->author = $booking->calendar_event->getAuthorProfile(false);
         }
-
+        
         if ($booking->event_type == 'group') {
             $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
         }

@@ -55,6 +55,7 @@ $router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($rout
     $router->get('/{id}/slot', 'SchedulesController@getScheduleSpot')->int('id');
     $router->put('/{id}', 'SchedulesController@patchBooking')->int('id');
     $router->get('/{id}/activities', 'SchedulesController@getBookingActivities')->int('id');
+    $router->get('/{id}/meta-info', 'SchedulesController@getBookingMetaInfo')->int('id');
 
     $router->get('/group-bookings/{group_id}/attendees', 'SchedulesController@getGroupAttendees')->int('group_id');
 

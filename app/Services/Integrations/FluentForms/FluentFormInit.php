@@ -37,7 +37,7 @@ class FluentFormInit
             return $elements;
         });
 
-        add_action('fluent_booking/booking_schedule', [$this, 'pushFormDataToBooking'], 10, 1);
+        add_action('fluent_booking/booking_meta_info_main_meta_fluentform', [$this, 'pushFormDataToBooking'], 10, 2);
     }
 
     public function registerIntegrations()
@@ -316,17 +316,17 @@ class FluentFormInit
         }
     }
 
-    public function pushFormDataToBooking(&$booking)
+    public function pushFormDataToBooking($meta, $booking)
     {
-        if ($booking->source != 'fluentform' || !$booking->source_id) {
-            return $booking;
+        if (!$booking->source_id) {
+            return $meta;
         }
 
         try {
             $submission = Submission::find($booking->source_id);
 
             if (!$submission) {
-                return;
+                return $meta;
             }
 
             $response = json_decode($submission->response);
@@ -348,12 +348,15 @@ class FluentFormInit
 
             $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">' . __('View Form Submission', 'fluent-booking-pro') . '</a></p>';
 
-            $booking->sourceDetails = [
+            $meta[] = [
+                'id'      => 'fluentform',
                 'title'   => __('Related Form Data', 'fluent-booking-pro'),
                 'content' => $entryHtmlData
             ];
         } catch (\Exception $e) {
-            return;
+
         }
+
+        return $meta;
     }
 }

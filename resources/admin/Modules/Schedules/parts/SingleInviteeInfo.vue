@@ -29,9 +29,9 @@
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
-                        <h3 >{{ field.label }}</h3>
+                        <h3>{{ field.label }}</h3>
                         <div class="fcal_spot_details_value">
-                            <p>{{ field.value }}</p>
+                            <p v-html="field.value"></p>
                         </div>
                     </template>
                 </div>
