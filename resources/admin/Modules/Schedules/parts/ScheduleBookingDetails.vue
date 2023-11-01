@@ -3,7 +3,7 @@
         <div class="fcal_schedule_details_content">
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
-                    {{ meetingDetails }} - {{ucFirst(showing_booking.status)}}
+                    {{ meetingDetails }} - {{ ucFirst(showing_booking.status) }}
                     <el-dropdown v-if="isMoreIconVisible" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
@@ -11,11 +11,16 @@
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item @click="updateScheduleStatus('completed')">
-                                    <el-icon><Check /></el-icon>
+                                    <el-icon>
+                                        <Check/>
+                                    </el-icon>
                                     {{ $t('Mark As Completed') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if="showing_booking.status!='no_show'" @click="updateScheduleStatus('no_show')">
-                                    <el-icon><Hide /></el-icon>
+                                <el-dropdown-item v-if="showing_booking.status!='no_show'"
+                                                  @click="updateScheduleStatus('no_show')">
+                                    <el-icon>
+                                        <Hide/>
+                                    </el-icon>
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="rescheduleBooking">
@@ -73,7 +78,8 @@
                             <h3>{{ $t('Status') }}</h3>
                             <p>{{ showing_booking.status }}</p>
                         </div>
-                        <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'" class="fcal_schedule_details_event_item">
+                        <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'"
+                             class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Booking URL') }}</h3>
                             <div class="fcal_spot_details_value">
                                 <a target="_blank" rel="nofollow"
@@ -92,16 +98,35 @@
                         </editable-booking-data>
                     </div>
                 </div>
-                <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
-                <PaymentLogs
-                    v-if="showing_booking.event_type == 'single' && showing_booking.payment_order"
-                    :booking="showing_booking" />
+                <div v-loading="loading_sidebar" v-if="showing_booking">
+                    <template v-if="main_body_contents && main_body_contents.length">
+                        <div v-for="bodyMeta in main_body_contents" :key="bodyMeta.id"
+                             class="fcal_schedule_event_infos_body">
+                            <div class="fcal_schedule_details_header">
+                                <h1 class="fcal_header_title">
+                                    {{ bodyMeta.title }}
+                                </h1>
+                            </div>
+                            <div>
+                                <div v-html="bodyMeta.content"></div>
+                            </div>
+                        </div>
+                    </template>
+                    <PaymentLogs v-if="payment_order" :payment_order="payment_order" :booking="showing_booking"/>
+                </div>
             </div>
         </div>
-        <div v-if="showing_booking" class="fcal_booking_activities">
-            <BookingActivities :booking_id="showing_booking.id"/>
-            <FluentCrmProfile :crm_email="showing_booking.email"/>
+        <div v-loading="loading_sidebar" v-if="showing_booking" class="fcal_booking_activities">
+            <BookingActivities :activities="activities"/>
+            <div v-if="sidebar_contents && sidebar_contents.length">
+                <div v-for="sideItem in sidebar_contents" :key="sideItem.id" class="fcal_schedule_profile_box">
+                    <div class="fcal_schedule_profile_header">
+                        <h1>{{ sideItem.title }}</h1>
+                    </div>
+                    <div class="fcal_schedule_profile_body" v-html="sideItem.content"></div>
+                </div>
+            </div>
         </div>
         <el-dialog
             v-model="cancelDialog"
@@ -116,7 +141,8 @@
                     }}</b></p>
                 <p class="fcal_meeting_time">{{ meetingTime }}</p>
                 <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
-                <el-input type="textarea" v-model="cancel_reason" :placeholder="$t('Reason for cancellation')"></el-input>
+                <el-input type="textarea" v-model="cancel_reason"
+                          :placeholder="$t('Reason for cancellation')"></el-input>
             </div>
             <template #footer>
               <span class="dialog-footer">
@@ -174,7 +200,6 @@
 <script type="text/babel">
 import {Back, MoreFilled, Refresh, Close, Delete, EditPen, Check, Hide} from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
-import FluentCrmProfile from "./FluentCrmProfile";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
@@ -187,7 +212,6 @@ export default {
     $emits: ['bookingFetched'],
     components: {
         PaymentLogs,
-        FluentCrmProfile,
         BookingActivities,
         SingleInviteeInfo,
         GroupBookingGuests,
@@ -211,12 +235,19 @@ export default {
             cancelDialog: false,
             deleteDialog: false,
             cancel_reason: '',
+
+            loading_sidebar: false,
+            activities: [],
+            sidebar_contents: [],
+            payment_order: null,
+            main_body_contents: []
         }
     },
     watch: {
         booking_id() {
             this.showing_booking = null;
             if (this.booking) {
+                this.getAdditionalData();
                 this.$nextTick(() => {
                     this.showing_booking = this.booking;
                 });
@@ -246,9 +277,18 @@ export default {
     methods: {
         fetchBooking() {
             this.fetching = true;
-            this.$get(`schedules/${this.booking_id}`)
+            this.loading_sidebar = true;
+            this.$get(`schedules/${this.booking_id}`, {
+                with: ['all_data']
+            })
                 .then(response => {
                     this.showing_booking = response.schedule;
+
+                    this.activities = response.activities;
+                    this.sidebar_contents = response.sidebar_contents;
+                    this.payment_order = response.payment_order;
+                    this.main_body_contents = response.main_body_contents;
+
                     this.$emit('bookingFetched', response.schedule);
                 })
                 .catch((errors) => {
@@ -256,6 +296,23 @@ export default {
                 })
                 .finally(() => {
                     this.fetching = false;
+                    this.loading_sidebar = false;
+                });
+        },
+        getAdditionalData() {
+            this.loading_sidebar = true;
+            this.$get(`schedules/${this.booking_id}/meta-info`)
+                .then(response => {
+                    this.activities = response.activities;
+                    this.sidebar_contents = response.sidebar_contents;
+                    this.payment_order = response.payment_order;
+                    this.main_body_contents = response.main_body_contents;
+                })
+                .catch((errors) => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading_sidebar = false;
                 });
         },
         updateScheduleStatus(new_status) {

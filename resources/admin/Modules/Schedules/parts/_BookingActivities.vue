@@ -6,10 +6,7 @@
                     {{ $t('Meeting Activities') }}
                 </h1>
             </div>
-            <div v-if="loading" class="fcal_loading">
-                <el-skeleton :rows="5" animated />
-            </div>
-            <div v-else class="fcal_booking_activities_list">
+            <div class="fcal_booking_activities_list">
                 <div v-if="activities.length" v-for="activity in activities" :key="activity.id" class="fcal_booking_activity" :class="activity.type">
                     <el-icon class="fcal_activity_complete_icon">
                         <Close v-if="activity.type=='cancel_reason' || activity.type=='error'" />
@@ -39,39 +36,15 @@ import { Check, Close } from '@element-plus/icons-vue';
 
 export default {
     name: 'BookingActivities',
-    props: ['booking_id'],
+    props: ['activities'],
     components: {
         Check,
         Close
     },
-    watch: {
-        booking_id() {
-           this.fetchActivities();
-        }
-    },
     data() {
         return {
-            activities: [],
             loading: false
         }
-    },
-    methods: {
-        fetchActivities() {
-            this.loading = true;
-            this.$get(`schedules/${this.booking_id}/activities`)
-                .then(response => {
-                    this.activities = response.activities;
-                })
-                .catch((errors) => {
-                    this.$handleError(errors);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        }
-    },
-    mounted() {
-        this.fetchActivities();
     }
 }
 </script>
