@@ -3,7 +3,7 @@
         <div class="fcal_schedule_details_content">
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
-                    {{ meetingDetails }} - {{ucFirst(showing_booking.status)}}
+                    {{ meetingDetails }} - {{ $t(ucFirst(showing_booking.status)) }}
                     <el-dropdown v-if="isMoreIconVisible" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
@@ -71,7 +71,7 @@
                             v-if="showing_booking.event_type != 'group'"
                             class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Status') }}</h3>
-                            <p>{{ showing_booking.status }}</p>
+                            <p>{{ $t(showing_booking.status) }}</p>
                         </div>
                         <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'" class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Booking URL') }}</h3>

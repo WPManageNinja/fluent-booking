@@ -13,6 +13,7 @@ function dateTimeI18(dateTime, format = 'dddd, MMM DD') {
         weekdaysShort: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.weekdaysShort),
         months: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.months),
         monthsShort: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.monthsShort),
+        monthsNumber: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.monthsNumber),
     }).format(format);
 }
 
@@ -91,11 +92,14 @@ export const i18 = function (str) {
 export const getDateTimeStringI18 = function (str, type) {
     const config = window.fluentCalendarPublicVars.i18.date_time_config;
     if (type == 'day') {
-        let trans = config.weekdays[str] || config.weekdaysShort[str] || str;
+        return config.weekdays[str] || config.weekdaysShort[str] || str;
     }
 
     if (type == 'month') {
         return config.months[str] || config.monthsShort[str] || str;
+    }
+    if (type == 'mNumber') {
+        return config.monthsNumber[str] || str;
     }
 
     return str;

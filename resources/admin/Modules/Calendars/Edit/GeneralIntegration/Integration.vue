@@ -95,6 +95,8 @@
                                 :title="$t('Are you sure to delete this?')"
                                 popper-class="fcal_confirm_dialog"
                                 confirm-button-type="danger"
+                                :confirm-button-text="$t('Yes')"
+                                :cancel-button-text="$t('No')"
                                 @confirm="removeFeed(integration.id)"
                             >
                                 <template #reference>

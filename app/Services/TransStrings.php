@@ -8,7 +8,7 @@ class TransStrings
 
     public static function getStrings()
     {
-        return [
+        return array(
             'Overview'                                                                         => __('Overview', 'fluent-booking-pro'),
             'Start date'                                                                       => __('Start date', 'fluent-booking-pro'),
             'Start'                                                                            => __('Start', 'fluent-booking-pro'),
@@ -548,8 +548,23 @@ class TransStrings
             'Receiver *'                                                                       => __('Receiver *', 'fluent-booking-pro'),
             'Calendar Avatar'                                                                  => __('Calendar Avatar', 'fluent-booking-pro'),
             'Featured Image'                                                                   => __('Featured Image', 'fluent-booking-pro'),
-            'no_show'                                                                          => __('no_show', 'fluent-booking-pro')
-        ];
+            'no_show'                                                                          => __('no_show', 'fluent-booking-pro'),
+            'Bookings'                                                                         => __('Bookings', 'fluent-booking-pro'),
+            '12h'                                                                              => __('12h', 'fluent-booking-pro'),
+            '24h'                                                                              => __('24h', 'fluent-booking-pro'),
+            'Monday'                                                                           => __('Monday', 'fluent-booking-pro'),
+            'Tuesday'                                                                          => __('Tuesday', 'fluent-booking-pro'),
+            'Wednesday'                                                                        => __('Wednesday', 'fluent-booking-pro'),
+            'Thursday'                                                                         => __('Thursday', 'fluent-booking-pro'),
+            'Friday'                                                                           => __('Friday', 'fluent-booking-pro'),
+            'Saturday'                                                                         => __('Saturday', 'fluent-booking-pro'),
+            'Sunday'                                                                           => __('Sunday', 'fluent-booking-pro'),
+            'Summary Email'                                                                    => __('Summary Email', 'fluent-booking-pro'),
+            'connect_your_stripe_desc'                                                         => __('Connect Your Stripe Account to your website to accept Payments', 'fluent-booking-pro'),
+            'Integration Feed'                                                                 => __('Integration Feed', 'fluent-booking-pro'),
+            'Error on integration settings'                                                    => __('Error on integration settings', 'fluent-booking-pro'),
+            'Field Label'                                                                      => __('Field Label', 'fluent-booking-pro')
+        );
 
     }
 }
