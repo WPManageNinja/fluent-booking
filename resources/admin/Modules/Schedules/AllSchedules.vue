@@ -67,53 +67,6 @@
                     </el-select>
                 </div>
             </div>
-            <div v-if="false" class="fcal_schedule_meetings_header">
-                <div class="fcal_schedule_meetings_header_actions">
-                    <div class="fcal_schedule_meetings_nav">
-                        <ul class="fcal_secendary_nav_items">
-                            <li @click="changePeriod('upcoming')"
-                                :class="{fcal_active : filters.period == 'upcoming' }">{{ $t('Upcoming') }}
-                            </li>
-                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">{{ $t('Past') }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div v-if="showAdvancedFilter" class="fcal_schedule_meetings_header_filters">
-                    <div class="fcal_schedule_meetings_header_filters_inner">
-                        <el-select
-                            v-model="query.eventType"
-                            class="fcal_select"
-                            :placeholder="$t('Event Type')"
-                            popper-class="fcal_select">
-                            <el-option value="single">{{ $t('Single') }}</el-option>
-                            <el-option value="group">{{ $t('Group') }}</el-option>
-                        </el-select>
-                        <el-select
-                            v-model="query.status"
-                            class="fcal_select"
-                            placeholder="Status"
-                            popper-class="fcal_select">
-                            <el-option value="scheduled">Scheduled</el-option>
-                            <el-option value="completed">Completed</el-option>
-                            <el-option value="cancelled">Cancelled</el-option>
-                        </el-select>
-                        <el-button
-                            v-if="query.eventType || query.status"
-                            class="fcal_primary_btn2 danger"
-                            @click="handleDiscard">
-                            <el-icon>
-                                <CircleClose/>
-                            </el-icon>
-                            {{ $t('Discard') }}
-                        </el-button>
-                        <el-button class="fcal_primary_btn" @click="fetchSchedules">
-                            {{ $t('Submit') }}
-                        </el-button>
-                    </div>
-                </div>
-            </div>
         </template>
 
         <div class="fcal_schedule_meetings_body">
