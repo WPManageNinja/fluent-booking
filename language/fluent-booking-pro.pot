@@ -203,7 +203,7 @@ msgid "Add Another Conditional Group"
 msgstr ""
 
 #: app/Services/TransStrings.php:245
-msgid "Add another Location Choice"
+msgid "Add another location option"
 msgstr ""
 
 #: app/Services/TransStrings.php:327

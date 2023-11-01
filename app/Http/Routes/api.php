@@ -71,6 +71,8 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
     $router->get('/general', 'SettingsController@getGeneralSettings');
     $router->post('/general', 'SettingsController@updateGeneralSettings');
     $router->get('/menu', 'SettingsController@getSettingsMenu');
+    $router->get('/global-modules', 'SettingsController@getGlobalModules');
+    $router->post('/global-modules', 'SettingsController@updateGlobalModules');
 });
 
 $router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {
@@ -91,6 +93,7 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/graph-reports', 'ReportController@getGraphReports');
     $router->get('/activities', 'ReportController@getActivities');
+    $router->get('/options/woo-products', 'PaymentMethodController@getWooProducts');
 });
 
 if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
