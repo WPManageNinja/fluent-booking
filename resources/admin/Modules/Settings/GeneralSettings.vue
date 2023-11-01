@@ -39,15 +39,15 @@
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Time Format')">
                                     <el-radio-group v-model="timeFormat">
-                                        <el-radio label="12">12h</el-radio>
-                                        <el-radio label="24">24h</el-radio>
+                                        <el-radio label="12">{{ $t('12h') }}</el-radio>
+                                        <el-radio label="24">{{ $t('24h') }}</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Summary Email">
+                                <el-form-item :label="$t('Summary Email')">
                                 <el-checkbox v-model="administration.summary_notification" true-label="yes"
                                              false-label="no"> {{ $t('Enable Booking Summary Notification') }}
                                 </el-checkbox>
@@ -70,13 +70,13 @@
                                                       :label="$t('In which day to send the email?')">
                                             <el-select v-model="administration.notification_day" :placeholder="$t('Select Day')"
                                                        popper-class="fcal_select" placement="bottom">
-                                                <el-option value="mon" label="Monday"></el-option>
-                                                <el-option value="tue" label="Tuesday"></el-option>
-                                                <el-option value="wed" label="Wednesday"></el-option>
-                                                <el-option value="thu" label="Thursday"></el-option>
-                                                <el-option value="fri" label="Friday"></el-option>
-                                                <el-option value="sat" label="Saturday"></el-option>
-                                                <el-option value="sun" label="Sunday"></el-option>
+                                                <el-option value="mon" :label="$t('Monday')"></el-option>
+                                                <el-option value="tue" :label="$t('Tuesday')"></el-option>
+                                                <el-option value="wed" :label="$t('Wednesday')"></el-option>
+                                                <el-option value="thu" :label="$t('Thursday')"></el-option>
+                                                <el-option value="fri" :label="$t('Friday')"></el-option>
+                                                <el-option value="sat" :label="$t('Saturday')"></el-option>
+                                                <el-option value="sun" :label="$t('Sunday')"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>

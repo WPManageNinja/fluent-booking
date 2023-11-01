@@ -63,7 +63,7 @@
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Status') }}</h3>
                         <p class="payment_status" :class="booking.payment_order.transaction.status">
-                            {{ booking.payment_order.transaction.status }}
+                            {{ $t(booking.payment_order.transaction.status) }}
                         </p>
                     </div>
                     <div v-if="booking.payment_order.transaction.vendor_charge_id" class="fcal_schedule_details_event_item">

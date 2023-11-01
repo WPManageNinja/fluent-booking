@@ -26,7 +26,7 @@
                             </div>
                             <div class="fcal_question_actions">
                                 <el-switch v-if="!field.disable_alter" v-model="field.enabled"/>
-                                <el-button class="fcal_plain_btn" @click="editField(field)">Edit</el-button>
+                                <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
                                 <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
                                     <el-icon><Delete /></el-icon>
                                 </el-button>
@@ -38,7 +38,7 @@
                     <el-link class="fcal_add_question" :underline="false" @click="addQuestion">
                         {{ $t('+Add more questions for invitees') }}
                     </el-link>
-                    <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
+                    <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                 </div>
             </div>
         </div>

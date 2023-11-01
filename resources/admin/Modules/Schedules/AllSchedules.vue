@@ -4,13 +4,13 @@
             <div class="fcal_title">
                 <div v-if="booking_id" class="fcal_back_btn">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
+                        <el-breadcrumb-item  @click="goBackToList">{{ $t('Bookings') }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ statusFilters[filters.period] || filters.period }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
                 <template v-else>
-                    <h3>Bookings</h3>
+                    <h3>{{ $t('Bookings') }}</h3>
                 </template>
             </div>
         </div>
@@ -144,7 +144,7 @@
                             <el-empty v-if="!schedulesLength" :description="$t('No bookings found based on your filter')"/>
                         </div>
                         <div v-if="!booking_id" class="fcal_right fcal_tm20">
-                            <pagination :pagination="pagination" @fetch="fetchSchedules"/>
+                            <pagination popper-class="fcal_select" :pagination="pagination" @fetch="fetchSchedules"/>
                         </div>
                     </div>
                     <div v-if="booking_id" class="fcal_spot_details">
@@ -215,20 +215,28 @@ export default {
         formattedDate() {
             return (date) => {
                 if (this.isToday(date)) {
-                    return 'Today';
+                    return this.$t('Today');
                 } else if (this.isYesterday(date)) {
-                    return 'Yesterday';
+                    return this.$t('Yesterday');
                 } else if (this.isTomorrow(date)) {
-                    return 'Tomorrow';
+                    return this.$t('Tomorrow');
                 }
-                return date;
+                if (this.filters.period == 'latest_bookings') {
+                    return date;
+                }
+
+                const month = this.$t(this.toCurrentTimezone(date, 'MMMM'));
+                const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
+                const year  = this.toCurrentTimezone(date, 'YYYY');
+
+                return month + ' ' + day +  ', ' + year;
             }
         },
         formattedSchedules() {
             const items = {};
             if(this.filters.period == 'latest_bookings') {
                 if (this.schedules.length) {
-                    items['Sorted by booked at date time'] = this.schedules;
+                    items[this.$t('Sorted by booked at date time')] = this.schedules;
                 }
                 return items;
             }

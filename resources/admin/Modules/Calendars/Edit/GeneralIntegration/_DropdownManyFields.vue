@@ -3,15 +3,15 @@
         <table class="fcal_table">
             <thead>
             <tr>
-                <th>{{rendered_labels.remote_text}}</th>
-                <th>{{rendered_labels.local_text}}</th>
+                <th>{{ $t(rendered_labels.remote_text) }}</th>
+                <th>{{ $t(rendered_labels.local_text) }}</th>
                 <th style="width: 100px;"></th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(item, itemIndex) in settings[field.key]" :key="'item_'+itemIndex">
                 <td>
-                    <el-select class="w-100" popper-class="fcal_select" v-model="item.label">
+                    <el-select class="w-100" popper-class="fcal_select" :placeholder="$t('Select')" v-model="item.label">
                         <el-option
                             v-for="(optionLabel, optionValue) in field.options"
                             :key="optionValue"

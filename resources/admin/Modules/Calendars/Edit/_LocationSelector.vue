@@ -9,6 +9,7 @@
                 <el-select
                     v-model="slot.location_settings[i].type"
                     popper-class="fcal_select fcal_location_select"
+                    :placeholder="$t('Select')"
                     @change="isLocationInfoRequired(slot.location_settings[i], i)"
                 >
                     <el-option-group

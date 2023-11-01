@@ -15,7 +15,7 @@
                 </div>
                 <ul>
                     <li v-for="(schedule, i) in existing_schedules.weekly_schedules" :key="i">
-                        <span class="day">{{ i }}</span>
+                        <span class="day">{{ $t(i) }}</span>
                         <span class="date">
                             <span v-if="schedule.slots.length" v-for="(time, index) in schedule.slots" :key="index">
                                 {{ time.start }} - {{ time.end }}

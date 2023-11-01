@@ -17,9 +17,9 @@
                     </div>
 
                     <span class="fcal_spot_period_status" :class="booking.status=='no_show'?'no_show':''" v-if="currentStatus">
-                        {{ currentStatus }}
+                        {{ $t(currentStatus) }}
                     </span>
-                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ ucFirst(booking.payment_status) }} | {{currencyFormat(booking.payment_order?.total_amount, true)}}</p>
+                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status) }} | {{currencyFormat(booking.payment_order?.total_amount, true)}}</p>
                 </div>
             </div>
             <div class="fcal_spot_actions">
@@ -47,11 +47,19 @@ export default {
     },
     computed: {
         formattedTimeRange() {
-            const startTime = this.toCurrentTimezone(this.booking.start_time, 'hh:mma');
-            const endTime = this.toCurrentTimezone(this.booking.end_time, 'hh:mma');
+            const startHour = this.$t(this.toCurrentTimezone(this.booking.start_time, 'hh'));
+            const startMin  = this.$t(this.toCurrentTimezone(this.booking.start_time, 'mm'));
+
+            const endHour = this.$t(this.toCurrentTimezone(this.booking.end_time, 'hh'));
+            const endMin  = this.$t(this.toCurrentTimezone(this.booking.end_time, 'mm'));
+
+            const startTime = startHour + ':' + startMin + this.$t(this.toCurrentTimezone(this.booking.start_time, 'a'));
+            const endTime   = endHour + ':' + endMin + this.$t(this.toCurrentTimezone(this.booking.end_time, 'a'));
 
             if(this.period == 'latest_bookings') {
-                return `${this.toCurrentTimezone(this.booking.start_time, 'D MMM, YYYY')} <br /> ${startTime} - ${endTime}`;
+                const day   = this.$t(this.toCurrentTimezone(this.booking.start_time, 'D'));
+                const month = this.toCurrentTimezone(this.booking.start_time, 'MMM').toLowerCase();
+                return `${day} ${this.$t(month)}, ${this.toCurrentTimezone(this.booking.start_time, 'YYYY')} <br /> ${startTime} - ${endTime}`;
             }
 
             return `${startTime} - ${endTime}`;
@@ -61,7 +69,7 @@ export default {
             const guestName = this.booking.first_name + ' ' + this.booking.last_name;
             if (eventType === 'group') {
                 const booked = this.booking.booked_count;
-                return booked + ' guests with '+ this.booking.author.name + 'as group booking type';
+                return booked + ' '+this.$t('guests with')+' '+ this.booking.author.name + this.$t('as group booking type');
             }
             if(this.showing_id) {
                 return guestName;

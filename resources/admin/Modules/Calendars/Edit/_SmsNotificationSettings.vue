@@ -23,7 +23,7 @@
                         <div class="header_right">
                             <span>
                                 <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
-                                    <el-icon><EditPen/></el-icon> Edit
+                                    <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
                                 </el-button>
                             </span>
                             <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
@@ -38,7 +38,7 @@
             <el-dialog
                 v-model="showEdit"
                 v-if="showEdit"
-                :title="(editingNotification) ? 'Edit: ' + editingNotification.title : $t('Edit Notification')"
+                :title="(editingNotification) ? $t('Edit:')+' ' + editingNotification.title : $t('Edit Notification')"
                 class="fcal_modal fcal_notification_modal"
                 :close-on-click-modal="false"
             >

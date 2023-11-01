@@ -106,7 +106,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button class="fcal_plain_btn" @click="cancelCreate">{{ $t('Cancel') }}</el-button>
-                    <SaveButton :saving="saving" label="Add New Schedule" @save="createNew"/>
+                    <SaveButton :saving="saving" :label="$t('Add New Schedule')" @save="createNew"/>
                 </span>
             </template>
         </el-dialog>
@@ -258,12 +258,12 @@ export default {
 
                 if (avail[day].enabled && slots) {
                     if (currentSegment && currentSegment.slots === slots) {
-                        currentSegment.days.push(humanDays[i]);
+                        currentSegment.days.push(this.$t(humanDays[i].toLowerCase()));
                     } else {
                         if (currentSegment) {
                             segments.push(currentSegment);
                         }
-                        currentSegment = { days: [humanDays[i]], slots: slots };
+                        currentSegment = { days: [this.$t(humanDays[i].toLowerCase())], slots: slots };
                     }
                 } else {
                     if (currentSegment) {

@@ -10,7 +10,7 @@
 <!--                v-model="config.enabled"-->
 <!--                :active-value="true"-->
 <!--                :inactive-value="false" />-->
-            <span class="fcal_day">{{week_day}}</span>
+            <span class="fcal_day">{{ $t(week_day) }}</span>
         </div>
         <div class="fcal_day_slots">
             <div v-if="config.slots.length && config.enabled" class="fcal_slot" v-for="(slot, index) in config.slots" :key="index">
