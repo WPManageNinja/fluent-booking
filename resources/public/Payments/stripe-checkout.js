@@ -1,4 +1,3 @@
-import {util, dateTimeI18, i18, getDateTimeStringI18} from '../util';
 class StripeCheckout {
     constructor(form, response) {
         this.form = form;
@@ -34,7 +33,7 @@ class StripeCheckout {
 
         const loadingMessage = document.createElement('p');
         loadingMessage.classList.add('fluent_booking_loading_payment_processor') ;
-        loadingMessage.textContent = i18('Loading Payment Processor...');
+        loadingMessage.textContent = 'Loading Payment Processor...';
 
         paymentProcessor.appendChild(loadingMessage);
 
@@ -56,7 +55,7 @@ class StripeCheckout {
                 e.preventDefault();
 
                 elements.submit().then(result => {
-                    stripePayButton.textContent = i18('Processing...');
+                    stripePayButton.textContent = 'Processing...';
                     stripePayButton.disabled = true;
 
                     const confirmParams = {

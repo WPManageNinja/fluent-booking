@@ -406,7 +406,9 @@ class FrontEndHandler
                 'Zoom Meeting'                 => __('Zoom Meeting', 'fluent-booking-pro'),
                 'Online Meeting'               => __('Online Meeting', 'fluent-booking-pro'),
                 'Processing...'                => __('Processing...', 'fluent-booking-pro'),
-                'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro')
+                'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
+                'PM'                            => __('PM', 'fluent-booking-pro'),
+                'AM'                            => __('AM', 'fluent-booking-pro')
             ]
         ];
 

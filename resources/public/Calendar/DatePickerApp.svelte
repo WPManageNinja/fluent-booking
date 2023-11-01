@@ -237,7 +237,7 @@
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
-        return `${getDateTimeStringI18(hours, 'mNumber')}:${getDateTimeStringI18(minutes, 'mNumber')} ${formatHr === '12' ? `${modifier}` : ''}`;
+        return `${getDateTimeStringI18(hours, 'mNumber')}:${getDateTimeStringI18(minutes, 'mNumber')} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
     }
 
 
