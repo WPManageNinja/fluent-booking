@@ -292,6 +292,8 @@ class CalendarController extends Controller
 
         $slot->author_profile = $slot->getAuthorProfile();
 
+        $slot->calendar->author_profile = $slot->calendar->getAuthorProfile();
+
         $slot->public_url = $slot->getPublicUrl();
 
         $slotSettings = $slot->settings;
