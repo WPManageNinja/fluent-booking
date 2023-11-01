@@ -75,7 +75,7 @@
             {/each}
 
             <!--{/if}-->
-            {#if hasPaymentItem()}
+            {#if hasPaymentItem() && appData.payment_items}
                 <div class="fluent_booking_payment_processor" style="display:none;">
                     <h3 class="label">{i18('Total Payment')}: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
                     {#if appData?.payment_methods?.template}
@@ -133,7 +133,7 @@
     const currentUrl = window.location.href;
 
     function hasPaymentItem() {
-        return !!(appData?.payment_items && appData?.payment_methods?.template);
+        return !!(slot.total_payment);
     }
 
     let getSubTotal = (items) => {

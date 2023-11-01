@@ -261,17 +261,17 @@ class FrontEndHandler
             'current_person' => $currentPerson,
             'start_day'      => $startDay,
             'i18'            => [
-                'Timezone'                     => __('Timezone', 'fluent-booking-pro'),
-                'minutes'                      => __('minutes', 'fluent-booking-pro'),
-                'Enter Details'                => __('Enter Details', 'fluent-booking-pro'),
-                'Payment Details'              => __('Payment Details', 'fluent-booking-pro'),
-                'Total Payment'                => __('Total Payment', 'fluent-booking-pro'),
-                'Pay Now'                      => __('Pay Now', 'fluent-booking-pro'),
-                'Confirm Payment'              => __('Confirm Payment', 'fluent-booking-pro'),
-                'processing'                   => __('Processing', 'fluent-booking-pro'),
-                'Schedule Meeting'             => __('Schedule Meeting', 'fluent-booking-pro'),
-                'Continue to Payments'         => __('Continue to Payments', 'fluent-booking-pro'),
-                'date_time_config'             => [
+                'Timezone'                      => __('Timezone', 'fluent-booking-pro'),
+                'minutes'                       => __('minutes', 'fluent-booking-pro'),
+                'Enter Details'                 => __('Enter Details', 'fluent-booking-pro'),
+                'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
+                'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
+                'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),
+                'Confirm Payment'               => __('Confirm Payment', 'fluent-booking-pro'),
+                'processing'                    => __('Processing', 'fluent-booking-pro'),
+                'Schedule Meeting'              => __('Schedule Meeting', 'fluent-booking-pro'),
+                'Continue to Payments'          => __('Continue to Payments', 'fluent-booking-pro'),
+                'date_time_config'              => [
                     'weekdays'      => array(
                         'sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking-pro'),
                         'monday'    => _x('Monday', 'calendar day full', 'fluent-booking-pro'),
@@ -319,21 +319,21 @@ class FrontEndHandler
                         'dec' => _x('Dec', 'calendar month name short', 'fluent-booking-pro')
                     ),
                 ],
-                'Country'                      => __('Country', 'fluent-booking-pro'),
-                '12h'                          => _x('12h', 'date time format switch', 'fluent-booking-pro'),
-                '24h'                          => _x('24h', 'date time format switch', 'fluent-booking-pro'),
-                'spots left'                   => _x('spots left', 'for how many spots left for available booking', 'fluent-booking-pro'),
-                'Next'                         => _x('Next', 'Booking form spot selection', 'fluent-booking-pro'),
-                'Select on the Next Step'      => __('Select on the Next Step', 'fluent-booking-pro'),
-                'location options'             => __('location options', 'fluent-booking-pro'),
-                'Your address'                 => __('Your address', 'fluent-booking-pro'),
-                'Organizer Phone Number'       => __('Organizer Phone Number', 'fluent-booking-pro'),
-                'In Person (Attendee Address)' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
-                'In Person (Organizer Address)'=> __('In Person (Organizer Address)', 'fluent-booking-pro'),
-                'Attendee Phone Number'        => __('Attendee Phone Number', 'fluent-booking-pro'),
-                'Google Meet'                  => __('Google Meet', 'fluent-booking-pro'),
-                'Zoom Meeting'                 => __('Zoom Meeting', 'fluent-booking-pro'),
-                'Online Meeting'               => __('Online Meeting', 'fluent-booking-pro'),
+                'Country'                       => __('Country', 'fluent-booking-pro'),
+                '12h'                           => _x('12h', 'date time format switch', 'fluent-booking-pro'),
+                '24h'                           => _x('24h', 'date time format switch', 'fluent-booking-pro'),
+                'spots left'                    => _x('spots left', 'for how many spots left for available booking', 'fluent-booking-pro'),
+                'Next'                          => _x('Next', 'Booking form spot selection', 'fluent-booking-pro'),
+                'Select on the Next Step'       => __('Select on the Next Step', 'fluent-booking-pro'),
+                'location options'              => __('location options', 'fluent-booking-pro'),
+                'Your address'                  => __('Your address', 'fluent-booking-pro'),
+                'Organizer Phone Number'        => __('Organizer Phone Number', 'fluent-booking-pro'),
+                'In Person (Attendee Address)'  => __('In Person (Attendee Address)', 'fluent-booking-pro'),
+                'In Person (Organizer Address)' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
+                'Attendee Phone Number'         => __('Attendee Phone Number', 'fluent-booking-pro'),
+                'Google Meet'                   => __('Google Meet', 'fluent-booking-pro'),
+                'Zoom Meeting'                  => __('Zoom Meeting', 'fluent-booking-pro'),
+                'Online Meeting'                => __('Online Meeting', 'fluent-booking-pro'),
             ]
         ];
 
@@ -564,20 +564,6 @@ class FrontEndHandler
             'type'               => $calendarEvent->type,
             'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12')
         ];
-
-        $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
-
-        if ($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
-            $total = 0;
-            foreach ($paymentSettings['items'] as $payment) {
-                $total += (int)$payment['value'];
-            }
-            $currency = CurrenciesHelper::getGlobalCurrencySign();
-
-            $eventData['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
-        } else {
-            $eventData['total_payment'] = '';
-        }
 
         $author = $calendar->getAuthorProfile(true);
         $author['name'] = $calendar->title;

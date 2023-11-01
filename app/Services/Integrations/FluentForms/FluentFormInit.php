@@ -316,17 +316,14 @@ class FluentFormInit
         }
     }
 
-
     public function pushFormDataToBooking(&$booking)
     {
-        $submissionId = Arr::get($booking, 'source_id');
-
-        if ('fluentform' != $booking->source || !$submissionId) {
-            return;
+        if ($booking->source != 'fluentform' || !$booking->source_id) {
+            return $booking;
         }
 
         try {
-            $submission = Submission::find($submissionId);
+            $submission = Submission::find($booking->source_id);
 
             if (!$submission) {
                 return;
@@ -336,7 +333,7 @@ class FluentFormInit
 
             $smartCode = '{all_data}';
 
-            if($submission->payment_total) {
+            if ($submission->payment_total) {
                 $smartCode .= '<h3>' . __('Related Payments', 'fluent-booking-pro') . '</h3>{payment.receipt}';
             }
 

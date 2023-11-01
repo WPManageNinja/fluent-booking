@@ -84,7 +84,6 @@
         if (isFluentform) {
             setTimeout(() => {
                 const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
-                console.log(formFieldsHeight);
                 const height = formFieldsHeight + 135;
                 calendar.style.height = height + 'px';
             }, 100)
@@ -128,7 +127,6 @@
         const height = 'auto';
         calendar.style.height = height;
     }
-
 </script>
 <div class="fcal_wrap">
     <div class="fcal_holder" id={appData.id}>

@@ -214,7 +214,7 @@ class CalendarSlot extends Model
     public function getTotalBufferTime()
     {
         $bufferTimeBefore = Arr::get($this->settings, 'buffer_time_before', 0);
-        $bufferTimeAfter  = Arr::get($this->settings, 'buffer_time_after', 0);
+        $bufferTimeAfter = Arr::get($this->settings, 'buffer_time_after', 0);
 
         return $bufferTimeBefore + $bufferTimeAfter;
     }
@@ -269,7 +269,7 @@ class CalendarSlot extends Model
 
         $totalCutStamp = strtotime($currentAuthorTimezoneDateTime) + $cutOutSeconds;
 
-        if(strtotime($startDate) < $totalCutStamp) {
+        if (strtotime($startDate) < $totalCutStamp) {
             $startDate = date('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
@@ -438,4 +438,27 @@ class CalendarSlot extends Model
         return $total;
     }
 
+
+    public function getPaymentSettings()
+    {
+        $settings = $this->getMeta('payment_settings', []);
+
+        $defaults = [
+            'enabled'        => 'no',
+            'driver'         => 'native',
+            'items'          => [
+                [
+                    'title' => __('Booking Fee', 'fluent-booking-pro'),
+                    'value' => 100,
+                ]
+            ],
+            'woo_product_id' => ''
+        ];
+
+        if (!$settings) {
+            $settings = $defaults;
+        }
+
+        return wp_parse_args($settings, $defaults);
+    }
 }

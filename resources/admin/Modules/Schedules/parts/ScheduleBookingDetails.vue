@@ -92,7 +92,7 @@
                         </editable-booking-data>
                     </div>
                 </div>
-                <SourceDetailsSection v-if="showing_booking.source != 'web'" :booking="showing_booking"/>
+                <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
                 <PaymentLogs
                     v-if="showing_booking.event_type == 'single' && showing_booking.payment_order"
