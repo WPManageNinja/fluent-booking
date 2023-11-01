@@ -9,7 +9,7 @@
                     {{ $t('Payment Settings') }}
                 </h2>
                 <el-button
-                    v-if="global_enabled"
+                    v-if="global_enabled && !loading"
                     :disabled="saving"
                     v-loading="saving"
                     type="primary"
@@ -19,86 +19,125 @@
                 </el-button>
             </div>
         </div>
-        <div v-if="global_enabled" class="fcal_settings_body" style="min-height: calc(100vh - 320px);">
-            <el-skeleton v-if="loading && !paymentSettings.enabled" animated :rows="3"></el-skeleton>
-            <el-form v-else :model="paymentSettings" label-position="top">
+        <el-skeleton v-if="loading" animated :rows="3"></el-skeleton>
+        <div v-else-if="global_enabled" class="fcal_settings_body" style="min-height: calc(100vh - 320px);">
+            <el-form :model="paymentSettings" label-position="top">
                 <el-form-item>
                     <el-checkbox true-label="yes" false-label="no" v-model="paymentSettings.enabled">
                         {{ $t('PaymentSettings/enable_payment_description') }}
                     </el-checkbox>
                 </el-form-item>
                 <template v-if="paymentSettings.enabled === 'yes'">
-                    <el-form-item :label="$t('Booking Payment Items')">
-                        <div>
-                            <el-skeleton v-if="loading" animated />
-                            <el-row v-else style="margin-bottom: 20px;" :gutter="20" v-for="(item, index) in paymentSettings.items">
-                                <el-col :span="14">
-                                    <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
-                                </el-col>
-                                <el-col :span="8">
-                                    <el-input class="fcal_group_input" min="0" type="number" v-model="item.value">
-                                        <template #prepend>{{ appVars.currency_sign }}</template>
-                                    </el-input>
-                                </el-col>
-                                <el-col :span="2" class="action_btn">
+                    <el-form-item label="Checkout Method">
+                        <el-radio-group v-model="paymentSettings.driver">
+                            <el-radio :disabled="!paymentConfig.native_enabled" label="native">
+                                {{ $t('Use Native Payment Mehods by FluentBooking') }}
+                            </el-radio>
+                            <el-radio v-if="paymentConfig.has_woo" :disabled="!paymentConfig.woo_enabled" label="woo">
+                                {{ $t('Use Woocommerce Checkout') }}
+                            </el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <template v-if="paymentSettings.driver == 'native'">
+                        <template v-if="paymentConfig.native_enabled">
+                            <el-form-item :label="$t('Booking Payment Items')">
+                                <div>
+                                    <el-skeleton v-if="loading" animated/>
+                                    <el-row v-else style="margin-bottom: 20px;" :gutter="20"
+                                            v-for="(item, index) in paymentSettings.items">
+                                        <el-col :span="14">
+                                            <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-input class="fcal_group_input" min="0" type="number"
+                                                      v-model="item.value">
+                                                <template #prepend>{{ appVars.currency_sign }}</template>
+                                            </el-input>
+                                        </el-col>
+                                        <el-col :span="2" class="action_btn">
                                       <span v-if="index > 0" @click="()=>{ paymentSettings.items.splice(index, 1); }">
                                            <el-icon><Delete/></el-icon>
                                       </span>
-                                </el-col>
-                            </el-row>
-                            <el-link @click="addItem" style="cursor: pointer;">
-                                {{ $t('Add more item') }}
-                                <el-icon>
-                                    <Plus/>
-                                </el-icon>
-                            </el-link>
-                        </div>
-                    </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-link @click="addItem" style="cursor: pointer;">
+                                        {{ $t('Add more item') }}
+                                        <el-icon>
+                                            <Plus/>
+                                        </el-icon>
+                                    </el-link>
+                                </div>
+                            </el-form-item>
+                        </template>
+                        <p v-else class="fcal_empty_text">
+                            {{ $t('PaymentSettings/enable_stripe_from_global_settings') }}
+                            <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
+                                {{ $t('Go to Stripe Settings') }}. <span class="anim-icon">👈</span>
+                            </router-link>
+                        </p>
+                    </template>
+                    <template v-else-if="paymentSettings.driver == 'woo'">
+                        <el-form-item label="Select WooCommerce Product">
+                            <woo-product-selector v-model="paymentSettings.woo_product_id"/>
+                            <p>The selected product will be used for checkout in WooCommerce. The amount will be equal
+                                to the selected product pricing</p>
+                        </el-form-item>
+                    </template>
                 </template>
             </el-form>
         </div>
-        <div v-if="!global_enabled" class="fcal_settings_body">
-            <p class="fcal_empty_text">{{ $t('PaymentSettings/enable_stripe_from_global_settings') }} <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
-                {{ $t('Settings Page') }}.<span class="anim-icon">👈</span></router-link></p>
+        <div v-else class="fcal_settings_body">
+            <p class="fcal_empty_text">
+                {{ $t('PaymentSettings/enable_stripe_from_global_settings') }}
+                <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
+                    {{ $t('Go to Stripe Settings') }}. <span class="anim-icon">👈</span>
+                </router-link>
+            </p>
         </div>
     </div>
 </template>
-<script>
+<script type="text/babel">
 import {Back, Link, Plus, Money, Delete} from "@element-plus/icons-vue";
-import Popover from "../../../../Components/Popover.vue";
+import WooProductSelector from "@/Pieces/WooProductSelector";
 
 export default {
     name: "PaymentSettings.vue",
-    components: {Popover, Link, Plus, Back, Money, Delete},
+    components: {Link, Plus, Back, Money, Delete, WooProductSelector},
     props: ['calendar_event'],
     data() {
         return {
-            loading: false,
+            loading: true,
             saving: false,
-            global_enabled: false,
             global_config_link: '',
             paymentSettings: {
                 enabled: 'no',
+                driver: 'native',
                 items: [
                     {
                         title: 'Booking Fee',
                         value: 100,
                     },
                 ],
+                woo_product_id: ''
             },
+            paymentConfig: {},
             currencies: [],
             calendarId: '',
             eventId: '',
         };
     },
+    computed: {
+        global_enabled() {
+            return this.paymentConfig.native_enabled || this.paymentConfig.woo_enabled;
+        },
+    },
     methods: {
         getSettings() {
-            this.loading = false;
+            this.loading = true;
             this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/payment-settings`, {})
                 .then((response) => {
+                    this.paymentConfig = response.config;
                     this.paymentSettings = response.settings;
-                    this.global_enabled = response.global_enabled;
-                    this.global_config_link = response.global_config_link;
                 })
                 .catch((errors) => {
                     this.$handleError(errors);
@@ -130,7 +169,6 @@ export default {
         },
     },
     mounted() {
-        // this.getCurrencies();
         this.getSettings();
     },
 }

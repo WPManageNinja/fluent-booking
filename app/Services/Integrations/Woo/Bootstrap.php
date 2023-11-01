@@ -12,25 +12,35 @@ class Bootstrap
     public function register()
     {
         add_filter('fluent_booking/booking_data', function ($bookingData, $calendarSlot) {
-            if (Arr::get($bookingData, 'source') != 'web' || !$this->isEnabled()) {
+            if ($calendarSlot->type != 'woo' || Arr::get($bookingData, 'source') != 'web' || !$this->isEnabled()) {
                 return $bookingData;
             }
 
-            $wooProductId = $calendarSlot->getMeta('woo_product_id');
+            $wooProductId = $this->getEventProductId($calendarSlot);
 
             if (!$wooProductId) {
                 return $bookingData;
             }
 
+            $wooProduct = wc_get_product($wooProductId);
+
+            if (!$wooProduct || !$wooProduct->get_id()) {
+                return $bookingData;
+            }
+
             $bookingData['source'] = 'woo';
-            $bookingData['status'] = 'pending'; // we are maing it pending
+            $bookingData['payment_method'] = 'woocommerce';
+            $bookingData['status'] = 'pending'; // we are making it pending
 
             add_filter('fluent_booking/booking_confirmation_response', function ($response, $booking) use ($wooProductId) {
                 if ($booking->status != 'pending' || $booking->source != 'woo') {
                     return $response;
                 }
 
-                WC()->cart->empty_cart(true);
+                if (apply_filters('fluent_booking/will_refresh_woo_cart', true, $booking, $wooProductId)) {
+                    WC()->cart->empty_cart();
+                }
+
                 WC()->cart->add_to_cart($wooProductId, 1, 0, [], [
                     'fcal_id'        => $booking->id,
                     'booking_time'   => DateTimeHelper::convertFromUtc($booking->start_time, $booking->person_time_zone),
@@ -43,6 +53,7 @@ class Bootstrap
                 ], wc_get_checkout_url());
 
                 $response['data']['redirect_to'] = $redirect;
+                $response['data']['redirect_message'] = __('You are redirecting to checkout page to complete the appointment.', 'fluent-booking-pro');
 
                 do_action('fluent_booking/log_booking_activity', [
                     'booking_id'  => $booking->id,
@@ -95,7 +106,7 @@ class Bootstrap
 
     public function modifyCheckout($data)
     {
-        if(!$this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return;
         }
 
@@ -129,7 +140,7 @@ class Bootstrap
 
     public function maybeBookingOrderStatusChanged($orderId, $from, $to, $order)
     {
-        if(!$this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return;
         }
 
@@ -140,7 +151,23 @@ class Bootstrap
                 return;
             }
             $booking = Booking::find($fcalBookingId);
-            if (!$booking || $booking->status != 'pending') {
+            if (!$booking || $booking->source_id) {
+                return;
+            }
+
+            if ($booking->status != 'pending') {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'success',
+                    'title'       => __('Woo: Booking status could not be changed', 'fluent-booking-pro'),
+                    'description' => __(sprintf(
+                        'Booking status could not changed as it\'s in %1s status. %2sView Order%3s',
+                        $booking->status,
+                        '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
+                        '</a>'
+                    ), 'fluent-booking-pro')
+                ]);
                 return;
             }
 
@@ -161,11 +188,16 @@ class Bootstrap
                 ), 'fluent-booking-pro')
             ]);
 
-            do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->calendar_event, [
+            $bookingData = [
                 'name'  => $booking->first_name . ' ' . $booking->last_name,
                 'email' => $booking->email,
                 'phone' => $booking->phone
-            ]);
+            ];
+
+            // this pre hook is for early actions that require for remote calendars and locations
+            do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event, $bookingData);
+
+            do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->calendar_event, $bookingData);
 
             // Order Comment
             $order->add_order_note(
@@ -224,5 +256,16 @@ class Bootstrap
     private function isEnabled()
     {
         return Helper::isModuleEnabled('woo');
+    }
+
+    private function getEventProductId($calendarSlot)
+    {
+        $paymentSettings = $calendarSlot->getMeta('payment_settings');
+
+        if (!$paymentSettings || empty($paymentSettings['woo_product_id']) || Arr::get($paymentSettings, 'enabled') != 'yes' || Arr::get($paymentSettings, 'driver') != 'woo') {
+            return null;
+        }
+
+        return (int)$paymentSettings['woo_product_id'];
     }
 }
