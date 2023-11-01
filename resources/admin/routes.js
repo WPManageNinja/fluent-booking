@@ -23,6 +23,7 @@ import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
 import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
 import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
+import GloablModules from "./Modules/Settings/GloablModules.vue";
 import License from "./Modules/Settings/License.vue";
 
 import IntegrationEditor from "./Modules/Calendars/Edit/GeneralIntegration/IntegrationEditor.vue";
@@ -187,6 +188,15 @@ export var routes = [
                 meta: {
                     active_menu: 'settings',
                     title: 'Configure Integrations'
+                },
+            },
+            {
+                name: 'globalModules',
+                path: 'configure-integrations/global-modules',
+                component: GloablModules,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Gloabl Feature Modules'
                 },
             },
             {

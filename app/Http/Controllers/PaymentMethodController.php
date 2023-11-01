@@ -106,30 +106,16 @@ class PaymentMethodController extends Controller
     {
         $calendarSlot = CalendarSlot::findOrFail($event_id);
 
-        $settings = $calendarSlot->getMeta('payment_settings', []);
-
-        if (!$settings) {
-            $settings = [
-                'enabled' => 'no',
-                'items'   => [
-                    [
-                        'title' => __('Booking Fee', 'fluent-booking-pro'),
-                        'value' => 100,
-                    ]
-                ]
-            ];
-        }
-
         $data = [
-            'settings' => $settings
+            'settings' => $calendarSlot->getPaymentSettings(),
+            'config'   => [
+                'native_enabled'     => Helper::isPaymentEnabled(),
+                'native_config_link' => Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe'),
+                'woo_config_link'    => Helper::getAppBaseUrl('settings/configure-integrations/global-modules'),
+                'has_woo'            => defined('WC_PLUGIN_FILE'),
+                'woo_enabled'        => defined('WC_PLUGIN_FILE') && Helper::isModuleEnabled('woo')
+            ]
         ];
-
-        if (Helper::isPaymentEnabled()) {
-            $data['global_enabled'] = true;
-        } else {
-            $data['global_enabled'] = false;
-            $data['global_config_link'] = Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe');
-        }
 
         return $data;
     }
@@ -142,24 +128,101 @@ class PaymentMethodController extends Controller
         if (!$event) {
             return $this->sendError([
                 'message' => __('Calendar not found', 'fluent-booking-pro')
-            ], 404);
+            ], 422);
         }
 
-        $type = Arr::get($data, 'enabled') === 'yes' ? 'paid' : 'free';
+        $isEnabled = Arr::get($data, 'enabled') === 'yes';
 
-        $event->update([
-            'type' => $type
-        ]);
-
+        $driver = Arr::get($data, 'driver');
+        $eventType = $isEnabled ? 'paid' : 'free';
         $data['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
 
-        $res = $event->updateMeta('payment_settings', $data);
+        if ($isEnabled) {
+            if (!$driver) {
+                return $this->sendError([
+                    'message' => __('Please select a payment method', 'fluent-booking-pro')
+                ], 422);
+            }
+
+            if ($driver == 'woo') {
+                $productId = Arr::get($data, 'woo_product_id');
+                if (!$productId) {
+                    return $this->sendError([
+                        'message' => __('Please select a product', 'fluent-booking-pro')
+                    ], 422);
+                }
+
+                $product = wc_get_product($productId);
+                if (!$product || !$product->get_id()) {
+                    return $this->sendError([
+                        'message' => __('Product not found. Please select a product', 'fluent-booking-pro')
+                    ], 422);
+                }
+
+                $eventType = 'woo';
+            }
+        }
+
+        $event->type = $eventType;
+        $event->save();
+
+        $event->updateMeta('payment_settings', $data);
 
         return $this->sendSuccess([
-                'data'    => $res->toArray(),
                 'message' => __('Settings updated successfully', 'fluent-booking-pro')
             ]
         );
+    }
 
+    public function getWooProducts(Request $request)
+    {
+        if (!defined('WC_PLUGIN_FILE')) {
+            return $this->sendError([
+                'message' => __('WooCommerce is not installed', 'fluent-booking-pro')
+            ], 422);
+        }
+
+        $products = wc_get_products([
+            's'       => $request->getSafe('search', 'sanitize_text_field'),
+            'limit'   => 100,
+            'orderby' => 'title',
+            'status'  => ['publish'],
+            'order'   => 'ASC',
+            'type'    => ['simple']
+        ]);
+
+        $data = [];
+
+        $includeId = $request->getSafe('include_id', 'intval');
+
+        $hadIncludeId = false;
+
+        foreach ($products as $product) {
+            $productId = (string)$product->get_id();
+            if ($productId == $includeId) {
+                $hadIncludeId = true;
+            }
+            $data[] = [
+                'id'    => $productId,
+                'title' => $product->get_title(),
+                'price' => $product->get_price()
+            ];
+        }
+
+        if (!$hadIncludeId) {
+            $product = wc_get_product($includeId);
+            if ($product) {
+                $data[] = [
+                    'id'    => $includeId,
+                    'title' => $product->get_title(),
+                    'price' => $product->get_price()
+                ];
+            }
+        }
+
+        return [
+            'items'    => $data,
+            'currency' => get_woocommerce_currency_symbol()
+        ];
     }
 }

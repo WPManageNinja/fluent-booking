@@ -17,6 +17,12 @@ add_action('fluentcrm_loaded', function () {
 (new \FluentBooking\App\Services\Integrations\ZoomMeeting\Bootstrap())->register();
 (new \FluentBooking\App\Services\Integrations\Webhook\WebhookIntegration())->register();
 
+
+/*
+ * Global Modules Intialization
+ */
+(new \FluentBooking\App\Services\GlobalModules\GlobalModules())->register();
+
 // payment Methods
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
 
@@ -40,6 +46,6 @@ add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $cale
 add_action('init', function () {
 // Woo Integration
     if (defined('WC_PLUGIN_FILE')) {
-      //  (new \FluentBooking\App\Services\Integrations\Woo\Bootstrap())->register();
+        (new \FluentBooking\App\Services\Integrations\Woo\Bootstrap())->register();
     }
 }, 1);
