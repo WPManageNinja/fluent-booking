@@ -228,7 +228,7 @@ export default {
             const items = {};
             if(this.filters.period == 'latest_bookings') {
                 if (this.schedules.length) {
-                    items['Sorted by booked at date time'] = this.schedules;
+                    items[this.$t('Sorted by booked at date time')] = this.schedules;
                 }
                 return items;
             }

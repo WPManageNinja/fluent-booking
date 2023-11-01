@@ -231,7 +231,7 @@ class Booking extends Model
         $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
         $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
 //        $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
-        $html .= 'tanbir ' . __($week, 'fluent-booking-pro') . ','. __($month, 'fluent-booking-pro') . ''. __($day, 'fluent-booking-pro') . ',' . $year;
+        $html .= __($week, 'fluent-booking-pro') . ', '. __($month, 'fluent-booking-pro') . ' '. __($day, 'fluent-booking-pro') . ', ' . $year;
 //        $html .= self::getDateTimeString(DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l'), 'day');
 
         if ($isHtml && $this->status == 'cancelled') {
