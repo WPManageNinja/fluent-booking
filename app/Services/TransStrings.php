@@ -96,7 +96,7 @@ class TransStrings
             'Edit'                                                                             => __('Edit', 'fluent-booking-pro'),
             'integrations_description'                                                         => __('Connect your favourite tools with your booking scheduled, completed or cancelled actions', 'fluent-booking-pro'),
             'Add New Integration'                                                              => __('Add New Integration', 'fluent-booking-pro'),
-            'empty_integrations_title'                                                         => __("You haven't added any integration feed yet. Add new integration to connect your favourite tools with your calendar", "flueng-booking-pro"),
+            'Integration/empty_integrations_title'                                             => __("You haven't added any integration feed yet. Add new integration to connect your favourite tools with your calendar", "fluent-booking-pro"),
             'Conditional Logics is a Pro Feature'                                              => __('Conditional Logics is a Pro Feature', 'fluent-booking-pro'),
             'Please upgrade to pro to unlock this feature.'                                    => __('Please upgrade to pro to unlock this feature.', 'fluent-booking-pro'),
             'Upgrade to Pro'                                                                   => __('Upgrade to Pro', 'fluent-booking-pro'),
@@ -664,6 +664,19 @@ class TransStrings
             'pending'                                                                          => __('pending', 'fluent-booking-pro'),
             'am'                                                                               => __('am', 'fluent-booking-pro'),
             'pm'                                                                               => __('pm', 'fluent-booking-pro'),
+            'Add New Schedule'                                                                 => __('Add New Schedule', 'fluent-booking-pro'),
+            'manage own calendar'                                                              => __('manage own calendar', 'fluent-booking-pro'),
+            'read and use other availabilities'                                                => __('read and use other availabilities', 'fluent-booking-pro'),
+            'manage other calendars'                                                           => __('manage other calendars', 'fluent-booking-pro'),
+            'read other calendars'                                                             => __('read other calendars', 'fluent-booking-pro'),
+            'manage all bookings'                                                              => __('manage all bookings', 'fluent-booking-pro'),
+            'read all bookings'                                                                => __('read all bookings', 'fluent-booking-pro'),
+            'manage other availabilities'                                                      => __('manage other availabilities', 'fluent-booking-pro'),
+            'Currently FluentBooking has integration with FluentCRM. After install'            => __('Currently FluentBooking has integration with FluentCRM. After install', 'fluent-booking-pro'),
+            'Integration/FluentCRM_not_active_desc'                                            => __(', you can configure the integration feed here. More integration will be available soon. For now, you may use webhook feed.', 'fluent-booking-pro'),
+            'Today'                                                                            => __('Today', 'fluent-booking-pro'),
+            'Yesterday'                                                                        => __('Yesterday', 'fluent-booking-pro'),
+            'Tomorrow'                                                                         => __('Tomorrow', 'fluent-booking-pro'),
         );
 
     }

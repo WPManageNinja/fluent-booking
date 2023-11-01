@@ -185,42 +185,6 @@ class Booking extends Model
         return $query->where('status', $status);
     }
 
-//    public function getDateTimeString($str, $type)
-//    {
-//        $config = array(
-//            'weekdays' => array(
-//                'Sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking-pro'),
-//                'Monday'    => _x('Monday', 'calendar day full', 'fluent-booking-pro'),
-//                'Tuesday'   => _x('Tuesday', 'calendar day full', 'fluent-booking-pro'),
-//                'Wednesday' => _x('Wednesday', 'calendar day full', 'fluent-booking-pro'),
-//                'Thursday'  => _x('Thursday', 'calendar day full', 'fluent-booking-pro'),
-//                'Friday'    => _x('Friday', 'calendar day full', 'fluent-booking-pro'),
-//                'Saturday'  => _x('Saturday', 'calendar day full', 'fluent-booking-pro'),
-//            ),
-//            'months'        => array(
-//                'January'   => _x('January', 'calendar month name full', 'fluent-booking-pro'),
-//                'February'  => _x('February', 'calendar month name full', 'fluent-booking-pro'),
-//                'March'     => _x('March', 'calendar month name full', 'fluent-booking-pro'),
-//                'April'     => _x('April', 'calendar month name full', 'fluent-booking-pro'),
-//                'May'       => _x('May', 'calendar month name full', 'fluent-booking-pro'),
-//                'June'      => _x('June', 'calendar month name full', 'fluent-booking-pro'),
-//                'July'      => _x('July', 'calendar month name full', 'fluent-booking-pro'),
-//                'August'    => _x('August', 'calendar month name full', 'fluent-booking-pro'),
-//                'September' => _x('September', 'calendar month name full', 'fluent-booking-pro'),
-//                'October'   => _x('October', 'calendar month name full', 'fluent-booking-pro'),
-//                'November'  => _x('November', 'calendar month name full', 'fluent-booking-pro'),
-//                'December'  => _x('December', 'calendar month name full', 'fluent-booking-pro')
-//            ),
-//        );
-//        if ($type == 'day') {
-//            return $config['weekdays'][$str];
-//        }
-//        if ($type == 'month') {
-//            return $config['months'][$str];
-//        }
-//        return $str;
-//    }
-
     public function getFullBookingDateTimeText($timeZone = 'UTC', $isHtml = false)
     {
         $week  = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l');
@@ -228,11 +192,14 @@ class Booking extends Model
         $day   = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'd');
         $year  = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'Y');
 
-        $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
-        $html .= ' - ' . DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h:ia') . ', ';
-//        $html .= DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l, F d, Y');
+        $startHour    = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h');
+        $startHourMin = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'i');
+        $endHour      = DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h');
+        $endHourMin   = DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'i');
+
+        $html = __($startHour, 'fluent-booking-pro') .':'.__($startHourMin, 'fluent-booking-pro').__(DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'a'), 'fluent-booking-pro');
+        $html .= ' - ' . __($endHour, 'fluent-booking-pro').':'.__($endHourMin, 'fluent-booking-pro').__(DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'a'), 'fluent-booking-pro') . ', ';
         $html .= __($week, 'fluent-booking-pro') . ', '. __($month, 'fluent-booking-pro') . ' '. __($day, 'fluent-booking-pro') . ', ' . $year;
-//        $html .= self::getDateTimeString(DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l'), 'day');
 
         if ($isHtml && $this->status == 'cancelled') {
             $html = '<del>' . $html . '</del>';

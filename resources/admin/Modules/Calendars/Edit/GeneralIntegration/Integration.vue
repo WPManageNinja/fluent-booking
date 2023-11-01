@@ -111,10 +111,10 @@
                     </div>
                 </div>
                 <template v-else-if="isEmpty(available_integrations)">
-                    <p style="font-size: 16px;">Currently FluentBooking has integration with FluentCRM. After install <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>, you can configure the integration feed here. More integration will be available soon. For now, you may use webhook feed.</p>
+                    <p style="font-size: 16px;">{{ $t('Currently FluentBooking has integration with FluentCRM.After install') }} <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>{{ $t('Integration/FluentCRM_not_active_desc') }}</p>
                 </template>
                 <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
-                    <p style="font-size: 16px;">{{ $t('empty_integrations_title') }}</p>
+                    <p style="font-size: 16px;">{{ $t('Integration/empty_integrations_title') }}</p>
                 </div>
             </template>
             <IntegrationEditor
@@ -232,24 +232,22 @@ export default {
                 .finally(() => (this.saving = false));
         },
         removeFeed(feed_id) {
-            this.$confirm(this.$t('Are you sure to delete this Feed?'))
-                .then(_ => {
-                    const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + feed_id;
-                    let data = {
-                        integration_id: feed_id,
-                    };
-                    this.deleting = true;
-                    this.$del(url, data)
-                        .then(response => {
-                            this.$handleSuccess(response.message);
-                            this.getFeeds();
-                        })
-                        .catch(error => {
-                            this.$handleError(error);
-                        })
-                        .finally(() => {
-                            this.deleting = false;
-                        });
+
+            const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + feed_id;
+            let data = {
+                integration_id: feed_id,
+            };
+            this.deleting = true;
+            this.$del(url, data)
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.getFeeds();
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.deleting = false;
                 });
         },
         getFeeds() {

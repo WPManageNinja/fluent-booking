@@ -185,7 +185,8 @@ export default {
         },
         getPermissionName(permission) {
             // replace _ from permission name
-            return permission.replace(/_/g, ' ');
+            const replaceUnderscore = permission.replace(/_/g, ' ');
+            return this.$t(replaceUnderscore);
         },
         initEdit(member) {
             this.editingMember = member;
