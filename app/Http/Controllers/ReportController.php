@@ -136,8 +136,7 @@ class ReportController extends Controller
         // Define a function to fetch booking data based on status
         $fetchBookingsByStatus = function ($status) use ($period, $groupBy, $orderBy, $frequency, $from, $to) {
 
-            $isAdmin = PermissionManager::userCanSeeAllBookings();
-            if (!$isAdmin) {
+            if (!PermissionManager::userCanSeeAllBookings()) {
 
                 return Booking::select($this->prepareSelect($frequency))
                     ->where('status', $status)
@@ -353,9 +352,7 @@ class ReportController extends Controller
             ->orderBy('start_time', 'ASC')
             ->upcoming();
 
-        $isAdmin = PermissionManager::hasAllCalendarAccess();
-
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $bookingQuery->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -383,9 +380,8 @@ class ReportController extends Controller
     public function getLatestBooks()
     {
         $bookingQuery = Booking::query();
-        $isAdmin = PermissionManager::userCanSeeAllBookings();
 
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $bookingQuery->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -398,7 +394,7 @@ class ReportController extends Controller
     {
         $activityQuery = BookingActivity::query();
 
-        if (!PermissionManager::hasAllCalendarAccess()) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $activityQuery->whereHas('booking.calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
