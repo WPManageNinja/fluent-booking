@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="fcal_create_calendar_form_footer">
-            <SaveButton :saving="saving" label="Save Changes" @save="saveSettings"/>
+            <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
         </div>
 
         <el-dialog

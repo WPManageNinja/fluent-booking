@@ -1563,6 +1563,26 @@
           }
         }
       }
+      .fcal_availability_body {
+        .fcal_availability_setting {
+          .fcal_weekly_schedule_wrap {
+            .fcal_weekly_schedules {
+              .fcal_week_day_config {
+                .fcal_day_status {
+                  min-width: 100px;
+                }
+              }
+            }
+          }
+          .fcal_override_date {
+            .fcal_override_date_inner {
+              .fcal_override_table {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
     }
   }
   .fcal_welcom_banner {

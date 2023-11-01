@@ -61,6 +61,8 @@
                             <el-popconfirm
                                 :title="$t('Are you sure to delete this webhook?')"
                                 popper-class="fcal_confirm_dialog"
+                                :confirm-button-text="$t('Yes')"
+                                :cancel-button-text="$t('No')"
                                 confirm-button-type="danger"
                                 @confirm="deleteWebhook(feed.id)"
                             >

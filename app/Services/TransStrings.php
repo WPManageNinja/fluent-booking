@@ -535,7 +535,20 @@ class TransStrings
             'All'                                                                              => __('All', 'fluent-booking-pro'),
             'Past'                                                                             => __('Past', 'fluent-booking-pro'),
             'All dates are shown in'                                                           => __('All dates are shown in', 'fluent-booking-pro'),
-            'timezone'                                                                         => __('timezone', 'fluent-booking-pro')
+            'timezone'                                                                         => __('timezone', 'fluent-booking-pro'),
+            'sun'                                                                              => __('sun', 'fluent-booking-pro'),
+            'mon'                                                                              => __('mon', 'fluent-booking-pro'),
+            'tue'                                                                              => __('tue', 'fluent-booking-pro'),
+            'wed'                                                                              => __('wed', 'fluent-booking-pro'),
+            'thu'                                                                              => __('thu', 'fluent-booking-pro'),
+            'fri'                                                                              => __('fri', 'fluent-booking-pro'),
+            'sat'                                                                              => __('sat', 'fluent-booking-pro'),
+            'SMS'                                                                              => __('SMS', 'fluent-booking-pro'),
+            'WhatsApp'                                                                         => __('WhatsApp', 'fluent-booking-pro'),
+            'Receiver *'                                                                       => __('Receiver *', 'fluent-booking-pro'),
+            'Calendar Avatar'                                                                  => __('Calendar Avatar', 'fluent-booking-pro'),
+            'Featured Image'                                                                   => __('Featured Image', 'fluent-booking-pro'),
+            'no_show'                                                                          => __('no_show', 'fluent-booking-pro')
         ];
 
     }
