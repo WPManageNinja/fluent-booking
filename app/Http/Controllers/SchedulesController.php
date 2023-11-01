@@ -36,7 +36,7 @@ class SchedulesController extends Controller
             $author = (int)$author;
         }
 
-        if (!PermissionManager::hasAllCalendarAccess()) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $author = get_current_user_id();
         }
 
@@ -179,11 +179,9 @@ class SchedulesController extends Controller
 
     public function getBooking(Request $request, $bookingId)
     {
-        $isAdmin = current_user_can('manage_options');
-
         $booking = Booking::with('slot');
 
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $booking->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -216,11 +214,9 @@ class SchedulesController extends Controller
 
     public function getGroupAttendees(Request $request, $groupId)
     {
-        $isAdmin = current_user_can('manage_options');
-
         $booking = Booking::with('slot');
 
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $booking->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });

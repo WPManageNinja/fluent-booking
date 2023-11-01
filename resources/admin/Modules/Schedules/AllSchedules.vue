@@ -60,7 +60,7 @@
                         placement="bottom"
                     >
                         <el-option value="me" :label="$t('My Meetings')"></el-option>
-                        <el-option v-if="hasAccess('manage_all_bookings')" value="all" :label="$t('All Meetings')" />
+                        <el-option v-if="hasAllBookingAccess" value="all" :label="$t('All Meetings')" />
                         <template v-if="all_hosts.length">
                             <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
                         </template>
@@ -72,9 +72,9 @@
                     <div class="fcal_schedule_meetings_nav">
                         <ul class="fcal_secendary_nav_items">
                             <li @click="changePeriod('upcoming')"
-                                :class="{fcal_active : filters.period == 'upcoming' }">Upcoming
+                                :class="{fcal_active : filters.period == 'upcoming' }">{{ $t('Upcoming') }}
                             </li>
-                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">Past
+                            <li @click="changePeriod('past')" :class="{fcal_active : filters.period == 'past' }">{{ $t('Past') }}
                             </li>
                         </ul>
                     </div>
@@ -153,7 +153,7 @@
                 </div>
             </div>
             <el-skeleton v-else :rows="5" animated/>
-            <p>All dates are shown in {{ currentTimezone }} timezone</p>
+            <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         </div>
     </div>
 </template>
@@ -255,25 +255,28 @@ export default {
             const period = this.filters.period;
             return period.charAt(0).toUpperCase() + period.slice(1);
         },
+        hasAllBookingAccess() {
+            return this.hasAccess('manage_all_bookings') || this.hasAccess('read_all_bookings');
+        },
         statusFilters() {
             const statuses = {
-                upcoming: 'Upcoming',
-                completed: 'Completed'
+                upcoming: this.$t('Upcoming'),
+                completed: this.$t('Completed')
             }
 
             if(this.pendingCount) {
-                statuses.pending = 'Pending (' + this.pendingCount + ')';
+                statuses.pending = this.$t('Pending')+' (' + this.pendingCount + ')';
             }
 
             if(this.cancelledCount) {
-                statuses.cancelled = 'Cancelled';
+                statuses.cancelled = this.$t('Cancelled');
             }
             if(this.noShowCount) {
-                statuses.no_show = 'No Show';
+                statuses.no_show = this.$t('No Show');
             }
 
-            statuses.latest_bookings = 'Latest Bookings';
-            statuses.all = 'All';
+            statuses.latest_bookings = this.$t('Latest Bookings');
+            statuses.all = this.$t('All');
             return statuses;
         }
     },

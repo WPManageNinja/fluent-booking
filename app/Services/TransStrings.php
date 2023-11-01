@@ -535,6 +535,11 @@ class TransStrings
             'Global Feature Modules'                                                           => __('Global Feature Modules', 'fluent-booking-pro'),
             'global_feature_modules_desc'                                                      => __('Enable/Disable FluentBooking Advanced features or integrations.', 'fluent-booking-pro'),
             'Search & Select Product'                                                          => __('Search & Select Product', 'fluent-booking-pro'),
+            'Latest Bookings'                                                                  => __('Latest Bookings', 'fluent-booking-pro'),
+            'All'                                                                              => __('All', 'fluent-booking-pro'),
+            'Past'                                                                             => __('Past', 'fluent-booking-pro'),
+            'All dates are shown in'                                                           => __('All dates are shown in', 'fluent-booking-pro'),
+            'timezone'                                                                         => __('timezone', 'fluent-booking-pro')
         ];
 
     }
