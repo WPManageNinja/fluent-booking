@@ -76,7 +76,7 @@
                 </el-form-item>
             </el-form>
             <div class="fcal_settings_footer">
-                <SaveButton :saving="saving" label="Save Changes" @save="updateSchedule"/>
+                <SaveButton :saving="saving" :label="$t('Save Changes')" @save="updateSchedule"/>
             </div>
         </div>
 

@@ -1,6 +1,6 @@
 <template>
     <el-form :model="notification.sms" label-position="top" class="fcal_sms_form">
-        <el-form-item v-if="notification.is_host" label="Receiver *" class="fcal_sms_radio">
+        <el-form-item v-if="notification.is_host" :label="$t('Receiver *')" class="fcal_sms_radio">
             <el-radio-group v-model="notification.sms.receiver">
                 <el-radio label="host_number"> {{ $t('Host Number') }}</el-radio>
                 <el-radio label="custom_number">{{ $t('Custom Number') }}</el-radio>
@@ -62,16 +62,16 @@
                 </el-link>
             </div>
             <el-link type="primary" :underline="false" @click="addReminderTime">
-                {{ $t('+Add Another Reminder') }}
+                {{ $t('+ Add Another Reminder') }}
             </el-link>
         </el-form-item>
         <el-form-item :label="$t('Send *')" class="fcal_sms_radio">
             <el-radio-group v-model="notification.sms.send_to">
-                <el-radio label="phone">SMS</el-radio>
-                <el-radio label="whatsapp">WhatsApp</el-radio>
+                <el-radio label="phone">{{ $t('SMS') }}</el-radio>
+                <el-radio label="whatsapp">{{ $t('WhatsApp') }}</el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="Status">
+        <el-form-item :label="$t('Status')">
             <el-checkbox v-model="notification.enabled"> {{ $t('Enable this sms notification') }}</el-checkbox>
         </el-form-item>
     </el-form>
