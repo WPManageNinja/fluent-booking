@@ -33,10 +33,10 @@ class SchedulesController extends Controller
         if ($author == 'me') {
             $author = get_current_user_id();
         } else if ($author !== 'all') {
-            $author = (int) $author;
+            $author = (int)$author;
         }
 
-        if (!PermissionManager::hasAllCalendarAccess()) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $author = get_current_user_id();
         }
 
@@ -58,7 +58,7 @@ class SchedulesController extends Controller
             $query = $query->orderBy('created_at', 'DESC');
         } else if ($period == 'no_show') {
             $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');
-        } else if($period == 'latest_bookings') {
+        } else if ($period == 'latest_bookings') {
             $query = $query->orderBy('id', 'DESC');
         } else {
             $query = $query->orderBy('start_time', 'DESC');
@@ -78,6 +78,7 @@ class SchedulesController extends Controller
 
         foreach ($schedules as $schedule) {
             $this->formatBooking($schedule);
+            do_action_ref_array('fluent_booking/booking_schedule', [&$schedule]);
         }
 
         $data = [
@@ -103,7 +104,7 @@ class SchedulesController extends Controller
             $data['pending_count'] = $pendingCount;
             $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
         }
-
+        
         return $data;
     }
 
@@ -178,11 +179,9 @@ class SchedulesController extends Controller
 
     public function getBooking(Request $request, $bookingId)
     {
-        $isAdmin = current_user_can('manage_options');
-
         $booking = Booking::with('slot');
 
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $booking->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -215,11 +214,9 @@ class SchedulesController extends Controller
 
     public function getGroupAttendees(Request $request, $groupId)
     {
-        $isAdmin = current_user_can('manage_options');
-
         $booking = Booking::with('slot');
 
-        if (!$isAdmin) {
+        if (!PermissionManager::userCanSeeAllBookings()) {
             $booking->whereHas('calendar', function ($q) {
                 $q->where('user_id', get_current_user_id());
             });
@@ -294,7 +291,7 @@ class SchedulesController extends Controller
         $booking->custom_form_data = $booking->getCustomFormData();
         $booking->reschedule_url = $booking->getRescheduleUrl();
 
-        if ($booking->payment_method) {
+        if ($booking->payment_method == 'stripe' && $booking->payment_order) {
             $booking->payment_order->load(['items', 'transaction']);
             $booking->currency = CurrenciesHelper::getGlobalCurrencySign();
         }

@@ -92,7 +92,7 @@
                         </editable-booking-data>
                     </div>
                 </div>
-                <SourceDetailsSection v-if="showing_booking.source != 'web'" :booking="showing_booking"/>
+                <SourceDetailsSection v-if="showing_booking.sourceDetails" :booking="showing_booking"/>
 
                 <PaymentLogs
                     v-if="showing_booking.event_type == 'single' && showing_booking.payment_order"
@@ -227,7 +227,7 @@ export default {
     },
     computed: {
         isMoreIconVisible() {
-            return this.showing_booking.status != 'cancelled' && this.showing_booking.status != 'completed';
+            return this.hasAccess('manage_all_bookings') && this.showing_booking.status != 'cancelled' && this.showing_booking.status != 'completed';
         },
         isGroupEvent() {
             return this.showing_booking.event_type == 'group';

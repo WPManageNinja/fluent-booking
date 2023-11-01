@@ -44,6 +44,11 @@
                     <el-icon><CreditCard/></el-icon>
                     <span>{{currencyFormat(slot.price_total)}}</span>
                 </span>
+                <span v-else-if="slot.type == 'woo'">
+                    <el-icon>
+                        <img style="width: 22px; height: 22px;" :src="appVars.asset_url + 'images/woo.svg'"/>
+                    </el-icon>
+                </span>
             </p>
         </div>
         <div class="fcal_slot_footer">

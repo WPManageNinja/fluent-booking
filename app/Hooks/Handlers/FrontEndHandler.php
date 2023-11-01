@@ -261,17 +261,17 @@ class FrontEndHandler
             'current_person' => $currentPerson,
             'start_day'      => $startDay,
             'i18'            => [
-                'Timezone'                     => __('Timezone', 'fluent-booking-pro'),
-                'minutes'                      => __('minutes', 'fluent-booking-pro'),
-                'Enter Details'                => __('Enter Details', 'fluent-booking-pro'),
-                'Payment Details'              => __('Payment Details', 'fluent-booking-pro'),
-                'Total Payment'                => __('Total Payment', 'fluent-booking-pro'),
-                'Pay Now'                      => __('Pay Now', 'fluent-booking-pro'),
-                'Confirm Payment'              => __('Confirm Payment', 'fluent-booking-pro'),
-                'processing'                   => __('Processing', 'fluent-booking-pro'),
-                'Schedule Meeting'             => __('Schedule Meeting', 'fluent-booking-pro'),
-                'Continue to Payments'         => __('Continue to Payments', 'fluent-booking-pro'),
-                'date_time_config'             => [
+                'Timezone'                      => __('Timezone', 'fluent-booking-pro'),
+                'minutes'                       => __('minutes', 'fluent-booking-pro'),
+                'Enter Details'                 => __('Enter Details', 'fluent-booking-pro'),
+                'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
+                'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
+                'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),
+                'Confirm Payment'               => __('Confirm Payment', 'fluent-booking-pro'),
+                'processing'                    => __('Processing', 'fluent-booking-pro'),
+                'Schedule Meeting'              => __('Schedule Meeting', 'fluent-booking-pro'),
+                'Continue to Payments'          => __('Continue to Payments', 'fluent-booking-pro'),
+                'date_time_config'              => [
                     'weekdays'      => array(
                         'sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking-pro'),
                         'monday'    => _x('Monday', 'calendar day full', 'fluent-booking-pro'),
@@ -639,20 +639,6 @@ class FrontEndHandler
             'type'               => $calendarEvent->type,
             'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12')
         ];
-
-        $paymentSettings = $calendarEvent->getMeta('payment_settings', []);
-
-        if ($paymentSettings && Arr::get($paymentSettings, 'enabled') == 'yes') {
-            $total = 0;
-            foreach ($paymentSettings['items'] as $payment) {
-                $total += (int)$payment['value'];
-            }
-            $currency = CurrenciesHelper::getGlobalCurrencySign();
-
-            $eventData['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
-        } else {
-            $eventData['total_payment'] = '';
-        }
 
         $author = $calendar->getAuthorProfile(true);
         $author['name'] = $calendar->title;
