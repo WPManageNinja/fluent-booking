@@ -154,7 +154,7 @@
             daySlots = availableDates[day.date];
             selectedDate = day.date;
 
-            if (daySlots.length == 1) {
+            if (daySlots.length == 1 && !daySlots[0].remaining) {
                 selectedDateTime = daySlots[0];
             }
 
