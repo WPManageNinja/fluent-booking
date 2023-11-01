@@ -209,7 +209,7 @@ msgid "Add Another Conditional Group"
 msgstr "Ajouter un autre groupe conditionnel"
 
 #: app/Services/TransStrings.php:245
-msgid "Add another Location Choice"
+msgid "Add another location option"
 msgstr "Ajouter un autre choix de lieu"
 
 #: app/Services/TransStrings.php:327
