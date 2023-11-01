@@ -378,9 +378,9 @@ export default {
         title() {
             let integrationName = this.settings_fields?.integration_title || '';
             if (this.editingIntegration.integration_id) {
-                return `Update ${integrationName} Integration Feed`;
+                return `${this.$t('Update')} ${integrationName} ${this.$t('Integration Feed')}`;
             } else {
-                return `Add New ${integrationName} Integration Feed`;
+                return `${this.$t('Add New')} ${integrationName} ${this.$t('Integration Feed')}`;
             }
         },
         maybeShowSaveButton() {
@@ -413,7 +413,7 @@ export default {
                     this.settings_fields = response.settings_fields;
                     this.settings = response.settings;
                     if (!this.settings.name) {
-                        this.settings.name = response.settings_fields.integration_title + ' Integration Feed' || '';
+                        this.settings.name = response.settings_fields.integration_title + ' '+this.$t('Integration Feed') || '';
                     }
                     this.merge_fields = response.merge_fields;
                 })
@@ -422,7 +422,7 @@ export default {
                     if (this.fromChainedAjax && error.data?.settings_fields) {
                         this.settings_fields = error.data.settings_fields;
                     }
-                    this.$handleError(error || 'Error on integration settings');
+                    this.$handleError(error || this.$t('Error on integration settings'));
                 })
                 .finally(() => {
                     this.loading_app = false;

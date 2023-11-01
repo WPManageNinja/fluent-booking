@@ -287,7 +287,7 @@
 
         <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
             <div class="fcal_slot_picker_header">
-                { dateTimeI18(selectedDate, 'dddd, MMM DD') }
+                { dateTimeI18(selectedDate, 'dddd, MMM') } {getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}
 
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
@@ -309,7 +309,11 @@
                                  on:keypress="{(e) => {selectedDateTime = day}}"
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
-                                    {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
+                                    <!--{convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}-->
+                                    <!--{convertTime12to24(util.dateTimeI18(util.dayjs(day.start).format('hh:mm A')), formatHours)}-->
+                                    <!--{util.dateTimeI18(util.dayjs(day.start).format('hh:mm'))}-->
+                                    <!--{convertTime12to24(util.dateTimeI18(day.start, 'HH:mm A'), formatHours)}-->
+                                    {getDateTimeStringI18(convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours), 'mNumber')}
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
                                     <div class="fcal_spot_remaining">{day.remaining} {i18('spots left')}</div>

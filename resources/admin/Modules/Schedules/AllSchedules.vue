@@ -4,13 +4,13 @@
             <div class="fcal_title">
                 <div v-if="booking_id" class="fcal_back_btn">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item  @click="goBackToList">Bookings</el-breadcrumb-item>
+                        <el-breadcrumb-item  @click="goBackToList">{{ $t('Bookings') }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ statusFilters[filters.period] || filters.period }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
                 <template v-else>
-                    <h3>Bookings</h3>
+                    <h3>{{ $t('Bookings') }}</h3>
                 </template>
             </div>
         </div>

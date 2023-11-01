@@ -5,18 +5,21 @@
     {#each days as day}
         {#if day.enabled}
             <span role="button" tabindex="0" aria-label="Select Day {day.name}" class="day day-enabled { (selectedDate === day.date) ? 'day_is_selected' : ''}" on:keypress={()=>daySelected(day)} on:click={()=>daySelected(day)}>
-                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{day.name}</span>
+                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{getDateTimeStringI18(day.name, 'mNumber')}</span>
+<!--                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>-->
+<!--                    {util.dateTimeI18(day.name)}-->
+<!--                </span>-->
             </span>
         {:else}
             <span class="day day-disabled">
-                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{day.name}</span>
+                <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{getDateTimeStringI18(day.name, 'mNumber')}</span>
             </span>
         {/if}
     {/each}
 </div>
 
 <script>
-    import {i18, getDateTimeStringI18} from '../util';
+    import {util, dateTimeI18, i18, getDateTimeStringI18} from '../util';
     import {createEventDispatcher} from 'svelte';
 
     export var headers = [];
