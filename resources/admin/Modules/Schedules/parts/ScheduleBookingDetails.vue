@@ -233,8 +233,11 @@ export default {
             return this.showing_booking.event_type == 'group';
         },
         meetingDetails() {
+            const day   = this.toCurrentTimezone(this.showing_booking.start_time, 'DD');
+            const month = this.toCurrentTimezone(this.showing_booking.start_time, 'MMM').toLowerCase();
+
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
-            const startTime = this.toCurrentTimezone(this.showing_booking.start_time, 'DD MMM YYYY, hh:mma');
+            const startTime = this.$t(day) + ' ' + this.$t(month) + ' ' + this.toCurrentTimezone(this.showing_booking.start_time, 'YYYY, hh:mma');
             return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
         },
         meetingTime() {
