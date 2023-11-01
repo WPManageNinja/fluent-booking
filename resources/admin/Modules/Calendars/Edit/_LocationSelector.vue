@@ -9,6 +9,7 @@
                 <el-select
                     v-model="slot.location_settings[i].type"
                     popper-class="fcal_select fcal_location_select"
+                    :placeholder="$t('Select')"
                     @change="isLocationInfoRequired(slot.location_settings[i], i)"
                 >
                     <el-option-group
@@ -53,7 +54,7 @@
             </div>
         </div>
 
-        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">{{ $t('Add another Location Choice') }}</el-link>
+        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">{{ $t('Add another location option') }}</el-link>
 
         <el-dialog
             v-if="dialogVisible"

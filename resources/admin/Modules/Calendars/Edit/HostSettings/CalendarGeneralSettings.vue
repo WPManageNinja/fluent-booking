@@ -16,13 +16,13 @@
             <el-form v-model="settings" label-position="top">
                 <el-row :gutter="30">
                     <el-col :span="12">
-                        <el-form-item label="Calendar Avatar">
+                        <el-form-item :label="$t('Calendar Avatar')">
                             <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar" />
-                            <p class="fcal_input_desc">{{ $t('Recommended Image Size: 600x600.Square Orientation') }}</p>
+                            <p class="fcal_input_desc">{{ $t('Recommended Image Size: 600x600. Square Orientation') }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="Featured Image">
+                        <el-form-item :label="$t('Featured Image')">
                             <photo-widget class="fcal_featured_image_upload" style="width: 100%;" v-model="calendar.author_profile.featured_image" />
                             <p class="fcal_input_desc">{{ $t('Will be shown on landing page social share meta or profile block') }}</p>
                         </el-form-item>

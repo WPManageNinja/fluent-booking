@@ -27,12 +27,12 @@
                                         :disabled="field.readonly">
                                         <template v-if="field.copy_btn" #append>
                                             <el-button type="default" @click="copyText(settings[fieldKey])">
-                                                <el-icon><CopyDocument /></el-icon> Copy
+                                                <el-icon><CopyDocument /></el-icon> {{ $t('Copy') }}
                                             </el-button>
                                         </template>
                                     </el-input>
 
-                                    <el-select  v-else-if="field.type='select'" v-model="settings[fieldKey]">
+                                    <el-select  v-else-if="field.type='select'" popper-class="fcal_select" v-model="settings[fieldKey]">
                                         <el-option
                                             v-for="(item, itemValue) in field.options"
                                             :key="itemValue"
@@ -47,7 +47,7 @@
                                     <p v-if="fieldSettings.is_connected">
                                         <el-icon><CircleCheckFilled /></el-icon>
                                         {{ fieldSettings.valid_message }}
-                                        <el-link @click="disconnect">disconnect</el-link>
+                                        <el-link @click="disconnect">{{ $t('Disconnect') }}</el-link>
                                     </p>
                                     <p v-else-if="fieldSettings.is_configured">
                                         <el-icon><CircleCloseFilled /></el-icon>

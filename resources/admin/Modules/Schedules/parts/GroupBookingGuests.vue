@@ -91,12 +91,12 @@
                 </el-table-column>
                 <el-table-column :label="$t('Status')" width="120">
                     <template #default="scope">
-                        {{ scope.row.status }}
+                        {{ $t(scope.row.status) }}
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('Booked At')" width="150">
                     <template #default="scope">
-                        {{ toCurrentTimezone(scope.row.created_at, 'DD MMM YYYY, hh:mma') }}
+                        {{ bookedAtHandler(scope.row.created_at) }}
                     </template>
                 </el-table-column>
                 <el-table-column width="40" fixed="right">
@@ -176,6 +176,15 @@ export default {
                 action: 'fluent_booking_export_hosts',
                 group_id: this.group_id
             });
+        },
+        bookedAtHandler(date) {
+            const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
+            const month = this.$t(this.toCurrentTimezone(date, 'MMM'));
+            const year  = this.$t(this.toCurrentTimezone(date, 'YYYY'));
+            const hour  = this.$t(this.toCurrentTimezone(date, 'hh'));
+            const min   = this.$t(this.toCurrentTimezone(date, 'mm'));
+            const a     = this.$t(this.toCurrentTimezone(date, 'a'));
+            return day + ' ' + month + ' ' + year +', ' + hour +':' + min + a;
         }
     },
     mounted() {

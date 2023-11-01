@@ -237,7 +237,7 @@
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
-        return `${hours}:${minutes} ${formatHr === '12' ? `${modifier}` : ''}`;
+        return `${getDateTimeStringI18(hours, 'mNumber')}:${getDateTimeStringI18(minutes, 'mNumber')} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
     }
 
 
@@ -297,7 +297,7 @@
                         </svg>
                     </i>
                 </div>
-                <span>{ dateTimeI18(selectedDate, 'dddd, MMM DD') }</span>
+                <span>{ dateTimeI18(selectedDate, 'dddd, MMM') } {getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span>
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
                         <input type="radio" id="12_hours_selector" bind:group={formatHours} value="12"/>
@@ -319,6 +319,10 @@
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
+                                    <!--{convertTime12to24(util.dateTimeI18(util.dayjs(day.start).format('hh:mm A')), formatHours)}-->
+                                    <!--{util.dateTimeI18(util.dayjs(day.start).format('hh:mm'))}-->
+                                    <!--{convertTime12to24(util.dateTimeI18(day.start, 'HH:mm A'), formatHours)}-->
+                                    <!--{getDateTimeStringI18(convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours), 'mNumber')}-->
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
                                     <div class="fcal_spot_remaining">{day.remaining} {i18('spots left')}</div>
