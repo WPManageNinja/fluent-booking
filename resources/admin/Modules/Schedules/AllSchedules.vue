@@ -60,7 +60,7 @@
                         placement="bottom"
                     >
                         <el-option value="me" :label="$t('My Meetings')"></el-option>
-                        <el-option v-if="hasAccess('manage_all_bookings')" value="all" :label="$t('All Meetings')" />
+                        <el-option v-if="hasAllBookingAccess" value="all" :label="$t('All Meetings')" />
                         <template v-if="all_hosts.length">
                             <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
                         </template>
@@ -254,6 +254,9 @@ export default {
         currentPeriod() {
             const period = this.filters.period;
             return period.charAt(0).toUpperCase() + period.slice(1);
+        },
+        hasAllBookingAccess() {
+            return this.hasAccess('manage_all_bookings') || this.hasAccess('read_all_bookings');
         },
         statusFilters() {
             const statuses = {
