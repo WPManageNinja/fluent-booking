@@ -93,6 +93,7 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/graph-reports', 'ReportController@getGraphReports');
     $router->get('/activities', 'ReportController@getActivities');
+    $router->get('/options/woo-products', 'PaymentMethodController@getWooProducts');
 });
 
 if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {

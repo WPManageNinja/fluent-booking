@@ -142,7 +142,8 @@ class TransStrings
             'Update Settings'                                                                  => __('Update Settings', 'fluent-booking-pro'),
             'PaymentSettings/enable_payment_description'                                       => __('Enable this event as Paid and collect payment on booking', 'fluent-booking-pro'),
             'Add more item'                                                                    => __('Add more item', 'fluent-booking-pro'),
-            'PaymentSettings/enable_stripe_from_global_settings'                               => __('In order to see this setting, you need to enable global Stripe payment first from the', 'fluent-booking-pro'),
+            'PaymentSettings/enable_stripe_from_global_settings'                               => __('To accept payment for your bookings, please activate Stripe from global settings.', 'fluent-booking-pro'),
+            'Go to Stripe Settings'                                                            => __('Go to Stripe Settings', 'fluent-booking-pro'),
             'Settings Page'                                                                    => __('Settings Page', 'fluent-booking-pro'),
             'Name'                                                                             => __('Name', 'fluent-booking-pro'),
             'WebHook Feed Name'                                                                => __('WebHook Feed Name', 'fluent-booking-pro'),
@@ -532,7 +533,8 @@ class TransStrings
             'Administrator'                                                                    => __('Administrator', 'fluent-booking-pro'),
             'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking-pro'),
             'Global Feature Modules'                                                           => __('Global Feature Modules', 'fluent-booking-pro'),
-            'global_feature_modules_desc'                                                      => __('Enable/Disable FluentBooking Advanced features or integrations.', 'fluent-booking-pro')
+            'global_feature_modules_desc'                                                      => __('Enable/Disable FluentBooking Advanced features or integrations.', 'fluent-booking-pro'),
+            'Search & Select Product'                                                          => __('Search & Select Product', 'fluent-booking-pro'),
         ];
 
     }
