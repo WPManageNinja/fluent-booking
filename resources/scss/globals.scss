@@ -463,10 +463,10 @@
                     border-radius: 0;
 
                     .fcal_week_day_config {
-                        padding: 0;
-                        min-height: auto;
+                        padding: 0 !important;
+                        min-height: auto !important;
                         column-gap: 10px;
-                        padding-right: 10px;
+                        padding-right: 10px !important;
                         .fcal_add_slot {
                             margin-top: 8px;
                         }

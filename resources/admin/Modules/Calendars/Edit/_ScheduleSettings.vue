@@ -5,7 +5,7 @@
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
-                <el-form-item label="Date range">
+                <el-form-item :label="$t('Date Range')">
                     <span class="sub-label">{{ $t('Invitees can schedule...') }}</span>
 
                     <el-radio-group v-model="slot.settings.range_type" class="fcal_date_range_radio">
@@ -28,8 +28,8 @@
                                     :disabled-date="disabledDate"
                                     value-format="YYYY-MM-DD"
                                     range-separator="To"
-                                    :start-placeholder="$t('Start Date')"
-                                    :end-placeholder="$t('End Date')"
+                                    :start-placeholder="$t('Start date')"
+                                    :end-placeholder="$t('End date')"
                                     popper-class="fcal_daterange_popover"
                                 />
                             </div>
@@ -93,7 +93,7 @@
                     </el-tabs>
                 </el-form-item>
 
-                <el-form-item label="Scheduling conditions" class="fcal_override_scheduling_condition_wrap">
+                <el-form-item :label="$t('Scheduling conditions')" class="fcal_override_scheduling_condition_wrap">
                     <span class="sub-label">{{ $t("Invitees can't schedule within...") }}</span>
                     <SchedulingConditions :settings="slot.settings"/>
                 </el-form-item>

@@ -25,7 +25,7 @@
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Booked At') }}</h3>
-                    <p>{{ toCurrentTimezone(booking.created_at, 'DD MMM YYYY, hh:mma') }}</p>
+                    <p>{{ bookedAtHandler(booking.created_at) }}</p>
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
@@ -43,6 +43,18 @@
 <script>
 export default {
     name: "SingleInviteeInfo",
-    props: ['booking']
+    props: ['booking'],
+
+    methods: {
+        bookedAtHandler(date) {
+            const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
+            const month = this.$t(this.toCurrentTimezone(date, 'MMM'));
+            const year  = this.$t(this.toCurrentTimezone(date, 'YYYY'));
+            const hour  = this.$t(this.toCurrentTimezone(date, 'hh'));
+            const min   = this.$t(this.toCurrentTimezone(date, 'mm'));
+            const a     = this.$t(this.toCurrentTimezone(date, 'a'));
+            return day + ' ' + month + ' ' + year +', ' + hour +':' + min + a;
+        }
+    }
 }
 </script>

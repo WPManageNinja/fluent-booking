@@ -60,7 +60,7 @@
                 </el-link>
             </div>
             <el-link type="primary" :underline="false" @click="addReminderTime">
-                {{ $t('+Add Another Reminder') }}
+                {{ $t('+ Add Another Reminder') }}
             </el-link>
         </el-form-item>
         <el-form-item :label="$t('Additional Recipients')" v-if="notification.is_host">
@@ -71,7 +71,7 @@
             </el-input>
             <p>{{ $t('EditNotificationSettings/additional_recipients_desc')}}</p>
         </el-form-item>
-        <el-form-item label="Status">
+        <el-form-item :label="$t('Status')">
             <el-checkbox v-model="notification.enabled"> {{ $t('Enable this notification email') }}</el-checkbox>
         </el-form-item>
     </el-form>

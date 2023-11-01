@@ -169,7 +169,7 @@ class BookingService
 
         $confirmationData = [
             'author'      => $author,
-            'title'       => __(sprintf('Your meeting has been %s', $booking->status), 'fluent-booking-pro'),
+            'title'       => sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $booking->status),
             'sub_heading' => $subHeading,
             'sections'    => $sections,
             'slot'        => $calendarSlot,

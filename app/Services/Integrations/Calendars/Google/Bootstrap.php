@@ -75,10 +75,10 @@ class Bootstrap
                 'caching_time'  => [
                     'type'        => 'select',
                     'options'     => [
-                        '1'  => '1 minute',
-                        '5'  => '5 minutes',
-                        '10' => '10 minutes',
-                        '15' => '15 minutes',
+                        '1'  => __('1 minute', 'fluent-booking-pro'),
+                        '5'  => __('5 minutes', 'fluent-booking-pro'),
+                        '10' => __('10 minutes', 'fluent-booking-pro'),
+                        '15' => __('15 minutes', 'fluent-booking-pro'),
                     ],
                     'label'       => __('Caching Time', 'fluent-booking-pro'),
                     'inline_help' => __('Select for how many minutes the Google Calendar event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in google then you may lower the value', 'fluent-booking-pro')

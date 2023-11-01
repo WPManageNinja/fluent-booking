@@ -46,8 +46,8 @@ export default {
     },
     computed:  {
         slotTitle() {
-            const eventType = this.event_type == 'group' ? 'Group' : 'One-to-One';
-            return `Add ${eventType} Booking Type`;
+            const eventType = this.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+            return `${this.$t('Add')} ${eventType} ${this.$t('Booking Type')}`;
         }
     },
     methods: {
