@@ -63,7 +63,7 @@
                 </div>
             <?php else: ?>
                 <div class="fcal_booking_manage fcal_normal_booking_footer">
-                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?> <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php _e('Reschedule', 'fluent-booking-pro');  ?></a> <?php _e('or', 'fluent-crm-pro'); ?> <a
+                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?> <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php _e('Reschedule', 'fluent-booking-pro');  ?></a> <?php _e('or', 'fluent-booking-pro'); ?> <a
                         href="<?php echo esc_url($booking->getCancelUrl()); ?>"><?php _e('Cancel', 'fluent-booking-pro') ?></a>
                 </div>
             <?php endif; ?>

@@ -63,7 +63,10 @@
 
                             <el-popconfirm
                                 popper-class="fcal_confirm_dialog"
-                                :title="$t('Are you sure to delete this?')" @confirm="deleteTeamMember(member)">
+                                :title="$t('Are you sure to delete this?')"
+                                :confirm-button-text="$t('Yes')"
+                                :cancel-button-text="$t('No')"
+                                @confirm="deleteTeamMember(member)">
                                 <template #reference>
                                     <el-button v-if="!member.is_calendar_user" type="danger" size="small"
                                                class="fcal_danger_btn">
@@ -182,7 +185,8 @@ export default {
         },
         getPermissionName(permission) {
             // replace _ from permission name
-            return permission.replace(/_/g, ' ');
+            const replaceUnderscore = permission.replace(/_/g, ' ');
+            return this.$t(replaceUnderscore);
         },
         initEdit(member) {
             this.editingMember = member;

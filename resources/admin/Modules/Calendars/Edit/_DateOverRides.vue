@@ -34,7 +34,7 @@
                     </el-calendar>
                     <div class="fcal_override_calendar_footer">
                         <div v-if="current_selects.length" class="fcal_override_calendar_available_hour">
-                            <h3>{{ $t('What hours are you available ?') }}</h3>
+                            <h3>{{ $t('What hours are you available?') }}</h3>
                             <div class="fcal_weekly_schedules">
                                 <DayOverRideConfig :isUnavailable="isUnavailableDate" day_label="" :slots="slots" />
                             </div>
@@ -163,7 +163,7 @@ export default {
         overriddenDate() {
             return (slot) => {
                 if (slot.start === "00:00" && slot.end === "00:00") {
-                    return 'Unavailable';
+                    return this.$t('Unavailable');
                 }
                 return this.toDateFormat('2022-12-12 ' + slot.start, 'HH:mma') + ' - ' + this.toDateFormat('2022-12-12 ' + slot.end, 'HH:mma');
             }

@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>{{ $t('One - to - One') }}</h3>
+                        <h3>{{ $t('One-to-One') }}</h3>
                         <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
                         <p>{{ $t('Good for: coffee chats, 1:1 interviews, etc.') }}</p>
                         <el-icon class="icon-right"><Right /></el-icon>
