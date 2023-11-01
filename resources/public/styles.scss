@@ -1113,6 +1113,9 @@ $lightDark: #6b7280;
         }
       }
     }
+    .fcal_back {
+        display: none;
+    }
   }
 }
 
@@ -1331,6 +1334,19 @@ $lightDark: #6b7280;
           > div {
             flex: 1;
           }
+        }
+
+        .fcal_slot_picker_header {
+            .fcal_back {
+                display: block;
+                margin-right: 4px;
+                .fcal_svg {
+                    display: flex;
+                }
+            }
+            span {
+                margin-right: auto;
+            }
         }
       }
     }
