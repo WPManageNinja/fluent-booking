@@ -2462,6 +2462,12 @@
                             align-items: flex-start;
                         }
                     }
+                    .el-radio-group {
+                        gap: 10px 25px;
+                        .el-radio {
+                            margin: 0;
+                        }
+                    }
                 }
             }
         }
