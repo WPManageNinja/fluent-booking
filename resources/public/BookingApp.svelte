@@ -144,7 +144,7 @@
                         <div class="fcal_slot_wrapper">
                             <div class="fcal_author">
                                 <div class="fcal_author_avatar">
-                                    <img src="{author.avatar}" alt="Author Avatar">
+                                    <img src="{author.avatar}" alt="{author.name}">
                                 </div>
                                 <div class="fcal_author_name">
                                     {author.name}
