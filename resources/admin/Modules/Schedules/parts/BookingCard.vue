@@ -19,7 +19,7 @@
                     <span class="fcal_spot_period_status" :class="booking.status=='no_show'?'no_show':''" v-if="currentStatus">
                         {{ $t(currentStatus) }}
                     </span>
-                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status) }} | {{currencyFormat(booking.payment_order?.total_amount, true)}}</p>
+                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status) }}</p>
                 </div>
             </div>
             <div class="fcal_spot_actions">
