@@ -390,6 +390,7 @@ export default {
         if (!this.booking) {
             this.fetchBooking();
         }
+        this.getAdditionalData();
     }
 }
 </script>
