@@ -73,8 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <SourceDetailsSection v-if="scope.row.source != 'web'" :booking="scope.row"/>
-                            <PaymentLogs v-if="scope.row.payment_order" :booking="scope.row" />
+                            <SourceDetailsSection :booking="scope.row"/>
                         </div>
                     </template>
                 </el-table-column>
@@ -125,13 +124,11 @@
 import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import SourceDetailsSection from './SourceDetailsSection';
-import PaymentLogs from "./PaymentLogs";
 export default {
     name: "GroupBookingGuests",
     props: ['group_id'],
     components: {
         SourceDetailsSection,
-        PaymentLogs,
         Pagination,
         MoreFilled,
         Close,
@@ -178,13 +175,7 @@ export default {
             });
         },
         bookedAtHandler(date) {
-            const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
-            const month = this.$t(this.toCurrentTimezone(date, 'MMM'));
-            const year  = this.$t(this.toCurrentTimezone(date, 'YYYY'));
-            const hour  = this.$t(this.toCurrentTimezone(date, 'hh'));
-            const min   = this.$t(this.toCurrentTimezone(date, 'mm'));
-            const a     = this.$t(this.toCurrentTimezone(date, 'a'));
-            return day + ' ' + month + ' ' + year +', ' + hour +':' + min + a;
+            return this.toCurrentTimezone(date, 'DD MMM YYYY, hh:mma')
         }
     },
     mounted() {
