@@ -178,13 +178,7 @@ export default {
             });
         },
         bookedAtHandler(date) {
-            const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
-            const month = this.$t(this.toCurrentTimezone(date, 'MMM'));
-            const year  = this.$t(this.toCurrentTimezone(date, 'YYYY'));
-            const hour  = this.$t(this.toCurrentTimezone(date, 'hh'));
-            const min   = this.$t(this.toCurrentTimezone(date, 'mm'));
-            const a     = this.$t(this.toCurrentTimezone(date, 'a'));
-            return day + ' ' + month + ' ' + year +', ' + hour +':' + min + a;
+            return this.toCurrentTimezone(date, 'DD MMM YYYY, hh:mma')
         }
     },
     mounted() {
