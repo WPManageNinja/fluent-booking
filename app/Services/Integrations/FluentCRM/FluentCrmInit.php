@@ -14,6 +14,9 @@ class FluentCrmInit
     {
         $this->registerHooks();
         $this->registerIntegrations();
+
+        // Contextual SmartCodes
+        (new CrmSmartCode())->register();
     }
 
     /**
@@ -47,6 +50,7 @@ class FluentCrmInit
     {
         new NewBookingTrigger();
         new CancelBookingTrigger();
+        new BookingCompletedTrigger();
     }
 
     private function getSubscriberId($email)
