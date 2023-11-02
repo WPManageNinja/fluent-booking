@@ -90,6 +90,10 @@
         }
     }
 
+    function formatHours(e) {
+        slot.time_format = e;
+    }
+
     function handleBookingConfirmation(confirmation) {
         bookingConfirmationHtml = confirmation.response_html;
         // remove height css to .fcal_calendar_inner class
@@ -242,6 +246,7 @@
                                 bind:timezone={timezone}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
+                                on:formatHours={(e) => {formatHours(e.detail)}}
                                 on:timezoneChanged={(e) => {resetSelection()}}
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
