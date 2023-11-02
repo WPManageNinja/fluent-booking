@@ -89,39 +89,39 @@
 
                         <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Mark booking as cancelled automtically after">
-                                    <el-select v-model="administration.auto_cancel_timing">
-                                        <el-option value="5" label="5 Minutes"></el-option>
-                                        <el-option value="10" label="10 Minutes"></el-option>
-                                        <el-option value="20" label="20 Minutes"></el-option>
-                                        <el-option value="30" label="30 Minutes"></el-option>
-                                        <el-option value="40" label="40 Minutes"></el-option>
-                                        <el-option value="50" label="50 Minutes"></el-option>
-                                        <el-option value="60" label="60 Minutes"></el-option>
-                                        <el-option value="120" label="2 Hours"></el-option>
-                                        <el-option value="180" label="3 Hours"></el-option>
-                                        <el-option value="360" label="6 Hours"></el-option>
-                                        <el-option value="720" label="12 Hours"></el-option>
+                                <el-form-item :label="$t('Mark booking as cancelled automatically after')">
+                                    <el-select popper-class="fcal_select" v-model="administration.auto_cancel_timing">
+                                        <el-option value="5" :label="$t('5 Minutes')"></el-option>
+                                        <el-option value="10" :label="$t('10 Minutes')"></el-option>
+                                        <el-option value="20" :label="$t('20 Minutes')"></el-option>
+                                        <el-option value="30" :label="$t('30 Minutes')"></el-option>
+                                        <el-option value="40" :label="$t('40 Minutes')"></el-option>
+                                        <el-option value="50" :label="$t('50 Minutes')"></el-option>
+                                        <el-option value="60" :label="$t('60 Minutes')"></el-option>
+                                        <el-option value="120" :label="$t('2 Hours')"></el-option>
+                                        <el-option value="180" :label="$t('3 Hours')"></el-option>
+                                        <el-option value="360" :label="$t('6 Hours')"></el-option>
+                                        <el-option value="720" :label="$t('12 Hours')"></el-option>
                                     </el-select>
-                                    <p>if customer does not complete the payment for paid events.</p>
+                                    <p>{{ $t('if customer does not complete the payment for paid events.') }}</p>
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
-                                <el-form-item label="Mark booking as completed automtically after">
-                                    <el-select v-model="administration.auto_complete_timing">
-                                        <el-option value="5" label="5 Minutes"></el-option>
-                                        <el-option value="10" label="10 Minutes"></el-option>
-                                        <el-option value="20" label="20 Minutes"></el-option>
-                                        <el-option value="30" label="30 Minutes"></el-option>
-                                        <el-option value="40" label="40 Minutes"></el-option>
-                                        <el-option value="50" label="50 Minutes"></el-option>
-                                        <el-option value="60" label="60 Minutes"></el-option>
-                                        <el-option value="120" label="2 Hours"></el-option>
-                                        <el-option value="180" label="3 Hours"></el-option>
-                                        <el-option value="360" label="6 Hours"></el-option>
-                                        <el-option value="720" label="12 Hours"></el-option>
+                                <el-form-item :label="$t('Mark booking as completed automatically after')">
+                                    <el-select popper-class="fcal_select" v-model="administration.auto_complete_timing">
+                                        <el-option value="5" :label="$t('5 Minutes')"></el-option>
+                                        <el-option value="10" :label="$t('10 Minutes')"></el-option>
+                                        <el-option value="20" :label="$t('20 Minutes')"></el-option>
+                                        <el-option value="30" :label="$t('30 Minutes')"></el-option>
+                                        <el-option value="40" :label="$t('40 Minutes')"></el-option>
+                                        <el-option value="50" :label="$t('50 Minutes')"></el-option>
+                                        <el-option value="60" :label="$t('60 Minutes')"></el-option>
+                                        <el-option value="120" :label="$t('2 Hours')"></el-option>
+                                        <el-option value="180" :label="$t('3 Hours')"></el-option>
+                                        <el-option value="360" :label="$t('6 Hours')"></el-option>
+                                        <el-option value="720" :label="$t('12 Hours')"></el-option>
                                     </el-select>
-                                    <p>from the event end time</p>
+                                    <p>{{ $t('from the event end time') }}</p>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -178,31 +178,31 @@ export default {
             weekdays: [
                 {
                     value: 'mon',
-                    label: 'Monday'
+                    label: this.$t('Monday')
                 },
                 {
                     value: 'tue',
-                    label: 'Tuesday'
+                    label: this.$t('Tuesday')
                 },
                 {
                     value: 'wed',
-                    label: 'Wednesday'
+                    label: this.$t('Wednesday')
                 },
                 {
                     value: 'thu',
-                    label: 'Thursday'
+                    label: this.$t('Thursday')
                 },
                 {
                     value: 'fri',
-                    label: 'Friday'
+                    label: this.$t('Friday')
                 },
                 {
                     value: 'sat',
-                    label: 'Saturday'
+                    label: this.$t('Saturday')
                 },
                 {
                     value: 'sun',
-                    label: 'Sunday'
+                    label: this.$t('Sunday')
                 }
             ],
             loading: false,
