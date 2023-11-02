@@ -187,19 +187,11 @@ class Booking extends Model
 
     public function getFullBookingDateTimeText($timeZone = 'UTC', $isHtml = false)
     {
-        $week  = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'l');
-        $month = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'F');
-        $day   = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'd');
-        $year  = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'Y');
+        $startDateTime = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'Y-m-d H:i:s');
+        $endDateTime = DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'Y-m-d H:i:s');
 
-        $startHour    = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h');
-        $startHourMin = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'i');
-        $endHour      = DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'h');
-        $endHourMin   = DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'i');
-
-        $html = __($startHour, 'fluent-booking-pro') .':'.__($startHourMin, 'fluent-booking-pro').__(DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'a'), 'fluent-booking-pro');
-        $html .= ' - ' . __($endHour, 'fluent-booking-pro').':'.__($endHourMin, 'fluent-booking-pro').__(DateTimeHelper::convertFromUtc($this->end_time, $timeZone, 'a'), 'fluent-booking-pro') . ', ';
-        $html .= __($week, 'fluent-booking-pro') . ', '. __($month, 'fluent-booking-pro') . ' '. __($day, 'fluent-booking-pro') . ', ' . $year;
+        $html = DateTimeHelper::formatToLocale($startDateTime, 'time') . ' - ' . DateTimeHelper::formatToLocale($endDateTime, 'time') . ', ';
+        $html .= DateTimeHelper::formatToLocale($startDateTime, 'date');
 
         if ($isHtml && $this->status == 'cancelled') {
             $html = '<del>' . $html . '</del>';
