@@ -195,6 +195,7 @@
 
     function slotSpotConfirmed() {
         dispatch('spotSelected', selectedDateTime);
+        dispatch('formatHours', formatHours);
         setTimeout(() => {
             selectedDateTime = {};
         }, 1000);
