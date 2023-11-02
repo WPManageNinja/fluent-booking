@@ -16,6 +16,10 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/zoom-connection/add', 'ZoomController@addConnectionByCalendarId')->int('id');
     $router->post('/{id}/integrations/zoom-connection/disconnect', 'ZoomController@disconnectByCalendarId')->int('id');
 
+    // Twilio Integrations
+    $router->get('/{id}/slots/{event_id}/sms-notifications', 'TwilioController@getSlotSmsNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/slots/{event_id}/sms-notifications', 'TwilioController@saveSlotSmsNotifications')->int('id')->int('event_id');
+
     // webhooks
     $router->get('/{id}/slots/{event_id}/webhooks', 'WebhookController@getFeeds')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}/webhooks', 'WebhookController@saveFeed')->int('id')->int('event_id');
