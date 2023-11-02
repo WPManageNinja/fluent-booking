@@ -19,6 +19,7 @@
                     <span class="fcal_spot_period_status" :class="booking.status=='no_show'?'no_show':''" v-else-if="currentStatus">
                         {{ $t(currentStatus) }}
                     </span>
+                    
                     <span class="fcal_spot_source" :class="'fcal_spot_source_' + booking.source" v-if="booking.source != 'web'">
                         {{ booking.source }}
                     </span>

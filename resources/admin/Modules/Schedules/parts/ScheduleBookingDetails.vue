@@ -398,6 +398,7 @@ export default {
         } else {
             this.getAdditionalData();
         }
+        this.getAdditionalData();
     }
 }
 </script>
