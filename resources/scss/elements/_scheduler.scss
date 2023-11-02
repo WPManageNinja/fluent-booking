@@ -533,7 +533,8 @@
             }
           }
           .fcal_spot_payment_status,
-          .fcal_spot_period_status {
+          .fcal_spot_period_status,
+          .fcal_spot_source {
             color: $primaryColor;
             display: inline-block;
             background: rgb(38 83 199 / 10%);

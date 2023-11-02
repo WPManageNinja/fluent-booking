@@ -58,9 +58,6 @@ $router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($rout
     $router->get('/{id}/meta-info', 'SchedulesController@getBookingMetaInfo')->int('id');
 
     $router->get('/group-bookings/{group_id}/attendees', 'SchedulesController@getGroupAttendees')->int('group_id');
-
-    // Get FluentCrm Profile
-    $router->get('/crm-profile/', 'SchedulesController@getCrmProfile');
 });
 
 $router->prefix('integrations')->withPolicy('SettingsPolicy')->group(function ($router) {
