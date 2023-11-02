@@ -116,7 +116,7 @@ class BookingService
 
         $guestName = trim($booking->first_name . ' ' . $booking->last_name);
 
-        $meetingTitle = sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+        $meetingTitle = $booking->getMeetingTitle();
 
         $sections = [
             'what'  => [
@@ -241,8 +241,7 @@ class BookingService
 
     public static function generateBookingICS(Booking $booking)
     {
-        $host = $booking->getHostDetails(false);
-        $meetingTitle = sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), esc_html($booking->calendar_event->title), esc_html(trim($booking->first_name . ' ' . $booking->last_name)), esc_attr($host['name']));
+        $meetingTitle = $booking->getMeetingTitle();
 
         // Initialize the ICS content
         $icsContent = "BEGIN:VCALENDAR\r\n";
