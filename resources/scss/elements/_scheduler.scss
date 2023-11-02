@@ -547,6 +547,10 @@
               color: #ff8f3c;
               background: rgb(255 143 60 / 15%);
             }
+            &.fcal_spot_source_woo {
+              color: #674399 !important;
+              background: rgb(103 67 153 / 11%) !important;
+            }
           }
           .fcal_spot_payment_status {
             &.paid {
@@ -2870,24 +2874,21 @@
       .fcal_booking_activity_time {
         font-size: 12px;
         font-weight: 400;
-        line-height: 18px;
         color: #697483;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
 
       .fcal_booking_activity_content {
         .fcal_booking_activity_title {
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 500;
-          line-height: 24px;
           color: $dark;
-          margin-bottom: 6px;
+          margin-bottom: 3px;
         }
 
         .fcal_booking_activity_description {
-          font-size: 16px;
+          font-size: 13px;
           font-weight: 400;
-          line-height: 24px;
           color: #445164;
           overflow-wrap: anywhere;
 
