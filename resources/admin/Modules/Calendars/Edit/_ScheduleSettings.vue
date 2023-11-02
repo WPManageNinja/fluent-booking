@@ -27,7 +27,7 @@
                                     type="daterange"
                                     :disabled-date="disabledDate"
                                     value-format="YYYY-MM-DD"
-                                    range-separator="To"
+                                    :range-separator="$t('To')"
                                     :start-placeholder="$t('Start date')"
                                     :end-placeholder="$t('End date')"
                                     popper-class="fcal_daterange_popover"
