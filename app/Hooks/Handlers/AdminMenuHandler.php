@@ -155,7 +155,7 @@ class AdminMenuHandler
         $slug = $app->config->get('app.slug');
 
         wp_enqueue_style(
-            'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION
+            'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION, 'all'
         );
 
         do_action($slug . '_loading_app');

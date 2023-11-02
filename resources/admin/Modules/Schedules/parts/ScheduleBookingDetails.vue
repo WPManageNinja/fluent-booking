@@ -118,16 +118,22 @@
                 </div>
             </div>
         </div>
-        <div v-loading="loading_sidebar" v-if="showing_booking" class="fcal_booking_activities">
-            <BookingActivities :activities="activities"/>
-            <div v-if="sidebar_contents && sidebar_contents.length">
-                <div v-for="sideItem in sidebar_contents" :key="sideItem.id" class="fcal_schedule_profile_box">
-                    <div class="fcal_schedule_profile_header">
-                        <h1>{{ sideItem.title }}</h1>
+        <div v-loading="loading_sidebar" class="fcal_booking_activities">
+            <template v-if="showing_booking">
+                <BookingActivities :activities="activities"/>
+                <div v-if="sidebar_contents && sidebar_contents.length">
+                    <div v-for="sideItem in sidebar_contents" :key="sideItem.id" class="fcal_schedule_profile_box">
+                        <div class="fcal_schedule_profile_header">
+                            <h1>{{ sideItem.title }}</h1>
+                        </div>
+                        <div class="fcal_schedule_profile_body" v-html="sideItem.content"></div>
                     </div>
-                    <div class="fcal_schedule_profile_body" v-html="sideItem.content"></div>
                 </div>
-            </div>
+            </template>
+            <el-skeleton :animated="true" :rows="10" v-if="loading_sidebar" />
+        </div>
+        <div style="background: white; padding: 20px;" v-if="fetching">
+            <el-skeleton :rows="10" :animated="true"/>
         </div>
         <el-dialog
             v-model="cancelDialog"
@@ -389,6 +395,8 @@ export default {
     mounted() {
         if (!this.booking) {
             this.fetchBooking();
+        } else {
+            this.getAdditionalData();
         }
     }
 }

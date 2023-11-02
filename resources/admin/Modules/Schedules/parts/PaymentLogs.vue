@@ -62,7 +62,7 @@
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Status') }}</h3>
-                        <p class="payment_status" :class="booking.payment_order.transaction.status">
+                        <p class="payment_status" :class="payment_order.transaction.status">
                             {{ $t(payment_order.transaction.status) }}
                         </p>
                     </div>
