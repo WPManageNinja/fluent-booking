@@ -1584,6 +1584,8 @@ class Helper
                 'notification_frequency' => 'daily',
                 'notification_day'       => 'mon',
                 'start_day'              => 'sun',
+                'auto_cancel_timing'     => '10',
+                'auto_complete_timing'   => '60'
             ],
             'time_format'    => '24'
         ];
@@ -1597,6 +1599,14 @@ class Helper
         $settings = wp_parse_args($settings, $defaults);
 
         $emailSettings = $settings['emailing'];
+
+        if (empty($settings['administration']['auto_cancel_timing'])) {
+            $settings['administration']['auto_cancel_timing'] = '10';
+        }
+
+        if (empty($settings['administration']['auto_complete_timing'])) {
+            $settings['administration']['auto_complete_timing'] = '10';
+        }
 
         if (empty($emailSettings['from_name']) && defined('FLUENTCRM')) {
             $crmSettings = fluentcrmGetGlobalSettings('email_settings', []);
@@ -1620,6 +1630,41 @@ class Helper
 
         return $settings;
 
+    }
+
+    public static function getGlobalAdminSetting($key = null, $default = null)
+    {
+        static $settings;
+        if ($settings) {
+
+            if ($key) {
+                return Arr::get($settings, $key, $default);
+            }
+
+            return $settings;
+        }
+
+        $globalSettings = self::getGlobalSettings();
+        $settings = Arr::get($globalSettings, 'administration', []);
+
+        if ($key) {
+            return Arr::get($settings, $key, $default);
+        }
+
+        return $settings;
+    }
+
+    public static function getDefaultTimeFormat()
+    {
+        static $format;
+
+        if ($format) {
+            return $format;
+        }
+
+        $settings = self::getGlobalSettings();
+        $format = Arr::get($settings, 'time_format', '24');
+        return $format;
     }
 
     public static function getVerifiedSenders()

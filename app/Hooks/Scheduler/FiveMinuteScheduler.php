@@ -2,6 +2,9 @@
 
 namespace FluentBooking\App\Hooks\Scheduler;
 
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Services\Helper;
+
 class FiveMinuteScheduler
 {
     public function register()
@@ -11,14 +14,40 @@ class FiveMinuteScheduler
 
     public function handle()
     {
-        $autCancelTimeOut = 600; // 10 minutes
+        $this->maybeAutoCancelBooking();
+        $this->maybeAutoCompleteBookings();
+    }
+
+    private function maybeAutoCompleteBookings()
+    {
+        $autoCompleteTimeOut = (int)Helper::getGlobalAdminSetting('auto_complete_timing', 60) * 60; // 10 minutes
+
+        $bookings = Booking::where('status', 'scheduled')
+            ->where('end_time', '<', date('Y-m-d H:i:s', time() - $autoCompleteTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->limit(500)
+            ->get();
+
+        foreach ($bookings as $booking) {
+            $booking->status = 'completed';
+            $booking->save();
+            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+        }
+
+        return true;
+    }
+
+    private function maybeAutoCancelBooking()
+    {
+        $autoCancelTimeOut = (int)Helper::getGlobalAdminSetting('auto_cancel_timing', 10) * 60; // 10 minutes
 
         \FluentBooking\App\Models\Booking::query()
-            ->where('created_at', '<=', date('Y-m-d H:i:s', time() - $autCancelTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->where('created_at', '<=', date('Y-m-d H:i:s', time() - $autoCancelTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->where('status', 'pending')
             ->update([
-                'status' => 'cancelled',
+                'status'     => 'cancelled',
                 'updated_at' => date('Y-m-d H:i:s') // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ]);
+
+        return true;
     }
 }

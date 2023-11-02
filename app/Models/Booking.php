@@ -452,6 +452,17 @@ class Booking extends Model
         return $this->getMeta('reschedule_reason', '');
     }
 
+    public function getMeetingTitle()
+    {
+        $calendarSlot = $this->calendar_event;
+
+        $author = $this->getHostDetails(false);
+
+        $guestName = trim($this->first_name . ' ' . $this->last_name);
+
+        return sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+    }
+
     public function getActivities()
     {
         return BookingActivity::where('booking_id', $this->id)

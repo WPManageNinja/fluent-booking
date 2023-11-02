@@ -141,7 +141,7 @@ class BookingFieldService
             unset($existingFields['location']);
         } else {
 
-            if(empty($existingFields['location'])) {
+            if (empty($existingFields['location'])) {
                 $existingFields['location'] = $defaultFields['location'];
             } else {
                 $existingFields['location']['options'] = $defaultFields['location']['options'];
@@ -192,11 +192,7 @@ class BookingFieldService
             unset($existingFields['payment_method']);
         }
 
-        if(is_user_logged_in()) {
-            $existingFields['email']['disabled'] = true;
-        } else {
-            $existingFields['email']['disabled'] = false;
-        }
+        $existingFields['email']['disabled'] = false;
 
         return array_values($existingFields);
     }
@@ -273,7 +269,7 @@ class BookingFieldService
             if ($field['type'] == 'phone') {
                 return true;
             } else if ($field['name'] == 'location') {
-                if(!empty($field['options'])) {
+                if (!empty($field['options'])) {
                     foreach ($field['options'] as $option) {
                         if (Arr::get($option, 'type') == 'phone_guest') {
                             return true;
