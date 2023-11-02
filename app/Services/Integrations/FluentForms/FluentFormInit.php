@@ -250,7 +250,8 @@ class FluentFormInit
                 'source_id'        => $entry->id,
                 'status'           => 'scheduled',
                 'source_url'       => $entry->source_url,
-                'ip_address'       => $entry->ip
+                'ip_address'       => $entry->ip,
+                'event_type'       => $event->event_type
             ];
 
             if ($entry->user_id) {
