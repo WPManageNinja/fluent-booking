@@ -30,6 +30,7 @@ class Bootstrap
 
             $bookingData['source'] = 'woo';
             $bookingData['payment_method'] = 'woocommerce';
+            $bookingData['payment_status'] = 'pending';
             $bookingData['status'] = 'pending'; // we are making it pending
 
             add_filter('fluent_booking/booking_confirmation_response', function ($response, $booking) use ($wooProductId) {
@@ -102,6 +103,9 @@ class Bootstrap
             $items[] = '__fcal_booking_id';
             return $items;
         });
+
+        add_action('fluent_booking/booking_meta_info_main_meta_woo', [$this, 'pushOrderDataToBookingView'], 10, 2);
+
     }
 
     public function modifyCheckout($data)
@@ -172,6 +176,7 @@ class Bootstrap
             }
 
             $booking->status = 'scheduled';
+            $booking->payment_status = 'paid';
             $booking->source_id = $order->get_id();
             $booking->save();
 
@@ -229,6 +234,9 @@ class Bootstrap
             return;
         }
 
+        $booking->payment_status = 'refunded';
+        $booking->save();
+
         $booking->cancelMeeting(__('Cancelled by WooCommerce Order', 'fluent-booking-pro'), 'guest', get_current_user_id());
 
         $order->add_order_note(
@@ -251,6 +259,45 @@ class Bootstrap
                 '</a>'
             ), 'fluent-booking-pro')
         ]);
+    }
+
+    public function pushOrderDataToBookingView($meta, $booking)
+    {
+        $orderId = $booking->source_id;
+        if (!$orderId) {
+            return $meta;
+        }
+
+        $order = wc_get_order($orderId);
+        if (!$order) {
+            return $meta;
+        }
+
+        // Get WooCommerce Order Summary as html
+        ob_start();
+        printf(
+        /* translators: 1: order number 2: order date 3: order status */
+            esc_html__('Order #%1$s was placed on %2$s and is currently %3$s.', 'fluent-booking-pro'),
+            '<mark class="order-number">' . $order->get_order_number() . '</mark>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            '<mark class="order-date">' . wc_format_datetime($order->get_date_created()) . '</mark>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            '<mark class="order-status">' . wc_get_order_status_name($order->get_status()) . '</mark>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        );
+        wc_get_template('order/order-details.php', [
+            'order'    => $order,
+            'order_id' => $orderId,
+        ]);
+
+        echo '<p><a href="' . $order->get_edit_order_url() . '" target="_blank">' . __('View Order', 'fluent-booking-pro') . '</a></p>';
+
+        $orderSummary = ob_get_clean();
+
+        $meta[] = [
+            'id'      => 'woo-order-summary',
+            'title'   => __('Order Summary', 'fluent-booking-pro'),
+            'content' => $orderSummary
+        ];
+
+        return $meta;
     }
 
     private function isEnabled()
