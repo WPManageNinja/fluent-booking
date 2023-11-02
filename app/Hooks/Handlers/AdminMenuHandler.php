@@ -242,7 +242,9 @@ class AdminMenuHandler
             'currency'           => CurrenciesHelper::getGlobalCurrency(),
             'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign(),
             'has_pro'            => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
-            'trans'              => TransStrings::getStrings()
+            'trans'              => TransStrings::getStrings(),
+            'date_format'        => get_option('date_format'),
+            'time_format'        => get_option('time_format'),
         ]);
 
     }
