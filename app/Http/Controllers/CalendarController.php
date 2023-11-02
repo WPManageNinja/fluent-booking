@@ -490,6 +490,38 @@ class CalendarController extends Controller
 
     }
 
+    public function cloneCalendarSlot(Request $request, $calendarId, $slotId)
+    {
+        $originalSlot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+    
+        $clonedSlot = $originalSlot->replicate();
+        
+        $clonedSlot->title = $originalSlot->title . ' (clone)';
+    
+        $clonedSlot->save();
+
+        $eventsMeta = $originalSlot->getCalendarEventsMeta();
+
+        $integrationsMeta = $originalSlot->getIntegrationsMeta();
+
+        foreach ($eventsMeta as $meta) {
+            $clonedMeta = $meta->replicate();
+            $clonedMeta->object_id = $clonedSlot->id;
+            $clonedMeta->save();
+        }
+
+        foreach ($integrationsMeta as $meta) {
+            $clonedMeta = $meta->replicate();
+            $clonedMeta->object_id = $clonedSlot->id;
+            $clonedMeta->save();
+        }
+
+        return [
+            'message' => __('The Event Type has been cloned successfully', 'fluent-booking-pro'),
+            'slot'    => $clonedSlot
+        ];
+    }
+
     public function getSlotEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
