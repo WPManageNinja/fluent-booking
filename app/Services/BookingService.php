@@ -40,19 +40,9 @@ class BookingService
         }
 
         if (!isset($data['person_user_id'])) {
-            $userId = get_current_user_id();
-
-            if ($userId) {
-                $user = get_user_by('ID', $userId);
-            } else {
-                $user = get_user_by('email', $data['email']);
-            }
-
+            $user = get_user_by('email', $data['email']);
             if ($user) {
-                $data['person_user_id'] = $userId;
-                if (empty($data['email'])) {
-                    $data['email'] = $user->user_email;
-                }
+                $data['person_user_id'] = $user->ID;
                 if (empty($data['first_name'])) {
                     $data['first_name'] = $user->first_name;
                     $data['last_name'] = $user->last_name;

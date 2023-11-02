@@ -303,7 +303,9 @@ class SchedulesController extends Controller
 
     private function formatBooking(&$booking)
     {
-        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
+        $autoCompleteTimeOut = (int) Helper::getGlobalAdminSetting('auto_complete_timing', 60) * 60; // 10 minutes
+
+        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > $autoCompleteTimeOut) {
             $booking->status = 'completed';
             $booking->save();
             do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
