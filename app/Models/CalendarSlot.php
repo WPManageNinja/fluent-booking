@@ -461,4 +461,22 @@ class CalendarSlot extends Model
 
         return wp_parse_args($settings, $defaults);
     }
+
+    public function getCalendarEventsMeta()
+    {
+        $eventsMeta = Meta::where('object_id', $this->id)
+            ->where('object_type', 'calendar_event')
+            ->get();
+        
+        return $eventsMeta;
+    }
+
+    public function getIntegrationsMeta()
+    {
+        $integrationsMeta = Meta::where('object_id', $this->id)
+            ->where('object_type', 'integration')
+            ->get();
+        
+        return $integrationsMeta;
+    }
 }

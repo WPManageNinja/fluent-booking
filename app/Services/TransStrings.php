@@ -74,6 +74,7 @@ class TransStrings
             'No events are using this schedule'                                                => __('No events are using this schedule', 'fluent-booking-pro'),
             'Set as Default'                                                                   => __('Set as Default', 'fluent-booking-pro'),
             'Duplicate'                                                                        => __('Duplicate', 'fluent-booking-pro'),
+            'Clone'                                                                            => __('Clone', 'fluent-booking-pro'),
             'Delete'                                                                           => __('Delete', 'fluent-booking-pro'),
             'No Availability found'                                                            => __('No Availability found', 'fluent-booking-pro'),
             'Add New Availability Schedule'                                                    => __('Add New Availability Schedule', 'fluent-booking-pro'),
