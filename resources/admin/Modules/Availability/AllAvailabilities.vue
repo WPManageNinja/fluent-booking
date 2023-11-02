@@ -66,7 +66,7 @@
                                             <el-icon><StarFilled /></el-icon>
                                             {{ $t('Set as Default') }}
                                         </el-dropdown-item>
-                                        <el-dropdown-item @click="cloneAvailability(availability)">
+                                        <el-dropdown-item @click="cloneAvailability(availability.id)">
                                             <el-icon><CopyDocument /></el-icon>
                                             {{ $t('Duplicate') }}
                                         </el-dropdown-item>
@@ -211,9 +211,9 @@ export default {
                     this.saving = false;
                 });
         },
-        cloneAvailability(availability) {
+        cloneAvailability(availabilityId) {
             this.saving = true;
-            this.$post('availability/clone', availability)
+            this.$post('availability/' + availabilityId + '/clone')
                 .then(response => {
                     this.$handleSuccess(response);
                     this.gotoDetails(response.schedule);

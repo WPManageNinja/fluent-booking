@@ -28,6 +28,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
     $router->post('/{id}/integrations/general_integration_feed/disconnect', 'IntegrationSettingsController@disconnectGeneralIntegrationFeed')->int('id');
 
+    $router->post('/{id}/clone-slot/{event_id}', 'CalendarController@cloneCalendarSlot')->int('id')->int('event_id');
+
     $router->get('/{id}/slots/{event_id}', 'CalendarController@getSlot')->int('id')->int('event_id');
     $router->post('/{id}/slots/{event_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('event_id');
     $router->put('/{id}/slots/{event_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('event_id');
@@ -79,13 +81,13 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
 $router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {
     $router->get('/', 'AvailabilityController@index');
     $router->post('/', 'AvailabilityController@createSchedule');
-    $router->post('/clone', 'AvailabilityController@cloneSchedule');
 
     $router->get('/{schedule_id}', 'AvailabilityController@getSchedule')->int('schedule_id');
     $router->get('/{schedule_id}/usages', 'AvailabilityController@getAvailabilityUsages')->int('schedule_id');
     $router->post('/{schedule_id}', 'AvailabilityController@updateSchedule')->int('schedule_id');
     $router->post('/{schedule_id}/update-title', 'AvailabilityController@updateScheduleTitle')->int('schedule_id');
     $router->post('/{schedule_id}/update-status', 'AvailabilityController@updateDefaultStatus')->int('schedule_id');
+    $router->post('/{schedule_id}/clone', 'AvailabilityController@cloneSchedule')->int('schedule_id');
     $router->delete('/{schedule_id}', 'AvailabilityController@deleteSchedule')->int('schedule_id');
 
 });
