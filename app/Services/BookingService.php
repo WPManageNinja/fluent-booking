@@ -56,7 +56,7 @@ class BookingService
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
-        if ($calendarSlot->type == 'group') {
+        if ($calendarSlot->event_type == 'group') {
             $event = Booking::select('group_id')
                 ->where('event_id', $calendarSlot->id)
                 ->where('calendar_id', $calendarSlot->calendar_id)
@@ -65,6 +65,8 @@ class BookingService
 
             $bookingData['group_id'] = $event ? $event->group_id : null;
         }
+
+        $bookingData['event_type'] = $calendarSlot->event_type;
 
         $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
 
