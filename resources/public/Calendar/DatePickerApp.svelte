@@ -238,7 +238,7 @@
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
-        return `${getDateTimeStringI18(hours, 'mNumber')}:${getDateTimeStringI18(minutes, 'mNumber')} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
+        return `${hours}:${minutes} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
     }
 
 
@@ -320,10 +320,6 @@
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
-                                    <!--{convertTime12to24(util.dateTimeI18(util.dayjs(day.start).format('hh:mm A')), formatHours)}-->
-                                    <!--{util.dateTimeI18(util.dayjs(day.start).format('hh:mm'))}-->
-                                    <!--{convertTime12to24(util.dateTimeI18(day.start, 'HH:mm A'), formatHours)}-->
-                                    <!--{getDateTimeStringI18(convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours), 'mNumber')}-->
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
                                     <div class="fcal_spot_remaining">{day.remaining} {i18('spots left')}</div>

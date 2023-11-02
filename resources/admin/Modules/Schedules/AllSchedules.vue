@@ -178,11 +178,7 @@ export default {
                     return date;
                 }
 
-                const month = this.$t(this.toCurrentTimezone(date, 'MMMM'));
-                const day   = this.$t(this.toCurrentTimezone(date, 'DD'));
-                const year  = this.toCurrentTimezone(date, 'YYYY');
-
-                return month + ' ' + day +  ', ' + year;
+                return this.toCurrentTimezone(date, 'MMMM DD YYYY');
             }
         },
         formattedSchedules() {
