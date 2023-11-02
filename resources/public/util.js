@@ -7,14 +7,15 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function dateTimeI18(dateTime, format = 'dddd, MMM DD') {
-    return dayjs(dateTime).locale({
+    const date = dayjs(dateTime).locale({
         name: 'fluent_date_time',
         weekdays: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.weekdays),
         weekdaysShort: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.weekdaysShort),
         months: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.months),
-        monthsShort: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.monthsShort),
-        monthsNumber: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.monthsNumber),
+        monthsShort: Object.values(window.fluentCalendarPublicVars.i18.date_time_config.monthsShort)
     }).format(format);
+
+    return getDateTimeStringI18(date, 'mNumber');
 }
 
 export const util = {
@@ -90,6 +91,9 @@ export const i18 = function (str) {
 }
 
 export const getDateTimeStringI18 = function (str, type) {
+    if(!str) {
+        return str;
+    }
     const config = window.fluentCalendarPublicVars.i18.date_time_config;
     if (type == 'day') {
         return config.weekdays[str] || config.weekdaysShort[str] || str;
@@ -99,7 +103,14 @@ export const getDateTimeStringI18 = function (str, type) {
         return config.months[str] || config.monthsShort[str] || str;
     }
     if (type == 'mNumber') {
-        return config.monthsNumber[str] || str;
+        str = str.toString();
+        const numbers = config.numericSystem;
+        const numberArr = numbers.split('_');
+        const number = str.split('').map((s) => {
+            return numberArr[s] || s;
+        });
+
+        return number.join('');
     }
 
     return str;
