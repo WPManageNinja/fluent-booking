@@ -35,7 +35,7 @@ class LocationService
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Zoom Icon', 'fluent-booking-pro') . '" />';
                 $html .= '<span class="fcal_loc_text">' . __('In Person (Attendee Address)', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'custom') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Zoom Icon', 'fluent-booking-pro') . '" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/physical_location.svg" alt="' . __('Custom Icon', 'fluent-booking-pro') . '" />';
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 } else {

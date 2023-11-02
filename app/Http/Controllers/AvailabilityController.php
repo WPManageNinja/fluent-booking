@@ -113,7 +113,7 @@ class AvailabilityController extends Controller
         $isTitleExist = AvailabilityService::isTitleAlreadyExist($data['title'], $userId);
 
         if ($isTitleExist) {
-            $message = $data['title'] . __(' is already exist', 'fluent-booking-pro');
+            $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $data['title']);
             return $this->sendError([
                 'message' => $message,
             ], 422);
@@ -202,7 +202,7 @@ class AvailabilityController extends Controller
         $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $schedule->object_id, $schedule->key);
 
         if ($isTitleExist) {
-            $message = $title . ' ' . __('is already exist', 'fluent-booking-pro');
+            $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $title);
             return $this->sendError([
                 'message' => $message,
             ], 422);
