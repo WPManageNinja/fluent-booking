@@ -52,19 +52,14 @@ export default {
     },
     computed: {
         formattedTimeRange() {
-            const startHour = this.$t(this.toCurrentTimezone(this.booking.start_time, 'hh'));
-            const startMin  = this.$t(this.toCurrentTimezone(this.booking.start_time, 'mm'));
+            const formatStartDate = this.toCurrentTimezone(this.booking.start_time, 'hh:mma');
+            const formatEndDate   = this.toCurrentTimezone(this.booking.end_time, 'hh:mma');
 
-            const endHour = this.$t(this.toCurrentTimezone(this.booking.end_time, 'hh'));
-            const endMin  = this.$t(this.toCurrentTimezone(this.booking.end_time, 'mm'));
-
-            const startTime = startHour + ':' + startMin + this.$t(this.toCurrentTimezone(this.booking.start_time, 'a'));
-            const endTime   = endHour + ':' + endMin + this.$t(this.toCurrentTimezone(this.booking.end_time, 'a'));
+            const startTime = formatStartDate;
+            const endTime   = formatEndDate;
 
             if(this.period == 'latest_bookings') {
-                const day   = this.$t(this.toCurrentTimezone(this.booking.start_time, 'D'));
-                const month = this.toCurrentTimezone(this.booking.start_time, 'MMM').toLowerCase();
-                return `${day} ${this.$t(month)}, ${this.toCurrentTimezone(this.booking.start_time, 'YYYY')} <br /> ${startTime} - ${endTime}`;
+                return `${this.toCurrentTimezone(this.booking.start_time, 'D MMM, YYYY')} <br /> ${startTime} - ${endTime}`;
             }
 
             return `${startTime} - ${endTime}`;
