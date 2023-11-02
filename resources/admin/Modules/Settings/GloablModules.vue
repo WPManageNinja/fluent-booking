@@ -26,7 +26,7 @@
                         <div class="fcal_card_actions">
                             <template v-if="item.is_system == 'yes'">
                                 <el-button type="success" text v-if="item.is_active" :readonly="true">
-                                    Sysyem Enabled
+                                    System Enabled
                                 </el-button>
                                 <a v-else class="el-button el-button--primary" :href="item.install_url">Install
                                     {{ item.title }}</a>
