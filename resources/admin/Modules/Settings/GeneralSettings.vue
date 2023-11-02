@@ -6,7 +6,7 @@
                     <div class="left">
                         <div class="img-box">
                             <el-icon style="font-size: 30px;">
-                                <Operation />
+                                <Operation/>
                             </el-icon>
                         </div>
                         <div class="content">
@@ -21,12 +21,14 @@
                         <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Admin Email')">
-                                    <el-input v-model="administration.admin_email" :placeholder="$t('Admin Email')"></el-input>
+                                    <el-input v-model="administration.admin_email"
+                                              :placeholder="$t('Admin Email')"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Calendar start from')">
-                                    <el-select v-model="administration.start_day" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
+                                    <el-select v-model="administration.start_day" popper-class="fcal_select"
+                                               :placeholder="$t('Select')" placement="bottom">
                                         <el-option
                                             v-for="item in weekdays"
                                             :key="item.value"
@@ -37,7 +39,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Time Format')">
+                                <el-form-item :label="$t('Default Time Format')">
                                     <el-radio-group v-model="timeFormat">
                                         <el-radio label="12">{{ $t('12h') }}</el-radio>
                                         <el-radio label="24">{{ $t('24h') }}</el-radio>
@@ -45,21 +47,21 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-row>
+                        <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Summary Email')">
-                                <el-checkbox v-model="administration.summary_notification" true-label="yes"
-                                             false-label="no"> {{ $t('Enable Booking Summary Notification') }}
-                                </el-checkbox>
-                            </el-form-item>
+                                    <el-checkbox v-model="administration.summary_notification" true-label="yes"
+                                                 false-label="no"> {{ $t('Enable Booking Summary Notification') }}
+                                    </el-checkbox>
+                                </el-form-item>
                             </el-col>
-
                             <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
                                 <el-row :gutter="30">
                                     <el-col :sm="24" :md="12">
                                         <el-form-item :label="$t('How often to send summary email?')">
                                             <el-select v-model="administration.notification_frequency"
-                                                       :placeholder="$t('Select Frequency')" popper-class="fcal_select" placement="bottom">
+                                                       :placeholder="$t('Select Frequency')" popper-class="fcal_select"
+                                                       placement="bottom">
                                                 <el-option value="daily" :label="$t('Daily')"></el-option>
                                                 <el-option value="weekly" :label="$t('Weekly')"></el-option>
                                             </el-select>
@@ -68,7 +70,8 @@
                                     <el-col :sm="24" :md="12">
                                         <el-form-item v-if="administration.notification_frequency == 'weekly'"
                                                       :label="$t('In which day to send the email?')">
-                                            <el-select v-model="administration.notification_day" :placeholder="$t('Select Day')"
+                                            <el-select v-model="administration.notification_day"
+                                                       :placeholder="$t('Select Day')"
                                                        popper-class="fcal_select" placement="bottom">
                                                 <el-option value="mon" :label="$t('Monday')"></el-option>
                                                 <el-option value="tue" :label="$t('Tuesday')"></el-option>
@@ -81,6 +84,45 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="30">
+                            <el-col :sm="24" :md="8">
+                                <el-form-item label="Mark booking as cancelled automtically after">
+                                    <el-select v-model="administration.auto_cancel_timing">
+                                        <el-option value="5" label="5 Minutes"></el-option>
+                                        <el-option value="10" label="10 Minutes"></el-option>
+                                        <el-option value="20" label="20 Minutes"></el-option>
+                                        <el-option value="30" label="30 Minutes"></el-option>
+                                        <el-option value="40" label="40 Minutes"></el-option>
+                                        <el-option value="50" label="50 Minutes"></el-option>
+                                        <el-option value="60" label="60 Minutes"></el-option>
+                                        <el-option value="120" label="2 Hours"></el-option>
+                                        <el-option value="180" label="3 Hours"></el-option>
+                                        <el-option value="360" label="6 Hours"></el-option>
+                                        <el-option value="720" label="12 Hours"></el-option>
+                                    </el-select>
+                                    <p>if customer does not complete the payment for paid events.</p>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item label="Mark booking as completed automtically after">
+                                    <el-select v-model="administration.auto_complete_timing">
+                                        <el-option value="5" label="5 Minutes"></el-option>
+                                        <el-option value="10" label="10 Minutes"></el-option>
+                                        <el-option value="20" label="20 Minutes"></el-option>
+                                        <el-option value="30" label="30 Minutes"></el-option>
+                                        <el-option value="40" label="40 Minutes"></el-option>
+                                        <el-option value="50" label="50 Minutes"></el-option>
+                                        <el-option value="60" label="60 Minutes"></el-option>
+                                        <el-option value="120" label="2 Hours"></el-option>
+                                        <el-option value="180" label="3 Hours"></el-option>
+                                        <el-option value="360" label="6 Hours"></el-option>
+                                        <el-option value="720" label="12 Hours"></el-option>
+                                    </el-select>
+                                    <p>from the event end time</p>
+                                </el-form-item>
                             </el-col>
                         </el-row>
 
@@ -134,34 +176,34 @@ export default {
             emailingFields: {},
             administration: {},
             weekdays: [
-              {
-                value: 'mon',
-                label: 'Monday'
-              },
-              {
-                value: 'tue',
-                label: 'Tuesday'
-              },
-              {
-                value: 'wed',
-                label: 'Wednesday'
-              },
-              {
-                value: 'thu',
-                label: 'Thursday'
-              },
-              {
-                value: 'fri',
-                label: 'Friday'
-              },
-              {
-                value: 'sat',
-                label: 'Saturday'
-              },
-              {
-                value: 'sun',
-                label: 'Sunday'
-              }
+                {
+                    value: 'mon',
+                    label: 'Monday'
+                },
+                {
+                    value: 'tue',
+                    label: 'Tuesday'
+                },
+                {
+                    value: 'wed',
+                    label: 'Wednesday'
+                },
+                {
+                    value: 'thu',
+                    label: 'Thursday'
+                },
+                {
+                    value: 'fri',
+                    label: 'Friday'
+                },
+                {
+                    value: 'sat',
+                    label: 'Saturday'
+                },
+                {
+                    value: 'sun',
+                    label: 'Sunday'
+                }
             ],
             loading: false,
             saving: false,

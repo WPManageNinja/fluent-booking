@@ -161,7 +161,7 @@ class Stripe extends BasePaymentMethod
             'status'           => sanitize_text_field($status),
             'vendor_charge_id' => sanitize_text_field($intentId),
             'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
-            'card_last_4'       => sanitize_text_field($last_4),
+            'card_last_4'      => sanitize_text_field($last_4),
             'card_brand'       => sanitize_text_field($brand),
         ];
 
@@ -259,12 +259,16 @@ class Stripe extends BasePaymentMethod
 
         $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
         $sessionPayload = array(
-            'amount'   => intval($args['amount']),
-            'currency' => $currency,
-            'metadata' => [
-                'ref_id' => $args['client_reference_id'],
-                'name' => $booking->first_name . ' ' . $booking->last_name,
-                'booking_id' => $booking->id,
+            'amount'               => intval($args['amount']),
+            'currency'             => $currency,
+            'receipt_email'        => $booking->email,
+            'description'          => $booking->getMeetingTitle(),
+            'statement_descriptor' => substr($booking->calendar_event->title, 0, 22),
+            'metadata'             => [
+                'ref_id'      => $args['client_reference_id'],
+                'guest_name'  => trim($booking->first_name . ' ' . $booking->last_name),
+                'guest_email' => $booking->email,
+                'booking_id'  => $booking->id,
                 'booking_url' => $bookingUrl,
             ],
         );
@@ -299,9 +303,9 @@ class Stripe extends BasePaymentMethod
             'description'       => __('Invoice for Order', 'fluent-booking-pro') . ' #' . $args['client_reference_id'],
             'footer'            => '',
             'metadata'          => [
-                'ref_id' => $args['client_reference_id'],
-                'name' => $booking->first_name . ' ' . $booking->last_name,
-                'booking_id' => $booking->id,
+                'ref_id'      => $args['client_reference_id'],
+                'name'        => $booking->first_name . ' ' . $booking->last_name,
+                'booking_id'  => $booking->id,
                 'booking_url' => $bookingUrl,
             ],
             'rendering_options' => [],

@@ -463,7 +463,7 @@ class TransStrings
             '+Add more questions for invitees'                                                 => __('+Add more questions for invitees', 'fluent-booking-pro'),
             '+Add new option'                                                                  => __('+Add new option', 'fluent-booking-pro'),
             'Save'                                                                             => __('Save', 'fluent-booking-pro'),
-            'Time Format'                                                                      => __('Time Format', 'fluent-booking-pro'),
+            'Default Time Format'                                                                      => __('Default Time Format', 'fluent-booking-pro'),
             'Are you sure you want to delete this availability?'                               => __('Are you sure you want to delete this availability?', 'fluent-booking-pro'),
             'Delete Availability'                                                              => __('Delete Availability', 'fluent-booking-pro'),
             'Invalid Vue Element'                                                              => __('Invalid Vue Element', 'fluent-booking-pro'),
