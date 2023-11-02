@@ -73,8 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <SourceDetailsSection v-if="scope.row.source != 'web'" :booking="scope.row"/>
-                            <PaymentLogs v-if="scope.row.payment_order" :booking="scope.row" />
+                            <SourceDetailsSection :booking="scope.row"/>
                         </div>
                     </template>
                 </el-table-column>
@@ -125,13 +124,11 @@
 import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import SourceDetailsSection from './SourceDetailsSection';
-import PaymentLogs from "./PaymentLogs";
 export default {
     name: "GroupBookingGuests",
     props: ['group_id'],
     components: {
         SourceDetailsSection,
-        PaymentLogs,
         Pagination,
         MoreFilled,
         Close,
