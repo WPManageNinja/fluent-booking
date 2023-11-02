@@ -31,10 +31,10 @@
                     <el-form-item label="Checkout Method">
                         <el-radio-group v-model="paymentSettings.driver">
                             <el-radio :disabled="!paymentConfig.native_enabled" label="native">
-                                {{ $t('Use Native Payment Mehods by FluentBooking') }}
+                                {{ $t('Use Native Payment Methods by FluentBooking') }}
                             </el-radio>
                             <el-radio v-if="paymentConfig.has_woo" :disabled="!paymentConfig.woo_enabled" label="woo">
-                                {{ $t('Use Woocommerce Checkout') }}
+                                {{ $t('Use WooCommerce Checkout') }}
                             </el-radio>
                         </el-radio-group>
                     </el-form-item>
