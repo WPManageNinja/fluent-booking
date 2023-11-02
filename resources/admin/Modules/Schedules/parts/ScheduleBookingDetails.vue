@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <div v-loading="loading_sidebar" v-if="showing_booking">
+                <div v-loading="loading_sidebar" v-if="showing_booking && showing_booking.event_type == 'single'">
                     <template v-if="main_body_contents && main_body_contents.length">
                         <div v-for="bodyMeta in main_body_contents" :key="bodyMeta.id"
                              class="fcal_schedule_event_infos_body">
@@ -210,7 +210,6 @@ import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
-import SourceDetailsSection from './SourceDetailsSection';
 import PaymentLogs from "./PaymentLogs";
 
 export default {
@@ -223,7 +222,6 @@ export default {
         SingleInviteeInfo,
         GroupBookingGuests,
         EditableBookingData,
-        SourceDetailsSection,
         Back,
         MoreFilled,
         Refresh,
@@ -271,33 +269,13 @@ export default {
             return this.showing_booking.event_type == 'group';
         },
         meetingDetails() {
-            const day   = this.toCurrentTimezone(this.showing_booking.start_time, 'DD');
-            const month = this.toCurrentTimezone(this.showing_booking.start_time, 'MMM').toLowerCase();
-            const hour  = this.toCurrentTimezone(this.showing_booking.start_time, 'hh').toLowerCase();
-            const min   = this.toCurrentTimezone(this.showing_booking.start_time, 'mm').toLowerCase();
-            const a     = this.toCurrentTimezone(this.showing_booking.start_time, 'a').toLowerCase();
-
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
-            const startTime = this.$t(day) + ' ' + this.$t(month) + ' ' + this.toCurrentTimezone(this.showing_booking.start_time, 'YYYY') +', '+ this.$t(hour) + ':' + this.$t(min) + this.$t(a);
+            const startTime = this.toCurrentTimezone(this.showing_booking.start_time, 'DD MMM, YYYY hh:mma');
             return `${this.$t(this.showing_booking.slot_minutes)} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
         },
         meetingTime() {
-            const startMonth = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'MMMM'));
-            const startDay   = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'D'));
-            const startYear  = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'YYYY'));
-            const startHour  = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'hh'));
-            const startMin   = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'mm'));
-            const startA     = this.$t(this.toCurrentTimezone(this.showing_booking.start_time, 'a'));
-
-            const endMonth = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'MMMM'));
-            const endDay   = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'D'));
-            const endYear  = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'YYYY'));
-            const endHour  = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'hh'));
-            const endMin   = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'mm'));
-            const endA     = this.$t(this.toCurrentTimezone(this.showing_booking.end_time, 'a'));
-
-            const startTime = startMonth + ' ' + startDay + ', ' + startYear + ' ' + startHour + ':' + startMin + startA;
-            const endTime   = endMonth + ' ' + endDay + ', ' + endYear + ' ' + endHour + ':' + endMin + endA;
+            const startTime = this.toCurrentTimezone(this.showing_booking.start_time, 'MMMM D, YYYY hh:mma');
+            const endTime = this.toCurrentTimezone(this.showing_booking.end_time, 'MMMM D, YYYY hh:mma');
             return `${startTime} - ${endTime}`;
         },
     },
@@ -395,8 +373,6 @@ export default {
     mounted() {
         if (!this.booking) {
             this.fetchBooking();
-        } else {
-            this.getAdditionalData();
         }
         this.getAdditionalData();
     }
