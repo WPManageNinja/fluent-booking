@@ -685,7 +685,22 @@ class TransStrings
             'Use WooCommerce Checkout'                                                         => __('Use WooCommerce Checkout', 'fluent-booking-pro'),
             'Use Native Payment Methods by FluentBooking'                                      => __('Use Native Payment Methods by FluentBooking', 'fluent-booking-pro'),
             'Currently FluentBooking has integration with FluentCRM.After install'             => __('Currently FluentBooking has integration with FluentCRM.After install', 'fluent-booking-pro'),
-            'To'                                                                               => __('To', 'fluent-booking-pro')
+            'To'                                                                               => __('To', 'fluent-booking-pro'),
+            '5 Minutes'                                                                        => __('5 Minutes', 'fluent-booking-pro'),
+            '10 Minutes'                                                                       => __('10 Minutes', 'fluent-booking-pro'),
+            '20 Minutes'                                                                       => __('20 Minutes', 'fluent-booking-pro'),
+            '30 Minutes'                                                                       => __('30 Minutes', 'fluent-booking-pro'),
+            '40 Minutes'                                                                       => __('40 Minutes', 'fluent-booking-pro'),
+            '50 Minutes'                                                                       => __('50 Minutes', 'fluent-booking-pro'),
+            '60 Minutes'                                                                       => __('60 Minutes', 'fluent-booking-pro'),
+            '2 Hours'                                                                          => __('2 Hours', 'fluent-booking-pro'),
+            '3 Hours'                                                                          => __('3 Hours', 'fluent-booking-pro'),
+            '6 Hours'                                                                          => __('6 Hours', 'fluent-booking-pro'),
+            '12 Hours'                                                                         => __('12 Hours', 'fluent-booking-pro'),
+            'if customer does not complete the payment for paid events.'                       => __('if customer does not complete the payment for paid events.', 'fluent-booking-pro'),
+            'from the event end time'                                                          => __('from the event end time', 'fluent-booking-pro'),
+            'Mark booking as completed automatically after'                                    => __('Mark booking as completed automatically after', 'fluent-booking-pro'),
+            'Mark booking as cancelled automatically after'                                    => __('Mark booking as cancelled automatically after', 'fluent-booking-pro')
         );
 
     }
