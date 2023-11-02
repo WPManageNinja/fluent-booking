@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <div v-loading="loading_sidebar" v-if="showing_booking">
+                <div v-loading="loading_sidebar" v-if="showing_booking && showing_booking.event_type == 'single'">
                     <template v-if="main_body_contents && main_body_contents.length">
                         <div v-for="bodyMeta in main_body_contents" :key="bodyMeta.id"
                              class="fcal_schedule_event_infos_body">
@@ -210,7 +210,6 @@ import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
-import SourceDetailsSection from './SourceDetailsSection';
 import PaymentLogs from "./PaymentLogs";
 
 export default {
@@ -223,7 +222,6 @@ export default {
         SingleInviteeInfo,
         GroupBookingGuests,
         EditableBookingData,
-        SourceDetailsSection,
         Back,
         MoreFilled,
         Refresh,
@@ -375,8 +373,6 @@ export default {
     mounted() {
         if (!this.booking) {
             this.fetchBooking();
-        } else {
-            this.getAdditionalData();
         }
         this.getAdditionalData();
     }
