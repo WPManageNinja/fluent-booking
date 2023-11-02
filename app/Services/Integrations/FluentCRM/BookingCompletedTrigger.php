@@ -4,17 +4,17 @@ namespace FluentBooking\App\Services\Integrations\FluentCRM;
 
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\Calendar;
-use FluentBooking\App\Services\Helper;
 use FluentCrm\App\Services\Funnel\FunnelHelper;
 use FluentCrm\App\Services\Funnel\FunnelProcessor;
 use FluentBooking\App\Services\PermissionManager;
 use FluentCrm\App\Services\Funnel\BaseTrigger;
+use FluentBooking\App\Services\Helper;
 
-class CancelBookingTrigger extends BaseTrigger
+class BookingCompletedTrigger extends BaseTrigger
 {
     public function __construct()
     {
-        $this->triggerName = 'fluent_booking/booking_schedule_cancelled';
+        $this->triggerName = 'fluent_booking/after_booking_completed';
         $this->actionArgNum = 1;
         $this->priority = 20;
         parent::__construct();
@@ -31,8 +31,8 @@ class CancelBookingTrigger extends BaseTrigger
     {
         return [
             'category'    => __('Booking', 'fluent-booking-pro'),
-            'label'       => __('Booking Cancelled', 'fluent-booking-pro'),
-            'description' => __('This Funnel will be initiated when a booking is cancelled', 'fluent-booking-pro'),
+            'label'       => __('Booking Completed', 'fluent-booking-pro'),
+            'description' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro')
         ];
     }
 
@@ -66,17 +66,17 @@ class CancelBookingTrigger extends BaseTrigger
     public function getSettingsFields($funnel)
     {
         return [
-            'title'     => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
-            'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking-pro'),
-            'fields'    => [
-                'event_id'            => [
+            'title'       => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
+            'description' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro'),
+            'fields'      => [
+                'event_id'                 => [
                     'type'        => 'grouped-select',
                     'label'       => __('Booking Calendar', 'fluent-booking-pro'),
                     'placeholder' => __('Select Calendar', 'fluent-booking-pro'),
                     'is_multiple' => false,
                     'options'     => $this->getCalendarOptions()
                 ],
-                'subscription_status' => [
+                'subscription_status'      => [
                     'type'        => 'option_selectors',
                     'option_key'  => 'editable_statuses',
                     'is_multiple' => false,
@@ -84,12 +84,12 @@ class CancelBookingTrigger extends BaseTrigger
                     'placeholder' => __('Select Status', 'fluent-booking-pro')
                 ],
                 'subscription_status_info' => [
-                    'type' => 'html',
-                    'info' => '<b>'.__('An Automated double-optin email will be sent for new subscribers', 'fluent-booking-pro').'</b>',
-                    'dependency'  => [
-                        'depends_on'    => 'subscription_status',
-                        'operator' => '=',
-                        'value'    => 'pending'
+                    'type'       => 'html',
+                    'info'       => '<b>' . __('An Automated double-optin email will be sent for new subscribers', 'fluent-booking-pro') . '</b>',
+                    'dependency' => [
+                        'depends_on' => 'subscription_status',
+                        'operator'   => '=',
+                        'value'      => 'pending'
                     ]
                 ]
             ]
