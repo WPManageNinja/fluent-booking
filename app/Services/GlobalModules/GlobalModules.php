@@ -37,7 +37,7 @@ class GlobalModules
                 'logo'           => $assetUrl . 'images/woo.svg',
                 'name'           => 'woo',
                 'title'          => __('WooCommerce', 'fluent-booking-pro'),
-                'description'    => __('Accept payment on your booking booking appointment with WooCommerce Checkout', 'fluent-booking-pro'),
+                'description'    => __('Accept payment on your booking appointment with WooCommerce Checkout', 'fluent-booking-pro'),
                 'is_unavailable' => !defined('WC_PLUGIN_FILE'),
                 'is_system'      => 'no',
                 'is_active'      => Arr::get($settings, 'woocommerce') == 'yes',
