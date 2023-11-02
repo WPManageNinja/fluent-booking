@@ -75,7 +75,7 @@ class DateTimeHelper
     {
         $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
 
-        if($timezone != 'UTC') {
+        if ($timezone != 'UTC') {
             $dateTime->setTimezone(new \DateTimeZone($timezone));
         }
 
@@ -84,7 +84,7 @@ class DateTimeHelper
 
     public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s')
     {
-        if($fromTimeZone == $toTimeZone) {
+        if ($fromTimeZone == $toTimeZone) {
             return date($format, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
@@ -112,5 +112,19 @@ class DateTimeHelper
         $dateTime->setTimezone(new \DateTimeZone($timezone));
         $date = $dateTime->format('Y-m-d H:i:s');
         return strtotime($date);
+    }
+
+    public static function formatToLocale($dateTime, $for = 'date')
+    {
+        // $for can be date | date_time | time
+        $dateFormat = get_option('date_format');
+
+        if ($for == 'date_time') {
+            $dateFormat .= ' ' . get_option('time_format');
+        } elseif ($for == 'time') {
+            $dateFormat = get_option('time_format');
+        }
+
+        return date_i18n($dateFormat, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 }
