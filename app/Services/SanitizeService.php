@@ -8,7 +8,7 @@ class SanitizeService
 {
     public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = true)
     {
-        foreach ($schedules as &$schedule) {
+        foreach ($schedules as $day => &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
             if (!$schedule['enabled'] || empty($schedule['slots'])) {
                 $schedule['slots'] = [];
