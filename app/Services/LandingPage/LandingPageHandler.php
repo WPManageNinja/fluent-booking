@@ -352,6 +352,7 @@ class LandingPageHandler
             ];
 
             $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
+            $vars['i18']['Continue to Payments'] = __('Confirm Reschedule', 'fluent-booking-pro');
 
             return $vars;
         });
