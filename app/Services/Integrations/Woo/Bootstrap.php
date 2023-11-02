@@ -108,8 +108,8 @@ class Bootstrap
 
         add_action('woocommerce_thankyou', function ($orderId) {
             $order = wc_get_order($orderId);
-            $fcalBookingId = $order->get_meta('__fcal_booking_id');
-            if (!$fcalBookingId) {
+            $fcalBookingId = (int)$order->get_meta('__fcal_booking_id');
+            if (!$fcalBookingId || !$this->isEnabled()) {
                 return;
             }
 
@@ -126,10 +126,11 @@ class Bootstrap
                             <b><?php _e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getMeetingTitle(); ?>
                         </li>
                         <li>
-                            <b><?php _e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getShortBookingDateTime($booking->person_time_zone); ?> (<?php echo $booking->person_time_zone; ?>)
+                            <b><?php _e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getShortBookingDateTime($booking->person_time_zone); ?>
+                            (<?php echo $booking->person_time_zone; ?>)
                         </li>
                         <li>
-                            <b><?php _e('Status:', 'fluent-booking-pro'); ?> <?php echo ucfirst($booking->status); ?></b>
+                            <b><?php _e('Status:', 'fluent-booking-pro'); ?><?php echo ucfirst($booking->status); ?></b>
                         </li>
                         <li>
                             <a href="<?php echo $booking->getConfirmationUrl(); ?>"><?php _e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>
