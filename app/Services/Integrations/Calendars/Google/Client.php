@@ -118,6 +118,10 @@ class Client
                 continue;
             }
 
+            if(empty($item['status']) || $item['status'] == 'cancelled') {
+                continue;
+            }
+
             $recurrence = Arr::get($item, 'recurrence.0');
 
             if(!empty($item['start']['date'])) {
@@ -126,6 +130,10 @@ class Client
                 } else {
                     $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
                 }
+            }
+
+            if(empty($item['start']['dateTime'])) {
+                continue;
             }
 
             if(!empty($item['end']['date'])) {

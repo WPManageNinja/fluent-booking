@@ -301,28 +301,6 @@ class SchedulesController extends Controller
         ];
     }
 
-
-    public function getCrmProfile(Request $request)
-    {
-        $email = $request->get('crmProfile');
-
-        if (!defined('FLUENTCRM')) {
-            return '';
-        }
-
-        // Attempt to retrieve the CRM profile HTML for the provided email address.
-        $profileHtml = fluentcrm_get_crm_profile_html($email, false);
-
-        if (!$profileHtml) {
-            return '';
-        }
-
-        return $this->sendSuccess([
-            'crm_profile' => $profileHtml
-        ]);
-    }
-
-
     private function formatBooking(&$booking)
     {
         if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > 3600) {
@@ -344,7 +322,7 @@ class SchedulesController extends Controller
         } else {
             $booking->author = $booking->calendar_event->getAuthorProfile(false);
         }
-        
+
         if ($booking->event_type == 'group') {
             $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
         }
