@@ -2,6 +2,9 @@
 
 namespace FluentBooking\App\Services;
 
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -124,11 +127,12 @@ class EditorShortCodeParser
             return $booking->hash;
         }
 
-        if (property_exists($booking, $key)) {
-            return $booking->{$key};
-        }
+        $fillables = (new Booking())->getFillable();
+        $fillables[] = 'id';
+        $fillables[] = 'created_at';
+        $fillables[] = 'updated_ar';
 
-        if($key == 'phone') {
+        if (in_array($key, $fillables)) {
             return $booking->{$key};
         }
 
@@ -202,9 +206,12 @@ class EditorShortCodeParser
             return '';
         }
 
-        if (property_exists($bookingEvent, $key)) {
+        $fillables = (new CalendarSlot())->getFillable();
+
+        if (in_array($key, $fillables)) {
             return $bookingEvent->{$key};
         }
+
         return '';
     }
 
@@ -216,7 +223,9 @@ class EditorShortCodeParser
             return '';
         }
 
-        if (property_exists($calendar, $key)) {
+        $fillables = (new Calendar())->getFillable();
+
+        if (in_array($key, $fillables)) {
             return $calendar->{$key};
         }
 
@@ -246,8 +255,7 @@ class EditorShortCodeParser
         $order = static::$store['payment_order'];
 
         if ($key == 'payment_total') {
-            $isZeroDecimal = CurrenciesHelper::isZeroDecimal($order->currency);
-            if ($isZeroDecimal) {
+            if (CurrenciesHelper::isZeroDecimal($order->currency)) {
                 return $order->total_amount;
             } else {
                 return $order->total_amount / 100;
@@ -262,10 +270,6 @@ class EditorShortCodeParser
             return $order->status;
         }
 
-        if ($key == 'payment_method') {
-            return $order->payment_method;
-        }
-
         if ($key == 'payment_currency') {
             return $order->currency;
         }
@@ -274,11 +278,9 @@ class EditorShortCodeParser
             return $order->created_at;
         }
 
-        if ($key == 'receipt_html') {
-            return '';
-        }
+        $fillables = (new \FluentBooking\App\Models\Order())->getFillable();
 
-        if (property_exists($order, $key)) {
+        if (in_array($key, $fillables)) {
             return $order->{$key};
         }
 

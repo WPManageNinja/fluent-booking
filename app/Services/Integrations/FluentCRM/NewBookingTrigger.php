@@ -31,9 +31,8 @@ class NewBookingTrigger extends BaseTrigger
     {
         return [
             'category'    => __('Booking', 'fluent-booking-pro'),
-            'label'       => __('New Booking (Fluent Booking)', 'fluent-booking-pro'),
-            'description' => __('This Funnel will be initiated when a new booking has been confirmed', 'fluent-booking-pro'),
-            'icon'        => 'fc-icon-fluentforms',
+            'label'       => __('New Booking', 'fluent-booking-pro'),
+            'description' => __('This Funnel will be initiated when a new booking has been confirmed', 'fluent-booking-pro')
         ];
     }
 
@@ -54,23 +53,23 @@ class NewBookingTrigger extends BaseTrigger
     public function getConditionFields($funnel)
     {
         return [
-             'run_only_one' => [
-                 'type'        => 'yes_no_check',
-                 'label'       => '',
-                 'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking-pro'),
-                 'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking-pro'),
-                 'options'     => FunnelHelper::getUpdateOptions()
-             ],
+            'run_only_one' => [
+                'type'        => 'yes_no_check',
+                'label'       => '',
+                'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking-pro'),
+                'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking-pro'),
+                'options'     => FunnelHelper::getUpdateOptions()
+            ],
         ];
     }
 
-     public function getSettingsFields($funnel)
-     {
-         return [
-             'title'     => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
-             'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking-pro'),
-             'fields'    => [
-                'event_id'  => [
+    public function getSettingsFields($funnel)
+    {
+        return [
+            'title'     => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
+            'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking-pro'),
+            'fields'    => [
+                'event_id'            => [
                     'type'        => 'grouped-select',
                     'label'       => __('Booking Calendar', 'fluent-booking-pro'),
                     'placeholder' => __('Select Calendar', 'fluent-booking-pro'),
@@ -83,10 +82,19 @@ class NewBookingTrigger extends BaseTrigger
                     'is_multiple' => false,
                     'label'       => __('Subscription Status', 'fluent-booking-pro'),
                     'placeholder' => __('Select Status', 'fluent-booking-pro')
+                ],
+                'subscription_status_info' => [
+                    'type' => 'html',
+                    'info' => '<b>'.__('An Automated double-optin email will be sent for new subscribers', 'fluent-booking-pro').'</b>',
+                    'dependency'  => [
+                        'depends_on'    => 'subscription_status',
+                        'operator' => '=',
+                        'value'    => 'pending'
+                    ]
                 ]
-             ]
-         ];
-     }
+            ]
+        ];
+    }
 
     public function handle($funnel, $originalArgs)
     {
@@ -95,24 +103,30 @@ class NewBookingTrigger extends BaseTrigger
         $willProcess = $this->isProcessable($funnel, $booking);
 
         $willProcess = apply_filters('fluentcrm_funnel_will_process_' . $this->triggerName, $willProcess, $funnel, $originalArgs);
-        
+
         if (!$willProcess) {
             return;
         }
 
-        $subscriberData = [
-            'email'  => $booking->email,
-            'status' => Arr::get($funnel, 'settings.subscription_status'),
-        ];
+        $subscriberData = array_filter([
+            'first_name' => $booking->first_name,
+            'last_name'  => $booking->last_name,
+            'email'      => $booking->email,
+            'phone'      => $booking->phone,
+            'user_id'    => $booking->user_id,
+            'timezone'   => $booking->person_time_zone,
+            'status'     => Arr::get($funnel->settings, 'subscription_status'),
+        ]);
 
         (new FunnelProcessor())->startFunnelSequence($funnel, $subscriberData, [
-            'source_trigger_name' => $this->triggerName
+            'source_trigger_name' => $this->triggerName,
+            'source_ref_id'       => $booking->id
         ]);
     }
 
     private function isProcessable($funnel, $booking)
     {
-        $slotId = Arr::get($funnel, 'settings.event_id');
+        $slotId = Arr::get($funnel->settings, 'event_id');
 
         if ($slotId != $booking->event_id) {
             return false;
@@ -122,8 +136,8 @@ class NewBookingTrigger extends BaseTrigger
 
         if ($subscriber && FunnelHelper::ifAlreadyInFunnel($funnel->id, $subscriber->id)) {
 
-            $runMultiple = Arr::get($funnel, 'conditions.run_only_one') == 'no';
-            
+            $runMultiple = Arr::get($funnel->conditions, 'run_only_one') == 'no';
+
             if ($runMultiple) {
                 FunnelHelper::removeSubscribersFromFunnel($funnel->id, [$subscriber->id]);
             }
