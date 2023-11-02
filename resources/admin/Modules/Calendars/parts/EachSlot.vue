@@ -17,6 +17,12 @@
                                     {{ $t('Disable') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>{{ $t('Enable this event') }}</el-dropdown-item>
+                                <el-dropdown-item command="clone">
+                                    <el-icon>
+                                        <CopyDocument/>
+                                    </el-icon>
+                                    {{ $t('Clone') }}
+                                </el-dropdown-item>
                                 <el-dropdown-item command="delete">
                                     <el-icon>
                                         <Delete/>
@@ -70,8 +76,8 @@
             </div>
             <div v-else>
                 <el-button
-                    v-loading="working"
-                    :disabled="working"
+                    v-loading="updating"
+                    :disabled="updating"
                     @click="updateStatus('active')"
                     class="fcal_primary_btn fcal_turn_on_btn">
                     {{ $t('Turn On') }}
@@ -125,7 +131,7 @@ export default {
     },
     data() {
         return {
-            working: false,
+            updating: false,
             isCopied: false,
             openShare: false,
             shareSlot: null
@@ -166,7 +172,7 @@ export default {
             }, 5000);
         },
         updateStatus(newStatus) {
-            this.working = true;
+            this.updating = true;
             this.$put('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id, {
                 status: newStatus
             })
@@ -178,8 +184,29 @@ export default {
                     this.$handleError(errors);
                 })
                 .finally(() => {
-                    this.working = false;
+                    this.updating = false;
                 });
+        },
+        cloneEvent() {
+            this.updating = true;
+            this.$post('calendars/' + this.slot.calendar_id + '/clone-slot/' + this.slot.id)
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.goToEvent(response.slot);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.updating = false;
+                });
+        },
+        goToEvent(slot) {
+            this.$router.push({ 
+                name: 'slot_settings', 
+                params: {calendar_id: slot.calendar_id, event_id: slot.id},
+                query: {step: 'basic-info' }
+            })
         },
         handleCommand(command) {
             if (command == 'enable') {
@@ -208,6 +235,9 @@ export default {
                             });
                     })
                 return;
+            }
+            if (command == 'clone') {
+                this.cloneEvent();
             }
         }
     }

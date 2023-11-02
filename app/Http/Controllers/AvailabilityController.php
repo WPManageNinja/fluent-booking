@@ -82,9 +82,9 @@ class AvailabilityController extends Controller
 
         $formattedSchedule = AvailabilityService::getFormattedSchedule($schedule);
 
-        return $this->sendSuccess([
+        return [
             'schedule' => $formattedSchedule,
-        ]);
+        ];
     }
 
     public function getAvailabilityUsages(Request $request, $scheduleId)
@@ -95,9 +95,9 @@ class AvailabilityController extends Controller
             ->latest()
             ->paginate();
 
-        return $this->sendSuccess([
+        return [
             'usages' => $availabilityUsages
-        ]);
+        ];
     }
 
     public function createSchedule(Request $request)
@@ -139,39 +139,30 @@ class AvailabilityController extends Controller
 
         do_action('fluent_booking/availability_schedule_created', $createdSchedule);
 
-        return $this->sendSuccess([
+        return [
             'schedule' => $createdSchedule,
             'message'  => __('Schedule has been created successfully', 'fluent-booking-pro'),
-        ]);
+        ];
     }
 
-    public function cloneSchedule(Request $request)
+    public function cloneSchedule(Request $request, $scheduleId)
     {
-        $userId = get_current_user_id();
+        $originalSchedule = Availability::findOrFail($scheduleId);
 
-        $data = $request->all();
+        $clonedSchedule = $originalSchedule->replicate();
 
-        $timezone       = Arr::get($data, 'settings.timezone');
-        $weeklySchedule = Arr::get($data, 'settings.weekly_schedules');
-        $dateOverrides  = Arr::get($data, 'settings.date_overrides');
+        $clonedSchedule->object_id = get_current_user_id();
 
-        if (!$timezone) {
-            $calendar = Calendar::where('user_id', $userId)->first();
-            if ($calendar) {
-                $timezone = $calendar->author_timezone;
-            }
-        }
+        $clonedSchedule->key = $clonedSchedule->key . ' (Clone)';
 
-        $scheduleData = AvailabilityService::createScheduleSchema($userId, $data['title'] . ' (Copy)', false, $timezone, 'UTC', $weeklySchedule, $dateOverrides);
+        $clonedSchedule->save();
 
-        $createdSchedule = Availability::create($scheduleData);
+        do_action('fluent_booking/availability_schedule_cloned', $clonedSchedule);
 
-        do_action('fluent_booking/availability_schedule_created', $createdSchedule);
-
-        return $this->sendSuccess([
-            'schedule' => $createdSchedule,
+        return [
+            'schedule' => $clonedSchedule,
             'message'  => __('Schedule has been cloned successfully', 'fluent-booking-pro'),
-        ]);
+        ];
     }
 
     public function updateSchedule(Request $request, $scheduleId)
@@ -196,10 +187,10 @@ class AvailabilityController extends Controller
 
         do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
 
-        return $this->sendSuccess([
+        return [
             'message'  => __('Schedule has been updated successfully', 'fluent-booking-pro'),
             'schedule' => $schedule
-        ]);
+        ];
     }
 
     public function updateScheduleTitle(Request $request, $scheduleId)
@@ -220,10 +211,10 @@ class AvailabilityController extends Controller
         $schedule->key = $title;
         $schedule->save();
 
-        return $this->sendSuccess([
+        return [
             'message' => __('Schedule title has been updated successfully', 'fluent-booking-pro'),
             'title'   => $schedule->key
-        ]);
+        ];
     }
 
     public function updateDefaultStatus(Request $request, $scheduleId)
@@ -242,9 +233,9 @@ class AvailabilityController extends Controller
 
         AvailabilityService::updateOtherDefaultStatus($schedule, $scheduleId);
 
-        return $this->sendSuccess([
+        return [
             'message' => __('Status has been updated successfully', 'fluent-booking-pro')
-        ]);
+        ];
     }
 
     public function deleteSchedule(Request $request, $scheduleId)
@@ -269,8 +260,8 @@ class AvailabilityController extends Controller
 
         $schedule->delete();
 
-        return $this->sendSuccess([
+        return [
             'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
-        ]);
+        ];
     }
 }
