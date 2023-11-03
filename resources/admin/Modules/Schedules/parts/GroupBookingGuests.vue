@@ -35,8 +35,8 @@
                 stripe
                 :data="attendees"
                 :empty-text="$t('No Host Found')"
+                @expand-change="handleExpand"
             >
-
                 <el-table-column type="expand">
                     <template #default="scope">
                         <div class="fcal_group_booking_guests_wrap">
@@ -73,7 +73,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <SourceDetailsSection :booking="scope.row"/>
+                            <div v-if="sidebar_loading"><el-skeleton :rows="5" :animated="true" /></div>
+                            <div v-else-if="bookingId == scope.row.id">
+                                <div class="fcal_schedule_event_infos">
+                                    <div v-if="main_body_contents && main_body_contents.length">
+                                        <div v-for="bodyMeta in main_body_contents" :key="bodyMeta.id" class="fcal_schedule_event_infos_body">
+                                            <div class="fcal_schedule_details_header">
+                                                <h1 class="fcal_header_title">
+                                                    {{ bodyMeta.title }}
+                                                </h1>
+                                            </div>
+                                            <div>
+                                                <div v-html="bodyMeta.content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <PaymentLogs v-if="payment_order" :payment_order="payment_order" :booking="scope.row" />
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -123,12 +140,13 @@
 <script>
 import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
-import SourceDetailsSection from './SourceDetailsSection';
+import PaymentLogs from './PaymentLogs';
 export default {
     name: "GroupBookingGuests",
     props: ['group_id'],
+    emits: ['updateAdditionalInfo'],
     components: {
-        SourceDetailsSection,
+        PaymentLogs,
         Pagination,
         MoreFilled,
         Close,
@@ -137,15 +155,19 @@ export default {
     },
     data() {
         return {
+            bookingId: null,
             attendees: [],
             loading: false,
+            sidebar_loading: false,
             app_loaded: false,
             pagination: {
                 total: 0,
                 current_page: 1,
                 per_page: 20
             },
-            search: ''
+            search: '',
+            payment_order: null,
+            main_body_contents: []
         }
     },
     methods: {
@@ -168,6 +190,19 @@ export default {
                     this.app_loaded = true;
                 });
         },
+        getAdditionalData(bookingId) {
+            this.sidebar_loading = true;
+            this.$get(`schedules/${bookingId}/meta-info`)
+                .then(response => {
+                    this.updateAdditionalData(response);
+                })
+                .catch((errors) => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.sidebar_loading = false;
+                });
+        },
         exportHosts() {
             location.href = window.ajaxurl + '?' + jQuery.param({
                 action: 'fluent_booking_export_hosts',
@@ -176,6 +211,17 @@ export default {
         },
         bookedAtHandler(date) {
             return this.toCurrentTimezone(date, 'DD MMM YYYY, hh:mma')
+        },
+        handleExpand(row, expandedRows) {
+            if (expandedRows.includes(row)) {
+                this.bookingId = row.id;
+                this.getAdditionalData(row.id);
+            }
+        },
+        updateAdditionalData(booking) {
+            this.payment_order = booking.payment_order;
+            this.main_body_contents = booking.main_body_contents;
+            this.$emit('updateAdditionalInfo', booking.activities, booking.sidebar_contents)
         }
     },
     mounted() {
