@@ -18,7 +18,9 @@
             <el-row class="items-center" v-for="(logic, key) in items" :key="key" :gutter="12">
                 <el-col :md="8">
                     <div class="mb-2">
-                        <el-select v-model="items[key].field" style="width: 100%" @change="items[key].value = ''">
+                        <el-select v-model="items[key].field" style="width: 100%" @change="items[key].value = ''"
+                                   :no-match-text="$t('No Data match')"
+                                   :no-data-text="$t('No Data')">
                             <el-option 
                                 v-for="(field, key) in fields" :key="key"
                                 :label="field.label" :value="key"
@@ -29,7 +31,9 @@
 
                 <el-col :md="5">
                     <div class="mb-2">
-                        <el-select v-model="items[key].operator">
+                        <el-select v-model="items[key].operator"
+                                   :no-match-text="$t('No Data match')"
+                                   :no-data-text="$t('No Data')">
                             <el-option-group :label="$t('General Operators')">
                                 <el-option value="=" :label="$t('equal')"></el-option>
                                 <el-option value="!=" :label="$t('not equal')"></el-option>
@@ -61,7 +65,9 @@
                         </template>
                         <template v-else>
                             <el-select v-if="fields[logic.field] && fields[logic.field].options && Object.keys(fields[logic.field].options).length"
-                                    v-model="items[key].value" style="width: 100%">
+                                    v-model="items[key].value" style="width: 100%"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')">
                                 <el-option v-for="(label, value) in fields[logic.field].options" :key="value"
                                         :label="label" :value="value"
                                 ></el-option>

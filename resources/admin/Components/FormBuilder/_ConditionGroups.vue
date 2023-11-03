@@ -16,7 +16,9 @@
                     <tr v-for="(condition, conditionIndex) in group.conditions" :key="conditionIndex">
                         <td>
                             <el-select @change="condition.operator = '='; condition.data_value = ''" clearable
-                                       :placeholder="$t('Select')" size="small" v-model="condition.data_key">
+                                       :placeholder="$t('Select')" size="small" v-model="condition.data_key"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')">
                                 <el-option-group
                                     v-for="(group, groupKey) in field.condition_properties"
                                     :key="groupKey"
@@ -32,7 +34,9 @@
                         </td>
                         <td>
                             <el-select v-if="condition.data_key" clearable :placeholder="$t('Select Condition')"
-                                       size="small" v-model="condition.operator">
+                                       size="small" v-model="condition.operator"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')">
                                 <template v-if="flat_properties[condition.data_key].multiple">
                                     <el-option value="=" :label="$t('Match any Of')"></el-option>
                                     <el-option value="match_all" :label="$t('Match all of')"></el-option>
@@ -71,6 +75,8 @@
                                     size="small"
                                     v-model="condition.data_value"
                                     clearable
+                                    :no-match-text="$t('No Data match')"
+                                    :no-data-text="$t('No Data')"
                                 >
                                     <el-option
                                         v-for="option in flat_properties[condition.data_key].options"

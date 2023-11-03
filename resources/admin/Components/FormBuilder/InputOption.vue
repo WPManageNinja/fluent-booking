@@ -1,5 +1,7 @@
 <template>
-    <el-select clearable filterable :multiple="field.multiple" :class="field.wrapper_class" v-model="model">
+    <el-select clearable filterable :multiple="field.multiple" :class="field.wrapper_class" v-model="model"
+               :no-match-text="$t('No Data match')"
+               :no-data-text="$t('No Data')">
         <el-option v-for="item in field.options" :key="item.id" :value="item.id" :label="item.label">
         </el-option>
     </el-select>
