@@ -48,7 +48,7 @@
                 </div>
                 <SingleInviteeInfo v-if="showing_booking.event_type == 'single'" :booking="showing_booking"/>
                 <group-booking-guests v-else-if="showing_booking.event_type == 'group'"
-                                      :group_id="showing_booking.group_id"/>
+                                      :group_id="showing_booking.group_id" @updateAdditionalInfo="updateAdditionalInfo"/>
                 <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
@@ -368,6 +368,10 @@ export default {
             if (this.booking) {
                 this.booking[data.key] = data.value;
             }
+        },
+        updateAdditionalInfo(activities, sidebarContents) {
+            this.activities = activities;
+            this.sidebar_contents = sidebarContents;
         }
     },
     mounted() {
