@@ -19,7 +19,9 @@
                     ...field.field_option_selector
                 }">
                 </option-selector>
-                <el-select v-else clearable filterable v-model="item.field_key" :placeholder="field.local_placeholder">
+                <el-select v-else clearable filterable v-model="item.field_key" :placeholder="field.local_placeholder"
+                           :no-match-text="$t('No Data match')"
+                           :no-data-text="$t('No Data')">
                     <el-option
                         v-for="(option, optionKey) in field.fields"
                         :key="optionKey"
@@ -34,7 +36,9 @@
                 }">
                 </option-selector>
                 <el-select v-else-if="field.value_options" clearable filterable v-model="item.field_value"
-                           :placeholder="field.remote_placeholder">
+                           :placeholder="field.remote_placeholder"
+                           :no-match-text="$t('No Data match')"
+                           :no-data-text="$t('No Data')">
                     <el-option
                         v-for="option in field.value_options"
                         :key="option.id"

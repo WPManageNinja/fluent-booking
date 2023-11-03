@@ -139,7 +139,7 @@ export default {
     },
     computed: {
         eventType() {
-            return this.slot.event_type == 'group' ? 'Group' : 'One-to-One';
+            return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
         }
     },
     methods: {

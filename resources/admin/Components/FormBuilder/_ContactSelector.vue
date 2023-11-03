@@ -11,7 +11,9 @@
         :size="field.size"
         :placeholder="field.placeholder || $t('Search contact')"
         :remote-method="fetchOptions"
-        v-loading="loading">
+        v-loading="loading"
+        :no-match-text="$t('No Data match')"
+        :no-data-text="$t('No Data')">
         <el-option
             v-for="item in options"
             :key="item.id"
