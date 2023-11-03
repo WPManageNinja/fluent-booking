@@ -30,7 +30,13 @@
 
         appReady = true;
         if (window.outerWidth <= 1045) {
-            isMobile = true;
+            if (!isFluentform) {
+                isMobile = true;
+            } else {
+                if (window.outerWidth <= 608) {
+                    isMobile = true;
+                }
+            }
         }
         if (window.outerWidth < 400) {
             isXsDevice = true;
@@ -117,7 +123,7 @@
         component.parentNode.classList.add("f_cal_day_selected");
 
         const calendarHolder = document.querySelector(".fcal_holder.f_cal_day_selected").offsetWidth;
-        if (calendarHolder <= 660) {
+        if (!isFluentform && calendarHolder <= 660) {
             isMobile = true;
         }
     }
