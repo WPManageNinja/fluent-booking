@@ -50,6 +50,8 @@
                                     :placeholder="$t('Select Schedule')"
                                     popper-class="fcal_select"
                                     class="fcal_timezone"
+                                    :no-match-text="$t('No Data match')"
+                                    :no-data-text="$t('No Data')"
                                 >
                                     <el-option-group
                                             v-for="schedulesHosts in slot.settings.schedule_options"
@@ -102,7 +104,9 @@
                     <div class="fcal_buffer_time_wrap">
                         <div class="fcal_buffer_time_before">
                             <span class="sub-label">{{ $t('Before Event') }}</span>
-                            <el-select v-model="slot.settings.buffer_time_before" :placeholder="$t('Select')" popper-class="fcal_select">
+                            <el-select v-model="slot.settings.buffer_time_before" :placeholder="$t('Select')"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
                                 <el-option
                                     v-for="time in bufferTimes"
                                     :key="time.value"
@@ -113,7 +117,9 @@
                         </div>
                         <div class="fcal_buffer_time_after">
                             <span class="sub-label">{{ $t('After Event') }}</span>
-                            <el-select v-model="slot.settings.buffer_time_after" :placeholder="$t('Select')" popper-class="fcal_select">
+                            <el-select v-model="slot.settings.buffer_time_after" :placeholder="$t('Select')"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
                                 <el-option
                                     v-for="time in bufferTimes"
                                     :key="time.value"

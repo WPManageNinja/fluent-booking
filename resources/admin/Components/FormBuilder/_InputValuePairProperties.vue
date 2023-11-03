@@ -11,7 +11,9 @@
             <tbody>
             <tr v-for="(condition, conditionIndex) in model" :key="conditionIndex">
                 <td>
-                    <el-select clearable @change="condition.data_value == ''; delete condition.data_operation" :placeholder="$t('Select')" size="small" v-model="condition.data_key">
+                    <el-select clearable @change="condition.data_value == ''; delete condition.data_operation" :placeholder="$t('Select')" size="small" v-model="condition.data_key"
+                               :no-match-text="$t('No Data match')"
+                               :no-data-text="$t('No Data')">
                         <el-option
                             v-for="(prop, propkey) in field.property_options"
                             :key="propkey"
@@ -59,7 +61,9 @@
                                         </el-input>
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-select size="mini" v-model="condition.data_operation" :placeholder="$t('Replace Value')">
+                                        <el-select size="mini" v-model="condition.data_operation" :placeholder="$t('Replace Value')"
+                                                   :no-match-text="$t('No Data match')"
+                                                   :no-data-text="$t('No Data')">
                                             <el-option value="" :label="$t('Replace Value')"></el-option>
                                             <el-option value="subtract" :label="$t('Subtract Value')"></el-option>
                                             <el-option value="add" :label="$t('Add Value')"></el-option>
@@ -85,6 +89,8 @@
                                             v-model="condition.data_value"
                                             clearable
                                             :multiple="field.property_options[condition.data_key].multiple"
+                                            :no-match-text="$t('No Data match')"
+                                            :no-data-text="$t('No Data')"
                                         >
                                             <el-option
                                                 v-for="option in field.property_options[condition.data_key].options"
@@ -95,7 +101,9 @@
                                         </el-select>
                                     </el-col>
                                     <el-col :span="6">
-                                        <el-select size="mini" v-model="condition.data_operation" :placeholder="$t('Replace Value')">
+                                        <el-select size="mini" v-model="condition.data_operation" :placeholder="$t('Replace Value')"
+                                                   :no-match-text="$t('No Data match')"
+                                                   :no-data-text="$t('No Data')">
                                             <el-option value="" :label="$t('Replace Options')"></el-option>
                                             <el-option value="subtract" :label="$t('Subtract Options')"></el-option>
                                             <el-option value="add" :label="$t('Add Options')"></el-option>
@@ -109,6 +117,8 @@
                                 v-model="condition.data_value"
                                 clearable
                                 :multiple="field.property_options[condition.data_key].multiple"
+                                :no-match-text="$t('No Data match')"
+                                :no-data-text="$t('No Data')"
                             >
                                 <el-option
                                     v-for="option in field.property_options[condition.data_key].options"

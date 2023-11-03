@@ -6,7 +6,9 @@
                    :multiple="field.is_multiple"
                    :placeholder="field.placeholder"
                    clearable
-                   filterable>
+                   filterable
+                   :no-match-text="$t('No Data match')"
+                   :no-data-text="$t('No Data')">
 
             <el-option v-if="element_ready"
                        v-for="option in options[field.option_key]"
