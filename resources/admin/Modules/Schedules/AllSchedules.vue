@@ -178,7 +178,7 @@ export default {
                     return date;
                 }
 
-                return this.toCurrentTimezone(date, 'MMMM DD YYYY');
+                return this.toCurrentTimezone(date, this.appVars.date_format);
             }
         },
         formattedSchedules() {

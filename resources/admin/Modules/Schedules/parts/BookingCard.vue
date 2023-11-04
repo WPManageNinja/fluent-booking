@@ -52,17 +52,14 @@ export default {
     },
     computed: {
         formattedTimeRange() {
-            const formatStartDate = this.toCurrentTimezone(this.booking.start_time, 'hh:mma');
-            const formatEndDate   = this.toCurrentTimezone(this.booking.end_time, 'hh:mma');
-
-            const startTime = formatStartDate;
-            const endTime   = formatEndDate;
+            const formatStartTime = this.toCurrentTimezone(this.booking.start_time, this.appVars.time_format);
+            const formatEndTime   = this.toCurrentTimezone(this.booking.end_time, this.appVars.time_format);
 
             if(this.period == 'latest_bookings') {
-                return `${this.toCurrentTimezone(this.booking.start_time, 'D MMM, YYYY')} <br /> ${startTime} - ${endTime}`;
+                return `${this.toCurrentTimezone(this.booking.start_time, 'D MMM, YYYY')} <br /> ${formatStartTime} - ${formatEndTime}`;
             }
 
-            return `${startTime} - ${endTime}`;
+            return `${formatStartTime} - ${formatEndTime}`;
         },
         spotTitle() {
             const eventType = this.booking.event_type;

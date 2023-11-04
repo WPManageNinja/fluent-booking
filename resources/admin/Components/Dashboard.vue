@@ -167,16 +167,16 @@ export default {
     computed: {
         formattedTimeRange() {
             return (start_time, end_time) => {
-                const startTime = this.toCurrentTimezone(start_time, 'hh:mma');
-                const endTime = this.toCurrentTimezone(end_time, 'hh:mma');
-                return `${startTime} - ${endTime}`;
+                const startTime = this.toCurrentTimezone(start_time, this.appVars.time_format);
+                const endTime = this.toCurrentTimezone(end_time, this.appVars.time_format);
+                return `${startTime} - ${endTime}, ${this.toCurrentTimezone(start_time, this.appVars.date_format)}`;
             }
         },
         bookingTitle() {
             return (schedule) => {
                 const guestName = schedule.first_name + ' ' + schedule.last_name;
                 const createdAt = this.convertDate(schedule.created_at)
-                return '<b>' + guestName + '</b>' + ' ' + this.$t('booked a new meeting at') + ' ' + createdAt;
+                return '<b>' + guestName + '</b>' + ' ' + this.$t('booked a new meeting at') + ' ' + this.toCurrentTimezone(createdAt, this.appVars.date_time_formatter);
             }
         },
         scheduleTitle() {

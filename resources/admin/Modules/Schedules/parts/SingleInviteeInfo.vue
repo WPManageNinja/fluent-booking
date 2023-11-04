@@ -47,7 +47,7 @@ export default {
 
     methods: {
         bookedAtHandler(date) {
-            return this.toCurrentTimezone(date, 'DD MMM YYYY, hh:mma');
+            return this.toCurrentTimezone(date, this.appVars.date_time_formatter);
         }
     }
 }

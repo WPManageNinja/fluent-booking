@@ -238,7 +238,8 @@
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
-        return `${hours}:${minutes} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
+        const string = `${hours}:${minutes} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
+        return getDateTimeStringI18(string, 'mNumber');
     }
 
 
@@ -256,7 +257,7 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h3>{getDateTimeStringI18(monthNames[month], 'month')} <span>{year}</span></h3>
+                    <h3>{getDateTimeStringI18(monthNames[month], 'month')} <span>{getDateTimeStringI18(year, 'mNumber')}</span></h3>
                 </div>
                 <div class="calendar_nav">
                     <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
@@ -322,7 +323,7 @@
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
-                                    <div class="fcal_spot_remaining">{day.remaining} {i18('spots left')}</div>
+                                    <div class="fcal_spot_remaining">{getDateTimeStringI18(day.remaining)} {i18('spots left')}</div>
                                 {/if}
                             </div>
                             {#if selectedDateTime && selectedDateTime.start == day.start}
