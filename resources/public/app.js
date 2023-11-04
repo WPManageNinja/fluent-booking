@@ -22,8 +22,7 @@ if (fullDate && fullDate.length >= 10) {
     }
 }
 
-
-window.fluentCalBootApp = function (elem) {
+window.fluentCalBootApp = function (elem, handleBack = false) {
     let calendarId = elem.dataset.calendar_id;
     let event_id = elem.dataset.event_id;
     if (elem.dataset.app_booted) {
@@ -31,7 +30,7 @@ window.fluentCalBootApp = function (elem) {
         return;
     }
 
-    if(!calendarId || !event_id) {
+    if (!calendarId || !event_id) {
         console.log('App could not be booted');
         return;
     }
@@ -41,14 +40,19 @@ window.fluentCalBootApp = function (elem) {
     elem.innerHTML = '';
     const appData = window['fcal_public_vars_' + calendarId + '_' + event_id];
 
+    if (!appData) {
+        return;
+    }
+
     if (preSelects) {
         appData.slot.pre_selects = preSelects;
     }
 
-    new BookingApp({
+    const app = new BookingApp({
         target: elem,
         props: {
             appData: appData,
+            handleBack: handleBack
         }
     });
 
@@ -56,6 +60,8 @@ window.fluentCalBootApp = function (elem) {
     elem.classList.remove('fcal_loading');
 
     elem.dataset.app_booted = true;
+
+    return app;
 };
 
 const calendarApps = document.querySelectorAll('.fluent_booking_app');
@@ -64,3 +70,56 @@ if (calendarApps.length) {
         window.fluentCalBootApp(calendarApps[index]);
     });
 }
+
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all <a> tags with the class 'fcal_event_card'
+    var links = document.querySelectorAll('a.fcal_event_card');
+
+    // Add a click event listener to each link
+    links.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            // Prevent the default action (navigation)
+            event.preventDefault();
+            const elem = link;
+
+            // get calendar id and event id from data attributes
+            let calendarId = elem.dataset.calendar_id;
+            let event_id = elem.dataset.event_id;
+            let eventSlug = elem.dataset.event_slug;
+
+            // crelate html like this
+            // <div className="fluent_booking_app fcal_loading" data-calendar_id="1" data-event_id="1">
+
+            const html = '<div class="fluent_booking_app fcal_loading" data-calendar_id="' + calendarId + '" data-event_id="' + event_id + '"><h3>Loading</h3></div>';
+
+            // append the html to .fcal_calendar_wrap element do not replace it
+            document.querySelector('.fcal_calendar_wrap').insertAdjacentHTML('beforeend', html);
+
+            // hide .fluent_booking_wrap
+            document.querySelector('.fluent_booking_wrap').style.display = 'none';
+
+            // get the element of the inserted html
+            const elemItem = document.querySelector('.fcal_calendar_wrap').lastElementChild;
+
+            const app = window.fluentCalBootApp(elemItem, true);
+
+            app.$on('handleBack', function () {
+                app.$destroy();
+                elemItem.remove();
+                document.querySelector('.fluent_booking_wrap').style.display = 'block';
+                if (window.history.pushState) {
+                    window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url);
+                }
+            });
+            
+            if (window.history.pushState) {
+                if (window.fluentCalendarPublicVars.is_pretty_url) {
+                    window.history.pushState({}, '', `${window.fluentCalendarPublicVars.base_url}/${eventSlug}`);
+                }
+            }
+        });
+    });
+});
+
+

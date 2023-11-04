@@ -123,6 +123,30 @@ class LandingPageHandler
 
         $authorProfile = $calendar->getAuthorProfile(true);
 
+        $globalVars = (new FrontEndHandler())->getGlobalVars();
+
+        $globalVars['is_landing_page'] = true;
+        $globalVars['is_pretty_url'] = defined('FLUENT_BOOKING_LANDING_SLUG');
+        $globalVars['base_url'] = home_url($wp->request);
+
+        $jsVars = [
+            'fluentCalendarPublicVars' => $globalVars,
+        ];
+
+        $extraJsFiles = [];
+
+        foreach ($activeEvents as $activeEvent) {
+            $event = clone $activeEvent;
+            $vars = (new FrontEndHandler())->getCalendarEventVars($calendar, $event);
+            $extraJs = $this->getEventLandingExtraJsFiles($vars['form_fields'], $event);
+            if ($extraJs) {
+                $extraJsFiles = array_merge($extraJsFiles, $extraJs);
+            }
+
+            $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
+        }
+
+        $assetUrl = App::getInstance('url.assets');
         $data = [
             'calendar'    => $calendar,
             'events'      => $activeEvents,
@@ -133,9 +157,27 @@ class LandingPageHandler
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
-            'js_vars' => [],
-            'js_files' => []
+            'js_files'    => [
+                $assetUrl . 'public/js/app.js',
+            ],
+            'js_vars'     => $jsVars
         ];
+
+        if ($extraJsFiles) {
+            $extraJsFiles = array_unique($extraJsFiles);
+            $data['js_files'] = array_merge($data['js_files'], $extraJsFiles);
+            add_action('fluent_booking/main_landing', function () use ($assetUrl) {
+                ?>
+                <style>
+                    .fcal_phone_wrapper .flag {
+                        background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
+                        background-size: 100%;
+                    }
+                </style>
+                <?php
+            });
+        }
+
 
         $app = App::getInstance();
         status_header(200);
@@ -201,8 +243,10 @@ class LandingPageHandler
             ]
         ];
 
-        if (BookingFieldService::hasPhoneNumberField($eventVars['form_fields'])) {
-            $data['js_files'][] = $assetUrl . 'public/js/phone-field.js';
+        $extraJs = $this->getEventLandingExtraJsFiles($eventVars['form_fields'], $calendarEvent);
+
+        if ($extraJs) {
+            $data['js_files'] = array_merge($data['js_files'], $extraJs);
             add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
                 ?>
                 <style>
@@ -215,16 +259,9 @@ class LandingPageHandler
             });
         }
 
-        if ($calendarEvent->type == 'paid') {
-            $data['js_files'][] = 'https://js.stripe.com/v3/';
-            $data['js_files'][] = $assetUrl . 'public/js/stripe-checkout.js';
-        }
-
         $data = apply_filters('fluent_booking/event_landing_page_vars', $data, $calendar, $calendarEvent, $existingBooking);
 
         $app = App::getInstance();
-
-        $data['existing_booking'] = $existingBooking;
 
         status_header(200);
         $app->view->render('landing.booking', $data);
@@ -233,7 +270,6 @@ class LandingPageHandler
 
     private function showBookingConfimationPage($booking, $actionType = 'confirmation')
     {
-
         $validActions = [
             'confirmation',
             'cancel',
@@ -385,5 +421,22 @@ class LandingPageHandler
         });
 
         $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
+    }
+
+    private function getEventLandingExtraJsFiles($formFields, $calendarEvent)
+    {
+        $files = [];
+        $assetUrl = App::getInstance('url.assets');
+
+        if (BookingFieldService::hasPhoneNumberField($formFields)) {
+            $files[] = $assetUrl . 'public/js/phone-field.js';
+        }
+
+        if ($calendarEvent->type == 'paid') {
+            $files[] = 'https://js.stripe.com/v3/';
+            $files[] = $assetUrl . 'public/js/stripe-checkout.js';
+        }
+
+        return $files;
     }
 }

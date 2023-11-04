@@ -188,6 +188,10 @@
             margin: 40px auto;
         }
 
+        .fluent_booking_app {
+            margin-top: 66px;
+        }
+
         @media (max-width: 800px) {
             .fluent_booking_wrap {
                 padding: 0 20px;
@@ -210,6 +214,8 @@
             }
         }
     </style>
+
+    <?php do_action('fluent_booking/main_landing'); ?>
 </head>
 <body>
 
@@ -232,6 +238,7 @@
                     <div class="fcal_slot">
                         <a data-calendar_id="<?php echo (int)$event->calendar_id; ?>"
                            data-event_hash="<?php echo esc_attr($event->hash); ?>"
+                           data-event_slug="<?php echo esc_attr($event->slug); ?>"
                            data-event_id="<?php echo (int)$event->id; ?>"
                            href="<?php echo esc_url($event->public_url); ?>" class="fcal_card fcal_event_card">
                             <div class="fcal_slot_content">
