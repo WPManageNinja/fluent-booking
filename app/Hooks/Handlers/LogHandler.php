@@ -29,5 +29,4 @@ class LogHandler
 
         BookingActivity::create($logData);
     }
-
 }
