@@ -26,14 +26,12 @@
     let showingPayments = false;
     let timezone = '';
 
-    let compRef;
-
     const dispatch = createEventDispatcher();
 
     function handleBackClick() {
         dispatch('handleBack');
     }
-
+    
     onMount(() => {
 
         timezone = util.dayjs.tz.guess();
@@ -148,7 +146,7 @@
         calendar.style.height = height;
     }
 </script>
-<div bind:this={compRef} class="fcal_wrap">
+<div class="fcal_wrap">
     <div class="fcal_holder" id={appData.id}>
         <div bind:this={component}
              class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
