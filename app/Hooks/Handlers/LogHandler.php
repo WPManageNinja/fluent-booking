@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentBooking\app\Hooks\Handlers;
+namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\Framework\Support\Arr;
@@ -29,5 +29,4 @@ class LogHandler
 
         BookingActivity::create($logData);
     }
-
 }
