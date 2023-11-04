@@ -14,6 +14,7 @@ $lightDark: #6b7280;
 .fluent_booking_app {
   padding-top: 0;
 }
+
 .fcal_cal_wrap {
   max-width: 100% !important;
   box-sizing: border-box;
@@ -40,10 +41,12 @@ $lightDark: #6b7280;
           color: #445164;
           margin-bottom: 10px;
         }
+
         .fcal_input_location_wrap {
           select {
             margin-bottom: 6px;
           }
+
           .fcal_location_radio_list {
             position: relative;
             line-height: 24px;
@@ -52,70 +55,80 @@ $lightDark: #6b7280;
             margin-bottom: 8px;
             cursor: pointer;
             display: block;
+
             &:last-child {
-                margin-bottom: 0;
+              margin-bottom: 0;
             }
+
             input {
-                position: absolute;
-                width: auto;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                margin: 0;
-                padding: 0;
-                left: 0;
-                top: 0;
-                appearance: none;
-                visibility: hidden;
-                opacity: 0;
-                &:checked~.fcal_radio_icon {
-                    border-color: var(--fcal_primary_color);
-                    &::before {
-                        transform: scale(1);
-                    }
-                }
-            }
-            .fcal_radio_icon {
-                position: absolute;
-                border: 1.5px solid #D1D5DB;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                left: 0;
-                top: 3px;
-                transition: .3s;
+              position: absolute;
+              width: auto;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              margin: 0;
+              padding: 0;
+              left: 0;
+              top: 0;
+              appearance: none;
+              visibility: hidden;
+              opacity: 0;
+
+              &:checked ~ .fcal_radio_icon {
+                border-color: var(--fcal_primary_color);
+
                 &::before {
-                    content: "";
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
-                    background: var(--fcal_primary_color);
-                    position: absolute;
-                    left: 3.5px;
-                    top: 3.5px;
-                    transform: scale(0);
-                    transition: .3s;
+                  transform: scale(1);
                 }
+              }
+            }
+
+            .fcal_radio_icon {
+              position: absolute;
+              border: 1.5px solid #D1D5DB;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              left: 0;
+              top: 3px;
+              transition: .3s;
+
+              &::before {
+                content: "";
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--fcal_primary_color);
+                position: absolute;
+                left: 3.5px;
+                top: 3.5px;
+                transform: scale(0);
+                transition: .3s;
+              }
             }
           }
         }
 
         .fcal_input_wrap {
-            &.address {
-                position: relative;
-                svg {
-                    position: absolute;
-                    left: 12px;
-                    width: 16px;
-                    top: 8px;
-                    opacity: 0.5;
-                }
-                input {
-                    padding-left: 38px;
-                }
+          &.address {
+            position: relative;
+
+            svg {
+              position: absolute;
+              left: 12px;
+              width: 16px;
+              top: 8px;
+              opacity: 0.5;
             }
+
+            input {
+              padding-left: 38px;
+            }
+          }
+
           &.fcal_field_name_address {
             position: relative;
+
             svg {
               position: absolute;
               left: 15px;
@@ -123,6 +136,7 @@ $lightDark: #6b7280;
               top: 10px;
               opacity: 0.5;
             }
+
             input {
               padding-left: 38px;
             }
@@ -253,17 +267,21 @@ $lightDark: #6b7280;
 
   &.fcal_on_desktop {
     transition: .3s;
+
     .fcal_calendar_slot_wrap {
       .fcal_slot_picker {
         overflow: auto;
         max-height: 100%;
+
         &::-webkit-scrollbar {
           width: 5px;
         }
+
         &::-webkit-scrollbar-thumb {
           background: #e4e4e7;
           border-radius: 10px;
         }
+
         &::-webkit-scrollbar-track {
           background: transparent;
         }
@@ -330,7 +348,6 @@ $lightDark: #6b7280;
   }
 
 
-
   .fcal_date_wrapper {
     width: auto;
     padding: 0;
@@ -361,6 +378,7 @@ $lightDark: #6b7280;
       .fcal_fluent_form_selected_time {
         font-size: 14px;
         margin-top: 8px;
+
         b {
           font-weight: 600;
         }
@@ -503,6 +521,7 @@ $lightDark: #6b7280;
 
       .fcal_timezone_select {
         max-width: 350px;
+
         select {
           border: 1px solid #EAECF0;
           padding: 10px 20px;
@@ -577,6 +596,7 @@ $lightDark: #6b7280;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
+
         .is-today {
           line-height: 40px;
           width: 40px;
@@ -585,6 +605,7 @@ $lightDark: #6b7280;
           position: relative;
           z-index: 1;
           color: var(--fcal_primary_color);
+
           &:before {
             background: var(--fcal_primary_color);
             border-radius: var(--fcal_date_radius);
@@ -736,6 +757,7 @@ $lightDark: #6b7280;
     display: flex;
     column-gap: 8px;
     color: #1B2533;
+
     svg {
 
     }
@@ -786,6 +808,7 @@ $lightDark: #6b7280;
 
       .fcal_day_picker_wrap {
         overflow: hidden;
+
         .fcal_day_picker {
           padding: 0;
 
@@ -803,26 +826,32 @@ $lightDark: #6b7280;
     }
   }
 }
+
 .fcal_multi_locations {
   position: relative;
   margin-bottom: 6px;
+
   .fcal_multi_location_title {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 14px;
+
     svg {
       width: 16px;
+
       path,
       circle {
         stroke: #697483;
       }
     }
+
     &:hover .fcal_location_tooltip {
       opacity: 1;
       visibility: visible;
     }
   }
+
   .fcal_location_tooltip {
     position: absolute;
     bottom: 100%;
@@ -835,27 +864,35 @@ $lightDark: #6b7280;
     visibility: hidden;
     transition: .2s;
     list-style: none;
+
     .title {
       margin-bottom: 10px;
     }
+
     li {
       font-size: 12px;
       margin-bottom: 6px;
+
       &:last-child {
         margin-bottom: 0;
       }
+
       &:not(.title) {
         padding-left: 15px;
       }
+
       .fcal_icon_item {
         margin-bottom: 6px;
+
         img {
           filter: contrast(0);
         }
+
         &:last-child {
           margin-bottom: 0;
         }
       }
+
       .fcal_loc_text {
         font-size: 12px;
         color: #ffffff;
@@ -908,6 +945,7 @@ $lightDark: #6b7280;
       + .fcal_spot {
         margin-top: 15px;
       }
+
       &:before {
         content: '';
         background: var(--fcal_primary_color);
@@ -923,6 +961,7 @@ $lightDark: #6b7280;
 
       &:hover {
         border-color: var(--fcal_primary_color);
+
         &:before {
           opacity: 0.1;
         }
@@ -966,6 +1005,7 @@ $lightDark: #6b7280;
 
       &.fcal_spot_selected {
         border-color: var(--fcal_primary_color);
+
         &:before {
           opacity: 0.1;
         }
@@ -1010,7 +1050,7 @@ $lightDark: #6b7280;
 
 .svelte-select {
   box-sizing: border-box !important;
-  padding-left: 0!important;
+  padding-left: 0 !important;
 
   .svelte-select-list {
     border: 1px solid #EAECF0 !important;
@@ -1112,8 +1152,9 @@ $lightDark: #6b7280;
         }
       }
     }
+
     .fcal_back {
-        display: none;
+      display: none;
     }
   }
 }
@@ -1166,13 +1207,16 @@ $lightDark: #6b7280;
         //width: 350px !important;
         box-sizing: border-box !important;
         padding: 0 !important;
+
         > * {
           box-sizing: border-box !important;
           padding-left: 5px !important;
         }
+
         .item {
           padding-left: 10px !important;
         }
+
         * {
           padding: 0 !important;
           margin: 0 !important;
@@ -1184,6 +1228,7 @@ $lightDark: #6b7280;
     }
   }
 }
+
 .fcal_timezone_select {
   max-width: 300px;
   margin-top: 30px;
@@ -1194,6 +1239,7 @@ $lightDark: #6b7280;
     display: block;
     margin-bottom: 5px;
   }
+
   .svelte-select {
     padding-left: 20px !important;
     border-radius: 8px !important;
@@ -1211,6 +1257,7 @@ $lightDark: #6b7280;
     gap: 6px;
     margin-bottom: 5px;
     font-size: 14px;
+
     svg {
       width: 16px;
     }
@@ -1221,8 +1268,10 @@ $lightDark: #6b7280;
   .fcal_side {
     padding: 15px 10px;
   }
+
   .fcal_date_wrapper .fcal_day_picker {
     padding: 15px 10px;
+
     .svelte-1ac5fol {
       grid-template-columns: repeat(7, minmax(40px, 6px));
     }
@@ -1336,16 +1385,18 @@ $lightDark: #6b7280;
         }
 
         .fcal_slot_picker_header {
-            .fcal_back {
-                display: block;
-                margin-right: 4px;
-                .fcal_svg {
-                    display: flex;
-                }
+          .fcal_back {
+            display: block;
+            margin-right: 4px;
+
+            .fcal_svg {
+              display: flex;
             }
-            span {
-                margin-right: auto;
-            }
+          }
+
+          span {
+            margin-right: auto;
+          }
         }
       }
     }
@@ -1391,11 +1442,14 @@ $lightDark: #6b7280;
 
 .fcal_on_mobile {
   height: auto !important;
+
   &.fcal_calendar_inner {
     width: 100%;
     max-width: 400px;
+
     .fcal_date_wrapper {
       width: 100%;
+
       .fcal_day_picker_wrap {
         .fcal_day_picker {
           .fcal_calendar_slot_wrap {
@@ -1406,16 +1460,20 @@ $lightDark: #6b7280;
                 }
               }
             }
+
             .fcal_slot_picker {
               max-height: 400px;
               overflow: auto;
+
               &::-webkit-scrollbar {
                 width: 5px;
               }
+
               &::-webkit-scrollbar-thumb {
                 background: #e4e4e7;
                 border-radius: 10px;
               }
+
               &::-webkit-scrollbar-track {
                 background: transparent;
               }
@@ -1530,7 +1588,7 @@ $lightDark: #6b7280;
 //to-do will refactor tanbir
 //payment items styles
 
-#fluent_booking_stipe_pay{
+#fluent_booking_stipe_pay {
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
@@ -1543,6 +1601,7 @@ $lightDark: #6b7280;
 .fcal_payment_items {
   display: flex;
   gap: 20px;
+
   table {
     width: 100%;
     margin-top: 24px;
@@ -1551,6 +1610,7 @@ $lightDark: #6b7280;
     border-spacing: 0;
     border-collapse: separate !important;
     background: #ffffff;
+
     thead {
       th {
         text-align: left;
@@ -1558,14 +1618,17 @@ $lightDark: #6b7280;
         background: #f5f6f7;
         font-size: 14px;
         font-weight: 500;
+
         &:first-child {
           border-top-left-radius: 8px;
         }
+
         &:last-child {
           border-top-right-radius: 8px;
         }
       }
     }
+
     tbody {
       td {
         padding: 10px 20px !important;
@@ -1574,10 +1637,12 @@ $lightDark: #6b7280;
         font-size: 13px;
       }
     }
+
     tfoot {
       tr {
         th {
           padding: 12px 20px;
+
           &:first-child {
             text-align: right;
           }
@@ -1590,6 +1655,7 @@ $lightDark: #6b7280;
     font-weight: 400;
     padding: 10px 17px;
     color: #515e72;
+
     .amount {
       font-weight: 500;
       color: #000000;
@@ -1607,10 +1673,12 @@ $lightDark: #6b7280;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
+
     th {
       text-align: left;
       padding: 6px 15px;
     }
+
     tbody {
       td {
         padding: 6px 15px;
@@ -1627,6 +1695,7 @@ $lightDark: #6b7280;
     margin: 0 0 10px;
     font-weight: 500;
   }
+
   form {
     label {
       font-weight: 500;
@@ -1634,11 +1703,13 @@ $lightDark: #6b7280;
       display: block;
       margin-bottom: 10px;
     }
+
     .p-CardForm {
       .p-GridCell {
         margin-bottom: 15px;
       }
     }
+
     .p-Input {
       input {
         padding-right: 51.2px;
@@ -1646,6 +1717,7 @@ $lightDark: #6b7280;
         box-shadow: none;
       }
     }
+
     .p-Select {
       select {
         border-radius: 8px;
@@ -1653,6 +1725,7 @@ $lightDark: #6b7280;
       }
     }
   }
+
   #fluent_booking_stipe_pay {
     background: var(--fcal_primary_color);
     text-align: center;
@@ -1674,6 +1747,7 @@ $lightDark: #6b7280;
 
 .fcal_check_holder {
   text-align: center;
+
   img {
     margin: 0 auto;
     display: block;
@@ -1692,21 +1766,26 @@ input.fcal_input:disabled {
           grid-template-columns: repeat(7, minmax(45px, 6px));
           grid-template-rows: 45px;
           grid-auto-rows: 45px;
+
           .day {
             width: 40px;
           }
         }
       }
+
       .fcal_slot_picker_header {
         span {
           font-size: 12px;
         }
       }
+
       .fcal_slot_picker {
         min-width: 200px;
+
         .fcal_slot_picker_header {
           gap: 4px;
           padding-right: 6px;
+
           .fcal_slot_picker_header_action {
             .format-hour {
               label {
@@ -1725,9 +1804,11 @@ input.fcal_input:disabled {
                 padding: 10px 16px;
                 font-size: 13px;
               }
+
               .fcal_spot_confirm {
                 padding: 10px 16px;
                 font-size: 13px;
+
                 svg {
                   width: 16px;
                   height: 16px;
@@ -1737,9 +1818,42 @@ input.fcal_input:disabled {
           }
         }
       }
+
       &.fcal_on_mobile {
         margin-right: auto;
       }
     }
   }
 }
+
+
+.fcal_back {
+  margin-bottom: 10px;
+  margin-top: -15px;
+  display: block;
+
+  .fcal_back_btn {
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    border: 1px solid black;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    &:hover {
+      border-color: var(--fcal_primary_color);
+      svg {
+        fill: var(--fcal_primary_color);
+      }
+    }
+    svg {
+      width: 25px;
+      height: 25px;
+      display: block;
+      text-align: center;
+    }
+  }
+}
+
+
