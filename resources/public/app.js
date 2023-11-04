@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url);
                 }
             });
-            
+
             if (window.history.pushState) {
                 if (window.fluentCalendarPublicVars.is_pretty_url) {
                     window.history.pushState({}, '', `${window.fluentCalendarPublicVars.base_url}/${eventSlug}`);
