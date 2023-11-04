@@ -9,8 +9,8 @@
     <meta name="description" content="<?php echo esc_attr($description); ?>">
     <meta name="robots" content="noindex"/>
 
-    <?php if(!empty($author['avatar'])): ?>
-    <link rel="icon" type="image/x-icon" href="<?php echo esc_url($author['avatar']); ?>">
+    <?php if (!empty($author['avatar'])): ?>
+        <link rel="icon" type="image/x-icon" href="<?php echo esc_url($author['avatar']); ?>">
     <?php endif; ?>
 
     <meta property="og:title" content="<?php echo esc_attr($title); ?>"/>
@@ -19,14 +19,14 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
     <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>"/>
 
-    <?php
-    if (!empty($author['featured_image'])) {
+    <?php if (!empty($author['featured_image'])) {
         ?>
         <meta property="og:image" content="<?php echo esc_url($author['featured_image']); ?>"/>
     <?php } ?>
 
     <?php foreach ($css_files as $css_file): ?>
-        <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_html(FLUENT_BOOKING_ASSETS_VERSION); ?>"
+        <link rel="stylesheet"
+              href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_html(FLUENT_BOOKING_ASSETS_VERSION); ?>"
               media="screen"/>
     <?php endforeach; ?>
 
@@ -183,12 +183,13 @@
             justify-content: space-between;
         }
 
-        .fluent_booking_app {
-            max-width: 750px;
+        .fluent_booking_wrap {
+            max-width: 752px;
+            margin: 40px auto;
         }
 
         @media (max-width: 800px) {
-            .fluent_booking_app {
+            .fluent_booking_wrap {
                 padding: 0 20px;
             }
         }
@@ -213,7 +214,7 @@
 <body>
 
 <div class="fcal_calendar_wrap">
-    <div class="fluent_booking_app">
+    <div class="fluent_booking_wrap">
         <div class="fcal_author_header">
             <img src="<?php echo esc_url($author['avatar']); ?>"/>
             <div class="author_info">
@@ -229,7 +230,10 @@
             <div class="fcal_slots">
                 <?php foreach ($events as $event): ?>
                     <div class="fcal_slot">
-                        <a href="<?php echo esc_url($event->public_url); ?>" class="fcal_card">
+                        <a data-calendar_id="<?php echo (int)$event->calendar_id; ?>"
+                           data-event_hash="<?php echo esc_attr($event->hash); ?>"
+                           data-event_id="<?php echo (int)$event->id; ?>"
+                           href="<?php echo esc_url($event->public_url); ?>" class="fcal_card fcal_event_card">
                             <div class="fcal_slot_content">
                                 <h2>
                                     <span class="fcal_slot_color_schema"
@@ -269,5 +273,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    <?php foreach ($js_vars as $varKey => $values): ?>
+    var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+    <?php endforeach; ?>
+</script>
+
+<?php foreach ($js_files as $file): ?>
+    <script src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
+<?php endforeach; ?>
+
 </body>
 </html>

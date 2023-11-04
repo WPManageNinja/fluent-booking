@@ -150,9 +150,7 @@ class FrontEndHandler
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
 
         if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
-
             wp_enqueue_script('fluent-booking-phone-field', App::getInstance('url.assets') . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
-
             add_action('fluent_booking/short_code_render', function () use ($assetUrl) {
                 ?>
                 <style>
@@ -267,10 +265,7 @@ class FrontEndHandler
                 'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
                 'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
                 'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),
-                'Confirm Payment'               => __('Confirm Payment', 'fluent-booking-pro'),
                 'processing'                    => __('Processing', 'fluent-booking-pro'),
-                'Schedule Meeting'              => __('Schedule Meeting', 'fluent-booking-pro'),
-                'Continue to Payments'          => __('Continue to Payments', 'fluent-booking-pro'),
                 'date_time_config'              => [
                     'weekdays'      => array(
                         'sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking-pro'),
@@ -320,22 +315,22 @@ class FrontEndHandler
                     ),
                     'numericSystem' => _x('0_1_2_3_4_5_6_7_8_9', 'calendar numeric system - Sequence must need to maintained', 'fluent-booking-pro'),
                 ],
-                'Country'                      => __('Country', 'fluent-booking-pro'),
-                '12h'                          => _x('12h', 'date time format switch', 'fluent-booking-pro'),
-                '24h'                          => _x('24h', 'date time format switch', 'fluent-booking-pro'),
-                'spots left'                   => _x('spots left', 'for how many spots left for available booking', 'fluent-booking-pro'),
-                'Next'                         => _x('Next', 'Booking form spot selection', 'fluent-booking-pro'),
-                'Select on the Next Step'      => __('Select on the Next Step', 'fluent-booking-pro'),
-                'location options'             => __('location options', 'fluent-booking-pro'),
-                'Your address'                 => __('Your address', 'fluent-booking-pro'),
-                'Organizer Phone Number'       => __('Organizer Phone Number', 'fluent-booking-pro'),
-                'In Person (Attendee Address)' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
-                'In Person (Organizer Address)'=> __('In Person (Organizer Address)', 'fluent-booking-pro'),
-                'Attendee Phone Number'        => __('Attendee Phone Number', 'fluent-booking-pro'),
-                'Google Meet'                  => __('Google Meet', 'fluent-booking-pro'),
-                'Zoom Meeting'                 => __('Zoom Meeting', 'fluent-booking-pro'),
-                'Online Meeting'               => __('Online Meeting', 'fluent-booking-pro'),
-                'Processing...'                => __('Processing...', 'fluent-booking-pro'),
+                'Country'                       => __('Country', 'fluent-booking-pro'),
+                '12h'                           => _x('12h', 'date time format switch', 'fluent-booking-pro'),
+                '24h'                           => _x('24h', 'date time format switch', 'fluent-booking-pro'),
+                'spots left'                    => _x('spots left', 'for how many spots left for available booking', 'fluent-booking-pro'),
+                'Next'                          => _x('Next', 'Booking form spot selection', 'fluent-booking-pro'),
+                'Select on the Next Step'       => __('Select on the Next Step', 'fluent-booking-pro'),
+                'location options'              => __('location options', 'fluent-booking-pro'),
+                'Your address'                  => __('Your address', 'fluent-booking-pro'),
+                'Organizer Phone Number'        => __('Organizer Phone Number', 'fluent-booking-pro'),
+                'In Person (Attendee Address)'  => __('In Person (Attendee Address)', 'fluent-booking-pro'),
+                'In Person (Organizer Address)' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
+                'Attendee Phone Number'         => __('Attendee Phone Number', 'fluent-booking-pro'),
+                'Google Meet'                   => __('Google Meet', 'fluent-booking-pro'),
+                'Zoom Meeting'                  => __('Zoom Meeting', 'fluent-booking-pro'),
+                'Online Meeting'                => __('Online Meeting', 'fluent-booking-pro'),
+                'Processing...'                 => __('Processing...', 'fluent-booking-pro'),
                 'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                            => __('PM', 'fluent-booking-pro'),
                 'AM'                            => __('AM', 'fluent-booking-pro')
@@ -567,7 +562,7 @@ class FrontEndHandler
             'pre_selects'        => null,
             'settings'           => $calendarEvent->settings,
             'type'               => $calendarEvent->type,
-            'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12')
+            'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12'),
         ];
 
         $author = $calendar->getAuthorProfile(true);
@@ -577,6 +572,11 @@ class FrontEndHandler
             'slot'           => $eventData,
             'author_profile' => $author,
             'form_fields'    => $formFields,
+            'i18n'           => [
+                'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
+                'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
+                'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
+            ]
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
