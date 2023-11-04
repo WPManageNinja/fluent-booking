@@ -28,7 +28,7 @@
                     </el-checkbox>
                 </el-form-item>
                 <template v-if="paymentSettings.enabled === 'yes'">
-                    <el-form-item label="Checkout Method">
+                    <el-form-item :label="$t('Checkout Method')">
                         <el-radio-group v-model="paymentSettings.driver">
                             <el-radio :disabled="!paymentConfig.native_enabled" label="native">
                                 {{ $t('Use Native Payment Methods by FluentBooking') }}

@@ -47,7 +47,9 @@
             </template>
 
             <template v-else-if="field.component == 'dropdown'">
-                <el-select v-model="model" :placeholder="field.placeholder">
+                <el-select v-model="model" :placeholder="field.placeholder"
+                           :no-match-text="$t('No Data match')"
+                           :no-data-text="$t('No Data')">
                     <el-option
                         v-for="(item,itemValue) in field.options"
                         :key="itemValue"
@@ -58,7 +60,9 @@
             </template>
 
             <template v-else-if="field.component == 'dropdown-group'">
-                <el-select v-model="model" :placeholder="field.placeholder">
+                <el-select v-model="model" :placeholder="field.placeholder"
+                           :no-match-text="$t('No Data match')"
+                           :no-data-text="$t('No Data')">
                     <el-option-group 
                         v-for="(group,groupLabel) in field.options"
                         :key="groupLabel"

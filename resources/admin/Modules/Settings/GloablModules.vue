@@ -26,18 +26,18 @@
                         <div class="fcal_card_actions">
                             <template v-if="item.is_system == 'yes'">
                                 <el-button type="success" text v-if="item.is_active" :readonly="true">
-                                    System Enabled
+                                    {{ $t('System Enabled') }}
                                 </el-button>
-                                <a v-else class="el-button el-button--primary" :href="item.install_url">Install
+                                <a v-else class="el-button el-button--primary" :href="item.install_url">{{ $t('Install') }}
                                     {{ item.title }}</a>
                             </template>
                             <template v-else>
                                 <el-button type="info" :disabled="true" plain v-if="item.is_unavailable">
-                                    Unavailable
+                                    {{ $t('Unavailable') }}
                                 </el-button>
                                 <template v-else>
-                                    <span v-if="settings[itemKey] == 'yes'">Enabled</span>
-                                    <span v-else>Disabled</span>
+                                    <span v-if="settings[itemKey] == 'yes'">{{ $t('Enabled') }}</span>
+                                    <span v-else>{{ $t('Disabled') }}</span>
                                     <el-switch :disabled="saving" v-loading="saving" @click="updateSettings()"
                                                active-value="yes" inactive-value="no"
                                                v-model="settings[itemKey]"></el-switch>
