@@ -1836,7 +1836,7 @@ input.fcal_input:disabled {
     align-items: center;
     justify-content: flex-start;
     cursor: pointer;
-    border: 1px solid black;
+    border: 1px solid #697483;
     display: flex;
     width: 30px;
     height: 30px;
@@ -1852,6 +1852,7 @@ input.fcal_input:disabled {
       height: 25px;
       display: block;
       text-align: center;
+      fill: #697483;
     }
   }
 }

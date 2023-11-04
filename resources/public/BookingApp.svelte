@@ -31,7 +31,7 @@
     function handleBackClick() {
         dispatch('handleBack');
     }
-    
+
     onMount(() => {
 
         timezone = util.dayjs.tz.guess();
@@ -158,7 +158,7 @@
                         <div class="fcal_slot_wrapper">
                             {#if handleBack}
                                 <div class="fcal_back">
-                                    <div on:click={handleBackClick} class="fcal_back_btn" role="button" aria-label="{i18('Go to previous page')}">
+                                    <div tabindex="0" on:click={handleBackClick} on:keypress={handleBackClick} class="fcal_back_btn" role="button" aria-label="{i18('Go to previous page')}">
                                         <svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg>
                                     </div>
                                 </div>
