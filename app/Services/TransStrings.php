@@ -631,7 +631,13 @@ class TransStrings
             'if customer does not complete the payment for paid events.'                       => __('if customer does not complete the payment for paid events.', 'fluent-booking-pro'),
             'from the event end time'                                                          => __('from the event end time', 'fluent-booking-pro'),
             'Mark booking as completed automatically after'                                    => __('Mark booking as completed automatically after', 'fluent-booking-pro'),
-            'Mark booking as cancelled automatically after'                                    => __('Mark booking as cancelled automatically after', 'fluent-booking-pro')
+            'Mark booking as cancelled automatically after'                                    => __('Mark booking as cancelled automatically after', 'fluent-booking-pro'),
+            'Checkout Method'                                                                  => __('Checkout Method', 'fluent-booking-pro'),
+            'No Data match'                                                                    => __('No Data match', 'fluent-booking-pro'),
+            'No Data'                                                                          => __('No Data', 'fluent-booking-pro'),
+            'System Enabled'                                                                   => __('System Enabled', 'fluent-booking-pro'),
+            'Enabled'                                                                          => __('Enabled', 'fluent-booking-pro'),
+            'Install'                                                                          => __('Install', 'fluent-booking-pro')
         );
 
     }

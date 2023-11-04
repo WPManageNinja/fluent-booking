@@ -31,5 +31,28 @@ document.body.addEventListener('ffc_init_custom_field', function (e) {
 
         element.classList.remove('fcal_loading');
         element.dataset.app_booted = true;
+
+        handleFormScroll();
     }
 });
+
+function handleFormScroll() {
+    let fluentFormDom = document.getElementsByClassName(
+        'ff_conv_app_' + window.fluent_forms_global_var.form.id
+    );
+
+    if (fluentFormDom) {
+        fluentFormDom = fluentFormDom[0];
+
+        function preventScroll(event) {
+            fluentFormDom.addEventListener(event, function (event) {
+                if (event.target.className.includes('fcal')) {
+                    event.stopImmediatePropagation();
+                }
+            }, true);
+        }
+
+        preventScroll('wheel');
+        preventScroll('swiped');
+    }
+}

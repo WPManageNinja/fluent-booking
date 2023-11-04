@@ -38,6 +38,8 @@
                             v-model="settings.list_id"
                             :placeholder="field.placeholder"
                             popper-class="fcal_select"
+                            :no-match-text="$t('No Data match')"
+                            :no-data-text="$t('No Data')"
                         >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
@@ -56,6 +58,8 @@
                             v-model="settings.list_id"
                             :placeholder="field.placeholder"
                             popper-class="fcal_select"
+                            :no-match-text="$t('No Data match')"
+                            :no-data-text="$t('No Data')"
                         >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
@@ -75,6 +79,8 @@
                             v-model="settings[field.key]"
                             :placeholder="field.placeholder"
                             popper-class="fcal_select"
+                            :no-match-text="$t('No Data match')"
+                            :no-data-text="$t('No Data')"
                         >
                             <el-option
                                 v-for="(list_name, list_key) in field.options"
@@ -228,6 +234,8 @@
                                 @change="chainedAjax(optionKey)"
                                 v-model="settings.chained_config[optionKey]"
                                 :placeholder="optionValue.placeholder"
+                                :no-match-text="$t('No Data match')"
+                                :no-data-text="$t('No Data')"
                             >
                                 <el-option
                                     v-for="(list_name, list_key) in optionValue.options"

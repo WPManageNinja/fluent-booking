@@ -972,7 +972,6 @@ $lightDark: #6b7280;
 
         .fcal_spot_name {
           color: var(--fcal_primary_color);
-          font-weight: 700;
 
           .fcal_spot_time {
             color: var(--fcal_primary_color);
@@ -1683,4 +1682,64 @@ $lightDark: #6b7280;
 
 input.fcal_input:disabled {
   background: #f6f6f6;
+}
+
+@media (max-width: 696px) {
+  .fcal_calendar_inner {
+    &.fcal_form_calendar {
+      .fcal_date_wrapper {
+        .calendar {
+          grid-template-columns: repeat(7, minmax(45px, 6px));
+          grid-template-rows: 45px;
+          grid-auto-rows: 45px;
+          .day {
+            width: 40px;
+          }
+        }
+      }
+      .fcal_slot_picker_header {
+        span {
+          font-size: 12px;
+        }
+      }
+      .fcal_slot_picker {
+        min-width: 200px;
+        .fcal_slot_picker_header {
+          gap: 4px;
+          padding-right: 6px;
+          .fcal_slot_picker_header_action {
+            .format-hour {
+              label {
+                font-size: 12px;
+                padding: 4px 3px;
+                width: 36px;
+              }
+            }
+          }
+        }
+
+        .fcal_slot_items {
+          .fcal_spot_lists {
+            .fcal_spot {
+              .fcal_spot_name {
+                padding: 10px 16px;
+                font-size: 13px;
+              }
+              .fcal_spot_confirm {
+                padding: 10px 16px;
+                font-size: 13px;
+                svg {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+            }
+          }
+        }
+      }
+      &.fcal_on_mobile {
+        margin-right: auto;
+      }
+    }
+  }
 }

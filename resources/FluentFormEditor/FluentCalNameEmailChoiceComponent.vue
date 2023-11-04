@@ -1,7 +1,9 @@
 <template>
     <div class="fcal_input_groups">
         <el-form-item :label="$t('Select Guest Email Field')">
-            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.email_field" :placeholder="$t('Select Guest Email Field')">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.email_field" :placeholder="$t('Select Guest Email Field')"
+                       :no-match-text="$t('No Data match')"
+                       :no-data-text="$t('No Data')">
                 <el-option
                     v-for="(item, itemName) in dependencies"
                     :key="itemName"
@@ -11,7 +13,9 @@
             </el-select>
         </el-form-item>
         <el-form-item :label="$t('Select Guest Name Field')">
-            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.name_field" :placeholder="$t('Select Guest Name Field')">
+            <el-select style="width: 100%;" v-model="editItem.settings.cal_guest_fields.name_field" :placeholder="$t('Select Guest Name Field')"
+                       :no-match-text="$t('No Data match')"
+                       :no-data-text="$t('No Data')">
                 <el-option
                     v-for="(item, itemName) in dependencies"
                     :key="itemName"
