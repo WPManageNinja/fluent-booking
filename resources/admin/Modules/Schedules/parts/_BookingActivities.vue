@@ -14,7 +14,7 @@
                     </el-icon>
 
                     <div class="fcal_booking_activity_time">
-                        {{ toCurrentTimezone(activity.created_at, 'DD MMM YYYY, hh:mma') }}
+                        {{ toCurrentTimezone(activity.created_at, this.appVars.date_time_formatter) }}
                     </div>
                     <div class="fcal_booking_activity_content">
                         <div class="fcal_booking_activity_title">
