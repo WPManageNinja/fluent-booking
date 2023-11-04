@@ -36,7 +36,7 @@ class LandingPageHandler
         if ($urlParts[0] != FLUENT_BOOKING_LANDING_SLUG || count($urlParts) < 2) {
             return;
         }
-        
+
         $authorSlug = sanitize_text_field($urlParts[1]);
 
         $this->routeView($authorSlug, Arr::get($urlParts, 2, null));
@@ -52,7 +52,7 @@ class LandingPageHandler
         }
 
         if (empty($_REQUEST['host'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            do_action('fluent_booking/landing_page_route_'.$route, $_REQUEST);
+            do_action('fluent_booking/landing_page_route_' . $route, $_REQUEST);
             return;
         }
 
@@ -133,6 +133,8 @@ class LandingPageHandler
             'css_files'   => [
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
+            'js_vars' => [],
+            'js_files' => []
         ];
 
         $app = App::getInstance();
@@ -351,16 +353,21 @@ class LandingPageHandler
                 'rescheduling_hash' => $booking->hash
             ];
 
-            $vars['i18']['Schedule Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
-            $vars['i18']['Continue to Payments'] = __('Confirm Reschedule', 'fluent-booking-pro');
-
             return $vars;
         });
+
+        add_filter('fluent_booking/public_event_vars', function ($vars, $calendarEvent) {
+            $vars['i18']['Schedule_Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
+            $vars['i18']['Continue_to_Payments'] = __('Confirm Reschedule', 'fluent-booking-pro');
+            $vars['i18']['Confirm_Payment'] = __('Confirm Reschedule', 'fluent-booking-pro');
+            return $vars;
+        }, 10, 2);
 
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3> <?php esc_html_e('You are rescheduling the booking:', 'fluent-booking-pro'); echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
+                <h3> <?php esc_html_e('You are rescheduling the booking:', 'fluent-booking-pro');
+                    echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
                     (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
             <?php
