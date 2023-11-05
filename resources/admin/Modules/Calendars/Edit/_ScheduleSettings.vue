@@ -96,6 +96,10 @@
                 <el-form-item :label="$t('Scheduling conditions')" class="fcal_override_scheduling_condition_wrap">
                     <span class="sub-label">{{ $t("Invitees can't schedule within...") }}</span>
                     <SchedulingConditions :settings="slot.settings"/>
+                    <span class="sub-label fcal_max_allowed_day_label">{{ $t("ScheduleSettings/maximum_allowed_per_day") }}</span>
+                    <div class="fcal_inline_items">
+                        <el-input type="number" @input="validateMaxBookInput" v-model="slot.settings.max_book_per_day" />
+                    </div>
                 </el-form-item>
 
                 <el-form-item :label="$t('ScheduleSettings/before/after_event_label')">
@@ -174,6 +178,14 @@ export default {
     methods: {
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
+        },
+        validateMaxBookInput() {
+            const maxBookPerDay = this.slot.settings.max_book_per_day;
+            if (maxBookPerDay && maxBookPerDay < 1) {
+                this.slot.settings.max_book_per_day = 1;
+            } else if (maxBookPerDay > 100){
+                this.slot.settings.max_book_per_day = 100;
+            }
         }
     },
     mounted() {

@@ -34,6 +34,8 @@ class TimeSlotService
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
+        
+        $maxBookPerDay = Arr::get($this->calendarSlot->settings, 'max_book_per_day', null);
 
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
@@ -57,12 +59,12 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
+            
+            $currentBookedSlots = $bookedSlots[$date] ?? [];
 
-            if (!$availableSlots) {
+            if (!$availableSlots || $this->hasReachedMaxLimit($maxBookPerDay, $currentBookedSlots)) {
                 continue;
             }
-
-            $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
 
@@ -182,6 +184,16 @@ class TimeSlotService
         return $date_array;
     }
 
+    protected function bookSlot($eventId, $start, $end, $remaining = 0)
+    {
+        return [
+            'event_id'    => $eventId,
+            'start'       => $start,
+            'end'         => $end,
+            'remaining'   => $remaining,
+        ];
+    }
+
     protected function getBookedSlots($dateRange, $toTimeZone = false, $bookingRequest = false)
     {
         if ($toTimeZone) {
@@ -225,20 +237,10 @@ class TimeSlotService
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
                     if ($beforeBufferTime < $booking->start_time) {
-                        $books[$date][] = [
-                            'event_id'    => $booking->event_id,
-                            'start'       => $beforeBufferTime,
-                            'end'         => $booking->start_time,
-                            'remaining'   => 0,
-                        ];
+                        $books[$date][] = $this->bookSlot($booking->event_id, $beforeBufferTime, $booking->start_time);
                     }
                     if ($afterBufferTime > $booking->end_time) {
-                        $books[$date][] = [
-                            'event_id'    => $booking->event_id,
-                            'start'       => $booking->end_time,
-                            'end'         => $afterBufferTime,
-                            'remaining'   => 0,
-                        ];
+                        $books[$date][] = $this->bookSlot($booking->event_id, $booking->end_time, $afterBufferTime);
                     }
                 } else {   
                     $booking->start_time = $beforeBufferTime;
@@ -246,12 +248,7 @@ class TimeSlotService
                 }
             }
 
-            $books[$date][] = [
-                'event_id'    => $booking->event_id,
-                'start'       => $booking->start_time,
-                'end'         => $booking->end_time,
-                'remaining'   => $remaining,
-            ];
+            $books[$date][] = $this->bookSlot($booking->event_id, $booking->start_time, $booking->end_time, $remaining);
         }
 
         return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $bookingRequest, $dateRange);
@@ -331,6 +328,19 @@ class TimeSlotService
 
         return $formattedSlots;
 
+    }
+
+    protected function hasReachedMaxLimit($maxBookPerDay, $bookedSlots)
+    {
+        if (!$maxBookPerDay) {
+            return false;
+        }
+
+        $booked = array_filter($bookedSlots, function ($bookedSlot) {
+            return $this->calendarSlot->id == $bookedSlot['event_id'];
+        });
+
+        return count($booked) >= $maxBookPerDay;
     }
 
     public function getAvailableSpots($startDate, $timeZone = 'utc')
