@@ -1346,6 +1346,11 @@
               .fcal_inline_items {
                 width: 100%;
               }
+              .sub-label {
+                &.fcal_max_allowed_day_label {
+                    margin-top: 1rem;
+                }
+              }
             }
             .fcal_buffer_time_wrap {
                 display: flex;
