@@ -125,7 +125,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         $paymentSettings = $slot->getPaymentSettings();
         if (Arr::get($paymentSettings, 'enabled') === 'yes' && Arr::get($paymentSettings, 'driver') === 'native') {
-            $vars['payment_methods'] = static::getMethodsTemplate(['templates' => '']);
+            $vars['payment_methods'] = $this->getMethodsTemplate(['templates' => '']);
             $vars['payment_items'] = Arr::get($paymentSettings, 'items');
             $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
         }
