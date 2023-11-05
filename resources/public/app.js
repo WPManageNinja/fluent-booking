@@ -109,13 +109,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 elemItem.remove();
                 document.querySelector('.fluent_booking_wrap').style.display = 'block';
                 if (window.history.pushState) {
-                    window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.delete('event');
+
+                    let ext = urlParams.toString();
+                    if(ext) {
+                        ext = '?' + ext;
+                    }
+
+                    window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url + ext );
                 }
             });
 
             if (window.history.pushState) {
                 if (window.fluentCalendarPublicVars.is_pretty_url) {
                     window.history.pushState({}, '', `${window.fluentCalendarPublicVars.base_url}/${eventSlug}`);
+                } else {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('event', eventSlug);
+                    window.history.pushState({}, '', `${window.fluentCalendarPublicVars.base_url}?${urlParams.toString()}`);
                 }
             }
         });

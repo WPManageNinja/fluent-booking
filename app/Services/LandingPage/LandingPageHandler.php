@@ -125,9 +125,12 @@ class LandingPageHandler
 
         $globalVars = (new FrontEndHandler())->getGlobalVars();
 
+        $currentUrl = home_url($wp->request);
+
+
         $globalVars['is_landing_page'] = true;
         $globalVars['is_pretty_url'] = defined('FLUENT_BOOKING_LANDING_SLUG');
-        $globalVars['base_url'] = home_url($wp->request);
+        $globalVars['base_url'] = rtrim($currentUrl, '/');
 
         $jsVars = [
             'fluentCalendarPublicVars' => $globalVars,
