@@ -100,6 +100,7 @@ class CalendarSlot extends Model
         if (count($locationSettings) > 1) {
             return true;
         }
+
         return false;
     }
 

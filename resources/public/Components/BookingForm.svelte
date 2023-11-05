@@ -89,12 +89,12 @@
                 {#if !hasPaymentItem()}
                     <button disabled="{submitting}" type="submit"
                             class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        {i18('Schedule Meeting')}
+                        {appData.i18n.Schedule_Meeting}
                     </button>
                 {:else}
                     <button disabled="{submitting}" type="submit"
                             class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        {i18('Continue to Payments')}
+                        {appData.i18n.Continue_to_Payments}
                     </button>
                 {/if}
             </div>
