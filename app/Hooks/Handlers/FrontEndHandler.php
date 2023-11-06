@@ -492,6 +492,7 @@ class FrontEndHandler
 
     public function ajaxGetAvailableDates()
     {
+        $startBenchmark = microtime(true);
         $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $slot = CalendarSlot::findOrfail($slotId);
 
@@ -538,6 +539,7 @@ class FrontEndHandler
             'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
+            'execution_time'       => microtime(true) - $startBenchmark
         ], 200);
     }
 
