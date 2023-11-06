@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\Calendars;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -105,50 +106,101 @@ class RemoteCalendarHelper
         exit();
     }
 
-    public static function getRruleDates($rule, $sampleRange, $minDate, $maxDate, $args = [])
+    public static function getRruleDates($rules, $sampleRange, $minDate, $maxDate, $args = [])
     {
         try {
             $durationSeconds = strtotime($sampleRange[1]) - strtotime($sampleRange[0]);
 
-            $maxDate = new \DateTime($maxDate);
-            $sampleStart = new \DateTime($sampleRange[0]);
+            // Define the time range you're interested in
+            $minDate = new \DateTime($minDate, new \DateTimeZone('UTC'));
+            $maxDate = new \DateTime($maxDate, new \DateTimeZone('UTC'));
+            $dtStart = new \DateTime($sampleRange[0], new \DateTimeZone('UTC'));
 
-            $parser = \FluentBooking\App\Services\Libs\RRule\RfcParser::parseRRule($rule, $sampleStart);
-            $rrule = new \FluentBooking\App\Services\Libs\RRule\RRule($parser);
+            // Create a rule set
+            $rset = new \FluentBooking\App\Services\Libs\RRule\RSet();
 
-            $blocks = [];
-            // Looping through the occurrences
-            foreach ($rrule as $occurrence) {
-                $start = $occurrence;
-
-                if($start > $maxDate) {
-                    break;
-                }
-
-                $startDateTime =  $start->format('Y-m-d H:i:s');
-
-                if(strtotime($startDateTime) < strtotime($minDate)) {
-                    continue;
-                }
-
-                $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-
-                if ($args) {
-                    $blocks[] = wp_parse_args([
-                        'start' => $startDateTime,
-                        'end'   => $endDateTime,
-                    ], $args);
-                } else {
-                    $blocks[] = [
-                        'start' => $startDateTime,
-                        'end'   => $endDateTime
-                    ];
+            foreach ($rules as $recurrence) {
+                if (strpos($recurrence, 'RRULE') === 0) {
+                    // Create the RRule object with the actual DTSTART
+                    $rrule = new \FluentBooking\App\Services\Libs\RRule\RRule($recurrence, $dtStart);
+                    $rset->addRRule($rrule);
+                } elseif (strpos($recurrence, 'EXDATE') === 0) {
+                    $exDates = \FluentBooking\App\Services\Libs\RRule\RfcParser::parseExDate($recurrence);
+                    foreach ($exDates as $exDate) {
+                        $rset->addExDate($exDate);
+                    }
                 }
             }
 
-            return $blocks;
-        } catch (\Exception $e) {
+            $occurrences = $rset->getOccurrencesBetween($minDate, $maxDate);
+
+            return array_map(function ($date) use ($durationSeconds, $args) {
+
+                $start = $date->format('Y-m-d H:i:s');
+                $endDateTime = date('Y-m-d H:i:s', strtotime($start) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+                if (!$args) {
+                    return [
+                        'start' => $start,
+                        'end'   => $endDateTime
+                    ];
+                }
+
+                return wp_parse_args([
+                    'start' => $start,
+                    'end'   => $endDateTime
+                ], $args);
+            }, $occurrences);
+
+        } catch (\Exception $exception) {
+            Helper::debugLog([
+                'message' => $exception->getMessage(),
+                'method'  => __METHOD__,
+                'type'    => 'rrule_error'
+            ]);
             return [];
         }
     }
+
+    public static function convertToTimeZoneOffset($dateTime, $toTimeZone, $refernceDate = null)
+    {
+        if ($toTimeZone === 'UTC') {
+            return date('Y-m-d H:i:s', strtotime($dateTime));
+        }
+
+        if (!$refernceDate) {
+            return DateTimeHelper::convertFromUtc($dateTime, $toTimeZone);
+        }
+
+        $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
+        $offset = self::getTimeOffset($refernceDate, $toTimeZone);
+        if ($offset > 0) {
+            $dateTime->add(new \DateInterval('PT' . $offset . 'S'));
+        } else {
+            $dateTime->sub(new \DateInterval('PT' . abs($offset) . 'S'));
+        }
+
+        return $dateTime->format('Y-m-d H:i:s');
+    }
+
+    public static function getTimeOffset($refDate, $timezone)
+    {
+        static $cache = [];
+
+        $cacheKey = $refDate . '_' . $timezone;
+
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
+        }
+
+        $refDate = new \DateTime($refDate, new \DateTimeZone('UTC'));
+        $refDate->setTimezone(new \DateTimeZone($timezone));
+
+        $offset = $refDate->getOffset();
+
+        $cache[$cacheKey] = $offset;
+
+        return $offset;
+    }
+
 }

@@ -40,6 +40,9 @@ add_action('init', function () {
         return;
     }
 
+
+    $benchmark = microtime(true);
+
     $item = [
         'start'      => array(
             'dateTime' => '2023-10-26T16:00:00Z',
@@ -50,31 +53,53 @@ add_action('init', function () {
             'timeZone' => 'Europe/Madrid',
         ),
         'recurrence' => array(
-            '0' => 'RRULE:FREQ=WEEKLY;BYDAY=TH',
+            'RRULE:FREQ=WEEKLY;BYDAY=TH'
         ),
         'status'     => 'confirmed'
     ];
 
-    $recurrence = Arr::get($item, 'recurrence.0');
+
+    $recurrence = $item['recurrence'];
 
     $args = [
-        'timeMin' => '2023-12-01T00:00:00Z',
+        'timeMin' => '2023-10-01T00:00:00Z',
         'timeMax' => '2023-12-31T00:00:00Z',
     ];
+
+    $refDate = new DateTime(Arr::get($item, 'start.dateTime'), new DateTimeZone('UTC'));
+    $refDate->setTimezone(new DateTimeZone('Europe/Madrid'));
+    $offset = $refDate->getOffset();
 
     $recurrenceDates = RemoteCalendarHelper::getRruleDates($recurrence, [
         Arr::get($item, 'start.dateTime'),
         Arr::get($item, 'end.dateTime'),
     ], $args['timeMin'], $args['timeMax'], [
         'status' => Arr::get($item, 'status'),
+        'offset' => $offset
     ]);
+
 
     $formatted = [];
     foreach ($recurrenceDates as $recurrenceDate) {
+
+        $start = new DateTime($recurrenceDate['start'], new DateTimeZone('UTC'));
+        $end = new DateTime($recurrenceDate['end'], new DateTimeZone('UTC'));
+
+        $offset = $recurrenceDate['offset'];
+
+        if($offset > 0) {
+            $start->add(new DateInterval('PT' . $offset . 'S'));
+            $end->add(new DateInterval('PT' . $offset . 'S'));
+        } else {
+            $start->sub(new DateInterval('PT' . abs($offset) . 'S'));
+            $end->add(new DateInterval('PT' . $offset . 'S'));
+        }
+
         $formatted[] = [
-            'start'  => \FluentBooking\App\Services\DateTimeHelper::convertFromUtc($recurrenceDate['start'], 'Europe/Madrid'),
-            'end'    => \FluentBooking\App\Services\DateTimeHelper::convertFromUtc($recurrenceDate['end'], 'Europe/Madrid'),
+            'start'  => $start->format('Y-m-d H:i:s'),
+            'end'    => $end->format('Y-m-d H:i:s'),
             'status' => $recurrenceDate['status'],
+            'utc'    => $recurrenceDate['start'],
         ];
     }
 

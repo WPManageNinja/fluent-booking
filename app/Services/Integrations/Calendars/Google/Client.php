@@ -122,7 +122,7 @@ class Client
                 continue;
             }
 
-            $recurrence = Arr::get($item, 'recurrence.0');
+            $recurrence = Arr::get($item, 'recurrence', []);
 
             if(!empty($item['start']['date'])) {
                 if($recurrence) {
@@ -145,11 +145,13 @@ class Client
             }
 
             if ($recurrence) {
+                $sampleStart = Arr::get($item, 'start.dateTime');
                 $recurrenceDate = RemoteCalendarHelper::getRruleDates($recurrence, [
-                    Arr::get($item, 'start.dateTime'),
+                    $sampleStart,
                     Arr::get($item, 'end.dateTime'),
                 ], $args['timeMin'], $args['timeMax'], [
                     'status' => Arr::get($item, 'status'),
+                    'rec_start' =>  $sampleStart
                 ]);
 
                 if($recurrenceDate) {
@@ -270,7 +272,7 @@ class Client
             $message = Arr::get($resBody, 'error_description', __('Unexpected error from google api', 'fluent-booking-pro'));
 
             Helper::debugLog([
-                'message' => $message,
+                'message' => $resBody,
                 'url'     => $url,
                 'body'    => $body,
                 'header'  => $headers,
