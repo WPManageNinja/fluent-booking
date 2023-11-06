@@ -273,6 +273,7 @@ class TransStrings
             'Set Custom Hours'                                                                 => __('Set Custom Hours', 'fluent-booking-pro'),
             "Invitees can't schedule within..."                                                => __("Invitees can't schedule within...", "fluent-booking-pro"),
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking-pro'),
+            'ScheduleSettings/maximum_allowed_per_day'                                         => __('Maximum allowed events per day for this type of event', 'fluent-booking-pro'),
             'Before Event'                                                                     => __('Before Event', 'fluent-booking-pro'),
             'After Event'                                                                      => __('After Event', 'fluent-booking-pro'),
             'Schedule Type'                                                                    => __('Schedule Type', 'fluent-booking-pro'),
