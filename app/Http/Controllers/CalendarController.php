@@ -497,12 +497,16 @@ class CalendarController extends Controller
 
     public function cloneCalendarSlot(Request $request, $calendarId, $slotId)
     {
-        $originalSlot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
-    
+        $calendar = Calendar::findOrFail($calendarId);
+
+        $originalSlot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+
         $clonedSlot = $originalSlot->replicate();
         
         $clonedSlot->title = $originalSlot->title . ' (clone)';
-    
+
+        $clonedSlot->slug = Helper::generateSlotSlug($clonedSlot->duration . 'min', $calendar);
+
         $clonedSlot->save();
 
         $eventsMeta = $originalSlot->getCalendarEventsMeta();
