@@ -198,7 +198,7 @@ class Bootstrap
                     return $calendar;
                 }
                 $error = Arr::get($meta->value, 'last_error');
-                $calendar->generic_error = '<p style="color: red; margin:0;">'.__('Google Calendar API Error:', 'fluent-booking-pro').' ' . $error . '. <a href="'.Helper::getAppBaseUrl('calendars/'.$calendar->id.'/settings/remote-calendars').'">'  .__('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
+                $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
 
@@ -378,8 +378,8 @@ class Bootstrap
         }
 
         foreach ($allRemoteBookedSlots as $slot) {
-            $start = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $toTimeZone);
-            $end = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $toTimeZone);
+            $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
+            $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
             $date = date('Y-m-d', strtotime($start));
 
             if (!isset($books[$date])) {
