@@ -1,45 +1,10 @@
 <template>
     <div class="fcal_create_calendar_form">
         <div class="fcal_create_calendar_form_header">
-            <h2> <ScheduleIcon/> {{ $t('Schedule Settings') }} </h2>
+            <h2> <ScheduleIcon/> {{ $t('Availability') }} </h2>
         </div>
         <div class="fcal_create_calendar_form_body">
             <el-form label-position="top">
-                <el-form-item :label="$t('Date Range')">
-                    <span class="sub-label">{{ $t('Invitees can schedule...') }}</span>
-
-                    <el-radio-group v-model="slot.settings.range_type" class="fcal_date_range_radio">
-                        <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_days" size="large">{{ $t('Within future days') }}</el-radio>
-
-                            <div v-if="slot.settings.range_type == 'range_days'" class="fcal_date_range_radio_condition">
-                                <el-input v-model="slot.settings.range_days" type="number">
-                                    <template #append>{{ $t('Days into the future') }}</template>
-                                </el-input>
-                            </div>
-                        </div>
-                        <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_date_between" size="large">{{ $t('Within a date range') }}</el-radio>
-
-                            <div v-if="slot.settings.range_type == 'range_date_between'" class="fcal_date_range_radio_condition">
-                                <el-date-picker
-                                    v-model="slot.settings.range_date_between"
-                                    type="daterange"
-                                    :disabled-date="disabledDate"
-                                    value-format="YYYY-MM-DD"
-                                    :range-separator="$t('To')"
-                                    :start-placeholder="$t('Start date')"
-                                    :end-placeholder="$t('End date')"
-                                    popper-class="fcal_daterange_popover"
-                                />
-                            </div>
-                        </div>
-                        <div class="fcal_date_range_radio_item">
-                            <el-radio label="range_indefinite" size="large">{{ $t('Indefinitely into the future') }} </el-radio>
-                        </div>
-                    </el-radio-group>
-                </el-form-item>
-                <el-divider/>
                 <el-form-item :label="$t('ScheduleSettings/availability_type_label')">
                     <el-tabs v-model="slot.availability_type">
                         <el-tab-pane :label="$t('Use an Existing Schedule')" name="existing_schedule">
@@ -95,46 +60,6 @@
                     </el-tabs>
                 </el-form-item>
 
-                <el-form-item :label="$t('Scheduling conditions')" class="fcal_override_scheduling_condition_wrap">
-                    <span class="sub-label">{{ $t("Invitees can't schedule within...") }}</span>
-                    <SchedulingConditions :settings="slot.settings"/>
-                    <span class="sub-label fcal_max_allowed_day_label">{{ $t("ScheduleSettings/maximum_allowed_per_day") }}</span>
-                    <div class="fcal_inline_items">
-                        <el-input type="number" @input="validateMaxBookInput" v-model="slot.settings.max_book_per_day" />
-                    </div>
-                </el-form-item>
-
-                <el-form-item :label="$t('ScheduleSettings/before/after_event_label')">
-                    <div class="fcal_buffer_time_wrap">
-                        <div class="fcal_buffer_time_before">
-                            <span class="sub-label">{{ $t('Before Event') }}</span>
-                            <el-select v-model="slot.settings.buffer_time_before" :placeholder="$t('Select')"
-                                       :no-match-text="$t('No Data match')"
-                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
-                                <el-option
-                                    v-for="time in bufferTimes"
-                                    :key="time.value"
-                                    :label="time.label"
-                                    :value="time.value"
-                                />
-                            </el-select>
-                        </div>
-                        <div class="fcal_buffer_time_after">
-                            <span class="sub-label">{{ $t('After Event') }}</span>
-                            <el-select v-model="slot.settings.buffer_time_after" :placeholder="$t('Select')"
-                                       :no-match-text="$t('No Data match')"
-                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
-                                <el-option
-                                    v-for="time in bufferTimes"
-                                    :key="time.value"
-                                    :label="time.label"
-                                    :value="time.value"
-                                />
-                            </el-select>
-                        </div>
-                    </div>
-                </el-form-item>
-
             </el-form>
         </div>
     </div>
@@ -184,14 +109,6 @@ export default {
     methods: {
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
-        },
-        validateMaxBookInput() {
-            const maxBookPerDay = this.slot.settings.max_book_per_day;
-            if (maxBookPerDay && maxBookPerDay < 1) {
-                this.slot.settings.max_book_per_day = 1;
-            } else if (maxBookPerDay > 100){
-                this.slot.settings.max_book_per_day = 100;
-            }
         }
     },
     mounted() {

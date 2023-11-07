@@ -42,11 +42,27 @@
                     <el-icon>
                         <ScheduleIcon/>
                     </el-icon>
-                    {{ $t('Schedule Settings') }}
+                    {{ $t('Availability') }}
                 </template>
                 <div v-if="activeTab == 'schedule-settings'" class="fcal_create_calendar_body">
                     <el-skeleton v-if="loading"/>
                     <ScheduleSettings v-else :slot="slot"/>
+                    <div class="fcal_create_calendar_form_footer">
+                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+                    </div>
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane name="limit-settings">
+                <template #label>
+                    <el-icon>
+                        <Clock/>
+                    </el-icon>
+                    {{ $t('Limits') }}
+                </template>
+                <div v-if="activeTab == 'limit-settings'" class="fcal_create_calendar_body">
+                    <el-skeleton v-if="loading"/>
+                    <LimitSettings v-else :slot="slot"/>
                     <div class="fcal_create_calendar_form_footer">
                         <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                     </div>
@@ -158,6 +174,7 @@ import BasicInfo from './_BasicInfo'
 import EmailNotificationSettings from './_EmailNotificationSettings';
 import SmsNotificationSettings from './_SmsNotificationSettings';
 import ScheduleSettings from "./_ScheduleSettings";
+import LimitSettings from "./_LimitSettings";
 import QuestionSettings from "./_QuestionSettings.vue";
 import EventIcon from '../../../Components/Icons/EventIcon';
 import QuestionIcon from '../../../Components/Icons/QuestionIcon';
@@ -168,7 +185,7 @@ import WebhookSettings from "./WebHook/WebhookSettings.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import PaymentSettings from "./Payments/PaymentSettings.vue";
 import Integration from './GeneralIntegration/Integration.vue';
-import {Back, Link, Message, Notification, Share, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
+import {Clock, Back, Link, Message, Notification, Share, CopyDocument, Money, Connection} from '@element-plus/icons-vue';
 import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {
@@ -177,6 +194,7 @@ export default {
     components: {
         WebhookSettings,
         ScheduleSettings,
+        LimitSettings,
         PaymentSettings,
         BasicInfo,
         SaveButton,
@@ -188,6 +206,7 @@ export default {
         NoficationIcon,
         QuestionIcon,
         ShareCalendarBlock,
+        Clock,
         Back,
         Link,
         Share,

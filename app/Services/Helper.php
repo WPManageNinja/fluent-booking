@@ -1183,6 +1183,60 @@ class Helper
         ]);
     }
 
+    public static function getSlotIntervals()
+    {
+        return apply_filters('fluent_booking/slot_intervals_schema', [
+            [
+                'value' => '',
+                'label' => __('Use event length (default)', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '5',
+                'label' => __('5 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '10',
+                'label' => __('10 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '15',
+                'label' => __('15 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '20',
+                'label' => __('20 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '30',
+                'label' => __('30 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '45',
+                'label' => __('45 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '60',
+                'label' => __('60 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '75',
+                'label' => __('75 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '90',
+                'label' => __('90 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '105',
+                'label' => __('105 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '120',
+                'label' => __('120 Minutes', 'fluent-booking-pro')
+            ]
+        ]);
+    }
+
     public static function getWeeklyScheduleSchema()
     {
         return apply_filters('fluent_booking/weekly_schedule_schema', [
