@@ -2,14 +2,14 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 
 import Edit from './edit';
-import Save from './save';
+// import Save from './save';
 import { attributes } from './attributes';
 // const el = wp.element.createElement;
 
 
-registerBlockType('fluent-booking/calendar', {
-    title: __('Fluent Booking'),
-    description: __('Fluent Booking'),
+registerBlockType('fluent-booking/team-management', {
+    title: __('FluentBooking Team Management'),
+    description: __('FluentBooking team management'),
     category: 'layout',
     icon: {
         src: <svg xmlns="http://www.w3.org/2000/svg" width="30" height="32" viewBox="0 0 30 32" fill="none">
@@ -28,12 +28,12 @@ registerBlockType('fluent-booking/calendar', {
                 </defs>
             </svg>
     },
-    keywords: [__('fluent'), __('fluent booking'), __('calendar'), __('booking')],
+    keywords: [__('fluent'), __('fluent booking'), __('calendar'), __('booking'), __('team')],
     supports: {
         align: ['wide', 'full'],
         html: true
     },
     attributes,
     edit: Edit,
-    save: Save
+    // save: Save,
 });

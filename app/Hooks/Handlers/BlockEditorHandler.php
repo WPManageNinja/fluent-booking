@@ -9,10 +9,17 @@ class BlockEditorHandler
         add_action('enqueue_block_editor_assets', function () {
             $app    = App::getInstance();
             $assets = $app['url.assets'];
-    
+
             wp_enqueue_script(
                 'fluent-booking/calendar',
                 $assets . 'admin/fluent-booking-index.js',
+                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element'),
+                FLUENT_BOOKING_ASSETS_VERSION,
+                true
+            );
+            wp_enqueue_script(
+                'fluent-booking/team-management',
+                $assets . 'admin/fluent-booking-team-management-index.js',
                 array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element'),
                 FLUENT_BOOKING_ASSETS_VERSION,
                 true
@@ -57,6 +64,17 @@ class BlockEditorHandler
                 ]
             ]
         ));
+
+        register_block_type( 'fluent-booking/team-management' , array(
+            'editor_script'   => 'fluent-booking/team-management',
+            'render_callback' => array($this, 'fcal_render_team_management_block'),
+            'attributes'      => []
+        ));
+    }
+
+    public function fcal_render_team_management_block()
+    {
+
     }
 
     public function fcal_render_block($attributes)
