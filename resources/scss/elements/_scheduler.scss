@@ -155,6 +155,8 @@
               position: relative;
               gap: 12px;
               font-size: 18px;
+              overflow-wrap: anywhere;
+              padding-right: 16px;
 
               .fcal_status_badge {
                 border-radius: 50%;
