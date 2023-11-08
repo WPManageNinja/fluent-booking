@@ -2,8 +2,8 @@
     {#each field.options as option}
         <label class="fcal_location_radio_list">
             {i18(option.title)}
-            <input type="radio" on:change={onChangeDriver} checked={form.location_config.driver === option.type}
-                   name={field.name} value={option.type}/>
+            <input type="radio" on:change={onChangeDriver} checked={form.location_config.driver == option.slug}
+                   name={field.name} value={option.slug}/>
             <span class="fcal_radio_icon"></span>
         </label>
     {/each}
