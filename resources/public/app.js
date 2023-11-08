@@ -48,6 +48,22 @@ window.fluentCalBootApp = function (elem, handleBack = false) {
         appData.slot.pre_selects = preSelects;
     }
 
+    if(appData.lazy_js_files) {
+        // load js files, appData.lazy_js_files is an object
+        for (const fileKey in appData.lazy_js_files) {
+            // check if script is already loaded
+            if(document.getElementById(fileKey)) {
+                continue;
+            }
+
+            const script = document.createElement('script');
+            script.src = appData.lazy_js_files[fileKey];
+            script.async = true;
+            script.id = fileKey;
+            document.body.appendChild(script);
+        }
+    }
+
     const app = new BookingApp({
         target: elem,
         props: {

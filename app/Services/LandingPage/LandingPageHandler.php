@@ -91,10 +91,10 @@ class LandingPageHandler
             $this->renderBookingView($calendar, $slot);
         }
 
-        $this->renderCalendarView($calendar);
+        $this->renderHostView($calendar);
     }
 
-    private function renderCalendarView($calendar)
+    private function renderHostView($calendar)
     {
         global $wp;
         $settings = LandingPageHelper::getSettings($calendar, 'public');
@@ -127,7 +127,6 @@ class LandingPageHandler
 
         $currentUrl = home_url($wp->request);
 
-
         $globalVars['is_landing_page'] = true;
         $globalVars['is_pretty_url'] = defined('FLUENT_BOOKING_LANDING_SLUG');
         $globalVars['base_url'] = rtrim($currentUrl, '/');
@@ -143,7 +142,7 @@ class LandingPageHandler
             $vars = (new FrontEndHandler())->getCalendarEventVars($calendar, $event);
             $extraJs = $this->getEventLandingExtraJsFiles($vars['form_fields'], $event);
             if ($extraJs) {
-                $extraJsFiles = array_merge($extraJsFiles, $extraJs);
+                $vars['lazy_js_files'] = $extraJs;
             }
 
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
@@ -432,12 +431,12 @@ class LandingPageHandler
         $assetUrl = App::getInstance('url.assets');
 
         if (BookingFieldService::hasPhoneNumberField($formFields)) {
-            $files[] = $assetUrl . 'public/js/phone-field.js';
+            $files['fluent-booking-phone-field-js'] = $assetUrl . 'public/js/phone-field.js';
         }
 
         if ($calendarEvent->type == 'paid') {
-            $files[] = 'https://js.stripe.com/v3/';
-            $files[] = $assetUrl . 'public/js/stripe-checkout.js';
+            $files['stipe-js'] = 'https://js.stripe.com/v3/';
+            $files['fluent-booking-stripe-checkout'] = $assetUrl . 'public/js/stripe-checkout.js';
         }
 
         return $files;
