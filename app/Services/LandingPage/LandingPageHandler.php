@@ -160,7 +160,7 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
             'js_files'    => [
-                $assetUrl . 'public/js/app.js',
+                'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
             ],
             'js_vars'     => $jsVars
         ];
@@ -237,7 +237,7 @@ class LandingPageHandler
                 $assetUrl . 'public/saas.css'
             ],
             'js_files'       => [
-                $assetUrl . 'public/js/app.js',
+                'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
                 'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars(),
@@ -248,7 +248,7 @@ class LandingPageHandler
         $extraJs = $this->getEventLandingExtraJsFiles($eventVars['form_fields'], $calendarEvent);
 
         if ($extraJs) {
-            $data['js_files'] = array_merge($data['js_files'], $extraJs);
+            $data['js_files'] = wp_parse_args($data['js_files'], $extraJs);
             add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
                 ?>
                 <style>
@@ -318,7 +318,7 @@ class LandingPageHandler
         ];
 
         if ($actionType == 'cancel') {
-            $data['js_files'][] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
+            $data['js_files']['fluent-booking-public-manage-meeting-js'] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
         }
 
         $app = App::getInstance();
@@ -435,8 +435,8 @@ class LandingPageHandler
         }
 
         if ($calendarEvent->type == 'paid') {
-            $files['stipe-js'] = 'https://js.stripe.com/v3/';
-            $files['fluent-booking-stripe-checkout'] = $assetUrl . 'public/js/stripe-checkout.js';
+            $files['fluent-booking-checkout-sdk-stripe-js'] = 'https://js.stripe.com/v3/';
+            $files['fluent-booking-checkout-handler-stripe-js'] = $assetUrl . 'public/js/stripe-checkout.js';
         }
 
         return $files;

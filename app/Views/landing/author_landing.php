@@ -282,13 +282,13 @@
 </div>
 
 <script>
-    <?php foreach ($js_vars as $varKey => $values): ?>
-    var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
-    <?php endforeach; ?>
+<?php foreach ($js_vars as $varKey => $values): ?>
+var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+<?php endforeach; ?>
 </script>
 
-<?php foreach ($js_files as $file): ?>
-    <script src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
+<?php foreach ($js_files as $fileKey => $file): ?>
+<script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
 <?php endforeach; ?>
 
 </body>
