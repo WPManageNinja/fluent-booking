@@ -133,6 +133,7 @@ class LandingPageHandler
 
         $jsVars = [
             'fluentCalendarPublicVars' => $globalVars,
+            'fcal_landing_page' => true
         ];
 
         $extraJsFiles = [];
@@ -162,7 +163,10 @@ class LandingPageHandler
             'js_files'    => [
                 'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
             ],
-            'js_vars'     => $jsVars
+            'js_vars'     => $jsVars,
+            'header_js_files' => [
+                'fluent_booking_team_app-js' => $assetUrl. 'public/js/team_app.js'
+            ]
         ];
 
         if ($extraJsFiles) {
@@ -244,6 +248,7 @@ class LandingPageHandler
                 'fcal_public_vars_' . $calendar->id . '_' . $calendarEvent->id => $eventVars,
             ]
         ];
+
 
         $extraJs = $this->getEventLandingExtraJsFiles($eventVars['form_fields'], $calendarEvent);
 
@@ -425,7 +430,7 @@ class LandingPageHandler
         $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
 
-    private function getEventLandingExtraJsFiles($formFields, $calendarEvent)
+    public function getEventLandingExtraJsFiles($formFields, $calendarEvent)
     {
         $files = [];
         $assetUrl = App::getInstance('url.assets');
