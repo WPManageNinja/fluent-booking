@@ -18,8 +18,8 @@ export const attributes = {
         type: 'array',
         default: []
     },
-    selectedCalendars: {
-        type: 'array',
-        default: []
+    hosts: {
+        type: 'object',
+        default: {}
     }
 };

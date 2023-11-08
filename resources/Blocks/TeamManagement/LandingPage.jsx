@@ -1,6 +1,5 @@
 /*eslint-disable*/
 const {Fragment, useEffect, useState} = wp.element;
-// import { RichText } from '@wordpress/block-editor';
 const { RichText } = wp.blockEditor;
 const {__} = wp.i18n;
 const {
@@ -19,7 +18,7 @@ export const LandingPage = props => {
             description,
             headerImage,
             calendars,
-            selectedCalendars
+            hosts
         }, setAttributes,
     } = props;
 
@@ -52,11 +51,14 @@ export const LandingPage = props => {
             });
     };
 
-    if (selectedCalendars.length) {
-        const selectedIDs = selectedCalendars.map(id => parseInt(id));
-        calendars = calendars.filter(calendar => selectedIDs.includes(calendar.id));
-    }
+    if (hosts) {
+        let hostId = [];
 
+        for (let key in hosts) {
+            hostId.push(parseInt(key));
+        }
+        calendars = calendars.filter(calendar => hostId.includes(calendar.id));
+    }
 
     return [
         <Fragment>
@@ -68,30 +70,22 @@ export const LandingPage = props => {
                         :
                         <img src={assetsUrl+'/images/logo.svg'} alt="Logo" />
                     }
-                    {
-                        title !== '' ?
-                            <RichText
-                                tagName="h1"
-                                value={ title }
-                                allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
-                                onChange={ ( heading ) => setAttributes( { title: heading } ) }
-                                placeholder="Enter title here..."
-                            />
-                        :
-                        ''
-                    }
-                    {
-                        description !== '' ?
-                            <RichText
-                                tagName="p"
-                                value={ description }
-                                allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
-                                onChange={ ( heading ) => setAttributes( { description: heading } ) }
-                                placeholder="Enter description here..."
-                            />
-                        :
-                        ''
-                    }
+                    <RichText
+                        className={title?'':'empty-text'}
+                        tagName="h1"
+                        value={ title }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        onChange={ ( heading ) => setAttributes( { title: heading } ) }
+                        placeholder="Enter title here..."
+                    />
+                    <RichText
+                        className={description?'':'empty-text'}
+                        tagName="p"
+                        value={ description }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        onChange={ ( heading ) => setAttributes( { description: heading } ) }
+                        placeholder="Enter description here..."
+                    />
                 </div>
 
                 {
