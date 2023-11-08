@@ -2189,6 +2189,16 @@
             flex: 1;
 
             .fcal_settings_landing_page {
+                .fcal_settings_header {
+                    .fcal_settings_actions {
+                        .fcal_plain_btn {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 4px;
+                            padding: 9px 16px;
+                        }
+                    }
+                }
                 .el-form {
                     .el-form-item {
                         .el-form-item__label {
