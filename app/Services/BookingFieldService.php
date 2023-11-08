@@ -140,7 +140,6 @@ class BookingFieldService
         if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
         } else {
-
             if (empty($existingFields['location'])) {
                 $existingFields['location'] = $defaultFields['location'];
             } else {
