@@ -68,11 +68,28 @@ class BlockEditorHandler
         register_block_type( 'fluent-booking/team-management' , array(
             'editor_script'   => 'fluent-booking/team-management',
             'render_callback' => array($this, 'fcal_render_team_management_block'),
-            'attributes'      => []
+            'attributes'      => array(
+                'title' => array(
+                    'type'    => 'string',
+                    'default' => 'FluentBooking Team'
+                ),
+                'description' => array(
+                    'type'    => 'string',
+                    'default' => ''
+                ),
+                'headerImage' => array(
+                    'type'    => 'object',
+                    'default' => ''
+                ),
+                'hosts'       => array(
+                    'type'    => 'object',
+                    'default' => ''
+                )
+            )
         ));
     }
 
-    public function fcal_render_team_management_block()
+    public function fcal_render_team_management_block($attributes)
     {
 
     }

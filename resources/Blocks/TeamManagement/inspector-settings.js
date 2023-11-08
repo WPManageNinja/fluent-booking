@@ -14,7 +14,11 @@ const {
     CheckboxControl,
     MenuGroup,
     MenuItem,
-    TextareaControl
+    TextareaControl,
+    DropdownMenuGroup,
+    DropdownMenuGroupLabel,
+    DropdownMenuCheckboxItem,
+    DropdownMenuSeparator
 } = wp.components;
 
 const assets_url = window.fluent_booking_block.assets_url;
@@ -27,7 +31,7 @@ const InspectorSettings = props => {
             headerImage,
             calendars,
             calendarChecked,
-            selectedCalendars
+            hosts
         }, setAttributes
     } = props;
 
@@ -54,12 +58,6 @@ const InspectorSettings = props => {
             value: calendar.id
         });
     })
-
-    const handleCheck = (e) => {
-        const ids = '';
-        console.log(e);
-    }
-
     return (
         <InspectorControls>
             <PanelBody title={__('Header Settings')}
@@ -98,18 +96,6 @@ const InspectorSettings = props => {
                                 )}
                             />
                         </div>
-                        <div className="fcal_block_inspector_widget">
-                            <TextControl
-                                label={__('Title')}
-                                value={title}
-                                onChange={(value) => setAttributes({title: value})}
-                            />
-                            <TextareaControl
-                                label={__('Description')}
-                                value={description}
-                                onChange={(value) => setAttributes({description: value})}
-                            />
-                        </div>
                     </div>
                 </PanelRow>
             </PanelBody>
@@ -119,76 +105,109 @@ const InspectorSettings = props => {
             >
                 <PanelRow>
                     <div className="fcal_block_settings">
-                        <div className="fcal_block_inspector_widget fcal_block_calendars_select">
-                            <h3>Select Calendars</h3>
-                            {calendars.map(function (calender) {
-                                return <CheckboxControl
-                                    label={calender.title}
-                                    checked={selectedCalendars.includes(calender.id+"")}
-                                    onChange={(value) => {
-                                        if (value === true) {
-                                            if (!selectedCalendars.includes(calender.id+"")) {
-                                                let oldChecked = selectedCalendars;
-                                                oldChecked.push(calender.id+"")
-                                                setAttributes({selectedCalendars:  [...selectedCalendars, ...oldChecked]})
-                                            }
-                                        }
-                                        else {
-                                            const index = selectedCalendars.indexOf(calender.id+"");
-                                            if (index > -1) {
-                                                let oldChecked =  selectedCalendars.filter(id => {
-                                                    return id !== calender.id+"";
-                                                })
-                                                setAttributes({selectedCalendars:  [...oldChecked]})
-                                            }
-                                        }
-                                    }}
-                                />
-                            })}
-                            <p className="info">{__('Leave this field empty to display all calendars.')}</p>
-                        </div>
-                        <div className="fcal_block_inspector_widget">
-                            {/*<SelectControl*/}
-                            {/*    label={__('Select calendars:')}*/}
-                            {/*    value={selectedCalendars} // e.g: value = [ '1', '2' ]*/}
-                            {/*    onChange={(calendarIds) => {*/}
-                            {/*        setAttributes({selectedCalendars: calendarIds});*/}
-                            {/*    }}*/}
-                            {/*    options={calendarOptions}*/}
-                            {/*    __nextHasNoMarginBottom*/}
-                            {/*    multiple={true}*/}
-                            {/*/>*/}
-                            {/*<p className="info">{__('Leave this field empty to display all calendars.')}</p>*/}
-                        </div>
-                        {/*<div className="fcal_block_inspector_widget">*/}
-                        {/*    <Dropdown*/}
-                        {/*        className="fcal_block_dropdown_wrapper"*/}
-                        {/*        contentClassName="fcal_block_dropdown_container"*/}
-                        {/*        popoverProps={ { placement: 'bottom-start' } }*/}
-                        {/*        renderToggle={ ( { isOpen, onToggle } ) => (*/}
-                        {/*            <Button*/}
-                        {/*                variant="primary"*/}
-                        {/*                onClick={ onToggle }*/}
-                        {/*                aria-expanded={ isOpen }*/}
-                        {/*            >*/}
-                        {/*                Select Calendars*/}
-                        {/*            </Button>*/}
-                        {/*        ) }*/}
-                        {/*        renderContent={ () => <div className="fcal_block_dropdown_content_wrap">*/}
-                        {/*            {*/}
-                        {/*                calendars.map(calendar => {*/}
-                        {/*                    return <CheckboxControl*/}
-                        {/*                        label={calendar.title}*/}
-                        {/*                        value={calendar.id}*/}
-                        {/*                        checked={ calendarChecked.includes( calendar.id ) ? true : false }*/}
-                        {/*                        onChange={ handleCheck(calendar.id) }*/}
-                        {/*                    />*/}
-                        {/*                })*/}
-                        {/*            }*/}
-                        {/*        </div> }*/}
-                        {/*    />*/}
-                        {/*</div>*/}
 
+                        <div className="fcal_block_inspector_widget fcal_inspector_host_select">
+                            <h3>{__('Select Hosts')}</h3>
+                            <ul className="accordion-list">
+                                {
+                                    calendars.map(cal => {
+                                        return <div>
+                                            <CheckboxControl
+                                                label={cal.title}
+                                                value={cal.id}
+                                                checked={hosts.hasOwnProperty(cal.id)}
+                                                onChange={(checked) => {
+                                                    let oldHosts = hosts;
+                                                    if (checked) {
+                                                        if (!oldHosts.hasOwnProperty(cal.id)) {
+                                                            oldHosts[cal.id] = [];
+                                                        }
+                                                    } else {
+                                                        if (oldHosts.hasOwnProperty(cal.id)) {
+                                                            delete oldHosts[cal.id]
+                                                        }
+                                                    }
+
+                                                    setAttributes({
+                                                        hosts: {...oldHosts}
+                                                    })
+                                                }}
+                                            />
+
+                                            {
+                                                hosts.hasOwnProperty(cal.id) ?
+                                                    <PanelBody title={__('Events')}
+                                                               initialOpen={true}
+                                                    >
+                                                        <PanelRow>
+                                                            <div className="answer">
+                                                                <div className="fcal_calendar_events_lists">
+
+                                                                    {/*<CheckboxControl*/}
+                                                                    {/*    label="All"*/}
+                                                                    {/*    value="all"*/}
+                                                                    {/*    checked={hosts[cal.id]?.includes('all')}*/}
+                                                                    {/*    onChange={(checked) => {*/}
+
+                                                                    {/*        let oldHosts = hosts;*/}
+                                                                    {/*        if (checked){*/}
+                                                                    {/*            if (!oldHosts.hasOwnProperty('all')){*/}
+                                                                    {/*                oldHosts[cal.id] = [];*/}
+                                                                    {/*            }*/}
+                                                                    {/*            oldHosts[cal.id].push('all')*/}
+                                                                    {/*        } else {*/}
+                                                                    {/*            if (oldHosts.hasOwnProperty('all')){*/}
+                                                                    {/*                oldHosts[cal.id].push('')*/}
+                                                                    {/*            }*/}
+                                                                    {/*        }*/}
+                                                                    {/*        setAttributes({*/}
+                                                                    {/*            hosts: {...oldHosts}*/}
+                                                                    {/*        })*/}
+                                                                    {/*    }}*/}
+                                                                    {/*/>*/}
+                                                                    {
+                                                                        cal?.slots.map(event => {
+                                                                            return <div key={'event-'+event.id} className="fcal_calendar_event">
+                                                                                <CheckboxControl
+                                                                                    label={event.title}
+                                                                                    value={event.id}
+                                                                                    checked={hosts[cal.id]?.includes(event.id)}
+                                                                                    onChange={(checked) => {
+
+                                                                                        let oldHosts = hosts;
+                                                                                        if (checked){
+                                                                                            if (!oldHosts.hasOwnProperty(cal.id)){
+                                                                                                oldHosts[cal.id] = [];
+                                                                                            }
+                                                                                            oldHosts[cal.id].push(event.id)
+                                                                                        } else{
+                                                                                            if (oldHosts.hasOwnProperty(cal.id)){
+                                                                                                let eventIds = oldHosts[cal.id] ;
+                                                                                                oldHosts[cal.id] =  eventIds.filter(id => {
+                                                                                                    return id != event.id;
+                                                                                                })
+                                                                                            }
+                                                                                        }
+                                                                                        setAttributes({
+                                                                                            hosts: {...oldHosts}
+                                                                                        })
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </PanelRow>
+                                                    </PanelBody>
+                                                : ''
+                                            }
+                                        </div>
+                                    })
+                                }
+
+                            </ul>
+                        </div>
                     </div>
                 </PanelRow>
             </PanelBody>
