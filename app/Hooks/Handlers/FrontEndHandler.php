@@ -11,6 +11,7 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
+use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
@@ -23,7 +24,9 @@ class FrontEndHandler
 {
     public function register()
     {
-        add_shortcode('fluent_booking', [$this, 'handleShortcode']);
+        add_shortcode('fluent_booking', [$this, 'handleBookingShortcode']);
+
+        add_shortcode('fluent_booking_team', [$this, 'handleTeamShortcode']);
 
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
 
@@ -39,7 +42,6 @@ class FrontEndHandler
         /*
          * Rescheduing Handlers
          */
-
         add_action('fluent_booking/starting_scheduling_ajax', function ($data) {
             if (empty($data['rescheduling_hash'])) {
                 return;
@@ -118,10 +120,9 @@ class FrontEndHandler
 
             }, 10, 2);
         });
-
     }
 
-    public function handleShortcode($atts, $content)
+    public function handleBookingShortcode($atts, $content)
     {
         $atts = shortcode_atts([
             'id'             => 0,
@@ -174,6 +175,78 @@ class FrontEndHandler
 
         return App::make('view')->make('public.calendar', [
             'calenderEvent' => $calendarEvent
+        ]);
+    }
+
+    public function handleTeamShortcode($atts, $content)
+    {
+        $atts = shortcode_atts([
+            'event_ids' => ''
+        ], $atts);
+
+        if (!$atts['event_ids']) {
+            return '';
+        }
+
+        $eventIds = array_filter(array_map('intval', explode(',', $atts['event_ids'])));
+
+        if (empty($eventIds)) {
+            return '';
+        }
+
+        $events = CalendarSlot::query()->whereIn('id', $eventIds)
+            ->where('status', 'active')
+            ->get();
+
+        $calendarIds = [];
+        $calendarEvents = [];
+
+        foreach ($events as $event) {
+            $calendarIds[] = $event->calendar_id;
+            if (!isset($calendarEvents[$event->calendar_id])) {
+                $calendarEvents[$event->calendar_id] = [];
+            }
+            $calendarEvents[$event->calendar_id][] = $event;
+        }
+
+        $calendars = Calendar::query()->whereIn('id', $calendarIds)->get();
+        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
+
+        wp_enqueue_script('fluent-booking-team', App::getInstance('url.assets') . 'public/js/team_app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+        $vars = [];
+
+        foreach ($calendars as $calendar) {
+            $vars['fcal_host_' . $calendar->id] = [
+                'host_html' => (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+                    'author'   => $calendar->getAuthorProfile(),
+                    'calendar' => $calendar,
+                    'events'   => $calendarEvents[$calendar->id]
+                ]),
+            ];
+        }
+
+        foreach ($events as $event) {
+            $itemVars = $this->getCalendarEventVars($event->calendar, $event);
+            $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($vars['form_fields'], $event);
+            if ($extraJs) {
+                $itemVars['lazy_js_files'] = $extraJs;
+            }
+            wp_localize_script('fluent-booking-team', 'fcal_public_vars_' . $event->calendar_id . '_' . $event->id, $itemVars);
+        }
+
+        wp_localize_script('fluent-booking-team', $wrapperId, $vars);
+
+        $assetUrl = App::getInstance('url.assets');
+        wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $this->loadGlobalVars();
+
+        return App::make('view')->make('public.team_page', [
+            'hosts'       => $calendars,
+            'wrapper_id'  => $wrapperId,
+            'logo'        => '',
+            'title'       => 'Book a meeting with our team',
+            'description' => 'Please select a team member to book a meeting with them',
         ]);
     }
 
@@ -539,7 +612,7 @@ class FrontEndHandler
             'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
-            'execution_time'       => microtime(true) - $startBenchmark
+            'execution_time'  => microtime(true) - $startBenchmark
         ], 200);
     }
 

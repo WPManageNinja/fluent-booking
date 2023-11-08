@@ -51,4 +51,6 @@ mix.js('resources/public/ExtendedPhone/phone-field.js', 'assets/public/js')
 
 mix.js('resources/public/public-manage-meeting.js', 'assets/public/js');
 
+mix.js('resources/public/Team/team_app.js', 'assets/public/js');
+
 mix.disableNotifications();
