@@ -106,6 +106,7 @@ class Bootstrap
         });
 
         add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
+            return $fields;
             $meetExist = Meta::where('object_type', '_outlook_user_token')
                 ->where('object_id', $calendar->user_id)
                 ->first();
@@ -339,7 +340,7 @@ class Bootstrap
                 $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $remoteId) {
                     $events = $calendarApi->getCalendarEvents($remoteId, [
                         'startDateTime' => $startDate,
-                        'endDateTime' => $endDate
+                        'endDateTime'   => $endDate
                     ]);
 
                     if (is_wp_error($events)) {
@@ -383,6 +384,7 @@ class Bootstrap
 
     public function createRemoteCalendarEvent($config, Booking $booking, CalendarSlot $slot)
     {
+
         $calendar = $booking->calendar;
         if (!$calendar) {
             return false;
@@ -436,66 +438,57 @@ class Bootstrap
             return false;
         }
 
-        $guestAttendee = array_filter([
-            'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
-            'email'        => $booking->email,
-            'comment'      => $booking->message
-        ]);
+        $guestAttendee = [
+            'emailAddress' => array_filter([
+                'name'    => trim($booking->first_name . ' ' . $booking->last_name),
+                'address' => $booking->email
+            ]),
+            'type'         => 'required'
+        ];
 
         $author = $slot->getAuthorProfile(false);
 
         $data = [
             'start'              => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
+                'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->start_time)),
+                'timeZone' => 'UTC'
             ],
             'end'                => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
+                'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->end_time)),
+                'timeZone' => 'UTC'
             ],
             'attendees'          => [
                 $guestAttendee,
-                [
-                    'display_name' => $author['name'],
-                    'email'        => $author['email']
+            ],
+            'organizer' => [
+                'emailAddress' => [
+                    'name'    => $author['name'],
+                    'address' => $author['email']
                 ]
             ],
+            'allowNewTimeProposals' => false,
             'source'             => [
                 'title' => $slot->title,
                 'url'   => $booking->source_url
             ],
-            'location'           => $booking->getLocationAsText(),
-            'summary'            => __(sprintf('%d Min Meeting between %1s and %2s', $booking->slot_minutes, $author['name'], trim($booking->first_name . ' ' . $booking->last_name)), 'fluent-booking-pro'),
-            'extendedProperties' => [
-                'shared' => [
-                    'created_by' => 'fluent-booking-pro',
-                    'site_uid'   => OutlookHelper::getUniqueSiteIdHash(),
-                    'event_id'   => $slot->id,
-                    'booking_id' => $booking->id
-                ],
+            'location'           => [
+                'displayName' => $booking->getLocationAsText(),
             ],
+            'subject'            => $booking->getMeetingTitle()
         ];
 
         if ($booking->message && $booking->event_type == 'single') {
-            $data['description'] = __('Note: ', 'fluent-booking-pro') . $booking->message;
-        }
-
-        $isGoogleMeet = false;
-
-        if (Arr::get($booking->location_details, 'type') == 'google_meet') {
-            $data['conferenceData'] = [
-                'createRequest' => [
-                    'requestId'             => $booking->hash,
-                    'conferenceSolutionKey' => [
-                        'type' => 'hangoutsMeet'
-                    ]
-                ]
+            $data['body'] = [
+                'contentType' => 'html',
+                'content'     => sprintf(__('Note: %s', 'fluent-booking-pro'), $booking->message)
             ];
-
-            $isGoogleMeet = true;
         }
 
         $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking, $slot);
 
+
         $response = $api->createEvent($config['remote_calendar_id'], $data);
+        error_log('Outlook response: ' . print_r($response, true));
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -508,17 +501,18 @@ class Bootstrap
             return false;
         }
 
+
         $responseData = [
             'id'                 => $response['id'],
-            'remote_link'        => $response['htmlLink'],
+            'remote_link'        => $response['webLink'],
             'remote_calendar_id' => $config['remote_calendar_id'],
             'access_db_id'       => $meta->id,
         ];
 
-        if ($isGoogleMeet && !empty($response['hangoutLink'])) {
-            $responseData['google_meet_link'] = $response['hangoutLink'];
+        if (!empty($response['onlineMeeting']['joinUrl'])) {
+            $responseData['ms_team_link'] = $response['onlineMeeting']['joinUrl'];
             $location = $booking->location_details;
-            $location['online_platform_link'] = $responseData['google_meet_link'];
+            $location['online_platform_link'] = $response['onlineMeeting']['joinUrl'];
             $booking->location_details = $location;
             $booking->save();
         }
