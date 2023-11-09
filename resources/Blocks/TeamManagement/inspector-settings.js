@@ -143,56 +143,65 @@ const InspectorSettings = props => {
                                                             <div className="answer">
                                                                 <div className="fcal_calendar_events_lists">
 
-                                                                    {/*<CheckboxControl*/}
-                                                                    {/*    label="All"*/}
-                                                                    {/*    value="all"*/}
-                                                                    {/*    checked={hosts[cal.id]?.includes('all')}*/}
-                                                                    {/*    onChange={(checked) => {*/}
+                                                                    <CheckboxControl
+                                                                        className="all-event-checked"
+                                                                        label={__('All')}
+                                                                        value="all"
+                                                                        checked={hosts[cal.id]?.includes('all')}
+                                                                        onChange={(checked) => {
 
-                                                                    {/*        let oldHosts = hosts;*/}
-                                                                    {/*        if (checked){*/}
-                                                                    {/*            if (!oldHosts.hasOwnProperty('all')){*/}
-                                                                    {/*                oldHosts[cal.id] = [];*/}
-                                                                    {/*            }*/}
-                                                                    {/*            oldHosts[cal.id].push('all')*/}
-                                                                    {/*        } else {*/}
-                                                                    {/*            if (oldHosts.hasOwnProperty('all')){*/}
-                                                                    {/*                oldHosts[cal.id].push('')*/}
-                                                                    {/*            }*/}
-                                                                    {/*        }*/}
-                                                                    {/*        setAttributes({*/}
-                                                                    {/*            hosts: {...oldHosts}*/}
-                                                                    {/*        })*/}
-                                                                    {/*    }}*/}
-                                                                    {/*/>*/}
+                                                                            let oldHosts = hosts;
+                                                                            if (checked){
+                                                                                if (!oldHosts.hasOwnProperty('all')){
+                                                                                    oldHosts[cal.id] = [];
+                                                                                }
+                                                                                oldHosts[cal.id].push('all')
+                                                                            } else {
+                                                                                if (oldHosts.hasOwnProperty(cal.id)){
+                                                                                    let eventIds = oldHosts[cal.id] ;
+                                                                                    oldHosts[cal.id] =  eventIds.filter(id => {
+                                                                                        return id != 'all';
+                                                                                    })
+                                                                                }
+                                                                            }
+                                                                            setAttributes({
+                                                                                hosts: {...oldHosts}
+                                                                            })
+                                                                        }}
+                                                                    />
                                                                     {
                                                                         cal?.slots.map(event => {
                                                                             return <div key={'event-'+event.id} className="fcal_calendar_event">
-                                                                                <CheckboxControl
-                                                                                    label={event.title}
-                                                                                    value={event.id}
-                                                                                    checked={hosts[cal.id]?.includes(event.id)}
-                                                                                    onChange={(checked) => {
+                                                                                {
+                                                                                    hosts[cal.id]?.includes('all') ?
+                                                                                    ''
+                                                                                    :
+                                                                                    <CheckboxControl
+                                                                                        label={event.title}
+                                                                                        value={event.id}
+                                                                                        checked={hosts[cal.id]?.includes(event.id)}
+                                                                                        onChange={(checked) => {
 
-                                                                                        let oldHosts = hosts;
-                                                                                        if (checked){
-                                                                                            if (!oldHosts.hasOwnProperty(cal.id)){
-                                                                                                oldHosts[cal.id] = [];
+                                                                                            let oldHosts = hosts;
+                                                                                            if (checked){
+                                                                                                if (!oldHosts.hasOwnProperty(cal.id)){
+                                                                                                    oldHosts[cal.id] = [];
+                                                                                                }
+                                                                                                oldHosts[cal.id].push(event.id)
+                                                                                            } else{
+                                                                                                if (oldHosts.hasOwnProperty(cal.id)){
+                                                                                                    let eventIds = oldHosts[cal.id] ;
+                                                                                                    oldHosts[cal.id] =  eventIds.filter(id => {
+                                                                                                        return id != event.id;
+                                                                                                    })
+                                                                                                }
                                                                                             }
-                                                                                            oldHosts[cal.id].push(event.id)
-                                                                                        } else{
-                                                                                            if (oldHosts.hasOwnProperty(cal.id)){
-                                                                                                let eventIds = oldHosts[cal.id] ;
-                                                                                                oldHosts[cal.id] =  eventIds.filter(id => {
-                                                                                                    return id != event.id;
-                                                                                                })
-                                                                                            }
-                                                                                        }
-                                                                                        setAttributes({
-                                                                                            hosts: {...oldHosts}
-                                                                                        })
-                                                                                    }}
-                                                                                />
+                                                                                            setAttributes({
+                                                                                                hosts: {...oldHosts}
+                                                                                            })
+                                                                                        }}
+                                                                                    />
+                                                                                }
                                                                             </div>
                                                                         })
                                                                     }
