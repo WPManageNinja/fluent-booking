@@ -59,6 +59,10 @@ function faCalOpenBookingPage(item, event) {
 
 window.faCalOpenBookingPage = faCalOpenBookingPage;
 
+let teamViewHtml = '<div class="test"></div>';
+// append the teamViewHtml to .fcal_calendar_wrap element do not replace it
+document.querySelector('.fcal_teams').insertAdjacentHTML('beforeend', teamViewHtml);
+
 document.querySelectorAll('.fcal_teams').forEach(function (teams) {
     teams.querySelector('.fcal_teams_wrap').style.display = 'block';
     teams.querySelector('.fcal_team_loading').remove();
