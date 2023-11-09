@@ -4,6 +4,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -129,28 +130,61 @@ class BlockEditorHandler
     public function fcal_render_team_management_block($attributes)
     {
 
-        return 'Hello';
-
-        $hosts = [
+        $attributes['hosts'] = [
             [
-                'id' => 1,
+                'id'        => 12,
                 'event_ids' => ['all']
             ],
             [
-                'id' => 2,
-                'event_ids' => ['6', '9']
+                'id'        => 1,
+                'event_ids' => ['1', '13']
             ]
         ];
 
-        return 'OK';
-        $hostsConfig = Arr::get($attributes, 'hosts');
+        $hosts = Arr::get($attributes, 'hosts', []);
 
-        foreach ($hostsConfig as $hostId => $config) {
-
+        if (!$hosts) {
+            return '';
         }
 
+        $hostItems = [];
 
-        dd($attributes);
+        foreach ($hosts as $config) {
+            $calendar = Calendar::find($config['id']);
+            if (!$calendar) {
+                continue;
+            }
+            $eventIds = Arr::get($config, 'event_ids', []);
+            if (!$eventIds) {
+                continue;
+            }
+            $isAll = in_array('all', $eventIds);
+
+            if ($isAll) {
+                $events = CalendarSlot::where('calendar_id', $calendar->id)
+                    ->where('status', 'active')
+                    ->get();
+            } else {
+                $events = CalendarSlot::where('calendar_id', $calendar->id)
+                    ->whereIn('id', $eventIds)
+                    ->where('status', 'active')
+                    ->get();
+            }
+
+            if ($events->isEmpty()) {
+                continue;
+            }
+
+            $calendar->activeEvents = $events;
+
+            $hostItems[$calendar->id] = $calendar;
+        }
+
+        return (new FrontEndHandler())->renderTeamHosts($hostItems, [
+            'title' => Arr::get($attributes, 'title'),
+            'description' => Arr::get($attributes, 'description'),
+            'logo' => Arr::get($attributes, 'headerImage.url')
+        ]);
     }
 
     public function fcal_render_block($attributes)
