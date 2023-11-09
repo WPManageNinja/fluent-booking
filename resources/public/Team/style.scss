@@ -8,6 +8,12 @@
       font-size: 1.5rem;
       margin: 0 0 .2rem 0;
     }
+    .fcal_person_avatar {
+      display: inline-block;
+      img {
+        max-height: 44px;
+      }
+    }
   }
 
   .fcal_team_body {
