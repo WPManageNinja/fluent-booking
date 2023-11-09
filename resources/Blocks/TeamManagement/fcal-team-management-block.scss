@@ -190,9 +190,19 @@
 			padding: 8px;
 			.components-checkbox-control {
 				margin-bottom: 0;
-
 				> .components-base-control__field {
 					margin-bottom: 0;
+					input {
+						border-color: #dbd8d8;
+						border-radius: 4px;
+						&:focus {
+							outline: none;
+							box-shadow: none;
+						}
+						&:checked {
+							border-color: #007cba;
+						}
+					}
 				}
 			}
 		}
@@ -228,22 +238,22 @@
 
 			.answer {
 				.fcal_calendar_event {
-					margin-bottom: 12px;
+					margin-top: 12px;
 					&:last-child {
 						margin-bottom: 0;
 					}
-					.components-checkbox-control {
-						margin-bottom: 0;
-						.components-checkbox-control__input-container {
-							margin-right: 8px;
-						}
-						.components-checkbox-control__label {
-							max-width: 100%;
-							width: 100%;
-							margin-right: 0;
-						}
-					}
 
+				}
+				.components-checkbox-control {
+					margin-bottom: 0;
+					.components-checkbox-control__input-container {
+						margin-right: 8px;
+					}
+					.components-checkbox-control__label {
+						max-width: 100%;
+						width: 100%;
+						margin-right: 0;
+					}
 				}
 			}
 		}
