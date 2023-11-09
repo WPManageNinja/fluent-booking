@@ -33,6 +33,17 @@ class RemoteCalendarsInit
             }
 
         }, 10, 2);
+
+        add_action('init', function () {
+            if(!isset($_REQUEST['out'])) {
+                return;
+            }
+
+            $booking = Booking::find(97);
+
+            $this->checkForRemoteCalendarEventInsert($booking, $booking->slot);
+        });
+
     }
 
     public function checkForRemoteCalendarEventInsert($booking, $slot)
@@ -55,7 +66,7 @@ class RemoteCalendarsInit
             do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $booking, 'add');
             return;
         }
-        
+
         do_action('fluent_booking/create_remote_calendar_event_' . $config['driver'], $config, $booking, $slot);
     }
 

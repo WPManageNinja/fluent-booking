@@ -188,18 +188,15 @@ class Client
 
     public function createEvent($calendarId, $data, $args = [])
     {
-
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events';
-
-        if (!empty($data['conferenceData'])) {
-            $url .= '?conferenceDataVersion=1';
-        }
+        $url = 'https://graph.microsoft.com/v1.0/me/calendars/' . $calendarId . '/events';
 
         if ($args) {
             $url = add_query_arg($args, $url);
         }
 
-        return $this->makeRequest($url, $data, 'POST', $this->getAuthorizationHeader());
+        $response = $this->makeCurlPost($url, $data, $this->getAuthorizationHeader());
+
+        dd($response);
     }
 
     public function patchEvent($calendarId, $eventId, $data, $args = [])
@@ -243,7 +240,7 @@ class Client
         ];
     }
 
-    public function makeRequest($url, $body = null, $type = 'GET', $headers = null)
+    public function makeRequest($url, $body = null, $type = 'GET', $headers = null, $xtraArgs = [])
     {
         if (!$headers) {
             $headers = [
@@ -258,6 +255,10 @@ class Client
             'httpversion' => '1.1',
         ];
 
+        if ($xtraArgs) {
+            // $args = wp_parse_args($args, $xtraArgs);
+        }
+
         if ($body) {
             if ($type == 'GET') {
                 $url = add_query_arg($body, $url);
@@ -266,7 +267,10 @@ class Client
             }
         }
 
+
         $request = wp_remote_request($url, $args);
+
+        dd($request);
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
@@ -279,6 +283,7 @@ class Client
             ]);
             return new \WP_Error('wp_error', $message, $request->get_all_error_data());
         }
+
 
         $resCode = wp_remote_retrieve_response_code($request);
 
@@ -300,6 +305,37 @@ class Client
         }
 
         return $resBody;
+    }
+
+    public function makeCurlPost($url, $body, $header)
+    {
+        // Initialize cURL session
+        $ch = curl_init($url);
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $this->accessToken,
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+
+        // Execute the cURL session
+        $response = curl_exec($ch);
+
+        // Check for cURL errors
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            curl_close($ch);
+            return new \WP_Error('curl_error', $error_msg);
+        }
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Decode the response
+        return json_decode($response, true);
     }
 
     public function getAuthUrl($userId)
