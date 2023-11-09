@@ -57,7 +57,9 @@ export const LandingPage = props => {
         for (let key in hosts) {
             hostId.push(parseInt(key));
         }
-        calendars = calendars.filter(calendar => hostId.includes(calendar.id));
+        if (hostId.length) {
+            calendars = calendars.filter(calendar => hostId.includes(calendar.id));
+        }
     }
 
     return [
