@@ -232,12 +232,17 @@ class FrontEndHandler
 
         $vars = [];
         foreach ($calendars as $calendar) {
+
+            $hostHtml = (string) (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+                'author'   => $calendar->getAuthorProfile(),
+                'calendar' => $calendar,
+                'events'   => $calendar->activeEvents
+            ]);
+
+            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>'.__('Back to team', 'fluent-booking-pro').'</span></div>';
+
             $vars['fcal_host_' . $calendar->id] = [
-                'host_html' => (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
-                    'author'   => $calendar->getAuthorProfile(),
-                    'calendar' => $calendar,
-                    'events'   => $calendar->activeEvents
-                ]),
+                'host_html' => $hostHtml
             ];
             foreach ($calendar->activeEvents as $event) {
                 $itemVars = $this->getCalendarEventVars($event->calendar, $event);
