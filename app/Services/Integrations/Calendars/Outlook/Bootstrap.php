@@ -18,6 +18,7 @@ class Bootstrap
     public function register()
     {
 
+        return;
         /*
          * Global Settings Handlers
          */
