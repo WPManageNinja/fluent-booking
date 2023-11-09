@@ -11,14 +11,19 @@ import './fcal-team-management-block.scss';
 
 const assetsUrl = window.fluent_booking_block.assets_url;
 
+const calendarsVar = window.fluent_booking_block.hosts;
+let calendars = Object.values(calendarsVar);
+
+const selectedHosts = [];
+
 export const LandingPage = props => {
     let {
         attributes: {
             title,
             description,
             headerImage,
-            calendars,
-            hosts
+            hosts,
+            calendarHosts,
         }, setAttributes,
     } = props;
 
@@ -31,36 +36,8 @@ export const LandingPage = props => {
     const {addQueryArgs} = wp.url;
 
     useEffect(() => {
-        getCalendars();
-    }, [ ] );
-    const getCalendars = (queryArgs) => {
-        setIsLoading(true);
-        apiFetch({
-            path: addQueryArgs('fluent-booking/v2/calendars', {
-                ...queryArgs
-            })
-        })
-            .then((response) => {
-                setAttributes( { calendars: response.calendars.data } );
-            })
-            .catch(error => {
-                setError(error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
 
-    if (hosts) {
-        let hostId = [];
-
-        for (let key in hosts) {
-            hostId.push(parseInt(key));
-        }
-        if (hostId.length) {
-            calendars = calendars.filter(calendar => hostId.includes(calendar.id));
-        }
-    }
+    }, [ calendarHosts]);
 
     return [
         <Fragment>
@@ -90,16 +67,15 @@ export const LandingPage = props => {
                     />
                 </div>
 
-                {
-                    calendars && calendars.length ?
+                { calendarHosts && calendarHosts.length ?
                         <div className="fcal_team_management_block_hosts">
-                            {calendars.map(calendar => {
+                            {calendarHosts.map(calConfig => {
                                 return <div className="fcal_team_management_block_host">
-                                    <img src={calendar?.author_profile?.avatar} alt=""/>
-                                    <h3>{calendar?.author_profile?.name}</h3>
+                                    <img src={calendarsVar[calConfig.id]?.author?.avatar} alt=""/>
+                                    <h3>{calendarsVar[calConfig.id]?.author?.name}</h3>
                                     {
-                                        calendar.description != '' ?
-                                            <p>{calendar.description}</p>
+                                        calendarsVar[calConfig.id]?.description != '' ?
+                                            <div dangerouslySetInnerHTML={{ __html: calendarsVar[calConfig.id]?.description }} />
                                         :
                                         ''
                                     }
@@ -107,8 +83,21 @@ export const LandingPage = props => {
                             })}
                         </div>
                         :
-                        <p className='empty-text'>{__('No Calendar Found!')}</p>
-                    }
+                    <div className="fcal_team_management_block_hosts">
+                        {calendars.map(calConfig => {
+                            return <div className="fcal_team_management_block_host">
+                                <img src={calConfig?.author?.avatar} alt=""/>
+                                <h3>{calConfig?.author?.name}</h3>
+                                {
+                                    calConfig?.description != '' ?
+                                        <div dangerouslySetInnerHTML={{ __html: calConfig?.description }} />
+                                        :
+                                        ''
+                                }
+                            </div>
+                        })}
+                    </div>
+                }
 
             </div>
         </Fragment>

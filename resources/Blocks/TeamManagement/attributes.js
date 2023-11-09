@@ -14,12 +14,12 @@ export const attributes = {
         type: 'object',
         default: {}
     },
-    calendars: {
-        type: 'array',
-        default: []
-    },
     hosts: {
         type: 'object',
         default: {}
-    }
+    },
+    calendarHosts: {
+        type: 'array',
+        default: []
+    },
 };
