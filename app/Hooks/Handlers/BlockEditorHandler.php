@@ -109,7 +109,7 @@ class BlockEditorHandler
             'attributes'      => array(
                 'title'       => array(
                     'type'    => 'string',
-                    'default' => 'FluentBooking Team'
+                    'default' => ''
                 ),
                 'description' => array(
                     'type'    => 'string',
