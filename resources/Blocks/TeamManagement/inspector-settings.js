@@ -31,7 +31,8 @@ const InspectorSettings = props => {
     calendars.map(calendar => {
         calendarOptions.push({
             label: calendar.title,
-            value: calendar.id
+            value: calendar.id,
+            author: calendar?.author
         });
     });
 
@@ -192,7 +193,9 @@ const InspectorSettings = props => {
                                                         calendarOptions.length && calendarOptions.length > 1 ?
                                                             host.value ?
                                                                 <button value={host.value}
-                                                                        onClick={handleNewHost}>{host.label}</button>
+                                                                        onClick={handleNewHost}>
+                                                                    <img src={host?.author?.avatar} alt={host.label} />
+                                                                    {host.label}</button>
                                                                 : <span className="select-host">{host.label}</span>
                                                             :
                                                             <div>
@@ -212,6 +215,7 @@ const InspectorSettings = props => {
                                     calendarHosts.map((host, index) => {
                                         return <div key={index}>
                                             <h3>
+                                                <img src={calendarsVar[host.id]?.author?.avatar} alt={calendarsVar[host.id].title} />
                                                 {calendarsVar[host.id].title}
                                                 <button className="remove-host" value={calendarsVar[host.id].id} onClick={handleRemoveHost}>+
                                                 </button>
