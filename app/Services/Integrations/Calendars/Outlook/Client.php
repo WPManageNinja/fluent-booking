@@ -194,9 +194,7 @@ class Client
             $url = add_query_arg($args, $url);
         }
 
-        $response = $this->makeCurlPost($url, $data, $this->getAuthorizationHeader());
-
-        dd($response);
+        return $this->makeRequest($url, json_encode($data), 'POST', $this->getAuthorizationHeader());
     }
 
     public function patchEvent($calendarId, $eventId, $data, $args = [])
@@ -223,9 +221,7 @@ class Client
 
     public function revokeConnection()
     {
-        return $this->makeRequest($this->revokeUrl, [
-            'token' => $this->accessToken
-        ], 'POST');
+        return $this->makeRequest($this->revokeUrl, [], 'GET', $this->getAuthorizationHeader());
     }
 
     public function getAuthorizationHeader($accessToken = null)
@@ -236,7 +232,7 @@ class Client
 
         return [
             'Authorization' => 'Bearer ' . $accessToken,
-            'Content-Type'  => 'application/json; charset=utf-8'
+            'Content-Type'  => 'application/json'
         ];
     }
 
@@ -269,8 +265,6 @@ class Client
 
 
         $request = wp_remote_request($url, $args);
-
-        dd($request);
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();

@@ -17,8 +17,6 @@ class Bootstrap
 {
     public function register()
     {
-
-        return;
         /*
          * Global Settings Handlers
          */
@@ -134,6 +132,7 @@ class Bootstrap
         add_action('fluent_booking/save_client_settings_outlook_calendar', function ($settings) {
             OutlookHelper::updateApiConfig($settings);
         });
+
         add_action('wp_ajax_fluent_booking_outlook_auth', [$this, 'handleAuthCallback']);
 
         /*
@@ -163,6 +162,7 @@ class Bootstrap
             $meta->value = $settings;
             $meta->save();
         }, 10, 2);
+
         add_action('fluent_calendar/disconnect_remote_calendar__outlook_user_token', function ($meta) {
             // Let's remove the cache first
             CalendarCache::deleteAllParentCache($meta->id);
@@ -468,10 +468,6 @@ class Bootstrap
                 ]
             ],
             'allowNewTimeProposals' => false,
-            'source'             => [
-                'title' => $slot->title,
-                'url'   => $booking->source_url
-            ],
             'location'           => [
                 'displayName' => $booking->getLocationAsText(),
             ],
@@ -487,9 +483,7 @@ class Bootstrap
 
         $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking, $slot);
 
-
         $response = $api->createEvent($config['remote_calendar_id'], $data);
-        error_log('Outlook response: ' . print_r($response, true));
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -525,7 +519,7 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Outlook Calendar event created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Outlook calendar event has been created. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            'description' => __(sprintf('Outlook calendar event has been created. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Outlook Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
         ]);
 
         return true;
@@ -543,7 +537,7 @@ class Bootstrap
             return false; // Nothing to update as there is no previous response of this booking
         }
 
-        $meta = Meta::where('object_type', '_goutlook_user_token')
+        $meta = Meta::where('object_type', '_outlook_user_token')
             ->where('object_id', $calendar->user_id)
             ->where('id', $config['db_id'])
             ->first();
@@ -585,11 +579,11 @@ class Bootstrap
             return false;
         }
 
-        $googleEventId = Arr::get($bookingMeta, 'id');
+        $outlookEventId = Arr::get($bookingMeta, 'id');
 
         $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $calendar);
 
-        $response = $api->patchEvent($config['remote_calendar_id'], $googleEventId, $data);
+        $response = $api->patchEvent($config['remote_calendar_id'], $outlookEventId, $data);
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -609,7 +603,7 @@ class Bootstrap
             'access_db_id'       => $meta->id,
         ];
 
-        $booking->updateMeta('__google_calendar_event', $responseData);
+        $booking->updateMeta('__outlook_calendar_event', $responseData);
 
         do_action('fluent_booking/log_booking_activity', [
             'booking_id'  => $booking->id,

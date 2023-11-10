@@ -181,7 +181,10 @@ class FrontEndHandler
     public function handleTeamShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'event_ids' => ''
+            'event_ids'   => '',
+            'title'       => '',
+            'description' => '',
+            'logo_url'    => ''
         ], $atts);
 
         if (!$atts['event_ids']) {
@@ -210,29 +213,45 @@ class FrontEndHandler
         }
 
         $calendars = Calendar::query()->whereIn('id', $calendarIds)->get();
-        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
 
+        foreach ($calendars as $calendar) {
+            $calendar->activeEvents = $calendarEvents[$calendar->id];
+        }
+
+        return $this->renderTeamHosts($calendars, [
+            'title'       => $atts['title'],
+            'description' => $atts['description'],
+            'logo'        => $atts['logo_url']
+        ]);
+    }
+
+    public function renderTeamHosts($calendars, $headerConfig = [])
+    {
+        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
         wp_enqueue_script('fluent-booking-team', App::getInstance('url.assets') . 'public/js/team_app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
 
         $vars = [];
-
         foreach ($calendars as $calendar) {
-            $vars['fcal_host_' . $calendar->id] = [
-                'host_html' => (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
-                    'author'   => $calendar->getAuthorProfile(),
-                    'calendar' => $calendar,
-                    'events'   => $calendarEvents[$calendar->id]
-                ]),
-            ];
-        }
 
-        foreach ($events as $event) {
-            $itemVars = $this->getCalendarEventVars($event->calendar, $event);
-            $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($vars['form_fields'], $event);
-            if ($extraJs) {
-                $itemVars['lazy_js_files'] = $extraJs;
+            $hostHtml = (string) (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+                'author'   => $calendar->getAuthorProfile(),
+                'calendar' => $calendar,
+                'events'   => $calendar->activeEvents
+            ]);
+
+            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>'.__('Back to team', 'fluent-booking-pro').'</span></div>';
+
+            $vars['fcal_host_' . $calendar->id] = [
+                'host_html' => $hostHtml
+            ];
+            foreach ($calendar->activeEvents as $event) {
+                $itemVars = $this->getCalendarEventVars($event->calendar, $event);
+                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($vars['form_fields'], $event);
+                if ($extraJs) {
+                    $itemVars['lazy_js_files'] = $extraJs;
+                }
+                wp_localize_script('fluent-booking-team', 'fcal_public_vars_' . $event->calendar_id . '_' . $event->id, $itemVars);
             }
-            wp_localize_script('fluent-booking-team', 'fcal_public_vars_' . $event->calendar_id . '_' . $event->id, $itemVars);
         }
 
         wp_localize_script('fluent-booking-team', $wrapperId, $vars);
@@ -244,9 +263,9 @@ class FrontEndHandler
         return App::make('view')->make('public.team_page', [
             'hosts'       => $calendars,
             'wrapper_id'  => $wrapperId,
-            'logo'        => '',
-            'title'       => 'Book a meeting with our team',
-            'description' => 'Please select a team member to book a meeting with them',
+            'logo'        => Arr::get($headerConfig, 'logo', ''),
+            'title'       => Arr::get($headerConfig, 'title', ''),
+            'description' => Arr::get($headerConfig, 'description', ''),
         ]);
     }
 

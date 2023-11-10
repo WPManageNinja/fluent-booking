@@ -28,6 +28,11 @@ function handleEventBlockClick(link) {
         app.$destroy();
         elemItem.remove();
         document.querySelector('.fluent_booking_wrap').style.marginLeft = '0';
+        const parentTeam = elem.closest('.fcal_teams');
+        // if(parentTeam) {
+        //     parentTeam.classList.remove('fcal_showing_team_calendar');
+        //     parentTeam.classList.add('fcal_showing_team_events');
+        // }
         if (window.history.pushState && window.fcal_landing_page) {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.delete('event');
@@ -54,6 +59,11 @@ function handleEventBlockClick(link) {
 
 function faCalOpenBookingPage(item, event) {
     event.preventDefault();
+    // const parentTeam = item.closest('.fcal_teams');
+    // if(parentTeam) {
+    //     parentTeam.classList.add('fcal_showing_team_calendar');
+    //     parentTeam.classList.remove('fcal_showing_team_events');
+    // }
     handleEventBlockClick(item);
 }
 
@@ -65,8 +75,19 @@ teamViewHtml.className = 'fluent_booking_team_view';
 // Now you can append teamViewHtml to the DOM or do whatever you need with it
 // For example, if you want to append it to the body:
 document.querySelector('.fcal_teams_inner').appendChild(teamViewHtml);
+window.fcalBackToTeam = function (item) {
+    const parentTeam = item.closest('.fcal_teams');
+    if(parentTeam) {
+        parentTeam.querySelector('.fluent_booking_team_view').innerHTML = '';
+        parentTeam.querySelector('.fcal_teams_wrap').style.display = 'block';
+        parentTeam.querySelector('.fcal_teams_wrap').style.marginLeft = '0';
+    }
+};
 
 document.querySelectorAll('.fcal_teams').forEach(function (teams) {
+
+    let currentState = 'view_members';
+
     teams.querySelector('.fcal_teams_wrap').style.display = 'block';
     teams.querySelector('.fcal_team_loading').remove();
     // find all the buttons in teams with class name fcal_each_member
@@ -91,6 +112,8 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
 
                 teams.querySelector('.fcal_teams_wrap').style.marginLeft = '-100%';
                 teams.querySelector('.fcal_teams_wrap').classList.add('hide');
+                // teams.querySelector('.fcal_teams_wrap').style.display = 'none';
+                currentState = 'view_member';
             }
         });
     });
