@@ -27,6 +27,14 @@
       width: 100%;
       border-radius: 8px;
     }
+
+    .fcal_person_avatar {
+      display: inline-block;
+
+      img {
+        max-height: 44px;
+      }
+    }
   }
 
   .fcal_team_body {
@@ -109,12 +117,31 @@
       display: flex;
       flex-wrap: nowrap;
       overflow: hidden;
+
       .fluent_booking_app,
       .fluent_booking_wrap {
         flex: none;
         width: 100%;
         transition: .4s;
       }
+    }
+  }
+  .fcal_back_btn_team {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+
+    svg {
+      width: 20px;
+    }
+  }
+
+  &.fcal_showing_team_calendar {
+    .fcal_back_btn_team {
+      display: none !important;
     }
   }
 }

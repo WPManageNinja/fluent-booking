@@ -14,12 +14,8 @@ export const attributes = {
         type: 'object',
         default: {}
     },
-    calendars: {
+    calendarHosts: {
         type: 'array',
         default: []
     },
-    hosts: {
-        type: 'object',
-        default: {}
-    }
 };
