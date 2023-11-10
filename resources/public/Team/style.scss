@@ -1,14 +1,31 @@
 @import "calendar";
-
 .fcal_teams {
   display: block;
 
   .fcal_team_header {
     text-align: center;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
     .fcal_team_title {
       font-size: 1.5rem;
-      margin: 0 0 .2rem 0;
+      margin: 6px 0 .2rem 0;
+      line-height: 1.2;
+      color: #111827;
+      font-weight: 500;
+    }
+    .fcal_team_description {
+      font-size: 14px;
+      line-height: 20px;
+      color: #6b7280;
+      font-weight: 400;
+    }
+    img {
+      max-width: 74px;
+      width: 100%;
+      border-radius: 8px;
     }
 
     .fcal_person_avatar {
@@ -25,23 +42,25 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     justify-content: center;
-    padding: 20px 0;
 
     @media (max-width: 767px) {
       grid-template-columns: 1fr;
     }
 
     .fcal_each_member {
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
       overflow: hidden;
-      transition: box-shadow 0.3s ease-in-out;
-      padding: 15px;
       cursor: pointer;
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      display: block;
+      text-decoration: none;
+      transition: 0.2s;
 
       &:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        //box-shadow: 0 8px 30px rgba(27, 37, 51, 0.05);
+        background: #f9fafb;
       }
 
       .fcal_person_avatar {
@@ -58,13 +77,17 @@
 
       .fcal_person_body {
         .fcal_person_name {
-          margin: 0.2rem 0;
-          font-size: 1.2rem;
+          font-size: 16px;
+          line-height: 24px;
+          color: #374151;
+          margin: 8px 0 0;
+          font-weight: 500;
         }
-
         .fcal_person_description {
           margin: 0;
-
+          font-size: 14px;
+          line-height: 24px;
+          color: #6b7280;
           p {
             margin: 0;
           }
@@ -73,6 +96,36 @@
     }
   }
 
+  .fcal_teams_inner {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .fcal_teams_wrap {
+    flex: none;
+    display: block;
+    width: 100%;
+    transition: .4s;
+  }
+
+  .fluent_booking_team_view {
+    width: 100%;
+    flex: none;
+    transition: .4s;
+
+    .fcal_calendar_wrap {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      .fluent_booking_app,
+      .fluent_booking_wrap {
+        flex: none;
+        width: 100%;
+        transition: .4s;
+      }
+    }
+  }
   .fcal_back_btn_team {
     display: flex;
     justify-content: flex-start;
