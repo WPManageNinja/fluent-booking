@@ -188,7 +188,7 @@
 			}
 		}
 		> div {
-			margin-bottom: 16px;
+			margin-bottom: 12px;
 			border: 1px solid #eee;
 			border-radius: 4px;
 			padding: 8px;
@@ -200,13 +200,20 @@
 					top: -4px;
 					border: none;
 					box-shadow: none;
-					border-radius: 4px;
+					border-radius: 30px;
 					background: #eeeeee;
 					cursor: pointer;
 					font-size: 14px;
-					line-height: 9px;
-					width: 22px;
-					height: 20px;;
+					line-height: 16px;
+					width: 20px;
+					height: 20px;
+					transform: rotate(45deg);
+					padding-left: 6px;
+					padding-bottom: 3px;
+					transition: .2s;
+					&:hover {
+						background: #dddddd;
+					}
 				}
 			}
 			.components-checkbox-control {
@@ -243,6 +250,9 @@
 				&:last-child {
 					margin-bottom: 0;
 				}
+			}
+			.all-event-checked {
+				margin-bottom: 8px;
 			}
 		}
 
@@ -309,12 +319,18 @@
 }
 
 .fcal-add-host-content {
+	.components-popover__content {
+		padding: 10px 15px;
+		box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 20px;
+		border-radius: 8px;
+		border: 1px solid #eee;
+	}
 	.fcal-add-host-popover {
 		width: 230px;
 		border-radius: 8px;
 		.fcal-host-list {
 			+.fcal-host-list {
-				margin-top: 6px;
+				margin-top: 2px;
 			}
 			.select-host {
 				font-weight: 500;
@@ -322,17 +338,25 @@
 				font-size: 12px;
 				margin-bottom: 8px;
 				color: #000000;
+				display: block;
+			}
+			p {
+				margin: 0;
 			}
 
 			button {
 				display: block;
 				border: none;
-				background: #eeeeee;
+				background: none;
 				border-radius: 4px;
 				width: 100%;
 				text-align: left;
 				padding: 6px 10px;
 				cursor: pointer;
+				transition: .2s;
+				&:hover {
+					background: #eeeeee;
+				}
 			}
 		}
 	}

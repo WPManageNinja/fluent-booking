@@ -4,17 +4,13 @@ const { __ } = wp.i18n;
 export const attributes = {
     title: {
         type: 'string',
-        default: 'FluentBooking Team'
+        default: ''
     },
     description: {
         type: 'string',
         default: ''
     },
     headerImage: {
-        type: 'object',
-        default: {}
-    },
-    hosts: {
         type: 'object',
         default: {}
     },
