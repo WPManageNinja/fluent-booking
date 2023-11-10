@@ -17,7 +17,7 @@ function handleEventBlockClick(link) {
     document.querySelector('.fcal_calendar_wrap').insertAdjacentHTML('beforeend', html);
 
     // hide .fluent_booking_wrap
-    document.querySelector('.fluent_booking_wrap').style.display = 'none';
+    document.querySelector('.fluent_booking_wrap').style.marginLeft = '-100%';
 
     // get the element of the inserted html
     const elemItem = document.querySelector('.fcal_calendar_wrap').lastElementChild;
@@ -27,7 +27,7 @@ function handleEventBlockClick(link) {
     app.$on('handleBack', function () {
         app.$destroy();
         elemItem.remove();
-        document.querySelector('.fluent_booking_wrap').style.display = 'block';
+        document.querySelector('.fluent_booking_wrap').style.marginLeft = '0';
         if (window.history.pushState && window.fcal_landing_page) {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.delete('event');
@@ -59,9 +59,12 @@ function faCalOpenBookingPage(item, event) {
 
 window.faCalOpenBookingPage = faCalOpenBookingPage;
 
-let teamViewHtml = '<div class="test"></div>';
-// append the teamViewHtml to .fcal_calendar_wrap element do not replace it
-document.querySelector('.fcal_teams').insertAdjacentHTML('beforeend', teamViewHtml);
+let teamViewHtml = document.createElement('div');
+teamViewHtml.className = 'fluent_booking_team_view';
+
+// Now you can append teamViewHtml to the DOM or do whatever you need with it
+// For example, if you want to append it to the body:
+document.querySelector('.fcal_teams_inner').appendChild(teamViewHtml);
 
 document.querySelectorAll('.fcal_teams').forEach(function (teams) {
     teams.querySelector('.fcal_teams_wrap').style.display = 'block';
@@ -82,12 +85,12 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
             }
 
             if (hostVars.host_html) {
-                // create html from hostVars.host_html with wrapper fcal_team
-                const html = '<div class="fluent_booking_team_view">'+hostVars.host_html+'</div>';
-                // append the html to .fcal_calendar_wrap element do not replace it
-                teams.insertAdjacentHTML('beforeend', html);
+
+                teamViewHtml.innerHTML = hostVars.host_html;
                 // hide .fcal_teams_wrap
-                teams.querySelector('.fcal_teams_wrap').style.display = 'none';
+
+                teams.querySelector('.fcal_teams_wrap').style.marginLeft = '-100%';
+                teams.querySelector('.fcal_teams_wrap').classList.add('hide');
             }
         });
     });
