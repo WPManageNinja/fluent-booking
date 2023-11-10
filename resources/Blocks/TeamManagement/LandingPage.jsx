@@ -22,7 +22,6 @@ export const LandingPage = props => {
             title,
             description,
             headerImage,
-            hosts,
             calendarHosts,
         }, setAttributes,
     } = props;
