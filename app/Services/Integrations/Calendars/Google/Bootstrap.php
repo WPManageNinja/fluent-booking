@@ -151,6 +151,7 @@ class Bootstrap
             ];
             return $calendars;
         }, 10, 2);
+
         add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushGoogleFeeds'], 10, 2);
         add_action('fluent_calendar/patch_calendar_config_settings__google_user_token', function ($conflictIds, $meta) {
             $meta = Meta::where('object_type', '_google_user_token')
@@ -161,6 +162,7 @@ class Bootstrap
             $meta->value = $settings;
             $meta->save();
         }, 10, 2);
+
         add_action('fluent_calendar/disconnect_remote_calendar__google_user_token', function ($meta) {
             // Let's remove the cache first
             CalendarCache::deleteAllParentCache($meta->id);
@@ -611,7 +613,7 @@ class Bootstrap
 
         $googleEventId = Arr::get($bookingMeta, 'id');
 
-        if(!$googleEventId) {
+        if (!$googleEventId) {
             return false;
         }
 
