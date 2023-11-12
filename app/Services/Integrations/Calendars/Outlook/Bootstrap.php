@@ -278,36 +278,25 @@ class Bootstrap extends BaseCalendar
 
     public function createEvent($config, Booking $booking)
     {
-        $calendar = $booking->calendar;
-        if (!$calendar || !$this->isConfigured()) {
-            return false;
+        if ($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event')) {
+            return; // already created
         }
 
-        if ($booking->getMeta('__outlook_calendar_event')) {
-            return false; // Already created
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        if (!$calendarApi) {
+            return;
         }
-
-        $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $booking->host_user_id)
-            ->where('id', $config['db_id'])
-            ->first();
-
-        if (!$meta || !$meta->value) {
-            return false; //  Meta could not be found
-        }
-
-        $settings = $meta->value;
 
         $isValid = false;
 
-        $calendarLists = Arr::get($settings, 'calendar_lists', []);
+        $calendarLists = Arr::get($calendarApi->settings, 'calendar_lists', []);
+        $remoteCreateId = Arr::get($config, 'remote_calendar_id');
 
         foreach ($calendarLists as $item) {
-            if ($item['can_write'] != 'yes') {
+            if ($isValid || Arr::get($item, 'can_write') != 'yes') {
                 continue;
             }
-
-            if ($item['id'] == $config['remote_calendar_id']) {
+            if (Arr::get($item, 'id') == $remoteCreateId) {
                 $isValid = true;
             }
         }
@@ -316,15 +305,14 @@ class Bootstrap extends BaseCalendar
             return false; // invalid id of the remote calendar
         }
 
-        $api = new OutlookCalendar($meta);
 
-        if ($api->lastError) {
+        if ($calendarApi->lastError) {
             do_action('fluent_booking/log_booking_activity', [
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -361,7 +349,8 @@ class Bootstrap extends BaseCalendar
             'location'              => [
                 'displayName' => $booking->getLocationAsText(),
             ],
-            'subject'               => $booking->getMeetingTitle()
+            'subject'               => $booking->getMeetingTitle(),
+            'transactionId'         => $booking->id,
         ];
 
         if ($booking->message && $booking->event_type == 'single') {
@@ -372,7 +361,7 @@ class Bootstrap extends BaseCalendar
         }
 
         $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking);
-        $response = $api->createEvent($config['remote_calendar_id'], $data);
+        $response = $calendarApi->createEvent($config['remote_calendar_id'], $data);
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -389,7 +378,7 @@ class Bootstrap extends BaseCalendar
             'id'                 => $response['id'],
             'remote_link'        => $response['webLink'],
             'remote_calendar_id' => $config['remote_calendar_id'],
-            'access_db_id'       => $meta->id,
+            'access_db_id'       => $calendarApi->getMetaModel()->id,
         ];
 
         if (!empty($response['onlineMeeting']['joinUrl'])) {
@@ -413,13 +402,176 @@ class Bootstrap extends BaseCalendar
         return true;
     }
 
-    public function patchEvent($config, Booking $booking, $updateData)
+    public function maybeAddOrRemoveGroupMembers($config, $booking, $allGroupBookings, $isRescheduling)
+    {
+        $parentMeta = null;
+
+        $missingEventBookings = [];
+
+        foreach ($allGroupBookings as $parentBooking) {
+            $meta = $parentBooking->getMeta('__outlook_calendar_event', []);
+            if (!$meta) {
+                $missingEventBookings[] = $parentBooking;
+            } else if (!$parentMeta) {
+                $parentMeta = $meta;
+            }
+        }
+
+        if (!$parentMeta || empty($parentMeta['id'])) {
+            return $this->createEvent($config, $booking);
+        }
+
+        $parentEventId = $parentMeta['id'];
+        $attendees = [];
+
+        foreach ($allGroupBookings as $groupBooking) {
+            if ($groupBooking->status != 'scheduled') {
+                continue;
+            }
+            $attendees[] = [
+                'emailAddress' => [
+                    'name'    => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
+                    'address' => $groupBooking->email
+                ],
+                'type'         => 'required'
+            ];
+        }
+
+        if (!$attendees) {
+            return;
+        }
+
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        if (!$calendarApi) {
+            return false;
+        }
+
+        if ($calendarApi->lastError) {
+            if (!$isRescheduling) {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'error',
+                    'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
+                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                ]);
+            }
+            return false;
+        }
+
+        $response = $calendarApi->patchEvent($parentEventId, [
+            'attendees'     => $attendees,
+            'hideAttendees' => true
+        ]);
+
+        if (is_wp_error($response)) {
+            if (!$isRescheduling) {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'error',
+                    'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
+                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                ]);
+            }
+            return false;
+        }
+
+        if (!$isRescheduling) {
+            if ($booking->status == 'scheduled') {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'info',
+                    'title'       => __('Added to Outlook calendar', 'fluent-booking-pro'),
+                    'description' => __('Guest has been added to outlook calendar event', 'fluent-booking-pro')
+                ]);
+            } else if ($booking->status == 'cancelled') {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'info',
+                    'title'       => __('Removed from Outlook calendar', 'fluent-booking-pro'),
+                    'description' => __('Guest has been removed from outlook calendar event', 'fluent-booking-pro')
+                ]);
+            }
+        }
+
+        foreach ($missingEventBookings as $missingBooking) {
+            if (!empty($parentMeta['onlineMeeting']['joinUrl'])) {
+                $location = $missingBooking->location_details;
+                if (empty($location['online_platform_link'])) {
+                    $location['online_platform_link'] = $parentMeta['onlineMeeting']['joinUrl'];
+                    $missingBooking->location_details = $location;
+                    $booking->save();
+                }
+            }
+
+            if ($missingBooking->status != 'cancelled') {
+                $missingBooking->updateMeta('__outlook_calendar_event', $parentMeta);
+            }
+
+            return true;
+        }
+    }
+
+    public function patchEvent($config, Booking $booking, $updateData, $isRescheduling)
     {
         $bookingMeta = $booking->getMeta('__outlook_calendar_event');
 
-        if (!$bookingMeta) {
-            return false; // Nothing to update as there is no previous response of this booking
+        if (!$bookingMeta || empty($bookingMeta['id'])) {
+            return $this->createEvent($config, $booking);
         }
+
+        $data = [
+            'start' => [
+                'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->start_time)),
+                'timeZone' => 'UTC'
+            ],
+            'end'   => [
+                'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->end_time)),
+                'timeZone' => 'UTC'
+            ],
+        ];
+
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        if (!$calendarApi) {
+            return false;
+        }
+
+        if ($calendarApi->lastError) {
+            if (!$isRescheduling) {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $booking->id,
+                    'status'      => 'closed',
+                    'type'        => 'error',
+                    'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
+                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                ]);
+            }
+            return false;
+        }
+
+        $response = $calendarApi->patchEvent($bookingMeta['id'], $data);
+
+        if (is_wp_error($response)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+            ]);
+            return false;
+        }
+
+        do_action('fluent_booking/log_booking_activity', [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'error',
+            'title'       => __('Outlook Event Updated', 'fluent-booking-pro'),
+            'description' => __('Event in outlook has been updated with new dates', 'fluent-booking-pro')
+        ]);
     }
 
     public function cancelEvent($config, Booking $booking)
@@ -430,44 +582,19 @@ class Bootstrap extends BaseCalendar
             return false; // Nothing to update as there is no previous response of this booking
         }
 
-        $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $booking->host_user_id)
-            ->where('id', $config['db_id'])
-            ->first();
-
-        if (!$meta) {
-            return false; //  Meta could not be found
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        if (!$calendarApi) {
+            return;
         }
 
-        $settings = $meta->value;
 
-        $isValid = false;
-
-        $calendarLists = Arr::get($settings, 'calendar_lists', []);
-
-        foreach ($calendarLists as $item) {
-            if ($item['can_write'] != 'yes') {
-                continue;
-            }
-
-            if ($item['id'] == $config['remote_calendar_id']) {
-                $isValid = true;
-            }
-        }
-
-        if (!$isValid) {
-            return false; // invalid id of the remote calendar
-        }
-
-        $api = new OutlookCalendar($meta);
-
-        if ($api->lastError) {
+        if ($calendarApi->lastError) {
             do_action('fluent_booking/log_booking_activity', [
                 'booking_id'  => $booking->id,
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
         }
@@ -479,9 +606,7 @@ class Bootstrap extends BaseCalendar
         }
 
         // Let's cancel the event
-        $response = $api->deleteEvent($outlookEventId);
-
-        error_log(print_r($response, true));
+        $response = $calendarApi->deleteEvent($outlookEventId);
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -489,7 +614,7 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to delete event in Outlook calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                'description' => __(sprintf('Failed to delete event in Outlook calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
         }

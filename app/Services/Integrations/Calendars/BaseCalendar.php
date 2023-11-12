@@ -26,16 +26,18 @@ abstract class BaseCalendar
          */
         add_filter('fluent_booking/remote_calendar_providers', [$this, 'addAsProvider'], 10, 2);
         add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushFeeds'], 10, 2);
-        add_action('fluent_calendar/patch_calendar_config_settings__' . $this->calendarKey . '_user_token', [$this, 'updateConflictIds'] , 10, 2);
-        add_action('fluent_calendar/disconnect_remote_calendar__'.$this->calendarKey.'_user_token', [$this, 'authDisconnect'], 10, 1);
+        add_action('fluent_calendar/patch_calendar_config_settings__' . $this->calendarKey . '_user_token', [$this, 'updateConflictIds'], 10, 2);
+        add_action('fluent_calendar/disconnect_remote_calendar__' . $this->calendarKey . '_user_token', [$this, 'authDisconnect'], 10, 1);
 
         /*
          * Booking Handlers
          */
         add_filter('fluent_booking/booked_events', [$this, 'getBookedSlots'], 10, 5);
         add_action('fluent_booking/create_remote_calendar_event_' . $this->calendarKey, [$this, 'createEvent'], 10, 2);
+        add_action('fluent_booking/refresh_remote_calendar_group_members_' . $this->calendarKey, [$this, 'maybeAddOrRemoveGroupMembers'], 10, 4);
+
         add_action('fluent_booking/cancel_remote_calendar_event_' . $this->calendarKey, [$this, 'cancelEvent'], 10, 2);
-        add_action('fluent_booking/update_remote_calendar_event_' . $this->calendarKey, [$this, 'patchEvent'], 10, 3);
+        add_action('fluent_booking/patch_remote_calendar_event_' . $this->calendarKey, [$this, 'patchEvent'], 10, 4);
 
     }
 
@@ -98,7 +100,9 @@ abstract class BaseCalendar
 
     abstract public function cancelEvent($config, Booking $booking);
 
-    abstract public function patchEvent($config, Booking $booking, $updateData);
+    abstract public function patchEvent($config, Booking $booking, $updateData, $isRescheduling);
+
+    abstract public function maybeAddOrRemoveGroupMembers($config, Booking $booking, $allGroupBookings, $isRescheduling);
 
     abstract public function getAuthUrl($userId = null);
 
