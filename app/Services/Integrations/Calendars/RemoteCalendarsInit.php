@@ -34,15 +34,16 @@ class RemoteCalendarsInit
 
         }, 10, 2);
 
-        add_action('init', function () {
-            if(!isset($_REQUEST['out'])) {
-                return;
-            }
-
-            $booking = Booking::find(97);
-
-            $this->checkForRemoteCalendarEventInsert($booking, $booking->slot);
-        });
+//        add_action('init', function () {
+//            return;
+//            if (!isset($_REQUEST['out'])) {
+//                return;
+//            }
+//
+//            $booking = Booking::find(98);
+//
+//            $this->checkForRemoteCalendarEventCancel($booking);
+//        });
 
     }
 
@@ -72,17 +73,15 @@ class RemoteCalendarsInit
 
     public function checkForRemoteCalendarEventCancel($booking)
     {
-        if ('cancelled' != Arr::get($booking, 'status')) {
+        if ('cancelled' != $booking->status) {
             return false;
         }
 
-        $calendar = Calendar::where('id', $booking->calendar_id)->first();
-
-        if (!$calendar) {
+        if (!$booking->host_user_id) {
             return;
         }
 
-        $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
 
         if (!$config) {
             return;
@@ -95,20 +94,17 @@ class RemoteCalendarsInit
             return;
         }
 
-        $data['status'] = 'cancelled';
-        do_action('fluent_booking/update_remote_calendar_event_' . $config['driver'], $config, $calendar, $booking, $data);
+        do_action('fluent_booking/cancel_remote_calendar_event_' . $config['driver'], $config, $booking);
 
     }
 
-    public function checkForRemoteCalendarEventReschedule($updatedBooking)
+    public function checkForRemoteCalendarEventReschedule(Booking $updatedBooking)
     {
-        $calendar = Calendar::where('id', $updatedBooking->calendar_id)->first();
-
-        if (!$calendar) {
+        if (!$updatedBooking->calendar) {
             return;
         }
 
-        $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($updatedBooking->host_user_id);
 
         if (!$config) {
             return;
@@ -123,12 +119,12 @@ class RemoteCalendarsInit
             ],
         ];
 
-        do_action('fluent_booking/update_remote_calendar_event_' . $config['driver'], $config, $calendar, $updatedBooking, $data);
+        do_action('fluent_booking/update_remote_calendar_event_' . $config['driver'], $config, $updatedBooking, $data);
 
-        $bookingExist = Booking::where('group_id', $updatedBooking->group_id)->count();
-
-        if ($bookingExist > 1) {
-            do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $updatedBooking, 'remove');
-        }
+//        $bookingExist = Booking::where('group_id', $updatedBooking->group_id)->count();
+//
+//        if ($bookingExist > 1) {
+//            do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $updatedBooking, 'remove');
+//        }
     }
 }

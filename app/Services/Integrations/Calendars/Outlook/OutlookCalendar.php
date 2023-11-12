@@ -68,6 +68,11 @@ class OutlookCalendar
         return Helper::decryptKey($settings['access_token']);
     }
 
+    public function deleteEvent($eventId)
+    {
+        return ($this->getAccessClient())->deleteEvent($eventId);
+    }
+
     private function normalizeUserAccessMeta()
     {
         $metaModel = $this->metaModel;

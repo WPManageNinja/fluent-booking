@@ -194,7 +194,7 @@ class TimeSlotService
         ];
     }
 
-    protected function getBookedSlots($dateRange, $toTimeZone = false, $bookingRequest = false)
+    protected function getBookedSlots($dateRange, $toTimeZone = false, $isDoingBooking = false)
     {
         if ($toTimeZone) {
             $dateRange[0] = DateTimeHelper::convertToUtc($dateRange[0], $toTimeZone);
@@ -251,7 +251,7 @@ class TimeSlotService
             $books[$date][] = $this->bookSlot($booking->event_id, $booking->start_time, $booking->end_time, $remaining);
         }
 
-        return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $bookingRequest, $dateRange);
+        return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
     }
 
     protected function getWeekDaySlots()

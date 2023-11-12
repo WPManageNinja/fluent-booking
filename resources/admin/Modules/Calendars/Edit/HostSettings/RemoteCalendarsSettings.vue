@@ -15,10 +15,14 @@
                             <span>{{ $t('Add') }}</span>
                         </el-button>
                     </template>
-                    <div v-for="driver in configuredProviders" :key="driver.key">
-                        <div class="fcal_driver_action">
-                            <a :href="driver.auth_url"
-                               class="el-button el-button--primary el-button--small">{{ driver.btn_text }}</a>
+                    <div class="fcal_all_driver_actions">
+                        <div v-for="driver in configuredProviders" :key="driver.key" class="fcal_driver_action">
+                            <a class="fcal_remote_cal_link" :href="driver.auth_url">
+                                <img :src="driver.icon"/>
+                                <span>
+                                    {{ driver.btn_text }}
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </el-popover>

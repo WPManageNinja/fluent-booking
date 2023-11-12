@@ -173,8 +173,14 @@ class Bootstrap
          */
         add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
         add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
-        add_action('fluent_booking/update_remote_calendar_event_google', [$this, 'updateRemoteCalendarEvent'], 10, 4);
+        add_action('fluent_booking/update_remote_calendar_event_google', [$this, 'updateRemoteCalendarEvent'], 10, 3);
         add_action('fluent_booking/update_attendees_remote_calendar_event_google', [$this, 'updateAttendeesRemoteCalendarEvent'], 10, 3);
+
+        add_action('fluent_booking/cancel_remote_calendar_event_google', function ($config, $booking) {
+            $this->updateRemoteCalendarEvent($config, $booking->calendar, $booking, [
+                'status' => 'cancelled'
+            ]);
+        }, 10, 2);
 
         add_action('fluent_booking/existing_event_attendees_async_add', [$this, 'addNewAttendee'], 10, 3);
         add_action('fluent_booking/existing_event_attendees_async_remove', [$this, 'removeExistingAttendee'], 10, 3);
@@ -313,7 +319,7 @@ class Bootstrap
         exit;
     }
 
-    public function pushBookedSlots($books, $calendarSlot, $toTimeZone, $bookingRequest, $dateRange)
+    public function pushBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
     {
         $config = GoogleHelper::getApiConfig();
 
@@ -553,12 +559,8 @@ class Bootstrap
         return true;
     }
 
-    public function updateRemoteCalendarEvent($config, $calendar, $booking, $data)
+    public function updateRemoteCalendarEvent($config, $booking, $data)
     {
-        if (!$calendar) {
-            return false;
-        }
-
         $bookingMeta = $booking->getMeta('__google_calendar_event');
 
         if (!$bookingMeta) {
@@ -566,7 +568,7 @@ class Bootstrap
         }
 
         $meta = Meta::where('object_type', '_google_user_token')
-            ->where('object_id', $calendar->user_id)
+            ->where('object_id', $booking->host_user_id)
             ->where('id', $config['db_id'])
             ->first();
 
@@ -609,7 +611,9 @@ class Bootstrap
 
         $googleEventId = Arr::get($bookingMeta, 'id');
 
-        $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $calendar);
+        if(!$googleEventId) {
+            return false;
+        }
 
         $response = $api->patchEvent($config['remote_calendar_id'], $googleEventId, $data);
 

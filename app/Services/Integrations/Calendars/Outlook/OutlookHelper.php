@@ -139,10 +139,7 @@ class OutlookHelper
 
     public static function getAppRedirectUrl()
     {
-        if (defined('FLUENT_BOOKING_OUTLOOK_REDIRECT_URL')) {
-            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        }
-        return admin_url('admin-ajax.php?action=fluent_booking_outlook_auth');
+        return 'https://fluentbooking.com/wp-json/fluent-api/outlook/';
     }
 
     public static function getUniqueSiteIdHash()
