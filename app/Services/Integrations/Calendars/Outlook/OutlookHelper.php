@@ -75,6 +75,23 @@ class OutlookHelper
         return $client;
     }
 
+    public static function getApiClientByUserId($userId)
+    {
+        if (!self::isConfigured()) {
+            return null;
+        }
+
+        $meta = Meta::where('object_type', '_outlook_user_token')
+            ->where('object_id', $userId)
+            ->first();
+
+        if (!$meta) {
+            return null;
+        }
+
+        return new OutlookCalendar($meta);
+    }
+
     public static function isConfigured()
     {
         $config = self::getApiConfig();
@@ -164,6 +181,8 @@ class OutlookHelper
         }
 
         $hash = md5(site_url('/') . time());
+
+        $hash = substr($hash, 0, 10);
 
         update_option('__fcal_unique_site_id', $hash, 'no');
 

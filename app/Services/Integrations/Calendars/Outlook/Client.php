@@ -113,23 +113,27 @@ class Client
         $maxDate = $args['endDateTime'];
 
         $url = 'https://graph.microsoft.com/v1.0/me/calendars/' . $id . '/calendarview';
-        $url .= '?$select=subject,recurrence,showAs,start,end,subject,isAllDay&startdatetime=' . $minDate . '&enddatetime=' . $maxDate . '&$top=' . $args['maxResults'];
+        $url .= '?$select=subject,recurrence,showAs,start,end,subject,isAllDay,transactionId&startdatetime=' . $minDate . '&enddatetime=' . $maxDate . '&$top=' . $args['maxResults'];
 
         // recurrence,showAs,start,end,subject
 
         $lists = $this->makeRequest($url, [], 'GET', $this->getAuthorizationHeader());
 
-        // dd($lists);
-
         if (is_wp_error($lists)) {
             return $lists;
         }
 
-        //   $siteUid = OutlookHelper::getUniqueSiteIdHash();
+        $siteUid = OutlookHelper::getUniqueSiteIdHash();
 
         $formattedLists = [];
         foreach ($lists['value'] as $item) {
             if (empty($item['start']['dateTime'])) {
+                continue;
+            }
+
+            $transactionId = Arr::get($item, 'transactionId');
+
+            if ($transactionId && strpos($transactionId, $siteUid) !== false) { // This is our own booking
                 continue;
             }
 
@@ -153,18 +157,22 @@ class Client
             $url = add_query_arg($args, $url);
         }
 
+        $siteUid = OutlookHelper::getUniqueSiteIdHash();
+
+        $data['transactionId'] = $siteUid . '__' . $data['transactionId'];
+
         return $this->makeRequest($url, json_encode($data), 'POST', $this->getAuthorizationHeader());
     }
 
-    public function patchEvent($calendarId, $eventId, $data, $args = [])
+    public function patchEvent($eventId, $data, $args = [])
     {
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events/' . $eventId;
+        $url = 'https://graph.microsoft.com/v1.0/me/events/' . $eventId;
 
         if ($args) {
             $url = add_query_arg($args, $url);
         }
 
-        return $this->makeRequest($url, $data, 'PATCH', $this->getAuthorizationHeader());
+        return $this->makeRequest($url, json_encode($data), 'PATCH', $this->getAuthorizationHeader());
     }
 
     public function getEvent($calendarId, $eventId, $args = [])
@@ -214,10 +222,6 @@ class Client
             'timeout'     => 20,
             'httpversion' => '1.1',
         ];
-
-        if ($xtraArgs) {
-            // $args = wp_parse_args($args, $xtraArgs);
-        }
 
         if ($body) {
             if ($type == 'GET') {

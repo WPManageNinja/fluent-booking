@@ -8,22 +8,17 @@ use FluentBooking\Framework\Support\Arr;
 
 class OutlookCalendar
 {
-
     public $lastError = null;
 
     private $metaModel;
 
+    public $settings;
+
     public function __construct(Meta $meta)
     {
+        $this->settings = $meta->value;
         $this->metaModel = $meta;
         $this->normalizeUserAccessMeta();
-    }
-
-    public function me()
-    {
-        $user = ($this->getAccessClient())->getUserDetails();
-
-        dd($user);
     }
 
     public function getMetaModel()
@@ -76,7 +71,7 @@ class OutlookCalendar
     private function normalizeUserAccessMeta()
     {
         $metaModel = $this->metaModel;
-        $settings = $metaModel->value;
+        $settings = $this->settings;
 
         if (Arr::get($settings, 'expires_in', 0) - 10 <= time()) {
             $settings['refresh_token'] = Helper::decryptKey(Arr::get($settings, 'refresh_token'));
@@ -135,14 +130,9 @@ class OutlookCalendar
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
     }
 
-    public function patchEvent($calendarId, $eventId, $eventData, $queryArgs = [])
+    public function patchEvent($eventId, $eventData, $queryArgs = [])
     {
-        $argsDefaults = [
-            'sendUpdates' => 'all'
-        ];
-        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
-
-        return ($this->getAccessClient())->patchEvent($calendarId, $eventId, $eventData, $queryArgs);
+        return ($this->getAccessClient())->patchEvent($eventId, $eventData, $queryArgs);
     }
 
     public function getEvent($calendarId, $eventId, $queryArgs = [])

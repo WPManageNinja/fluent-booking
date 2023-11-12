@@ -172,7 +172,7 @@ class Bootstrap
          * Booking Handlers
          */
         add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
-        add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 3);
+        add_action('fluent_booking/create_remote_calendar_event_google', [$this, 'createRemoteCalendarEvent'], 10, 2);
         add_action('fluent_booking/update_remote_calendar_event_google', [$this, 'updateRemoteCalendarEvent'], 10, 3);
         add_action('fluent_booking/update_attendees_remote_calendar_event_google', [$this, 'updateAttendeesRemoteCalendarEvent'], 10, 3);
 
@@ -404,7 +404,7 @@ class Bootstrap
         return $books;
     }
 
-    public function createRemoteCalendarEvent($config, Booking $booking, CalendarSlot $slot)
+    public function createRemoteCalendarEvent($config, Booking $booking)
     {
         $calendar = $booking->calendar;
         if (!$calendar) {
