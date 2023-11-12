@@ -18,7 +18,6 @@ class Client
     public $revokeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/logout';
     public $tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
     private $refreshTokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
-    public $authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
     public $authScope = 'Calendars.ReadWrite offline_access openid';
 
     public $calendarEvent = 'https://graph.microsoft.com/v1.0/me/calendars/{calendarId}/events';
@@ -27,12 +26,7 @@ class Client
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-
-        if (defined('FLUENT_BOOKING_OUTLOOK_REDIRECT_URL')) {
-            $this->redirectUrl = FLUENT_BOOKING_OUTLOOK_REDIRECT_URL;
-        } else {
-            $this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_outlook_auth');
-        }
+        $this->redirectUrl = OutlookHelper::getAppRedirectUrl();
     }
 
     public function setAccessToken($accessToken)
@@ -119,68 +113,33 @@ class Client
         $maxDate = $args['endDateTime'];
 
         $url = 'https://graph.microsoft.com/v1.0/me/calendars/' . $id . '/calendarview';
-        $url .= '?$select=subject,recurrence,showAs,start,end,subject&startdatetime=' . $minDate . '&enddatetime=' . $maxDate . '&$top=' . $args['maxResults'];
+        $url .= '?$select=subject,recurrence,showAs,start,end,subject,isAllDay&startdatetime=' . $minDate . '&enddatetime=' . $maxDate . '&$top=' . $args['maxResults'];
 
         // recurrence,showAs,start,end,subject
 
         $lists = $this->makeRequest($url, [], 'GET', $this->getAuthorizationHeader());
 
+        // dd($lists);
+
         if (is_wp_error($lists)) {
             return $lists;
         }
 
-        $siteUid = OutlookHelper::getUniqueSiteIdHash();
+        //   $siteUid = OutlookHelper::getUniqueSiteIdHash();
 
         $formattedLists = [];
         foreach ($lists['value'] as $item) {
-            $sharedData = Arr::get($item, 'extendedProperties.shared');
-            if ($sharedData && Arr::get($sharedData, 'created_by') == 'fluent-booking-pro' && Arr::get($sharedData, 'site_uid') == $siteUid) {
-                continue;
-            }
-
-            $recurrence = Arr::get($item, 'recurrence', []);
-
-//            if (!empty($item['start']['date'])) {
-//                if ($recurrence) {
-//                    $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d');
-//                } else {
-//                    $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
-//                }
-//            }
-
             if (empty($item['start']['dateTime'])) {
                 continue;
             }
 
-//            if (!empty($item['end']['date'])) {
-//                if ($recurrence) {
-//                    $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d');
-//                } else {
-//                    $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
-//                }
-//            }
+            $formattedLists[] = [
+                'id'     => $item['id'],
+                'start'  => Arr::get($item, 'start.dateTime'),
+                'end'    => Arr::get($item, 'end.dateTime'),
+                'status' => Arr::get($item, 'showAs')
+            ];
 
-            if ($recurrence) {
-                $sampleStart = Arr::get($item, 'start.dateTime');
-                $recurrenceDate = RemoteCalendarHelper::getRruleDates($recurrence, [
-                    $sampleStart,
-                    Arr::get($item, 'end.dateTime'),
-                ], $args['timeMin'], $args['timeMax'], [
-                    'status'    => Arr::get($item, 'status'),
-                    'rec_start' => $sampleStart
-                ]);
-
-                if ($recurrenceDate) {
-                    $formattedLists = array_merge($formattedLists, $recurrenceDate);
-                }
-            } else {
-                $formattedLists[] = [
-                    'id'     => $item['id'],
-                    'start'  => Arr::get($item, 'start.dateTime'),
-                    'end'    => Arr::get($item, 'end.dateTime'),
-                    'status' => Arr::get($item, 'showAs')
-                ];
-            }
         }
 
         return $formattedLists;
@@ -217,6 +176,11 @@ class Client
         }
 
         return $this->makeRequest($url, '', 'GET', $this->getAuthorizationHeader());
+    }
+
+    public function deleteEvent($eventId)
+    {
+        return $this->makeRequest("https://graph.microsoft.com/v1.0/me/events/{$eventId}", [], 'DELETE', $this->getAuthorizationHeader());
     }
 
     public function revokeConnection()
@@ -334,15 +298,11 @@ class Client
 
     public function getAuthUrl($userId)
     {
-        $authUrl = add_query_arg([
-            'client_id'     => $this->clientId,
-            'scope'         => urlencode_deep($this->authScope),
-            'redirect_uri'  => $this->redirectUrl,
-            'response_type' => 'code',
-            'state'         => $userId,
-            'prompt'        => 'consent'
-        ], $this->authUrl);
-
-        return $authUrl;
+        return add_query_arg([
+            'client_id'    => $this->clientId,
+            'redirect_uri' => urlencode_deep(add_query_arg([
+                'state' => $userId
+            ], admin_url('admin-ajax.php?action=fluent_booking_outlook_auth')))
+        ], $this->redirectUrl);
     }
 }

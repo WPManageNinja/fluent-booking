@@ -246,7 +246,7 @@ class FrontEndHandler
             ];
             foreach ($calendar->activeEvents as $event) {
                 $itemVars = $this->getCalendarEventVars($event->calendar, $event);
-                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($vars['form_fields'], $event);
+                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
                 if ($extraJs) {
                     $itemVars['lazy_js_files'] = $extraJs;
                 }

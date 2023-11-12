@@ -56,6 +56,7 @@ class RemoteCalendarHelper
     public static function getRemoteCalendarConfig($userId)
     {
         $settings = self::getUserRemoteCreatableCalendarSettings($userId);
+
         if (!$settings) {
             return null;
         }

@@ -5,183 +5,28 @@ namespace FluentBooking\App\Services\Integrations\Calendars\Outlook;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
-use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Integrations\Calendars\BaseCalendar;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
-class Bootstrap
+class Bootstrap extends BaseCalendar
 {
+    public function __construct()
+    {
+        $this->calendarKey = 'outlook';
+        $app = App::getInstance();
+        $this->logo = $app['url.assets'] . 'images/outlook-color.svg';
+        $this->calendarTitle = __('Outlook Calendar', 'fluent-booking-pro');
+    }
+
     public function register()
     {
-        /*
-         * Global Settings Handlers
-         */
-        add_filter('fluent_booking/settings_menu_items', function ($menuItems) {
-            $app = App::getInstance();
-            $menuItems['outlook_calendar'] = [
-                'title'          => __('Outlook Calendar', 'fluent-booking-pro'),
-                'icon_url'       => $app['url.assets'] . 'images/outlook-color.svg',
-                'component_type' => 'GlobalSettingsComponent',
-                'route'          => [
-                    'name'   => 'configure-integrations',
-                    'params' => [
-                        'settings_key' => 'outlook_calendar'
-                    ]
-                ]
-            ];
-            return $menuItems;
-        }, 10, 1);
-
-        add_filter('fluent_booking/get_client_settings_outlook_calendar', function ($settings) {
-            $config = OutlookHelper::getApiConfig();
-            $config['redirect_url'] = OutlookHelper::getAppRedirectUrl();
-
-            if (!empty($config['constant_defined'])) {
-                $config['client_secret'] = '**********';
-                $config['client_id'] = '**********';
-            } else if (!empty($config['client_secret'])) {
-                $config['client_secret'] = '********************';
-            }
-
-            return $config;
-        });
-        add_filter('fluent_booking/get_client_field_settings_outlook_calendar', function ($items) {
-
-            $app = App::getInstance();
-
-            $fields = [
-                'client_id'     => [
-                    'type'        => 'text',
-                    'label'       => __('Client ID', 'fluent-booking-pro'),
-                    'placeholder' => __('Enter Your Client ID', 'fluent-booking-pro'),
-                ],
-                'client_secret' => [
-                    'type'        => 'text',
-                    'label'       => __('Secret Key', 'fluent-booking-pro'),
-                    'placeholder' => __('Enter Your Secret Key', 'fluent-booking-pro'),
-                ],
-                'redirect_url'  => [
-                    'type'        => 'text',
-                    'label'       => __('Redirect URI', 'fluent-booking-pro'),
-                    'placeholder' => __('Enter Your Redirect URI', 'fluent-booking-pro'),
-                    'readonly'    => true,
-                    'copy_btn'    => true,
-                ],
-                'caching_time'  => [
-                    'type'        => 'select',
-                    'options'     => [
-                        '1'  => __('1 minute', 'fluent-booking-pro'),
-                        '5'  => __('5 minutes', 'fluent-booking-pro'),
-                        '10' => __('10 minutes', 'fluent-booking-pro'),
-                        '15' => __('15 minutes', 'fluent-booking-pro'),
-                    ],
-                    'label'       => __('Caching Time', 'fluent-booking-pro'),
-                    'inline_help' => __('Select for how many minutes the Google Calendar event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in google then you may lower the value', 'fluent-booking-pro')
-                ],
-            ];
-
-            $config = OutlookHelper::getApiConfig();
-
-            $description = '<p>' . __('Login to your Outlook account, go to Azure Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Outlook Calendar. For full details read the', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/outlook-calendar-integration-with-fluent-booking/">' . __('documentation', 'fluent-booking-pro') . '</a></p>';
-
-            if (!empty($config['constant_defined'])) {
-                $fields = null;
-                $description = '<p>' . __('Outlook Calendar integration is configured by wp-config.php constants. No action required here', 'fluent-booking-pro') . '</p>';
-            }
-
-            return [
-                'logo'          => $app['url.assets'] . 'images/outlook-color.svg',
-                'title'         => __('Outlook Calendar / Meet', 'fluent-booking-pro'),
-                'subtitle'      => __('Configure Outlook Calendar to sync your events', 'fluent-booking-pro'),
-                'description'   => $description,
-                'save_btn_text' => __('Save Outlook API Configuration', 'fluent-booking-pro'),
-                'fields'        => $fields,
-                'will_encrypt'  => true
-            ];
-        });
-
-        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
-            return $fields;
-            $meetExist = Meta::where('object_type', '_outlook_user_token')
-                ->where('object_id', $calendar->user_id)
-                ->first();
-
-            $message = !$meetExist ? ' ' . __('(Connect Outlook Calendar First)', 'fluent-booking-pro') : '';
-
-            if (!$message) {
-                // now check if the user calendar event create enabled
-                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
-                if (!$calConfig || Arr::get($calConfig, 'driver') != 'outlook') {
-                    $message = __('(Set Outlook Event Creat First)', 'fluent-booking-pro');
-                    $meetExist = false;
-                }
-            }
-
-            $fields['conferencing']['options']['outlook'] = [
-                'title'         => __('Outlook', 'fluent-booking-pro') . $message,
-                'disabled'      => !$meetExist,
-                'location_type' => 'conferencing'
-            ];
-            return $fields;
-        }, 10, 2);
-
-        add_action('fluent_booking/save_client_settings_outlook_calendar', function ($settings) {
-            OutlookHelper::updateApiConfig($settings);
-        });
-
+        $this->boot();
         add_action('wp_ajax_fluent_booking_outlook_auth', [$this, 'handleAuthCallback']);
-
-        /*
-         * oAuth From Handlers from Calendar
-         */
-        add_filter('fluent_booking/remote_calendar_providers', function ($calendars, $userId = null) {
-            $app = App::getInstance();
-            $calendars['outlook'] = [
-                'key'                  => 'outlook',
-                'icon'                 => $app['url.assets'] . 'images/outlook-color.svg',
-                'title'                => __('Outlook Calendar', 'fluent-booking-pro'),
-                'subtitle'             => __('Configure Outlook Calendar to sync your events', 'fluent-booking-pro'),
-                'btn_text'             => __('Connect with Outlook Calendar', 'fluent-booking-pro'),
-                'auth_url'             => $this->getAuthUrl($userId),
-                'is_global_configured' => OutlookHelper::isConfigured(),
-                'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/outlook_calendar'),
-            ];
-            return $calendars;
-        }, 10, 2);
-        add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushOutlookFeeds'], 10, 2);
-        add_action('fluent_calendar/patch_calendar_config_settings__outlook_user_token', function ($conflictIds, $meta) {
-            $meta = Meta::where('object_type', '_outlook_user_token')
-                ->where('id', $meta->id)
-                ->first();
-            $settings = $meta->value;
-            $settings['conflict_check_ids'] = $conflictIds;
-            $meta->value = $settings;
-            $meta->save();
-        }, 10, 2);
-
-        add_action('fluent_calendar/disconnect_remote_calendar__outlook_user_token', function ($meta) {
-            // Let's remove the cache first
-            CalendarCache::deleteAllParentCache($meta->id);
-            (new OutlookCalendar($meta))->revoke();
-            $meta->delete();
-        });
-
-        /*
-         * Booking Handlers
-         */
-        add_filter('fluent_booking/booked_events', [$this, 'pushBookedSlots'], 10, 5);
-        add_action('fluent_booking/create_remote_calendar_event_outlook', [$this, 'createRemoteCalendarEvent'], 10, 3);
-        add_action('fluent_booking/update_remote_calendar_event_outlook', [$this, 'updateRemoteCalendarEvent'], 10, 4);
-        add_action('fluent_booking/update_attendees_remote_calendar_event_outlook', [$this, 'updateAttendeesRemoteCalendarEvent'], 10, 3);
-
-        add_action('fluent_booking/existing_event_attendees_async_add', [$this, 'addNewAttendee'], 10, 3);
-        add_action('fluent_booking/existing_event_attendees_async_remove', [$this, 'removeExistingAttendee'], 10, 3);
-
-
         add_action('fluent_booking/before_get_all_calendars', function () {
             if (!OutlookHelper::isConfigured()) {
                 return;
@@ -199,43 +44,55 @@ class Bootstrap
                 if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
                     return $calendar;
                 }
+
                 $error = Arr::get($meta->value, 'last_error');
                 $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Outlook Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
-
     }
 
-    public function pushOutlookFeeds($feeds, $userId)
+    public function getClientSettingsForView($settings)
     {
-        $items = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $userId)
-            ->get();
+        $config = OutlookHelper::getApiConfig();
+        $config['redirect_url'] = OutlookHelper::getAppRedirectUrl();
 
-        foreach ($items as $item) {
-
-            CalendarCache::deleteAllParentCache($item->id);
-
-            $errors = '';
-
-            $remoteCalendars = $this->getRemoteCalendarsList($item, true);
-
-            if (is_wp_error($remoteCalendars)) {
-                $errors = $remoteCalendars->get_error_message() . ' ' . __('Please remove the connection and reconnect again.', 'fluent-booking-pro');
-                $remoteCalendars = [];
-            }
-
-            $feeds[] = [
-                'driver'             => 'outlook',
-                'db_id'              => $item->id,
-                'identifier'         => $item->key,
-                'remote_calendars'   => $remoteCalendars,
-                'errors'             => $errors,
-                'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
-            ];
+        if (!empty($config['constant_defined'])) {
+            $config['client_secret'] = '**********';
+            $config['client_id'] = '**********';
+        } else if (!empty($config['client_secret'])) {
+            $config['client_secret'] = '********************';
         }
 
-        return $feeds;
+        return $config;
+    }
+
+    public function getClientFieldSettings($settings)
+    {
+        $fields = $this->getStanadrdFields();
+
+        $config = OutlookHelper::getApiConfig();
+
+        $description = '<p>' . __('Login to your Outlook account, go to Azure Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Outlook Calendar. For full details read the', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/outlook-calendar-integration-with-fluent-booking/">' . __('documentation', 'fluent-booking-pro') . '</a></p>';
+
+        if (!empty($config['constant_defined'])) {
+            $fields = null;
+            $description = '<p>' . __('Outlook Calendar integration is configured by wp-config.php constants. No action required here', 'fluent-booking-pro') . '</p>';
+        }
+
+        return [
+            'logo'          => $this->logo,
+            'title'         => $this->calendarTitle,
+            'subtitle'      => __('Configure Outlook Calendar to sync your events', 'fluent-booking-pro'),
+            'description'   => $description,
+            'save_btn_text' => __('Save Outlook API Configuration', 'fluent-booking-pro'),
+            'fields'        => $fields,
+            'will_encrypt'  => true
+        ];
+    }
+
+    public function saveClientSettings($settings)
+    {
+        OutlookHelper::updateApiConfig($settings);
     }
 
     public function handleAuthCallback()
@@ -298,7 +155,43 @@ class Bootstrap
         exit;
     }
 
-    public function pushBookedSlots($books, $calendarSlot, $toTimeZone, $bookingRequest, $dateRange)
+    public function pushFeeds($feeds, $userId)
+    {
+        if (!$this->isConfigured()) {
+            return $feeds;
+        }
+
+        $items = Meta::where('object_type', '_outlook_user_token')
+            ->where('object_id', $userId)
+            ->get();
+
+        foreach ($items as $item) {
+
+            CalendarCache::deleteAllParentCache($item->id);
+
+            $errors = '';
+
+            $remoteCalendars = $this->getRemoteCalendarsList($item, true);
+
+            if (is_wp_error($remoteCalendars)) {
+                $errors = $remoteCalendars->get_error_message() . ' ' . __('Please remove the connection and reconnect again.', 'fluent-booking-pro');
+                $remoteCalendars = [];
+            }
+
+            $feeds[] = [
+                'driver'             => 'outlook',
+                'db_id'              => $item->id,
+                'identifier'         => $item->key,
+                'remote_calendars'   => $remoteCalendars,
+                'errors'             => $errors,
+                'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
+            ];
+        }
+
+        return $feeds;
+    }
+
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
     {
         $config = OutlookHelper::getApiConfig();
 
@@ -383,11 +276,10 @@ class Bootstrap
         return $books;
     }
 
-    public function createRemoteCalendarEvent($config, Booking $booking, CalendarSlot $slot)
+    public function createEvent($config, Booking $booking)
     {
-
         $calendar = $booking->calendar;
-        if (!$calendar) {
+        if (!$calendar || !$this->isConfigured()) {
             return false;
         }
 
@@ -396,11 +288,11 @@ class Bootstrap
         }
 
         $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $calendar->user_id)
+            ->where('object_id', $booking->host_user_id)
             ->where('id', $config['db_id'])
             ->first();
 
-        if (!$meta) {
+        if (!$meta || !$meta->value) {
             return false; //  Meta could not be found
         }
 
@@ -424,8 +316,6 @@ class Bootstrap
             return false; // invalid id of the remote calendar
         }
 
-        $booking = Booking::find($booking->id);
-
         $api = new OutlookCalendar($meta);
 
         if ($api->lastError) {
@@ -447,31 +337,31 @@ class Bootstrap
             'type'         => 'required'
         ];
 
-        $author = $slot->getAuthorProfile(false);
+        $author = $booking->getHostDetails(false);
 
         $data = [
-            'start'              => [
+            'start'                 => [
                 'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->start_time)),
                 'timeZone' => 'UTC'
             ],
-            'end'                => [
+            'end'                   => [
                 'dateTime' => date('Y-m-d\TH:i:s', strtotime($booking->end_time)),
                 'timeZone' => 'UTC'
             ],
-            'attendees'          => [
+            'attendees'             => [
                 $guestAttendee,
             ],
-            'organizer' => [
+            'organizer'             => [
                 'emailAddress' => [
                     'name'    => $author['name'],
                     'address' => $author['email']
                 ]
             ],
             'allowNewTimeProposals' => false,
-            'location'           => [
+            'location'              => [
                 'displayName' => $booking->getLocationAsText(),
             ],
-            'subject'            => $booking->getMeetingTitle()
+            'subject'               => $booking->getMeetingTitle()
         ];
 
         if ($booking->message && $booking->event_type == 'single') {
@@ -481,8 +371,7 @@ class Bootstrap
             ];
         }
 
-        $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking, $slot);
-
+        $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking);
         $response = $api->createEvent($config['remote_calendar_id'], $data);
 
         if (is_wp_error($response)) {
@@ -495,7 +384,6 @@ class Bootstrap
             ]);
             return false;
         }
-
 
         $responseData = [
             'id'                 => $response['id'],
@@ -519,18 +407,23 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Outlook Calendar event created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Outlook calendar event has been created. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Outlook Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            'description' => __(sprintf('Outlook calendar event has been created. %s', '<a target="_blank" href="' . $response['webLink'] . '">' . __('View on Outlook Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
         ]);
 
         return true;
     }
 
-    public function updateRemoteCalendarEvent($config, $calendar, $booking, $data)
+    public function patchEvent($config, Booking $booking, $updateData)
     {
-        if (!$calendar) {
-            return false;
-        }
+        $bookingMeta = $booking->getMeta('__outlook_calendar_event');
 
+        if (!$bookingMeta) {
+            return false; // Nothing to update as there is no previous response of this booking
+        }
+    }
+
+    public function cancelEvent($config, Booking $booking)
+    {
         $bookingMeta = $booking->getMeta('__outlook_calendar_event');
 
         if (!$bookingMeta) {
@@ -538,7 +431,7 @@ class Bootstrap
         }
 
         $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $calendar->user_id)
+            ->where('object_id', $booking->host_user_id)
             ->where('id', $config['db_id'])
             ->first();
 
@@ -581,9 +474,14 @@ class Bootstrap
 
         $outlookEventId = Arr::get($bookingMeta, 'id');
 
-        $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $calendar);
+        if (!$outlookEventId) {
+            return false;
+        }
 
-        $response = $api->patchEvent($config['remote_calendar_id'], $outlookEventId, $data);
+        // Let's cancel the event
+        $response = $api->deleteEvent($outlookEventId);
+
+        error_log(print_r($response, true));
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -591,243 +489,47 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Outlook calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                'description' => __(sprintf('Failed to delete event in Outlook calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
             ]);
             return false;
         }
-
-        $responseData = [
-            'id'                 => $response['id'],
-            'remote_link'        => $response['htmlLink'],
-            'remote_calendar_id' => $config['remote_calendar_id'],
-            'access_db_id'       => $meta->id,
-        ];
-
-        $booking->updateMeta('__outlook_calendar_event', $responseData);
 
         do_action('fluent_booking/log_booking_activity', [
             'booking_id'  => $booking->id,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Outlook Calendar event updated', 'fluent-booking-pro'),
-            'description' => __(sprintf('Outlook calendar event has been updated. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            'title'       => __('Outlook event has been deleted', 'fluent-booking-pro'),
+            'description' => __('Outlook calendar event has been deleted', 'fluent-booking-pro')
         ]);
 
         return true;
     }
 
-    public function updateAttendeesRemoteCalendarEvent($config, Booking $booking, $action)
+    public function authDisconnect($meta)
     {
-        $calendar = $booking->calendar;
-        if (!$calendar) {
-            return false;
-        }
-
-        if ($booking->getMeta('__outlook_calendar_event')) {
-            return false; // Already created
-        }
-
-        $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $calendar->user_id)
-            ->where('id', $config['db_id'])
-            ->first();
-
-        if (!$meta) {
-            return false; //  Meta could not be found
-        }
-
-        $settings = $meta->value;
-
-        $isValid = false;
-
-        $calendarLists = Arr::get($settings, 'calendar_lists', []);
-
-        foreach ($calendarLists as $item) {
-            if ($item['can_write'] != 'yes') {
-                continue;
-            }
-
-            if ($item['id'] == $config['remote_calendar_id']) {
-                $isValid = true;
-            }
-        }
-
-        if (!$isValid) {
-            return false; // invalid id of the remote calendar
-        }
-
-        as_enqueue_async_action('fluent_booking/existing_event_attendees_async_' . $action, [
-            $config['remote_calendar_id'],
-            $config['db_id'],
-            $booking->id
-        ], 'fluent-booking');
+        // Let's remove the cache first
+        CalendarCache::deleteAllParentCache($meta->id);
+        (new OutlookCalendar($meta))->revoke();
+        $meta->delete();
     }
 
-    public function addNewAttendee($calendarId, $dbId, $bookingId)
+    public function getAuthUrl($userId = null)
     {
-        $booking = Booking::findOrFail($bookingId);
-
-        $calendar = $booking->calendar;
-        if (!$calendar) {
-            return false;
+        if (!$userId) {
+            return '';
         }
 
-        $existingBooking = Booking::where('group_id', $booking->group_id)->first();
-
-        $bookingMeta = $existingBooking->getMeta('__outlook_calendar_event');
-
-        if (!$bookingMeta) {
-            return false; // Nothing to add as there is no previous response
-        }
-
-        $googleEventId = Arr::get($bookingMeta, 'id');
-
-        $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $calendar->user_id)
-            ->where('id', $dbId)
-            ->first();
-
-        if (!$meta) {
-            return false; //  Meta could not be found
-        }
-
-        $googleEventId = Arr::get($bookingMeta, 'id');
-        $googleMeetLink = Arr::get($bookingMeta, 'ms_team_link');
-
-        if ($googleMeetLink) {
-            $location = $booking->location_details;
-            $location['online_platform_link'] = $googleMeetLink;
-            $booking->location_details = $location;
-            $booking->save();
-        }
-
-        $api = new OutlookCalendar($meta);
-
-        $updatedEvent = $api->getEvent($calendarId, $googleEventId);
-
-        if (is_wp_error($updatedEvent)) {
-            do_action('fluent_booking/log_booking_activity', [
-                'booking_id'  => $booking->id,
-                'status'      => 'closed',
-                'type'        => 'error',
-                'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to add attendee in Outlook calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
-            ]);
-            return false;
-        }
-
-        $attendee = array_filter([
-            'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
-            'email'        => $booking->email,
-            'comment'      => $booking->message
-        ]);
-
-        $attendees = $updatedEvent['attendees'] ?? [];
-
-        $attendees[] = $attendee;
-
-        $data['attendees'] = $attendees;
-
-        $response = $api->patchEvent($calendarId, $googleEventId, $data);
-
-        if (is_wp_error($response)) {
-            do_action('fluent_booking/log_booking_activity', [
-                'booking_id'  => $booking->id,
-                'status'      => 'closed',
-                'type'        => 'error',
-                'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to add attendee in Outlook calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
-            ]);
-            return false;
-        }
-
-        do_action('fluent_booking/log_booking_activity', [
-            'booking_id'  => $booking->id,
-            'status'      => 'closed',
-            'type'        => 'success',
-            'title'       => __('Attendee Added in Outlook Calendar Event', 'fluent-booking-pro'),
-            'description' => __(sprintf('Attendee has been added in Outlook calendar successfully. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
-        ]);
+        return (OutlookHelper::getApiClient())->getAuthUrl($userId);
     }
 
-    public function removeExistingAttendee($calendarId, $dbId, $bookingId)
+    public function isConfigured()
     {
-        $booking = Booking::findOrFail($bookingId);
-
-        $calendar = $booking->calendar;
-        if (!$calendar) {
-            return false;
-        }
-
-        $existingBooking = Booking::where('group_id', $booking->group_id)->first();
-
-        $bookingMeta = $existingBooking->getMeta('__outlook_calendar_event');
-
-        if (!$bookingMeta) {
-            return false; // Nothing to add as there is no previous response
-        }
-
-        $googleEventId = Arr::get($bookingMeta, 'id');
-
-        $meta = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $calendar->user_id)
-            ->where('id', $dbId)
-            ->first();
-
-        if (!$meta) {
-            return false; //  Meta could not be found
-        }
-
-        $api = new OutlookCalendar($meta);
-
-
-        $updatedEvent = $api->getEvent($calendarId, $googleEventId);
-
-        if (is_wp_error($updatedEvent)) {
-            do_action('fluent_booking/log_booking_activity', [
-                'booking_id'  => $booking->id,
-                'status'      => 'closed',
-                'type'        => 'error',
-                'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to add attendee in Outlook calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
-            ]);
-            return false;
-        }
-
-        $attendees = $updatedEvent['attendees'] ?? [];
-
-        $attendeeIndex = array_search($booking->email, array_column($attendees, 'email'));
-
-        if ($attendeeIndex !== false) {
-            unset($attendees[$attendeeIndex]);
-        }
-
-        $data = [
-            'attendees' => array_values($attendees) // Reindex the array after removing the attendee
-        ];
-
-        $response = $api->patchEvent($calendarId, $googleEventId, $data);
-
-        if (is_wp_error($response)) {
-            do_action('fluent_booking/log_booking_activity', [
-                'booking_id'  => $booking->id,
-                'status'      => 'closed',
-                'type'        => 'error',
-                'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to remove attendee from Outlook calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
-            ]);
-            return false;
-        }
-
-        do_action('fluent_booking/log_booking_activity', [
-            'booking_id'  => $booking->id,
-            'status'      => 'closed',
-            'type'        => 'success',
-            'title'       => __('Attendee Added in Outlook Calendar Event', 'fluent-booking-pro'),
-            'description' => __(sprintf('Attendee has been removed from Outlook calendar successfully. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
-        ]);
+        return OutlookHelper::isConfigured();
     }
 
+    /*
+     * Internals
+     */
     private function addFeedIntegration($userId, $tokenData)
     {
         $exist = Meta::where('object_type', '_outlook_user_token')
@@ -874,14 +576,5 @@ class Bootstrap
         $calendarClient->updateSettinsValueByKey('last_calendar_lists_fetched', time());
 
         return $remoteCalendars;
-    }
-
-    protected function getAuthUrl($userId)
-    {
-        if (!$userId) {
-            return '';
-        }
-
-        return (OutlookHelper::getApiClient())->getAuthUrl($userId);
     }
 }
