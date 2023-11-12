@@ -139,6 +139,10 @@ class GoogleHelper
 
     public static function getAppRedirectUrl()
     {
+        if(self::isUsingNativeApp()){
+            return 'https://fluentbooking.com/wp-json/fluent-api/google-calendar';
+        }
+
         if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
             return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
         }
@@ -173,4 +177,17 @@ class GoogleHelper
         return $hash;
     }
 
+    public static function getAppReirectUrl()
+    {
+        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
+            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
+        }
+
+        return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
+    }
+
+    public static function isUsingNativeApp()
+    {
+        return true;
+    }
 }

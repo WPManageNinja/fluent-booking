@@ -28,12 +28,7 @@ class Client
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-
-        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
-            $this->redirectUrl = FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        } else {
-            $this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-        }
+        $this->redirectUrl = GoogleHelper::getAppRedirectUrl();
     }
 
     public function setAccessToken($accessToken)
@@ -118,26 +113,26 @@ class Client
                 continue;
             }
 
-            if(empty($item['status']) || $item['status'] == 'cancelled') {
+            if (empty($item['status']) || $item['status'] == 'cancelled') {
                 continue;
             }
 
             $recurrence = Arr::get($item, 'recurrence', []);
 
-            if(!empty($item['start']['date'])) {
-                if($recurrence) {
+            if (!empty($item['start']['date'])) {
+                if ($recurrence) {
                     $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d');
                 } else {
                     $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
                 }
             }
 
-            if(empty($item['start']['dateTime'])) {
+            if (empty($item['start']['dateTime'])) {
                 continue;
             }
 
-            if(!empty($item['end']['date'])) {
-                if($recurrence) {
+            if (!empty($item['end']['date'])) {
+                if ($recurrence) {
                     $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d');
                 } else {
                     $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
@@ -150,11 +145,11 @@ class Client
                     $sampleStart,
                     Arr::get($item, 'end.dateTime'),
                 ], $args['timeMin'], $args['timeMax'], [
-                    'status' => Arr::get($item, 'status'),
-                    'rec_start' =>  $sampleStart
+                    'status'    => Arr::get($item, 'status'),
+                    'rec_start' => $sampleStart
                 ]);
 
-                if($recurrenceDate) {
+                if ($recurrenceDate) {
                     $formattedLists = array_merge($formattedLists, $recurrenceDate);
                 }
             } else {
@@ -288,6 +283,13 @@ class Client
 
     public function getAuthUrl($userId)
     {
+        if (GoogleHelper::isUsingNativeApp()) {
+            return add_query_arg([
+                'client_id'    => $this->clientId,
+                'redirect_uri' => urlencode_deep(admin_url('admin-ajax.php?action=fluent_booking_g_auth&state=' . $userId)),
+            ], $this->redirectUrl);
+        }
+
         $authUrl = add_query_arg([
             'client_id'     => $this->clientId,
             'scope'         => urlencode_deep($this->authScope),
