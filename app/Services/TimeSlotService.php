@@ -301,7 +301,7 @@ class TimeSlotService
         $remoteBookings = apply_filters('fluent_booking/remote_booked_events', [], $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
 
         if (!$remoteBookings) {
-            return $books;
+            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
         }
 
         if (!$isGroupBooking) {
@@ -509,19 +509,22 @@ class TimeSlotService
             return [];
         }
 
-        $startDate = $slotConfig['start'];
-        $endDate = $slotConfig['end'];
-        if (date('Ymd', strtotime($startDate)) == date('Ymd', strtotime($endDate))) {
+        $startTime = $slotConfig['start'];
+        $endTime = $slotConfig['end'];
+        if (date('Ymd', strtotime($startTime)) == date('Ymd', strtotime($endTime))) {
             return [
-                date('Y-m-d', strtotime($startDate)) => [
-                    $this->bookSlot(Arr::get($slotConfig, 'event_id'), $startDate, $endDate, Arr::get($slotConfig, 'remaining'))
-                ]
+                date('Y-m-d', strtotime($startTime)) => $this->bookSlot(Arr::get($slotConfig, 'event_id'), $startTime, $endTime, Arr::get($slotConfig, 'remaining'))
+
             ];
         }
 
-        $start = new DateTime($startDate);
-        $end = new DateTime($endDate);
-        $end = $end->modify('+1 day'); // Include end date in the loop
+        $start = new \DateTime($startTime);
+        $end = new \DateTime($endTime);
+
+        // Set the end time to the end of the day if it's set to the beginning of a day
+        if ($end->format('H:i:s') === '00:00:00') {
+            $end->modify('-1 second'); // This will set the time to 23:59:59 of the previous day
+        }
 
         $interval = new \DateInterval('P1D');
         $dateRange = new \DatePeriod($start, $interval, $end);
@@ -529,13 +532,20 @@ class TimeSlotService
         $rangeArray = [];
         foreach ($dateRange as $date) {
             $dateKey = $date->format('Y-m-d');
-            if ($date->format('Y-m-d') == $start->format('Y-m-d')) {
-                $rangeArray[$dateKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $startDate, $date->format('Y-m-d 23:59:59'), Arr::get($slotConfig, 'remaining'));
-            } elseif ($date->format('Y-m-d') == $end->modify('-1 day')->format('Y-m-d')) {
-                $rangeArray[$dateKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $date->format('Y-m-d 00:00:00'), $endDate, Arr::get($slotConfig, 'remaining'));
+
+            if ($date->format('Y-m-d') === $start->format('Y-m-d')) {
+                $rangeArray[$dateKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $startTime, $date->format('Y-m-d 23:59:59'), Arr::get($slotConfig, 'remaining'));
+            } elseif ($date->format('Y-m-d') === $end->format('Y-m-d')) {
+                $rangeArray[$dateKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $date->format('Y-m-d 00:00:00'), $endTime, Arr::get($slotConfig, 'remaining'));
             } else {
                 $rangeArray[$dateKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $date->format('Y-m-d 00:00:00'), $date->format('Y-m-d 23:59:59'), Arr::get($slotConfig, 'remaining'));
             }
+        }
+
+        // Add the last day if it was not included in the loop
+        if ($end->format('Y-m-d') !== $date->format('Y-m-d')) {
+            $lastDayKey = $end->format('Y-m-d');
+            $rangeArray[$lastDayKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $end->format('Y-m-d 00:00:00'), $endTime, Arr::get($slotConfig, 'remaining'));
         }
 
         return $rangeArray;
