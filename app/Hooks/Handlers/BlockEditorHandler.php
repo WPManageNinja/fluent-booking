@@ -130,18 +130,7 @@ class BlockEditorHandler
     public function fcal_render_team_management_block($attributes)
     {
 
-        $attributes['hosts'] = [
-            [
-                'id'        => 12,
-                'event_ids' => ['all']
-            ],
-            [
-                'id'        => 1,
-                'event_ids' => ['1', '13']
-            ]
-        ];
-
-        $hosts = Arr::get($attributes, 'hosts', []);
+        $hosts = Arr::get($attributes, 'calendarHosts', []);
 
         if (!$hosts) {
             return '';
@@ -154,10 +143,11 @@ class BlockEditorHandler
             if (!$calendar) {
                 continue;
             }
-            $eventIds = Arr::get($config, 'event_ids', []);
+            $eventIds = Arr::get($config, 'events', []);
             if (!$eventIds) {
                 continue;
             }
+
             $isAll = in_array('all', $eventIds);
 
             if ($isAll) {
