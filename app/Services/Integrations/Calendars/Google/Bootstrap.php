@@ -22,7 +22,7 @@ class Bootstrap extends BaseCalendar
         $app = App::getInstance();
 
         $this->calendarKey = 'google';
-        $this->calendarName = __('Google Calendar / Meet', 'fluent-booking-pro');
+        $this->calendarTitle = __('Google Calendar / Meet', 'fluent-booking-pro');
         $this->logo = $app['url.assets'] . 'images/google-calendar.svg';
         $this->boot();
 
@@ -51,6 +51,28 @@ class Bootstrap extends BaseCalendar
             ];
             return $fields;
         }, 10, 2);
+
+        add_action('fluent_booking/before_get_all_calendars', function () {
+            if (!GoogleHelper::isConfigured()) {
+                return;
+            }
+            // Show the Google last error
+            add_action('fluent_booking/calendar', function (&$calendar, $type) {
+                if ($type != 'lists') {
+                    return $calendar;
+                }
+
+                $meta = Meta::where('object_type', '_google_user_token')
+                    ->where('object_id', $calendar->user_id)
+                    ->first();
+
+                if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
+                    return $calendar;
+                }
+                $error = Arr::get($meta->value, 'last_error');
+                $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
+            }, 10, 2);
+        });
 
     }
 
