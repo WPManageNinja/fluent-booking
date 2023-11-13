@@ -269,8 +269,8 @@ class FrontEndHandler
             $eventCount = count($calendar->activeEvents);
 
             $vars['fcal_host_' . $calendar->id] = [
-                'host_html'      => $hostHtml,
-                'event_count'    => $eventCount,
+                'host_html'       => $hostHtml,
+                'event_count'     => $eventCount,
                 'target_event_id' => ($eventCount == 1) ? $calendar->activeEvents[0]->id : 0
             ];
 
@@ -503,10 +503,14 @@ class FrontEndHandler
         if ($calendarSlot->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
             $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
-        } else if ($calendarSlot->isAddressRequired()) {
+        }
+
+        if ($calendarSlot->isAddressRequired()) {
             $rules['address'] = 'required';
             $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking-pro');
-        } else if ($calendarSlot->isLocationFieldRequired()) {
+        }
+
+        if ($calendarSlot->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
             $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
             $selectedLocationDriver = Arr::get($postedData, 'location_config.driver');
@@ -518,6 +522,17 @@ class FrontEndHandler
                 } else {
                     $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking-pro');
                 }
+            }
+        }
+
+        $requiredFields = array_filter($calendarSlot->getMeta('booking_fields', []), function ($field) {
+            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && Arr::get($field, 'name') == 'message';
+        });
+
+        foreach ($requiredFields as $field) {
+            if (empty($rules[$field['name']])) {
+                $rules[$field['name']] = 'required';
+                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking-pro');
             }
         }
 
