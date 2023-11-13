@@ -70,23 +70,18 @@ class Bootstrap extends BaseCalendar
     {
         $fields = $this->getStanadrdFields();
 
-        $config = OutlookHelper::getApiConfig();
-
-        $description = '<p>' . __('Login to your Outlook account, go to Azure Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Outlook Calendar. For full details read the', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/outlook-calendar-integration-with-fluent-booking/">' . __('documentation', 'fluent-booking-pro') . '</a></p>';
-
-        if (!empty($config['constant_defined'])) {
-            $fields = null;
-            $description = '<p>' . __('Outlook Calendar integration is configured by wp-config.php constants. No action required here', 'fluent-booking-pro') . '</p>';
-        }
+        $description = '<p>' . __('Your outlook API configaration is already. You can connect your outlook calendar from your host settings.', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/outlook-calendar-integration-with-fluent-booking/">' . __('Read the documentation', 'fluent-booking-pro') . '</a></p>';
 
         return [
             'logo'          => $this->logo,
             'title'         => $this->calendarTitle,
-            'subtitle'      => __('Configure Outlook Calendar to sync your events', 'fluent-booking-pro'),
+            'subtitle'      => __('Use Outlook Calendar to sync your Fluent Booking events', 'fluent-booking-pro'),
             'description'   => $description,
-            'save_btn_text' => __('Save Outlook API Configuration', 'fluent-booking-pro'),
-            'fields'        => $fields,
-            'will_encrypt'  => true
+            'save_btn_text' => __('Update Caching Time', 'fluent-booking-pro'),
+            'fields'        => [
+                'caching_time' => $fields['caching_time']
+            ],
+            'will_encrypt'  => false
         ];
     }
 

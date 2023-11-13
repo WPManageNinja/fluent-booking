@@ -53,7 +53,7 @@ class Bootstrap extends BaseCalendar
         }, 10, 2);
 
         add_action('fluent_booking/before_get_all_calendars', function () {
-            if (!GoogleHelper::isConfigured()) {
+            if (!$this->isConfigured()) {
                 return;
             }
             // Show the Google last error
@@ -73,7 +73,6 @@ class Bootstrap extends BaseCalendar
                 $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
-
     }
 
 
@@ -648,6 +647,7 @@ class Bootstrap extends BaseCalendar
 
     public function isConfigured()
     {
+        return false;
         return GoogleHelper::isConfigured();
     }
 
