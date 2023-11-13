@@ -282,7 +282,7 @@ class Bootstrap extends BaseCalendar
             return; // already created
         }
 
-        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
             return;
         }
@@ -441,7 +441,7 @@ class Bootstrap extends BaseCalendar
             return;
         }
 
-        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
             return false;
         }
@@ -534,7 +534,7 @@ class Bootstrap extends BaseCalendar
             ],
         ];
 
-        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
             return false;
         }
@@ -582,7 +582,7 @@ class Bootstrap extends BaseCalendar
             return false; // Nothing to update as there is no previous response of this booking
         }
 
-        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id);
+        $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
             return;
         }

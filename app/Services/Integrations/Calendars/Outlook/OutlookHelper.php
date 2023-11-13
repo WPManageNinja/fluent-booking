@@ -75,21 +75,35 @@ class OutlookHelper
         return $client;
     }
 
-    public static function getApiClientByUserId($userId)
+    public static function getApiClientByUserId($userId, $remoteId = null)
     {
         if (!self::isConfigured()) {
             return null;
         }
 
-        $meta = Meta::where('object_type', '_outlook_user_token')
+        $metas = Meta::query()->where('object_type', '_outlook_user_token')
             ->where('object_id', $userId)
-            ->first();
+            ->get();
 
-        if (!$meta) {
+        if ($metas->isEmpty()) {
             return null;
         }
 
-        return new OutlookCalendar($meta);
+        if ($metas->count() == 1 || !$remoteId) {
+            return new OutlookCalendar($metas->first());
+        }
+
+        foreach ($metas as $meta) {
+            $settings = $meta->value;
+            $calendarLists = Arr::get($settings, 'calendar_lists', []);
+            foreach ($calendarLists as $list) {
+                if (Arr::get($list, 'id') == $remoteId) {
+                    return new OutlookCalendar($meta);
+                }
+            }
+        }
+
+        return null;
     }
 
     public static function isConfigured()
