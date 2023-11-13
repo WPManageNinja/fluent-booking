@@ -251,7 +251,7 @@ class TimeSlotService
                     $booking->end_time = $afterBufferTime;
                 }
             }
-
+            
             $slot = $this->bookSlot($booking->event_id, $booking->start_time, $booking->end_time, $remaining);
 
             if ($isGroupBooking && $remaining) {
@@ -260,7 +260,6 @@ class TimeSlotService
 
             $books[$date][] = $slot;
         }
-
 
         $remoteBookings = apply_filters('fluent_booking/remote_booked_events', [], $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
 
@@ -280,14 +279,14 @@ class TimeSlotService
         }
 
         foreach ($remoteBookings as $date => $remoteBookings) {
-            if(!isset($books[$date])) {
+            if (!isset($books[$date])) {
                 $books[$date] = $remoteBookings;
                 continue;
             }
 
             foreach ($remoteBookings as $slot) {
                 $key = $slot['start'] . '_' . $slot['end'];
-                if(isset($groupBookingKeys[$key])) {
+                if (isset($groupBookingKeys[$key])) {
                     continue;
                 }
 
@@ -296,7 +295,6 @@ class TimeSlotService
         }
 
         return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
-        
     }
 
     protected function getWeekDaySlots()
