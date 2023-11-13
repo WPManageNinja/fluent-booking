@@ -75,6 +75,37 @@ class OutlookHelper
         return $client;
     }
 
+    public static function getApiClientByUserId($userId, $remoteId = null)
+    {
+        if (!self::isConfigured()) {
+            return null;
+        }
+
+        $metas = Meta::query()->where('object_type', '_outlook_user_token')
+            ->where('object_id', $userId)
+            ->get();
+
+        if ($metas->isEmpty()) {
+            return null;
+        }
+
+        if ($metas->count() == 1 || !$remoteId) {
+            return new OutlookCalendar($metas->first());
+        }
+
+        foreach ($metas as $meta) {
+            $settings = $meta->value;
+            $calendarLists = Arr::get($settings, 'calendar_lists', []);
+            foreach ($calendarLists as $list) {
+                if (Arr::get($list, 'id') == $remoteId) {
+                    return new OutlookCalendar($meta);
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static function isConfigured()
     {
         $config = self::getApiConfig();
@@ -139,10 +170,7 @@ class OutlookHelper
 
     public static function getAppRedirectUrl()
     {
-        if (defined('FLUENT_BOOKING_OUTLOOK_REDIRECT_URL')) {
-            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        }
-        return admin_url('admin-ajax.php?action=fluent_booking_outlook_auth');
+        return 'https://fluentbooking.com/wp-json/fluent-api/outlook/';
     }
 
     public static function getUniqueSiteIdHash()
@@ -167,6 +195,8 @@ class OutlookHelper
         }
 
         $hash = md5(site_url('/') . time());
+
+        $hash = substr($hash, 0, 10);
 
         update_option('__fcal_unique_site_id', $hash, 'no');
 

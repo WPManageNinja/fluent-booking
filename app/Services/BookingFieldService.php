@@ -264,6 +264,10 @@ class BookingFieldService
 
     public static function hasPhoneNumberField($fields)
     {
+        if(!$fields) {
+            return false;
+        }
+
         foreach ($fields as $field) {
             if ($field['type'] == 'phone') {
                 return true;

@@ -78,9 +78,31 @@ class FrontEndHandler
                     ], 422);
                 }
 
+                if ($bookingData['start_time'] == $existingBooking->start_time) {
+                    wp_send_json([
+                        'message' => __('Sorry, you can not reschedule to the same time.', 'fluent-booking-pro')
+                    ], 422);
+                }
+
                 $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
 
                 $previousBooking = clone $existingBooking;
+
+                if ($existingBooking->event_type == 'group') {
+                    // Need to handle group booking type here
+                    // check for existing group
+                    $parent = Booking::where('status', 'scheduled')
+                        ->where('event_id', $existingBooking->event_id)
+                        ->where('start_time', $bookingData['start_time'])
+                        ->orderBy('id', 'ASC')
+                        ->first();
+
+                    if ($parent) {
+                        $existingBooking->group_id = $parent->group_id;
+                    } else {
+                        $existingBooking->group_id = Helper::getNextBookingGroup();
+                    }
+                }
 
                 $existingBooking->start_time = $bookingData['start_time'];
                 $existingBooking->person_time_zone = $bookingData['person_time_zone'];
@@ -99,10 +121,13 @@ class FrontEndHandler
                 $existingBooking->updateMeta('rescheduled_by_type', $rescheduleBy);
 
                 do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $existingBooking->id,
+                    'type'        => 'info',
+                    'status'      => 'closed',
                     'title'       => __('Meeting Rescheduled', 'fluent-booking-pro'),
-                    'description' => __('Meeting has been rescheduled by guest from Web UI', 'fluent-booking-pro')
+                    'description' => __(sprintf('Meeting has been rescheduled by %1s from Web UI. Previous date time: %2s (UTC)', $rescheduleBy, $previousBooking->start_time), 'fluent-booking-pro')
                 ]);
-
+                
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
@@ -113,7 +138,7 @@ class FrontEndHandler
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
-                    'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
+                    'message'       => __('Booking has been rescheduled', 'fluent-booking-pro'),
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
                 ], 200);
@@ -233,20 +258,20 @@ class FrontEndHandler
         $vars = [];
         foreach ($calendars as $calendar) {
 
-            $hostHtml = (string) (string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+            $hostHtml = (string)(string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
                 'author'   => $calendar->getAuthorProfile(),
                 'calendar' => $calendar,
                 'events'   => $calendar->activeEvents
             ]);
 
-            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>'.__('Back to team', 'fluent-booking-pro').'</span></div>';
+            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>' . __('Back to team', 'fluent-booking-pro') . '</span></div>';
 
             $vars['fcal_host_' . $calendar->id] = [
                 'host_html' => $hostHtml
             ];
             foreach ($calendar->activeEvents as $event) {
                 $itemVars = $this->getCalendarEventVars($event->calendar, $event);
-                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($vars['form_fields'], $event);
+                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
                 if ($extraJs) {
                     $itemVars['lazy_js_files'] = $extraJs;
                 }

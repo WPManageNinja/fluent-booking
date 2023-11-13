@@ -4,9 +4,7 @@ namespace FluentBooking\App\Services\Integrations\Calendars;
 
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
-use FluentBooking\Framework\Support\Arr;
 
 class RemoteCalendarsInit
 {
@@ -16,10 +14,9 @@ class RemoteCalendarsInit
         (new \FluentBooking\App\Services\Integrations\Calendars\Outlook\Bootstrap())->register();
 
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 11, 2);
-
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'checkForRemoteCalendarEventCancel'], 10, 1);
 
-        add_action('fluent_booking/after_booking_rescheduled', [$this, 'checkForRemoteCalendarEventReschedule'], 10, 1);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'checkForRemoteCalendarEventReschedule'], 10, 2);
 
         add_action('fluent_booking/after_disconnect_remote_calendar', function ($metaId, $calendar) {
             $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
@@ -31,104 +28,97 @@ class RemoteCalendarsInit
             if (!$meta) {
                 RemoteCalendarHelper::updateUserRemoteCreatableCalendarSettings($calendar->user_id, []);
             }
-
         }, 10, 2);
-
-        add_action('init', function () {
-            if(!isset($_REQUEST['out'])) {
-                return;
-            }
-
-            $booking = Booking::find(97);
-
-            $this->checkForRemoteCalendarEventInsert($booking, $booking->slot);
-        });
-
     }
 
     public function checkForRemoteCalendarEventInsert($booking, $slot)
     {
-
-        $calendar = $slot->calendar;
-        if (!$calendar) {
-            return;
-        }
-
-        $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
 
         if (!$config) {
             return; // no integration available
         }
 
-        $bookingExist = Booking::where('group_id', $booking->group_id)->count();
+        if ($booking->event_type == 'group') {
+            // this is a group event
+            $allGroupBookings = Booking::query()->where('group_id', $booking->group_id)
+                ->where('status', 'scheduled')
+                ->orderBy('id', 'ASC')
+                ->get();
 
-        if ($bookingExist > 1) {
-            do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $booking, 'add');
-            return;
+            if ($allGroupBookings->count() > 1) {
+                do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $allGroupBookings, false);
+                return;
+            }
         }
 
-        do_action('fluent_booking/create_remote_calendar_event_' . $config['driver'], $config, $booking, $slot);
+        do_action('fluent_booking/create_remote_calendar_event_' . $config['driver'], $config, $booking);
     }
 
-    public function checkForRemoteCalendarEventCancel($booking)
+    public function checkForRemoteCalendarEventCancel(Booking $booking)
     {
-        if ('cancelled' != Arr::get($booking, 'status')) {
+        if ($booking->status !== 'cancelled') {
             return false;
         }
 
-        $calendar = Calendar::where('id', $booking->calendar_id)->first();
-
-        if (!$calendar) {
-            return;
-        }
-
-        $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
 
         if (!$config) {
-            return;
+            return; // no integration available
         }
 
-        $bookingExist = Booking::where('group_id', $booking->group_id)->count();
+        if ($booking->event_type == 'group') {
+            // this is a group event
+            $allGroupBookings = Booking::query()->where('group_id', $booking->group_id)
+                ->where('status', 'scheduled')
+                ->orderBy('id', 'ASC')
+                ->get();
 
-        if ($bookingExist > 1) {
-            do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $booking, 'remove');
-            return;
+            if ($allGroupBookings->count()) {
+                do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $allGroupBookings, false);
+                return;
+            }
         }
 
-        $data['status'] = 'cancelled';
-        do_action('fluent_booking/update_remote_calendar_event_' . $config['driver'], $config, $calendar, $booking, $data);
-
+        do_action('fluent_booking/cancel_remote_calendar_event_' . $config['driver'], $config, $booking);
     }
 
-    public function checkForRemoteCalendarEventReschedule($updatedBooking)
+    public function checkForRemoteCalendarEventReschedule(Booking $booking, $previousBooking)
     {
-        $calendar = Calendar::where('id', $updatedBooking->calendar_id)->first();
-
-        if (!$calendar) {
-            return;
-        }
-
-        $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
-
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
         if (!$config) {
             return;
         }
 
-        $data = [
-            'start' => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            ],
-            'end'   => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->end_time)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            ],
-        ];
+        if ($booking->event_type == 'group') {
+            // let's check if the previous booking group has any booking
+            $previousGroupBookings = Booking::query()->where('group_id', $previousBooking->group_id)
+                ->where('status', 'scheduled')
+                ->orderBy('id', 'ASC')
+                ->get();
 
-        do_action('fluent_booking/update_remote_calendar_event_' . $config['driver'], $config, $calendar, $updatedBooking, $data);
+            if ($previousGroupBookings->count()) {
+                $booking->status = 'rescheduling';
+                // we need to refresh the group members
+                do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $previousGroupBookings, true);
+                $booking->status = 'scheduled';
+            }
 
-        $bookingExist = Booking::where('group_id', $updatedBooking->group_id)->count();
+            $newGroupings = Booking::query()->where('group_id', $booking->group_id)
+                ->where('status', 'scheduled')
+                ->orderBy('id', 'ASC')
+                ->get();
 
-        if ($bookingExist > 1) {
-            do_action('fluent_booking/update_attendees_remote_calendar_event_' . $config['driver'], $config, $updatedBooking, 'remove');
+            if ($newGroupings->count() > 1) {
+                $booking->updateMeta('__' . $config['driver'] . '_calendar_event', []);
+                do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $newGroupings, false);
+                return;
+            }
         }
+
+        do_action('fluent_booking/patch_remote_calendar_event_' . $config['driver'], $config, $booking, [
+            'start' => $booking->start_time,
+            'end'   => $booking->end_time
+        ], true);
     }
 }
