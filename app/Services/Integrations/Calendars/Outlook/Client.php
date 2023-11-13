@@ -131,12 +131,6 @@ class Client
                 continue;
             }
 
-            $transactionId = Arr::get($item, 'transactionId');
-
-            if ($transactionId && strpos($transactionId, $siteUid) !== false) { // This is our own booking
-                continue;
-            }
-
             $formattedLists[] = [
                 'id'     => $item['id'],
                 'start'  => Arr::get($item, 'start.dateTime'),
