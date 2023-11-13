@@ -10,57 +10,21 @@ class OutlookHelper
 {
     public static function getApiConfig()
     {
-        if (defined('FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_SECRET')) {
-            return [
-                'client_id'        => FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_ID,
-                'client_secret'    => FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_SECRET,
-                'constant_defined' => true,
-                'caching_time'     => defined('FLUENT_BOOKING_OUTLOOK_API_CACHING_TIME') ? FLUENT_BOOKING_OUTLOOK_API_CACHING_TIME : '5'
-            ];
-        }
-
-        $defaults = [
-            'client_id'     => '',
-            'client_secret' => '',
-            'caching_time'  => '5'
+        $options = get_option('_fcal_outlook_calendar_client_details', []);
+        return [
+            'client_id'         => 'db98d3d0-c944-41f8-bb01-555c913a903b',
+            'client_secret'     => 'B2J8Q~sOFsiiHrqk_ajYL3NcIAv0mEPu6hWuLbHV',
+            'constant_defined'  => true,
+            'is_system_defined' => 'yes',
+            'caching_time'      => Arr::get($options, 'caching_time', 5)
         ];
-
-        $settings = get_option('_fcal_outlook_calendar_client_details', []);
-
-        $settings = wp_parse_args($settings, $defaults);
-
-        if (!empty($settings['client_secret'])) {
-            $settings['client_secret'] = Helper::decryptKey($settings['client_secret']);
-        }
-
-        return $settings;
     }
 
     public static function updateApiConfig($settings)
     {
-        if (defined('FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_SECRET')) {
-            return [
-                'client_id'        => FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_ID,
-                'client_secret'    => FLUENT_BOOKING_OUTLOOK_AUTH_CLIENT_SECRET,
-                'constant_defined' => true
-            ];
-        }
-
-        $settings = Arr::only($settings, ['client_id', 'client_secret', 'caching_time']);
-
-        if (!empty($settings['client_secret'])) {
-
-            if ($settings['client_secret'] == '********************') {
-                $oldSettings = self::getApiConfig();
-                $settings['client_secret'] = $oldSettings['client_secret'];
-            }
-
-            $settings['client_secret'] = Helper::encryptKey($settings['client_secret']);
-        }
-
+        $settings = Arr::only($settings, ['caching_time']);
         update_option('_fcal_outlook_calendar_client_details', $settings, 'no');
-
-        return $settings;
+        return self::getApiConfig();
     }
 
     public static function getApiClient($accessToken = null)
@@ -108,6 +72,7 @@ class OutlookHelper
 
     public static function isConfigured()
     {
+        return true;
         $config = self::getApiConfig();
         return !empty($config['client_id']) && !empty($config['client_secret']);
     }
