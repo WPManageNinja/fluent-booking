@@ -58,29 +58,8 @@
                 </div>
             </template>
 
-            <div v-else-if="!isEmpty(configuredProviders)">
+            <div v-else-if="!isEmpty(providers)">
                 <h3>{{ $t('RemoteCalendarsSettings/connect_calendar_desc') }}</h3>
-                <div v-for="driver in configuredProviders" :key="driver.key" class="">
-                    <div class="fcal_remote_calendar_block fcal_promt_box">
-                        <div class="fcal_remote_header">
-                            <div class="fcal_driver_brand">
-                                <img :src="driver.icon"/>
-                                <div class="fcal_driver_heading">
-                                    <h3>{{ driver.title }}</h3>
-                                    <p>{{ driver.subtitle }}</p>
-                                </div>
-                            </div>
-                            <div class="fcal_driver_action">
-                                <a :href="driver.auth_url"
-                                   class="el-button el-button--primary el-button--small">{{ driver.btn_text }}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div v-else-if="!isEmpty(providers) && !feeds.length">
-                <h3>{{ $t('To use Remote Calendar Sync feature please configure your apps first') }}</h3>
                 <div v-for="driver in providers" :key="driver.key" class="">
                     <div class="fcal_remote_calendar_block fcal_promt_box">
                         <div class="fcal_remote_header">
@@ -92,9 +71,14 @@
                                 </div>
                             </div>
                             <div class="fcal_driver_action">
-                                <a :href="driver.global_config_url"
-                                   class="el-button el-button--primary el-button--small">Configure {{ driver.title }}
-                                    API</a>
+                                <a v-if="driver.is_global_configured" :href="driver.auth_url"
+                                   class="el-button el-button--primary el-button--small">
+                                    {{ driver.btn_text }}
+                                </a>
+                                <a v-else :href="driver.global_config_url"
+                                   class="el-button el-button--primary el-button--small">
+                                    Configure {{ driver.title }}API
+                                </a>
                             </div>
                         </div>
                     </div>

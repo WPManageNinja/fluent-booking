@@ -148,7 +148,7 @@ class BootstrapX
                 'btn_text'             => __('Connect with Google Calendar', 'fluent-booking-pro'),
                 'auth_url'             => $this->getAuthUrl($userId),
                 'is_global_configured' => GoogleHelper::isConfigured(),
-                'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/google_calendar'),
+                'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/google'),
             ];
             return $calendars;
         }, 10, 2);
@@ -199,15 +199,17 @@ class BootstrapX
                     return $calendar;
                 }
 
-                $meta = Meta::where('object_type', '_google_user_token')
+                $metas = Meta::where('object_type', '_google_user_token')
                     ->where('object_id', $calendar->user_id)
-                    ->first();
+                    ->get();
 
-                if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
-                    return $calendar;
+                foreach ($metas as $meta) {
+                    if (!$meta || empty(Arr::get($meta->value, 'last_error'))) {
+                        return $calendar;
+                    }
+                    $error = Arr::get($meta->value, 'last_error');
+                    $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
                 }
-                $error = Arr::get($meta->value, 'last_error');
-                $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
     }

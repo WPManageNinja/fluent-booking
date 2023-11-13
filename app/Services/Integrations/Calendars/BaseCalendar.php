@@ -73,8 +73,9 @@ abstract class BaseCalendar
             'btn_text'             => __(sprintf('Connect with %s', $this->calendarTitle), 'fluent-booking-pro'),
             'auth_url'             => $this->getAuthUrl($userId),
             'is_global_configured' => $this->isConfigured(),
-            'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/outlook_calendar'),
+            'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/'.$this->calendarKey),
         ];
+
         return $providers;
     }
 
