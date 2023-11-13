@@ -189,48 +189,42 @@ class Bootstrap extends BaseCalendar
 
         $startDate = $fromDate->format('Y-m-d\TH:i:s\Z');
         $endDate = $toDate->format('Y-m-d\TH:i:s\Z');
-        $cacheKeyPrefix = $toDate->format('YmdHis');
+        $cacheKeyPrefix = $toDate->format('YmdHi');
 
         $allRemoteBookedSlots = [];
 
-
         foreach ($items as $item) {
             $meta = $item['item'];
+            $cacheKey = md5($cacheKeyPrefix . '_' . $meta->id);
             $calendarApi = new GoogleCalendar($meta);
-
             if ($calendarApi->lastError) {
                 continue;
             }
 
-            foreach ($item['check_ids'] as $remoteId) {
-                $cacheKey = md5($cacheKeyPrefix . '_' . $remoteId);
-                $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $remoteId) {
-                    $events = $calendarApi->getCalendarEvents($remoteId, [
-                        'timeMin' => $startDate,
-                        'timeMax' => $endDate
-                    ]);
+            $remoteSlots = CalendarCache::getCache($meta->id, $cacheKey, function () use ($calendarApi, $startDate, $endDate, $item) {
+                $freeBusy = $calendarApi->getBusyTimes($item['check_ids'], [
+                    'timeMin'  => $startDate,
+                    'timeMax'  => $endDate,
+                    'timeZone' => 'UTC'
+                ]);
 
-                    if (is_wp_error($events)) {
-                        if ($events->get_error_code() == 'api_error') {
-                            return []; // it's an api error so let's not call again and again
-                        }
-
-                        return $events; //  it's an wp error so we will call again
+                if (is_wp_error($freeBusy)) {
+                    if ($freeBusy->get_error_code() == 'api_error') {
+                        return []; // it's an api error so let's not call again and again
                     }
-
-                    // We have to format it appropriately
-                    return $events;
-                }, $cacheTime * 60);
-
-                if ($remoteSlots && !is_wp_error($remoteSlots)) {
-                    $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
+                    return $freeBusy; //  it's an wp error so we will call again
                 }
+                return $freeBusy;
+            }, $cacheTime);
+
+            if (!is_wp_error($remoteSlots) && $remoteSlots) {
+                $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
             }
         }
 
         foreach ($allRemoteBookedSlots as $slot) {
-            $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
-            $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
+            $start = DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone);
+            $end = DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone);
             $date = date('Y-m-d', strtotime($start));
 
             if (!isset($books[$date])) {
