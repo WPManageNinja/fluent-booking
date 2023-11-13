@@ -32,7 +32,7 @@ abstract class BaseCalendar
         /*
          * Booking Handlers
          */
-        add_filter('fluent_booking/booked_events', [$this, 'getBookedSlots'], 10, 5);
+        add_filter('fluent_booking/remote_booked_events', [$this, 'getBookedSlots'], 10, 5);
         add_action('fluent_booking/create_remote_calendar_event_' . $this->calendarKey, [$this, 'createEvent'], 10, 2);
         add_action('fluent_booking/refresh_remote_calendar_group_members_' . $this->calendarKey, [$this, 'maybeAddOrRemoveGroupMembers'], 10, 4);
 

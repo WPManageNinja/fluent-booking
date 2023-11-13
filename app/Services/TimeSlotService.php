@@ -34,7 +34,7 @@ class TimeSlotService
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
-        
+
         $maxBookPerDay = Arr::get($this->calendarSlot->settings, 'max_book_per_day', null);
 
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -59,7 +59,7 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
-            
+
             $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             if (!$availableSlots || $this->hasReachedMaxLimit($maxBookPerDay, $currentBookedSlots)) {
@@ -67,7 +67,6 @@ class TimeSlotService
             }
 
             $isToday = $date === $todayDate;
-
             $validSlots = [];
 
             foreach ($availableSlots as $start) {
@@ -187,10 +186,10 @@ class TimeSlotService
     protected function bookSlot($eventId, $start, $end, $remaining = 0)
     {
         return [
-            'event_id'    => $eventId,
-            'start'       => $start,
-            'end'         => $end,
-            'remaining'   => $remaining,
+            'event_id'  => $eventId,
+            'start'     => $start,
+            'end'       => $end,
+            'remaining' => $remaining,
         ];
     }
 
@@ -212,9 +211,14 @@ class TimeSlotService
             ->groupBy('group_id');
 
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
+
+        $isGroupBooking = $maxBooking > 1;
+
         $bufferTime = $this->calendarSlot->getTotalBufferTime();
 
         $books = [];
+
+        $groupBookingKeys = [];
 
         foreach ($bookings as $booking) {
 
@@ -232,7 +236,7 @@ class TimeSlotService
 
             if ($this->calendarSlot->id == $booking->event_id) {
                 $beforeBufferTime = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $afterBufferTime  = date('Y-m-d H:i:s', strtotime($booking->end_time   . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $afterBufferTime = date('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 if ($maxBooking > $booked) {
                     $remaining = $maxBooking - $booked;
@@ -242,16 +246,57 @@ class TimeSlotService
                     if ($afterBufferTime > $booking->end_time) {
                         $books[$date][] = $this->bookSlot($booking->event_id, $booking->end_time, $afterBufferTime);
                     }
-                } else {   
+                } else {
                     $booking->start_time = $beforeBufferTime;
-                    $booking->end_time   = $afterBufferTime;
+                    $booking->end_time = $afterBufferTime;
                 }
             }
 
-            $books[$date][] = $this->bookSlot($booking->event_id, $booking->start_time, $booking->end_time, $remaining);
+            $slot = $this->bookSlot($booking->event_id, $booking->start_time, $booking->end_time, $remaining);
+
+            if ($isGroupBooking && $remaining) {
+                $groupBookingKeys[$slot['start'] . '_' . $slot['end']] = true;
+            }
+
+            $books[$date][] = $slot;
+        }
+
+
+        $remoteBookings = apply_filters('fluent_booking/remote_booked_events', [], $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+
+        if (!$remoteBookings) {
+            return $books;
+        }
+
+        if (!$isGroupBooking) {
+            foreach ($remoteBookings as $bookedDate => $slots) {
+                if (!isset($books[$bookedDate])) {
+                    $books[$bookedDate] = $slots;
+                    continue;
+                }
+                $books[$bookedDate] = array_merge($books[$bookedDate], $slots);
+            }
+            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+        }
+
+        foreach ($remoteBookings as $date => $remoteBookings) {
+            if(!isset($books[$date])) {
+                $books[$date] = $remoteBookings;
+                continue;
+            }
+
+            foreach ($remoteBookings as $slot) {
+                $key = $slot['start'] . '_' . $slot['end'];
+                if(isset($groupBookingKeys[$key])) {
+                    continue;
+                }
+
+                $books[$date][] = $slot;
+            }
         }
 
         return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+        
     }
 
     protected function getWeekDaySlots()
@@ -288,7 +333,7 @@ class TimeSlotService
             foreach ($slots as $slot) {
                 $start = strtotime($slot['start']);
                 $end = strtotime($slot['end']);
-                
+
                 while ($start + $period <= $end) {
                     $daySlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     $start += $period;
@@ -351,7 +396,7 @@ class TimeSlotService
 
         // Extract current month and year
         $requestedDateMonth = date('m', strtotime($requestedDate));
-        $requestedDateYear  = date('Y', strtotime($requestedDate));
+        $requestedDateYear = date('Y', strtotime($requestedDate));
 
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $currentAuthorDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -376,7 +421,7 @@ class TimeSlotService
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
-        
+
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
 
@@ -389,7 +434,7 @@ class TimeSlotService
         foreach ($slots as $spots) {
 
             foreach ($spots as $spot) {
-                if(strtotime($spot['start']) < $minBookableTimestamp) {
+                if (strtotime($spot['start']) < $minBookableTimestamp) {
                     continue;
                 }
 

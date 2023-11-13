@@ -75,6 +75,11 @@ class Client
         return $tokens;
     }
 
+    public function getFreeBusy($args)
+    {
+        return $this->makeRequest('https://www.googleapis.com/calendar/v3/freeBusy', $args, 'POST', $this->getAuthorizationHeader());
+    }
+
     public function getCalendarLists($accessToken = null)
     {
         $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList', [], 'GET', $this->getAuthorizationHeader($accessToken));

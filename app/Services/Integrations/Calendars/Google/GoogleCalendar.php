@@ -33,6 +33,35 @@ class GoogleCalendar
         return ($this->getAccessClient())->getCalendarLists();
     }
 
+    public function getBusyTimes($ids, $args = [])
+    {
+        $args['items'] = [];
+
+        foreach ($ids as $id) {
+            $args['items'][] = ['id' => $id];
+        }
+
+        $result = ($this->getAccessClient())->getFreeBusy($args);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        $busyTimes = [];
+
+        foreach (Arr::get($result, 'calendars', []) as $calendarId => $calendar) {
+
+            if (!Arr::has($calendar, 'busy') || Arr::has($calendar, 'errors')) {
+                continue;
+            }
+
+            $items = Arr::get($calendar, 'busy', []);
+            $busyTimes = array_merge($busyTimes, $items);
+        }
+
+        return $busyTimes;
+    }
+
     public function getCalendarEvents($calendarId, $args = [])
     {
         $defaults = [
