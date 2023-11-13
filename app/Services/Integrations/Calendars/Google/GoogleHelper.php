@@ -75,6 +75,37 @@ class GoogleHelper
         return $client;
     }
 
+    public static function getApiClientByUserId($userId = null, $remoteId = null)
+    {
+        if (!self::isConfigured()) {
+            return null;
+        }
+
+        $metas = Meta::query()->where('object_type', '_google_user_token')
+            ->where('object_id', $userId)
+            ->get();
+
+        if ($metas->isEmpty()) {
+            return null;
+        }
+
+        if ($metas->count() == 1 || !$remoteId) {
+            return new GoogleCalendar($metas->first());
+        }
+
+        foreach ($metas as $meta) {
+            $settings = $meta->value;
+            $calendarLists = Arr::get($settings, 'calendar_lists', []);
+            foreach ($calendarLists as $list) {
+                if (Arr::get($list, 'id') == $remoteId) {
+                    return new GoogleCalendar($meta);
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static function isConfigured()
     {
         $config = self::getApiConfig();
@@ -107,19 +138,14 @@ class GoogleHelper
         $calendars = [];
 
         foreach ($metaItems as $item) {
-
             $settings = $item->value;
-
             $checkIds = Arr::get($settings, 'conflict_check_ids', []);
-
             if (empty($checkIds)) {
                 continue;
             }
 
             $itemValidCalendars = [];
-
             $allCalendars = Arr::get($settings, 'calendar_lists', []);
-
             foreach ($allCalendars as $calendar) {
                 if (in_array($calendar['id'], $checkIds)) {
                     $itemValidCalendars[] = $calendar['id'];
@@ -139,7 +165,7 @@ class GoogleHelper
 
     public static function getAppRedirectUrl()
     {
-        if(self::isUsingNativeApp()){
+        if (self::isUsingNativeApp()) {
             return 'https://fluentbooking.com/wp-json/fluent-api/google-calendar';
         }
 
@@ -188,6 +214,6 @@ class GoogleHelper
 
     public static function isUsingNativeApp()
     {
-        return true;
+        return defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL');
     }
 }

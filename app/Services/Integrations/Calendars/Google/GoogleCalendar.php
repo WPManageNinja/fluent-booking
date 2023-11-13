@@ -118,6 +118,7 @@ class GoogleCalendar
         $argsDefaults = [
             'sendUpdates' => 'all'
         ];
+
         $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
 
         if (empty($eventData['start']) || empty($eventData['end'])) {
