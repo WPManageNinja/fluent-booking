@@ -647,7 +647,6 @@ class Bootstrap extends BaseCalendar
 
     public function isConfigured()
     {
-        return false;
         return GoogleHelper::isConfigured();
     }
 

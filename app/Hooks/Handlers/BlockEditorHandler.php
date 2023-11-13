@@ -129,7 +129,6 @@ class BlockEditorHandler
 
     public function fcal_render_team_management_block($attributes)
     {
-
         $hosts = Arr::get($attributes, 'calendarHosts', []);
 
         if (!$hosts) {
