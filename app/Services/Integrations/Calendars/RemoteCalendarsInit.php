@@ -4,15 +4,13 @@ namespace FluentBooking\App\Services\Integrations\Calendars;
 
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
-use FluentBooking\Framework\Support\Arr;
 
 class RemoteCalendarsInit
 {
     public function boot()
     {
-        (new \FluentBooking\App\Services\Integrations\Calendars\Google\BootstrapX())->register();
+        (new \FluentBooking\App\Services\Integrations\Calendars\Google\Bootstrap())->register();
         (new \FluentBooking\App\Services\Integrations\Calendars\Outlook\Bootstrap())->register();
 
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 11, 2);
