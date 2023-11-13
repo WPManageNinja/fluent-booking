@@ -544,10 +544,10 @@ class Bootstrap extends BaseCalendar
             if ($groupBooking->status != 'scheduled') {
                 continue;
             }
-            $attendees[$booking->email] = array_filter([
-                'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
-                'email'        => $booking->email,
-                'comment'      => $booking->message
+            $attendees[$groupBooking->email] = array_filter([
+                'display_name' => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
+                'email'        => $groupBooking->email,
+                'comment'      => $groupBooking->message
             ]);
         }
 
@@ -562,6 +562,9 @@ class Bootstrap extends BaseCalendar
         ];
 
         $attendees = array_values($attendees);
+
+        error_log(__METHOD__);
+        error_log(print_r($attendees, true));
 
         $calendarApi = GoogleHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
