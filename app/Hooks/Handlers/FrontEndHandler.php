@@ -127,7 +127,7 @@ class FrontEndHandler
                     'title'       => __('Meeting Rescheduled', 'fluent-booking-pro'),
                     'description' => __(sprintf('Meeting has been rescheduled by %1s from Web UI. Previous date time: %2s (UTC)', $rescheduleBy, $previousBooking->start_time), 'fluent-booking-pro')
                 ]);
-                
+
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
@@ -266,9 +266,15 @@ class FrontEndHandler
 
             $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>' . __('Back to team', 'fluent-booking-pro') . '</span></div>';
 
+            $eventCount = count($calendar->activeEvents);
+
             $vars['fcal_host_' . $calendar->id] = [
-                'host_html' => $hostHtml
+                'host_html'      => $hostHtml,
+                'event_count'    => $eventCount,
+                'target_event_id' => ($eventCount == 1) ? $calendar->activeEvents[0]->id : 0
             ];
+
+
             foreach ($calendar->activeEvents as $event) {
                 $itemVars = $this->getCalendarEventVars($event->calendar, $event);
                 $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
