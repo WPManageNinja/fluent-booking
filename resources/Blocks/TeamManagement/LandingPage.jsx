@@ -1,0 +1,104 @@
+/*eslint-disable*/
+const {Fragment, useEffect, useState} = wp.element;
+const { RichText } = wp.blockEditor;
+const {__} = wp.i18n;
+const {
+    Spinner,
+    DropdownMenu
+} = wp.components;
+
+import './fcal-team-management-block.scss';
+
+const assetsUrl = window.fluent_booking_block.assets_url;
+
+const calendarsVar = window.fluent_booking_block.hosts;
+let calendars = Object.values(calendarsVar);
+
+const selectedHosts = [];
+
+export const LandingPage = props => {
+    let {
+        attributes: {
+            title,
+            description,
+            headerImage,
+            calendarHosts,
+        }, setAttributes,
+    } = props;
+
+    const [isLoading, setIsLoading] = useState(false);
+    // const [slot, setSlot] = useState('');
+    const [error, setError] = useState(false);
+
+
+    const apiFetch = wp.apiFetch;
+    const {addQueryArgs} = wp.url;
+
+    useEffect(() => {
+
+    }, [ calendarHosts]);
+
+    return [
+        <Fragment>
+            <div className="fcal_team_management_block_wrap">
+                <div className="fcal_team_management_block_header">
+                    {
+                        headerImage.url != '' ?
+                        <img src={headerImage.url} alt={headerImage.title} />
+                        :
+                        <img src={assetsUrl+'/images/logo.svg'} alt="Logo" />
+                    }
+                    <RichText
+                        className={title?'':'empty-text'}
+                        tagName="h1"
+                        value={ title }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        onChange={ ( heading ) => setAttributes( { title: heading } ) }
+                        placeholder="Enter title here..."
+                    />
+                    <RichText
+                        className={description?'':'empty-text'}
+                        tagName="p"
+                        value={ description }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        onChange={ ( heading ) => setAttributes( { description: heading } ) }
+                        placeholder="Enter description here..."
+                    />
+                </div>
+
+                { calendarHosts && calendarHosts.length ?
+                        <div className="fcal_team_management_block_hosts">
+                            {calendarHosts.map(calConfig => {
+                                return <div className="fcal_team_management_block_host">
+                                    <img src={calendarsVar[calConfig.id]?.author?.avatar} alt=""/>
+                                    <h3>{calendarsVar[calConfig.id]?.author?.name}</h3>
+                                    {
+                                        calendarsVar[calConfig.id]?.description != '' ?
+                                            <div dangerouslySetInnerHTML={{ __html: calendarsVar[calConfig.id]?.description }} />
+                                        :
+                                        ''
+                                    }
+                                </div>
+                            })}
+                        </div>
+                        :
+                    <div className="fcal_team_management_block_hosts">
+                        {calendars.map(calConfig => {
+                            return <div className="fcal_team_management_block_host">
+                                <img src={calConfig?.author?.avatar} alt=""/>
+                                <h3>{calConfig?.author?.name}</h3>
+                                {
+                                    calConfig?.description != '' ?
+                                        <div dangerouslySetInnerHTML={{ __html: calConfig?.description }} />
+                                        :
+                                        ''
+                                }
+                            </div>
+                        })}
+                    </div>
+                }
+
+            </div>
+        </Fragment>
+    ]
+}

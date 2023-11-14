@@ -1,20 +1,22 @@
 <?php
 
-namespace FluentBooking\App\Services\Integrations\Calendars\Google;
+namespace FluentBooking\App\Services\Integrations\Calendars\Outlook;
 
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
-class GoogleCalendar
+class OutlookCalendar
 {
-
     public $lastError = null;
 
     private $metaModel;
 
+    public $settings;
+
     public function __construct(Meta $meta)
     {
+        $this->settings = $meta->value;
         $this->metaModel = $meta;
         $this->normalizeUserAccessMeta();
     }
@@ -33,40 +35,12 @@ class GoogleCalendar
         return ($this->getAccessClient())->getCalendarLists();
     }
 
-    public function getBusyTimes($ids, $args = [])
-    {
-        $args['items'] = [];
-
-        foreach ($ids as $id) {
-            $args['items'][] = ['id' => $id];
-        }
-
-        $result = ($this->getAccessClient())->getFreeBusy($args);
-
-        if (is_wp_error($result)) {
-            return $result;
-        }
-
-        $busyTimes = [];
-
-        foreach (Arr::get($result, 'calendars', []) as $calendarId => $calendar) {
-
-            if (!Arr::has($calendar, 'busy') || Arr::has($calendar, 'errors')) {
-                continue;
-            }
-
-            $items = Arr::get($calendar, 'busy', []);
-            $busyTimes = array_merge($busyTimes, $items);
-        }
-
-        return $busyTimes;
-    }
-
     public function getCalendarEvents($calendarId, $args = [])
     {
         $defaults = [
-            'maxResults' => 2000,
-            'timeZone'   => 'UTC'
+            'maxResults'    => 2000,
+            'startDateTime' => date('Y-m-d') . 'T00:00:00Z',
+            'endDateTime'   => date('Y-m-d', strtotime('+1 month')) . 'T00:00:00Z'
         ];
 
         $args = array_merge($defaults, $args);
@@ -80,7 +54,7 @@ class GoogleCalendar
 
     private function getAccessClient()
     {
-        return (GoogleHelper::getApiClient($this->getAccessToken()));
+        return (OutlookHelper::getApiClient($this->getAccessToken()));
     }
 
     public function getAccessToken()
@@ -89,15 +63,20 @@ class GoogleCalendar
         return Helper::decryptKey($settings['access_token']);
     }
 
+    public function deleteEvent($eventId)
+    {
+        return ($this->getAccessClient())->deleteEvent($eventId);
+    }
+
     private function normalizeUserAccessMeta()
     {
         $metaModel = $this->metaModel;
-        $settings = $metaModel->value;
+        $settings = $this->settings;
 
         if (Arr::get($settings, 'expires_in', 0) - 10 <= time()) {
             $settings['refresh_token'] = Helper::decryptKey(Arr::get($settings, 'refresh_token'));
 
-            $newTokens = (GoogleHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
+            $newTokens = (OutlookHelper::getApiClient())->reGenerateToken($settings['refresh_token']);
 
             if (is_wp_error($newTokens)) {
                 $settings['refresh_token'] = Helper::encryptKey($settings['refresh_token']);
@@ -144,12 +123,6 @@ class GoogleCalendar
 
     public function createEvent($calendarId, $eventData, $queryArgs = [])
     {
-        $argsDefaults = [
-            'sendUpdates' => 'all'
-        ];
-
-        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
-
         if (empty($eventData['start']) || empty($eventData['end'])) {
             return new \WP_Error('invalid_data', __('start and end data is required', 'fluent-booking-pro'));
         }
@@ -157,14 +130,9 @@ class GoogleCalendar
         return ($this->getAccessClient())->createEvent($calendarId, $eventData, $queryArgs);
     }
 
-    public function patchEvent($calendarId, $eventId, $eventData, $queryArgs = [])
+    public function patchEvent($eventId, $eventData, $queryArgs = [])
     {
-        $argsDefaults = [
-            'sendUpdates' => 'all'
-        ];
-        $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
-
-        return ($this->getAccessClient())->patchEvent($calendarId, $eventId, $eventData, $queryArgs);
+        return ($this->getAccessClient())->patchEvent($eventId, $eventData, $queryArgs);
     }
 
     public function getEvent($calendarId, $eventId, $queryArgs = [])
