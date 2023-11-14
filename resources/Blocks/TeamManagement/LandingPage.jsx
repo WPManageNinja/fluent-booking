@@ -29,7 +29,7 @@ export const LandingPage = props => {
     const [isLoading, setIsLoading] = useState(false);
     // const [slot, setSlot] = useState('');
     const [error, setError] = useState(false);
-    
+
     const apiFetch = wp.apiFetch;
     const {addQueryArgs} = wp.url;
 

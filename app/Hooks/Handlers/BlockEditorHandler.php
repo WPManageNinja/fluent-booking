@@ -131,6 +131,8 @@ class BlockEditorHandler
     {
         $hosts = Arr::get($attributes, 'calendarHosts', []);
 
+        $wrapperClassName = Arr::get($attributes, 'className');
+
         if (!$hosts) {
             return '';
         }
@@ -172,7 +174,8 @@ class BlockEditorHandler
         return (new FrontEndHandler())->renderTeamHosts($hostItems, [
             'title' => Arr::get($attributes, 'title'),
             'description' => Arr::get($attributes, 'description'),
-            'logo' => Arr::get($attributes, 'headerImage.url')
+            'logo' => Arr::get($attributes, 'headerImage.url'),
+            'wrapper_class' => $wrapperClassName
         ]);
     }
 
