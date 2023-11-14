@@ -305,39 +305,38 @@ class TimeSlotService
         }
 
         if (!$isGroupBooking) {
-            foreach ($remoteBookings as $slots) {
-                foreach ($slots as $slot) {
-                    $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                        'start' => $slot['start'],
-                        'end'   => $slot['end']
-                    ]);
-                    foreach ($rangedItems as $rangedDate => $rangedSlot) {
-                        if (!isset($books[$rangedDate])) {
-                            $books[$rangedDate] = [];
-                        }
-                        $books[$rangedDate][] = $rangedSlot;
-                    }
-                }
-            }
-            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
-        }
 
-        foreach ($remoteBookings as $slots) {
-            foreach ($slots as $slot) {
+            foreach ($remoteBookings as $slot) {
                 $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                     'start' => $slot['start'],
                     'end'   => $slot['end']
                 ]);
+
                 foreach ($rangedItems as $rangedDate => $rangedSlot) {
                     if (!isset($books[$rangedDate])) {
                         $books[$rangedDate] = [];
                     }
-                    $key = $rangedSlot['start'] . '_' . $rangedSlot['end'];
-                    if (isset($groupBookingKeys[$key])) {
-                        continue;
-                    }
                     $books[$rangedDate][] = $rangedSlot;
                 }
+            }
+
+            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+        }
+
+        foreach ($remoteBookings as $slot) {
+            $rangedItems = $this->createDateRangeArrayFromSlotConfig([
+                'start' => $slot['start'],
+                'end'   => $slot['end']
+            ]);
+            foreach ($rangedItems as $rangedDate => $rangedSlot) {
+                if (!isset($books[$rangedDate])) {
+                    $books[$rangedDate] = [];
+                }
+                $key = $rangedSlot['start'] . '_' . $rangedSlot['end'];
+                if (isset($groupBookingKeys[$key])) {
+                    continue;
+                }
+                $books[$rangedDate][] = $rangedSlot;
             }
         }
 

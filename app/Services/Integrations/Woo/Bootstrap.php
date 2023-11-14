@@ -336,7 +336,7 @@ class Bootstrap
 
     private function isEnabled()
     {
-        return Helper::isModuleEnabled('woo');
+        return defined('WC_PLUGIN_FILE') && Helper::isModuleEnabled('woo');
     }
 
     private function getEventProductId($calendarSlot)
