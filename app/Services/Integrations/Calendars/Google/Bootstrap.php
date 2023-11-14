@@ -555,8 +555,6 @@ class Bootstrap extends BaseCalendar
 
         $attendees = array_values($attendees);
 
-        error_log(__METHOD__);
-        error_log(print_r($attendees, true));
 
         $calendarApi = GoogleHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
@@ -574,8 +572,8 @@ class Bootstrap extends BaseCalendar
                     'booking_id'  => $booking->id,
                     'status'      => 'closed',
                     'type'        => 'error',
-                    'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                    'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
+                    'description' => __(sprintf('Failed to connect with Google calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
                 ]);
             }
             return false;
@@ -618,7 +616,7 @@ class Bootstrap extends BaseCalendar
             }
 
             if ($missingBooking->status != 'cancelled') {
-                $missingBooking->updateMeta('__outlook_calendar_event', $parentMeta);
+                $missingBooking->updateMeta('__google_calendar_event', $parentMeta);
             }
 
             return true;
