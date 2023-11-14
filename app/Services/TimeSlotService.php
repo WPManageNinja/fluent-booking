@@ -265,7 +265,7 @@ class TimeSlotService
                             }
 
                             if ($isGroupBooking && $remaining) {
-                                $groupBookingKeys[$slot['start'] . '_' . $slot['end']] = true;
+                                $groupBookingKeys[$booking->start_time . '_' . $booking->end_time] = true;
                             }
 
                             $books[$date][] = $slot;
