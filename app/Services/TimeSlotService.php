@@ -35,8 +35,6 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $maxBookPerDay = Arr::get($this->calendarSlot->settings, 'max_book_per_day', null);
-
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
@@ -60,11 +58,11 @@ class TimeSlotService
                 $availableSlots = $daySlots[$day];
             }
 
-            $currentBookedSlots = $bookedSlots[$date] ?? [];
-
-            if (!$availableSlots || $this->hasReachedMaxLimit($maxBookPerDay, $currentBookedSlots)) {
+            if (!$availableSlots) {
                 continue;
             }
+            
+            $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
             $validSlots = [];
