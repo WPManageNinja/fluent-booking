@@ -147,7 +147,6 @@
     function submitForm(e) {
         const formFields = e.target.elements;
         const selectedMethod = (formFields?.stripe_payment_method?.value) ? formFields.stripe_payment_method.value : '';
-        dispatch('onPaymentsVisibilityChanged', true);
         const postdata = {
             ...form,
             timezone,
@@ -166,6 +165,7 @@
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
+                dispatch('onPaymentsVisibilityChanged', true);
                 if (res.data?.redirect_to) {
                     window.location.href = res.data.redirect_to;
                     return;
