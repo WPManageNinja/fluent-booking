@@ -2,34 +2,145 @@
 
 namespace FluentBooking\App\Services\Integrations\Calendars;
 
-use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Meta;
 
-class BaseCalendar
+abstract class BaseCalendar
 {
 
-    private $dbId;
+    protected $calendarKey;
 
-    private $settingsKey = '';
+    protected $calendarTitle;
 
-    private $settings = [];
+    protected $logo;
 
-    private $client;
-
-    private $calendarId;
-
-    public function __construct($config = [])
+    public function boot()
     {
-        $this->settingsKey = Arr::get($config, 'settings_key');
-        $this->settings = Arr::get($config, 'settings');
-        $this->calendarId = Arr::get($config, 'calendar_id');
-        $this->dbId = Arr::get($config, 'db_id');
+        add_filter('fluent_booking/settings_menu_items', [$this, 'pushToGlobalMenu'], 10, 1);
+        add_filter('fluent_booking/get_client_settings_' . $this->calendarKey, [$this, 'getClientSettingsForView'], 10, 1);
+        add_filter('fluent_booking/get_client_field_settings_' . $this->calendarKey, [$this, 'getClientFieldSettings'], 10, 1);
+        add_action('fluent_booking/save_client_settings_' . $this->calendarKey, [$this, 'saveClientSettings'], 10, 1);
+
+        /*
+         * oAuth From Handlers from Calendar
+         */
+        add_filter('fluent_booking/remote_calendar_providers', [$this, 'addAsProvider'], 10, 2);
+        add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushFeeds'], 10, 2);
+        add_action('fluent_calendar/patch_calendar_config_settings__' . $this->calendarKey . '_user_token', [$this, 'updateConflictIds'], 10, 2);
+        add_action('fluent_calendar/disconnect_remote_calendar__' . $this->calendarKey . '_user_token', [$this, 'authDisconnect'], 10, 1);
+
+        /*
+         * Booking Handlers
+         */
+        add_filter('fluent_booking/remote_booked_events', [$this, 'getBookedSlots'], 10, 5);
+        add_action('fluent_booking/create_remote_calendar_event_' . $this->calendarKey, [$this, 'createEvent'], 10, 2);
+        add_action('fluent_booking/refresh_remote_calendar_group_members_' . $this->calendarKey, [$this, 'maybeAddOrRemoveGroupMembers'], 10, 4);
+
+        add_action('fluent_booking/cancel_remote_calendar_event_' . $this->calendarKey, [$this, 'cancelEvent'], 10, 2);
+        add_action('fluent_booking/patch_remote_calendar_event_' . $this->calendarKey, [$this, 'patchEvent'], 10, 4);
+
     }
 
-
-    public function setClient($client)
+    public function pushToGlobalMenu($menuItems)
     {
-        $this->client = $client;
+        $menuItems[$this->calendarKey] = [
+            'title'          => $this->calendarTitle,
+            'icon_url'       => $this->logo,
+            'component_type' => 'GlobalSettingsComponent',
+            'route'          => [
+                'name'   => 'configure-integrations',
+                'params' => [
+                    'settings_key' => $this->calendarKey
+                ]
+            ]
+        ];
+        return $menuItems;
     }
-    
+
+    abstract public function getClientSettingsForView($settings);
+
+    abstract public function getClientFieldSettings($settings);
+
+    abstract public function saveClientSettings($settings);
+
+    public function addAsProvider($providers, $userId)
+    {
+        $providers[$this->calendarKey] = [
+            'key'                  => $this->calendarKey,
+            'icon'                 => $this->logo,
+            'title'                => $this->calendarTitle,
+            'subtitle'             => __(sprintf('Configure %s to sync your events', $this->calendarTitle), 'fluent-booking-pro'),
+            'btn_text'             => __(sprintf('Connect with %s', $this->calendarTitle), 'fluent-booking-pro'),
+            'auth_url'             => $this->getAuthUrl($userId),
+            'is_global_configured' => $this->isConfigured(),
+            'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/'.$this->calendarKey),
+        ];
+
+        return $providers;
+    }
+
+    abstract public function pushFeeds($feeds, $userId);
+
+    public function updateConflictIds($conflictIds, $meta)
+    {
+        $meta = Meta::where('object_type', '_' . $this->calendarKey . '_user_token')
+            ->where('id', $meta->id)
+            ->first();
+
+        $settings = $meta->value;
+        $settings['conflict_check_ids'] = $conflictIds;
+        $meta->value = $settings;
+        $meta->save();
+    }
+
+    abstract public function authDisconnect($meta);
+
+    abstract public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+
+    abstract public function createEvent($config, Booking $booking);
+
+    abstract public function cancelEvent($config, Booking $booking);
+
+    abstract public function patchEvent($config, Booking $booking, $updateData, $isRescheduling);
+
+    abstract public function maybeAddOrRemoveGroupMembers($config, Booking $booking, $allGroupBookings, $isRescheduling);
+
+    abstract public function getAuthUrl($userId = null);
+
+    abstract public function isConfigured();
+
+    protected function getStanadrdFields()
+    {
+        return [
+            'client_id'     => [
+                'type'        => 'text',
+                'label'       => __('Client ID', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your Client ID', 'fluent-booking-pro'),
+            ],
+            'client_secret' => [
+                'type'        => 'text',
+                'label'       => __('Secret Key', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your Secret Key', 'fluent-booking-pro'),
+            ],
+            'redirect_url'  => [
+                'type'        => 'text',
+                'label'       => __('Redirect URI', 'fluent-booking-pro'),
+                'placeholder' => __('Enter Your Redirect URI', 'fluent-booking-pro'),
+                'readonly'    => true,
+                'copy_btn'    => true,
+            ],
+            'caching_time'  => [
+                'type'        => 'select',
+                'options'     => [
+                    '1'  => __('1 minute', 'fluent-booking-pro'),
+                    '5'  => __('5 minutes', 'fluent-booking-pro'),
+                    '10' => __('10 minutes', 'fluent-booking-pro'),
+                    '15' => __('15 minutes', 'fluent-booking-pro'),
+                ],
+                'label'       => __('Caching Time', 'fluent-booking-pro'),
+                'inline_help' => __(sprintf('Select for how many minutes the %1s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2s then you may lower the value', $this->calendarTitle, $this->calendarTitle), 'fluent-booking-pro')
+            ],
+        ];
+    }
 
 }

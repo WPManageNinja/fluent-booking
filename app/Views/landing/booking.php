@@ -63,8 +63,8 @@ use FluentBooking\App\Models\Booking;
     <?php endforeach; ?>
 </script>
 
-<?php foreach ($js_files as $file): ?>
-    <script src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
+<?php foreach ($js_files as $fileKey => $file): ?>
+    <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
 <?php endforeach; ?>
 
 <?php do_action('fluent_booking/author_landing_footer', $calendar_event); ?>

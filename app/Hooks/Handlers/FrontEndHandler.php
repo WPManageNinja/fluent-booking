@@ -11,6 +11,7 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
+use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
@@ -23,7 +24,9 @@ class FrontEndHandler
 {
     public function register()
     {
-        add_shortcode('fluent_booking', [$this, 'handleShortcode']);
+        add_shortcode('fluent_booking', [$this, 'handleBookingShortcode']);
+
+        add_shortcode('fluent_booking_team', [$this, 'handleTeamShortcode']);
 
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
 
@@ -39,7 +42,6 @@ class FrontEndHandler
         /*
          * Rescheduing Handlers
          */
-
         add_action('fluent_booking/starting_scheduling_ajax', function ($data) {
             if (empty($data['rescheduling_hash'])) {
                 return;
@@ -76,9 +78,31 @@ class FrontEndHandler
                     ], 422);
                 }
 
+                if ($bookingData['start_time'] == $existingBooking->start_time) {
+                    wp_send_json([
+                        'message' => __('Sorry, you can not reschedule to the same time.', 'fluent-booking-pro')
+                    ], 422);
+                }
+
                 $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
 
                 $previousBooking = clone $existingBooking;
+
+                if ($existingBooking->event_type == 'group') {
+                    // Need to handle group booking type here
+                    // check for existing group
+                    $parent = Booking::where('status', 'scheduled')
+                        ->where('event_id', $existingBooking->event_id)
+                        ->where('start_time', $bookingData['start_time'])
+                        ->orderBy('id', 'ASC')
+                        ->first();
+
+                    if ($parent) {
+                        $existingBooking->group_id = $parent->group_id;
+                    } else {
+                        $existingBooking->group_id = Helper::getNextBookingGroup();
+                    }
+                }
 
                 $existingBooking->start_time = $bookingData['start_time'];
                 $existingBooking->person_time_zone = $bookingData['person_time_zone'];
@@ -97,8 +121,11 @@ class FrontEndHandler
                 $existingBooking->updateMeta('rescheduled_by_type', $rescheduleBy);
 
                 do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $existingBooking->id,
+                    'type'        => 'info',
+                    'status'      => 'closed',
                     'title'       => __('Meeting Rescheduled', 'fluent-booking-pro'),
-                    'description' => __('Meeting has been rescheduled by guest from Web UI', 'fluent-booking-pro')
+                    'description' => __(sprintf('Meeting has been rescheduled by %1s from Web UI. Previous date time: %2s (UTC)', $rescheduleBy, $previousBooking->start_time), 'fluent-booking-pro')
                 ]);
 
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
@@ -111,17 +138,16 @@ class FrontEndHandler
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
-                    'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
+                    'message'       => __('Booking has been rescheduled', 'fluent-booking-pro'),
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
                 ], 200);
 
             }, 10, 2);
         });
-
     }
 
-    public function handleShortcode($atts, $content)
+    public function handleBookingShortcode($atts, $content)
     {
         $atts = shortcode_atts([
             'id'             => 0,
@@ -174,6 +200,103 @@ class FrontEndHandler
 
         return App::make('view')->make('public.calendar', [
             'calenderEvent' => $calendarEvent
+        ]);
+    }
+
+    public function handleTeamShortcode($atts, $content)
+    {
+        $atts = shortcode_atts([
+            'event_ids'   => '',
+            'title'       => '',
+            'description' => '',
+            'logo_url'    => ''
+        ], $atts);
+
+        if (!$atts['event_ids']) {
+            return '';
+        }
+
+        $eventIds = array_filter(array_map('intval', explode(',', $atts['event_ids'])));
+
+        if (empty($eventIds)) {
+            return '';
+        }
+
+        $events = CalendarSlot::query()->whereIn('id', $eventIds)
+            ->where('status', 'active')
+            ->get();
+
+        $calendarIds = [];
+        $calendarEvents = [];
+
+        foreach ($events as $event) {
+            $calendarIds[] = $event->calendar_id;
+            if (!isset($calendarEvents[$event->calendar_id])) {
+                $calendarEvents[$event->calendar_id] = [];
+            }
+            $calendarEvents[$event->calendar_id][] = $event;
+        }
+
+        $calendars = Calendar::query()->whereIn('id', $calendarIds)->get();
+
+        foreach ($calendars as $calendar) {
+            $calendar->activeEvents = $calendarEvents[$calendar->id];
+        }
+
+        return $this->renderTeamHosts($calendars, [
+            'title'       => $atts['title'],
+            'description' => $atts['description'],
+            'logo'        => $atts['logo_url']
+        ]);
+    }
+
+    public function renderTeamHosts($calendars, $headerConfig = [])
+    {
+        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
+        wp_enqueue_script('fluent-booking-team', App::getInstance('url.assets') . 'public/js/team_app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+        $vars = [];
+        foreach ($calendars as $calendar) {
+
+            $hostHtml = (string)(string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+                'author'   => $calendar->getAuthorProfile(),
+                'calendar' => $calendar,
+                'events'   => $calendar->activeEvents
+            ]);
+
+            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>' . __('Back to team', 'fluent-booking-pro') . '</span></div>';
+
+            $eventCount = count($calendar->activeEvents);
+
+            $vars['fcal_host_' . $calendar->id] = [
+                'host_html'       => $hostHtml,
+                'event_count'     => $eventCount,
+                'target_event_id' => ($eventCount == 1) ? $calendar->activeEvents[0]->id : 0
+            ];
+
+
+            foreach ($calendar->activeEvents as $event) {
+                $itemVars = $this->getCalendarEventVars($event->calendar, $event);
+                $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
+                if ($extraJs) {
+                    $itemVars['lazy_js_files'] = $extraJs;
+                }
+                wp_localize_script('fluent-booking-team', 'fcal_public_vars_' . $event->calendar_id . '_' . $event->id, $itemVars);
+            }
+        }
+
+        wp_localize_script('fluent-booking-team', $wrapperId, $vars);
+
+        $assetUrl = App::getInstance('url.assets');
+        wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $this->loadGlobalVars();
+
+        return App::make('view')->make('public.team_page', [
+            'hosts'       => $calendars,
+            'wrapper_id'  => $wrapperId,
+            'logo'        => Arr::get($headerConfig, 'logo', ''),
+            'title'       => Arr::get($headerConfig, 'title', ''),
+            'description' => Arr::get($headerConfig, 'description', ''),
         ]);
     }
 
@@ -380,10 +503,14 @@ class FrontEndHandler
         if ($calendarSlot->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
             $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
-        } else if ($calendarSlot->isAddressRequired()) {
+        }
+
+        if ($calendarSlot->isAddressRequired()) {
             $rules['address'] = 'required';
             $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking-pro');
-        } else if ($calendarSlot->isLocationFieldRequired()) {
+        }
+
+        if ($calendarSlot->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
             $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
             $selectedLocationDriver = Arr::get($postedData, 'location_config.driver');
@@ -395,6 +522,17 @@ class FrontEndHandler
                 } else {
                     $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking-pro');
                 }
+            }
+        }
+
+        $requiredFields = array_filter($calendarSlot->getMeta('booking_fields', []), function ($field) {
+            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && Arr::get($field, 'name') == 'message';
+        });
+
+        foreach ($requiredFields as $field) {
+            if (empty($rules[$field['name']])) {
+                $rules[$field['name']] = 'required';
+                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking-pro');
             }
         }
 
@@ -431,7 +569,7 @@ class FrontEndHandler
             'start_time'       => $startDateTime,
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
-            'message'          => sanitize_textarea_field(Arr::get($postedData, 'message', '')),
+            'message'          => sanitize_textarea_field(wp_unslash(Arr::get($postedData, 'message', ''))),
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'address'          => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
             'ip_address'       => Helper::getIp(),
@@ -492,6 +630,7 @@ class FrontEndHandler
 
     public function ajaxGetAvailableDates()
     {
+        $startBenchmark = microtime(true);
         $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $slot = CalendarSlot::findOrfail($slotId);
 
@@ -538,6 +677,7 @@ class FrontEndHandler
             'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
             'max_lookup_date' => $slot->getMaxLookUpDate(),
+            'execution_time'  => microtime(true) - $startBenchmark
         ], 200);
     }
 
