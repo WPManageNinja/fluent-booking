@@ -244,9 +244,9 @@ class FrontEndHandler
         }
 
         return $this->renderTeamHosts($calendars, [
-            'title'       => $atts['title'],
-            'description' => $atts['description'],
-            'logo'        => $atts['logo_url'],
+            'title'         => $atts['title'],
+            'description'   => $atts['description'],
+            'logo'          => $atts['logo_url'],
             'wrapper_class' => ''
         ]);
     }
@@ -293,11 +293,11 @@ class FrontEndHandler
         $this->loadGlobalVars();
 
         return App::make('view')->make('public.team_page', [
-            'hosts'       => $calendars,
-            'wrapper_id'  => $wrapperId,
-            'logo'        => Arr::get($headerConfig, 'logo', ''),
-            'title'       => Arr::get($headerConfig, 'title', ''),
-            'description' => Arr::get($headerConfig, 'description', ''),
+            'hosts'         => $calendars,
+            'wrapper_id'    => $wrapperId,
+            'logo'          => Arr::get($headerConfig, 'logo', ''),
+            'title'         => Arr::get($headerConfig, 'title', ''),
+            'description'   => Arr::get($headerConfig, 'description', ''),
             'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
         ]);
     }
@@ -505,17 +505,15 @@ class FrontEndHandler
         if ($calendarSlot->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
             $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
-        }
-
-        if ($calendarSlot->isAddressRequired()) {
+        } else if ($calendarSlot->isAddressRequired()) {
             $rules['address'] = 'required';
-            $messages['phone_number.required'] = __('Please provide your Address', 'fluent-booking-pro');
-        }
-
-        if ($calendarSlot->isLocationFieldRequired()) {
+            $messages['address.required'] = __('Please provide your Address', 'fluent-booking-pro');
+        } else if ($calendarSlot->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
             $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
-            $selectedLocationDriver = Arr::get($postedData, 'location_config.driver');
+
+            $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
+            $selectedLocationDriver = Arr::get($selectedLocation, 'type');
             // is user input required
             if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
                 $rules['location_config.user_location_input'] = 'required';
