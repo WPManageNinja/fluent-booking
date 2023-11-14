@@ -223,18 +223,10 @@ class Bootstrap extends BaseCalendar
         }
 
         foreach ($allRemoteBookedSlots as $slot) {
-            $start = DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone);
-            $end = DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone);
-            $date = date('Y-m-d', strtotime($start));
-
-            if (!isset($books[$date])) {
-                $books[$date] = [];
-            }
-
-            $books[$date][] = [
+            $books[] = [
                 'type'     => 'remote',
-                'start'    => $start,
-                'end'      => $end,
+                'start'    => DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone),
+                'end'      => DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone),
                 'source'   => 'google',
                 'event_id' => null
             ];
