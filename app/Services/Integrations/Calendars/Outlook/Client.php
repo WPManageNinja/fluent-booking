@@ -123,11 +123,9 @@ class Client
             return $lists;
         }
 
-        $siteUid = OutlookHelper::getUniqueSiteIdHash();
-
         $formattedLists = [];
         foreach ($lists['value'] as $item) {
-            if (empty($item['start']['dateTime'])) {
+            if (empty($item['start']['dateTime']) || Arr::get($item, 'showAs') == 'free') {
                 continue;
             }
 
