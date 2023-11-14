@@ -114,6 +114,9 @@ class RemoteCalendarsInit
                 do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $newGroupings, false);
                 return;
             }
+
+            do_action('fluent_booking/create_remote_calendar_event_' . $config['driver'], $config, $booking);
+            return;
         }
 
         do_action('fluent_booking/patch_remote_calendar_event_' . $config['driver'], $config, $booking, [
