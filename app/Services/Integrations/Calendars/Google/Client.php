@@ -28,12 +28,7 @@ class Client
     {
         $this->clientId = $clientID;
         $this->clientSecret = $clientSecret;
-
-        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
-            $this->redirectUrl = FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        } else {
-            $this->redirectUrl = admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-        }
+        $this->redirectUrl = GoogleHelper::getAppRedirectUrl();
     }
 
     public function setAccessToken($accessToken)
@@ -80,6 +75,11 @@ class Client
         return $tokens;
     }
 
+    public function getFreeBusy($args)
+    {
+        return $this->makeRequest('https://www.googleapis.com/calendar/v3/freeBusy', $args, 'POST', $this->getAuthorizationHeader());
+    }
+
     public function getCalendarLists($accessToken = null)
     {
         $lists = $this->makeRequest('https://www.googleapis.com/calendar/v3/users/me/calendarList', [], 'GET', $this->getAuthorizationHeader($accessToken));
@@ -118,26 +118,26 @@ class Client
                 continue;
             }
 
-            if(empty($item['status']) || $item['status'] == 'cancelled') {
+            if (empty($item['status']) || $item['status'] == 'cancelled') {
                 continue;
             }
 
-            $recurrence = Arr::get($item, 'recurrence.0');
+            $recurrence = Arr::get($item, 'recurrence', []);
 
-            if(!empty($item['start']['date'])) {
-                if($recurrence) {
+            if (!empty($item['start']['date'])) {
+                if ($recurrence) {
                     $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d');
                 } else {
                     $item['start']['dateTime'] = DateTimeHelper::convertToUtc($item['start']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
                 }
             }
 
-            if(empty($item['start']['dateTime'])) {
+            if (empty($item['start']['dateTime'])) {
                 continue;
             }
 
-            if(!empty($item['end']['date'])) {
-                if($recurrence) {
+            if (!empty($item['end']['date'])) {
+                if ($recurrence) {
                     $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d');
                 } else {
                     $item['end']['dateTime'] = DateTimeHelper::convertToUtc($item['end']['date'], $lists['timeZone'], 'Y-m-d\TH:i:s\Z');
@@ -145,14 +145,16 @@ class Client
             }
 
             if ($recurrence) {
+                $sampleStart = Arr::get($item, 'start.dateTime');
                 $recurrenceDate = RemoteCalendarHelper::getRruleDates($recurrence, [
-                    Arr::get($item, 'start.dateTime'),
+                    $sampleStart,
                     Arr::get($item, 'end.dateTime'),
                 ], $args['timeMin'], $args['timeMax'], [
-                    'status' => Arr::get($item, 'status'),
+                    'status'    => Arr::get($item, 'status'),
+                    'rec_start' => $sampleStart
                 ]);
 
-                if($recurrenceDate) {
+                if ($recurrenceDate) {
                     $formattedLists = array_merge($formattedLists, $recurrenceDate);
                 }
             } else {
@@ -270,7 +272,7 @@ class Client
             $message = Arr::get($resBody, 'error_description', __('Unexpected error from google api', 'fluent-booking-pro'));
 
             Helper::debugLog([
-                'message' => $message,
+                'message' => $resBody,
                 'url'     => $url,
                 'body'    => $body,
                 'header'  => $headers,
@@ -286,6 +288,13 @@ class Client
 
     public function getAuthUrl($userId)
     {
+        if (GoogleHelper::isUsingNativeApp()) {
+            return add_query_arg([
+                'client_id'    => $this->clientId,
+                'redirect_uri' => urlencode_deep(admin_url('admin-ajax.php?action=fluent_booking_g_auth&state=' . $userId)),
+            ], $this->redirectUrl);
+        }
+
         $authUrl = add_query_arg([
             'client_id'     => $this->clientId,
             'scope'         => urlencode_deep($this->authScope),

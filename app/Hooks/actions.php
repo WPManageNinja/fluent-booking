@@ -40,44 +40,4 @@ add_action('init', function () {
         return;
     }
 
-    $item = [
-        'start'      => array(
-            'dateTime' => '2023-10-26T16:00:00Z',
-            'timeZone' => 'Europe/Madrid',
-        ),
-        'end'        => array(
-            'dateTime' => '2023-10-26T18:00:00Z',
-            'timeZone' => 'Europe/Madrid',
-        ),
-        'recurrence' => array(
-            '0' => 'RRULE:FREQ=WEEKLY;BYDAY=TH',
-        ),
-        'status'     => 'confirmed'
-    ];
-
-    $recurrence = Arr::get($item, 'recurrence.0');
-
-    $args = [
-        'timeMin' => '2023-12-01T00:00:00Z',
-        'timeMax' => '2023-12-31T00:00:00Z',
-    ];
-
-    $recurrenceDates = RemoteCalendarHelper::getRruleDates($recurrence, [
-        Arr::get($item, 'start.dateTime'),
-        Arr::get($item, 'end.dateTime'),
-    ], $args['timeMin'], $args['timeMax'], [
-        'status' => Arr::get($item, 'status'),
-    ]);
-
-    $formatted = [];
-    foreach ($recurrenceDates as $recurrenceDate) {
-        $formatted[] = [
-            'start'  => \FluentBooking\App\Services\DateTimeHelper::convertFromUtc($recurrenceDate['start'], 'Europe/Madrid'),
-            'end'    => \FluentBooking\App\Services\DateTimeHelper::convertFromUtc($recurrenceDate['end'], 'Europe/Madrid'),
-            'status' => $recurrenceDate['status'],
-        ];
-    }
-
-    dd([$formatted, $recurrenceDates]);
-
 });

@@ -140,7 +140,6 @@ class BookingFieldService
         if (empty($defaultFields['location'])) {
             unset($existingFields['location']);
         } else {
-
             if (empty($existingFields['location'])) {
                 $existingFields['location'] = $defaultFields['location'];
             } else {
@@ -265,6 +264,10 @@ class BookingFieldService
 
     public static function hasPhoneNumberField($fields)
     {
+        if(!$fields) {
+            return false;
+        }
+
         foreach ($fields as $field) {
             if ($field['type'] == 'phone') {
                 return true;
