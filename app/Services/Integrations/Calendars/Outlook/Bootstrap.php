@@ -194,8 +194,6 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $cacheTime = Arr::get($config, 'caching_time', 5);
-
         $items = OutlookHelper::getConflictCheckCalendars($calendarSlot->user_id);
 
         if (!$items) {
@@ -216,6 +214,7 @@ class Bootstrap extends BaseCalendar
         $allRemoteBookedSlots = [];
 
 
+        $cacheTime = Arr::get($config, 'caching_time', 5);
         foreach ($items as $item) {
             $meta = $item['item'];
             $calendarApi = new OutlookCalendar($meta);
@@ -245,23 +244,19 @@ class Bootstrap extends BaseCalendar
                 }, $cacheTime * 60);
 
                 if ($remoteSlots && !is_wp_error($remoteSlots)) {
-                    $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
+                    foreach ($remoteSlots as $slot) {
+                        $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
+                        $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
+                        $books[] = [
+                            'type'     => 'remote',
+                            'start'    => $start,
+                            'end'      => $end,
+                            'source'   => 'outlook',
+                            'event_id' => null
+                        ];
+                    }
                 }
             }
-        }
-
-
-        foreach ($allRemoteBookedSlots as $slot) {
-            $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
-            $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
-            
-            $books[] = [
-                'type'     => 'remote',
-                'start'    => $start,
-                'end'      => $end,
-                'source'   => 'outlook',
-                'event_id' => null
-            ];
         }
 
         return $books;
