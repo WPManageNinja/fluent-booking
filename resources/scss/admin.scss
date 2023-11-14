@@ -1040,6 +1040,7 @@ table.shop_table.order_details {
     td, th {
       border-bottom: 1px solid #dddfe6;
     }
+
     &:hover {
       td, th {
         background: #ffffff;
@@ -1051,6 +1052,7 @@ table.shop_table.order_details {
     tr th {
       text-align: right;
     }
+
     tr td {
       padding: 10px 15px;
     }
@@ -1099,4 +1101,35 @@ table.shop_table.order_details {
 
 .fcal_checkable_lined > label {
   display: flex;
+}
+
+.fcal_all_driver_actions {
+  margin: 0 -12px;
+
+  .fcal_driver_action {
+    display: block;
+    border-bottom: 1px solid #e5e7eb;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: #F0F6FE;
+    }
+
+    a.fcal_remote_cal_link {
+      display: flex;
+      color: #306ae0;
+      padding: 10px 15px;
+      text-decoration: none;
+      align-items: center;
+      column-gap: 10px;
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
 }

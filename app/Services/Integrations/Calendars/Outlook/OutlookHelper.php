@@ -1,66 +1,30 @@
 <?php
 
-namespace FluentBooking\App\Services\Integrations\Calendars\Google;
+namespace FluentBooking\App\Services\Integrations\Calendars\Outlook;
 
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
-class GoogleHelper
+class OutlookHelper
 {
     public static function getApiConfig()
     {
-        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
-            return [
-                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
-                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
-                'constant_defined' => true,
-                'caching_time'     => defined('FLUENT_BOOKING_G_API_CACHING_TIME') ? FLUENT_BOOKING_G_API_CACHING_TIME : '5'
-            ];
-        }
-
-        $defaults = [
-            'client_id'     => '',
-            'client_secret' => '',
-            'caching_time'  => '5'
+        $options = get_option('_fcal_outlook_calendar_client_details', []);
+        return [
+            'client_id'         => 'db98d3d0-c944-41f8-bb01-555c913a903b',
+            'client_secret'     => 'B2J8Q~sOFsiiHrqk_ajYL3NcIAv0mEPu6hWuLbHV',
+            'constant_defined'  => true,
+            'is_system_defined' => 'yes',
+            'caching_time'      => Arr::get($options, 'caching_time', 5)
         ];
-
-        $settings = get_option('_fcal_google_calendar_client_details', []);
-
-        $settings = wp_parse_args($settings, $defaults);
-
-        if (!empty($settings['client_secret'])) {
-            $settings['client_secret'] = Helper::decryptKey($settings['client_secret']);
-        }
-
-        return $settings;
     }
 
     public static function updateApiConfig($settings)
     {
-        if (defined('FLUENT_BOOKING_G_AUTH_CLIENT_ID') && defined('FLUENT_BOOKING_G_AUTH_CLIENT_SECRET')) {
-            return [
-                'client_id'        => FLUENT_BOOKING_G_AUTH_CLIENT_ID,
-                'client_secret'    => FLUENT_BOOKING_G_AUTH_CLIENT_SECRET,
-                'constant_defined' => true
-            ];
-        }
-
-        $settings = Arr::only($settings, ['client_id', 'client_secret', 'caching_time']);
-
-        if (!empty($settings['client_secret'])) {
-
-            if ($settings['client_secret'] == '********************') {
-                $oldSettings = self::getApiConfig();
-                $settings['client_secret'] = $oldSettings['client_secret'];
-            }
-
-            $settings['client_secret'] = Helper::encryptKey($settings['client_secret']);
-        }
-
-        update_option('_fcal_google_calendar_client_details', $settings, 'no');
-
-        return $settings;
+        $settings = Arr::only($settings, ['caching_time']);
+        update_option('_fcal_outlook_calendar_client_details', $settings, 'no');
+        return self::getApiConfig();
     }
 
     public static function getApiClient($accessToken = null)
@@ -75,13 +39,13 @@ class GoogleHelper
         return $client;
     }
 
-    public static function getApiClientByUserId($userId = null, $remoteId = null)
+    public static function getApiClientByUserId($userId, $remoteId = null)
     {
         if (!self::isConfigured()) {
             return null;
         }
 
-        $metas = Meta::query()->where('object_type', '_google_user_token')
+        $metas = Meta::query()->where('object_type', '_outlook_user_token')
             ->where('object_id', $userId)
             ->get();
 
@@ -90,7 +54,7 @@ class GoogleHelper
         }
 
         if ($metas->count() == 1 || !$remoteId) {
-            return new GoogleCalendar($metas->first());
+            return new OutlookCalendar($metas->first());
         }
 
         foreach ($metas as $meta) {
@@ -98,7 +62,7 @@ class GoogleHelper
             $calendarLists = Arr::get($settings, 'calendar_lists', []);
             foreach ($calendarLists as $list) {
                 if (Arr::get($list, 'id') == $remoteId) {
-                    return new GoogleCalendar($meta);
+                    return new OutlookCalendar($meta);
                 }
             }
         }
@@ -108,6 +72,7 @@ class GoogleHelper
 
     public static function isConfigured()
     {
+        return true;
         $config = self::getApiConfig();
         return !empty($config['client_id']) && !empty($config['client_secret']);
     }
@@ -119,7 +84,7 @@ class GoogleHelper
         $jwtPayload = json_decode($tokenPayload, true);
 
         if (empty($jwtPayload['email'])) {
-            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for google authentication. Please try again', 'fluent-booking-pro'));
+            return new \WP_Error('payload_error', __('Sorry! There has an error when fetching data for outlook authentication. Please try again', 'fluent-booking-pro'));
         }
 
         return Arr::get($jwtPayload, 'email');
@@ -127,7 +92,7 @@ class GoogleHelper
 
     public static function getConflictCheckCalendars($userId)
     {
-        $metaItems = Meta::where('object_type', '_google_user_token')
+        $metaItems = Meta::where('object_type', '_outlook_user_token')
             ->where('object_id', $userId)
             ->get();
 
@@ -138,14 +103,19 @@ class GoogleHelper
         $calendars = [];
 
         foreach ($metaItems as $item) {
+
             $settings = $item->value;
+
             $checkIds = Arr::get($settings, 'conflict_check_ids', []);
+
             if (empty($checkIds)) {
                 continue;
             }
 
             $itemValidCalendars = [];
+
             $allCalendars = Arr::get($settings, 'calendar_lists', []);
+
             foreach ($allCalendars as $calendar) {
                 if (in_array($calendar['id'], $checkIds)) {
                     $itemValidCalendars[] = $calendar['id'];
@@ -165,14 +135,7 @@ class GoogleHelper
 
     public static function getAppRedirectUrl()
     {
-        if (self::isUsingNativeApp()) {
-            return 'https://fluentbooking.com/wp-json/fluent-api/google-calendar';
-        }
-
-        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
-            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        }
-        return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
+        return 'https://fluentbooking.com/wp-json/fluent-api/outlook/';
     }
 
     public static function getUniqueSiteIdHash()
@@ -198,22 +161,11 @@ class GoogleHelper
 
         $hash = md5(site_url('/') . time());
 
+        $hash = substr($hash, 0, 10);
+
         update_option('__fcal_unique_site_id', $hash, 'no');
 
         return $hash;
     }
 
-    public static function getAppReirectUrl()
-    {
-        if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
-            return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
-        }
-
-        return admin_url('admin-ajax.php?action=fluent_booking_g_auth');
-    }
-
-    public static function isUsingNativeApp()
-    {
-        return defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL');
-    }
 }

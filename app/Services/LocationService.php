@@ -118,8 +118,8 @@ class LocationService
         }
 
         $keyedLocations = [];
-        foreach ($locations as $location) {
-            $keyedLocations[$location['type']] = $location;
+        foreach ($locations as $index => $location) {
+            $keyedLocations[$location['type'] . '__:__' . $index] = $location;
         }
 
         $driver = Arr::get($userInput, 'driver');
@@ -131,42 +131,43 @@ class LocationService
             ];
         }
 
-        // custom user input location types
-        $userInputTypes = ['in_person_guest', 'phone_guest'];
 
-        if (in_array($driver, $userInputTypes)) {
+        $selectedLocation = $keyedLocations[$driver];
+        $selectedType = $selectedLocation['type'];
+
+        // custom user input location types
+        if (in_array($selectedType, ['in_person_guest', 'phone_guest'])) {
             return [
-                'type'        => $driver,
+                'type'        => $selectedType,
                 'description' => Arr::get($userInput, 'user_location_input')
             ];
         }
 
         // Check provided description location type to store as description
-        $customTypes = ['custom', 'phone_organizer', 'in_person_organizer'];
-        if (in_array($driver, $customTypes)) {
+        if (in_array($selectedType, ['custom', 'phone_organizer', 'in_person_organizer'])) {
             $fieldMaps = [
                 'custom'              => 'description',
                 'in_person_organizer' => 'description',
                 'phone_organizer'     => 'host_phone_number'
             ];
 
-            $key = $fieldMaps[$driver];
+            $key = $fieldMaps[$selectedType];
 
             return [
-                'type'        => $driver,
-                'description' => Arr::get($keyedLocations, $driver . '.' . $key)
+                'type'        => $selectedType,
+                'description' => Arr::get($selectedLocation, $key)
             ];
         }
 
-        if ($driver == 'online_meeting') {
+        if ($selectedType == 'online_meeting') {
             return [
-                'type'                 => $driver,
-                'online_platform_link' => Arr::get($keyedLocations, $driver . '.meeting_link')
+                'type'                 => $selectedType,
+                'online_platform_link' => Arr::get($selectedLocation, 'meeting_link')
             ];
         }
 
         return [
-            'type'        => $driver,
+            'type'        => $selectedType,
             'description' => ''
         ];
     }
@@ -178,12 +179,12 @@ class LocationService
 
     public static function getLocationOptions($calendarSlot)
     {
-        $locationSettings = Arr::get($calendarSlot, 'location_settings');
+        $locationSettings = $calendarSlot->location_settings;
 
-       // dd($locationSettings);
+        // dd($locationSettings);
 
         $locationOptions = [];
-        foreach ($locationSettings as $location) {
+        foreach ($locationSettings as $index => $location) {
             $title = Arr::get($location, 'title');
             $locationType = Arr::get($location, 'type');
 
@@ -201,7 +202,8 @@ class LocationService
 
             $locationOptions[] = [
                 'type'  => Arr::get($location, 'type'),
-                'title' => $title
+                'title' => $title,
+                'slug'  => Arr::get($location, 'type') . '__:__' . $index
             ];
         }
         return $locationOptions;

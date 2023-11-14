@@ -91,10 +91,10 @@ class LandingPageHandler
             $this->renderBookingView($calendar, $slot);
         }
 
-        $this->renderCalendarView($calendar);
+        $this->renderHostView($calendar);
     }
 
-    private function renderCalendarView($calendar)
+    private function renderHostView($calendar)
     {
         global $wp;
         $settings = LandingPageHelper::getSettings($calendar, 'public');
@@ -127,13 +127,13 @@ class LandingPageHandler
 
         $currentUrl = home_url($wp->request);
 
-
         $globalVars['is_landing_page'] = true;
         $globalVars['is_pretty_url'] = defined('FLUENT_BOOKING_LANDING_SLUG');
         $globalVars['base_url'] = rtrim($currentUrl, '/');
 
         $jsVars = [
             'fluentCalendarPublicVars' => $globalVars,
+            'fcal_landing_page' => true
         ];
 
         $extraJsFiles = [];
@@ -143,7 +143,7 @@ class LandingPageHandler
             $vars = (new FrontEndHandler())->getCalendarEventVars($calendar, $event);
             $extraJs = $this->getEventLandingExtraJsFiles($vars['form_fields'], $event);
             if ($extraJs) {
-                $extraJsFiles = array_merge($extraJsFiles, $extraJs);
+                $vars['lazy_js_files'] = $extraJs;
             }
 
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
@@ -161,9 +161,12 @@ class LandingPageHandler
                 App::getInstance('url.assets') . 'public/saas.css'
             ],
             'js_files'    => [
-                $assetUrl . 'public/js/app.js',
+                'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
             ],
-            'js_vars'     => $jsVars
+            'js_vars'     => $jsVars,
+            'header_js_files' => [
+                'fluent_booking_team_app-js' => $assetUrl. 'public/js/team_app.js'
+            ]
         ];
 
         if ($extraJsFiles) {
@@ -238,7 +241,7 @@ class LandingPageHandler
                 $assetUrl . 'public/saas.css'
             ],
             'js_files'       => [
-                $assetUrl . 'public/js/app.js',
+                'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
             ],
             'js_vars'        => [
                 'fluentCalendarPublicVars'                                     => (new FrontEndHandler())->getGlobalVars(),
@@ -246,10 +249,11 @@ class LandingPageHandler
             ]
         ];
 
+
         $extraJs = $this->getEventLandingExtraJsFiles($eventVars['form_fields'], $calendarEvent);
 
         if ($extraJs) {
-            $data['js_files'] = array_merge($data['js_files'], $extraJs);
+            $data['js_files'] = wp_parse_args($data['js_files'], $extraJs);
             add_action('fluent_booking/author_landing_head', function () use ($assetUrl) {
                 ?>
                 <style>
@@ -319,7 +323,7 @@ class LandingPageHandler
         ];
 
         if ($actionType == 'cancel') {
-            $data['js_files'][] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
+            $data['js_files']['fluent-booking-public-manage-meeting-js'] = App::getInstance('url.assets') . 'public/js/public-manage-meeting.js';
         }
 
         $app = App::getInstance();
@@ -426,18 +430,18 @@ class LandingPageHandler
         $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
     }
 
-    private function getEventLandingExtraJsFiles($formFields, $calendarEvent)
+    public function getEventLandingExtraJsFiles($formFields, $calendarEvent)
     {
         $files = [];
         $assetUrl = App::getInstance('url.assets');
 
         if (BookingFieldService::hasPhoneNumberField($formFields)) {
-            $files[] = $assetUrl . 'public/js/phone-field.js';
+            $files['fluent-booking-phone-field-js'] = $assetUrl . 'public/js/phone-field.js';
         }
 
         if ($calendarEvent->type == 'paid') {
-            $files[] = 'https://js.stripe.com/v3/';
-            $files[] = $assetUrl . 'public/js/stripe-checkout.js';
+            $files['fluent-booking-checkout-sdk-stripe-js'] = 'https://js.stripe.com/v3/';
+            $files['fluent-booking-checkout-handler-stripe-js'] = $assetUrl . 'public/js/stripe-checkout.js';
         }
 
         return $files;

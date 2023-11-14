@@ -35,8 +35,8 @@
     <?php endforeach; ?>
 </script>
 
-<?php foreach ($js_files as $file): ?>
-    <script src="<?php echo esc_url($file); ?>" defer="defer"></script>
+<?php foreach ($js_files as $fileKey => $file): ?>
+    <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>" defer="defer"></script>
 <?php endforeach; ?>
 </body>
 </html>
