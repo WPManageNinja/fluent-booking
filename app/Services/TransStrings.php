@@ -18,7 +18,7 @@ class TransStrings
             'Next meeting not available'                                                       => __('Next meeting not available', 'fluent-booking-pro'),
             'Latest Booked Meetings'                                                           => __('Latest Booked Meetings', 'fluent-booking-pro'),
             'No Latest Booked Event Found'                                                     => __('No Latest Booked Event Found', 'fluent-booking-pro'),
-            'view'                                                                             => __('view ', 'fluent-booking-pro'),
+            'View'                                                                             => __('View ', 'fluent-booking-pro'),
             'Select Date'                                                                      => __('Select Date', 'fluent-booking-pro'),
             'Booking Trends'                                                                   => __('Booking Trends', 'fluent-booking-pro'),
             'Cancel'                                                                           => __('Cancel', 'fluent-booking-pro'),

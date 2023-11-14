@@ -45,7 +45,7 @@
                                 <a target="_blank" :href="slot.public_url">
                                     <el-button type="default">
                                         <el-icon><Link /></el-icon>
-                                        {{ $t('view') }}
+                                        {{ $t('View') }}
                                     </el-button>
                                 </a>                                
                                 <el-button type="default" @click="copyLandingPageUrl(slot.public_url)">
