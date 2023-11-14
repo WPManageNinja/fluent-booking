@@ -250,16 +250,12 @@ class Bootstrap extends BaseCalendar
             }
         }
 
+
         foreach ($allRemoteBookedSlots as $slot) {
             $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
             $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
-            $date = date('Y-m-d', strtotime($start));
-
-            if (!isset($books[$date])) {
-                $books[$date] = [];
-            }
-
-            $books[$date][] = [
+            
+            $books[] = [
                 'type'     => 'remote',
                 'start'    => $start,
                 'end'      => $end,
