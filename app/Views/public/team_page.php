@@ -1,4 +1,4 @@
-<div id="<?php echo esc_attr($wrapper_id); ?>" class="fcal_teams">
+<div id="<?php echo esc_attr($wrapper_id); ?>" class="fcal_teams <?php echo esc_attr($wrapper_class); ?>">
     <div class="fcal_teams_inner">
         <div style="display: none;" class="fcal_teams_wrap">
             <?php if (!empty($logo) || !empty($title) || !empty($description)): ?>
