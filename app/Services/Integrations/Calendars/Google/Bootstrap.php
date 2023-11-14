@@ -218,18 +218,16 @@ class Bootstrap extends BaseCalendar
             }, $cacheTime);
 
             if (!is_wp_error($remoteSlots) && $remoteSlots) {
-                $allRemoteBookedSlots = array_merge($allRemoteBookedSlots, $remoteSlots);
+                foreach ($remoteSlots as $slot) {
+                    $books[] = [
+                        'type'     => 'remote',
+                        'start'    => DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone),
+                        'end'      => DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone),
+                        'source'   => 'google',
+                        'event_id' => null
+                    ];
+                }
             }
-        }
-
-        foreach ($allRemoteBookedSlots as $slot) {
-            $books[] = [
-                'type'     => 'remote',
-                'start'    => DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone),
-                'end'      => DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone),
-                'source'   => 'google',
-                'event_id' => null
-            ];
         }
 
         return $books;
