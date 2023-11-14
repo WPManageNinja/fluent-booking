@@ -49,7 +49,7 @@ class GlobalPaymentHandler
             return $eventVars;
         }
 
-        if ($driver == 'woo') {
+        if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {
             $productId = Arr::get($paymentSettings, 'woo_product_id');
             $product = wc_get_product($productId);
             if ($product) {

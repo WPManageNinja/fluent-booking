@@ -144,7 +144,7 @@ class PaymentMethodController extends Controller
                 ], 422);
             }
 
-            if ($driver == 'woo') {
+            if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {
                 $productId = Arr::get($data, 'woo_product_id');
                 if (!$productId) {
                     return $this->sendError([
