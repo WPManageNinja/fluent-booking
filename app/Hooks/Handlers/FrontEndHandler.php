@@ -246,7 +246,8 @@ class FrontEndHandler
         return $this->renderTeamHosts($calendars, [
             'title'       => $atts['title'],
             'description' => $atts['description'],
-            'logo'        => $atts['logo_url']
+            'logo'        => $atts['logo_url'],
+            'wrapper_class' => ''
         ]);
     }
 
@@ -297,6 +298,7 @@ class FrontEndHandler
             'logo'        => Arr::get($headerConfig, 'logo', ''),
             'title'       => Arr::get($headerConfig, 'title', ''),
             'description' => Arr::get($headerConfig, 'description', ''),
+            'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
         ]);
     }
 
