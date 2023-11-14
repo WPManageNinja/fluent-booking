@@ -317,10 +317,6 @@ class CalendarController extends Controller
             $slotSettings['buffer_time_after'] = '0';
         }
 
-        if (!isset($slotSettings['max_book_per_day'])) {
-            $slotSettings['max_book_per_day'] = '';
-        }
-
         $slot->settings = $slotSettings;
 
         $data = [
@@ -455,8 +451,7 @@ class CalendarController extends Controller
             'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
             'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '')),
-            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '')),
-            'max_book_per_day'    => sanitize_text_field(Arr::get($data, 'settings.max_book_per_day', null))
+            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', ''))
         ];
 
         $slot->title = sanitize_text_field($data['title']);
