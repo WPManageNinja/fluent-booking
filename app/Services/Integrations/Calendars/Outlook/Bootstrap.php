@@ -31,7 +31,7 @@ class Bootstrap extends BaseCalendar
             if (!OutlookHelper::isConfigured()) {
                 return;
             }
-            // Show the Google last error
+            // Show the Outlook last error
             add_action('fluent_booking/calendar', function (&$calendar, $type) {
                 if ($type != 'lists') {
                     return $calendar;
