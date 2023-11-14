@@ -1,11 +1,12 @@
 /*eslint-disable*/
+import { plusCircleFilled } from '@wordpress/icons';
 const {useState, useEffect} = wp.element;
 const {InspectorControls, MediaUpload} = wp.blockEditor;
 const {__} = wp.i18n;
 const {
     PanelBody,
     PanelRow,
-    Dropdown,
+    DropdownMenu,
     Button,
     CheckboxControl,
 } = wp.components;
@@ -36,25 +37,22 @@ const InspectorSettings = props => {
         });
     });
 
+    let hostIds = [];
     if (calendarHosts.length) {
-        let hostIds = [];
         calendarHosts.map(calHost => {
             hostIds.push(calHost.id);
             calendarOptions = calendarOptions.filter(host => host.value != calHost.id);
         })
     }
 
-
-    const handleNewHost = (newHost) => {
-        let newHostId = newHost.target.value;
+    const handleNewHost = (newHost, callback) => {
+        let newHostId = newHost.value;
         let exists = false;
         let hIds = calendarHosts;
         for (let host of calendarHosts) {
-
             if (host.id == newHostId) {
                 exists = true;
             }
-
         }
         if (calendarHosts.length) {
             if (!exists) {
@@ -72,11 +70,13 @@ const InspectorSettings = props => {
 
         setAttributes({
             selectedHost: newHostId
-        })
+        });
+
         setAttributes({
             calendarHosts: hIds
         });
 
+        callback();
     }
 
     function handleRemoveHost(e) {
@@ -169,47 +169,38 @@ const InspectorSettings = props => {
             >
                 <PanelRow>
                     <div className="fcal_block_settings">
-
                         <div className="fcal_block_inspector_widget fcal_inspector_host_select">
-                            <Dropdown
+                            <DropdownMenu
                                 className="fcal-add-host-container"
-                                contentClassName="fcal-add-host-content"
-                                popoverProps={{placement: 'bottom-start'}}
-                                renderToggle={({isOpen, onToggle}) => (
-                                    <Button
-                                        variant="primary"
-                                        onClick={onToggle}
-                                        aria-expanded={isOpen}
-                                    >
-                                        {__('+Add New Host')}
-                                    </Button>
-                                )}
-                                renderContent={() => <div className="fcal-add-host-popover">
-                                    {
-                                        calendars.length ?
-                                            calendarOptions.map(host => {
-                                                return <div className="fcal-host-list">
-                                                    {
-                                                        calendarOptions.length && calendarOptions.length > 1 ?
-                                                            host.value ?
-                                                                <button value={host.value}
-                                                                        onClick={handleNewHost}>
-                                                                    <img src={host?.author?.avatar} alt={host.label} />
-                                                                    {host.label}</button>
-                                                                : <span className="select-host">{host.label}</span>
-                                                            :
-                                                            <div>
-                                                                <span className="select-host">{host.label}</span>
-                                                                <p><b>{__('You have added all hosts!')}</b></p>
-                                                            </div>
-                                                    }
-                                                </div>
-                                            })
-                                        : <span className="select-host">{__('No Hosts Found!')}</span>
-                                    }
-
-                                </div>}
-                            />
+                                icon={plusCircleFilled}
+                                text={__('Add Host to Team')}
+                                label={__('+ Add Host to Team')}>
+                                { ( { onClose } ) => (
+                                    <div className='fcal-add-host-content'>
+                                        {
+                                            calendars.length ?
+                                                calendarOptions.map(host => {
+                                                    return <div className="fcal-host-list">
+                                                        {
+                                                            calendarOptions.length && calendarOptions.length > 1 ?
+                                                                host.value ?
+                                                                    <button value={host.value} onClick={() => { handleNewHost(host, onClose); }}>
+                                                                        <img src={host?.author?.avatar} alt={host.label} />
+                                                                        {host.label}</button>
+                                                                    : <span className="select-host">{host.label}</span>
+                                                                :
+                                                                <div>
+                                                                    <span className="select-host">{host.label}</span>
+                                                                    <p><b>{__('You have added all hosts!')}</b></p>
+                                                                </div>
+                                                        }
+                                                    </div>
+                                                })
+                                                : <span className="select-host">{__('No Hosts Found!')}</span>
+                                        }
+                                    </div>
+                                ) }
+                            </DropdownMenu>
                             <ul className="accordion-list">
                                 {calendarHosts.length ?
                                     calendarHosts.map((host, index) => {
@@ -223,7 +214,7 @@ const InspectorSettings = props => {
 
                                             <CheckboxControl
                                                 className="all-event-checked"
-                                                label={__('All')}
+                                                label={__('All Events')}
                                                 value="all"
                                                 checked={isCheckAll(index, calendarsVar[host.id].id, 'all')}
                                                 onChange={(checked) => {

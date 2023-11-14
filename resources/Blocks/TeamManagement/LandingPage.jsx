@@ -30,13 +30,8 @@ export const LandingPage = props => {
     // const [slot, setSlot] = useState('');
     const [error, setError] = useState(false);
 
-
     const apiFetch = wp.apiFetch;
     const {addQueryArgs} = wp.url;
-
-    useEffect(() => {
-
-    }, [ calendarHosts]);
 
     return [
         <Fragment>
@@ -83,18 +78,7 @@ export const LandingPage = props => {
                         </div>
                         :
                     <div className="fcal_team_management_block_hosts">
-                        {calendars.map(calConfig => {
-                            return <div className="fcal_team_management_block_host">
-                                <img src={calConfig?.author?.avatar} alt=""/>
-                                <h3>{calConfig?.author?.name}</h3>
-                                {
-                                    calConfig?.description != '' ?
-                                        <div dangerouslySetInnerHTML={{ __html: calConfig?.description }} />
-                                        :
-                                        ''
-                                }
-                            </div>
-                        })}
+                        <p>Please select team member from block settings</p>
                     </div>
                 }
 
