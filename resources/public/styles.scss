@@ -1052,6 +1052,10 @@ $lightDark: #6b7280;
   box-sizing: border-box !important;
   padding-left: 0 !important;
 
+  &.focused {
+    border: 1px solid var(--fcal_primary_color) !important;
+  }
+  
   .svelte-select-list {
     border: 1px solid #EAECF0 !important;
     border-radius: 8px;
@@ -1070,6 +1074,15 @@ $lightDark: #6b7280;
 
     &::-webkit-scrollbar-track {
       background: transparent;
+    }
+  }
+
+  .item {
+    &.active {
+        background: var(--fcal_primary_color) !important;
+    }
+    &.hover {
+        background: #e5e7eb !important;
     }
   }
 }
@@ -1196,15 +1209,10 @@ $lightDark: #6b7280;
       .svelte-select-list {
         position: absolute !important;
         display: block !important;
-        //top: 0 !important;
-        //right: 150px !important;
         left: auto !important;
         right: 0 !important;
-        //background: red !important;
-        //display: none;
         box-shadow: none !important;
         max-width: 350px !important;
-        //width: 350px !important;
         box-sizing: border-box !important;
         padding: 0 !important;
 

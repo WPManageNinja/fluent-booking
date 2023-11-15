@@ -55,6 +55,8 @@
 
     let start_time;
 
+    let primaryColor = 'var(--fcal_primary_color)';
+
     $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
 
 
@@ -250,7 +252,7 @@
         {#if isLoadingDates}
             <div class="fcal_loading_dates">
                 <div class="fcal_loading_dates_inner">
-                    <Pulse color="#0060e6"/>
+                    <Pulse color={primaryColor}/>
                 </div>
             </div>
         {/if}

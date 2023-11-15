@@ -60,6 +60,42 @@
                     </el-tabs>
                 </el-form-item>
 
+                <el-form-item :label="$t('Scheduling conditions')" class="fcal_override_scheduling_condition_wrap">
+                    <span class="sub-label">{{ $t("Invitees can't schedule within...") }}</span>
+                    <SchedulingConditions :settings="slot.settings"/>
+                </el-form-item>
+
+                <el-form-item :label="$t('ScheduleSettings/before/after_event_label')">
+                    <div class="fcal_buffer_time_wrap">
+                        <div class="fcal_buffer_time_before">
+                            <span class="sub-label">{{ $t('Before Event') }}</span>
+                            <el-select v-model="slot.settings.buffer_time_before" :placeholder="$t('Select')"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
+                                <el-option
+                                    v-for="time in bufferTimes"
+                                    :key="time.value"
+                                    :label="time.label"
+                                    :value="time.value"
+                                />
+                            </el-select>
+                        </div>
+                        <div class="fcal_buffer_time_after">
+                            <span class="sub-label">{{ $t('After Event') }}</span>
+                            <el-select v-model="slot.settings.buffer_time_after" :placeholder="$t('Select')"
+                                       :no-match-text="$t('No Data match')"
+                                       :no-data-text="$t('No Data')" popper-class="fcal_select">
+                                <el-option
+                                    v-for="time in bufferTimes"
+                                    :key="time.value"
+                                    :label="time.label"
+                                    :value="time.value"
+                                />
+                            </el-select>
+                        </div>
+                    </div>
+                </el-form-item>
+
             </el-form>
         </div>
     </div>
