@@ -35,8 +35,6 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $maxBookPerDay = Arr::get($this->calendarSlot->settings, 'max_book_per_day', null);
-
         $todayDate = DateTimeHelper::convertToTimeZone(date('Y-m-d'), 'UTC', $this->calendar->author_timezone, 'Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $overrides = Arr::get($this->calendarSlot->settings, 'date_overrides', []);
@@ -60,11 +58,11 @@ class TimeSlotService
                 $availableSlots = $daySlots[$day];
             }
 
-            $currentBookedSlots = $bookedSlots[$date] ?? [];
-
-            if (!$availableSlots || $this->hasReachedMaxLimit($maxBookPerDay, $currentBookedSlots)) {
+            if (!$availableSlots) {
                 continue;
             }
+            
+            $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
             $validSlots = [];
@@ -265,7 +263,7 @@ class TimeSlotService
                             }
 
                             if ($isGroupBooking && $remaining) {
-                                $groupBookingKeys[$slot['start'] . '_' . $slot['end']] = true;
+                                $groupBookingKeys[$booking->start_time . '_' . $booking->end_time] = true;
                             }
 
                             $books[$date][] = $slot;
@@ -305,39 +303,38 @@ class TimeSlotService
         }
 
         if (!$isGroupBooking) {
-            foreach ($remoteBookings as $slots) {
-                foreach ($slots as $slot) {
-                    $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                        'start' => $slot['start'],
-                        'end'   => $slot['end']
-                    ]);
-                    foreach ($rangedItems as $rangedDate => $rangedSlot) {
-                        if (!isset($books[$rangedDate])) {
-                            $books[$rangedDate] = [];
-                        }
-                        $books[$rangedDate][] = $rangedSlot;
-                    }
-                }
-            }
-            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
-        }
 
-        foreach ($remoteBookings as $slots) {
-            foreach ($slots as $slot) {
+            foreach ($remoteBookings as $slot) {
                 $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                     'start' => $slot['start'],
                     'end'   => $slot['end']
                 ]);
+
                 foreach ($rangedItems as $rangedDate => $rangedSlot) {
                     if (!isset($books[$rangedDate])) {
                         $books[$rangedDate] = [];
                     }
-                    $key = $rangedSlot['start'] . '_' . $rangedSlot['end'];
-                    if (isset($groupBookingKeys[$key])) {
-                        continue;
-                    }
                     $books[$rangedDate][] = $rangedSlot;
                 }
+            }
+
+            return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+        }
+
+        foreach ($remoteBookings as $slot) {
+            $rangedItems = $this->createDateRangeArrayFromSlotConfig([
+                'start' => $slot['start'],
+                'end'   => $slot['end']
+            ]);
+            foreach ($rangedItems as $rangedDate => $rangedSlot) {
+                if (!isset($books[$rangedDate])) {
+                    $books[$rangedDate] = [];
+                }
+                $key = $rangedSlot['start'] . '_' . $rangedSlot['end'];
+                if (isset($groupBookingKeys[$key])) {
+                    continue;
+                }
+                $books[$rangedDate][] = $rangedSlot;
             }
         }
 

@@ -2,10 +2,10 @@
 Contributors: techjewel, wpmanageninja
 Author URI: https://fluentbooking.com/
 Tags: booking, appointment booking, appointments, booking system, scheduling, event booking system
-Requires at least: 5.0
-Tested up to: 6.3
+Requires at least: 6.0
+Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,14 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.2.0 (Date: 14 Nov 2023)
+- Added Outlook integration
+- Added Team Block
+- Ajax-based Landing Page
+- More translation strings added
+- Added Pretty URL for Landing Pages
+- All day and recurring events for google calendar sync issue fixed
 
 1.1.0 (Date: 02 Nov 2023)
 - Added WooCommerce Checkout Integration
