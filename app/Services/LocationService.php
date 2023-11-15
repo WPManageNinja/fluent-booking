@@ -86,7 +86,6 @@ class LocationService
     public static function getLocationDetails($calendarEvent, $userInput = [], $allInput = [])
     {
         $userInput = array_map('sanitize_text_field', $userInput);
-
         $locations = $calendarEvent->location_settings;
 
         if (empty($locations)) {
@@ -107,7 +106,7 @@ class LocationService
             $type = Arr::get($defaultLocation, 'type');
 
             $userInput = [
-                'driver' => $type
+                'driver' => $type . '__:__0'
             ];
 
             if ($type == 'phone_guest') {
@@ -131,8 +130,8 @@ class LocationService
             ];
         }
 
-
         $selectedLocation = $keyedLocations[$driver];
+
         $selectedType = $selectedLocation['type'];
 
         // custom user input location types
@@ -177,9 +176,9 @@ class LocationService
         return [];
     }
 
-    public static function getLocationOptions($calendarSlot)
+    public static function getLocationOptions($calendarEvent, $keyed = false)
     {
-        $locationSettings = $calendarSlot->location_settings;
+        $locationSettings = $calendarEvent->location_settings;
 
         // dd($locationSettings);
 
@@ -200,11 +199,21 @@ class LocationService
                 $title = str_replace('_', ' ', ucfirst($locationType));
             }
 
-            $locationOptions[] = [
-                'type'  => Arr::get($location, 'type'),
-                'title' => $title,
-                'slug'  => Arr::get($location, 'type') . '__:__' . $index
-            ];
+            $slug = Arr::get($location, 'type') . '__:__' . $index;
+
+            if ($keyed) {
+                $locationOptions[$slug] = [
+                    'type'  => Arr::get($location, 'type'),
+                    'title' => $title,
+                    'slug'  => Arr::get($location, 'type') . '__:__' . $index
+                ];
+            } else {
+                $locationOptions[] = [
+                    'type'  => Arr::get($location, 'type'),
+                    'title' => $title,
+                    'slug'  => Arr::get($location, 'type') . '__:__' . $index
+                ];
+            }
         }
         return $locationOptions;
     }
