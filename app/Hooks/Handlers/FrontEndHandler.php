@@ -463,7 +463,7 @@ class FrontEndHandler
         ];
 
         if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
-            $data['user_country'] = sanitize_text_field($_REQUEST['HTTP_CF_IPCOUNTRY']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $data['user_country'] = sanitize_text_field($_SERVER['HTTP_CF_IPCOUNTRY']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         }
 
         return apply_filters('fluent_calendar/global_booking_vars', $data);
