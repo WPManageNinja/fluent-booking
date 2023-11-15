@@ -154,6 +154,17 @@ class BookingService
             ];
         }
 
+        $customFieldsData = $booking->getCustomFormData(true);
+
+        foreach ($customFieldsData as $dataKey => $data) {
+            if (!empty($data['value'])) {   
+                $sections[$dataKey] = [
+                    'title'   => $data['label'],
+                    'content' => $data['value']
+                ];
+            }
+        }
+
         $subHeading = '';
         if ($booking->status == 'scheduled') {
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);

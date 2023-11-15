@@ -187,7 +187,7 @@ class EditorShortCodeParser
             $booking = static::$store['booking'];
             return $booking->person_time_zone;
         }
-        if ('notes' == $key) {
+        if ('note' == $key) {
             return $guest->getMessage();
         }
 
