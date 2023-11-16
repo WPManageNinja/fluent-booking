@@ -205,13 +205,13 @@ class LocationService
                 $locationOptions[$slug] = [
                     'type'  => Arr::get($location, 'type'),
                     'title' => $title,
-                    'slug'  => Arr::get($location, 'type') . '__:__' . $index
+                    'slug'  => $slug
                 ];
             } else {
                 $locationOptions[] = [
                     'type'  => Arr::get($location, 'type'),
                     'title' => $title,
-                    'slug'  => Arr::get($location, 'type') . '__:__' . $index
+                    'slug'  => $slug
                 ];
             }
         }
