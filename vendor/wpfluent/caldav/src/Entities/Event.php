@@ -2,6 +2,8 @@
 
 namespace FluentBooking\Package\CalDav\Entities;
 
+use FluentBooking\Framework\Support\DateTime;
+
 class Event implements \JsonSerializable
 {
 	protected $calendar = null;
@@ -10,10 +12,26 @@ class Event implements \JsonSerializable
 	
 	protected $meta = [];
 
+	protected $dateTimeFields = [
+		'dtstart',
+		'dtend',
+		'created',
+		'dtstamp',
+		'last_modified'
+	];
+
 	public function __construct($event, array $meta)
 	{
-		$this->icalEvent = $event;
 		$this->meta = $meta;
+		$this->icalEvent = $event;
+		$this->convertDateTimeStringsToDateTimeObject();
+	}
+
+	protected function convertDateTimeStringsToDateTimeObject()
+	{
+		foreach ($this->dateTimeFields as $field) {
+			$this->icalEvent->{$field} = DateTime::create($this->icalEvent->{$field});
+		}
 	}
 
 	public function getIcalEvent()

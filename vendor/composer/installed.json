@@ -50,18 +50,18 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/caldav.git",
-                "reference": "747286a5aa46675012899d368848d91881b0e712"
+                "reference": "2272baeb89c7d394070c7d80238ce1a2d9ef4db5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/caldav/zipball/747286a5aa46675012899d368848d91881b0e712",
-                "reference": "747286a5aa46675012899d368848d91881b0e712",
+                "url": "https://api.github.com/repos/wpfluent/caldav/zipball/2272baeb89c7d394070c7d80238ce1a2d9ef4db5",
+                "reference": "2272baeb89c7d394070c7d80238ce1a2d9ef4db5",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3|^8.0"
             },
-            "time": "2023-11-16T21:24:18+00:00",
+            "time": "2023-11-17T11:59:50+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -97,24 +97,24 @@
         },
         {
             "name": "wpfluent/framework",
-            "version": "2.2.23",
-            "version_normalized": "2.2.23.0",
+            "version": "2.2.24",
+            "version_normalized": "2.2.24.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/framework.git",
-                "reference": "8518547129c3a718c26ca1e20c9ecf24f6f90324"
+                "reference": "708adb19f99108b872077dd5751f35f097592f9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/8518547129c3a718c26ca1e20c9ecf24f6f90324",
-                "reference": "8518547129c3a718c26ca1e20c9ecf24f6f90324",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/708adb19f99108b872077dd5751f35f097592f9a",
+                "reference": "708adb19f99108b872077dd5751f35f097592f9a",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.3|^8.0"
             },
-            "time": "2023-11-15T22:12:24+00:00",
+            "time": "2023-11-17T11:09:52+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -138,7 +138,7 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.2.23",
+                "source": "https://github.com/wpfluent/framework/tree/2.2.24",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
             "install-path": "../wpfluent/framework"

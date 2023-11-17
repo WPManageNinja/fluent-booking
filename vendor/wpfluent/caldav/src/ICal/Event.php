@@ -416,6 +416,11 @@ class Event implements \JsonSerializable
 		return $this->data['uid'];
 	}
 
+	public function __get($key)
+	{
+		return $this->data[$key];
+	}
+
 	public function __set($key, $value)
 	{
 		$this->data[$key] = $value;

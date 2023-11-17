@@ -22,6 +22,40 @@ $client = new NextCloud($base_url, $username, $password);
 ```php
 // Get all calendars
 $calendars = $client->getCalendars();
+```
+Once you get all the calendars, you'll get an array where each array will contain something like this:
+
+```php
+{
+    displayname: "Home",
+    events: [],
+    getctag: "HwoQEgwAAGj/iqqR3wABAAEYARgAIhUI1YCtyZ6LsNFMEPLT3MannZbujAEoAA==",
+    href : "/10337091274/calendars/home/"
+}
+```
+
+You should save these to use later, otherwise you'll need to call the `$client->getCalendars()` method again and again, which is expensive. If you save the calendar's data then you may make a calendar instance from this data, for example:
+
+```php
+$calendar = $client->createCalendar({
+    displayname: "Home",
+    events: [],
+    getctag: "HwoQEgwAAGj/iqqR3wABAAEYARgAIhUI1YCtyZ6LsNFMEPLT3MannZbujAEoAA==",
+    href : "/10337091274/calendars/home/"
+});
+
+// Add an event into the first calendar
+return $calendars->addEvent([...]);
+
+// Get all events from the first calendar
+return $calendars->getEvents();
+```
+
+Once you have the calendar intance, you can use this instance to get or add events. On the initial call to `getCalendars()`, you don't need to make an instance of the calendar because each item will be an intance of a calendar, for example:
+
+```php
+// Get all calendars
+$calendars = $client->getCalendars();
 
 // Add an event into the first calendar
 return $calendars[0]->addEvent([...]);
