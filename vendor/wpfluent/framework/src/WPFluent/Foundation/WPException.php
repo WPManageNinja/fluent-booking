@@ -29,6 +29,12 @@ class WPException extends Exception {
 	protected $errorData = [];
 
 	/**
+	 * WPError object
+	 * @var \WP_Error
+	 */
+	protected $wpError = null;
+
+	/**
 	 * Construct the WPException instance
 	 * @param WP_Error $wpError
 	 */

@@ -7,8 +7,11 @@ use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
 use InvalidArgumentException;
+use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Pipeline;
 use FluentBooking\Framework\Validator\ValidationException;
 use FluentBooking\Framework\Database\Orm\ModelNotFoundException;
+use FluentBooking\Framework\Response\Response as WPFluentResponse;
 
 class Route
 {
@@ -55,6 +58,12 @@ class Route
      * @var callable|string
      */
     protected $action = null;
+
+    /**
+     * Rest route action info after parsing
+     * @var array
+     */
+    protected $actionInfo = [];
     
     /**
      * Policy Handler/Callback after parsing
@@ -91,6 +100,12 @@ class Route
      * @var callable|string
      */
     protected $policyHandler = null;
+
+    /**
+     * Route Middleware
+     * @var array
+     */
+    protected $middleware = [];
 
     /**
      * Predefined Regex foe where constraints
@@ -151,7 +166,7 @@ class Route
      */
     public function meta($key, $value = null)
     {
-        $meta = is_array($key) ? $key : func_get_args();
+        $meta = is_array($key) ? $key : [$key => $value];
 
         $this->meta = array_merge($this->meta, $meta);
 
@@ -166,7 +181,7 @@ class Route
      */
     public function getMeta($key = '')
     {
-        if ($key && isset($this->meta[$key])) {
+        if (isset($this->meta[$key])) {
             return $this->meta[$key];
         }
         
@@ -179,7 +194,7 @@ class Route
      * @param  string $key
      * @return mixed
      */
-    public function getOptions($key = null)
+    public function getOption($key = null)
     {
         return $key ? $this->options[$key] : $this->options;
     }
@@ -191,13 +206,11 @@ class Route
      */
     public function getAction($key = '')
     {
-        $action = $this->getOptions('args')['action'];
-
-        if ($key && array_key_exists($key, $action)) {
-            return $action[$key];
+        if ($key && array_key_exists($key, $this->actionInfo)) {
+            return $this->actionInfo[$key];
         }
         
-        return $action;
+        return $this->actionInfo;
     }
 
     /**
@@ -289,6 +302,22 @@ class Route
     }
 
     /**
+     * Set the route middleware
+     * @param  array $middleware
+     * @return self
+     */
+    public function middleware(...$middleware)
+    {
+        if (is_array($middleware[0])) {
+            $middleware = reset($middleware);
+        }
+
+        $this->middleware = array_merge($this->middleware, $middleware);
+
+        return $this;
+    }
+
+    /**
      * Set the route policy
      * @param  string $handler
      * @return null
@@ -302,6 +331,8 @@ class Route
                 debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4)
             );
         }
+
+        return $this;
     }
 
     /**
@@ -359,9 +390,7 @@ class Route
     protected function setOptions()
     {
         $this->options = [
-            'args' => [
-                '__meta__' => $this->meta
-            ],
+            'args' => [],
             'methods' => $this->method,
             'callback' => [$this, 'callback'],
             'permission_callback' => [$this, 'permissionCallback']
@@ -444,6 +473,10 @@ class Route
 
             $response = $this->app->call($this->action, $routeParameters);
 
+            if ($response instanceof WPFluentResponse) {
+                $response = $response->toArray();
+            }
+
             if (!($response instanceof WP_REST_Response)) {
                 if (is_wp_error($response)) {
                     $response = $this->app->response->wpErrorToResponse($response);
@@ -452,6 +485,11 @@ class Route
                 }
             }
 
+            $response->header(
+                'Cache-Control',
+                'no-cache, must-revalidate, max-age=0, no-store, private'
+            );
+            
             return $response;
 
         } catch (ValidationException $e) {
@@ -487,12 +525,62 @@ class Route
             }
         }
 
-        if ($this->permissionHandler) {
-            return $this->app->call(
-                $this->permissionHandler,
-                $this->app->request->get_url_params()
-            );
+        return $this->app->make(Pipeline::class)
+            ->send($this->app->request)
+            ->through(
+                $this->collectMiddleWare()
+            )->then(function($request) {
+                if ($this->permissionHandler) {
+                    return $this->app->call(
+                        $this->permissionHandler,
+                        $this->app->request->get_url_params()
+                    );
+                } 
+            });
+    }
+
+    /**
+     * Added the ability to add middleware so we can
+     * intercept the request without modifying the source
+     * code again and again. The middleware class will
+     * implement the handle method as given below:
+     * 
+     * public function handle($request, $next)
+     *
+     * And must return $next($request) (or nothing to cancel);
+     * 
+     * @return array
+     */
+    protected function collectMiddleWare()
+    {
+        $middleware = $this->app['config']->get('middleware', []);
+
+        $allMiddleware = Arr::get($middleware, 'global', []);
+
+        foreach ($this->middleware as $routeMiddleware) {
+
+            $pieces = explode(':', $routeMiddleware);
+
+            if ($handler = Arr::get($middleware['route'], $key = reset($pieces))) {
+
+                if (isset($pieces[1])) {
+                    $handler = $handler . ':' . str_replace(' ', '', end($pieces));
+                }
+
+                if (!in_array($handler, $allMiddleware)) {
+                    $allMiddleware[] = $handler;
+                }
+            } else {
+                
+                $middlewarePath = 'config.middleware.route';
+
+                throw new InvalidArgumentException(
+                    "No middleware is assigned for the key: {$key} in {$middlewarePath} array."
+                );
+            }
         }
+
+        return $allMiddleware;
     }
 
     /**
@@ -503,17 +591,34 @@ class Route
      */
     protected function getPolicyHandler($policyHandler)
     {
-        if ($policyHandler instanceof Closure) {
-            return function() use ($policyHandler) {
-                $policyHandler($this->app->request);
-            };
+        if (!$policyHandler) {
+            return [$this, 'defaultPolicyHandler'];
         }
 
-        if (strpos($policyHandler, '@') !== false) return $policyHandler;
+        if ($policyHandler instanceof Closure) {
+            return $policyHandler;
+        }
 
-        if (strpos($policyHandler, '::') !== false) return $policyHandler;
+        if ($this->isPolicyHandlerParseable($policyHandler)) {
+            return $policyHandler;
+        }
 
-        if ($policyHandler && $this->handler instanceof Closure) {
+        if (is_string($policyHandler) && $this->handler instanceof Closure) {
+
+            if (class_exists($policyHandler)) {
+                
+                $reflection = new \ReflectionClass($policyHandler);
+                
+                if ($reflection->hasMethod('verifyRequest')) {
+                    
+                    $policyHandler = $policyHandler . '@' . 'verifyRequest';
+                    
+                    return $policyHandler;
+                }
+            } elseif (function_exists($policyHandler)) {
+                return $policyHandler;
+            }
+
             throw new InvalidArgumentException(
                 'Explicit policy handler is required while using a closure as route callback.'
             );
@@ -529,6 +634,12 @@ class Route
         }
 
         return $policyHandler ?: [$this, 'defaultPolicyHandler'];
+    }
+
+    protected function isPolicyHandlerParseable($policyHandler)
+    {
+        return (strpos($policyHandler, '@') === true
+        || strpos($policyHandler, '::') === true);
     }
 
     /**
@@ -569,16 +680,19 @@ class Route
 
         $this->permissionHandler = $policyHandler;
 
-        $policyHandler[0] = get_class($policyHandler[0]);
+        if (is_array($policyHandler)) {
+            $policyHandler[0] = get_class($policyHandler[0]);
+        }
 
-        $this->options['args']['action'] = [
+        $this->actionInfo = [
             'handler' => is_object($handler) ? $action : $handler,
             'controller' => $controller,
             'method' => is_array($action) ? $action[1] : null,
             'path' => $this->uri,
             'http_method' => $request->get_method(),
             'full_uri' => $request->get_route(),
-            'permission_callback' => $policyHandler
+            'permission_callback' => $policyHandler,
+            'compiled_url' => $this->compiled
         ];
 
 

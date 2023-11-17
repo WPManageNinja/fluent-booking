@@ -5,6 +5,7 @@ namespace FluentBooking\Framework\Http;
 use Closure;
 use ReflectionMethod;
 use ReflectionFunction;
+use InvalidArgumentException;
 use FluentBooking\Framework\Container\Util;
 use FluentBooking\Framework\Support\Reflector;
 use FluentBooking\Framework\Support\UrlRoutable;
@@ -15,40 +16,56 @@ trait SubstituteRouteParametersTrait
     {
         $resolved = [];
 
-        $signatureParameters = $this->filterSignatureParameters(
-            $dependencies = $this->getParametersFromRouteAction()
-        );
+        $signatureParameters = $this->getParametersFromRouteAction();
 
         if ($signatureParameters) {
 
-            $parametersInfo = [];
-
-            foreach ($dependencies as $dependency) {
-                $parametersInfo[$dependency->getName()] = $dependency;
-            }
-
             foreach ($signatureParameters as $signatureParameter) {
-                
-                if (array_key_exists($name = $signatureParameter->getName(), $routeParameters)) {
-                    
-                    $class = Util::getParameterClassName($parametersInfo[$name]);
 
+                $name = $signatureParameter->getName();
+                
+                if ($this->boundModel($name, $signatureParameter, $routeParameters)) {
+                    
+                    $class = Util::getParameterClassName($signatureParameter);
+                    
                     $resolved[$name] = $this->app->make($class)->findOrFail(
                         $routeParameters[$name]
                     );
 
                     unset($routeParameters[$name]);
                 }
+
             }
         }
-        
+
         $remainingParams = [];
 
-        foreach (array_reverse($routeParameters) as $param) {
-            $remainingParams[($dep = array_pop($dependencies))->getName()] = $param;
+        $signatureParameters = array_filter($signatureParameters, function($param) {
+            return !class_exists(Reflector::getParameterClassName($param) ?: '');
+        });
+
+
+        if (($params = count($signatureParameters)) && $params != count($routeParameters)) {
+            throw new InvalidArgumentException(
+                'Invalid route action, route parameters doesn\'t match with method signature.'
+            );
         }
 
-        return $resolved + array_reverse($remainingParams);
+        foreach ($routeParameters as $param) {
+            
+            if ($dep = array_shift($signatureParameters)) {
+                $remainingParams[$dep->getName()] = $param;
+            }
+        }
+
+        return $resolved + $remainingParams;
+    }
+
+    protected function boundModel($name, $parameter, $routeParameters)
+    {
+        if (array_key_exists($name, $routeParameters)) {
+            return Reflector::isParameterSubclassOf($parameter, UrlRoutable::class);
+        }
     }
 
     protected function getParametersFromRouteAction()
@@ -60,14 +77,5 @@ trait SubstituteRouteParametersTrait
         list($class, $method) = explode('@', $this->action);
 
         return (new ReflectionMethod($class, $method))->getParameters();
-    }
-
-    protected function filterSignatureParameters($parameters)
-    {
-        return array_filter($parameters, function ($param) {
-            return Reflector::isParameterSubclassOf(
-                $param, UrlRoutable::class
-            );
-        });
     }
 }

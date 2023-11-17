@@ -8,11 +8,12 @@ use ArrayIterator;
 use FluentBooking\Framework\Support\Helper;
 use FluentBooking\Framework\Support\MacroableTrait;
 use FluentBooking\Framework\Support\EnumeratesValues;
+use FluentBooking\Framework\Database\Orm\ResourceAbleTrait;
 use FluentBooking\Framework\Support\CanBeEscapedWhenCastToString;
 
 class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerable
 {
-    use EnumeratesValues, MacroableTrait;
+    use EnumeratesValues, MacroableTrait, ResourceAbleTrait;
 
     /**
      * The items contained in the collection.

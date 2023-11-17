@@ -10,13 +10,14 @@ use FluentBooking\Framework\Support\Helper;
 use FluentBooking\Framework\Support\Tappable;
 use FluentBooking\Framework\Support\Collection;
 use FluentBooking\Framework\Support\ForwardsCalls;
+use FluentBooking\Framework\Database\Orm\ResourceAbleTrait;
 
 /**
  * @mixin \FluentBooking\Framework\Support\Collection
  */
 abstract class AbstractPaginator
 {
-    use ForwardsCalls, Tappable;
+    use ForwardsCalls, Tappable, ResourceAbleTrait;
 
     /**
      * All of the items being paginated.

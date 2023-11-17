@@ -303,10 +303,6 @@ class Application extends Container
      */
     protected function requireRouteFile($router)
     {
-        $router->namespace(
-            $this['__namespace__'] . '\App\Http\Controllers'
-        )->group(function($router) {
-            require_once $this['path.http'] . 'Routes/api.php';
-        });
+        require_once $this['path.http'] . 'Routes/routes.php';
     }
 }

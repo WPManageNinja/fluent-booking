@@ -24,7 +24,7 @@ use FluentBooking\Framework\Database\ConnectionResolverInterface as Resolver;
 
 abstract class Model implements ArrayableInterface, ArrayAccess, CanBeEscapedWhenCastToString, JsonableInterface, JsonSerializable, UrlRoutable
 {
-    use HelperFunctionsTrait;
+    use HelperFunctionsTrait, ResourceAbleTrait;
 
     use Concerns\HasAttributes,
         Concerns\HasEvents,
