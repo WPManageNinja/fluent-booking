@@ -3,7 +3,7 @@
         'name' => 'wpfluent/wpfluent',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '765de279a88af605138484a05fe4dc19f61360cc',
+        'reference' => 'cc855f92d15a98befa889ead1d25898b750b6c9d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(
@@ -21,10 +21,21 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'wpfluent/caldav' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '747286a5aa46675012899d368848d91881b0e712',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../wpfluent/caldav',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'wpfluent/framework' => array(
-            'pretty_version' => '2.1.20',
-            'version' => '2.1.20.0',
-            'reference' => 'e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c',
+            'pretty_version' => '2.2.23',
+            'version' => '2.2.23.0',
+            'reference' => '8518547129c3a718c26ca1e20c9ecf24f6f90324',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpfluent/framework',
             'aliases' => array(),
@@ -33,7 +44,7 @@
         'wpfluent/wpfluent' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '765de279a88af605138484a05fe4dc19f61360cc',
+            'reference' => 'cc855f92d15a98befa889ead1d25898b750b6c9d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(

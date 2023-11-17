@@ -60,6 +60,10 @@ class ComposerScript
                     $namespace . "\\Framework\\" => "src/WPFluent"
                 ];
             } else {
+                if(strpos($package['name'], 'wpfluent') === false) {
+                    continue;
+                }
+
                 $packageDir = $vendorDir . "/{$package['name']}/src/";
 
                 $iterator = new RecursiveIteratorIterator(

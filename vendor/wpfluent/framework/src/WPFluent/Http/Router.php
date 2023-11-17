@@ -30,9 +30,21 @@ class Router
     
     /**
      * Route policy handler to pass to the route
-     * @var string|null
+     * @var array
      */
-    protected $policyHandler = null;
+    protected $policyHandler = [];
+
+    /**
+     * Route middleware to pass to the route
+     * @var array
+     */
+    protected $middleware = [];
+
+    /**
+     * Keep the track of number of group calls
+     * @var integer
+     */
+    protected $groupCount = 0;
 
     /**
      * Construct the routet instance
@@ -51,6 +63,8 @@ class Router
      */
     public function group($attributes = [], \Closure $callback = null)
     {
+        $this->groupCount += 1;
+
         if ($attributes instanceof \Closure) {
             $callback = $attributes;
             $attributes = [];
@@ -64,8 +78,24 @@ class Router
             $this->withPolicy($attributes['policy']);
         }
 
+        if (isset($attributes['middleware'])) {
+            $this->middleware($attributes['middleware']);
+        }
+
         if (isset($attributes['namespace'])) {
             $this->namespace($attributes['namespace']);
+        }
+
+        if (!isset($this->policyHandler[$this->groupCount])) {
+            if (isset($this->policyHandler[$this->groupCount - 1])) {
+                $this->policyHandler[] = $this->policyHandler[$this->groupCount - 1];
+            }
+        }
+
+        if (!isset($this->middleware[$this->groupCount])) {
+            if (isset($this->middleware[$this->groupCount - 1])) {
+                $this->middleware[] = $this->middleware[$this->groupCount - 1];
+            }
         }
 
         $this->executeGroupCallback($callback);
@@ -85,6 +115,22 @@ class Router
     }
 
     /**
+     * Set the route middleware
+     * @param  array|string $middleware
+     * @return self
+     */
+    public function middleware(...$middleware)
+    {
+        if (is_array($middleware[0])) {
+            $middleware = reset($middleware);
+        }
+
+        $this->middleware = array_merge($this->middleware, $middleware);
+
+        return $this;
+    }
+
+    /**
      * Set the route policy
      * 
      * @param  string $prefix
@@ -92,7 +138,7 @@ class Router
      */
     public function withPolicy($handler)
     {
-        $this->policyHandler = $handler;
+        $this->policyHandler[] = $handler;
 
         return $this;
     }
@@ -119,9 +165,11 @@ class Router
     protected function executeGroupCallback($callback)
     {
         $callback($this);
+        $this->groupCount -= 1;
         array_pop($this->prefix);
         array_pop($this->namespace);
-        $this->policyHandler = null;
+        array_pop($this->middleware);
+        array_pop($this->policyHandler);
     }
 
     /**
@@ -232,7 +280,11 @@ class Router
         );
 
         if ($this->policyHandler) {
-            $route->withPolicy($this->policyHandler);
+            $route->withPolicy(end($this->policyHandler));
+        }
+
+        if ($this->middleware) {
+            $route->middleware($this->middleware);
         }
 
         if ($this->namespace) {

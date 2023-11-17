@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a72364d9daaa2deb241e11d2c4caaf1",
+    "content-hash": "d9011659e4fd19d24f34742e6df8f864",
     "packages": [
         {
             "name": "woocommerce/action-scheduler",
@@ -47,17 +47,66 @@
             "time": "2023-10-11T18:24:47+00:00"
         },
         {
-            "name": "wpfluent/framework",
-            "version": "2.1.20",
+            "name": "wpfluent/caldav",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:wpfluent/framework.git",
-                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c"
+                "url": "git@github.com:wpfluent/caldav.git",
+                "reference": "747286a5aa46675012899d368848d91881b0e712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
-                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
+                "url": "https://api.github.com/repos/wpfluent/caldav/zipball/747286a5aa46675012899d368848d91881b0e712",
+                "reference": "747286a5aa46675012899d368848d91881b0e712",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "wpfluent": {
+                    "type": "wpfluent-package"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WPFluentPackage\\Package\\CalDav\\": "src/"
+                }
+            },
+            "license": [
+                "GPLv2 or later"
+            ],
+            "authors": [
+                {
+                    "name": "Sheikh Heera",
+                    "email": "heera.sheikh77@gmail.com"
+                }
+            ],
+            "description": "A caldav client for wpfluent framework.",
+            "keywords": [
+                "wp",
+                "wpfluent"
+            ],
+            "support": {
+                "source": "https://github.com/wpfluent/caldav/tree/master",
+                "issues": "https://github.com/wpfluent/caldav/issues"
+            },
+            "time": "2023-11-16T21:24:18+00:00"
+        },
+        {
+            "name": "wpfluent/framework",
+            "version": "2.2.23",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpfluent/framework.git",
+                "reference": "8518547129c3a718c26ca1e20c9ecf24f6f90324"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/8518547129c3a718c26ca1e20c9ecf24f6f90324",
+                "reference": "8518547129c3a718c26ca1e20c9ecf24f6f90324",
                 "shasum": ""
             },
             "require": {
@@ -86,10 +135,10 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.1.20",
+                "source": "https://github.com/wpfluent/framework/tree/2.2.23",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
-            "time": "2023-10-23T17:20:38+00:00"
+            "time": "2023-11-15T22:12:24+00:00"
         }
     ],
     "packages-dev": [],
@@ -100,5 +149,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
