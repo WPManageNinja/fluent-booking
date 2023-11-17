@@ -9,7 +9,7 @@
 
         <div v-if="slot" class="fcal_create_calendar_body">
             <div class="fcal_create_calendar_basic_info">
-                <basic-info ref="basicInfo" :slot="slot" :event_type="event_type" />
+                <event-details ref="basicInfo" :calendar_event="slot" :event_type="event_type" :new_event="true" />
             </div>
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="saveSettings">
@@ -26,7 +26,7 @@
 </template>
 
 <script type="text/babel">
-import BasicInfo from './_BasicInfo.vue';
+import EventDetails from './_EventDetails.vue';
 import {Back} from '@element-plus/icons-vue';
 
 
@@ -34,7 +34,7 @@ export default {
     name: 'NewSlotEvent',
     props: ['calendar_id', 'event_type'],
     components: {
-        BasicInfo,
+        EventDetails,
         Back
     },
     data() {
@@ -51,9 +51,9 @@ export default {
         }
     },
     methods: {
-        getSlotSchema() {
+        getEventSchema() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/slot-schema')
+            this.$get('calendars/' + this.calendar_id + '/event-schema')
                 .then(response => {
                     this.slot = response.slot;
                 })
@@ -68,28 +68,28 @@ export default {
             return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
         checkValidation() {
-            const location = this.slot.location_settings[0];
-            if (!location.type) {
-                this.$handleError(this.$t('Location is required'));
-                return false;
-            } else if ((location.type == 'custom') && !location.title)  {
-                this.$handleError(this.$t('Location Title is required'));
-                return false;
-            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
-                this.$handleError(this.$t('Location Description is required'));
-                return false;
-            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
-                this.$handleError(this.$t('Phone Number is required'));
-                return false;
+            for (const location of this.slot.location_settings) {
+                if (!location.type) {
+                    this.$handleError(this.$t('Location Type is required'));
+                    return false;
+                } else if ((location.type == 'custom') && !location.title) {
+                    this.$handleError(this.$t('Location Title is required'));
+                    return false;
+                } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description) {
+                    this.$handleError(this.$t('Location Description is required'));
+                    return false;
+                } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                    this.$handleError(this.$t('Phone Number is required'));
+                    return false;
+                }
             }
             return true;
         },
         saveSettings() {
-            if (!this.checkValidation()) {
-                return;
-            }
+            if (!this.checkValidation()) return;
+            
             this.saving = true;
-            this.$post('calendars/' + this.calendar_id + '/slots', {
+            this.$post('calendars/' + this.calendar_id + '/events', {
                 title: this.slot.title,
                 status: this.slot.status,
                 color_schema: this.slot.color_schema,
@@ -106,9 +106,8 @@ export default {
                 .then(response => {
                     this.$handleSuccess(response);
                     this.$router.push({ 
-                        name: 'slot_settings', 
+                        name: 'event_details', 
                         params: {calendar_id: response.slot.calendar_id, event_id: response.slot.id},
-                        query: {step: 'basic-info' }
                     })
                 })
                 .catch(errors => {
@@ -121,7 +120,7 @@ export default {
     },
     mounted() {
         this.$changeTitle(this.$t('Create new Event Type'));
-        this.getSlotSchema();
+        this.getEventSchema();
     }
 }
 </script>

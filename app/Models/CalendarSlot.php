@@ -33,7 +33,15 @@ class CalendarSlot extends Model
 
     public function setSettingsAttribute($settings)
     {
-        $this->attributes['settings'] = \maybe_serialize($settings);
+        $originalSettings = $this->getOriginal('settings');
+
+        $originalSettings = maybe_unserialize($originalSettings);
+
+        foreach ($settings as $key => $value) {
+            $originalSettings[$key] = $value;
+        }
+
+        $this->attributes['settings'] = maybe_serialize($originalSettings);
     }
 
     public function getSettingsAttribute($settings)

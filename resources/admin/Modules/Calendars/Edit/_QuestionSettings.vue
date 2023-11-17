@@ -1,55 +1,57 @@
 <template>
-    <div class="fcal_create_calendar_form">
-        <div class="fcal_create_calendar_form_header">
-            <h2><QuestionIcon/> {{ $t('Booking Questions') }} </h2>
-        </div>
-        <div class="fcal_create_calendar_form_body">
-            <div class="fcal_questions_wrapper">
-                <el-skeleton animated v-if="loading" />
-                <div v-else class="fcal_questions">
-                    <div class="fcal_question" v-for="(field, index) in fields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
-                        <div class="fcal_question_sorting">
-                            <el-icon @click="moveUp(index)"><Top /></el-icon>
-                            <el-icon @click="moveDown(index)"><Bottom /></el-icon>
-                        </div>
-                        <div class="fcal_question_card">
-                            <div class="fcal_question_content">
-                                <h2>{{ field.label }}
-                                    <span class="required" title="Required Field" v-if="field.required">{{ $t('Required') }}</span>
-                                    <span class="required" v-if="field.system_defined">{{ $t('System') }}</span>
-                                    <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
-                                </h2>
-                                <p>
-                                    <span v-if="field.system_defined">{{ field.name }}</span>
-                                    <span v-else>{{ field.type }}</span>
-                                </p>
+    <div class="fcal_create_calendar_body">
+        <div class="fcal_create_calendar_form">
+            <div class="fcal_create_calendar_form_header">
+                <h2><QuestionIcon/> {{ $t('Booking Questions') }} </h2>
+            </div>
+            <div class="fcal_create_calendar_form_body">
+                <div class="fcal_questions_wrapper">
+                    <el-skeleton animated v-if="loading" />
+                    <div v-else class="fcal_questions">
+                        <div class="fcal_question" v-for="(field, index) in fields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
+                            <div class="fcal_question_sorting">
+                                <el-icon @click="moveUp(index)"><Top /></el-icon>
+                                <el-icon @click="moveDown(index)"><Bottom /></el-icon>
                             </div>
-                            <div class="fcal_question_actions">
-                                <el-switch v-if="!field.disable_alter" v-model="field.enabled"/>
-                                <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
-                                <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
-                                    <el-icon><Delete /></el-icon>
-                                </el-button>
+                            <div class="fcal_question_card">
+                                <div class="fcal_question_content">
+                                    <h2>{{ field.label }}
+                                        <span class="required" title="Required Field" v-if="field.required">{{ $t('Required') }}</span>
+                                        <span class="required" v-if="field.system_defined">{{ $t('System') }}</span>
+                                        <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
+                                    </h2>
+                                    <p>
+                                        <span v-if="field.system_defined">{{ field.name }}</span>
+                                        <span v-else>{{ field.type }}</span>
+                                    </p>
+                                </div>
+                                <div class="fcal_question_actions">
+                                    <el-switch v-if="!field.disable_alter" v-model="field.enabled" @change="saveSettings"/>
+                                    <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
+                                    <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
+                                        <el-icon><Delete /></el-icon>
+                                    </el-button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="fcal_question_footer">
-                    <el-link class="fcal_add_question" :underline="false" @click="addQuestion">
-                        {{ $t('+Add more questions for invitees') }}
-                    </el-link>
-                    <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+                    <div class="fcal_question_footer">
+                        <el-link class="fcal_add_question" :underline="false" @click="addQuestion">
+                            {{ $t('+Add more questions for invitees') }}
+                        </el-link>
+                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+                    </div>
                 </div>
             </div>
+            <EditCustomFieldModal 
+                v-if="showModal"
+                :field="field"
+                :fields="fields"
+                :showModal="showModal"
+                @closeModal="closeModal"
+                @updateFieldData="updateFieldData"
+            />
         </div>
-        <EditCustomFieldModal 
-            v-if="showModal"
-            :field="field"
-            :fields="fields"
-            :showModal="showModal"
-            @closeModal="closeModal"
-            @updateFieldData="updateFieldData"
-        />
     </div>
 </template>
 
@@ -61,7 +63,7 @@ import { Delete, Bottom, Top } from '@element-plus/icons-vue';
 
 export default {
     name: 'QuestionSettings',
-    props: ['slot', 'activeTab'],
+    props: ['calendar_event'],
     components: {
         QuestionIcon,
         EditCustomFieldModal,
@@ -77,11 +79,6 @@ export default {
             fields : [],
             showModal: false
         }
-    },
-    watch: {
-        activeTab() {
-            this.fetchFields();
-        },
     },
     methods: {
         addQuestion() {
@@ -138,10 +135,9 @@ export default {
         },
         fetchFields() {
             this.loading = true;
-            this.$get('calendars/' + this.slot.calendar.id + '/slots/' + this.slot.id + '/booking-fields')
+            this.$get('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/booking-fields')
                 .then(response => {
                     this.fields = response.fields;
-                    console.log(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -152,7 +148,7 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.slot.calendar.id + '/slots/' + this.slot.id + '/booking-fields', {
+            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/booking-fields', {
                 booking_fields: this.fields
             })
                 .then(response => {
