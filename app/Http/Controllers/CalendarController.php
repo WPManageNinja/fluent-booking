@@ -286,7 +286,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getSlot(Request $request, $calendarId, $slotId)
+    public function getEvent(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar.user'])->findOrFail($slotId);
 
@@ -329,10 +329,14 @@ class CalendarController extends Controller
             $data['calendar'] = $calendar;
         }
 
+        if (in_array('settings_menu', $this->request->get('with', []))) {
+            $data['settings_menu'] = Helper::getEventSettingsMenuItems($slot);
+        }
+
         return $data;
     }
 
-    public function getSlotSchema(Request $request, $calendarId)
+    public function getEventSchema(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
 
@@ -362,7 +366,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function createCalendarSlot(Request $request, $calendarId)
+    public function createCalendarEvent(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
 
@@ -398,6 +402,8 @@ class CalendarController extends Controller
                 'range_days'          => (int)(Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
                 'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
+                'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '')),
+                'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', ''))
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
@@ -418,11 +424,11 @@ class CalendarController extends Controller
         ];
     }
 
-    public function updateCalendarSlot(Request $request, $calendarId, $slotId)
+    public function updateEventDetails(Request $request, $calendarId, $eventId)
     {
         $data = $request->all();
 
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+        $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $generalRules = [
             'title'                                 => 'required',
@@ -433,7 +439,7 @@ class CalendarController extends Controller
         ];
 
         $conditionalRules = [];
-        if ('group' === $slot->event_type) {
+        if ('group' === $event->event_type) {
             $conditionalRules = [
                 'max_book_per_slot' => 'required|numeric|min:1',
                 'is_display_spots'  => 'required|min:0|max:1',
@@ -442,38 +448,70 @@ class CalendarController extends Controller
 
         $this->validate($data, array_merge($generalRules, $conditionalRules));
 
-        $slot->settings = [
-            'schedule_type'       => sanitize_text_field($data['settings']['schedule_type']),
-            'weekly_schedules'    => SanitizeService::weeklySchedules($data['settings']['weekly_schedules'], $slot->calendar->author_timezone, 'UTC'),
-            'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($data['settings'], 'date_overrides', []), $slot->calendar->author_timezone, 'UTC'),
-            'range_type'          => sanitize_text_field(Arr::get($data['settings'], 'range_type')),
-            'range_days'          => (int)(Arr::get($data['settings'], 'range_days', 60)) ?: 60,
-            'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($data['settings'], 'range_date_between', ['', ''])),
+        $event->title = sanitize_text_field($data['title']);
+        $event->duration = (int)$data['duration'];
+        $event->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
+        $event->color_schema = sanitize_text_field(Arr::get($data, 'color_schema', '#0099ff'));
+        $event->description = sanitize_textarea_field(Arr::get($data, 'description'));
+        $event->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
+        $event->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
+        $event->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
+
+        $event->save();
+
+        return [
+            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'event'   => $event
+        ];
+    }
+
+    public function updateEventAvailability(Request $request, $calendarId, $eventId)
+    {
+        $data = $request->all();
+
+        $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+
+        $event->settings = [
+            'schedule_type'      => sanitize_text_field(Arr::get($data, 'schedule_type')),
+            'weekly_schedules'   => SanitizeService::weeklySchedules(Arr::get($data, 'weekly_schedules'), $event->calendar->author_timezone, 'UTC'),
+            'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides'), $event->calendar->author_timezone, 'UTC'),
+            'range_type'         => sanitize_text_field(Arr::get($data, 'range_type')),
+            'range_days'         => (int)(Arr::get($data, 'range_days', 60)) ?: 60,
+            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', '']))
+        ];
+
+        $event->availability_id = (int)Arr::get($data, 'availability_id');
+        $event->availability_type = SanitizeService::checkCollection(Arr::get($data, 'availability_type'), ['existing_schedule', 'custom']);
+        
+        $event->save();
+
+        return [
+            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'event'   => $event
+        ];
+    }
+
+    public function updateEventLimits(Request $request, $calendarId, $eventId)
+    {
+        $data = $request->all();
+
+        $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+
+        $event->settings = [
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
             'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '')),
             'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', ''))
         ];
-
-        $slot->title = sanitize_text_field($data['title']);
-        $slot->duration = (int)$data['duration'];
-        $slot->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
-        $slot->color_schema = sanitize_text_field(Arr::get($data, 'color_schema', '#0099ff'));
-        $slot->description = sanitize_textarea_field(Arr::get($data, 'description'));
-        $slot->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
-        $slot->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
-        $slot->availability_id = (int)Arr::get($data, 'availability_id');
-        $slot->availability_type = SanitizeService::checkCollection($data['availability_type'], ['existing_schedule', 'custom']);
-        $slot->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
-
-        $slot->save();
+            
+        $event->save();
 
         return [
             'message' => __('Data has been updated', 'fluent-booking-pro'),
-            'slot'    => $slot
+            'event'   => $event
         ];
     }
 
-    public function patchCalendarSlot(Request $request, $calendarId, $slotId)
+    public function patchCalendarEvent(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
@@ -490,43 +528,43 @@ class CalendarController extends Controller
 
     }
 
-    public function cloneCalendarSlot(Request $request, $calendarId, $slotId)
+    public function cloneCalendarEvent(Request $request, $calendarId, $eventId)
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $originalSlot = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($slotId);
+        $originalEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($eventId);
 
-        $clonedSlot = $originalSlot->replicate();
+        $clonedEvent = $originalEvent->replicate();
         
-        $clonedSlot->title = $originalSlot->title . ' (clone)';
+        $clonedEvent->title = $originalEvent->title . ' (clone)';
 
-        $clonedSlot->slug = Helper::generateSlotSlug($clonedSlot->duration . 'min', $calendar);
+        $clonedEvent->slug = Helper::generateSlotSlug($clonedEvent->duration . 'min', $calendar);
 
-        $clonedSlot->save();
+        $clonedEvent->save();
 
-        $eventsMeta = $originalSlot->getCalendarEventsMeta();
+        $eventsMeta = $originalEvent->getCalendarEventsMeta();
 
-        $integrationsMeta = $originalSlot->getIntegrationsMeta();
+        $integrationsMeta = $originalEvent->getIntegrationsMeta();
 
         foreach ($eventsMeta as $meta) {
             $clonedMeta = $meta->replicate();
-            $clonedMeta->object_id = $clonedSlot->id;
+            $clonedMeta->object_id = $clonedEvent->id;
             $clonedMeta->save();
         }
 
         foreach ($integrationsMeta as $meta) {
             $clonedMeta = $meta->replicate();
-            $clonedMeta->object_id = $clonedSlot->id;
+            $clonedMeta->object_id = $clonedEvent->id;
             $clonedMeta->save();
         }
 
         return [
             'message' => __('The Event Type has been cloned successfully', 'fluent-booking-pro'),
-            'slot'    => $clonedSlot
+            'slot'    => $clonedEvent
         ];
     }
 
-    public function getSlotEmailNotifications(Request $request, $calendarId, $slotId)
+    public function getEventEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
@@ -552,7 +590,7 @@ class CalendarController extends Controller
         return $data;
     }
 
-    public function saveSlotEmailNotifications(Request $request, $calendarId, $slotId)
+    public function saveEventEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
@@ -576,7 +614,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getSlotBookingFields(Request $request, $calendarId, $slotId)
+    public function getEventBookingFields(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
@@ -585,7 +623,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function saveSlotBookingFields(Request $request, $calendarId, $slotId)
+    public function saveEventBookingFields(Request $request, $calendarId, $slotId)
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
         $currencySign = CurrenciesHelper::getGlobalCurrencySign();

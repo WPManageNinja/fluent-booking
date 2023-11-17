@@ -42,6 +42,58 @@ add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $cale
     return $items;
 }, 1, 2);
 
+add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items, $event) {
+    $items['sms_notification'] = [
+        'type'    => 'route',
+        'route'   => [
+            'name'   => 'sms_notification',
+            'params' => [
+                'calendar_id' => $event->calendar_id,
+                'event_id'    => $event->id
+            ]
+        ],
+        'label'   => __('SMS Notification', 'fluent-booking-pro'),
+        'elIcon' => 'Notification'
+    ];
+    $items['payment_settings'] = [
+        'type'    => 'route',
+        'route'   => [
+            'name'   => 'payment_settings',
+            'params' => [
+                'calendar_id' => $event->calendar_id,
+                'event_id'    => $event->id
+            ]
+        ],
+        'label'   => __('Payment Settings', 'fluent-booking-pro'),
+        'elIcon' => 'Money'
+    ];
+    $items['webhook_settings'] = [
+        'type'    => 'route',
+        'route'   => [
+            'name'   => 'webhook_settings',
+            'params' => [
+                'calendar_id' => $event->calendar_id,
+                'event_id'    => $event->id
+            ]
+        ],
+        'label'   => __('Webhooks Feeds', 'fluent-booking-pro'),
+        'elIcon' => 'Link'
+    ];
+    $items['integrations'] = [
+        'type'    => 'route',
+        'route'   => [
+            'name'   => 'integrations',
+            'params' => [
+                'calendar_id' => $event->calendar_id,
+                'event_id'    => $event->id
+            ]
+        ],
+        'label'   => __('Integrations', 'fluent-booking-pro'),
+        'elIcon' => 'Connection'
+    ];
+    return $items;
+}, 1, 2);
+
 
 add_action('init', function () {
 // Woo Integration

@@ -1584,6 +1584,35 @@
         }
       }
     }
+    .fcal_create_calendar_body_wrap {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        .el-aside {
+            width: 324px;
+            flex: none;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px 14px;
+            overflow-x: hidden;
+            .fcal_settings_sidebar {
+                display: flex;
+                flex-direction: column;
+                float: left;
+                position: relative;
+                .el-icon {
+                    .icon {
+                        padding-bottom: 4px;
+                    }
+                }
+            }
+        }
+        .fcal_settings_content {
+            flex: 1;
+            overflow: inherit;
+            position: relative;
+        }
+    }
     .el-tabs {
       &.fcal_tabs {
         @media (max-width: 680px) {

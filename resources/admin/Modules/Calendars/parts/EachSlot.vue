@@ -145,7 +145,7 @@ export default {
     methods: {
         editSlot() {
             this.$router.push({
-                name: 'slot_settings',
+                name: 'event_details',
                 params: {calendar_id: this.slot.calendar_id, event_id: this.slot.id}
             })
         },
@@ -173,7 +173,7 @@ export default {
         },
         updateStatus(newStatus) {
             this.updating = true;
-            this.$put('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id, {
+            this.$put('calendars/' + this.slot.calendar_id + '/events/' + this.slot.id, {
                 status: newStatus
             })
                 .then(response => {
@@ -189,7 +189,7 @@ export default {
         },
         cloneEvent() {
             this.updating = true;
-            this.$post('calendars/' + this.slot.calendar_id + '/clone-slot/' + this.slot.id)
+            this.$post('calendars/' + this.slot.calendar_id + '/clone-event/' + this.slot.id)
                 .then(response => {
                     this.$handleSuccess(response);
                     this.goToEvent(response.slot);
@@ -203,9 +203,8 @@ export default {
         },
         goToEvent(slot) {
             this.$router.push({ 
-                name: 'slot_settings', 
+                name: 'event_details', 
                 params: {calendar_id: slot.calendar_id, event_id: slot.id},
-                query: {step: 'basic-info' }
             })
         },
         handleCommand(command) {
@@ -225,7 +224,7 @@ export default {
                         type: 'warning'
                     })
                     .then(() => {
-                        this.$del('calendars/' + this.slot.calendar_id + '/slots/' + this.slot.id)
+                        this.$del('calendars/' + this.slot.calendar_id + '/events/' + this.slot.id)
                             .then(response => {
                                 this.$handleSuccess(response);
                                 this.$emit('slotDeleted');

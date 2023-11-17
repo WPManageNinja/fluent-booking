@@ -15,10 +15,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}', 'CalendarController@updateCalendar')->int('id');
     $router->delete('/{id}', 'CalendarController@deleteCalendar')->int('id');
 
-    $router->post('/{id}/slots', 'CalendarController@createCalendarSlot')->int('id');
-    $router->get('/{id}/slot-schema', 'CalendarController@getSlotSchema')->int('id');
-
-    $router->get('/calendars-slots', 'CalendarController@getCalendarsSlots')->int('id');
+    $router->post('/{id}/events', 'CalendarController@createCalendarEvent')->int('id');
+    $router->get('/{id}/event-schema', 'CalendarController@getEventSchema')->int('id');
 
     // Landing Page API
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
@@ -28,18 +26,21 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
     $router->post('/{id}/integrations/general_integration_feed/disconnect', 'IntegrationSettingsController@disconnectGeneralIntegrationFeed')->int('id');
 
-    $router->post('/{id}/clone-slot/{event_id}', 'CalendarController@cloneCalendarSlot')->int('id')->int('event_id');
+    $router->post('/{id}/clone-event/{event_id}', 'CalendarController@cloneCalendarEvent')->int('id')->int('event_id');
 
-    $router->get('/{id}/slots/{event_id}', 'CalendarController@getSlot')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}', 'CalendarController@updateCalendarSlot')->int('id')->int('event_id');
-    $router->put('/{id}/slots/{event_id}', 'CalendarController@patchCalendarSlot')->int('id')->int('event_id');
-    $router->delete('/{id}/slots/{event_id}', 'CalendarController@deleteCalendarEvent')->int('id')->int('event_id');
+    $router->get('/{id}/events/{event_id}', 'CalendarController@getEvent')->int('id')->int('event_id');
+    $router->put('/{id}/events/{event_id}', 'CalendarController@patchCalendarEvent')->int('id')->int('event_id');
+    $router->delete('/{id}/events/{event_id}', 'CalendarController@deleteCalendarEvent')->int('id')->int('event_id');
 
-    $router->get('/{id}/slots/{event_id}/email-notifications', 'CalendarController@getSlotEmailNotifications')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/email-notifications', 'CalendarController@saveSlotEmailNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/details', 'CalendarController@updateEventDetails')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/availability', 'CalendarController@updateEventAvailability')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/limits', 'CalendarController@updateEventLimits')->int('id')->int('event_id');
 
-    $router->get('/{id}/slots/{event_id}/booking-fields', 'CalendarController@getSlotBookingFields')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/booking-fields', 'CalendarController@saveSlotBookingFields')->int('id')->int('event_id');
+    $router->get('/{id}/events/{event_id}/email-notifications', 'CalendarController@getEventEmailNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/email-notifications', 'CalendarController@saveEventEmailNotifications')->int('id')->int('event_id');
+
+    $router->get('/{id}/events/{event_id}/booking-fields', 'CalendarController@getEventBookingFields')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/booking-fields', 'CalendarController@saveEventBookingFields')->int('id')->int('event_id');
 });
 
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {

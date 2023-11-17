@@ -56,7 +56,7 @@ export const LandingPage = props => {
         }
         setIsLoading(true);
         apiFetch({
-            path: addQueryArgs('fluent-booking/v2/calendars/'+calendarId+'/slots/'+slotId, {
+            path: addQueryArgs('fluent-booking/v2/calendars/'+calendarId+'/events/'+slotId, {
                 ...queryArgs
             })
         })

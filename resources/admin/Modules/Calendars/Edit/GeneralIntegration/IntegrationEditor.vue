@@ -457,7 +457,7 @@ export default {
         },
         loadMergeFields() {
             this.loading_list = true;
-            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
 
             this.$get(url, {
                 list_id: this.settings.list_id,
@@ -483,7 +483,7 @@ export default {
                 data_type: 'stringify',
             };
 
-            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
 
             this.$post(url, data)
                 .then(response => {
