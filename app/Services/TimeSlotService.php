@@ -234,7 +234,7 @@ class TimeSlotService
 
             $remaining = 0;
 
-            if ($this->calendarSlot->id == $booking->event_id) {
+            if ($bufferTime && $this->calendarSlot->id == $booking->event_id) {
                 $beforeBufferTime = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $afterBufferTime = date('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 if ($maxBooking > $booked) {
@@ -242,14 +242,12 @@ class TimeSlotService
                     $rangedItems = [];
                     if ($beforeBufferTime < $booking->start_time) {
                         $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                            'event_id'  => $booking->event_id,
                             'start'     => $beforeBufferTime,
                             'end'       => $booking->start_time,
                             'remaining' => $remaining,
                         ]);
                     } else if ($afterBufferTime > $booking->end_time) {
                         $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                            'event_id'  => $booking->event_id,
                             'start'     => $booking->end_time,
                             'end'       => $afterBufferTime,
                             'remaining' => $remaining,
@@ -296,6 +294,8 @@ class TimeSlotService
             }
         }
 
+        $books = apply_filters('fluent_booking/local_booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+
         $remoteBookings = apply_filters('fluent_booking/remote_booked_events', [], $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
 
         if (!$remoteBookings) {
@@ -320,7 +320,7 @@ class TimeSlotService
 
             return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
         }
-
+        
         foreach ($remoteBookings as $slot) {
             $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                 'start' => $slot['start'],
