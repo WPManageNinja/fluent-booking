@@ -55,6 +55,11 @@ class Client
 		return "{$this->baseUrl}/{$param}";
 	}
 
+	public function createCalendar($data)
+	{
+		return new Calendar($data, $this);
+	}
+
 	public function  getCalendarsInfo($url)
     {
         $payload = '<?xml version="1.0" encoding="utf-8"?>

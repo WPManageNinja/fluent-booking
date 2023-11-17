@@ -18,6 +18,11 @@ class Calendar implements \JsonSerializable
 		$this->client = $client;
 	}
 
+	public function getData()
+	{
+		return $this->data;
+	}
+
 	public function __get($key)
 	{
 		if (isset($this->data[$key])) {
