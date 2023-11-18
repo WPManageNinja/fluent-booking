@@ -7,6 +7,8 @@
 
     window['fcal_translate'] = i18;
 
+    let wrapDom;
+
     export let appData;
     export let handleBack;
 
@@ -32,45 +34,24 @@
         dispatch('handleBack');
     }
 
-    onMount(() => {
-
-        timezone = util.dayjs.tz.guess();
-
-        appReady = true;
-        if (window.outerWidth <= 1045) {
-            if (!isFluentform) {
-                isMobile = true;
-            } else {
-                if (window.outerWidth <= 608) {
-                    isMobile = true;
-                }
-            }
+    function checkDevice() {
+        if (wrapDom.parentNode.offsetWidth <= 1045) {
+            isMobile = true;
         }
-        if (window.outerWidth < 400) {
+
+        if (wrapDom.parentNode.offsetWidth < 400) {
             isXsDevice = true;
         }
-        if (appReady === true) {
-            setTimeout(() => {
+    }
 
-            }, 2000)
-        }
-        setTimeout(() => {
-            if (!isFluentform) {
-                const calendarHolder = document.querySelector(".fcal_calendar_inner:not(.fcal_form_calendar)").offsetWidth;
-                if (calendarHolder <= 650) {
-                    isMobile = true;
-                }
-            }
-        }, 1000)
+    onMount(() => {
+        timezone = util.dayjs.tz.guess();
+        appReady = true;
+        checkDevice();
     });
 
     window.onresize = function () {
-        if (window.outerWidth <= 1045) {
-            isMobile = true;
-        }
-        if (window.outerWidth < 400) {
-            isXsDevice = true;
-        }
+        checkDevice();
     };
 
     function onPaymentsVisibilityChanged(visibility) {
@@ -129,11 +110,7 @@
 
     function dayClicked(day) {
         component.parentNode.classList.add("f_cal_day_selected");
-
-        const calendarHolder = document.querySelector(".fcal_holder.f_cal_day_selected").offsetWidth;
-        if (!isFluentform && calendarHolder <= 660) {
-            isMobile = true;
-        }
+        checkDevice();
     }
 
     function resetSelection() {
@@ -147,7 +124,7 @@
     }
 </script>
 <div class="fcal_wrap">
-    <div class="fcal_holder" id={appData.id}>
+    <div bind:this={wrapDom} class="fcal_holder" id={appData.id}>
         <div bind:this={component}
              class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
             {#if isBookingDone}
