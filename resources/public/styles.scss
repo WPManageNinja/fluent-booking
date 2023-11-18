@@ -576,33 +576,33 @@ $lightDark: #6b7280;
     }
 
     .calendar {
-      span:not(.day-name) {
-        padding: 0;
-
-        span {
-          padding: 0;
-          border-radius: 4px;
-        }
-      }
-
       .day {
         text-align: center;
-        padding: 10px;
         box-sizing: border-box;
-        position: relative;
         z-index: 1;
         color: #B4B9C1;
-
         font-size: 14px;
         font-weight: 500;
-        line-height: 20px;
+        text-align: center;
+
+        padding-top: 100% !important;
+        display: block;
+        position: relative;
+
+        > span {
+          position: absolute !important;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+        }
 
         .is-today {
-          line-height: 40px;
-          width: 40px;
           margin: auto;
-          display: block;
-          position: relative;
           z-index: 1;
           color: var(--fcal_primary_color);
 
@@ -681,8 +681,6 @@ $lightDark: #6b7280;
           text-align: center;
           font-size: 14px;
           font-weight: 500;
-          height: 44px;
-          line-height: 44px;
         }
 
         &.day-disabled {
@@ -696,8 +694,6 @@ $lightDark: #6b7280;
 
           &.day_is_selected {
             span {
-              line-height: 36px;
-
               &:before {
                 content: '';
                 width: 4px;
@@ -720,14 +716,8 @@ $lightDark: #6b7280;
           }
 
           span {
-            position: relative;
             color: #445164;
             font-weight: 500;
-            display: block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            margin: 0 auto;
             border-radius: var(--fcal_date_radius);
             background-color: #e5e7eb;
             transition: .3s;
@@ -749,7 +739,9 @@ $lightDark: #6b7280;
           }
         }
       }
-
+      .day-name {
+        line-height: 50px;
+      }
     }
   }
 
@@ -1055,7 +1047,7 @@ $lightDark: #6b7280;
   &.focused {
     border: 1px solid var(--fcal_primary_color) !important;
   }
-  
+
   .svelte-select-list {
     border: 1px solid #EAECF0 !important;
     border-radius: 8px;
@@ -1079,10 +1071,11 @@ $lightDark: #6b7280;
 
   .item {
     &.active {
-        background: var(--fcal_primary_color) !important;
+      background: var(--fcal_primary_color) !important;
     }
+
     &.hover {
-        background: #e5e7eb !important;
+      background: #e5e7eb !important;
     }
   }
 }
@@ -1849,12 +1842,15 @@ input.fcal_input:disabled {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+
     &:hover {
       border-color: var(--fcal_primary_color);
+
       svg {
         fill: var(--fcal_primary_color);
       }
     }
+
     svg {
       width: 25px;
       height: 25px;
