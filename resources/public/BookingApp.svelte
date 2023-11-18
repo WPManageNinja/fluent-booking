@@ -8,6 +8,7 @@
     window['fcal_translate'] = i18;
 
     let wrapDom;
+    let wrapperClass = '';
 
     export let appData;
     export let handleBack;
@@ -27,6 +28,8 @@
     let selectedDate = false;
     let showingPayments = false;
     let timezone = '';
+    let selectedDay = false;
+    let wrapperWidth = 800;
 
     const dispatch = createEventDispatcher();
 
@@ -35,12 +38,15 @@
     }
 
     function checkDevice() {
-        if (wrapDom.parentNode.offsetWidth <= 1045) {
-            isMobile = true;
-        }
-
-        if (wrapDom.parentNode.offsetWidth < 400) {
-            isXsDevice = true;
+        wrapperWidth = wrapDom.parentNode.offsetWidth;
+        if(wrapperWidth >= 1000) {
+            wrapperClass = 'fcal_on_lg';
+        } else if(wrapperWidth >= 800) {
+            wrapperClass = 'fcal_on_md';
+        } else if(wrapperWidth >= 600) {
+            wrapperClass = 'fcal_on_sm';
+        } else {
+            wrapperClass = 'fcal_on_xs';
         }
     }
 
@@ -109,12 +115,14 @@
     }
 
     function dayClicked(day) {
+        selectedDay = day;
         component.parentNode.classList.add("f_cal_day_selected");
         checkDevice();
     }
 
     function resetSelection() {
-        selectedDate = false;
+        selectedDate = null;
+        selectedDay = null;
         component.parentNode.classList.remove("f_cal_day_selected");
         component.parentNode.classList.remove("f_cal_spot_selected");
 
@@ -125,8 +133,7 @@
 </script>
 <div class="fcal_wrap">
     <div bind:this={wrapDom} class="fcal_holder" id={appData.id}>
-        <div bind:this={component}
-             class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} { isXsDevice ? 'fcal_on_xs' : '' } { isMobile ? 'fcal_on_mobile' : 'fcal_on_desktop' }">
+        <div data-width="{wrapperWidth}px" bind:this={component} class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDay ? 'fcal_day_selected' : ''} {wrapperClass}">
             {#if isBookingDone}
                 <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
             {:else }
