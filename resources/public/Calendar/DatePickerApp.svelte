@@ -301,7 +301,7 @@
                         </svg>
                     </i>
                 </div>
-                <span>{ dateTimeI18(selectedDate, 'dddd, MMM') } {getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span>
+                <span class="fcal_slot_date_info">{ dateTimeI18(selectedDate, 'ddd') } <span>{getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span></span>
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
                         <input type="radio" id="12_hours_selector" bind:group={formatHours} value="12"/>

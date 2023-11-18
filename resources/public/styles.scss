@@ -265,42 +265,17 @@ $lightDark: #6b7280;
   border: 1px solid rgba(26, 26, 26, 0.1);
   overflow: hidden;
 
-  &.fcal_on_desktop {
-    transition: .3s;
-
-    .fcal_calendar_slot_wrap {
-      .fcal_slot_picker {
-        overflow: auto;
-        max-height: 100%;
-
-        &::-webkit-scrollbar {
-          width: 5px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: #e4e4e7;
-          border-radius: 10px;
-        }
-
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
-      }
-    }
-  }
-
   .fcal_side {
-    width: 100% !important;
-    min-width: 360px;
+    max-width: 100%;
+    width: 360px;
     border-right: 1px solid #EAECF0;
     transition: all .22s ease-out;
     -webkit-transition: all .22s ease-out;
     -moz-transition: all .22s ease-out;
     -o-transition: all .22s ease-out;
     padding: 30px 36px 23px 20px;
-    max-width: 360px;
     overflow: auto;
-    min-height: 500px;
+    min-height: 450px;
     z-index: 9;
     background: #ffffff;
 
@@ -346,7 +321,6 @@ $lightDark: #6b7280;
     }
 
   }
-
 
   .fcal_date_wrapper {
     width: auto;
@@ -512,12 +486,8 @@ $lightDark: #6b7280;
     }
 
     .fcal_day_picker {
-      padding: 30px 20px;
       height: 100%;
       position: relative;
-      @media (max-width: $breakpoint-tablet) {
-        height: auto;
-      }
 
       .fcal_timezone_select {
         max-width: 350px;
@@ -533,15 +503,9 @@ $lightDark: #6b7280;
       }
     }
 
-
     .calendar-container {
-      //width: fit-content;
-      //overflow: auto;
-      //box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-      //border-radius: 10px;
-      //background: #fff;
-      //max-width: 1200px;
-      max-width: 368px;
+      max-width: 390px;
+      padding: 30px 20px;
     }
 
     .calendar-header {
@@ -744,7 +708,7 @@ $lightDark: #6b7280;
       }
     }
   }
-  
+
   .fcal_icon_item {
     display: flex;
     column-gap: 8px;
@@ -817,88 +781,69 @@ $lightDark: #6b7280;
       }
     }
   }
-}
 
-.fcal_multi_locations {
-  position: relative;
-  margin-bottom: 6px;
-
-  .fcal_multi_location_title {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-
-    svg {
-      width: 16px;
-
-      path,
-      circle {
-        stroke: #697483;
-      }
-    }
-
-    &:hover .fcal_location_tooltip {
-      opacity: 1;
-      visibility: visible;
+  &.fcal_day_selected {
+    .calendar-container {
+      border-right: 1px solid #dadce0
     }
   }
 
-  .fcal_location_tooltip {
-    position: absolute;
-    bottom: 100%;
-    background: #000000;
-    border-radius: 8px;
-    color: #fff;
-    padding: 10px 15px;
-    opacity: 0;
-    margin: 0;
-    visibility: hidden;
-    transition: .2s;
-    list-style: none;
-
-    .title {
-      margin-bottom: 10px;
+  &.fcal_on_md,&.fcal_on_lg {
+    .fcal_back {
+      display: none;
     }
+  }
 
-    li {
-      font-size: 12px;
-      margin-bottom: 6px;
+  &.fcal_on_sm,&.fcal_on_xs {
+    min-width: 100%;
+  }
 
-      &:last-child {
-        margin-bottom: 0;
+  &.fcal_on_md {
+    &.fcal_day_selected {
+      .fcal_side {
+        width: 300px;
+      }
+    }
+  }
+
+  &.fcal_on_sm {
+    .fcal_side {
+      width: 240px;
+    }
+    &.fcal_day_selected {
+
+      .fcal_date_wrapper {
+        width: calc( 100% - 240px);
       }
 
-      &:not(.title) {
-        padding-left: 15px;
+      .calendar-container {
+        display: none;
       }
-
-      .fcal_icon_item {
-        margin-bottom: 6px;
-
-        img {
-          filter: contrast(0);
-        }
-
-        &:last-child {
-          margin-bottom: 0;
-        }
+      .fcal_calendar_slot_wrap {
+        padding: 0 20px 20px !important;
+        max-height: 450px;
+        overflow: auto;
+        min-width: 300px;
       }
-
-      .fcal_loc_text {
-        font-size: 12px;
-        color: #ffffff;
-        font-weight: 400;
+      .fcal_slot_picker {
+        width: 100%;
+        display: block;
+        position: relative;
       }
     }
   }
 }
 
-.fcal_calendar_slot_wrap {
-  display: flex;
-  column-gap: 40px;
-  align-items: flex-start;
+.fcal_slot_picker {
+  min-width: 220px;
   position: relative;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  background: #ffffff;
+  right: 0px;
+  top: 0;
+  padding: 0 0 20px 0;
   transition: .3s;
   -webkit-transition: .3s;
   -moz-transition: .3s;
@@ -906,13 +851,14 @@ $lightDark: #6b7280;
   -o-transition: .3s;
 
   &.is_active {
-    padding-right: 310px;
+    opacity: 1;
+    visibility: visible;
+    height: 100%;
+    overflow: auto;
   }
-}
 
+  padding-right: 20px;
 
-.fcal_slot_items {
-  padding-right: 8px;
 
   .fcal_spot_lists {
     margin: 0;
@@ -924,7 +870,6 @@ $lightDark: #6b7280;
       border: 1px solid #ADB5C2;
       border-radius: 4px;
       width: 100%;
-      //align-items: center;
       transition: .3s;
       position: relative;
       padding: 2px 2px 2px 0;
@@ -933,7 +878,6 @@ $lightDark: #6b7280;
       -moz-transition: .3s;
       -ms-transition: .3s;
       -o-transition: .3s;
-
       + .fcal_spot {
         margin-top: 15px;
       }
@@ -1038,6 +982,155 @@ $lightDark: #6b7280;
       }
     }
   }
+
+  .fcal_slot_picker_header {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1B2533;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 12px;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 30px 0px 20px 0;
+
+    .fcal_slot_picker_header_action {
+      display: flex;
+      align-items: center;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: .25rem;
+
+      .format-hour {
+        overflow: hidden;
+
+        input {
+          opacity: 0;
+          visibility: hidden;
+          position: absolute;
+
+          &:checked ~ label {
+            background: #e5e7eb;
+          }
+        }
+
+        label {
+          cursor: pointer;
+          line-height: 1.25;
+          font-size: 12px;
+          color: #374151;
+          padding: 0.35rem 0.25rem;
+          border-radius: 8px;
+          display: block;
+          width: 40px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+.fcal_multi_locations {
+  position: relative;
+  margin-bottom: 6px;
+
+  .fcal_multi_location_title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+
+    svg {
+      width: 16px;
+
+      path,
+      circle {
+        stroke: #697483;
+      }
+    }
+
+    &:hover .fcal_location_tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .fcal_location_tooltip {
+    position: absolute;
+    bottom: 100%;
+    background: #000000;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px 15px;
+    opacity: 0;
+    margin: 0;
+    visibility: hidden;
+    transition: .2s;
+    list-style: none;
+
+    .title {
+      margin-bottom: 10px;
+    }
+
+    li {
+      font-size: 12px;
+      margin-bottom: 6px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:not(.title) {
+        padding-left: 15px;
+      }
+
+      .fcal_icon_item {
+        margin-bottom: 6px;
+
+        img {
+          filter: contrast(0);
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .fcal_loc_text {
+        font-size: 12px;
+        color: #ffffff;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.fcal_calendar_slot_wrap {
+  display: flex;
+  column-gap: 40px;
+  align-items: flex-start;
+  position: relative;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -ms-transition: .3s;
+  -o-transition: .3s;
+
+  &.is_active {
+    padding-right: 240px;
+  }
 }
 
 .svelte-select {
@@ -1080,90 +1173,7 @@ $lightDark: #6b7280;
   }
 }
 
-.fcal_slot_picker {
-  min-width: 270px;
-  position: relative;
-  position: absolute;
-  visibility: hidden;
-  opacity: 0;
-  background: #ffffff;
-  right: 0px;
-  top: 0;
-  transition: .3s;
-  -webkit-transition: .3s;
-  -moz-transition: .3s;
-  -ms-transition: .3s;
-  -o-transition: .3s;
 
-  &.is_active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: -20px;
-    width: 1px;
-    height: calc(100% + 66px);
-    background: #EAECF0;
-    top: -30px;
-  }
-
-  .fcal_slot_picker_header {
-    margin: 0 0 20px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 24px;
-    color: #1B2533;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 12px;
-    background: #ffffff;
-    position: sticky;
-    top: 0;
-    z-index: 5;
-
-    .fcal_slot_picker_header_action {
-      display: flex;
-      align-items: center;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: .25rem;
-
-      .format-hour {
-        overflow: hidden;
-
-        input {
-          opacity: 0;
-          visibility: hidden;
-          position: absolute;
-
-          &:checked ~ label {
-            background: #e5e7eb;
-          }
-        }
-
-        label {
-          cursor: pointer;
-          line-height: 1.25;
-          font-size: 12px;
-          color: #374151;
-          padding: 0.35rem 0.25rem;
-          border-radius: 8px;
-          display: block;
-          width: 40px;
-          text-align: center;
-        }
-      }
-    }
-
-    .fcal_back {
-      display: none;
-    }
-  }
-}
 
 .fcal_loading_dates {
   position: absolute;
@@ -1186,47 +1196,6 @@ $lightDark: #6b7280;
     color: rgb(84 82 82);
     font-size: 17px;
     margin-bottom: 15px !important;
-  }
-}
-
-.fcal_on_desktop {
-  .fcal_timezone_select {
-    .svelte-select {
-      position: relative !important;
-      display: flex;
-      flex-direction: column;
-      width: calc(100% - 1px) !important;
-      max-width: 350px !important;
-      padding-left: 20px !important;
-
-      .svelte-select-list {
-        position: absolute !important;
-        display: block !important;
-        left: auto !important;
-        right: 0 !important;
-        box-shadow: none !important;
-        max-width: 350px !important;
-        box-sizing: border-box !important;
-        padding: 0 !important;
-
-        > * {
-          box-sizing: border-box !important;
-          padding-left: 5px !important;
-        }
-
-        .item {
-          padding-left: 10px !important;
-        }
-
-        * {
-          padding: 0 !important;
-          margin: 0 !important;
-          max-width: 100% !important;
-          width: auto !important;
-          box-sizing: border-box !important;
-        }
-      }
-    }
   }
 }
 
@@ -1271,8 +1240,6 @@ $lightDark: #6b7280;
   }
 
   .fcal_date_wrapper .fcal_day_picker {
-    padding: 15px 10px;
-
     .svelte-1ac5fol {
       grid-template-columns: repeat(7, minmax(40px, 6px));
     }
@@ -1441,136 +1408,6 @@ $lightDark: #6b7280;
   }
 }
 
-.fcal_on_mobile {
-  height: auto !important;
-
-  &.fcal_calendar_inner {
-    width: 100%;
-    max-width: 400px;
-
-    .fcal_date_wrapper {
-      width: 100%;
-
-      .fcal_day_picker_wrap {
-        .fcal_day_picker {
-          .fcal_calendar_slot_wrap {
-            &.is_active {
-              .fcal_slot_picker {
-                &.is_active {
-                  width: 100%;
-                }
-              }
-            }
-
-            .fcal_slot_picker {
-              max-height: 400px;
-              overflow: auto;
-
-              &::-webkit-scrollbar {
-                width: 5px;
-              }
-
-              &::-webkit-scrollbar-thumb {
-                background: #e4e4e7;
-                border-radius: 10px;
-              }
-
-              &::-webkit-scrollbar-track {
-                background: transparent;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .fcal_slot_picker_header {
-    text-align: center;
-    border-bottom: 1px solid #c8c7c7;
-  }
-
-  .fcal_date_wrapper {
-    &.is_active {
-      padding-right: 0;
-      min-width: 100%;
-
-      .fcal_day_picker_wrap {
-        transform: translateX(0);
-        display: none;
-      }
-
-      .fcal_date_event_details {
-        &.is_active {
-          display: block;
-        }
-      }
-    }
-
-    .fcal_date_event_details {
-      width: 100%;
-      max-width: 100% !important;
-      position: relative;
-      visibility: visible;
-      opacity: 1;
-      display: none;
-    }
-
-    .fcal_calendar_slot_wrap {
-      flex-direction: column;
-      gap: 30px;
-
-      .fcal_slot_picker {
-        //min-width: 100%;
-        &.is_active {
-          display: none;
-        }
-      }
-
-      &.is_active {
-        padding-right: 0;
-      }
-
-      .fcal_slot_picker {
-        position: relative;
-        right: auto;
-        opacity: 1;
-        visibility: visible;
-        display: none;
-
-        .fcal_slot_picker_header {
-          margin-bottom: 25px;
-          padding-bottom: 10px;
-        }
-
-        &:before {
-          display: none;
-        }
-
-        &.is_active {
-          display: block;
-        }
-      }
-    }
-  }
-
-  &.fcal_calendar_inner {
-    flex-direction: column;
-
-    .fcal_side {
-      width: 100%;
-      max-width: 100%;
-      min-width: 100%;
-      border-right: none;
-      max-height: 100%;
-      min-height: auto;
-    }
-  }
-
-  .fcal_sec_heading {
-    text-align: center;
-  }
-}
 
 .calendar_nav {
   svg {
@@ -1757,74 +1594,6 @@ $lightDark: #6b7280;
 
 input.fcal_input:disabled {
   background: #f6f6f6;
-}
-
-@media (max-width: 696px) {
-  .fcal_calendar_inner {
-    &.fcal_form_calendar {
-      .fcal_date_wrapper {
-        .calendar {
-          grid-template-columns: repeat(7, minmax(45px, 6px));
-          grid-template-rows: 45px;
-          grid-auto-rows: 45px;
-
-          .day {
-            width: 40px;
-          }
-        }
-      }
-
-      .fcal_slot_picker_header {
-        span {
-          font-size: 12px;
-        }
-      }
-
-      .fcal_slot_picker {
-        min-width: 200px;
-
-        .fcal_slot_picker_header {
-          gap: 4px;
-          padding-right: 6px;
-
-          .fcal_slot_picker_header_action {
-            .format-hour {
-              label {
-                font-size: 12px;
-                padding: 4px 3px;
-                width: 36px;
-              }
-            }
-          }
-        }
-
-        .fcal_slot_items {
-          .fcal_spot_lists {
-            .fcal_spot {
-              .fcal_spot_name {
-                padding: 10px 16px;
-                font-size: 13px;
-              }
-
-              .fcal_spot_confirm {
-                padding: 10px 16px;
-                font-size: 13px;
-
-                svg {
-                  width: 16px;
-                  height: 16px;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      &.fcal_on_mobile {
-        margin-right: auto;
-      }
-    }
-  }
 }
 
 
