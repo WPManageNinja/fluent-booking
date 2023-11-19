@@ -703,6 +703,7 @@ $lightDark: #6b7280;
           }
         }
       }
+
       .day-name {
         line-height: 50px;
       }
@@ -788,13 +789,30 @@ $lightDark: #6b7280;
     }
   }
 
-  &.fcal_on_md,&.fcal_on_lg {
-    .fcal_back {
+  &.fcal_spot_selected {
+    height: auto;
+
+    .fcal_day_picker_wrap {
       display: none;
+    }
+
+    .fcal_date_event_details {
+      position: relative;
     }
   }
 
-  &.fcal_on_sm,&.fcal_on_xs {
+  &.fcal_on_md, &.fcal_on_lg {
+    &.fcal_spot_selected .fcal_date_wrapper {
+      min-width: 450px;
+    }
+    .fcal_slot_picker_header {
+      .fcal_back {
+        display: none;
+      }
+    }
+  }
+
+  &.fcal_on_sm, &.fcal_on_xs {
     min-width: 100%;
   }
 
@@ -810,10 +828,45 @@ $lightDark: #6b7280;
     .fcal_side {
       width: 240px;
     }
-    &.fcal_day_selected {
 
+    &.fcal_day_selected {
       .fcal_date_wrapper {
-        width: calc( 100% - 240px);
+        width: calc(100% - 240px);
+      }
+
+      .calendar-container {
+        display: none;
+      }
+
+      .fcal_calendar_slot_wrap {
+        padding: 0 20px 20px !important;
+        max-height: 450px;
+        overflow: auto;
+        min-width: 300px;
+      }
+
+      .fcal_slot_picker {
+        width: 100%;
+        display: block;
+        position: relative;
+      }
+    }
+  }
+
+  &.fcal_on_xs {
+    flex-direction: column;
+
+    .fcal_side {
+      border: none;
+      padding: 20px;
+      width: 100%;
+      height: auto;
+      min-height: auto;
+    }
+
+    &.fcal_day_selected {
+      .fcal_date_wrapper {
+        width: 100%;
       }
 
       .calendar-container {
@@ -825,9 +878,11 @@ $lightDark: #6b7280;
         overflow: auto;
         min-width: 300px;
       }
+
       .fcal_slot_picker {
         width: 100%;
         display: block;
+        padding-right: 10px;
         position: relative;
       }
     }
@@ -878,6 +933,7 @@ $lightDark: #6b7280;
       -moz-transition: .3s;
       -ms-transition: .3s;
       -o-transition: .3s;
+
       + .fcal_spot {
         margin-top: 15px;
       }
@@ -1035,13 +1091,6 @@ $lightDark: #6b7280;
 }
 
 
-
-
-
-
-
-
-
 .fcal_multi_locations {
   position: relative;
   margin-bottom: 6px;
@@ -1174,7 +1223,6 @@ $lightDark: #6b7280;
 }
 
 
-
 .fcal_loading_dates {
   position: absolute;
   top: 0;
@@ -1230,18 +1278,6 @@ $lightDark: #6b7280;
 
     svg {
       width: 16px;
-    }
-  }
-}
-
-.fcal_calendar_inner.fcal_on_xs {
-  .fcal_side {
-    padding: 15px 10px;
-  }
-
-  .fcal_date_wrapper .fcal_day_picker {
-    .svelte-1ac5fol {
-      grid-template-columns: repeat(7, minmax(40px, 6px));
     }
   }
 }
