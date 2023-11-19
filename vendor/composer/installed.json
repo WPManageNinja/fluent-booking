@@ -44,25 +44,77 @@
             "install-path": "../woocommerce/action-scheduler"
         },
         {
-            "name": "wpfluent/framework",
-            "version": "2.1.20",
-            "version_normalized": "2.1.20.0",
+            "name": "wpfluent/caldav",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:wpfluent/framework.git",
-                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c"
+                "url": "git@github.com:wpfluent/caldav.git",
+                "reference": "495167a7de374211e923fda2b3f77033ae9ae07d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
-                "reference": "e9b96f41a151fdcd6c9256ab06bcc8d2d03cdf9c",
+                "url": "https://api.github.com/repos/wpfluent/caldav/zipball/495167a7de374211e923fda2b3f77033ae9ae07d",
+                "reference": "495167a7de374211e923fda2b3f77033ae9ae07d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "time": "2023-11-17T14:10:21+00:00",
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "wpfluent": {
+                    "type": "wpfluent-package"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "FluentBooking\\Package\\CalDav\\": "src/"
+                }
+            },
+            "license": [
+                "GPLv2 or later"
+            ],
+            "authors": [
+                {
+                    "name": "Sheikh Heera",
+                    "email": "heera.sheikh77@gmail.com"
+                }
+            ],
+            "description": "A caldav client for wpfluent framework.",
+            "keywords": [
+                "wp",
+                "wpfluent"
+            ],
+            "support": {
+                "source": "https://github.com/wpfluent/caldav/tree/master",
+                "issues": "https://github.com/wpfluent/caldav/issues"
+            },
+            "install-path": "../wpfluent/caldav"
+        },
+        {
+            "name": "wpfluent/framework",
+            "version": "2.2.25",
+            "version_normalized": "2.2.25.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpfluent/framework.git",
+                "reference": "cf76ae421411613cb44a38451e230f8a7b79408b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/cf76ae421411613cb44a38451e230f8a7b79408b",
+                "reference": "cf76ae421411613cb44a38451e230f8a7b79408b",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.3|^8.0"
             },
-            "time": "2023-10-23T17:20:38+00:00",
+            "time": "2023-11-19T10:10:00+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -72,7 +124,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "WPFluent\\": "src/WPFluent"
+                    "FluentBooking\\Framework\\": "src/WPFluent"
                 }
             },
             "license": [
@@ -86,7 +138,7 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.1.20",
+                "source": "https://github.com/wpfluent/framework/tree/2.2.25",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
             "install-path": "../wpfluent/framework"

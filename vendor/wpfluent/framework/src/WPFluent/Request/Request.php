@@ -141,7 +141,7 @@ class Request
      */
     public function get($key = null, $default = null)
     {
-        return Arr::get($this->inputs(), $key, $default);
+        return Helper::dataGet($this->inputs(), $key, $default);
     }
 
     /**
@@ -181,10 +181,23 @@ class Request
 
             if ($value !== null) {
                 while ($callback = array_shift($callbacks)) {
-                    $value = $callback($value);
+                    if (is_array($value)) {
+                        $value = array_map($callback, $value);
+                    } else {
+                        $value = $callback($value);
+                    }
                 }
 
-                $result[$field] = $value;
+                if (str_contains($field, '*')) {
+
+                    $fieldParts = explode('.', $field);
+
+                    $field = implode('.', array_filter($fieldParts, function($v) {
+                        return $v != '*';
+                    }));
+                }
+
+                Arr::set($result, $field, $value);
             }
         }
 
@@ -212,7 +225,9 @@ class Request
         if (!$this->isJson()) return;
         
         if (!isset($this->json)) {
-            $this->json = (array) json_decode($this->getContent(), true);
+            $json = $this->get_json_params() ?: $this->getContent();
+            
+            $this->json = (array) json_decode($json, true);
         }
 
         if (is_null($key)) {
@@ -256,7 +271,9 @@ class Request
      */
     public function cookie($key = null, $default = null)
     {
-        return $key ? Arr::get($this->cookie, $key, $default) : $this->cookie;
+        $cookie = $key ? Arr::get($this->cookie, $key, $default) : $this->cookie;
+
+        return json_decode(base64_decode($cookie, true));
     }
 
     /**
@@ -341,10 +358,6 @@ class Request
 
     public function mergeInputsFromRestRequest($wpRestRequest)
     {
-        $this->request = array_merge(
-            $this->request, $wpRestRequest->get_params()
-        );
-
         $this->post = array_merge(
             $this->post, $this->clean($wpRestRequest->get_body_params())
         );
@@ -366,6 +379,18 @@ class Request
     public function input($key = null, $default = null)
     {
         return Arr::get($this->inputs(), $key, $default);
+    }
+
+    /**
+     * Remove a key(s) from the $request array
+     * @param  mixed $key
+     * @return self
+     */
+    public function forget($key)
+    {
+        Arr::forget($this->request, $key);
+
+        return $this;
     }
 
     /**
@@ -510,6 +535,20 @@ class Request
                 'Unprocessable Entity!', 422, null, $validator->errors()
             );
         }
+    }
+
+    /**
+     * Abort the request.
+     * 
+     * @param  integer $status
+     * @param  string  $message
+     * @return null
+     */
+    public function abort($status = 403, $message = '')
+    {
+        $message = $message ?: 'Request has benn aborted.';
+        
+        $this->app->response->json(['message' => $message], $status);
     }
 
     /**

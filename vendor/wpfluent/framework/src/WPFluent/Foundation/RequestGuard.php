@@ -50,9 +50,11 @@ abstract class RequestGuard
      * @return array
      * @throws FluentBooking\Framework\Validator\ValidationException
      */
-    public function validate(Validator $validator)
+    public function validate(Validator $validator = null)
     {
         try {
+
+            $validator = $validator ?: App::make(Validator::class);
 
             if (!($rules = (array) $this->rules())) return;
 
@@ -72,6 +74,25 @@ abstract class RequestGuard
                 App::getInstance()->doCustomAction('handle_exception', $e);
             }
         }
+    }
+
+    /**
+     * Handles validation including before and after calls
+     *
+     * @throws FluentBooking\Framework\Validator\ValidationException
+     * @return null
+     */
+    public static function applyValidation()
+    {
+        $instance = new static;
+
+        $request = App::getInstance('request');
+
+        $request->merge($instance->beforeValidation());
+
+        $instance->validate(App::make(Validator::class));
+
+        $request->merge($instance->afterValidation());
     }
 
     /**

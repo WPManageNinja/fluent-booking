@@ -2,7 +2,10 @@
 
 namespace FluentBooking\Framework\Validator;
 
+use Closure;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Str;
+use FluentBooking\Framework\Foundation\App;
 
 class Validator
 {
@@ -55,6 +58,18 @@ class Validator
     ];
 
     /**
+     * The current rule being handled
+     * @var mixed
+     */
+    protected $currentRule = null;
+
+    /**
+     * Custom rules added by developer
+     * @var array
+     */
+    protected static $customRules = [];
+
+    /**
      * Create a new Validator instance.
      *
      * @param array $data
@@ -65,7 +80,13 @@ class Validator
      */
     public function __construct(array $data = [], array $rules = [], array $messages = [])
     {
-        $this->init($data, $rules, $messages);
+        $this->data = $data;
+
+        $this->messages = [];
+
+        $this->customMessages = $messages;
+
+        $this->setRules($rules);
     }
 
     /**
@@ -77,22 +98,9 @@ class Validator
      *
      * @return \FluentBooking\Framework\Validator\Validator
      */
-    public function make(array $data = [], array $rules = [], array $messages = [])
+    public function make(array $data, array $rules = [], array $messages = [])
     {
-        return $this->init($data, $rules, $messages);
-    }
-
-    protected function init(array $data = [], array $rules = [], array $messages = [])
-    {
-        $this->data = $data;
-
-        $this->setRules($rules);
-
-        $this->messages = [];
-
-        $this->customMessages = $messages;
-
-        return $this;
+        return new static($data, $rules, $messages);
     }
 
     /**
@@ -104,9 +112,7 @@ class Validator
      */
     protected function setRules(array $rules = [])
     {
-        $this->rules = array_merge_recursive(
-            $this->rules, (new ValidationRuleParser($this->data))->explode($rules)
-        );
+        $this->rules = array_merge_recursive($this->rules, $rules);
 
         return $this;
     }
@@ -118,9 +124,11 @@ class Validator
      */
     public function validate()
     {
+        $this->rules = (new ValidationRuleParser($this->data))->explode($this->rules);
+
         foreach ($this->rules as $attribute => $rules) {
-            foreach ($rules as $rule) {
-                $this->validateAttribute($attribute, $rule);
+            foreach ($rules as $key => $rule) {
+                $this->validateAttribute($attribute, $rule, $key);
             }
         }
 
@@ -135,19 +143,34 @@ class Validator
      *
      * @return void
      */
-    protected function validateAttribute($attribute, $rule)
+    protected function validateAttribute($attribute, $rule, $key = null)
     {
+        $this->currentRule = $rule;
+
         list($rule, $parameters) = ValidationRuleParser::parse($rule);
+
+        if ($rule === '') {
+            return;
+        }
 
         $value = $this->getValue($attribute);
 
+        if ($rule instanceof Closure) {
+            if ($message = $rule($attribute, $value, $this->rules, $this->data)) {
+                is_string($message) && $this->messages[$attribute][$key] = str_replace(
+                    ':attribute', $attribute, $message
+                );
+            }
+            return;
+        }
+
         $ruleCamelCase = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $rule)));
+        
+        $shouldValidate = $this->shouldValidate($ruleCamelCase, $attribute, $value);
 
         $method = 'validate'.$ruleCamelCase;
 
-        if ($this->shouldValidate($method, $ruleCamelCase, $attribute, $value) &&
-            ! $this->$method($attribute, $value, $parameters)
-        ) {
+        if ($shouldValidate && !$this->$method($attribute, $value, $parameters)) {
             $this->addFailure($attribute, $rule, $parameters);
         }
     }
@@ -260,9 +283,9 @@ class Validator
      *
      * @return bool
      */
-    public function shouldValidate($method, $rule, $attribute, $value)
+    public function shouldValidate($rule, $attribute, $value)
     {
-        return $this->hasMethod($method) && $this->presentOrRuleIsImplicit($rule, $attribute, $value);
+        return $this->presentOrRuleIsImplicit($rule, $attribute, $value);
     }
 
     /**
@@ -286,7 +309,7 @@ class Validator
      */
     protected function isImplicit($rule)
     {
-        return in_array($rule, $this->implicitRules);
+        return in_array($rule, $this->implicitRules) || in_array($rule, static::$customRules);
     }
 
     /**
@@ -301,5 +324,51 @@ class Validator
     protected function presentOrRuleIsImplicit($rule, $attribute, $value)
     {
         return $this->validatePresent($attribute, $value) || $this->isImplicit($rule);
+    }
+
+    public function extend($rule, $callback, $message = null)
+    {
+        $ruleCamelCase = ucwords(Str::camel($rule));
+
+        static::$customRules[$ruleCamelCase] = $callback;
+    }
+
+    /**
+     * Get all the custom rules with handlers
+     * 
+     * @return array
+     */
+    public function getExtentions()
+    {
+        return static::$customRules;
+    }
+
+    /**
+     * Handle dynamic calls for custom rules
+     * @param  string $method
+     * @param  array $params
+     * @return bool (true)
+     */
+    public function __call($method, $params)
+    {
+        list($attribute, $value, $params) = $params;
+
+        $rule = substr($this->currentRule, 0, strpos($this->currentRule, ':'));
+
+        if ($callback = Arr::get(static::$customRules, ucwords(str::camel($rule)))) {
+
+            if (is_string($callback) && class_exists($callback)) {
+                $callback = App::make($callback);
+            }
+
+            if ($message = $callback($attribute, $value, $this->rules, $this->data, ...$params)) {
+
+                is_string($message) && $this->messages[$attribute][$rule] = str_replace(
+                    ':attribute', $attribute, $message
+                );
+            }
+        }
+
+        return true;
     }
 }
