@@ -50,7 +50,8 @@ p {
   text-align: center;
   background: white;
   min-height: 500px;
-  max-width: 752px;
+  max-width: 810px;
+  width: 100%;
   padding: 20px;
   border: 1px solid rgba(26, 26, 26, 0.1);
   border-radius: 8px;
@@ -101,7 +102,6 @@ p {
     font-size: 110%;
   }
 }
-
 
 .book_up {
   margin: 30px 0;
