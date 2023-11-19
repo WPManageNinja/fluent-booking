@@ -3,7 +3,7 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import { createEventDispatcher } from 'svelte'
+    import {createEventDispatcher} from 'svelte'
 
     window['fcal_translate'] = i18;
 
@@ -23,12 +23,12 @@
     let calendarHeight = '';
     let component = null;
     let isBookingDone = false;
-    let isMobile = false;
-    let isXsDevice = false;
+
     let selectedDate = false;
+    let selectedDateTime = {};
+
     let showingPayments = false;
     let timezone = '';
-    let selectedDay = false;
     let wrapperWidth = 800;
 
     const dispatch = createEventDispatcher();
@@ -39,11 +39,11 @@
 
     function checkDevice() {
         wrapperWidth = wrapDom.parentNode.offsetWidth;
-        if(wrapperWidth >= 1000) {
+        if (wrapperWidth >= 1000) {
             wrapperClass = 'fcal_on_lg';
-        } else if(wrapperWidth >= 800) {
+        } else if (wrapperWidth >= 800) {
             wrapperClass = 'fcal_on_md';
-        } else if(wrapperWidth >= 600) {
+        } else if (wrapperWidth >= 600) {
             wrapperClass = 'fcal_on_sm';
         } else {
             wrapperClass = 'fcal_on_xs';
@@ -65,30 +65,7 @@
     }
 
     function spotSelected(spot) {
-
-        component.parentNode.classList.remove("f_cal_day_selected");
-        component.parentNode.classList.add("f_cal_spot_selected");
-
-        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-
-        // const height = calendarHeight + 135;
-        // calendar.style.height = height + 'px';
-        selectedDate = spot;
-
-
-        setTimeout(() => {
-            const currentHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
-            calendarHeight = currentHeight + 135;
-            calendar.style.height = calendarHeight + 'px';
-        }, 1000);
-
-        if (isFluentform) {
-            setTimeout(() => {
-                const formFieldsHeight = document.querySelector(".fcal_form_booking_details").offsetHeight;
-                const height = formFieldsHeight + 135;
-                calendar.style.height = height + 'px';
-            }, 100)
-        }
+        selectedDateTime = spot;
     }
 
     function formatHours(e) {
@@ -115,25 +92,22 @@
     }
 
     function dayClicked(day) {
-        selectedDay = day;
-        component.parentNode.classList.add("f_cal_day_selected");
+        selectedDate = day;
         checkDevice();
     }
 
     function resetSelection() {
-        selectedDate = null;
-        selectedDay = null;
-        component.parentNode.classList.remove("f_cal_day_selected");
-        component.parentNode.classList.remove("f_cal_spot_selected");
-
-        const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-        const height = 'auto';
-        calendar.style.height = height;
+        if (wrapperWidth < 800) {
+            selectedDate = null;
+        }
+        selectedDateTime = {};
+        component.style.height = 'auto';
     }
 </script>
 <div class="fcal_wrap">
     <div bind:this={wrapDom} class="fcal_holder" id={appData.id}>
-        <div data-width="{wrapperWidth}px" bind:this={component} class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDay ? 'fcal_day_selected' : ''} {wrapperClass}">
+        <div data-width="{wrapperWidth}px" bind:this={component}
+             class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDate ? 'fcal_day_selected' : ''} { selectedDateTime.start ? 'fcal_spot_selected' : '' } {wrapperClass}">
             {#if isBookingDone}
                 <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
             {:else }
@@ -142,8 +116,12 @@
                         <div class="fcal_slot_wrapper">
                             {#if handleBack}
                                 <div class="fcal_back">
-                                    <div tabindex="0" on:click={handleBackClick} on:keypress={handleBackClick} class="fcal_back_btn" role="button" aria-label="{i18('Go to previous page')}">
-                                        <svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg>
+                                    <div tabindex="0" on:click={handleBackClick} on:keypress={handleBackClick}
+                                         class="fcal_back_btn" role="button" aria-label="{i18('Go to previous page')}">
+                                        <svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;"
+                                             version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg>
                                     </div>
                                 </div>
                             {/if}
@@ -202,7 +180,7 @@
                                 {#if slot.total_payment }
                                     {@html slot.total_payment}
                                 {/if}
-                                {#if selectedDate}
+                                {#if selectedDateTime.start}
                                     <div class="slot_time_range fcal_icon_item">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                              viewBox="0 0 18 18" fill="none">
@@ -234,13 +212,13 @@
 
                                         <span>
                                             {#if slot.time_format == '24' }
-                                                {util.dateTimeI18(selectedDate.start, 'HH:mm')}
-                                                - {util.dateTimeI18(selectedDate.end, 'HH:mm')},
+                                                {util.dateTimeI18(selectedDateTime.start, 'HH:mm')}
+                                                - {util.dateTimeI18(selectedDateTime.end, 'HH:mm')},
                                            {:else}
-                                                {util.dateTimeI18(selectedDate.start, 'hh:mma')}
-                                                - {util.dateTimeI18(selectedDate.end, 'hh:mma')},
+                                                {util.dateTimeI18(selectedDateTime.start, 'hh:mma')}
+                                                - {util.dateTimeI18(selectedDateTime.end, 'hh:mma')},
                                            {/if}
-                                            {util.dateTimeI18(selectedDate.start, 'dddd, MMM DD, YYYY')}
+                                            {util.dateTimeI18(selectedDateTime.start, 'dddd, MMM DD, YYYY')}
                                         </span>
                                     </div>
                                     <div class="slot_time_range slot_timezone fcal_icon_item">
@@ -266,7 +244,7 @@
                                     </div>
                                 {/if}
                             </div>
-                            {#if !selectedDate}
+                            {#if !selectedDateTime.start}
                                 <div class="fcal_slot_description">
                                     {@html slot.description || ''}
                                 </div>
@@ -274,13 +252,15 @@
                         </div>
                     </div>
                 {/if}
-                <div class="fcal_date_wrapper {selectedDate ? 'is_active' : ''}">
+                <div class="fcal_date_wrapper {selectedDateTime.start ? 'is_active' : ''}">
                     {#if appReady}
                         <div class="fcal_day_picker_wrap" id="fcal_day_picker_wrap">
                             <DayPickerApp
                                 {appData}
                                 {slot}
                                 {settings}
+                                {selectedDate}
+                                {selectedDateTime}
                                 bind:timezone={timezone}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
@@ -289,7 +269,7 @@
                                 on:resetSelection={(e) => { resetSelection() }}
                             />
                         </div>
-                        <div class="fcal_date_event_details {selectedDate ? 'is_active' : ''}">
+                        <div class="fcal_date_event_details { selectedDateTime.start ? 'is_active' : ''}">
                             <div class="fcal_date_event_details_header">
                                 <h2>
                                     {#if showingPayments}
@@ -297,7 +277,7 @@
                                     {:else}
                                         <div aria-label="Back to Date Selection" on:click={(e) => {
                                                 resetSelection()
-                                             }} on:keypress={(e) => { selectedDate = false }} class="fcal_back">
+                                             }} on:keypress={(e) => { resetSelection() }} class="fcal_back">
                                             <i class="fcal_svg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                                      viewBox="0 0 24 24">
@@ -312,13 +292,13 @@
                                 </h2>
                             </div>
 
-                            {#if !isFluentform && selectedDate }
+                            {#if !isFluentform && selectedDateTime.start }
                                 <BookingForm
                                     {appData}
                                     {slot}
                                     {timezone}
                                     on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
-                                    bind:spot={selectedDate}
+                                    bind:spot={selectedDateTime}
                                     bind:formFields={appData.form_fields}
                                     on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
                                 />

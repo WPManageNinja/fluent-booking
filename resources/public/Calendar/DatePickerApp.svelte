@@ -8,6 +8,8 @@
     export let slot;
     export let timezone;
     export let appData;
+    export let selectedDate = '';
+    export let selectedDateTime = {};
     
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
@@ -35,8 +37,7 @@
     let isLoadingDates = false;
     let availableDates = {};
     let daySlots = [];
-    let selectedDate = '';
-    let selectedDateTime = {};
+
     let nextDisabled = false;
     let formatHours = appData.slot?.time_format;
 
