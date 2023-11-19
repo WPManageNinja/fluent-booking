@@ -811,7 +811,7 @@ $lightDark: #6b7280;
       }
     }
   }
-  
+
   &.fcal_on_sm, &.fcal_on_xs {
     min-width: 100%;
   }
@@ -1282,45 +1282,6 @@ $lightDark: #6b7280;
   }
 }
 
-/*
-* Booking confirmation
- */
-
-.fcal_booking_confirmed {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 20px;
-
-  .fcal_confirm_header {
-    text-align: center;
-  }
-
-  ul.fcal_conform_items {
-    list-style: none;
-    margin: 20px 0;
-    padding: 20px 0;
-    border-top: 2px solid rgba(26, 26, 26, 0.1);
-    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
-
-    li {
-      margin-bottom: 10px;
-    }
-  }
-
-  span.fcal_slot_name_icon {
-    width: 18px;
-    height: 18px;
-    background-color: rgb(130, 71, 245);
-    border-radius: 50%;
-  }
-
-  li.fcal_conform_slot_name {
-    display: flex;
-    column-gap: 10px;
-    align-items: center;
-  }
-}
-
 .fcal_btn_submit {
   background: var(--fcal_primary_color);
   text-align: center;
@@ -1343,7 +1304,6 @@ $lightDark: #6b7280;
   }
 }
 
-
 .fcal_back.fcal_go_back {
   position: absolute;
   left: 0;
@@ -1360,97 +1320,11 @@ $lightDark: #6b7280;
   background: #ffff95;
 }
 
-/*
-* Responsive CSS
- */
-.fcal_time_picker_head {
-  display: none;
-}
-
-.f_cal_day_selected {
-  .fcal_on_mobile {
-    .fcal_calendar_slot_wrap {
-      flex-direction: column;
-
-      .calendar-container {
-        display: none;
-      }
-
-      .fcal_slot_picker {
-        width: 100%;
-
-        .fcal_spot_selected {
-          justify-content: space-between;
-          column-gap: 15px;
-
-          > div {
-            flex: 1;
-          }
-        }
-
-        .fcal_slot_picker_header {
-          .fcal_back {
-            display: block;
-            margin-right: 4px;
-
-            .fcal_svg {
-              display: flex;
-            }
-          }
-
-          span {
-            margin-right: auto;
-          }
-        }
-      }
-    }
-
-    .fcal_day_picker_head {
-      display: none;
-    }
-
-    .fcal_time_picker_head {
-      display: block;
-      position: relative;
-
-      h3 {
-        margin-bottom: 0 !important;
-      }
-
-      p {
-        margin-top: 0;
-        color: rgb(84, 82, 82);
-      }
-    }
-
-  }
-}
-
-@media (max-width: $breakpoint-tablet2) {
-  .fcal_holder {
-    &.f_cal_spot_selected {
-      .fcal_on_mobile {
-        .fcal_day_picker_wrap {
-          .fcal_day_picker {
-            .fcal_calendar_slot_wrap {
-              .fcal_slot_picker {
-                display: block;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-
 .calendar_nav {
   svg {
     height: 1em;
     width: 1em;
   }
-
   .fcal_nav_active {
     svg {
       color: var(--fcal_primary_color);
@@ -1461,7 +1335,6 @@ $lightDark: #6b7280;
 
 //to-do will refactor tanbir
 //payment items styles
-
 #fluent_booking_stipe_pay {
   font-size: 14px;
   font-weight: 500;
@@ -1632,7 +1505,6 @@ input.fcal_input:disabled {
   background: #f6f6f6;
 }
 
-
 .fcal_slot_wrapper .fcal_back {
   margin-bottom: 10px;
   margin-top: -15px;
@@ -1665,5 +1537,3 @@ input.fcal_input:disabled {
     }
   }
 }
-
-
