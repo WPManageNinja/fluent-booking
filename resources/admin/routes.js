@@ -27,6 +27,7 @@ import GloablModules from "./Modules/Settings/GloablModules.vue";
 import License from "./Modules/Settings/License.vue";
 
 import IntegrationEditor from "./Modules/Calendars/Edit/GeneralIntegration/IntegrationEditor.vue";
+import ConfigureGoogleCalendarSettings from "@/Modules/Settings/ConfigureGoogleCalendarSettings.vue";
 
 export var routes = [
     {
@@ -169,6 +170,15 @@ export var routes = [
                     active_menu: 'settings',
                     title: 'Zoom Integrations'
                 }
+            },
+            {
+                name: 'configure-google',
+                path: 'configure-integrations/google',
+                component: ConfigureGoogleCalendarSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Configure Google'
+                },
             },
             {
                 name: 'configure-integrations',
