@@ -12,6 +12,8 @@ class Calendar implements \JsonSerializable
 	
 	protected $events = [];
 
+	protected $dateTimeFields = ['dtstart', 'dtend'];
+
 	public function __construct(array $data, $client)
 	{
 		$this->data = $data;
