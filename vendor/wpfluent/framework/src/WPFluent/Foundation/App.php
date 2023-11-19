@@ -7,12 +7,14 @@ class App
 {
     /**
      * Application instance
+     * 
      * @var FluentBooking\Framework\Foundation\Application
      */
     protected static $instance = null;
 
     /**
      * Set the application instance
+     * 
      * @param FluentBooking\Framework\Foundation\Application $app
      */
     public static function setInstance($app)
@@ -22,13 +24,15 @@ class App
 
     /**
      * Get the application instance
+     * 
      * @param  string $module The binding/key name for a component.
+     * @param  array $parameters constructor dependencies if any.
      * @return FluentBooking\Framework\Foundation\Application|mixed
      */
-    public static function getInstance($module = null)
+    public static function getInstance($module = null, $parameters = [])
     {
         if ($module) {
-            return static::$instance[$module];
+            return static::$instance->make($module, $parameters);
         }
 
         return static::$instance;
@@ -36,22 +40,25 @@ class App
 
     /**
      * Retrive a component from the container
+     * 
      * @param  string $module The binding/key name for a component.
+     * @param  array $parameters constructor dependencies if any.
      * @return FluentBooking\Framework\Foundation\Application|mixed
      */
-    public static function make($module = null)
+    public static function make($module = null, $parameters = [])
     {
-        return static::getInstance($module);
+        return static::getInstance($module, $parameters);
     }
 
     /**
      * Handle dynamic method calls
+     * 
      * @param  string $method
      * @param  array $params
      * @return mixed
      */
     public static function __callStatic($method, $params)
     {
-        return static::getInstance($method);
+        return static::getInstance($method, ...$params);
     }
 }

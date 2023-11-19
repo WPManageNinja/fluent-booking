@@ -10,6 +10,8 @@ use FluentBooking\Framework\Validator\Contracts\File;
 
 trait ValidatesAttributes
 {
+    use ValidateDatabaseRulesTrait;
+
     /**
      * Require a certain number of parameters to be present.
      *
@@ -24,7 +26,9 @@ trait ValidatesAttributes
     protected function requireParameterCount($count, $parameters, $rule)
     {
         if (count($parameters) < $count) {
-            throw new InvalidArgumentException("Validation rule $rule requires at least $count parameters.");
+            throw new InvalidArgumentException(
+                "Validation rule $rule requires at least $count parameters."
+            );
         }
     }
 
@@ -256,6 +260,18 @@ trait ValidatesAttributes
     }
 
     /**
+     * Validate that an attribute is a string.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function validateString($attribute, $value)
+    {
+        return is_string($value);
+    }
+
+    /**
      * Validate that an attribute is numeric.
      *
      * @param string $attribute
@@ -335,7 +351,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentBooking\Framework\Validator\Contracts\File
+         * @var $value \PackageDev\Framework\Validator\Contracts\File
          */
         return $value->getPath() != '' && in_array($value->guessExtension(), $parameters);
     }
@@ -392,7 +408,7 @@ trait ValidatesAttributes
         }
 
         /**
-         * @var $value \FluentBooking\Framework\Validator\Contracts\File
+         * @var $value \PackageDev\Framework\Validator\Contracts\File
          */
         return strtolower($value->getClientOriginalExtension()) === 'php';
     }
@@ -408,66 +424,6 @@ trait ValidatesAttributes
     protected function validatePresent($attribute, $value)
     {
         return Arr::has($this->data, $attribute);
-    }
-
-    /**
-     * Validate that an attribute is unique in a given table
-     *
-     * @param string $attribute
-     * @param mixed $value
-     * @param array $parameters
-     *
-     * @return bool
-     */
-    protected function validateUnique($attribute, $value, $parameters)
-    {
-        global $wpdb;
-        
-        if ($parameters && !$parameters[0]) {
-            unset($parameters[0]);
-        }
-
-        $this->requireParameterCount(1, $parameters, 'unique');
-
-        if (!empty($parameters[1]) && strtolower($parameters[1]) != 'null') {
-            $attribute = $parameters[1];
-        }
-
-        $bindings = [$value];
-
-        $query = "SELECT * FROM {$wpdb->prefix}{$parameters[0]} WHERE {$attribute} = %s";
-        
-        if (count($parameters) > 2) {
-            $ignorekey = 'id';
-
-            if (!empty($parameters[3]) && strtolower($parameters[3]) != 'null') {
-                $ignorekey = $parameters[3];
-            }
-
-            if ($parameters[2] && strtolower($parameters[2]) != 'null') {
-                $query .= " and {$ignorekey} != %d";
-                $bindings[] = $parameters[2];
-            }
-        }
-
-        if (count($parameters) > 3) {
-            if(count(array_slice($parameters, 0, 4)) == 4) {
-                $extraWhereClauses = array_slice($parameters, 4);
-                foreach (array_chunk($extraWhereClauses, 2) as $where) {
-                    if (count($where) == 2) {
-                        if (is_numeric($where[1])) {
-                            $placeHolder = strpos($where[1], ".") === true ? '%f' : '%d';
-                        } else {
-                            $placeHolder = '%s';
-                        }
-                        $query .= " and {$where[0]} = {$placeHolder}";
-                        $bindings[] = $where[1];
-                    }
-                }
-            }
-        }
-        
-        return is_null($wpdb->get_row($wpdb->prepare($query, $bindings)));
     }
 
     /**
@@ -506,5 +462,41 @@ trait ValidatesAttributes
         }
 
         return empty(array_diff_key($value, array_fill_keys($parameters, '')));
+    }
+
+    /**
+     * Validate an attribute is contained within a list of values.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array  $parameters
+     * @return bool
+     */
+    public function validateIn($attribute, $value, $parameters)
+    {
+        if (is_array($value) && $this->hasRule($attribute, 'Array')) {
+            foreach ($value as $element) {
+                if (is_array($element)) {
+                    return false;
+                }
+            }
+
+            return count(array_diff($value, $parameters)) === 0;
+        }
+
+        return !is_array($value) && in_array((string) $value, $parameters);
+    }
+
+    /**
+     * Validate an attribute is not contained within a list of values.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array  $parameters
+     * @return bool
+     */
+    public function validateNotIn($attribute, $value, $parameters)
+    {
+        return !$this->validateIn($attribute, $value, $parameters);
     }
 }

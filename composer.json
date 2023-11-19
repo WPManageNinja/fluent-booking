@@ -18,11 +18,16 @@
         {
             "type": "vcs",
             "url": "https://github.com/wpfluent/framework"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/wpfluent/caldav"
         }
     ],
     "require": {
         "wpfluent/framework": "^2.0",
-        "woocommerce/action-scheduler": "^3.6"
+        "woocommerce/action-scheduler": "^3.6",
+        "wpfluent/caldav": "*"
     },
     "autoload": {
         "psr-4": {
