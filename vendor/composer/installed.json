@@ -97,24 +97,24 @@
         },
         {
             "name": "wpfluent/framework",
-            "version": "2.2.25",
-            "version_normalized": "2.2.25.0",
+            "version": "2.2.26",
+            "version_normalized": "2.2.26.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/framework.git",
-                "reference": "cf76ae421411613cb44a38451e230f8a7b79408b"
+                "reference": "752d177fcf2e072ac0cfd8b87c3266dd8515ee3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/cf76ae421411613cb44a38451e230f8a7b79408b",
-                "reference": "cf76ae421411613cb44a38451e230f8a7b79408b",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/752d177fcf2e072ac0cfd8b87c3266dd8515ee3a",
+                "reference": "752d177fcf2e072ac0cfd8b87c3266dd8515ee3a",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.3|^8.0"
             },
-            "time": "2023-11-19T10:10:00+00:00",
+            "time": "2023-11-19T16:14:57+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -138,7 +138,7 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.2.25",
+                "source": "https://github.com/wpfluent/framework/tree/2.2.26",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
             "install-path": "../wpfluent/framework"
