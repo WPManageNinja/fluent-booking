@@ -1,3 +1,38 @@
+.fcal_booking_confirmed {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 20px;
+
+  .fcal_confirm_header {
+    text-align: center;
+  }
+
+  ul.fcal_conform_items {
+    list-style: none;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 2px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
+
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+  span.fcal_slot_name_icon {
+    width: 18px;
+    height: 18px;
+    background-color: rgb(130, 71, 245);
+    border-radius: 50%;
+  }
+
+  li.fcal_conform_slot_name {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+  }
+}
+
 .fcal_confirm_header {
   text-align: center;
   h3 {
