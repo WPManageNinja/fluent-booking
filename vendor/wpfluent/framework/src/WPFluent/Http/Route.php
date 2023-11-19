@@ -105,7 +105,10 @@ class Route
      * Route Middleware
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = [
+        'before' => [],
+        'after' => []
+    ];
 
     /**
      * Predefined Regex foe where constraints
@@ -302,17 +305,41 @@ class Route
     }
 
     /**
+     * Set the route before middleware
+     * 
+     * @param  array|string $middleware
+     * @return self
+     */
+    public function before(...$middleware)
+    {
+        return $this->middleware('before', ...$middleware);
+    }
+
+    /**
+     * Set the route after middleware
+     * 
+     * @param  array|string $middleware
+     * @return self
+     */
+    public function after(...$middleware)
+    {
+        return $this->middleware('after', ...$middleware);
+    }
+
+    /**
      * Set the route middleware
      * @param  array $middleware
      * @return self
      */
-    public function middleware(...$middleware)
+    public function middleware($type = 'before', ...$middleware)
     {
         if (is_array($middleware[0])) {
             $middleware = reset($middleware);
         }
 
-        $this->middleware = array_merge($this->middleware, $middleware);
+        $this->middleware[$type] = array_merge(
+            $this->middleware[$type], $middleware
+        );
 
         return $this;
     }
@@ -484,12 +511,18 @@ class Route
                     $response = $this->app->response->sendSuccess($response);
                 }
             }
-
-            $response->header(
-                'Cache-Control',
-                'no-cache, must-revalidate, max-age=0, no-store, private'
-            );
             
+            if ($afterMiddleware = $this->collectMiddleWare('after')) {
+                return $this->app->make(Pipeline::class)
+                    ->send($response)
+                    ->through($afterMiddleware)->then(function($response) {
+                        if (!$response instanceof WP_REST_Response) {
+                            $response = new WP_REST_Response($response);
+                        }
+                        return $response;
+                    });
+            }
+
             return $response;
 
         } catch (ValidationException $e) {
@@ -525,18 +558,18 @@ class Route
             }
         }
 
-        return $this->app->make(Pipeline::class)
-            ->send($this->app->request)
-            ->through(
-                $this->collectMiddleWare()
-            )->then(function($request) {
-                if ($this->permissionHandler) {
-                    return $this->app->call(
-                        $this->permissionHandler,
-                        $this->app->request->get_url_params()
-                    );
-                } 
-            });
+        if ($beforeMiddleware = $this->collectMiddleWare('before')) {
+            return $this->app->make(Pipeline::class)
+                ->send($this->app->request)
+                ->through($beforeMiddleware)->then(function($request) {
+                    if ($this->permissionHandler) {
+                        return $this->app->call(
+                            $this->permissionHandler,
+                            $this->app->request->get_url_params()
+                        );
+                    } 
+                });
+        }
     }
 
     /**
@@ -551,28 +584,33 @@ class Route
      * 
      * @return array
      */
-    protected function collectMiddleWare()
+    protected function collectMiddleWare($type = 'before')
     {
         $middleware = $this->app['config']->get('middleware', []);
 
-        $allMiddleware = Arr::get($middleware, 'global', []);
+        $callableMiddleware = Arr::get($middleware, "global.{$type}", []);
 
-        foreach ($this->middleware as $routeMiddleware) {
+        foreach ($this->middleware[$type] as $routeMiddleware) {
 
             $pieces = explode(':', $routeMiddleware);
 
-            if ($handler = Arr::get($middleware['route'], $key = reset($pieces))) {
+            if ($handler = Arr::get($middleware['route'][$type], $key = reset($pieces))) {
 
                 if (isset($pieces[1])) {
-                    $handler = $handler . ':' . str_replace(' ', '', end($pieces));
+
+                    if (is_object($handler)) {
+                        $handler = $this->wrapMiddleware($handler, $pieces);
+                    } elseif (is_string($handler)) {
+                        $handler = $handler . ':' . str_replace(' ', '', end($pieces));
+                    }
                 }
 
-                if (!in_array($handler, $allMiddleware)) {
-                    $allMiddleware[] = $handler;
+                if (!in_array($handler, $callableMiddleware)) {
+                    $callableMiddleware[] = $handler;
                 }
             } else {
                 
-                $middlewarePath = 'config.middleware.route';
+                $middlewarePath = 'config.middleware.route.' . $type;
 
                 throw new InvalidArgumentException(
                     "No middleware is assigned for the key: {$key} in {$middlewarePath} array."
@@ -580,7 +618,38 @@ class Route
             }
         }
 
-        return $allMiddleware;
+        return $callableMiddleware;
+    }
+
+    /**
+     * Create a class to wrap the middleware
+     * 
+     * @param  mixed $handler
+     * @param  aray $pieces
+     * @return object
+     */
+    protected function wrapMiddleware($handler, $pieces)
+    {
+        $params = str_replace(' ', '', end($pieces));
+        
+        $params = explode(',', $params);
+
+        return new class ($handler, $params) {
+            protected $handler, $params = null;
+            public function __construct($handler, $params) {
+                $this->handler = $handler;
+                $this->params = $params;
+            }
+            public function handle($target, $next) {
+                if (is_callable($this->handler)) {
+                    return ($this->handler)($target, $next, ...$this->params);
+                } else {
+                    return $this->handler->handle(
+                        $target, $next, ...$this->params
+                    );
+                }
+            }
+        };
     }
 
     /**

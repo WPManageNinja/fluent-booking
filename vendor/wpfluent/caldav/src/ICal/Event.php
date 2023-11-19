@@ -54,7 +54,9 @@ class Event implements \JsonSerializable
 
 	protected function getCurrentDateTime()
 	{
-		return (new DateTime('now', new DateTimeZone('UTC')))->format($this->dateTimeFormat);
+		return (
+			new DateTime('now', new DateTimeZone('UTC'))
+		)->format($this->dateTimeFormat);
 	}
 
 	protected function setDateTime()
@@ -337,8 +339,6 @@ class Event implements \JsonSerializable
 		} else {
 			$calendar[] = "TRANSP:TRANSPARENT";
 		}
-
-		$calendar[] = "DTEND:{$this->data['dtend']}";
 
 		if (isset($this->data['status'])) {
 			$eventStatus = strtoupper($this->data['status']);
