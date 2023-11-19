@@ -38,8 +38,10 @@
     }
 
     function checkDevice() {
+        console.log(wrapDom);
         wrapperWidth = wrapDom.parentNode.offsetWidth;
-        if (wrapperWidth >= 1000) {
+        console.log(wrapperWidth);
+        if (wrapperWidth >= 900) {
             wrapperClass = 'fcal_on_lg';
         } else if (wrapperWidth >= 800) {
             wrapperClass = 'fcal_on_md';
@@ -106,6 +108,7 @@
 </script>
 <div class="fcal_wrap">
     <div bind:this={wrapDom} class="fcal_holder" id={appData.id}>
+        {#if true}
         <div data-width="{wrapperWidth}px" bind:this={component}
              class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDate ? 'fcal_day_selected' : ''} { selectedDateTime.start ? 'fcal_spot_selected' : '' } {wrapperClass}">
             {#if isBookingDone}
@@ -308,5 +311,6 @@
                 </div>
             {/if}
         </div>
+        {/if}
     </div>
 </div>
