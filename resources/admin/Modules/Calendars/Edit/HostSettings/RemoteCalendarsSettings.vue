@@ -77,7 +77,7 @@
                                 </a>
                                 <a v-else :href="driver.global_config_url"
                                    class="el-button el-button--primary el-button--small">
-                                    Configure {{ driver.title }}API
+                                    Configure {{ driver.title }} API
                                 </a>
                             </div>
                         </div>
