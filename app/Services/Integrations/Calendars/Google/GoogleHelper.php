@@ -19,10 +19,33 @@ class GoogleHelper
             ];
         }
 
+        $settings = get_option('_fcal_google_calendar_client_details', []);
+
+        if (!$settings) {
+            return [
+                'client_id'        => '530691696829-0g22sbe8qnqtoh58v1rkc34efhrlld5c.apps.googleusercontent.com',
+                'client_secret'    => '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',
+                'driver_type'      => 'system_defined',
+                'constant_defined' => true,
+                'caching_time'     => '5'
+            ];
+        }
+
+        if (empty($settings['client_id']) || empty($settings['client_secret']) || Arr::get($settings, 'driver_type') == 'system_defined') {
+            return [
+                'client_id'        => '530691696829-0g22sbe8qnqtoh58v1rkc34efhrlld5c.apps.googleusercontent.com',
+                'client_secret'    => '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',
+                'driver_type'      => 'system_defined',
+                'constant_defined' => true,
+                'caching_time'     => Arr::get($settings, 'caching_time', 5)
+            ];
+        }
+
         $defaults = [
             'client_id'     => '',
             'client_secret' => '',
-            'caching_time'  => '5'
+            'caching_time'  => '5',
+            'driver_type'   => 'custom_defined'
         ];
 
         $settings = get_option('_fcal_google_calendar_client_details', []);
@@ -46,21 +69,24 @@ class GoogleHelper
             ];
         }
 
-        $settings = Arr::only($settings, ['client_id', 'client_secret', 'caching_time']);
+        $settings = Arr::only($settings, ['client_id', 'client_secret', 'driver_type', 'caching_time']);
 
-        if (!empty($settings['client_secret'])) {
-
+        if (Arr::get($settings, 'driver_type') == 'system_defined') {
+            $settings = [
+                'caching_time' => Arr::get($settings, 'caching_time', 5),
+                'driver_type'  => 'system_defined'
+            ];
+        } else if (!empty($settings['client_secret'])) {
             if ($settings['client_secret'] == '********************') {
                 $oldSettings = self::getApiConfig();
                 $settings['client_secret'] = $oldSettings['client_secret'];
             }
-
             $settings['client_secret'] = Helper::encryptKey($settings['client_secret']);
         }
 
         update_option('_fcal_google_calendar_client_details', $settings, 'no');
 
-        return $settings;
+        return self::getApiConfig();
     }
 
     public static function getApiClient($accessToken = null)
@@ -205,6 +231,10 @@ class GoogleHelper
 
     public static function getAppReirectUrl()
     {
+        if (self::isUsingNativeApp()) {
+            return 'https://fluentbooking.com/wp-json/fluent-api/google-calendar';
+        }
+
         if (defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL')) {
             return FLUENT_BOOKING_GOOGLE_REDIRECT_URL;
         }
@@ -214,6 +244,7 @@ class GoogleHelper
 
     public static function isUsingNativeApp()
     {
-        return defined('FLUENT_BOOKING_GOOGLE_REDIRECT_URL');
+        $settings = self::getApiConfig();
+        return Arr::get($settings, 'driver_type') == 'system_defined';
     }
 }
