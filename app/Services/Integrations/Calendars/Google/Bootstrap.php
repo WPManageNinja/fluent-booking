@@ -75,6 +75,18 @@ class Bootstrap extends BaseCalendar
         });
     }
 
+    public function pushToGlobalMenu($menuItems)
+    {
+        $menuItems[$this->calendarKey] = [
+            'title'          => $this->calendarTitle,
+            'icon_url'       => $this->logo,
+            'component_type' => 'GlobalGoogleComponent',
+            'route'          => [
+                'name'   => 'configure-google'
+            ]
+        ];
+        return $menuItems;
+    }
 
     public function getClientSettingsForView($settings)
     {
@@ -96,12 +108,10 @@ class Bootstrap extends BaseCalendar
         $config = GoogleHelper::getApiConfig();
 
         $description = '<p>' . __('Login to your Google account, go to Google Cloud Console, create a project, complete OAuth Consent screen process, click on Create Credentials, and you will get your client id and secret key. If you get the ID and Keys for Google Calendar, Google Meet will be integrated automatically. For full details read the', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">' . __('documentation', 'fluent-booking-pro') . '</a></p>';
+        $fields = $this->getStanadrdFields();
 
         if (!empty($config['constant_defined'])) {
-            $fields = null;
             $description = '<p>' . __('Google Calendar/Meet integration is configured by wp-config.php constants. No action required here', 'fluent-booking-pro') . '</p>';
-        } else {
-            $fields = $this->getStanadrdFields();
         }
 
         return [
