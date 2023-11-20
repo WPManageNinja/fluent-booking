@@ -1396,6 +1396,18 @@
                     width: auto;
                 }
               }
+              .fcal_booking_duration {
+                width: 20%;
+                .el-input__wrapper {
+                    border-radius: 0px;
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+                }
+                .el-input-group__append {
+                    border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
+                }
+              }
             }
           }
           .el-link--primary {   

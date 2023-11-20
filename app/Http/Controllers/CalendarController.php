@@ -317,6 +317,27 @@ class CalendarController extends Controller
             $slotSettings['buffer_time_after'] = '0';
         }
 
+        if (!isset($slotSettings['booking_frequency'], $slotSettings['booking_duration'])) {
+            $slotSettings['booking_frequency'] = [
+                'enabled' => true,
+                'limits'  => [
+                    [
+                        'unit'  => 'per_day',
+                        'value' => 1,
+                    ]
+                ]
+            ];
+            $slotSettings['booking_duration'] = [
+                'enabled' => true,
+                'limits'  => [
+                    [
+                        'unit'  => 'per_day',
+                        'value' => 1,
+                    ]
+                ]
+            ];
+        }
+
         $slot->settings = $slotSettings;
 
         $data = [
@@ -500,7 +521,15 @@ class CalendarController extends Controller
         $event->settings = [
             'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
             'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '0')),
-            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '0'))
+            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '0')),
+            'booking_frequency'   => [
+                'enabled' => Arr::isTrue($data, 'settings.booking_frequency.enabled'),
+                'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_frequency.limits'))
+            ],
+            'booking_duration'    => [
+                'enabled' => Arr::isTrue($data, 'settings.booking_duration.enabled'),
+                'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_duration.limits'))
+            ]
         ];
             
         $event->save();
@@ -602,7 +631,7 @@ class CalendarController extends Controller
             $formattedNotifications[$key] = [
                 'title'   => sanitize_text_field(Arr::get($value, 'title')),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'email'   => $this->sanitize_notification_data(Arr::get($value, 'email')),
+                'email'   => $this->sanitize_mapped_data(Arr::get($value, 'email')),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
@@ -683,7 +712,7 @@ class CalendarController extends Controller
         ];
     }
 
-    private function sanitize_notification_data($settings)
+    private function sanitize_mapped_data($settings)
     {
         $sanitizerMap = [
             'value'                 => 'intval',
