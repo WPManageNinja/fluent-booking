@@ -2818,9 +2818,11 @@
     overflow-x: hidden;
     &::-webkit-scrollbar {
       width: 6px;
+      border-radius: 10px;
     }
     &::-webkit-scrollbar-thumb {
-      background: red;
+      background: #c1c1c1;
+      border-radius: 10px;
     }
 
     .fcal_no_activities {

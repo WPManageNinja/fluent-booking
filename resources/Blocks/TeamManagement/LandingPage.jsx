@@ -47,17 +47,17 @@ export const LandingPage = props => {
                         className={title?'':'empty-text'}
                         tagName="h1"
                         value={ title }
-                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link', 'core/text-color' ] }
                         onChange={ ( heading ) => setAttributes( { title: heading } ) }
-                        placeholder="Enter title here..."
+                        placeholder={__('Enter title here...')}
                     />
                     <RichText
                         className={description?'':'empty-text'}
                         tagName="p"
                         value={ description }
-                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link', 'core/text-color' ] }
                         onChange={ ( heading ) => setAttributes( { description: heading } ) }
-                        placeholder="Enter description here..."
+                        placeholder={__('Enter description here...')}
                     />
                 </div>
 
@@ -78,7 +78,7 @@ export const LandingPage = props => {
                         </div>
                         :
                     <div className="fcal_team_management_block_hosts">
-                        <p>Please select team member from block settings</p>
+                        <p>{__('Please select team member from block settings')}</p>
                     </div>
                 }
 
