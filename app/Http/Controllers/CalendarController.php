@@ -302,14 +302,6 @@ class CalendarController extends Controller
 
         $slotSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($slotSettings, 'date_overrides', []), 'UTC', $slot->calendar->author_timezone, $slot);
 
-        $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
-
-        $scheduleOptions = AvailabilityService::getScheduleOptions();
-
-        $slotSettings['schedule_options'] = $scheduleOptions;
-
-        $slotSettings['available_schedules'] = $availableSchedules;
-
         $slotSettings['location_fields'] = $slot->calendar->getLocationFields();
 
         if (!isset($slotSettings['buffer_time_before'], $slotSettings['buffer_time_after'])) {
@@ -388,6 +380,20 @@ class CalendarController extends Controller
 
         return [
             'slot' => $schema
+        ];
+    }
+
+    public function getAvailabilitySettings(Request $request, $calendarId, $slotId)
+    {
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
+
+        $scheduleOptions = AvailabilityService::getScheduleOptions();
+        
+        return [
+            'schedule_options'    => $scheduleOptions,
+            'available_schedules' => $availableSchedules
         ];
     }
 
