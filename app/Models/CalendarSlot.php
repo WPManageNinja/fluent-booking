@@ -224,7 +224,7 @@ class CalendarSlot extends Model
     {
         $interval = Arr::get($this->settings, 'slot_interval', '');
 
-        $slotInterval = empty($interval) ? $this->period : intval($interval);
+        $slotInterval = empty($interval) ? $this->duration : intval($interval);
 
         return $slotInterval;
     }
