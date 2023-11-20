@@ -220,6 +220,15 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
+    public function getSlotInterval()
+    {
+        $interval = Arr::get($this->settings, 'slot_interval', '');
+
+        $slotInterval = empty($interval) ? $this->period : intval($interval);
+
+        return $slotInterval;
+    }
+
     public function getTotalBufferTime()
     {
         $bufferTimeBefore = Arr::get($this->settings, 'buffer_time_before', 0);

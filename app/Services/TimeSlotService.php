@@ -23,7 +23,7 @@ class TimeSlotService
 
     public function getDates($fromDate = false, $toDate = false, $bookingRequest = false)
     {
-        $period = $this->calendarSlot->duration;
+        $period = $this->calendarSlot->duration * 60;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -68,7 +68,7 @@ class TimeSlotService
             $validSlots = [];
 
             foreach ($availableSlots as $start) {
-                $end = date('H:i', strtotime($start) + 60 * $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $end = date('H:i', strtotime($start) + $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $slot = [
                     'start' => $date . ' ' . $start . ':00',
                     'end'   => $date . ' ' . $end . ':00'
@@ -145,7 +145,7 @@ class TimeSlotService
             $midStartTime = strtotime($availableSlots[$mid]['start']);
             $midEndTime = strtotime($availableSlots[$mid]['end']);
 
-            if ($fromTimeStamp == $midStartTime && $toTimeStamp == $midEndTime) {
+            if ($fromTimeStamp <= $midStartTime && $toTimeStamp <= $midEndTime) {
                 return true;
             } elseif ($fromTimeStamp > $midStartTime) {
                 $left = $mid + 1;
@@ -326,6 +326,8 @@ class TimeSlotService
 
         $schedule = $this->calendarSlot->settings['weekly_schedules'];
 
+        $interval = $this->calendarSlot->getSlotInterval() * 60;
+
         if ('existing_schedule' === $this->calendarSlot->availability_type) {
             $availability = Availability::findOrFail($this->calendarSlot->availability_id);
             $schedule = Arr::get($availability, 'value.weekly_schedules');
@@ -357,7 +359,7 @@ class TimeSlotService
 
                 while ($start + $period <= $end) {
                     $daySlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    $start += $period;
+                    $start += $interval;
                 }
             }
 
@@ -372,7 +374,9 @@ class TimeSlotService
 
     protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false)
     {
-        $period = $this->calendarSlot->duration;
+        $period = $this->calendarSlot->duration * 60;
+
+        $interval = $this->calendarSlot->getSlotInterval() * 60;
 
         $formattedSlots = [];
 
@@ -386,9 +390,9 @@ class TimeSlotService
             $start = strtotime($slot['start']);
             $end = strtotime($slot['end']);
 
-            while ($start < $end) {
+            while ($start + $period <= $end) {
                 $formattedSlots[] = date('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $start += $period * 60;
+                $start += $interval;
             }
         }
 
