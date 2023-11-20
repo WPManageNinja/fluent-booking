@@ -248,6 +248,7 @@ $lightDark: #6b7280;
         padding: 10px 20px;
         background: var(--fcal_primary_color);
         border-radius: 8px;
+        margin-bottom: 0;
       }
 
       &.fcal_submit {
@@ -264,6 +265,30 @@ $lightDark: #6b7280;
   display: flex;
   border: 1px solid rgba(26, 26, 26, 0.1);
   overflow: hidden;
+  @media (max-width: 663px) {
+    &.fcal_day_selected {
+      &.fcal_spot_selected {
+        height: auto !important;
+      }
+    }
+  }
+  &.fcal_mobile {
+    height: auto !important;
+    .fcal_date_wrapper {
+      width: 100%;
+      margin-left: 0;
+      .fcal_day_picker_wrap {
+        width: 100%;
+      }
+      &.is_active {
+        .fcal_date_event_details {
+          &.is_active {
+            position: relative;
+          }
+        }
+      }
+    }
+  }
 
   .fcal_side {
     max-width: 100%;
@@ -279,6 +304,9 @@ $lightDark: #6b7280;
     min-height: 450px;
     z-index: 9;
     background: #ffffff;
+    @media (max-width: 410px) {
+      min-width: 100%;
+    }
 
     .fcal_author {
       margin-bottom: 10px;
@@ -339,8 +367,11 @@ $lightDark: #6b7280;
     &.is_active {
       //padding-right: 600px;
       .fcal_day_picker_wrap {
-        transform: translateX(-100%);
+        //transform: translateX(-100%);
+        margin-left: -100%;
         visibility: hidden;
+        width: 100%;
+        flex: none;
       }
     }
 
@@ -351,6 +382,10 @@ $lightDark: #6b7280;
       -webkit-transition: .5s;
       -moz-transition: .5s;
       -o-transition: .5s;
+      @media (max-width: 663px) {
+        flex: none;
+        width: 100%;
+      }
 
       .fcal_fluent_form_selected_time {
         font-size: 14px;
@@ -368,6 +403,7 @@ $lightDark: #6b7280;
       //max-width: 600px;
       z-index: 10;
       background: #ffffff;
+      flex: none;
       width: 100%;
       max-width: 100%;
       opacity: 0;
@@ -377,19 +413,26 @@ $lightDark: #6b7280;
       -webkit-transition: .5s;
       -moz-transition: .5s;
       -o-transition: .5s;
-      right: 0;
+      right: -100%;
       top: 0;
       max-height: 100%;
       overflow-x: hidden;
       //transform: translateX(100%);
-      max-width: 0;
+      //max-width: 0;
+      &.is_payment {
+        position: relative;
+      }
+      @media (max-width: 663px) {
+        right: 0;
+        position: relative;
+      }
 
       &.is_active {
         opacity: 1;
         visibility: visible;
         right: 0;
         //transform: translateX(0);
-        max-width: 700px;
+        //max-width: 700px;
       }
 
       .fcal_form_booking_details {
@@ -509,6 +552,7 @@ $lightDark: #6b7280;
     .calendar-container {
       max-width: 390px;
       padding: 30px 20px;
+      transition: .3s;
     }
 
     .calendar-header {
@@ -762,6 +806,9 @@ $lightDark: #6b7280;
 
   &.fcal_form_calendar {
     border: none !important;
+    .fcal_side {
+      padding-left: 0;
+    }
 
     .fcal_date_wrapper {
       margin: 0;
@@ -796,11 +843,11 @@ $lightDark: #6b7280;
     height: auto;
 
     .fcal_day_picker_wrap {
-      display: none;
+      //display: none;
     }
 
     .fcal_date_event_details {
-      position: relative;
+      //position: relative;
     }
   }
 
@@ -839,6 +886,24 @@ $lightDark: #6b7280;
       }
       .fcal_calendar_slot_wrap {
         &.is_active {
+          .calendar {
+            .day-name {
+              font-size: 11px;
+            }
+            .day {
+              font-size: 12px;
+              .is-today {
+                &::before {
+                  width: 4px;
+                  height: 4px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .fcal_calendar_slot_wrap {
+        &.is_active {
           padding-right: 220px;
         }
       }
@@ -851,7 +916,7 @@ $lightDark: #6b7280;
               font-size: 13px;
             }
             .fcal_spot_confirm {
-              padding: 7px 12px;
+              padding: 5px 12px;
               font-size: 10px;
               svg {
                 width: 16px;
@@ -868,11 +933,19 @@ $lightDark: #6b7280;
     .fcal_side {
       width: 240px;
       min-width: 240px;
+      .fcal_slot_info {
+        .fcal_slot_heading {
+          font-size: 20px;
+        }
+      }
     }
 
     &.fcal_day_selected {
       .fcal_date_wrapper {
         width: calc(100% - 240px);
+      }
+      .fcal_day_picker_wrap {
+        width: 100%;
       }
 
       .calendar-container {
@@ -897,10 +970,24 @@ $lightDark: #6b7280;
   &.fcal_on_xs {
     flex-direction: column;
     &.fcal_form_calendar {
+      .fcal_side {
+        padding-left: 0;
+        padding-right: 0;
+      }
       .fcal_date_wrapper {
         .fcal_day_picker_wrap {
           width: 100%;
+          .fcal_calendar_slot_wrap {
+            &.is_active {
+              padding-left: 0 !important;
+            }
+            .calendar-container {
+              padding-left: 0;
+              padding-right: 0;
+            }
+          }
         }
+
       }
     }
 
@@ -912,26 +999,37 @@ $lightDark: #6b7280;
       min-height: auto;
     }
 
+    .fcal_date_wrapper {
+      .fcal_slot_picker {
+        right: -100%;
+      }
+    }
     &.fcal_day_selected {
       .fcal_date_wrapper {
         width: 100%;
       }
 
       .calendar-container {
-        display: none;
+        //display: none;
+        opacity: 0;
+        visibility: hidden;
+        margin-left: -100%;
       }
       .fcal_calendar_slot_wrap {
         padding: 0 20px 20px !important;
-        max-height: 450px;
+        //max-height: 450px;
         overflow: auto;
-        min-width: 300px;
+        //min-width: 300px;
+        max-height: inherit;
+        min-width: 100%;
       }
 
       .fcal_slot_picker {
         width: 100%;
-        display: block;
-        padding-right: 10px;
-        position: relative;
+        &.is_active {
+          right: 0;
+          padding: 0 20px;
+        }
       }
     }
   }
@@ -1063,14 +1161,14 @@ $lightDark: #6b7280;
       .fcal_spot_confirm {
         background: var(--fcal_primary_color);
         text-align: center;
-        padding: 10px 21px;
+        padding: 10px 16px;
         border-radius: 4px;
         border: none;
         color: white;
         cursor: pointer;
         box-sizing: border-box;
 
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 500;
         line-height: 24px;
         flex: none;
