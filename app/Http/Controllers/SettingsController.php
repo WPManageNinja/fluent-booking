@@ -39,8 +39,8 @@ class SettingsController extends Controller
             'reply_to_name'           => [
                 'wrapper_class' => 'fc_item_half',
                 'type'          => 'input-text',
-                'placeholder'   => __('Reply to Name (Optional)', 'fluent-booking-pro'),
-                'label'         => __('Reply to Name', 'fluent-booking-pro'),
+                'placeholder'   => __('Reply to Name', 'fluent-booking-pro'),
+                'label'         => __('Reply to Name (Optional)', 'fluent-booking-pro'),
                 'help'          => __('Default Reply to Name (Optional)', 'fluent-booking-pro')
             ],
             'reply_to_email'          => [
@@ -68,7 +68,7 @@ class SettingsController extends Controller
             'email_footer'            => [
                 'wrapper_class' => 'fc_full_width fc_mb_0 fc_wp_editor',
                 'type'          => 'wp-editor-field',
-                'label'         => __('Email Footer for Booking related emails (optional)', 'fluent-booking-pro'),
+                'label'         => __('Email Footer for Booking related emails (Optional)', 'fluent-booking-pro'),
                 'inline_help'   => __('You may include your business name, address etc here, for example: <br />You have received this email because signed up for an event or made a booking on our website.', 'fluent-booking-pro')
             ]
         ];
