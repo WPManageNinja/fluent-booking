@@ -569,19 +569,30 @@ class Route
                         );
                     } 
                 });
+        } else {
+            if ($this->permissionHandler) {
+                return $this->app->call(
+                    $this->permissionHandler,
+                    $this->app->request->get_url_params()
+                );
+            } 
         }
     }
 
     /**
-     * Added the ability to add middleware so we can
-     * intercept the request without modifying the source
-     * code again and again. The middleware class will
-     * implement the handle method as given below:
+     * Added the ability to add middleware so we can intercept
+     * the request without modifying the source code again
+     * and again. The middleware class will implement
+     * the handle method as given below:
      * 
      * public function handle($request, $next)
      *
-     * And must return $next($request) (or nothing to cancel);
+     * And must return $next($request) to handle the request.
+     * Otherwise return nothing to abort the request.
+     * Optionally, you may call the abort method:
+     * return $request->abort(code, message);
      * 
+     * @param string $type
      * @return array
      */
     protected function collectMiddleWare($type = 'before')
@@ -597,17 +608,11 @@ class Route
             if ($handler = Arr::get($middleware['route'][$type], $key = reset($pieces))) {
 
                 if (isset($pieces[1])) {
-
-                    if (is_object($handler)) {
-                        $handler = $this->wrapMiddleware($handler, $pieces);
-                    } elseif (is_string($handler)) {
-                        $handler = $handler . ':' . str_replace(' ', '', end($pieces));
-                    }
+                    $handler = $this->resolveMiddleware($handler, $pieces);
                 }
 
-                if (!in_array($handler, $callableMiddleware)) {
-                    $callableMiddleware[] = $handler;
-                }
+                $this->addMiddlewareInTheStack($callableMiddleware, $handler);
+
             } else {
                 
                 $middlewarePath = 'config.middleware.route.' . $type;
@@ -619,6 +624,24 @@ class Route
         }
 
         return $callableMiddleware;
+    }
+
+    /**
+     * Resolve the middleware
+     * 
+     * @param  mixed $handler
+     * @param  aray $pieces
+     * @return object
+     */
+    protected function resolveMiddleware($handler, $pieces)
+    {
+        if (is_object($handler)) {
+            $handler = $this->wrapMiddleware($handler, $pieces);
+        } elseif (is_string($handler)) {
+            $handler = $handler . ':' . str_replace(' ', '', end($pieces));
+        }
+        
+        return $handler;
     }
 
     /**
@@ -650,6 +673,19 @@ class Route
                 }
             }
         };
+    }
+
+    /**
+     * Add the middleware in the stack
+     * 
+     * @param array &$stack All callable middleware for the route
+     * @param null
+     */
+    protected function addMiddlewareInTheStack(&$stack, $middleware)
+    {
+        if (!in_array($middleware, $stack)) {
+            $stack[] = $middleware;
+        }
     }
 
     /**

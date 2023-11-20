@@ -32,7 +32,7 @@
                                         </template>
                                     </el-input>
 
-                                    <el-select  v-else-if="field.type='select'" popper-class="fcal_select" v-model="settings[fieldKey]">
+                                    <el-select  v-else-if="field.type == 'select'" popper-class="fcal_select" v-model="settings[fieldKey]">
                                         <el-option
                                             v-for="(item, itemValue) in field.options"
                                             :key="itemValue"
@@ -40,6 +40,10 @@
                                             :value="itemValue">
                                         </el-option>
                                     </el-select>
+
+                                    <el-checkbox v-else-if="field.type == 'yes_no_checkbox'" true-label="yes" false-label="no" v-model="settings[fieldKey]">
+                                        {{ field.checkbox_label }}
+                                    </el-checkbox>
 
                                     <p v-if="field.inline_help" v-html="field.inline_help"></p>
                                 </el-form-item>
