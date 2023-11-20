@@ -74,12 +74,9 @@ function faCalOpenBookingPage(item, event) {
 
 window.faCalOpenBookingPage = faCalOpenBookingPage;
 
-let teamViewHtml = document.createElement('div');
-teamViewHtml.className = 'fluent_booking_team_view';
-
 // Now you can append teamViewHtml to the DOM or do whatever you need with it
 // For example, if you want to append it to the body:
-document.querySelector('.fcal_teams_inner').appendChild(teamViewHtml);
+
 window.fcalBackToTeam = function (item) {
     const parentTeam = item.closest('.fcal_teams');
     if(parentTeam) {
@@ -93,10 +90,19 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
 
     let currentState = 'view_members';
 
+    let teamViewHtml = document.createElement('div');
+    teamViewHtml.className = 'fluent_booking_team_view';
+
     teams.querySelector('.fcal_teams_wrap').style.display = 'block';
     teams.querySelector('.fcal_team_loading').remove();
     // find all the buttons in teams with class name fcal_each_member
     const buttons = teams.querySelectorAll('.fcal_each_member');
+
+    const teamInner = teams.querySelectorAll('.fcal_teams_inner')
+    teamInner.forEach(function (inner) {
+        inner.appendChild(teamViewHtml);
+    })
+
     const teamVars = window[teams.id];
     if (!teamVars) {
         return;
