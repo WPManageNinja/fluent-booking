@@ -8,20 +8,20 @@
                 <el-form label-position="top">
                     <el-form-item :label="$t('Availability Range')">
                     <span class="sub-label">{{ $t('Invitees can schedule...') }}</span>
-                    <el-radio-group v-model="calendar_event.settings.range_type" class="fcal_date_range_radio">
+                    <el-radio-group v-model="settings.range_type" class="fcal_date_range_radio">
                         <div class="fcal_date_range_radio_item">
                             <el-radio label="range_days" size="large">{{ $t('Within future days') }}</el-radio>
-                            <div v-if="calendar_event.settings.range_type == 'range_days'" class="fcal_date_range_radio_condition">
-                                <el-input v-model="calendar_event.settings.range_days" type="number">
+                            <div v-if="settings.range_type == 'range_days'" class="fcal_date_range_radio_condition">
+                                <el-input v-model="settings.range_days" type="number">
                                     <template #append>{{ $t('Days into the future') }}</template>
                                 </el-input>
                             </div>
                         </div>
                         <div class="fcal_date_range_radio_item">
                             <el-radio label="range_date_between" size="large">{{ $t('Within a date range') }}</el-radio>
-                            <div v-if="calendar_event.settings.range_type == 'range_date_between'" class="fcal_date_range_radio_condition">
+                            <div v-if="settings.range_type == 'range_date_between'" class="fcal_date_range_radio_condition">
                                 <el-date-picker
-                                    v-model="calendar_event.settings.range_date_between"
+                                    v-model="settings.range_date_between"
                                     type="daterange"
                                     :disabled-date="disabledDate"
                                     value-format="YYYY-MM-DD"
@@ -41,7 +41,7 @@
                     <el-form-item :label="$t('ScheduleSettings/availability_type_label')">
                         <el-tabs v-model="calendar_event.availability_type">
                             <el-tab-pane :label="$t('Use an Existing Schedule')" name="existing_schedule">
-                                <div class="fcal_availability_body">
+                                <div v-if="!loading" class="fcal_availability_body">
                                     <h4>{{ $t('Which Schedule Do You Want to Use ?') }}</h4>
                                     <el-select
                                         v-model="calendar_event.availability_id"
@@ -52,15 +52,15 @@
                                         :no-data-text="$t('No Data')"
                                     >
                                         <el-option-group
-                                                v-for="schedulesHosts in calendar_event.settings.schedule_options"
+                                            v-for="schedulesHosts in scheduleOptions"
                                                 :key="schedulesHosts.hostName"
                                                 :label="schedulesHosts.hostName">
-                                            <el-option
+                                                <el-option
                                                     v-for="schedule in schedulesHosts.schedules"
                                                     :key="schedule.value"
                                                     :label="schedule.label"
                                                     :value="schedule.value">
-                                            </el-option>
+                                                </el-option>
                                         </el-option-group>
                                     </el-select>
                                     <ExistingSchedule
@@ -70,6 +70,7 @@
                                     />
 
                                 </div>
+                                <el-skeleton v-else :rows="5" animated />
                             </el-tab-pane>
                             <el-tab-pane :label="$t('Set Custom Hours')" name="custom">
                                 <div class="fcal_availability_body">
@@ -79,11 +80,11 @@
                                     </div>
                                     <div class="fcal_availability_setting">
                                         <WeeklySchedules
-                                            :weekly_schedules="calendar_event.settings.weekly_schedules"
+                                            :weekly_schedules="settings.weekly_schedules"
                                             :title="$t('Weekly Hours')"
                                         />
                                         <date-over-rides
-                                            :settings="calendar_event.settings"
+                                            :settings="settings"
                                             :title="$t('Add date overrides')"
                                         />
 
@@ -134,12 +135,16 @@ export default {
     },
     data() {
         return {
-            saving: false
+            loading: false,
+            saving: false,
+            scheduleOptions: [],
+            availableSchedules: [],
+            settings: this.calendar_event.settings
         }
     },
     computed: {
         selectedSchedule() {
-            const selectedAvailability = this.calendar_event.settings.available_schedules.find(schedule => schedule.id === this.calendar_event.availability_id);
+            const selectedAvailability = this.availableSchedules.find(schedule => schedule.id === this.calendar_event.availability_id);
             return selectedAvailability?.settings || [];
         }
     },
@@ -147,15 +152,29 @@ export default {
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
         },
+        getAvailabilitySettings() {
+            this.loading = true;
+            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/availability')
+                .then(response => {
+                    this.scheduleOptions = response.schedule_options;
+                    this.availableSchedules = response.available_schedules;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/availability', {
-                schedule_type: this.calendar_event.settings.schedule_type,
-                weekly_schedules: this.calendar_event.settings.weekly_schedules,
-                date_overrides: this.calendar_event.settings.date_overrides,
-                range_type: this.calendar_event.settings.range_type,
-                range_days: this.calendar_event.settings.range_days,
-                range_date_between: this.calendar_event.settings.range_date_between,
+                schedule_type: this.settings.schedule_type,
+                weekly_schedules: this.settings.weekly_schedules,
+                date_overrides: this.settings.date_overrides,
+                range_type: this.settings.range_type,
+                range_days: this.settings.range_days,
+                range_date_between: this.settings.range_date_between,
                 availability_type: this.calendar_event.availability_type,
                 availability_id: this.calendar_event.availability_id,
             })
@@ -171,8 +190,9 @@ export default {
         },
     },
     mounted() {
-        this.calendar_event.availability_id ??= this.calendar_event.settings.available_schedules[0].id;
-        this.calendar_event.availability_id = parseInt(this.calendar_event.availability_id);
+        this.getAvailabilitySettings();
+        this.calendar_event.availability_id ??= this.settings.available_schedules[0].id;
+        this.calendar_event.availability_id = parseInt(this.calendar_event.availability_id);    
     }
 }
 </script>
