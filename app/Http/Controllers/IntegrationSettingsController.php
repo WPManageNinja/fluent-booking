@@ -140,6 +140,28 @@ class IntegrationSettingsController extends Controller
         ];
     }
 
+    public function addCalDavCredential(Request $request, $calendarId)
+    {
+        try {
+            $calendar = Calendar::findOrFail($calendarId);
+            $driverKey = sanitize_text_field($request->get('driver_key'));
+            $result = apply_filters('fluent_booking/verify_save_caldav_credential_' . $driverKey, [
+                'message' => __('Your credential could not be saved. Please make sure the credntial is valid', 'fluent-booking-pro'),
+                'success' => false
+            ], $request->get('settings'), $calendar->user_id);
+
+            if (empty($result['success'])) {
+                return $this->sendError($result);
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
     public function getGeneralIntegrationFeed(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);

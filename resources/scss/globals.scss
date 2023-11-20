@@ -2834,6 +2834,12 @@ p.fcal_human_text {
     border-radius: 0 !important;
 }
 
+.fcal_secure_form {
+    padding: 20px;
+    background: #f3f4f9;
+    border-radius: 10px;
+}
+
 @keyframes handAnim {
     0% {
         right: -22px;

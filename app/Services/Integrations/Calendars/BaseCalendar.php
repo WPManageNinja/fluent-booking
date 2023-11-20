@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\Calendars;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\Framework\Support\Arr;
 
 abstract class BaseCalendar
 {
@@ -141,6 +142,44 @@ abstract class BaseCalendar
                 'inline_help' => __(sprintf('Select for how many minutes the %1s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2s then you may lower the value', $this->calendarTitle, $this->calendarTitle), 'fluent-booking-pro')
             ],
         ];
+    }
+
+    public function getConflictCheckCalendars($userId)
+    {
+        $metaItems = Meta::where('object_type', '_'.$this->calendarKey.'_user_token')
+            ->where('object_id', $userId)
+            ->get();
+
+        if ($metaItems->isEmpty()) {
+            return [];
+        }
+
+        $calendars = [];
+
+        foreach ($metaItems as $item) {
+            $settings = $item->value;
+            $checkIds = Arr::get($settings, 'conflict_check_ids', []);
+            if (empty($checkIds)) {
+                continue;
+            }
+
+            $itemValidCalendars = [];
+            $allCalendars = Arr::get($settings, 'calendar_lists', []);
+            foreach ($allCalendars as $calendar) {
+                if (in_array($calendar['id'], $checkIds)) {
+                    $itemValidCalendars[] = $calendar['id'];
+                }
+            }
+
+            if ($itemValidCalendars) {
+                $calendars[] = [
+                    'item'      => $item,
+                    'check_ids' => $itemValidCalendars
+                ];
+            }
+        }
+
+        return $calendars;
     }
 
 }

@@ -595,4 +595,33 @@ class Booking extends Model
 
         return $data;
     }
+
+    public function getAdditionalData($isHtml = false)
+    {
+        $customData = BookingFieldService::getFormattedCustomBookingData($this);
+
+        if (!$customData) {
+            return '';
+        }
+
+        if (!$isHtml) {
+            $text = '';
+            foreach ($customData as $data) {
+                $text .= $data['label'] . ': '. PHP_EOL . $data['value'] .PHP_EOL.PHP_EOL;
+            }
+            return $text;
+        }
+
+        $html = '<table>';
+        foreach ($customData as $data) {
+            $html .= '<tr>';
+            $html .= '<td><b>' . $data['label'] . '</b></td>';
+            $html .= '<td>' . $data['value'] . '</td>';
+            $html .= '</tr>';
+        }
+        $html .= '</table>';
+
+        return $html;
+    }
+
 }

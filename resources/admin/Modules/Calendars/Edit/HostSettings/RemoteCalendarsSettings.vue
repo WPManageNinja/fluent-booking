@@ -87,6 +87,10 @@
                 </div>
             </div>
         </div>
+
+        <el-dialog :close-on-click-modal="false" v-model="showCalDav" width="50%" :title="'Connect ' + calDavDriver.title">
+            <cal-dav-auth v-if="showCalDav" :calendar="calendar" :driver="calDavDriver"/>
+        </el-dialog>
     </div>
 </template>
 
@@ -94,12 +98,14 @@
 import each from 'lodash/each';
 import isEmpty from 'lodash/isEmpty';
 import RemoteCalendar from './RemoteCalendar';
+import CalDavAuth from './CalDavAuth';
 
 export default {
     name: 'RemoteCalendarsSettings',
     props: ['calendar'],
     components: {
-        RemoteCalendar
+        RemoteCalendar,
+        CalDavAuth
     },
     data() {
         return {
@@ -109,7 +115,9 @@ export default {
             feeds: [],
             settings: {
                 remote_calendar_config: ''
-            }
+            },
+            showCalDav: false,
+            calDavDriver: {}
         }
     },
     computed: {
@@ -183,8 +191,9 @@ export default {
                 });
         },
         isEmpty,
-        initCalDav() {
-
+        initCalDav(driver) {
+            this.calDavDriver = driver;
+            this.showCalDav = true;
         }
     },
     mounted() {

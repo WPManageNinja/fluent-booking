@@ -9,6 +9,7 @@ use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\BaseCalendar;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\DateTime;
 
 class Bootstrap extends BaseCalendar
 {
@@ -31,7 +32,7 @@ class Bootstrap extends BaseCalendar
                     return $calendar;
                 }
 
-                $metas = Meta::where('object_type', '_apple_cal_user_token')
+                $metas = Meta::where('object_type', '_apple_calendar_user_token')
                     ->where('object_id', $calendar->user_id)
                     ->get();
 
@@ -47,6 +48,8 @@ class Bootstrap extends BaseCalendar
                 return $calendar;
             }, 10, 2);
         });
+
+        add_filter('fluent_booking/verify_save_caldav_credential_' . $this->calendarKey, [$this, 'saveUserCredentials'], 10, 3);
     }
 
     public function getClientSettingsForView($settings)
@@ -112,7 +115,7 @@ class Bootstrap extends BaseCalendar
             return $feeds;
         }
 
-        $items = Meta::where('object_type', '_apple_cal_user_token')
+        $items = Meta::where('object_type', '_apple_calendar_user_token')
             ->where('object_id', $userId)
             ->get();
 
@@ -151,6 +154,33 @@ class Bootstrap extends BaseCalendar
 
     public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
     {
+        if (!$this->isConfigured()) {
+            return $books;
+        }
+
+        return $books;
+
+        $conflictItems = $this->getConflictCheckCalendars($calendarSlot->user_id);
+
+        $item = $conflictItems[0];
+
+        $userName = Arr::get($item['item']->value, 'remote_email');
+
+        $password = Helper::decryptKey(Arr::get($item['item']->value, 'remote_pass'));
+
+        $client = new IcloudClient($userName, $password);
+
+        $calendarId = Arr::get($item, 'check_ids.0', '');
+
+
+        $events = $client->getEvents($calendarId, [
+            new \DateTime($dateRange[0]),
+            new \DateTime($dateRange[1])
+        ]);
+
+      //  dd($events);
+
+
         return $books;
     }
 
@@ -164,7 +194,7 @@ class Bootstrap extends BaseCalendar
             return false; // Already created
         }
 
-        $meta = Meta::where('object_type', '_apple_cal_user_token')
+        $meta = Meta::where('object_type', '_apple_calendar_user_token')
             ->where('object_id', $booking->host_user_id)
             ->where('id', $config['db_id'])
             ->first();
@@ -173,27 +203,39 @@ class Bootstrap extends BaseCalendar
             return false; //  Meta could not be found
         }
 
-        $settings = $meta->value;
+        $client = AppleHelper::getClientByMeta($meta);
 
-        $isValid = false;
-
-        $calendarLists = Arr::get($settings, 'calendar_lists', []);
-
-        foreach ($calendarLists as $item) {
-            if ($item['can_write'] != 'yes') {
-                continue;
-            }
-
-            if ($item['id'] == $config['remote_calendar_id']) {
-                $isValid = true;
-            }
+        if (is_wp_error($client)) {
+            return false;
         }
 
-        if (!$isValid) {
-            return false; // invalid id of the remote calendar
+        $data = [
+            'dtstart'  => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'    => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'status'   => 'confirmed',
+            'summary'  => $booking->getMeetingTitle(),
+            'location' => $booking->getLocationAsText()
+        ];
+
+        if ($booking->message) {
+            $data['description'] = $booking->message;
         }
 
+        if ($additionalData = $booking->getAdditionalData(false)) {
+            if (!empty($data['description'])) {
+                $data['description'] .= "\\n";
+            } else {
+                $data['description'] = '';
+            }
 
+            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
+
+            $data['description'] .= $additionalData;
+        }
+
+        $response = $client->createEvent($config['remote_calendar_id'], $data);
+
+        error_log(print_r($response, true));
     }
 
     public function cancelEvent($config, Booking $booking)
@@ -231,12 +273,12 @@ class Bootstrap extends BaseCalendar
 
     private function getRemoteCalendarsList($item, $fromApi = false)
     {
-        return [];
+        return Arr::get($item->value, 'calendar_lists', []);
     }
 
     private function addFeedIntegration($userId, $tokenData)
     {
-        $exist = Meta::where('object_type', '_apple_cal_user_token')
+        $exist = Meta::where('object_type', '_apple_calendar_user_token')
             ->where('object_id', $userId)
             ->where('key', $tokenData['remote_email'])
             ->first();
@@ -248,10 +290,52 @@ class Bootstrap extends BaseCalendar
         }
 
         return Meta::create([
-            'object_type' => '_apple_cal_user_token',
+            'object_type' => '_apple_calendar_user_token',
             'object_id'   => $userId,
             'key'         => $tokenData['remote_email'],
             'value'       => $tokenData
         ]);
     }
+
+    public function saveUserCredentials($response, $data, $userId)
+    {
+        $userEmail = Arr::get($data, 'username');
+        if (!is_email($userEmail)) {
+            $response['message'] = 'Please enter a valid email address';
+            return $response;
+        }
+
+        $password = Arr::get($data, 'password');
+        if (!$password) {
+            $response['message'] = 'Please enter a valid password';
+            return $response;
+        }
+
+        // Let's validate the CalDav credential
+
+        $icloud = new IcloudClient($userEmail, $password);
+
+        $calendars = $icloud->getCalendars();
+
+        if (is_wp_error($calendars)) {
+            $response['message'] = $calendars->get_error_message();
+            return $response;
+        }
+
+        $tokenData = [
+            'remote_email'                => $userEmail,
+            'remote_pass'                 => Helper::encryptKey($password),
+            'calendar_lists'              => $calendars,
+            'last_calendar_lists_fetched' => time()
+        ];
+
+        $this->addFeedIntegration($userId, $tokenData);
+
+        $response['success'] = true;
+        $response['message'] = __('Your credential has been saved', 'fluent-booking-pro');
+
+        return $response;
+    }
+
+
 }
