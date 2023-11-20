@@ -132,6 +132,12 @@
 
     const currentUrl = window.location.href;
 
+    setTimeout(() => {
+        const adjustHeight  = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+        const calendarInner = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected");
+        calendarInner.style.height =  adjustHeight + 135 +'px';
+    }, 100)
+
     function hasPaymentItem() {
         return !!(slot.total_payment);
     }
@@ -181,7 +187,6 @@
                     if (hasPaymentItem) {
                         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
                         setTimeout(() => {
-                            const adjustHeight = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
                             calendar.style.height = 'auto';
                         }, 100);
                     }
