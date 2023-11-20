@@ -37,7 +37,7 @@
                     </div>
                     <div class="fcal_question_footer">
                         <el-link class="fcal_add_question" :underline="false" @click="addQuestion">
-                            {{ $t('+Add more questions for invitees') }}
+                            {{ $t('+ Add more questions for invitees') }}
                         </el-link>
                         <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                     </div>
