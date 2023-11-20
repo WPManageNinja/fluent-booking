@@ -206,6 +206,9 @@
 
     function slotSpotForFluentForm(day) {
         selectedDateTime = day;
+        if (isFluentform) {
+            dispatch('dateOnFluentForm', selectedDateTime);
+        }
         if (!isFluentform) {
             return;
         }
