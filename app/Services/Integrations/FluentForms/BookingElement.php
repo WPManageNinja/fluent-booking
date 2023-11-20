@@ -58,7 +58,8 @@ class BookingElement extends BaseFieldManager
                 'container_class'    => '',
                 'cal_guest_fields'   => [
                     'email_field' => '',
-                    'name_field'  => ''
+                    'name_field'  => '',
+                    'host_info'   => 'hide'
                 ],
                 'validation_rules'   => array(
                     'required' => [
@@ -185,7 +186,13 @@ class BookingElement extends BaseFieldManager
 
         $localizeData['name'] = $name;
         $localizeData['settings'] = $settings;
-        $localizeData['disable_author'] = true;
+
+        if (Arr::get($localizeData['settings']['cal_guest_fields'], 'host_info', 'hide') == 'show') {
+            $localizeData['disable_author'] = false;
+        } else {
+            $localizeData['disable_author'] = true;
+        }
+
         $localizeData['form_instance'] = $form->instance_css_class;
 
         return [$localizeData, $element_id];

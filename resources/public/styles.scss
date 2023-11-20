@@ -268,6 +268,7 @@ $lightDark: #6b7280;
   .fcal_side {
     max-width: 100%;
     width: 360px;
+    min-width: 360px;
     border-right: 1px solid #EAECF0;
     transition: all .22s ease-out;
     -webkit-transition: all .22s ease-out;
@@ -332,6 +333,8 @@ $lightDark: #6b7280;
     -webkit-transition: .5s;
     -moz-transition: .5s;
     -o-transition: .5s;
+    display: flex;
+    align-items: flex-start;
 
     &.is_active {
       //padding-right: 600px;
@@ -814,12 +817,49 @@ $lightDark: #6b7280;
 
   &.fcal_on_sm, &.fcal_on_xs {
     min-width: 100%;
+
+    .fcal_slot_picker {
+      &.is_active {
+        .fcal_slot_picker_header {
+          .fcal_slot_date_info {
+            margin-right: auto;
+            margin-left: 8px;
+          }
+        }
+
+      }
+    }
   }
 
   &.fcal_on_md {
     &.fcal_day_selected {
       .fcal_side {
         width: 300px;
+        min-width: 300px;
+      }
+      .fcal_calendar_slot_wrap {
+        &.is_active {
+          padding-right: 220px;
+        }
+      }
+      .fcal_slot_picker {
+        min-width: 200px;
+        .fcal_spot_lists {
+          .fcal_spot {
+            .fcal_spot_name {
+              padding: 6px 19px;
+              font-size: 13px;
+            }
+            .fcal_spot_confirm {
+              padding: 7px 12px;
+              font-size: 10px;
+              svg {
+                width: 16px;
+                height: 16px;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -827,6 +867,7 @@ $lightDark: #6b7280;
   &.fcal_on_sm {
     .fcal_side {
       width: 240px;
+      min-width: 240px;
     }
 
     &.fcal_day_selected {
@@ -855,6 +896,13 @@ $lightDark: #6b7280;
 
   &.fcal_on_xs {
     flex-direction: column;
+    &.fcal_form_calendar {
+      .fcal_date_wrapper {
+        .fcal_day_picker_wrap {
+          width: 100%;
+        }
+      }
+    }
 
     .fcal_side {
       border: none;
