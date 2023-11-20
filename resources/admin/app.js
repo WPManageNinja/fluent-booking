@@ -6,7 +6,7 @@ import Rest from './Bits/Rest.js';
 import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
-import {Plus, Delete, Location, Operation, UserFilled} from "@element-plus/icons-vue";
+import {Plus, Delete, Location, Operation, UserFilled, Lock} from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
 import {applyFilters, addFilter} from '@wordpress/hooks';
 
@@ -40,7 +40,7 @@ function convertToText(obj) {
 
 const app = createApp(DashboardApplication);
 
-const Icons = [Plus, Delete, Location, Operation, UserFilled];
+const Icons = [Plus, Delete, Location, Operation, UserFilled, Lock];
 Icons.forEach((icon) => {
     app.component(icon.name, icon);
 });
