@@ -38,15 +38,18 @@
     }
 
     function checkDevice() {
-        console.log(wrapDom);
         wrapperWidth = wrapDom.parentNode.offsetWidth;
-        console.log(wrapperWidth);
+        const conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
+
         if (wrapperWidth >= 900) {
             wrapperClass = 'fcal_on_lg';
         } else if (wrapperWidth >= 800) {
             wrapperClass = 'fcal_on_md';
         } else if (wrapperWidth >= 600) {
             wrapperClass = 'fcal_on_sm';
+            if (conversationalPage.length) {
+                wrapperClass = 'fcal_on_md';
+            }
         } else {
             wrapperClass = 'fcal_on_xs';
         }
