@@ -323,7 +323,7 @@ class CalendarController extends Controller
 
         if (!isset($slotSettings['booking_frequency'], $slotSettings['booking_duration'])) {
             $slotSettings['booking_frequency'] = [
-                'enabled' => true,
+                'enabled' => false,
                 'limits'  => [
                     [
                         'unit'  => 'per_day',
@@ -332,7 +332,7 @@ class CalendarController extends Controller
                 ]
             ];
             $slotSettings['booking_duration'] = [
-                'enabled' => true,
+                'enabled' => false,
                 'limits'  => [
                     [
                         'unit'  => 'per_day',

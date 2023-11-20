@@ -5,38 +5,43 @@
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
                     {{ meetingDetails }} - {{ $t(ucFirst(showing_booking.status)) }}
 
-                    <el-dropdown v-if="isMoreIconVisible" trigger="click" popper-class="fcal_select">
+                    <el-dropdown v-if="hasAccess('manage_all_bookings')" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item @click="updateScheduleStatus('completed')">
+                                <el-dropdown-item 
+                                    v-if="canMarkAsCompleted" @click="updateScheduleStatus('completed')">
                                     <el-icon>
                                         <Check/>
                                     </el-icon>
                                     {{ $t('Mark As Completed') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if="showing_booking.status!='no_show'"
-                                                  @click="updateScheduleStatus('no_show')">
+                                <el-dropdown-item 
+                                    v-if="canMakeNoShow"
+                                    @click="updateScheduleStatus('no_show')">
                                     <el-icon>
                                         <Hide/>
                                     </el-icon>
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="rescheduleBooking">
+                                <el-dropdown-item 
+                                    v-if="canReschedule" @click="rescheduleBooking">
                                     <el-icon>
                                         <Refresh/>
                                     </el-icon>
                                     {{ $t('Reschedule') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="cancelDialog = true">
+                                <el-dropdown-item 
+                                    v-if="canCancel" @click="cancelDialog = true">
                                     <el-icon>
                                         <Close/>
                                     </el-icon>
                                     {{ $t('Cancel') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="deleteDialog = true">
+                                <el-dropdown-item 
+                                    v-if="!isBookingCompleted" @click="deleteDialog = true">
                                     <el-icon>
                                         <Delete/>
                                     </el-icon>
@@ -163,8 +168,9 @@
                     v-loading="updating"
                     :disabled="updating"
                     class="fcal_primary_btn"
-                    @click="cancelEvent()">
-                  {{ $t('Yes, Cancel') }}
+                    @click="cancelEvent()"
+                >
+                    {{ $t('Yes, Cancel') }}
                 </el-button>
               </span>
             </template>
@@ -262,8 +268,23 @@ export default {
         }
     },
     computed: {
-        isMoreIconVisible() {
-            return this.hasAccess('manage_all_bookings') && this.showing_booking.status != 'cancelled' && this.showing_booking.status != 'completed';
+        isBookingCompleted() {
+            return this.showing_booking.status == 'completed';
+        },
+        isBookingCancelled() {
+            return this.showing_booking.status == 'cancelled';
+        },
+        canMarkAsCompleted() {
+            return !this.isBookingCompleted && !this.isBookingCancelled;
+        },
+        canReschedule() {
+            return !this.isBookingCompleted && !this.isBookingCancelled;
+        },
+        canMakeNoShow() {
+            return this.showing_booking.status != 'no_show' && this.isBookingCompleted;
+        },
+        canCancel() {
+            return !this.isBookingCompleted && !this.isBookingCancelled;
         },
         isGroupEvent() {
             return this.showing_booking.event_type == 'group';
