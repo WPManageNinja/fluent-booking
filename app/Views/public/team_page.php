@@ -9,7 +9,7 @@
                         </div>
                     <?php endif; ?>
                     <?php if ($title): ?>
-                        <h2 class="fcal_team_title"><?php echo esc_html($title); ?></h2>
+                        <h2 class="fcal_team_title"><?php echo wp_kses_post($title); ?></h2>
                     <?php endif; ?>
                     <?php if ($description): ?>
                         <div class="fcal_team_description">
