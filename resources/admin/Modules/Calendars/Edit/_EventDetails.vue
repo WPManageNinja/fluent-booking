@@ -59,7 +59,7 @@
                                 @change="validateDuration(calendar_event)"
                                 type="number"
                                 :min="10">
-                                <template #append>Minutes</template>
+                                <template #append>{{ $t('Minutes') }}</template>
                             </el-input>
                         </div>
                     </el-form-item>

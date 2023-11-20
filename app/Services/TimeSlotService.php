@@ -32,6 +32,10 @@ class TimeSlotService
         $daySlots = $this->getWeekDaySlots();
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
+        $bookingFrequency = Arr::get($this->calendarSlot->settings, 'booking_frequency', []);
+
+        $bookingDuration = Arr::get($this->calendarSlot->settings, 'booking_duration', []);
+
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
@@ -57,13 +61,17 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
-
+            
             if (!$availableSlots) {
                 continue;
             }
             
             $currentBookedSlots = $bookedSlots[$date] ?? [];
 
+            if ($this->hasReachedMaxLimit($bookingFrequency, $bookingDuration, $currentBookedSlots)) {
+                continue;
+            }
+            
             $isToday = $date === $todayDate;
             $validSlots = [];
 
@@ -395,17 +403,25 @@ class TimeSlotService
         return $formattedSlots;
     }
 
-    protected function hasReachedMaxLimit($maxBookPerDay, $bookedSlots)
+    protected function hasReachedMaxLimit($bookingFrequency, $bookingDuration, $bookedSlots)
     {
-        if (!$maxBookPerDay) {
-            return false;
+        if (Arr::isTrue($bookingFrequency, 'enabled')) {
+            $booked = array_filter($bookedSlots, function ($bookedSlot) {
+                return $this->calendarSlot->id == $bookedSlot['event_id'];
+            });
+    
+            return count($booked) >= Arr::get($bookingFrequency, 'limits.0.value');
         }
 
-        $booked = array_filter($bookedSlots, function ($bookedSlot) {
-            return $this->calendarSlot->id == $bookedSlot['event_id'];
-        });
-
-        return count($booked) >= $maxBookPerDay;
+        if (Arr::isTrue($bookingDuration, 'enabled')) {
+            $booked = array_filter($bookedSlots, function ($bookedSlot) {
+                return $this->calendarSlot->id == $bookedSlot['event_id'];
+            });
+    
+            return count($booked) * $this->calendarSlot->duration >= Arr::get($bookingDuration, 'limits.0.value');
+        }
+        
+        return false;
     }
 
     public function getAvailableSpots($startDate, $timeZone = 'utc')

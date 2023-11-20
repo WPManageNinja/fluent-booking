@@ -11,7 +11,7 @@
                             <div class="fcal_buffer_time_wrap">
                                 <div class="fcal_buffer_time">
                                     <span class="sub-label">{{ $t('Before Event') }}</span>
-                                    <el-select v-model="calendar_event.settings.buffer_time_before" :placeholder="$t('Select')"
+                                    <el-select v-model="settings.buffer_time_before" :placeholder="$t('Select')"
                                             :no-match-text="$t('No Data match')"
                                             :no-data-text="$t('No Data')" popper-class="fcal_select">
                                         <el-option
@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="fcal_buffer_time">
                                     <span class="sub-label">{{ $t('After Event') }}</span>
-                                    <el-select v-model="calendar_event.settings.buffer_time_after" :placeholder="$t('Select')"
+                                    <el-select v-model="settings.buffer_time_after" :placeholder="$t('Select')"
                                             :no-match-text="$t('No Data match')"
                                             :no-data-text="$t('No Data')" popper-class="fcal_select">
                                         <el-option
@@ -39,11 +39,11 @@
                             <div class="fcal_slot_condition_wrap">
                                 <div class="fcal_slot_condition_time">
                                     <span class="sub-label">{{ $t("Minimum Notice") }}</span>
-                                    <SchedulingConditions :settings="calendar_event.settings"/>
+                                    <SchedulingConditions :settings="settings"/>
                                 </div>
                                 <div class="fcal_slot_condition_time">
                                     <span class="sub-label">{{ $t("Time-slot intervals") }}</span>
-                                    <el-select v-model="calendar_event.settings.slot_interval" :placeholder="$t('Select')"
+                                    <el-select v-model="settings.slot_interval" :placeholder="$t('Select')"
                                         :no-match-text="$t('No Data match')"
                                         :no-data-text="$t('No Data')" popper-class="fcal_select">
                                         <el-option
@@ -65,23 +65,23 @@
                                 <span>{{ $t("LimitSettings/booking_frequency_description") }}</span>
                             </div>
                             <div class="card_action">
-                                <el-switch v-model="calendar_event.settings.booking_frequency"/>
+                                <el-switch v-model="settings.booking_frequency.enabled"/>
                             </div>
                         </div>
-                        <div class="fcal_booking_limit_child_card" v-if="calendar_event.settings.booking_frequency">
-                            <div v-for="(frequency, index) in booking_frequencies" :key="index" class="fcal_inline_items">
+                        <div class="fcal_booking_limit_child_card" v-if="settings.booking_frequency.enabled">
+                            <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
                                 <el-input type="text" v-model="frequency.value" @input="validateInput(frequency)"/>
-                                <el-select v-model="frequency.unit" @change="validateInput(frequency)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                    <el-option value="per_day" :label="$t('Per Day')"></el-option>
-                                    <el-option value="per_week" :label="$t('Per Week')"></el-option>
+                                <el-select v-model="frequency.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                    <el-option :disabled="isDayExist(settings.booking_frequency)" value="per_day" :label="$t('Per day')"></el-option>
+                                    <el-option :disabled="isWeekExist(settings.booking_frequency)" value="per_week" :label="$t('Per week')"></el-option>
                                 </el-select>
-                                <el-link v-if="isRemovable(booking_frequencies)" type="danger" :title="$t('Remove')"
+                                <el-link v-if="isRemovable(settings.booking_frequency)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
                                     :underline="false"
                                     @click="removeBookingFrequency(index)">
                                 </el-link>
                             </div>
-                            <el-link type="primary" :underline="false" @click="addBookingFrequency">
+                            <el-link v-if="isInsertable(settings.booking_frequency)" type="primary" :underline="false" @click="insertBookingFrequency">
                                 {{ $t('Add Another Limit') }}
                             </el-link>
                         </div>
@@ -94,23 +94,25 @@
                                 <span>{{ $t("LimitSettings/booking_duration_description") }}</span>
                             </div>
                             <div class="card_action">
-                                <el-switch v-model="calendar_event.settings.booking_duration"/>
+                                <el-switch v-model="settings.booking_duration.enabled"/>
                             </div>
                         </div>
-                        <div class="fcal_booking_limit_child_card" v-if="calendar_event.settings.booking_duration">
-                            <div v-for="(duration, index) in booking_durations" :key="index" class="fcal_inline_items">
-                                <el-input type="text" v-model="duration.value" @input="validateInput(duration)"/>
-                                <el-select v-model="duration.unit" @change="validateInput(duration)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                    <el-option value="per_day" :label="$t('Per Day')"></el-option>
-                                    <el-option value="per_week" :label="$t('Per Week')"></el-option>
+                        <div class="fcal_booking_limit_child_card" v-if="settings.booking_duration.enabled">
+                            <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
+                                <el-input class="fcal_booking_duration" type="text" v-model="duration.value" @input="validateInput(duration)">
+                                    <template #append>{{ $t('Minutes') }}</template>
+                                </el-input>
+                                <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                    <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
+                                    <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
                                 </el-select>
-                                <el-link v-if="isRemovable(booking_durations)" type="danger" :title="$t('Remove')"
+                                <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
                                     :underline="false"
                                     @click="removeBookingDuration(index)">
                                 </el-link>
                             </div>
-                            <el-link type="primary" :underline="false" @click="addBookingDuration">
+                            <el-link v-if="isInsertable(settings.booking_duration)" type="primary" :underline="false" @click="insertBookingDuration">
                                 {{ $t('Add Another Limit') }}
                             </el-link>
                         </div>
@@ -153,66 +155,62 @@ export default {
     data() {
         return {
             saving: false,
+            settings: this.calendar_event.settings,
             bufferTimes: this.appVars.buffer_times,
             slotIntervals: this.appVars.slot_intervals,
             CloseBoldIcon: markRaw(CloseBold),
-            booking_frequencies: [
-                {
-                    value: 1,
-                    unit: 'per_day'
-                }
-            ],
-            booking_durations: [
-                {
-                    value: 1,
-                    unit: 'per_day'
-                }
-            ]
         }
     },
     computed: {
         isRemovable() {
-            return (data) => {
-                return data.length > 1;
+            return (settings) => {
+                return settings.limits.length > 1;
+            }
+        },
+        isInsertable() {
+            return (settings) => {
+                return settings.limits.length < 2;
             }
         }
     },
     methods: {
-        addBookingFrequency() {
-            this.booking_frequencies.push({
-                value: 1,
-                unit: 'per_week'
+        isDayExist(settings) {
+            return settings.limits.some(limit => limit.unit == 'per_day');
+        },
+        isWeekExist(settings) {
+            return settings.limits.some(limit => limit.unit == 'per_week');
+        },
+        insertBookingFrequency() {
+            const unitValue = this.isDayExist(this.settings.booking_frequency) ? 'per_week' : 'per_day';
+            this.settings.booking_frequency.limits.push({
+                unit: unitValue,
+                value: 1
             });
         },
         removeBookingFrequency(index) {
-            this.booking_frequencies.splice(index, 1);
+            this.settings.booking_frequency.limits.splice(index, 1);
         },
-        addBookingDuration() {
-            this.booking_durations.push({
-                value: 1,
-                unit: 'per_week'
+        insertBookingDuration() {
+            const unitValue = this.isDayExist(this.settings.booking_duration) ? 'per_week' : 'per_day';
+            this.settings.booking_duration.limits.push({
+                unit: unitValue,
+                value: 1
             });
         },
         removeBookingDuration(index) {
-            this.booking_durations.splice(index, 1);
-        },
-        validateMaxBookInput() {
-            const maxBookPerDay = this.calendar_event.settings.max_book_per_day;
-            if (maxBookPerDay && maxBookPerDay < 1) {
-                this.calendar_event.settings.max_book_per_day = 1;
-            } else if (maxBookPerDay > 100){
-                this.calendar_event.settings.max_book_per_day = 100;
-            }
+            this.settings.booking_duration.limits.splice(index, 1);
         },
         validateInput(frequency) {
             if (isNaN(frequency.value) || frequency.value < 1) {
                 frequency.value = '';
+            } else if (frequency.value > 10000) {
+                frequency.value = 10000;
             }
         },
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/limits', {
-                settings: this.calendar_event.settings
+                settings: this.settings
             })
                 .then(response => {
                     this.$handleSuccess(response);
