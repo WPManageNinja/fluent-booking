@@ -71,10 +71,12 @@
                                 </div>
                             </div>
                             <div class="fcal_driver_action">
-                                <a v-if="driver.is_global_configured" :href="driver.auth_url"
-                                   class="el-button el-button--primary el-button--small">
-                                    {{ driver.btn_text }}
-                                </a>
+                                <template v-if="driver.is_global_configured">
+                                    <el-button @click="initCalDav(driver)" type="primary" v-if="driver.is_caldav">{{ driver.btn_text }}</el-button>
+                                    <a v-else :href="driver.auth_url" class="el-button el-button--primary el-button--small">
+                                        {{ driver.btn_text }}
+                                    </a>
+                                </template>
                                 <a v-else :href="driver.global_config_url"
                                    class="el-button el-button--primary el-button--small">
                                     Configure {{ driver.title }} API
@@ -180,7 +182,10 @@ export default {
                     this.saving = false;
                 });
         },
-        isEmpty
+        isEmpty,
+        initCalDav() {
+
+        }
     },
     mounted() {
         this.getSettings();
