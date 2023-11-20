@@ -32,6 +32,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->put('/{id}/events/{event_id}', 'CalendarController@patchCalendarEvent')->int('id')->int('event_id');
     $router->delete('/{id}/events/{event_id}', 'CalendarController@deleteCalendarEvent')->int('id')->int('event_id');
 
+    $router->get('/{id}/events/{event_id}/availability', 'CalendarController@getAvailabilitySettings')->int('event_id');
     $router->post('/{id}/events/{event_id}/details', 'CalendarController@updateEventDetails')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/availability', 'CalendarController@updateEventAvailability')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/limits', 'CalendarController@updateEventLimits')->int('id')->int('event_id');
