@@ -210,6 +210,7 @@ class AdminMenuHandler
         $meetingDurations = Helper::getMeetingDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $bufferTimes = Helper::getBufferTimes();
+        $slotIntervals = Helper::getSlotIntervals();
         $customFieldTypes = Helper::getCustomFieldTypes();
         $locationFields = (new Calendar())->getLocationFields();
 
@@ -222,6 +223,7 @@ class AdminMenuHandler
             'event_colors'       => $eventColors,
             'meeting_durations'  => $meetingDurations,
             'buffer_times'       => $bufferTimes,
+            'slot_intervals'     => $slotIntervals,
             'schedule_schema'    => $scheduleSchema,
             'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,

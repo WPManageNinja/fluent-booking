@@ -22,7 +22,7 @@
             <div class="fcal_onboard_steps">
                 <div v-if="step==1" class="fcal_onboard_step step-1">
                     <div class="fcal_create_calendar_basic_info">
-                        <basic-info ref="basicInfo" :is_board="is_board" :slot="calendar.slot" :event_type="calendar.slot.event_type" />
+                        <event-details ref="basicInfo" :is_board="is_board" :calendar_event="calendar.slot" :event_type="calendar.slot.event_type" :new_event="true"/>
                     </div>
                     <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone">
                         <time-zone-selector v-model="calendar.author_timezone"/>
@@ -61,7 +61,7 @@ import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
 import { Right, Back } from '@element-plus/icons-vue';
-import BasicInfo from './Edit/_BasicInfo';
+import EventDetails from './Edit/_EventDetails';
 import PartyIcon from "@/Pieces/PartyIcon";
 
 export default {
@@ -74,7 +74,7 @@ export default {
         HostSelector,
         SaveButton,
         Right,
-        BasicInfo,
+        EventDetails,
         Back
     },
     data() {
@@ -140,30 +140,29 @@ export default {
         },
         redirectToSetting(calendarId, slotId) {
             this.$router.push({
-                name: 'slot_settings',
+                name: 'event_details',
                 params: { calendar_id: calendarId, event_id: slotId }
             });
         },
         checkValidation() {
-            const location = this.calendar.slot.location_settings[0];
-
-            if(!location) {
+            if(!this.calendar.slot.location_settings[0]) {
                 this.$handleError(this.$t('Please provide a location first'));
                 return false;
             }
-
-            if (!location.type) {
-                this.$handleError(this.$t('Location is required'));
-                return false;
-            } else if ((location.type == 'custom') && !location.title)  {
-                this.$handleError(this.$t('Location Title is required'));
-                return false;
-            } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description)  {
-                this.$handleError(this.$t('Location Description is required'));
-                return false;
-            } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
-                this.$handleError(this.$t('Phone Number is required'));
-                return false;
+            for (const location of this.calendar.slot.location_settings) {
+                if (!location.type) {
+                    this.$handleError(this.$t('Location Type is required'));
+                    return false;
+                } else if ((location.type == 'custom') && !location.title) {
+                    this.$handleError(this.$t('Location Title is required'));
+                    return false;
+                } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description) {
+                    this.$handleError(this.$t('Location Description is required'));
+                    return false;
+                } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                    this.$handleError(this.$t('Phone Number is required'));
+                    return false;
+                }
             }
             return true;
         },

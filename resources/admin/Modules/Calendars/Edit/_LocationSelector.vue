@@ -54,11 +54,12 @@
             </div>
         </div>
 
-        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation">{{ $t('Add another location option') }}</el-link>
+        <el-link v-if="slot.event_type == 'single'" :underline="false" @click="addNewLocation"> + {{ $t('Add another location option') }}</el-link>
 
         <el-dialog
             v-if="dialogVisible"
             v-model="dialogVisible"
+            :show-close="false"
             :close-on-press-escape="false"
             :close-on-click-modal="false"
             width="30%"

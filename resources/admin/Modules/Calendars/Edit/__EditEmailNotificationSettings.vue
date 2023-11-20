@@ -82,7 +82,7 @@ import { markRaw } from "vue";
 import Popover from '../../../Components/Popover.vue';
 import { Plus, More, CloseBold, ArrowDown } from '@element-plus/icons-vue';
 export default {
-    name: 'EditNotificationEmail',
+    name: 'EditEmailNotification',
     components: {
         Plus,
         More,

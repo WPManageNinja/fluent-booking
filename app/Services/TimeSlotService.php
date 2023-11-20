@@ -57,13 +57,13 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
-
+            
             if (!$availableSlots) {
                 continue;
             }
             
             $currentBookedSlots = $bookedSlots[$date] ?? [];
-
+            
             $isToday = $date === $todayDate;
             $validSlots = [];
 
@@ -234,43 +234,22 @@ class TimeSlotService
 
             $remaining = 0;
 
-            if ($bufferTime && $this->calendarSlot->id == $booking->event_id) {
-                $beforeBufferTime = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $afterBufferTime = date('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                if ($maxBooking > $booked) {
-                    $remaining = $maxBooking - $booked;
-                    $rangedItems = [];
-                    if ($beforeBufferTime < $booking->start_time) {
-                        $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                            'start'     => $beforeBufferTime,
-                            'end'       => $booking->start_time,
-                            'remaining' => $remaining,
-                        ]);
-                    } else if ($afterBufferTime > $booking->end_time) {
-                        $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                            'start'     => $booking->end_time,
-                            'end'       => $afterBufferTime,
-                            'remaining' => $remaining,
-                        ]);
-                    }
-
-                    if ($rangedItems) {
-                        foreach ($rangedItems as $date => $slot) {
-                            if (!isset($books[$date])) {
-                                $books[$date] = [];
-                            }
-
-                            if ($isGroupBooking && $remaining) {
-                                $groupBookingKeys[$booking->start_time . '_' . $booking->end_time] = true;
-                            }
-
-                            $books[$date][] = $slot;
+            if ($this->calendarSlot->id == $booking->event_id) {
+                $remaining = max(0, $maxBooking - $booked);
+                if ($bufferTime) {
+                    $beforeBufferTime = date('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $afterBufferTime = date('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    if ($remaining) {
+                        if ($beforeBufferTime < $booking->start_time) {
+                            $books[$date][] = $this->bookSlot(null, $beforeBufferTime, $booking->start_time);
                         }
+                        if ($afterBufferTime > $booking->end_time) {
+                            $books[$date][] = $this->bookSlot(null, $booking->end_time, $afterBufferTime);
+                        }
+                    } else {
+                        $booking->start_time = $beforeBufferTime;
+                        $booking->end_time = $afterBufferTime;
                     }
-
-                } else {
-                    $booking->start_time = $beforeBufferTime;
-                    $booking->end_time = $afterBufferTime;
                 }
             }
 
@@ -414,19 +393,6 @@ class TimeSlotService
         }
 
         return $formattedSlots;
-    }
-
-    protected function hasReachedMaxLimit($maxBookPerDay, $bookedSlots)
-    {
-        if (!$maxBookPerDay) {
-            return false;
-        }
-
-        $booked = array_filter($bookedSlots, function ($bookedSlot) {
-            return $this->calendarSlot->id == $bookedSlot['event_id'];
-        });
-
-        return count($booked) >= $maxBookPerDay;
     }
 
     public function getAvailableSpots($startDate, $timeZone = 'utc')

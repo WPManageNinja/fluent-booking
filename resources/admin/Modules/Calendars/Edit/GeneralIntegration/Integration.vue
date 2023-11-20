@@ -1,131 +1,133 @@
 <template>
-    <div class="fcal_calendar_settings fcal_integration_settings">
-        <div class="fcal_settings_header" v-if="show_edit">
-            <div class="fcal_settings_head">
-                <h2>
-                    <el-breadcrumb separator="/">
-                        <el-breadcrumb-item @click="showAll()">{{ $t('Integrations') }}</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{ $t('Edit') }}</el-breadcrumb-item>
-                    </el-breadcrumb>
-                </h2>
-            </div>
-            <div class="fcal_actions">
-                <el-button
-                    class="fcal_primary_btn2"
-                    @click="showAll()"
-                >
-                    <el-icon>
-                        <Back/>
-                    </el-icon>
-                    {{ $t('Back') }}
-                </el-button>
-            </div>
-        </div>
-
-        <div v-else class="fcal_settings_header">
-            <div class="fcal_settings_head">
-                <h2>{{ $t('Integrations') }}</h2>
-                <p>{{ $t('integrations_description') }}</p>
-            </div>
-            <div v-if="!isEmpty(available_integrations)" class="fcal_actions">
-                <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click"
-                             popper-class="fcal_select">
-                    <el-button type="info">
-                        {{ $t('Add New Integration') }}
-
+    <div class="fcal_create_calendar_body">
+        <div class="fcal_calendar_settings fcal_integration_settings">
+            <div class="fcal_settings_header" v-if="show_edit">
+                <div class="fcal_settings_head">
+                    <h2>
+                        <el-breadcrumb separator="/">
+                            <el-breadcrumb-item @click="showAll()">{{ $t('Integrations') }}</el-breadcrumb-item>
+                            <el-breadcrumb-item>{{ $t('Edit') }}</el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </h2>
+                </div>
+                <div class="fcal_actions">
+                    <el-button
+                        class="fcal_primary_btn2"
+                        @click="showAll()"
+                    >
                         <el-icon>
-                            <ArrowDown/>
+                            <Back/>
                         </el-icon>
+                        {{ $t('Back') }}
                     </el-button>
-                    <template #dropdown>
-                        <el-dropdown-menu class="ff-dropdown-menu" slot="dropdown"
-                                          style="max-height: 400px; overflow: auto">
-                            <el-dropdown-item v-for="(integration,integration_name) in filteredList"
-                                              :key="integration_name" :command="integration_name">
-                                {{ integration.title }}
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                </div>
             </div>
-        </div>
 
-        <el-skeleton v-if="loading" :animated="true" :rows="5"/>
-        <div v-else class="fcal_settings_body">
-            <template v-if="!show_edit">
-                <div v-if="integrations.length" class="fcal_integration_items">
-                    <div class="fcal_integration_item" v-for="integration in integrations" :key="integration.id">
-                        <div class="fcal_card_wrap">
-                            <div class="fcal_integration_icon">
-                                <img v-if="integration.provider_logo"
-                                     class="general_integration_logo"
-                                     :src="integration.provider_logo" :alt="integration.provider"/>
-                            </div>
-                            <div class="fcal_card_item_details">
-                                <h3>{{ integration.name }}</h3>
-                                <ul class="event_triggers" v-if="integration.feed.event_trigger">
+            <div v-else class="fcal_settings_header">
+                <div class="fcal_settings_head">
+                    <h2>{{ $t('Integrations') }}</h2>
+                    <p>{{ $t('integrations_description') }}</p>
+                </div>
+                <div v-if="!isEmpty(available_integrations)" class="fcal_actions">
+                    <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click"
+                                popper-class="fcal_select">
+                        <el-button type="info">
+                            {{ $t('Add New Integration') }}
 
-                                    <li v-for="(event, i) in integration.feed.event_trigger" :key="i"><i class="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 stroke-[3px]"
-                                             data-testid="start-icon">
-                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                        </svg>
-                                    </i> {{ getEventName(event) }}
-                                    </li>
-                                </ul>
+                            <el-icon>
+                                <ArrowDown/>
+                            </el-icon>
+                        </el-button>
+                        <template #dropdown>
+                            <el-dropdown-menu class="ff-dropdown-menu" slot="dropdown"
+                                            style="max-height: 400px; overflow: auto">
+                                <el-dropdown-item v-for="(integration,integration_name) in filteredList"
+                                                :key="integration_name" :command="integration_name">
+                                    {{ integration.title }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+            </div>
+
+            <el-skeleton v-if="loading" :animated="true" :rows="5"/>
+            <div v-else class="fcal_settings_body">
+                <template v-if="!show_edit">
+                    <div v-if="integrations.length" class="fcal_integration_items">
+                        <div class="fcal_integration_item" v-for="integration in integrations" :key="integration.id">
+                            <div class="fcal_card_wrap">
+                                <div class="fcal_integration_icon">
+                                    <img v-if="integration.provider_logo"
+                                        class="general_integration_logo"
+                                        :src="integration.provider_logo" :alt="integration.provider"/>
+                                </div>
+                                <div class="fcal_card_item_details">
+                                    <h3>{{ integration.name }}</h3>
+                                    <ul class="event_triggers" v-if="integration.feed.event_trigger">
+
+                                        <li v-for="(event, i) in integration.feed.event_trigger" :key="i"><i class="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 stroke-[3px]"
+                                                data-testid="start-icon">
+                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                            </svg>
+                                        </i> {{ getEventName(event) }}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="fcal_card_actions">
-                            <el-switch
-                                active-color="#306ae0"
-                                @change="handleActive(integration)"
-                                v-model="integration.enabled">
-                            </el-switch>
-                            <el-button
-                                class="fcal_plain_btn"
-                                @click="edit(integration)"
-                            >
-                                <el-icon>
-                                    <Edit/>
-                                </el-icon>
-                            </el-button>
-                            <el-popconfirm
-                                :title="$t('Are you sure to delete this?')"
-                                popper-class="fcal_confirm_dialog"
-                                confirm-button-type="danger"
-                                :confirm-button-text="$t('Yes')"
-                                :cancel-button-text="$t('No')"
-                                @confirm="removeFeed(integration.id)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" class="fcal_danger_btn">
-                                        <el-icon>
-                                            <Delete/>
-                                        </el-icon>
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
+                            <div class="fcal_card_actions">
+                                <el-switch
+                                    active-color="#306ae0"
+                                    @change="handleActive(integration)"
+                                    v-model="integration.enabled">
+                                </el-switch>
+                                <el-button
+                                    class="fcal_plain_btn"
+                                    @click="edit(integration)"
+                                >
+                                    <el-icon>
+                                        <Edit/>
+                                    </el-icon>
+                                </el-button>
+                                <el-popconfirm
+                                    :title="$t('Are you sure to delete this?')"
+                                    popper-class="fcal_confirm_dialog"
+                                    confirm-button-type="danger"
+                                    :confirm-button-text="$t('Yes')"
+                                    :cancel-button-text="$t('No')"
+                                    @confirm="removeFeed(integration.id)"
+                                >
+                                    <template #reference>
+                                        <el-button type="danger" class="fcal_danger_btn">
+                                            <el-icon>
+                                                <Delete/>
+                                            </el-icon>
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <template v-else-if="isEmpty(available_integrations)">
-                    <p style="font-size: 16px;">{{ $t('Currently FluentBooking has integration with FluentCRM.After install') }} <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>{{ $t('Integration/FluentCRM_not_active_desc') }}</p>
+                    <template v-else-if="isEmpty(available_integrations)">
+                        <p style="font-size: 16px;">{{ $t('Currently FluentBooking has integration with FluentCRM.After install') }} <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>{{ $t('Integration/FluentCRM_not_active_desc') }}</p>
+                    </template>
+                    <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
+                        <p style="font-size: 16px;">{{ $t('Integration/empty_integrations_title') }}</p>
+                    </div>
                 </template>
-                <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
-                    <p style="font-size: 16px;">{{ $t('Integration/empty_integrations_title') }}</p>
-                </div>
-            </template>
-            <IntegrationEditor
-                v-else
-                :editingIntegration="editingIntegration"
-                :calendar_event="calendar_event"
-                :inputs="fields"
-                :has_pro="has_pro"
-                @back="hideEditor"
-                :smart_codes="smart_codes"
-            />
+                <IntegrationEditor
+                    v-else
+                    :editingIntegration="editingIntegration"
+                    :calendar_event="calendar_event"
+                    :inputs="fields"
+                    :has_pro="appVars.has_pro"
+                    @back="hideEditor"
+                    :smart_codes="smart_codes"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -147,7 +149,7 @@ import EventIcon from "@/Components/Icons/EventIcon.vue";
 
 export default {
     name: 'Integrations',
-    props: ['calendar_id', 'event_id', 'calendar_event', 'has_pro', 'editorShortcodes'],
+    props: ['calendar_id', 'event_id', 'calendar_event'],
     components: {
         EventIcon,
         QuestionIcon,
@@ -271,7 +273,7 @@ export default {
         isEmpty,
         fetchFields() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/slots/' + this.event_id + '/booking-fields')
+            this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id + '/booking-fields')
                 .then(response => {
                     this.fields = response.fields;
                 })
@@ -314,7 +316,4 @@ export default {
         this.fetchFields();
     }
 };
-</script>
-<script setup>
-import {Share} from "@element-plus/icons-vue";
 </script>

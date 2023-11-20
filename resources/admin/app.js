@@ -218,7 +218,7 @@ router.afterEach((to, from) => {
     jQuery(".toplevel_page_fluent-booking li").find(`a[href*='#/${activeMenu}']`).parent().addClass("current");
 
     if (activeMenu == 'dashboard') {
-        jQuery(".toplevel_page_fluent-booking ul.wp-submenu li.wp-first-item").addClass("current");
+        jQuery(".toplevel_page_fluent-booking li.wp-first-item").find("a[href*='fluent-booking']").parent().addClass("current");
     }
     
     if (to.meta.title) {
