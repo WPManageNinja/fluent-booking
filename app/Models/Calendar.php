@@ -40,6 +40,10 @@ class Calendar extends Model
             }
             $model->hash = md5(wp_generate_uuid4() . time());
         });
+
+        static::deleting(function ($model) {
+            $model->availabilities()->delete();
+        });
     }
 
     public function setSettingsAttribute($settings)
@@ -70,6 +74,11 @@ class Calendar extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'calendar_id');
+    }
+
+    public function availabilities()
+    {
+        return $this->hasMany(Availability::class, 'object_id', 'user_id');
     }
 
     public function getAuthorPhoto()

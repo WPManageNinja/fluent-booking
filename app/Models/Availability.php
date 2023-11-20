@@ -42,11 +42,6 @@ class Availability extends Model
         return \maybe_unserialize($value);
     }
 
-    public function calendar()
-    {
-        return $this->belongsTo(Calendar::class, 'object_id');
-    }
-
     public function getAuthor()
     {
         $user = get_user_by('ID', $this->object_id);

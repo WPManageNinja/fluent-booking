@@ -2,6 +2,15 @@ import DashboardWrapper from './Components/DashboardWrapper.vue';
 import AllCalendars from './Modules/Calendars/AllCalendars.vue';
 import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
+import AvailabilitySettings from "./Modules/Calendars/Edit/_AvailabilitySettings.vue";
+import EventDetails from "./Modules/Calendars/Edit/_EventDetails.vue";
+import LimitSettings from "./Modules/Calendars/Edit/_LimitSettings.vue";
+import EmailNotification from "./Modules/Calendars/Edit/_EmailNotificationSettings.vue";
+import SMSNotification from "./Modules/Calendars/Edit/_SmsNotificationSettings.vue";
+import QuestionSettings from "./Modules/Calendars/Edit/_QuestionSettings.vue";
+import PaymentSettings from "./Modules/Calendars/Edit/Payments/PaymentSettings.vue";
+import WebhookSettings from "./Modules/Calendars/Edit/WebHook/WebhookSettings.vue";
+import Integrations from "./Modules/Calendars/Edit/GeneralIntegration/Integration.vue";
 import CreateCalendarSlot from "./Modules/Calendars/Edit/CreateCalendarSlot.vue";
 import AllSchedules from "./Modules/Schedules/AllSchedules.vue";
 
@@ -104,12 +113,94 @@ export var routes = [
     },
     {
         path: '/calendars/:calendar_id/slot-settings/:event_id',
-        name: 'slot_settings',
         component: SlotSettings,
         props: true,
         meta: {
             active_menu: 'calendars'
-        }
+        },
+        children: [
+            {
+                path: 'event-details',
+                name: 'event_details',
+                component: EventDetails,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'availability-settings',
+                name: 'availability_settings',
+                component: AvailabilitySettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'limit-settings',
+                name: 'limit_settings',
+                component: LimitSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'email-notification',
+                name: 'email_notification',
+                component: EmailNotification,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'sms-notification',
+                name: 'sms_notification',
+                component: SMSNotification,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'question-settings',
+                name: 'question_settings',
+                component: QuestionSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'payment-settings',
+                name: 'payment_settings',
+                component: PaymentSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'webhook-settings',
+                name: 'webhook_settings',
+                component: WebhookSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'integrations',
+                name: 'integrations',
+                component: Integrations,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+        ]
     },
     {
         path: '/calendars/:calendar_id/slot-settings/:event_id/integrations/:integration_id/:integration_name',

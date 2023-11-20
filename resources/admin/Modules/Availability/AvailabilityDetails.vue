@@ -130,7 +130,6 @@
 
 <script>
 import { StarFilled, Setting, Delete, EditPen, Location, MoreFilled, CopyDocument } from '@element-plus/icons-vue';
-import ScheduleSettings from "../Calendars/Edit/_ScheduleSettings";
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
 import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
@@ -146,7 +145,6 @@ export default {
         WeeklySchedules,
         TimezoneIcon,
         SaveButton,
-        ScheduleSettings,
         ScheduleIcon,
         Pagination,
         StarFilled,
@@ -178,7 +176,7 @@ export default {
         },
         goToEvent(event) {
             this.$router.push({
-                name: 'slot_settings',
+                name: 'event_details',
                 params: { calendar_id: event.calendar_id, event_id: event.id}
             })
         },

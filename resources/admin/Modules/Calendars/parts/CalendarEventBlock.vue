@@ -8,14 +8,14 @@
                     <p v-if="calendar.public_url && calendar.visibility == 'public'" class="fcal_profile_link">
                         <a target="_blank" rel="noopener" :href="calendar.public_url">{{calendar.public_url}}</a>
                     </p>
-                    <p class="fcal_profile_link" v-else-if="!calendar.public_url"><span style="cursor: pointer;" @click="goToIntegrationSetting">
+                    <p class="fcal_profile_link" v-else-if="!calendar.public_url"><span style="cursor: pointer;" @click="goToCalendarSetting">
                         {{ $t('Enable Landing Page') }}
                     </span></p>
                     <div v-if="calendar.generic_error" v-html="calendar.generic_error"></div>
                 </div>
             </div>
             <div class="fcal_cal_actions">
-                <el-button class="fcal_plain_btn" @click="goToIntegrationSetting">
+                <el-button class="fcal_plain_btn" @click="goToCalendarSetting">
                     <el-icon><Setting /></el-icon> {{ $t('Host Settings') }}
                 </el-button>
 
@@ -57,7 +57,7 @@
             modal-class="fcal_drawer"
         >
             <div class="fcal_create_new_booking_type_drawer">
-                <el-button @click="createOneToOneSlot">
+                <el-button @click="createSlot('single')">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -72,7 +72,7 @@
                         <el-icon class="icon-right"><Right /></el-icon>
                     </div>
                 </el-button>
-                <el-button @click="createGroupSlot">
+                <el-button @click="createSlot('group')">
                     <div class="icons-wrap">
                         <el-icon><User /></el-icon>
                         <el-icon><Right /></el-icon>
@@ -120,22 +120,16 @@ export default {
         slotDeleted(slotIndex) {
             this.calendar.slots.splice(slotIndex, 1);
         },
-        goToIntegrationSetting() {
+        goToCalendarSetting() {
             this.$router.push({
                 name: 'calendar_settings',
                 params: {id: this.calendar.id}
             })
         },
-        createOneToOneSlot() {
+        createSlot(eventType) {
             this.$router.push({
                 name: 'create_slot_event',
-                params: {calendar_id: this.calendar.id, event_type: 'single'}
-            })
-        },
-        createGroupSlot() {
-            this.$router.push({
-                name: 'create_slot_event',
-                params: {calendar_id: this.calendar.id, event_type: 'group'}
+                params: {calendar_id: this.calendar.id, event_type: eventType}
             })
         },
         handleCommand(command) {

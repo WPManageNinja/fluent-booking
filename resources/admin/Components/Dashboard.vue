@@ -69,7 +69,7 @@
                             </span>
                             <div class="description_and_link">
                                 <span class="title" v-html="scheduleTitle(schedule)"></span>
-                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('view') }}</el-link>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
                             </div>
                         </div>
                         <div v-else class="fcal_no_activities">
