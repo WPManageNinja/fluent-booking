@@ -89,7 +89,7 @@ class ICal
      *
      * @var boolean
      */
-    public $skipRecurrence = false;
+    public $skipRecurrence = true;
 
     /**
      * Toggles whether to disable all character replacement.
