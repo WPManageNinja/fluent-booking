@@ -181,6 +181,9 @@ class Bootstrap extends BaseCalendar
 
         $cacheKeyPrefix = $toDate->format('YmdHis');
 
+        $config = AppleHelper::getApiConfig();
+        $cacheTime = Arr::get($config, 'caching_time', 5);
+
         $remoteBooks = [];
         foreach ($conflictItems as $item) {
             $meta = $item['item'];
@@ -204,7 +207,7 @@ class Bootstrap extends BaseCalendar
                     } catch (\Exception $exception) {
                         return new \WP_Error($exception->getCode(), $exception->getMessage());
                     }
-                });
+                }, $cacheTime * 60);
 
                 $missedSlots = [];
                 foreach ($events['events'] as $event) {
