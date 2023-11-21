@@ -67,6 +67,8 @@ trait FoundationTrait
     {
         if (is_string($handler)) {
 
+            if (function_exists($handler)) return $handler;
+
             $handler = $this->getPolicyNamespace($handler) . '\\' . $handler;
 
             if (is_string($handler) && strpos($handler, '@') !== false) {
@@ -237,6 +239,8 @@ trait FoundationTrait
     public function parseHookHandler($handler)
     {
         if (is_string($handler)) {
+
+            if (function_exists($handler)) return $handler;
             
             if (count($array = preg_split('/::|@/', $handler)) < 2) {
                 $array[] = 'handle';

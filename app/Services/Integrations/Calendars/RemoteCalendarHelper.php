@@ -107,15 +107,15 @@ class RemoteCalendarHelper
         exit();
     }
 
-    public static function getRruleDates($rules, $sampleRange, $minDate, $maxDate, $args = [])
+    public static function getRruleDates($rules, $sampleRange, $minDate, $maxDate, $args = [], $timezone = 'UTC')
     {
         try {
             $durationSeconds = strtotime($sampleRange[1]) - strtotime($sampleRange[0]);
 
             // Define the time range you're interested in
-            $minDate = new \DateTime($minDate, new \DateTimeZone('UTC'));
-            $maxDate = new \DateTime($maxDate, new \DateTimeZone('UTC'));
-            $dtStart = new \DateTime($sampleRange[0], new \DateTimeZone('UTC'));
+            $minDate = new \DateTime($minDate, new \DateTimeZone($timezone));
+            $maxDate = new \DateTime($maxDate, new \DateTimeZone($timezone));
+            $dtStart = new \DateTime($sampleRange[0], new \DateTimeZone($timezone));
 
             // Create a rule set
             $rset = new \FluentBooking\App\Services\Libs\RRule\RSet();

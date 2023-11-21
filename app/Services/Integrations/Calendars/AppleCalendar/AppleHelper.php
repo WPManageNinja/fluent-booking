@@ -38,4 +38,18 @@ class AppleHelper
         update_option('_fcal_apple_calendar_client_details', $settings, 'no');
         return $settings;
     }
+
+    public static function getClientByMeta(Meta $meta)
+    {
+        $settings = $meta->value;
+        $userName = Arr::get($settings, 'remote_email');
+        $passWord = Helper::decryptKey(Arr::get($settings, 'remote_pass'));
+
+        if (!$userName || !$passWord) {
+            return new \WP_Error('invalid_credentials', __('Invalid credentials', 'fluent-booking-pro'));
+        }
+
+
+        return new IcloudClient($userName, $passWord);
+    }
 }

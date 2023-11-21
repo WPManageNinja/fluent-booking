@@ -213,6 +213,8 @@ class Client
 
 		$content = wp_remote_retrieve_body($response);
 
+       // dd($content);
+
 		return $this->extractReportinformation($content);
 	}
 

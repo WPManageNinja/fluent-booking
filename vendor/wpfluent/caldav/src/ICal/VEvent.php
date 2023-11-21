@@ -71,6 +71,8 @@ class VEvent
      */
     public $created;
 
+    public $timezone;
+
     /**
      * https://www.kanzaki.com/docs/ical/lastModified.html
      *

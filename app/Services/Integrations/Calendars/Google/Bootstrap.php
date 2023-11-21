@@ -82,7 +82,7 @@ class Bootstrap extends BaseCalendar
             'icon_url'       => $this->logo,
             'component_type' => 'GlobalGoogleComponent',
             'route'          => [
-                'name'   => 'configure-google'
+                'name' => 'configure-google'
             ]
         ];
         return $menuItems;
