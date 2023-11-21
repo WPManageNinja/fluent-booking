@@ -7,10 +7,10 @@
   }
 
   .fcal_calendar_inner {
-    border: 1px solid #DADCE0;
+    border: 1px solid var(--slot_border);
     border-radius: 8px;
     transition: all .22s ease-out;
-    background: #ffffff;
+    background: var(--cal_bg);
 
     &.fcal_form_calendar {
       width: 100%;

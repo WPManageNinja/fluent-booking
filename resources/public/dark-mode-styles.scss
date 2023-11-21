@@ -1,0 +1,188 @@
+
+.fluent_booking_wrap {
+	padding-top: 40px;
+	margin-top: 0;
+}
+
+
+// Dark Mode
+body.dark-mode {
+
+	// Variables
+	//#1c1c1c
+	$calBG: #1c1c1c;
+	$color_2: #a5a5a5;
+	--dark: #dddbdb;
+	--primaryColor: #ffffff;
+	--gray: #a5a5a5;
+	--cal_bg: #1c1c1c;
+	--slot_border: #2b2b2b;
+	--fcal_primary_color: #ffffff;
+	--date_disabled_bg: transparent;
+	--enable_day_bg: #2b2b2b;
+	--date_disabled_color: #575757;
+	--thBG: #2b2b2b;
+	--whiteColor: #1B2533;
+	--input_bg: #101010;
+	--fcal_body_bg: #101010;
+
+
+	> .fcal_calendar_wrap {
+		background: var(--fcal_body_bg);
+		height: 100vh;
+		overflow-x: hidden;
+		.fcal_slots {
+			.fcal_slot {
+				background: transparent;
+				&:hover {
+					background: $calBG;
+				}
+			}
+		}
+	}
+	.fcal_slot {
+		.fcal_slot_duration {
+			color: $color_2;
+		}
+		.book_now {
+			svg {
+				path {
+					stroke: var(--primaryColor);
+				}
+			}
+		}
+	}
+	.fcal_calendar_inner {
+		.fcal_date_wrapper {
+			.calendar {
+				.day {
+					&.day-enabled {
+						&:hover {
+							span {
+								color: #101010;
+								&:before {
+									background: #101010;
+								}
+							}
+						}
+						span {
+							color: #ffffff;
+						}
+					}
+					&.day_is_selected {
+						span {
+							color: #101010 !important;
+							&:before {
+								background: #101010;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.fcal_slot_picker {
+		.fcal_spot_lists {
+			.fcal_spot {
+				.fcal_spot_confirm {
+					color: #101010;
+				}
+			}
+		}
+		.fcal_slot_picker_header {
+			.fcal_slot_picker_header_action {
+				.format-hour {
+					input:checked ~ label {
+						color: #2b2b2b;
+					}
+				}
+			}
+		}
+	}
+	.fcal_author_header {
+		p {
+			color: #a5a5a5;
+		}
+	}
+	.svelte-select {
+		.item {
+			color: #1B2533 !important;
+		}
+	}
+	.fcal_slot_info {
+		.fcal_multi_location_title,
+		.fcal_icon_item {
+			svg {
+				circle,
+				path {
+					fill: #ffffff;
+					stroke: #ffffff;
+				}
+			}
+		}
+		.fcal_multi_location_title,
+		.slot_time_range,
+		.slot_timing {
+			svg {
+				circle,
+				path {
+					fill: none;
+				}
+			}
+		}
+	}
+	.fcal_payment_items {
+		table {
+			thead {
+				th {
+					background: #2b2b2b;
+				}
+			}
+		}
+	}
+	.fcal_booking_form_wrap {
+		.fcal_booking_form {
+			.fcal_form_item {
+				.fcal_input_content {
+					.fcal_input_wrap {
+						&.address {
+							textarea {
+								&::placeholder {
+									color: var(--gray);
+								}
+							}
+							svg {
+								stroke: var(--gray);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.fluent_booking_payment_processor {
+		#fluent_booking_stipe_pay {
+			&:hover {
+				background: #e9e7e7;
+			}
+		}
+	}
+
+	//	team
+	.fcal_teams {
+		.fcal_team_body {
+			.fcal_each_member {
+				&:hover {
+					background: #1c1c1c;
+				}
+			}
+		}
+		.fcal_slots {
+			.fcal_slot {
+				&:hover {
+					background: #1c1c1c;
+				}
+			}
+		}
+	}
+}
