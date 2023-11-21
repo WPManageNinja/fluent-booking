@@ -10,6 +10,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/remote-calendars/patch-conflicts', 'IntegrationSettingsController@patchRemoteCalendarConflictSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
+    $router->post('/{id}/integrations/remote-calendars/cal-dav-auth', 'IntegrationSettingsController@addCalDavCredential')->int('id');
 
     // Zoom Integrations - User Level
     $router->get('/{id}/integrations/zoom-connection', 'ZoomController@getZoomConnectionByCalendarId')->int('id');

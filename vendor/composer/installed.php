@@ -3,7 +3,7 @@
         'name' => 'wpfluent/wpfluent',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '7607827e4ce44a39b80f4e79e3a45a9d4ff3fbde',
+        'reference' => '001d5105611b02a0e95549d970932a6db026d79b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(
@@ -13,9 +13,9 @@
     ),
     'versions' => array(
         'woocommerce/action-scheduler' => array(
-            'pretty_version' => '3.6.4',
-            'version' => '3.6.4.0',
-            'reference' => 'e7dafe215be5ef823392204535ee2e241f99a8cb',
+            'pretty_version' => '3.7.0',
+            'version' => '3.7.0.0',
+            'reference' => '7a2046a5e6a15786068bb0298407522f30c694b4',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../woocommerce/action-scheduler',
             'aliases' => array(),
@@ -24,7 +24,7 @@
         'wpfluent/caldav' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '495167a7de374211e923fda2b3f77033ae9ae07d',
+            'reference' => 'cd323facb3261171582585df04dc18f05d3c7a57',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpfluent/caldav',
             'aliases' => array(
@@ -33,9 +33,9 @@
             'dev_requirement' => false,
         ),
         'wpfluent/framework' => array(
-            'pretty_version' => '2.2.26',
-            'version' => '2.2.26.0',
-            'reference' => '752d177fcf2e072ac0cfd8b87c3266dd8515ee3a',
+            'pretty_version' => '2.2.27',
+            'version' => '2.2.27.0',
+            'reference' => '877f3891d677274788d24ca405f3df6db69d7114',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpfluent/framework',
             'aliases' => array(),
@@ -44,7 +44,7 @@
         'wpfluent/wpfluent' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '7607827e4ce44a39b80f4e79e3a45a9d4ff3fbde',
+            'reference' => '001d5105611b02a0e95549d970932a6db026d79b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(

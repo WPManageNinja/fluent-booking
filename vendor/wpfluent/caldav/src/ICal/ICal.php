@@ -89,7 +89,7 @@ class ICal
      *
      * @var boolean
      */
-    public $skipRecurrence = false;
+    public $skipRecurrence = true;
 
     /**
      * Toggles whether to disable all character replacement.
@@ -657,6 +657,7 @@ class ICal
                 }
 
                 $add     = $this->keyValueFromString($line);
+
                 $keyword = $add[0];
                 $values  = $add[1]; // May be an array containing multiple values
 
@@ -676,6 +677,7 @@ class ICal
                 $values = array_reverse($values);
 
                 foreach ($values as $value) {
+
                     switch ($line) {
                         case 'BEGIN:VJOURNAL':
                             if (!is_array($value)) {
@@ -1004,6 +1006,14 @@ class ICal
 
                 break;
 
+            case 'VTIMEZONE':
+                if($value) {
+                    $this->cal[$component][$keyword] = $value;
+                } else {
+                    $this->cal[$component][$keyword] = $value;
+                }
+                break;
+
             default:
                 $this->cal[$component][$keyword] = $value;
 
@@ -1013,6 +1023,7 @@ class ICal
         if (is_string($keyword)) {
             $this->lastKeyword = $keyword;
         }
+
     }
 
     /**
@@ -1273,6 +1284,7 @@ class ICal
      */
     protected function processEvents()
     {
+
         $checks = null;
         $events = (isset($this->cal['VEVENT'])) ? $this->cal['VEVENT'] : array();
 
@@ -1308,6 +1320,8 @@ class ICal
                     $this->alteredRecurrenceInstances[$uid][$key] = $recurrenceDateUtc;
                 }
 
+                $anEvent['timezone'] = $this->calendarTimeZoneFromRemote();
+
                 $events[$key] = $anEvent;
             }
 
@@ -1336,6 +1350,7 @@ class ICal
             foreach ($eventKeysToRemove as $eventKeyToRemove) {
                 $events[$eventKeyToRemove] = null;
             }
+
 
             $this->cal['VEVENT'] = $events;
         }
@@ -2229,6 +2244,17 @@ class ICal
         }
 
         return $timeZone;
+    }
+
+    public function calendarTimeZoneFromRemote()
+    {
+        if (isset($this->cal['VCALENDAR']['X-WR-TIMEZONE'])) {
+            return $this->cal['VCALENDAR']['X-WR-TIMEZONE'];
+        }
+        if (isset($this->cal['VTIMEZONE']['TZID'])) {
+            return $this->cal['VTIMEZONE']['TZID'];
+        }
+        return null;
     }
 
     /**

@@ -117,9 +117,9 @@ trait CommonTrait
         $events = [];
 
         foreach ($xpath->query('//cal:calendar-data') as $cal) {
-        	
+
         	$ical = new ICal($cal->nodeValue, [
-        		'defaultTimeZone' => wp_timezone_string()
+        		'defaultTimeZone' => 'UTC'
         	]);
 
             $events = array_merge($events, $ical->events());

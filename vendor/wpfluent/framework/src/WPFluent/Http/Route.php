@@ -128,6 +128,13 @@ class Route
     protected static $parameters = null;
 
     /**
+     * Route substituted parameters
+     * 
+     * @var null|array
+     */
+    protected static $substitutedParameters = [];
+
+    /**
      * Construct the route instance
      * 
      * @param \FluentBooking\Framework\Foundation\Application $app
@@ -494,11 +501,9 @@ class Route
     {
         try {
 
-            if ($routeParameters = $this->getParameter()) {
-                $routeParameters = $this->SubstituteParameters($routeParameters);
-            }
-
-            $response = $this->app->call($this->action, $routeParameters);
+            $response = $this->app->call(
+                $this->action, $this->getControllerParameters()
+            );
 
             if ($response instanceof WPFluentResponse) {
                 $response = $response->toArray();
@@ -562,21 +567,46 @@ class Route
             return $this->app->make(Pipeline::class)
                 ->send($this->app->request)
                 ->through($beforeMiddleware)->then(function($request) {
-                    if ($this->permissionHandler) {
-                        return $this->app->call(
-                            $this->permissionHandler,
-                            $this->app->request->get_url_params()
-                        );
-                    } 
+                     return $this->dispatchPermissionHandler();
                 });
-        } else {
-            if ($this->permissionHandler) {
-                return $this->app->call(
-                    $this->permissionHandler,
-                    $this->app->request->get_url_params()
-                );
-            } 
         }
+        
+        return $this->dispatchPermissionHandler();
+    }
+
+    /**
+     * Dispatches the permission handler
+     * 
+     * @return bool|null
+     */
+    protected function dispatchPermissionHandler()
+    {
+        if ($this->permissionHandler) {
+            return $this->app->call(
+                $this->permissionHandler,
+                $this->getControllerParameters()
+            );
+        }
+    }
+
+    /**
+     * Gether route params after substituted the params
+     * 
+     * @return array
+     */
+    protected function getControllerParameters()
+    {
+        $routeParameters = [];
+
+        if (!static::$substitutedParameters) {
+            if ($routeParameters = $this->getParameter()) {
+                $routeParameters = $this->SubstituteParameters($routeParameters);
+            }
+        } else {
+            $routeParameters = static::$substitutedParameters;
+        }
+
+        return $routeParameters;
     }
 
     /**
@@ -601,25 +631,41 @@ class Route
 
         $callableMiddleware = Arr::get($middleware, "global.{$type}", []);
 
+        $routeArray = [];
+
+        if (isset($middleware['route'])) {
+            $routeArray = $middleware['route'];
+            if (isset($routeArray[$type])) {
+                $routeArray = $routeArray[$type];
+            }
+        }
+
+        if (!$routeArray) return [];
+
         foreach ($this->middleware[$type] as $routeMiddleware) {
 
-            $pieces = explode(':', $routeMiddleware);
-
-            if ($handler = Arr::get($middleware['route'][$type], $key = reset($pieces))) {
+            if (is_object($routeMiddleware)) {
+                $handler = $routeMiddleware;
+            } else {
+                $pieces = explode(':', $routeMiddleware);
+                $handler = Arr::get($routeArray, $key = reset($pieces));
 
                 if (isset($pieces[1])) {
                     $handler = $this->resolveMiddleware($handler, $pieces);
                 }
+            }
 
+            if (isset($handler)) {
                 $this->addMiddlewareInTheStack($callableMiddleware, $handler);
-
             } else {
+                if (isset($key)) {
+                    $mpath = 'config.middleware.route.' . $type;
+                    $msg = "No middleware is assigned for the key: {$key} in {$mpath} array.";
+                } else {
+                    $msg = "Could't resolve middleware.";
+                }
                 
-                $middlewarePath = 'config.middleware.route.' . $type;
-
-                throw new InvalidArgumentException(
-                    "No middleware is assigned for the key: {$key} in {$middlewarePath} array."
-                );
+                throw new InvalidArgumentException($msg);
             }
         }
 
@@ -801,7 +847,16 @@ class Route
         ];
 
 
-        return $this->action = $handler;
+        $this->action = $handler;
+
+        if ($routeParameters = $this->getParameter()) {
+            static::$substitutedParameters = $this->SubstituteParameters(
+                $routeParameters
+            );
+        }
+
+
+        return $this->action;
     }
 
     /**
