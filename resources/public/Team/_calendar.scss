@@ -1,6 +1,7 @@
-$color_1: var(--dark);
-$color_2: #445164;
+$color_1: var(--dark) !default;
+$color_2: #445164 !default;
 $color_3: var(--primaryColor);
+$color_4: var(--gray) !default;
 $border-color_1: var(--primaryColor);
 
 .fcal_author_header {
@@ -27,13 +28,14 @@ $border-color_1: var(--primaryColor);
     font-size: 16px;
     line-height: 24px;
     margin: 8px 0 0 0;
+    color: var(--gray); //#a5a5a5
   }
 }
 
 .fcal_slots {
   display: grid;
   grid-template-columns: 1fr;
-  border: 1px solid #D6DAE1;
+  border: 1px solid var(--slot_border);
   border-radius: 8px;
   overflow: hidden;
 
@@ -57,9 +59,10 @@ $border-color_1: var(--primaryColor);
 }
 
 .fcal_slot {
-  border-bottom: 1px solid #D6DAE1;
+  border-bottom: 1px solid var(--slot_border);
   padding: 16px 24px;
   transition: .3s;
+  background: transparent;
 
   h2 {
     font-size: 16px;
@@ -84,7 +87,7 @@ $border-color_1: var(--primaryColor);
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
-    color: $color_1;
+    color: $color_4;
     margin: 0 0 7px;
     padding-left: 19px;
   }
@@ -102,7 +105,7 @@ $border-color_1: var(--primaryColor);
   }
 
   button {
-    border: 1px solid #D6DAE1;
+    border: 1px solid var(--slot_border);
     color: $color_1;
     font-size: 14px;
     font-weight: 500;

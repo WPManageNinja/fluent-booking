@@ -303,6 +303,39 @@
             margin-top: 24px;
         }
     }
+
+    .fcal_appearance_theme {
+        gap: 15px;
+        .el-radio {
+            margin: 0;
+            text-align: center;
+            &.is-checked {
+                .el-radio__label {
+                    svg {
+                        box-shadow: 0 0 0 1.5px #fff, 0 0 0 4px $primaryColor;
+                    }
+                }
+            }
+            .el-radio__input {
+                display: none;
+            }
+            .el-radio__label {
+                margin: 0;
+                padding-left: 0 !important;
+                svg {
+                    border-radius: 4px;
+                    display: block;
+                    transition: .3s;
+                }
+                h4 {
+                    margin: .5rem 0 0;
+                    font-size: 14px;
+                    color: var(--dark);
+                    font-weight: 500;
+                }
+            }
+        }
+    }
 }
 .fcal_settings_general {
     .el-form {

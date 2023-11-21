@@ -137,6 +137,46 @@
                 </div>
             </div>
         </div>
+
+
+        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_apperance">
+            <div class="fcal_configure_integration_card">
+                <div class="fcal_configure_integration_card_header">
+                    <div class="left">
+                        <div class="content">
+                            <h3>{{ $t('Theme') }}</h3>
+                            <p>{{ $t('This only applies to your public booking pages') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body">
+                    <el-radio-group v-model="theme" class="fcal_appearance_theme">
+                        <el-radio label="system-default">
+                            <SystemDefault />
+                            <h4>{{ $t('System Default') }}</h4>
+                        </el-radio>
+                        <el-radio label="light-mode">
+                            <ModeLight />
+                            <h4>{{ $t('Light') }}</h4>
+                        </el-radio>
+                        <el-radio label="dark-mode">
+                            <ModeDark />
+                            <h4>{{ $t('Dark') }}</h4>
+                        </el-radio>
+                    </el-radio-group>
+
+                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
+                                   class="fcal_primary_btn">
+                            {{ $t('Save Settings') }}
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="fcal_settings_body_inner fcal_settings_general">
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
@@ -164,10 +204,16 @@
 
 <script type="text/babel">
 import FormBuilder from '@/Components/FormBuilder/FormBuilder.vue';
+import SystemDefault from "@/Pieces/theme/SystemDefault";
+import ModeLight from "@/Pieces/theme/ModeLight";
+import ModeDark from "@/Pieces/theme/ModeDark";
 
 export default {
     name: "GeneralSettings",
     components: {
+        ModeDark,
+        ModeLight,
+        SystemDefault,
         FormBuilder
     },
     data() {
@@ -175,6 +221,7 @@ export default {
             emailing: {},
             emailingFields: {},
             administration: {},
+            theme: '',
             weekdays: [
                 {
                     value: 'mon',
@@ -215,10 +262,12 @@ export default {
             this.loading = true;
             this.$get('settings/general')
                 .then(response => {
-                    this.emailing = response.emailing;
+                    console.log(response);
+                    this.emailing       = response.emailing;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;
-                    this.timeFormat = response.time_format;
+                    this.theme          = response.theme;
+                    this.timeFormat     = response.time_format;
                 })
                 .catch(error => {
                     this.$handleError(error);
@@ -233,6 +282,7 @@ export default {
                 emailing: this.emailing,
                 administration: this.administration,
                 timeFormat: this.timeFormat,
+                theme: this.theme,
             })
                 .then(response => {
                     this.$notify.success(response.message);

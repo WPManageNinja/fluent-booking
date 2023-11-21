@@ -649,7 +649,12 @@ class TransStrings
             'No Data'                                                                          => __('No Data', 'fluent-booking-pro'),
             'System Enabled'                                                                   => __('System Enabled', 'fluent-booking-pro'),
             'Enabled'                                                                          => __('Enabled', 'fluent-booking-pro'),
-            'Install'                                                                          => __('Install', 'fluent-booking-pro')
+            'Install'                                                                          => __('Install', 'fluent-booking-pro'),
+            'This only applies to your public booking pages'                                   => __('This only applies to your public booking pages', 'fluent-booking-pro'),
+            'Theme'                                                                       => __('Theme', 'fluent-booking-pro'),
+            'System Default'                                                              => __('System Default', 'fluent-booking-pro'),
+            'Light'                                                                       => __('Light', 'fluent-booking-pro'),
+            'Dark'                                                                        => __('Dark', 'fluent-booking-pro')
         );
 
     }
