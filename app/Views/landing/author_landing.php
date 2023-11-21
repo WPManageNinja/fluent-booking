@@ -34,6 +34,7 @@
         :root {
             --dark: #1B2533;
             --primaryColor: #2653C7;
+            --gray: #1B2533;
         }
 
         .fluent_booking_wrap {
