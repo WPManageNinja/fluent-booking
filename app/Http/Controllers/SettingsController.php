@@ -93,6 +93,7 @@ class SettingsController extends Controller
             $formattedSettings[$settingKey] = $santizedSettings;
         }
         $formattedSettings['time_format'] = $request->get('timeFormat');
+        $formattedSettings['theme']       = $request->get('theme');
 
         update_option('_fluent_booking_settings', $formattedSettings, 'no');
 
