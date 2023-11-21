@@ -4,6 +4,13 @@ $bodyBg: #f1f2f5;
 $primaryColor: #306ae0;
 $dark: #1B2533;
 $lightDark: #6b7280;
+$darkSecondaryColor: #445164;
+$whiteColor: #ffffff;
+$whiteBG: #ffffff;
+$thBG: #f5f6f7;
+$tooltipBG: #000000;
+$blackColor: #000000;
+
 :root {
   --fcal_primary_color: #306ae0;
   --fcal_date_radius: 4px;
@@ -38,7 +45,7 @@ $lightDark: #6b7280;
           font-size: 14px;
           font-weight: 700;
           line-height: 20px;
-          color: #445164;
+          color: $darkSecondaryColor;
           margin-bottom: 10px;
         }
 
@@ -62,7 +69,6 @@ $lightDark: #6b7280;
 
             input {
               position: absolute;
-              width: auto;
               width: 20px;
               height: 20px;
               border-radius: 50%;
@@ -219,8 +225,8 @@ $lightDark: #6b7280;
                 content: '';
                 width: 5px;
                 height: 12px;
-                border-bottom: 1.5px solid #ffffff;
-                border-right: 1.5px solid #ffffff;
+                border-bottom: 1.5px solid $whiteColor;
+                border-right: 1.5px solid $whiteColor;
                 position: absolute;
                 left: 50%;
                 top: 50%;
@@ -244,7 +250,7 @@ $lightDark: #6b7280;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
-        color: #ffffff;
+        color: $whiteColor;
         padding: 10px 20px;
         background: var(--fcal_primary_color);
         border-radius: 8px;
@@ -303,7 +309,7 @@ $lightDark: #6b7280;
     overflow: auto;
     min-height: 450px;
     z-index: 9;
-    background: #ffffff;
+    background: $whiteBG;
     @media (max-width: 410px) {
       min-width: 100%;
     }
@@ -330,7 +336,7 @@ $lightDark: #6b7280;
       font-weight: 500;
       line-height: 24px;
       margin: 0;
-      color: #1B2533;
+      color: $dark;
     }
 
     .fcal_slot_heading {
@@ -400,7 +406,7 @@ $lightDark: #6b7280;
       //width: 600px;
       //max-width: 600px;
       z-index: 10;
-      background: #ffffff;
+      background: $whiteBG;
       flex: none;
       width: 100%;
       max-width: 100%;
@@ -442,7 +448,7 @@ $lightDark: #6b7280;
           .fcal_back {
             cursor: pointer;
             position: absolute;
-            background: #ffffff;
+            background: $whiteBG;
             width: 30px;
             height: 30px;
             text-align: center;
@@ -474,7 +480,7 @@ $lightDark: #6b7280;
           font-size: 20px;
           font-weight: 700;
           line-height: 28px;
-          color: #1B2533;
+          color: $dark;
           margin: 0;
         }
 
@@ -494,7 +500,7 @@ $lightDark: #6b7280;
             -o-transition: .3s;
 
             svg {
-              fill: #445164;
+              fill: $darkSecondaryColor;
               width: 18px;
               transition: .3s;
               -webkit-transition: .3s;
@@ -510,7 +516,7 @@ $lightDark: #6b7280;
               color: var(--fcal_primary_color);
 
               svg {
-                fill: #ffffff;
+                fill: $whiteColor;
               }
             }
 
@@ -562,7 +568,7 @@ $lightDark: #6b7280;
         h3 {
           margin: 0;
           font-size: 18px;
-          color: #1B2533;
+          color: $dark;
           line-height: 28px;
 
           span {
@@ -592,7 +598,6 @@ $lightDark: #6b7280;
         color: #B4B9C1;
         font-size: 14px;
         font-weight: 500;
-        text-align: center;
 
         padding-top: 100% !important;
         display: block;
@@ -694,7 +699,7 @@ $lightDark: #6b7280;
 
         &.day-disabled {
           color: rgb(152 160 166);
-          background-color: #ffffff;
+          background-color: $whiteBG;
           cursor: not-allowed;
         }
 
@@ -708,7 +713,7 @@ $lightDark: #6b7280;
                 width: 4px;
                 height: 4px;
                 border-radius: 50%;
-                background: #ffffff;
+                background: $whiteBG;
                 position: absolute;
                 left: 50%;
                 bottom: 3px;
@@ -725,7 +730,7 @@ $lightDark: #6b7280;
           }
 
           span {
-            color: #445164;
+            color: $darkSecondaryColor;
             font-weight: 500;
             border-radius: var(--fcal_date_radius);
             background-color: #e5e7eb;
@@ -758,7 +763,7 @@ $lightDark: #6b7280;
   .fcal_icon_item {
     display: flex;
     column-gap: 8px;
-    color: #1B2533;
+    color: $dark;
 
     svg {
 
@@ -799,7 +804,6 @@ $lightDark: #6b7280;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    color: #1B2533;
   }
 
   &.fcal_form_calendar {
@@ -823,7 +827,7 @@ $lightDark: #6b7280;
               display: inline-block;
               font-weight: 500;
               line-height: inherit;
-              color: #000000;
+              color: $blackColor;
             }
           }
         }
@@ -1045,14 +1049,14 @@ $lightDark: #6b7280;
 
 .fcal_slot_picker {
   min-width: 220px;
-  position: relative;
+  //position: relative;
   position: absolute;
   visibility: hidden;
   opacity: 0;
-  background: #ffffff;
-  right: 0px;
+  background: $whiteBG;
+  right: 0;
   top: 0;
-  padding: 0 0 20px 0;
+  padding: 0 20px 20px 0;
   transition: .3s;
   -webkit-transition: .3s;
   -moz-transition: .3s;
@@ -1065,8 +1069,6 @@ $lightDark: #6b7280;
     height: 100%;
     overflow: auto;
   }
-
-  padding-right: 20px;
 
 
   .fcal_spot_lists {
@@ -1133,7 +1135,7 @@ $lightDark: #6b7280;
           font-size: 15px;
           font-weight: 500;
           line-height: 24px;
-          color: #445164;
+          color: $darkSecondaryColor;
         }
 
         .fcal_spot_remaining {
@@ -1186,7 +1188,7 @@ $lightDark: #6b7280;
           height: 22px;
 
           path {
-            fill: #ffffff;
+            fill: $whiteColor;
           }
         }
       }
@@ -1197,16 +1199,19 @@ $lightDark: #6b7280;
     margin: 0;
     font-size: 14px;
     font-weight: 500;
-    color: #1B2533;
+    color: $dark;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 12px;
-    background: #ffffff;
+    background: $whiteBG;
     position: sticky;
     top: 0;
     z-index: 5;
-    padding: 30px 0px 20px 0;
+    padding: 30px 0 20px 0;
+
+    .fcal_back {
+      cursor: pointer;
+    }
 
     .fcal_slot_picker_header_action {
       display: flex;
@@ -1273,9 +1278,9 @@ $lightDark: #6b7280;
   .fcal_location_tooltip {
     position: absolute;
     bottom: 100%;
-    background: #000000;
+    background: $tooltipBG;
     border-radius: 8px;
-    color: #fff;
+    color: $whiteColor;
     padding: 10px 15px;
     opacity: 0;
     margin: 0;
@@ -1313,7 +1318,7 @@ $lightDark: #6b7280;
 
       .fcal_loc_text {
         font-size: 12px;
-        color: #ffffff;
+        color: $whiteColor;
         font-weight: 400;
       }
     }
@@ -1493,7 +1498,7 @@ $lightDark: #6b7280;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  color: #fff;
+  color: $whiteColor;
   padding: 10px 20px;
   background: var(--fcal_primary_color);
   border-radius: 8px;
@@ -1510,13 +1515,13 @@ $lightDark: #6b7280;
     border-radius: 8px;
     border-spacing: 0;
     border-collapse: separate !important;
-    background: #ffffff;
+    background: $whiteBG;
 
     thead {
       th {
         text-align: left;
         padding: 12px 20px;
-        background: #f5f6f7;
+        background: $thBG;
         font-size: 14px;
         font-weight: 500;
 
@@ -1559,7 +1564,7 @@ $lightDark: #6b7280;
 
     .amount {
       font-weight: 500;
-      color: #000000;
+      color: $blackColor;
     }
   }
 
@@ -1600,7 +1605,7 @@ $lightDark: #6b7280;
   form {
     label {
       font-weight: 500;
-      color: #000000;
+      color: $blackColor;
       display: block;
       margin-bottom: 10px;
     }
