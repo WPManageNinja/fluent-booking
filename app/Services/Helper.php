@@ -1727,7 +1727,8 @@ class Helper
                 'auto_cancel_timing'     => '10',
                 'auto_complete_timing'   => '60'
             ],
-            'time_format'    => '24'
+            'time_format'    => '24',
+            'theme'          => 'system-default'
         ];
 
         $settings = get_option('_fluent_booking_settings', []);
