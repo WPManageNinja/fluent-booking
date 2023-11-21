@@ -367,7 +367,6 @@ $lightDark: #6b7280;
     &.is_active {
       //padding-right: 600px;
       .fcal_day_picker_wrap {
-        //transform: translateX(-100%);
         margin-left: -100%;
         visibility: hidden;
         width: 100%;
@@ -376,7 +375,6 @@ $lightDark: #6b7280;
     }
 
     .fcal_day_picker_wrap {
-      transform: translateX(0);
       visibility: visible;
       transition: .5s;
       -webkit-transition: .5s;
@@ -940,29 +938,42 @@ $lightDark: #6b7280;
       }
     }
 
+    .fcal_date_wrapper {
+      .fcal_slot_picker {
+        right: -100%;
+      }
+    }
     &.fcal_day_selected {
       .fcal_date_wrapper {
         width: calc(100% - 240px);
+        .fcal_slot_picker {
+          right: 0;
+        }
       }
       .fcal_day_picker_wrap {
         width: 100%;
       }
 
       .calendar-container {
-        display: none;
+        //display: none;
+        opacity: 0;
+        visibility: hidden;
+        margin-left: -100%;
       }
 
       .fcal_calendar_slot_wrap {
         padding: 0 20px 20px !important;
-        max-height: 450px;
         overflow: auto;
-        min-width: 300px;
+        max-height: inherit;
+        min-width: 100%;
       }
 
       .fcal_slot_picker {
         width: 100%;
-        display: block;
-        position: relative;
+        &.is_active {
+          right: 0;
+          padding: 0 20px;
+        }
       }
     }
   }
@@ -1010,16 +1021,13 @@ $lightDark: #6b7280;
       }
 
       .calendar-container {
-        //display: none;
         opacity: 0;
         visibility: hidden;
         margin-left: -100%;
       }
       .fcal_calendar_slot_wrap {
         padding: 0 20px 20px !important;
-        //max-height: 450px;
         overflow: auto;
-        //min-width: 300px;
         max-height: inherit;
         min-width: 100%;
       }
