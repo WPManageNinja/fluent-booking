@@ -5,11 +5,14 @@ namespace FluentBooking\App\Services\Integrations\Calendars\AppleCalendar;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\Calendars\BaseCalendar;
 use FluentBooking\App\Services\Integrations\Calendars\CalendarCache;
+use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\DateTime;
+use FluentBooking\Package\CalDav\Entities\Calendar;
 
 class Bootstrap extends BaseCalendar
 {
@@ -158,28 +161,132 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        return $books;
-
         $conflictItems = $this->getConflictCheckCalendars($calendarSlot->user_id);
 
-        $item = $conflictItems[0];
+        if (!$conflictItems) {
+            return $books;
+        }
 
-        $userName = Arr::get($item['item']->value, 'remote_email');
+        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
 
-        $password = Helper::decryptKey(Arr::get($item['item']->value, 'remote_pass'));
+        $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
+        $toDate->modify('first day of next month');
+        $toDate->setTime(23, 59, 59);
 
-        $client = new IcloudClient($userName, $password);
+        $dateRange = [
+            $fromDate->format('Y-m-d H:i:s'),
+            $toDate->format('Y-m-d H:i:s')
+        ];
 
-        $calendarId = Arr::get($item, 'check_ids.0', '');
+        $cacheKeyPrefix = $toDate->format('YmdHis');
 
+        $remoteBooks = [];
+        foreach ($conflictItems as $item) {
+            $meta = $item['item'];
+            $userName = Arr::get($meta->value, 'remote_email');
 
-        $events = $client->getEvents($calendarId, [
-            new \DateTime($dateRange[0]),
-            new \DateTime($dateRange[1])
-        ]);
+            $password = Helper::decryptKey(Arr::get($meta->value, 'remote_pass'));
 
-      //  dd($events);
+            $client = new IcloudClient($userName, $password);
 
+            $remoteCalendarIds = Arr::get($item, 'check_ids', []);
+            $timeZone = null;
+
+            foreach ($remoteCalendarIds as $calendarId) {
+                $cacheKey = md5($cacheKeyPrefix . '_' . $calendarId . '_' . $toTimeZone . '_' . $this->calendarKey);
+                $events = CalendarCache::getCache($meta->id, $cacheKey, function () use ($client, $calendarId, $dateRange) {
+                    try {
+                        return $client->getEvents($calendarId, [
+                            new \DateTime($dateRange[0]),
+                            new \DateTime($dateRange[1])
+                        ]);
+                    } catch (\Exception $exception) {
+                        return new \WP_Error($exception->getCode(), $exception->getMessage());
+                    }
+                });
+
+                $missedSlots = [];
+                foreach ($events['events'] as $event) {
+                    if ($event->timezone) {
+                        $timeZone = $event->timezone;
+                    }
+
+                    if (!empty($event->rrule)) {
+                        $recurringDates = RemoteCalendarHelper::getRruleDates([
+                            'RRULE:' . $event->rrule
+                        ], [
+                            $event->dtstart,
+                            $event->dtend
+                        ], $dateRange[0], $dateRange[1], [
+                            'type'     => 'remote',
+                            'source'   => 'apple_calendar',
+                            'event_id' => null
+                        ], $timeZone);
+
+                        if ($recurringDates) {
+                            if ($toTimeZone != $timeZone) {
+                                foreach ($recurringDates as $recurringDate) {
+                                    $recurringDate['start'] = DateTimeHelper::convertToTimeZone($recurringDate['start'], $timeZone, $toTimeZone);
+                                    $recurringDate['end'] = DateTimeHelper::convertToTimeZone($recurringDate['end'], $timeZone, $toTimeZone);
+                                    $books[] = $recurringDate;
+                                }
+                            } else {
+                                $remoteBooks = array_merge($remoteBooks, $recurringDates);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    // check if it's UTC Already
+                    if (strpos($event->dtstart, 'Z')) {
+                        $remoteBooks[] = [
+                            'type'     => 'remote',
+                            'start'    => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
+                            'end'      => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
+                            'source'   => 'apple_calendar',
+                            'event_id' => null
+                        ];
+                        continue;
+                    }
+
+                    $event->dtstart = date('Y-m-d H:i:s', strtotime($event->dtstart));
+                    $event->dtend = date('Y-m-d H:i:s', strtotime($event->dtend));
+
+                    $eventData = [
+                        'type'     => 'remote',
+                        'start'    => $event->dtstart,
+                        'end'      => $event->dtend,
+                        'source'   => 'apple_calendar',
+                        'event_id' => null
+                    ];
+
+                    if ($timeZone) {
+                        $eventData['start'] = DateTimeHelper::convertToTimeZone($eventData['start'], $timeZone, $toTimeZone);
+                        $eventData['end'] = DateTimeHelper::convertToTimeZone($eventData['end'], $timeZone, $toTimeZone);
+                        $remoteBooks[] = $eventData;
+                    } else {
+                        $missedSlots[] = $eventData;
+                    }
+                }
+                if ($missedSlots) {
+                    if ($timeZone) {
+                        foreach ($missedSlots as $missedSlot) {
+                            $missedSlot['start'] = DateTimeHelper::convertToTimeZone($missedSlot['start'], $timeZone, $toTimeZone);
+                            $missedSlot['end'] = DateTimeHelper::convertToTimeZone($missedSlot['end'], $timeZone, $toTimeZone);
+                            $remoteBooks[] = $missedSlot;
+                        }
+                    } else {
+                        $remoteBooks = array_merge($remoteBooks, $missedSlots);
+                    }
+                }
+            }
+        }
+
+        if ($remoteBooks) {
+            $books = array_merge($books, $remoteBooks);
+        }
 
         return $books;
     }
@@ -233,9 +340,40 @@ class Bootstrap extends BaseCalendar
             $data['description'] .= $additionalData;
         }
 
-        $response = $client->createEvent($config['remote_calendar_id'], $data);
+        try {
+            $apiCalendar = new Calendar([
+                'href' => $config['remote_calendar_id']
+            ], $client->getClient());
 
-        error_log(print_r($response, true));
+            $event = $apiCalendar->createEvent();
+            foreach ($data as $key => $datum) {
+                $event->{$key} = $datum;
+            }
+
+            $event->save();
+
+            $booking->updateMeta('__apple_calendar_event', [
+                'remote_event_id' => $event->uid,
+                'remote_calendar' => $config['remote_calendar_id']
+            ]);
+
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'success',
+                'title'       => __('Apple Calendar event created', 'fluent-booking-pro'),
+                'description' => __(sprintf('Aplle calendar event has been created. EventID: %s', $event->uid), 'fluent-booking-pro')
+            ]);
+
+        } catch (\Exception $exception) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to create event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+            ]);
+        }
     }
 
     public function cancelEvent($config, Booking $booking)

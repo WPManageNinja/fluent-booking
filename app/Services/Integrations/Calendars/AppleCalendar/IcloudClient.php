@@ -69,7 +69,9 @@ class IcloudClient
         }
 
         try {
+
             return $this->client->addEvent($calendarId, $event);
+
         } catch (\Exception $e) {
             return new \WP_Error($e->getCode(), $e->getMessage());
         }
