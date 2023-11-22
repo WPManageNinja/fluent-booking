@@ -155,6 +155,10 @@ body {
               width: 16px;
               top: 10px;
               opacity: 0.5;
+              path,
+              circle {
+                stroke: var(--dark);
+              }
             }
 
             input {
@@ -1626,11 +1630,11 @@ body {
   .fcal_payment_item_single {
     font-weight: 400;
     padding: 10px 17px;
-    color: #515e72;
+    color: var(--dark);
 
     .amount {
       font-weight: 500;
-      color: $blackColor;
+      color: var(--dark);
     }
   }
 
