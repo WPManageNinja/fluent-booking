@@ -221,11 +221,6 @@ class Booking extends Model
     public function getLocationDetailsHtml()
     {
         $details = $this->location_details;
-
-        if (empty($details['type'])) {
-            return '--';
-        }
-
         $locationType = Arr::get($details, 'type');
 
         if (!$locationType) {
@@ -244,30 +239,6 @@ class Booking extends Model
             return $html;
         }
 
-        if ($locationType == 'google_meet') {
-            $html = '<b>' . __('Google Meet', 'fluent-booking-pro') . ' </b> ';
-            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
-            }
-            return $html;
-        }
-
-        if ($locationType == 'online_meeting') {
-            $html = '<b>' . __('Online Meeting', 'fluent-booking-pro') . '</b> ';
-            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
-            }
-            return $html;
-        }
-
-        if ($locationType == 'zoom_meeting') {
-            $html = '<b>' . __('Zoom Video', 'fluent-booking-pro') . '</b> ';
-            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
-            }
-            return $html;
-        }
-
         if ($locationType == 'phone_guest') {
             return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . $this->phone;
         }
@@ -282,6 +253,23 @@ class Booking extends Model
             return $html;
         }
 
+        if (in_array($locationType, ['google_meet', 'online_meeting', 'zoom_meeting', 'ms_teams'])) {
+            $platformLabels = [
+                'google_meet'    => __('Google Meet', 'fluent-booking-pro'),
+                'online_meeting' => __('Online Meeting', 'fluent-booking-pro'),
+                'zoom_meeting'   => __('Zoom Video', 'fluent-booking-pro'),
+                'ms_teams'       => __('MS Teams', 'fluent-booking-pro'),
+            ];
+            
+            $html = '<b>' . $platformLabels[$locationType] . '</b> ';
+        
+            if ($meetingLink = Arr::get($details, 'online_platform_link')) {
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
+            }
+
+            return $html;
+        }
+
         return '--';
     }
 
@@ -292,9 +280,9 @@ class Booking extends Model
         $locationType = Arr::get($details, 'type');
         $meetingLink = Arr::get($details, 'online_platform_link');
 
-        $onlinePlatforms = ['google_meet', 'zoom_meeting', 'online_meeting'];
+        $onlinePlatforms = ['google_meet', 'zoom_meeting', 'online_meeting', 'ms_teams'];
 
-        if (in_array($locationType, $onlinePlatforms) && $meetingLink) {
+        if ($meetingLink && in_array($locationType, $onlinePlatforms)) {
             return $meetingLink;
         }
 

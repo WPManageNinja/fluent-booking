@@ -433,9 +433,9 @@ class CalendarController extends Controller
                 'range_days'          => (int)(Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
                 'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
-                'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '0')),
-                'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '0')),
-                'slot_interval'       => sanitize_text_field(Arr::get($data, 'settings.slot_interval', ''))
+                'buffer_time_before'  => sanitize_text_field(Arr::get($slot, 'settings.buffer_time_before', '0')),
+                'buffer_time_after'   => sanitize_text_field(Arr::get($slot, 'settings.buffer_time_after', '0')),
+                'slot_interval'       => sanitize_text_field(Arr::get($slot, 'settings.slot_interval', ''))
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
