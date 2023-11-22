@@ -220,7 +220,7 @@ class ReportController extends Controller
     private function getPercentage($currentMonthTotal, $lastMonthTotal)
     {
         if ($lastMonthTotal > 0) {
-            return intval(($currentMonthTotal - $lastMonthTotal) / $lastMonthTotal) * 100;
+            return (($currentMonthTotal - $lastMonthTotal) / $lastMonthTotal) * 100;
         } else if (!$lastMonthTotal) {
             return 100;
         }
