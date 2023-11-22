@@ -20,7 +20,7 @@ class Bootstrap extends BaseCalendar
         $this->calendarKey = 'outlook';
         $app = App::getInstance();
         $this->logo = $app['url.assets'] . 'images/outlook-color.svg';
-        $this->calendarTitle = __('Outlook Calendar', 'fluent-booking-pro');
+        $this->calendarTitle = __('Outlook Calendar / MS Teams', 'fluent-booking-pro');
     }
 
     public function register()
