@@ -433,9 +433,9 @@ class CalendarController extends Controller
                 'range_days'          => (int)(Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
                 'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
-                'buffer_time_before'  => sanitize_text_field(Arr::get($slot, 'settings.buffer_time_before', '0')),
-                'buffer_time_after'   => sanitize_text_field(Arr::get($slot, 'settings.buffer_time_after', '0')),
-                'slot_interval'       => sanitize_text_field(Arr::get($slot, 'settings.slot_interval', ''))
+                'buffer_time_before'  => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_before', '0')),
+                'buffer_time_after'   => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_after', '0')),
+                'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', ''))
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
@@ -506,7 +506,7 @@ class CalendarController extends Controller
         $event->settings = [
             'schedule_type'      => sanitize_text_field(Arr::get($data, 'schedule_type')),
             'weekly_schedules'   => SanitizeService::weeklySchedules(Arr::get($data, 'weekly_schedules'), $event->calendar->author_timezone, 'UTC'),
-            'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides'), $event->calendar->author_timezone, 'UTC'),
+            'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides', []), $event->calendar->author_timezone, 'UTC'),
             'range_type'         => sanitize_text_field(Arr::get($data, 'range_type')),
             'range_days'         => (int)(Arr::get($data, 'range_days', 60)) ?: 60,
             'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', '']))

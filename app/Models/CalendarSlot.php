@@ -41,7 +41,7 @@ class CalendarSlot extends Model
             $originalSettings[$key] = $value;
         }
 
-        $this->attributes['settings'] = maybe_serialize($originalSettings);
+        $this->attributes['settings'] = \maybe_serialize($originalSettings);
     }
 
     public function getSettingsAttribute($settings)
