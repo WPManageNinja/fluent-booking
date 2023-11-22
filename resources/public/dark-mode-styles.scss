@@ -119,10 +119,16 @@ body.dark-mode {
 			}
 		}
 		.fcal_multi_location_title,
-		.slot_time_range,
 		.slot_timing {
 			svg {
 				circle,
+				path {
+					fill: none;
+				}
+			}
+		}
+		.slot_time_range {
+			svg {
 				path {
 					fill: none;
 				}
@@ -165,6 +171,7 @@ body.dark-mode {
 			}
 		}
 	}
+
 
 	//	team
 	.fcal_teams {
