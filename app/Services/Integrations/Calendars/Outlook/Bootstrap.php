@@ -27,6 +27,31 @@ class Bootstrap extends BaseCalendar
     {
         $this->boot();
         add_action('wp_ajax_fluent_booking_outlook_auth', [$this, 'handleAuthCallback']);
+
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
+            $teamsExist = Meta::where('object_type', '_outlook_user_token')
+                ->where('object_id', $calendar->user_id)
+                ->first();
+
+            $message = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
+
+            if (!$message) {
+                // now check if the user calendar event create enabled
+                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
+                if (!$calConfig || Arr::get($calConfig, 'driver') != 'outlook') {
+                    $message = __('(Set Outlook Event Creat First)', 'fluent-booking-pro');
+                    $teamsExist = false;
+                }
+            }
+
+            $fields['conferencing']['options']['ms_teams'] = [
+                'title'         => __('MS Teams', 'fluent-booking-pro') . $message,
+                'disabled'      => !$teamsExist,
+                'location_type' => 'conferencing'
+            ];
+            return $fields;
+        }, 10, 2);
+
         add_action('fluent_booking/before_get_all_calendars', function () {
             if (!OutlookHelper::isConfigured()) {
                 return;
@@ -346,6 +371,12 @@ class Bootstrap extends BaseCalendar
             ];
         }
 
+        $isMsTeamMeeting = false;
+        if (Arr::get($booking->location_details, 'type') == 'ms_teams') {
+            $isMsTeamMeeting = true;
+            $data['isOnlineMeeting'] = true;
+        }
+
         $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking);
         $response = $calendarApi->createEvent($config['remote_calendar_id'], $data);
 
@@ -367,7 +398,7 @@ class Bootstrap extends BaseCalendar
             'access_db_id'       => $calendarApi->getMetaModel()->id,
         ];
 
-        if (!empty($response['onlineMeeting']['joinUrl'])) {
+        if ($isMsTeamMeeting && !empty($response['onlineMeeting']['joinUrl'])) {
             $responseData['ms_team_link'] = $response['onlineMeeting']['joinUrl'];
             $location = $booking->location_details;
             $location['online_platform_link'] = $response['onlineMeeting']['joinUrl'];
