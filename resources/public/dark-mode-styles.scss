@@ -108,6 +108,11 @@ body.dark-mode {
 		}
 	}
 	.fcal_slot_info {
+		.slot_location {
+			img {
+				filter: invert(1);
+			}
+		}
 		.fcal_multi_location_title,
 		.fcal_icon_item {
 			svg {
