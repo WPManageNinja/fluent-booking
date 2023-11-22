@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="fcal_driver_action">
-                <el-button @click="disconnectCalendar()" size="small">
+                <el-button @click="disconnectCalendar()" class="fcal_plain_btn" size="small">
                     <el-icon>
                         <Delete/>
                     </el-icon>
@@ -37,11 +37,15 @@
 </template>
 <script type="text/babel">
 import isArray from "lodash/isArray";
+import { Delete } from '@element-plus/icons-vue';
 
 export default {
     name: 'RemoteCalendarBlock',
     props: ['calendar', 'driver', 'feed'],
     $emit: ['refetch'],
+    components: {
+        Delete
+    },
     data() {
         return {
             saving: false,

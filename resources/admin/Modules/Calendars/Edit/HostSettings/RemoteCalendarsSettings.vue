@@ -8,11 +8,11 @@
             <div v-if="!isEmpty(feeds)" class="fcal_settings_actions">
                 <el-popover placement="bottom-end" width="300" trigger="click">
                     <template #reference>
-                        <el-button type="default">
+                        <el-button class="fcal_plain_btn">
                             <el-icon>
                                 <Plus/>
                             </el-icon>
-                            <span>{{ $t('Add') }}</span>
+                            {{ $t('Add') }}
                         </el-button>
                     </template>
                     <div class="fcal_all_driver_actions">
@@ -40,7 +40,9 @@
                         <el-col :md="10" :xs="24">
                             <el-select :disabled="saving" v-loading="saving" @change="updateSettings()" clearable
                                        v-model="settings.remote_calendar_config" value-key="id"
-                                       :placeholder="$t('Select a Remote Calendar')">
+                                       :placeholder="$t('Select a Remote Calendar')"
+                                       placement="bottom"
+                                       popper-class="fcal_select">
                                 <el-option
                                     v-for="item in insertableCalendars"
                                     :key="item.details.id"
