@@ -145,7 +145,7 @@ class TimeSlotService
             $midStartTime = strtotime($availableSlots[$mid]['start']);
             $midEndTime = strtotime($availableSlots[$mid]['end']);
 
-            if ($fromTimeStamp <= $midStartTime && $toTimeStamp <= $midEndTime) {
+            if ($fromTimeStamp == $midStartTime && $toTimeStamp == $midEndTime) {
                 return true;
             } elseif ($fromTimeStamp > $midStartTime) {
                 $left = $mid + 1;
