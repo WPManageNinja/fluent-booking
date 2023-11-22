@@ -1655,6 +1655,20 @@ body {
   .label {
     margin: 0 0 10px;
     font-weight: 500;
+    color: var(--dark);
+  }
+  .fluent_booking_loading_payment_processor {
+    color: var(--dark);
+  }
+  .payment-methods-radio {
+    .__PrivateStripeElement {
+      background: #ffffff !important;
+      border-radius: 4px;
+      > iframe {
+        background: #ffffff !important;
+        border-radius: 4px;
+      }
+    }
   }
 
   form {
