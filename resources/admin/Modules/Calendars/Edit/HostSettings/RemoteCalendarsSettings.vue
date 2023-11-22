@@ -17,7 +17,11 @@
                     </template>
                     <div class="fcal_all_driver_actions">
                         <div v-for="driver in configuredProviders" :key="driver.key" class="fcal_driver_action">
-                            <a class="fcal_remote_cal_link" :href="driver.auth_url">
+                            <a href="#" class="fcal_remote_cal_link" @click.prevent="initCalDav(driver)" v-if="driver.is_caldav">
+                                <img :src="driver.icon"/>
+                                <span>{{ driver.btn_text }}</span>
+                            </a>
+                            <a v-else class="fcal_remote_cal_link" :href="driver.auth_url">
                                 <img :src="driver.icon"/>
                                 <span>
                                     {{ driver.btn_text }}
