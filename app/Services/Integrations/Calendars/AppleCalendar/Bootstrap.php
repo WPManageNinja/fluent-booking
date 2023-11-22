@@ -319,12 +319,24 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
+        $host = $booking->getHostDetails(false);
+
         $data = [
-            'dtstart'  => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'dtend'    => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
-            'status'   => 'confirmed',
-            'summary'  => $booking->getMeetingTitle(),
-            'location' => $booking->getLocationAsText()
+            'dtstart'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'     => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'status'    => 'confirmed',
+            'summary'   => $booking->getMeetingTitle(),
+            'location'  => $booking->getLocationAsText(),
+            'attendees' => [
+                [
+                    'email' => $booking->email,
+                    'name'  => trim($booking->first_name . ' ' . $booking->last_name)
+                ]
+            ],
+            'organizer' => [
+                'email' => $host['email'],
+                'name'  => $host['name']
+            ]
         ];
 
         if ($booking->message) {
@@ -381,9 +393,50 @@ class Bootstrap extends BaseCalendar
 
     public function cancelEvent($config, Booking $booking)
     {
-        return $this->patchEvent($config, $booking, [
-            'status' => 'cancelled'
-        ], false);
+        if (!$this->isConfigured() || $booking->status != 'cancelled') {
+            return false;
+        }
+
+        $appleEvent = $booking->getMeta('__apple_calendar_event');
+
+        if (!$appleEvent) {
+            return false;
+        }
+
+        $meta = Meta::where('object_type', '_apple_calendar_user_token')
+            ->where('object_id', $booking->host_user_id)
+            ->where('id', $config['db_id'])
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+
+        try {
+            $client = AppleHelper::getClientByMeta($meta);
+            $apiCalendar = new Calendar([
+                'href' => Arr::get($appleEvent, 'remote_calendar')
+            ], $client->getClient());
+
+            $apiCalendar->deleteEvent(Arr::get($appleEvent, 'remote_event_id'));
+
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'success',
+                'title'       => __('Apple event has been deleted', 'fluent-booking-pro'),
+                'description' => __('Apple calendar event has been deleted', 'fluent-booking-pro')
+            ]);
+        } catch (\Exception $exception) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to delete event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+            ]);
+            return false;
+        }
     }
 
     public function patchEvent($config, Booking $booking, $updateData, $isRescheduling)
@@ -477,6 +530,5 @@ class Bootstrap extends BaseCalendar
 
         return $response;
     }
-
 
 }
