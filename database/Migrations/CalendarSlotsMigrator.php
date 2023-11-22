@@ -26,7 +26,7 @@ class CalendarSlotsMigrator
                 `media_id` BIGINT(20) UNSIGNED,
                 `description` LONGTEXT NULL,
                 `settings` LONGTEXT NULL,
-                `availability_type` VARCHAR(192) DEFAULt 'custom',
+                `availability_type` VARCHAR(192) DEFAULT 'custom',
                 `availability_id` BIGINT(20) UNSIGNED,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'active',
                 `type` VARCHAR(20) NOT NULL DEFAULT 'free',
