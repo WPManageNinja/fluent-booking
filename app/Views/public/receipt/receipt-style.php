@@ -9,16 +9,17 @@
         width: 100%;
         empty-cells: show;
         font-size: 14px;
-        border: 1px solid #cbcbcb !important;
+        border: 1px solid var(--slot_border) !important;
     }
 
     .fluent_booking_table td, .fluent_booking_table th {
-        border-left: 1px solid #cbcbcb;
+        border-left: 1px solid var(--slot_border);
         border-width: 0 0 0 1px;
         font-size: inherit;
         margin: 0;
         overflow: visible;
-        padding: .5em 1em
+        padding: .5em 1em;
+        color: var(--dark);
     }
 
     .fluent_booking_table td:first-child, .fluent_booking_table th:first-child {
@@ -45,7 +46,8 @@
     }
 
     table.input_items_table tr td, table.input_items_table tr th {
-        border: 1px solid #cbcbcb;
+        color: var(--dark);
+        border: 1px solid var(--slot_border);
         text-align: left;
         width: auto;
         word-break: normal;
@@ -57,10 +59,12 @@
 
     .fluent_booking_payment_info {
         width: 100%;
-        -webkit-box-shadow: 0px -2px #e3e8ee;
-        box-shadow: 0px -2px #e3e8ee;
-        background-color: rgb(247, 250, 252);
-        color: rgb(56, 56, 56);
+        border-top: 2px solid var(--slot_border);
+        background-color: var(--thBG);
+        color: var(--dark);
+        td {
+            /*color: var(--dark);*/
+        }
     }
 
     .fluent_booking_payment_info_item {
@@ -93,6 +97,6 @@
     }
 
     .fluent_booking_order_items_table tr {
-        border: 1px solid #ccc;
+        border: 1px solid var(--slot_border);
     }
 </style>
