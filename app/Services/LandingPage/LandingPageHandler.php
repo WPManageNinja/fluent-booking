@@ -319,7 +319,8 @@ class LandingPageHandler
             'author'      => $authorProfile,
             'slot'        => $calendarEvent,
             'url'         => home_url($wp->request),
-            'action_type' => $actionType
+            'action_type' => $actionType,
+            'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
 
         if ($actionType == 'cancel') {
