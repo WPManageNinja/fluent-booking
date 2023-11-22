@@ -9,8 +9,6 @@
 body.dark-mode {
 
 	// Variables
-	//#1c1c1c
-	$calBG: #1c1c1c;
 	$color_2: #a5a5a5;
 	--dark: #dddbdb;
 	--primaryColor: #ffffff;
@@ -35,7 +33,7 @@ body.dark-mode {
 			.fcal_slot {
 				background: transparent;
 				&:hover {
-					background: $calBG;
+					background: #1c1c1c;
 				}
 			}
 		}

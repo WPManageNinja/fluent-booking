@@ -262,7 +262,6 @@ export default {
             this.loading = true;
             this.$get('settings/general')
                 .then(response => {
-                    console.log(response);
                     this.emailing       = response.emailing;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;

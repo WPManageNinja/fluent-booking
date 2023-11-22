@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" media="all" />
     <?php endforeach; ?>
 </head>
-<body>
+<body class="booking-confirmation-page">
 
 <div class="confirmation_page">
     <div class="fcal_conf_wrap">
@@ -38,5 +38,36 @@
 <?php foreach ($js_files as $fileKey => $file): ?>
     <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>" defer="defer"></script>
 <?php endforeach; ?>
+
+<script>
+    const theme = '<?php echo $theme; ?>';
+
+    if (theme == 'system-default') {
+        // System Mode
+        const runColorMode = (fn) => {
+            if (!window.matchMedia) {
+                return;
+            }
+            const query = window.matchMedia('(prefers-color-scheme: dark)');
+            fn(query.matches);
+            query.addEventListener('change', (event) => fn(event.matches));
+        }
+        runColorMode((isDarkMode) => {
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+            } else {
+                document.body.classList.add('light-mode');
+                document.body.classList.remove('dark-mode');
+            }
+        })
+    } else if (themeMode == 'dark-mode') {
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+    }
+</script>
 </body>
 </html>
