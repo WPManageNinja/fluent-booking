@@ -158,6 +158,7 @@ class Request
 
         $key = is_array($key) ? $key : [$key];
 
+        // Normalize all to ['field' => ['cb1', 'cb2']] style array
         if ($callback) {
             $callback = is_array($callback) ? $callback : [$callback];
             foreach ($key as $k => $field) {
@@ -165,7 +166,8 @@ class Request
             }
         } else {
             foreach ($key as $k => $v) {
-                
+                // Add a simple closure to normalize when
+                // there's no callback given for a field
                 if (is_int($k)) {
                     $k = $v;
                     $v = function($v) { return $v; };
@@ -175,7 +177,13 @@ class Request
             }
         }
 
+        // Sanitize all the fields using given callbacks
         foreach ($array as $field => $callbacks) {
+            
+            // In case someone used 'cb1|cb2|cb3' style callbacks
+            $callbacks = Arr::flatten(array_map(function($cb) {
+                return is_string($cb) ? explode('|', $cb) : $cb;
+            }, $callbacks));
 
             $value = $this->get($field, $default);
 
@@ -189,18 +197,17 @@ class Request
                 }
 
                 if (str_contains($field, '*')) {
-
-                    $fieldParts = explode('.', $field);
-
-                    $field = implode('.', array_filter($fieldParts, function($v) {
-                        return $v != '*';
-                    }));
+                    foreach ($value as $k => $v) {
+                        Arr::set($result, str_replace('*', $k, $field), $value[$k]);
+                    }
+                } else {
+                    Arr::set($result, $field, $value);
                 }
-
-                Arr::set($result, $field, $value);
             }
         }
 
+        // Return the first item if only one item in the array
+        // because some one asked for one field, otherwise all.
         return count($result) > 1 ? $result : reset($result);
     }
 

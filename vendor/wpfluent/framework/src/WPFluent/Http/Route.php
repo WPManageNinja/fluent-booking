@@ -353,11 +353,17 @@ class Route
 
     /**
      * Set the route policy
-     * @param  string $handler
-     * @return null
+     * 
+     * @param  mixed $handler
+     * @param  string|null $method
+     * @return self
      */
-    public function withPolicy($handler)
+    public function withPolicy($handler, $method = null)
     {
+        if (is_array($handler = $method ? func_get_args() : $handler)) {
+            $handler = implode('@', $handler);
+        }
+
         $this->policyHandler = $handler;
 
         if (is_string($handler) && !$this->app->hasNamespace($handler)) {
@@ -830,6 +836,15 @@ class Route
         );
 
         $this->permissionHandler = $policyHandler;
+
+        // Adjust policy handler if the method was explicitly given
+        if (is_array($policyHandler) && isset($policyHandler[1])) {
+            if ($pieces = explode('@', $this->policyHandler)) {
+                if (isset($pieces[1])) {
+                    $this->permissionHandler[1] = $pieces[1];
+                }
+            }
+        }
 
         if (is_array($policyHandler)) {
             $policyHandler[0] = get_class($policyHandler[0]);

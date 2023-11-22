@@ -137,7 +137,7 @@ class Router
     /**
      * Set the namespace for the action/controller
      * 
-     * @param  string $prefix
+     * @param  string $namespace
      * @return self
      */
     public function namespace($ns)
@@ -150,11 +150,16 @@ class Router
     /**
      * Set the route policy
      * 
-     * @param  string $prefix
+     * @param  mixed $handler
+     * @param  string|null $method
      * @return self
      */
-    public function withPolicy($handler)
+    public function withPolicy($handler, $method = null)
     {
+        if (is_array($handler = $method ? func_get_args() : $handler)) {
+            $handler = implode('@', $handler);
+        }
+
         $this->policyHandler[] = $handler;
 
         return $this;

@@ -213,21 +213,22 @@ class Client
 
 		$content = wp_remote_retrieve_body($response);
 
-       // dd($content);
-
 		return $this->extractReportinformation($content);
 	}
 
 	public function getEventFrom($url)
 	{
-		$response = $this->get($url, [], ['depth' => 1]);
+		$response = $this->get($url, [], [
+			'depth' => 1,
+			'Content-Type' => 'application/json'
+		]);
 
 		$content = wp_remote_retrieve_body($response);
 
 		return [
-			'event' => $this->extractSingleIcs($content),
+			'event' => $this->extractSingleEvent($content),
 			'etag' => wp_remote_retrieve_header($response, 'etag'),
-			'status' => 'HTTP/1.1 200 OK'//wp_remote_retrieve_response_code($response)
+			'status' => 'HTTP/1.1 200 OK'
 		];
 	}
 
@@ -242,6 +243,16 @@ class Client
         $response = $this->put($url, [
             'payload' => $event->compile()
         ], ['Content-Type' => 'text/calendar; charset=utf-8']);
+
+		return $response['response'];
+	}
+
+	public function deleteEvent($url)
+	{
+		// dd($url);
+        $response = $this->delete(
+        	$url, [], ['Content-Type' => 'application/json']
+        );
 
 		return $response['response'];
 	}
@@ -290,6 +301,7 @@ class Client
 
 	protected function sendRequest($method, $url, $args, $headers)
 	{
+		// if ($method == 'DELETE') dd($url, $this->prepareArgs($method, $args, $headers));
 		return wp_remote_request(
 			$url, $this->prepareArgs($method, $args, $headers)
 		);

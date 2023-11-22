@@ -43,6 +43,13 @@ class ICloud extends Client
         return parent::addEventTo($url, $payload);
 	}
 
+    public function deleteEvent($url)
+    {
+        $url = $this->makeUrl($url);
+
+        return parent::deleteEvent($url);
+    }
+
 	protected function getAuthCredential()
 	{
 		return 'Basic ' . base64_encode(

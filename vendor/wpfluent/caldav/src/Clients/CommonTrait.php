@@ -117,12 +117,9 @@ trait CommonTrait
         $events = [];
 
         foreach ($xpath->query('//cal:calendar-data') as $cal) {
-
-        	$ical = new ICal($cal->nodeValue, [
-        		'defaultTimeZone' => 'UTC'
-        	]);
-
-            $events = array_merge($events, $ical->events());
+            $events = array_merge(
+            	$events, $this->extractSingleEvent($cal->nodeValue)
+            );
         }
 
         if ($this->getOption('format_date_times')) {
@@ -132,10 +129,10 @@ trait CommonTrait
         return compact('href', 'etag', 'status', 'events');
 	}
 
-	protected function extractSingleIcs($content)
+	protected function extractSingleEvent($content)
 	{
 		$ical = new ICal($content, [
-    		'defaultTimeZone' => wp_timezone_string()
+    		'defaultTimeZone' => 'UTC'
     	]);
 
     	return $ical->events();

@@ -657,7 +657,6 @@ class ICal
                 }
 
                 $add     = $this->keyValueFromString($line);
-
                 $keyword = $add[0];
                 $values  = $add[1]; // May be an array containing multiple values
 
@@ -677,7 +676,6 @@ class ICal
                 $values = array_reverse($values);
 
                 foreach ($values as $value) {
-
                     switch ($line) {
                         case 'BEGIN:VJOURNAL':
                             if (!is_array($value)) {
@@ -1006,13 +1004,15 @@ class ICal
 
                 break;
 
-            case 'VTIMEZONE':
-                if($value) {
-                    $this->cal[$component][$keyword] = $value;
-                } else {
-                    $this->cal[$component][$keyword] = $value;
-                }
-                break;
+            // Note: The following code is not required because
+            // the default case does the same thing, check default.
+
+            // case 'VTIMEZONE':
+            //     if ($value) {
+            //         $this->cal[$component][$keyword] = $value;
+            //     }
+
+            //     break;
 
             default:
                 $this->cal[$component][$keyword] = $value;
@@ -1023,7 +1023,6 @@ class ICal
         if (is_string($keyword)) {
             $this->lastKeyword = $keyword;
         }
-
     }
 
     /**
@@ -1284,7 +1283,6 @@ class ICal
      */
     protected function processEvents()
     {
-
         $checks = null;
         $events = (isset($this->cal['VEVENT'])) ? $this->cal['VEVENT'] : array();
 
@@ -1350,7 +1348,6 @@ class ICal
             foreach ($eventKeysToRemove as $eventKeyToRemove) {
                 $events[$eventKeyToRemove] = null;
             }
-
 
             $this->cal['VEVENT'] = $events;
         }
@@ -2246,17 +2243,6 @@ class ICal
         return $timeZone;
     }
 
-    public function calendarTimeZoneFromRemote()
-    {
-        if (isset($this->cal['VCALENDAR']['X-WR-TIMEZONE'])) {
-            return $this->cal['VCALENDAR']['X-WR-TIMEZONE'];
-        }
-        if (isset($this->cal['VTIMEZONE']['TZID'])) {
-            return $this->cal['VTIMEZONE']['TZID'];
-        }
-        return null;
-    }
-
     /**
      * Returns an array of arrays with all free/busy events.
      * Every event is an associative array and each property
@@ -2753,5 +2739,14 @@ class ICal
         }
 
         return new \DateTimeZone($this->getDefaultTimeZone());
+    }
+
+    public function calendarTimeZoneFromRemote()
+    {
+        if (isset($this->cal['VCALENDAR']['X-WR-TIMEZONE'])) {
+            return $this->cal['VCALENDAR']['X-WR-TIMEZONE'];
+        } elseif (isset($this->cal['VTIMEZONE']['TZID'])) {
+            return $this->cal['VTIMEZONE']['TZID'];
+        }
     }
 }

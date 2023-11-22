@@ -39,17 +39,13 @@ class Event implements \JsonSerializable
 
 	protected function setDefaults()
 	{
-		$currentDateTime = $this->getCurrentDateTime();
-
-		$this->data['created'] = $currentDateTime;
-
-		$this->data['dtstamp'] = $currentDateTime;
-
-		$this->data['last-modified'] = $currentDateTime;
-		
-		$this->data['sequence'] = 0;
-		
-		$this->data['uid'] = md5(__NAMESPACE__) . '-' . wp_generate_uuid4();
+		if (!isset($this->data['uid'])) {
+			$currentDateTime = $this->getCurrentDateTime();
+			$this->data['created'] = $currentDateTime;
+			$this->data['dtstamp'] = $currentDateTime;
+			$this->data['last-modified'] = $currentDateTime;
+			$this->data['uid'] = md5(__NAMESPACE__) . '-' . wp_generate_uuid4();
+		}
 	}
 
 	protected function getCurrentDateTime()
@@ -319,6 +315,14 @@ class Event implements \JsonSerializable
 	public function compile()
 	{
 		$this->preCompile();
+
+		if (!isset($this->data['sequence'])) {
+			$this->data['sequence'] = 0;
+		} else {
+			$this->data['sequence'] += 1;
+		}
+		
+		$this->data['last-modified'] = $this->getCurrentDateTime();
 
 		$appNS = strtolower(explode('\\', __NAMESPACE__)[0]);
 		$calendar[] = "BEGIN:VCALENDAR";
