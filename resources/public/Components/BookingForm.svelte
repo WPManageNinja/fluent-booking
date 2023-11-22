@@ -178,6 +178,10 @@
                 }
 
                 if (res.data?.actionName === 'custom') {
+                    if (res.data?.intent?.errors) {
+                        errors = getErrorText(res.data?.intent?.errors);
+                        return;
+                    }
                     window.dispatchEvent(new CustomEvent('fluent_booking_payment_next_action_' + res.data.nextAction, {
                         detail: {
                             form: e.target,

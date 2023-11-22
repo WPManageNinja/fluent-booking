@@ -91,4 +91,26 @@ class StripeSettings
 
         return $this->get()['test_secret_key'];
     }
+
+    public static function getPaymentDescriptor($calendarEvent)
+    {
+        $descriptor = $calendarEvent->title;
+        
+        // Check if the string contains at least one Latin character
+        if (!preg_match('/[a-zA-Z]/', $str)) {
+            $descriptor = 'Event: ' . $descriptor;
+        }
+        $descriptor = stripslashes($descriptor);
+
+        // Remove illegal characters
+        $descriptor = str_replace(['<', '>', '"', "'"], '', $descriptor);
+
+        // Descriptor should be 22 characters max
+        $descriptor = substr($descriptor, 0, 22);
+
+        if (!$descriptor || strlen($descriptor) < 5) {
+            $descriptor = 'FluentBooking';
+        }
+        return $descriptor;
+    }
 }
