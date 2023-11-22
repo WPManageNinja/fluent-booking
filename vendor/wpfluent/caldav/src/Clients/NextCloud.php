@@ -43,6 +43,13 @@ class NextCloud extends Client
         return parent::addEventTo($url, $payload);
 	}
 
+	public function deleteEvent($url)
+    {
+        $url = $this->buildUrlFrom($url);
+
+        return parent::deleteEvent($url);
+    }
+
 	protected function getAuthCredential()
 	{
 		return 'Basic ' . base64_encode(

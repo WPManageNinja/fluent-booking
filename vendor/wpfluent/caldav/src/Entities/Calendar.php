@@ -88,7 +88,7 @@ class Calendar implements \JsonSerializable
 			return $event;
 		}, $events['event']);
 
-		return $this->events;
+		return $this->events ? reset($this->events) : $this->events;
 	}
 
 	public function addEvent($event)
@@ -102,7 +102,22 @@ class Calendar implements \JsonSerializable
 		);
 
 		if (is_array($response) && array_key_exists('code', $response))  {
-			return $response['code'] == 201;
+			return intval($response['code'] / 100) == 2;
+		}
+	}
+
+	public function deleteEvent($uid)
+	{
+		if ($uid instanceof Event) {
+			$uid = $uid->getUid();
+		}
+
+		$response = $this->client->deleteEvent(
+			rtrim($this->data['href'], '/') . '/' . $uid . '.ics'
+		);
+
+		if (is_array($response) && array_key_exists('code', $response))  {
+			return $response['code'] == 204;
 		}
 	}
 
