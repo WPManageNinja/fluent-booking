@@ -87,44 +87,39 @@ $event->location = 'Office';
 
 // Using $calendar->addEvent method
 if ($calendar->addEvent($event)) {
-    return $calendar->getEvents();
+    return $calendar->getEvent($event->getUid());
 }
 // Or using $event->save method
-return $event->save();
+$event =  $event->save();
 ```
 
-**Note:** If the `$event->save` method is used then you'll get back the newly created event(s) back. In this case, you'll always receive an array of events even if you create a single event because, when you'll use `repeat` (Originally RRULE) for recurring events, the system creates multiple entries so don't get confused. That's all for now.
-
-**The following examples are obsolate and not functional anymore. But, follow the event creating example (Create Event) given below to know the the available properties that you can use to create an event.**
+**To update an existing event:**
 
 ```php
-$nc = new NextCloud([
-    'username' => '********',
-    'password' => '********',
-    'base_url' => 'https://example.com/remote.php/dav/',
+// Pass the saved calendar data
+$calendar = $client->createCalendar([
+    'href' => '/10337091274/calendars/work/',
+    'displayname' => 'Work',
+    'getctag' => 'HwoQEgwAAGlcwC6jWgAAAAAYARgAIhUI3pahwNDCrtloEJSXjYThi4nzhwEoAA==',
 ]);
 
-// Optional (to format the dates when parsing the events)
-$nc->setOptions([
-    'format_date_times' => true,
-    'date_time_format' => 'd-m-Y h:i:s'
-]);
+$events = $calendar->getEvents();
+
+// Update the first event
+$events[0]->summary = 'New Summary';
+$updatedEevent = $events[0]->save();
 ```
 
-# Fetch all calendar's information (like meta)
+**To delete an existing event:**
 
 ```php
-$nc->getCalendarsInfo();
+$event->delete();
+$calendar->deleteEvent($eventUid);
 ```
 
-# Fetch one specific calendar's information (like meta)
-```php
-$nc->getCalendarInfo('calendar_name/href');
-```
+**Note:** If the `$event->save` method is used then you'll get back the newly created or updated event back.
 
-It'll return an array with `calendars` and `deleted` keys. Mostly, you'll be needing the `href` from the `calendars`, use the `href` to create/get events as parameters (if you don't use calendar name).
-
-# Create Event
+Available setable properties in an event:
 
 ```php
 $event = [
@@ -183,14 +178,4 @@ $event = [
         'bysetpos' => -1
     ]
 ];
-
-// The calendarname could be the href (using href is recommended).
-$nc->addEventTo(/*calendarname*/ 'personal', /*event object*/ $event);
-```
-
-# Fetch events:
-
-```php
-// The calendarname could be the href (using href is recommended).
-$nc->getEventsFrom(/*calendarname*/ 'personal');
 ```

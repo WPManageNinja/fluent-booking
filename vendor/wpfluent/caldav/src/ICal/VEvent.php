@@ -71,8 +71,6 @@ class VEvent
      */
     public $created;
 
-    public $timezone;
-
     /**
      * https://www.kanzaki.com/docs/ical/lastModified.html
      *
@@ -142,6 +140,13 @@ class VEvent
      * @var string
      */
     public $attach;
+
+    /**
+     * https://www.kanzaki.com/docs/ical/tzid.html
+     *
+     * @var string
+     */
+    public $timezone;
 
     /**
      * Manage additional properties
