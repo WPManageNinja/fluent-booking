@@ -4,6 +4,7 @@
   --cal_bg: #ffffff;
   --slot_border: #D6DAE1;
   --fcal_primary_color: #306ae0;
+  --thBG: #f5f6f7;
 }
 .booking-confirmation-page {
   background: var(--fcal_body_bg);
@@ -17,6 +18,7 @@
   --cal_bg: #1c1c1c;
   --slot_border: #2b2b2b;
   --fcal_primary_color: #ffffff;
+  --thBG: #2b2b2b;
 
   .fcal_to_calendars {
     a {
@@ -92,6 +94,33 @@
     p {
       margin: 5px 0;
       color: var(--dark);
+    }
+  }
+  .fcal_confirm_body {
+    hr {
+      border-color: var(--slot_border);
+    }
+    .fluent_booking_order_items_table {
+      thead {
+        th {
+          border-color: var(--slot_border);
+          background: var(--thBG);
+          color: var(--dark);
+        }
+      }
+      tbody {
+        tr {
+          td {
+            color: var(--dark);
+          }
+        }
+      }
+    }
+    .fcal_payment_html {
+      h4,
+      h3 {
+        color: var(--dark);
+      }
     }
   }
   .fcal_confirm_section {

@@ -261,6 +261,15 @@ body {
           max-height: 180px;
         }
       }
+      .fcal_custom_phone_field {
+        .svelte-select {
+          .value-container {
+            > input {
+              background: transparent;
+            }
+          }
+        }
+      }
 
       button {
         font-size: 14px;
