@@ -3,7 +3,9 @@
         <el-select :placeholder="field.placeholder" filterable allow-create v-if="field.options.length"
                    v-model="model"
                    :no-match-text="$t('No Data match')"
-                   :no-data-text="$t('No Data')">
+                   :no-data-text="$t('No Data')"
+                   popper-class="fcal_select"
+                    >
             <el-option v-for="option in field.options" :key="option" :value="option"></el-option>
         </el-select>
         <el-input v-else :type="field.data_type" :placeholder="field.placeholder" v-model="model"></el-input>

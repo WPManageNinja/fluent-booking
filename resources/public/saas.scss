@@ -42,4 +42,8 @@
 
 .fcal_normal_booking_footer {
   text-align: center;
+  color: var(--dark);
+  a {
+    color: var(--fcal_primary_color);
+  }
 }

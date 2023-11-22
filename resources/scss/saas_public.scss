@@ -3,8 +3,8 @@
 
 .confirmation_page {
   max-width: 600px;
-  margin: 66px auto 30px;
-  background: white;
+  margin: auto;
+  background: var(--cal_bg);
   border: 1px solid rgba(26, 26, 26, 0.1);
   border-radius: 8px;
   box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
@@ -97,5 +97,8 @@
 }
 .fcal_normal_booking_footer {
   text-align: center;
+  a {
+    color: var(--fcal_primary_color);
+  }
 }
 
