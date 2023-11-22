@@ -117,13 +117,26 @@
                 </el-table-column>
                 <el-table-column width="40" fixed="right">
                     <template #default="scope">
-                        <el-dropdown trigger="click" popper-class="fcal_select">
+                        <el-dropdown v-if="canEdit(scope.row.status)" trigger="click" popper-class="fcal_select">
                             <span class="el-dropdown-link">
                                     <el-icon><MoreFilled /></el-icon>
                             </span>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item><el-icon><Close /></el-icon> {{ $t('Cancel') }}</el-dropdown-item>
+                                    <el-dropdown-item 
+                                        @click="rescheduleBooking(scope.row.reschedule_url)">
+                                        <el-icon>
+                                            <Refresh/>
+                                        </el-icon>
+                                        {{ $t('Reschedule') }}
+                                    </el-dropdown-item>
+                                    <el-dropdown-item 
+                                        @click="cancelBooking(scope.row)">
+                                        <el-icon>
+                                            <Close/>
+                                        </el-icon>
+                                        {{ $t('Cancel') }}
+                                    </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -134,11 +147,46 @@
                 <pagination :pagination="pagination" @fetch="fetchGuests"/>
             </div>
         </div>
+        <el-dialog
+            v-model="cancelDialog"
+            width="30%"
+            :title="$t('Cancel Meeting')"
+            class="fcal_modal"
+        >
+            <div style="text-align: center;">
+                <h3>{{ selectedBooking.calendar_event?.title }}</h3>
+                <p class="fcal_meeting_with">{{ $t('with') }} <b>{{ selectedBooking.first_name }} {{
+                        selectedBooking.last_name
+                    }}</b></p>
+                <p class="fcal_meeting_time">{{ meetingTime }}</p>
+                <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
+                <el-input type="textarea" v-model="cancelReason"
+                          :placeholder="$t('Reason for cancellation')"></el-input>
+            </div>
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button
+                    @click="cancelDialog = false"
+                    class="fcal_plain_btn"
+                >
+                    {{ $t("No, Don't cancel") }}
+                </el-button>
+                <el-button
+                    v-loading="updating"
+                    :disabled="updating"
+                    class="fcal_primary_btn"
+                    @click="updateScheduleStatus('cancelled')"
+                >
+                    {{ $t('Yes, Cancel') }}
+                </el-button>
+              </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { MoreFilled, Close, Download, Search } from '@element-plus/icons-vue';
+import { MoreFilled, Refresh, Close, Download, Search } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import PaymentLogs from './PaymentLogs';
 export default {
@@ -149,6 +197,7 @@ export default {
         PaymentLogs,
         Pagination,
         MoreFilled,
+        Refresh,
         Close,
         Download,
         Search
@@ -156,8 +205,11 @@ export default {
     data() {
         return {
             bookingId: null,
+            selectedBooking: {},
+            cancelReason: '',
             attendees: [],
             loading: false,
+            updating: false,
             sidebar_loading: false,
             app_loaded: false,
             pagination: {
@@ -166,9 +218,22 @@ export default {
                 per_page: 20
             },
             search: '',
+            cancelDialog: false,
             payment_order: null,
             main_body_contents: []
         }
+    },
+    computed: {
+        canEdit() {
+            return (status) => {
+                return this.hasAccess('manage_all_bookings') && status !='cancelled' && status != 'completed';
+            }
+        },
+        meetingTime() {
+            const startTime = this.toCurrentTimezone(this.selectedBooking.start_time, this.appVars.date_time_formatter);
+            const endTime = this.toCurrentTimezone(this.selectedBooking.end_time, this.appVars.date_time_formatter);
+            return `${startTime} - ${endTime}`;
+        },
     },
     methods: {
         fetchGuests() {
@@ -203,6 +268,34 @@ export default {
                     this.sidebar_loading = false;
                 });
         },
+        updateScheduleStatus(new_status) {
+            this.updating = true;
+            const data = {
+                column: 'status',
+                value: new_status
+            };
+            if (new_status == 'cancelled') {
+                data.cancel_reason = this.cancelReason;
+            }
+
+            this.$put(`schedules/${this.selectedBooking.id}`, data)
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.selectedBooking.status = new_status;
+                    this.selectedBooking.happening_status = '';
+                    this.cancelDialog = false;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.updating = false;
+                });
+        },
+        cancelBooking(booking) {
+            this.cancelDialog = true;
+            this.selectedBooking = booking;
+        },
         exportHosts() {
             location.href = window.ajaxurl + '?' + jQuery.param({
                 action: 'fluent_booking_export_hosts',
@@ -222,7 +315,10 @@ export default {
             this.payment_order = booking.payment_order;
             this.main_body_contents = booking.main_body_contents;
             this.$emit('updateAdditionalInfo', booking.activities, booking.sidebar_contents)
-        }
+        },
+        rescheduleBooking(rescheduleUrl) {
+            window.open(rescheduleUrl, '_blank');
+        },
     },
     mounted() {
         this.fetchGuests();
