@@ -65,6 +65,17 @@ class Google extends Client
         return parent::addEventTo($url . '/events', $payload);
 	}
 
+	public function deleteEvent($url)
+    {
+        $url = $this->buildUrlFrom($url);
+		
+		if (str_contains($url, '/events')) {
+			$url = str_replace('/events', '', $url);
+		}
+
+        return parent::deleteEvent($url);
+    }
+
 	protected function getAuthCredential()
 	{
 		return 'Bearer ' . $this->password;

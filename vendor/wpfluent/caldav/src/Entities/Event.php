@@ -4,10 +4,23 @@ namespace FluentBooking\Package\CalDav\Entities;
 
 class Event implements \JsonSerializable
 {
+	/**
+	 * The \Entities\Calendar object
+	 * @var null
+	 */
 	protected $calendar = null;
 
+	/**
+	 * The \ICal\Event object
+	 * @var null
+	 */
 	protected $icalEvent = [];
 	
+	/**
+	 * Information about the calebdar
+	 * 
+	 * @var array
+	 */
 	protected $meta = [];
 
 	public function __construct($event, array $meta)
@@ -16,11 +29,21 @@ class Event implements \JsonSerializable
 		$this->icalEvent = $event;
 	}
 
+	/**
+	 * Getter to get underlying Event Object
+	 * @return \ICal\Event
+	 */
 	public function getIcalEvent()
 	{
 		return $this->icalEvent;
 	}
 
+	/**
+	 * Dynamic property getter
+	 * 
+	 * @param  string $key
+	 * @return mixed
+	 */
 	public function __get($key)
 	{
 		if (isset($this->meta[$key])) {
@@ -30,11 +53,32 @@ class Event implements \JsonSerializable
 		return $this->icalEvent->{$key};
 	}
 
+	/**
+	 * Get the uid of underlying event
+	 * @return [type] [description]
+	 */
+	public function getUid()
+	{
+		return $this->icalEvent->getUid();
+	}
+
+	/**
+	 * Dynamic property setter
+	 * 
+	 * @param  string $key
+	 * @param  mixed $value
+	 * @return mixed
+	 */
 	public function __set($key, $value)
 	{
 		$this->icalEvent->{$key} = $value;
 	}
 
+	/**
+	 * Create/Update an event
+	 * 
+	 * @return \Ical\Event
+	 */
 	public function save()
 	{
 		if ($this->calendar->addEvent($this->icalEvent)) {
@@ -42,6 +86,18 @@ class Event implements \JsonSerializable
 		}
 	}
 
+	public function delete()
+	{
+		return $this->calendar->deleteEvent(
+			$this->icalEvent->getUid()
+		);
+	}
+
+	/**
+	 * Set the calendar object
+	 * 
+	 * @param \Entities\Calendar
+	 */
 	public function setCalendar($calendar)
 	{
 		$this->calendar = $calendar;
