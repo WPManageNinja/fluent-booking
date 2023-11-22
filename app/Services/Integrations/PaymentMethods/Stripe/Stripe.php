@@ -263,7 +263,7 @@ class Stripe extends BasePaymentMethod
             'currency'             => $currency,
             'receipt_email'        => $booking->email,
             'description'          => $booking->getMeetingTitle(),
-            'statement_descriptor' => substr($booking->calendar_event->title, 0, 22),
+            'statement_descriptor' => StripeSettings::getPaymentDescriptor($booking->calendar_event),
             'metadata'             => [
                 'ref_id'      => $args['client_reference_id'],
                 'guest_name'  => trim($booking->first_name . ' ' . $booking->last_name),
