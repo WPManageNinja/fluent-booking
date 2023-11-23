@@ -260,9 +260,9 @@ class Booking extends Model
                 'zoom_meeting'   => __('Zoom Video', 'fluent-booking-pro'),
                 'ms_teams'       => __('MS Teams', 'fluent-booking-pro'),
             ];
-            
+
             $html = '<b>' . $platformLabels[$locationType] . '</b> ';
-        
+
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
                 $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
             }
@@ -595,13 +595,19 @@ class Booking extends Model
         if (!$isHtml) {
             $text = '';
             foreach ($customData as $data) {
-                $text .= $data['label'] . ': '. PHP_EOL . $data['value'] .PHP_EOL.PHP_EOL;
+                if (empty($data['value'])) {
+                    continue;
+                }
+                $text .= $data['label'] . ': ' . PHP_EOL . esc_html($data['value']) . PHP_EOL . PHP_EOL;
             }
             return $text;
         }
 
         $html = '<table>';
         foreach ($customData as $data) {
+            if (empty($data['value'])) {
+                continue;
+            }
             $html .= '<tr>';
             $html .= '<td><b>' . $data['label'] . '</b></td>';
             $html .= '<td>' . $data['value'] . '</td>';
