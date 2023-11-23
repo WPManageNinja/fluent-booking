@@ -20,8 +20,6 @@
             form[field.name] = e.detail.value;
         });
 
-        console.log('Skeleton', form, field);
-
         document.body.dispatchEvent(new CustomEvent('fcal_init_phone_field', {
             detail: {
                 elementId: currentFieldId,
