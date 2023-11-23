@@ -21,6 +21,9 @@ class LocationService
             if ($location['type'] == 'google_meet') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Google Meet" />';
                 $html .= '<span class="fcal_loc_text">' . __('Google Meet', 'fluent-booking-pro') . '</span>';
+            } else if ($location['type'] == 'ms_teams') {
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="MS Teams" />';
+                $html .= '<span class="fcal_loc_text">' . __('MS Teams', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'zoom_meeting') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/zoom.svg" alt="Zoom Icon" />';
                 $html .= '<span class="fcal_loc_text">' . __('Zoom Video', 'fluent-booking-pro') . '</span>';
@@ -53,7 +56,6 @@ class LocationService
                 $html .= '<span class="fcal_loc_text">' . __('Attendee Phone Number', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'phone_organizer') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="' . __('Phone', 'fluent-booking-pro') . '" />';
-
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['host_phone_number'] . '</span>';
                 } else {
