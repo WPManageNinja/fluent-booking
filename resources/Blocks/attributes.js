@@ -29,5 +29,9 @@ export const attributes = {
     hideHostInfo: {
         type: 'string',
         default: 'no'
+    },
+    theme: {
+        type: 'string',
+        default: 'system-default'
     }
 };

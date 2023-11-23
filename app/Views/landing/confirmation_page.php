@@ -40,33 +40,41 @@
 <?php endforeach; ?>
 
 <script>
-    const theme = '<?php echo $theme; ?>';
+    const theme = '<?php echo esc_attr($theme); ?>';
 
-    if (theme == 'system-default') {
-        // System Mode
-        const runColorMode = (fn) => {
-            if (!window.matchMedia) {
-                return;
+    const confirmationPage = document.querySelector('.confirmation_page');
+    if (confirmationPage) {
+        if (theme == 'system-default') {
+            // System Mode
+            const runColorMode = (fn) => {
+                if (!window.matchMedia) {
+                    return;
+                }
+                const query = window.matchMedia('(prefers-color-scheme: dark)');
+                fn(query.matches);
+                query.addEventListener('change', (event) => fn(event.matches));
             }
-            const query = window.matchMedia('(prefers-color-scheme: dark)');
-            fn(query.matches);
-            query.addEventListener('change', (event) => fn(event.matches));
+            runColorMode((isDarkMode) => {
+                if (isDarkMode) {
+                    modeClassAddRemove(confirmationPage, 'fcal-dark-mode', 'fcal-light-mode');
+                } else {
+                    modeClassAddRemove(confirmationPage, 'fcal-light-mode', 'fcal-dark-mode');
+                }
+            })
+        } else if (theme == 'dark-mode') {
+            modeClassAddRemove(confirmationPage, 'fcal-dark-mode', 'fcal-light-mode');
+        } else {
+            modeClassAddRemove(confirmationPage, 'fcal-light-mode', 'fcal-dark-mode');
         }
-        runColorMode((isDarkMode) => {
-            if (isDarkMode) {
-                document.body.classList.add('dark-mode');
-                document.body.classList.remove('light-mode');
-            } else {
-                document.body.classList.add('light-mode');
-                document.body.classList.remove('dark-mode');
+
+        function modeClassAddRemove(elName, addClass, removeClass) {
+            if (elName && addClass) {
+                elName.classList.add(addClass);
             }
-        })
-    } else if (themeMode == 'dark-mode') {
-        document.body.classList.remove('light-mode');
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
+            if (elName && removeClass) {
+                elName.classList.remove(removeClass);
+            }
+        }
     }
 </script>
 </body>

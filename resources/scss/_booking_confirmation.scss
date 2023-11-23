@@ -1,24 +1,18 @@
 :root {
-  --dark: #1B2533;
+  --fcal_dark: #1B2533;
   --fcal_body_bg: #f3f4f6;
-  --cal_bg: #ffffff;
-  --slot_border: #D6DAE1;
+  --fcal_cal_bg: #ffffff;
+  --fcal_slot_border: #D6DAE1;
   --fcal_primary_color: #306ae0;
-  --thBG: #f5f6f7;
+  --fcal_thBG: #f5f6f7;
 }
-.booking-confirmation-page {
-  background: var(--fcal_body_bg);
-  padding: 66px 0 30px;
-  height: 100vh;
-  overflow-x: hidden;
-}
-.dark-mode {
-  --dark: #dddbdb;
+.fcal-dark-mode {
+  --fcal_dark: #dddbdb;
   --fcal_body_bg: #101010;
-  --cal_bg: #1c1c1c;
-  --slot_border: #2b2b2b;
+  --fcal_cal_bg: #1c1c1c;
+  --fcal_slot_border: #2b2b2b;
   --fcal_primary_color: #ffffff;
-  --thBG: #2b2b2b;
+  --fcal_thBG: #2b2b2b;
 
   .fcal_to_calendars {
     a {
@@ -80,38 +74,40 @@
   text-align: center;
   h3 {
     font-size: 21px;
-    color: var(--dark);
+    color: var(--fcal_dark);
   }
 }
 .fcal_confirmation {
+  padding: 66px 0 30px;
+
   .fcal_confirm_header {
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--slot_border);
+    border-bottom: 2px solid var(--fcal_slot_border);
     margin-bottom: 20px;
     h3 {
       font-weight: 500;
     }
     p {
       margin: 5px 0;
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
   }
   .fcal_confirm_body {
     hr {
-      border-color: var(--slot_border);
+      border-color: var(--fcal_slot_border);
     }
     .fluent_booking_order_items_table {
       thead {
         th {
-          border-color: var(--slot_border);
-          background: var(--thBG);
-          color: var(--dark);
+          border-color: var(--fcal_slot_border);
+          background: var(--fcal_thBG);
+          color: var(--fcal_dark);
         }
       }
       tbody {
         tr {
           td {
-            color: var(--dark);
+            color: var(--fcal_dark);
           }
         }
       }
@@ -119,7 +115,7 @@
     .fcal_payment_html {
       h4,
       h3 {
-        color: var(--dark);
+        color: var(--fcal_dark);
       }
     }
   }
@@ -133,6 +129,9 @@
   .fcal_confirm_section_content {
     font-size: 14px;
     color: #666666;
+    a {
+      color: var(--fcal_primary_color);
+    }
   }
   .fcal_confirm_section_title {
     width: 200px;
@@ -144,7 +143,7 @@
     h4 {
       font-size: 16px;
       font-weight: bold;
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
     p {
       margin: 0;
@@ -154,8 +153,8 @@
   .fcal_booking_manage {
     margin-top: 20px;
     padding: 20px 0;
-    border-top: 2px solid var(--slot_border);
-    color: var(--dark);
+    border-top: 2px solid var(--fcal_slot_border);
+    color: var(--fcal_dark);
   }
 }
 ul.fcal_listed {
@@ -190,6 +189,15 @@ span.fcal_host_badge {
       align-items: center;
       padding: 6px;
       border: 1px solid #e5e7eb;
+    }
+  }
+}
+
+// Dark mode
+.fcal-dark-mode {
+  .fcal_confirmation {
+    .fcal_confirm_section_content {
+      color: var(--fcal_dark);
     }
   }
 }
