@@ -50,7 +50,7 @@ class BookingElement extends BaseFieldManager
                 'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
-                'label'              => __('FluentBooking Field', 'fluent-booking-pro'),
+                'label'              => __('Select Appointment Date & Time', 'fluent-booking-pro'),
                 'admin_field_label'  => '',
                 'event_id'           => '',
                 'booking_calendar'   => '',
@@ -59,7 +59,7 @@ class BookingElement extends BaseFieldManager
                 'cal_guest_fields'   => [
                     'email_field' => '',
                     'name_field'  => '',
-                    'host_info'   => 'hide'
+                    'host_info'   => 'show'
                 ],
                 'validation_rules'   => array(
                     'required' => [
@@ -129,12 +129,24 @@ class BookingElement extends BaseFieldManager
             $data['attributes']['tabindex'] = $tabIndex;
         }
 
+        $showHost = Arr::get($data, 'settings.cal_guest_fields.host_info') == 'show';
+
         $ariaRequired = 'false';
         if (Arr::get($data, 'settings.validation_rules.required.value')) {
             $ariaRequired = 'true';
         }
 
-        [$localizeData, $element_id] = $this->getLocalizedData($data, $form);
+        $slot_id = (int)Arr::get($data, 'settings.event_id');
+
+        $calendarEvent = CalendarSlot::find($slot_id);
+
+        if (!$calendarEvent || !$calendarEvent->calendar) {
+            esc_html_e('Selected Calendar could not be found', 'fluent-booking-pro');
+            return;
+        }
+
+        [$localizeData, $element_id] = (new FluentFormInit())->getLocalizedData($calendarEvent, $data, $form);
+
         $localizeData['time_format'] = (Helper::getGlobalSettings())['time_format'];
 
         wp_enqueue_script(
@@ -149,53 +161,17 @@ class BookingElement extends BaseFieldManager
             (new FrontEndHandler())->getGlobalVars()
         );
 
-        $elMarkup = '<div class="fcal_cal_wrap"><div class="fluentform_calendar_app" data-element_id="' . esc_attr($element_id) . '"></div></div>';
+        $calClass = 'fluentform_calendar_app';
+
+        if ($showHost) {
+            $calClass .= ' fcal_showing_host';
+        } else {
+            $calClass .= ' fcal_not_showing_host';
+        }
+
+        $elMarkup = '<div class="fcal_cal_wrap"><div class="' . esc_attr($calClass) . '" data-element_id="' . esc_attr($element_id) . '"></div></div>';
         $html = $this->buildElementMarkup($elMarkup, $data, $form);
         echo apply_filters('fluentform/rendering_field_html_' . $elementName, $html, $data, $form);
-    }
-
-    public function getLocalizedData($data, $form)
-    {
-        $element_id = $this->makeElementId($data, $form);
-
-        $slot_id = (int)Arr::get($data, 'settings.event_id');
-
-        $slot = CalendarSlot::find($slot_id);
-
-        if (!$slot) {
-            return __('Slot Not Found', 'fluent-booking-pro');
-        }
-
-        $calendar = $slot->calendar;
-
-        if (!$slot->calendar) {
-            return __('Calendar Not Found', 'fluent-booking-pro');
-        }
-
-        $slot->max_lookup_date = $slot->getMaxLookUpDate();
-
-        $slot->min_lookup_date = $slot->getMinLookUpDate();
-
-        $slot->description = wpautop($slot->description);
-
-        $settings = Arr::get($data, 'settings');
-
-        $name = Arr::get($data, 'attributes.name');
-
-        $localizeData = (new FrontEndHandler())->getCalendarEventVars($calendar, $slot);
-
-        $localizeData['name'] = $name;
-        $localizeData['settings'] = $settings;
-
-        if (Arr::get($localizeData['settings']['cal_guest_fields'], 'host_info', 'hide') == 'show') {
-            $localizeData['disable_author'] = false;
-        } else {
-            $localizeData['disable_author'] = true;
-        }
-
-        $localizeData['form_instance'] = $form->instance_css_class;
-
-        return [$localizeData, $element_id];
     }
 
     public function renderResponse($data, $field, $form_id)
@@ -220,23 +196,23 @@ class BookingElement extends BaseFieldManager
                 $calendar = $booking->calendar;
                 $html = '<div class="ff_entry_table_wrapper"><table class="ff_entry_table_field ff-table">';
                 $html .= '<tr>';
-                $html .= '<th>'.__('Booking ID', 'fluent-booking-pro').'</th>';
+                $html .= '<th>' . __('Booking ID', 'fluent-booking-pro') . '</th>';
                 $html .= '<td>' . $booking->id . ' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>'.__('Booking Status', 'fluent-booking-pro').'</th>';
+                $html .= '<th>' . __('Booking Status', 'fluent-booking-pro') . '</th>';
                 $html .= '<td>' . $booking->status . '</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>'.__('Date & Time', 'fluent-booking-pro').'</th>';
+                $html .= '<th>' . __('Date & Time', 'fluent-booking-pro') . '</th>';
                 $html .= '<td>' . $booking->getFullBookingDateTimeText($calendar->author_timezone, true) . ' (' . $calendar->author_timezone . ')</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>'.__('Meeting Duration', 'fluent-booking-pro').'</th>';
+                $html .= '<th>' . __('Meeting Duration', 'fluent-booking-pro') . '</th>';
                 $html .= '<td>' . $booking->slot_minutes . ' Minutes</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>'.__('Meeting Host', 'fluent-booking-pro').'</th>';
+                $html .= '<th>' . __('Meeting Host', 'fluent-booking-pro') . '</th>';
                 $html .= '<td>' . $calendar->title . '</td>';
                 $html .= '</tr>';
                 $html .= '</html></div>';
@@ -259,8 +235,35 @@ class BookingElement extends BaseFieldManager
 
     public function getCalendarOptions()
     {
-        $calendarOptions = Helper::getCalendarOptionsByHost();
-
-        return apply_filters('fluent_booking/ff_editor_calendar_options', $calendarOptions);
+        return apply_filters('fluent_booking/ff_editor_calendar_options', Helper::getCalendarOptionsByHost());
     }
+
+    /**
+     * Build unique ID concatenating form id and name attribute
+     *
+     * @param array $data $form
+     *
+     * @return string for id value
+     */
+    protected function makeElementId($data, $form)
+    {
+        if (isset($data['attributes']['name'])) {
+            $formInstance = \FluentForm\App\Helpers\Helper::$formInstance;
+            if (!empty($data['attributes']['id'])) {
+                return $data['attributes']['id'];
+            }
+            $elementName = $data['attributes']['name'];
+            $elementName = str_replace(['[', ']', ' '], '_', $elementName);
+
+            $suffix = esc_attr($form->id);
+            if ($formInstance > 1) {
+                $suffix = $suffix . '_' . $formInstance;
+            }
+
+            $suffix .= '_' . $elementName;
+
+            return 'ff_' . esc_attr($suffix);
+        }
+    }
+
 }

@@ -10,7 +10,8 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
-    
+    export let form = {};
+
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
 
@@ -59,7 +60,6 @@
     let primaryColor = 'var(--fcal_primary_color)';
 
     $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
-
 
     function maybeMaxDateDisabled() {
         let result = false;
@@ -153,6 +153,7 @@
     }
 
     function dayClick(day) {
+        console.log(form);
         if (availableDates[day.date]) {
             daySlots = availableDates[day.date];
             selectedDate = day.date;
@@ -195,7 +196,6 @@
         loadAvailableDates();
     }
 
-
     function slotSpotConfirmed() {
         dispatch('spotSelected', selectedDateTime);
         dispatch('formatHours', formatHours);
@@ -208,10 +208,10 @@
         selectedDateTime = day;
         if (isFluentform) {
             dispatch('dateOnFluentForm', selectedDateTime);
-        }
-        if (!isFluentform) {
+        } else {
             return;
         }
+
         if (selectedDateTime) {
             start_time = selectedDateTime.start;
         }
@@ -219,11 +219,10 @@
         if (isFFConversational) {
             appData.element.dispatchEvent(new CustomEvent('value.update', {
                 detail: {
-                    value: JSON.stringify({ id, timezone, start_time })
+                    value: JSON.stringify({id, timezone, start_time})
                 }
             }));
         }
-
     }
 
     function resetSelection() {
@@ -248,7 +247,6 @@
         return getDateTimeStringI18(string, 'mNumber');
     }
 
-
 </script>
 
 <div class="fcal_day_picker">
@@ -263,16 +261,19 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h3>{getDateTimeStringI18(monthNames[month], 'month')} <span>{getDateTimeStringI18(year, 'mNumber')}</span></h3>
+                    <h3>{getDateTimeStringI18(monthNames[month], 'month')}
+                        <span>{getDateTimeStringI18(year, 'mNumber')}</span></h3>
                 </div>
                 <div class="calendar_nav">
-                    <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled} on:click={()=>prev()}>
+                    <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled}
+                            on:click={()=>prev()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                         </svg>
                     </button>
-                    <button aria-label="Next Month" type="button" class:fcal_nav_active={!nextDisabled} on:click={()=>next()}>
+                    <button aria-label="Next Month" type="button" class:fcal_nav_active={!nextDisabled}
+                            on:click={()=>next()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
@@ -291,21 +292,26 @@
                 <label for="fcal_timezone_selector">{i18('Timezone')}</label>
                 <TimeZoneSelector bind:timezone={timezone}/>
             </div>
+
+            <slot/>
+
         </div>
 
         <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
             <div class="fcal_slot_picker_header">
-                <div aria-label="Back to Date Selection" class="fcal_back" on:keypress="{(e) => {selectedDate = false}}" on:click={resetSelection}>
+                <div aria-label="Back to Date Selection" class="fcal_back" on:keypress="{(e) => {selectedDate = false}}"
+                     on:click={resetSelection}>
                     <i class="fcal_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            viewBox="0 0 24 24">
+                             viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path
                                 d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
                         </svg>
                     </i>
                 </div>
-                <span class="fcal_slot_date_info">{ dateTimeI18(selectedDate, 'ddd') } <span>{getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span></span>
+                <span class="fcal_slot_date_info">{ dateTimeI18(selectedDate, 'ddd') }
+                    <span>{getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span></span>
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
                         <input type="radio" id="12_hours_selector" bind:group={formatHours} value="12"/>
@@ -322,14 +328,16 @@
                     {#each daySlots as day}
                         <div
                             class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
-                            <div role="button" tabindex="0" aria-label="Select Time" on:click="{slotSpotForFluentForm(day)}"
+                            <div role="button" tabindex="0" aria-label="Select Time"
+                                 on:click="{slotSpotForFluentForm(day)}"
                                  on:keypress="{(e) => {selectedDateTime = day}}"
                                  class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
-                                    <div class="fcal_spot_remaining">{getDateTimeStringI18(day.remaining)} {i18('spots left')}</div>
+                                    <div
+                                        class="fcal_spot_remaining">{getDateTimeStringI18(day.remaining)} {i18('spots left')}</div>
                                 {/if}
                             </div>
                             {#if selectedDateTime && selectedDateTime.start == day.start}
@@ -351,9 +359,7 @@
             </div>
         </div>
     </div>
+    {#if isFluentform}
+        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, start_time, form })}/>
+    {/if}
 </div>
-{#if isFluentform}
-    <div>
-        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, start_time })}/>
-    </div>
-{/if}
