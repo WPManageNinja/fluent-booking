@@ -28,6 +28,7 @@ abstract class BaseCalendar
         add_filter('fluent_booking/remote_calendar_providers', [$this, 'addAsProvider'], 10, 2);
         add_filter('fluent_booking/remote_calendar_connection_feeds', [$this, 'pushFeeds'], 10, 2);
         add_action('fluent_calendar/patch_calendar_config_settings__' . $this->calendarKey . '_user_token', [$this, 'updateConflictIds'], 10, 2);
+        add_action('fluent_calendar/patch_calendar_additional_settings__' . $this->calendarKey . '_user_token', [$this, 'updateAdditionalSettings'], 10, 2);
         add_action('fluent_calendar/disconnect_remote_calendar__' . $this->calendarKey . '_user_token', [$this, 'authDisconnect'], 10, 1);
 
         /*
@@ -90,6 +91,18 @@ abstract class BaseCalendar
 
         $settings = $meta->value;
         $settings['conflict_check_ids'] = $conflictIds;
+        $meta->value = $settings;
+        $meta->save();
+    }
+
+    public function updateAdditionalSettings($additionalSettings, $meta)
+    {
+        $meta = Meta::where('object_type', '_' . $this->calendarKey . '_user_token')
+            ->where('id', $meta->id)
+            ->first();
+
+        $settings = $meta->value;
+        $settings['additional_settings'] = $additionalSettings;
         $meta->value = $settings;
         $meta->save();
     }

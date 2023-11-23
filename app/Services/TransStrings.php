@@ -508,6 +508,7 @@ class TransStrings
             'Settings'                                                                         => __('Settings', 'fluent-booking-pro'),
             'SMS Notifications'                                                                => __('SMS Notifications', 'fluent-booking-pro'),
             'Event Settings'                                                                   => __('Event Settings', 'fluent-booking-pro'),
+            'Additional Settings'                                                              => __('Additional Settings', 'fluent-booking-pro'),
             'Active'                                                                           => __('Active', 'fluent-booking-pro'),
             'Inactive'                                                                         => __('Inactive', 'fluent-booking-pro'),
             'Settings updated!'                                                                => __('Settings updated!', 'fluent-booking-pro'),
