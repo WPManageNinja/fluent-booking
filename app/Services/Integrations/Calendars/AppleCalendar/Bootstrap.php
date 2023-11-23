@@ -501,7 +501,7 @@ class Bootstrap extends BaseCalendar
         if (!$client) {
             return false;
         }
-        
+
         try {
             $apiCalendar = new Calendar(['href' => $parentCalendarId], $client->getClient());
             $apiEvent = $apiCalendar->getEvent($parentEventId);
@@ -523,18 +523,9 @@ class Bootstrap extends BaseCalendar
         }
 
         foreach ($missingEventBookings as $missingBooking) {
-//            if (!empty($parentMeta['onlineMeeting']['joinUrl'])) {
-//                $location = $missingBooking->location_details;
-//                if (empty($location['online_platform_link'])) {
-//                    $location['online_platform_link'] = $parentMeta['onlineMeeting']['joinUrl'];
-//                    $missingBooking->location_details = $location;
-//                    $booking->save();
-//                }
-//            }
-//
-//            if ($missingBooking->status != 'cancelled') {
-//                $missingBooking->updateMeta('__outlook_calendar_event', $parentMeta);
-//            }
+            if ($missingBooking->status != 'cancelled') {
+                $missingBooking->updateMeta('__apple_calendar_event', $parentMeta);
+            }
         }
     }
 
