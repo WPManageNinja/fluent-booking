@@ -92,6 +92,11 @@ class AdminMenuHandler
 
     public function render()
     {
+
+        if(!as_has_scheduled_action('fluent_booking_five_minutes_tasks')) {
+            as_schedule_recurring_action(time(), (60 * 5), 'fluent_booking_five_minutes_tasks', [], 'fluent-booking', true);
+        }
+
         $app = App::getInstance();
 
         $config = $app->config;
