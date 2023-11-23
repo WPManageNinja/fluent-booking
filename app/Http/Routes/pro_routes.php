@@ -8,6 +8,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     // Integrations
     $router->get('/{id}/integrations/remote-calendars', 'IntegrationSettingsController@getRemoteCalendars')->int('id');
     $router->post('/{id}/integrations/remote-calendars/patch-conflicts', 'IntegrationSettingsController@patchRemoteCalendarConflictSettings')->int('id');
+    $router->post('/{id}/integrations/remote-calendars/patch-settings', 'IntegrationSettingsController@patchRemoteCalendarAdditionalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/sync-settings', 'IntegrationSettingsController@syncCreatbleRemoteCalSettings')->int('id');
     $router->post('/{id}/integrations/remote-calendars/disconnect-calendar', 'IntegrationSettingsController@disconnectRemoteCalendar')->int('id');
     $router->post('/{id}/integrations/remote-calendars/cal-dav-auth', 'IntegrationSettingsController@addCalDavCredential')->int('id');
