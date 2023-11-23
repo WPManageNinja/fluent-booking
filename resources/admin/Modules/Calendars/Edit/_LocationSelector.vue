@@ -212,6 +212,9 @@ export default {
             } else if (location.type == 'google_meet') {
                 this.slot.location_settings[index].title = this.$t('Google Meet');
                 return;
+            } else if (location.type == 'ms_teams') {
+                this.slot.location_settings[index].title = this.$t('MS Teams');
+                return;
             } else if (location.type == 'zoom_meeting') {
                 this.slot.location_settings[index].title = this.$t('Zoom Meeting');
                 return;
