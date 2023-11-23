@@ -16,7 +16,21 @@
   .slot_time_range {
     font-weight: bold;
   }
-  .fcal_ff_location {
-    margin-top: 20px;
+}
+
+.fcal_ff_location {
+  margin-top: 20px !important;
+}
+
+.ffc_question {
+  .fcal_calendar_inner {
+    border: none !important;
+  }
+  .fcal_slot_description {
+    p {
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 20px;
+    }
   }
 }
