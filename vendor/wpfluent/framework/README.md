@@ -1,3 +1,3 @@
 # WPFluent Framework
 
-- Version - 2.2.28
+- Version - 2.2.31

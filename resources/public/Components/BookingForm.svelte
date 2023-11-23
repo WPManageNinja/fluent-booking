@@ -19,7 +19,7 @@
                                         {#if field.required}<span>*</span>{/if}
                                     </div>
                                 {/if}
-                                <LocationField field={field} form="{form}"/>
+                                <LocationField {appData} field={field} bind:form="{form}"/>
                             </div>
                         {:else}
                             <label class="fcal_input_content">
@@ -74,30 +74,33 @@
                 {/if}
             {/each}
 
-            <!--{/if}-->
-            {#if hasPaymentItem() && appData.payment_items}
-                <div class="fluent_booking_payment_processor" style="display:none;">
-                    <h3 class="label">{i18('Total Payment')}: {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
-                    {#if appData?.payment_methods?.template}
-                        <div class="fcal_form_payment_item">
-                            {@html appData.payment_methods.template}
-                        </div>
+            {#if !appData.is_fluentform}
+                <!--{/if}-->
+                {#if hasPaymentItem() && appData.payment_items}
+                    <div class="fluent_booking_payment_processor" style="display:none;">
+                        <h3 class="label">{i18('Total Payment')}
+                            : {@html appData?.currency_sign} {getSubTotal(appData?.payment_items)}</h3>
+                        {#if appData?.payment_methods?.template}
+                            <div class="fcal_form_payment_item">
+                                {@html appData.payment_methods.template}
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
+                <div class="fcal_form_item fcal_submit">
+                    {#if !hasPaymentItem()}
+                        <button disabled="{submitting}" type="submit"
+                                class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                            {appData.i18n.Schedule_Meeting}
+                        </button>
+                    {:else}
+                        <button disabled="{submitting}" type="submit"
+                                class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
+                            {appData.i18n.Continue_to_Payments}
+                        </button>
                     {/if}
                 </div>
             {/if}
-            <div class="fcal_form_item fcal_submit">
-                {#if !hasPaymentItem()}
-                    <button disabled="{submitting}" type="submit"
-                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        {appData.i18n.Schedule_Meeting}
-                    </button>
-                {:else}
-                    <button disabled="{submitting}" type="submit"
-                            class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                        {appData.i18n.Continue_to_Payments}
-                    </button>
-                {/if}
-            </div>
         </form>
         {#if errors}
             <div class="fcal_errors">
@@ -110,7 +113,6 @@
     import {Pulse} from 'svelte-loading-spinners';
     import {util, i18, getErrorText} from '../util.js';
     import {createEventDispatcher} from 'svelte';
-    import {intros} from "svelte/internal";
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
     import PhoneFieldSkeleton from "./PhoneFieldSkeleton.svelte";
@@ -122,7 +124,7 @@
 
     export let appData;
 
-    const form = window.fluentCalendarPublicVars.current_person;
+    export let form;
 
     let submitting = false;
 
@@ -133,9 +135,13 @@
     const currentUrl = window.location.href;
 
     setTimeout(() => {
-        const adjustHeight  = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap").offsetHeight;
+        const wrap = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap");
+        if(!wrap) {
+            return;
+        }
+        const adjustHeight = wrap.offsetHeight;
         const calendarInner = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected");
-        calendarInner.style.height =  adjustHeight + 135 +'px';
+        calendarInner.style.height = adjustHeight + 135 + 'px';
     }, 100)
 
     function hasPaymentItem() {

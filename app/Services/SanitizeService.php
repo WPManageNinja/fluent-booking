@@ -140,10 +140,15 @@ class SanitizeService
         foreach ($locations as $locationIndex => $location) {
 
             $locationType = $location['type'];
+            $locationTitle = sanitize_text_field(Arr::get($location, 'title'));
+
+            if (empty($locationTitle) && $locationType == 'ms_teams') {
+                $locationTitle = 'MS Teams';
+            }
 
             $sanitizedLocation = [
                 'type'               => sanitize_text_field($location['type']),
-                'title'              => sanitize_text_field(Arr::get($location, 'title')),
+                'title'              => $locationTitle,
                 'display_on_booking' => sanitize_text_field(Arr::get($location, 'display_on_booking'))
             ];
 
