@@ -40,34 +40,45 @@
 <?php endforeach; ?>
 
 <script>
-    const theme = '<?php echo $theme; ?>';
+    const theme = '<?php echo esc_attr($theme); ?>';
 
-    if (theme == 'system-default') {
-        // System Mode
-        const runColorMode = (fn) => {
-            if (!window.matchMedia) {
-                return;
-            }
-            const query = window.matchMedia('(prefers-color-scheme: dark)');
-            fn(query.matches);
-            query.addEventListener('change', (event) => fn(event.matches));
-        }
-        runColorMode((isDarkMode) => {
-            if (isDarkMode) {
-                document.body.classList.add('dark-mode');
-                document.body.classList.remove('light-mode');
+    const confirmationPage = document.querySelector('.confirmation_page');
+    function applyModeClasses(element, darkMode) {
+        const darkClass  = 'fcal-dark-mode';
+        const lightClass = 'fcal-light-mode';
+
+        if (element) {
+            if (darkMode) {
+                element.classList.add(darkClass);
+                element.classList.remove(lightClass);
             } else {
-                document.body.classList.add('light-mode');
-                document.body.classList.remove('dark-mode');
+                element.classList.add(lightClass);
+                element.classList.remove(darkClass);
             }
-        })
-    } else if (themeMode == 'dark-mode') {
-        document.body.classList.remove('light-mode');
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
+        }
     }
+
+    if (confirmationPage) {
+        if (theme === 'system-default') {
+            const runColorMode = (fn) => {
+                if (!window.matchMedia) {
+                    return;
+                }
+                const query = window.matchMedia('(prefers-color-scheme: dark)');
+                fn(query.matches);
+                query.addEventListener('change', (event) => fn(event.matches));
+            };
+
+            runColorMode((isDarkMode) => {
+                applyModeClasses(confirmationPage, isDarkMode);
+            });
+        } else if (theme === 'dark-mode') {
+            applyModeClasses(confirmationPage, true);
+        } else {
+            applyModeClasses(confirmationPage, false);
+        }
+    }
+
 </script>
 </body>
 </html>

@@ -19,7 +19,8 @@ const InspectorSettings = props => {
             primary_color,
             date_round,
             avatarStyle,
-            hideHostInfo
+            hideHostInfo,
+            theme
         }, setAttributes
     } = props;
 
@@ -110,6 +111,19 @@ const InspectorSettings = props => {
                                     { label: __('Hide'), value: 'yes' },
                                 ] }
                                 onChange={ ( value ) => setAttributes({hideHostInfo: value} ) }
+                            />
+                        </div>
+
+                        <div className="fcal_block_inspector_widget fcal_block_inspector_host_info fcal_block_theme">
+                            <RadioControl
+                                label={__('Theme')}
+                                selected={ theme }
+                                options={ [
+                                    { label: __('System Default'), value: 'system-default' },
+                                    { label: __('Light'), value: 'light' },
+                                    { label: __('Dark'), value: 'dark' },
+                                ] }
+                                onChange={ ( value ) => setAttributes({theme: value} ) }
                             />
                         </div>
 

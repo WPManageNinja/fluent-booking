@@ -7,9 +7,9 @@
     position: absolute !important;
     top: 1px;
     left: 1px;
-    background: #f9fafb !important;
+    background: var(--fcal_slot_border) !important;
     border: 0 !important;
-    border-right: 1px solid #D6DAE1 !important;
+    border-right: 1px solid var(--fcal_slot_border) !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     height: calc(100% - 2px) !important;

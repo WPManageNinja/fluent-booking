@@ -99,6 +99,10 @@ class BlockEditorHandler
                 'hideHostInfo'   => [
                     'type'    => 'string',
                     'default' => 'no'
+                ],
+                'theme'   => [
+                    'type'    => 'string',
+                    'default' => 'system-default'
                 ]
             ]
         ));
@@ -189,9 +193,10 @@ class BlockEditorHandler
             }
         </style>';
 
-        $slotId = $attributes['slotId'];
+        $slotId      = $attributes['slotId'];
         $disableHost = $attributes['hideHostInfo'];
-        $output .= do_shortcode("[fluent_booking id=$slotId disable_author=$disableHost]");
+        $theme       = Arr::get($attributes, 'theme', 'system-default');
+        $output     .= do_shortcode("[fluent_booking id=$slotId disable_author=$disableHost theme=$theme]");
         return $output;
     }
 }
