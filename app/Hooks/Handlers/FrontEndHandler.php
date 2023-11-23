@@ -151,7 +151,8 @@ class FrontEndHandler
     {
         $atts = shortcode_atts([
             'id'             => 0,
-            'disable_author' => 'no'
+            'disable_author' => 'no',
+            'theme'          => 'system-default'
         ], $atts);
 
         if (!$atts['id']) {
@@ -199,7 +200,8 @@ class FrontEndHandler
         );
 
         return App::make('view')->make('public.calendar', [
-            'calenderEvent' => $calendarEvent
+            'calenderEvent' => $calendarEvent,
+            'theme'         => $atts['theme']
         ]);
     }
 

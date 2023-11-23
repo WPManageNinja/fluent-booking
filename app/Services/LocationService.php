@@ -22,7 +22,7 @@ class LocationService
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Google Meet" />';
                 $html .= '<span class="fcal_loc_text">' . __('Google Meet', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'ms_teams') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/ms-team.svg" alt="MS Teams" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/ms-teams.svg" alt="MS Teams" />';
                 $html .= '<span class="fcal_loc_text">' . __('MS Teams', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'zoom_meeting') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/zoom.svg" alt="Zoom Icon" />';

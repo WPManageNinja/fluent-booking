@@ -16,7 +16,7 @@
       font-size: 1.5rem;
       margin: 6px 0 .2rem 0;
       line-height: 1.2;
-      color: #111827;
+      color: var(--fcal_dark);
       font-weight: 500;
     }
     .fcal_team_description {
@@ -57,13 +57,13 @@
       overflow: hidden;
       cursor: pointer;
       width: 100%;
-      border: 1px solid var(--slot_border);
+      border: 1px solid var(--fcal_slot_border);
       border-radius: 8px;
       padding: 16px;
       display: block;
       text-decoration: none;
       transition: 0.2s;
-      background: var(--cal_bg);
+      background: var(--fcal_cal_bg);
 
       &:hover {
         //box-shadow: 0 8px 30px rgba(27, 37, 51, 0.05);
@@ -86,7 +86,7 @@
         .fcal_person_name {
           font-size: 16px;
           line-height: 24px;
-          color: var(--dark);
+          color: var(--fcal_dark);
           margin: 8px 0 0;
           font-weight: 500;
         }
@@ -140,12 +140,12 @@
     column-gap: 5px;
     margin-top: 20px;
     cursor: pointer;
-    color: var(--dark);
+    color: var(--fcal_dark);
 
     svg {
       width: 20px;
       polygon {
-        fill: var(--dark);
+        fill: var(--fcal_dark);
       }
     }
   }

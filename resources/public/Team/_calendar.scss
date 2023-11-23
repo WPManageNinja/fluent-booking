@@ -1,8 +1,11 @@
-$color_1: var(--dark) !default;
+$color_1: var(--fcal_dark) !default;
 $color_2: #445164 !default;
-$color_3: var(--primaryColor);
-$border-color_1: var(--primaryColor);
+$color_3: var(--fcal_primaryColor);
+$border-color_1: var(--fcal_primaryColor);
 
+.fcal_calendar_wrap {
+
+}
 .fcal_author_header {
   text-align: center;
 
@@ -27,14 +30,14 @@ $border-color_1: var(--primaryColor);
     font-size: 16px;
     line-height: 24px;
     margin: 8px 0 0 0;
-    color: var(--gray); //#a5a5a5
+    color: var(--fcal_gray); //#a5a5a5
   }
 }
 
 .fcal_slots {
   display: grid;
   grid-template-columns: 1fr;
-  border: 1px solid var(--slot_border);
+  border: 1px solid var(--fcal_slot_border);
   border-radius: 8px;
   overflow: hidden;
 
@@ -58,10 +61,10 @@ $border-color_1: var(--primaryColor);
 }
 
 .fcal_slot {
-  border-bottom: 1px solid var(--slot_border);
+  border-bottom: 1px solid var(--fcal_slot_border);
   padding: 16px 24px;
   transition: .3s;
-  background: var(--cal_bg);
+  background: var(--fcal_cal_bg);
 
   h2 {
     font-size: 16px;
@@ -86,7 +89,7 @@ $border-color_1: var(--primaryColor);
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
-    color: var(--gray);
+    color: var(--fcal_gray);
     margin: 0 0 7px;
     padding-left: 19px;
   }
@@ -101,10 +104,15 @@ $border-color_1: var(--primaryColor);
     gap: 7px;
     color: $color_2;
     padding-left: 19px;
+    svg {
+      path {
+        stroke: var(--fcal_dark);
+      }
+    }
   }
 
   button {
-    border: 1px solid var(--slot_border);
+    border: 1px solid var(--fcal_slot_border);
     color: $color_1;
     font-size: 14px;
     font-weight: 500;
