@@ -7,10 +7,10 @@
   }
 
   .fcal_calendar_inner {
-    border: 1px solid var(--slot_border);
+    border: 1px solid var(--fcal_slot_border);
     border-radius: 8px;
     transition: all .22s ease-out;
-    background: var(--cal_bg);
+    background: var(--fcal_cal_bg);
 
     &.fcal_form_calendar {
       width: 100%;
@@ -42,7 +42,7 @@
 
 .fcal_normal_booking_footer {
   text-align: center;
-  color: var(--dark);
+  color: var(--fcal_dark);
   a {
     color: var(--fcal_primary_color);
   }

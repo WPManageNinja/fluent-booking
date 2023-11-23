@@ -89,29 +89,46 @@ if (calendarApps.length) {
 
 
 const themeMode = window.fluentCalendarPublicVars.theme;
-if (themeMode == 'system-default') {
-    // System Mode
-    const runColorMode = (fn) => {
-        if (!window.matchMedia) {
-            return;
-        }
-        const query = window.matchMedia('(prefers-color-scheme: dark)');
-        fn(query.matches);
-        query.addEventListener('change', (event) => fn(event.matches));
+const calwrap   = document.querySelector('.calendar_wrap');
+const calTeams  = document.querySelectorAll('.fcal_teams');
+const fcalLanding_page  = document.querySelector('.fcal_calendar_wrap');
+const gutenblockCal = document.querySelector('.fcal_cal_wrap');
+
+function runColorMode(fn) {
+    if (!window.matchMedia) {
+        return;
     }
-    runColorMode((isDarkMode) => {
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            document.body.classList.remove('light-mode');
-        } else {
-            document.body.classList.add('light-mode');
-            document.body.classList.remove('dark-mode');
-        }
-    })
-} else if (themeMode == 'dark-mode') {
-    document.body.classList.remove('light-mode');
-    document.body.classList.add('dark-mode');
-} else {
-    document.body.classList.remove('dark-mode');
-    document.body.classList.add('light-mode');
+
+    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    fn(query.matches);
+    query.addEventListener('change', (event) => fn(event.matches));
 }
+
+function applyModeClasses(element, darkMode) {
+    if (element) {
+        const darkClass  = 'fcal-dark-mode';
+        const lightClass = 'fcal-light-mode';
+
+        if (darkMode) {
+            element.classList.add(darkClass);
+            element.classList.remove(lightClass);
+        } else {
+            element.classList.add(lightClass);
+            element.classList.remove(darkClass);
+        }
+    }
+}
+
+if (themeMode === 'system-default') {
+    runColorMode((isDarkMode) => {
+        const elementsToApplyClasses             = [calwrap, gutenblockCal, ...calTeams, fcalLanding_page];
+        elementsToApplyClasses.forEach((element) => applyModeClasses(element, isDarkMode));
+    });
+} else if (themeMode === 'dark-mode') {
+    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    elementsToApplyClasses.forEach((element) => applyModeClasses(element, true));
+} else {
+    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    elementsToApplyClasses.forEach((element) => applyModeClasses(element, false));
+}
+
