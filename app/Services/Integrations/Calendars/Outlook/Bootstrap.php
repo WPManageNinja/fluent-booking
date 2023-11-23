@@ -29,11 +29,11 @@ class Bootstrap extends BaseCalendar
         add_action('wp_ajax_fluent_booking_outlook_auth', [$this, 'handleAuthCallback']);
 
         add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
-            $teamsExist = Meta::where('object_type', '_outlook_user_token')
-                ->where('object_id', $calendar->user_id)
-                ->first();
+            $outlookQuery = Meta::where('object_type', '_outlook_user_token')
+                ->where('object_id', $calendar->user_id);
 
-            $message = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
+            $teamsExist = $outlookQuery->first();
+            $message    = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
@@ -41,6 +41,14 @@ class Bootstrap extends BaseCalendar
                 if (!$calConfig || Arr::get($calConfig, 'driver') != 'outlook') {
                     $message = __('(Set Outlook Event Creat First)', 'fluent-booking-pro');
                     $teamsExist = false;
+                } elseif (!empty($configId = Arr::get($calConfig, 'id'))) {
+                    $metaId = explode('__||__', $configId)[0];
+                    $meta = $outlookQuery->where('id', $metaId)->first();
+                    $isEnabled = Arr::get($meta->value, 'additional_settings.teams_enabled', '');
+                    if ($isEnabled != 'yes') {
+                        $message = __('(Enable MS Teams From Outlook Settings)', 'fluent-booking-pro');
+                        $teamsExist = false;
+                    }
                 }
             }
 
@@ -198,13 +206,19 @@ class Bootstrap extends BaseCalendar
                 $remoteCalendars = [];
             }
 
+            $additionalSettings = $this->getAdditionalSettings($item->value);
+
+            $additionalSettingFields = $this->getAdditionalSettingFields();
+
             $feeds[] = [
-                'driver'             => 'outlook',
-                'db_id'              => $item->id,
-                'identifier'         => $item->key,
-                'remote_calendars'   => $remoteCalendars,
-                'errors'             => $errors,
-                'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
+                'driver'              => 'outlook',
+                'db_id'               => $item->id,
+                'identifier'          => $item->key,
+                'remote_calendars'    => $remoteCalendars,
+                'errors'              => $errors,
+                'conflict_check_ids'  => Arr::get($item->value, 'conflict_check_ids', []),
+                'additional_settings' => $additionalSettings,
+                'additional_setting_fields' => $additionalSettingFields
             ];
         }
 
@@ -717,5 +731,29 @@ class Bootstrap extends BaseCalendar
         $calendarClient->updateSettinsValueByKey('last_calendar_lists_fetched', time());
 
         return $remoteCalendars;
+    }
+
+    private function getAdditionalSettings($settings)
+    {
+        $additionalSettings = Arr::get($settings, 'additional_settings', '');
+        if (!$additionalSettings) {
+            return [
+                'teams_enabled' => 'no'
+            ];
+        }
+
+        return $additionalSettings;
+    }
+
+    private function getAdditionalSettingFields()
+    {
+        $fields = [
+            'teams_enabled' => [
+                'type'           => 'yes_no_checkbox',
+                'checkbox_label' => __('Enable Microsoft Teams (Requires work/school account)', 'fluent-booking-pro'),
+            ]
+        ];
+
+        return apply_filters('fluent_booking/outlook_additional_setting_fields', $fields);
     }
 }
