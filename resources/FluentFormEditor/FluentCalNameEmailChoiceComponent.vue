@@ -24,11 +24,8 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item :label="$t('Show/Hide Host Info')">
-            <el-radio-group v-model="editItem.settings.cal_guest_fields.host_info">
-                <el-radio label="show">{{ $t('Show') }}</el-radio>
-                <el-radio label="hide">{{ $t('Hide') }}</el-radio>
-            </el-radio-group>
+        <el-form-item>
+            <el-checkbox v-model="editItem.settings.cal_guest_fields.host_info" :true-label="'show'" :false-label="'hide'">{{ $t('Show Host Info') }}</el-checkbox>
         </el-form-item>
     </div>
 </template>

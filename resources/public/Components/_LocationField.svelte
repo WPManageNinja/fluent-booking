@@ -2,7 +2,8 @@
     {#each field.options as option}
         <label class="fcal_location_radio_list">
             {i18(option.title)}
-            <input type="radio" on:change={onChangeDriver} data-driver="{option.type}" checked={form.location_config.driver == option.slug}
+            <input type="radio" on:change={onChangeDriver} data-driver="{option.type}"
+                   checked={form.location_config.driver == option.slug}
                    name={field.name} value={option.slug}/>
             <span class="fcal_radio_icon"></span>
         </label>
@@ -23,6 +24,9 @@
                       placeholder="{i18('Your address')}"></textarea>
         </div>
     {/if}
+    {#if appData.is_fluentform}
+        <input type="hidden" name="{appData.name} + '__location'" value={JSON.stringify(form.location_config)}/>
+    {/if}
 </div>
 
 <script>
@@ -31,6 +35,7 @@
 
     export let field;
     export let form;
+    export let appData;
 
     if (!form.location_config) {
         form.location_config = {
@@ -52,6 +57,7 @@
         form.location_config.driver = event.currentTarget.value;
         form.location_config.driverType = event.currentTarget.dataset.driver;
         form.location_config.user_location_input = '';
+        console.log(form.location_config);
     }
 
 </script>

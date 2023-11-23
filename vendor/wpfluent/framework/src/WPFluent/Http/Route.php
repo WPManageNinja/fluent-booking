@@ -6,6 +6,7 @@ use Closure;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
+use BadMethodCallException;
 use InvalidArgumentException;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Pipeline;
@@ -587,12 +588,10 @@ class Route
      */
     protected function dispatchPermissionHandler()
     {
-        if ($this->permissionHandler) {
-            return $this->app->call(
-                $this->permissionHandler,
-                $this->getControllerParameters()
-            );
-        }
+        return $this->app->call(
+            $this->permissionHandler,
+            $this->getControllerParameters()
+        );
     }
 
     /**
@@ -814,6 +813,7 @@ class Route
      * 
      * @param  \WP_REST_Request $request
      * @return null
+     * @throws \BadMethodCallException
      */
     public function prepareCallbacks($request)
     {
@@ -831,19 +831,39 @@ class Route
             $controller = end($pieces);
         }
 
-        $policyHandler = $this->app->parsePolicyHandler(
-            $this->getPolicyHandler($this->policyHandler)
-        );
+        try {
+            $policyHandler = $this->app->parsePolicyHandler(
+                $this->getPolicyHandler($this->policyHandler)
+            );
+            
+            $this->permissionHandler = $policyHandler;
 
-        $this->permissionHandler = $policyHandler;
-
-        // Adjust policy handler if the method was explicitly given
-        if (is_array($policyHandler) && isset($policyHandler[1])) {
-            if ($pieces = explode('@', $this->policyHandler)) {
-                if (isset($pieces[1])) {
-                    $this->permissionHandler[1] = $pieces[1];
+            // Adjust policy handler if the method was explicitly given
+            if (is_string($this->policyHandler)) {
+                if (is_array($policyHandler) && isset($policyHandler[1])) {
+                    if ($pieces = explode('@', $this->policyHandler)) {
+                        if (isset($pieces[1])) {
+                            $this->permissionHandler[1] = $pieces[1];
+                        }
+                    }
                 }
             }
+
+            if (!is_callable($this->permissionHandler)) {
+                throw new Exception();
+            }
+
+        } catch (Exception $e) {
+            $pHandler = $this->policyHandler;
+            if (is_array($this->permissionHandler) && $this->permissionHandler) {
+                $pHandler = is_object($this->permissionHandler[0]) ?
+                get_class($this->permissionHandler[0]) . ':' . $this->permissionHandler[1] :
+                $this->permissionHandler[0]  . ':' . $this->permissionHandler[1];
+            }
+
+            throw new BadMethodCallException(
+                "The permission callback {$pHandler} is invalid or not callable."
+            );
         }
 
         if (is_array($policyHandler)) {

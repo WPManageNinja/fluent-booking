@@ -182,11 +182,10 @@ class LocationService
     {
         $locationSettings = $calendarEvent->location_settings;
 
-        // dd($locationSettings);
-
         $locationOptions = [];
         foreach ($locationSettings as $index => $location) {
             $title = Arr::get($location, 'title');
+
             $locationType = Arr::get($location, 'type');
 
             if ($locationType == 'custom') {

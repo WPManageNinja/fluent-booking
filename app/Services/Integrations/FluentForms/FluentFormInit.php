@@ -2,6 +2,8 @@
 
 namespace FluentBooking\App\Services\Integrations\FluentForms;
 
+use FluentBooking\App\Services\BookingFieldService;
+use FluentBooking\App\Services\LocationService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\DateTimeHelper;
@@ -81,19 +83,20 @@ class FluentFormInit
         }
 
         $eventId = Arr::get($field, 'raw.settings.event_id');
-        $event = CalendarSlot::find($eventId);
+        $calendarEvent = CalendarSlot::find($eventId);
 
-        if (!$event || $event->status != 'active') {
+        if (!$calendarEvent || $calendarEvent->status != 'active') {
             return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
+
 
         $startTime = $bookingData['start_time'];
         $timeZone = $bookingData['timezone'];
 
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($event->duration * 60));
+        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarEvent->duration * 60));
 
-        $timeSlotService = new TimeSlotService($event->calendar, $event);
+        $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
 
         if (!$isSpotAvailable) {
@@ -103,7 +106,6 @@ class FluentFormInit
 
         if (!is_user_logged_in()) {
             $fieldError = '';
-
             // Now check if the email field is given or not
             $emailFieldKey = Arr::get($field, 'raw.settings.cal_guest_fields.email_field');
             if (!$emailFieldKey) {
@@ -120,17 +122,52 @@ class FluentFormInit
             }
         }
 
+        $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
+
+        if ($locationFieldKey) {
+            $requiredKeys = [];
+            if ($locationFieldKey == 'location') {
+                $locationFieldKey = 'location_config';
+            }
+
+            $userInputData = Arr::get($bookingData, 'form.' . $locationFieldKey);
+            if (in_array($locationFieldKey, ['phone_number', 'address'])) {
+                $requiredKeys[] = $locationFieldKey;
+            } else if ($locationFieldKey == 'location_config') {
+                $requiredKeys[] = 'location_config.driver';
+                $selectedLocation = LocationService::getLocationDetails($calendarEvent, $userInputData, $bookingData['form']);
+                $selectedLocationDriver = Arr::get($selectedLocation, 'type');
+                if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
+                    $requiredKeys[] = 'location_config.user_location_input';
+                }
+            }
+
+            foreach ($requiredKeys as $requiredKey) {
+                if (!Arr::get($bookingData['form'], $requiredKey)) {
+                    return __('Please provide a valid location for this meeting', 'fluent-booking-pro');
+                }
+            }
+        }
+
         /*
          * We are decoding the data with valid array
          */
-        add_filter('fluentform/insert_response_data', function ($data) use ($name, $event) {
+        add_filter('fluentform/insert_response_data', function ($data) use ($name, $calendarEvent) {
+
             if (isset($data[$name]) && is_string($data[$name])) {
                 $bookingArr = json_decode($data[$name], true);
-                if ($bookingArr) {
-                    unset($bookingArr['id']);
-                    $bookingArr['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($event->duration * 60));
+                $validData = array_filter(Arr::only($bookingArr, ['start_time', 'timezone', 'form.location_config', 'form.phone_number', 'form.address']));
+                $extendedData = array_filter(Arr::only(Arr::get($bookingArr, 'form', []), ['location_config', 'phone_number', 'address']));
+
+                if ($extendedData) {
+                    $validData = array_merge($validData, $extendedData);
                 }
-                $data[$name] = (array)$bookingArr;
+
+                if ($validData) {
+                    $validData['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($calendarEvent->duration * 60));
+                }
+
+                $data[$name] = (array)$validData;
             }
 
             return $data;
@@ -258,6 +295,14 @@ class FluentFormInit
                 $bookingData['person_user_id'] = $entry->user_id;
             }
 
+            $selectedLocation = LocationService::getLocationDetails($event, Arr::get($ffFieldData, 'location_config', []), $ffFieldData);
+            if ($selectedLocation['type'] == 'phone_guest') {
+                $bookingData['phone'] = sanitize_textarea_field($selectedLocation['description']);
+            } else if (!empty($ffFieldData['address'])) {
+                $bookingData['address'] = sanitize_textarea_field($ffFieldData['address']);
+            }
+            $bookingData['location_details'] = $selectedLocation;
+
             try {
                 $booking = BookingService::createBooking($bookingData, $event);
 
@@ -301,7 +346,15 @@ class FluentFormInit
     public function loadConversationalAsset($question, $field, $form)
     {
         if ('fcal_booking' === $field['element']) {
-            [$localizeData] = (new BookingElement)->getLocalizedData($field, $form);
+
+            $calendarEventId = Arr::get($field, 'settings.event_id');
+            $calendarEvent = CalendarSlot::find($calendarEventId);
+
+            if (!$calendarEvent || !$calendarEvent->calendar) {
+                return;
+            }
+
+            [$localizeData, $elementId] = $this->getLocalizedData($calendarEvent, $field, $form);
 
             wp_enqueue_script(
                 'fluent_booking',
@@ -311,8 +364,13 @@ class FluentFormInit
                 true
             );
 
-            wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
+            if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
+                wp_enqueue_script('fluent-booking-phone-field', FLUENT_BOOKING_URL . 'assets/public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+                $inlineStyle = '.fcal_phone_wrapper .flag { background: url('.esc_url(FLUENT_BOOKING_URL.'assets/images/flags_responsive.png').') no-repeat;background-size: 100%;}';
+                wp_add_inline_style('fluent-booking-phone-field', $inlineStyle);
+            }
 
+            wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
             wp_localize_script('fluent_booking', 'fluentCalendarPublicVars', (new FrontEndHandler())->getGlobalVars());
         }
     }
@@ -359,5 +417,85 @@ class FluentFormInit
         }
 
         return $meta;
+    }
+
+    public function getLocalizedData($calendarEvent, $data, $form)
+    {
+
+        $element_id = $this->makeElementId($data, $form);
+
+        $calendar = $calendarEvent->calendar;
+
+        $settings = Arr::get($data, 'settings');
+
+        $name = Arr::get($data, 'attributes.name');
+
+        $localizeData = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
+
+        $localizeData['name'] = $name;
+        $localizeData['settings'] = $settings;
+
+        if (Arr::get($localizeData['settings']['cal_guest_fields'], 'host_info', 'hide') == 'show') {
+            $localizeData['disable_author'] = false;
+        } else {
+            $localizeData['disable_author'] = true;
+        }
+
+        $localizeData['form_instance'] = $form->instance_css_class;
+
+        $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
+        if ($locationFieldKey) {
+            $formFields = $localizeData['form_fields'];
+            $formFields = array_filter($formFields, function ($field) use ($locationFieldKey) {
+                return $field['name'] == $locationFieldKey;
+            });
+
+            $localizeData['form_fields'] = array_values($formFields);
+        } else {
+            $localizeData['form_fields'] = [];
+        }
+
+        return [$localizeData, $element_id];
+    }
+
+    private function getLocationFieldKey($calendarEvent)
+    {
+        $locationFieldKey = '';
+        if ($calendarEvent->isPhoneRequired()) {
+            $locationFieldKey = 'phone_number';
+        } else if ($calendarEvent->isAddressRequired()) {
+            $locationFieldKey = 'address';
+        } else if ($calendarEvent->isLocationFieldRequired()) {
+            $locationFieldKey = 'location';
+        }
+        return $locationFieldKey;
+    }
+
+    /**
+     * Build unique ID concatenating form id and name attribute
+     *
+     * @param array $data $form
+     *
+     * @return string for id value
+     */
+    protected function makeElementId($data, $form)
+    {
+        if (isset($data['attributes']['name'])) {
+            $formInstance = \FluentForm\App\Helpers\Helper::$formInstance;
+            if (!empty($data['attributes']['id'])) {
+                return $data['attributes']['id'];
+            }
+            $elementName = $data['attributes']['name'];
+            $elementName = str_replace(['[', ']', ' '], '_', $elementName);
+
+            $suffix = esc_attr($form->id);
+            if ($formInstance > 1) {
+                $suffix = $suffix . '_' . $formInstance;
+            }
+
+            $suffix .= '_' . $elementName;
+
+            return 'ff_' . esc_attr($suffix);
+        }
     }
 }

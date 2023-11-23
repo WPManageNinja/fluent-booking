@@ -1,6 +1,7 @@
 import BookingApp from './BookingApp.svelte';
 import './styles.scss';
 import './saas.scss';
+import '../scss/_fluentform_classic.scss';
 
 document.body.addEventListener('ffc_init_custom_field', function (e) {
     if ('fcal_booking' !== e.detail?.question?.ff_input_type) {
@@ -44,8 +45,12 @@ function handleFormScroll() {
     if (fluentFormDom) {
         fluentFormDom = fluentFormDom[0];
 
+        console.log(fluentFormDom);
+
         function preventScroll(event) {
+
             fluentFormDom.addEventListener(event, function (event) {
+                console.log('preventScroll', event.target.className);
                 if (event.target.className.includes('fcal')) {
                     event.stopImmediatePropagation();
                 }
