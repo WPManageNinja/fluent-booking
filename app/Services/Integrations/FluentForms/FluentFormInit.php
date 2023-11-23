@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services\Integrations\FluentForms;
 
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\CalendarSlot;
@@ -363,8 +364,13 @@ class FluentFormInit
                 true
             );
 
-            wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
+            if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
+                wp_enqueue_script('fluent-booking-phone-field', FLUENT_BOOKING_URL . 'assets/public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+                $inlineStyle = '.fcal_phone_wrapper .flag { background: url('.esc_url(FLUENT_BOOKING_URL.'assets/images/flags_responsive.png').') no-repeat;background-size: 100%;}';
+                wp_add_inline_style('fluent-booking-phone-field', $inlineStyle);
+            }
 
+            wp_localize_script('fluent_booking', 'fcal_public_vars_' . $question['id'], $localizeData);
             wp_localize_script('fluent_booking', 'fluentCalendarPublicVars', (new FrontEndHandler())->getGlobalVars());
         }
     }
