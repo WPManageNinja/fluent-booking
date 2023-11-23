@@ -375,6 +375,7 @@ class Bootstrap extends BaseCalendar
         if (Arr::get($booking->location_details, 'type') == 'ms_teams') {
             $isMsTeamMeeting = true;
             $data['isOnlineMeeting'] = true;
+            $data['onlineMeetingProvider'] = 'teamsForBusiness';
         }
 
         $data = apply_filters('fluent_booking/outlook_event_data', $data, $booking);

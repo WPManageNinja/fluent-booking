@@ -216,9 +216,9 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled')) {
             $sms = Arr::get($notifications, 'booking_conf_attendee.sms', []);
 
-            $smsData['send_to'] = $sms['send_to'];
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = Arr::get($booking, 'phone');
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -237,9 +237,9 @@ class Bootstrap
 
             $hostPhone = $booking->calendar->user->getMeta('host_phone');
 
-            $smsData['send_to'] = $sms['send_to'];
-            $smsData['receiver_number'] = ($sms['receiver'] == 'host_number') ? $hostPhone : $sms['number'];
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
+            $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -273,9 +273,9 @@ class Bootstrap
         if ('guest' == $emailTo && Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_attendee.sms', []);
 
-            $smsData['send_to'] = $sms['send_to'];
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = Arr::get($booking, 'phone');
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -293,9 +293,9 @@ class Bootstrap
 
             $hostPhone = $booking->calendar->user->getMeta('host_phone');
 
-            $smsData['send_to'] = $sms['send_to'];
-            $smsData['receiver_number'] = ($sms['receiver'] == 'host_number') ? $hostPhone : $sms['number'];
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
+            $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -335,9 +335,9 @@ class Bootstrap
     
                 $hostPhone = $booking->calendar->user->getMeta('host_phone');
 
-                $smsData['send_to'] = $sms['send_to'];
-                $smsData['receiver_number'] = ($sms['receiver'] == 'host_number') ? $hostPhone : $sms['number'];
-                $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+                $smsData['send_to'] = Arr::get($sms, 'send_to');
+                $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+                $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
     
                 $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -356,9 +356,9 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $sms = Arr::get($notifications, 'cancelled_by_attendee.sms', []);
 
-            $smsData['send_to'] = $sms['send_to'];
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = Arr::get($booking, 'phone');
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -398,9 +398,9 @@ class Bootstrap
                 
                 $hostPhone = $booking->calendar->user->getMeta('host_phone');
 
-                $smsData['send_to'] = $sms['send_to'];
-                $smsData['receiver_number'] = ($sms['receiver'] == 'host_number') ? $hostPhone : $sms['number'];
-                $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+                $smsData['send_to'] = Arr::get($sms, 'send_to');
+                $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+                $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
     
                 $smsSend = $this->sendSmsNotification($booking, $smsData);
 
@@ -419,9 +419,9 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'rescheduled_by_attendee.enabled')) {
             $sms = Arr::get($notifications, 'rescheduled_by_attendee.sms', []);
 
-            $smsData['send_to'] = $sms['send_to'];
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = Arr::get($booking, 'phone');
-            $smsData['message'] = EditorShortCodeParser::parse($sms['body'], $booking);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
 
