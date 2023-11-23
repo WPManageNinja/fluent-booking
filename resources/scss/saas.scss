@@ -99,7 +99,7 @@ p {
 
       &:disabled {
         cursor: no-drop;
-        background: var(--input_disable_bg) !important;
+        background: var(--fcal_input_disable_bg) !important;
       }
     }
   }
@@ -151,6 +151,6 @@ p {
   max-width: 752px;
   text-align: center;
   h3 {
-    color: var(--dark);
+    color: var(--fcal_dark);
   }
 }

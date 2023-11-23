@@ -31,7 +31,7 @@ function handleEventBlockClick(link) {
     app.$on('handleBack', function () {
         app.$destroy();
         elemItem.remove();
-        bookingWrap.style.marginLeft = '0';
+        bookingWrap.style.marginLeft = 'auto';
         bookingWrap.style.height = 'auto';
         const parentTeam = elem.closest('.fcal_teams');
         // if(parentTeam) {

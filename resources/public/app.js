@@ -89,6 +89,9 @@ if (calendarApps.length) {
 
 
 const themeMode = window.fluentCalendarPublicVars.theme;
+const calwrap   = document.querySelector('.calendar_wrap');
+const calTeams  = document.querySelectorAll('.fcal_teams');
+const fcalLanding_page  = document.querySelector('.fcal_calendar_wrap');
 if (themeMode == 'system-default') {
     // System Mode
     const runColorMode = (fn) => {
@@ -101,17 +104,52 @@ if (themeMode == 'system-default') {
     }
     runColorMode((isDarkMode) => {
         if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            document.body.classList.remove('light-mode');
+            if (calwrap) {
+                modeClassAddRemove(calwrap,'fcal-dark-mode', 'fcal-light-mode');
+            }
+            if (calTeams) {
+                calTeams.forEach(function(team) {
+                    modeClassAddRemove(team,'fcal-dark-mode', 'fcal-light-mode');
+                });
+            }
+            if (fcalLanding_page) {
+                modeClassAddRemove(fcalLanding_page,'fcal-dark-mode', 'fcal-light-mode');
+            }
         } else {
-            document.body.classList.add('light-mode');
-            document.body.classList.remove('dark-mode');
+            if (calwrap) {
+                modeClassAddRemove(calwrap,'fcal-light-mode', 'fcal-dark-mode');
+            }
+            if (calTeams) {
+                calTeams.forEach(function(team) {
+                    modeClassAddRemove(team,'fcal-light-mode', 'fcal-dark-mode');
+                });
+            }
+            if (fcalLanding_page) {
+                modeClassAddRemove(fcalLanding_page,'fcal-light-mode', 'fcal-dark-mode');
+            }
         }
     })
 } else if (themeMode == 'dark-mode') {
-    document.body.classList.remove('light-mode');
-    document.body.classList.add('dark-mode');
+    if (calwrap) {
+        modeClassAddRemove(calwrap,'fcal-dark-mode', 'fcal-light-mode');
+    }
+    if (fcalLanding_page) {
+        modeClassAddRemove(fcalLanding_page,'fcal-dark-mode', 'fcal-light-mode');
+    }
 } else {
-    document.body.classList.remove('dark-mode');
-    document.body.classList.add('light-mode');
+    if (calwrap) {
+        modeClassAddRemove(calwrap,'fcal-light-mode', 'fcal-dark-mode');
+    }
+    if (fcalLanding_page) {
+        modeClassAddRemove(fcalLanding_page,'fcal-light-mode', 'fcal-dark-mode');
+    }
+}
+
+function modeClassAddRemove(elName, addClass, removeClass) {
+    if (elName && addClass) {
+        elName.classList.add(addClass);
+    }
+    if (elName && removeClass) {
+        elName.classList.remove(removeClass);
+    }
 }
