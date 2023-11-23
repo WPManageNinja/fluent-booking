@@ -25,6 +25,21 @@ class Bootstrap extends BaseCalendar
         $this->logo = $app['url.assets'] . 'images/apple-cal.svg';
         $this->boot();
 
+        add_action('init', function () {
+            if (!isset($_GET['apple'])) {
+                return;
+            }
+
+            $booking = Booking::find(136);
+
+            $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
+            $this->patchEvent($config, $booking, [
+                'start' => '2023-12-11 10:00:00',
+                'end'   => '2021-12-11 11:30:00'
+            ], true);
+
+        });
+
         add_action('fluent_booking/before_get_all_calendars', function () {
             if (!$this->isConfigured()) {
                 return;
@@ -304,56 +319,13 @@ class Bootstrap extends BaseCalendar
             return false; // Already created
         }
 
-        $meta = Meta::where('object_type', '_apple_calendar_user_token')
-            ->where('object_id', $booking->host_user_id)
-            ->where('id', $config['db_id'])
-            ->first();
+        $client = $this->getClientFromBookingConfig($config, $booking);
 
-        if (!$meta) {
-            return false; //  Meta could not be found
-        }
-
-        $client = AppleHelper::getClientByMeta($meta);
-
-        if (is_wp_error($client)) {
+        if (!$client) {
             return false;
         }
 
-        $host = $booking->getHostDetails(false);
-
-        $data = [
-            'dtstart'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'dtend'     => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
-            'status'    => 'confirmed',
-            'summary'   => $booking->getMeetingTitle(),
-            'location'  => $booking->getLocationAsText(),
-            'attendees' => [
-                [
-                    'email' => $booking->email,
-                    'name'  => trim($booking->first_name . ' ' . $booking->last_name)
-                ]
-            ],
-            'organizer' => [
-                'email' => $host['email'],
-                'name'  => $host['name']
-            ]
-        ];
-
-        if ($booking->message) {
-            $data['description'] = $booking->message;
-        }
-
-        if ($additionalData = $booking->getAdditionalData(false)) {
-            if (!empty($data['description'])) {
-                $data['description'] .= "\\n";
-            } else {
-                $data['description'] = '';
-            }
-
-            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
-
-            $data['description'] .= $additionalData;
-        }
+        $data = $this->prepareEventData($booking);
 
         try {
             $apiCalendar = new Calendar([
@@ -403,17 +375,14 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $meta = Meta::where('object_type', '_apple_calendar_user_token')
-            ->where('object_id', $booking->host_user_id)
-            ->where('id', $config['db_id'])
-            ->first();
+        $client = $this->getClientFromBookingConfig($config, $booking);
 
-        if (!$meta) {
-            return false; //  Meta could not be found
+        if (!$client) {
+            return false;
         }
 
         try {
-            $client = AppleHelper::getClientByMeta($meta);
+
             $apiCalendar = new Calendar([
                 'href' => Arr::get($appleEvent, 'remote_calendar')
             ], $client->getClient());
@@ -441,16 +410,123 @@ class Bootstrap extends BaseCalendar
 
     public function patchEvent($config, Booking $booking, $updateData, $isRescheduling)
     {
-        if (!$this->isConfigured()) {
+        $appleEvent = $booking->getMeta('__apple_calendar_event');
+
+        if (!$appleEvent) {
+            return false;
+        }
+        $client = $this->getClientFromBookingConfig($config, $booking);
+
+        if (!$client) {
             return false;
         }
 
-        return;
+        try {
+            $apiCalendar = new Calendar([
+                'href' => Arr::get($appleEvent, 'remote_calendar')
+            ], $client->getClient());
+
+            $apiEvent = $apiCalendar->getEvent(Arr::get($appleEvent, 'remote_event_id'));
+
+            $eventData = $this->prepareEventData($booking);
+
+            $eventData['attendees'] = $apiEvent->attendees;
+
+            foreach ($eventData as $key => $datum) {
+                $apiEvent->{$key} = $datum;
+            }
+            $apiEvent->save();
+
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'success',
+                'title'       => __('Apple event has been updated', 'fluent-booking-pro'),
+                'description' => __('Apple calendar event has been updated', 'fluent-booking-pro')
+            ]);
+        } catch (\Exception $exception) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to update event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+            ]);
+            return false;
+        }
+
+        return true;
     }
 
-    public function maybeAddOrRemoveGroupMembers($config, Booking $booking, $allGroupBookings, $isRescheduling)
+    public function maybeAddOrRemoveGroupMembers($config, $booking, $allGroupBookings, $isRescheduling)
     {
-        return;
+        $parentMeta = null;
+
+        $missingEventBookings = [];
+
+        foreach ($allGroupBookings as $parentBooking) {
+            $meta = $parentBooking->getMeta('__apple_calendar_event', []);
+            if (!$meta) {
+                $missingEventBookings[] = $parentBooking;
+            } else if (!$parentMeta) {
+                $parentMeta = $meta;
+            }
+        }
+
+        if (!$parentMeta || empty($parentMeta['remote_event_id'])) {
+            return $this->createEvent($config, $booking);
+        }
+
+        $attendees = [];
+
+        foreach ($allGroupBookings as $groupBooking) {
+            if ($groupBooking->status != 'scheduled') {
+                continue;
+            }
+            $attendees[] = [
+                'name'  => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
+                'email' => $groupBooking->email
+            ];
+        }
+
+        if (!$attendees) {
+            return;
+        }
+
+        $parentEventId = $parentMeta['remote_event_id'];
+        $parentCalendarId = $parentMeta['remote_calendar'];
+
+        $client = $this->getClientFromBookingConfig($config, $booking);
+
+        if (!$client) {
+            return false;
+        }
+
+        try {
+            $apiCalendar = new Calendar(['href' => $parentCalendarId], $client->getClient());
+            $apiEvent = $apiCalendar->getEvent($parentEventId);
+            $eventData = $this->prepareEventData($booking);
+            $eventData['attendees'] = $attendees;
+            $eventData['description'] = __('This is a group event.', 'fluent-booking-pro');
+            foreach ($eventData as $key => $datum) {
+                $apiEvent->{$key} = $datum;
+            }
+            $apiEvent->save();
+        } catch (\Exception $exception) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to update event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+            ]);
+        }
+
+        foreach ($missingEventBookings as $missingBooking) {
+            if ($missingBooking->status != 'cancelled') {
+                $missingBooking->updateMeta('__apple_calendar_event', $parentMeta);
+            }
+        }
     }
 
     public function getAuthUrl($userId = null)
@@ -529,6 +605,71 @@ class Bootstrap extends BaseCalendar
         $response['message'] = __('Your credential has been saved', 'fluent-booking-pro');
 
         return $response;
+    }
+
+    private function prepareEventData(Booking $booking)
+    {
+        $host = $booking->getHostDetails(false);
+
+        $data = [
+            'dtstart'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'     => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'status'    => 'confirmed',
+            'summary'   => $booking->getMeetingTitle(),
+            'location'  => $booking->getLocationAsText(),
+            'attendees' => [
+                [
+                    'email' => $booking->email,
+                    'name'  => trim($booking->first_name . ' ' . $booking->last_name)
+                ]
+            ],
+            'organizer' => [
+                'email' => $host['email'],
+                'name'  => $host['name']
+            ]
+        ];
+
+        if ($booking->message) {
+            $data['description'] = $booking->message;
+        }
+
+        if ($additionalData = $booking->getAdditionalData(false)) {
+            if (!empty($data['description'])) {
+                $data['description'] .= "\\n";
+            } else {
+                $data['description'] = '';
+            }
+
+            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
+
+            $data['description'] .= $additionalData;
+        }
+
+        return $data;
+    }
+
+    private function getClientFromBookingConfig($config, $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $appleEvent = $booking->getMeta('__apple_calendar_event');
+
+        if (!$appleEvent) {
+            return false;
+        }
+
+        $meta = Meta::where('object_type', '_apple_calendar_user_token')
+            ->where('object_id', $booking->host_user_id)
+            ->where('id', $config['db_id'])
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+
+        return AppleHelper::getClientByMeta($meta);
     }
 
 }
