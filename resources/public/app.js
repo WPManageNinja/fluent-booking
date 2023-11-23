@@ -92,64 +92,43 @@ const themeMode = window.fluentCalendarPublicVars.theme;
 const calwrap   = document.querySelector('.calendar_wrap');
 const calTeams  = document.querySelectorAll('.fcal_teams');
 const fcalLanding_page  = document.querySelector('.fcal_calendar_wrap');
-if (themeMode == 'system-default') {
-    // System Mode
-    const runColorMode = (fn) => {
-        if (!window.matchMedia) {
-            return;
-        }
-        const query = window.matchMedia('(prefers-color-scheme: dark)');
-        fn(query.matches);
-        query.addEventListener('change', (event) => fn(event.matches));
+const gutenblockCal = document.querySelector('.fcal_cal_wrap');
+
+function runColorMode(fn) {
+    if (!window.matchMedia) {
+        return;
     }
-    runColorMode((isDarkMode) => {
-        if (isDarkMode) {
-            if (calwrap) {
-                modeClassAddRemove(calwrap,'fcal-dark-mode', 'fcal-light-mode');
-            }
-            if (calTeams) {
-                calTeams.forEach(function(team) {
-                    modeClassAddRemove(team,'fcal-dark-mode', 'fcal-light-mode');
-                });
-            }
-            if (fcalLanding_page) {
-                modeClassAddRemove(fcalLanding_page,'fcal-dark-mode', 'fcal-light-mode');
-            }
+
+    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    fn(query.matches);
+    query.addEventListener('change', (event) => fn(event.matches));
+}
+
+function applyModeClasses(element, darkMode) {
+    if (element) {
+        const darkClass  = 'fcal-dark-mode';
+        const lightClass = 'fcal-light-mode';
+
+        if (darkMode) {
+            element.classList.add(darkClass);
+            element.classList.remove(lightClass);
         } else {
-            if (calwrap) {
-                modeClassAddRemove(calwrap,'fcal-light-mode', 'fcal-dark-mode');
-            }
-            if (calTeams) {
-                calTeams.forEach(function(team) {
-                    modeClassAddRemove(team,'fcal-light-mode', 'fcal-dark-mode');
-                });
-            }
-            if (fcalLanding_page) {
-                modeClassAddRemove(fcalLanding_page,'fcal-light-mode', 'fcal-dark-mode');
-            }
+            element.classList.add(lightClass);
+            element.classList.remove(darkClass);
         }
-    })
-} else if (themeMode == 'dark-mode') {
-    if (calwrap) {
-        modeClassAddRemove(calwrap,'fcal-dark-mode', 'fcal-light-mode');
-    }
-    if (fcalLanding_page) {
-        modeClassAddRemove(fcalLanding_page,'fcal-dark-mode', 'fcal-light-mode');
-    }
-} else {
-    if (calwrap) {
-        modeClassAddRemove(calwrap,'fcal-light-mode', 'fcal-dark-mode');
-    }
-    if (fcalLanding_page) {
-        modeClassAddRemove(fcalLanding_page,'fcal-light-mode', 'fcal-dark-mode');
     }
 }
 
-function modeClassAddRemove(elName, addClass, removeClass) {
-    if (elName && addClass) {
-        elName.classList.add(addClass);
-    }
-    if (elName && removeClass) {
-        elName.classList.remove(removeClass);
-    }
+if (themeMode === 'system-default') {
+    runColorMode((isDarkMode) => {
+        const elementsToApplyClasses             = [calwrap, gutenblockCal, ...calTeams, fcalLanding_page];
+        elementsToApplyClasses.forEach((element) => applyModeClasses(element, isDarkMode));
+    });
+} else if (themeMode === 'dark-mode') {
+    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    elementsToApplyClasses.forEach((element) => applyModeClasses(element, true));
+} else {
+    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    elementsToApplyClasses.forEach((element) => applyModeClasses(element, false));
 }
+
