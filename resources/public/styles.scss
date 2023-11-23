@@ -1,12 +1,9 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
 $bodyBg: #f3f4f6 !default;
-$primaryColor: #306ae0;
 $dark: var(--dark);
 $lightDark: #6b7280;
-$whiteColor: #ffffff;
 $whiteBG: #ffffff;
-$blackColor: #000000;
 
 :root {
   --fcal_primary_color: #306ae0;
@@ -24,6 +21,7 @@ $blackColor: #000000;
   --input_bg: #ffffff;
   --fcal_body_bg: #f3f4f6;
   --input_disable_bg: #f7f7f7;
+  --gray: #6b7280;
 }
 
 body {
@@ -863,7 +861,7 @@ body {
               display: inline-block;
               font-weight: 500;
               line-height: inherit;
-              color: $blackColor;
+              color: var(--dark);
             }
           }
         }
@@ -1690,7 +1688,7 @@ body {
   form {
     label {
       font-weight: 500;
-      color: $blackColor;
+      color: var(--dark);
       display: block;
       margin-bottom: 10px;
     }
