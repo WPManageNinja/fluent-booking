@@ -254,6 +254,7 @@ class TransStrings
             'Organizer Phone Number'                                                           => __('Organizer Phone Number', 'fluent-booking-pro'),
             'Online Meeting'                                                                   => __('Online Meeting', 'fluent-booking-pro'),
             'Google Meet'                                                                      => __('Google Meet', 'fluent-booking-pro'),
+            'MS Teams'                                                                         => __('MS Teams', 'fluent-booking-pro'),
             'Zoom Meeting'                                                                     => __('Zoom Meeting', 'fluent-booking-pro'),
             'Booking Questions'                                                                => __('Booking Questions', 'fluent-booking-pro'),
             'Required'                                                                         => __('Required', 'fluent-booking-pro'),
