@@ -177,7 +177,7 @@ class Event implements \JsonSerializable
 		$organizer = &$this->data['organizer'];
 
 		if (!isset($organizer['email'])) {
-			throw new Exception('An organizer must have an email.');
+			throw new \Exception('An organizer must have an email.');
 		}
 
 		if (!isset($organizer['name'])) {

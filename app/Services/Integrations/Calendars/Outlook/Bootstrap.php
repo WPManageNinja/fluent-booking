@@ -528,9 +528,8 @@ class Bootstrap extends BaseCalendar
             if ($missingBooking->status != 'cancelled') {
                 $missingBooking->updateMeta('__outlook_calendar_event', $parentMeta);
             }
-
-            return true;
         }
+
     }
 
     public function patchEvent($config, Booking $booking, $updateData, $isRescheduling)
@@ -604,7 +603,6 @@ class Bootstrap extends BaseCalendar
         if (!$calendarApi) {
             return;
         }
-
 
         if ($calendarApi->lastError) {
             do_action('fluent_booking/log_booking_activity', [
