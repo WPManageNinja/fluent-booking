@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\FluentForms;
 
 
 use FluentBooking\App\App;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Models\Booking;
@@ -149,11 +150,25 @@ class BookingElement extends BaseFieldManager
 
         $localizeData['time_format'] = (Helper::getGlobalSettings())['time_format'];
 
+        $assetUrl = App::getInstance('url.assets');
+
         wp_enqueue_script(
             'fluentform-calendar-public',
-            App::getInstance('url.assets') . 'public/js/fluentform.js', [],
+            $assetUrl . 'public/js/fluentform.js', [],
             FLUENT_BOOKING_ASSETS_VERSION, true
         );
+
+        if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
+            wp_enqueue_script('fluent-booking-phone-field', $assetUrl . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+            ?>
+            <style>
+                .fcal_phone_wrapper .flag {
+                    background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
+                    background-size: 100%;
+                }
+            </style>
+            <?php
+        }
 
         wp_localize_script('fluentform-calendar-public', 'fcal_public_vars_' . $element_id, $localizeData);
 
