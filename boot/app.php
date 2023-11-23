@@ -16,12 +16,11 @@ return function ($file) {
         ($app->make(DeactivationHandler::class))->handle();
     });
 
-    require_once( FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php' );
- 
+    require_once(FLUENT_BOOKING_DIR . 'boot/action_scheduler_loader.php');
+
     add_action('plugins_loaded', function () use ($app) {
         do_action('fluent_booking/loaded', $app);
-
-        if(defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
             $licenseManager = new \FluentBooking\App\Services\PluginManager\LicenseManager();
             $licenseManager->initUpdater();
 
@@ -35,6 +34,5 @@ return function ($file) {
                 });
             }
         }
-
     });
 };
