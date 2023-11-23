@@ -234,7 +234,7 @@ body {
     }
   }
 }
-.fcal_calendar_wrap {
+body >.fcal_calendar_wrap {
   background: var(--fcal_body_bg);
   height: 100vh;
   overflow-x: hidden;
