@@ -410,7 +410,7 @@ class LandingPageHandler
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3> <?php esc_html_e('You are rescheduling the booking:', 'fluent-booking-pro');
+                <h3> <?php esc_html_e('You are rescheduling the booking: ', 'fluent-booking-pro');
                     echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
                     (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
