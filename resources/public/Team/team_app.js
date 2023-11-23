@@ -31,9 +31,13 @@ function handleEventBlockClick(link) {
     app.$on('handleBack', function () {
         app.$destroy();
         elemItem.remove();
-        bookingWrap.style.marginLeft = '0';
         bookingWrap.style.height = 'auto';
         const parentTeam = elem.closest('.fcal_teams');
+        if (parentTeam) {
+            bookingWrap.style.marginLeft = '0';
+        } else {
+            bookingWrap.style.marginLeft = 'auto';
+        }
         // if(parentTeam) {
         //     parentTeam.classList.remove('fcal_showing_team_calendar');
         //     parentTeam.classList.add('fcal_showing_team_events');

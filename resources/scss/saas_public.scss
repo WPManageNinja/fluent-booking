@@ -2,16 +2,19 @@
 @import "../scss/booking_confirmation";
 
 .confirmation_page {
-  max-width: 600px;
-  margin: auto;
-  background: var(--cal_bg);
-  border: 1px solid rgba(26, 26, 26, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
-  padding: 20px;
-}
-
-.confirmation_page {
+  background: var(--fcal_body_bg);
+  height: 100vh;
+  overflow-x: hidden;
+  padding: 40px 0;
+  .fcal_conf_wrap {
+    max-width: 600px;
+    margin: auto;
+    background: var(--fcal_cal_bg);
+    border: 1px solid rgba(26, 26, 26, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
+    padding: 20px;
+  }
   ul.fcal_conform_items {
     list-style: none;
     margin: 20px 0;
@@ -52,7 +55,7 @@
   textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--fcal_slot_border);
     border-radius: 5px;
   }
   label {

@@ -1,7 +1,7 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
 $bodyBg: #f3f4f6 !default;
-$dark: var(--dark);
+$dark: var(--fcal_dark);
 $lightDark: #6b7280;
 $whiteBG: #ffffff;
 
@@ -9,19 +9,19 @@ $whiteBG: #ffffff;
   --fcal_primary_color: #306ae0;
   --fcal_date_radius: 4px;
   --fcal_avatar_radius: 8px;
-  --cal_bg: #ffffff;
-  --slot_border: #D6DAE1;
-  --date_disabled_bg: #ffffff;
-  --enable_day_bg: #e5e7eb;
-  --date_disabled_color: rgb(152 160 166);
-  --thBG: #f5f6f7;
-  --dark: #1B2533;
-  --whiteColor: #ffffff;
-  --scroll_bar_bg: #c1c1c1;
-  --input_bg: #ffffff;
+  --fcal_cal_bg: #ffffff;
+  --fcal_slot_border: #D6DAE1;
+  --fcal_date_disabled_bg: #ffffff;
+  --fcal_enable_day_bg: #e5e7eb;
+  --fcal_date_disabled_color: rgb(152 160 166);
+  --fcal_thBG: #f5f6f7;
+  --fcal_dark: #1B2533;
+  --fcal_whiteColor: #ffffff;
+  --fcal_scroll_bar_bg: #c1c1c1;
+  --fcal_input_bg: #ffffff;
   --fcal_body_bg: #f3f4f6;
-  --input_disable_bg: #f7f7f7;
-  --gray: #6b7280;
+  --fcal_input_disable_bg: #f7f7f7;
+  --fcal_gray: #6b7280;
 }
 
 body {
@@ -29,7 +29,217 @@ body {
 }
 
 @import "../scss/booking_confirmation";
-@import "dark-mode-styles";
+
+// Dark Mode
+.fluent_booking_wrap {
+  padding-top: 40px;
+  margin-top: 0;
+}
+.fcal-dark-mode {
+
+  // Variables
+  $color_2: #a5a5a5;
+  --fcal_dark: #dddbdb;
+  --fcal_primaryColor: #ffffff;
+  --fcal_gray: #a5a5a5;
+  --fcal_cal_bg: #1c1c1c;
+  --fcal_slot_border: #2b2b2b;
+  --fcal_primary_color: #ffffff;
+  --fcal_date_disabled_bg: transparent;
+  --fcal_enable_day_bg: #2b2b2b;
+  --fcal_date_disabled_color: #575757;
+  --fcal_thBG: #2b2b2b;
+  --fcal_whiteColor: #1B2533;
+  --fcal_input_bg: #101010;
+  --fcal_body_bg: #101010;
+  --fcal_input_disable_bg: #414141;
+
+  &.fcal_calendar_wrap {
+    .fcal_slots {
+      .fcal_slot {
+        &:hover {
+          background: #181818;
+        }
+      }
+    }
+  }
+
+  .fcal_slot {
+    .fcal_slot_duration {
+      color: $color_2;
+    }
+    .book_now {
+      svg {
+        path {
+          stroke: var(--fcal_primaryColor);
+        }
+      }
+    }
+  }
+  .fcal_calendar_inner {
+    .fcal_date_wrapper {
+      .calendar {
+        .day {
+          &.day-enabled {
+            &:hover {
+              span {
+                color: #101010;
+                &:before {
+                  background: #101010;
+                }
+              }
+            }
+            span {
+              color: #ffffff;
+            }
+          }
+          &.day_is_selected {
+            span {
+              color: #101010 !important;
+              &:before {
+                background: #101010 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .fcal_slot_picker {
+    .fcal_spot_lists {
+      .fcal_spot {
+        .fcal_spot_confirm {
+          color: #101010;
+        }
+      }
+    }
+    .fcal_slot_picker_header {
+      .fcal_slot_picker_header_action {
+        .format-hour {
+          input:checked ~ label {
+            color: #2b2b2b;
+          }
+        }
+      }
+    }
+  }
+  .fcal_author_header {
+    p {
+      color: #a5a5a5;
+    }
+  }
+  .svelte-select {
+    .item {
+      color: #1B2533 !important;
+    }
+  }
+  .fcal_slot_info {
+    .slot_location {
+      img {
+        filter: invert(1);
+      }
+    }
+    .fcal_multi_location_title,
+    .fcal_icon_item {
+      svg {
+        circle,
+        path {
+          fill: #ffffff;
+          stroke: #ffffff;
+        }
+      }
+    }
+    .fcal_multi_location_title,
+    .slot_timing {
+      svg {
+        circle,
+        path {
+          fill: none;
+        }
+      }
+    }
+    .slot_time_range {
+      svg {
+        path {
+          fill: none;
+        }
+      }
+    }
+  }
+  .fcal_payment_items {
+    table {
+      thead {
+        th {
+          background: #2b2b2b;
+        }
+      }
+    }
+  }
+  .fcal_booking_form_wrap {
+    .fcal_booking_form {
+      .fcal_form_item {
+        .fcal_input_content {
+          .fcal_input_wrap {
+            &.address {
+              textarea {
+                &::placeholder {
+                  color: var(--fcal_gray);
+                }
+              }
+              svg {
+                stroke: var(--fcal_gray);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .fluent_booking_payment_processor {
+    #fluent_booking_stipe_pay {
+      &:hover {
+        background: #e9e7e7;
+      }
+    }
+  }
+
+  //	team
+  .fcal_teams,
+  &.fcal_teams {
+    .fcal_team_header {
+      .fcal_team_description {
+        color: #a5a5a5;
+      }
+    }
+    .fcal_team_body {
+      .fcal_each_member {
+        &:hover {
+          background: #1c1c1c;
+        }
+        .fcal_person_body {
+          .fcal_person_description {
+            p {
+              color: #d6d6d6;
+            }
+          }
+        }
+      }
+    }
+    .fcal_slots {
+      .fcal_slot {
+        &:hover {
+          background: #1c1c1c;
+        }
+      }
+    }
+  }
+}
+body >.fcal_calendar_wrap {
+  background: var(--fcal_body_bg);
+  height: 100vh;
+  overflow-x: hidden;
+}
+
 .fluent_booking_app {
   padding-top: 0;
 }
@@ -57,7 +267,7 @@ body {
           font-size: 14px;
           font-weight: 700;
           line-height: 20px;
-          color: var(--dark);
+          color: var(--fcal_dark);
           margin-bottom: 10px;
         }
 
@@ -74,7 +284,7 @@ body {
             margin-bottom: 8px;
             cursor: pointer;
             display: block;
-            color: var(--dark);
+            color: var(--fcal_dark);
 
             &:last-child {
               margin-bottom: 0;
@@ -156,7 +366,7 @@ body {
               opacity: 0.5;
               path,
               circle {
-                stroke: var(--dark);
+                stroke: var(--fcal_dark);
               }
             }
 
@@ -174,7 +384,7 @@ body {
         textarea,
         input {
           padding: 7px 16px;
-          border: 1px solid var(--slot_border);
+          border: 1px solid var(--fcal_slot_border);
           border-radius: 8px;
           display: block;
           width: 100%;
@@ -183,8 +393,8 @@ body {
           -moz-transition: .1s;
           -ms-transition: .1s;
           -o-transition: .1s;
-          color: var(--dark);
-          background: var(--input_bg);
+          color: var(--fcal_dark);
+          background: var(--fcal_input_bg);
 
           font-size: 16px;
           font-weight: 400;
@@ -244,8 +454,8 @@ body {
                 content: '';
                 width: 5px;
                 height: 12px;
-                border-bottom: 1.5px solid var(--whiteColor);
-                border-right: 1.5px solid var(--whiteColor);
+                border-bottom: 1.5px solid var(--fcal_whiteColor);
+                border-right: 1.5px solid var(--fcal_whiteColor);
                 position: absolute;
                 left: 50%;
                 top: 50%;
@@ -278,7 +488,7 @@ body {
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
-        color: var(--whiteColor);
+        color: var(--fcal_whiteColor);
         padding: 10px 20px;
         background: var(--fcal_primary_color);
         border-radius: 8px;
@@ -328,7 +538,7 @@ body {
     max-width: 100%;
     width: 360px;
     min-width: 360px;
-    border-right: 1px solid var(--slot_border);
+    border-right: 1px solid var(--fcal_slot_border);
     transition: all .22s ease-out;
     -webkit-transition: all .22s ease-out;
     -moz-transition: all .22s ease-out;
@@ -337,7 +547,7 @@ body {
     overflow: auto;
     min-height: 450px;
     z-index: 9;
-    background: var(--cal_bg);
+    background: var(--fcal_cal_bg);
     @media (max-width: 410px) {
       min-width: 100%;
     }
@@ -372,13 +582,13 @@ body {
       font-weight: 700;
       line-height: 32px;
       margin: 0 0 20px;
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
 
     .fcal_slot_description {
       margin-top: 20px;
       font-size: 16px;
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
 
     .fcal_location_description {
@@ -436,7 +646,7 @@ body {
       //width: 600px;
       //max-width: 600px;
       z-index: 10;
-      background: var(--cal_bg);
+      background: var(--fcal_cal_bg);
       flex: none;
       width: 100%;
       max-width: 100%;
@@ -498,7 +708,7 @@ body {
       }
 
       .fcal_date_event_details_header {
-        border-bottom: 1px solid var(--slot_border);
+        border-bottom: 1px solid var(--fcal_slot_border);
         padding-bottom: 20px;
         margin-bottom: 20px;
 
@@ -518,7 +728,7 @@ body {
           i.fcal_svg {
             width: 40px;
             height: 40px;
-            border: 1px solid var(--slot_border);
+            border: 1px solid var(--fcal_slot_border);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -530,7 +740,7 @@ body {
             -o-transition: .3s;
 
             svg {
-              fill: var(--dark);
+              fill: var(--fcal_dark);
               width: 18px;
               transition: .3s;
               -webkit-transition: .3s;
@@ -546,7 +756,7 @@ body {
               color: var(--fcal_primary_color);
 
               svg {
-                fill: var(--whiteColor);
+                fill: var(--fcal_whiteColor);
               }
             }
 
@@ -598,7 +808,7 @@ body {
         h3 {
           margin: 0;
           font-size: 18px;
-          color: var(--dark);
+          color: var(--fcal_dark);
           line-height: 28px;
 
           span {
@@ -728,16 +938,16 @@ body {
         }
 
         &.day-disabled {
-          color: var(--date_disabled_color);
+          color: var(--fcal_date_disabled_color);
           cursor: not-allowed;
           span {
-            background-color: var(--date_disabled_bg);
+            background-color: var(--fcal_date_disabled_bg);
           }
         }
 
         &.day-enabled {
           cursor: pointer;
-          color: var(--dark);
+          color: var(--fcal_dark);
 
           &.day_is_selected {
             span {
@@ -763,10 +973,10 @@ body {
           }
 
           span {
-            color: var(--dark);
+            color: var(--fcal_dark);
             font-weight: 500;
             border-radius: var(--fcal_date_radius);
-            background-color: var(--enable_day_bg);
+            background-color: var(--fcal_enable_day_bg);
             transition: .3s;
             -webkit-transition: .3s;
             -moz-transition: .3s;
@@ -789,7 +999,7 @@ body {
 
       .day-name {
         line-height: 41px;
-        color: var(--dark);
+        color: var(--fcal_dark);
       }
     }
   }
@@ -856,7 +1066,7 @@ body {
               display: inline-block;
               font-weight: 500;
               line-height: inherit;
-              color: var(--dark);
+              color: var(--fcal_dark);
             }
           }
         }
@@ -866,7 +1076,7 @@ body {
 
   &.fcal_day_selected {
     .calendar-container {
-      border-right: 1px solid var(--slot_border);
+      border-right: 1px solid var(--fcal_slot_border);
     }
   }
 
@@ -1085,7 +1295,7 @@ body {
   position: absolute;
   visibility: hidden;
   opacity: 0;
-  background: var(--cal_bg);
+  background: var(--fcal_cal_bg);
   right: 0;
   top: 0;
   padding: 0 20px 20px 0;
@@ -1105,7 +1315,7 @@ body {
       width: 6px;
     }
     &::-webkit-scrollbar-thumb {
-      background: var(--scroll_bar_bg);
+      background: var(--fcal_scroll_bar_bg);
       border-radius: 10px;
     }
   }
@@ -1118,7 +1328,7 @@ body {
     .fcal_spot {
       display: flex;
       justify-content: space-between;
-      border: 1px solid var(--slot_border);
+      border: 1px solid var(--fcal_slot_border);
       border-radius: 4px;
       width: 100%;
       transition: .3s;
@@ -1129,7 +1339,7 @@ body {
       -moz-transition: .3s;
       -ms-transition: .3s;
       -o-transition: .3s;
-      background: var(--input_bg);
+      background: var(--fcal_input_bg);
 
       + .fcal_spot {
         margin-top: 15px;
@@ -1171,13 +1381,13 @@ body {
         align-items: center;
         padding: 10px 24px;
         font-size: 15px;
-        color: var(--dark);
+        color: var(--fcal_dark);
 
         .fcal_spot_time {
           font-size: 15px;
           font-weight: 500;
           line-height: 24px;
-          color: var(--dark);
+          color: var(--fcal_dark);
         }
 
         .fcal_spot_remaining {
@@ -1230,7 +1440,7 @@ body {
           height: 22px;
 
           path {
-            fill: var(--whiteColor);
+            fill: var(--fcal_whiteColor);
           }
         }
       }
@@ -1245,7 +1455,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--cal_bg);
+    background: var(--fcal_cal_bg);
     position: sticky;
     top: 0;
     z-index: 5;
@@ -1256,19 +1466,19 @@ body {
       svg {
         path {
           &:nth-child(2){
-            fill: var(--dark);
+            fill: var(--fcal_dark);
           }
         }
       }
     }
     .fcal_slot_date_info {
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
 
     .fcal_slot_picker_header_action {
       display: flex;
       align-items: center;
-      border: 1px solid var(--slot_border);
+      border: 1px solid var(--fcal_slot_border);
       border-radius: 8px;
       padding: .25rem;
 
@@ -1289,7 +1499,7 @@ body {
           cursor: pointer;
           line-height: 1.25;
           font-size: 12px;
-          color: var(--dark);
+          color: var(--fcal_dark);
           padding: 0.35rem 0.25rem;
           border-radius: 8px;
           display: block;
@@ -1311,7 +1521,7 @@ body {
     align-items: center;
     gap: 6px;
     font-size: 14px;
-    color: var(--dark);
+    color: var(--fcal_dark);
 
     svg {
       width: 16px;
@@ -1331,9 +1541,9 @@ body {
   .fcal_location_tooltip {
     position: absolute;
     bottom: 100%;
-    background: var(--dark);
+    background: var(--fcal_dark);
     border-radius: 8px;
-    color: var(--whiteColor);
+    color: var(--fcal_whiteColor);
     padding: 10px 15px;
     opacity: 0;
     margin: 0;
@@ -1372,7 +1582,7 @@ body {
 
       .fcal_loc_text {
         font-size: 12px;
-        color: var(--whiteColor);
+        color: var(--fcal_whiteColor);
         font-weight: 400;
       }
     }
@@ -1398,20 +1608,21 @@ body {
 .svelte-select {
   box-sizing: border-box !important;
   padding-left: 0 !important;
-  border-color: var(--slot_border) !important;
-  background: var(--input_bg) !important;
-  color: var(--dark);
+  border-color: var(--fcal_slot_border) !important;
+  background: var(--fcal_input_bg) !important;
+  color: var(--fcal_dark);
 
   &.focused {
     border: 1px solid var(--fcal_primary_color) !important;
   }
 
   .svelte-select-list {
-    border: 1px solid #EAECF0 !important;
+    border: 1px solid var(--fcal_slot_border) !important;
     border-radius: 8px;
     box-shadow: 0 8px 30px rgba(27, 37, 51, .1) !important;
     padding: 8px 0 8px 8px;
     height: 210px !important;
+    background: var(--fcal_body_bg) !important;
 
     &::-webkit-scrollbar {
       width: 5px;
@@ -1425,8 +1636,16 @@ body {
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+    .item {
+      color: var(--fcal_dark) !important;
+      &.hover,
+      &.active,
+      &:hover {
+        background: var(--fcal_primary_color) !important;
+        color: var(--fcal_whiteColor) !important;
+      }
+    }
   }
-
   .item {
     &.active {
       background: var(--fcal_primary_color) !important;
@@ -1472,7 +1691,7 @@ body {
     font-weight: 500;
     display: block;
     margin-bottom: 5px;
-    color: var(--dark);
+    color: var(--fcal_dark);
   }
 
   .svelte-select {
@@ -1492,7 +1711,7 @@ body {
     gap: 6px;
     margin-bottom: 5px;
     font-size: 14px;
-    color: var(--dark);
+    color: var(--fcal_dark);
 
     svg {
       width: 16px;
@@ -1559,7 +1778,7 @@ body {
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--whiteColor);
+  color: var(--fcal_whiteColor);
   padding: 10px 20px;
   background: var(--fcal_primary_color);
   border-radius: 8px;
@@ -1572,7 +1791,7 @@ body {
   table {
     width: 100%;
     margin-top: 24px;
-    border: 1px solid var(--slot_border);
+    border: 1px solid var(--fcal_slot_border);
     border-radius: 8px;
     border-spacing: 0;
     border-collapse: separate !important;
@@ -1582,10 +1801,10 @@ body {
       th {
         text-align: left;
         padding: 12px 20px;
-        background: var(--thBG);
+        background: var(--fcal_thBG);
         font-size: 14px;
         font-weight: 500;
-        color: var(--dark);
+        color: var(--fcal_dark);
 
         &:first-child {
           border-top-left-radius: 8px;
@@ -1600,17 +1819,17 @@ body {
     tbody {
       td {
         padding: 10px 20px !important;
-        border-bottom: 1px solid var(--slot_border) !important;
+        border-bottom: 1px solid var(--fcal_slot_border) !important;
         background: none !important;
         font-size: 13px;
-        color: var(--dark);
+        color: var(--fcal_dark);
       }
     }
 
     tfoot {
       tr {
         th {
-          color: var(--dark);
+          color: var(--fcal_dark);
           padding: 12px 20px;
 
           &:first-child {
@@ -1624,11 +1843,11 @@ body {
   .fcal_payment_item_single {
     font-weight: 400;
     padding: 10px 17px;
-    color: var(--dark);
+    color: var(--fcal_dark);
 
     .amount {
       font-weight: 500;
-      color: var(--dark);
+      color: var(--fcal_dark);
     }
   }
 
@@ -1664,10 +1883,10 @@ body {
   .label {
     margin: 0 0 10px;
     font-weight: 500;
-    color: var(--dark);
+    color: var(--fcal_dark);
   }
   .fluent_booking_loading_payment_processor {
-    color: var(--dark);
+    color: var(--fcal_dark);
   }
   .payment-methods-radio {
     .__PrivateStripeElement {
@@ -1683,7 +1902,7 @@ body {
   form {
     label {
       font-weight: 500;
-      color: var(--dark);
+      color: var(--fcal_dark);
       display: block;
       margin-bottom: 10px;
     }
@@ -1717,7 +1936,7 @@ body {
     border-radius: 4px;
     margin-bottom: 15px;
     border: none;
-    color: var(--whiteColor);
+    color: var(--fcal_whiteColor);
     cursor: pointer;
     box-sizing: border-box;
     display: inline-block;

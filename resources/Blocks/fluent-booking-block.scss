@@ -133,6 +133,9 @@ $dark: #1B2533;
 		}
 	}
 	.fcal_block_inspector_host_info {
+		.components-flex {
+			gap: 12px;
+		}
 		.components-base-control__field {
 			.components-v-stack {
 				flex-direction: row;
@@ -140,16 +143,25 @@ $dark: #1B2533;
 				input {
 					transition: .3s;
 					margin-right: 0;
+					width: 16px;
+					height: 16px;
 					&:focus {
 						outline: none;
 						box-shadow: none;
 					}
 					&:before {
 						transition: .3s;
+						border-width: 3px;
+						width: 6px;
+						height: 6px;
+					}
+					&:checked:before {
+						transform: translate(4px, 4px);
 					}
 				}
 				label {
 					padding-left: 6px;
+					margin-right: 0;
 				}
 			}
 		}

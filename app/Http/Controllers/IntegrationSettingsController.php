@@ -115,6 +115,20 @@ class IntegrationSettingsController extends Controller
         ];
     }
 
+    public function patchRemoteCalendarAdditionalSettings(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+        $meta = Meta::where('id', $request->get('meta_id'))->first();
+
+        $additionalSettings = wp_unslash($request->get('additional_settings'));
+
+        do_action('fluent_calendar/patch_calendar_additional_settings_' . $meta->object_type, $additionalSettings, $meta, $calendar);
+
+        return [
+            'message' => __('Your settings has been updated', 'fluent-booking-pro')
+        ];
+    }
+
     public function syncCreatbleRemoteCalSettings(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);

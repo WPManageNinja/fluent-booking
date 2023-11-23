@@ -138,6 +138,29 @@
             </div>
         </div>
 
+        <div class="fcal_settings_body_inner fcal_settings_general">
+            <div class="fcal_configure_integration_card">
+                <div class="fcal_configure_integration_card_header">
+                    <div class="left">
+                        <div class="content">
+                            <h3>{{ $t('Emailing Settings') }}</h3>
+                            <p>{{ $t('GeneralSettings/email_settings_description') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body">
+                    <form-builder :formData="emailing" :fields="emailingFields"/>
+                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
+                                   class="fcal_primary_btn">
+                            {{ $t('Save Settings') }}
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_apperance">
             <div class="fcal_configure_integration_card">
@@ -145,7 +168,7 @@
                     <div class="left">
                         <div class="content">
                             <h3>{{ $t('Theme') }}</h3>
-                            <p>{{ $t('This only applies to your public booking pages') }}</p>
+                            <p>{{ $t('This only applies to your public landing pages') }}</p>
                         </div>
                     </div>
                 </div>
@@ -167,29 +190,6 @@
                         </el-radio>
                     </el-radio-group>
 
-                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
-                                   class="fcal_primary_btn">
-                            {{ $t('Save Settings') }}
-                        </el-button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="fcal_settings_body_inner fcal_settings_general">
-            <div class="fcal_configure_integration_card">
-                <div class="fcal_configure_integration_card_header">
-                    <div class="left">
-                        <div class="content">
-                            <h3>{{ $t('Emailing Settings') }}</h3>
-                            <p>{{ $t('GeneralSettings/email_settings_description') }}</p>
-                        </div>
-                    </div>
-                </div>
-                <el-skeleton animated v-if="loading"></el-skeleton>
-                <div v-else class="fcal_configure_integration_body">
-                    <form-builder :formData="emailing" :fields="emailingFields"/>
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
                         <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
                                    class="fcal_primary_btn">

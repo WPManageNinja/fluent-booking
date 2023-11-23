@@ -32,9 +32,9 @@
 
     <style>
         :root {
-            --dark: #1B2533;
-            --primaryColor: #2653C7;
-            --gray: #6b7280;
+            --fcal_dark: #1B2533;
+            --fcal_primaryColor: #2653C7;
+            --fcal_gray: #6b7280;
         }
 
         .fluent_booking_wrap {
