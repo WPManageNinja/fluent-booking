@@ -661,6 +661,8 @@ class TimeSlotService
             }
         }
 
+        $bookingDuration = $this->calendarSlot->duration;
+
         // Per Month Booking Frequency Limit Hanlder
         if (!empty($keyedLimits['per_month'])) {
             $startDate = date('Y-m-01 00:00:00', strtotime(min($ranges)));
@@ -670,7 +672,7 @@ class TimeSlotService
                 DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
                 DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone)
             );
-            if ($monthlyDuration >= $keyedLimits['per_month']) {
+            if ($monthlyDuration + $bookingDuration > $keyedLimits['per_month']) {
                 $ranges = [];
             }
         }
@@ -685,7 +687,7 @@ class TimeSlotService
                     DateTimeHelper::convertToUtc($filledWeek[6] . ' 23:59:59', $this->calendar->author_timezone)
                 );
 
-                if ($weeklyDuration >= $weeklyLimit) {
+                if ($weeklyDuration + $bookingDuration > $weeklyLimit) {
                     $ranges = array_filter($ranges, function ($rangeDate) use ($filledWeek) {
                         return !in_array($rangeDate, $filledWeek);
                     });
@@ -716,7 +718,7 @@ class TimeSlotService
                     continue;
                 }
 
-                if ($dayDurarion >= $perDayLimit) {
+                if ($dayDurarion + $bookingDuration > $perDayLimit) {
                     unset($ranges[$rangeIndex]);
                 }
             }
