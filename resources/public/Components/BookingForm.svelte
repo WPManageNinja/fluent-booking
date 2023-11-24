@@ -7,6 +7,7 @@
                 </div>
             </div>
         {/if}
+        <slot name="before_form"></slot>
         <form on:submit|preventDefault={submitForm}>
             {#each formFields as field}
                 {#if field.enabled}

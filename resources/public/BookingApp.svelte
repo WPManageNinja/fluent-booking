@@ -113,6 +113,7 @@
     }
 
     function fluentFormDateHandle(e) {
+        selectedDateTime = e.detail;
         fluentFormDateTimeSelected = e.detail;
     }
 </script>
@@ -259,48 +260,6 @@
                                         </div>
                                     {/if}
                                 </div>
-                                {#if fluentFormDateTimeSelected.start}
-                                    <div class="slot_time_range fcal_icon_item">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                             viewBox="0 0 18 18" fill="none">
-                                            <path d="M6 1.5V3.75" stroke="#445164" stroke-width="1.25"
-                                                  stroke-miterlimit="10" stroke-linecap="round"
-                                                  stroke-linejoin="round"/>
-                                            <path d="M12 1.5V3.75" stroke="#445164" stroke-width="1.25"
-                                                  stroke-miterlimit="10" stroke-linecap="round"
-                                                  stroke-linejoin="round"/>
-                                            <path d="M2.625 6.8175H15.375" stroke="#445164" stroke-miterlimit="10"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path
-                                                d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z"
-                                                stroke="#445164" stroke-miterlimit="10" stroke-linecap="round"
-                                                stroke-linejoin="round"/>
-                                            <path d="M11.771 10.275H11.7778" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M11.771 12.525H11.7778" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M8.99661 10.275H9.00335" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M8.99661 12.525H9.00335" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M6.22073 10.275H6.22747" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M6.22073 12.525H6.22747" stroke="#445164" stroke-width="1.5"
-                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-
-                                        <span>
-                                        {#if slot.time_format == '24' }
-                                            {util.dateTimeI18(fluentFormDateTimeSelected.start, 'HH:mm')}
-                                            - {util.dateTimeI18(fluentFormDateTimeSelected.end, 'HH:mm')},
-                                       {:else}
-                                            {util.dateTimeI18(fluentFormDateTimeSelected.start, 'hh:mma')}
-                                            - {util.dateTimeI18(fluentFormDateTimeSelected.end, 'hh:mma')},
-                                       {/if}
-                                            {util.dateTimeI18(fluentFormDateTimeSelected.start, 'dddd, MMM DD, YYYY')}
-                                    </span>
-                                    </div>
-                                {/if}
                                 {#if !selectedDateTime.start && !fluentFormDateTimeSelected.start}
                                     <div class="fcal_slot_description">
                                         {@html slot.description || ''}
@@ -327,61 +286,50 @@
                                     on:timezoneChanged={(e) => {resetSelection()}}
                                     on:resetSelection={(e) => { resetSelection() }}
                                 >
-                                    {#if isFluentform && appData.form_fields.length > 0}
-                                        <div class="fcal_ff_location">
-                                            <BookingForm
-                                                {appData}
-                                                {slot}
-                                                {timezone}
-                                                bind:form={form}
-                                                on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
-                                                bind:spot={selectedDateTime}
-                                                bind:formFields={appData.form_fields}
-                                                on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                            />
-                                        </div>
-                                    {/if}
                                 </DayPickerApp>
                             </div>
-                            {#if !isFluentform }
-                                <div
-                                    class="fcal_date_event_details {showingPayments ? 'is_payment' : ''} { selectedDateTime.start ? 'is_active' : ''}">
-                                    <div class="fcal_date_event_details_header">
-                                        <h2>
-                                            {#if showingPayments}
-                                                {i18('Payment Details')}
-                                            {:else}
-                                                <div aria-label="Back to Date Selection" on:click={(e) => {
+                            <div
+                                class="fcal_date_event_details {showingPayments ? 'is_payment' : ''} { selectedDateTime.start ? 'is_active' : ''}">
+                                <div class="fcal_date_event_details_header">
+                                    <h2>
+                                        {#if showingPayments}
+                                            {i18('Payment Details')}
+                                        {:else}
+                                            <div aria-label="Back to Date Selection" on:click={(e) => {
                                                 resetSelection()
                                              }} on:keypress={(e) => { resetSelection() }} class="fcal_back">
-                                                    <i class="fcal_svg">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                             viewBox="0 0 24 24">
-                                                            <path fill="none" d="M0 0h24v24H0V0z"/>
-                                                            <path
-                                                                d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
-                                                        </svg>
-                                                    </i>
-                                                </div>
-                                                {i18('Enter Details')}
-                                            {/if}
-                                        </h2>
-                                    </div>
-
-                                    {#if selectedDateTime.start}
-                                        <BookingForm
-                                            {appData}
-                                            {slot}
-                                            {timezone}
-                                            bind:form={form}
-                                            on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
-                                            bind:spot={selectedDateTime}
-                                            bind:formFields={appData.form_fields}
-                                            on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
-                                        />
-                                    {/if}
+                                                <i class="fcal_svg">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                         viewBox="0 0 24 24">
+                                                        <path fill="none" d="M0 0h24v24H0V0z"/>
+                                                        <path
+                                                            d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                            {i18('Enter Details')}
+                                        {/if}
+                                    </h2>
                                 </div>
-                            {/if}
+                                {#if selectedDateTime.start}
+                                    <BookingForm
+                                        {appData}
+                                        {slot}
+                                        {timezone}
+                                        bind:form={form}
+                                        on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
+                                        bind:spot={selectedDateTime}
+                                        bind:formFields={appData.form_fields}
+                                        on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    >
+                                        <div slot="before_form">
+                                            {#if isFluentform}
+                                                <h1>OK</h1>
+                                            {/if}
+                                        </div>
+                                    </BookingForm>
+                                {/if}
+                            </div>
                         {/if}
                     </div>
                 {/if}
