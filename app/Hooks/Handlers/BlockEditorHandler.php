@@ -23,6 +23,9 @@ class BlockEditorHandler
                 FLUENT_BOOKING_ASSETS_VERSION,
                 true
             );
+            wp_localize_script('fluent-booking/calendar', 'fluentCalendarGutenbergVars', [
+                'ajaxurl'        => admin_url('admin-ajax.php'),
+            ]);
             wp_enqueue_script(
                 'fluent-booking/team-management',
                 $assets . 'admin/fluent-booking-team-management-index.js',
