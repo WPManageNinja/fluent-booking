@@ -43,28 +43,34 @@
         </style>
         <?php endif; ?>
 
-        <?php if ($booking->canCancel()): ?>
-            <?php if ($action_type == 'cancel'): ?>
-                <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
-                    <form id="fcal_cancellation_form" action="<?php echo esc_url($action_url); ?>" method="POST"
-                          class="fcal_form_cancellation">
-                        <label for="cancellation_reason"><?php _e('Reason for cancellation', 'fluent-booking-pro') ?></label>
-                        <div class="fcal_form_field">
-                    <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking-pro'); ?>"
-                              name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
-                        </div>
-                        <div class="fcal_form_actions">
-                            <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"
-                               class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking-pro'); ?></a>
-                            <button class="fcal_btn fcal_btn_primary fcal_cancel_btn"
-                                    type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking-pro'); ?></button>
-                        </div>
-                    </form>
-                </div>
-            <?php else: ?>
+        <?php if ($action_type == 'cancel'): ?>
+            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
+                <form id="fcal_cancellation_form" action="<?php echo esc_url($action_url); ?>" method="POST"
+                        class="fcal_form_cancellation">
+                    <label for="cancellation_reason"><?php _e('Reason for cancellation', 'fluent-booking-pro') ?></label>
+                    <div class="fcal_form_field">
+                <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking-pro'); ?>"
+                            name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
+                    </div>
+                    <div class="fcal_form_actions">
+                        <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"
+                            class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking-pro'); ?></a>
+                        <button class="fcal_btn fcal_btn_primary fcal_cancel_btn"
+                                type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking-pro'); ?></button>
+                    </div>
+                </form>
+            </div>
+        <?php else: ?>
+            <?php if ($booking->canCancel() || $booking->canReschedule()): ?>
                 <div class="fcal_booking_manage fcal_normal_booking_footer">
-                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?> <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php _e('Reschedule', 'fluent-booking-pro');  ?></a> <?php _e('or', 'fluent-booking-pro'); ?> <a
-                        href="<?php echo esc_url($booking->getCancelUrl()); ?>"><?php _e('Cancel', 'fluent-booking-pro') ?></a>
+                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?>
+                    <?php if ($booking->canCancel()): ?>
+                        <a href="<?php echo esc_url($booking->getCancelUrl()); ?>"><?php _e('Cancel', 'fluent-booking-pro') ?></a>
+                    <?php endif; ?>
+                    <?php ($booking->canCancel() && $booking->canReschedule()) ? _e('or', 'fluent-booking-pro') : ''; ?>
+                    <?php if ($booking->canReschedule()): ?>
+                        <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php _e('Reschedule', 'fluent-booking-pro');  ?></a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
