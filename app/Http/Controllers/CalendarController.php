@@ -335,6 +335,14 @@ class CalendarController extends Controller
             ];
         }
 
+        if (!isset($slotSettings['can_cancel'])) {
+            $slotSettings['can_cancel'] = 'yes';
+        }
+
+        if (!isset($slotSettings['can_reschedule'])) {
+            $slotSettings['can_reschedule'] = 'yes';
+        }
+
         $slot->settings = $slotSettings;
 
         $data = [
@@ -542,7 +550,9 @@ class CalendarController extends Controller
             'booking_duration'    => [
                 'enabled' => Arr::isTrue($data, 'settings.booking_duration.enabled'),
                 'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_duration.limits'))
-            ]
+            ],
+            'can_cancel'          => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
+            'can_reschedule'      => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
             
         $event->save();

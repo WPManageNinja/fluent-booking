@@ -122,6 +122,22 @@
                         </div>
                     </el-form-item>
 
+                    <el-form-item>
+                        <div class="fcal_booking_limit_card">
+                            <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("LimitSettings/attendee_permissions") }}</span>
+                            </div>
+                        </div>
+                            <div class="fcal_booking_limit_child_card">
+                                <div>
+                                    <el-checkbox true-label="yes" false-label="no" v-model="settings.can_cancel">{{ $t('Attendee can cancel booking') }}</el-checkbox>
+                                </div>
+                                <div>
+                                    <el-checkbox true-label="yes" false-label="no" v-model="settings.can_reschedule">{{ $t('Attendee can reschedule booking') }}</el-checkbox>
+                                </div>
+                            </div>
+                    </el-form-item>
+
                 </el-form>
             </div>
             <div class="fcal_create_calendar_form_footer">
@@ -159,6 +175,7 @@ export default {
     data() {
         return {
             saving: false,
+            canCancel: 'no',
             settings: this.calendar_event.settings,
             bufferTimes: this.appVars.buffer_times,
             slotIntervals: this.appVars.slot_intervals,
