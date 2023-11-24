@@ -77,9 +77,10 @@ class FluentFormInit
                 if (!$error) {
                     $error = sprintf(__('%s field is required', 'fluent-booking-pro'), Arr::get($field, 'raw.settings.label'));
                 }
-
                 return $error;
             }
+        } else if (empty($bookingData['start_time'])) {
+            return $error;
         }
 
         $eventId = Arr::get($field, 'raw.settings.event_id');
@@ -90,7 +91,7 @@ class FluentFormInit
         }
 
 
-        $startTime = $bookingData['start_time'];
+        $startTime = Arr::get($bookingData, 'start_time');
         $timeZone = $bookingData['timezone'];
 
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
@@ -366,7 +367,7 @@ class FluentFormInit
 
             if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
                 wp_enqueue_script('fluent-booking-phone-field', FLUENT_BOOKING_URL . 'assets/public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
-                $inlineStyle = '.fcal_phone_wrapper .flag { background: url('.esc_url(FLUENT_BOOKING_URL.'assets/images/flags_responsive.png').') no-repeat;background-size: 100%;}';
+                $inlineStyle = '.fcal_phone_wrapper .flag { background: url(' . esc_url(FLUENT_BOOKING_URL . 'assets/images/flags_responsive.png') . ') no-repeat;background-size: 100%;}';
                 wp_add_inline_style('fluent-booking-phone-field', $inlineStyle);
             }
 
