@@ -24,7 +24,8 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 1.2.3 (Date: 24 Nov 2023)
 - Fixed Integration Settings
 - Added Privacy Flag for Google Calendar Integration
-- Fix Styling Issue for Fluent Forms
+- Fix Apple Calendar Integration Issue
+- Added Padding to Fluent Forms Block
 
 1.2.2 (Date: 24 Nov 2023)
 - Apple Calendar Integration
