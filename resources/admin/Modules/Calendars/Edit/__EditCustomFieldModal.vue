@@ -42,7 +42,7 @@
                     </el-link>
                 </div>
                 <el-link type="primary" :underline="false" @click="addNewOption">
-                    {{ $t('+Add new option') }}
+                    {{ '+ ' + $t('Add new option') }}
                 </el-link>
             </el-form-item>
             <el-form-item :label="$t('Required')">
