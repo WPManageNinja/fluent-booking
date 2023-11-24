@@ -704,6 +704,45 @@ body >.fcal_calendar_wrap {
             }
           }
         }
+        table {
+          width: 100%;
+          border-collapse: separate;
+          border: 1px solid #eaecf0;
+          border-spacing: 0;
+          border-radius: 6px;
+          tr {
+            &:first-child {
+              th {
+                border-radius: 4px 0 0 0;
+              }
+            }
+            &:last-child {
+              th {
+                border-radius: 0 0 0 4px;
+                border-bottom: none;
+              }
+              td {
+                border-bottom: none;
+              }
+            }
+            th {
+              background: #f6f6f6;
+              text-align: left;
+              font-weight: 500;
+              padding: 8px 20px;
+              min-width: 100px;
+              width: 150px;
+              font-size: 14px;
+              border-bottom: 1px solid #e7e7e7;
+              color: #323232;
+            }
+            td {
+              padding: 8px 20px;
+              font-size: 14px;
+              border-bottom: 1px solid #f3f3f3;
+            }
+          }
+        }
       }
 
       .fcal_date_event_details_header {
