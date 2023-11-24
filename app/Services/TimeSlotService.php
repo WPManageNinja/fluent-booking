@@ -29,7 +29,9 @@ class TimeSlotService
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
+
         $daySlots = $this->getWeekDaySlots();
+
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
@@ -47,7 +49,6 @@ class TimeSlotService
         $rangedValidSlots = [];
 
         foreach ($ranges as $date) {
-
             if ($overrides && isset($overrides[$date])) {
                 $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
             } else {
@@ -57,13 +58,13 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
-            
+
             if (!$availableSlots) {
                 continue;
             }
-            
+
             $currentBookedSlots = $bookedSlots[$date] ?? [];
-            
+
             $isToday = $date === $todayDate;
             $validSlots = [];
 
@@ -299,7 +300,7 @@ class TimeSlotService
 
             return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
         }
-        
+
         foreach ($remoteBookings as $slot) {
             $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                 'start' => $slot['start'],
