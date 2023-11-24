@@ -389,6 +389,7 @@ class FrontEndHandler
                 'Timezone'                      => __('Timezone', 'fluent-booking-pro'),
                 'minutes'                       => __('minutes', 'fluent-booking-pro'),
                 'Enter Details'                 => __('Enter Details', 'fluent-booking-pro'),
+                'Summary'                       => __('Summary', 'fluent-booking-pro'),
                 'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
                 'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
                 'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),

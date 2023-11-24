@@ -680,7 +680,6 @@ body >.fcal_calendar_wrap {
       }
 
       .fcal_form_booking_details {
-        padding-left: 20px;
 
         .fcal_author {
           position: relative;
@@ -1242,6 +1241,12 @@ body >.fcal_calendar_wrap {
           }
         }
 
+      }
+      .fcal_date_event_details {
+        &.is_active {
+          padding-left: 0;
+          padding-right: 0;
+        }
       }
     }
 
