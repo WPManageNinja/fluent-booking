@@ -141,13 +141,13 @@
         if(!wrap) {
             return;
         }
-        const adjustHeight  = wrap.offsetHeight;
+        const adjustHeight  = wrap.offsetHeight + 135;
         const calendarInner = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected");
 
-        if (sidebar.offsetHeight > wrap.offsetHeight) {
+        if (sidebar.offsetHeight > adjustHeight) {
             calendarInner.style.height = sidebar.offsetHeight + 'px';
         } else {
-            calendarInner.style.height = adjustHeight + 135 + 'px';
+            calendarInner.style.height = adjustHeight + 'px';
         }
     }, 100)
 
