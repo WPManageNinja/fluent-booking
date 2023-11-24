@@ -19,6 +19,31 @@ class CalendarSlot extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'user_id',
+        'hash',
+        'calendar_id',
+        'duration',
+        'title',
+        'slug',
+        'media_id',
+        'description',
+        'settings',
+        'availability_type',
+        'availability_id',
+        'status',
+        'type',
+        'color_schema',
+        'location_type',
+        'location_heading',
+        'location_settings',
+        'event_type',
+        'is_display_spots',
+        'max_book_per_slot',
+        'created_at',
+        'updated_at',
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -496,5 +521,29 @@ class CalendarSlot extends Model
             ->get();
         
         return $integrationsMeta;
+    }
+
+    /**
+     * Get the attributes that have been changed since last sync.
+     *
+     * @return array
+     */
+    public function getDirty()
+    {
+        $dirty = [];
+        foreach ($this->attributes as $key => $value) {
+            if (!in_array($key, $this->fillable)) {
+                continue;
+            }
+
+            if (!array_key_exists($key, $this->original)) {
+                $dirty[$key] = $value;
+            } elseif ($value !== $this->original[$key] &&
+                !$this->originalIsNumericallyEquivalent($key)) {
+                $dirty[$key] = $value;
+            }
+        }
+
+        return $dirty;
     }
 }

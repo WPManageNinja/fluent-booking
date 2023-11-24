@@ -16,6 +16,7 @@ class Calendar extends Model
         'hash',
         'user_id',
         'account_id',
+        'parent_id',
         'title',
         'slug',
         'media_id',
@@ -25,9 +26,11 @@ class Calendar extends Model
         'type',
         'event_type',
         'account_type',
+        'visibility',
         'author_timezone',
         'max_book_per_slot',
-        'visibility'
+        'created_at',
+        'updated_at'
     ];
 
     public static function boot()
@@ -226,5 +229,29 @@ class Calendar extends Model
         }
 
         return LandingPageHelper::getLandingBaseUrl() . '&host=' . $this->slug;
+    }
+
+    /**
+     * Get the attributes that have been changed since last sync.
+     *
+     * @return array
+     */
+    public function getDirty()
+    {
+        $dirty = [];
+        foreach ($this->attributes as $key => $value) {
+            if (!in_array($key, $this->fillable)) {
+                continue;
+            }
+
+            if (!array_key_exists($key, $this->original)) {
+                $dirty[$key] = $value;
+            } elseif ($value !== $this->original[$key] &&
+                !$this->originalIsNumericallyEquivalent($key)) {
+                $dirty[$key] = $value;
+            }
+        }
+
+        return $dirty;
     }
 }
