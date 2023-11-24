@@ -3,6 +3,7 @@
     import {onMount} from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
+    import Summary from "./Fluentform/Summary.svelte";
     import {createEventDispatcher} from 'svelte'
 
     window['fcal_translate'] = i18;
@@ -110,11 +111,26 @@
         }
         selectedDateTime = {};
         component.style.height = 'auto';
+        summaryDetailsHeightHandle();
     }
 
     function fluentFormDateHandle(e) {
         selectedDateTime = e.detail;
         fluentFormDateTimeSelected = e.detail;
+        summaryDetailsHeightHandle();
+    }
+
+    function summaryDetailsHeightHandle() {
+        setTimeout(() => {
+            const eventDetails = document.querySelector('.fcal_calendar_inner.fcal_spot_selected.fcal_on_xs .fcal_date_wrapper.is_active .fcal_day_picker_wrap');
+            if (isFluentform) {
+                if (selectedDateTime.start) {
+                    eventDetails.style.position = 'absolute';
+                } else {
+                    document.querySelector('.fcal_calendar_inner.fcal_on_xs .fcal_date_wrapper .fcal_day_picker_wrap').style.position = 'relative';
+                }
+            }
+        }, 100)
     }
 </script>
 <div class="fcal_wrap">
@@ -307,7 +323,11 @@
                                                     </svg>
                                                 </i>
                                             </div>
-                                            {i18('Enter Details')}
+                                            {#if isFluentform}
+                                                {i18('Summary')}
+                                            {:else}
+                                                {i18('Enter Details')}
+                                            {/if}
                                         {/if}
                                     </h2>
                                 </div>
@@ -324,7 +344,12 @@
                                     >
                                         <div slot="before_form">
                                             {#if isFluentform}
-                                                <h1>OK</h1>
+                                                <Summary
+                                                    {appData}
+                                                    {slot}
+                                                    {timezone}
+                                                    {selectedDateTime}
+                                                />
                                             {/if}
                                         </div>
                                     </BookingForm>

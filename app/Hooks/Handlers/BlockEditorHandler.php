@@ -102,7 +102,7 @@ class BlockEditorHandler
                 ],
                 'theme'   => [
                     'type'    => 'string',
-                    'default' => 'system-default'
+                    'default' => 'light'
                 ]
             ]
         ));

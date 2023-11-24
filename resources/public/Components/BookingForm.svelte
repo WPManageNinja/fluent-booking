@@ -136,13 +136,19 @@
     const currentUrl = window.location.href;
 
     setTimeout(() => {
-        const wrap = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap");
+        const wrap    = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap");
+        const sidebar = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected .fcal_side");
         if(!wrap) {
             return;
         }
-        const adjustHeight = wrap.offsetHeight;
+        const adjustHeight  = wrap.offsetHeight;
         const calendarInner = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected");
-        calendarInner.style.height = adjustHeight + 135 + 'px';
+
+        if (sidebar.offsetHeight > wrap.offsetHeight) {
+            calendarInner.style.height = sidebar.offsetHeight + 'px';
+        } else {
+            calendarInner.style.height = adjustHeight + 135 + 'px';
+        }
     }, 100)
 
     function hasPaymentItem() {
