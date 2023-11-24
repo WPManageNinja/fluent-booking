@@ -138,7 +138,7 @@
             </div>
         </div>
 
-        <div class="fcal_settings_body_inner fcal_settings_general">
+        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">
@@ -162,7 +162,7 @@
         </div>
 
 
-        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_apperance">
+        <div class="fcal_settings_body_inner fcal_settings_apperance">
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">

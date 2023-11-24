@@ -139,7 +139,7 @@ export const LandingPage = props => {
                         {
                             isLoading ?
                                 <h2 className="fcal_block_loading">
-                                    Loading ...
+                                    {__('Loading...')}
                                     <Spinner/>
                                 </h2>
                                 :
@@ -151,7 +151,7 @@ export const LandingPage = props => {
                                             id="fcal_select_calendar"
                                             onChange={handleCalendar}
                                         >
-                                            <option value="">---Select a Slot---</option>
+                                            <option value="">{__('---Select a Slot---')}</option>
                                             {calendars.map((item, index) => {
                                                 return <optgroup label={item.title} key={index}>
                                                     {
