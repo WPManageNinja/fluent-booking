@@ -55,7 +55,7 @@
                                     </el-checkbox>
                                 </el-form-item>
                             </el-col>
-                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="8">
+                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
                                 <el-row :gutter="30">
                                     <el-col :sm="24" :md="12">
                                         <el-form-item :label="$t('Email Frequency?')">
@@ -84,22 +84,6 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                            </el-col>
-                            <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Default Country for Phone Field')">
-                                    <el-select v-model="administration.default_country"
-                                               filterable
-                                               clearable
-                                               :placeholder="$t('Select Country')" popper-class="fcal_select"
-                                               placement="bottom">
-                                        <el-option
-                                            v-for="(item, itemKey) in all_countries"
-                                            :key="itemKey"
-                                            :label="item"
-                                            :value="itemKey"
-                                        />
-                                    </el-select>
-                                </el-form-item>
                             </el-col>
                         </el-row>
 
@@ -138,6 +122,22 @@
                                         <el-option value="720" :label="$t('12 Hours')"></el-option>
                                     </el-select>
                                     <p>{{ $t('from the event end time') }}</p>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Default Country for Phone Field')">
+                                    <el-select v-model="administration.default_country"
+                                               filterable
+                                               clearable
+                                               :placeholder="$t('Select Country')" popper-class="fcal_select"
+                                               placement="bottom">
+                                        <el-option
+                                            v-for="(item, itemKey) in all_countries"
+                                            :key="itemKey"
+                                            :label="item"
+                                            :value="itemKey"
+                                        />
+                                    </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>

@@ -301,6 +301,9 @@ class TransStrings
             'Scheduling conditions'                                                            => __('Scheduling conditions', 'fluent-booking-pro'),
             'Share'                                                                            => __('Share', 'fluent-booking-pro'),
             'Email Notifications'                                                              => __('Email Notifications', 'fluent-booking-pro'),
+            'Email Frequency?'                                                                 => __('Email Frequency?', 'fluent-booking-pro'),
+            'Default Country for Phone Field'                                                  => __('Default Country for Phone Field', 'fluent-booking-pro'),
+            'Select Country'                                                                   => __('Select Country', 'fluent-booking-pro'),
             'Webhooks Feeds'                                                                   => __('Webhooks Feeds', 'fluent-booking-pro'),
             'Connect with stripe'                                                              => __('Connect with stripe', 'fluent-booking-pro'),
             'Your Stripe Account is connected'                                                 => __('Your Stripe Account is connected', 'fluent-booking-pro'),
@@ -657,10 +660,10 @@ class TransStrings
             'Enabled'                                                                          => __('Enabled', 'fluent-booking-pro'),
             'Install'                                                                          => __('Install', 'fluent-booking-pro'),
             'This only applies to your public landing pages'                                   => __('This only applies to your public landing pages', 'fluent-booking-pro'),
-            'Theme'                                                                       => __('Theme', 'fluent-booking-pro'),
-            'System Default'                                                              => __('System Default', 'fluent-booking-pro'),
-            'Light'                                                                       => __('Light', 'fluent-booking-pro'),
-            'Dark'                                                                        => __('Dark', 'fluent-booking-pro')
+            'Theme'                                                                            => __('Theme', 'fluent-booking-pro'),
+            'System Default'                                                                   => __('System Default', 'fluent-booking-pro'),
+            'Light'                                                                            => __('Light', 'fluent-booking-pro'),
+            'Dark'                                                                             => __('Dark', 'fluent-booking-pro')
         );
 
     }
