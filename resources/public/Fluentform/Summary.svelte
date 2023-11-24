@@ -1,7 +1,7 @@
 <script>
-    import { util, i18 } from '../util.js';
+    import { util } from '../util.js';
 
-    export let appData, timezone, slot, selectedDateTime;
+    export let timezone, slot, selectedDateTime;
 
 </script>
 
