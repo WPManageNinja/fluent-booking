@@ -598,7 +598,7 @@ class TimeSlotService
 
                 $weeklyCount = $this->getBookingsTotal(
                     DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
-                    DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone)
+                    DateTimeHelper::convertToUtc($filledWeek[6] . ' 23:59:59', $this->calendar->author_timezone)
                 );
 
                 if ($weeklyCount >= $weeklyLimit) {
@@ -682,7 +682,7 @@ class TimeSlotService
             foreach ($filledWeeks as $filledWeek) {
                 $weeklyDuration = $this->getBookingDurationTotal(
                     DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
-                    DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone)
+                    DateTimeHelper::convertToUtc($filledWeek[6] . ' 23:59:59', $this->calendar->author_timezone)
                 );
 
                 if ($weeklyDuration >= $weeklyLimit) {
