@@ -2,7 +2,6 @@
 
 namespace FluentBooking\App\Services;
 
-use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
@@ -582,12 +581,17 @@ class TimeSlotService
             );
 
             if ($monthlyCount >= $monthlyLimit) {
-                $ranges = [];
+                return [];
             }
         }
 
         // Per Week Booking Frequency Limit Hanlder
         if (!empty($keyedFrequenceyLimits['per_week'])) {
+
+            if (!$ranges) {
+                return [];
+            }
+
             $weeklyLimit = (int)$keyedFrequenceyLimits['per_week'];
             $filledWeeks = $this->getFilledWeeks(min($ranges), max($ranges));
             foreach ($filledWeeks as $filledWeek) {
@@ -721,12 +725,14 @@ class TimeSlotService
         return $ranges;
     }
 
-    public function getFilledWeeks($from, $to, $weekStart = 'mon')
+    public function getFilledWeeks($from, $to, $weekStart = '')
     {
+        $weekStart = $weekStart ? $weekStart : Arr::get(Helper::getGlobalSettings(), 'administration.start_day', 'sun');
+
         $startDate = new DateTime($from);
         $endDate = new DateTime($to);
 
-        if ($startDate->format('D') != $weekStart) {
+        if (strtolower($startDate->format('D')) != $weekStart) {
             $startDate->modify('last ' . $weekStart);
         }
 
