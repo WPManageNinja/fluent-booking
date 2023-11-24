@@ -557,7 +557,18 @@ class Booking extends Model
 
     public function canCancel()
     {
-        return in_array($this->status, ['scheduled', 'pending']);
+        $hasPermission = Arr::get($this->calendar_event, 'settings.can_cancel', 'yes') == 'yes';
+        $isCancelable  = in_array($this->status, ['scheduled', 'pending']);
+
+        return $hasPermission && $isCancelable;
+    }
+
+    public function canReschedule()
+    {
+        $hasPermission   = Arr::get($this->calendar_event, 'settings.can_reschedule', 'yes') == 'yes';
+        $isReschedulable = in_array($this->status, ['scheduled', 'pending']);
+        
+        return $hasPermission && $isReschedulable;
     }
 
     public function getHostDetails($isPublic = true)
