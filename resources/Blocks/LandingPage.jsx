@@ -4,6 +4,7 @@ const {__} = wp.i18n;
 const {
     Spinner
 } = wp.components;
+import { DatePicker } from './Components/DatePicker.jsx';
 
 import './fluent-booking-block.scss';
 
@@ -132,12 +133,9 @@ export const LandingPage = props => {
                                 null
                             }
                             <div className="fcal_block_preview_date_wrapper">
-                                {
-                                    theme == 'dark' ?
-                                        <img src={assetsUrl+'Blocks/images/date-picker-dark.png'} alt="FluentBooking" />
-                                    :
-                                        <img src={assetsUrl+'Blocks/images/date-picker-light.png'} alt="FluentBooking" />
-                                }
+                                <DatePicker
+                                    attributes={props.attributes}
+                                    setAttributes={props.setAttributes} />
                             </div>
 
                         </div>
