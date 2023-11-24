@@ -468,6 +468,8 @@ class FrontEndHandler
 
         if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
             $data['user_country'] = sanitize_text_field($_SERVER['HTTP_CF_IPCOUNTRY']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        } else {
+            $data['user_country'] = Arr::get($globalSettings, 'administration.default_country', '');
         }
 
         return apply_filters('fluent_calendar/global_booking_vars', $data);
