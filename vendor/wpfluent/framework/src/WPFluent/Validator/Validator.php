@@ -156,11 +156,20 @@ class Validator
         $value = $this->getValue($attribute);
 
         if ($rule instanceof Closure) {
-            if ($message = $rule($attribute, $value, $this->rules, $this->data)) {
+            
+            $params = [];
+
+            if ($key && strpos($key, ':') !== false) {
+                $params = explode(':', $key);
+                $params = array_filter(array_map('trim', explode(',', end($params))));
+            }
+
+            if ($message = $rule($attribute, $value, $this->rules, $this->data, ...$params)) {
                 is_string($message) && $this->messages[$attribute][$key] = str_replace(
                     ':attribute', $attribute, $message
                 );
             }
+
             return;
         }
 

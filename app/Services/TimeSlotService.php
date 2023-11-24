@@ -2,6 +2,7 @@
 
 namespace FluentBooking\App\Services;
 
+use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
@@ -15,8 +16,11 @@ class TimeSlotService
 
     protected $calendar;
 
+    protected $groupedSlots = [];
+
     public function __construct(Calendar $calendar, CalendarSlot $calendarSlot)
     {
+        $this->groupedSlots = [];
         $this->calendar = $calendar;
         $this->calendarSlot = $calendarSlot;
     }
@@ -34,6 +38,7 @@ class TimeSlotService
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
         $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
+        $ranges = $this->maybeBookingDurationLimitRanges($ranges, $bookedSlots);
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
@@ -261,14 +266,14 @@ class TimeSlotService
                 'end'       => $booking->end_time,
                 'remaining' => $remaining,
             ]);
-
+            
             foreach ($rangedItems as $date => $slot) {
-                if (!isset($books[$date])) {
-                    $books[$date] = [];
+                if ($isGroupBooking && $remaining && $this->calendarSlot->id == $booking->event_id) {
+                    $this->groupedSlots[] = $slot;
                 }
 
-                if ($isGroupBooking && $remaining) {
-                    $groupBookingKeys[$slot['start'] . '_' . $slot['end']] = true;
+                if (!isset($books[$date])) {
+                    $books[$date] = [];
                 }
 
                 $books[$date][] = $slot;
@@ -310,10 +315,6 @@ class TimeSlotService
             foreach ($rangedItems as $rangedDate => $rangedSlot) {
                 if (!isset($books[$rangedDate])) {
                     $books[$rangedDate] = [];
-                }
-                $key = $rangedSlot['start'] . '_' . $rangedSlot['end'];
-                if (isset($groupBookingKeys[$key])) {
-                    continue;
                 }
                 $books[$rangedDate][] = $rangedSlot;
             }
@@ -483,7 +484,6 @@ class TimeSlotService
         if (date('Ymd', strtotime($startTime)) == date('Ymd', strtotime($endTime))) {
             return [
                 date('Y-m-d', strtotime($startTime)) => $this->bookSlot(Arr::get($slotConfig, 'event_id'), $startTime, $endTime, Arr::get($slotConfig, 'remaining'))
-
             ];
         }
 
@@ -523,6 +523,10 @@ class TimeSlotService
 
     private function maybeBookingFrequencyLimitRanges($ranges, $bookedSlots)
     {
+        if (!$ranges) {
+            return $ranges;
+        }
+
         $isBookingFrequencyEnabled = !!Arr::get($this->calendarSlot->settings, 'booking_frequency.enabled');
 
         if (!$isBookingFrequencyEnabled) {
@@ -544,14 +548,11 @@ class TimeSlotService
             $endDate = date('Y-m-t 23:59:59', strtotime(min($ranges)));
 
             $monthlyLimit = (int)$keyedFrequenceyLimits['per_month'];
-            $monthlyCount = Booking::query()->where('event_id', $this->calendarSlot->id)
-                ->whereBetween('start_time', [
-                    DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
-                    DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone),
-                ])
-                ->whereIn('status', ['scheduled', 'completed'])
-                ->groupBy('group_id')
-                ->count();
+
+            $monthlyCount = $this->getBookingsTotal(
+                DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
+                DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone)
+            );
 
             if ($monthlyCount >= $monthlyLimit) {
                 $ranges = [];
@@ -563,14 +564,11 @@ class TimeSlotService
             $weeklyLimit = (int)$keyedFrequenceyLimits['per_week'];
             $filledWeeks = $this->getFilledWeeks(min($ranges), max($ranges));
             foreach ($filledWeeks as $filledWeek) {
-                $weeklyCount = Booking::query()->where('event_id', $this->calendarSlot->id)
-                    ->whereBetween('start_time', [
-                        DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
-                        DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone),
-                    ])
-                    ->whereIn('status', ['scheduled', 'completed'])
-                    ->groupBy('group_id')
-                    ->count();
+
+                $weeklyCount = $this->getBookingsTotal(
+                    DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
+                    DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone)
+                );
 
                 if ($weeklyCount >= $weeklyLimit) {
                     $ranges = array_filter($ranges, function ($rangeDate) use ($filledWeek) {
@@ -607,13 +605,94 @@ class TimeSlotService
                 if (!$ranges) {
                     return [];
                 }
-
             }
         }
 
         return $ranges;
     }
 
+    private function maybeBookingDurationLimitRanges($ranges, $bookedSlots)
+    {
+        if (!$ranges) {
+            return $ranges;
+        }
+
+        if (!Arr::get($this->calendarSlot->settings, 'booking_duration.enabled')) {
+            return $ranges;
+        }
+
+        $limits = Arr::get($this->calendarSlot->settings, 'booking_duration.limits', []);
+
+        $keyedLimits = [];
+        foreach ($limits as $limit) {
+            if (!empty($limit['value'])) {
+                $keyedLimits[$limit['unit']] = (int)$limit['value'];
+            }
+        }
+
+        // Per Month Booking Frequency Limit Hanlder
+        if (!empty($keyedLimits['per_month'])) {
+            $startDate = date('Y-m-01 00:00:00', strtotime(min($ranges)));
+            $endDate = date('Y-m-t 23:59:59', strtotime(min($ranges)));
+
+            $monthlyDuration = $this->getBookingDurationTotal(
+                DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
+                DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone)
+            );
+            if ($monthlyDuration >= $keyedLimits['per_month']) {
+                $ranges = [];
+            }
+        }
+
+        // Per Week Booking Frequency Limit Hanlder
+        if (!empty($keyedLimits['per_week'])) {
+            $weeklyLimit = (int)$keyedLimits['per_week'];
+            $filledWeeks = $this->getFilledWeeks(min($ranges), max($ranges));
+            foreach ($filledWeeks as $filledWeek) {
+                $weeklyDuration = $this->getBookingDurationTotal(
+                    DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
+                    DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone)
+                );
+
+                if ($weeklyDuration >= $weeklyLimit) {
+                    $ranges = array_filter($ranges, function ($rangeDate) use ($filledWeek) {
+                        return !in_array($rangeDate, $filledWeek);
+                    });
+
+                    if (!$ranges) {
+                        return [];
+                    }
+                }
+            }
+        }
+
+        // Per Day Booking Frequency Limit Hanlder
+        if (!empty($keyedLimits['per_day'])) {
+            $perDayLimit = $keyedLimits['per_day'];
+            foreach ($ranges as $rangeIndex => $rangeDate) {
+                if (!isset($bookedSlots[$rangeDate])) {
+                    continue;
+                }
+
+                $dayDurarion = array_reduce($bookedSlots[$rangeDate], function ($carry, $slot) {
+                    if (Arr::get($slot, 'event_id') == $this->calendarSlot->id) {
+                        $carry += (int)((strtotime($slot['end']) - strtotime($slot['start'])) / 60);
+                    }
+                    return $carry;
+                }, 0);
+
+                if (!$dayDurarion) {
+                    continue;
+                }
+
+                if ($dayDurarion >= $perDayLimit) {
+                    unset($ranges[$rangeIndex]);
+                }
+            }
+        }
+
+        return $ranges;
+    }
 
     public function getFilledWeeks($from, $to, $weekStart = 'mon')
     {
@@ -637,5 +716,43 @@ class TimeSlotService
         }
 
         return $weeks;
+    }
+
+    protected function getBookingsTotal($start, $end)
+    {
+        if ($this->calendarSlot->event_type == 'group') {
+            return Booking::query()
+                ->where('event_id', $this->calendarSlot->id)
+                ->whereBetween('start_time', [$start, $end])
+                ->whereIn('status', ['scheduled', 'completed'])
+                ->groupBy('group_id')
+                ->count();
+        }
+
+        return Booking::query()
+            ->where('event_id', $this->calendarSlot->id)
+            ->whereBetween('start_time', [$start, $end])
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->count();
+    }
+
+    protected function getBookingDurationTotal($start, $end)
+    {
+        if ($this->calendarSlot->event_type == 'group') {
+            return Booking::query()
+                ->select(['group_id', 'slot_minutes'])
+                ->where('event_id', $this->calendarSlot->id)
+                ->whereBetween('start_time', [$start, $end])
+                ->whereIn('status', ['scheduled', 'completed'])
+                ->groupBy('group_id')
+                ->get()
+                ->sum('slot_minutes');
+        }
+
+        return Booking::query()
+            ->where('event_id', $this->calendarSlot->id)
+            ->whereBetween('start_time', [$start, $end])
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->sum('slot_minutes');
     }
 }
