@@ -537,39 +537,44 @@ class Bootstrap extends BaseCalendar
             return $this->createEvent($config, $booking);
         }
 
-        $parentEventId = $parentMeta['id'];
-        $attendees = [];
-
-        foreach ($allGroupBookings as $groupBooking) {
-            if ($groupBooking->status != 'scheduled') {
-                continue;
-            }
-            $attendees[$groupBooking->email] = array_filter([
-                'display_name' => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
-                'email'        => $groupBooking->email,
-                'comment'      => $groupBooking->message
-            ]);
-        }
-
-        if (!$attendees) {
-            return;
-        }
-
-        $author = $booking->getHostDetails(false);
-        $attendees[$author['email']] = [
-            'display_name' => $author['name'],
-            'email'        => $author['email']
-        ];
-
-        $attendees = array_values($attendees);
-
+        $parentEventId    = $parentMeta['id'];
+        $parentCalendarId = Arr::get($parentMeta, 'remote_calendar_id');
 
         $calendarApi = GoogleHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
             return false;
         }
 
-        $response = $calendarApi->patchEvent(Arr::get($parentMeta, 'remote_calendar_id'), $parentEventId, [
+        $updatedEvent = $calendarApi->getEvent($parentCalendarId, $parentEventId);
+
+        if (is_wp_error($updatedEvent)) {
+            do_action('fluent_booking/log_booking_activity', [
+                'booking_id'  => $booking->id,
+                'status'      => 'closed',
+                'type'        => 'error',
+                'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
+                'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
+            ]);
+            return false;
+        }
+
+        $attendees = $updatedEvent['attendees'] ?? [];
+
+        if ($booking->status == 'scheduled') {
+            $attendee = array_filter([
+                'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
+                'email'        => $booking->email,
+                'comment'      => $booking->message
+            ]);
+            $attendees[] = $attendee;
+        } else {
+            $attendeeIndex = array_search($booking->email, array_column($attendees, 'email'));
+            if ($attendeeIndex !== false) {
+                unset($attendees[$attendeeIndex]);
+            }
+        }
+
+        $response = $calendarApi->patchEvent($parentCalendarId, $parentEventId, [
             'attendees' => $attendees
         ]);
 
