@@ -89,6 +89,7 @@
                                 <el-form-item :label="$t('Default Country for Phone Field')">
                                     <el-select v-model="administration.default_country"
                                                filterable
+                                               clearable
                                                :placeholder="$t('Select Country')" popper-class="fcal_select"
                                                placement="bottom">
                                         <el-option
