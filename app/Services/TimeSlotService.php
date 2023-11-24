@@ -123,6 +123,25 @@ class TimeSlotService
             }
         }
 
+        if (!$this->groupedSlots) {
+            return $rangedValidSlots;
+        }
+
+        foreach ($this->groupedSlots as $slot) {
+            $date = date('Y-m-d', strtotime($slot['start']));
+            if ($todayDate == $date && strtotime($slot['start']) < $cutOutTimeStamp) {
+                continue;
+            }
+
+            if (!isset($rangedValidSlots[$date])) {
+                $rangedValidSlots[$date] = [];
+            }
+            $rangedValidSlots[$date][] = $slot;
+        }
+
+        //  $formattedSlots = $this->convertSlotSetsToFlat($this->groupedSlots, $this->calendar->author_timezone);
+
+
         return $rangedValidSlots;
     }
 
@@ -223,8 +242,6 @@ class TimeSlotService
 
         $books = [];
 
-        $groupBookingKeys = [];
-
         foreach ($bookings as $booking) {
 
             $booked = $booking->count();
@@ -264,7 +281,7 @@ class TimeSlotService
                 'event_id'  => $booking->event_id,
                 'start'     => $booking->start_time,
                 'end'       => $booking->end_time,
-                'remaining' => $remaining,
+                'remaining' => $remaining
             ]);
 
             $eventIdAdded = false;
@@ -275,7 +292,6 @@ class TimeSlotService
                     if ($eventIdAdded) {
                         $slot['event_id'] = null;
                     }
-                    
                     $eventIdAdded = true;
                 }
 
@@ -453,7 +469,6 @@ class TimeSlotService
         $minBookableTimestamp = strtotime($startDate);
 
         foreach ($slots as $spots) {
-
             foreach ($spots as $spot) {
                 if (strtotime($spot['start']) < $minBookableTimestamp) {
                     continue;
@@ -469,13 +484,18 @@ class TimeSlotService
                     $remainingSlots = Arr::get($spot, 'remaining', $maxBooking);
                 }
 
-                $convertedSpots[$startDate][] = [
-                    'start'     => DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone),
+                $start = DateTimeHelper::convertToTimeZone($spot['start'], $calendar->author_timezone, $timeZone);
+                $convertedSpots[$startDate][$start] = [
+                    'start'     => $start,
                     'end'       => DateTimeHelper::convertToTimeZone($spot['end'], $calendar->author_timezone, $timeZone),
                     'remaining' => $remainingSlots,
                 ];
             }
         }
+
+        $convertedSpots = array_map(function ($spots) {
+            return array_values($spots);
+        }, $convertedSpots);
 
         return $convertedSpots;
     }
