@@ -108,7 +108,7 @@
                                 <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                     <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
                                     <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
-                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per Month')"></el-option>
+                                    <el-option :disabled="isMonthExist(settings.booking_duration)" value="per_month" :label="$t('Per Month')"></el-option>
                                 </el-select>
                                 <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"

@@ -40,4 +40,19 @@ class Model extends BaseModel
     {
         return new \DateTimeZone('UTC');
     }
+
+    /**
+     * Determine if the new and old values for a given key are numerically equivalent.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    protected function originalIsNumericallyEquivalent($key)
+    {
+        $current = $this->attributes[$key];
+
+        $original = $this->original[$key];
+
+        return is_numeric($current) && is_numeric($original) && strcmp((string) $current, (string) $original) === 0;
+    }
 }
