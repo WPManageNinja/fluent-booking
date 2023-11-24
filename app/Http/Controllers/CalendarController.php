@@ -35,6 +35,7 @@ class CalendarController extends Controller
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
                 $slot->public_url = $slot->getPublicUrl();
                 $slot->price_total = $slot->getPricingTotal();
+                $slot->location_fields = $slot->calendar->getLocationFields();
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
