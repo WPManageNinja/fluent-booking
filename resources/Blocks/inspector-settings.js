@@ -110,16 +110,14 @@ const InspectorSettings = props => {
                         </div>
 
                         <div className="fcal_block_inspector_widget fcal_block_inspector_host_info">
-                            <RadioControl
-                                label={__('Host Info')}
-                                help={__('You can show/hide host info')}
-                                selected={ hideHostInfo }
-                                options={ [
-                                    { label: __('Show'), value: 'no' },
-                                    { label: __('Hide'), value: 'yes' },
-                                ] }
-                                onChange={ ( value ) => setAttributes({hideHostInfo: value} ) }
-                            />
+                            <h3 className="label">{__('Host Info')}</h3>
+                            <select
+                                value={hideHostInfo}
+                                onChange={hostInfoHandle}
+                            >
+                                <option value="no">{__('Show')}</option>
+                                <option value="yes">{__('Hide')}</option>
+                            </select>
                         </div>
 
                         <div className="fcal_block_inspector_widget fcal_block_theme">
