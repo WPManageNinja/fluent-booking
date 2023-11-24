@@ -55,10 +55,10 @@
                                     </el-checkbox>
                                 </el-form-item>
                             </el-col>
-                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
+                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="8">
                                 <el-row :gutter="30">
                                     <el-col :sm="24" :md="12">
-                                        <el-form-item :label="$t('How often to send summary email?')">
+                                        <el-form-item :label="$t('Email Frequency?')">
                                             <el-select v-model="administration.notification_frequency"
                                                        :placeholder="$t('Select Frequency')" popper-class="fcal_select"
                                                        placement="bottom">
@@ -84,6 +84,21 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Default Country for Phone Field')">
+                                    <el-select v-model="administration.default_country"
+                                               filterable
+                                               :placeholder="$t('Select Country')" popper-class="fcal_select"
+                                               placement="bottom">
+                                        <el-option
+                                            v-for="(item, itemKey) in all_countries"
+                                            :key="itemKey"
+                                            :label="item"
+                                            :value="itemKey"
+                                        />
+                                    </el-select>
+                                </el-form-item>
                             </el-col>
                         </el-row>
 
@@ -177,15 +192,15 @@
                 <div v-else class="fcal_configure_integration_body">
                     <el-radio-group v-model="theme" class="fcal_appearance_theme">
                         <el-radio label="system-default">
-                            <SystemDefault />
+                            <SystemDefault/>
                             <h4>{{ $t('System Default') }}</h4>
                         </el-radio>
                         <el-radio label="light-mode">
-                            <ModeLight />
+                            <ModeLight/>
                             <h4>{{ $t('Light') }}</h4>
                         </el-radio>
                         <el-radio label="dark-mode">
-                            <ModeDark />
+                            <ModeDark/>
                             <h4>{{ $t('Dark') }}</h4>
                         </el-radio>
                     </el-radio-group>
@@ -254,7 +269,8 @@ export default {
             ],
             loading: false,
             saving: false,
-            timeFormat: '12'
+            timeFormat: '12',
+            all_countries: {}
         }
     },
     methods: {
@@ -262,11 +278,12 @@ export default {
             this.loading = true;
             this.$get('settings/general')
                 .then(response => {
-                    this.emailing       = response.emailing;
+                    this.emailing = response.emailing;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;
-                    this.theme          = response.theme;
-                    this.timeFormat     = response.time_format;
+                    this.theme = response.theme;
+                    this.timeFormat = response.time_format;
+                    this.all_countries = response.all_countries;
                 })
                 .catch(error => {
                     this.$handleError(error);

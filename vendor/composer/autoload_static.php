@@ -157,6 +157,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\App\\Services\\Integrations\\ZoomMeeting\\ZoomHelper' => __DIR__ . '/../..' . '/app/Services/Integrations/ZoomMeeting/ZoomHelper.php',
         'FluentBooking\\App\\Services\\LandingPage\\LandingPageHandler' => __DIR__ . '/../..' . '/app/Services/LandingPage/LandingPageHandler.php',
         'FluentBooking\\App\\Services\\LandingPage\\LandingPageHelper' => __DIR__ . '/../..' . '/app/Services/LandingPage/LandingPageHelper.php',
+        'FluentBooking\\App\\Services\\Libs\\Countries' => __DIR__ . '/../..' . '/app/Services/Libs/Countries.php',
         'FluentBooking\\App\\Services\\Libs\\Emogrifier\\Emogrifier' => __DIR__ . '/../..' . '/app/Services/Libs/Emogrifier/Emogrifier.php',
         'FluentBooking\\App\\Services\\Libs\\RRule\\RRule' => __DIR__ . '/../..' . '/app/Services/Libs/RRule/RRule.php',
         'FluentBooking\\App\\Services\\Libs\\RRule\\RRuleInterface' => __DIR__ . '/../..' . '/app/Services/Libs/RRule/RRuleInterface.php',
