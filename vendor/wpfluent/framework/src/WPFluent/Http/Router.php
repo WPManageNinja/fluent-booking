@@ -98,7 +98,9 @@ class Router
         // but the parent group has then bring it in this group.
         if (!isset($this->policyHandler[$this->groupCount])) {
             if (isset($this->policyHandler[$this->groupCount - 1])) {
-                $this->policyHandler[] = $this->policyHandler[$this->groupCount - 1];
+                if ($policyHandler = $this->policyHandler[$this->groupCount - 1]) {
+                    $this->policyHandler[] = $policyHandler;
+                }
             }
         }
 
@@ -106,7 +108,9 @@ class Router
         // but the parent group has then bring it in this group.
         if (!isset($this->middleware['before'][$this->groupCount])) {
             if (isset($this->middleware['before'][$this->groupCount - 1])) {
-                $this->middleware['before'][] = $this->middleware['before'][$this->groupCount - 1];
+                if ($beforeMiddleware = $this->middleware['before'][$this->groupCount - 1]) {
+                    $this->middleware['before'][] = $beforeMiddleware;
+                }
             }
         }
 
@@ -114,7 +118,9 @@ class Router
         // but the parent group has then bring it in this group.
         if (!isset($this->middleware['after'][$this->groupCount])) {
             if (isset($this->middleware['after'][$this->groupCount - 1])) {
-                $this->middleware['after'][] = $this->middleware['after'][$this->groupCount - 1];
+                if ($afterMiddleware = $this->middleware['after'][$this->groupCount - 1]) {
+                    $this->middleware['after'][] = $afterMiddleware;
+                }
             }
         }
 
