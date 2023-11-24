@@ -1,5 +1,6 @@
 /*eslint-disable*/
 const {Fragment, useEffect, useState} = wp.element;
+const {__} = wp.i18n;
 const {
     Spinner
 } = wp.components;
