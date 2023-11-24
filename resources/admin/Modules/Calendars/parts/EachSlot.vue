@@ -1,5 +1,5 @@
 <template>
-    <div :class="'fcal_status_'+slot.status">
+    <div :class="'fcal_cal_slot_wrapper ' + 'fcal_status_'+slot.status">
         <div class="fcal_slot_body">
             <h3>
                 <span class="fcal_status_badge" :style="{background: slot.color_schema}"></span> {{ slot.title }}
@@ -57,6 +57,7 @@
                 </span>
             </p>
         </div>
+        <div v-if="isLocationDisabled" class="fcal_slot_error">{{ $t('EachSlot/disabled_location_description')}}</div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button class="fcal_plain_btn" @click="viewShareCalendar(slot)">
@@ -140,6 +141,15 @@ export default {
     computed: {
         eventType() {
             return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+        },
+        isLocationDisabled() {
+            let isDisabled = false;
+            this.slot.location_settings.forEach((location) => {
+                if (this.slot.location_fields?.conferencing?.options[location.type]?.disabled) {
+                    return isDisabled = true;
+                }
+            })
+            return isDisabled;
         }
     },
     methods: {

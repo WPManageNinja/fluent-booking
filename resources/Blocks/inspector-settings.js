@@ -39,6 +39,14 @@ const InspectorSettings = props => {
         setAttributes({avatarStyle: event.target.value});
     }
 
+    const colorSchemaHandle = (event) => {
+        setAttributes({theme: event.target.value});
+    }
+
+    const hostInfoHandle = (event) => {
+        setAttributes({hideHostInfo: event.target.value});
+    }
+
 
     const colorHandles = [
         {
@@ -96,47 +104,48 @@ const InspectorSettings = props => {
                                 value={avatarStyle}
                                 onChange={avatarStyleChangeHandle}
                             >
-                                <option value="8px">Square</option>
-                                <option value="50%">Rounded</option>
+                                <option value="8px">{__('Square')}</option>
+                                <option value="50%">{__('Rounded')}</option>
                             </select>
                         </div>
 
                         <div className="fcal_block_inspector_widget fcal_block_inspector_host_info">
-                            <RadioControl
-                                label={__('Host Info')}
-                                help={__('You can show/hide host info')}
-                                selected={ hideHostInfo }
-                                options={ [
-                                    { label: __('Show'), value: 'no' },
-                                    { label: __('Hide'), value: 'yes' },
-                                ] }
-                                onChange={ ( value ) => setAttributes({hideHostInfo: value} ) }
-                            />
+                            <h3 className="label">{__('Host Info')}</h3>
+                            <select
+                                value={hideHostInfo}
+                                onChange={hostInfoHandle}
+                            >
+                                <option value="no">{__('Show')}</option>
+                                <option value="yes">{__('Hide')}</option>
+                            </select>
                         </div>
 
-                        <div className="fcal_block_inspector_widget fcal_block_inspector_host_info fcal_block_theme">
-                            <RadioControl
-                                label={__('Theme')}
-                                selected={ theme }
-                                options={ [
-                                    { label: __('System Default'), value: 'system-default' },
-                                    { label: __('Light'), value: 'light' },
-                                    { label: __('Dark'), value: 'dark' },
-                                ] }
-                                onChange={ ( value ) => setAttributes({theme: value} ) }
-                            />
+                        <div className="fcal_block_inspector_widget fcal_block_theme">
+                            <h3 className="label">{__('Color Schema')}</h3>
+                            <select
+                                value={theme}
+                                onChange={colorSchemaHandle}
+                            >
+                                <option value="system-default">{__('System Default')}</option>
+                                <option value="light">{__('Light')}</option>
+                                <option value="dark">{__('Dark')}</option>
+                            </select>
                         </div>
 
                     </div>
                 </PanelRow>
             </PanelBody>
 
-            <div className="fluent-latest-posts-content-color-settings">
-                <PanelColorSettings
-                    title={__('Customization')}
-                    colorSettings={ colorHandles }
-                />
-            </div>
+            {
+                theme != 'dark' ?
+                <div className="fluent-latest-posts-content-color-settings">
+                    <PanelColorSettings
+                        title={__('Customization')}
+                        colorSettings={ colorHandles }
+                    />
+                </div>
+                : ''
+            }
         </InspectorControls>
     );
 };

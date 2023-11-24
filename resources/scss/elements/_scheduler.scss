@@ -140,6 +140,13 @@
 
           }
 
+          .fcal_cal_slot_wrapper {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            height: 100%;
+          }
+
           .fcal_status_draft {
             .fcal_slot_body {
               opacity: 0.6;
@@ -213,6 +220,11 @@
               }
             }
 
+          }
+
+          .fcal_slot_error {
+            color: red;
+            padding-bottom: 4px;
           }
 
           .fcal_slot_footer {
