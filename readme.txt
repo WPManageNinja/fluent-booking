@@ -28,6 +28,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 - Dark Mode
 - Control Booking Frequency and duration
 - Reschedule or Cancel Group Meeting
+- Added Default Country for Phone Field
 - Improvements and Bug Fixes
 
 1.2.1 (Date: 14 Nov 2023)
