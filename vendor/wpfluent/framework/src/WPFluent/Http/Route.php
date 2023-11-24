@@ -6,7 +6,6 @@ use Closure;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
-use BadMethodCallException;
 use InvalidArgumentException;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Pipeline;
@@ -17,7 +16,7 @@ use FluentBooking\Framework\Response\Response as WPFluentResponse;
 class Route
 {
     use SubstituteRouteParametersTrait;
-    
+
     /**
      * Application Instance
      * @var \FluentBooking\Framework\Foundation\Application
@@ -35,7 +34,7 @@ class Route
      * @var string
      */
     protected $uri = null;
-    
+
     /**
      * Compiled rest endpoint
      * @var string
@@ -53,7 +52,7 @@ class Route
      * @var string
      */
     protected $handler = null;
-    
+
     /**
      * Rest Handler/Callback after parsing
      * @var callable|string
@@ -65,7 +64,7 @@ class Route
      * @var array
      */
     protected $actionInfo = [];
-    
+
     /**
      * Policy Handler/Callback after parsing
      * @var string
@@ -77,7 +76,7 @@ class Route
      * @var string
      */
     protected $method = null;
-    
+
     /**
      * Rest options
      * @var array
@@ -95,7 +94,7 @@ class Route
      * @var string
      */
     protected $namespace = null;
-    
+
     /**
      * Policy Handler/Callback after parsing
      * @var callable|string
@@ -130,14 +129,14 @@ class Route
 
     /**
      * Route substituted parameters
-     * 
+     *
      * @var null|array
      */
     protected static $substitutedParameters = [];
 
     /**
      * Construct the route instance
-     * 
+     *
      * @param \FluentBooking\Framework\Foundation\Application $app
      * @param string $restNamespace
      * @param string $uri
@@ -155,7 +154,7 @@ class Route
 
     /**
      * Alternative constructor
-     * 
+     *
      * @param \FluentBooking\Framework\Foundation\Application $app
      * @param string $restNamespace
      * @param string $uri
@@ -170,7 +169,7 @@ class Route
 
     /**
      * Set route meta
-     * 
+     *
      * @param  string $key
      * @param  mixed $value
      * @return self
@@ -186,7 +185,7 @@ class Route
 
     /**
      * Get route meta
-     * 
+     *
      * @param  string $key
      * @return mixed
      */
@@ -195,13 +194,13 @@ class Route
         if (isset($this->meta[$key])) {
             return $this->meta[$key];
         }
-        
+
         return $this->meta;
     }
 
     /**
      * Get route options
-     * 
+     *
      * @param  string $key
      * @return mixed
      */
@@ -220,13 +219,13 @@ class Route
         if ($key && array_key_exists($key, $this->actionInfo)) {
             return $this->actionInfo[$key];
         }
-        
+
         return $this->actionInfo;
     }
 
     /**
      * Set a where constrain into the route
-     * 
+     *
      * @param  string $identifier
      * @param  string $value
      * @return self
@@ -246,7 +245,7 @@ class Route
 
     /**
      * Add an integer type route constraint
-     * 
+     *
      * @param  string $identifiers
      * @return self
      */
@@ -263,7 +262,7 @@ class Route
 
     /**
      * Add an alpha type route constraint
-     * 
+     *
      * @param  string $identifiers
      * @return self
      */
@@ -280,7 +279,7 @@ class Route
 
     /**
      * Add an alphanum type route constraint
-     * 
+     *
      * @param  string $identifiers
      * @return self
      */
@@ -297,7 +296,7 @@ class Route
 
     /**
      * Add an alphanumdash type route constraint
-     * 
+     *
      * @param  string $identifiers
      * @return self
      */
@@ -314,7 +313,7 @@ class Route
 
     /**
      * Set the route before middleware
-     * 
+     *
      * @param  array|string $middleware
      * @return self
      */
@@ -325,7 +324,7 @@ class Route
 
     /**
      * Set the route after middleware
-     * 
+     *
      * @param  array|string $middleware
      * @return self
      */
@@ -354,7 +353,7 @@ class Route
 
     /**
      * Set the route policy
-     * 
+     *
      * @param  mixed $handler
      * @param  string|null $method
      * @return self
@@ -378,7 +377,7 @@ class Route
 
     /**
      * Resolve and set policy with namespace for add-ons
-     * 
+     *
      * @param null
      */
     protected function setPolicyHandlerWithNamespace($backTrace)
@@ -390,7 +389,7 @@ class Route
         $class = $last['class'];
 
         $namespace = substr(__NAMESPACE__, 0, strpos(__NAMESPACE__, '\\'));
-        
+
         $calledClassNamespace = substr($class, 0, strpos($class, '\\'));
 
         if ($namespace != $calledClassNamespace) {
@@ -411,7 +410,7 @@ class Route
 
     /**
      * Register the rest endpoint
-     * 
+     *
      * @return null
      */
     public function register()
@@ -425,7 +424,7 @@ class Route
 
     /**
      * Set route options
-     * 
+     *
      * @return null
      */
     protected function setOptions()
@@ -454,7 +453,7 @@ class Route
 
     /**
      * Compikle the rest route to regex
-     * 
+     *
      * @param  string $uri
      * @return string compiled rest endpoint
      */
@@ -465,7 +464,7 @@ class Route
         $compiledUri = preg_replace_callback('#/{(.*?)}#', function($match) use (&$params, $uri) {
             // Default regx
             $regx = '[^\s(?!/)]+';
-            
+
             $param = trim($match[1]);
 
             if ($isOptional = strpos($param, '?')) {
@@ -477,7 +476,7 @@ class Route
                     "Duplicate parameter name '{$param}' found in {$uri}.", 500
                 );
             }
-            
+
             $params[] = $param;
 
             if (isset($this->wheres[$param])) {
@@ -489,9 +488,9 @@ class Route
             if ($isOptional) {
                 $pattern = "(?:" . $pattern . ")?";
             }
-            
+
             $this->options['args'][$param]['required'] = !$isOptional;
-            
+
             return $pattern;
 
         }, $uri);
@@ -501,7 +500,7 @@ class Route
 
     /**
      * Route handler
-     * 
+     *
      * @return mixed
      */
     public function callback()
@@ -523,7 +522,7 @@ class Route
                     $response = $this->app->response->sendSuccess($response);
                 }
             }
-            
+
             if ($afterMiddleware = $this->collectMiddleWare('after')) {
                 return $this->app->make(Pipeline::class)
                     ->send($response)
@@ -560,7 +559,7 @@ class Route
     public function permissionCallback($wpRestRequest)
     {
         $this->app->instance('route', $this);
-        
+
         if (!$this->app->bound('wprestrequest')) {
             $this->app->instance('wprestrequest', $wpRestRequest);
             $this->app->request->mergeInputsFromRestRequest($wpRestRequest);
@@ -574,29 +573,31 @@ class Route
             return $this->app->make(Pipeline::class)
                 ->send($this->app->request)
                 ->through($beforeMiddleware)->then(function($request) {
-                     return $this->dispatchPermissionHandler();
+                    return $this->dispatchPermissionHandler();
                 });
         }
-        
+
         return $this->dispatchPermissionHandler();
     }
 
     /**
      * Dispatches the permission handler
-     * 
+     *
      * @return bool|null
      */
     protected function dispatchPermissionHandler()
     {
-        return $this->app->call(
-            $this->permissionHandler,
-            $this->getControllerParameters()
-        );
+        if ($this->permissionHandler) {
+            return $this->app->call(
+                $this->permissionHandler,
+                $this->getControllerParameters()
+            );
+        }
     }
 
     /**
      * Gether route params after substituted the params
-     * 
+     *
      * @return array
      */
     protected function getControllerParameters()
@@ -619,14 +620,14 @@ class Route
      * the request without modifying the source code again
      * and again. The middleware class will implement
      * the handle method as given below:
-     * 
+     *
      * public function handle($request, $next)
      *
      * And must return $next($request) to handle the request.
      * Otherwise return nothing to abort the request.
      * Optionally, you may call the abort method:
      * return $request->abort(code, message);
-     * 
+     *
      * @param string $type
      * @return array
      */
@@ -669,7 +670,7 @@ class Route
                 } else {
                     $msg = "Could't resolve middleware.";
                 }
-                
+
                 throw new InvalidArgumentException($msg);
             }
         }
@@ -679,7 +680,7 @@ class Route
 
     /**
      * Resolve the middleware
-     * 
+     *
      * @param  mixed $handler
      * @param  aray $pieces
      * @return object
@@ -691,13 +692,13 @@ class Route
         } elseif (is_string($handler)) {
             $handler = $handler . ':' . str_replace(' ', '', end($pieces));
         }
-        
+
         return $handler;
     }
 
     /**
      * Create a class to wrap the middleware
-     * 
+     *
      * @param  mixed $handler
      * @param  aray $pieces
      * @return object
@@ -705,7 +706,7 @@ class Route
     protected function wrapMiddleware($handler, $pieces)
     {
         $params = str_replace(' ', '', end($pieces));
-        
+
         $params = explode(',', $params);
 
         return new class ($handler, $params) {
@@ -728,7 +729,7 @@ class Route
 
     /**
      * Add the middleware in the stack
-     * 
+     *
      * @param array &$stack All callable middleware for the route
      * @param null
      */
@@ -741,7 +742,7 @@ class Route
 
     /**
      * Resolve the policy handler
-     * 
+     *
      * @param  string $policyHandler
      * @return mixed
      */
@@ -762,13 +763,13 @@ class Route
         if (is_string($policyHandler) && $this->handler instanceof Closure) {
 
             if (class_exists($policyHandler)) {
-                
+
                 $reflection = new \ReflectionClass($policyHandler);
-                
+
                 if ($reflection->hasMethod('verifyRequest')) {
-                    
+
                     $policyHandler = $policyHandler . '@' . 'verifyRequest';
-                    
+
                     return $policyHandler;
                 }
             } elseif (function_exists($policyHandler)) {
@@ -779,7 +780,7 @@ class Route
                 'Explicit policy handler is required while using a closure as route callback.'
             );
         }
-        
+
         if ($policyHandler && !function_exists($policyHandler)) {
             if (is_string($this->handler) && strpos($this->handler, '@') !== false) {
                 list($_, $method) = explode('@', $this->handler);
@@ -795,12 +796,12 @@ class Route
     protected function isPolicyHandlerParseable($policyHandler)
     {
         return (strpos($policyHandler, '@') === true
-        || strpos($policyHandler, '::') === true);
+            || strpos($policyHandler, '::') === true);
     }
 
     /**
      * Default/Fallback policy handler for the route
-     * 
+     *
      * @return bool
      */
     public function defaultPolicyHandler()
@@ -810,10 +811,9 @@ class Route
 
     /**
      * Parse the rest and permission/policy handlers
-     * 
+     *
      * @param  \WP_REST_Request $request
      * @return null
-     * @throws \BadMethodCallException
      */
     public function prepareCallbacks($request)
     {
@@ -831,39 +831,19 @@ class Route
             $controller = end($pieces);
         }
 
-        try {
-            $policyHandler = $this->app->parsePolicyHandler(
-                $this->getPolicyHandler($this->policyHandler)
-            );
-            
-            $this->permissionHandler = $policyHandler;
+        $policyHandler = $this->app->parsePolicyHandler(
+            $this->getPolicyHandler($this->policyHandler)
+        );
 
-            // Adjust policy handler if the method was explicitly given
-            if (is_string($this->policyHandler)) {
-                if (is_array($policyHandler) && isset($policyHandler[1])) {
-                    if ($pieces = explode('@', $this->policyHandler)) {
-                        if (isset($pieces[1])) {
-                            $this->permissionHandler[1] = $pieces[1];
-                        }
-                    }
+        $this->permissionHandler = $policyHandler;
+
+        // Adjust policy handler if the method was explicitly given
+        if (is_array($policyHandler) && isset($policyHandler[1])) {
+            if ($pieces = explode('@', $this->policyHandler)) {
+                if (isset($pieces[1])) {
+                    $this->permissionHandler[1] = $pieces[1];
                 }
             }
-
-            if (!is_callable($this->permissionHandler)) {
-                throw new Exception();
-            }
-
-        } catch (Exception $e) {
-            $pHandler = $this->policyHandler;
-            if (is_array($this->permissionHandler) && $this->permissionHandler) {
-                $pHandler = is_object($this->permissionHandler[0]) ?
-                get_class($this->permissionHandler[0]) . ':' . $this->permissionHandler[1] :
-                $this->permissionHandler[0]  . ':' . $this->permissionHandler[1];
-            }
-
-            throw new BadMethodCallException(
-                "The permission callback {$pHandler} is invalid or not callable."
-            );
         }
 
         if (is_array($policyHandler)) {
@@ -897,7 +877,7 @@ class Route
     /**
      * Get route one or more parameters
      * @param  string $key
-     * 
+     *
      * @return mixed
      */
     public function getParameter($key = null)
@@ -911,7 +891,7 @@ class Route
 
     /**
      * Dynamically access a route parameter.
-     * 
+     *
      * @param string $key
      * @return mixed
      */
