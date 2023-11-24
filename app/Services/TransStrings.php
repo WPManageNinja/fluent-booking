@@ -244,6 +244,7 @@ class TransStrings
             'Date Overrides'                                                                   => __('Date Overrides', 'fluent-booking-pro'),
             'No specific date overrides found for this schedule'                               => __('No specific date overrides found for this schedule', 'fluent-booking-pro'),
             'LocationSelector/disabled_location_description'                                   => __('Looks like your remote connection for this location is disabled. Please revise your location selection', 'fluent-booking-pro'),
+            'EachSlot/disabled_location_description'                                           => __('Selected location seems disabled. Please revise your location selections', 'fluent-booking-pro'),
             'Add another location option'                                                      => __('Add another location option', 'fluent-booking-pro'),
             'Display Description on booking page'                                              => __('Display Description on booking page', 'fluent-booking-pro'),
             'Display Phone number on booking page'                                             => __('Display Phone number on booking page', 'fluent-booking-pro'),
