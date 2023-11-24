@@ -71,12 +71,12 @@
                         <div class="fcal_booking_limit_child_card" v-if="settings.booking_frequency.enabled">
                             <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
                                 <el-input class="fcal_booking_duration" type="number" v-model="frequency.value" @input="validateInput(frequency)">
-                                    <template #append>{{ $t('bookings') }}</template>
+                                    <template #append>{{ $t('Bookings') }}</template>
                                 </el-input>
                                 <el-select v-model="frequency.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                     <el-option :disabled="isDayExist(settings.booking_frequency)" value="per_day" :label="$t('Per day')"></el-option>
                                     <el-option :disabled="isWeekExist(settings.booking_frequency)" value="per_week" :label="$t('Per week')"></el-option>
-                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per Month')"></el-option>
+                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per month')"></el-option>
                                 </el-select>
                                 <el-link v-if="isRemovable(settings.booking_frequency)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
@@ -108,7 +108,7 @@
                                 <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                     <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
                                     <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
-                                    <el-option :disabled="isMonthExist(settings.booking_duration)" value="per_month" :label="$t('Per Month')"></el-option>
+                                    <el-option :disabled="isMonthExist(settings.booking_duration)" value="per_month" :label="$t('Per month')"></el-option>
                                 </el-select>
                                 <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
