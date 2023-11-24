@@ -198,7 +198,7 @@ class BlockEditorHandler
 
         $slotId      = $attributes['slotId'];
         $disableHost = $attributes['hideHostInfo'];
-        $theme       = Arr::get($attributes, 'theme', 'system-default');
+        $theme       = Arr::get($attributes, 'theme', 'light');
         $output     .= do_shortcode("[fluent_booking id=$slotId disable_author=$disableHost theme=$theme]");
         return $output;
     }
