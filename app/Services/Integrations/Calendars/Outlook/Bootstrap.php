@@ -378,11 +378,17 @@ class Bootstrap extends BaseCalendar
             'transactionId'         => $booking->id,
         ];
 
-        if ($booking->message && $booking->event_type == 'single') {
+        if ($booking->event_type == 'single') {
             $data['body'] = [
-                'contentType' => 'html',
-                'content'     => sprintf(__('Note: %s', 'fluent-booking-pro'), $booking->message)
+                'contentType' => 'text',
+                'content'     => ''
             ];
+            if ($booking->message) {
+                $data['body']['content'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
+            }
+            if ($booking->getAdditionalData(false)) {
+                $data['body']['content'] .= $booking->getAdditionalData(false);
+            }
         }
 
         $isMsTeamMeeting = false;
