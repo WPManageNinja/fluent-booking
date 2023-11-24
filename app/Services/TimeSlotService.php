@@ -266,10 +266,17 @@ class TimeSlotService
                 'end'       => $booking->end_time,
                 'remaining' => $remaining,
             ]);
-            
+
+            $eventIdAdded = false;
+
             foreach ($rangedItems as $date => $slot) {
                 if ($isGroupBooking && $remaining && $this->calendarSlot->id == $booking->event_id) {
                     $this->groupedSlots[] = $slot;
+                    if ($eventIdAdded) {
+                        $slot['event_id'] = null;
+                    }
+                    
+                    $eventIdAdded = true;
                 }
 
                 if (!isset($books[$date])) {
