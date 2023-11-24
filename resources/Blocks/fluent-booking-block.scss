@@ -1,7 +1,27 @@
-
-$dark: #1B2533;
+:root {
+	--fcal_block_dark: #1B2533;
+	--fcal_block_bg: #ffffff;
+	--fcal_block_border_color: #D6DAE1;
+}
+$dark: var(--fcal_block_dark);
 
 .fcal_block_landing_page {
+	&.fcal_block_landing_preview {
+		.fcal_block_preview_wrap {
+			&.dark {
+				--fcal_block_dark: #dddbdb;
+				--fcal_block_bg: #1c1c1c;
+				--fcal_block_border_color: #2b2b2b;
+			}
+		}
+	}
+}
+.fcal_block_landing_page {
+	position: relative;
+	border-radius: 8px;
+	border: 1px solid var(--fcal_block_border_color);
+	padding: 24px;
+	background: #F5F6F7;
 	.fcal_block_loading {
 		margin: 0;
 		font-size: 20px;
@@ -13,13 +33,6 @@ $dark: #1B2533;
 			font-size: 20px;
 		}
 	}
-}
-.fcal_block_landing_page {
-	position: relative;
-	border-radius: 8px;
-	border: 1px solid #D6DAE1;
-	padding: 24px;
-	background: #F5F6F7;
 	.fcal_block_header {
 		text-align: center;
 		.fcal_block_logo {
@@ -42,16 +55,18 @@ $dark: #1B2533;
 		padding: 0;
 		border: none;
 		background: none;
+		max-width: 800px;
+		margin: auto;
 		.fcal_block_preview_wrap {
 			display: flex;
-			border: 1px solid #D6DAE1;
-			background: #ffffff;
+			border: 1px solid var(--fcal_block_border_color);
+			background: var(--fcal_block_bg);
 			border-radius: 8px;
 			.fcal_block_preview_aside {
 				width: 100%;
-				max-width: 250px;
+				max-width: 350px;
 				padding: 24px;
-				border-right: 1px solid #EAECF0;
+				border-right: 1px solid var(--fcal_block_border_color);
 				.fcal_author {
 					margin-bottom: 10px;
 					.fcal_author_avatar {
@@ -81,6 +96,7 @@ $dark: #1B2533;
 						font-weight: 700;
 						line-height: 32px;
 						margin: 0 0 20px;
+						color: $dark;
 					}
 					.fcal_icon_item {
 						display: flex;
@@ -126,7 +142,7 @@ $dark: #1B2533;
 			margin-bottom: 5px;
 		}
 		select {
-			border: 1px solid #D6DAE1;
+			border: 1px solid var(--fcal_block_border_color);
 			border-radius: 8px;
 			padding: 3px 16px;
 			width: 100%;
