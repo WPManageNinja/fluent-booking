@@ -32,6 +32,6 @@ export const attributes = {
     },
     theme: {
         type: 'string',
-        default: 'system-default'
+        default: 'light'
     }
 };

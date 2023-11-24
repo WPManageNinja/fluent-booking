@@ -593,14 +593,11 @@ class Booking extends Model
         }
 
         if (!$isHtml) {
-            $text = '';
-            foreach ($customData as $data) {
-                if (empty($data['value'])) {
-                    continue;
-                }
-                $text .= $data['label'] . ': ' . PHP_EOL . esc_html($data['value']) . PHP_EOL . PHP_EOL;
-            }
-            return $text;
+            $lines = array_filter(array_map(function ($data) {
+                return !empty($data['value']) ? $data['label'] . ': ' . PHP_EOL . esc_html($data['value']) : null;
+            }, $customData));
+        
+            return implode(PHP_EOL . PHP_EOL, $lines);
         }
 
         $html = '<table>';
