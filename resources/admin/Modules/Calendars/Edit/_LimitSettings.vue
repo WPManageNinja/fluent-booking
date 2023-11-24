@@ -70,10 +70,13 @@
                         </div>
                         <div class="fcal_booking_limit_child_card" v-if="settings.booking_frequency.enabled">
                             <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
-                                <el-input type="text" v-model="frequency.value" @input="validateInput(frequency)"/>
+                                <el-input class="fcal_booking_duration" type="number" v-model="frequency.value" @input="validateInput(frequency)">
+                                    <template #append>{{ $t('bookings') }}</template>
+                                </el-input>
                                 <el-select v-model="frequency.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                     <el-option :disabled="isDayExist(settings.booking_frequency)" value="per_day" :label="$t('Per day')"></el-option>
                                     <el-option :disabled="isWeekExist(settings.booking_frequency)" value="per_week" :label="$t('Per week')"></el-option>
+                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per Month')"></el-option>
                                 </el-select>
                                 <el-link v-if="isRemovable(settings.booking_frequency)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
@@ -99,12 +102,13 @@
                         </div>
                         <div class="fcal_booking_limit_child_card" v-if="settings.booking_duration.enabled">
                             <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
-                                <el-input class="fcal_booking_duration" type="text" v-model="duration.value" @input="validateInput(duration)">
+                                <el-input class="fcal_booking_duration" type="number" v-model="duration.value" @input="validateInput(duration)">
                                     <template #append>{{ $t('Minutes') }}</template>
                                 </el-input>
                                 <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                     <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
                                     <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
+                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per Month')"></el-option>
                                 </el-select>
                                 <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
                                     :icon="CloseBoldIcon"
@@ -169,7 +173,7 @@ export default {
         },
         isInsertable() {
             return (settings) => {
-                return settings.limits.length < 2;
+                return settings.limits.length < 3;
             }
         }
     },
@@ -180,11 +184,14 @@ export default {
         isWeekExist(settings) {
             return settings.limits.some(limit => limit.unit == 'per_week');
         },
+        isMonthExist(settings) {
+            return settings.limits.some(limit => limit.unit == 'per_month');
+        },
         insertBookingFrequency() {
             const unitValue = this.isDayExist(this.settings.booking_frequency) ? 'per_week' : 'per_day';
             this.settings.booking_frequency.limits.push({
                 unit: unitValue,
-                value: 1
+                value: 5
             });
         },
         removeBookingFrequency(index) {
@@ -194,7 +201,7 @@ export default {
             const unitValue = this.isDayExist(this.settings.booking_duration) ? 'per_week' : 'per_day';
             this.settings.booking_duration.limits.push({
                 unit: unitValue,
-                value: 1
+                value: 120
             });
         },
         removeBookingDuration(index) {
