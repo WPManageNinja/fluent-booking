@@ -82,7 +82,6 @@ export const DatePicker = props => {
             .catch((error) => {
                 console.error('There was an error!', error);
             });
-        setIsLoading(false);
 
     };
 
