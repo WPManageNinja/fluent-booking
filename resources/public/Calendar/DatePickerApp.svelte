@@ -153,7 +153,6 @@
     }
 
     function dayClick(day) {
-        console.log(form);
         if (availableDates[day.date]) {
             daySlots = availableDates[day.date];
             selectedDate = day.date;
