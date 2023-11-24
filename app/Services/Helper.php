@@ -1334,7 +1334,7 @@ class Helper
     public static function getEventSettingsMenuItems($event)
     {
         return apply_filters('fluent_booking/calendar_event_setting_menu_items', [
-            'event_details' => [
+            'event_details'         => [
                 'type'    => 'route',
                 'route'   => [
                     'name'   => 'event_details',
@@ -1358,9 +1358,9 @@ class Helper
                 'label'   => __('Availability', 'fluent-booking-pro'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.66666 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3333 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.91666 7.5752H17.0833" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 7.08366V14.167C17.5 16.667 16.25 18.3337 13.3333 18.3337H6.66667C3.75 18.3337 2.5 16.667 2.5 14.167V7.08366C2.5 4.58366 3.75 2.91699 6.66667 2.91699H13.3333C16.25 2.91699 17.5 4.58366 17.5 7.08366Z" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0789 11.4167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0789 13.9167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.99623 11.4167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.99623 13.9167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.91194 11.4167H6.91942" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.91194 13.9167H6.91942" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
-            'limit_settings' => [
-                'type'    => 'route',
-                'route'   => [
+            'limit_settings'        => [
+                'type'   => 'route',
+                'route'  => [
                     'name'   => 'limit_settings',
                     'params' => [
                         'calendar_id' => $event->calendar_id,
@@ -1368,9 +1368,9 @@ class Helper
                     ]
                 ],
                 'label'  => __('Limits', 'fluent-booking-pro'),
-                'elIcon' => 'Clock' 
+                'elIcon' => 'Clock'
             ],
-            'question_settings' => [
+            'question_settings'     => [
                 'type'    => 'route',
                 'route'   => [
                     'name'   => 'question_settings',
@@ -1379,19 +1379,19 @@ class Helper
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'  => __('Question Settings', 'fluent-booking-pro'),
+                'label'   => __('Question Settings', 'fluent-booking-pro'),
                 'svgIcon' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13.8714V13.6441C12 12.908 12.5061 12.5182 13.0121 12.2043C13.5061 11.9012 14 11.5115 14 10.797C14 9.8011 13.1085 9 12 9C10.8915 9 10 9.8011 10 10.797" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.9945 16.4587H12.0053" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 3.5C19.33 3.67504 21 4.91005 21 9.48055V15.4903C21 19.4968 20 21.5 15 21.5H9C4 21.5 3 19.4968 3 15.4903V9.48055C3 4.91005 4.67 3.68476 8 3.5H16Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
-            'email_notification' => [
-                'type'    => 'route',
-                'route'   => [
+            'email_notification'    => [
+                'type'   => 'route',
+                'route'  => [
                     'name'   => 'email_notification',
                     'params' => [
                         'calendar_id' => $event->calendar_id,
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Email Notification', 'fluent-booking-pro'),
+                'label'  => __('Email Notification', 'fluent-booking-pro'),
                 'elIcon' => 'Message'
             ]
         ], $event);
@@ -1725,7 +1725,8 @@ class Helper
                 'notification_day'       => 'mon',
                 'start_day'              => 'sun',
                 'auto_cancel_timing'     => '10',
-                'auto_complete_timing'   => '60'
+                'auto_complete_timing'   => '60',
+                'default_phone_country'  => ''
             ],
             'time_format'    => '24',
             'theme'          => 'system-default'
