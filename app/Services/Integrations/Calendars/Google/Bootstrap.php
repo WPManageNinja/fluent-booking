@@ -323,6 +323,8 @@ class Bootstrap extends BaseCalendar
             ],
             'location'           => $booking->getLocationAsText(),
             'summary'            => $booking->getMeetingTitle(),
+            'guestsCanInviteOthers' => false,
+            'guestsCanSeeOtherGuests' => false,
             'extendedProperties' => [
                 'shared' => [
                     'created_by' => 'fluent-booking-pro',

@@ -58,7 +58,7 @@
                                 v-model="calendar_event.custom_duration"
                                 @change="validateDuration(calendar_event)"
                                 type="number"
-                                :min="10">
+                                :min="5">
                                 <template #append>{{ $t('Minutes') }}</template>
                             </el-input>
                         </div>
@@ -131,7 +131,7 @@ export default {
             this.calendar_event.status = this.isEnable ? 'active' : 'draft';
         },
         validateDuration(calendar_event) {
-            this.calendar_event.custom_duration = Math.max(10, Math.min(720, calendar_event.custom_duration));
+            this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
         checkDurationType() {
             const fromDurationValue = this.appVars.meeting_durations.some(duration => duration.value === this.calendar_event.duration);

@@ -137,7 +137,7 @@ export default {
     methods: {
         getSettings() {
             this.loading = true;
-            this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/payment-settings`, {})
+            this.$get(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/payment-settings`, {})
                 .then((response) => {
                     this.paymentConfig = response.config;
                     this.paymentSettings = response.settings;
@@ -151,7 +151,7 @@ export default {
         },
         update() {
             this.saving = true;
-            this.$post(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/payment-settings`, {
+            this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/payment-settings`, {
                 settings: this.paymentSettings,
             })
                 .then((response) => {

@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,11 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.2.3 (Date: 24 Nov 2023)
+- Fixed Integration Settings
+- Added Privacy Flag for Google Calendar Integration
+- Fix Styling Issue for Fluent Forms
 
 1.2.2 (Date: 24 Nov 2023)
 - Apple Calendar Integration
