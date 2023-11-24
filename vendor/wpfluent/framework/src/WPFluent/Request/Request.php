@@ -484,11 +484,17 @@ class Request
      * @param  string  $message
      * @return null
      */
-    public function abort($status = 403, $message = '')
+    public function abort($status = 403, $message = null)
     {
+        if (!$message && !is_numeric($status) && is_string($status)) {
+            $message = $status;
+        }
+
         $message = $message ?: 'Request has benn aborted.';
-        
-        $this->app->response->json(['message' => $message], $status);
+
+        $this->app->response->json(
+            is_array($message) ? $message : ['message' => (string) $message], $status
+        );
     }
 
     /**
