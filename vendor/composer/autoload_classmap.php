@@ -131,6 +131,7 @@ return array(
     'FluentBooking\\App\\Services\\Integrations\\ZoomMeeting\\ZoomHelper' => $baseDir . '/app/Services/Integrations/ZoomMeeting/ZoomHelper.php',
     'FluentBooking\\App\\Services\\LandingPage\\LandingPageHandler' => $baseDir . '/app/Services/LandingPage/LandingPageHandler.php',
     'FluentBooking\\App\\Services\\LandingPage\\LandingPageHelper' => $baseDir . '/app/Services/LandingPage/LandingPageHelper.php',
+    'FluentBooking\\App\\Services\\Libs\\Countries' => $baseDir . '/app/Services/Libs/Countries.php',
     'FluentBooking\\App\\Services\\Libs\\Emogrifier\\Emogrifier' => $baseDir . '/app/Services/Libs/Emogrifier/Emogrifier.php',
     'FluentBooking\\App\\Services\\Libs\\RRule\\RRule' => $baseDir . '/app/Services/Libs/RRule/RRule.php',
     'FluentBooking\\App\\Services\\Libs\\RRule\\RRuleInterface' => $baseDir . '/app/Services/Libs/RRule/RRuleInterface.php',

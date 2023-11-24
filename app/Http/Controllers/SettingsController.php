@@ -4,7 +4,9 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Services\GlobalModules\GlobalModules;
 use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\Libs\Countries;
 use FluentBooking\Framework\Request\Request;
+
 class SettingsController extends Controller
 {
     public function getSettingsMenu()
@@ -73,6 +75,8 @@ class SettingsController extends Controller
             ]
         ];
 
+        $settings['all_countries'] = Countries::get();
+
         return $settings;
     }
 
@@ -93,7 +97,7 @@ class SettingsController extends Controller
             $formattedSettings[$settingKey] = $santizedSettings;
         }
         $formattedSettings['time_format'] = $request->get('timeFormat');
-        $formattedSettings['theme']       = $request->get('theme');
+        $formattedSettings['theme'] = $request->get('theme');
 
         update_option('_fluent_booking_settings', $formattedSettings, 'no');
 
@@ -127,7 +131,7 @@ class SettingsController extends Controller
         $formattedModules = [];
 
         foreach ($settings as $settingKey => $value) {
-            if(!isset($modules[$settingKey])) {
+            if (!isset($modules[$settingKey])) {
                 continue;
             }
             $formattedModules[$settingKey] = $value == 'yes' ? 'yes' : 'no';
@@ -136,7 +140,7 @@ class SettingsController extends Controller
         Helper::updateGlobalModuleSettings($formattedModules);
 
         return [
-            'message'  => __('Settings updated successfully', 'fluent-booking-pro'),
+            'message' => __('Settings updated successfully', 'fluent-booking-pro'),
         ];
     }
 }
