@@ -126,6 +126,8 @@ class TimeSlotService
             return $rangedValidSlots;
         }
 
+        $addedDates = [];
+
         foreach ($this->groupedSlots as $slot) {
             $date = date('Y-m-d', strtotime($slot['start']));
             if ($todayDate == $date && strtotime($slot['start']) < $cutOutTimeStamp) {
@@ -134,8 +136,23 @@ class TimeSlotService
 
             if (!isset($rangedValidSlots[$date])) {
                 $rangedValidSlots[$date] = [];
+                $rangedValidSlots[$date][] = $slot;
+                continue;
             }
+
+            $addedDates[$date] = $date;
+
             $rangedValidSlots[$date][] = $slot;
+        }
+
+        foreach ($addedDates as $date) {
+            $dateSlots = $rangedValidSlots[$date];
+            // short the $dateSlots array with start key asc way
+            usort($dateSlots, function ($a, $b) {
+                return strtotime($a['start']) - strtotime($b['start']);
+            });
+
+            $rangedValidSlots[$date] = $dateSlots;
         }
 
         //  $formattedSlots = $this->convertSlotSetsToFlat($this->groupedSlots, $this->calendar->author_timezone);

@@ -1154,6 +1154,11 @@ body >.fcal_calendar_wrap {
         }
 
       }
+
+      .fcal_spot_lists {
+        padding-bottom: 20px !important;
+      }
+
     }
   }
 
@@ -2037,3 +2042,14 @@ input.fcal_input:disabled {
     }
   }
 }
+
+.fcal_wrap {
+  .svelte-select {
+    .value-container {
+      input {
+        border: none !important;
+      }
+    }
+  }
+}
+

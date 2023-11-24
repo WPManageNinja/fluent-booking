@@ -217,7 +217,7 @@ export default {
 
             this.saving = true;
 
-            const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + row.id;
+            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + row.id;
 
             this.$post(url, data)
                 .then(response => {
@@ -235,7 +235,7 @@ export default {
         },
         removeFeed(feed_id) {
 
-            const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations/' + feed_id;
+            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + feed_id;
             let data = {
                 integration_id: feed_id,
             };
@@ -255,7 +255,7 @@ export default {
         getFeeds() {
             this.loading = true;
 
-            const url = 'calendars/' + this.calendar_id + '/slots/' + this.event_id + '/integrations';
+            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations';
             this.$get(url)
                 .then(response => {
                     this.integrations = response.feeds;
