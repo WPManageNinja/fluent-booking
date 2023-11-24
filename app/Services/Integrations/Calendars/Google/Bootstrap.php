@@ -333,8 +333,14 @@ class Bootstrap extends BaseCalendar
             ],
         ];
 
-        if ($booking->message && $booking->event_type == 'single') {
-            $data['description'] = __('Note: ', 'fluent-booking-pro') . $booking->message;
+        if ($booking->event_type == 'single') {
+            $data['description'] = '';
+            if ($booking->message) {
+                $data['description'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
+            }
+            if ($booking->getAdditionalData(false)) {
+                $data['description'] .= $booking->getAdditionalData(false);
+            }
         }
 
         $isGoogleMeet = false;
