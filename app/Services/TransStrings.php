@@ -289,6 +289,7 @@ class TransStrings
             'After Event'                                                                      => __('After Event', 'fluent-booking-pro'),
             'Per day'                                                                          => __('Per day', 'fluent-booking-pro'),
             'Per week'                                                                         => __('Per week', 'fluent-booking-pro'),
+            'Per month'                                                                        => __('Per month', 'fluent-booking-pro'),
             'Add Another Limit'                                                                => __('+ Add Another Limit', 'fluent-booking-pro'),
             'Minimum Notice'                                                                   => __('Minimum Notice', 'fluent-booking-pro'),
             'Time-slot intervals'                                                              => __('Time-slot intervals', 'fluent-booking-pro'),
