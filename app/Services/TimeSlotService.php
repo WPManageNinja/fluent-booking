@@ -29,8 +29,11 @@ class TimeSlotService
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
+
         $daySlots = $this->getWeekDaySlots();
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
+
+        $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
@@ -47,7 +50,6 @@ class TimeSlotService
         $rangedValidSlots = [];
 
         foreach ($ranges as $date) {
-
             if ($overrides && isset($overrides[$date])) {
                 $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
             } else {
@@ -57,13 +59,13 @@ class TimeSlotService
                 }
                 $availableSlots = $daySlots[$day];
             }
-            
+
             if (!$availableSlots) {
                 continue;
             }
-            
+
             $currentBookedSlots = $bookedSlots[$date] ?? [];
-            
+
             $isToday = $date === $todayDate;
             $validSlots = [];
 
@@ -299,7 +301,7 @@ class TimeSlotService
 
             return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
         }
-        
+
         foreach ($remoteBookings as $slot) {
             $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                 'start' => $slot['start'],
@@ -518,4 +520,122 @@ class TimeSlotService
         return $rangeArray;
     }
 
+
+    private function maybeBookingFrequencyLimitRanges($ranges, $bookedSlots)
+    {
+        $isBookingFrequencyEnabled = !!Arr::get($this->calendarSlot->settings, 'booking_frequency.enabled');
+
+        if (!$isBookingFrequencyEnabled) {
+            return $ranges;
+        }
+
+        $frequenceyLimits = Arr::get($this->calendarSlot->settings, 'booking_frequency.limits', []);
+
+        $keyedFrequenceyLimits = [];
+        foreach ($frequenceyLimits as $limit) {
+            if (!empty($limit['value'])) {
+                $keyedFrequenceyLimits[$limit['unit']] = $limit['value'];
+            }
+        }
+
+        // Per Month Booking Frequency Limit Hanlder
+        if (!empty($keyedFrequenceyLimits['per_month'])) {
+            $startDate = date('Y-m-01 00:00:00', strtotime(min($ranges)));
+            $endDate = date('Y-m-t 23:59:59', strtotime(min($ranges)));
+
+            $monthlyLimit = (int)$keyedFrequenceyLimits['per_month'];
+            $monthlyCount = Booking::query()->where('event_id', $this->calendarSlot->id)
+                ->whereBetween('start_time', [
+                    DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
+                    DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone),
+                ])
+                ->whereIn('status', ['scheduled', 'completed'])
+                ->groupBy('group_id')
+                ->count();
+
+            if ($monthlyCount >= $monthlyLimit) {
+                $ranges = [];
+            }
+        }
+
+        // Per Week Booking Frequency Limit Hanlder
+        if (!empty($keyedFrequenceyLimits['per_week'])) {
+            $weeklyLimit = (int)$keyedFrequenceyLimits['per_week'];
+            $filledWeeks = $this->getFilledWeeks(min($ranges), max($ranges));
+            foreach ($filledWeeks as $filledWeek) {
+                $weeklyCount = Booking::query()->where('event_id', $this->calendarSlot->id)
+                    ->whereBetween('start_time', [
+                        DateTimeHelper::convertToUtc($filledWeek[0] . ' 00:00:00', $this->calendar->author_timezone),
+                        DateTimeHelper::convertToUtc($filledWeek[1] . ' 23:59:59', $this->calendar->author_timezone),
+                    ])
+                    ->whereIn('status', ['scheduled', 'completed'])
+                    ->groupBy('group_id')
+                    ->count();
+
+                if ($weeklyCount >= $weeklyLimit) {
+                    $ranges = array_filter($ranges, function ($rangeDate) use ($filledWeek) {
+                        return !in_array($rangeDate, $filledWeek);
+                    });
+
+                    if (!$ranges) {
+                        return [];
+                    }
+                }
+            }
+        }
+
+        // Per Day Booking Frequency Limit Hanlder
+        if (!empty($keyedFrequenceyLimits['per_day'])) {
+            $perDayLimit = $keyedFrequenceyLimits['per_day'];
+            foreach ($ranges as $rangeIndex => $rangeDate) {
+                if (!isset($bookedSlots[$rangeDate])) {
+                    continue;
+                }
+
+                $dayBooked = array_filter($bookedSlots[$rangeDate], function ($slot) {
+                    return Arr::get($slot, 'event_id') == $this->calendarSlot->id;
+                });
+
+                if (!$dayBooked) {
+                    continue;
+                }
+
+                if (count($dayBooked) >= $perDayLimit) {
+                    unset($ranges[$rangeIndex]);
+                }
+
+                if (!$ranges) {
+                    return [];
+                }
+
+            }
+        }
+
+        return $ranges;
+    }
+
+
+    public function getFilledWeeks($from, $to, $weekStart = 'mon')
+    {
+        $startDate = new DateTime($from);
+        $endDate = new DateTime($to);
+
+        if ($startDate->format('D') != $weekStart) {
+            $startDate->modify('last ' . $weekStart);
+        }
+
+        $weeks = [];
+
+        while ($startDate <= $endDate) {
+            // get all days in this week
+            $week = [];
+            for ($i = 0; $i < 7; $i++) {
+                $week[] = $startDate->format('Y-m-d');
+                $startDate->modify('+1 day');
+            }
+            $weeks[] = $week;
+        }
+
+        return $weeks;
+    }
 }
