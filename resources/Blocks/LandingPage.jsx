@@ -1,5 +1,6 @@
 /*eslint-disable*/
 const {Fragment, useEffect, useState} = wp.element;
+const {__} = wp.i18n;
 const {
     Spinner
 } = wp.components;
@@ -15,7 +16,8 @@ export const LandingPage = props => {
             calendars,
             calendarId,
             avatarStyle,
-            hideHostInfo
+            hideHostInfo,
+            theme
         }, setAttributes,
     } = props;
 
@@ -81,11 +83,11 @@ export const LandingPage = props => {
 
     return [
         <Fragment>
-            <div className={slotId ? 'fcal_block_landing_page fcal_block_landing_preview' : 'fcal_block_landing_page'}>
+            <div className={slotId ? 'fcal_block_landing_page fcal_block_landing_preview' : 'fcal_block_landing_page '}>
 
                 {
                     slotId && slot ?
-                        <div className="fcal_block_preview_wrap">
+                        <div className={theme +' fcal_block_preview_wrap'}>
                             {
                                 hideHostInfo == 'no' ?
                                     <div className="fcal_block_preview_aside">
@@ -130,7 +132,12 @@ export const LandingPage = props => {
                                 null
                             }
                             <div className="fcal_block_preview_date_wrapper">
-                                <img src={assetsUrl+'Blocks/images/date-picker.png'} alt="FluentBooking" />
+                                {
+                                    theme == 'dark' ?
+                                        <img src={assetsUrl+'Blocks/images/date-picker-dark.png'} alt="FluentBooking" />
+                                    :
+                                        <img src={assetsUrl+'Blocks/images/date-picker-light.png'} alt="FluentBooking" />
+                                }
                             </div>
 
                         </div>
