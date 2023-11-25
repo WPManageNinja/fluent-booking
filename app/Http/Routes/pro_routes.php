@@ -19,29 +19,28 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->post('/{id}/integrations/zoom-connection/disconnect', 'ZoomController@disconnectByCalendarId')->int('id');
 
     // Twilio Integrations
-    $router->get('/{id}/slots/{event_id}/sms-notifications', 'TwilioController@getSlotSmsNotifications')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/sms-notifications', 'TwilioController@saveSlotSmsNotifications')->int('id')->int('event_id');
+    $router->get('/{id}/events/{event_id}/sms-notifications', 'TwilioController@getSlotSmsNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/sms-notifications', 'TwilioController@saveSlotSmsNotifications')->int('id')->int('event_id');
 
     // webhooks
-    $router->get('/{id}/slots/{event_id}/webhooks', 'WebhookController@getFeeds')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/webhooks', 'WebhookController@saveFeed')->int('id')->int('event_id');
-    $router->delete('/{id}/slots/{event_id}/webhooks/{webhook_id}', 'WebhookController@deleteFeed')->int('id')->int('event_id')->int('webhook_id');
+    $router->get('/{id}/events/{event_id}/webhooks', 'WebhookController@getFeeds')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/webhooks', 'WebhookController@saveFeed')->int('id')->int('event_id');
+    $router->delete('/{id}/events/{event_id}/webhooks/{webhook_id}', 'WebhookController@deleteFeed')->int('id')->int('event_id')->int('webhook_id');
 
     // Payment settings route
-    $router->get('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@getCalendarEventSettings')->int('id')->int('event_id');
-    $router->post('/{id}/slots/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
+    $router->get('/{id}/events/{event_id}/payment-settings', 'PaymentMethodController@getCalendarEventSettings')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/payment-settings', 'PaymentMethodController@updateSettings')->int('id')->int('event_id');
 
     /*
     * Calendar Integrations
     */
-    $router->prefix('{id}/slots/{slot_id}/integrations')->group(function ($router) {
+    $router->prefix('{id}/events/{slot_id}/integrations')->group(function ($router) {
         $router->get('/', 'CalendarIntegrationController@index')->int('id')->int('slot_id');
 
         $router->prefix('{integration_id}')->group(function ($router) {
             $router->get('/', 'CalendarIntegrationController@find')->int('id')->int('slot_id')->int('integration_id');
             $router->post('/', 'CalendarIntegrationController@update')->int('id')->int('slot_id')->int('integration_id');
             $router->delete('/', 'CalendarIntegrationController@delete')->int('id')->int('slot_id')->int('integration_id');
-
             $router->get('/merge-fields', 'CalendarIntegrationController@integrationListComponent');
         });
     });

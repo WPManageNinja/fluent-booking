@@ -25,21 +25,6 @@ class Bootstrap extends BaseCalendar
         $this->logo = $app['url.assets'] . 'images/apple-cal.svg';
         $this->boot();
 
-        add_action('init', function () {
-            if (!isset($_GET['apple'])) {
-                return;
-            }
-
-            $booking = Booking::find(136);
-
-            $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
-            $this->patchEvent($config, $booking, [
-                'start' => '2023-12-11 10:00:00',
-                'end'   => '2021-12-11 11:30:00'
-            ], true);
-
-        });
-
         add_action('fluent_booking/before_get_all_calendars', function () {
             if (!$this->isConfigured()) {
                 return;
@@ -311,6 +296,7 @@ class Bootstrap extends BaseCalendar
 
     public function createEvent($config, Booking $booking)
     {
+
         if (!$this->isConfigured() || $booking->status != 'scheduled') {
             return false;
         }
@@ -651,12 +637,6 @@ class Bootstrap extends BaseCalendar
     private function getClientFromBookingConfig($config, $booking)
     {
         if (!$this->isConfigured()) {
-            return false;
-        }
-
-        $appleEvent = $booking->getMeta('__apple_calendar_event');
-
-        if (!$appleEvent) {
             return false;
         }
 
