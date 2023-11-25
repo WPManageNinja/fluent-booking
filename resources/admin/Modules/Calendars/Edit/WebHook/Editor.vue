@@ -234,7 +234,7 @@ export default {
     methods: {
         saveWebHook() {
             this.saving = true;
-            this.$post(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, {
+            this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, {
                 webhook: {
                     settings: this.settings,
                     id: this.editing_feed.id

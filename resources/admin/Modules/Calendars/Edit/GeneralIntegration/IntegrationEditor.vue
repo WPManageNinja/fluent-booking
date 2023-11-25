@@ -414,7 +414,7 @@ export default {
                 data = {...data, ...this.refreshQuery}
             }
 
-            const url = 'calendars/' + this.calendar_event.calendar_id + '/slots/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
+            const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
 
             this.$get(url, data)
                 .then(response => {

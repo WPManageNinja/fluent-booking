@@ -12,7 +12,6 @@ class CalendarIntegrationController extends Controller
     public function index(CalendarIntegrationService $integrationService, $calendarId, $eventId)
     {
         try {
-
             $calendarEvent = CalendarSlot::findOrFail($eventId);
             $settings = $integrationService->get($eventId);
 
@@ -32,7 +31,9 @@ class CalendarIntegrationController extends Controller
     public function find(CalendarIntegrationService $integrationService, $calendarId, $slotId, $integrationId)
     {
         try {
-            $integration = $integrationService->find($this->request->all());
+            $data = $this->request->all();
+            $data['slot_id'] = $slotId;
+            $integration = $integrationService->find($data);
             return $this->sendSuccess($integration);
         } catch (Exception $e) {
             return $this->sendError([
@@ -46,6 +47,7 @@ class CalendarIntegrationController extends Controller
 
         $data = $this->request->all();
         $data['slot_id'] = $slotId;
+        $data['integration_id'] = $integrationId;
 
         try {
             $integration = $integrationService->update($data);

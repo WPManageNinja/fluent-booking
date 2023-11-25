@@ -140,7 +140,7 @@ export default {
     methods: {
         getFeeds() {
             this.loading = true;
-            this.$get(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, {
+            this.$get(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, {
                 with: ['smart_codes']
             })
                 .then(response => {
@@ -198,7 +198,7 @@ export default {
                 }
             };
 
-            this.$post(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks`, data)
+            this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, data)
                 .then(response => {
                     this.$handleSuccess(response.message);
                 })
@@ -208,7 +208,7 @@ export default {
         },
         deleteWebhook(id) {
             this.loading = true;
-            this.$del(`calendars/${this.calendar_event.calendar_id}/slots/${this.calendar_event.id}/webhooks/${id}`)
+            this.$del(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks/${id}`)
                 .then(response => {
                     this.$handleSuccess(response.message);
                     this.getFeeds();
