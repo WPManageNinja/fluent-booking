@@ -85,6 +85,12 @@
         }
     }
 
+    function maybeStartFromNextMonth() {
+        if (month == now.getMonth() && !Object.keys(availableDates).length) {
+            next();
+        }
+    }
+
     // choose what date/day gets displayed in each date box.
     function initContent() {
         headers = dayNames;
@@ -105,6 +111,7 @@
             .then(response => {
                 timezone = response.timezone;
                 availableDates = response.available_slots;
+                maybeStartFromNextMonth();
 
                 if (firstLoading && slot.pre_selects && slot.pre_selects.day) {
                     selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
