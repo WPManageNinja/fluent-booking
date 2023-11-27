@@ -1,5 +1,6 @@
 /*eslint-disable*/
 import {util} from "../../public/util";
+const {__} = wp.i18n;
 
 const {Fragment, useEffect, useState} = wp.element;
 
@@ -43,7 +44,7 @@ export const DatePicker = props => {
             //     .toString()
             //     .padStart(2, '0')}-${(d.getDate()).toString().padStart(2, '0')}`;
             // Replace the 'YYYY-MM-DD' with the actual format you need
-            const enabled = true;//!!availableDates['2023-11-27'];
+            const enabled = !!availableDates[date];
             daysArray.push({ name: `${i + 1}`, enabled: enabled, date: date });
         }
 
@@ -88,7 +89,7 @@ export const DatePicker = props => {
     useEffect(() => {
         loadAvailableDates();
         initMonth();
-    }, []);
+    }, [availableDates]);
 
 
     let currentDate = new Date();
@@ -141,7 +142,7 @@ export const DatePicker = props => {
                 {
                     timezone ?
                         <div className="fcal_block_timezone">
-                            <h3>Timezone</h3>
+                            <h3>{__('Timezone')}</h3>
                             <span className="timezone">
                                 {timezone}
                             </span>
