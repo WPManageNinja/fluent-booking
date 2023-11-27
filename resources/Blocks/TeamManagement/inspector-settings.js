@@ -179,8 +179,8 @@ const InspectorSettings = props => {
                                     <div className='fcal-add-host-content'>
                                         {
                                             calendars.length ?
-                                                calendarOptions.map(host => {
-                                                    return <div className="fcal-host-list">
+                                                calendarOptions.map((host, index) => {
+                                                    return <div key={index} className="fcal-host-list">
                                                         {
                                                             calendarOptions.length && calendarOptions.length > 1 ?
                                                                 host.value ?

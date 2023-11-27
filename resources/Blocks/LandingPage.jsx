@@ -156,12 +156,12 @@ export const LandingPage = props => {
                                             id="fcal_select_calendar"
                                             onChange={handleCalendar}
                                         >
-                                            <option value="">{__('---Select a Slot---')}</option>
+                                            <option key="default" value="">{__('---Select a Event---')}</option>
                                             {calendars.map((item, index) => {
                                                 return <optgroup label={item.title} key={index}>
                                                     {
-                                                        item.slots.map(slot => {
-                                                            return <option key={'slot-'+slot.id} value={[slot.id,item.id]}>
+                                                        item.slots.map((slot, index) => {
+                                                            return <option key={index} value={[slot.id,item.id]}>
                                                                 {slot.title}
                                                             </option>
                                                         })
