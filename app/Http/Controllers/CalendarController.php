@@ -320,7 +320,7 @@ class CalendarController extends Controller
                 'limits'  => [
                     [
                         'unit'  => 'per_day',
-                        'value' => 1,
+                        'value' => 5,
                     ]
                 ]
             ];
@@ -329,7 +329,7 @@ class CalendarController extends Controller
                 'limits'  => [
                     [
                         'unit'  => 'per_day',
-                        'value' => 1,
+                        'value' => 120,
                     ]
                 ]
             ];

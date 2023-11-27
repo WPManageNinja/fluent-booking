@@ -205,7 +205,9 @@ export default {
             return settings.limits.some(limit => limit.unit == 'per_month');
         },
         insertBookingFrequency() {
-            const unitValue = this.isDayExist(this.settings.booking_frequency) ? 'per_week' : 'per_day';
+            const dayExist = this.isDayExist(this.settings.booking_frequency);
+            const weekExist = this.isWeekExist(this.settings.booking_frequency);
+            const unitValue = dayExist ? (weekExist ? 'per_month' : 'per_week') : 'per_day';
             this.settings.booking_frequency.limits.push({
                 unit: unitValue,
                 value: 5
@@ -215,7 +217,9 @@ export default {
             this.settings.booking_frequency.limits.splice(index, 1);
         },
         insertBookingDuration() {
-            const unitValue = this.isDayExist(this.settings.booking_duration) ? 'per_week' : 'per_day';
+            const dayExist = this.isDayExist(this.settings.booking_duration);
+            const weekExist = this.isWeekExist(this.settings.booking_duration);
+            const unitValue = dayExist ? (weekExist ? 'per_month' : 'per_week') : 'per_day';
             this.settings.booking_duration.limits.push({
                 unit: unitValue,
                 value: 120
