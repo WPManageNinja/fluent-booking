@@ -91,7 +91,6 @@ if (calendarApps.length) {
 const themeMode = window.fluentCalendarPublicVars.theme;
 const calwrap   = document.querySelector('.calendar_wrap');
 const fcalLanding_page  = document.querySelector('.fcal_calendar_wrap');
-const gutenblockCal = document.querySelector('.fcal_cal_wrap');
 
 function runColorMode(fn) {
     if (!window.matchMedia) {
@@ -120,7 +119,7 @@ function applyModeClasses(element, darkMode) {
 
 if (themeMode === 'system-default') {
     runColorMode((isDarkMode) => {
-        const elementsToApplyClasses             = [calwrap, gutenblockCal, fcalLanding_page];
+        const elementsToApplyClasses             = [calwrap, fcalLanding_page];
         elementsToApplyClasses.forEach((element) => applyModeClasses(element, isDarkMode));
     });
 } else if (themeMode === 'dark-mode') {
