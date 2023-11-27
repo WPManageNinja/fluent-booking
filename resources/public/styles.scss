@@ -597,6 +597,17 @@ body >.fcal_calendar_wrap {
 
   }
 
+  &.fcal_form_calendar {
+    .fcal_date_wrapper {
+      .fcal_day_picker {
+        .fcal_timezone_select {
+          max-width: calc(100% - 15px) !important;
+        }
+      }
+
+    }
+  }
+
   .fcal_date_wrapper {
     width: auto;
     padding: 0;
@@ -1154,11 +1165,6 @@ body >.fcal_calendar_wrap {
         }
 
       }
-
-      .fcal_spot_lists {
-        padding-bottom: 20px !important;
-      }
-
     }
   }
 
@@ -1733,6 +1739,7 @@ body >.fcal_calendar_wrap {
 
 .fcal_timezone_select {
   max-width: 300px;
+  //max-width: calc(100% - 20px);
   margin-top: 30px;
   padding-left: 1px;
 
@@ -2042,14 +2049,3 @@ input.fcal_input:disabled {
     }
   }
 }
-
-.fcal_wrap {
-  .svelte-select {
-    .value-container {
-      input {
-        border: none !important;
-      }
-    }
-  }
-}
-
