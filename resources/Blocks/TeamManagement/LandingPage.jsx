@@ -63,8 +63,8 @@ export const LandingPage = props => {
 
                 { calendarHosts && calendarHosts.length ?
                         <div className="fcal_team_management_block_hosts">
-                            {calendarHosts.map(calConfig => {
-                                return <div className="fcal_team_management_block_host">
+                            {calendarHosts.map((calConfig, index) => {
+                                return <div key={index} className="fcal_team_management_block_host">
                                     <img src={calendarsVar[calConfig.id]?.author?.avatar} alt=""/>
                                     <h3>{calendarsVar[calConfig.id]?.author?.name}</h3>
                                     {
