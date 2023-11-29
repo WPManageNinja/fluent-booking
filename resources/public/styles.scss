@@ -597,17 +597,6 @@ body >.fcal_calendar_wrap {
 
   }
 
-  &.fcal_form_calendar {
-    .fcal_date_wrapper {
-      .fcal_day_picker {
-        .fcal_timezone_select {
-          max-width: calc(100% - 15px) !important;
-        }
-      }
-
-    }
-  }
-
   .fcal_date_wrapper {
     width: auto;
     padding: 0;
@@ -691,6 +680,7 @@ body >.fcal_calendar_wrap {
       }
 
       .fcal_form_booking_details {
+        margin-bottom: 10px;
 
         .fcal_author {
           position: relative;
@@ -830,6 +820,7 @@ body >.fcal_calendar_wrap {
 
       .fcal_timezone_select {
         max-width: 350px;
+        max-width: 100%;
 
         select {
           border: 1px solid #EAECF0;
@@ -1738,7 +1729,8 @@ body >.fcal_calendar_wrap {
 }
 
 .fcal_timezone_select {
-  max-width: 300px;
+  //max-width: 300px;
+  max-width: 100%;
   //max-width: calc(100% - 20px);
   margin-top: 30px;
   padding-left: 1px;
@@ -1750,6 +1742,9 @@ body >.fcal_calendar_wrap {
     color: var(--fcal_dark);
   }
 
+  .svelte-select-list {
+    max-width: calc(100% - 20px) !important;
+  }
   .svelte-select {
     padding-left: 20px !important;
     border-radius: 8px !important;
