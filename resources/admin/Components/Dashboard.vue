@@ -94,7 +94,7 @@
                                 <el-icon class="fcal_activity_complete_icon"></el-icon>
 
                                 <div class="description_and_link">
-                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('view') }}</el-link>
+                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
                                 </div>
                             </div>
                             <div v-else class="fcal_no_activities">
