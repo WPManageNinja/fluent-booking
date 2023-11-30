@@ -1325,8 +1325,20 @@ class Helper
                 'label' => __('Phone', 'fluent-booking-pro')
             ],
             [
+                'value' => 'radio',
+                'label' => __('Radio', 'fluent-booking-pro')
+            ],
+            [
                 'value' => 'dropdown',
                 'label' => __('Dropdown', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'checkbox',
+                'label' => __('Checkbox', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'checkbox-group',
+                'label' => __('Checkbox Group', 'fluent-booking-pro')
             ]
         ]);
     }
