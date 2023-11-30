@@ -123,7 +123,7 @@ export default {
         goToCalendarSetting() {
             this.$router.push({
                 name: 'calendar_settings',
-                params: {id: this.calendar.id}
+                params: { calendar_id: this.calendar.id }
             })
         },
         createSlot(eventType) {
