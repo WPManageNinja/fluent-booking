@@ -33,7 +33,7 @@ export default {
     name: 'CalendarSettings',
     data() {
         return {
-            calendar_id: this.$route.params.id,
+            calendar_id: this.$route.params.calendar_id,
             loading: false,
             menuItems: {},
             calendar: {}
