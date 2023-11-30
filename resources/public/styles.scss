@@ -275,8 +275,17 @@ body >.fcal_calendar_wrap {
           select {
             margin-bottom: 6px;
           }
+        }
 
-          .fcal_location_radio_list {
+        .fcal_checkbox_group {
+            display: block;
+            margin-bottom: 5px;
+            input {
+                margin-right: 8px;
+            }
+        }
+
+        .fcal_radio_group {
             position: relative;
             line-height: 24px;
             font-size: 16px;
@@ -311,31 +320,29 @@ body >.fcal_calendar_wrap {
                 }
               }
             }
-
             .fcal_radio_icon {
-              position: absolute;
-              border: 1.5px solid #D1D5DB;
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              left: 0;
-              top: 3px;
-              transition: .3s;
-
-              &::before {
-                content: "";
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background: var(--fcal_primary_color);
                 position: absolute;
-                left: 3.5px;
-                top: 3.5px;
-                transform: scale(0);
+                border: 1.5px solid #D1D5DB;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                left: 0;
+                top: 3px;
                 transition: .3s;
+  
+                &::before {
+                  content: "";
+                  width: 10px;
+                  height: 10px;
+                  border-radius: 50%;
+                  background: var(--fcal_primary_color);
+                  position: absolute;
+                  left: 3.5px;
+                  top: 3.5px;
+                  transform: scale(0);
+                  transition: .3s;
+                }
               }
-            }
-          }
         }
 
         .fcal_input_wrap {
@@ -405,6 +412,11 @@ body >.fcal_calendar_wrap {
             box-shadow: none;
             border-color: var(--fcal_primary_color);
           }
+        }
+
+        input[type=checkbox] {
+            display: inline-block;
+            width: auto;
         }
 
         .fcal_checkbox_wrap {

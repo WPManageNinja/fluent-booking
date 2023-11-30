@@ -26,10 +26,10 @@
                             <label class="fcal_input_content">
                                 {#if field.label}
                                     <div class="fcal_input_label">
-                                        {#if !(field.type === 'payment' && appData?.slot?.type === 'free')}
+                                        {#if !( field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'))}
                                             {field.label}
+                                            {#if field.required}<span>*</span>{/if}
                                         {/if}
-                                        {#if field.required}<span>*</span>{/if}
                                     </div>
                                 {/if}
                                 {#if field.type === 'text'}
@@ -57,6 +57,19 @@
                                 {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
+                                {:else if field.type === 'checkbox'}
+                                    <label>
+                                        <input type="checkbox" bind:checked={form[field.name]} />
+                                        <span>{field.label}</span>
+                                    </label>
+                                {:else if field.type === 'radio'}
+                                    {#each field.options as option}
+                                        <label class="fcal_radio_group">
+                                            {option}
+                                            <input type="radio" bind:group={form[field.name]} value={option}>
+                                            <span class="fcal_radio_icon"></span>
+                                        </label>
+                                    {/each}
                                 {:else if field.type === 'dropdown'}
                                     <select bind:value={form[field.name]}>
                                         <option value="" disabled selected>{field.placeholder}</option>
@@ -64,6 +77,12 @@
                                             <option value={option}>{option}</option>
                                         {/each}
                                     </select>
+                                {:else if field.type === 'checkbox-group'}
+                                    {#each field.options as option (option)}
+                                        <label class="fcal_checkbox_group">
+                                            <input type="checkbox" bind:group={form[field.name]} value={option}/>{option}
+                                        </label>
+                                    {/each}
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
                                     <Payments field={field}/>
                                 {:else if field.type === 'hidden' }
