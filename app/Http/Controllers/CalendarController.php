@@ -197,9 +197,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getCalendar(Request $request, $id)
+    public function getCalendar(Request $request, $calendarId)
     {
-        $calendar = Calendar::with(['slots'])->findOrFail($id);
+        $calendar = Calendar::with(['slots'])->findOrFail($calendarId);
 
         $calendar->author_profile = $calendar->getAuthorProfile();
 
@@ -226,9 +226,9 @@ class CalendarController extends Controller
         return $data;
     }
 
-    public function getSharingSettings(Request $request, $id)
+    public function getSharingSettings(Request $request, $calendarId)
     {
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
 
         return [
             'settings'  => LandingPageHelper::getSettings($calendar),
@@ -236,9 +236,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function saveSharingSettings(Request $request, $id)
+    public function saveSharingSettings(Request $request, $calendarId)
     {
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
 
         $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image', 'phone']);
 
@@ -265,11 +265,11 @@ class CalendarController extends Controller
         ];
     }
 
-    public function updateCalendar(Request $request, $id)
+    public function updateCalendar(Request $request, $calendarId)
     {
         $data = $request->all();
 
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
 
         do_action_ref_array('fluent_booking/before_update_calendar', [&$calendar, $data]);
 

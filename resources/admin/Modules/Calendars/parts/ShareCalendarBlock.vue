@@ -120,7 +120,7 @@ export default {
         gotoCalendarSettings() {
             this.$router.push({
                 name: 'calendar_settings', 
-                params: {id: this.calendarId}
+                params: { calendar_id: this.calendarId}
             })
         },
         copyTo(text) {

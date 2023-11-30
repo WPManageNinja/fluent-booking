@@ -56,7 +56,7 @@ export var routes = [
         }
     },
     {
-        path: '/calendars/:id/settings',
+        path: '/calendars/:calendar_id/settings',
         component: CalendarSettings,
         props: true,
         meta: {
