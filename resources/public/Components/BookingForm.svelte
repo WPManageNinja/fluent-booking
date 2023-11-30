@@ -58,9 +58,10 @@
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
                                 {:else if field.type === 'checkbox'}
-                                    <label>
+                                    <label class="fcal_custom_checkbox">
                                         <input type="checkbox" bind:checked={form[field.name]} />
                                         <span>{field.label}</span>
+                                        <span class="checkbox_mark"></span>
                                     </label>
                                 {:else if field.type === 'radio'}
                                     {#each field.options as option}
@@ -79,8 +80,9 @@
                                     </select>
                                 {:else if field.type === 'checkbox-group'}
                                     {#each field.options as option (option)}
-                                        <label class="fcal_checkbox_group">
+                                        <label class="fcal_checkbox_group fcal_custom_checkbox">
                                             <input type="checkbox" bind:group={form[field.name]} value={option}/>{option}
+                                            <span class="checkbox_mark"></span>
                                         </label>
                                     {/each}
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
