@@ -1,6 +1,6 @@
 <div class="fcal_input_wrap fcal_input_location_wrap">
     {#each field.options as option}
-        <label class="fcal_location_radio_list">
+        <label class="fcal_radio_group">
             {i18(option.title)}
             <input type="radio" on:change={onChangeDriver} data-driver="{option.type}"
                    checked={form.location_config.driver == option.slug}
