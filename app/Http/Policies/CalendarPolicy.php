@@ -14,11 +14,13 @@ class CalendarPolicy extends Policy
      * @param \FluentBooking\Framework\Request\Request $request
      * @return bool
      */
-    public function verifyRequest(Request $request, $calendarId)
+    public function verifyRequest(Request $request)
     {
         if (current_user_can('manage_options')) {
             return true;
         }
+
+        $calendarId = $request->calendar_id;
 
         if (!$calendarId) {
             return apply_filters('fluent_booking/verify_calendar_api', current_user_can('manage_options'), $request);

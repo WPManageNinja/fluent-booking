@@ -164,7 +164,8 @@ export default {
         saveSettings() {
             if (!this.checkValidation()) return;
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/details', {
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/details', {
+                calendar_id: this.calendar_event.calendar_id,
                 title: this.calendar_event.title,
                 status: this.calendar_event.status,
                 color_schema: this.calendar_event.color_schema,

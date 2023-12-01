@@ -37,6 +37,7 @@ export default {
             }
 
             this.$post(url, {
+                calendar_id : this.calendar_id,
                 connected_id: this.connectedAccount.id
             })
                 .then(response => {

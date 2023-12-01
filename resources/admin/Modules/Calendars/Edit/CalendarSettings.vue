@@ -43,6 +43,7 @@ export default {
         getSettings() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id, {
+                calendar_id: this.calendar_id,
                 with: ['settings_menu']
             })
             .then(response => {
