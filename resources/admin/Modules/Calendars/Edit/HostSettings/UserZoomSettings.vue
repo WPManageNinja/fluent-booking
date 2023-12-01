@@ -53,7 +53,9 @@ export default {
     methods: {
         fetchConnection() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar.id + '/integrations/zoom-connection')
+            this.$get('calendars/' + this.calendar.id + '/integrations/zoom-connection', {
+                calendar_id : this.calendar.id
+            })
                 .then(response => {
                     this.connection = response.connection;
                     this.form_fields = response.form_fields;

@@ -139,7 +139,9 @@ export default {
                     cancelButtonText: this.$t('Cancel'),
                     type: 'warning'
                 }).then(() => {
-                    this.$del('calendars/' + this.calendar.id)
+                    this.$del('calendars/' + this.calendar.id, {
+                        calendar_id : this.calendar.id,
+                    })
                         .then(response => {
                             this.$handleSuccess(response);
                             this.$emit('fetchCalendar')

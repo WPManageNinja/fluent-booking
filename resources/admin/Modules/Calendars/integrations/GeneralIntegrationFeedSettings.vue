@@ -65,6 +65,7 @@ export default {
         fetchSettings() {
             this.loading = true;
             this.$get('calendars/' + this.calendar.id + '/integrations/general_integration_feed', {
+                calendar_id : this.calendar.id,
                 settings_key: this.settings_key
             })
                 .then(response => {
@@ -86,6 +87,7 @@ export default {
             }).then(() => {
                 this.disconnecting = true;
                 this.$post('calendars/' + this.calendar.id + '/integrations/general_integration_feed/disconnect', {
+                    calendar_id : this.calendar.id,
                     settings_key: this.settings_key
                 })
                     .then(response => {

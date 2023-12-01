@@ -237,7 +237,8 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/limits', {
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/limits', {
+                calendar_id: this.calendar_event.calendar_id,
                 settings: this.settings
             })
                 .then(response => {

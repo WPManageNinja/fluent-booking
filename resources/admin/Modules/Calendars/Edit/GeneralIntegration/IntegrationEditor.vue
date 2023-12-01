@@ -414,6 +414,8 @@ export default {
                 data = {...data, ...this.refreshQuery}
             }
 
+            data = {...data, calendar_id: this.calendar_event.calendar_id};
+
             const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
 
             this.$get(url, data)
@@ -460,6 +462,7 @@ export default {
             const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
 
             this.$get(url, {
+                calendar_id: this.calendar_event.calendar_id,
                 list_id: this.settings.list_id,
                 integration_name: this.editingIntegration.integration_name
             })
@@ -478,6 +481,7 @@ export default {
             this.errors.clear();
             this.saving = true;
             let data = {
+                calendar_id: this.calendar_event.calendar_id,
                 integration_name: this.editingIntegration.integration_name,
                 integration: JSON.stringify(this.settings),
                 data_type: 'stringify',

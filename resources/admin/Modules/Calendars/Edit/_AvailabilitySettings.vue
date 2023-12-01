@@ -154,7 +154,9 @@ export default {
         },
         getAvailabilitySettings() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/availability')
+            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/availability', {
+                calendar_id: this.calendar_event.calendar_id
+            })
                 .then(response => {
                     this.scheduleOptions = response.schedule_options;
                     this.availableSchedules = response.available_schedules;
@@ -168,7 +170,8 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/availability', {
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/availability', {
+                calendar_id: this.calendar_event.calendar_id,
                 schedule_type: this.settings.schedule_type,
                 weekly_schedules: this.settings.weekly_schedules,
                 date_overrides: this.settings.date_overrides,

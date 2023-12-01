@@ -123,7 +123,8 @@ export default {
         },
         fetch() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/sms-notifications', {
+            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/sms-notifications', {
+                calendar_id: this.calendar_event.calendar_id,
                 with: ['smart_codes']
             })
                 .then(response => {
@@ -139,7 +140,8 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/sms-notifications', {
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/sms-notifications', {
+                calendar_id: this.calendar_event.calendar_id,
                 notifications: this.notifications
             })
                 .then(response => {
