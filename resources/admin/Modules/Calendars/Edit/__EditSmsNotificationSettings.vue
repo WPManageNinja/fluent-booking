@@ -29,7 +29,7 @@
             <template #label>
                 <h3 class="el-form-item__label">
                     {{ $t('SMS Body') }}
-                    <el-button @click="toggleBodyPopup"><el-icon><More /></el-icon></el-button>
+                    <el-button @click="toggleBodyPopup" class="fcal_plain_btn"><el-icon><More /></el-icon></el-button>
                 </h3>
             </template>
             <popover
