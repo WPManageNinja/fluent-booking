@@ -16,7 +16,7 @@
                     </template>
                 </el-table>
                 <div class="fcal_crm_pagination">
-                    <pagination :pagination="pagination" @fetch="fetch" />
+                    <pagination popper-class="fcal_select" :pagination="pagination" @fetch="fetch" />
                 </div>
             </div>
     </div>
