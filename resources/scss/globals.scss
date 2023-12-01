@@ -1293,11 +1293,11 @@
                             .el-button {
                                 height: 100%;
                                 margin: 0;
-                                background: rgba(38, 83, 199, 0.2);
+                                background: #d6dae2;
                                 border-radius: 0;
                                 border: none;
                                 box-shadow: none;
-                                color: $primaryColor;
+                                color: $dark;
                                 padding: 11px 15px;
                                 a {
                                     color: #8F97A2;
@@ -1311,10 +1311,10 @@
                                     }
                                 }
                                 &:nth-child(2) {
-                                    background: rgb(38 83 199 / 20%);
+                                    background: #d6dae2;
                                     border-radius: 0 8px 8px 0;
-                                    color: rgb(38 83 199);
-                                    border-left: 1px solid rgb(38 83 199 / 25%);
+                                    color: $dark;
+                                    border-left: 1px solid #e4e6ea;
                                 }
                                 > span {
                                     gap: 4px;
@@ -2448,6 +2448,7 @@
                                         background: #eaecf0;
                                         color: $dark;
                                         margin: 0;
+                                        font-size: 12px;
                                         transition: .3s;
                                     }
                                 }
