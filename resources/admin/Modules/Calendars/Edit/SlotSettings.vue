@@ -84,6 +84,7 @@ export default {
         getSlot() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id, {
+                calendar_id : this.calendar_id,
                 with: ['calendar', 'settings_menu']
             })
                 .then(response => {

@@ -54,6 +54,7 @@ export default {
             }
 
             this.$post(url, {
+                calendar_id : this.calendar_id,
                 zoom_credentials: this.form,
                 user_id: this.user_id
             })

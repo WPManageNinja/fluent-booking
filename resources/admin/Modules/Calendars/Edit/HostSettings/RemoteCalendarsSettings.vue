@@ -168,7 +168,9 @@ export default {
     methods: {
         getSettings() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar.id + '/integrations/remote-calendars')
+            this.$get('calendars/' + this.calendar.id + '/integrations/remote-calendars', {
+                calendar_id : this.calendar.id
+            })
                 .then(response => {
                     this.providers = response.providers;
                     this.feeds = response.feeds;
@@ -184,6 +186,7 @@ export default {
         updateSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/sync-settings', {
+                calendar_id : this.calendar.id,
                 remote_calendar_config: this.settings.remote_calendar_config
             })
                 .then(response => {

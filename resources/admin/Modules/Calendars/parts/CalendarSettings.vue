@@ -60,6 +60,7 @@ export default {
         saveSettings() {
             this.saving = true;
             this.$post('calendars/'+this.calendar.id, {
+                calendar_id : this.calendar.id,
                 description: this.calendar.description,
                 author_profile: this.calendar.author_profile,
                 slug: this.calendar.slug,

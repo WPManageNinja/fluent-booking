@@ -135,7 +135,9 @@ export default {
         },
         fetchFields() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/booking-fields')
+            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/booking-fields', {
+                calendar_id: this.calendar_event.calendar_id
+            })
                 .then(response => {
                     this.fields = response.fields;
                 })
@@ -148,7 +150,8 @@ export default {
         },
         saveSettings() {
             this.saving = true;
-            this.$post('calendars/' + this.calendar_event.calendar.id + '/events/' + this.calendar_event.id + '/booking-fields', {
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/booking-fields', {
+                calendar_id: this.calendar_event.calendar_id,
                 booking_fields: this.fields
             })
                 .then(response => {
