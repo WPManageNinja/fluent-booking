@@ -210,6 +210,7 @@ export default {
         },
         handleActive(row) {
             let data = {
+                calendar_id : this.calendar_id,
                 status: row.enabled,
             };
 
@@ -221,11 +222,6 @@ export default {
 
             this.$post(url, data)
                 .then(response => {
-                    if (response.created) {
-                        // this.$router.push({
-                        //     name: 'allIntegrations',
-                        // });
-                    }
                     this.$handleSuccess(response.message);
                 })
                 .catch(error => {
@@ -237,6 +233,7 @@ export default {
 
             const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + feed_id;
             let data = {
+                calendar_id : this.calendar_id,
                 integration_id: feed_id,
             };
             this.deleting = true;
@@ -256,7 +253,9 @@ export default {
             this.loading = true;
 
             const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations';
-            this.$get(url)
+            this.$get(url, {
+                calendar_id : this.calendar_id
+            })
                 .then(response => {
                     this.integrations = response.feeds;
                     this.available_integrations = response.available_integrations;
@@ -273,7 +272,9 @@ export default {
         isEmpty,
         fetchFields() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id + '/booking-fields')
+            this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id + '/booking-fields', {
+                calendar_id : this.calendar_id
+            })
                 .then(response => {
                     this.fields = response.fields;
                 })

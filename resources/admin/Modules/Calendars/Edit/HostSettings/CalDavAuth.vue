@@ -58,6 +58,7 @@ export default {
             this.saving = true;
 
             this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/cal-dav-auth', {
+                calendar_id: this.calendar.id,
                 driver_key: this.driver.key,
                 settings: this.settings
             })

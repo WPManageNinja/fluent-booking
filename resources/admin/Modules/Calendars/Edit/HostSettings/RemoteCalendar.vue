@@ -74,6 +74,7 @@ export default {
             this.saving_id = id;
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/patch-conflicts', {
+                calendar_id : this.calendar.id,
                 meta_id: this.feed.db_id,
                 conflict_check_ids: this.feed.conflict_check_ids
             })
@@ -91,6 +92,7 @@ export default {
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/patch-settings', {
+                calendar_id : this.calendar.id,
                 meta_id: this.feed.db_id,
                 additional_settings: this.feed.additional_settings
             })
@@ -112,6 +114,7 @@ export default {
                 .then(() => {
                     this.working = true;
                     this.$post('calendars/' + this.calendar.id + '/integrations/remote-calendars/disconnect-calendar', {
+                        calendar_id : this.calendar.id,
                         meta_id: this.feed.db_id
                     })
                         .then(response => {

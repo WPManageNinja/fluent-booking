@@ -108,7 +108,9 @@ export default {
     methods: {
         fetchSettings() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar.id + '/sharing-settings')
+            this.$get('calendars/' + this.calendar.id + '/sharing-settings', {
+                    calendar_id : this.calendar.id
+                })
                 .then(response => {
                     this.settings = response.settings;
                     this.share_url = response.share_url;
@@ -123,6 +125,7 @@ export default {
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/sharing-settings', {
+                calendar_id : this.calendar.id,
                 landing_page_settings: this.settings,
                 calendar_data: {
                     description: this.calendar.description,

@@ -53,7 +53,9 @@ export default {
     methods: {
         getEventSchema() {
             this.loading = true;
-            this.$get('calendars/' + this.calendar_id + '/event-schema')
+            this.$get('calendars/' + this.calendar_id + '/event-schema', {
+                calendar_id : this.calendar_id,
+            })
                 .then(response => {
                     this.slot = response.slot;
                 })
@@ -90,6 +92,7 @@ export default {
             
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/events', {
+                calendar_id : this.calendar_id,
                 title: this.slot.title,
                 status: this.slot.status,
                 color_schema: this.slot.color_schema,
