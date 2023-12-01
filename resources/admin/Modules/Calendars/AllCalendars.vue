@@ -24,7 +24,7 @@
             </div>
 
             <div class="fcal_right fcal_tm20">
-                <pagination :pagination="pagination" @fetch="getCalendars"/>
+                <pagination popper-class="fcal_select" :pagination="pagination" @fetch="getCalendars"/>
             </div>
         </div>
 
