@@ -4,8 +4,6 @@ const { registerBlockType } = wp.blocks;
 import Edit from './edit';
 import Save from './save';
 import { attributes } from './attributes';
-// const el = wp.element.createElement;
-
 
 registerBlockType('fluent-booking/calendar', {
     title: __('Fluent Booking'),

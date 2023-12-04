@@ -8,8 +8,6 @@ import { DatePicker } from './Components/DatePicker.jsx';
 
 import './fluent-booking-block.scss';
 
-const assetsUrl = window.fluent_booking_block.assets_url;
-
 export const LandingPage = props => {
     const {
         attributes: {
