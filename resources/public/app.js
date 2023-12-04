@@ -44,6 +44,13 @@ window.fluentCalBootApp = function (elem, handleBack = false) {
         return;
     }
 
+    if (appData.theme == 'system-default') {
+        const gutenBlockMode = document.querySelector('.fcal_cal_wrap');
+        runColorMode((isDarkMode) => {
+            applyModeClasses(gutenBlockMode, isDarkMode);
+        });
+    }
+
     if (preSelects) {
         appData.slot.pre_selects = preSelects;
     }
