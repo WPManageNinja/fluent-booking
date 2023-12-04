@@ -1,20 +1,13 @@
 /*eslint-disable*/
-const {Fragment, useEffect, useState} = wp.element;
+const {Fragment, useState} = wp.element;
 const { RichText } = wp.blockEditor;
 const {__} = wp.i18n;
-const {
-    Spinner,
-    DropdownMenu
-} = wp.components;
 
 import './fcal-team-management-block.scss';
 
 const assetsUrl = window.fluent_booking_block.assets_url;
 
 const calendarsVar = window.fluent_booking_block.hosts;
-let calendars = Object.values(calendarsVar);
-
-const selectedHosts = [];
 
 export const LandingPage = props => {
     let {
