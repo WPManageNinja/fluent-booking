@@ -152,7 +152,7 @@ class FrontEndHandler
         $atts = shortcode_atts([
             'id'             => 0,
             'disable_author' => 'no',
-            'theme'          => 'system-default'
+            'theme'          => 'light'
         ], $atts);
 
         if (!$atts['id']) {
@@ -175,6 +175,7 @@ class FrontEndHandler
 
         $localizeData = $this->getCalendarEventVars($calendar, $calendarEvent);
         $localizeData['disable_author'] = $atts['disable_author'] == 'yes';
+        $localizeData['theme'] = $atts['theme'];
 
         if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
             wp_enqueue_script('fluent-booking-phone-field', App::getInstance('url.assets') . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
