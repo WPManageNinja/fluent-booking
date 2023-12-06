@@ -170,13 +170,18 @@ class BookingService
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
-        $bookingStatus = __('scheduled', 'fluent-booking-pro');
-        if ($booking->status == 'cancelled') {
-            $bookingStatus = __('cancelled', 'fluent-booking-pro');
-        } else if ($booking->status == 'rescheduled') {
-            $bookingStatus = __('rescheduled', 'fluent-booking-pro');
+        switch ($booking->status) {
+            case 'cancelled':
+                $bookingStatus = __('cancelled', 'fluent-booking-pro');
+                break;
+            case 'rescheduled':
+                $bookingStatus = __('rescheduled', 'fluent-booking-pro');
+                break;
+            default:
+                $bookingStatus = __('scheduled', 'fluent-booking-pro');
+                break;
         }
-        
+
         $confirmationData = [
             'author'      => $author,
             'title'       => sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus),
