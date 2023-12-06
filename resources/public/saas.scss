@@ -12,6 +12,13 @@
     transition: all .22s ease-out;
     background: var(--fcal_cal_bg);
 
+    .fcal_booking_confirmed {
+      margin-top: 0;
+      .fcal_confirmation {
+        padding-top: 0;
+      }
+    }
+
     &.fcal_form_calendar {
       width: 100%;
       box-shadow: none;
