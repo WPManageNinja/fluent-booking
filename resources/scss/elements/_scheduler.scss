@@ -1376,13 +1376,16 @@
                 align-items: center;
               }
             }
-            .fcal_booking_limit_card {
+            .fcal_event_card {
                 border: 1px solid #EAECF0;
                 padding: 1.5rem;
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-between;            
+                .el-form-item {
+                    width: 100%;
+                }
                 .sub-label {
                     &.card-title {
                         margin-bottom: 2px;
@@ -1397,7 +1400,7 @@
                     }
                 }
             }
-            .fcal_booking_limit_child_card {
+            .fcal_event_child_card {
               width: 100%;
               padding: 1.5rem;
               border: 1px solid #EAECF0;
@@ -1431,6 +1434,12 @@
                     border-radius: 8px;
                 }
             }
+          }
+          .fcal_event_details_wrap {
+            border: 1px solid #EAECF0;
+            padding: 1.5rem;
+            width: 100%;
+            border-radius: 8px;
           }
           .fcal_questions {
             display: grid;

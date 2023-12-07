@@ -59,7 +59,7 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_booking_limit_card">
+                        <div class="fcal_event_card">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/booking_frequency") }}</span>
                                 <span>{{ $t("LimitSettings/booking_frequency_description") }}</span>
@@ -68,7 +68,7 @@
                                 <el-switch v-model="settings.booking_frequency.enabled"/>
                             </div>
                         </div>
-                        <div class="fcal_booking_limit_child_card" v-if="settings.booking_frequency.enabled">
+                        <div class="fcal_event_child_card" v-if="settings.booking_frequency.enabled">
                             <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
                                 <el-input class="fcal_booking_duration" type="number" v-model="frequency.value" @input="validateInput(frequency)">
                                     <template #append>{{ $t('Bookings') }}</template>
@@ -91,7 +91,7 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_booking_limit_card">
+                        <div class="fcal_event_card">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/booking_duration") }}</span>
                                 <span>{{ $t("LimitSettings/booking_duration_description") }}</span>
@@ -100,7 +100,7 @@
                                 <el-switch v-model="settings.booking_duration.enabled"/>
                             </div>
                         </div>
-                        <div class="fcal_booking_limit_child_card" v-if="settings.booking_duration.enabled">
+                        <div class="fcal_event_child_card" v-if="settings.booking_duration.enabled">
                             <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
                                 <el-input class="fcal_booking_duration" type="number" v-model="duration.value" @input="validateInput(duration)">
                                     <template #append>{{ $t('Minutes') }}</template>
@@ -123,12 +123,12 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_booking_limit_card">
+                        <div class="fcal_event_card">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/attendee_permissions") }}</span>
                             </div>
                         </div>
-                            <div class="fcal_booking_limit_child_card">
+                            <div class="fcal_event_child_card">
                                 <div>
                                     <el-checkbox true-label="yes" false-label="no" v-model="settings.can_cancel">{{ $t('Attendee can cancel booking') }}</el-checkbox>
                                 </div>
@@ -175,7 +175,6 @@ export default {
     data() {
         return {
             saving: false,
-            canCancel: 'no',
             settings: this.calendar_event.settings,
             bufferTimes: this.appVars.buffer_times,
             slotIntervals: this.appVars.slot_intervals,

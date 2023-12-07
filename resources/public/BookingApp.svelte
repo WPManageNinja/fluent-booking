@@ -82,6 +82,12 @@
     }
 
     function handleBookingConfirmation(confirmation) {
+        // Check if there is custom redirect url
+        if (confirmation.redirect_url) {
+            window.location.href = confirmation.redirect_url;
+            return;
+        }
+
         bookingConfirmationHtml = confirmation.response_html;
         // remove height css to .fcal_calendar_inner class
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
