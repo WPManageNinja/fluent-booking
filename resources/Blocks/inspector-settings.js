@@ -3,12 +3,8 @@ const { InspectorControls, PanelColorSettings } = wp.blockEditor;
 const {__} = wp.i18n;
 const {
     PanelBody,
-    PanelRow,
-    SelectControl,
-    RadioControl
+    PanelRow
 } = wp.components;
-
-const assets_url = window.fluent_booking_block.assets_url;
 
 const InspectorSettings = props => {
     const {
@@ -93,8 +89,8 @@ const InspectorSettings = props => {
                                 value={date_round}
                                 onChange={dateStyleChangeHandle}
                             >
-                                <option value="4px">Square</option>
-                                <option value="50%">Rounded</option>
+                                <option value="4px">{__('Square')}</option>
+                                <option value="50%">{__('Rounded')}</option>
                             </select>
                         </div>
 
