@@ -79,6 +79,102 @@
     }
 }
 
+.fcal_event_date {
+    display: flex;
+    justify-content: space-between;
+    .el-form-item__content {
+        position: relative;
+        .el-input {
+            .el-input__wrapper {
+                input {
+                    background: transparent;
+                }
+            }
+        }
+        .fcal_booking_calendar {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 0;
+            bottom: 110%;
+            background: #ffffff;
+            z-index: 99999;
+            border: 1px solid #D6DAE1;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1);
+            .el-calendar__header {
+                padding: 6px 10px;
+                .el-button-group {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+            .el-calendar__body {
+                padding: 6px 10px 15px;
+                .el-calendar-table {
+                    thead {
+                        th {
+                            padding: 0;
+                        }
+                    }
+                    tbody {
+                        --el-calendar-border: none;
+                        tr {
+                            td {
+                                &.prev {
+                                    .el-calendar-day {
+                                        &:hover {
+                                            background: transparent;
+                                            color: #b8b6b6;
+                                        }
+                                    }
+                                }
+                                .el-calendar-day {
+                                    height: auto !important;
+                                    text-align: center;
+                                    p {
+                                        margin: 0;
+                                        &.is-selected {
+                                            color: #ffffff;
+                                            background: #306ae0;
+                                        }
+                                    }
+                                    &:hover {
+                                        color: #ffffff;
+                                        background-color: #306ae0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    td {
+                        border-bottom: 0px;
+                        border-right: 0px;
+                        &.is-selected {
+                            color: #ffffff;
+                            background: #306ae0;
+                        }
+                    }
+                }
+            }
+        }
+        .el-checkbox__input {
+            &.is-checked {
+                .el-checkbox__inner {
+                    background-color: $primaryColor;
+                    border-color: $primaryColor;
+                }
+                .el-checkbox__label {
+                    color: $primaryColor;
+                }
+            }
+        }
+    }
+    .el-form-item {
+        width: 300px;
+    }
+}
+
 .fcal_override_dropdown_wrap {
     position: relative;
     > .fcal_primary_btn2 {
@@ -720,6 +816,9 @@
                         color: #445164;
                         margin-bottom: 10px;
                     }
+                    .fcal_time_zone_selector {
+                        width: 100%;
+                    }
                     .el-input {
                         &.is-focus {
                             .el-input__wrapper {
@@ -818,6 +917,14 @@
                                 }
                             }
                         }
+                        &.fcal_new_booking_radio {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            .el-radio {
+                                margin: 0 0 6px;    
+                            }
+                        }
                     }
                     .el-link--primary {   
                         .el-link__inner {
@@ -833,6 +940,9 @@
                         .el-checkbox__label {
                             white-space: break-spaces;
                         }
+                    }
+                    .el-date-editor {
+                        height: auto;
                     }
                     &.fcal_question_options {
                         .el-form-item__content {
@@ -862,6 +972,69 @@
                     }
                 }
             }
+            .el-checkbox {
+                margin-right: 8px;
+                &.is-checked {
+                  .el-checkbox__label {
+                    color: $primaryColor;
+                  }
+                }
+            
+                .el-checkbox__input {
+                  &.is-checked {
+                    .el-checkbox__inner {
+                      background: $primaryColor;
+                      border-color: $primaryColor;
+                    }
+                  }
+            
+                  .el-checkbox__inner {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 4px;
+                    border-color: #D1D5DB;
+            
+                    &::after {
+                      height: 8px;
+                      left: 7px;
+                      top: 3px;
+                    }
+                  }
+                }
+            }
+            .el-radio {
+              height: auto;
+          
+              .el-radio__label {
+                color: $dark;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 24px;
+                padding-left: 8px;
+              }
+          
+              .el-radio__input {
+                &.is-checked {
+                  .el-radio__inner {
+                    border-color: $primaryColor;
+                    background: transparent;
+                  }
+                }
+          
+                .el-radio__inner {
+                  width: 22px;
+                  height: 22px;
+                  border: 1.5px solid #D1D5DB;
+          
+                  &:after {
+                    width: 12px;
+                    height: 12px;
+                    background: $primaryColor;
+                  }
+                }
+              }
+            }
+
             .fcal_integration_form_footer {
                 border-top: 1px solid #D6DAE1;
                 margin-top: 1rem;
@@ -879,6 +1052,9 @@
                     padding: 10px 22px !important;
                 }
             }
+        }
+        &.fcal_new_booking {
+            max-width: 660px;
         }
     }
     &.fcal_notification_modal {
@@ -1488,6 +1664,14 @@
         border: none;
         > span {
             gap: 8px;
+        }
+        &.is-disabled {
+            background: #416ddd;
+            color: #ffffff;
+            &:hover {
+                background: #416ddd;
+                color: #ffffff;
+            }
         }
         &:hover {
             background: #416ddd;
