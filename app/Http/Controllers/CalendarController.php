@@ -318,29 +318,27 @@ class CalendarController extends Controller
             $slotSettings['booking_frequency'] = [
                 'enabled' => false,
                 'limits'  => [
-                    [
-                        'unit'  => 'per_day',
-                        'value' => 5,
-                    ]
+                    ['unit'  => 'per_day', 'value' => 5]
                 ]
             ];
             $slotSettings['booking_duration'] = [
                 'enabled' => false,
                 'limits'  => [
-                    [
-                        'unit'  => 'per_day',
-                        'value' => 120,
-                    ]
+                    ['unit'  => 'per_day', 'value' => 120]
                 ]
             ];
         }
 
-        if (!isset($slotSettings['can_cancel'])) {
+        if (!isset($slotSettings['can_cancel'], $slotSettings['can_reschedule'])) {
             $slotSettings['can_cancel'] = 'yes';
+            $slotSettings['can_reschedule'] = 'yes';
         }
 
-        if (!isset($slotSettings['can_reschedule'])) {
-            $slotSettings['can_reschedule'] = 'yes';
+        if (!isset($slotSettings['custom_redirect'])) {
+            $slotSettings['custom_redirect'] = [
+                'enabled'      => false,
+                'redirect_url' => ''
+            ];
         }
 
         $slot->settings = $slotSettings;
@@ -497,6 +495,13 @@ class CalendarController extends Controller
         $event->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
         $event->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $event->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
+
+        $event->settings = [
+            'custom_redirect' => [
+                'enabled'      => Arr::isTrue($data, 'custom_redirect.enabled'),
+                'redirect_url' => sanitize_url(Arr::get($data, 'custom_redirect.redirect_url'))
+            ]
+        ];
 
         $event->save();
 

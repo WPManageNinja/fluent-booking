@@ -626,10 +626,15 @@ class FrontEndHandler
             return;
         }
 
+        $isRedirectUrlEnabled = Arr::isTrue($calendarSlot, 'settings.custom_redirect.enabled');
+
+        $redirectUrl = $isRedirectUrlEnabled ? Arr::get($calendarSlot, 'settings.custom_redirect.redirect_url', '') : '';
+
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json(apply_filters('fluent_booking/booking_confirmation_response', [
             'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
+            'redirect_url'  => $redirectUrl,
             'response_html' => $html,
             'booking_hash'  => $booking->hash
         ], $booking), 200);
