@@ -57,7 +57,6 @@
         form.location_config.driver = event.currentTarget.value;
         form.location_config.driverType = event.currentTarget.dataset.driver;
         form.location_config.user_location_input = '';
-        console.log(form.location_config);
     }
 
 </script>

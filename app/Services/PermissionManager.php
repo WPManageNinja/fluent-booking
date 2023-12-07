@@ -23,7 +23,9 @@ class PermissionManager
 
     public static function hasAllCalendarAccess()
     {
-        return apply_filters('fluent_booking/has_all_calendar_access', current_user_can('manage_options'));
+        $hasCalendarAccess = self::userCan('manage_own_calendar') && self::userCan('manage_other_calendars');
+        
+        return apply_filters('fluent_booking/has_all_calendar_access', current_user_can('manage_options')) || $hasCalendarAccess;
     }
 
     public static function canReadCalendar($calendarId)

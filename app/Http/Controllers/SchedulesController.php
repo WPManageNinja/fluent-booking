@@ -85,9 +85,11 @@ class SchedulesController extends Controller
             'timezone'  => 'UTC'
         ];
 
+        $data['calendar_event_lists'] = CalendarService::getCalendarOptionsByTitle();
+
         if ($author && $author != 'all') {
             $slotOptions = CalendarService::getSlotOptions($author);
-            $data['slotOptions'] = $slotOptions;
+            $data['slot_options'] = $slotOptions;
         }
 
         if ($request->get('page') == 1) {
