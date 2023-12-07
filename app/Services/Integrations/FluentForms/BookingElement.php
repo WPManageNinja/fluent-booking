@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\FluentForms;
 
 
 use FluentBooking\App\App;
+use FluentBooking\App\Services\CalendarService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Helper;
@@ -250,7 +251,7 @@ class BookingElement extends BaseFieldManager
 
     public function getCalendarOptions()
     {
-        return apply_filters('fluent_booking/ff_editor_calendar_options', Helper::getCalendarOptionsByHost());
+        return apply_filters('fluent_booking/ff_editor_calendar_options', CalendarService::getCalendarOptionsByHost());
     }
 
     /**

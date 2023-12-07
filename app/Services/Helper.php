@@ -10,7 +10,6 @@ use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\BookingMeta;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
-use FluentBooking\App\Services\PermissionManager;
 
 class Helper
 {
@@ -859,71 +858,6 @@ class Helper
         $user = get_user_by('ID', $userId);
 
         return $user->user_email;
-    }
-
-    public static function getCalendarOptionsByHost()
-    {
-        $calendars = Calendar::select(['id', 'title'])
-            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
-                return $query->where('user_id', get_current_user_id());
-            })
-            ->with(['slots'])
-            ->latest()
-            ->get();
-
-        $formattedCalendars = [];
-        foreach ($calendars as $index => $calendar) {
-            $slots = Arr::get($calendar, 'slots');
-            if (!empty($slots)) {
-                $options = [];
-                foreach ($slots as $slot) {
-                    $options[] = [
-                        'label' => Arr::get($slot, 'title'),
-                        'value' => Arr::get($slot, 'id')
-                    ];
-                }
-                if (!empty($options)) {
-                    $formattedCalendars[$index] = [
-                        'label'   => Arr::get($calendar, 'title'),
-                        'options' => $options
-                    ];
-                }
-            }
-        }
-        return $formattedCalendars;
-    }
-
-    public static function getCalendarOptionsByTitle()
-    {
-        $calendars = Calendar::select(['id', 'title'])
-            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
-                return $query->where('user_id', get_current_user_id());
-            })
-            ->with(['slots'])
-            ->latest()
-            ->get();
-
-
-        $formattedCalendars = [];
-        foreach ($calendars as $index => $calendar) {
-            $slots = Arr::get($calendar, 'slots');
-            if (!empty($slots)) {
-                $options = [];
-                foreach ($slots as $slot) {
-                    $options[] = [
-                        'id'    => Arr::get($slot, 'id'),
-                        'title' => Arr::get($slot, 'title')
-                    ];
-                }
-                if (!empty($options)) {
-                    $formattedCalendars[$index] = [
-                        'title'   => Arr::get($calendar, 'title'),
-                        'options' => $options
-                    ];
-                }
-            }
-        }
-        return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
     }
 
     public static function excerpt($text, $max_length = 160)

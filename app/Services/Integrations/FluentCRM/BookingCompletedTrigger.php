@@ -8,7 +8,7 @@ use FluentCrm\App\Services\Funnel\FunnelHelper;
 use FluentCrm\App\Services\Funnel\FunnelProcessor;
 use FluentBooking\App\Services\PermissionManager;
 use FluentCrm\App\Services\Funnel\BaseTrigger;
-use FluentBooking\App\Services\Helper;
+use FluentBooking\App\Services\CalendarService;
 
 class BookingCompletedTrigger extends BaseTrigger
 {
@@ -22,7 +22,7 @@ class BookingCompletedTrigger extends BaseTrigger
 
     public function getCalendarOptions()
     {
-        $calendarOptions = Helper::getCalendarOptionsByTitle();
+        $calendarOptions = CalendarService::getCalendarOptionsByTitle();
 
         return apply_filters('fluent_booking/crm_trigger_calendar_options', $calendarOptions);
     }

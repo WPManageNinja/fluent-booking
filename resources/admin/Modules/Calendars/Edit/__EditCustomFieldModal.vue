@@ -109,7 +109,7 @@ export default {
             return this.isNewEntry ? this.$t('Add Question') : this.$t('Update Question');
         },
         isOptionRequired() {
-            return ['dropdown', 'radio', 'checkbox-group'].includes(this.fieldData.type);
+            return this.fieldData.name != 'location' && ['dropdown', 'radio', 'checkbox-group'].includes(this.fieldData.type);
         },
         isRemovable() {
             return this.fieldData.options.length > 2;

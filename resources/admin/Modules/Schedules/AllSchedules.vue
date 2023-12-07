@@ -13,6 +13,21 @@
                     <h3>{{ $t('Bookings') }}</h3>
                 </template>
             </div>
+            <div v-if="!booking_id" class="fcal_actions">
+                <el-dropdown trigger="click" popper-class="fcal_select">
+                    <span class="el-dropdown-link">
+                        <el-icon><MoreFilled/></el-icon>
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item 
+                                @click="isNewBookingOpen = true">
+                                {{ $t('Create Booking Manually') }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
         </div>
 
         <template v-if="!booking_id">
@@ -108,15 +123,23 @@
             <el-skeleton v-else :rows="5" animated/>
             <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         </div>
+        <AddNewBookingModal
+            v-if="isNewBookingOpen"
+            :showModal="isNewBookingOpen"
+            :calendarEventLists="calendarEventLists"
+            @closeModal="closeModal"
+            @addNewBooking="fetchSchedules"
+        />
     </div>
 </template>
 
-<script type="text/babel">
-import Pagination from "../../Pieces/Pagination.vue";
-import BookingCard from "./parts/BookingCard.vue";
-import ScheduleBookingDetails from './parts/ScheduleBookingDetails.vue';
+<script>
+import Pagination from "../../Pieces/Pagination";
+import BookingCard from "./parts/BookingCard";
+import AddNewBookingModal from "./parts/_AddNewBookingModal";
+import ScheduleBookingDetails from './parts/ScheduleBookingDetails';
 import each from 'lodash/each';
-import {Back, Filter, CircleClose, ArrowLeft, Search} from '@element-plus/icons-vue';
+import { Back, Filter, CircleClose, ArrowLeft, Search, MoreFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
@@ -124,11 +147,13 @@ export default {
         BookingCard,
         Pagination,
         ScheduleBookingDetails,
+        AddNewBookingModal,
         Filter,
         Back,
         CircleClose,
         ArrowLeft,
-        Search
+        Search,
+        MoreFilled
     },
     data() {
         return {
@@ -159,9 +184,11 @@ export default {
             pendingCount: 0,
             cancelledCount: 0,
             noShowCount: 0,
+            calendarEventLists: '',
             isHideSidebar: false,
             currentEventTitle: '',
-            search: ''
+            search: '',
+            isNewBookingOpen: false
         }
     },
     computed: {
@@ -177,7 +204,6 @@ export default {
                 if (this.filters.period == 'latest_bookings') {
                     return date;
                 }
-
                 return this.toCurrentTimezone(date, this.appVars.date_format);
             }
         },
@@ -251,6 +277,7 @@ export default {
                 .then(response => {
                     this.schedules = response.schedules.data;
                     this.pagination.total = response.schedules.total;
+                    this.calendarEventLists = response.calendar_event_lists;
                     if(response.pending_count) {
                         this.pendingCount = response.pending_count;
                     }
@@ -260,8 +287,8 @@ export default {
                     if(response.no_show_count) {
                         this.noShowCount = response.no_show_count;
                     }
-                    if(response.slotOptions) {
-                        this.event_types = response.slotOptions;
+                    if(response.slot_options) {
+                        this.event_types = response.slot_options;
                     }
                 })
                 .catch(errors => {
@@ -290,7 +317,6 @@ export default {
             this.current_schedule = schedule;
             this.booking_id = schedule.id;
             this.currentEventTitle = schedule.calendar_event?.title;
-            
         },
         handleDiscard() {
             this.query.eventType = '';
@@ -321,6 +347,9 @@ export default {
                 this.goBackToList();
             }
             this.current_schedule = newSchedule;
+        },
+        closeModal() {
+            this.isNewBookingOpen = false;
         }
     },
     mounted() {

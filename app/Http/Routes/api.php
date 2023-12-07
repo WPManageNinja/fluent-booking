@@ -8,6 +8,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/', 'CalendarController@getAllCalendars')->meta('calendar_type', 'booking');
 
+    $router->get('event-lists', 'CalendarController@getCalendarEventLists');
+    
     $router->post('/', 'CalendarController@createCalendar');
     $router->post('check-slug', 'CalendarController@checkSlug');
 
@@ -47,6 +49,11 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('remaining-hosts', 'AdminController@getRemainingHosts');
     $router->get('other-hosts', 'AdminController@getOtherHosts');
+});
+
+$router->prefix('bookings')->withPolicy('AdminPolicy')->group(function ($router) {
+    $router->get('event', 'BookingController@getEvent');
+    $router->post('create/{event_id}', 'BookingController@createBooking')->int('event_id');
 });
 
 $router->prefix('schedules')->withPolicy('MeetingPolicy')->group(function ($router) {
