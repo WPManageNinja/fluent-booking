@@ -342,8 +342,9 @@
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                 </div>
                                 {#if day.remaining && selectedDateTime != day }
-                                    <div
-                                        class="fcal_spot_remaining">{getDateTimeStringI18(day.remaining)} {i18('spots left')}</div>
+                                    <div class="fcal_spot_remaining">
+                                        {getDateTimeStringI18(day.remaining)} {i18('spots left')}
+                                    </div>
                                 {/if}
                             </div>
                             {#if selectedDateTime && selectedDateTime.start == day.start}

@@ -4,11 +4,11 @@ namespace FluentBooking\App\Services\Integrations\FluentCRM;
 
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\Calendar;
-use FluentBooking\App\Services\Helper;
 use FluentCrm\App\Services\Funnel\FunnelHelper;
 use FluentCrm\App\Services\Funnel\FunnelProcessor;
 use FluentBooking\App\Services\PermissionManager;
 use FluentCrm\App\Services\Funnel\BaseTrigger;
+use FluentBooking\App\Services\CalendarService;
 
 class CancelBookingTrigger extends BaseTrigger
 {
@@ -22,7 +22,7 @@ class CancelBookingTrigger extends BaseTrigger
 
     public function getCalendarOptions()
     {
-        $calendarOptions = Helper::getCalendarOptionsByTitle();
+        $calendarOptions = CalendarService::getCalendarOptionsByTitle();
 
         return apply_filters('fluent_booking/crm_trigger_calendar_options', $calendarOptions);
     }
