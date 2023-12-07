@@ -129,7 +129,7 @@
                                     background: transparent;
                                     p {
                                         background: $primaryColor !important;
-                                        color: #ffffff;
+                                        color: #ffffff !important;
                                     }
                                 }
                                 &.is-selected,
@@ -162,6 +162,7 @@
                                         border-radius: 4px;
                                         line-height: 40px;
                                         position: relative;
+                                        color: #98a0a6;
                                         transition: .3s;
                                         &:before {
                                             content: '';
@@ -178,6 +179,7 @@
                                             transition: .3s;
                                         }
                                         &:not(.fcal_date_disabled) {
+                                            color: $dark;
                                             background: #e5e7eb;
                                         }
                                         &.is-selected {
@@ -194,6 +196,14 @@
                                             }
                                         }
                                         background: transparent;
+                                    }
+                                }
+                                &.is-today {
+                                    p {
+                                        color: $primaryColor;
+                                        &:before {
+                                            background: $primaryColor;
+                                        }
                                     }
                                 }
                             }
@@ -857,7 +867,6 @@
             }
         }
         .el-dialog__body {
-            padding: 0;
             .el-form {
                 .el-form-item {
                     margin-bottom: 16px;
@@ -1120,117 +1129,12 @@
         }
         &.fcal_new_booking {
             max-width: 660px;
-        }
-    }
-    &.fcal_notification_modal {
-        .el-dialog__header {
-            border-bottom: 1px solid #DCDFE6;
-        }
-        .el-dialog__body {
-            padding-bottom: 0;
-        }
-        .el-form {
-            .el-form-item {
-                .el-form-item__content {
-                    .fcal_popover_shortcode {
-                        width: 100%;
-                    }
-                    .el-input {
-                        &.is-focus {
-                            .el-input__wrapper {
-                                box-shadow: none !important;
-                            }
-                        }
-                        .el-input {
-                            &.is-focus {
-                                .el-input__wrapper {
-                                    box-shadow: none !important;
-                                }
-                            }
-                            &.el-input-group--append {
-                                .el-input__wrapper {
-                                    border-top-right-radius: 0;
-                                    border-bottom-right-radius: 0;
-                                    &.is-focus {
-                                        border-color: #EAECF0;
-                                    }
-                                }
-                            }
-                            .el-input-group__append {
-                                border-top-right-radius: 8px;
-                                border-bottom-right-radius: 8px;
-                                border-color: #EAECF0;
-                            }
-                            .el-input__wrapper {
-                                padding: 6px 18px;
-                                border-radius: 8px;
-                                box-shadow: none;
-                                border: 1px solid #EAECF0;
-                                &:hover {
-                                    box-shadow: none;
-                                }
-                                &.is-focus {
-                                    border-color: $primaryColor;
-                                }
-
-                                .el-input__inner {
-                                    height: auto;
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                            }
-                        }
-                        .el-link {
-                            color: $primaryColor;
-                        }
-                        .fcal_reminder_timing {
-                            margin-bottom: 10px;
-                            width: 100%;
-                            .el-select {
-                                width: auto;
-                                min-width: 160px;
-                            }
-                            .el-link--danger {
-                                color: var(--el-color-danger);
-                            }
-                        }
-                    }
-                    .wp_vue_editor_wrapper {
-                        width: 100%;
-                    }
-                }
-                &.fcal_sms_form {
-                    .el-form-item {
-                        &.fcal_sms_body  {
-                            position: relative;
-                            .el-form-item__label {
-                                font-size: 14px !important;
-                                color: #1B2533 !important;
-                                justify-content: space-between;
-                                width: 100%;
-                                display: flex;
-                                align-items: center;
-                            }
-                        }
-                        &.fcal_sms_radio {
-                            .el-radio__label {
-                                font-size: 14px !important;
-                            }
-                            .el-radio__inner {
-                                width: 18px !important;
-                                height: 18px !important;
-                                &:after {
-                                    width: 8px !important;
-                                    height: 8px !important;
-                                }
-                            }
-                        }
-                        .el-input {
-                            .el-input__wrapper {
-                                input {
-                                    background: none;
-                                }
-                            }
+            .el-dialog__footer {
+                .dialog-footer {
+                    .fcal_primary_btn {
+                        background: $primaryColor !important;
+                        &.is-disabled {
+                            opacity: 0.5;
                         }
                     }
                 }
@@ -1649,6 +1553,132 @@
                     margin: 0;
                     line-height: 1;
                     padding: 10px 20px !important;
+                }
+            }
+        }
+        &.fcal_notification_modal {
+            .el-dialog__header {
+                border-bottom: 1px solid #DCDFE6;
+            }
+            .el-dialog__body {
+                padding-bottom: 0;
+            }
+            .el-form {
+                .el-form-item {
+                    .el-form-item__content {
+                        .fcal_popover_shortcode {
+                            width: 100%;
+                            .el-input-group--append {
+                                .el-input__wrapper {
+                                    border-top-right-radius: 0;
+                                    border-bottom-right-radius: 0;
+                                }
+                            }
+                        }
+                        .el-input {
+                            &.is-focus {
+                                .el-input__wrapper {
+                                    box-shadow: none !important;
+                                }
+                            }
+                            .el-input {
+                                &.is-focus {
+                                    .el-input__wrapper {
+                                        box-shadow: none !important;
+                                    }
+                                }
+                                &.el-input-group--append {
+                                    .el-input__wrapper {
+                                        border-top-right-radius: 0;
+                                        border-bottom-right-radius: 0;
+                                        &.is-focus {
+                                            border-color: #EAECF0;
+                                        }
+                                    }
+                                }
+                                .el-input-group__append {
+                                    border-top-right-radius: 8px;
+                                    border-bottom-right-radius: 8px;
+                                    border-color: #EAECF0;
+                                }
+                                .el-input__wrapper {
+                                    padding: 6px 18px;
+                                    border-radius: 8px;
+                                    box-shadow: none;
+                                    border: 1px solid #EAECF0;
+                                    &:hover {
+                                        box-shadow: none;
+                                    }
+                                    &.is-focus {
+                                        border-color: $primaryColor;
+                                    }
+
+                                    .el-input__inner {
+                                        height: auto;
+                                        margin: 0;
+                                        padding: 0;
+                                    }
+                                }
+                            }
+                            .el-link {
+                                color: $primaryColor;
+                            }
+                            .fcal_reminder_timing {
+                                margin-bottom: 10px;
+                                width: 100%;
+                                .el-select {
+                                    width: auto;
+                                    min-width: 160px;
+                                }
+                                .el-link--danger {
+                                    color: var(--el-color-danger);
+                                }
+                            }
+                        }
+                        .wp_vue_editor_wrapper {
+                            width: 100%;
+                        }
+                    }
+                }
+                &.fcal_sms_form {
+                    .el-form-item {
+                        &.fcal_sms_body  {
+                            position: relative;
+                            .el-form-item__label {
+                                font-size: 14px !important;
+                                color: #1B2533 !important;
+                                justify-content: space-between;
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                        &.fcal_sms_radio {
+                            .el-radio__label {
+                                font-size: 14px !important;
+                            }
+                            .el-radio__inner {
+                                width: 18px !important;
+                                height: 18px !important;
+                                &:after {
+                                    width: 8px !important;
+                                    height: 8px !important;
+                                }
+                            }
+                        }
+                        .el-input {
+                            .el-input__wrapper {
+                                input {
+                                    background: none;
+                                }
+                            }
+                        }
+                        .el-textarea {
+                            textarea {
+                                height: 120px !important;
+                            }
+                        }
+                    }
                 }
             }
         }
