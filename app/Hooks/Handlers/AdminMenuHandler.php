@@ -97,6 +97,7 @@ class AdminMenuHandler
             as_schedule_recurring_action(time(), (60 * 5), 'fluent_booking_five_minutes_tasks', [], 'fluent-booking', true);
         }
 
+        $this->changeFooter();
         $app = App::getInstance();
 
         $config = $app->config;
@@ -149,6 +150,18 @@ class AdminMenuHandler
             'baseUrl'   => $baseUrl,
             'logo'      => $assets . 'images/logo.svg',
         ]);
+    }
+
+    public function changeFooter()
+    {
+        add_filter('admin_footer_text', function ($content) {
+            $url = 'https://fluentbooking.com/';
+            return sprintf(wp_kses(__('Thank you for using <a href="%s">FluentBooking</a>.', 'fluent-booking-pro'), array('a' => array('href' => array()))), esc_url($url)) . '<span title="based on your WP timezone settings" style="margin-left: 10px;" data-timestamp="' . current_time('timestamp') . '" id="fcal_server_timestamp"></span>';
+        });
+
+        add_filter('update_footer', function ($text) {
+            return FLUENT_BOOKING_VERSION;
+        });
     }
 
     public function enqueueAssets()
