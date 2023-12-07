@@ -120,7 +120,7 @@
                     {{ $t('No events are using this schedule') }}
                 </p>
                 <div class="fcal_right fcal_tm20">
-                    <pagination :pagination="pagination" @fetch="fetchAvailabilityUsages"/>
+                    <pagination popper-class="fcal_select" :pagination="pagination" @fetch="fetchAvailabilityUsages"/>
                 </div>
             </div>
             <el-skeleton v-else :row="4" animated/>

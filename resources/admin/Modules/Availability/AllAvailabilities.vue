@@ -83,7 +83,7 @@
                 <el-empty class="fcal_empty" v-else :description="$t('No Availability found')"/>
             </div>
             <div class="fcal_right fcal_tm20">
-                <pagination :pagination="pagination" @fetch="fetchAvailabilities"/>
+                <pagination popper-class="fcal_select" :pagination="pagination" @fetch="fetchAvailabilities"/>
             </div>
         </div>
 

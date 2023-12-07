@@ -144,7 +144,7 @@
                 </el-table-column>
             </el-table>
             <div class="fcal_right fcal_tm20">
-                <pagination :pagination="pagination" @fetch="fetchGuests"/>
+                <pagination popper-class="fcal_select" :pagination="pagination" @fetch="fetchGuests"/>
             </div>
         </div>
         <el-dialog

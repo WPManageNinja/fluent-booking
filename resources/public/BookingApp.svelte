@@ -122,13 +122,14 @@
 
     function summaryDetailsHeightHandle() {
         setTimeout(() => {
-            const eventDetails = document.querySelector('.fcal_calendar_inner.fcal_spot_selected.fcal_on_xs .fcal_date_wrapper.is_active .fcal_day_picker_wrap');
-            if (isFluentform) {
-                if (selectedDateTime.start) {
-                    eventDetails.style.position = 'absolute';
-                } else {
-                    document.querySelector('.fcal_calendar_inner.fcal_on_xs .fcal_date_wrapper .fcal_day_picker_wrap').style.position = 'relative';
-                }
+            const eventDetails        = document.querySelector('.fcal_calendar_inner.fcal_spot_selected.fcal_on_xs .fcal_date_wrapper.is_active .fcal_day_picker_wrap');
+            const hasFluentform       = isFluentform && document.querySelector('.fcal_calendar_inner.fcal_on_xs');
+            const hasSelectedDateTime = selectedDateTime.start !== undefined;
+
+            if (hasFluentform && hasSelectedDateTime) {
+                eventDetails.style.position = 'absolute';
+            } else if (hasFluentform) {
+                document.querySelector('.fcal_calendar_inner.fcal_on_xs .fcal_date_wrapper .fcal_day_picker_wrap').style.position = 'relative';
             }
         }, 100)
     }

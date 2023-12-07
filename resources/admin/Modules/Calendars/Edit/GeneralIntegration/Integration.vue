@@ -12,7 +12,7 @@
                 </div>
                 <div class="fcal_actions">
                     <el-button
-                        class="fcal_primary_btn2"
+                        class="fcal_plain_btn"
                         @click="showAll()"
                     >
                         <el-icon>

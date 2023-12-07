@@ -1,13 +1,11 @@
 /*eslint-disable*/
 import { plusCircleFilled } from '@wordpress/icons';
-const {useState, useEffect} = wp.element;
 const {InspectorControls, MediaUpload} = wp.blockEditor;
 const {__} = wp.i18n;
 const {
     PanelBody,
     PanelRow,
     DropdownMenu,
-    Button,
     CheckboxControl,
 } = wp.components;
 

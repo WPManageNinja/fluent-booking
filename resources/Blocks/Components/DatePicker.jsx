@@ -1,5 +1,4 @@
 /*eslint-disable*/
-import {util} from "../../public/util";
 const {__} = wp.i18n;
 
 const {Fragment, useEffect, useState} = wp.element;
@@ -40,9 +39,6 @@ export const DatePicker = props => {
         for (let i = 0; i < daysInThisMonth; i++) {
             let d = new Date(year, month, i + 1);
             const date = d.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-            // const date = `${d.getFullYear()}-${(d.getMonth() + 1)
-            //     .toString()
-            //     .padStart(2, '0')}-${(d.getDate()).toString().padStart(2, '0')}`;
             // Replace the 'YYYY-MM-DD' with the actual format you need
             const enabled = !!availableDates[date];
             daysArray.push({ name: `${i + 1}`, enabled: enabled, date: date });

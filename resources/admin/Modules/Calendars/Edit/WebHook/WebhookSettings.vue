@@ -13,7 +13,7 @@
                     <el-button
                         v-if="editing_feed"
                         @click="backToHome()"
-                        class="fcal_primary_btn2"
+                        class="fcal_plain_btn"
                     >
                         <el-icon>
                             <Back/>

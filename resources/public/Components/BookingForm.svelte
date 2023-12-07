@@ -165,7 +165,7 @@
         const adjustHeight  = wrap.offsetHeight + 135;
         const calendarInner = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected");
 
-        if (sidebar.offsetHeight > adjustHeight) {
+        if (sidebar && sidebar.offsetHeight > adjustHeight) {
             calendarInner.style.height = sidebar.offsetHeight + 'px';
         } else {
             calendarInner.style.height = adjustHeight + 'px';
