@@ -94,7 +94,6 @@
         .fcal_booking_calendar {
             position: absolute;
             width: 300px;
-            height: 300px;
             left: 0;
             bottom: 110%;
             background: #ffffff;
@@ -115,12 +114,35 @@
                     thead {
                         th {
                             padding: 0;
+                            color: $dark;
+                            text-transform: uppercase;
                         }
                     }
                     tbody {
                         --el-calendar-border: none;
                         tr {
                             td {
+                                border-radius: 4px;
+                                border-bottom: 0;
+                                border-right: 0;
+                                &.is-selected {
+                                    background: transparent;
+                                    p {
+                                        background: $primaryColor !important;
+                                        color: #ffffff;
+                                    }
+                                }
+                                &.is-selected,
+                                &.is-today {
+                                    .el-calendar-day{
+                                        p {
+                                            line-height: 35px;
+                                            &:before {
+                                                transform: scale(1);
+                                            }
+                                        }
+                                    }
+                                }
                                 &.prev {
                                     .el-calendar-day {
                                         &:hover {
@@ -130,29 +152,51 @@
                                     }
                                 }
                                 .el-calendar-day {
-                                    height: auto !important;
                                     text-align: center;
+                                    padding: 1px;
+                                    width: 40px;
+                                    height: 40px;
                                     p {
                                         margin: 0;
+                                        height: 100%;
+                                        border-radius: 4px;
+                                        line-height: 40px;
+                                        position: relative;
+                                        transition: .3s;
+                                        &:before {
+                                            content: '';
+                                            width: 4px;
+                                            height: 4px;
+                                            border-radius: 50%;
+                                            position: absolute;
+                                            left: 50%;
+                                            margin-left: -2px;
+                                            bottom: 3px;
+                                            z-index: 1;
+                                            background: #ffffff;
+                                            transform: scale(0);
+                                            transition: .3s;
+                                        }
+                                        &:not(.fcal_date_disabled) {
+                                            background: #e5e7eb;
+                                        }
                                         &.is-selected {
                                             color: #ffffff;
-                                            background: #306ae0;
+                                            background: $primaryColor;
                                         }
                                     }
                                     &:hover {
-                                        color: #ffffff;
-                                        background-color: #306ae0;
+                                        p {
+                                            &:not(.fcal_date_disabled) {
+                                                color: #ffffff;
+                                                background-color: $primaryColor;
+
+                                            }
+                                        }
+                                        background: transparent;
                                     }
                                 }
                             }
-                        }
-                    }
-                    td {
-                        border-bottom: 0px;
-                        border-right: 0px;
-                        &.is-selected {
-                            color: #ffffff;
-                            background: #306ae0;
                         }
                     }
                 }
@@ -833,115 +877,108 @@
                                 box-shadow: none !important;
                             }
                         }
-                        .el-input {
+                        .el-input__wrapper {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 6px 16px;
                             &.is-focus {
-                                .el-input__wrapper {
-                                    box-shadow: none !important;
-                                }
+                                border-color: $primaryColor;
+                                box-shadow: none !important;
                             }
-                            .el-input__wrapper {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 6px 16px;
-                                &.is-focus {
-                                    border-color: $primaryColor;
-                                    box-shadow: none !important;
-                                }
-                                .el-input__inner {
-                                    height: auto;
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                            }
-                        }
-                        .el-textarea {
-                            textarea {
-                                box-shadow: none;
-                                border: 1px solid #D6DAE1;
-                                border-radius: 8px;
-                                padding: 8px 16px;
-                                height: 48px;
-                                &:focus {
-                                    border-color: $primaryColor;
-                                }
-                            }
-                        }
-                        .el-radio-group {
-                            &.radio_desc_group {
-                                display: block;
-                                position: relative;
-                                &.radio_required_field {
-                                    display: flex;
-                                    align-items: center;
-                                    .el-radio {
-                                        align-items: center;
-                                    }
-                                }
-                                .el-radio {
-                                    .el-radio__input {
-                                        input {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                        }
-                                        &.is-checked {
-                                            .el-radio__inner {
-                                                background: transparent;
-                                                border-color: $primaryColor;
-                                            }
-                                            +.el-radio__label {
-                                                color: $dark;
-                                            }
-                                        }
-                                        .el-radio__inner {
-                                            width: 24px;
-                                            height: 24px;
-                                            border: 1.5px solid #D1D5DB;
-                                            &:after {
-                                                width: 12px;
-                                                height: 12px;
-                                                background: $primaryColor;
-                                            }
-                                        }
-                                    }
-                                    .el-radio__label {
-                                        b {
-                                            font-size: 16px;
-                                            font-weight: 500;
-                                            line-height: 24px;
-                                            color: $dark;
-                                        }
-                                        p {
-                                            font-size: 13px;
-                                            font-weight: 400;
-                                            margin-top: 2px;
-                                        }
-                                    }
-                                }
-                                > label {
-                                    display: flex;
-                                    flex-direction: row;
-                                    align-items: flex-start;
-                                    height: auto;
-                                    line-height: 14px;
-                                    margin-bottom: 15px;
-                                    p {
-                                        margin: 0;
-                                    }
-                                }
-                            }
-                        }
-                        &.fcal_new_booking_radio {
-                            display: flex;
-                            flex-direction: column;
-                            align-items: flex-start;
-                            .el-radio {
-                                margin: 0 0 6px;    
+                            .el-input__inner {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
                             }
                         }
                     }
-                    .el-link--primary {   
+                    .el-textarea {
+                        textarea {
+                            box-shadow: none;
+                            border: 1px solid #D6DAE1;
+                            border-radius: 8px;
+                            padding: 8px 16px;
+                            height: 48px;
+                            &:focus {
+                                border-color: $primaryColor;
+                            }
+                        }
+                    }
+                    .el-radio-group {
+                        &.radio_desc_group {
+                            display: block;
+                            position: relative;
+                            &.radio_required_field {
+                                display: flex;
+                                align-items: center;
+                                .el-radio {
+                                    align-items: center;
+                                }
+                            }
+                            .el-radio {
+                                .el-radio__input {
+                                    input {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                    }
+                                    &.is-checked {
+                                        .el-radio__inner {
+                                            background: transparent;
+                                            border-color: $primaryColor;
+                                        }
+                                        +.el-radio__label {
+                                            color: $dark;
+                                        }
+                                    }
+                                    .el-radio__inner {
+                                        width: 24px;
+                                        height: 24px;
+                                        border: 1.5px solid #D1D5DB;
+                                        &:after {
+                                            width: 12px;
+                                            height: 12px;
+                                            background: $primaryColor;
+                                        }
+                                    }
+                                }
+                                .el-radio__label {
+                                    b {
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        line-height: 24px;
+                                        color: $dark;
+                                    }
+                                    p {
+                                        font-size: 13px;
+                                        font-weight: 400;
+                                        margin-top: 2px;
+                                    }
+                                }
+                            }
+                            > label {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: flex-start;
+                                height: auto;
+                                line-height: 14px;
+                                margin-bottom: 15px;
+                                p {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                    .fcal_new_booking_radio {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        .el-radio {
+                            margin: 0 0 6px;
+                        }
+                    }
+                    .el-link--primary {
                         .el-link__inner {
                             color: $primaryColor;
                             padding: 4px;
