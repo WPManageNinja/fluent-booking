@@ -283,6 +283,8 @@ class TransStrings
             'Set Custom Hours'                                                                 => __('Set Custom Hours', 'fluent-booking-pro'),
             "Invitees can't schedule within..."                                                => __("Invitees can't schedule within...", "fluent-booking-pro"),
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking-pro'),
+            'EventDetails/redirect_url_description'                                            => __('Redirect to a custom URL after a successful booking', 'fluent-booking-pro'),
+            'EventDetails/redirect_url_placeholder'                                            => __('https://example.com/redirect-to-my-success-page', 'fluent-booking-pro'),
             'LimitSettings/booking_frequency'                                                  => __('Limit booking frequency', 'fluent-booking-pro'),
             'LimitSettings/booking_frequency_description'                                      => __('Limit how many times this event can be booked', 'fluent-booking-pro'),
             'LimitSettings/booking_duration'                                                   => __('Limit total booking duration', 'fluent-booking-pro'),
@@ -678,7 +680,8 @@ class TransStrings
             'Theme'                                                                            => __('Theme', 'fluent-booking-pro'),
             'System Default'                                                                   => __('System Default', 'fluent-booking-pro'),
             'Light'                                                                            => __('Light', 'fluent-booking-pro'),
-            'Dark'                                                                             => __('Dark', 'fluent-booking-pro')
+            'Dark'                                                                             => __('Dark', 'fluent-booking-pro'),
+            'Redirect on Booking'                                                              => __('Redirect on Booking', 'fluent-booking-pro')
         );
 
     }
