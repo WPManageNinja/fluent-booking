@@ -89,7 +89,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item>
+                    <el-form-item v-if="!is_board && !new_event">
                         <div class="fcal_event_card">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Redirect on Booking") }}</span>
