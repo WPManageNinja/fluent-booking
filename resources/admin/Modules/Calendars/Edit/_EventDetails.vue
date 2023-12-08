@@ -7,87 +7,118 @@
             </div>
             <div class="fcal_create_calendar_form_body">
                 <el-form label-position="top">
-                    <el-form-item
-                        v-if="is_board"
-                        :label="$t('Event Type')">
-                        <el-select
-                            v-model="calendar_event.event_type"
-                            popper-class="fcal_select"
-                        >
-                            <el-option value="single" :label="$t('One to One')" />
-                            <el-option value="group" :label="$t('Group')"/>
-                        </el-select>
-                    </el-form-item>
+                    <el-form-item>
+                        <div class="fcal_event_details_wrap">
+                            <el-form-item
+                                v-if="is_board"
+                                :label="$t('Event Type')">
+                                <el-select
+                                    v-model="calendar_event.event_type"
+                                    popper-class="fcal_select"
+                                >
+                                    <el-option value="single" :label="$t('One to One')" />
+                                    <el-option value="group" :label="$t('Group')"/>
+                                </el-select>
+                            </el-form-item>
 
-                    <el-form-item :label="$t('Event Name *')" class="fcal_color_select_wrap">
-                        <el-input
-                            v-model="calendar_event.title"
-                            :placeholder="$t('Enter Event Title')"
-                        >
-                            <template #prepend>
-                                <div class="fcal_color_select">
-                                    <span class="fcal_color" :style="'background:'+ calendar_event.color_schema "></span>
-                                    <el-select
-                                        v-model="calendar_event.color_schema"
-                                        :placeholder="$t('Select')"
-                                        style="width: 77px"
-                                        popper-class="fcal_color_select_popover"
-                                    >
-                                        <el-option
-                                            v-for="(color, i) in colors" :key="i"
-                                            :value="color.value">
-                                            <span :style="'background:'+color.value"></span>
-                                        </el-option>
-                                    </el-select>
-                                </div>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-
-                    <el-form-item :label="$t('Meeting Duration *')">
-                        <el-select v-model="calendar_event.duration" :placeholder="$t('Select')" popper-class="fcal_select">
-                            <el-option
-                                v-for="item in meetingDuration"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
-                        </el-select>
-                        <div v-if="calendar_event.duration === 'custom'" class="custom-duration">
-                            <el-input
-                                v-model="calendar_event.custom_duration"
-                                @change="validateDuration(calendar_event)"
-                                type="number"
-                                :min="5">
-                                <template #append>{{ $t('Minutes') }}</template>
-                            </el-input>
+                            <el-form-item :label="$t('Event Name *')" class="fcal_color_select_wrap">
+                                <el-input
+                                    v-model="calendar_event.title"
+                                    :placeholder="$t('Enter Event Title')"
+                                >
+                                    <template #prepend>
+                                        <div class="fcal_color_select">
+                                            <span class="fcal_color" :style="'background:'+ calendar_event.color_schema "></span>
+                                            <el-select
+                                                v-model="calendar_event.color_schema"
+                                                :placeholder="$t('Select')"
+                                                style="width: 77px"
+                                                popper-class="fcal_color_select_popover"
+                                            >
+                                                <el-option
+                                                    v-for="(color, i) in colors" :key="i"
+                                                    :value="color.value">
+                                                    <span :style="'background:'+color.value"></span>
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            
+                            <el-form-item :label="$t('Description')">
+                                <el-input
+                                v-model="calendar_event.description"
+                                type="textarea"
+                                :rows="2"
+                                :placeholder="$t('Enter Description here')"
+                                />
+                            </el-form-item>
                         </div>
                     </el-form-item>
 
-                    <el-form-item :label="$t('Description')">
-                        <el-input
-                            v-model="calendar_event.description"
-                            type="textarea"
-                            :rows="2"
-                            :placeholder="$t('Enter Description here')"
-                        />
+                    <el-form-item>
+                        <div class="fcal_event_card">
+                            <el-form-item :label="$t('Meeting Duration *')">
+                                <el-select v-model="calendar_event.duration" :placeholder="$t('Select')" popper-class="fcal_select">
+                                    <el-option
+                                        v-for="item in meetingDuration"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    />
+                                </el-select>
+                                <div v-if="calendar_event.duration === 'custom'" class="custom-duration">
+                                    <el-input
+                                        v-model="calendar_event.custom_duration"
+                                        @change="validateDuration(calendar_event)"
+                                        type="number"
+                                        :min="5">
+                                        <template #append>{{ $t('Minutes') }}</template>
+                                    </el-input>
+                                </div>
+                            </el-form-item>
+                        </div>
                     </el-form-item>
 
-                    <el-form-item :label="$t('Location *')">
-                        <location-selector :slot="calendar_event"/>
+                    <el-form-item>
+                        <div class="fcal_event_card">
+                            <el-form-item :label="$t('Location *')">
+                                <location-selector :slot="calendar_event"/>
+                            </el-form-item>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item v-if="!is_board && !new_event">
+                        <div class="fcal_event_card">
+                            <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("Redirect on Booking") }}</span>
+                                <span>{{ $t("EventDetails/redirect_url_description") }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="calendar_event.settings.custom_redirect.enabled"/>
+                            </div>
+                        </div>
+                            <div class="fcal_event_child_card" v-if="calendar_event.settings.custom_redirect.enabled">
+                                <el-input v-model="calendar_event.settings.custom_redirect.redirect_url" :placeholder="$t('EventDetails/redirect_url_placeholder')"></el-input>
+                            </div>
                     </el-form-item>
 
                     <template v-if="isGroupMeeting">
-                        <el-form-item :label="$t('Max invitees in a spot')">
-                            <el-input type="number" :min="1" v-model="calendar_event.max_book_per_slot"></el-input>
+                        <el-form-item>
+                            <div class="fcal_event_card">
+                                <el-form-item :label="$t('Max invitees in a spot')">
+                                    <el-input type="number" :min="1" v-model="calendar_event.max_book_per_slot"></el-input>
+                                </el-form-item>
+                                <el-checkbox
+                                    v-model="isDisplaySpots"
+                                    @change="toggleDisplaySpots"
+                                    class="fcal_checkbox"
+                                    type="checkbox"
+                                    :label="$t('Display remaining spots on booking page')">
+                                </el-checkbox>
+                            </div>
                         </el-form-item>
-                        <el-checkbox
-                            v-model="isDisplaySpots"
-                            @change="toggleDisplaySpots"
-                            class="fcal_checkbox"
-                            type="checkbox"
-                            :label="$t('Display remaining spots on booking page')">
-                        </el-checkbox>
                     </template>
                 </el-form>
             </div>
@@ -173,7 +204,8 @@ export default {
                 duration: this.getMeetingDuration(),
                 max_book_per_slot: this.calendar_event.max_book_per_slot,
                 is_display_spots: this.calendar_event.is_display_spots,
-                location_settings: this.calendar_event.location_settings
+                location_settings: this.calendar_event.location_settings,
+                custom_redirect: this.calendar_event.settings.custom_redirect
             })
                 .then(response => {
                     this.$handleSuccess(response);

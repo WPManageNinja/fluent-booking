@@ -60,7 +60,7 @@ class CalendarSlot extends Model
     {
         $originalSettings = $this->getOriginal('settings');
 
-        $originalSettings = maybe_unserialize($originalSettings);
+        $originalSettings = \maybe_unserialize($originalSettings);
 
         foreach ($settings as $key => $value) {
             $originalSettings[$key] = $value;
