@@ -38,10 +38,6 @@ function handleEventBlockClick(link) {
         } else {
             bookingWrap.style.marginLeft = 'auto';
         }
-        // if(parentTeam) {
-        //     parentTeam.classList.remove('fcal_showing_team_calendar');
-        //     parentTeam.classList.add('fcal_showing_team_events');
-        // }
         if (window.history.pushState && window.fcal_landing_page) {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.delete('event');
@@ -68,11 +64,6 @@ function handleEventBlockClick(link) {
 
 function faCalOpenBookingPage(item, event) {
     event.preventDefault();
-    // const parentTeam = item.closest('.fcal_teams');
-    // if(parentTeam) {
-    //     parentTeam.classList.add('fcal_showing_team_calendar');
-    //     parentTeam.classList.remove('fcal_showing_team_events');
-    // }
     handleEventBlockClick(item);
 }
 

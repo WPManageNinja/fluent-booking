@@ -115,6 +115,11 @@ class LandingPageHandler
             } else {
                 $activeEvent->description = sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $activeEvent->duration);
             }
+
+            if (Arr::isTrue($activeEvent->settings, 'multi_duration.enabled')) {
+                $activeEvent->description = __('Choose your duration and book a meeting with me', 'fluent-booking-pro');
+                $activeEvent->duration = Arr::get($activeEvent->settings, 'multi_duration.available_durations');
+            }
         }
 
         $metaDescription = Helper::excerpt($calendar->description);

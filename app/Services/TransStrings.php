@@ -681,7 +681,10 @@ class TransStrings
             'System Default'                                                                   => __('System Default', 'fluent-booking-pro'),
             'Light'                                                                            => __('Light', 'fluent-booking-pro'),
             'Dark'                                                                             => __('Dark', 'fluent-booking-pro'),
-            'Redirect on Booking'                                                              => __('Redirect on Booking', 'fluent-booking-pro')
+            'Redirect after booking'                                                           => __('Redirect after booking', 'fluent-booking-pro'),
+            'Available Durations'                                                              => __('Available Durations', 'fluent-booking-pro'),
+            'Default Duration'                                                                 => __('Default Duration', 'fluent-booking-pro'),
+            'Allow attendee to select duration'                                                => __('Allow attendee to select duration', 'fluent-booking-pro')
         );
 
     }

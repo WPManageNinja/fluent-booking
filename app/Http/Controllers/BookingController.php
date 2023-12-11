@@ -65,8 +65,6 @@ class BookingController extends Controller
 
         $postedData = $request->all();
 
-        do_action('fluent_booking/starting_scheduling_ajax', $postedData);
-
         $rules = [
             'name'       => 'required',
             'email'      => 'required|email',
@@ -130,8 +128,13 @@ class BookingController extends Controller
             return;
         }
 
+        $duration = $calendarEvent->duration;
+        if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
+            $duration = Arr::get($calendarEvent->settings, 'multi_duration.default_duration');
+        }
+
         $startDateTime = DateTimeHelper::convertToUtc($postedData['event_time'], $postedData['timezone']);
-        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarEvent->duration * 60));
+        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -145,6 +148,7 @@ class BookingController extends Controller
             'status'           => sanitize_text_field($postedData['status']),
             'source'           => 'web',
             'event_type'       => $calendarEvent->event_type,
+            'slot_minutes'     => $duration
         ];
 
         $eventLocations = [];

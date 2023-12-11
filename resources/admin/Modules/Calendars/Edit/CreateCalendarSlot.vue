@@ -1,5 +1,5 @@
 <template>
-    <div class="fcal_create_calendar_wrap">
+    <div class="fcal_create_calendar_wrap fcal_onboard_wrap">
         <div class="fcal_create_calendar_header">
             <router-link :to="{name: 'calendars'}" class="fcal_back_btn">
                 <el-icon :size="20" color="black"><Back/></el-icon>

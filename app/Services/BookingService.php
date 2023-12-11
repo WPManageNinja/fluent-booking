@@ -32,11 +32,11 @@ class BookingService
         ];
 
         if (empty($data['slot_minutes'])) {
-            $defaults['slot_minutes'] = $calendarSlot->duration;
+            $data['slot_minutes'] = $calendarSlot->duration;
         }
 
         if (empty($data['end_time'])) {
-            $defaults['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($calendarSlot->duration * 60));
+            $data['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($data['slot_minutes'] * 60));
         }
 
         if (!isset($data['person_user_id'])) {

@@ -7,6 +7,7 @@
 
     export let slot;
     export let timezone;
+    export let duration;
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
@@ -53,7 +54,11 @@
 
     $: timezone, maybeTimeZoneChanged();
 
+    $: duration, maybeDurationChanged();
+
     let lastTimeZone = timezone;
+
+    let lastDuration = duration;
 
     let start_time;
 
@@ -85,6 +90,15 @@
         }
     }
 
+    function maybeDurationChanged() {
+        if (lastDuration != duration) {
+            lastDuration = duration;
+            selectedDate = '';
+            selectedDateTime = {};
+            loadAvailableDates();
+        }
+    }
+
     function maybeStartFromNextMonth() {
         if (month == now.getMonth() && !Object.keys(availableDates).length) {
             next();
@@ -102,9 +116,11 @@
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
+        console.log(slot);
         util.$get(window.fluentCalendarPublicVars.ajaxurl, {
             event_id: slot.id,
             timezone: timezone || '',
+            duration: duration || '',
             action: 'fluent_cal_get_available_dates',
             start_date: util.dayjs(year + '-' + (month + 1) + '-', '01').format('YYYY-MM-DD'),
         })
