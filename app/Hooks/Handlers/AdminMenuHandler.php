@@ -226,6 +226,7 @@ class AdminMenuHandler
 
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
+        $multiDurations = Helper::getMeetingMultiDurations();
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $bufferTimes = Helper::getBufferTimes();
         $slotIntervals = Helper::getSlotIntervals();
@@ -240,6 +241,7 @@ class AdminMenuHandler
             'asset_url'          => $assets,
             'event_colors'       => $eventColors,
             'meeting_durations'  => $meetingDurations,
+            'multi_durations'    => $multiDurations,
             'buffer_times'       => $bufferTimes,
             'slot_intervals'     => $slotIntervals,
             'schedule_schema'    => $scheduleSchema,

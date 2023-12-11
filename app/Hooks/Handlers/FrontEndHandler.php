@@ -84,7 +84,7 @@ class FrontEndHandler
                     ], 422);
                 }
 
-                $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->calendar_event->duration * 60));
+                $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
 
                 $previousBooking = clone $existingBooking;
 
@@ -568,8 +568,16 @@ class FrontEndHandler
             return;
         }
 
+        $duration = $calendarSlot->duration;
+        if (Arr::isTrue($calendarSlot->settings, 'multi_duration.enabled')) {
+            $requestedDuration = Arr::get($_REQUEST, 'duration');
+            if (in_array($requestedDuration, Arr::get($calendarSlot->settings, 'multi_duration.available_durations'))) {
+                $duration = $requestedDuration;
+            }
+        }
+
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarSlot->duration * 60));
+        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -583,6 +591,7 @@ class FrontEndHandler
             'status'           => 'scheduled',
             'source'           => 'web',
             'event_type'       => $calendarSlot->event_type,
+            'slot_minutes'     => $duration
         ];
 
         $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
@@ -598,7 +607,7 @@ class FrontEndHandler
 
         // Check if the time is available or not for this slot
         $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
+        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
         if (!$isSpotAvailable) {
             wp_send_json([
@@ -669,9 +678,17 @@ class FrontEndHandler
             $timeZone = $calendar->author_timezone;
         }
 
+        $duration = $slot->duration;
+        if (Arr::isTrue($slot->settings, 'multi_duration.enabled')) {
+            $requestedDuration = Arr::get($_REQUEST, 'duration');
+            if (in_array($requestedDuration, Arr::get($slot->settings, 'multi_duration.available_durations'))) {
+                $duration = $requestedDuration;
+            }
+        }
+
         $timeSlotService = new TimeSlotService($calendar, $slot);
 
-        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
+        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
 
         if (is_wp_error($availableSpots)) {
             wp_send_json([
@@ -706,7 +723,7 @@ class FrontEndHandler
             'id'                 => $calendarEvent->id,
             'max_lookup_date'    => $calendarEvent->max_lookup_date,
             'min_lookup_date'    => $calendarEvent->min_lookup_date,
-            'duration'           => $calendarEvent->duration,
+            'duration'           => $calendarEvent->getDuration(),
             'title'              => $calendarEvent->title,
             'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,

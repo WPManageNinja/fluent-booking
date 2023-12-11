@@ -59,25 +59,63 @@
 
                     <el-form-item>
                         <div class="fcal_event_card">
-                            <el-form-item :label="$t('Meeting Duration *')">
-                                <el-select v-model="calendar_event.duration" :placeholder="$t('Select')" popper-class="fcal_select">
-                                    <el-option
-                                        v-for="item in meetingDuration"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    />
-                                </el-select>
-                                <div v-if="calendar_event.duration === 'custom'" class="custom-duration">
-                                    <el-input
-                                        v-model="calendar_event.custom_duration"
-                                        @change="validateDuration(calendar_event)"
-                                        type="number"
-                                        :min="5">
-                                        <template #append>{{ $t('Minutes') }}</template>
-                                    </el-input>
-                                </div>
-                            </el-form-item>
+                            <div class="fcal_meeting_duration">
+                                <el-form-item v-if="!calendar_event.settings.multi_duration.enabled" :label="$t('Meeting Duration *')">
+                                    <el-select
+                                        v-model="calendar_event.duration"
+                                        :placeholder="$t('Select')"
+                                        popper-class="fcal_select">
+                                        <el-option
+                                            v-for="item in meetingDurations"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                        />
+                                    </el-select>
+                                    <div v-if="calendar_event.duration === 'custom'" class="custom-duration">
+                                        <el-input
+                                            v-model="calendar_event.custom_duration"
+                                            @change="validateDuration(calendar_event)"
+                                            type="number"
+                                            :min="5">
+                                            <template #append>{{ $t('Minutes') }}</template>
+                                        </el-input>
+                                    </div>
+                                </el-form-item>
+                                <template v-else>
+                                    <el-form-item :label="$t('Available Durations') + ' *'">
+                                        <el-select
+                                            v-model="calendar_event.settings.multi_duration.available_durations"
+                                            @change="updateDefaultDurations"
+                                            multiple
+                                            :placeholder="$t('Select')"
+                                            popper-class="fcal_select">
+                                            <el-option
+                                                v-for="item in multiDurations"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                            />
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item :label="$t('Default Duration')">
+                                        <el-select
+                                            v-model="calendar_event.settings.multi_duration.default_duration"
+                                            :placeholder="$t('Select')"
+                                            popper-class="fcal_select">
+                                            <el-option
+                                                v-for="item in defaultDurations"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                            />
+                                        </el-select>
+                                    </el-form-item>
+                                </template>
+                                <el-form-item>
+                                    <el-switch v-model="calendar_event.settings.multi_duration.enabled" :active-text="$t('Allow attendee to select duration')"/>
+                                </el-form-item>
+                            </div>
                         </div>
                     </el-form-item>
 
@@ -89,10 +127,29 @@
                         </div>
                     </el-form-item>
 
+                    <template v-if="isGroupMeeting">
+                        <el-form-item>
+                            <div class="fcal_event_card">
+                                <div>
+                                    <el-form-item :label="$t('Max invitees in a spot')">
+                                        <el-input type="number" :min="1" v-model="calendar_event.max_book_per_slot"></el-input>
+                                    </el-form-item>
+                                    <el-checkbox
+                                        v-model="isDisplaySpots"
+                                        @change="toggleDisplaySpots"
+                                        class="fcal_checkbox"
+                                        type="checkbox"
+                                        :label="$t('Display remaining spots on booking page')">
+                                    </el-checkbox>
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </template>
+
                     <el-form-item v-if="!is_board && !new_event">
                         <div class="fcal_event_card">
                             <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Redirect on Booking") }}</span>
+                                <span class="sub-label card-title">{{ $t("Redirect after booking") }}</span>
                                 <span>{{ $t("EventDetails/redirect_url_description") }}</span>
                             </div>
                             <div class="card_action">
@@ -103,23 +160,6 @@
                                 <el-input v-model="calendar_event.settings.custom_redirect.redirect_url" :placeholder="$t('EventDetails/redirect_url_placeholder')"></el-input>
                             </div>
                     </el-form-item>
-
-                    <template v-if="isGroupMeeting">
-                        <el-form-item>
-                            <div class="fcal_event_card">
-                                <el-form-item :label="$t('Max invitees in a spot')">
-                                    <el-input type="number" :min="1" v-model="calendar_event.max_book_per_slot"></el-input>
-                                </el-form-item>
-                                <el-checkbox
-                                    v-model="isDisplaySpots"
-                                    @change="toggleDisplaySpots"
-                                    class="fcal_checkbox"
-                                    type="checkbox"
-                                    :label="$t('Display remaining spots on booking page')">
-                                </el-checkbox>
-                            </div>
-                        </el-form-item>
-                    </template>
                 </el-form>
             </div>
             <div v-if="!is_board && !new_event" class="fcal_create_calendar_form_footer">
@@ -151,7 +191,9 @@ export default {
             isDisplaySpots: this.calendar_event.is_display_spots == 1 ? true : false,
             isGroupMeeting: this.calendar_event.event_type == 'group',
             colors: this.appVars.event_colors,
-            meetingDuration: this.appVars.meeting_durations
+            meetingDurations: this.appVars.meeting_durations,
+            multiDurations: this.appVars.multi_durations,
+            defaultDurations: []
         }
     },
     methods: {
@@ -164,6 +206,18 @@ export default {
         validateDuration(calendar_event) {
             this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
+        updateDefaultDurations(updatedValue) {
+            const durations = updatedValue.map(duration => ({
+                value: duration,
+                label: `${duration} ${this.$t('Minutes')}`
+            }));
+            this.defaultDurations = durations;
+
+            const defaultDuration = this.calendar_event.settings.multi_duration.default_duration;
+            if (!updatedValue.includes(defaultDuration)) {
+                this.calendar_event.settings.multi_duration.default_duration = updatedValue[0];
+            }
+        },
         checkDurationType() {
             const fromDurationValue = this.appVars.meeting_durations.some(duration => duration.value === this.calendar_event.duration);
             if (!fromDurationValue) {
@@ -172,17 +226,32 @@ export default {
             }
         },
         checkValidation() {
+            if (!this.calendar_event.title) {
+                this.$handleError(this.$t('Event Title is required'));
+                return false;
+            }
+            if (this.calendar_event.settings.custom_redirect?.enabled && !this.calendar_event.settings.custom_redirect?.redirect_url) {
+                this.$handleError(this.$t('Redirect URL field is required'));
+                return false;
+            }
+            if (this.calendar_event.settings.multi_duration?.enabled && !this.calendar_event.settings.multi_duration?.available_durations?.length) {
+                this.$handleError(this.$t('Multiple Duration requires at least 1 option'));
+                return false;
+            }
             for (const location of this.calendar_event.location_settings) {
                 if (!location.type) {
                     this.$handleError(this.$t('Location Type is required'));
                     return false;
-                } else if ((location.type == 'custom') && !location.title) {
+                }
+                if ((location.type == 'custom') && !location.title) {
                     this.$handleError(this.$t('Location Title is required'));
                     return false;
-                } else if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description) {
+                }
+                if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description) {
                     this.$handleError(this.$t('Location Description is required'));
                     return false;
-                } else if (location.type == 'phone_organizer' && !location.host_phone_number) {
+                }
+                if (location.type == 'phone_organizer' && !location.host_phone_number) {
                     this.$handleError(this.$t('Phone Number is required'));
                     return false;
                 }
@@ -205,7 +274,8 @@ export default {
                 max_book_per_slot: this.calendar_event.max_book_per_slot,
                 is_display_spots: this.calendar_event.is_display_spots,
                 location_settings: this.calendar_event.location_settings,
-                custom_redirect: this.calendar_event.settings.custom_redirect
+                custom_redirect: this.calendar_event.settings.custom_redirect,
+                multi_duration: this.calendar_event.settings.multi_duration
             })
                 .then(response => {
                     this.$handleSuccess(response);
@@ -220,6 +290,7 @@ export default {
     },
     mounted() {
         this.checkDurationType();
+        this.updateDefaultDurations(this.calendar_event.settings?.multi_duration?.available_durations);
         this.calendar_event.event_type = this.event_type ? this.event_type : this.calendar_event.event_type;
         this.isGroupMeeting = this.calendar_event.event_type == 'group';
     }
