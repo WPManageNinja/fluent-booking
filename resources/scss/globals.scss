@@ -130,6 +130,9 @@
                                     p {
                                         background: $primaryColor !important;
                                         color: #ffffff !important;
+                                        &:before {
+                                            background: #ffffff !important;
+                                        }
                                     }
                                 }
                                 &.is-selected,
@@ -1127,6 +1130,11 @@
                 }
             }
         }
+        &.fcal_question_dialog {
+            .el-dialog__body {
+                padding: 0;
+            }
+        }
         &.fcal_new_booking {
             max-width: 660px;
             .el-dialog__footer {
@@ -1676,6 +1684,12 @@
                         .el-textarea {
                             textarea {
                                 height: 120px !important;
+                            }
+                        }
+                        .el-form-item__content {
+                            .fcal_reminder_timing {
+                                width: 100%;
+                                margin-bottom: 5px;
                             }
                         }
                     }
