@@ -131,21 +131,23 @@ class BookingElement extends BaseFieldManager
             $data['attributes']['tabindex'] = $tabIndex;
         }
 
-        $showHost = Arr::get($data, 'settings.cal_guest_fields.host_info') == 'show';
-
         $ariaRequired = 'false';
         if (Arr::get($data, 'settings.validation_rules.required.value')) {
             $ariaRequired = 'true';
         }
-
+        
         $slot_id = (int)Arr::get($data, 'settings.event_id');
-
+        
         $calendarEvent = CalendarSlot::find($slot_id);
-
+        
         if (!$calendarEvent || !$calendarEvent->calendar) {
             esc_html_e('Selected Calendar could not be found', 'fluent-booking-pro');
             return;
         }
+        
+        $isHostEnabled = Arr::get($data, 'settings.cal_guest_fields.host_info', 'hide') == 'show';
+
+        $showHostInfo = $isHostEnabled || Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled');
 
         [$localizeData, $element_id] = (new FluentFormInit())->getLocalizedData($calendarEvent, $data, $form);
 
@@ -179,7 +181,7 @@ class BookingElement extends BaseFieldManager
 
         $calClass = 'fluentform_calendar_app';
 
-        if ($showHost) {
+        if ($showHostInfo) {
             $calClass .= ' fcal_showing_host';
         } else {
             $calClass .= ' fcal_not_showing_host';

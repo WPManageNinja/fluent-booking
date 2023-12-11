@@ -90,15 +90,23 @@ class FluentFormInit
             return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
 
+        $duration = $calendarEvent->duration;
+        if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
+            $bookingDuration  = Arr::get($bookingData, 'duration', '');
+            $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
+            if (in_array($bookingDuration, $availableDurations)) {
+                $duration = $bookingDuration;
+            }
+        }
 
         $startTime = Arr::get($bookingData, 'start_time');
         $timeZone = $bookingData['timezone'];
 
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($calendarEvent->duration * 60));
+        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
+        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
         if (!$isSpotAvailable) {
             $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro');
@@ -157,7 +165,7 @@ class FluentFormInit
 
             if (isset($data[$name]) && is_string($data[$name])) {
                 $bookingArr = json_decode($data[$name], true);
-                $validData = array_filter(Arr::only($bookingArr, ['start_time', 'timezone', 'form.location_config', 'form.phone_number', 'form.address']));
+                $validData = array_filter(Arr::only($bookingArr, ['start_time', 'timezone', 'duration', 'form.location_config', 'form.phone_number', 'form.address']));
                 $extendedData = array_filter(Arr::only(Arr::get($bookingArr, 'form', []), ['location_config', 'phone_number', 'address']));
 
                 if ($extendedData) {
@@ -165,7 +173,16 @@ class FluentFormInit
                 }
 
                 if ($validData) {
-                    $validData['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($calendarEvent->duration * 60));
+                    $duration = $calendarEvent->duration;
+                    if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
+                        $bookingDuration  = Arr::get($validData, 'duration', '');
+                        $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
+                        if (in_array($bookingDuration, $availableDurations)) {
+                            $duration = $bookingDuration;
+                        }
+                    }
+                    $validData['duration'] = $duration;
+                    $validData['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
                 }
 
                 $data[$name] = (array)$validData;
@@ -216,7 +233,7 @@ class FluentFormInit
                 $ffFieldData = json_decode($ffFieldData, true);
             }
 
-            if (empty($ffFieldData['timezone']) || empty($ffFieldData['start_time'])) {
+            if (empty($ffFieldData['timezone']) || empty($ffFieldData['start_time']) || empty($ffFieldData['duration'])) {
                 continue;
             }
 
@@ -275,7 +292,8 @@ class FluentFormInit
             }
 
             $startTime = $ffFieldData['start_time'];
-            $timeZone = $ffFieldData['timezone'];
+            $timeZone  = $ffFieldData['timezone'];
+            $duration  = $ffFieldData['duration'];
 
             $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
 
@@ -289,7 +307,8 @@ class FluentFormInit
                 'status'           => 'scheduled',
                 'source_url'       => $entry->source_url,
                 'ip_address'       => $entry->ip,
-                'event_type'       => $event->event_type
+                'event_type'       => $event->event_type,
+                'slot_minutes'     => $duration
             ];
 
             if ($entry->user_id) {
@@ -436,7 +455,11 @@ class FluentFormInit
         $localizeData['name'] = $name;
         $localizeData['settings'] = $settings;
 
-        if (Arr::get($localizeData['settings']['cal_guest_fields'], 'host_info', 'hide') == 'show') {
+        $isHostEnabled = Arr::get($localizeData['settings']['cal_guest_fields'], 'host_info', 'hide') == 'show';
+
+        $showHostInfo = $isHostEnabled || Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled');
+
+        if ($showHostInfo) {
             $localizeData['disable_author'] = false;
         } else {
             $localizeData['disable_author'] = true;
