@@ -1091,6 +1091,64 @@ class Helper
         ]);
     }
 
+    public static function getMeetingMultiDurations()
+    {
+        return apply_filters('fluent_booking/meeting_multi_durations_schema', [
+            [
+                'value' => '5',
+                'label' => __('5 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '10',
+                'label' => __('10 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '15',
+                'label' => __('15 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '30',
+                'label' => __('30 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '45',
+                'label' => __('45 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '50',
+                'label' => __('50 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '60',
+                'label' => __('60 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '90',
+                'label' => __('90 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '120',
+                'label' => __('120 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '150',
+                'label' => __('150 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '180',
+                'label' => __('180 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '240',
+                'label' => __('240 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '480',
+                'label' => __('480 Minutes', 'fluent-booking-pro')
+            ]
+        ]);
+    }
+
     public static function getBufferTimes()
     {
         return apply_filters('fluent_booking/buffer_times_schema', [

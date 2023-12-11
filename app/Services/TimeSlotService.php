@@ -24,16 +24,16 @@ class TimeSlotService
         $this->calendarSlot = $calendarSlot;
     }
 
-    public function getDates($fromDate = false, $toDate = false, $bookingRequest = false)
+    public function getDates($fromDate = false, $toDate = false, $duration = null, $bookingRequest = false)
     {
-        $period = $this->calendarSlot->duration * 60;
+        $period = ($duration ?: $this->calendarSlot->duration) * 60;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
-        $daySlots = $this->getWeekDaySlots();
+        $daySlots = $this->getWeekDaySlots($duration);
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
         $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
@@ -55,7 +55,7 @@ class TimeSlotService
 
         foreach ($ranges as $date) {
             if ($overrides && isset($overrides[$date])) {
-                $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone);
+                $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $this->calendar->author_timezone, $duration);
             } else {
                 $day = strtolower(date('D', strtotime($date))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 if (empty($daySlots[$day])) {
@@ -161,7 +161,7 @@ class TimeSlotService
         return $rangedValidSlots;
     }
 
-    public function isSpotAvailable($fromTime, $toTime)
+    public function isSpotAvailable($fromTime, $toTime, $duration = null)
     {
         $fromTime = DateTimeHelper::convertToTimeZone($fromTime, 'UTC', $this->calendar->author_timezone);
         $toTime = DateTimeHelper::convertToTimeZone($toTime, 'UTC', $this->calendar->author_timezone);
@@ -172,7 +172,7 @@ class TimeSlotService
         $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toTime = date('Y-m-d 23:59:59', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
-        $slots = $this->getDates($fromTime, $toTime, true);
+        $slots = $this->getDates($fromTime, $toTime, $duration, true);
 
         $date = date('Y-m-d', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
@@ -362,13 +362,13 @@ class TimeSlotService
         return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
     }
 
-    protected function getWeekDaySlots()
+    protected function getWeekDaySlots($duration = null)
     {
-        $period = $this->calendarSlot->duration * 60;
+        $period = ($duration ?: $this->calendarSlot->duration) * 60;
 
         $schedule = $this->calendarSlot->settings['weekly_schedules'];
 
-        $interval = $this->calendarSlot->getSlotInterval() * 60;
+        $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
         if ('existing_schedule' === $this->calendarSlot->availability_type) {
             $availability = Availability::findOrFail($this->calendarSlot->availability_id);
@@ -414,11 +414,11 @@ class TimeSlotService
         return $formattedSlots;
     }
 
-    protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false)
+    protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false, $duration = null)
     {
-        $period = $this->calendarSlot->duration * 60;
+        $period = ($duration ?: $this->calendarSlot->duration) * 60;
 
-        $interval = $this->calendarSlot->getSlotInterval() * 60;
+        $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
         $formattedSlots = [];
 
@@ -441,7 +441,7 @@ class TimeSlotService
         return $formattedSlots;
     }
 
-    public function getAvailableSpots($startDate, $timeZone = 'utc')
+    public function getAvailableSpots($startDate, $timeZone = 'utc', $duration = null)
     {
         $slot = $this->calendarSlot;
         $calendar = $this->calendar;
@@ -478,7 +478,7 @@ class TimeSlotService
         $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, $calendar->author_timezone);
         $endDate = DateTimeHelper::convertToTimeZone($endDate, $timeZone, $calendar->author_timezone);
 
-        $slots = $this->getDates($startDate, $endDate);
+        $slots = $this->getDates($startDate, $endDate, $duration);
 
         $convertedSpots = [];
 

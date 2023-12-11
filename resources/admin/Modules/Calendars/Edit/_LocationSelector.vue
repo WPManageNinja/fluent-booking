@@ -73,7 +73,7 @@
                 <el-form-item v-if="modalSettings.type == 'custom'" :label="$t('Location Title *')">
                     <el-input v-model="modalSettings.title" type="text" :placeholder="$t('Location Title')" />
                 </el-form-item>
-                <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" :label="$t('Location Description')">
+                <el-form-item v-if="modalSettings.type == 'in_person_organizer' || modalSettings.type == 'custom'" :label="$t('Location Description *')">
                     <el-input v-model="modalSettings.description" type="textarea" :placeholder="$t('Location Description *')" />
                     <el-checkbox v-model="modalSettings.display_on_booking" true-label="yes" false-label="no" :label="$t('Display Description on booking page')"/>
                 </el-form-item>

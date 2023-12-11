@@ -90,7 +90,7 @@ export default {
                 .then(response => {
                     this.menuItems = response.settings_menu;
                     this.calendar = response.calendar;
-                    this.slot = response.slot;
+                    this.slot = response.calendar_event;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
