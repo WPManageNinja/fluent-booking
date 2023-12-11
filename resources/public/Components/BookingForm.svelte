@@ -140,6 +140,7 @@
     import PhoneFieldSkeleton from "./PhoneFieldSkeleton.svelte";
 
     export let timezone;
+    export let duration;
     export let formFields;
     export let spot;
     export let slot;
@@ -190,6 +191,7 @@
         const postdata = {
             ...form,
             timezone,
+            duration,
             start_date: spot.start,
             event_id: slot.id,
             source_url: currentUrl,

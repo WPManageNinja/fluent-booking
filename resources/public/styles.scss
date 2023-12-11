@@ -104,6 +104,11 @@ body {
         }
       }
     }
+    .fcal_duration {
+        &.is_selected {
+            color: #101010 !important;
+        }
+    }
   }
   .fcal_slot_picker {
     .fcal_spot_lists {
@@ -1148,6 +1153,25 @@ body >.fcal_calendar_wrap {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
+
+    .fcal_multi_duration {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        .fcal_duration {
+            cursor: pointer;
+            padding: 4px 6px;
+            font-weight: 500;
+            line-height: 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            background-color: var(--fcal_enable_day_bg);
+            &.is_selected {
+                color: white;
+                background-color: var(--fcal_primary_color);
+            }
+        }
+    }
   }
 
   &.fcal_form_calendar {

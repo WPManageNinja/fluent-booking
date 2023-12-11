@@ -4,7 +4,7 @@
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
     import Summary from "./Fluentform/Summary.svelte";
-    import {createEventDispatcher} from 'svelte'
+    import {createEventDispatcher} from 'svelte';
 
     window['fcal_translate'] = i18;
 
@@ -13,16 +13,17 @@
 
     export let appData;
     export let handleBack;
+    export let duration = appData.slot.duration;
 
     const slot = appData.slot;
     const settings = appData.settings;
     const author = appData.author_profile;
     const isFluentform = appData.is_fluentform;
+    const availableDurations = slot.settings?.multi_duration?.available_durations;
     let form = window.fluentCalendarPublicVars.current_person || {};
 
     let appReady = false;
     let bookingConfirmationHtml = '';
-    let calendarHeight = '';
     let component = null;
     let isBookingDone = false;
 
@@ -75,6 +76,11 @@
 
     function spotSelected(spot) {
         selectedDateTime = spot;
+    }
+
+    function durationSelected(value) {
+        console.log(value);
+        duration = value;
     }
 
     function formatHours(e) {
@@ -186,7 +192,24 @@
                                                 stroke="#445164" stroke-width="1.25" stroke-linecap="round"
                                                 stroke-linejoin="round"/>
                                         </svg>
-                                        <span>{slot.duration} {i18('minutes')}</span>
+                                        {#if slot.settings?.multi_duration?.enabled}
+                                            {#if selectedDateTime.start}
+                                                <span>{duration} {i18('minutes')}</span>
+                                            {:else}
+                                                <div class="fcal_multi_duration">
+                                                    {#each availableDurations as value}
+                                                        <span
+                                                            on:keypress={()=>durationSelected(value)} 
+                                                            on:click={()=>durationSelected(value)} 
+                                                            class="fcal_duration {duration == value ? 'is_selected' : ''}">
+                                                            {value} {i18('minutes')}
+                                                        </span>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                        {:else}
+                                            <span>{slot.duration} {i18('minutes')}</span>
+                                        {/if}
                                     </div>
 
                                     {#if slot.location_settings.length > 1}
@@ -300,6 +323,7 @@
                                     {settings}
                                     {selectedDate}
                                     {selectedDateTime}
+                                    bind:duration={duration}
                                     bind:timezone={timezone}
                                     bind:form={form}
                                     on:dayClicked={(e) => {dayClicked(e.detail)}}
@@ -343,6 +367,7 @@
                                         {appData}
                                         {slot}
                                         {timezone}
+                                        {duration}
                                         bind:form={form}
                                         on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
                                         bind:spot={selectedDateTime}

@@ -168,7 +168,12 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields'     => $calendar->getLocationFields()
+            'location_fields'     => $calendar->getLocationFields(),
+            'multi_duration' => [
+                'enabled'             => false,
+                'default_duration'    => '',
+                'available_durations' => []
+            ]
         ];
     }
 
@@ -245,11 +250,22 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
-    public function getSlotInterval()
+    public function getDuration()
     {
+        if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
+            return Arr::get($this->settings, 'multi_duration.default_duration', '');
+        }
+        
+        return $this->duration;
+    }
+
+    public function getSlotInterval($duration = null)
+    {
+        $duration = $duration ?: $this->duration;
+
         $interval = Arr::get($this->settings, 'slot_interval', '');
 
-        $slotInterval = empty($interval) ? $this->duration : intval($interval);
+        $slotInterval = empty($interval) ? $duration : intval($interval);
 
         return $slotInterval;
     }

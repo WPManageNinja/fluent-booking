@@ -110,7 +110,12 @@ export default {
                         }
                     ],
                     settings: {
-                        location_fields: this.appVars.location_fields
+                        location_fields: this.appVars.location_fields,
+                        multi_duration: {
+                            enabled: false,
+                            default_duration: '',
+                            available_durations: []
+                        }
                     }
                 }
             },
@@ -129,7 +134,7 @@ export default {
                 calendar: this.calendar,
             })
                 .then(response => {
-                    this.redirectToSetting(response.calendar.id, response.slot.id); 
+                    this.redirectToSetting(response.calendar.id, response.slot.id);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -147,6 +152,14 @@ export default {
         checkValidation() {
             if(!this.calendar.slot.location_settings[0]) {
                 this.$handleError(this.$t('Please provide a location first'));
+                return false;
+            }
+            if (!this.calendar.slot.title) {
+                this.$handleError(this.$t('Event Title is required'));
+                return false;
+            }
+            if (this.calendar.slot.settings?.multi_duration?.enabled && !this.calendar.slot.settings?.multi_duration?.available_durations?.length) {
+                this.$handleError(this.$t('Multiple Duration requires at least 1 option'));
                 return false;
             }
             for (const location of this.calendar.slot.location_settings) {
