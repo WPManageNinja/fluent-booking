@@ -3,7 +3,7 @@
         v-model="openModal"
         :title="modalTitle"
         :append-to-body="true"
-        class="fcal_dialog">
+        class="fcal_dialog fcal_question_dialog">
         <p v-if="fieldData.system_defined">{{ $t('EditCustomFieldModal/system_defined_field_label') }}</p>
         <el-form v-if="openModal" label-position="top" >
             <el-form-item :label="$t('Field Type')">
