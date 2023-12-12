@@ -34,9 +34,9 @@
                                         <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                         <path d="M9.16418 8.855L7.35585 7.77584C7.04085 7.58917 6.78418 7.14 6.78418 6.7725V4.38084" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
-                                    <?php echo esc_attr($duration) . ' ' . esc_html__('minutes', 'fluent-booking-pro');
-                                }?>
-                            </span>
+                                    <?php echo esc_attr($duration) . ' ' . esc_html__('minutes', 'fluent-booking-pro'); ?>
+                                    </span>
+                                <?php } ?>
                             </div>
                             <button class="book_now">
                                 <?php _e('Book Now', 'fluent-booking-pro'); ?>
