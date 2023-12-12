@@ -1652,6 +1652,7 @@ body >.fcal_calendar_wrap {
     gap: 6px;
     font-size: 14px;
     color: var(--fcal_dark);
+    width: fit-content;
 
     svg {
       width: 16px;

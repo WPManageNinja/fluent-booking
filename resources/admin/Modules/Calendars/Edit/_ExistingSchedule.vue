@@ -45,7 +45,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div v-else>{{ $t('No specific date overrides found for this schedule') }}</div>
+                <p v-else>{{ $t('No specific date overrides found for this schedule') }}</p>
             </div>
         </div>
     </div>
