@@ -59,8 +59,8 @@ class ZoomHelper
             $client = new Client($config['client_id'], $config['client_secret'], $config['account_id']);
             $newConfig = $client->generateAccessToken();
 
-            if (is_wp_error($config)) {
-                return $config;
+            if(is_wp_error($newConfig)) {
+                return $newConfig;
             }
 
             $savingConfig = $config;
@@ -73,6 +73,7 @@ class ZoomHelper
         }
 
         $client = new Client($config['client_id'], $config['client_secret'], $config['account_id']);
+
         return $client->setAccessToken($config['access_token']);
     }
 
