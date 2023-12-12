@@ -25,7 +25,7 @@ class BootstrapX
             $app = App::getInstance();
             $menuItems['google_calendar'] = [
                 'title'          => __('Google Calendar / Meet', 'fluent-booking-pro'),
-                'icon_url'       => $app['url.assets'] . 'images/google-calendar.svg',
+                'icon_url'       => $app['url.assets'] . 'images/gg-calendar.svg',
                 'component_type' => 'GlobalSettingsComponent',
                 'route'          => [
                     'name'   => 'configure-integrations',
@@ -95,7 +95,7 @@ class BootstrapX
             }
 
             return [
-                'logo'          => $app['url.assets'] . 'images/google-calendar.svg',
+                'logo'          => $app['url.assets'] . 'images/gg-calendar.svg',
                 'title'         => __('Google Calendar / Meet', 'fluent-booking-pro'),
                 'subtitle'      => __('Configure Google Calendar/Meet to sync your events', 'fluent-booking-pro'),
                 'description'   => $description,
@@ -142,7 +142,7 @@ class BootstrapX
             $app = App::getInstance();
             $calendars['google'] = [
                 'key'                  => 'google',
-                'icon'                 => $app['url.assets'] . 'images/google-calendar.svg',
+                'icon'                 => $app['url.assets'] . 'images/gg-calendar.svg',
                 'title'                => __('Google Calendar', 'fluent-booking-pro'),
                 'subtitle'             => __('Configure Google Calendar/Meet to sync your events', 'fluent-booking-pro'),
                 'btn_text'             => __('Connect with Google Calendar', 'fluent-booking-pro'),

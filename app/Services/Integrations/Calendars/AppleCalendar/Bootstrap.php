@@ -22,7 +22,7 @@ class Bootstrap extends BaseCalendar
 
         $this->calendarKey = 'apple_calendar';
         $this->calendarTitle = __('Apple Calendar', 'fluent-booking-pro');
-        $this->logo = $app['url.assets'] . 'images/apple-cal.svg';
+        $this->logo = $app['url.assets'] . 'images/a-cal.svg';
         $this->boot();
 
         add_action('fluent_booking/before_get_all_calendars', function () {
