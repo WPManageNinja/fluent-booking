@@ -1647,6 +1647,9 @@
                             width: 100%;
                         }
                     }
+                    .fcal_reminder_timing {
+                        width: 100%;
+                    }
                 }
                 &.fcal_sms_form {
                     .el-form-item {
@@ -1694,6 +1697,11 @@
                         }
                     }
                 }
+            }
+        }
+        &.fcal_add_team_member_dialog {
+            .el-dialog__body {
+                padding: 0;
             }
         }
     }
