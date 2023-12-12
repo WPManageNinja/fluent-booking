@@ -60,7 +60,7 @@
                     <el-form-item>
                         <div class="fcal_event_card">
                             <div class="fcal_meeting_duration">
-                                <el-form-item v-if="!calendar_event.settings.multi_duration.enabled" :label="$t('Meeting Duration *')">
+                                <el-form-item v-if="!calendar_event.settings?.multi_duration?.enabled" :label="$t('Meeting Duration *')">
                                     <el-select
                                         v-model="calendar_event.duration"
                                         :placeholder="$t('Select')"
@@ -82,7 +82,7 @@
                                         </el-input>
                                     </div>
                                 </el-form-item>
-                                <template v-else>
+                                <template v-else-if="showMultiDuration">
                                     <el-form-item :label="$t('Available Durations') + ' *'">
                                         <el-select
                                             v-model="calendar_event.settings.multi_duration.available_durations"
@@ -112,7 +112,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </template>
-                                <el-form-item>
+                                <el-form-item v-if="showMultiDuration">
                                     <el-switch v-model="calendar_event.settings.multi_duration.enabled" :active-text="$t('Allow attendee to select duration')"/>
                                 </el-form-item>
                             </div>
@@ -196,6 +196,11 @@ export default {
             defaultDurations: []
         }
     },
+    computed: {
+        showMultiDuration() {
+            return !this.is_board && !this.new_event && !this.isGroupMeeting
+        }
+    },
     methods: {
         toggleDisplaySpots() {
             this.calendar_event.is_display_spots = this.isDisplaySpots ? 1 : 0;
@@ -207,6 +212,9 @@ export default {
             this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
         updateDefaultDurations(updatedValue) {
+            if (!updatedValue) {
+                return;
+            }
             const durations = updatedValue.map(duration => ({
                 value: duration,
                 label: `${duration} ${this.$t('Minutes')}`

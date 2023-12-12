@@ -110,12 +110,7 @@ export default {
                         }
                     ],
                     settings: {
-                        location_fields: this.appVars.location_fields,
-                        multi_duration: {
-                            enabled: false,
-                            default_duration: '',
-                            available_durations: []
-                        }
+                        location_fields: this.appVars.location_fields
                     }
                 }
             },
