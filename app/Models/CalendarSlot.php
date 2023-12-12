@@ -492,6 +492,22 @@ class CalendarSlot extends Model
         return $total;
     }
 
+    public function getRedirectUrlWithQuery()
+    {
+        $redirectUrl   = Arr::get($this->settings, 'custom_redirect.redirect_url', '');
+        $queryString   = Arr::get($this->settings, 'custom_redirect.query_string', '');
+        $isQueryString = (Arr::get($this->settings, 'custom_redirect.is_query_string', 'no') == 'yes');
+
+        if ($isQueryString && $queryString) {
+            if (strpos($redirectUrl, '?')) {
+                $redirectUrl .= '&' . $queryString;
+            } else {
+                $redirectUrl .= '?' . $queryString;
+            }
+        }
+
+        return $redirectUrl;
+    }
 
     public function getPaymentSettings()
     {

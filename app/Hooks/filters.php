@@ -45,8 +45,10 @@
 
     if (!isset($settings['custom_redirect'])) {
         $settings['custom_redirect'] = [
-            'enabled'      => false,
-            'redirect_url' => ''
+            'enabled'         => false,
+            'redirect_url'    => '',
+            'is_query_string' => 'no',
+            'query_string'    => ''
         ];
     }
 
