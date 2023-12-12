@@ -115,7 +115,7 @@
             :before-close="() => { showAddModal = false; showAddModal = null; }"
             :title="$t('Add Team Member')"
             width="50%"
-            class="fcal_dialog"
+            class="fcal_dialog fcal_add_team_member_dialog"
         >
             <el-form v-if="showAddModal" label-position="top">
                 <el-form-item :label="$t('Select Member')">
