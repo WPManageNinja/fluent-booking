@@ -257,7 +257,6 @@ class CalendarController extends Controller
             $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
         }
 
-
         $sharingSettings = $request->get('landing_page_settings', []);
         LandingPageHelper::updateSettings($calendar, $sharingSettings);
 
@@ -316,6 +315,13 @@ class CalendarController extends Controller
             $calendar = $calendarEvent->calendar;
             $calendar->author_profile = $calendar->getAuthorProfile();
             $data['calendar'] = $calendar;
+        }
+
+        if (in_array('smart_codes', $request->get('with', []))) {
+            $data['smart_codes'] = [
+                'texts' => Helper::getEditorShortCodes($calendarEvent),
+                'html'  => Helper::getEditorShortCodes($calendarEvent, true)
+            ];
         }
 
         if (in_array('settings_menu', $this->request->get('with', []))) {
@@ -440,7 +446,8 @@ class CalendarController extends Controller
             'location_settings.*.type'              => 'required',
             'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer',
-            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true'
+            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true',
+            'custom_redirect.query_string'          => 'required_if:custom_redirect.is_query_string,yes'
         ];
 
         $conditionalRules = [];
@@ -466,8 +473,10 @@ class CalendarController extends Controller
 
         $event->settings = [
             'custom_redirect' => [
-                'enabled'      => Arr::isTrue($data, 'custom_redirect.enabled'),
-                'redirect_url' => sanitize_url(Arr::get($data, 'custom_redirect.redirect_url'))
+                'enabled'         => Arr::isTrue($data, 'custom_redirect.enabled'),
+                'redirect_url'    => sanitize_text_field(Arr::get($data, 'custom_redirect.redirect_url')),
+                'is_query_string' => Arr::get($data, 'custom_redirect.is_query_string') == 'yes' ? 'yes' : 'no',
+                'query_string'    => sanitize_text_field(Arr::get($data, 'custom_redirect.query_string')),
             ],
             'multi_duration' => [
                 'enabled'             => Arr::isTrue($data, 'multi_duration.enabled'),
