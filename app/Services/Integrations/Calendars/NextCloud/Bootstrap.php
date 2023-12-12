@@ -21,7 +21,7 @@ class Bootstrap extends BaseCalendar
 
         $this->calendarKey = 'next_cloud_calendar';
         $this->calendarTitle = __('Nextcloud Calendar', 'fluent-booking-pro');
-        $this->logo = $app['url.assets'] . 'images/Nextcloud-Logo.svg';
+        $this->logo = $app['url.assets'] . 'images/Ncloud.svg';
         $this->boot();
 
         add_action('fluent_booking/before_get_all_calendars', function () {

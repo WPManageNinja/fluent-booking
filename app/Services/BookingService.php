@@ -221,7 +221,7 @@ class BookingService
                         'details'  => $booking->title,
                         'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
                     ], 'https://calendar.google.com/calendar/r/eventedit'),
-                    'icon'  => $assetsUrl . 'images/google-icon.svg'
+                    'icon'  => $assetsUrl . 'images/g-icon.svg'
                 ],
                 'outlook'  => [
                     'title' => __('Outlook', 'fluent-booking-pro'),
@@ -234,7 +234,7 @@ class BookingService
                         'rru'      => 'addevent',
                         'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
                     ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
-                    'icon'  => $assetsUrl . 'images/outlook.svg'
+                    'icon'  => $assetsUrl . 'images/ol-icon.svg'
                 ],
                 'msoffice' => [
                     'title' => __('Microsoft Office', 'fluent-booking-pro'),
