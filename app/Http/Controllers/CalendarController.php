@@ -68,17 +68,16 @@ class CalendarController extends Controller
         $data = $request->get('calendar');
 
         $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
-            'author_timezone'                                  => 'required',
-            'slot.duration'                                    => 'required|int',
-            'slot.event_type'                                  => 'required',
-            'slot.availability_type'                           => 'required',
-            'slot.schedule_type'                               => 'required',
-            'slot.title'                                       => 'required',
-            'slot.weekly_schedules'                            => 'required_if:slot.schedule_type,weekly_schedules',
-            'user_id'                                          => 'required|int',
-            'slot.location_settings.*.type'                    => 'required',
-            'slot.location_settings.*.host_phone_number'       => 'required_if:location_settings.*.type,phone_organizer',
-            'slot.settings.multi_duration.available_durations' => 'required_if:slot.settings.multi_duration.enabled,true'
+            'author_timezone'                            => 'required',
+            'slot.duration'                              => 'required|int',
+            'slot.event_type'                            => 'required',
+            'slot.availability_type'                     => 'required',
+            'slot.schedule_type'                         => 'required',
+            'slot.title'                                 => 'required',
+            'slot.weekly_schedules'                      => 'required_if:slot.schedule_type,weekly_schedules',
+            'user_id'                                    => 'required|int',
+            'slot.location_settings.*.type'              => 'required',
+            'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ], $data));
 
         $userId = (int) $data['user_id'];
@@ -171,12 +170,7 @@ class CalendarController extends Controller
             'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
-                'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC'),
-                'multi_duration'      => [
-                    'enabled'             => Arr::isTrue($slot['settings'], 'multi_duration.enabled'),
-                    'default_duration'    => Arr::get($slot['settings'], 'multi_duration.default_duration'),
-                    'available_durations' => array_map('sanitize_text_field', Arr::get($slot['settings'], 'multi_duration.available_durations', []))
-                ]
+                'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
@@ -382,17 +376,16 @@ class CalendarController extends Controller
         $slot = $request->all();
 
         $this->validate($slot, [
-            'title'                                       => 'required',
-            'duration'                                    => 'required|int',
-            'status'                                      => 'required',
-            'settings.schedule_type'                      => 'required',
-            'settings.weekly_schedules'                   => 'required_if:settings.schedule_type,weekly_schedules',
-            'event_type'                                  => 'required',
-            'location_settings.*.type'                    => 'required',
-            'location_settings.*.title'                   => 'required_if:location_settings.*.type,custom',
-            'location_settings.*.description'             => 'required_if:location_settings.*.type,address_organizer',
-            'location_settings.*.host_phone_number'       => 'required_if:location_settings.*.type,phone_organizer',
-            'settings.multi_duration.available_durations' => 'required_if:settings.multi_duration.enabled,true'
+            'title'                                 => 'required',
+            'duration'                              => 'required|int',
+            'status'                                => 'required',
+            'settings.schedule_type'                => 'required',
+            'settings.weekly_schedules'             => 'required_if:settings.schedule_type,weekly_schedules',
+            'event_type'                            => 'required',
+            'location_settings.*.type'              => 'required',
+            'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
+            'location_settings.*.description'       => 'required_if:location_settings.*.type,address_organizer',
+            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ]);
 
         $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
@@ -414,12 +407,7 @@ class CalendarController extends Controller
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
                 'buffer_time_before'  => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_before', '0')),
                 'buffer_time_after'   => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_after', '0')),
-                'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', '')),
-                'multi_duration'      => [
-                    'enabled'             => Arr::isTrue($slot['settings'], 'multi_duration.enabled'),
-                    'default_duration'    => Arr::get($slot['settings'], 'multi_duration.default_duration'),
-                    'available_durations' => array_map('sanitize_text_field', Arr::get($slot['settings'], 'multi_duration.available_durations', []))
-                ]
+                'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', ''))
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
@@ -452,8 +440,7 @@ class CalendarController extends Controller
             'location_settings.*.type'              => 'required',
             'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer',
-            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true',
-            'multi_duration.available_durations'    => 'required_if:multi_duration.enabled,true'
+            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true'
         ];
 
         $conditionalRules = [];
@@ -462,6 +449,8 @@ class CalendarController extends Controller
                 'max_book_per_slot' => 'required|numeric|min:1',
                 'is_display_spots'  => 'required|min:0|max:1',
             ];
+        } else {
+            $conditionalRules['multi_duration.available_durations'] = 'required_if:multi_duration.enabled,true';
         }
 
         $this->validate($data, array_merge($generalRules, $conditionalRules));
@@ -482,7 +471,7 @@ class CalendarController extends Controller
             ],
             'multi_duration' => [
                 'enabled'             => Arr::isTrue($data, 'multi_duration.enabled'),
-                'default_duration'    => Arr::get($data, 'multi_duration.default_duration'),
+                'default_duration'    => Arr::get($data, 'multi_duration.default_duration', ''),
                 'available_durations' => array_map('sanitize_text_field', Arr::get($data, 'multi_duration.available_durations', []))
             ]
         ];
