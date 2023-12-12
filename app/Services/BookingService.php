@@ -170,8 +170,6 @@ class BookingService
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
-        $bookingStatus = $booking->status;
-
         switch ($booking->status) {
             case 'cancelled':
                 $bookingStatus = __('cancelled', 'fluent-booking-pro');
@@ -179,8 +177,11 @@ class BookingService
             case 'rescheduled':
                 $bookingStatus = __('rescheduled', 'fluent-booking-pro');
                 break;
-            default:
+            case 'scheduled':
                 $bookingStatus = __('scheduled', 'fluent-booking-pro');
+                break;
+            default:
+                $bookingStatus = $booking->status;
                 break;
         }
 
