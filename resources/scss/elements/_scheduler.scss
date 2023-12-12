@@ -1415,9 +1415,18 @@
                 .el-select {
                     width: auto;
                 }
+                .fcal_booking_duration {
+                    width: 20%;
+                }
               }
-              .fcal_booking_duration {
-                width: 20%;
+              .fcal_event_input_hint {
+                margin-top: 0.25rem;
+              }
+              .el-checkbox {
+                  margin-bottom: 0.5rem;
+              }
+              .fcal_booking_duration, .fcal_popover_shortcode {
+                width: 100%;
                 .el-input__wrapper {
                     border-radius: 0px;
                     border-top-left-radius: 8px;

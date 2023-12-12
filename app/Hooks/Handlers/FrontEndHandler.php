@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingFieldService;
+use FluentBooking\App\Services\EditorShortCodeParser;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -635,9 +636,32 @@ class FrontEndHandler
             return;
         }
 
+        $redirectUrl = '';
+
         $isRedirectUrlEnabled = Arr::isTrue($calendarSlot, 'settings.custom_redirect.enabled');
 
-        $redirectUrl = $isRedirectUrlEnabled ? Arr::get($calendarSlot, 'settings.custom_redirect.redirect_url', '') : '';
+        if ($isRedirectUrlEnabled) {
+            $redirectUrl = EditorShortCodeParser::parse($calendarSlot->getRedirectUrlWithQuery(), $booking);
+            $isUrlParser = apply_filters('fluent_booking/will_parse_redirect_url_value', true, $calendarSlot);
+
+            if ($isUrlParser) {
+                if (strpos($redirectUrl, '=&') || '=' == substr($redirectUrl, -1)) {
+                    $urlArray    = explode('?', $redirectUrl);
+                    $baseUrl     = array_shift($urlArray);
+                    $query       = wp_parse_url($redirectUrl)['query'];
+                    $queryParams = explode('&', $query);
+
+                    $params = [];
+                    foreach ($queryParams as $queryParam) {
+                        $paramArray = explode('=', $queryParam);
+                        if (!empty($paramArray[1])) {
+                            $params[$paramArray[0]] = $paramArray[1];
+                        }
+                    }
+                    $redirectUrl = add_query_arg($params, $baseUrl);
+                }
+            }
+        }
 
         $html = BookingService::getBookingConfirmationHtml($booking);
 

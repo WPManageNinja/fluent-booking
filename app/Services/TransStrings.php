@@ -285,6 +285,7 @@ class TransStrings
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking-pro'),
             'EventDetails/redirect_url_description'                                            => __('Redirect to a custom URL after a successful booking', 'fluent-booking-pro'),
             'EventDetails/redirect_url_placeholder'                                            => __('https://example.com/redirect-to-my-success-page', 'fluent-booking-pro'),
+            'EventDetails/redirect_query_string_hint'                                          => __('Sample: email={guest.email}&phone={booking.phone}', 'fluent-booking-pro'),
             'LimitSettings/booking_frequency'                                                  => __('Limit booking frequency', 'fluent-booking-pro'),
             'LimitSettings/booking_frequency_description'                                      => __('Limit how many times this event can be booked', 'fluent-booking-pro'),
             'LimitSettings/booking_duration'                                                   => __('Limit total booking duration', 'fluent-booking-pro'),
@@ -681,7 +682,10 @@ class TransStrings
             'System Default'                                                                   => __('System Default', 'fluent-booking-pro'),
             'Light'                                                                            => __('Light', 'fluent-booking-pro'),
             'Dark'                                                                             => __('Dark', 'fluent-booking-pro'),
+            'Redirect URL'                                                                     => __('Redirect URL', 'fluent-booking-pro'),
+            'Redirect Query String'                                                            => __('Redirect Query String', 'fluent-booking-pro'),
             'Redirect after booking'                                                           => __('Redirect after booking', 'fluent-booking-pro'),
+            'Pass Field Data Via Query String'                                                 => __('Pass Field Data Via Query String', 'fluent-booking-pro'),
             'Available Durations'                                                              => __('Available Durations', 'fluent-booking-pro'),
             'Default Duration'                                                                 => __('Default Duration', 'fluent-booking-pro'),
             'Allow attendee to select duration'                                                => __('Allow attendee to select duration', 'fluent-booking-pro')
