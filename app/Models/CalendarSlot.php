@@ -168,12 +168,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields'     => $calendar->getLocationFields(),
-            'multi_duration' => [
-                'enabled'             => false,
-                'default_duration'    => '',
-                'available_durations' => []
-            ]
+            'location_fields'     => $calendar->getLocationFields()
         ];
     }
 
