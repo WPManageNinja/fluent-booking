@@ -19,7 +19,7 @@ class LocationService
 
             $html .= '<div class="slot_location fcal_icon_item fcal_img_item fcal_loc_google_meet">';
             if ($location['type'] == 'google_meet') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/google-meet.svg" alt="Google Meet" />';
+                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/g-meet.svg" alt="Google Meet" />';
                 $html .= '<span class="fcal_loc_text">' . __('Google Meet', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'ms_teams') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/ms-teams.svg" alt="MS Teams" />';

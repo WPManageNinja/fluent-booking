@@ -163,7 +163,12 @@ class ZoomController extends Controller
         }
 
         $client = ZoomHelper::getZoomClient($metaItem->object_id);
-        $response = $client->revokeConnection();
+
+        if(!is_wp_error($client)) {
+            $response = $client->revokeConnection();
+        } else {
+            $response = $client;
+        }
 
         $metaItem->delete();
 

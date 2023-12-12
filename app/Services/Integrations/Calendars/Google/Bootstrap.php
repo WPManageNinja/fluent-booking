@@ -23,7 +23,7 @@ class Bootstrap extends BaseCalendar
 
         $this->calendarKey = 'google';
         $this->calendarTitle = __('Google Calendar / Meet', 'fluent-booking-pro');
-        $this->logo = $app['url.assets'] . 'images/google-calendar.svg';
+        $this->logo = $app['url.assets'] . 'images/gg-calendar.svg';
         $this->boot();
 
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);

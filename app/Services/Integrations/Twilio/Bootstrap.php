@@ -29,7 +29,7 @@ class Bootstrap
         $app = App::getInstance();
         $menuItems['twilio'] = [
             'title' => __('SMS by Twilio', 'fluent-booking-pro'),
-            'icon_url' => $app['url.assets'] . 'images/twilio.svg',
+            'icon_url' => $app['url.assets'] . 'images/tw.svg',
             'component_type' => 'GlobalSettingsComponent',
             'route' => [
                 'name' => 'configure-integrations',
@@ -87,7 +87,7 @@ class Bootstrap
         $description = '<p>' . __('Please read the step-by-step documentation to setup Account SID and Auth Token and get the Sender Numbers for your app.', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/twilio-integration-with-fluentbooking/">' . __('Go to the documentation article', 'fluent-booking-pro') . '</a></p>';
 
         return [
-            'logo'            => $app['url.assets'] . 'images/twilio.svg',
+            'logo'            => $app['url.assets'] . 'images/tw.svg',
             'title'           => __('Twilio SMS Integration', 'fluent-booking-pro'),
             'subtitle'        => __('Configure Twilio API to send SMS/WhatsApp notifications on booking events', 'fluent-booking-pro'),
             'description'     => $description,
