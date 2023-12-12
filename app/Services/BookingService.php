@@ -177,8 +177,11 @@ class BookingService
             case 'rescheduled':
                 $bookingStatus = __('rescheduled', 'fluent-booking-pro');
                 break;
-            default:
+            case 'scheduled':
                 $bookingStatus = __('scheduled', 'fluent-booking-pro');
+                break;
+            default:
+                $bookingStatus = $booking->status;
                 break;
         }
 
