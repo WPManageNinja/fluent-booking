@@ -3,11 +3,11 @@
         <el-form-item :label="$t('Subject')">
             <popover
                 :groupTitle="$t('Shortcodes')"
-               :data="smart_codes.texts"
+                :data="smart_codes.texts"
                 placement="bottom-end"
                 :isVisible="subjectPopupVisible"
                 class="fcal_popover_shortcode"
-               @command="handleSubjectCommand">
+                @command="handleSubjectCommand">
                <template #popoverButton>
                     <el-input
                         type="text"

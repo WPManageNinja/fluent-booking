@@ -97,7 +97,7 @@ class StripeSettings
         $descriptor = $calendarEvent->title;
         
         // Check if the string contains at least one Latin character
-        if (!preg_match('/[a-zA-Z]/', $str)) {
+        if (!preg_match('/[a-zA-Z]/', $descriptor)) {
             $descriptor = 'Event: ' . $descriptor;
         }
         $descriptor = stripslashes($descriptor);
