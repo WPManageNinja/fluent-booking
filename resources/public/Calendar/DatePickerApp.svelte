@@ -241,7 +241,7 @@
         if (isFFConversational) {
             appData.element.dispatchEvent(new CustomEvent('value.update', {
                 detail: {
-                    value: JSON.stringify({id, timezone, start_time})
+                    value: JSON.stringify({id, timezone, duration, start_time})
                 }
             }));
         }
