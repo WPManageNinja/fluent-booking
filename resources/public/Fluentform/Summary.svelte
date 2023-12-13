@@ -1,5 +1,5 @@
 <script>
-    import { util } from '../util.js';
+    import { util, i18 } from '../util.js';
 
     export let timezone, slot, selectedDateTime;
 
@@ -10,11 +10,11 @@
     <table>
         <tbody>
             <tr>
-                <th>Date</th>
+                <th>{i18('Date')}</th>
                 <td>{util.dateTimeI18(selectedDateTime.start, 'dddd, MMM DD, YYYY')}</td>
             </tr>
             <tr>
-                <th>Time</th>
+                <th>{i18('Time')}</th>
                 <td>
                     {#if slot.time_format == '24' }
                         {util.dateTimeI18(selectedDateTime.start, 'HH:mm')}
@@ -26,7 +26,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Timezone</th>
+                <th>{i18('Timezone')}</th>
                 <td>{timezone}</td>
             </tr>
         </tbody>

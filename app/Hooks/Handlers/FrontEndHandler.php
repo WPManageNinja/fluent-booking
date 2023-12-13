@@ -465,7 +465,9 @@ class FrontEndHandler
                 'Processing...'                 => __('Processing...', 'fluent-booking-pro'),
                 'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                            => __('PM', 'fluent-booking-pro'),
-                'AM'                            => __('AM', 'fluent-booking-pro')
+                'AM'                            => __('AM', 'fluent-booking-pro'),
+                'Date'                          => __('Date', 'fluent-booking-pro'),
+                'Time'                          => __('Time', 'fluent-booking-pro')
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
