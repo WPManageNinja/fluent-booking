@@ -389,6 +389,7 @@ class TransStrings
             'Upcoming'                                                                         => __('Upcoming', 'fluent-booking-pro'),
             'Completed'                                                                        => __('Completed', 'fluent-booking-pro'),
             'Cancelled'                                                                        => __('Cancelled', 'fluent-booking-pro'),
+            'cancelled'                                                                        => __('cancelled', 'fluent-booking-pro'),
             'Pending'                                                                          => __('Pending', 'fluent-booking-pro'),
             'No Show'                                                                          => __('No Show', 'fluent-booking-pro'),
             'Event Guests'                                                                     => __('Event Guests', 'fluent-booking-pro'),
