@@ -56,14 +56,14 @@ class EmailNotificationService
             $replyTo = $guestAddress;
         } else {
             $to = $guestAddress;
-            $replyName = $useHostName == 'no'? $settingsReplyToName: $hostName;
-            $formName = $useHostName == 'no'? $settingsFromName: $hostName;
+            $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
+            $fromName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no'? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no'? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
-            $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
+            $from = sprintf('%1s <%2s>', $fromName, $replyFromEmail);
         }
 
         $headers = [
@@ -75,7 +75,7 @@ class EmailNotificationService
         }
 
         if (isset($email['recipients'])) {
-            $headers[] = 'Bcc: ' . implode(', ', $email['recipients']);
+            $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
         }
 
         $body = (string)App::make('view')->make('emails.template', [
@@ -133,11 +133,11 @@ class EmailNotificationService
             $replyTo = $guestAddress;
         } else {
             $to = $guestAddress;
-            $replyName = $useHostName == 'no'? $settingsReplyToName: $hostName;
-            $formName = $useHostName == 'no'? $settingsFromName: $hostName;
+            $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
+            $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no'? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no'? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
             $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
@@ -152,7 +152,7 @@ class EmailNotificationService
         }
 
         if (isset($email['recipients'])) {
-            $headers[] = 'Bcc: ' . implode(', ', $email['recipients']);
+            $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
         }
 
         $subject = EditorShortCodeParser::parse($email['subject'], $booking);
@@ -194,7 +194,9 @@ class EmailNotificationService
 
         // Host Address
         $hostAddress = $author['email'];
+        $hostName = '';
         if ($author['name']) {
+            $hostName = $author['name'];
             $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
         }
 
@@ -206,17 +208,36 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
         }
 
+        $globalSettings = Helper::getGlobalSettings();
+        $useHostName = Arr::get($globalSettings, 'emailing.use_host_name', 'yes');
+        $useHostEmailOnReply = Arr::get($globalSettings, 'emailing.use_host_email_on_reply', 'yes');
+        $settingsFromName = Arr::get($globalSettings, 'emailing.from_name', '');
+        $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
+        $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
+        $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
+
         if ('host' == $emailTo) {
             $to = $hostAddress;
             $replyTo = $guestAddress;
         } else {
             $to = $guestAddress;
-            $replyTo = $hostAddress;
+            $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
+            $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
+
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+
+            $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
+            $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
         }
 
         $headers = [
             'Reply-To: ' . $replyTo
         ];
+
+        if (isset($email['recipients'])) {
+            $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
+        }
 
         $subject = EditorShortCodeParser::parse($email['subject'], $booking);
         $html = EditorShortCodeParser::parse($email['body'], $booking);
@@ -250,7 +271,9 @@ class EmailNotificationService
 
         // Host Address
         $hostAddress = $author['email'];
+        $hostName = '';
         if ($author['name']) {
+            $hostName = $author['name'];
             $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
         }
 
@@ -262,17 +285,36 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
         }
 
+        $globalSettings = Helper::getGlobalSettings();
+        $useHostName = Arr::get($globalSettings, 'emailing.use_host_name', 'yes');
+        $useHostEmailOnReply = Arr::get($globalSettings, 'emailing.use_host_email_on_reply', 'yes');
+        $settingsFromName = Arr::get($globalSettings, 'emailing.from_name', '');
+        $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
+        $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
+        $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
+
         if ('host' == $emailTo) {
             $to = $hostAddress;
             $replyTo = $guestAddress;
         } else {
             $to = $guestAddress;
-            $replyTo = $hostAddress;
+            $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
+            $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
+
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+
+            $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
+            $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
         }
 
         $headers = [
             'Reply-To: ' . $replyTo
         ];
+
+        if (isset($email['recipients'])) {
+            $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
+        }
 
         $subject = EditorShortCodeParser::parse($email['subject'], $booking);
         $html = EditorShortCodeParser::parse($email['body'], $booking);
