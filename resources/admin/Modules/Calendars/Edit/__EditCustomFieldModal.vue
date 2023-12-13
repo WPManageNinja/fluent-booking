@@ -102,6 +102,10 @@ export default {
             } else {
                 this.fieldData.options = {};
             }
+            if (this.fieldData.type == 'checkbox') {
+                this.fieldData.required = false;
+                this.fieldData.disable_alter = true;
+            }
         }
     },
     computed: {
