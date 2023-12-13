@@ -207,13 +207,14 @@
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
-                dispatch('onPaymentsVisibilityChanged', true);
                 if (res.data?.redirect_to) {
                     window.location.href = res.data.redirect_to;
                     return;
                 }
-
                 if (res.data?.actionName === 'custom') {
+                    if (res.data?.data?.payment_method) {
+                        dispatch('onPaymentsVisibilityChanged', true);
+                    }
                     if (res.data?.intent?.errors) {
                         errors = getErrorText(res.data?.intent?.errors);
                         return;
