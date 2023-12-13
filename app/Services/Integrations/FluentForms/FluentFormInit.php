@@ -465,7 +465,9 @@ class FluentFormInit
             $localizeData['disable_author'] = true;
         }
 
-        $localizeData['form_instance'] = $form->instance_css_class;
+        if(!empty($form->instance_css_class)) {
+            $localizeData['form_instance'] = $form->instance_css_class;
+        }
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
         if ($locationFieldKey) {
