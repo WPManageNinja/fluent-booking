@@ -43,6 +43,10 @@
     }
 
     function checkDevice() {
+        let timeout = 0;
+        if (isFluentform) {
+            timeout = 2000;
+        }
         setTimeout(() => {
             wrapperWidth = wrapDom.parentNode.offsetWidth;
             const conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
@@ -59,7 +63,7 @@
             } else {
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
-        }, 2000)
+        }, timeout)
     }
 
     onMount(() => {
