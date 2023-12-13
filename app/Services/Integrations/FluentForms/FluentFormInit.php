@@ -133,13 +133,16 @@ class FluentFormInit
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
 
+        die('Please implement this part');
+
         if ($locationFieldKey) {
             $requiredKeys = [];
             if ($locationFieldKey == 'location') {
                 $locationFieldKey = 'location_config';
             }
 
-            $userInputData = Arr::get($bookingData, 'form.' . $locationFieldKey);
+            $userInputData = Arr::get($bookingData,  $locationFieldKey);
+
             if (in_array($locationFieldKey, ['phone_number', 'address'])) {
                 $requiredKeys[] = $locationFieldKey;
             } else if ($locationFieldKey == 'location_config') {
