@@ -571,8 +571,9 @@ class FrontEndHandler
 
         $duration = $calendarSlot->duration;
         if (Arr::isTrue($calendarSlot->settings, 'multi_duration.enabled')) {
-            $requestedDuration = Arr::get($_REQUEST, 'duration');
-            if (in_array($requestedDuration, Arr::get($calendarSlot->settings, 'multi_duration.available_durations'))) {
+            $requestedDuration  = Arr::get($_REQUEST, 'duration');
+            $availableDurations = Arr::get($calendarSlot->settings, 'multi_duration.available_durations', []);
+            if (in_array($requestedDuration, $availableDurations)) {
                 $duration = $requestedDuration;
             }
         }
@@ -704,8 +705,9 @@ class FrontEndHandler
 
         $duration = $slot->duration;
         if (Arr::isTrue($slot->settings, 'multi_duration.enabled')) {
-            $requestedDuration = Arr::get($_REQUEST, 'duration');
-            if (in_array($requestedDuration, Arr::get($slot->settings, 'multi_duration.available_durations'))) {
+            $requestedDuration  = Arr::get($_REQUEST, 'duration');
+            $availableDurations = Arr::get($slot->settings, 'multi_duration.available_durations', []);
+            if (in_array($requestedDuration, $availableDurations)) {
                 $duration = $requestedDuration;
             }
         }
