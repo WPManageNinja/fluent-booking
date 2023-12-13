@@ -43,21 +43,23 @@
     }
 
     function checkDevice() {
-        wrapperWidth = wrapDom.parentNode.offsetWidth;
-        const conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
+        setTimeout(() => {
+            wrapperWidth = wrapDom.parentNode.offsetWidth;
+            const conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
 
-        if (wrapperWidth >= 900) {
-            wrapperClass = 'fcal_on_lg';
-        } else if (wrapperWidth >= 800) {
-            wrapperClass = 'fcal_on_md';
-        } else if (wrapperWidth >= 600) {
-            wrapperClass = 'fcal_on_sm';
-            if (conversationalPage.length && appData.disable_author) {
+            if (wrapperWidth >= 900) {
+                wrapperClass = 'fcal_on_lg';
+            } else if (wrapperWidth >= 800) {
                 wrapperClass = 'fcal_on_md';
+            } else if (wrapperWidth >= 600) {
+                wrapperClass = 'fcal_on_sm';
+                if (conversationalPage.length && appData.disable_author) {
+                    wrapperClass = 'fcal_on_md';
+                }
+            } else {
+                wrapperClass = 'fcal_on_xs fcal_mobile';
             }
-        } else {
-            wrapperClass = 'fcal_on_xs fcal_mobile';
-        }
+        }, 2000)
     }
 
     onMount(() => {
