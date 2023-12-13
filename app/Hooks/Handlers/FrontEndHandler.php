@@ -7,7 +7,6 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingFieldService;
-use FluentBooking\App\Services\EditorShortCodeParser;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -63,7 +62,7 @@ class FrontEndHandler
                 ];
             });
 
-            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData) {
+            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData, $calendarEvent) {
                 $existingHash = Arr::get($postedData, 'rescheduling_hash');
                 $existingBooking = Booking::where('hash', $existingHash)->first();
 
@@ -136,15 +135,18 @@ class FrontEndHandler
                     return $data;
                 });
 
+                $redirectUrl = $calendarEvent->getRedirectUrlWithQuery($existingBooking);
+
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
                     'message'       => __('Booking has been rescheduled', 'fluent-booking-pro'),
+                    'redirect_url'  => $redirectUrl,
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
                 ], 200);
 
-            }, 10, 2);
+            }, 10, 3);
         });
     }
 
@@ -637,32 +639,7 @@ class FrontEndHandler
             return;
         }
 
-        $redirectUrl = '';
-
-        $isRedirectUrlEnabled = Arr::isTrue($calendarSlot, 'settings.custom_redirect.enabled');
-
-        if ($isRedirectUrlEnabled) {
-            $redirectUrl = EditorShortCodeParser::parse($calendarSlot->getRedirectUrlWithQuery(), $booking);
-            $isUrlParser = apply_filters('fluent_booking/will_parse_redirect_url_value', true, $calendarSlot);
-
-            if ($isUrlParser) {
-                if (strpos($redirectUrl, '=&') || '=' == substr($redirectUrl, -1)) {
-                    $urlArray    = explode('?', $redirectUrl);
-                    $baseUrl     = array_shift($urlArray);
-                    $query       = wp_parse_url($redirectUrl)['query'];
-                    $queryParams = explode('&', $query);
-
-                    $params = [];
-                    foreach ($queryParams as $queryParam) {
-                        $paramArray = explode('=', $queryParam);
-                        if (!empty($paramArray[1])) {
-                            $params[$paramArray[0]] = $paramArray[1];
-                        }
-                    }
-                    $redirectUrl = add_query_arg($params, $baseUrl);
-                }
-            }
-        }
+        $redirectUrl = $calendarSlot->getRedirectUrlWithQuery($booking);
 
         $html = BookingService::getBookingConfirmationHtml($booking);
 
