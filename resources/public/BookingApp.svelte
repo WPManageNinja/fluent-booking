@@ -79,7 +79,6 @@
     }
 
     function durationSelected(value) {
-        console.log(value);
         duration = value;
     }
 
