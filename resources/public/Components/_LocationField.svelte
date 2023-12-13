@@ -25,7 +25,8 @@
         </div>
     {/if}
     {#if appData.is_fluentform}
-        <input type="hidden" name="{appData.name + '__location' }" value={JSON.stringify(form.location_config)}/>
+        <input type="hidden" name="{appData.name + '__location' }"
+               value={JSON.stringify(form.location_config)}/>
     {/if}
 </div>
 

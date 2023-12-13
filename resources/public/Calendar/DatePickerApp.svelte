@@ -382,7 +382,4 @@
             </div>
         </div>
     </div>
-    {#if isFluentform}
-        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, duration, start_time, form })}/>
-    {/if}
 </div>
