@@ -26,7 +26,8 @@ class TimeSlotService
 
     public function getDates($fromDate = false, $toDate = false, $duration = null, $bookingRequest = false)
     {
-        $period = ($duration ?: $this->calendarSlot->duration) * 60;
+        $duration = $duration ?: $this->calendarSlot->duration;
+        $period   = $duration * 60;
 
         $fromDate = $fromDate ? $fromDate : date('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toDate = $toDate ? $toDate : date('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -37,7 +38,7 @@ class TimeSlotService
         $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
 
         $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
-        $ranges = $this->maybeBookingDurationLimitRanges($ranges, $bookedSlots);
+        $ranges = $this->maybeBookingDurationLimitRanges($ranges, $bookedSlots, $duration);
 
         $timeStamp = DateTimeHelper::getTimestamp($this->calendar->author_timezone);
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
@@ -157,7 +158,6 @@ class TimeSlotService
 
         //  $formattedSlots = $this->convertSlotSetsToFlat($this->groupedSlots, $this->calendar->author_timezone);
 
-
         return $rangedValidSlots;
     }
 
@@ -171,6 +171,8 @@ class TimeSlotService
 
         $fromTime = date('Y-m-d 00:00:00', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toTime = date('Y-m-d 23:59:59', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+        $duration = $duration ?: $this->calendarSlot->duration;
 
         $slots = $this->getDates($fromTime, $toTime, $duration, true);
 
@@ -362,9 +364,9 @@ class TimeSlotService
         return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
     }
 
-    protected function getWeekDaySlots($duration = null)
+    protected function getWeekDaySlots($duration)
     {
-        $period = ($duration ?: $this->calendarSlot->duration) * 60;
+        $period = $duration * 60;
 
         $schedule = $this->calendarSlot->settings['weekly_schedules'];
 
@@ -443,11 +445,12 @@ class TimeSlotService
 
     public function getAvailableSpots($startDate, $timeZone = 'utc', $duration = null)
     {
-        $slot = $this->calendarSlot;
+        $slot     = $this->calendarSlot;
         $calendar = $this->calendar;
-        $requestedDate = $startDate;
-
+        $duration = $duration ?: $this->calendarSlot->duration;
+        
         // Extract current month and year
+        $requestedDate = $startDate;
         $requestedDateMonth = date('m', strtotime($requestedDate));
         $requestedDateYear = date('Y', strtotime($requestedDate));
 
@@ -659,7 +662,7 @@ class TimeSlotService
         return $ranges;
     }
 
-    private function maybeBookingDurationLimitRanges($ranges, $bookedSlots)
+    private function maybeBookingDurationLimitRanges($ranges, $bookedSlots, $duration)
     {
         if (!$ranges) {
             return $ranges;
@@ -678,8 +681,6 @@ class TimeSlotService
             }
         }
 
-        $bookingDuration = $this->calendarSlot->duration;
-
         // Per Month Booking Frequency Limit Hanlder
         if (!empty($keyedLimits['per_month'])) {
             $startDate = date('Y-m-01 00:00:00', strtotime(min($ranges)));
@@ -689,7 +690,7 @@ class TimeSlotService
                 DateTimeHelper::convertToUtc($startDate, $this->calendar->author_timezone),
                 DateTimeHelper::convertToUtc($endDate, $this->calendar->author_timezone)
             );
-            if ($monthlyDuration + $bookingDuration > $keyedLimits['per_month']) {
+            if ($monthlyDuration + $duration > $keyedLimits['per_month']) {
                 $ranges = [];
             }
         }
@@ -704,7 +705,7 @@ class TimeSlotService
                     DateTimeHelper::convertToUtc($filledWeek[6] . ' 23:59:59', $this->calendar->author_timezone)
                 );
 
-                if ($weeklyDuration + $bookingDuration > $weeklyLimit) {
+                if ($weeklyDuration + $duration > $weeklyLimit) {
                     $ranges = array_filter($ranges, function ($rangeDate) use ($filledWeek) {
                         return !in_array($rangeDate, $filledWeek);
                     });
@@ -735,7 +736,7 @@ class TimeSlotService
                     continue;
                 }
 
-                if ($dayDurarion + $bookingDuration > $perDayLimit) {
+                if ($dayDurarion + $duration > $perDayLimit) {
                     unset($ranges[$rangeIndex]);
                 }
             }
