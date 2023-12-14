@@ -7,7 +7,7 @@ use FluentBooking\Framework\Foundation\RequestGuard;
 class UserRequest extends RequestGuard
 {
     /**
-     * @return Array
+     * @return array
      */
     public function rules()
     {
@@ -15,7 +15,7 @@ class UserRequest extends RequestGuard
     }
 
     /**
-     * @return Array
+     * @return array
      */
     public function messages()
     {
@@ -23,7 +23,7 @@ class UserRequest extends RequestGuard
     }
 
     /**
-     * @return Array
+     * @return array
      */
     public function sanitize()
     {
