@@ -557,7 +557,7 @@ class Request
             );
         }
 
-        $this->validated = $validator->validated();
+        $this->validated = $validator->validated($data);
 
         return $data;
     }
@@ -567,7 +567,7 @@ class Request
      *
      * @return array
      */
-    public function validated()
+    public function validated($data = [])
     {
         if ($data) {
             return $this->validated = $data;
