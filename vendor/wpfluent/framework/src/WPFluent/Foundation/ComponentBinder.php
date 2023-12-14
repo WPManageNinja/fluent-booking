@@ -89,9 +89,7 @@ class ComponentBinder
             }
 
             $request->merge($request->beforeValidation());
-
-            $data = $request->validate($app->make('validator'));
-
+            $request->validate();
             $request->merge($request->afterValidation());
         });
     }

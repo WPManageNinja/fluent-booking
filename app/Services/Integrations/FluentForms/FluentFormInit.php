@@ -133,6 +133,7 @@ class FluentFormInit
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
 
+
         if ($locationFieldKey) {
             $requiredKeys = [];
             if ($locationFieldKey == 'location') {
@@ -140,6 +141,7 @@ class FluentFormInit
             }
 
             $userInputData = Arr::get($bookingData, 'form.' . $locationFieldKey);
+
             if (in_array($locationFieldKey, ['phone_number', 'address'])) {
                 $requiredKeys[] = $locationFieldKey;
             } else if ($locationFieldKey == 'location_config') {
@@ -465,7 +467,9 @@ class FluentFormInit
             $localizeData['disable_author'] = true;
         }
 
-        $localizeData['form_instance'] = $form->instance_css_class;
+        if(!empty($form->instance_css_class)) {
+            $localizeData['form_instance'] = $form->instance_css_class;
+        }
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
         if ($locationFieldKey) {
