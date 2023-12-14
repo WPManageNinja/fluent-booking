@@ -558,7 +558,7 @@ class TimeSlotService
         }
 
         // Add the last day if it was not included in the loop
-        if ($end->format('Y-m-d') !== $date->format('Y-m-d')) {
+        if ($end->format('Y-m-d') !== $start->format('Y-m-d')) {
             $lastDayKey = $end->format('Y-m-d');
             $rangeArray[$lastDayKey] = $this->bookSlot(Arr::get($slotConfig, 'event_id'), $end->format('Y-m-d 00:00:00'), $endTime, Arr::get($slotConfig, 'remaining'));
         }
