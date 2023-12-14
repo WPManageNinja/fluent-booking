@@ -11,13 +11,13 @@ class OutlookHelper
     public static function getApiConfig()
     {
         $options = get_option('_fcal_outlook_calendar_client_details', []);
-        return [
+        return apply_filters('fluent_booking/outlook_app_credentials', [
             'client_id'         => 'db98d3d0-c944-41f8-bb01-555c913a903b',
             'client_secret'     => 'B2J8Q~sOFsiiHrqk_ajYL3NcIAv0mEPu6hWuLbHV',
             'constant_defined'  => true,
             'is_system_defined' => 'yes',
             'caching_time'      => Arr::get($options, 'caching_time', 5)
-        ];
+        ]);
     }
 
     public static function updateApiConfig($settings)
@@ -135,7 +135,7 @@ class OutlookHelper
 
     public static function getAppRedirectUrl()
     {
-        return 'https://fluentbooking.com/wp-json/fluent-api/outlook/';
+        return apply_filters('fluent_booking/outlook_app_redirect_url', 'https://fluentbooking.com/wp-json/fluent-api/outlook/');
     }
 
     public static function getUniqueSiteIdHash()
