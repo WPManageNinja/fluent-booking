@@ -32,7 +32,7 @@ add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $cale
         'route'   => [
             'name'   => 'remote_calendars',
             'params' => [
-                'id' => $calendar->id
+                'calendar_id' => $calendar->id
             ]
         ],
         'label'   => __('Remote Calendars', 'fluent-booking-pro'),

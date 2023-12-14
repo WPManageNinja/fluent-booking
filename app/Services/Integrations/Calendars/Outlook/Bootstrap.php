@@ -303,7 +303,7 @@ class Bootstrap extends BaseCalendar
 
     public function createEvent($config, Booking $booking)
     {
-        if ($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event')) {
+        if (($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event') && $booking->event_type == 'single')) {
             return; // already created
         }
 

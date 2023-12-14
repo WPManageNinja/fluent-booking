@@ -347,7 +347,6 @@
                             <DayPickerApp
                                 {appData}
                                 {slot}
-                                {settings}
                                 {selectedDate}
                                 {selectedDateTime}
                                 bind:duration={duration}

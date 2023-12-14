@@ -215,7 +215,7 @@ class CalendarController extends Controller
                     'route'   => [
                         'name'   => 'calendar_settings',
                         'params' => [
-                            'id' => $calendar->id
+                            'calendar_id' => $calendar->id
                         ]
                     ],
                     'label'   => __('Calendar Settings', 'fluent-booking-pro'),

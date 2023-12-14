@@ -305,7 +305,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__next_cloud_calendar_event')) {
+        if ($booking->getMeta('__next_cloud_calendar_event') && $booking->event_type == 'single') {
             return false; // Already created
         }
 
@@ -449,16 +449,17 @@ class Bootstrap extends BaseCalendar
 
     public function maybeAddOrRemoveGroupMembers($config, $booking, $allGroupBookings, $isRescheduling)
     {
-        $parentMeta = null;
+        $parentMeta = $parentBooking = null;
 
         $missingEventBookings = [];
 
-        foreach ($allGroupBookings as $parentBooking) {
-            $meta = $parentBooking->getMeta('__next_cloud_calendar_event', []);
+        foreach ($allGroupBookings as $groupBooking) {
+            $meta = $groupBooking->getMeta('__next_cloud_calendar_event', []);
             if (!$meta) {
-                $missingEventBookings[] = $parentBooking;
+                $missingEventBookings[] = $groupBooking;
             } else if (!$parentMeta) {
                 $parentMeta = $meta;
+                $parentBooking = $groupBooking;
             }
         }
 
@@ -494,7 +495,7 @@ class Bootstrap extends BaseCalendar
         try {
             $apiCalendar = new Calendar(['href' => $parentCalendarId], $client->getClient());
             $apiEvent = $apiCalendar->getEvent($parentEventId);
-            $eventData = $this->prepareEventData($booking);
+            $eventData = $this->prepareEventData($parentBooking);
             $eventData['attendees'] = $attendees;
             $eventData['description'] = __('This is a group event.', 'fluent-booking-pro');
             foreach ($eventData as $key => $datum) {
