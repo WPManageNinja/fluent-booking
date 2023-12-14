@@ -268,6 +268,7 @@ return array(
     'FluentBooking\\Framework\\Foundation\\UnAuthorizedException' => $vendorDir . '/wpfluent/framework/src/WPFluent/Foundation/UnAuthorizedException.php',
     'FluentBooking\\Framework\\Foundation\\WPException' => $vendorDir . '/wpfluent/framework/src/WPFluent/Foundation/WPException.php',
     'FluentBooking\\Framework\\Http\\Controller' => $vendorDir . '/wpfluent/framework/src/WPFluent/Http/Controller.php',
+    'FluentBooking\\Framework\\Http\\Group' => $vendorDir . '/wpfluent/framework/src/WPFluent/Http/Group.php',
     'FluentBooking\\Framework\\Http\\Route' => $vendorDir . '/wpfluent/framework/src/WPFluent/Http/Route.php',
     'FluentBooking\\Framework\\Http\\Router' => $vendorDir . '/wpfluent/framework/src/WPFluent/Http/Router.php',
     'FluentBooking\\Framework\\Http\\SubstituteRouteParametersTrait' => $vendorDir . '/wpfluent/framework/src/WPFluent/Http/SubstituteRouteParametersTrait.php',
