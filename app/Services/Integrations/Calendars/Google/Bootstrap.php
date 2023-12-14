@@ -249,7 +249,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__google_calendar_event')) {
+        if ($booking->event_type == 'single' && $booking->getMeta('__google_calendar_event')) {
             return false; // Already created
         }
 

@@ -352,7 +352,6 @@
                                 {selectedDateTime}
                                 bind:duration={duration}
                                 bind:timezone={timezone}
-                                bind:form={form}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
                                 on:dateOnFluentForm={(e) => {fluentFormDateHandle(e)}}
