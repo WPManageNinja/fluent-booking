@@ -313,7 +313,7 @@ class EditorShortCodeParser
     {
         if (0 === strpos($key, 'date.')) {
             $format = str_replace('date.', '', $key);
-            return date($format, strtotime(current_time('mysql'))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return gmdate($format, strtotime(current_time('mysql'))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
         return $key;
     }

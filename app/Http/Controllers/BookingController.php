@@ -26,7 +26,7 @@ class BookingController extends Controller
         }
 
         $calendar = $slot->calendar;
-        $startDate = $request->get('start_date', date('Y-m-d H:i:s'));
+        $startDate = $request->get('start_date', gmdate('Y-m-d H:i:s'));
         $timeZone = $request->get('timezone', 'UTC');
 
         if (!$timeZone) {
@@ -134,7 +134,7 @@ class BookingController extends Controller
         }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['event_time'], $postedData['timezone']);
-        $endDateTime   = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $endDateTime   = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -229,7 +229,7 @@ class BookingController extends Controller
         $startDate = $request->get('start_date');
 
         if (!$startDate) {
-            $startDate = date('Y-m-d H:i:s');
+            $startDate = gmdate('Y-m-d H:i:s');
         }
 
         $timeZone = $request->get('timezone');

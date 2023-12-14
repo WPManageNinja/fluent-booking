@@ -224,10 +224,10 @@ class LandingPageHandler
 
         $calendarEvent->pre_selects = false;
 
-        if (date('m') != date('m', strtotime($calendarEvent->min_lookup_date))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        if (gmdate('m') != gmdate('m', strtotime($calendarEvent->min_lookup_date))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $calendarEvent->pre_selects = [
-                'month' => date('m', strtotime($calendarEvent->min_lookup_date)), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                'year'  => date('Y', strtotime($calendarEvent->min_lookup_date)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                'month' => gmdate('m', strtotime($calendarEvent->min_lookup_date)), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                'year'  => gmdate('Y', strtotime($calendarEvent->min_lookup_date)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ];
         }
 

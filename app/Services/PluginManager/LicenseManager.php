@@ -354,7 +354,7 @@ class LicenseManager
             $renewUrl = $this->getRenewUrl();
         }
 
-        return '<p>Your ' . $this->getVar('plugin_title') . ' ' . __('license has been', 'fluent-booking-pro') . ' <b>' . __('expired at', 'fluent-booking-pro') . ' ' . date('d M Y', strtotime($licenseData['expires'])) . '</b>, Please ' .
+        return '<p>Your ' . $this->getVar('plugin_title') . ' ' . __('license has been', 'fluent-booking-pro') . ' <b>' . __('expired at', 'fluent-booking-pro') . ' ' . gmdate('d M Y', strtotime($licenseData['expires'])) . '</b>, Please ' .
             '<a href="' . $renewUrl . '"><b>' . __('Click Here to Renew Your License', 'fluent-booking-pro') . '</b></a>' . '</p>';
     }
 

@@ -39,8 +39,8 @@ class OutlookCalendar
     {
         $defaults = [
             'maxResults'    => 2000,
-            'startDateTime' => date('Y-m-d') . 'T00:00:00Z',
-            'endDateTime'   => date('Y-m-d', strtotime('+1 month')) . 'T00:00:00Z'
+            'startDateTime' => gmdate('Y-m-d') . 'T00:00:00Z',
+            'endDateTime'   => gmdate('Y-m-d', strtotime('+1 month')) . 'T00:00:00Z'
         ];
 
         $args = array_merge($defaults, $args);

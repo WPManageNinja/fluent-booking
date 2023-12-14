@@ -103,7 +103,7 @@ class FluentFormInit
         $timeZone = $bookingData['timezone'];
 
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
@@ -184,7 +184,7 @@ class FluentFormInit
                         }
                     }
                     $validData['duration'] = $duration;
-                    $validData['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
+                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
                 }
 
                 $data[$name] = (array)$validData;

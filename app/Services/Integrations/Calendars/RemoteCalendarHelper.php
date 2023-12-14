@@ -138,7 +138,7 @@ class RemoteCalendarHelper
             return array_map(function ($date) use ($durationSeconds, $args) {
 
                 $start = $date->format('Y-m-d H:i:s');
-                $endDateTime = date('Y-m-d H:i:s', strtotime($start) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $endDateTime = gmdate('Y-m-d H:i:s', strtotime($start) + $durationSeconds); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 if (!$args) {
                     return [
@@ -166,7 +166,7 @@ class RemoteCalendarHelper
     public static function convertToTimeZoneOffset($dateTime, $toTimeZone, $refernceDate = null)
     {
         if ($toTimeZone === 'UTC') {
-            return date('Y-m-d H:i:s', strtotime($dateTime));
+            return gmdate('Y-m-d H:i:s', strtotime($dateTime));
         }
 
         if (!$refernceDate) {
