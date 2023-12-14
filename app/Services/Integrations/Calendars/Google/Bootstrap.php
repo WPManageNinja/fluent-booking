@@ -190,7 +190,7 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $start = gmdate('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
         $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
 
         $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
@@ -305,10 +305,10 @@ class Bootstrap extends BaseCalendar
 
         $data = [
             'start'              => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
             ],
             'end'                => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ],
             'attendees'          => [
                 $guestAttendee,
@@ -481,11 +481,11 @@ class Bootstrap extends BaseCalendar
 
         if (!empty($updateData['start'])) {
             $updateData['start'] = [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
             ];
 
             $updateData['end'] = [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ];
         }
 

@@ -84,7 +84,7 @@ class FrontEndHandler
                     ], 422);
                 }
 
-                $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
+                $endDateTime = gmdate('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
 
                 $previousBooking = clone $existingBooking;
 
@@ -583,7 +583,7 @@ class FrontEndHandler
         }
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -669,7 +669,7 @@ class FrontEndHandler
         $startDate = Arr::get($_REQUEST, 'start_date'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
-            $startDate = date('Y-m-d H:i:s');
+            $startDate = gmdate('Y-m-d H:i:s');
         }
 
         $timeZone = Arr::get($_REQUEST, 'timezone'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended

@@ -46,7 +46,7 @@ class SanitizeService
     public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $event = false)
     {
 
-        $todayTimeStamp = strtotime(date('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $validOverrides = [];
         $updatedOverRides = [];
@@ -105,8 +105,8 @@ class SanitizeService
 
         $range = array_values($range);
 
-        $range[0] = date('Y-m-d H:i:s', strtotime(sanitize_text_field($range[0]))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        $range[1] = date('Y-m-d H:i:s', strtotime(sanitize_text_field($range[1]))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $range[0] = gmdate('Y-m-d H:i:s', strtotime(sanitize_text_field($range[0]))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $range[1] = gmdate('Y-m-d H:i:s', strtotime(sanitize_text_field($range[1]))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         return $range;
     }
