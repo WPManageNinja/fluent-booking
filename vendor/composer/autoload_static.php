@@ -294,6 +294,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\Framework\\Foundation\\UnAuthorizedException' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Foundation/UnAuthorizedException.php',
         'FluentBooking\\Framework\\Foundation\\WPException' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Foundation/WPException.php',
         'FluentBooking\\Framework\\Http\\Controller' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Http/Controller.php',
+        'FluentBooking\\Framework\\Http\\Group' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Http/Group.php',
         'FluentBooking\\Framework\\Http\\Route' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Http/Route.php',
         'FluentBooking\\Framework\\Http\\Router' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Http/Router.php',
         'FluentBooking\\Framework\\Http\\SubstituteRouteParametersTrait' => __DIR__ . '/..' . '/wpfluent/framework/src/WPFluent/Http/SubstituteRouteParametersTrait.php',

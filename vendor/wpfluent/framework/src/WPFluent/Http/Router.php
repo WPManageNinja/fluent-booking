@@ -124,7 +124,7 @@ class Router
             }
         }
 
-        $this->executeGroupCallback($callback);
+        return new Group($this, $callback);
     }
 
     /**
@@ -218,7 +218,7 @@ class Router
      * @param  Closure $callback
      * @return null
      */
-    protected function executeGroupCallback($callback)
+    public function executeGroupCallback($callback)
     {
         $callback($this);
         $this->groupCount -= 1;

@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.2.4
+Stable tag: 1.2.41
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1.2.4 (Date: 14 Dec 2023)
+1.2.41 (Date: 14 Dec 2023)
 - Nextcloud Calendar Integration
 - Redirection Option After Booking
 - New Custom Field Types in Question Settings

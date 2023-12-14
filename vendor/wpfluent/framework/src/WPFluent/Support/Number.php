@@ -493,7 +493,7 @@ class Number
 
 			return $result;
 
-	    } elseif ($number < 1000000000000000000) {
+	    } elseif (intval($number) < 1000000000000000000) {
 
 		    $result = static::convertToWords(
 		    	intval($number / 1000000000000000), $numberWords, $tensWords
@@ -509,7 +509,7 @@ class Number
 
 			return $result;
 
-		} elseif ($number < 1000000000000000000000) {
+		} elseif (intval($number) < 1000000000000000000000) {
 
 		    $result = static::convertToWords(
 		    	intval($number / 1000000000000000000), $numberWords, $tensWords
