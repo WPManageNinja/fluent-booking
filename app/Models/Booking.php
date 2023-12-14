@@ -150,12 +150,12 @@ class Booking extends Model
 
     public function scopeUpcoming($query)
     {
-        return $query->where('end_time', '>=', date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        return $query->where('end_time', '>=', gmdate('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function scopePast($query)
     {
-        return $query->where('end_time', '<', date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        return $query->where('end_time', '<', gmdate('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function scopeApplyComputedStatus($query, $status)
@@ -172,12 +172,12 @@ class Booking extends Model
         }
 
         if ($status == 'upcoming') {
-            return $query->where('end_time', '>=', date('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return $query->where('end_time', '>=', gmdate('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->where('status', 'scheduled');
         }
 
         if ($status == 'completed') {
-            return $query->where('end_time', '<', date('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return $query->where('end_time', '<', gmdate('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->where('status', '!=', 'cancelled')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }

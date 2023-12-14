@@ -167,7 +167,7 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $start = gmdate('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
         $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
 
         $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
@@ -246,16 +246,16 @@ class Bootstrap extends BaseCalendar
                     if (strpos($event->dtstart, 'Z')) {
                         $remoteBooks[] = [
                             'type'     => 'remote',
-                            'start'    => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
-                            'end'      => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
+                            'start'    => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
+                            'end'      => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
                             'source'   => 'apple_calendar',
                             'event_id' => null
                         ];
                         continue;
                     }
 
-                    $event->dtstart = date('Y-m-d H:i:s', strtotime($event->dtstart));
-                    $event->dtend = date('Y-m-d H:i:s', strtotime($event->dtend));
+                    $event->dtstart = gmdate('Y-m-d H:i:s', strtotime($event->dtstart));
+                    $event->dtend = gmdate('Y-m-d H:i:s', strtotime($event->dtend));
 
                     $eventData = [
                         'type'     => 'remote',
@@ -598,8 +598,8 @@ class Bootstrap extends BaseCalendar
         $host = $booking->getHostDetails(false);
 
         $data = [
-            'dtstart'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'dtend'     => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'dtstart'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
             'status'    => 'confirmed',
             'summary'   => $booking->getMeetingTitle(),
             'location'  => $booking->getLocationAsText(),

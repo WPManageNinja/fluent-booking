@@ -15,7 +15,7 @@ class SummaryReportService
     {
         $notificationSettings = Helper::getGlobalSettings('administration');
 
-        $currentDay = strtolower(date('D'));
+        $currentDay = strtolower(gmdate('D'));
 
         $status     = Arr::get($notificationSettings, 'summary_notification');
         $frequency  = Arr::get($notificationSettings, 'notification_frequency');
@@ -28,7 +28,7 @@ class SummaryReportService
 
         $reportDays = $frequency == 'daily' ? 1 : 7; 
 
-        $reportDateFrom = date('Y-m-d', time() - $reportDays * 60 * 60 * 24);
+        $reportDateFrom = gmdate('Y-m-d', time() - $reportDays * 60 * 60 * 24);
 
         $totalBooked = Booking::where('end_time', '>', $reportDateFrom)->count();
         $totalCompleted = Booking::where('created_at', '>', $reportDateFrom)->where('status', 'completed')->count();

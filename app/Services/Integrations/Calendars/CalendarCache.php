@@ -51,8 +51,8 @@ class CalendarCache
             $db->table('fcal_meta')
                 ->where('id', $row->id)
                 ->update([
-                    'updated_at' => date('Y-m-d H:i:s', time() + $cacheTime), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    'created_at' => date('Y-m-d H:i:s'), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    'updated_at' => gmdate('Y-m-d H:i:s', time() + $cacheTime), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    'created_at' => gmdate('Y-m-d H:i:s'), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     'value'      => maybe_serialize($value)
                 ]);
         } else {
@@ -62,8 +62,8 @@ class CalendarCache
 
             $db->table('fcal_meta')
                 ->insert([
-                    'updated_at'  => date('Y-m-d H:i:s', time() + $cacheTime), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    'created_at'  => date('Y-m-d H:i:s'), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    'updated_at'  => gmdate('Y-m-d H:i:s', time() + $cacheTime), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    'created_at'  => gmdate('Y-m-d H:i:s'), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     'object_type' => self::$objectType,
                     'key'         => $key,
                     'object_id'   => $parentId,
@@ -98,7 +98,7 @@ class CalendarCache
         $db = self::db();
         $db->table('fcal_meta')
             ->where('object_type', self::$objectType)
-            ->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-15 days'))) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->where('updated_at', '<', gmdate('Y-m-d H:i:s', strtotime('-15 days'))) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->delete();
     }
 

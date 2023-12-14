@@ -339,7 +339,7 @@ class BootstrapX
             return $books;
         }
 
-        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $start = gmdate('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
         $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
 
         $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
@@ -390,7 +390,7 @@ class BootstrapX
         foreach ($allRemoteBookedSlots as $slot) {
             $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
             $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
-            $date = date('Y-m-d', strtotime($start));
+            $date = gmdate('Y-m-d', strtotime($start));
 
             if (!isset($books[$date])) {
                 $books[$date] = [];
@@ -473,10 +473,10 @@ class BootstrapX
 
         $data = [
             'start'              => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time))
             ],
             'end'                => [
-                'dateTime' => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
+                'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ],
             'attendees'          => [
                 $guestAttendee,
