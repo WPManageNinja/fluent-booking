@@ -11,7 +11,7 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
-    export let form = {};
+    export const form = {};
 
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;

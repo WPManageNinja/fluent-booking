@@ -159,7 +159,7 @@
     $: if (appData.is_fluentform && (form.location_config || selectedDateTime.start )) {
         fluentFormInput = {
             id: appData.id,
-            location_config: form.location_config,
+            form: form,
             timezone: timezone,
             duration: duration,
             start_time: selectedDateTime.start
