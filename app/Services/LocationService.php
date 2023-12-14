@@ -25,7 +25,7 @@ class LocationService
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/ms-teams.svg" alt="MS Teams" />';
                 $html .= '<span class="fcal_loc_text">' . __('MS Teams', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'zoom_meeting') {
-                $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/zoom.svg" alt="Zoom Icon" />';
+                $html .= '<img class="fcal_loc_icon zoom_icon" src="' . $app['url.assets'] . 'images/zoom.svg" alt="Zoom Icon" />';
                 $html .= '<span class="fcal_loc_text">' . __('Zoom Video', 'fluent-booking-pro') . '</span>';
             } else if ($location['type'] == 'online_meeting') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/link.svg" alt="Online Meeting" />';
