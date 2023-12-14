@@ -444,7 +444,7 @@ class Bootstrap extends BaseCalendar
         return true;
     }
 
-    public function maybeAddOrRemoveGroupMembers($config, $booking, $allGroupBookings, $isRescheduling)
+    public function maybeAddOrRemoveGroupMembers($config, Booking $booking, $allGroupBookings, $isRescheduling)
     {
         $parentMeta = null;
 
