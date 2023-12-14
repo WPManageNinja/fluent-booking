@@ -3,6 +3,7 @@
 namespace FluentBooking\Framework\Support;
 
 use Closure;
+use Exception;
 use FluentBooking\Framework\Foundation\App;
 use FluentBooking\Framework\Support\HigherOrderTapProxy;
 
@@ -195,5 +196,39 @@ class Helper
     public static function event(...$args)
     {
         return App::make('events')->dispatch(...$args);
+    }
+
+    /**
+     * Retry an operation a given number of times.
+     *
+     * @param  int  $times
+     * @param  callable  $callback
+     * @param  int|\Closure  $sleepMilliseconds
+     * @param  callable|null  $when
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public static function retry($times, callable $callback, $sleepMilliseconds = 0, $when = null)
+    {
+        $attempts = 0;
+
+        beginning:
+        $attempts++;
+        $times--;
+
+        try {
+            return $callback($attempts);
+        } catch (Exception $e) {
+            if ($times < 1 || ($when && ! $when($e))) {
+                throw $e;
+            }
+
+            if ($sleepMilliseconds) {
+                usleep(static::value($sleepMilliseconds, $attempts) * 1000);
+            }
+
+            goto beginning;
+        }
     }
 }
