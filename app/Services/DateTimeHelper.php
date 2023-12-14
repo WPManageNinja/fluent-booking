@@ -85,7 +85,7 @@ class DateTimeHelper
     public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s')
     {
         if ($fromTimeZone == $toTimeZone) {
-            return date($format, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return gmdate($format, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
@@ -108,7 +108,7 @@ class DateTimeHelper
 
     public static function getTimestamp($timezone = 'UTC')
     {
-        $dateTime = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $dateTime = new \DateTime(gmdate('Y-m-d H:i:s'), new \DateTimeZone('UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $dateTime->setTimezone(new \DateTimeZone($timezone));
         $date = $dateTime->format('Y-m-d H:i:s');
         return strtotime($date);
