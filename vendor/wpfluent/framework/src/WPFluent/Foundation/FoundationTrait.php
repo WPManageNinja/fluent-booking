@@ -250,7 +250,7 @@ trait FoundationTrait
 
             $class = $this->makeInstance($class);
 
-            return [$class, $method];
+            return is_callable($class) ? $class : [$class, $method];
 
         } else if (is_array($handler)) {
             list($class, $method) = $handler;
