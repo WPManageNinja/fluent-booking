@@ -11,7 +11,7 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
-    export let form = {};
+    export const form = {};
 
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
@@ -382,7 +382,4 @@
             </div>
         </div>
     </div>
-    {#if isFluentform}
-        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, duration, start_time, form })}/>
-    {/if}
 </div>

@@ -784,4 +784,80 @@ class Arr
     {
         return map_deep($value, $callback);
     }
+
+    /**
+     * Compare two nested arrays side by side
+     * @param  array $array1
+     * @param  array $array2
+     * @param  array $path
+     * @return array
+     */
+    public static function compare($array1, $array2, $path = [])
+    {
+        $differences = [];
+
+        foreach ($array1 as $key => $value1) {
+            // Check if the key exists in the second array
+            if (!array_key_exists($key, $array2)) {
+                $differences[implode('.', array_merge($path, [$key]))] = [
+                    'array_1' => $value1,
+                    'array_2' => null,
+                ];
+            } else {
+                // If the value is an array, recursively compare
+                if (is_array($value1) && is_array($array2[$key])) {
+                    $differences = array_merge($differences, static::compare(
+                        $value1, $array2[$key], array_merge($path, [$key])
+                    ));
+                } else {
+                    // Compare values
+                    if ($value1 !== $array2[$key]) {
+                        $differences[implode('.', array_merge($path, [$key]))] = [
+                            'array_1' => $value1,
+                            'array_2' => $array2[$key],
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Check for keys in the second array that are not in the first array
+        foreach ($array2 as $key => $value2) {
+            if (!array_key_exists($key, $array1)) {
+                $differences[implode('.', array_merge($path, [$key]))] = [
+                    'array_1' => null,
+                    'array_2' => $value2,
+                ];
+            }
+        }
+
+        return $differences;
+    }
+
+    /**
+     * Merge the items from the first array into the
+     * second array if the second array is missing it.
+     * 
+     * @param  array &$array1
+     * @param  array &$array2
+     * @return array         
+     */
+    public static function mergeMissing(&$array1, &$array2)
+    {
+        foreach ($array1 as $key => $value1) {
+            // If the key exists in the second array
+            if (array_key_exists($key, $array2)) {
+                // If the value is an array, recursively add missing items
+                if (is_array($value1) && is_array($array2[$key])) {
+                    static::mergeMissing($value1, $array2[$key]);
+                }
+            } else {
+                // If the key doesn't exist in the second array,
+                // then add it with the corresponding value
+                $array2[$key] = $value1;
+            }
+        }
+
+        return $array2;
+    }
 }
