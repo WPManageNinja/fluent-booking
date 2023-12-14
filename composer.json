@@ -26,7 +26,7 @@
     ],
     "require": {
         "wpfluent/framework": "^2.0",
-        "woocommerce/action-scheduler": "^3.6",
+        "woocommerce/action-scheduler": "3.7.0",
         "wpfluent/caldav": "*"
     },
     "autoload": {
