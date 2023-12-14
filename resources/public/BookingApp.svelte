@@ -44,13 +44,12 @@
 
     function checkDevice() {
         let timeout = 0;
-        if (isFluentform) {
+        let conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
+        if (isFluentform && !conversationalPage) {
             timeout = 2000;
         }
         setTimeout(() => {
             wrapperWidth = wrapDom.parentNode.offsetWidth;
-            const conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
-
             if (wrapperWidth >= 900) {
                 wrapperClass = 'fcal_on_lg';
             } else if (wrapperWidth >= 800) {
