@@ -358,7 +358,7 @@
                                 on:dateOnFluentForm={(e) => {fluentFormDateHandle(e)}}
                                 on:formatHours={(e) => {formatHours(e.detail)}}
                                 on:timezoneChanged={(e) => {resetSelection()}}
-                                on:resetSelection={(e) => { resetSelection() }}
+                                on:resetSelection={(e) => {resetSelection()}}
                             >
                             </DayPickerApp>
                         </div>

@@ -96,6 +96,7 @@
             selectedDate = '';
             selectedDateTime = {};
             loadAvailableDates();
+            dispatch('resetSelection');
         }
     }
 
@@ -116,7 +117,6 @@
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
-        console.log(slot);
         util.$get(window.fluentCalendarPublicVars.ajaxurl, {
             event_id: slot.id,
             timezone: timezone || '',
