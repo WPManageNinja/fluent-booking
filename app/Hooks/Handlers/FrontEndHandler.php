@@ -62,7 +62,7 @@ class FrontEndHandler
                 ];
             });
 
-            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData, $calendarEvent) {
+            add_action('fluent_booking/before_creating_schedule', function ($bookingData, $postedData, $calendarEvent) {
                 $existingHash = Arr::get($postedData, 'rescheduling_hash');
                 $existingBooking = Booking::where('hash', $existingHash)->first();
 
@@ -625,7 +625,7 @@ class FrontEndHandler
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
-        do_action('fluent_calendar/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
+        do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);

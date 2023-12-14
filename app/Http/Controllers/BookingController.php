@@ -188,7 +188,7 @@ class BookingController extends Controller
             }
         }
 
-        do_action('fluent_calendar/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
+        do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarEvent, $customFieldsData);
