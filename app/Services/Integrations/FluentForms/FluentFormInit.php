@@ -169,7 +169,7 @@ class FluentFormInit
 
                 if ($validData) {
                     $validData['duration'] = $calendarEvent->getDuration(Arr::get($validData, 'duration', null));
-                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
+                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($validData['duration'] * 60));
                 }
 
                 $data[$name] = (array)$validData;
