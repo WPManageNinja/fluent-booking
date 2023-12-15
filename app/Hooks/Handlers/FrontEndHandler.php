@@ -573,14 +573,7 @@ class FrontEndHandler
             return;
         }
 
-        $duration = $calendarSlot->duration;
-        if (Arr::isTrue($calendarSlot->settings, 'multi_duration.enabled')) {
-            $requestedDuration  = Arr::get($_REQUEST, 'duration');
-            $availableDurations = Arr::get($calendarSlot->settings, 'multi_duration.available_durations', []);
-            if (in_array($requestedDuration, $availableDurations)) {
-                $duration = $requestedDuration;
-            }
-        }
+        $duration = $calendarSlot->getDuration(Arr::get($_REQUEST, 'duration', null));
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
@@ -682,14 +675,7 @@ class FrontEndHandler
             $timeZone = $calendar->author_timezone;
         }
 
-        $duration = $slot->duration;
-        if (Arr::isTrue($slot->settings, 'multi_duration.enabled')) {
-            $requestedDuration  = Arr::get($_REQUEST, 'duration');
-            $availableDurations = Arr::get($slot->settings, 'multi_duration.available_durations', []);
-            if (in_array($requestedDuration, $availableDurations)) {
-                $duration = $requestedDuration;
-            }
-        }
+        $duration = $slot->getDuration(Arr::get($_REQUEST, 'duration', null));
 
         $timeSlotService = new TimeSlotService($calendar, $slot);
 
@@ -705,7 +691,7 @@ class FrontEndHandler
         }
 
         $availableSpots = array_filter($availableSpots);
-        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone, $duration);
 
         wp_send_json([
             'available_slots' => $availableSpots,
@@ -728,7 +714,7 @@ class FrontEndHandler
             'id'                 => $calendarEvent->id,
             'max_lookup_date'    => $calendarEvent->max_lookup_date,
             'min_lookup_date'    => $calendarEvent->min_lookup_date,
-            'duration'           => $calendarEvent->getDuration(),
+            'duration'           => $calendarEvent->getDefaultDuration(),
             'title'              => $calendarEvent->title,
             'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,
