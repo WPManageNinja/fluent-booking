@@ -59,7 +59,7 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_event_card">
+                        <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/booking_frequency") }}</span>
                                 <span>{{ $t("LimitSettings/booking_frequency_description") }}</span>
@@ -67,31 +67,31 @@
                             <div class="card_action">
                                 <el-switch v-model="settings.booking_frequency.enabled"/>
                             </div>
-                        </div>
-                        <div class="fcal_event_child_card" v-if="settings.booking_frequency.enabled">
-                            <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
-                                <el-input class="fcal_booking_duration" type="number" v-model="frequency.value" @input="validateInput(frequency)">
-                                    <template #append>{{ $t('Bookings') }}</template>
-                                </el-input>
-                                <el-select v-model="frequency.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                    <el-option :disabled="isDayExist(settings.booking_frequency)" value="per_day" :label="$t('Per day')"></el-option>
-                                    <el-option :disabled="isWeekExist(settings.booking_frequency)" value="per_week" :label="$t('Per week')"></el-option>
-                                    <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per month')"></el-option>
-                                </el-select>
-                                <el-link v-if="isRemovable(settings.booking_frequency)" type="danger" :title="$t('Remove')"
-                                    :icon="CloseBoldIcon"
-                                    :underline="false"
-                                    @click="removeBookingFrequency(index)">
+                            <div class="fcal_event_child_card" v-if="settings.booking_frequency.enabled">
+                                <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
+                                    <el-input class="fcal_booking_duration" type="number" v-model="frequency.value" @input="validateInput(frequency)">
+                                        <template #append>{{ $t('Bookings') }}</template>
+                                    </el-input>
+                                    <el-select v-model="frequency.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                        <el-option :disabled="isDayExist(settings.booking_frequency)" value="per_day" :label="$t('Per day')"></el-option>
+                                        <el-option :disabled="isWeekExist(settings.booking_frequency)" value="per_week" :label="$t('Per week')"></el-option>
+                                        <el-option :disabled="isMonthExist(settings.booking_frequency)" value="per_month" :label="$t('Per month')"></el-option>
+                                    </el-select>
+                                    <el-link v-if="isRemovable(settings.booking_frequency)" type="danger" :title="$t('Remove')"
+                                             :icon="CloseBoldIcon"
+                                             :underline="false"
+                                             @click="removeBookingFrequency(index)">
+                                    </el-link>
+                                </div>
+                                <el-link v-if="isInsertable(settings.booking_frequency)" type="primary" :underline="false" @click="insertBookingFrequency">
+                                    {{ $t('Add Another Limit') }}
                                 </el-link>
                             </div>
-                            <el-link v-if="isInsertable(settings.booking_frequency)" type="primary" :underline="false" @click="insertBookingFrequency">
-                                {{ $t('Add Another Limit') }}
-                            </el-link>
                         </div>
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_event_card">
+                        <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/booking_duration") }}</span>
                                 <span>{{ $t("LimitSettings/booking_duration_description") }}</span>
@@ -99,35 +99,34 @@
                             <div class="card_action">
                                 <el-switch v-model="settings.booking_duration.enabled"/>
                             </div>
-                        </div>
-                        <div class="fcal_event_child_card" v-if="settings.booking_duration.enabled">
-                            <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
-                                <el-input class="fcal_booking_duration" type="number" v-model="duration.value" @input="validateInput(duration)">
-                                    <template #append>{{ $t('Minutes') }}</template>
-                                </el-input>
-                                <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                    <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
-                                    <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
-                                    <el-option :disabled="isMonthExist(settings.booking_duration)" value="per_month" :label="$t('Per month')"></el-option>
-                                </el-select>
-                                <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
-                                    :icon="CloseBoldIcon"
-                                    :underline="false"
-                                    @click="removeBookingDuration(index)">
+                            <div class="fcal_event_child_card" v-if="settings.booking_duration.enabled">
+                                <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
+                                    <el-input class="fcal_booking_duration" type="number" v-model="duration.value" @input="validateInput(duration)">
+                                        <template #append>{{ $t('Minutes') }}</template>
+                                    </el-input>
+                                    <el-select v-model="duration.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                        <el-option :disabled="isDayExist(settings.booking_duration)" value="per_day" :label="$t('Per day')"></el-option>
+                                        <el-option :disabled="isWeekExist(settings.booking_duration)" value="per_week" :label="$t('Per week')"></el-option>
+                                        <el-option :disabled="isMonthExist(settings.booking_duration)" value="per_month" :label="$t('Per month')"></el-option>
+                                    </el-select>
+                                    <el-link v-if="isRemovable(settings.booking_duration)" type="danger" :title="$t('Remove')"
+                                             :icon="CloseBoldIcon"
+                                             :underline="false"
+                                             @click="removeBookingDuration(index)">
+                                    </el-link>
+                                </div>
+                                <el-link v-if="isInsertable(settings.booking_duration)" type="primary" :underline="false" @click="insertBookingDuration">
+                                    {{ $t('Add Another Limit') }}
                                 </el-link>
                             </div>
-                            <el-link v-if="isInsertable(settings.booking_duration)" type="primary" :underline="false" @click="insertBookingDuration">
-                                {{ $t('Add Another Limit') }}
-                            </el-link>
                         </div>
                     </el-form-item>
 
                     <el-form-item>
-                        <div class="fcal_event_card">
+                        <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/attendee_permissions") }}</span>
                             </div>
-                        </div>
                             <div class="fcal_event_child_card">
                                 <div>
                                     <el-checkbox true-label="yes" false-label="no" v-model="settings.can_cancel">{{ $t('Attendee can cancel booking') }}</el-checkbox>
@@ -136,6 +135,7 @@
                                     <el-checkbox true-label="yes" false-label="no" v-model="settings.can_reschedule">{{ $t('Attendee can reschedule booking') }}</el-checkbox>
                                 </div>
                             </div>
+                        </div>
                     </el-form-item>
 
                 </el-form>
