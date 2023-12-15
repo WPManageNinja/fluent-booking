@@ -147,7 +147,7 @@
                     </template>
 
                     <el-form-item v-if="!is_board && !new_event">
-                        <div class="fcal_event_card">
+                        <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Redirect after booking") }}</span>
                                 <span>{{ $t("EventDetails/redirect_url_description") }}</span>
@@ -155,53 +155,53 @@
                             <div class="card_action">
                                 <el-switch v-model="calendar_event.settings.custom_redirect.enabled"/>
                             </div>
-                        </div>
-                        <div class="fcal_event_child_card" v-if="calendar_event.settings.custom_redirect.enabled">
-                            <el-form-item :label="$t('Redirect URL')">
-                                <popover
-                                    :groupTitle="$t('Shortcodes')"
-                                    :data="smart_codes.texts"
-                                    placement="bottom-end"
-                                    :isVisible="urlPopupVisible"
-                                    class="fcal_popover_shortcode"
-                                    @command="handleRedirectUrlCommand">
-                                    <template #popoverButton>
-                                        <el-input
-                                            type="text"
-                                            :placeholder="$t('EventDetails/redirect_url_placeholder')"
-                                            v-model="calendar_event.settings.custom_redirect.redirect_url">
-                                            <template #append>
-                                                <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
-                                            </template>
-                                        </el-input>
-                                    </template>
-                                </popover>
-                            </el-form-item>
-                            <el-form-item :label="$t('Redirect Query String')">
-                                <el-checkbox true-label="yes" false-label="no" v-model="calendar_event.settings.custom_redirect.is_query_string">{{ $t('Pass Field Data Via Query String') }}</el-checkbox>
-                                <popover
-                                    v-if="enabledQueryString"
-                                    :groupTitle="$t('Shortcodes')"
-                                    :data="smart_codes.texts"
-                                    placement="bottom-end"
-                                    :isVisible="queryPopupVisible"
-                                    class="fcal_popover_shortcode"
-                                    @command="handleRedirectQueryCommand">
-                                    <template #popoverButton>
-                                        <el-input
-                                            type="text"
-                                            :placeholder="$t('Redirect Query String')"
-                                            v-model="calendar_event.settings.custom_redirect.query_string">
-                                            <template #append>
-                                                <el-button :icon="MoreIcon" @click="toggleQueryPopupVisible"></el-button>
-                                            </template>
-                                        </el-input>
-                                    </template>
-                                </popover>
-                                <p v-if="enabledQueryString" class="fcal_event_input_hint">
-                                    <em>{{ $t('EventDetails/redirect_query_string_hint') }}</em>
-                                </p>
-                            </el-form-item>
+                            <div class="fcal_event_child_card" v-if="calendar_event.settings.custom_redirect.enabled">
+                                <el-form-item :label="$t('Redirect URL')">
+                                    <popover
+                                        :groupTitle="$t('Shortcodes')"
+                                        :data="smart_codes.texts"
+                                        placement="bottom-end"
+                                        :isVisible="urlPopupVisible"
+                                        class="fcal_popover_shortcode"
+                                        @command="handleRedirectUrlCommand">
+                                        <template #popoverButton>
+                                            <el-input
+                                                type="text"
+                                                :placeholder="$t('EventDetails/redirect_url_placeholder')"
+                                                v-model="calendar_event.settings.custom_redirect.redirect_url">
+                                                <template #append>
+                                                    <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
+                                                </template>
+                                            </el-input>
+                                        </template>
+                                    </popover>
+                                </el-form-item>
+                                <el-form-item :label="$t('Redirect Query String')">
+                                    <el-checkbox true-label="yes" false-label="no" v-model="calendar_event.settings.custom_redirect.is_query_string">{{ $t('Pass Field Data Via Query String') }}</el-checkbox>
+                                    <popover
+                                        v-if="enabledQueryString"
+                                        :groupTitle="$t('Shortcodes')"
+                                        :data="smart_codes.texts"
+                                        placement="bottom-end"
+                                        :isVisible="queryPopupVisible"
+                                        class="fcal_popover_shortcode"
+                                        @command="handleRedirectQueryCommand">
+                                        <template #popoverButton>
+                                            <el-input
+                                                type="text"
+                                                :placeholder="$t('Redirect Query String')"
+                                                v-model="calendar_event.settings.custom_redirect.query_string">
+                                                <template #append>
+                                                    <el-button :icon="MoreIcon" @click="toggleQueryPopupVisible"></el-button>
+                                                </template>
+                                            </el-input>
+                                        </template>
+                                    </popover>
+                                    <p v-if="enabledQueryString" class="fcal_event_input_hint">
+                                        <em>{{ $t('EventDetails/redirect_query_string_hint') }}</em>
+                                    </p>
+                                </el-form-item>
+                            </div>
                         </div>
                     </el-form-item>
                 </el-form>
