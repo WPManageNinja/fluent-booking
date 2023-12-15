@@ -90,14 +90,7 @@ class FluentFormInit
             return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
 
-        $duration = $calendarEvent->duration;
-        if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
-            $bookingDuration  = Arr::get($bookingData, 'duration', '');
-            $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
-            if (in_array($bookingDuration, $availableDurations)) {
-                $duration = $bookingDuration;
-            }
-        }
+        $duration = $calendarEvent->getDuration(Arr::get($bookingData, 'duration', null));
 
         $startTime = Arr::get($bookingData, 'start_time');
         $timeZone = $bookingData['timezone'];
@@ -175,16 +168,8 @@ class FluentFormInit
                 }
 
                 if ($validData) {
-                    $duration = $calendarEvent->duration;
-                    if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
-                        $bookingDuration  = Arr::get($validData, 'duration', '');
-                        $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
-                        if (in_array($bookingDuration, $availableDurations)) {
-                            $duration = $bookingDuration;
-                        }
-                    }
-                    $validData['duration'] = $duration;
-                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
+                    $validData['duration'] = $calendarEvent->getDuration(Arr::get($validData, 'duration', null));
+                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($validData['duration'] * 60));
                 }
 
                 $data[$name] = (array)$validData;
