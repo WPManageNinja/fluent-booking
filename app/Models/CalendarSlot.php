@@ -246,7 +246,20 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
-    public function getDuration()
+    public function getDuration($duration = null)
+    {
+        if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
+            if (in_array($duration, Arr::get($this->settings, 'multi_duration.available_durations', []))) {
+                return $duration;
+            } else {
+                return Arr::get($this->settings, 'multi_duration.default_duration', '');
+            }
+        }
+
+        return $this->duration;
+    }
+
+    public function getDefaultDuration()
     {
         if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
             return Arr::get($this->settings, 'multi_duration.default_duration', '');

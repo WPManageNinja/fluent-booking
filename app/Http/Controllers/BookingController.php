@@ -128,10 +128,7 @@ class BookingController extends Controller
             return;
         }
 
-        $duration = $calendarEvent->duration;
-        if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
-            $duration = Arr::get($calendarEvent->settings, 'multi_duration.default_duration');
-        }
+        $duration = $calendarEvent->getDuration(Arr::get($postedData, 'duration', null));
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['event_time'], $postedData['timezone']);
         $endDateTime   = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
@@ -179,7 +176,7 @@ class BookingController extends Controller
         // Check if the time is available or not for this slot
         if (!Arr::isTrue($postedData, 'ignore_availability')) {
             $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime);
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
             
             if (!$isSpotAvailable) {
                 wp_send_json([
@@ -241,10 +238,11 @@ class BookingController extends Controller
         if (!in_array($timeZone, \DateTimeZone::listIdentifiers())) {
             $timeZone = $calendar->author_timezone;
         }
-
+        
+        $duration = $calendarEvent->getDuration($request->get('duration'));
+        
         $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
-
-        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
+        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
 
         if (is_wp_error($availableSpots)) {
             wp_send_json([
@@ -255,7 +253,7 @@ class BookingController extends Controller
             ], 200);
         }
 
-        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', array_filter($availableSpots), $calendarEvent, $calendar, $timeZone);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', array_filter($availableSpots), $calendarEvent, $calendar, $timeZone, $duration);
 
         return [
             'calendar_event'  => $calendarEventVars,

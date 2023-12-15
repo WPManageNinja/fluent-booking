@@ -34,7 +34,7 @@ class CalendarController extends Controller
             foreach ($calendar->slots as $slot) {
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
                 $slot->public_url = $slot->getPublicUrl();
-                $slot->duration = $slot->getDuration();
+                $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
                 $slot->location_fields = $slot->calendar->getLocationFields();
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);

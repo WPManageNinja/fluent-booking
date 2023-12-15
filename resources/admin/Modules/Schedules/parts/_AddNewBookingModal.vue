@@ -28,6 +28,18 @@
             <el-form-item :label="getTimezoneLabel">
                 <TimeZoneSelector v-model="newBooking.timezone"/>
             </el-form-item>
+            <el-form-item :label="$t('Meeting Duration *')">
+                <el-select
+                    v-model="newBooking.duration"
+                    popper-class="fcal_select"
+                    :disabled="!event?.id">
+                    <el-option v-for="duration in availableDurations"
+                        :key="duration"
+                        :label="duration + ' ' + $t('minutes')"
+                        :value="duration">
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item>
                 <el-checkbox v-model="ignoreAvailability" :disabled="!event?.id">
                     {{ $t('Ignore Availability') }}
@@ -45,6 +57,7 @@
                     <el-calendar
                         v-if="selectEventDate && !loading"
                         v-model="eventDate"
+                        v-loading="loading"
                         ref="calendar"
                         class="fcal_booking_calendar">
                         <template #header="{ date }">
@@ -77,7 +90,7 @@
                             :value="slot.start">
                             <span v-if="slot.remaining" style="float: left">{{ getStartTime(slot) }}</span>
                             <span v-if="slot.remaining" style="float: right">{{ getRemaining(slot) }}</span>
-                    </el-option>
+                        </el-option>
                     </el-select>
                 </el-form-item>
             </div>
@@ -157,7 +170,7 @@
                 <el-button class="fcal_plain_btn" @click="openModal = false">
                     {{ $t('Cancel') }}
                 </el-button>
-                <el-button :disabled="!event?.id" class="fcal_primary_btn" @click="validateAndCreate">
+                <el-button :disabled="!event?.id" class="fcal_primary_btn" v-loading="saving" @click="validateAndCreate">
                     {{ $t('Create Booking') }}
                 </el-button>
             </div>
@@ -182,6 +195,7 @@ export default {
             saving: false,
             loading: false,
             availableSlots: {},
+            availableDurations: {},
             event: {},
             daySlots: [],
             openModal: this.showModal,
@@ -195,6 +209,7 @@ export default {
                 email: '',
                 message: '',
                 timezone: '',
+                duration: '',
                 event_date: null,
                 event_time: '',
                 custom_fields: {},
@@ -225,6 +240,11 @@ export default {
             if (this.event?.id) {
                 this.fetchEvent();
             }
+        },
+        'newBooking.duration': function () {
+            this.newBooking.event_date = null;
+            this.newBooking.event_time = '';
+            this.fetchEvent();
         },
         'newBooking.event_date': function () {
             this.updateDaySlots();
@@ -257,13 +277,17 @@ export default {
             this.$get('bookings/event', {
                 event_id: this.newBooking.event_id,
                 timezone: this.newBooking.timezone,
+                duration: this.newBooking.duration,
                 start_date: this.dayjs(this.eventYear +'-'+ (this.eventMonth+1) + '-' + '01').format('YYYY-MM-DD HH:mm')
             })
                 .then(response => {
-                    this.event = response.calendar_event.slot;
                     this.formFields = response.calendar_event.form_fields;
                     this.availableSlots = response.available_slots;
-                    this.locationType = this.event.location_settings[0].type;
+                    this.locationType = response.calendar_event.slot.location_settings[0].type;
+                    if (this.event?.id != response.calendar_event.slot.id) {
+                        this.event = response.calendar_event.slot;
+                        this.updateDurations();
+                    }
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -322,6 +346,11 @@ export default {
             } else {
                 this.daySlots = this.defaultDaySlots(this.newBooking.event_date);
             }
+        },
+        updateDurations() {
+            const isMultiDuration = this.event.settings?.multi_duration?.enabled;
+            this.availableDurations = isMultiDuration ? this.event.settings?.multi_duration?.available_durations : [this.event.duration];
+            this.newBooking.duration = isMultiDuration ? this.event.settings?.multi_duration?.default_duration : this.event.duration;
         },
         toggleSelect(data) {
             if (this.isDateInvalid(data)) {
