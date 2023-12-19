@@ -386,6 +386,47 @@ body >.fcal_calendar_wrap {
               padding-left: 38px;
             }
           }
+
+          &.fcal_input_multi_guests_wrap {
+            .fcal_multi_guest_input {
+              display: flex;
+              align-items: center;
+              gap: 2px;
+              margin-bottom: 5px;
+              input {
+                max-width: 250px;
+                width: 100%;
+              }
+              button {
+                border: none;
+                background: var(--fcal_slot_border);
+                color: var(--fcal_dark);
+                height: 40px;
+                padding: 10px;
+                cursor: pointer;
+                svg {
+                  width: 20px;
+                  height: 20px;
+                  path {
+                    fill: var(--fcal_dark);
+                  }
+                }
+              }
+            }
+            .fcal_add_guest_btn {
+              border: none;
+              background: none;
+              padding: 10px;
+              color: var(--fcal_dark);
+              cursor: pointer;
+              line-height: 1;
+              font-weight: 500;
+              transition: .3s;
+              &:hover {
+                background: var(--fcal_enable_day_bg);
+              }
+            }
+          }
         }
 
         select {

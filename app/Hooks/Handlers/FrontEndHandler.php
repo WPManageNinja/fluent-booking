@@ -466,6 +466,8 @@ class FrontEndHandler
                 'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                            => __('PM', 'fluent-booking-pro'),
                 'AM'                            => __('AM', 'fluent-booking-pro'),
+                '+ Add another guest'           => __('+ Add another guest', 'fluent-booking-pro'),
+                'Email'                         => __('Email', 'fluent-booking-pro')
                 'Date'                          => __('Date', 'fluent-booking-pro'),
                 'Time'                          => __('Time', 'fluent-booking-pro')
             ],
