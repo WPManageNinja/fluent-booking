@@ -1331,6 +1331,10 @@ class Helper
             [
                 'value' => 'checkbox-group',
                 'label' => __('Checkbox Group', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'multi-guests',
+                'label' => __('Multi Guests', 'fluent-booking-pro')
             ]
         ]);
     }

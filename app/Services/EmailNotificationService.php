@@ -83,6 +83,11 @@ class EmailNotificationService
             'email_footer' => self::getGlobalEmailFooter(),
         ]);
 
+        if (isset($email['additional_guests'])) {
+            Mailer::send($email['additional_guests'], $emailSubject, $body, $headers);
+        }
+
+
         $emogrifier = new Emogrifier($body);
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string)$emogrifier->emogrify();
