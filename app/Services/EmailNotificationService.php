@@ -84,7 +84,7 @@ class EmailNotificationService
         ]);
 
         if (isset($email['additional_guests'])) {
-            Mailer::send($email['additional_guests'], $emailSubject, $body, $headers);
+            $to .= ', ' . $email['additional_guests'];
         }
 
 
