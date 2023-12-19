@@ -33,7 +33,7 @@ class Model extends BaseModel
      */
     public function freshTimestamp()
     {
-        return new \DateTime(date('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        return new \DateTime(gmdate('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getTimezone()

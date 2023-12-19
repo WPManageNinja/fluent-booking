@@ -62,7 +62,7 @@ class FrontEndHandler
                 ];
             });
 
-            add_action('fluent_calendar/before_creating_schedule', function ($bookingData, $postedData) {
+            add_action('fluent_booking/before_creating_schedule', function ($bookingData, $postedData, $calendarEvent) {
                 $existingHash = Arr::get($postedData, 'rescheduling_hash');
                 $existingBooking = Booking::where('hash', $existingHash)->first();
 
@@ -84,7 +84,7 @@ class FrontEndHandler
                     ], 422);
                 }
 
-                $endDateTime = date('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
+                $endDateTime = gmdate('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
 
                 $previousBooking = clone $existingBooking;
 
@@ -135,15 +135,18 @@ class FrontEndHandler
                     return $data;
                 });
 
+                $redirectUrl = $calendarEvent->getRedirectUrlWithQuery($existingBooking);
+
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
                     'message'       => __('Booking has been rescheduled', 'fluent-booking-pro'),
+                    'redirect_url'  => $redirectUrl,
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
                 ], 200);
 
-            }, 10, 2);
+            }, 10, 3);
         });
     }
 
@@ -465,6 +468,8 @@ class FrontEndHandler
                 'AM'                            => __('AM', 'fluent-booking-pro'),
                 '+ Add another guest'           => __('+ Add another guest', 'fluent-booking-pro'),
                 'Email'                         => __('Email', 'fluent-booking-pro')
+                'Date'                          => __('Date', 'fluent-booking-pro'),
+                'Time'                          => __('Time', 'fluent-booking-pro')
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
@@ -570,16 +575,10 @@ class FrontEndHandler
             return;
         }
 
-        $duration = $calendarSlot->duration;
-        if (Arr::isTrue($calendarSlot->settings, 'multi_duration.enabled')) {
-            $requestedDuration = Arr::get($_REQUEST, 'duration');
-            if (in_array($requestedDuration, Arr::get($calendarSlot->settings, 'multi_duration.available_durations'))) {
-                $duration = $requestedDuration;
-            }
-        }
+        $duration = $calendarSlot->getDuration(Arr::get($_REQUEST, 'duration', null));
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($postedData['timezone']),
@@ -621,7 +620,7 @@ class FrontEndHandler
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
-        do_action('fluent_calendar/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
+        do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
 
         try {
             $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
@@ -637,9 +636,7 @@ class FrontEndHandler
             return;
         }
 
-        $isRedirectUrlEnabled = Arr::isTrue($calendarSlot, 'settings.custom_redirect.enabled');
-
-        $redirectUrl = $isRedirectUrlEnabled ? Arr::get($calendarSlot, 'settings.custom_redirect.redirect_url', '') : '';
+        $redirectUrl = $calendarSlot->getRedirectUrlWithQuery($booking);
 
         $html = BookingService::getBookingConfirmationHtml($booking);
 
@@ -667,7 +664,7 @@ class FrontEndHandler
         $startDate = Arr::get($_REQUEST, 'start_date'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
-            $startDate = date('Y-m-d H:i:s');
+            $startDate = gmdate('Y-m-d H:i:s');
         }
 
         $timeZone = Arr::get($_REQUEST, 'timezone'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -680,13 +677,7 @@ class FrontEndHandler
             $timeZone = $calendar->author_timezone;
         }
 
-        $duration = $slot->duration;
-        if (Arr::isTrue($slot->settings, 'multi_duration.enabled')) {
-            $requestedDuration = Arr::get($_REQUEST, 'duration');
-            if (in_array($requestedDuration, Arr::get($slot->settings, 'multi_duration.available_durations'))) {
-                $duration = $requestedDuration;
-            }
-        }
+        $duration = $slot->getDuration(Arr::get($_REQUEST, 'duration', null));
 
         $timeSlotService = new TimeSlotService($calendar, $slot);
 
@@ -702,7 +693,7 @@ class FrontEndHandler
         }
 
         $availableSpots = array_filter($availableSpots);
-        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone, $duration);
 
         wp_send_json([
             'available_slots' => $availableSpots,
@@ -725,7 +716,7 @@ class FrontEndHandler
             'id'                 => $calendarEvent->id,
             'max_lookup_date'    => $calendarEvent->max_lookup_date,
             'min_lookup_date'    => $calendarEvent->min_lookup_date,
-            'duration'           => $calendarEvent->getDuration(),
+            'duration'           => $calendarEvent->getDefaultDuration(),
             'title'              => $calendarEvent->title,
             'location_settings'  => $calendarEvent->location_settings,
             'location_icon_html' => $calendarEvent->location_icon_html,

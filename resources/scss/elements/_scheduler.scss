@@ -1382,7 +1382,18 @@
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;           
+                justify-content: space-between;
+                border-radius: 8px;
+                &.fcal_event_card_wrap {
+                  flex-wrap: wrap;
+                  padding: 0;
+                  .card_contents {
+                    padding: 1.5rem;
+                  }
+                  .card_action {
+                    padding: 0 1.5rem;
+                  }
+                }
                 .el-form-item , .fcal_meeting_duration {
                     width: 100%;
                 }
@@ -1404,28 +1415,36 @@
                         }
                     }
                 }
-            }
-            .fcal_event_child_card {
-              width: 100%;
-              padding: 1.5rem;
-              border: 1px solid #EAECF0;
-              border-top-width: 0;
-              .fcal_inline_items {
-                margin-bottom: 0.5rem;
-                .el-select {
+              .fcal_event_child_card {
+                width: 100%;
+                padding: 1.5rem;
+                border-top: 1px solid #EAECF0;
+                .fcal_inline_items {
+                  margin-bottom: 0.5rem;
+                  .el-select {
                     width: auto;
+                  }
+                  .fcal_booking_duration {
+                    width: 20%;
+                  }
                 }
-              }
-              .fcal_booking_duration {
-                width: 20%;
-                .el-input__wrapper {
+                .fcal_event_input_hint {
+                  margin-top: 0.25rem;
+                }
+                .el-checkbox {
+                  margin-bottom: 0.5rem;
+                }
+                .fcal_booking_duration, .fcal_popover_shortcode {
+                  width: 100%;
+                  .el-input__wrapper {
                     border-radius: 0px;
                     border-top-left-radius: 8px;
                     border-bottom-left-radius: 8px;
-                }
-                .el-input-group__append {
+                  }
+                  .el-input-group__append {
                     border-top-right-radius: 8px;
                     border-bottom-right-radius: 8px;
+                  }
                 }
               }
             }

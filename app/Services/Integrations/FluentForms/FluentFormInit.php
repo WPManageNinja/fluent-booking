@@ -90,20 +90,13 @@ class FluentFormInit
             return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
         }
 
-        $duration = $calendarEvent->duration;
-        if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
-            $bookingDuration  = Arr::get($bookingData, 'duration', '');
-            $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
-            if (in_array($bookingDuration, $availableDurations)) {
-                $duration = $bookingDuration;
-            }
-        }
+        $duration = $calendarEvent->getDuration(Arr::get($bookingData, 'duration', null));
 
         $startTime = Arr::get($bookingData, 'start_time');
         $timeZone = $bookingData['timezone'];
 
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
-        $endDateTime = date('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
@@ -133,6 +126,7 @@ class FluentFormInit
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
 
+
         if ($locationFieldKey) {
             $requiredKeys = [];
             if ($locationFieldKey == 'location') {
@@ -140,6 +134,7 @@ class FluentFormInit
             }
 
             $userInputData = Arr::get($bookingData, 'form.' . $locationFieldKey);
+
             if (in_array($locationFieldKey, ['phone_number', 'address'])) {
                 $requiredKeys[] = $locationFieldKey;
             } else if ($locationFieldKey == 'location_config') {
@@ -173,16 +168,8 @@ class FluentFormInit
                 }
 
                 if ($validData) {
-                    $duration = $calendarEvent->duration;
-                    if (Arr::isTrue($calendarEvent->settings, 'multi_duration.enabled')) {
-                        $bookingDuration  = Arr::get($validData, 'duration', '');
-                        $availableDurations = Arr::get($calendarEvent->settings, 'multi_duration.available_durations', []);
-                        if (in_array($bookingDuration, $availableDurations)) {
-                            $duration = $bookingDuration;
-                        }
-                    }
-                    $validData['duration'] = $duration;
-                    $validData['end_time'] = date('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($duration * 60));
+                    $validData['duration'] = $calendarEvent->getDuration(Arr::get($validData, 'duration', null));
+                    $validData['end_time'] = gmdate('Y-m-d H:i:s', strtotime($bookingArr['start_time']) + ($validData['duration'] * 60));
                 }
 
                 $data[$name] = (array)$validData;
@@ -465,7 +452,9 @@ class FluentFormInit
             $localizeData['disable_author'] = true;
         }
 
-        $localizeData['form_instance'] = $form->instance_css_class;
+        if(!empty($form->instance_css_class)) {
+            $localizeData['form_instance'] = $form->instance_css_class;
+        }
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
         if ($locationFieldKey) {

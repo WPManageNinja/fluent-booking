@@ -1742,9 +1742,10 @@ body >.fcal_calendar_wrap {
 
       .fcal_icon_item {
         margin-bottom: 6px;
-
         img {
-          filter: contrast(0);
+          &:not(.zoom_icon) {
+            filter: contrast(0);
+          }
         }
 
         &:last-child {

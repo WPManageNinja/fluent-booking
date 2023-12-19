@@ -7,6 +7,7 @@ use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\BookingService;
+use FluentBooking\App\Services\EditorShortCodeParser;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\Integrations\Twilio\TwilioHelper;
@@ -245,7 +246,20 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
-    public function getDuration()
+    public function getDuration($duration = null)
+    {
+        if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
+            if (in_array($duration, Arr::get($this->settings, 'multi_duration.available_durations', []))) {
+                return $duration;
+            } else {
+                return Arr::get($this->settings, 'multi_duration.default_duration', '');
+            }
+        }
+
+        return $this->duration;
+    }
+
+    public function getDefaultDuration()
     {
         if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
             return Arr::get($this->settings, 'multi_duration.default_duration', '');
@@ -278,16 +292,16 @@ class CalendarSlot extends Model
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_indefinite') {
-            return date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        $maxDate = date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $maxDate = gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($maxDate) > strtotime($range[1])) {
-                    $maxDate = date('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $maxDate = gmdate('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 }
             }
         } else {
@@ -295,11 +309,11 @@ class CalendarSlot extends Model
             if (!$rangeDays) {
                 $rangeDays = 60;
             }
-            $maxDate = date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $maxDate = gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        if (strtotime($maxDate) > strtotime(date('Y-m-t 23:59:59', strtotime($startDate)))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            return date('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        if (strtotime($maxDate) > strtotime(gmdate('Y-m-t 23:59:59', strtotime($startDate)))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         return $maxDate;
@@ -313,18 +327,18 @@ class CalendarSlot extends Model
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($range[0]) >= strtotime($startDate)) {
-                    $startDate = date('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $startDate = gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 }
             }
         }
 
         $cutOutSeconds = $this->getCutoutSeconds();
-        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(date('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(gmdate('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $totalCutStamp = strtotime($currentAuthorTimezoneDateTime) + $cutOutSeconds;
 
         if (strtotime($startDate) < $totalCutStamp) {
-            $startDate = date('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $startDate = gmdate('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         return $startDate;
@@ -341,7 +355,7 @@ class CalendarSlot extends Model
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                return date('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                return gmdate('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
@@ -350,7 +364,7 @@ class CalendarSlot extends Model
             $rangeDays = 60;
         }
 
-        return date('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        return gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getMinLookUpDate()
@@ -360,11 +374,11 @@ class CalendarSlot extends Model
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                return date('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                return gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
-        return date('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        return gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function getCutoutSeconds()
@@ -492,6 +506,49 @@ class CalendarSlot extends Model
         return $total;
     }
 
+    public function getRedirectUrlWithQuery($booking)
+    {
+        $isEnabled     = Arr::isTrue($this->settings, 'custom_redirect.enabled');
+        $redirectUrl   = Arr::get($this->settings, 'custom_redirect.redirect_url', '');
+        $queryString   = Arr::get($this->settings, 'custom_redirect.query_string', '');
+        $isQueryString = Arr::get($this->settings, 'custom_redirect.is_query_string', 'no') == 'yes';
+
+        if ($isQueryString && $queryString) {
+            if (strpos($redirectUrl, '?')) {
+                $redirectUrl .= '&' . $queryString;
+            } else {
+                $redirectUrl .= '?' . $queryString;
+            }
+        }
+
+        if (!$isEnabled || empty($redirectUrl)) {
+            return '';
+        }
+            
+        $redirectUrl = EditorShortCodeParser::parse($redirectUrl, $booking);
+
+        $isUrlParser = apply_filters('fluent_booking/will_parse_redirect_url_value', true, $this);
+
+        if ($isUrlParser) {
+            if (strpos($redirectUrl, '=&') || '=' == substr($redirectUrl, -1)) {
+                $urlArray    = explode('?', $redirectUrl);
+                $baseUrl     = array_shift($urlArray);
+                $query       = wp_parse_url($redirectUrl)['query'];
+                $queryParams = explode('&', $query);
+
+                $params = [];
+                foreach ($queryParams as $queryParam) {
+                    $paramArray = explode('=', $queryParam);
+                    if (!empty($paramArray[1])) {
+                        $params[$paramArray[0]] = $paramArray[1];
+                    }
+                }
+                $redirectUrl = add_query_arg($params, $baseUrl);
+            }
+        }
+
+        return $redirectUrl;
+    }
 
     public function getPaymentSettings()
     {

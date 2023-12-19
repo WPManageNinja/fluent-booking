@@ -121,7 +121,7 @@ class Bootstrap
                 ],
             ],
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
-            'start_time'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'start_time'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
             'topic'        => sprintf(__('%1s meeting with %2s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
         ], $booking, $calendarSlot);
 
@@ -228,7 +228,7 @@ class Bootstrap
         }
 
         $data = [
-            'start_time' => date('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time))
+            'start_time' => gmdate('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time))
         ];
 
         $this->updateZoomMeeting($updatedBooking, $data);
