@@ -403,7 +403,7 @@ class LandingPageHandler
             ];
 
             return $vars;
-        });
+        }, 10, 1);
 
         add_filter('fluent_booking/public_event_vars', function ($vars, $calendarEvent) {
             $vars['i18']['Schedule_Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
@@ -420,7 +420,7 @@ class LandingPageHandler
                     (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
             <?php
-        });
+        }, 10, 1);
 
         add_action('fluent_booking/author_landing_head', function () {
             ?>
