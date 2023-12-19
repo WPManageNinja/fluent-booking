@@ -11,7 +11,6 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
-    export let form = {};
 
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
@@ -96,6 +95,7 @@
             selectedDate = '';
             selectedDateTime = {};
             loadAvailableDates();
+            dispatch('resetSelection');
         }
     }
 
@@ -116,7 +116,6 @@
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
-        console.log(slot);
         util.$get(window.fluentCalendarPublicVars.ajaxurl, {
             event_id: slot.id,
             timezone: timezone || '',
@@ -241,7 +240,7 @@
         if (isFFConversational) {
             appData.element.dispatchEvent(new CustomEvent('value.update', {
                 detail: {
-                    value: JSON.stringify({id, timezone, start_time})
+                    value: JSON.stringify({id, timezone, duration, start_time})
                 }
             }));
         }
@@ -382,7 +381,4 @@
             </div>
         </div>
     </div>
-    {#if isFluentform}
-        <input type="hidden" name={appData.name} value={JSON.stringify({ id, timezone, duration, start_time, form })}/>
-    {/if}
 </div>

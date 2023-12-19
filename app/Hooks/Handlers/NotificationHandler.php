@@ -178,6 +178,10 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $email = Arr::get($notifications, 'cancelled_by_attendee.email', []);
+            $additionalRecipients = Arr::get($email, 'additional_recipients', false);
+            if ($additionalRecipients) {
+                $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
+            }
             EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
         }
     }
@@ -208,6 +212,10 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'rescheduled_by_attendee.enabled')) {
             $email = Arr::get($notifications, 'rescheduled_by_attendee.email', []);
+            $additionalRecipients = Arr::get($email, 'additional_recipients', false);
+            if ($additionalRecipients) {
+                $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
+            }
             EmailNotificationService::bookingRescheduledEmail($booking, $email, 'host');
         }
     }

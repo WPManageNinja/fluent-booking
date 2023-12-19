@@ -292,7 +292,7 @@ export default {
         meetingDetails() {
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
-            return `${this.$t(this.showing_booking.slot_minutes)} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
+            return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
         },
         meetingTime() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);

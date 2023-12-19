@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9011659e4fd19d24f34742e6df8f864",
+    "content-hash": "eeb9bec6493a3d4fd053848592691d57",
     "packages": [
         {
             "name": "woocommerce/action-scheduler",
@@ -97,16 +97,16 @@
         },
         {
             "name": "wpfluent/framework",
-            "version": "2.2.35",
+            "version": "2.2.39",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpfluent/framework.git",
-                "reference": "4b418a2b39e1ea5ee822d8ee06fd3cf5b4692bbc"
+                "reference": "567c334e08c0516dfb9138341068ac4292cf9985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpfluent/framework/zipball/4b418a2b39e1ea5ee822d8ee06fd3cf5b4692bbc",
-                "reference": "4b418a2b39e1ea5ee822d8ee06fd3cf5b4692bbc",
+                "url": "https://api.github.com/repos/wpfluent/framework/zipball/567c334e08c0516dfb9138341068ac4292cf9985",
+                "reference": "567c334e08c0516dfb9138341068ac4292cf9985",
                 "shasum": ""
             },
             "require": {
@@ -135,10 +135,10 @@
             ],
             "description": "A lightweight rest api based framework to build WordPress plugins.",
             "support": {
-                "source": "https://github.com/wpfluent/framework/tree/2.2.35",
+                "source": "https://github.com/wpfluent/framework/tree/2.2.39",
                 "issues": "https://github.com/wpfluent/framework/issues"
             },
-            "time": "2023-11-24T11:20:11+00:00"
+            "time": "2023-12-14T16:17:11+00:00"
         }
     ],
     "packages-dev": [],

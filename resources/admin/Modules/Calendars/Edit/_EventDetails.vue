@@ -147,7 +147,7 @@
                     </template>
 
                     <el-form-item v-if="!is_board && !new_event">
-                        <div class="fcal_event_card">
+                        <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Redirect after booking") }}</span>
                                 <span>{{ $t("EventDetails/redirect_url_description") }}</span>
@@ -155,10 +155,54 @@
                             <div class="card_action">
                                 <el-switch v-model="calendar_event.settings.custom_redirect.enabled"/>
                             </div>
-                        </div>
                             <div class="fcal_event_child_card" v-if="calendar_event.settings.custom_redirect.enabled">
-                                <el-input v-model="calendar_event.settings.custom_redirect.redirect_url" :placeholder="$t('EventDetails/redirect_url_placeholder')"></el-input>
+                                <el-form-item :label="$t('Redirect URL')">
+                                    <popover
+                                        :groupTitle="$t('Shortcodes')"
+                                        :data="smart_codes.texts"
+                                        placement="bottom-end"
+                                        :isVisible="urlPopupVisible"
+                                        class="fcal_popover_shortcode"
+                                        @command="handleRedirectUrlCommand">
+                                        <template #popoverButton>
+                                            <el-input
+                                                type="text"
+                                                :placeholder="$t('EventDetails/redirect_url_placeholder')"
+                                                v-model="calendar_event.settings.custom_redirect.redirect_url">
+                                                <template #append>
+                                                    <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
+                                                </template>
+                                            </el-input>
+                                        </template>
+                                    </popover>
+                                </el-form-item>
+                                <el-form-item :label="$t('Redirect Query String')">
+                                    <el-checkbox true-label="yes" false-label="no" v-model="calendar_event.settings.custom_redirect.is_query_string">{{ $t('Pass Field Data Via Query String') }}</el-checkbox>
+                                    <popover
+                                        v-if="enabledQueryString"
+                                        :groupTitle="$t('Shortcodes')"
+                                        :data="smart_codes.texts"
+                                        placement="bottom-end"
+                                        :isVisible="queryPopupVisible"
+                                        class="fcal_popover_shortcode"
+                                        @command="handleRedirectQueryCommand">
+                                        <template #popoverButton>
+                                            <el-input
+                                                type="text"
+                                                :placeholder="$t('Redirect Query String')"
+                                                v-model="calendar_event.settings.custom_redirect.query_string">
+                                                <template #append>
+                                                    <el-button :icon="MoreIcon" @click="toggleQueryPopupVisible"></el-button>
+                                                </template>
+                                            </el-input>
+                                        </template>
+                                    </popover>
+                                    <p v-if="enabledQueryString" class="fcal_event_input_hint">
+                                        <em>{{ $t('EventDetails/redirect_query_string_hint') }}</em>
+                                    </p>
+                                </el-form-item>
                             </div>
+                        </div>
                     </el-form-item>
                 </el-form>
             </div>
@@ -174,6 +218,9 @@ import LocationSelector from "./_LocationSelector";
 import EventIcon from "../../../Components/Icons/EventIcon";
 import HostSelector from "@/Pieces/HostSelector";
 import SaveButton from "@/Components/Buttons/SaveButton";
+import Popover from "@/Components/Popover";
+import { markRaw } from "vue";
+import { More } from '@element-plus/icons-vue';
 
 export default {
     name: 'EventDetails',
@@ -182,26 +229,55 @@ export default {
         HostSelector,
         LocationSelector,
         EventIcon,
-        SaveButton
+        SaveButton,
+        Popover,
+        More
     },
     data() {
         return {
             saving: false,
+            loading: false,
+            urlPopupVisible: false,
+            queryPopupVisible: false,
             isEnable: this.calendar_event.status === 'active' ? true : false,
             isDisplaySpots: this.calendar_event.is_display_spots == 1 ? true : false,
             isGroupMeeting: this.calendar_event.event_type == 'group',
             colors: this.appVars.event_colors,
             meetingDurations: this.appVars.meeting_durations,
             multiDurations: this.appVars.multi_durations,
-            defaultDurations: []
+            hasWpEditor: !!window.wp.editor,
+            editor_id: 'wp_editor_'+ Date.now() + parseInt( Math.random() * 1000 ),
+            MoreIcon: markRaw(More),
+            defaultDurations: [],
+            smart_codes: {
+                texts: {},
+                html: {}
+            },
         }
     },
     computed: {
         showMultiDuration() {
             return !this.is_board && !this.new_event && !this.isGroupMeeting
+        },
+        enabledQueryString() {
+            return (this.calendar_event.settings?.custom_redirect?.is_query_string == 'yes')
         }
     },
     methods: {
+        toggleUrlPopupVisible() {
+            this.urlPopupVisible = !this.urlPopupVisible;
+        },
+        handleRedirectUrlCommand(command) {
+            this.calendar_event.settings.custom_redirect.redirect_url += command;
+            this.urlPopupVisible = false;
+        },
+        toggleQueryPopupVisible() {
+            this.queryPopupVisible = !this.queryPopupVisible;
+        },
+        handleRedirectQueryCommand(command) {
+            this.calendar_event.settings.custom_redirect.query_string += command;
+            this.queryPopupVisible = false;
+        },
         toggleDisplaySpots() {
             this.calendar_event.is_display_spots = this.isDisplaySpots ? 1 : 0;
         },
@@ -233,6 +309,9 @@ export default {
                 this.calendar_event.duration = 'custom';
             }
         },
+        getMeetingDuration() {
+            return this.calendar_event.duration === 'custom' ? this.calendar_event.custom_duration : this.calendar_event.duration;
+        },
         checkValidation() {
             if (!this.calendar_event.title) {
                 this.$handleError(this.$t('Event Title is required'));
@@ -240,6 +319,10 @@ export default {
             }
             if (this.calendar_event.settings.custom_redirect?.enabled && !this.calendar_event.settings.custom_redirect?.redirect_url) {
                 this.$handleError(this.$t('Redirect URL field is required'));
+                return false;
+            }
+            if (this.enabledQueryString && !this.calendar_event.settings.custom_redirect?.query_string) {
+                this.$handleError(this.$t('Redirect Query String field is required'));
                 return false;
             }
             if (this.calendar_event.settings.multi_duration?.enabled && !this.calendar_event.settings.multi_duration?.available_durations?.length) {
@@ -266,8 +349,21 @@ export default {
             }
             return true;
         },
-        getMeetingDuration() {
-            return this.calendar_event.duration === 'custom' ? this.calendar_event.custom_duration : this.calendar_event.duration;
+        fetchSettings() {
+            this.loading = true;
+            this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id, {
+                calendar_id : this.calendar_id,
+                with: ['smart_codes']
+            })
+                .then(response => {
+                    this.smart_codes = response.smart_codes;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         saveSettings() {
             if (!this.checkValidation()) return;
@@ -295,8 +391,35 @@ export default {
                     this.saving = false;
                 });
         },
+        changeContentEvent() {
+            const content = wp.editor.getContent(this.editor_id);
+            this.calendar_event.settings.custom_redirect.redirect_url = content;
+        },
+        initEditor() {
+            wp.editor.remove(this.editor_id);
+            const that = this;
+            wp.editor.initialize(this.editor_id, {
+                mediaButtons: true,
+                tinymce: {
+                    height : 300,
+                    toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,hr,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',
+                    setup(editor) {
+                        editor.on('change', function (ed, l) {
+                            that.changeContentEvent();
+                        });
+                    }
+                },
+                quicktags: true
+            });
+            jQuery('#'+this.editor_id).on('change', function(e) {
+                that.changeContentEvent();
+            });
+        },
     },
     mounted() {
+        if (this.calendar_event?.calendar_id && this.calendar_event?.id) {
+            this.fetchSettings();
+        }
         this.checkDurationType();
         this.updateDefaultDurations(this.calendar_event.settings?.multi_duration?.available_durations);
         this.calendar_event.event_type = this.event_type ? this.event_type : this.calendar_event.event_type;

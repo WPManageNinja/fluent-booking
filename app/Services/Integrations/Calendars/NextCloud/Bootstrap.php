@@ -171,7 +171,7 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $start = date('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
+        $start = gmdate('Y-m-d 00:00:00', strtotime($dateRange[0]) - 86400); // just the previous day
         $fromDate = new \DateTime($start, new \DateTimeZone('UTC'));
 
         $toDate = new \DateTime($dateRange[1], new \DateTimeZone('UTC'));
@@ -258,8 +258,8 @@ class Bootstrap extends BaseCalendar
                         continue;
                     }
 
-                    $event->dtstart = date('Y-m-d H:i:s', strtotime($event->dtstart));
-                    $event->dtend = date('Y-m-d H:i:s', strtotime($event->dtend));
+                    $event->dtstart = gmdate('Y-m-d H:i:s', strtotime($event->dtstart));
+                    $event->dtend = gmdate('Y-m-d H:i:s', strtotime($event->dtend));
 
                     $eventData = [
                         'type'     => 'remote',
@@ -305,7 +305,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__next_cloud_calendar_event')) {
+        if ($booking->getMeta('__next_cloud_calendar_event') && $booking->event_type == 'single') {
             return false; // Already created
         }
 
@@ -449,16 +449,17 @@ class Bootstrap extends BaseCalendar
 
     public function maybeAddOrRemoveGroupMembers($config, $booking, $allGroupBookings, $isRescheduling)
     {
-        $parentMeta = null;
+        $parentMeta = $parentBooking = null;
 
         $missingEventBookings = [];
 
-        foreach ($allGroupBookings as $parentBooking) {
-            $meta = $parentBooking->getMeta('__next_cloud_calendar_event', []);
+        foreach ($allGroupBookings as $groupBooking) {
+            $meta = $groupBooking->getMeta('__next_cloud_calendar_event', []);
             if (!$meta) {
-                $missingEventBookings[] = $parentBooking;
+                $missingEventBookings[] = $groupBooking;
             } else if (!$parentMeta) {
                 $parentMeta = $meta;
+                $parentBooking = $groupBooking;
             }
         }
 
@@ -494,7 +495,7 @@ class Bootstrap extends BaseCalendar
         try {
             $apiCalendar = new Calendar(['href' => $parentCalendarId], $client->getClient());
             $apiEvent = $apiCalendar->getEvent($parentEventId);
-            $eventData = $this->prepareEventData($booking);
+            $eventData = $this->prepareEventData($parentBooking);
             $eventData['attendees'] = $attendees;
             $eventData['description'] = __('This is a group event.', 'fluent-booking-pro');
             foreach ($eventData as $key => $datum) {
@@ -604,8 +605,8 @@ class Bootstrap extends BaseCalendar
         $host = $booking->getHostDetails(false);
 
         $data = [
-            'dtstart'   => date('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'dtend'     => date('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'dtstart'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
             'status'    => 'confirmed',
             'summary'   => $booking->getMeetingTitle(),
             'location'  => $booking->getLocationAsText(),

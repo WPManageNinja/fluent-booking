@@ -656,7 +656,7 @@ class DateTime extends PHPDateTime
      */
     public function toUTC($dateString, $format = 'Y-m-d H:i:s')
     {
-        return get_gmt_from_date($date_string, $format);
+        return get_gmt_from_date($dateString, $format);
     }
 
     /**

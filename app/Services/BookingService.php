@@ -36,7 +36,7 @@ class BookingService
         }
 
         if (empty($data['end_time'])) {
-            $data['end_time'] = date('Y-m-d H:i:s', strtotime($data['start_time']) + ($data['slot_minutes'] * 60));
+            $data['end_time'] = gmdate('Y-m-d H:i:s', strtotime($data['start_time']) + ($data['slot_minutes'] * 60));
         }
 
         if (!isset($data['person_user_id'])) {
@@ -219,7 +219,7 @@ class BookingService
                 'google'   => [
                     'title' => __('Google Calendar', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
-                        'dates'    => date('Ymd\THis\Z', strtotime($booking->start_time)) . '/' . date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'dates'    => gmdate('Ymd\THis\Z', strtotime($booking->start_time)) . '/' . gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
                         'text'     => $meetingTitle,
                         'details'  => $booking->title,
                         'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
@@ -229,8 +229,8 @@ class BookingService
                 'outlook'  => [
                     'title' => __('Outlook', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
-                        'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
-                        'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'startdt'  => gmdate('Ymd\THis\Z', strtotime($booking->start_time)),
+                        'enddt'    => gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
                         'subject'  => $meetingTitle,
                         'path'     => '/calendar/action/compose',
                         'body'     => $booking->title,
@@ -242,8 +242,8 @@ class BookingService
                 'msoffice' => [
                     'title' => __('Microsoft Office', 'fluent-booking-pro'),
                     'url'   => add_query_arg([
-                        'startdt'  => date('Ymd\THis\Z', strtotime($booking->start_time)),
-                        'enddt'    => date('Ymd\THis\Z', strtotime($booking->end_time)),
+                        'startdt'  => gmdate('Ymd\THis\Z', strtotime($booking->start_time)),
+                        'enddt'    => gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
                         'subject'  => $meetingTitle,
                         'path'     => '/calendar/action/compose',
                         'body'     => $booking->title,
@@ -282,8 +282,8 @@ class BookingService
         $icsContent .= "DESCRIPTION:" . $meetingTitle . "\r\n";
 
         // Date and time formatting (assuming eventStart and eventEnd are DateTime objects)
-        $icsContent .= "DTSTART:" . date('Ymd\THis\Z', strtotime($booking->start_time)) . "\r\n";
-        $icsContent .= "DTEND:" . date('Ymd\THis\Z', strtotime($booking->end_time)) . "\r\n";
+        $icsContent .= "DTSTART:" . gmdate('Ymd\THis\Z', strtotime($booking->start_time)) . "\r\n";
+        $icsContent .= "DTEND:" . gmdate('Ymd\THis\Z', strtotime($booking->end_time)) . "\r\n";
 
         $icsContent .= "LOCATION:" . wp_kses_post(LocationService::getBookingLocationUrl($booking)) . "\r\n";
 
