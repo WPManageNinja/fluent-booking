@@ -391,22 +391,31 @@ body >.fcal_calendar_wrap {
             .fcal_multi_guest_input {
               display: flex;
               align-items: center;
-              gap: 2px;
               margin-bottom: 5px;
               input {
                 max-width: 250px;
                 width: 100%;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-right: none;
+                font-size: 14px;
+              }
+              input:focus~button {
+                border-color: var(--fcal_primary_color);
               }
               button {
-                border: none;
                 background: var(--fcal_slot_border);
                 color: var(--fcal_dark);
                 height: 40px;
-                padding: 10px;
+                padding: 12px 13px;
                 cursor: pointer;
+                border: 1px solid var(--fcal_slot_border);
+                border-left: none;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
                 svg {
-                  width: 20px;
-                  height: 20px;
+                  width: 15px;
+                  height: 15px;
                   path {
                     fill: var(--fcal_dark);
                   }
