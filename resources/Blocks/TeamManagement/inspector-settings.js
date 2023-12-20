@@ -143,7 +143,7 @@ const InspectorSettings = props => {
                                     <>
                                         <button onClick={open}>
                                             {
-                                                headerImage.url !== '' ?
+                                                headerImage.url ?
                                                     __('Change Image')
                                                     : __('Upload Image')
                                             }
