@@ -23,12 +23,13 @@ class AdminController extends Controller
                 ]
             ];
         }
-
-        $users = get_users([
-            'role__not_in' => ['subscriber'],
+        $args = array(
+            'role__not_in' => array('subscriber'),
             'number'       => 50,
-            'search'       => sanitize_text_field($request->get('search'))
-        ]);
+            'search'       => '*' . sanitize_text_field($request->get('search')) . '*',
+        );
+
+        $users = get_users($args);
 
         $hosts = [];
         $pushedIds = [];
