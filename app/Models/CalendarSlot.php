@@ -500,7 +500,7 @@ class CalendarSlot extends Model
         $total = 0;
 
         foreach ($items as $item) {
-            $total += $item['value'];
+            $total += (int)$item['value'];
         }
 
         return $total;

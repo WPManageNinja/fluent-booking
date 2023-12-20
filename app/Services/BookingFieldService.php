@@ -212,6 +212,24 @@ class BookingFieldService
         return $labels;
     }
 
+    public static function generateFieldName($calendarEvent, $fieldLabel)
+    {
+        $fieldName     = 'custom_' . sanitize_title($fieldLabel);
+        $bookingFields = self::getBookingFields($calendarEvent);
+        
+        $matched = 0;
+        foreach ($bookingFields as $field) {
+            if (strpos($field['name'], $fieldName) !== false) {
+                $matched++;
+            }
+        }
+
+        if ($matched) {
+            $fieldName .= '_' . $matched;
+        }
+        return $fieldName;
+    }
+
     public static function getFormattedCustomBookingData(Booking $booking)
     {
         $customFormData = $booking->getMeta('custom_fields_data', []);
