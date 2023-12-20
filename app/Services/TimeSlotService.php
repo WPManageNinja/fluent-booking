@@ -469,11 +469,12 @@ class TimeSlotService
             $startDate = gmdate('Y-m-01 00:00:00', strtotime($requestedDate));
         }
 
-        $eventType = $slot->event_type;
+        $eventType      = $slot->event_type;
         $isDisplaySpots = $slot->is_display_spots;
-        $maxBooking = $slot->getMaxBookingPerSlot();
-        $endDate = $slot->getMaxBookableDateTime($startDate);
-        $startDate = $slot->getMinBookableDateTime($startDate);
+        $maxBooking     = $slot->getMaxBookingPerSlot();
+        $endDate        = $slot->getMaxBookableDateTime($startDate);
+        $startDate      = $slot->getMinBookableDateTime($startDate);
+
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }

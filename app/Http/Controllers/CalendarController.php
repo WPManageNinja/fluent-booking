@@ -12,6 +12,7 @@ use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
+use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 
@@ -662,10 +663,10 @@ class CalendarController extends Controller
         ];
     }
 
-    public function saveEventBookingFields(Request $request, $calendarId, $slotId)
+    public function saveEventBookingFields(Request $request, $calendarId, $eventId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
-        $currencySign = CurrenciesHelper::getGlobalCurrencySign();
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+        $currencySign  = CurrenciesHelper::getGlobalCurrencySign();
 
         $bookingFields = $request->get('booking_fields');
 
@@ -678,10 +679,11 @@ class CalendarController extends Controller
 
         foreach ($bookingFields as $value) {
             if (empty($value['name'])) {
-                $value['name'] = 'custom_' . sanitize_title($value['label']);
+                $value['name'] = BookingFieldService::generateFieldName($calendarEvent, $value['label']);
             }
 
             $textValues = array_map('sanitize_text_field', Arr::only($value, $textFields));
+
             $booleanValues = array_map(function ($valueItem) {
                 return $valueItem === true || $valueItem === 'true' || $valueItem == 1;
             }, Arr::only($value, $booleanFields));
@@ -689,7 +691,7 @@ class CalendarController extends Controller
             $formattedField = array_merge($textValues, $booleanValues);
 
             $formattedField['index'] = (int)Arr::get($value, 'index');
-            if ($value['type'] == 'payment' && $slot->type === 'paid') {
+            if ($value['type'] == 'payment' && $calendarEvent->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
                 $formattedField['currency_sign'] = $currencySign;
             }
@@ -701,7 +703,7 @@ class CalendarController extends Controller
             $formattedFields[] = $formattedField;
         }
 
-        $slot->setBookingFields($formattedFields);
+        $calendarEvent->setBookingFields($formattedFields);
 
         return [
             'message' => __('Fields has been updated', 'fluent-booking-pro')
