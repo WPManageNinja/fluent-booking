@@ -62,7 +62,7 @@ export const LandingPage = props => {
             })
         })
             .then((response) => {
-                setSlot(response.slot);
+                setSlot(response.calendar_event);
             })
             .catch(error => {
                 setError(error);
@@ -169,7 +169,7 @@ export const LandingPage = props => {
                                         </select>
                                         :
                                         <div className="fcal_calendar_not_found">
-                                            <h2>{error ? 'Something went wrong!' : 'No Calendars found!'}</h2>
+                                            <h2>{error ? __('Something went wrong!') : __('No Calendars found!')}</h2>
                                         </div>
                                 }
 
