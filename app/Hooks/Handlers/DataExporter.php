@@ -55,7 +55,7 @@ class DataExporter
                 $attendee->last_name,
                 $attendee->email,
                 $attendee->message,
-                $attendee->location_details,
+                $attendee->location_details['description'],
                 $attendee->source,
                 $attendee->booking_type,
                 $attendee->source_url,
