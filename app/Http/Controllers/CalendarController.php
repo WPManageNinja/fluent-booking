@@ -68,7 +68,7 @@ class CalendarController extends Controller
     {
         $data = $request->get('calendar');
 
-        $this->validate($data, apply_filters('fluent_booking/create_calender_validation_rule', [
+        $rules = [
             'author_timezone'                            => 'required',
             'slot.duration'                              => 'required|int',
             'slot.event_type'                            => 'required',
@@ -79,7 +79,27 @@ class CalendarController extends Controller
             'user_id'                                    => 'required|int',
             'slot.location_settings.*.type'              => 'required',
             'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
-        ], $data));
+        ];
+
+        $messages = [
+            'author_timezone.required'                               => __('Author timezone field is required', 'fluent-booking-pro'),
+            'slot.duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
+            'slot.event_type.required'                               => __('Event type field is required', 'fluent-booking-pro'),
+            'slot.availability_type.required'                        => __('Event availability type field is required', 'fluent-booking-pro'),
+            'slot.schedule_type.required'                            => __('Event schedule type field is required', 'fluent-booking-pro'),
+            'slot.title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
+            'slot.weekly_schedules.required_if'                      => __('Event weekly schedules field is required', 'fluent-booking-pro'),
+            'user_id.required'                                       => __('User id is required', 'fluent-booking-pro'),
+            'slot.location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
+            'slot.location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
+        ];
+
+        $validationConfig = apply_filters('fluent_booking/create_calendar_validation_rule', [
+            'rules'    => $rules,
+            'messages' => $messages
+        ], $data);
+
+        $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
 
         $userId = (int) $data['user_id'];
 
@@ -382,7 +402,7 @@ class CalendarController extends Controller
 
         $slot = $request->all();
 
-        $this->validate($slot, [
+        $rules = [
             'title'                                 => 'required',
             'duration'                              => 'required|int',
             'status'                                => 'required',
@@ -393,7 +413,27 @@ class CalendarController extends Controller
             'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
             'location_settings.*.description'       => 'required_if:location_settings.*.type,address_organizer',
             'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
-        ]);
+        ];
+
+        $messages = [
+            'title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
+            'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
+            'status.required'                                   => __('Event status field is required', 'fluent-booking-pro'),
+            'settings.schedule_type.required'                   => __('Event schedule type field is required', 'fluent-booking-pro'),
+            'settings.weekly_schedules.required_if'             => __('Event weekly schedules field is required', 'fluent-booking-pro'),
+            'event_type.required'                               => __('Event type field is required', 'fluent-booking-pro'),
+            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
+            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
+            'location_settings.*.description.required_if'       => __('Event location description field is required', 'fluent-booking-pro'),
+            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
+        ];
+
+        $validationConfig = apply_filters('fluent_booking/create_calendar_event_validation_rule', [
+            'rules'    => $rules,
+            'messages' => $messages
+        ], $slot);
+
+        $this->validate($slot, $validationConfig['rules'], $validationConfig['messages']);
 
         $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
 
@@ -441,7 +481,7 @@ class CalendarController extends Controller
 
         $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
-        $generalRules = [
+        $rules = [
             'title'                                 => 'required',
             'duration'                              => 'required|numeric',
             'location_settings.*.type'              => 'required',
@@ -451,17 +491,42 @@ class CalendarController extends Controller
             'custom_redirect.query_string'          => 'required_if:custom_redirect.is_query_string,yes'
         ];
 
-        $conditionalRules = [];
+        $messages = [
+            'title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
+            'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
+            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
+            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
+            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro'),
+            'custom_redirect.redirect_url.required_if'          => __('Event redirect url field is required', 'fluent-booking-pro'),
+            'custom_redirect.query_string.required_if'          => __('Event query string field is required', 'fluent-booking-pro')
+        ];
+
         if ('group' === $event->event_type) {
-            $conditionalRules = [
+            $rules = array_merge($rules, [
                 'max_book_per_slot' => 'required|numeric|min:1',
                 'is_display_spots'  => 'required|min:0|max:1',
-            ];
+            ]);
+            $messages = array_merge($messages, [
+                'max_book_per_slot.required' => __('Event max book per slot field is required', 'fluent-booking-pro'),
+                'is_display_spots.required'  => __('Event is display spots field is required', 'fluent-booking-pro')
+            ]);
         } else {
-            $conditionalRules['multi_duration.available_durations'] = 'required_if:multi_duration.enabled,true';
+            $rules = array_merge($rules, [
+                'multi_duration.default_duration'    => 'required_if:multi_duration.enabled,true',
+                'multi_duration.available_durations' => 'required_if:multi_duration.enabled,true'
+            ]);
+            $messages = array_merge($messages, [
+                'multi_duration.default_duration.required_if'    => __('Event default duration is required', 'fluent-booking-pro'),
+                'multi_duration.available_durations.required_if' => __('Event available durations is required', 'fluent-booking-pro')
+            ]);
         }
 
-        $this->validate($data, array_merge($generalRules, $conditionalRules));
+        $validationConfig = apply_filters('fluent_booking/update_event_details_validation_rule', [
+            'rules'    => $rules,
+            'messages' => $messages
+        ], $event);
+
+        $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
 
         $event->title = sanitize_text_field($data['title']);
         $event->duration = (int)$data['duration'];
