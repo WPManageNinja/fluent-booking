@@ -218,7 +218,7 @@ export default {
 
             each(this.schedules, (schedule) => {
                 const startTime = schedule.start_time;
-                let date = this.toCurrentTimezone(startTime, this.appVars.date_format);
+                let date = this.toCurrentTimezone(startTime, 'MMMM D, YYYY');
                 items[date] = items[date] || [];
                 items[date].push(schedule);
             });
