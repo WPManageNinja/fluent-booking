@@ -6,7 +6,7 @@
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item  @click="goBackToList">{{ $t('Bookings') }}</el-breadcrumb-item>
                         <el-breadcrumb-item>{{ statusFilters[filters.period] || filters.period }}</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{ current_schedule?.slot?.title }}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ current_schedule?.slot?.title ?? '...' }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
                 <template v-else>

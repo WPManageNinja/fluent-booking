@@ -24,9 +24,9 @@ class TimeSlotService
         $this->calendarSlot = $calendarSlot;
     }
 
-    public function getDates($fromDate = false, $toDate = false, $duration = null, $bookingRequest = false)
+    public function getDates($fromDate = false, $toDate = false, $duration = null, $isDoingBooking = false)
     {
-        $duration = $duration ?: $this->calendarSlot->duration;
+        $duration = $this->calendarSlot->getDuration($duration);
         $period   = $duration * 60;
 
         $fromDate = $fromDate ? $fromDate : gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -35,7 +35,7 @@ class TimeSlotService
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
         $daySlots = $this->getWeekDaySlots($duration);
-        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $bookingRequest);
+        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], $this->calendar->author_timezone, $isDoingBooking);
 
         $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
         $ranges = $this->maybeBookingDurationLimitRanges($ranges, $bookedSlots, $duration);
@@ -172,7 +172,7 @@ class TimeSlotService
         $fromTime = gmdate('Y-m-d 00:00:00', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toTime = gmdate('Y-m-d 23:59:59', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
-        $duration = $duration ?: $this->calendarSlot->duration;
+        $duration = $this->calendarSlot->getDuration($duration);
 
         $slots = $this->getDates($fromTime, $toTime, $duration, true);
 
@@ -418,7 +418,7 @@ class TimeSlotService
 
     protected function convertSlotSetsToFlat($slotSets, $toTimeZone = false, $duration = null)
     {
-        $period = ($duration ?: $this->calendarSlot->duration) * 60;
+        $period = ($this->calendarSlot->getDuration($duration)) * 60;
 
         $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
@@ -447,7 +447,7 @@ class TimeSlotService
     {
         $slot     = $this->calendarSlot;
         $calendar = $this->calendar;
-        $duration = $duration ?: $this->calendarSlot->duration;
+        $duration = $this->calendarSlot->getDuration($duration);
         
         // Extract current month and year
         $requestedDate = $startDate;
