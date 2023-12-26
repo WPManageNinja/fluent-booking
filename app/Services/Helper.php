@@ -1335,6 +1335,10 @@ class Helper
             [
                 'value' => 'multi-guests',
                 'label' => __('Multi Guests', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'date',
+                'label' => __('Date', 'fluent-booking-pro')
             ]
         ]);
     }
