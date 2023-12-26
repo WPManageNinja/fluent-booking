@@ -96,6 +96,12 @@
                                             <span class="checkbox_mark"></span>
                                         </label>
                                     {/each}
+                                {:else if field.type === 'date' }
+                                    <span class="fcal_date_field">
+                                        <input class="set_date" type="text" placeholder={appData.date_formatter} bind:value={form[field.name]} />
+                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field.name))} />
+                                    </span>
+
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
                                     <Payments field={field}/>
                                 {:else if field.type === 'hidden' }
@@ -256,5 +262,9 @@
             });
     }
 
+    function handleDateFormatChange(event, formName) {
+        const inputValue = event.target.value;
+        form[formName]   = util.dayjs(inputValue).format(appData.date_formatter);
+    }
 
 </script>
