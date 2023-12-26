@@ -264,7 +264,7 @@ class Booking extends Model
             $html = '<b>' . $platformLabels[$locationType] . '</b> ';
 
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Online Joining URL', 'fluent-booking-pro') . '</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Joining Meeting', 'fluent-booking-pro') . '</a>';
             }
 
             return $html;
