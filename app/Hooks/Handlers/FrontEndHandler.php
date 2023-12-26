@@ -738,7 +738,8 @@ class FrontEndHandler
                 'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
                 'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
                 'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
-            ]
+            ],
+            'date_formatter' => DateTimeHelper::getDateFormatter(true)
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);

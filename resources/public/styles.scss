@@ -588,6 +588,34 @@ body >.fcal_calendar_wrap {
             transition: all 250ms cubic-bezier(.4,.0,.23,1);
           }
         }
+
+        input.picker[type="date"] {
+          position: relative;
+        }
+
+        .fcal_date_field {
+          position: relative;
+          display: block;
+          input {
+            &.pick_date {
+              position: absolute;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              opacity: 0;
+            }
+            &.pick_date[type="date"]::-webkit-calendar-picker-indicator {
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 100%;
+              height: 100%;
+              padding: 0;
+              color: transparent;
+              background: transparent;
+            }
+          }
+        }
       }
       .fcal_custom_phone_field {
         .svelte-select {
