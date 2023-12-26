@@ -328,10 +328,11 @@ export default {
             if (this.calendar_event.settings.multi_duration?.enabled) {
                 if (!this.calendar_event.settings.multi_duration?.available_durations?.length) {
                     this.$handleError(this.$t('Multiple Duration requires at least 1 option'));
+                    return false;
                 } else if (!this.calendar_event.settings.multi_duration?.default_duration) {
                     this.$handleError(this.$t('Default Duration is required'));
+                    return false;
                 }
-                return false;
             }
             for (const location of this.calendar_event.location_settings) {
                 if (!location.type) {
