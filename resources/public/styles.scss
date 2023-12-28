@@ -553,6 +553,8 @@ body >.fcal_calendar_wrap {
             height: 0;
             width: 0;
             position: absolute;
+            left: 0;
+            opacity: 0;
             &:checked ~ .checkbox_mark {
               border-color: var(--fcal_primary_color);
               background: var(--fcal_primary_color);
@@ -603,6 +605,9 @@ body >.fcal_calendar_wrap {
               top: 0;
               bottom: 0;
               opacity: 0;
+              &:focus~.set_date {
+                border-color: var(--fcal_primary_color);
+              }
             }
             &.pick_date[type="date"]::-webkit-calendar-picker-indicator {
               position: absolute;
@@ -613,6 +618,28 @@ body >.fcal_calendar_wrap {
               padding: 0;
               color: transparent;
               background: transparent;
+            }
+          }
+          .clear_date_icon {
+            position: absolute;
+            z-index: 3;
+            right: 10px;
+            top: 13px;
+            transform: rotate(45deg);
+            display: block;
+            border: 1px solid var(--fcal_slot_border);
+            width: 14px;
+            height: 14px;
+            line-height: 10px;
+            font-size: 12px;
+            border-radius: 50%;
+            text-align: center;
+            color: var(--fcal_slot_border);
+            cursor: pointer;
+            transition: .2s;
+            &:hover {
+              color: var(--fcal_dark);
+              border-color: var(--fcal_dark);
             }
           }
         }
