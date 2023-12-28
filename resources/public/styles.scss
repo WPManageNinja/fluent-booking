@@ -1,6 +1,5 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
-$bodyBg: #f3f4f6 !default;
 $dark: var(--fcal_dark);
 $lightDark: #6b7280;
 $whiteBG: #ffffff;
@@ -22,10 +21,6 @@ $whiteBG: #ffffff;
   --fcal_body_bg: #f3f4f6;
   --fcal_input_disable_bg: #f7f7f7;
   --fcal_gray: #6b7280;
-}
-
-body {
-  background: $bodyBg;
 }
 
 @import "../scss/booking_confirmation";
