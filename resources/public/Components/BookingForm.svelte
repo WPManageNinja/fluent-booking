@@ -101,7 +101,7 @@
                                         <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field.name))} />
                                         <input class="set_date" type="text" placeholder={appData.date_formatter} bind:value={form[field.name]} />
                                         {#if form[field.name]}
-                                        <span class="clear_date_icon" on:click={(() => handleDateClear(field.name))}>+</span>
+                                        <span class="clear_date_icon" on:keydown={(() => handleDateClear(field.name))} on:click={(() => handleDateClear(field.name))}>+</span>
                                         {/if}
                                     </span>
 
