@@ -1322,7 +1322,11 @@ class Helper
             ],
             [
                 'value' => 'dropdown',
-                'label' => __('Dropdown', 'fluent-booking-pro')
+                'label' => __('Select', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'multi-select',
+                'label' => __('Multi Select', 'fluent-booking-pro')
             ],
             [
                 'value' => 'checkbox',

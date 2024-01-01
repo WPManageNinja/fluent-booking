@@ -431,6 +431,38 @@ body >.fcal_calendar_wrap {
               }
             }
           }
+
+          &.fcal_input_multi_select_wrap {
+            .svelte-select {
+              border-radius: 8px;
+              .value-container {
+                padding-left: 10px;
+                > input {
+                  border: none;
+                  border-radius: 0;
+                }
+                .multi-item {
+                  font-size: 14px;
+                  background: var(--fcal_enable_day_bg);
+                  border: none;
+                  box-shadow: none;
+                  outline: none;
+                  border-radius: 8px;
+                  padding: 2px 8px;
+                  height: 30px;
+                  color: var(--fcal_dark);
+                  .multi-item-clear {
+                    cursor: pointer;
+                    svg {
+                      width: 15px;
+                      height: 15px;
+                      color: var(--fcal_dark);
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
 
         select {

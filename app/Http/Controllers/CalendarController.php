@@ -735,7 +735,7 @@ class CalendarController extends Controller
 
         $bookingFields = $request->get('booking_fields');
 
-        $optionRequiredFields = ['dropdown', 'radio', 'checkbox-group'];
+        $optionRequiredFields = ['dropdown', 'radio', 'checkbox-group', 'multi-select'];
 
         $formattedFields = [];
 
