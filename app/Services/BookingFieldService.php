@@ -26,7 +26,16 @@ class BookingFieldService
             }
 
             if (is_array($value)) {
-                $value = array_map('sanitize_text_field', $value);
+                if ($customField['type'] === 'multi-select') {
+                    $value = array_map(
+                        function ($item) {
+                            return sanitize_text_field(Arr::get($item, 'value'));
+                        },
+                        $value
+                    );
+                } else {
+                    $value = array_map('sanitize_text_field', $value);
+                }
             } else if ($customField['type'] == 'textarea') {
                 $value = sanitize_textarea_field($value);
             } else {
