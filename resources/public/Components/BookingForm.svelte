@@ -33,6 +33,18 @@
                                 <MultiGuests {appData} field={field} bind:form="{form}" />
                             </div>
 
+                        {:else if field.type === 'multi-select' }
+                            <div class="fcal_input_content">
+                                {#if field.label}
+                                    <div class="fcal_input_label">
+                                        {field.label}
+                                        {#if field.required}<span>*</span>{/if}
+                                    </div>
+                                {/if}
+
+                                <MultiSelect {appData} field={field} bind:form={form} />
+                            </div>
+
                         {:else}
                             <label class="fcal_input_content">
                                 {#if field.label}
@@ -158,6 +170,7 @@
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
     import MultiGuests from "./_MultiGuests.svelte";
+    import MultiSelect from "./_MultiSelect.svelte";
     import PhoneFieldSkeleton from "./PhoneFieldSkeleton.svelte";
 
     export let timezone;
