@@ -43,10 +43,6 @@ class Calendar extends Model
             }
             $model->hash = md5(wp_generate_uuid4() . time());
         });
-
-        static::deleting(function ($model) {
-            $model->availabilities()->delete();
-        });
     }
 
     public function setSettingsAttribute($settings)
@@ -84,6 +80,11 @@ class Calendar extends Model
         return $this->hasMany(Availability::class, 'object_id', 'user_id');
     }
 
+    public function isTeamCalendar()
+    {
+        return $this->type == 'team';
+    }
+
     public function getAuthorPhoto()
     {
         $photo = $this->getMeta('profile_photo_url');
@@ -114,14 +115,12 @@ class Calendar extends Model
             $name = $user->display_name;
         }
 
-        $photo = $this->getAuthorPhoto();
-
         $data = [
             'name'           => $name,
             'author_slug'    => $user->user_nicename,
             'first_name'     => $user->first_name,
             'last_name'      => $user->last_name,
-            'avatar'         => $photo,
+            'avatar'         => $this->getMeta('profile_photo_url'),
             'phone'          => $this->user->getMeta('host_phone'),
             'featured_image' => $this->getMeta('featured_image_url')
         ];

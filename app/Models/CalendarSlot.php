@@ -100,9 +100,19 @@ class CalendarSlot extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getAuthorProfile($public = true)
+    public function isTeamEvent() {
+        if (!$this->calendar) {
+            return false;
+        }
+
+        return $this->calendar->type == 'team';
+    }
+
+    public function getAuthorProfile($public = true, $userID = null)
     {
-        $user = get_user_by('id', $this->user_id);
+        $userID = $userID ?: $this->user_id;
+
+        $user = get_user_by('id', $userID);
         if (!$user) {
             return false;
         }
@@ -114,6 +124,7 @@ class CalendarSlot extends Model
         }
 
         $data = [
+            'ID'     => $user->ID,
             'name'   => $name,
             'avatar' => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
         ];
@@ -122,9 +133,19 @@ class CalendarSlot extends Model
             $data['email'] = $user->user_email;
         }
 
-        $data['ID'] = $user->ID;
-
         return $data;
+    }
+
+    public function getAuthorProfiles($public = true)
+    {
+        $teamMembers   = [];
+        $teamMemberIds = $this->getHostIds();
+
+        foreach ($teamMemberIds as $teamMemberId) {
+            $teamMembers[] = $this->getAuthorProfile($public, $teamMemberId);
+        }
+
+        return $teamMembers;
     }
 
     public function isLocationFieldRequired()
@@ -394,9 +415,11 @@ class CalendarSlot extends Model
 
     public function getHostIds()
     {
-        return [
-            $this->user_id
-        ];
+        if ($this->isTeamEvent()) {
+            return Arr::get($this->settings, 'team_members', []);
+        }
+
+        return [$this->user_id];
     }
 
     public function getMaxBookingPerSlot()

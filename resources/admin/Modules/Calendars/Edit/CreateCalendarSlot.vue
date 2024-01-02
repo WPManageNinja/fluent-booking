@@ -46,11 +46,23 @@ export default {
     },
     computed:  {
         slotTitle() {
-            const eventType = this.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+            const eventType = this.getEventType(this.event_type);
             return `${this.$t('Add')} ${eventType} ${this.$t('Booking Type')}`;
         }
     },
     methods: {
+        getMeetingDuration() {
+            return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
+        },
+        getEventType(eventType) {
+            const typeMap = {
+                'single': 'One-to-One',
+                'group': 'Group',
+                'round_robin': 'Round Robin',
+                'collective': 'Collective'
+            };
+            return typeMap[eventType];
+        },
         getEventSchema() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/event-schema', {
@@ -65,9 +77,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        getMeetingDuration() {
-            return this.slot.duration === 'custom' ? this.slot.custom_duration : this.slot.duration;
         },
         checkValidation() {
             for (const location of this.slot.location_settings) {
@@ -89,7 +98,6 @@ export default {
         },
         saveSettings() {
             if (!this.checkValidation()) return;
-            
             this.saving = true;
             this.$post('calendars/' + this.calendar_id + '/events', {
                 calendar_id : this.calendar_id,

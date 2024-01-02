@@ -19,7 +19,7 @@
             <el-aside>
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, index) in menuItems" :key="index">
-                        <router-link v-if="menu.type == 'route'" :to="menu.route">
+                        <router-link v-if="isRouteVisible(menu)" :to="menu.route">
                             <el-icon>
                                 <div v-if="menu.svgIcon" class="icon" v-html="menu.svgIcon"></div>
                                 <component v-else-if="menu.elIcon" :is="menu.elIcon"></component>
@@ -78,6 +78,16 @@ export default {
             loading: true,
             saving: false,
             openShare: false
+        }
+    },
+    computed: {
+        isRouteVisible() {
+            return (menu) => {
+                if (menu.type != 'route' || (this.calendar.type != 'team' && menu.route.name == 'assignment')) {
+                    return false;
+                }
+                return true;
+            }
         }
     },
     methods: {

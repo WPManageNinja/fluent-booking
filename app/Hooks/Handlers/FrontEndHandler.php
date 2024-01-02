@@ -743,6 +743,10 @@ class FrontEndHandler
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
 
+        if ($calendar->isTeamCalendar()) {
+            $eventVars['team_member_profiles'] = $calendarEvent->getAuthorProfiles(true);
+        }
+
         return apply_filters('fluent_booking/public_event_vars', $eventVars, $calendarEvent);
     }
 

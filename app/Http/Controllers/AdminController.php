@@ -75,6 +75,7 @@ class AdminController extends Controller
 
         $calendars = Calendar::with(['user'])
             ->where('user_id', '!=', $currentUserId)
+            ->where('type', '!=', 'team')
             ->get();
 
         $allHosts = [];
@@ -97,6 +98,27 @@ class AdminController extends Controller
 
         return [
             'hosts' => $allHosts
+        ];
+    }
+
+    public function getAllHosts(Request $request)
+    {
+        $calendars = Calendar::with(['user'])
+            ->where('type', '!=', 'team')
+            ->get();
+        
+        $hosts = [];
+        foreach ($calendars as $calendar) {
+            $hosts[] = [
+                'id'          => $calendar->user->ID,
+                'name'        => $calendar->user->full_name,
+                'avatar'      => $calendar->getAuthorPhoto(),
+                'calendar_id' => $calendar->id
+            ];
+        }
+
+        return [
+            'hosts' => $hosts
         ];
     }
 

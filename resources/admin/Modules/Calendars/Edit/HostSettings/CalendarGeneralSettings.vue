@@ -12,7 +12,6 @@
             </div>
         </div>
         <div v-loading="loading" class="fcal_settings_body">
-
             <el-form v-model="settings" label-position="top">
                 <el-row :gutter="30">
                     <el-col :span="12">
@@ -36,7 +35,7 @@
                     />
                     <p class="fcal_input_desc" v-if="calendar.type == 'simple'">{{ $t('Should be same as the host name') }}</p>
                 </el-form-item>
-                <el-form-item :label="$t('Host Phone (with country code)')">
+                <el-form-item v-if="calendar.type == 'simple'" :label="$t('Host Phone (with country code)')">
                     <el-input
                         v-model="calendar.author_profile.phone"
                         type="text"
