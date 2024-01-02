@@ -126,12 +126,12 @@ class SanitizeService
         ];
     }
 
-    public static function checkCollection($value, $collection)
+    public static function checkCollection($value, $collection, $default = '')
     {
         if (in_array($value, $collection, true)) {
             return $value;
         }
-        return '';
+        return $default;
     }
 
     public static function locationSettings($locations)

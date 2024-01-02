@@ -76,7 +76,6 @@ class CalendarController extends Controller
             'slot.schedule_type'                         => 'required',
             'slot.title'                                 => 'required',
             'slot.weekly_schedules'                      => 'required_if:slot.schedule_type,weekly_schedules',
-            'user_id'                                    => 'required|int',
             'slot.location_settings.*.type'              => 'required',
             'slot.location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ];
@@ -89,7 +88,6 @@ class CalendarController extends Controller
             'slot.schedule_type.required'                            => __('Event schedule type field is required', 'fluent-booking-pro'),
             'slot.title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
             'slot.weekly_schedules.required_if'                      => __('Event weekly schedules field is required', 'fluent-booking-pro'),
-            'user_id.required'                                       => __('User id is required', 'fluent-booking-pro'),
             'slot.location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
             'slot.location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
         ];
@@ -100,8 +98,6 @@ class CalendarController extends Controller
         ], $data);
 
         $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
-
-        $userId = (int) $data['user_id'];
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
@@ -117,7 +113,11 @@ class CalendarController extends Controller
             ], 422);
         }
 
-        if (Calendar::where('user_id', $userId)->first()) {
+        $title = sanitize_text_field(Arr::get($data, 'title', ''));
+
+        $isTeam = $title ? true : false;
+
+        if (!$isTeam && Calendar::where('user_id', $user->ID)->first()) {
             return $this->sendError([
                 'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
             ], 422);
@@ -148,11 +148,12 @@ class CalendarController extends Controller
             }
 
             $calendarData = [
+                'slug'    => $slug,
                 'user_id' => $user->ID,
-                'title'   => $personName,
-                'slug'    => $slug
+                'title'   => $isTeam ? $title : $personName,
+                'type'    => $isTeam ? 'team' : 'simple',
+                'author_timezone' => sanitize_text_field($data['author_timezone']) ?: 'UTC',
             ];
-
             $calendar = Calendar::create($calendarData);
         } else {
             $calendar = Calendar::where('user_id', $user->ID)->first();
@@ -164,22 +165,20 @@ class CalendarController extends Controller
             ], 422);
         }
 
-        if (!empty($data['author_timezone'])) {
-            $calendar->author_timezone = sanitize_text_field($data['author_timezone']);
-            $calendar->save();
-        } else {
-            $data['author_timezone'] = 'UTC';
+        $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
+
+        if (!$availability) {
+            $weeklySchedule = Arr::get($data, 'slot.weekly_schedules', []);
+
+            $defaultSchedule = AvailabilityService::createScheduleSchema(
+                $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone, 'UTC', $weeklySchedule
+            );
+
+            $availability = Availability::create($defaultSchedule);
         }
 
-        $weeklySchedule = Arr::get($data, 'slot.weekly_schedules');
-
-        $defaultSchedule = AvailabilityService::createScheduleSchema(
-            $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone, 'UTC', $weeklySchedule
-        );
-
-        $availability = Availability::create($defaultSchedule);
-
         $slot = $data['slot'];
+
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $slotData = [
@@ -190,13 +189,14 @@ class CalendarController extends Controller
             'duration'          => (int)$slot['duration'],
             'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [
+                'team_members'     => $isTeam ? [$user->ID] : [],
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
-            'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom']),
+            'availability_type' => SanitizeService::checkCollection($slot['availability_type'], ['existing_schedule', 'custom'], 'existing_schedule'),
             'availability_id'   => (int)$availability->id,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_heading'  => wp_kses_post(Arr::get($slot, 'location_heading')),
@@ -208,8 +208,8 @@ class CalendarController extends Controller
         $slot = CalendarSlot::create($slotData);
 
         do_action('fluent_booking/after_create_calendar', $calendar);
-        do_action('fluent_booking/after_create_calendar_slot', $slot, $calendar);
 
+        do_action('fluent_booking/after_create_calendar_slot', $slot, $calendar);
 
         return [
             'calendar'     => $calendar,
@@ -326,7 +326,7 @@ class CalendarController extends Controller
 
         $eventSettings['location_fields'] = $calendarEvent->calendar->getLocationFields();
 
-        $calendarEvent->settings = apply_filters('fluent_booking/get_calendar_event_settings', $eventSettings, $calendarEvent);
+        $calendarEvent->settings = apply_filters('fluent_booking/get_calendar_event_settings', $eventSettings, $calendarEvent, $calendarEvent->calendar);
 
         $data = [
             'calendar_event' => $calendarEvent
@@ -386,7 +386,7 @@ class CalendarController extends Controller
     {
         $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
 
-        $availableSchedules = AvailabilityService::availablitySchedules($slot->calendar->author_timezone);
+        $availableSchedules = AvailabilityService::availabilitySchedules($slot->calendar->author_timezone);
 
         $scheduleOptions = AvailabilityService::getScheduleOptions();
         
@@ -406,8 +406,6 @@ class CalendarController extends Controller
             'title'                                 => 'required',
             'duration'                              => 'required|int',
             'status'                                => 'required',
-            'settings.schedule_type'                => 'required',
-            'settings.weekly_schedules'             => 'required_if:settings.schedule_type,weekly_schedules',
             'event_type'                            => 'required',
             'location_settings.*.type'              => 'required',
             'location_settings.*.title'             => 'required_if:location_settings.*.type,custom',
@@ -419,8 +417,6 @@ class CalendarController extends Controller
             'title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
             'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
             'status.required'                                   => __('Event status field is required', 'fluent-booking-pro'),
-            'settings.schedule_type.required'                   => __('Event schedule type field is required', 'fluent-booking-pro'),
-            'settings.weekly_schedules.required_if'             => __('Event weekly schedules field is required', 'fluent-booking-pro'),
             'event_type.required'                               => __('Event type field is required', 'fluent-booking-pro'),
             'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
             'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
@@ -454,9 +450,10 @@ class CalendarController extends Controller
                 'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($slot['settings'], 'schedule_conditions', [])),
                 'buffer_time_before'  => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_before', '0')),
                 'buffer_time_after'   => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_after', '0')),
-                'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', ''))
+                'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', '')),
+                'team_members'        => $calendar->type == 'team' ? [get_current_user_id()] : [],
             ],
-            'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
+            'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft'], 'active'),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
             'availability_type' => 'existing_schedule',
@@ -571,12 +568,36 @@ class CalendarController extends Controller
             'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides', []), $event->calendar->author_timezone, 'UTC'),
             'range_type'         => sanitize_text_field(Arr::get($data, 'range_type')),
             'range_days'         => (int)(Arr::get($data, 'range_days', 60)) ?: 60,
-            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', '']))
+            'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', ''])),
+            'common_schedule'    => Arr::isTrue($data, 'common_schedule', false)
         ];
 
         $event->availability_id = (int)Arr::get($data, 'availability_id');
         $event->availability_type = SanitizeService::checkCollection(Arr::get($data, 'availability_type'), ['existing_schedule', 'custom']);
         
+        $event->save();
+
+        return [
+            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'event'   => $event
+        ];
+    }
+
+    public function updateAssignments(Request $request, $calendarId, $eventId)
+    {
+        $data = $request->all();
+
+        $this->validate($data, 
+            ['team_members' => 'required'],
+            ['team_members.required' => __('There should be at least one member', 'fluent-booking-pro')]
+        );
+
+        $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+        
+        $event->settings = [
+            'team_members' => array_map('intval', Arr::get($data, 'team_members', []))
+        ];
+
         $event->save();
 
         return [

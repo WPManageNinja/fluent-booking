@@ -9,7 +9,7 @@ use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityService
 {
-    public static function availablitySchedules($toTimezone)
+    public static function availabilitySchedules($toTimezone)
     {
         $availabilities = Availability::where('object_type', 'availability')->get();
 

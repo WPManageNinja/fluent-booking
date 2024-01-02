@@ -39,12 +39,13 @@
                 <span class="fcal_slog_meta_event">
                     <span class="icons">
                         <el-icon><User/></el-icon>
+                        <el-icon v-if="isTeam"><User/></el-icon>
                         <el-icon><Right/></el-icon>
                         <span class="right">
                             <el-icon><User/></el-icon>
-                            <el-icon class="last-icon" v-if="slot.event_type == 'group'"><User/></el-icon>
+                            <el-icon v-if="isGroup" class="last-icon"><User/></el-icon>
                         </span>
-                    </span> {{ eventType }}
+                    </span> {{ getEventType(slot.event_type) }}
                 </span>
                 <span v-if="slot.price_total" class="fcal_slog_meta_event">
                     <el-icon><CreditCard/></el-icon>
@@ -139,6 +140,12 @@ export default {
         }
     },
     computed: {
+        isTeam() {
+            return this.slot.event_type == 'round_robin' || this.slot.event_type == 'collective';
+        },
+        isGroup() {
+            return this.slot.event_type == 'group';
+        },
         eventType() {
             return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
         },
@@ -166,6 +173,15 @@ export default {
         closeShareCalendar() {
             this.openShare = false;
             this.shareSlot = null;
+        },
+        getEventType(eventType) {
+            const typeMap = {
+                'single': 'One-to-One',
+                'group': 'Group',
+                'round_robin': 'Round Robin',
+                'collective': 'Collective'
+            };
+            return typeMap[eventType];
         },
         copyTo(text) {
             copyToClipBoard(text);

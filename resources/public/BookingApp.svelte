@@ -16,8 +16,8 @@
     export let duration = appData.slot.duration;
 
     const slot = appData.slot;
-    const settings = appData.settings;
     const author = appData.author_profile;
+    const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const availableDurations = slot.settings?.multi_duration?.available_durations;
     let form = window.fluentCalendarPublicVars.current_person || {};
@@ -196,14 +196,34 @@
                                     </div>
                                 </div>
                             {/if}
-                            <div class="fcal_author">
-                                <div class="fcal_author_avatar">
-                                    <img src="{author.avatar}" alt="{author.name}">
+                            {#if teamMembers}
+                                <div class="fcal_author_wrapper">
+                                    <div class="fcal_author_list">
+                                        {#each teamMembers as member}
+                                            <div class="fcal_author">
+                                                <div class="fcal_author_avatar">
+                                                    <img src="{member.avatar}" alt="{member.name}">
+                                                    <div class="fcal_author_tooltip">
+                                                        <span>{member.name}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {/each}
+                                    </div>
+                                    <div class="fcal_author_name">
+                                        {author.name}
+                                    </div>
                                 </div>
-                                <div class="fcal_author_name">
-                                    {author.name}
+                            {:else}
+                                <div class="fcal_author">
+                                    <div class="fcal_author_avatar">
+                                        <img src="{author.avatar}" alt="{author.name}">
+                                    </div>
+                                    <div class="fcal_author_name">
+                                        {author.name}
+                                    </div>
                                 </div>
-                            </div>
+                            {/if}
                             <div class="fcal_slot_info">
                                 <h2 class="fcal_slot_heading">{slot.title}</h2>
                                 <div class="slot_timing fcal_icon_item">

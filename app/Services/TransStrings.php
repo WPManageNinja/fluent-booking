@@ -308,6 +308,7 @@ class TransStrings
             'Specific Dates & Hours (coming soon)'                                             => __('Specific Dates & Hours (coming soon)', 'fluent-booking-pro'),
             'Weekly Hours Schedules'                                                           => __('Weekly Hours Schedules', 'fluent-booking-pro'),
             'Availability Range'                                                               => __('Availability Range', 'fluent-booking-pro'),
+            'Availability/team_availability_description'                                       => __('Enable this if you want to use a common schedule between hosts. When disabled, each host will be booked based on their default schedule.', 'fluent-booking-pro'),
             'Select the available date range'                                                  => __('Select the available date range', 'fluent-booking-pro'),
             'Scheduling conditions'                                                            => __('Scheduling conditions', 'fluent-booking-pro'),
             'Share'                                                                            => __('Share', 'fluent-booking-pro'),
@@ -327,6 +328,7 @@ class TransStrings
             'GeneralIntegrationFeedSettings/failed_to_load_desc'                               => __('Failed to load this integration. Please reload this page and try again.', 'fluent-booking-pro'),
             'Confirm, Disconnect'                                                              => __('Confirm, Disconnect', 'fluent-booking-pro'),
             'Enable Landing Page'                                                              => __('Enable Landing Page', 'fluent-booking-pro'),
+            'New'                                                                              => __('New', 'fluent-booking-pro'),
             'New Event Type'                                                                   => __('New Event Type', 'fluent-booking-pro'),
             'No Event Found!'                                                                  => __('No Event Found!', 'fluent-booking-pro'),
             'Calendar Settings'                                                                => __('Calendar Settings', 'fluent-booking-pro'),
@@ -338,6 +340,7 @@ class TransStrings
             'Group of invitees'                                                                => __('Group of invitees', 'fluent-booking-pro'),
             'Good for: coffee chats, 1:1 interviews, etc.'                                     => __('Good for: coffee chats, 1:1 interviews, etc.', 'fluent-booking-pro'),
             'Good for: webinars, online classes, etc.'                                         => __('Good for: webinars, online classes, etc.', 'fluent-booking-pro'),
+            'Good for: distributing incoming sales leads.'                                     => __('Good for: distributing incoming sales leads.', 'fluent-booking-pro'),
             'Landing page URL'                                                                 => __('Landing page URL', 'fluent-booking-pro'),
             'Publicly Accessible'                                                              => __('Publicly Accessible', 'fluent-booking-pro'),
             'Disable Landing Page Feature'                                                     => __('Disable Landing Page Feature', 'fluent-booking-pro'),
@@ -367,6 +370,7 @@ class TransStrings
             'Create Booking'                                                                   => __('Create Booking', 'fluent-booking-pro'),
             'Create Booking Manually'                                                          => __('Create Booking Manually', 'fluent-booking-pro'),
             'Add New Host'                                                                     => __('Add New Host', 'fluent-booking-pro'),
+            'Add New Team'                                                                     => __('Add New Team', 'fluent-booking-pro'),
             'Add New Booking'                                                                  => __('Add New Booking', 'fluent-booking-pro'),
             'Add New Calendar Host'                                                            => __('Add New Calendar Host', 'fluent-booking-pro'),
             'AllCalendars/create_host_desc'                                                    => __('A particular user can have one calendar with multiple events. Please select a user who does not have a calendar yet', 'fluent-booking-pro'),
@@ -447,7 +451,13 @@ class TransStrings
             'No bookings found based on your filter'                                           => __('No bookings found based on your filter', 'fluent-booking-pro'),
             'Team'                                                                             => __('Team', 'fluent-booking-pro'),
             'TeamManagement/description'                                                       => __('Grant Team Members Access to FluentBookings for Calendar and Booking Management.', 'fluent-booking-pro'),
+            'Assignment'                                                                       => __('Assignment', 'fluent-booking-pro'),
+            'Assign Member'                                                                    => __('Assign Member', 'fluent-booking-pro'),
             'Team Member'                                                                      => __('Team Member', 'fluent-booking-pro'),
+            'Team Members'                                                                     => __('Team Members', 'fluent-booking-pro'),
+            'Team Name'                                                                        => __('Team Name', 'fluent-booking-pro'),
+            'Team Avatar'                                                                      => __('Team Avatar', 'fluent-booking-pro'),
+            'Team Settings'                                                                    => __('Team Settings', 'fluent-booking-pro'),
             'Edit Team Member'                                                                 => __('Edit Team Member', 'fluent-booking-pro'),
             'Access Permissions for this user'                                                 => __('Access Permissions for this user', 'fluent-booking-pro'),
             '(Required Permission)'                                                            => __('(Required Permission)', 'fluent-booking-pro'),
@@ -694,7 +704,11 @@ class TransStrings
             'Multiple Duration requires at least 1 option'                                     => __('Multiple Duration requires at least 1 option', 'fluent-booking-pro'),
             'Available Durations'                                                              => __('Available Durations', 'fluent-booking-pro'),
             'Default Duration'                                                                 => __('Default Duration', 'fluent-booking-pro'),
-            'Allow attendee to select duration'                                                => __('Allow attendee to select duration', 'fluent-booking-pro')
+            'Allow attendee to select duration'                                                => __('Allow attendee to select duration', 'fluent-booking-pro'),
+            'Round Robin'                                                                      => __('Round Robin', 'fluent-booking-pro'),
+            'Enter Name of this team'                                                          => __('Enter Name of this team', 'fluent-booking-pro'),
+            'One rotating host'                                                                => __('One rotating host', 'fluent-booking-pro'),
+            'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro')
         );
 
     }
