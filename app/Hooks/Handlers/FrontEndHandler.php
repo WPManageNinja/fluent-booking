@@ -606,18 +606,46 @@ class FrontEndHandler
             $bookingData['source_url'] = sanitize_url($sourceUrl);
         }
 
+        if (!empty($postedData['payment_method'])) {
+            $customFieldsData['payment_method'] = $postedData['payment_method'];
+        }
+
+        $hostIds = null;
+        if ($calendarSlot->isTeamEvent()) {
+            $hostIds = $calendarSlot->getHostIds();
+            $hostBookings = [];
+            foreach ($hostIds as $hostId) {
+                $hostBookings[$hostId] = Booking::getHostTotalBooking(
+                    $calendarSlot->id,
+                    [$hostId],
+                    [gmdate('Y-m-d 00:00:00',strtotime($startDateTime)), gmdate('Y-m-d 23:59:59',strtotime($startDateTime))]
+                );
+            }
+            usort($hostIds, function ($a, $b) use ($hostBookings) {
+                return $hostBookings[$a] - $hostBookings[$b];
+            });
+        }
+
         // Check if the time is available or not for this slot
         $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $isSpotAvailable = false;
+
+        if ($hostIds) {
+            foreach ($hostIds as $hostId) {
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
+                if ($isSpotAvailable) {
+                    $bookingData['host_user_id'] = $hostId;
+                    break;
+                }
+            }
+        } else {
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        }
 
         if (!$isSpotAvailable) {
             wp_send_json([
                 'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
             ], 422);
-        }
-
-        if (!empty($postedData['payment_method'])) {
-            $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarSlot);

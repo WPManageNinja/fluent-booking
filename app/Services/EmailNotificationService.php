@@ -23,7 +23,7 @@ class EmailNotificationService
         $emailBody = EditorShortCodeParser::parse($email['body'], $booking);
 
         $calendarEvent = $booking->calendar_event;
-        $author = $calendarEvent->getAuthorProfile(false);
+        $author = $booking->getHostDetails(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -106,7 +106,7 @@ class EmailNotificationService
     public static function reminderEmail(Booking $booking, $email, $emailTo)
     {
         $calendarEvent = $booking->calendar_event;
-        $author = $calendarEvent->getAuthorProfile(false);
+        $author = $booking->getHostDetails(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -194,8 +194,7 @@ class EmailNotificationService
     public static function bookingCancelledEmail(Booking $booking, $email, $emailTo)
     {
         $calendarEvent = $booking->calendar_event;
-
-        $author = $calendarEvent->getAuthorProfile(false);
+        $author = $booking->getHostDetails(false);
 
         // Host Address
         $hostAddress = $author['email'];
@@ -271,8 +270,7 @@ class EmailNotificationService
     public static function bookingRescheduledEmail(Booking $booking, $email, $emailTo)
     {
         $calendarEvent = $booking->calendar_event;
-
-        $author = $calendarEvent->getAuthorProfile(false);
+        $author = $booking->getHostDetails(false);
 
         // Host Address
         $hostAddress = $author['email'];
