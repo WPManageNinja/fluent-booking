@@ -159,13 +159,15 @@ class Bootstrap extends BaseCalendar
         $meta->delete();
     }
 
-    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking)
     {
         if (!$this->isConfigured()) {
             return $books;
         }
 
-        $conflictItems = $this->getConflictCheckCalendars($calendarSlot->user_id);
+        $hostId = $hostId ?: $calendarSlot->user_id;
+
+        $conflictItems = $this->getConflictCheckCalendars($hostId);
 
         if (!$conflictItems) {
             return $books;

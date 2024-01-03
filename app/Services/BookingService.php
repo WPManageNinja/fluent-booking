@@ -82,7 +82,7 @@ class BookingService
             Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
         }
 
-        $booking->hosts()->attach($calendarSlot->user_id, [
+        $booking->hosts()->attach($booking->host_user_id, [
             'status' => 'confirmed'
         ]);
 

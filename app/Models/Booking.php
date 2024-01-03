@@ -125,6 +125,11 @@ class Booking extends Model
         return $this->hasMany(BookingMeta::class, 'booking_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'host_user_id');
+    }
+
     public function getCustomFormData($isFormatted = true)
     {
         if ($isFormatted) {
@@ -132,6 +137,15 @@ class Booking extends Model
         }
 
         return $this->getMeta('custom_fields_data', []);
+    }
+
+    public static function getHostTotalBooking($eventId, $hostIds, $ranges)
+    {
+        return self::where('event_id', $eventId)
+            ->whereIn('host_user_id', $hostIds)
+            ->whereBetween('start_time', $ranges)
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->count();
     }
 
     public function hosts()

@@ -205,7 +205,7 @@ class Bootstrap
 
     public function bookingScheduledSms($bookingId)
     {
-        $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
+        $booking = Booking::with(['user', 'calendar_event'])->find($bookingId);
 
         if (!$booking || !$booking->calendar_event) {
             return '';
@@ -235,7 +235,7 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'booking_conf_host.enabled')) {
             $sms = Arr::get($notifications, 'booking_conf_host.sms', []);
 
-            $hostPhone = $booking->calendar->user->getMeta('host_phone');
+            $hostPhone = $booking->user->getMeta('host_phone');
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
@@ -258,7 +258,7 @@ class Bootstrap
 
     public function bookingReminderSms($bookingId, $emailTo)
     {
-        $booking = Booking::with(['calendar_event', 'calendar'])->find($bookingId);
+        $booking = Booking::with(['user', 'calendar_event'])->find($bookingId);
 
         if (!$booking || $booking->status != 'scheduled') {
             return false;
@@ -291,7 +291,7 @@ class Bootstrap
         } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $sms = Arr::get($notifications, 'reminder_to_host.sms', []);
 
-            $hostPhone = $booking->calendar->user->getMeta('host_phone');
+            $hostPhone = $booking->user->getMeta('host_phone');
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
             $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
@@ -333,7 +333,7 @@ class Bootstrap
                 // This from the host
                 $sms = Arr::get($notifications, 'cancelled_by_host.sms', []);
     
-                $hostPhone = $booking->calendar->user->getMeta('host_phone');
+                $hostPhone = $booking->user->getMeta('host_phone');
 
                 $smsData['send_to'] = Arr::get($sms, 'send_to');
                 $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
@@ -396,7 +396,7 @@ class Bootstrap
                 // This from the host
                 $sms = Arr::get($notifications, 'rescheduled_by_host.sms', []);
                 
-                $hostPhone = $booking->calendar->user->getMeta('host_phone');
+                $hostPhone = $booking->user->getMeta('host_phone');
 
                 $smsData['send_to'] = Arr::get($sms, 'send_to');
                 $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');

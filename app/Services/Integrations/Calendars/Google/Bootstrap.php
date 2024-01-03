@@ -174,7 +174,7 @@ class Bootstrap extends BaseCalendar
         $meta->delete();
     }
 
-    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking)
     {
         $config = GoogleHelper::getApiConfig();
 
@@ -184,7 +184,9 @@ class Bootstrap extends BaseCalendar
 
         $cacheTime = Arr::get($config, 'caching_time', 5);
 
-        $items = GoogleHelper::getConflictCheckCalendars($calendarSlot->user_id);
+        $hostId = $hostId ?: $calendarSlot->user_id;
+
+        $items = GoogleHelper::getConflictCheckCalendars($hostId);
 
         if (!$items) {
             return $books;

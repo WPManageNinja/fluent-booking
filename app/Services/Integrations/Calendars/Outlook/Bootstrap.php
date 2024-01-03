@@ -225,7 +225,7 @@ class Bootstrap extends BaseCalendar
         return $feeds;
     }
 
-    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking)
     {
         $config = OutlookHelper::getApiConfig();
 
@@ -233,7 +233,9 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $items = OutlookHelper::getConflictCheckCalendars($calendarSlot->user_id);
+        $hostId = $hostId ?: $calendarSlot->user_id;
+
+        $items = OutlookHelper::getConflictCheckCalendars($hostId);
 
         if (!$items) {
             return $books;

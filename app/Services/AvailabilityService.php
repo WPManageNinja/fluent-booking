@@ -131,15 +131,12 @@ class AvailabilityService
     {
         $schedules = Availability::where('object_id', $userId)->get();
 
-        $defaultSchedule = [];
-
         foreach ($schedules as $schedule) {
             if (Arr::isTrue($schedule, 'value.default')) {
-                $defaultSchedule = $schedule;
-                break;  
+                return $schedule;
             }
         }
-        return $defaultSchedule;
+        return null;
     }
 
     public static function createScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC', $weeklySchedule = [], $dateOverrides = [])

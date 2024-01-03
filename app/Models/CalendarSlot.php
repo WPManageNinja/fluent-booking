@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -413,8 +414,12 @@ class CalendarSlot extends Model
         return strtotime('+' . $conditions['value'] . ' ' . $conditions['unit'], 0) - strtotime('+0 seconds', 0);
     }
 
-    public function getHostIds()
+    public function getHostIds($hostId = null)
     {
+        if ($hostId) {
+            return [$hostId];
+        }
+
         if ($this->isTeamEvent()) {
             return Arr::get($this->settings, 'team_members', []);
         }
@@ -571,6 +576,105 @@ class CalendarSlot extends Model
         }
 
         return $redirectUrl;
+    }
+
+    protected function getTeamScheduleData($dataKey)
+    {
+        $teamSchedules = [];
+        $teamMemberIds = $this->getHostIds();
+
+        foreach ($teamMemberIds as $teamMemberId) {
+            $schedule = AvailabilityService::getDefaultSchedule($teamMemberId);
+            if ($schedule) {
+                $teamSchedules[] = Arr::get($schedule, 'value.' . $dataKey, []);
+            }
+        }
+        return $teamSchedules;
+    }
+
+    protected function mergeTeamOverrides()
+    {
+        $teamOverrides = $this->getTeamScheduleData('date_overrides');
+
+        $teamOverride = [];
+        foreach ($teamOverrides as $dateOverrides) {
+            foreach ($dateOverrides as $date => $slots) {
+                if (!isset($teamOverride[$date])) {
+                    $teamOverride[$date] = $slots;
+                } else {
+                    $teamOverride[$date] = array_values(array_unique(array_merge($teamOverride[$date], $slots), SORT_REGULAR));
+                }
+            }
+        }
+
+        return $teamOverride;
+    }
+
+    protected function mergeTeamSchedules()
+    {
+        $teamSchedules = $this->getTeamScheduleData('weekly_schedules');
+
+        $teamSchedule = [];
+        foreach ($teamSchedules as $schedule) {
+            foreach ($schedule as $day => $dayData) {
+                if (!isset($teamSchedule[$day])) {
+                    $teamSchedule[$day] = $dayData;
+                } else {
+                    $teamSchedule[$day]['enabled'] = $teamSchedule[$day]['enabled'] || $dayData['enabled'];
+                    $teamSchedule[$day]['slots']   = array_values(array_unique(array_merge($teamSchedule[$day]['slots'], $dayData['slots']), SORT_REGULAR));
+                }
+            }
+        }
+
+        return $teamSchedule;
+    }
+
+    public function getWeeklySlots($hostId = null)
+    {
+        if ($hostId) {
+            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            return Arr::get($schedule, 'value.weekly_schedules', []);
+        }
+
+        if ($this->isCommonSchedule()) {
+            return $this->mergeTeamSchedules();
+        }
+
+        if ($this->availability_type === 'existing_schedule') {
+            $availability = Availability::findOrFail($this->availability_id);
+            return Arr::get($availability, 'value.weekly_schedules', []);
+        }
+
+        return Arr::get($this->settings, 'weekly_schedules', []);
+    }
+
+    public function getDateOverrides($hostId = null)
+    {
+        if ($hostId) {
+            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            return Arr::get($schedule, 'value.date_overrides', []);
+        }
+
+        if ($this->isCommonSchedule()) {
+            return $this->mergeTeamOverrides();
+        }
+
+        if ($this->availability_type === 'existing_schedule') {
+            $availability = Availability::findOrFail($this->availability_id);
+            return Arr::get($availability, 'value.date_overrides', []);
+        }
+
+        return Arr::get($this->settings, 'date_overrides', []);
+    }
+
+    public function isCommonSchedule()
+    {
+        if ($this->isTeamEvent()) {
+            if (!Arr::isTrue($this->settings, 'common_schedule', false)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getPaymentSettings()
