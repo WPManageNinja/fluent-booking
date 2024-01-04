@@ -5,29 +5,24 @@
                 @change="statusUpdated"
                 v-model="config.enabled"
             />
-<!--            <el-switch-->
-<!--                @change="statusUpdated"-->
-<!--                v-model="config.enabled"-->
-<!--                :active-value="true"-->
-<!--                :inactive-value="false" />-->
             <span class="fcal_day">{{ $t(week_day) }}</span>
         </div>
         <div class="fcal_day_slots">
             <div v-if="config.slots.length && config.enabled" class="fcal_slot" v-for="(slot, index) in config.slots" :key="index">
                 <el-time-select v-model="slot.start"
-                                start="00:00"
-                                step="00:15"
-                                end="23:45"
+                                :start="weekSelectTime.start"
+                                :step="weekSelectTime.step"
+                                :end="weekSelectTime.end"
                                 :max-time="slot.end"
                                 :placeholder="$t('Start')"
                                 popper-class="fcal_select"
                 />
                 <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
-                                start="00:00"
-                                step="00:15"
+                                :start="weekSelectTime.start"
+                                :step="weekSelectTime.step"
                                 :min-time="slot.start"
-                                end="23:45"
+                                :end="weekSelectTime.end"
                                 :placeholder="$t('End')"
                                 popper-class="fcal_select"
                 />
@@ -48,20 +43,15 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {
-    Delete,
-    Plus
-} from '@element-plus/icons-vue'
-import {markRaw} from "vue";
+<script>
+import { Delete, Plus } from '@element-plus/icons-vue'
+import { markRaw } from "vue";
 export default {
     name: 'WeekDayConfig',
     props: ['week_day', 'config'],
-    components: {
-
-    },
     data() {
         return {
+            weekSelectTime: this.appVars.week_select_times,
             DeleteIcon: markRaw(Delete),
             PlusIcon: markRaw(Plus)
         }
