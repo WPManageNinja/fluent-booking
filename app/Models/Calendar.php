@@ -120,7 +120,7 @@ class Calendar extends Model
             'author_slug'    => $user->user_nicename,
             'first_name'     => $user->first_name,
             'last_name'      => $user->last_name,
-            'avatar'         => $this->getMeta('profile_photo_url'),
+            'avatar'         => $this->getAuthorPhoto(),
             'phone'          => $this->user->getMeta('host_phone'),
             'featured_image' => $this->getMeta('featured_image_url')
         ];

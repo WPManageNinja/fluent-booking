@@ -219,6 +219,8 @@ class AdminMenuHandler
             }
         }
 
+        $calendarId = Calendar::where('user_id', $currentUser->ID)->where('type','!=','team')->first()->value('id');
+
         $hasAllAccess = false;
         if (PermissionManager::hasAllCalendarAccess()) {
             $hasAllAccess = true;
@@ -249,6 +251,7 @@ class AdminMenuHandler
             'custom_field_types' => $customFieldTypes,
             'me'                 => [
                 'id'          => $currentUser->ID,
+                'calendar_id' => $calendarId,
                 'full_name'   => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'       => $currentUser->user_email,
                 'is_admin'    => $hasAllAccess,
