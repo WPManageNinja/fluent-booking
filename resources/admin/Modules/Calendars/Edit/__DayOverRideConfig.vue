@@ -6,9 +6,9 @@
         <div class="fcal_day_slots">
             <div class="fcal_slot" v-for="(slot, index) in slots" :key="index">
                 <el-time-select v-model="slot.start"
-                                start="00:00"
-                                step="00:10"
-                                end="23:50"
+                                :start="overrideSelectTime.start"
+                                :step="overrideSelectTime.step"
+                                :end="overrideSelectTime.end"
                                 :max-time="slot.end"
                                 :placeholder="$t('Start')"
                                 popper-class="fcal_select"
@@ -16,10 +16,10 @@
                 />
                 <span class="fcal_sep"></span>
                 <el-time-select v-model="slot.end"
-                                start="00:00"
-                                step="00:10"
+                                :start="overrideSelectTime.start"
+                                :step="overrideSelectTime.step"
                                 :min-time="slot.start"
-                                end="23:50"
+                                :end="overrideSelectTime.end"
                                 :placeholder="$t('End')"
                                 popper-class="fcal_select"
                                 :disabled="isUnavailable"
@@ -39,17 +39,15 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {
-    Delete,
-    Plus
-} from '@element-plus/icons-vue'
-import {markRaw} from "vue";
+<script>
+import { Delete, Plus } from '@element-plus/icons-vue'
+import { markRaw } from "vue";
 export default {
     name: 'DayOverRideConfig',
     props: ['day_label', 'slots', 'isUnavailable'],
     data() {
         return {
+            overrideSelectTime: this.appVars.override_select_times,
             DeleteIcon: markRaw(Delete),
             PlusIcon: markRaw(Plus)
         }
