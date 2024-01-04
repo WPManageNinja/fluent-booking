@@ -1249,6 +1249,24 @@ class Helper
         ]);
     }
 
+    public static function getWeekSelectTimes()
+    {
+        return apply_filters('fluent_booking/week_select_times_schema', [
+            'start' => '00:00',
+            'step'  => '00:15',
+            'end'   => '23:45'
+        ]);
+    }
+
+    public static function getOverrideSelectTimes()
+    {
+        return apply_filters('fluent_booking/override_select_times_schema', [
+            'start' => '00:00',
+            'step'  => '00:15',
+            'end'   => '23:45'
+        ]);
+    }
+
     public static function getWeeklyScheduleSchema()
     {
         return apply_filters('fluent_booking/weekly_schedule_schema', [
