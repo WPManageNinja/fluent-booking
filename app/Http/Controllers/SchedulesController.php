@@ -4,6 +4,7 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\Order;
@@ -30,18 +31,19 @@ class SchedulesController extends Controller
 
         $author = Arr::get($filters, 'author');
 
-        if ($author == 'me') {
-            $author = get_current_user_id();
-        } else if ($author !== 'all') {
+        if ($author !== 'all') {
             $author = (int)$author;
         }
 
         if (!PermissionManager::userCanSeeAllBookings()) {
-            $author = get_current_user_id();
+            $author = Calendar::where('user_id', get_current_user_id())
+                ->where('type', '!=', 'team')
+                ->first()
+                ->value('id');
         }
 
         if ($author && $author !== 'all') {
-            $query->where('host_user_id', $author);
+            $query->where('calendar_id', $author);
 
             if ($slotId && $slotId !== 'all') {
                 $query->where('event_id', $slotId);
@@ -313,23 +315,15 @@ class SchedulesController extends Controller
             do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
         }
 
-        $booking->happening_status = $booking->getOngoingStatus();
-        $booking->location = $booking->getLocationDetailsHtml();
-        $booking->custom_form_data = $booking->getCustomFormData();
-        $booking->reschedule_url = $booking->getRescheduleUrl();
-
-        if (!$booking->calendar_event) {
-            $booking->author = [
-                'name' => 'unknown'
-            ];
-            $booking->slot = (object)[];
-        } else {
-            $booking->author = $booking->calendar_event->getAuthorProfile(false);
-        }
-
         if ($booking->event_type == 'group') {
             $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
         }
+
+        $booking->author           = $booking->getHostDetails(false);
+        $booking->location         = $booking->getLocationDetailsHtml();
+        $booking->reschedule_url   = $booking->getRescheduleUrl();
+        $booking->happening_status = $booking->getOngoingStatus();
+        $booking->custom_form_data = $booking->getCustomFormData();
 
         $booking->slot = $booking->calendar_event;
 

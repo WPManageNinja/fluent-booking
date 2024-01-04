@@ -593,10 +593,12 @@ class Booking extends Model
                 $name = $user->display_name;
             }
             $data = [
+                'id'         => $user->ID,
                 'name'       => $name,
                 'email'      => $user->user_email,
                 'first_name' => $user->first_name,
                 'last_name'  => $user->last_name,
+                'avatar'     => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
             ];
         } else {
             $data = $this->calendar->getAuthorProfile(false);

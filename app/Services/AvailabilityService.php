@@ -94,7 +94,7 @@ class AvailabilityService
 
     public static function getScheduleOptions()
     {
-        $calendars = Calendar::with(['user'])->get();
+        $calendars = Calendar::with(['user'])->where('type', '!=', 'team')->get();
 
         $scheduleOptions = [];
 

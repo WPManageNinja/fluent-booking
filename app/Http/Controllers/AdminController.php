@@ -126,7 +126,7 @@ class AdminController extends Controller
     {
         $teamMembers = [];
 
-        $calendars = Calendar::get();
+        $calendars = Calendar::where('type', '!=', 'team')->get();
 
         foreach ($calendars as $calendar) {
             $user = get_user_by('ID', $calendar->user_id);

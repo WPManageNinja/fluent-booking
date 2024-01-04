@@ -8,14 +8,13 @@
                 <el-form label-position="top">
                     <el-form-item :label="$t('Assign Member')">
                         <el-select
-                            v-model="settings.team_members"
-                            @change="validateTeamMembers"
-                            multiple
+                            @change="addTeamMember"
                             :placeholder="$t('Select')"
                             popper-class="fcal_select">
                             <el-option
-                                v-for="host in all_hosts"
+                                v-for="host in filteredHosts"
                                 :key="host.id"
+                                :disabled="host.disabled"
                                 :label="host.name"
                                 :value="host.id"
                             />
@@ -75,13 +74,9 @@ export default {
             loading: false,
             saving: false,
             all_hosts: [],
+            filteredHosts: [],
             teamMembers: [],
             settings: this.calendar_event.settings
-        }
-    },
-    watch: {
-        'settings.team_members': function(updatedValue) {
-            this.updateTeamMembers(updatedValue);
         }
     },
     methods: {
@@ -91,26 +86,36 @@ export default {
                 params: { calendar_id: calendarId }
             })
         },
-        validateTeamMembers(updatedValue) {
-            if (!updatedValue.length) {
-                this.settings.team_members = [this.all_hosts[0].id];
-            }
-        },
-        updateTeamMembers(updatedValue) {
-            this.teamMembers = updatedValue.map((id) => {
+        updateTeamMembers() {
+            this.teamMembers = this.settings.team_members.map((id) => {
                 return this.all_hosts.find(host => host.id === id);
             });
+        },
+        addTeamMember(id) {
+            this.settings.team_members.push(id);
+            this.saveSettings();
         },
         removeTeamMember(id) {
             this.settings.team_members = this.settings.team_members.filter(memberId => memberId !== id);
             this.saveSettings();
+        },
+        updatefilteredHosts() {
+            this.filteredHosts = this.all_hosts.map((host) => {
+                const updatedHost = { ...host };
+                if (this.settings.team_members.includes(updatedHost.id)) {
+                    updatedHost.disabled = true;
+                    updatedHost.name = updatedHost.name + ' (' + this.$t('Already Assigned') + ')';
+                }
+                return updatedHost;
+            });
         },
         getAllHosts() {
             this.loading = true;
             this.$get('admin/all-hosts')
                 .then(response => {
                     this.all_hosts = response.hosts;
-                    this.updateTeamMembers(this.settings.team_members);
+                    this.updateTeamMembers();
+                    this.updatefilteredHosts();
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -127,6 +132,8 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response);
+                    this.updateTeamMembers();
+                    this.updatefilteredHosts();
                 })
                 .catch(errors => {
                     this.$handleError(errors);

@@ -612,18 +612,7 @@ class FrontEndHandler
 
         $hostIds = null;
         if ($calendarSlot->isTeamEvent()) {
-            $hostIds = $calendarSlot->getHostIds();
-            $hostBookings = [];
-            foreach ($hostIds as $hostId) {
-                $hostBookings[$hostId] = Booking::getHostTotalBooking(
-                    $calendarSlot->id,
-                    [$hostId],
-                    [gmdate('Y-m-d 00:00:00',strtotime($startDateTime)), gmdate('Y-m-d 23:59:59',strtotime($startDateTime))]
-                );
-            }
-            usort($hostIds, function ($a, $b) use ($hostBookings) {
-                return $hostBookings[$a] - $hostBookings[$b];
-            });
+            $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
         }
 
         // Check if the time is available or not for this slot

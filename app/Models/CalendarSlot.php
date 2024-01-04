@@ -578,6 +578,16 @@ class CalendarSlot extends Model
         return $redirectUrl;
     }
 
+    public function isCommonSchedule()
+    {
+        if ($this->isTeamEvent()) {
+            if (!Arr::isTrue($this->settings, 'common_schedule', false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function getTeamScheduleData($dataKey)
     {
         $teamSchedules = [];
@@ -667,14 +677,23 @@ class CalendarSlot extends Model
         return Arr::get($this->settings, 'date_overrides', []);
     }
 
-    public function isCommonSchedule()
+    public function getHostIdsSortedByBookings($startDate)
     {
-        if ($this->isTeamEvent()) {
-            if (!Arr::isTrue($this->settings, 'common_schedule', false)) {
-                return true;
-            }
+        $hostIds = $this->getHostIds();
+
+        $hostBookings = [];
+        foreach ($hostIds as $hostId) {
+            $hostBookings[$hostId] = Booking::getHostTotalBooking(
+                $this->id,
+                [$hostId],
+                [gmdate('Y-m-d 00:00:00',strtotime($startDate)), gmdate('Y-m-d 23:59:59',strtotime($startDate))]
+            );
         }
-        return false;
+        usort($hostIds, function ($a, $b) use ($hostBookings) {
+            return $hostBookings[$a] - $hostBookings[$b];
+        });
+
+        return $hostIds;
     }
 
     public function getPaymentSettings()
