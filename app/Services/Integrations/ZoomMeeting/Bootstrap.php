@@ -32,7 +32,7 @@ class Bootstrap
          */
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeCancelZoomMeeting'], 10, 1);
-        add_action('fluent_booking/after_booking_rescheduled', [$this, 'maybeRescheduleZoomMeeting'], 10, 1);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'maybeRescheduleZoomMeeting'], 10, 2);
 
         /*
          * Location Hooks
@@ -217,7 +217,7 @@ class Bootstrap
         return true;
     }
 
-    public function maybeRescheduleZoomMeeting($updatedBooking)
+    public function maybeRescheduleZoomMeeting($updatedBooking, $previousBooking)
     {
         if (Arr::get($updatedBooking->location_details, 'type') !== 'zoom_meeting') {
             return false; // not our location
@@ -231,21 +231,17 @@ class Bootstrap
             'start_time' => gmdate('Y-m-d\TH:i:s\Z', strtotime($updatedBooking->start_time))
         ];
 
+        if ($previousBooking->event_type == 'group') {
+            $this->updateAttendees($previousBooking);
+            $this->maybeCreateZoomMeeting($updatedBooking, $updatedBooking->calendar_event);
+            return false;
+        }
+
         $this->updateZoomMeeting($updatedBooking, $data);
     }
 
     private function updateAttendees($booking)
     {
-        $existingBooking = Booking::where('group_id', $booking->group_id)
-            ->where('status', 'scheduled')
-            ->first();
-
-        $bookingMeta = $existingBooking->getMeta('__zoom_meeting_details');
-
-        if (!$bookingMeta) {
-            return false;
-        }
-
         $attendeesEmails = Booking::where('group_id', $booking->group_id)
             ->where('status', 'scheduled')
             ->pluck('email')
@@ -267,10 +263,14 @@ class Bootstrap
 
     public function updateZoomMeeting($booking, $data)
     {
-        $bookingMeta = $booking->getMeta('__zoom_meeting_details');
+        $existingBooking = Booking::where('group_id', $booking->group_id)
+            ->where('status', 'scheduled')
+            ->first();
+
+        $bookingMeta = $existingBooking->getMeta('__zoom_meeting_details');
 
         if (!$bookingMeta) {
-            return false; // Nothing to cancel as there is no previous record
+            return false;
         }
 
         $api = ZoomHelper::getZoomClient($booking->host_user_id);
@@ -278,7 +278,6 @@ class Bootstrap
         if (is_wp_error($api)) {
             return false;
         }
-
 
         $meetingId = Arr::get($bookingMeta, 'id');
 
