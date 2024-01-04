@@ -708,7 +708,8 @@ class TransStrings
             'Round Robin'                                                                      => __('Round Robin', 'fluent-booking-pro'),
             'Enter Name of this team'                                                          => __('Enter Name of this team', 'fluent-booking-pro'),
             'One rotating host'                                                                => __('One rotating host', 'fluent-booking-pro'),
-            'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro')
+            'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro'),
+            'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
         );
 
     }

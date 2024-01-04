@@ -104,7 +104,7 @@ export default {
                 const updatedHost = { ...host };
                 if (this.settings.team_members.includes(updatedHost.id)) {
                     updatedHost.disabled = true;
-                    updatedHost.name = updatedHost.name + ' (' + this.$t('Already Assigned') + ')';
+                    updatedHost.name = updatedHost.name + ' (' + this.$t('Already assigned') + ')';
                 }
                 return updatedHost;
             });
