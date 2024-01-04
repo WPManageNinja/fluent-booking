@@ -249,7 +249,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__apple_calendar_event') && $booking->event_type == 'single') {
+        if ($booking->getMeta('__google_calendar_event') && $booking->event_type == 'single') {
             return false; // Already created
         }
 
@@ -585,7 +585,6 @@ class Bootstrap extends BaseCalendar
         $response = $calendarApi->patchEvent($parentCalendarId, $parentEventId, [
             'attendees' => $attendees
         ]);
-
 
         if (is_wp_error($response)) {
             if (!$isRescheduling) {
