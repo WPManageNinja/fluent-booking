@@ -57,7 +57,7 @@ class BookingFieldService
         $requiredIndexes = ['name', 'email', 'message'];
 
         $defaultFields = [
-            'name'    => [
+            'name' => [
                 'index'          => 1,
                 'type'           => 'text',
                 'name'           => 'name',
@@ -69,7 +69,7 @@ class BookingFieldService
                 'is_visible'     => true,
                 'placeholder'    => __('Your Name', 'fluent-booking-pro'),
             ],
-            'email'   => [
+            'email' => [
                 'index'          => 2,
                 'type'           => 'email',
                 'name'           => 'email',
@@ -90,9 +90,21 @@ class BookingFieldService
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => false,
-            ],
+            ]
         ];
 
+        if ($calendarSlot->isGuestFieldRequired()) {
+            $requiredIndexes[] = 'guests';
+            $defaultFields['guests'] = [
+                'type'           => 'multi-guests',
+                'name'           => 'guests',
+                'label'          => __('Additional Guests', 'fluent-booking-pro'),
+                'required'       => false,
+                'enabled'        => false,
+                'system_defined' => true,
+                'disable_alter'  => false
+            ];
+        }
         if ($calendarSlot->isLocationFieldRequired()) {
             $requiredIndexes[] = 'location';
             $defaultFields['location'] = [
@@ -191,7 +203,6 @@ class BookingFieldService
                     $exist['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
                     $exist['payment_items'] = PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
                 }
-
                 $existingFields['payment_method'] = $exist;
             } else {
                 unset($existingFields['payment_method']);
@@ -265,9 +276,9 @@ class BookingFieldService
         return $formattedData;
     }
 
-    public static function getCustomFields($calendarSlot, $withConfig = false)
+    public static function getCustomFields($calendarEvent, $withConfig = false)
     {
-        $existingFields = $calendarSlot->getMeta('booking_fields', []);
+        $existingFields = $calendarEvent->getMeta('booking_fields', []);
 
         if (!$existingFields) {
             return [];

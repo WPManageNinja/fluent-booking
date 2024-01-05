@@ -295,11 +295,20 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $guestAttendee = array_filter([
+        $mainGuest = array_filter([
             'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
             'email'        => $booking->email,
             'comment'      => $booking->message
         ]);
+
+        $additionalGuests = $booking->getAdditionalGuests();
+
+        $guestAttendees = array_merge(
+            [$mainGuest],
+            array_map(function ($guest) {
+                return ['email' => $guest];
+            }, $additionalGuests ?? [])
+        );
 
         $author = $booking->getHostDetails(false);
 
@@ -310,13 +319,12 @@ class Bootstrap extends BaseCalendar
             'end'                => [
                 'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ],
-            'attendees'          => [
-                $guestAttendee,
+            'attendees'          => array_merge($guestAttendees, [
                 [
                     'display_name' => $author['name'],
                     'email'        => $author['email']
                 ]
-            ],
+            ]),
             'source'             => [
                 'title' => $booking->calendar_event->title,
                 'url'   => $booking->source_url

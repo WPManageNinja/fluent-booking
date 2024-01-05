@@ -597,18 +597,27 @@ class Bootstrap extends BaseCalendar
     {
         $host = $booking->getHostDetails(false);
 
+        $mainGuest = [
+            'email' => $booking->email,
+            'name'  => trim($booking->first_name . ' ' . $booking->last_name),
+        ];
+        
+        $additionalGuests = $booking->getAdditionalGuests();
+        
+        $attendees = array_merge(
+            [$mainGuest],
+            array_map(function ($guest) {
+                return ['email' => $guest];
+            }, $additionalGuests ?? [])
+        );
+
         $data = [
             'dtstart'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
             'dtend'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
             'status'    => 'confirmed',
             'summary'   => $booking->getMeetingTitle(),
             'location'  => $booking->getLocationAsText(),
-            'attendees' => [
-                [
-                    'email' => $booking->email,
-                    'name'  => trim($booking->first_name . ' ' . $booking->last_name)
-                ]
-            ],
+            'attendees' => $attendees,
             'organizer' => [
                 'email' => $host['email'],
                 'name'  => $host['name']

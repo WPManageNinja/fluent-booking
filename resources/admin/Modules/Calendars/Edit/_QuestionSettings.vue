@@ -117,7 +117,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message', 'address', 'location', 'phone_number'];
+            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number'];
             return allowedFields.includes(name);
         },
         moveUp(index) {

@@ -466,10 +466,11 @@ class FrontEndHandler
                 'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                            => __('PM', 'fluent-booking-pro'),
                 'AM'                            => __('AM', 'fluent-booking-pro'),
-                '+ Add another guest'           => __('+ Add another guest', 'fluent-booking-pro'),
                 'Email'                         => __('Email', 'fluent-booking-pro'),
                 'Date'                          => __('Date', 'fluent-booking-pro'),
-                'Time'                          => __('Time', 'fluent-booking-pro')
+                'Time'                          => __('Time', 'fluent-booking-pro'),
+                'Add guests'                    => __('Add guests', 'fluent-booking-pro'),
+                'Add another'                   => __('Add another', 'fluent-booking-pro')
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
@@ -539,8 +540,12 @@ class FrontEndHandler
             }
         }
 
+        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
+            $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
+        }
+
         $requiredFields = array_filter($calendarSlot->getMeta('booking_fields', []), function ($field) {
-            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && Arr::get($field, 'name') == 'message';
+            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
         });
 
         foreach ($requiredFields as $field) {
@@ -604,6 +609,10 @@ class FrontEndHandler
 
         if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
+        }
+
+        if ($additionalGuests) {
+            $bookingData['additional_guests'] = $additionalGuests;
         }
 
         // Check if the time is available or not for this slot
