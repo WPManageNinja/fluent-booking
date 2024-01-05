@@ -329,6 +329,8 @@ class SchedulesController extends Controller
 
         if ($booking->event_type == 'group') {
             $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
+        } else {
+            $booking->additional_guests = $booking->getAdditionalGuests();
         }
 
         $booking->slot = $booking->calendar_event;

@@ -23,16 +23,7 @@
                                 <LocationField {appData} field={field} bind:form="{form}"/>
                             </div>
                         {:else if field.type == 'multi-guests'}
-                            <div class="fcal_input_content">
-                                {#if field.label}
-                                    <div class="fcal_input_label">
-                                        {field.label}
-                                        {#if field.required}<span>*</span>{/if}
-                                    </div>
-                                {/if}
-                                <MultiGuests {appData} field={field} bind:form="{form}" />
-                            </div>
-
+                            <MultiGuests {appData} field={field} bind:form="{form}" />
                         {:else if field.type === 'multi-select' }
                             <div class="fcal_input_content">
                                 {#if field.label}

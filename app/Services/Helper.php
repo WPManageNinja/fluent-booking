@@ -1355,10 +1355,6 @@ class Helper
                 'label' => __('Checkbox Group', 'fluent-booking-pro')
             ],
             [
-                'value' => 'multi-guests',
-                'label' => __('Multi Guests', 'fluent-booking-pro')
-            ],
-            [
                 'value' => 'date',
                 'label' => __('Date', 'fluent-booking-pro')
             ]
@@ -1546,6 +1542,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.additional_guests}}'             => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
                         '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),
@@ -1602,6 +1599,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.additional_guests}}'             => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
                         '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),

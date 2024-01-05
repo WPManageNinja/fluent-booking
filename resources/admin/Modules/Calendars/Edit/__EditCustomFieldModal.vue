@@ -154,6 +154,9 @@ export default {
             this.isNewEntry = true;
         } else {
             this.fieldData = this.field;
+            if (!this.fieldData.index) {
+                this.fieldData.index = this.getFieldIndex();
+            }
         }
     }
 }

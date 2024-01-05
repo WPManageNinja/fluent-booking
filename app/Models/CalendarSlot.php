@@ -156,6 +156,15 @@ class CalendarSlot extends Model
         return false;
     }
 
+    public function isGuestFieldRequired()
+    {
+        if ($this->event_type != 'group') {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getSlotSettingsSchema($calendar)
     {
         return [
