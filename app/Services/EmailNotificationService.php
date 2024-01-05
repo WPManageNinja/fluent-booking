@@ -26,8 +26,8 @@ class EmailNotificationService
         $author = $calendarEvent->getAuthorProfile(false);
 
         // Host Address
-        $hostAddress = $author['email'];
         $hostName = '';
+        $hostAddress = $author['email'];
         if ($author['name']) {
             $hostName = $author['name'];
             $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
@@ -39,6 +39,10 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s %2s <%3s>', $booking->first_name, $booking->last_name, $booking->email);
         } else if ($booking->first_name) {
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
+        }
+
+        if ($additionalGuests = $booking->getAdditionalGuests()) {
+            $guestAddress .= ', ' . implode(', ', $additionalGuests);
         }
 
         $globalSettings = Helper::getGlobalSettings();
@@ -83,11 +87,6 @@ class EmailNotificationService
             'email_footer' => self::getGlobalEmailFooter(),
         ]);
 
-        if (isset($email['additional_guests'])) {
-            $to .= ', ' . $email['additional_guests'];
-        }
-
-
         $emogrifier = new Emogrifier($body);
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string)$emogrifier->emogrify();
@@ -122,6 +121,10 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s %2s <%3s>', $booking->first_name, $booking->last_name, $booking->email);
         } else if ($booking->first_name) {
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
+        }
+
+        if ($additionalGuests = $booking->getAdditionalGuests()) {
+            $guestAddress .= ', ' . implode(', ', $additionalGuests);
         }
 
         $globalSettings = Helper::getGlobalSettings();
@@ -213,6 +216,10 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
         }
 
+        if ($additionalGuests = $booking->getAdditionalGuests()) {
+            $guestAddress .= ', ' . implode(', ', $additionalGuests);
+        }
+
         $globalSettings = Helper::getGlobalSettings();
         $useHostName = Arr::get($globalSettings, 'emailing.use_host_name', 'yes');
         $useHostEmailOnReply = Arr::get($globalSettings, 'emailing.use_host_email_on_reply', 'yes');
@@ -288,6 +295,10 @@ class EmailNotificationService
             $guestAddress = sprintf('%1s %2s <%3s>', $booking->first_name, $booking->last_name, $booking->email);
         } else if ($booking->first_name) {
             $guestAddress = sprintf('%1s <%2s>', $booking->first_name, $booking->email);
+        }
+
+        if ($additionalGuests = $booking->getAdditionalGuests()) {
+            $guestAddress .= ', ' . implode(', ', $additionalGuests);
         }
 
         $globalSettings = Helper::getGlobalSettings();
