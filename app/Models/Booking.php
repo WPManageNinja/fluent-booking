@@ -134,6 +134,20 @@ class Booking extends Model
         return $this->getMeta('custom_fields_data', []);
     }
 
+    public function getAdditionalGuests($isHtml = false)
+    {
+        $additionalGuests = $this->getMeta('additional_guests', []);
+        if (!$additionalGuests) {
+            return [];
+        }
+
+        if ($isHtml) {
+            return wpautop(implode('<br>', $additionalGuests));
+        }
+
+        return $additionalGuests;
+    }
+
     public function hosts()
     {
         $class = __NAMESPACE__ . '\User';
@@ -264,7 +278,7 @@ class Booking extends Model
             $html = '<b>' . $platformLabels[$locationType] . '</b> ';
 
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Joining Meeting', 'fluent-booking-pro') . '</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Join Meeting', 'fluent-booking-pro') . '</a>';
             }
 
             return $html;

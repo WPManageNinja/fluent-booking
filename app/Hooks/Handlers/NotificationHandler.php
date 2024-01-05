@@ -4,9 +4,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\EmailNotificationService;
-use FluentBooking\App\Services\Mailer;
 use FluentBooking\Framework\Support\Arr;
 
 class NotificationHandler
@@ -86,15 +84,6 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled')) {
             $email = Arr::get($notifications, 'booking_conf_attendee.email', []);
-
-            $formFields = BookingFieldService::getBookingFields($booking->calendar_event);
-            foreach ($formFields as $formField) {
-                if ($formField['type'] == 'multi-guests') {
-                    $result                     = Arr::get($booking->getCustomFormData(), $formField['name']);
-                    $email['additional_guests'] = Arr::get($result, 'value');
-                }
-            }
-
             EmailNotificationService::emailOnBooked($booking, $email, 'guest');
         }
 

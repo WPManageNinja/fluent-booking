@@ -342,13 +342,25 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $guestAttendee = [
+        $mainGuest = [
             'emailAddress' => array_filter([
                 'name'    => trim($booking->first_name . ' ' . $booking->last_name),
                 'address' => $booking->email
             ]),
             'type'         => 'required'
         ];
+
+        $additionalGuests = $booking->getAdditionalGuests();
+
+        $guestAttendees = array_merge(
+            [$mainGuest],
+            array_map(function ($guest) {
+                return [
+                    'emailAddress' => ['address' => $guest],
+                    'type'         => 'required'
+                ];
+            }, $additionalGuests ?? [])
+        );
 
         $author = $booking->getHostDetails(false);
 
@@ -362,7 +374,7 @@ class Bootstrap extends BaseCalendar
                 'timeZone' => 'UTC'
             ],
             'attendees'             => [
-                $guestAttendee,
+                $guestAttendees,
             ],
             'organizer'             => [
                 'emailAddress' => [

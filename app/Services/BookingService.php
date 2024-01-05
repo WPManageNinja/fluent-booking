@@ -54,6 +54,8 @@ class BookingService
             $data['location_details'] = LocationService::getLocationDetails($calendarSlot, [], []);
         }
 
+        $additionalGuests = Arr::get($data, 'additional_guests', []);
+
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
         if ($calendarSlot->event_type == 'group') {
@@ -80,6 +82,10 @@ class BookingService
 
         if ($customFieldsData) {
             Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+        }
+
+        if ($additionalGuests) {
+            Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
         }
 
         $booking->hosts()->attach($calendarSlot->user_id, [
@@ -136,6 +142,13 @@ class BookingService
                 'content' => $booking->getLocationDetailsHtml()
             ]
         ];
+
+        if ($guests = $booking->getAdditionalGuests(true)) {
+            $sections['guests'] = [
+                'title'   => __('Additional Guests', 'fluent-booking-pro'),
+                'content' => $guests
+            ];
+        }
 
         if ($booking->status == 'cancelled') {
             // add cancellation reason at the beginning

@@ -15,6 +15,12 @@
                     <h3>{{ $t('Invitee Email') }}</h3>
                     <p>{{ booking.email }}</p>
                 </div>
+                <div v-if="booking.additional_guests.length" class="fcal_schedule_details_event_item">
+                    <h3>{{ $t('Additional Guests') }}</h3>
+                    <div v-for="guest in booking.additional_guests" class="fcal_spot_details_value">
+                        <p>{{ guest }}</p>
+                    </div>
+                </div>
                 <div v-if="booking.message" class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Message') }}</h3>
                     <p>{{ booking.message }}</p>
