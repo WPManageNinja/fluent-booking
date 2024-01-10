@@ -103,11 +103,11 @@ class CalendarSlot extends Model
     }
 
     public function isTeamEvent() {
-        if (!$this->calendar) {
-            return false;
+        if ($this->calendar) {
+            return $this->calendar->type == 'team';
         }
-
-        return $this->calendar->type == 'team';
+        
+        return $this->event_type == 'round_robin' || $this->event_type == 'collective';
     }
 
     public function getAuthorProfile($public = true, $userID = null)

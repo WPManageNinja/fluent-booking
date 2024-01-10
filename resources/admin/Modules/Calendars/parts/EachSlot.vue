@@ -34,6 +34,16 @@
                     </el-dropdown>
                 </div>
             </h3>
+            <div v-if="isTeam">
+                <div v-if="slot.author_profiles" class="fcal_author_avatars">
+                    <div v-for="author in slot.author_profiles" class="fcal_author">
+                        <img class="fcal_author_avatar" :src="author.avatar">
+                        <div class="fcal_author_tooltip">
+                            <span>{{ author.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p class="fcal_slot_meta">
                 <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} {{ $t('minutes') }}</span>
                 <span class="fcal_slog_meta_event">

@@ -185,6 +185,40 @@
               }
             }
 
+            .fcal_author_avatars {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: 12px;
+                .fcal_author {
+                    position: relative;
+                    &:hover .fcal_author_tooltip {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    .fcal_author_avatar {
+                        margin-right: -4px;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        border: 1.5px solid white;
+                    }
+                    .fcal_author_tooltip {
+                        position: absolute;
+                        bottom: 105%;
+                        width: max-content;
+                        background: black;
+                        border-radius: 8px;
+                        color: white;
+                        font-size: 14px;
+                        padding: 4px 8px;
+                        opacity: 0;
+                        margin: 0;
+                        visibility: hidden;
+                        transition: .2s;
+                    }
+                }
+            }
+
             .fcal_slot_meta {
               display: flex;
               align-items: center;

@@ -38,6 +38,7 @@ class CalendarController extends Controller
                 $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
                 $slot->location_fields = $slot->calendar->getLocationFields();
+                $slot->author_profiles = $slot->isTeamEvent() ? $slot->getAuthorProfiles() : [];
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
