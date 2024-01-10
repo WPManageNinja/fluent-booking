@@ -33,7 +33,7 @@ class Bootstrap extends BaseCalendar
                 ->where('object_id', $calendar->user_id);
 
             $teamsExist = $outlookQuery->first();
-            $message    = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
+            $message = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
@@ -167,9 +167,17 @@ class Bootstrap extends BaseCalendar
                 'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
             ]);
         }
-
-
+        
         $userEmail = OutlookHelper::getEmailByIdToken($response['id_token']);
+
+        if (is_wp_error($userEmail)) {
+            RemoteCalendarHelper::showGeneralError([
+                'title'    => __('Failed to connect Calendar API', 'fluent-booking-pro'),
+                'body'     => __('Outlook API Response Error:', 'fluent-booking-pro') . ' ' . $userEmail->get_error_message(),
+                'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
+                'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
+            ]);
+        }
 
         $response['expires_in'] += time();
         $response['access_token'] = Helper::encryptKey($response['access_token']);
@@ -211,13 +219,13 @@ class Bootstrap extends BaseCalendar
             $additionalSettingFields = $this->getAdditionalSettingFields();
 
             $feeds[] = [
-                'driver'              => 'outlook',
-                'db_id'               => $item->id,
-                'identifier'          => $item->key,
-                'remote_calendars'    => $remoteCalendars,
-                'errors'              => $errors,
-                'conflict_check_ids'  => Arr::get($item->value, 'conflict_check_ids', []),
-                'additional_settings' => $additionalSettings,
+                'driver'                    => 'outlook',
+                'db_id'                     => $item->id,
+                'identifier'                => $item->key,
+                'remote_calendars'          => $remoteCalendars,
+                'errors'                    => $errors,
+                'conflict_check_ids'        => Arr::get($item->value, 'conflict_check_ids', []),
+                'additional_settings'       => $additionalSettings,
                 'additional_setting_fields' => $additionalSettingFields
             ];
         }
