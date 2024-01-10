@@ -1,24 +1,70 @@
 <?php
+/**
+ * Plugin Name: Action Scheduler
+ * Plugin URI: https://actionscheduler.org
+ * Description: A robust scheduling library for use in WordPress plugins.
+ * Author: Automattic
+ * Author URI: https://automattic.com/
+ * Version: 3.6.9
+ * License: GPLv3
+ * Tested up to: 6.4
+ * Requires at least: 5.2
+ * Requires PHP: 5.6
+ *
+ * Copyright 2019 Automattic, Inc.  (https://automattic.com/contact/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @package ActionScheduler
+ */
 
-add_action('plugins_loaded', function () {
-    if (class_exists('ActionScheduler_Versions', false) || function_exists('action_scheduler_register_3_dot_7_dot_0')) {
-        return;
+if (!function_exists('fluentwp_scheduler_register') && function_exists('add_action')) { // WRCS: DEFINED_VERSION.
+
+    if (!class_exists('ActionScheduler_Versions', false)) {
+        require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/ActionScheduler_Versions.php';
+        add_action('plugins_loaded', array('ActionScheduler_Versions', 'initialize_latest_version'), 1, 0);
     }
 
-    require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/ActionScheduler_Versions.php';
+    add_action('plugins_loaded', 'fluentwp_scheduler_register', 0, 0); // WRCS: DEFINED_VERSION.
 
-    if (!function_exists('action_scheduler_initialize_3_dot_7_dot_0')) { // WRCS: DEFINED_VERSION.
-        function action_scheduler_initialize_3_dot_7_dot_0()
-        {
-            if (!class_exists('ActionScheduler', false)) {
-                require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/abstracts/ActionScheduler.php';
-                ActionScheduler::init(FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php');
-            }
+    /**
+     * Registers this version of Action Scheduler.
+     */
+    function fluentwp_scheduler_register()
+    { // WRCS: DEFINED_VERSION.
+        $versions = ActionScheduler_Versions::instance();
+        $versions->register('3.6.9', 'fluentwp_scheduler_initialize'); // WRCS: DEFINED_VERSION.
+    }
+
+    /**
+     * Initializes this version of Action Scheduler.
+     */
+    function fluentwp_scheduler_initialize()
+    { // WRCS: DEFINED_VERSION.
+        // A final safety check is required even here, because historic versions of Action Scheduler
+        // followed a different pattern (in some unusual cases, we could reach this point and the
+        // ActionScheduler class is already defined—so we need to guard against that).
+        if (!class_exists('ActionScheduler', false)) {
+            require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/abstracts/ActionScheduler.php';
+            ActionScheduler::init(FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php');
         }
     }
 
-    $versions = ActionScheduler_Versions::instance();
-    $versions->register('3.7.0', 'action_scheduler_initialize_3_dot_7_dot_0'); // WRCS: DEFINED_VERSION.
-
-    ActionScheduler_Versions::initialize_latest_version();
-}, 0, 0);
+    // Support usage in themes - load this version if no plugin has loaded a version yet.
+    if (did_action('plugins_loaded') && !doing_action('plugins_loaded') && !class_exists('ActionScheduler', false)) {
+        fluentwp_scheduler_initialize(); // WRCS: DEFINED_VERSION.
+        do_action('action_scheduler_pre_theme_init');
+        ActionScheduler_Versions::initialize_latest_version();
+    }
+}
