@@ -449,6 +449,7 @@ class TransStrings
             'Discard'                                                                          => __('Discard', 'fluent-booking-pro'),
             'Submit'                                                                           => __('Submit', 'fluent-booking-pro'),
             'No bookings found based on your filter'                                           => __('No bookings found based on your filter', 'fluent-booking-pro'),
+            'beta'                                                                             => __('beta', 'fluent-booking-pro'),
             'Team'                                                                             => __('Team', 'fluent-booking-pro'),
             'TeamManagement/description'                                                       => __('Grant Team Members Access to FluentBookings for Calendar and Booking Management.', 'fluent-booking-pro'),
             'Assignment'                                                                       => __('Assignment', 'fluent-booking-pro'),
