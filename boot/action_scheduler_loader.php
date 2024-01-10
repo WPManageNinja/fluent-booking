@@ -47,17 +47,19 @@ if (!function_exists('fluentwp_scheduler_register') && function_exists('add_acti
         $versions->register('3.6.9', 'fluentwp_scheduler_initialize'); // WRCS: DEFINED_VERSION.
     }
 
-    /**
-     * Initializes this version of Action Scheduler.
-     */
-    function fluentwp_scheduler_initialize()
-    { // WRCS: DEFINED_VERSION.
-        // A final safety check is required even here, because historic versions of Action Scheduler
-        // followed a different pattern (in some unusual cases, we could reach this point and the
-        // ActionScheduler class is already defined—so we need to guard against that).
-        if (!class_exists('ActionScheduler', false)) {
-            require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/abstracts/ActionScheduler.php';
-            ActionScheduler::init(FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php');
+    if (!function_exists('fluentwp_scheduler_initialize')) {
+        /**
+         * Initializes this version of Action Scheduler.
+         */
+        function fluentwp_scheduler_initialize()
+        { // WRCS: DEFINED_VERSION.
+            // A final safety check is required even here, because historic versions of Action Scheduler
+            // followed a different pattern (in some unusual cases, we could reach this point and the
+            // ActionScheduler class is already defined—so we need to guard against that).
+            if (!class_exists('ActionScheduler', false)) {
+                require_once FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/classes/abstracts/ActionScheduler.php';
+                ActionScheduler::init(FLUENT_BOOKING_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php');
+            }
         }
     }
 
