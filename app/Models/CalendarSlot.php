@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
@@ -588,7 +589,23 @@ class CalendarSlot extends Model
         return false;
     }
 
-    protected function getTeamScheduleData($dataKey)
+    private function getProcessedWeeklySlots($schedule)
+    {
+        $scheduleData = Arr::get($schedule, 'value.weekly_schedules', []);
+        $scheduleTimezone = Arr::get($schedule, 'value.timezone', 'UTC');
+        $schedule = SanitizeService::weeklySchedules($scheduleData, 'UTC', $scheduleTimezone);
+        return AvailabilityService::getUtcWeeklySchedules($schedule, $scheduleTimezone);
+    }
+
+    private function getProcessedDateOverrides($schedule)
+    {
+        $scheduleData = Arr::get($schedule, 'value.date_overrides', []);
+        $scheduleTimezone = Arr::get($schedule, 'value.timezone', 'UTC');
+        $schedule = SanitizeService::slotDateOverrides($scheduleData, 'UTC', $scheduleTimezone);
+        return AvailabilityService::getUtcDateOverrides($schedule, $scheduleTimezone);
+    }
+
+    protected function getTeamScheduleData($dataKey = 'weekly_schedules')
     {
         $teamSchedules = [];
         $teamMemberIds = $this->getHostIds();
@@ -596,7 +613,11 @@ class CalendarSlot extends Model
         foreach ($teamMemberIds as $teamMemberId) {
             $schedule = AvailabilityService::getDefaultSchedule($teamMemberId);
             if ($schedule) {
-                $teamSchedules[] = Arr::get($schedule, 'value.' . $dataKey, []);
+                if ($dataKey == 'date_overrides') {
+                    $teamSchedules[] = $this->getProcessedDateOverrides($schedule);
+                    continue;
+                }
+                $teamSchedules[] = $this->getProcessedWeeklySlots($schedule);
             }
         }
         return $teamSchedules;
@@ -612,7 +633,9 @@ class CalendarSlot extends Model
                 if (!isset($teamOverride[$date])) {
                     $teamOverride[$date] = $slots;
                 } else {
-                    $teamOverride[$date] = array_values(array_unique(array_merge($teamOverride[$date], $slots), SORT_REGULAR));
+                    $combinedSlots = array_merge($teamOverride[$date], $slots);
+                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
+                    $teamOverride[$date] = array_values($uniqueCombinedSlots);
                 }
             }
         }
@@ -630,8 +653,10 @@ class CalendarSlot extends Model
                 if (!isset($teamSchedule[$day])) {
                     $teamSchedule[$day] = $dayData;
                 } else {
+                    $combinedSlots = array_merge($teamSchedule[$day]['slots'], $slots);
+                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
+                    $teamSchedule[$day]['slots'] = array_values($uniqueCombinedSlots);
                     $teamSchedule[$day]['enabled'] = $teamSchedule[$day]['enabled'] || $dayData['enabled'];
-                    $teamSchedule[$day]['slots']   = array_values(array_unique(array_merge($teamSchedule[$day]['slots'], $dayData['slots']), SORT_REGULAR));
                 }
             }
         }
@@ -643,7 +668,7 @@ class CalendarSlot extends Model
     {
         if ($hostId) {
             $schedule = AvailabilityService::getDefaultSchedule($hostId);
-            return Arr::get($schedule, 'value.weekly_schedules', []);
+            return $this->getProcessedWeeklySlots($schedule);
         }
 
         if ($this->isCommonSchedule()) {
@@ -651,18 +676,19 @@ class CalendarSlot extends Model
         }
 
         if ($this->availability_type === 'existing_schedule') {
-            $availability = Availability::findOrFail($this->availability_id);
-            return Arr::get($availability, 'value.weekly_schedules', []);
+            $schedule = Availability::findOrFail($this->availability_id);
+            return $this->getProcessedWeeklySlots($schedule);
         }
 
-        return Arr::get($this->settings, 'weekly_schedules', []);
+        $schedule = SanitizeService::weeklySchedules(Arr::get($this->settings,'weekly_schedules',[]), 'UTC', $this->calendar->author_timezone);
+        return AvailabilityService::getUtcWeeklySchedules($schedule, $scheduleTimezone);
     }
 
     public function getDateOverrides($hostId = null)
     {
         if ($hostId) {
             $schedule = AvailabilityService::getDefaultSchedule($hostId);
-            return Arr::get($schedule, 'value.date_overrides', []);
+            return $this->getProcessedDateOverrides($schedule);
         }
 
         if ($this->isCommonSchedule()) {
@@ -670,11 +696,13 @@ class CalendarSlot extends Model
         }
 
         if ($this->availability_type === 'existing_schedule') {
-            $availability = Availability::findOrFail($this->availability_id);
-            return Arr::get($availability, 'value.date_overrides', []);
+            $schedule = Availability::findOrFail($this->availability_id);
+            return $this->getProcessedDateOverrides($schedule);
         }
 
-        return Arr::get($this->settings, 'date_overrides', []);
+        $scheduleData = Arr::get($this->settings,'date_overrides',[]);
+        $schedule = SanitizeService::slotDateOverrides($scheduleData, 'UTC', $this->calendar->author_timezone);
+        return AvailabilityService::getUtcDateOverrides($schedule, $scheduleTimezone);
     }
 
     public function getHostIdsSortedByBookings($startDate)

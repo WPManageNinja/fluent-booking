@@ -5,6 +5,7 @@ namespace FluentBooking\App\Services;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityService
@@ -101,12 +102,14 @@ class AvailabilityService
         foreach ($calendars as $index => $calendar) {
             $availabilities = Availability::where('object_type', 'availability')
                 ->where('object_id', $calendar->user_id)
-                ->get();
+                ->get()
+                ->toArray();
 
             $options = [];
             foreach ($availabilities as $availability) {
+                $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
                 $options[] = [
-                    'label' => Arr::get($availability, 'key'),
+                    'label' => Arr::get($availability, 'key') . $default,
                     'value' => Arr::get($availability, 'id')
                 ];
             }
@@ -163,5 +166,232 @@ class AvailabilityService
         return CalendarSlot::where('availability_type', 'existing_schedule')
             ->where('availability_id', $scheduleId)
             ->count();
+    }
+
+    public static function getUtcWeeklySchedules($schedules, $fromTimeZone = false, $toTimeZone = 'UTC')
+    {
+        if (!$schedules) {
+            return [];
+        }
+
+        if (!$fromTimeZone || !$toTimeZone || $fromTimeZone == $toTimeZone) {
+            return $schedules;
+        }
+
+        $weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+        foreach ($schedules as $day => &$schedule) {
+            $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
+            if (!$schedule['enabled'] || empty($schedule['slots'])) {
+                $schedule['slots'] = [];
+                $schedule['enabled'] = false;
+                continue;
+            }
+            
+            $schedule['enabled'] = true;
+            
+            $nextDayIndex = 0;
+            $dayIndex = array_search($day, $weekDays);
+            foreach ($schedule['slots'] as $index => $slot) {
+                if (!$slot['start'] || !$slot['end']) {
+                    unset($schedule['slots'][$index]);
+                    continue;
+                }
+
+                if (!empty(Arr::get($slot, 'type', ''))) {
+                    continue;
+                }
+                
+                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
+                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+
+                if ($nextDayIndex) {
+                    array_splice($schedules[$nextDay]['slots'], $nextDayIndex, 0, [[
+                        'start' => $slot['start'],
+                        'end'   => $slot['end'],
+                        'type'  => 'next_day'
+                    ]]);
+                    unset($schedule['slots'][$index]);
+                    $nextDayIndex++;
+                    continue;
+                }
+
+                if ($dayDiff > 0) {
+                    $nextDayIndex = 1;
+                    $nextDay = $weekDays[($dayIndex + $dayDiff) % 7];
+                    $schedules[$nextDay]['enabled'] = true;
+                    if (strtotime($slot['start']) < strtotime($slot['end'])) {
+                        array_unshift($schedules[$nextDay]['slots'], [
+                            'start' => $slot['start'],
+                            'end'   => $slot['end'],
+                            'type'  => 'next_day'
+                        ]);
+                        unset($schedule['slots'][$index]);
+                        continue;
+                    }
+                    if ($slot['end'] != '00:00') {
+                        array_unshift($schedules[$nextDay]['slots'], [
+                            'start' => '00:00',
+                            'end'   => $slot['end'],
+                            'type'  => 'next_day'
+                        ]);
+                        $slot['end'] = '00:00';
+                    }
+                } else if ($dayDiff < 0) {
+                    $prevDay = $weekDays[($dayIndex + $dayDiff + 7) % 7];
+                    $schedules[$prevDay]['enabled'] = true;
+                    if (strtotime($slot['start']) < strtotime($slot['end'])) {
+                        array_push($schedules[$prevDay]['slots'], [
+                            'start' => $slot['start'],
+                            'end'   => $slot['end'],
+                            'type'  => 'prev_day'
+                        ]);
+                        unset($schedule['slots'][$index]);
+                        continue;
+                    }
+                    if ($slot['start'] != '00:00') {
+                        array_push($schedules[$prevDay]['slots'], [
+                            'start' => $slot['start'],
+                            'end'   => '00:00',
+                            'type'  => 'prev_day'
+                        ]);
+                        $slot['start'] = '00:00';
+                    }
+                } else {
+                    if (strtotime($slot['start']) > strtotime($slot['end'])) {
+                        if ($slot['end'] != '00:00') {
+                            $nextDayIndex = 1;
+                            $nextDay = $weekDays[($dayIndex + 1) % 7];
+                            array_unshift($schedules[$nextDay]['slots'], [
+                                'start' => '00:00',
+                                'end'   => $slot['end'],
+                                'type'  => 'next_day'
+                            ]);
+                            $slot['end'] = '00:00';
+                        }
+                    }
+                }
+
+                if ($slot['start'] == '00:00' && $slot['end'] == '00:00') {
+                    unset($schedule['slots'][$index]);
+                    continue;
+                }
+
+                $schedule['slots'][$index] = $slot;
+            }
+
+            $schedule['slots'] = array_values($schedule['slots']);
+        }
+
+        return $schedules;
+    }
+
+    public static function getUtcDateOverrides($overrides, $fromTimeZone = false, $toTimeZone = 'UTC')
+    {        
+        if (!$overrides) {
+            return [];
+        }
+
+        if (!$fromTimeZone || !$toTimeZone) {
+            return $overrides;
+        }
+
+        $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+        $validOverrides = [];
+        foreach ($overrides as $date => $slots) {
+            $dateTimestamp = strtotime($date);
+            if ($dateTimestamp < $todayTimeStamp) {
+                continue;
+            }
+
+            $nextDayIndex = 0;
+            foreach ($slots as $index => $slot) {
+                if (empty($slot['start']) || empty($slot['end'])) {
+                    unset($slots[$index]);
+                    continue;
+                }
+
+                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
+                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+
+                if ($nextDayIndex) {
+                    $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400 * $dayDiff)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    array_splice($validOverrides[$nextDay], $nextDayIndex, 0, [[
+                        'start' => $slot['start'],
+                        'end'   => $slot['end']
+                    ]]);
+                    unset($slots[$index]);
+                    $nextDayIndex++;
+                    continue;
+                }
+                if ($dayDiff > 0) {
+                    $nextDayIndex = 1;
+                    $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400 * $dayDiff)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $validOverrides[$nextDay] = $validOverrides[$nextDay] ?? [];
+                    if (strtotime($slot['start']) < strtotime($slot['end'])) {
+                        array_unshift($validOverrides[$nextDay], [
+                            'start' => $slot['start'],
+                            'end'   => $slot['end']
+                        ]);
+                        unset($slots[$index]);
+                        continue;
+                    }
+                    if ($slot['end'] != '00:00') {
+                        array_unshift($validOverrides[$nextDay], [
+                            'start' => '00:00',
+                            'end'   => $slot['end']
+                        ]);
+                        $slot['end'] = '00:00';
+                    }
+                } else if ($dayDiff < 0) {
+                    $prevDay = gmdate('Y-m-d', ($dateTimestamp - 86400 * abs($dayDiff))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $validOverrides[$prevDay] = $validOverrides[$prevDay] ?? [];
+                    if (strtotime($slot['start']) < strtotime($slot['end'])) {
+                        array_push($validOverrides[$prevDay], [
+                            'start' => $slot['start'],
+                            'end'   => $slot['end']
+                        ]);
+                        unset($slots[$index]);
+                        continue;
+                    }
+                    if ($slot['start'] != '00:00') {
+                        array_push($validOverrides[$prevDay], [
+                            'start' => $slot['start'],
+                            'end'   => '00:00'
+                        ]);
+                        $slot['start'] = '00:00';
+                    }
+                } else {
+                    if (strtotime($slot['start']) > strtotime($slot['end'])) {
+                        if ($slot['end'] != '00:00') {
+                            $nextDayIndex = 1;
+                            $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                            $validOverrides[$nextDay] = $validOverrides[$nextDay] ?? [];
+                            array_unshift($validOverrides[$nextDay], [
+                                'start' => '00:00',
+                                'end'   => $slot['end']
+                            ]);
+                            $slot['end'] = '00:00';
+                        }
+                    }
+                }
+
+                if ($slot['start'] == '00:00' && $slot['end'] == '00:00') {
+                    unset($slots[$index]);
+                    continue;
+                }
+                $slots[$index] = $slot;
+            }
+
+            if ($slots) {
+                $validOverrides[$date] = $validOverrides[$date] ?? [];
+                $validOverrides[$date] = array_merge($validOverrides[$date], $slots);
+            }
+        }
+
+        return $validOverrides;
     }
 }
