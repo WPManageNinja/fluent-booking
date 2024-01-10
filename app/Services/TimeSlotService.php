@@ -381,6 +381,7 @@ class TimeSlotService
         foreach ($items as $day => $slots) {
             $daySlots = [];
             foreach ($slots as $slot) {
+                $slot['end'] = ($slot['end'] == '00:00') ? '24:00' : $slot['end'];
                 $start = strtotime($slot['start']);
                 $end = strtotime($slot['end']);
 
@@ -406,6 +407,7 @@ class TimeSlotService
         $formattedSlots = [];
 
         foreach ($slotSets as $slot) {
+            $slot['end'] = ($slot['end'] == '00:00') ? '24:00' : $slot['end'];
             $start = strtotime($slot['start']);
             $end = strtotime($slot['end']);
 

@@ -227,4 +227,15 @@ class DateTimeHelper
 
         return $format;
     }
+
+    public static function getDayDifference($dateTime, $fromTimeZone, $toTimeZone)
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone($fromTimeZone));
+
+        $originalDateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
+
+        $originalDateTime->setTimezone(new \DateTimeZone($toTimeZone));
+
+        return $originalDateTime->format('z') - $currentDate->format('z');
+    }
 }
