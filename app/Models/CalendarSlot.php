@@ -179,7 +179,7 @@ class CalendarSlot extends Model
         return false;
     }
 
-    public function getSlotSettingsSchema($calendar)
+    public function getSlotSettingsSchema()
     {
         return [
             'schedule_type'       => 'weekly_schedules',
@@ -192,7 +192,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields'     => $calendar->getLocationFields()
+            'location_fields'     => $this->getLocationFields()
         ];
     }
 
@@ -487,6 +487,54 @@ class CalendarSlot extends Model
         }
 
         return $exist;
+    }
+
+    public function getLocationFields()
+    {
+        return apply_filters('fluent_booking/get_location_fields', [
+            'conferencing' => [
+                'label'   => __('Conferencing', 'fluent-booking-pro'),
+                'options' => [],
+            ],
+            'in_person'    => [
+                'label'   => __('In Person', 'fluent-booking-pro'),
+                'options' => [
+                    'in_person_guest'     => [
+                        'title' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
+                    ],
+                    'in_person_organizer' => [
+                        'title' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
+                    ],
+                ],
+            ],
+            'phone'        => [
+                'label'   => __('Phone', 'fluent-booking-pro'),
+                'options' => [
+                    'phone_guest'     => [
+                        'title' => __('Attendee Phone Number', 'fluent-booking-pro'),
+                    ],
+                    'phone_organizer' => [
+                        'title' => __('Organizer Phone Number', 'fluent-booking-pro'),
+                    ],
+                ],
+            ],
+            'online'       => [
+                'label'   => __('Online', 'fluent-booking-pro'),
+                'options' => [
+                    'online_meeting' => [
+                        'title' => __('Online Meeting', 'fluent-booking-pro'),
+                    ],
+                ],
+            ],
+            'other'        => [
+                'label'   => __('Other', 'fluent-booking-pro'),
+                'options' => [
+                    'custom' => [
+                        'title' => __('Custom', 'fluent-booking-pro'),
+                    ],
+                ],
+            ],
+        ], $this);
     }
 
     public function defaultPaymentIcon($currency, $amount)

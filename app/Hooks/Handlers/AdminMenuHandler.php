@@ -4,6 +4,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\User;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -233,7 +234,7 @@ class AdminMenuHandler
         $bufferTimes = Helper::getBufferTimes();
         $slotIntervals = Helper::getSlotIntervals();
         $customFieldTypes = Helper::getCustomFieldTypes();
-        $locationFields = (new Calendar())->getLocationFields();
+        $locationFields = (new CalendarSlot())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
             'slug'               => $slug = $app->config->get('app.slug'),
