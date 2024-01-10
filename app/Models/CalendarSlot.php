@@ -653,7 +653,7 @@ class CalendarSlot extends Model
                 if (!isset($teamSchedule[$day])) {
                     $teamSchedule[$day] = $dayData;
                 } else {
-                    $combinedSlots = array_merge($teamSchedule[$day]['slots'], $slots);
+                    $combinedSlots = array_merge($teamSchedule[$day]['slots'], $dayData['slots']);
                     $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
                     $teamSchedule[$day]['slots'] = array_values($uniqueCombinedSlots);
                     $teamSchedule[$day]['enabled'] = $teamSchedule[$day]['enabled'] || $dayData['enabled'];
