@@ -212,6 +212,7 @@ export default {
                 duration: '',
                 event_date: null,
                 event_time: '',
+                source_url: window.location.href,
                 custom_fields: {},
                 status: 'scheduled'
             },
