@@ -37,7 +37,7 @@ class CalendarController extends Controller
                 $slot->public_url = $slot->getPublicUrl();
                 $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
-                $slot->location_fields = $slot->calendar->getLocationFields();
+                $slot->location_fields = $slot->getLocationFields();
                 $slot->author_profiles = $slot->isTeamEvent() ? $slot->getAuthorProfiles() : [];
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
@@ -204,7 +204,7 @@ class CalendarController extends Controller
             'location_settings' => SanitizeService::locationSettings(Arr::get($slot, 'location_settings', [])),
         ];
 
-        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema($calendar));
+        $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
 
         $slot = CalendarSlot::create($slotData);
 
@@ -215,7 +215,6 @@ class CalendarController extends Controller
         return [
             'calendar'     => $calendar,
             'slot'         => $slot,
-            'force_reload' => true,
             'redirect_url' => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/slot-settings/' . $slot->id)
         ];
     }
@@ -325,7 +324,7 @@ class CalendarController extends Controller
 
         $eventSettings['date_overrides'] = (object)SanitizeService::slotDateOverrides(Arr::get($eventSettings, 'date_overrides', []), 'UTC', $calendarEvent->calendar->author_timezone, $calendarEvent);
 
-        $eventSettings['location_fields'] = $calendarEvent->calendar->getLocationFields();
+        $eventSettings['location_fields'] = $calendarEvent->getLocationFields();
 
         $calendarEvent->settings = apply_filters('fluent_booking/get_calendar_event_settings', $eventSettings, $calendarEvent, $calendarEvent->calendar);
 
@@ -357,7 +356,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($calendar);
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
 
         $schema = [
             'title'             => '',
