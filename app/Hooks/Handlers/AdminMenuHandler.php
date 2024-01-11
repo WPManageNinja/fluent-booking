@@ -234,6 +234,8 @@ class AdminMenuHandler
         $bufferTimes = Helper::getBufferTimes();
         $slotIntervals = Helper::getSlotIntervals();
         $customFieldTypes = Helper::getCustomFieldTypes();
+        $weekSelectTimes = Helper::getWeekSelectTimes();
+        $overrideSelectTimes = Helper::getOverrideSelectTimes();
         $locationFields = (new CalendarSlot())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
