@@ -80,7 +80,7 @@ class Bootstrap extends BaseCalendar
             }
             // Show the Outlook last error
             add_action('fluent_booking/calendar', function (&$calendar, $type) {
-                if ($type != 'lists') {
+                if ($type != 'lists' || $calendar->type == 'team') {
                     return $calendar;
                 }
 
@@ -319,7 +319,7 @@ class Bootstrap extends BaseCalendar
 
     public function createEvent($config, Booking $booking)
     {
-        if (($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event') && $booking->event_type == 'single')) {
+        if (($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event') && $booking->event_type != 'group')) {
             return; // already created
         }
 
@@ -394,7 +394,7 @@ class Bootstrap extends BaseCalendar
             'transactionId'         => $booking->id,
         ];
 
-        if ($booking->event_type == 'single') {
+        if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',
                 'content'     => ''

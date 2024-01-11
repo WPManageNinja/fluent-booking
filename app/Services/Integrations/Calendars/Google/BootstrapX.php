@@ -501,7 +501,7 @@ class BootstrapX
             ],
         ];
 
-        if ($booking->message && $booking->event_type == 'single') {
+        if ($booking->message && $booking->event_type != 'group') {
             $data['description'] = __('Note: ', 'fluent-booking-pro') . $booking->message;
         }
 
