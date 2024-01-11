@@ -1,6 +1,5 @@
 $breakpoint-tablet2: 1055;
 $breakpoint-tablet: 767px;
-$bodyBg: #f3f4f6 !default;
 $dark: var(--fcal_dark);
 $lightDark: #6b7280;
 $whiteBG: #ffffff;
@@ -22,10 +21,6 @@ $whiteBG: #ffffff;
   --fcal_body_bg: #f3f4f6;
   --fcal_input_disable_bg: #f7f7f7;
   --fcal_gray: #6b7280;
-}
-
-body {
-  background: $bodyBg;
 }
 
 @import "../scss/booking_confirmation";
@@ -393,7 +388,6 @@ body >.fcal_calendar_wrap {
               align-items: center;
               margin-bottom: 5px;
               input {
-                max-width: 250px;
                 width: 100%;
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
@@ -433,6 +427,38 @@ body >.fcal_calendar_wrap {
               transition: .3s;
               &:hover {
                 background: var(--fcal_enable_day_bg);
+              }
+            }
+          }
+
+          &.fcal_input_multi_select_wrap {
+            .svelte-select {
+              border-radius: 8px;
+              .value-container {
+                padding-left: 10px;
+                > input {
+                  border: none;
+                  border-radius: 0;
+                }
+                .multi-item {
+                  font-size: 14px;
+                  background: var(--fcal_enable_day_bg);
+                  border: none;
+                  box-shadow: none;
+                  outline: none;
+                  border-radius: 8px;
+                  padding: 2px 8px;
+                  height: 30px;
+                  color: var(--fcal_dark);
+                  .multi-item-clear {
+                    cursor: pointer;
+                    svg {
+                      width: 15px;
+                      height: 15px;
+                      color: var(--fcal_dark);
+                    }
+                  }
+                }
               }
             }
           }
@@ -553,6 +579,8 @@ body >.fcal_calendar_wrap {
             height: 0;
             width: 0;
             position: absolute;
+            left: 0;
+            opacity: 0;
             &:checked ~ .checkbox_mark {
               border-color: var(--fcal_primary_color);
               background: var(--fcal_primary_color);
@@ -586,6 +614,59 @@ body >.fcal_calendar_wrap {
             left: 0;
             top: 0;
             transition: all 250ms cubic-bezier(.4,.0,.23,1);
+          }
+        }
+
+        input.picker[type="date"] {
+          position: relative;
+        }
+
+        .fcal_date_field {
+          position: relative;
+          display: block;
+          input {
+            &.pick_date {
+              position: absolute;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              opacity: 0;
+              &:focus~.set_date {
+                border-color: var(--fcal_primary_color);
+              }
+            }
+            &.pick_date[type="date"]::-webkit-calendar-picker-indicator {
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 100%;
+              height: 100%;
+              padding: 0;
+              color: transparent;
+              background: transparent;
+            }
+          }
+          .clear_date_icon {
+            position: absolute;
+            z-index: 3;
+            right: 10px;
+            top: 13px;
+            transform: rotate(45deg);
+            display: block;
+            border: 1px solid var(--fcal_slot_border);
+            width: 14px;
+            height: 14px;
+            line-height: 10px;
+            font-size: 12px;
+            border-radius: 50%;
+            text-align: center;
+            color: var(--fcal_slot_border);
+            cursor: pointer;
+            transition: .2s;
+            &:hover {
+              color: var(--fcal_dark);
+              border-color: var(--fcal_dark);
+            }
           }
         }
       }
@@ -1599,6 +1680,7 @@ body >.fcal_calendar_wrap {
         cursor: pointer;
         box-sizing: border-box;
         display: flex;
+        gap: 0.25rem;
         justify-content: space-between;
         width: 100%;
         align-items: center;

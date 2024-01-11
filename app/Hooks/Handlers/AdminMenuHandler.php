@@ -250,6 +250,8 @@ class AdminMenuHandler
             'schedule_schema'    => $scheduleSchema,
             'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,
+            'week_select_times'  => $weekSelectTimes,
+            'override_select_times' => $overrideSelectTimes,
             'me'                 => [
                 'id'          => $currentUser->ID,
                 'calendar_id' => $calendarId,

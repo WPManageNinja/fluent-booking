@@ -1249,6 +1249,24 @@ class Helper
         ]);
     }
 
+    public static function getWeekSelectTimes()
+    {
+        return apply_filters('fluent_booking/week_select_times_schema', [
+            'start' => '00:00',
+            'step'  => '00:15',
+            'end'   => '23:45'
+        ]);
+    }
+
+    public static function getOverrideSelectTimes()
+    {
+        return apply_filters('fluent_booking/override_select_times_schema', [
+            'start' => '00:00',
+            'step'  => '00:15',
+            'end'   => '23:45'
+        ]);
+    }
+
     public static function getWeeklyScheduleSchema()
     {
         return apply_filters('fluent_booking/weekly_schedule_schema', [
@@ -1322,7 +1340,11 @@ class Helper
             ],
             [
                 'value' => 'dropdown',
-                'label' => __('Dropdown', 'fluent-booking-pro')
+                'label' => __('Select', 'fluent-booking-pro')
+            ],
+            [
+                'value' => 'multi-select',
+                'label' => __('Multi Select', 'fluent-booking-pro')
             ],
             [
                 'value' => 'checkbox',
@@ -1333,8 +1355,8 @@ class Helper
                 'label' => __('Checkbox Group', 'fluent-booking-pro')
             ],
             [
-                'value' => 'multi-guests',
-                'label' => __('Multi Guests', 'fluent-booking-pro')
+                'value' => 'date',
+                'label' => __('Date', 'fluent-booking-pro')
             ]
         ]);
     }
@@ -1532,6 +1554,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.additional_guests}}'             => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
                         '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),
@@ -1588,6 +1611,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                    => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                   => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.additional_guests}}'             => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}' => __('Full Start & End Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'  => __('Full Start & End Time (with host timezone)', 'fluent-booking-pro'),
                         '{{booking.start_date_time}}'               => __('Event Date Time (UTC)', 'fluent-booking-pro'),

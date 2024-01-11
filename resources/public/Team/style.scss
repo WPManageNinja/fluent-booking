@@ -3,6 +3,9 @@
   display: block;
   border-radius: 4px;
   background: #ffffff;
+  * {
+    box-sizing: border-box;
+  }
 
   .fcal_team_header {
     text-align: center;
