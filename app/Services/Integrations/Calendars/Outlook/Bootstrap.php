@@ -397,9 +397,7 @@ class Bootstrap extends BaseCalendar
                 'dateTime' => gmdate('Y-m-d\TH:i:s', strtotime($booking->end_time)),
                 'timeZone' => 'UTC'
             ],
-            'attendees'             => [
-                $guestAttendees,
-            ],
+            'attendees'             => $guestAttendees,
             'organizer'             => [
                 'emailAddress' => [
                     'name'    => $author['name'],
