@@ -147,7 +147,7 @@ class Booking extends Model
             ->whereIn('status', ['scheduled', 'completed'])
             ->count();
     }
-    
+
     public function getAdditionalGuests($isHtml = false)
     {
         $additionalGuests = $this->getMeta('additional_guests', []);
@@ -376,7 +376,7 @@ class Booking extends Model
             ->first();
 
         if ($isHtml && $row) {
-            return $row->description;
+            return wp_unslash($row->description);
         }
 
         return $row;
