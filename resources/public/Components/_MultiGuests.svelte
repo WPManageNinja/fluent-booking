@@ -16,10 +16,10 @@
                 </button>
             </div>
         {/each}
-        {#if form[field.name].length === 0 || form[field.name][form[field.name].length - 1]}
+        {#if (form[field.name].length === 0 || form[field.name][form[field.name].length - 1]) && form[field.name].length < field.limit}
             <button
                 type="button"
-                class="fcal_add_guest_btn" 
+                class="fcal_add_guest_btn"
                 on:click={(() => handleAddGuest())}>
                 {'+ ' + (form[field.name].length === 0 ? i18('Add guests') : i18('Add another'))}
             </button>

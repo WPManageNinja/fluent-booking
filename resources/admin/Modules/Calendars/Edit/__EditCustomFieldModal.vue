@@ -24,6 +24,9 @@
             <el-form-item :label="$t('Label *')">
                 <el-input v-model="fieldData.label" type="text" :placeholder="$t('Label')"/>
             </el-form-item>
+            <el-form-item v-if="fieldData.limit" :label="$t('Maximum Guest Limit') + ' *'">
+                <el-input v-model="fieldData.limit" type="number" @change="validateLimit(fieldData.limit)"/>
+            </el-form-item>
             <el-form-item v-if="hasPlaceHolder" :label="$t('Placeholder')">
                 <el-input v-model="fieldData.placeholder" :placeholder="$t('Placeholder')" />
             </el-form-item>
@@ -145,6 +148,9 @@ export default {
                 }
             });
             return index + 1;
+        },
+        validateLimit(limit) {
+            this.fieldData.limit = Math.max(1, Math.min(50, limit));
         }
     },
     mounted() {

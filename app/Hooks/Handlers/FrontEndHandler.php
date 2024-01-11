@@ -621,7 +621,9 @@ class FrontEndHandler
         }
         
         if ($additionalGuests) {
-            $bookingData['additional_guests'] = $additionalGuests;
+            $guestField = BookingFieldService::getBookingFieldByName($calendarSlot, 'guests');
+            $guestLimit = Arr::get($guestField, 'limit', 10);
+            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         // Check if the time is available or not for this slot

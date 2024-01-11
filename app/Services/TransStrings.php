@@ -711,6 +711,7 @@ class TransStrings
             'One rotating host'                                                                => __('One rotating host', 'fluent-booking-pro'),
             'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro'),
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
+            'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
         );
 
     }

@@ -99,6 +99,7 @@ class BookingFieldService
                 'type'           => 'multi-guests',
                 'name'           => 'guests',
                 'label'          => __('Additional Guests', 'fluent-booking-pro'),
+                'limit'          => 10,
                 'required'       => false,
                 'enabled'        => false,
                 'system_defined' => true,
@@ -298,6 +299,19 @@ class BookingFieldService
         }
 
         return $customFields;
+    }
+
+    public static function getBookingFieldByName($calendarEvent, $name)
+    {
+        $fields = self::getBookingFields($calendarEvent);
+
+        foreach ($fields as $field) {
+            if (Arr::get($field, 'name') == $name) {
+                return $field;
+            }
+        }
+
+        return [];
     }
 
     public static function hasPhoneNumberField($fields)
