@@ -30,7 +30,7 @@ class Bootstrap extends BaseCalendar
             }
             // Show the Google last error
             add_action('fluent_booking/calendar', function (&$calendar, $type) {
-                if ($type != 'lists') {
+                if ($type != 'lists' || $calendar->type == 'team') {
                     return $calendar;
                 }
 
@@ -307,7 +307,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__next_cloud_calendar_event') && $booking->event_type == 'single') {
+        if ($booking->getMeta('__next_cloud_calendar_event') && $booking->event_type != 'group') {
             return false; // Already created
         }
 
