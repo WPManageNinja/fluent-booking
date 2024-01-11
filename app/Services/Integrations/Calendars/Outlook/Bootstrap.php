@@ -181,9 +181,17 @@ class Bootstrap extends BaseCalendar
                 'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
             ]);
         }
-
-
+        
         $userEmail = OutlookHelper::getEmailByIdToken($response['id_token']);
+
+        if (is_wp_error($userEmail)) {
+            RemoteCalendarHelper::showGeneralError([
+                'title'    => __('Failed to connect Calendar API', 'fluent-booking-pro'),
+                'body'     => __('Outlook API Response Error:', 'fluent-booking-pro') . ' ' . $userEmail->get_error_message(),
+                'btn_url'  => Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars'),
+                'btn_text' => __('Back to Calendars Configuration', 'fluent-booking-pro')
+            ]);
+        }
 
         $response['expires_in'] += time();
         $response['access_token'] = Helper::encryptKey($response['access_token']);
@@ -225,13 +233,13 @@ class Bootstrap extends BaseCalendar
             $additionalSettingFields = $this->getAdditionalSettingFields();
 
             $feeds[] = [
-                'driver'              => 'outlook',
-                'db_id'               => $item->id,
-                'identifier'          => $item->key,
-                'remote_calendars'    => $remoteCalendars,
-                'errors'              => $errors,
-                'conflict_check_ids'  => Arr::get($item->value, 'conflict_check_ids', []),
-                'additional_settings' => $additionalSettings,
+                'driver'                    => 'outlook',
+                'db_id'                     => $item->id,
+                'identifier'                => $item->key,
+                'remote_calendars'          => $remoteCalendars,
+                'errors'                    => $errors,
+                'conflict_check_ids'        => Arr::get($item->value, 'conflict_check_ids', []),
+                'additional_settings'       => $additionalSettings,
                 'additional_setting_fields' => $additionalSettingFields
             ];
         }
@@ -358,13 +366,25 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $guestAttendee = [
+        $mainGuest = [
             'emailAddress' => array_filter([
                 'name'    => trim($booking->first_name . ' ' . $booking->last_name),
                 'address' => $booking->email
             ]),
             'type'         => 'required'
         ];
+
+        $additionalGuests = $booking->getAdditionalGuests();
+
+        $guestAttendees = array_merge(
+            [$mainGuest],
+            array_map(function ($guest) {
+                return [
+                    'emailAddress' => ['address' => $guest],
+                    'type'         => 'required'
+                ];
+            }, $additionalGuests ?? [])
+        );
 
         $author = $booking->getHostDetails(false);
 
@@ -378,7 +398,7 @@ class Bootstrap extends BaseCalendar
                 'timeZone' => 'UTC'
             ],
             'attendees'             => [
-                $guestAttendee,
+                $guestAttendees,
             ],
             'organizer'             => [
                 'emailAddress' => [

@@ -112,7 +112,7 @@ export default {
             return this.isNewEntry ? this.$t('Add Question') : this.$t('Update Question');
         },
         isOptionRequired() {
-            return this.fieldData.name != 'location' && ['dropdown', 'radio', 'checkbox-group'].includes(this.fieldData.type);
+            return this.fieldData.name != 'location' && ['dropdown', 'multi-select', 'radio', 'checkbox-group'].includes(this.fieldData.type);
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
@@ -154,6 +154,9 @@ export default {
             this.isNewEntry = true;
         } else {
             this.fieldData = this.field;
+            if (!this.fieldData.index) {
+                this.fieldData.index = this.getFieldIndex();
+            }
         }
     }
 }

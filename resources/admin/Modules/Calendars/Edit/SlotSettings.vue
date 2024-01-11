@@ -3,8 +3,8 @@
         <div class="fcal_header">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ name: 'calendars' }">{{ $t('Booking Types') }}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{ calendar.title }}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{ slot?.title }}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ calendar.title ?? '...' }}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ slot?.title ?? '...'}}</el-breadcrumb-item>
             </el-breadcrumb>
 
             <div class="fcal_actions">

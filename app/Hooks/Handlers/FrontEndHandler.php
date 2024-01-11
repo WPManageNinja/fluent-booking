@@ -466,10 +466,11 @@ class FrontEndHandler
                 'Loading Payment Processor...'  => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                            => __('PM', 'fluent-booking-pro'),
                 'AM'                            => __('AM', 'fluent-booking-pro'),
-                '+ Add another guest'           => __('+ Add another guest', 'fluent-booking-pro'),
                 'Email'                         => __('Email', 'fluent-booking-pro'),
                 'Date'                          => __('Date', 'fluent-booking-pro'),
-                'Time'                          => __('Time', 'fluent-booking-pro')
+                'Time'                          => __('Time', 'fluent-booking-pro'),
+                'Add guests'                    => __('Add guests', 'fluent-booking-pro'),
+                'Add another'                   => __('Add another', 'fluent-booking-pro')
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
@@ -539,8 +540,12 @@ class FrontEndHandler
             }
         }
 
+        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
+            $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
+        }
+
         $requiredFields = array_filter($calendarSlot->getMeta('booking_fields', []), function ($field) {
-            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && Arr::get($field, 'name') == 'message';
+            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
         });
 
         foreach ($requiredFields as $field) {
@@ -613,6 +618,10 @@ class FrontEndHandler
         $hostIds = null;
         if ($calendarSlot->isTeamEvent()) {
             $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
+        }
+        
+        if ($additionalGuests) {
+            $bookingData['additional_guests'] = $additionalGuests;
         }
 
         // Check if the time is available or not for this slot
@@ -755,7 +764,8 @@ class FrontEndHandler
                 'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
                 'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
                 'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
-            ]
+            ],
+            'date_formatter' => DateTimeHelper::getDateFormatter(true)
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);

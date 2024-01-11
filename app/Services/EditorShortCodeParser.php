@@ -65,6 +65,10 @@ class EditorShortCodeParser
             return $bookingEvent->description;
         }
 
+        if ($key == 'additional_guests') {
+            return $booking->getAdditionalGuests(true);
+        }
+
         if ('full_start_end_guest_timezone' == $key) {
             return $booking->getShortBookingDateTime($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
         }
