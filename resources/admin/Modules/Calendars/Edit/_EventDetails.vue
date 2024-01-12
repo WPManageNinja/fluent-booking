@@ -48,10 +48,10 @@
                             
                             <el-form-item :label="$t('Description')">
                                 <el-input
-                                v-model="calendar_event.description"
-                                type="textarea"
-                                :rows="2"
-                                :placeholder="$t('Enter Description here')"
+                                    v-model="calendar_event.description"
+                                    type="textarea"
+                                    :rows="2"
+                                    :placeholder="$t('Enter Description here')"
                                 />
                             </el-form-item>
                         </div>

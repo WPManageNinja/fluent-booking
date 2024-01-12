@@ -34,7 +34,7 @@ abstract class BaseCalendar
         /*
          * Booking Handlers
          */
-        add_filter('fluent_booking/remote_booked_events', [$this, 'getBookedSlots'], 10, 5);
+        add_filter('fluent_booking/remote_booked_events', [$this, 'getBookedSlots'], 10, 6);
         add_action('fluent_booking/create_remote_calendar_event_' . $this->calendarKey, [$this, 'createEvent'], 10, 2);
         add_action('fluent_booking/refresh_remote_calendar_group_members_' . $this->calendarKey, [$this, 'maybeAddOrRemoveGroupMembers'], 10, 4);
 
@@ -109,7 +109,7 @@ abstract class BaseCalendar
 
     abstract public function authDisconnect($meta);
 
-    abstract public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
+    abstract public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking);
 
     abstract public function createEvent($config, Booking $booking);
 
@@ -157,10 +157,10 @@ abstract class BaseCalendar
         ];
     }
 
-    public function getConflictCheckCalendars($userId)
+    public function getConflictCheckCalendars($hostIds)
     {
         $metaItems = Meta::where('object_type', '_'.$this->calendarKey.'_user_token')
-            ->where('object_id', $userId)
+            ->whereIn('object_id', $hostIds)
             ->get();
 
         if ($metaItems->isEmpty()) {

@@ -51,7 +51,7 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <SingleInviteeInfo v-if="showing_booking.event_type == 'single'" :booking="showing_booking"/>
+                <SingleInviteeInfo v-if="showing_booking.event_type != 'group'" :booking="showing_booking"/>
                 <group-booking-guests v-else-if="showing_booking.event_type == 'group'"
                                       :group_id="showing_booking.group_id" @updateAdditionalInfo="updateAdditionalInfo"/>
                 <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
@@ -210,8 +210,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {Back, MoreFilled, Refresh, Close, Delete, EditPen, Check, Hide} from '@element-plus/icons-vue';
+<script>
+import { Back, MoreFilled, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';

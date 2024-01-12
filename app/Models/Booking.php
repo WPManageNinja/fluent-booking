@@ -125,6 +125,11 @@ class Booking extends Model
         return $this->hasMany(BookingMeta::class, 'booking_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'host_user_id');
+    }
+
     public function getCustomFormData($isFormatted = true)
     {
         if ($isFormatted) {
@@ -132,6 +137,15 @@ class Booking extends Model
         }
 
         return $this->getMeta('custom_fields_data', []);
+    }
+
+    public static function getHostTotalBooking($eventId, $hostIds, $ranges)
+    {
+        return self::where('event_id', $eventId)
+            ->whereIn('host_user_id', $hostIds)
+            ->whereBetween('start_time', $ranges)
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->count();
     }
 
     public function getAdditionalGuests($isHtml = false)
@@ -362,7 +376,7 @@ class Booking extends Model
             ->first();
 
         if ($isHtml && $row) {
-            return $row->description;
+            return wp_unslash($row->description);
         }
 
         return $row;
@@ -593,10 +607,12 @@ class Booking extends Model
                 $name = $user->display_name;
             }
             $data = [
+                'id'         => $user->ID,
                 'name'       => $name,
                 'email'      => $user->user_email,
                 'first_name' => $user->first_name,
                 'last_name'  => $user->last_name,
+                'avatar'     => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
             ];
         } else {
             $data = $this->calendar->getAuthorProfile(false);

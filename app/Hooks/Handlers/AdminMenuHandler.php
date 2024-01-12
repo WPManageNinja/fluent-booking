@@ -4,6 +4,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\User;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
@@ -219,6 +220,8 @@ class AdminMenuHandler
             }
         }
 
+        $calendarId = Calendar::where('user_id', $currentUser->ID)->where('type','!=','team')->first()->value('id');
+
         $hasAllAccess = false;
         if (PermissionManager::hasAllCalendarAccess()) {
             $hasAllAccess = true;
@@ -233,7 +236,7 @@ class AdminMenuHandler
         $customFieldTypes = Helper::getCustomFieldTypes();
         $weekSelectTimes = Helper::getWeekSelectTimes();
         $overrideSelectTimes = Helper::getOverrideSelectTimes();
-        $locationFields = (new Calendar())->getLocationFields();
+        $locationFields = (new CalendarSlot())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
             'slug'               => $slug = $app->config->get('app.slug'),
@@ -253,6 +256,7 @@ class AdminMenuHandler
             'override_select_times' => $overrideSelectTimes,
             'me'                 => [
                 'id'          => $currentUser->ID,
+                'calendar_id' => $calendarId,
                 'full_name'   => trim($currentUser->first_name . ' ' . $currentUser->last_name),
                 'email'       => $currentUser->user_email,
                 'is_admin'    => $hasAllAccess,

@@ -37,9 +37,11 @@ class Bootstrap
         /*
          * Location Hooks
          */
-        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
-            if (!ZoomHelper::isZoomConfigured($calendar->user_id)) {
-                return $fields;
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendarEvent) {
+            foreach ($calendarEvent->getHostIds() as $hostId) {
+                if (!ZoomHelper::isZoomConfigured($hostId)) {
+                    return $fields;
+                }
             }
 
             $fields['conferencing']['options']['zoom_meeting'] = [

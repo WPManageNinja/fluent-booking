@@ -2,8 +2,9 @@ import DashboardWrapper from './Components/DashboardWrapper.vue';
 import AllCalendars from './Modules/Calendars/AllCalendars.vue';
 import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
-import AvailabilitySettings from "./Modules/Calendars/Edit/_AvailabilitySettings.vue";
 import EventDetails from "./Modules/Calendars/Edit/_EventDetails.vue";
+import AvailabilitySettings from "./Modules/Calendars/Edit/_AvailabilitySettings.vue";
+import Assignment from "./Modules/Calendars/Edit/_Assignment.vue";
 import LimitSettings from "./Modules/Calendars/Edit/_LimitSettings.vue";
 import EmailNotification from "./Modules/Calendars/Edit/_EmailNotificationSettings.vue";
 import SMSNotification from "./Modules/Calendars/Edit/_SmsNotificationSettings.vue";
@@ -132,6 +133,15 @@ export var routes = [
                 path: 'availability-settings',
                 name: 'availability_settings',
                 component: AvailabilitySettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'assignment',
+                name: 'assignment',
+                component: Assignment,
                 props: true,
                 meta: {
                     active_menu: 'calendars'

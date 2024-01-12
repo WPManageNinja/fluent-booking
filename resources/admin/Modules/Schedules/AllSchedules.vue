@@ -52,13 +52,14 @@
                         </template>
                     </el-input>
 
-                    <el-select v-if="filters.author == 'me'"
+                    <el-select
+                        v-if="filters.author == appVars.me.calendar_id"
                         v-model="filters.event_type"
                         class="fcal_select"
                         :aria-placeholder="$t('Select Event Types')"
                         popper-class="fcal_select"
                         @change="handlePeriodChange()"
-                       placement="bottom"
+                        placement="bottom"
                     >
                         <template v-if="event_types.length">
                             <el-option value="all" :label="$t('All Events')" />
@@ -74,10 +75,15 @@
                         @change="handlePeriodChange()"
                         placement="bottom"
                     >
-                        <el-option value="me" :label="$t('My Meetings')"></el-option>
+                        <el-option :value="appVars.me.calendar_id" :label="$t('My Meetings')" />
                         <el-option v-if="hasAllBookingAccess" value="all" :label="$t('All Meetings')" />
-                        <template v-if="all_hosts.length">
-                            <el-option v-for="host in all_hosts" :key="host.id" :value="host.id" :label="host.label"></el-option>
+                        <template v-if="calendarEventLists.length">
+                            <el-option 
+                                v-for="calendar in filteredCalendarEventLists"
+                                :key="calendar.id"
+                                :value="calendar.id" 
+                                :label="calendar.title">
+                            </el-option>
                         </template>
                     </el-select>
                 </div>
@@ -161,7 +167,7 @@ export default {
             loading: true,
             filters: {
                 period: 'upcoming',
-                author: 'me',
+                author: this.appVars.me.calendar_id,
                 event_type: 'all',
                 search: ''
             },
@@ -173,7 +179,6 @@ export default {
             booking_id: false,
             current_schedule: null,
             loadingHosts: false,
-            all_hosts: [],
             event_types: [],
             showAdvancedFilter: false,
             query: {
@@ -261,6 +266,9 @@ export default {
             statuses.latest_bookings = this.$t('Latest Bookings');
             statuses.all = this.$t('All');
             return statuses;
+        },
+        filteredCalendarEventLists() {
+            return this.calendarEventLists.filter(calendar => calendar.id != this.appVars.me.calendar_id);
         }
     },
     methods: {
@@ -296,13 +304,6 @@ export default {
                 })
                 .finally(() => {
                     this.loading = false;
-                });
-        },
-        fetchHosts() {
-            this.loadingHosts = true;
-            this.$get('admin/other-hosts')
-                .then(response => {
-                    this.all_hosts = response.hosts;
                 });
         },
         changePeriod(period) {
@@ -360,10 +361,6 @@ export default {
         this.fetchSchedules();
         if (this.$route.query.booking_id) {
             this.booking_id = this.$route.query.booking_id;
-        }
-
-        if (this.hasSupport('multi_users')) {
-            this.fetchHosts();
         }
 
         const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");

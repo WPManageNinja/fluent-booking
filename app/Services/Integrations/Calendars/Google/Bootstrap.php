@@ -28,21 +28,34 @@ class Bootstrap extends BaseCalendar
 
         add_action('wp_ajax_fluent_booking_g_auth', [$this, 'handleAuthCallback']);
 
-        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
-            $meetExist = Meta::where('object_type', '_google_user_token')
-                ->where('object_id', $calendar->user_id)
-                ->first();
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendarEvent) {
+            foreach ($calendarEvent->getHostIds() as $hostId) {
+                $meetExist = Meta::where('object_type', '_google_user_token')
+                    ->where('object_id', $hostId)
+                    ->first();
+    
+                $message = !$meetExist ? __('Connect Google Meet First', 'fluent-booking-pro') : '';
 
-            $message = !$meetExist ? ' ' . __('(Connect Google Meet First)', 'fluent-booking-pro') : '';
-
-            if (!$message) {
-                // now check if the user calendar event create enabled
-                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
-                if (!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
-                    $message = __('(Set Google Event Creat First)', 'fluent-booking-pro');
-                    $meetExist = false;
+                if (!$meetExist) {
+                    break;
+                }
+    
+                if (!$message) {
+                    // now check if the user calendar event create enabled
+                    $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($hostId);
+                    if (!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
+                        $message = __('Set Google Event Creat First', 'fluent-booking-pro');
+                        $meetExist = false;
+                        break;
+                    }
                 }
             }
+
+            if ($calendarEvent->isTeamEvent()) {
+                $message = $message ? __('All Hosts Need to ', 'fluent-booking-pro') . $message : '';
+            }
+
+            $message = $message ? ' (' . $message . ')' : '';
 
             $fields['conferencing']['options']['google_meet'] = [
                 'title'         => __('Google Meet', 'fluent-booking-pro') . $message,
@@ -58,7 +71,7 @@ class Bootstrap extends BaseCalendar
             }
             // Show the Google last error
             add_action('fluent_booking/calendar', function (&$calendar, $type) {
-                if ($type != 'lists') {
+                if ($type != 'lists' || $calendar->type == 'team') {
                     return $calendar;
                 }
 
@@ -174,7 +187,7 @@ class Bootstrap extends BaseCalendar
         $meta->delete();
     }
 
-    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking)
     {
         $config = GoogleHelper::getApiConfig();
 
@@ -184,7 +197,9 @@ class Bootstrap extends BaseCalendar
 
         $cacheTime = Arr::get($config, 'caching_time', 5);
 
-        $items = GoogleHelper::getConflictCheckCalendars($calendarSlot->user_id);
+        $hostIds = $calendarSlot->getHostIds($hostId);
+
+        $items = GoogleHelper::getConflictCheckCalendars($hostIds);
 
         if (!$items) {
             return $books;
@@ -249,7 +264,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__google_calendar_event') && $booking->event_type == 'single') {
+        if ($booking->getMeta('__apple_calendar_event') && $booking->event_type != 'group') {
             return false; // Already created
         }
 
@@ -343,7 +358,7 @@ class Bootstrap extends BaseCalendar
             ],
         ];
 
-        if ($booking->event_type == 'single') {
+        if ($booking->event_type != 'group') {
             $data['description'] = '';
             if ($booking->message) {
                 $data['description'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;

@@ -748,6 +748,49 @@ body >.fcal_calendar_wrap {
       min-width: 100%;
     }
 
+    .fcal_author_wrapper {
+        margin: 10px 0;
+        .fcal_author_list {
+            display: flex;
+            flex-wrap: wrap;
+            .fcal_author {
+                position: relative;
+                .fcal_author_name {
+                    margin-bottom: 4px;
+                }
+                .fcal_author_avatar {
+                    margin-bottom: 0px;
+                    img {
+                        margin-right: -4px;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                    }
+                    &:hover {
+                        .fcal_author_tooltip {
+                            opacity: 1;
+                            visibility: visible;
+                        }
+                    }
+                }
+                .fcal_author_tooltip {
+                    position: absolute;
+                    bottom: 105%;
+                    width: max-content;
+                    background: var(--fcal_dark);
+                    border-radius: 8px;
+                    color: var(--fcal_whiteColor);
+                    font-size: 14px;
+                    padding: 4px 8px;
+                    opacity: 0;
+                    margin: 0;
+                    visibility: hidden;
+                    transition: .2s;
+                }
+            }
+        }
+    }
+
     .fcal_author {
       margin-bottom: 10px;
     }
@@ -1807,6 +1850,7 @@ body >.fcal_calendar_wrap {
     background: var(--fcal_dark);
     border-radius: 8px;
     color: var(--fcal_whiteColor);
+    font-size: 14px;
     padding: 10px 15px;
     opacity: 0;
     margin: 0;

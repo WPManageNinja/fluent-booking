@@ -611,22 +611,41 @@ class FrontEndHandler
             $bookingData['source_url'] = sanitize_url($sourceUrl);
         }
 
+        if (!empty($postedData['payment_method'])) {
+            $customFieldsData['payment_method'] = $postedData['payment_method'];
+        }
+
+        $hostIds = null;
+        if ($calendarSlot->isTeamEvent()) {
+            $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
+        }
+        
         if ($additionalGuests) {
-            $bookingData['additional_guests'] = $additionalGuests;
+            $guestField = BookingFieldService::getBookingFieldByName($calendarSlot, 'guests');
+            $guestLimit = Arr::get($guestField, 'limit', 10);
+            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         // Check if the time is available or not for this slot
         $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $isSpotAvailable = false;
+
+        if ($hostIds) {
+            foreach ($hostIds as $hostId) {
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
+                if ($isSpotAvailable) {
+                    $bookingData['host_user_id'] = $hostId;
+                    break;
+                }
+            }
+        } else {
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        }
 
         if (!$isSpotAvailable) {
             wp_send_json([
                 'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
             ], 422);
-        }
-
-        if (!empty($postedData['payment_method'])) {
-            $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
@@ -752,6 +771,10 @@ class FrontEndHandler
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
+
+        if ($calendar->isTeamCalendar()) {
+            $eventVars['team_member_profiles'] = $calendarEvent->getAuthorProfiles(true);
+        }
 
         return apply_filters('fluent_booking/public_event_vars', $eventVars, $calendarEvent);
     }

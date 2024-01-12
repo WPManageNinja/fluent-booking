@@ -14,8 +14,7 @@
         </div>
         <div class="fcal_create_calendar_header">
             <h1 v-if="!is_board" style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
-                <el-icon><Back /></el-icon> {{ $t('Add') }} {{ calendar.slot.event_type=='single'?'One-to-One':'Group' }}
-                {{ $t('Booking Type') }}
+                <el-icon><Back /></el-icon> {{ calendarTitle }}
             </h1>
         </div>
         <div v-if="calendar.slot" class="fcal_create_calendar_body" :class="step==2 ? 'fcal_step_2_active' : ''">
@@ -47,9 +46,9 @@
             </div>
 
             <div class="fcal_create_calendar_form_footer">
-                <el-button v-if="step==1" class="fcal_primary_btn" @click="handleStep(2)">{{ $t('Continue') }}</el-button>
-                <el-button v-if="step==2" class="fcal_plain_btn" @click="handleStep(1)">{{ $t('Back') }}</el-button>
-                <SaveButton v-if="step==2" :saving="saving" label="Continue" @save="createCalendar"/>
+                <el-button v-if="step==1 && !is_team" class="fcal_primary_btn" @click="handleStep(2)">{{ $t('Continue') }}</el-button>
+                <el-button v-if="step==2 && !is_team" class="fcal_plain_btn" @click="handleStep(1)">{{ $t('Back') }}</el-button>
+                <SaveButton v-if="step==2 || is_team" :saving="saving" :label="$t('Continue')" @save="createCalendar"/>
             </div>
         </div>
     </div>
@@ -80,14 +79,13 @@ export default {
     data() {
         return {
             user_id: '',
+            is_team: false,
             require_slug: false,
-            form_step: 'general',
-            checking_slug: false,
             calendar: {
                 slug: '',
                 title: '',
                 description: '',
-                author_timezone: '',
+                author_timezone: 'UTC',
                 user_id: '',
                 slot: {
                     duration: '15',
@@ -118,11 +116,15 @@ export default {
             step: 1
         }
     },
+    computed: {
+        calendarTitle() {
+            const bookingType = this.getEventType(this.event_type);
+            return `${this.$t('Add')} ${bookingType} ${this.$t('Booking Type')}`;
+        },
+    },
     methods: {
         createCalendar() {
-            if (!this.checkValidation()) {
-                return;
-            }
+            if (!this.checkValidation()) return;
             this.saving = true;
             this.updateMeetingDuration();
             this.$post('calendars', {
@@ -178,44 +180,6 @@ export default {
             const duration = this.calendar.slot.duration;
             this.calendar.slot.duration = duration === 'custom' ? this.calendar.slot.custom_duration : duration;
         },
-        checkSlug() {
-            if (!this.calendar.slug) {
-                this.$handleError(this.$t('Please provide a slug first'));
-                return;
-            }
-
-            if(!isNaN(this.calendar.slug)) {
-                this.$handleError(this.$t('Only number in slug is not allowed'));
-                return;
-            }
-
-            if  (this.calendar.slug.length < 4) {
-                this.$handleError(this.$t('The Slug need to be at least 4 characters'));
-                return;
-            }
-
-            // check if the slug has special characters or any space. we will only allow alpha-numeric characters
-            const isInvalid = this.calendar.slug.match(/[^a-zA-Z0-9_-]/g);
-            if(isInvalid) {
-                this.$handleError(this.$t('CreateNew/invalid_error_message'));
-                return;
-            }
-
-            this.checking_slug = true;
-            this.$post('calendars/check-slug', {
-                slug: this.calendar.slug
-            })
-                .then(response => {
-                    this.form_step = 'general';
-                })
-                .catch(errors => {
-                    this.$handleError(errors);
-                })
-                .finally(() => {
-                    this.checking_slug = false;
-                });
-
-        },
         handleStep(index) {
             if (!this.calendar.slot.title) {
                 this.$handleError(this.$t('Title Field is required'));
@@ -224,8 +188,16 @@ export default {
             if (!this.checkValidation()) {
                 return;
             }
-
             this.step = index;
+        },
+        getEventType(eventType) {
+            const typeMap = {
+                'single': 'One-to-One',
+                'group': 'Group',
+                'round_robin': 'Round Robin',
+                'collective': 'Collective'
+            };
+            return typeMap[eventType];
         }
     },
     mounted() {
@@ -234,21 +206,23 @@ export default {
             this.calendar.user_id = this.host_id;
         }
 
+        if (this.$route.query.team_name) {
+            this.is_team = true;
+            this.calendar.title = this.$route.query.team_name;
+        }
+
         if(!this.hasSupport('is_hosted')) {
-            this.form_step = 'general';
             this.require_slug = false;
             return;
         }
 
         if(this.appVars.intended_username) {
             this.calendar.slug = this.appVars.intended_username;
-            this.form_step = 'general';
             this.require_slug = true;
             return;
         }
 
         this.require_slug = true;
-        this.form_step = 'slug';
     }
 }
 </script>

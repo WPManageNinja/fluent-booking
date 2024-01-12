@@ -90,10 +90,10 @@ class OutlookHelper
         return Arr::get($jwtPayload, 'email');
     }
 
-    public static function getConflictCheckCalendars($userId)
+    public static function getConflictCheckCalendars($hostIds)
     {
         $metaItems = Meta::where('object_type', '_outlook_user_token')
-            ->where('object_id', $userId)
+            ->whereIn('object_id', $hostIds)
             ->get();
 
         if ($metaItems->isEmpty()) {

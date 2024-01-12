@@ -105,16 +105,16 @@ class BootstrapX
             ];
         });
 
-        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendarEvent) {
             $meetExist = Meta::where('object_type', '_google_user_token')
-                ->where('object_id', $calendar->user_id)
+                ->where('object_id', $calendarEvent->user_id)
                 ->first();
 
             $message = !$meetExist ? ' ' . __('(Connect Google Meet First)', 'fluent-booking-pro') : '';
 
             if (!$message) {
                 // now check if the user calendar event create enabled
-                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
+                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendarEvent->user_id);
                 if (!$calConfig || Arr::get($calConfig, 'driver') != 'google') {
                     $message = __('(Set Google Event Creat First)', 'fluent-booking-pro');
                     $meetExist = false;
@@ -501,7 +501,7 @@ class BootstrapX
             ],
         ];
 
-        if ($booking->message && $booking->event_type == 'single') {
+        if ($booking->message && $booking->event_type != 'group') {
             $data['description'] = __('Note: ', 'fluent-booking-pro') . $booking->message;
         }
 
