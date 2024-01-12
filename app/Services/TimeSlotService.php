@@ -35,7 +35,7 @@ class TimeSlotService
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
         $daySlots = $this->getWeekDaySlots($duration, $hostId);
-        $bookedSlots = $this->getBookedSlots([$fromDate, $toDate], 'UTC', $hostId, $isDoingBooking);
+        $bookedSlots = $this->maybeMergedBookedSlots([$fromDate, $toDate], $hostId, $isDoingBooking);
 
         $ranges = $this->maybeBookingFrequencyLimitRanges($ranges, $bookedSlots);
         $ranges = $this->maybeBookingDurationLimitRanges($ranges, $bookedSlots, $duration);
@@ -777,17 +777,63 @@ class TimeSlotService
 
     protected function maybeSortDaySlots($daySlots)
     {
-        if (!$this->calendarSlot->isCommonSchedule()) {
+        if (!$this->calendarSlot->isTeamDefaultSchedule()) {
             return $daySlots;
         }
 
         $daySlots = array_unique($daySlots);
 
-        // Sort and make the array unique
         usort($daySlots, function ($a, $b) {
             return strtotime($a) - strtotime($b);
         });
 
         return $daySlots;
+    }
+
+    protected function maybeMergedBookedSlots($dateRange, $hostId = null, $isDoingBooking = false)
+    {
+        if (!$hostId && $this->calendarSlot->isRoundRobin() && $this->calendarSlot->isTeamCommonSchedule()) {
+            $allBookedSlots = [];
+            $hostIds = $this->calendarSlot->getHostIds();
+            foreach ($hostIds as $id) {
+                $allBookedSlots[] = $this->getBookedSlots($dateRange, 'UTC', $id, $isDoingBooking);
+            }
+            $totalBooked = count($allBookedSlots);
+            $commonBookedSlots = [];
+            $selectedSlots = [];
+            foreach ($allBookedSlots as $index => $bookedSlots) {
+                foreach ($bookedSlots as $date => $slots) {
+                    foreach ($slots as $slot) {
+                        if (isset($selectedSlots[$slot['start']]) && $selectedSlots[$slot['start']] == $slot['end']) {
+                            continue;
+                        }
+                        $booked = 1;
+                        $start = strtotime($slot['start']);
+                        $end = strtotime($slot['end']);
+                        foreach ($allBookedSlots as $indx => $otherBookedSlots) {
+                            if ($indx == $index) {
+                                continue;
+                            }
+                            if (!isset($otherBookedSlots[$date])) {
+                                break;
+                            }
+                            foreach ($otherBookedSlots[$date] as $otherSlot) {
+                                if ($start >= strtotime($otherSlot['start']) && $end <= strtotime($otherSlot['end'])) {
+                                    $booked++;
+                                    break;
+                                }
+                            }
+                        }
+                        if ($booked == $totalBooked) {
+                            $commonBookedSlots[$date] = $commonBookedSlots[$date] ?? [];
+                            $commonBookedSlots[$date][] = $slot;
+                            $selectedSlots[$slot['start']] = $slot['end'];
+                        }
+                    }
+                }
+            }
+            return $commonBookedSlots;
+        }
+        return $this->getBookedSlots($dateRange, 'UTC', $hostId, $isDoingBooking);
     }
 }

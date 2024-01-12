@@ -255,9 +255,9 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $hostId = $hostId ?: $calendarSlot->user_id;
+        $hostIds = $calendarSlot->getHostIds($hostId);
 
-        $items = OutlookHelper::getConflictCheckCalendars($hostId);
+        $items = OutlookHelper::getConflictCheckCalendars($hostIds);
 
         if (!$items) {
             return $books;

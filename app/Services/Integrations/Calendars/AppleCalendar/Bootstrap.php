@@ -161,9 +161,9 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
         
-        $hostId = $hostId ?: $calendarSlot->user_id;
+        $hostIds = $calendarSlot->getHostIds($hostId);
 
-        $conflictItems = $this->getConflictCheckCalendars($hostId);
+        $conflictItems = $this->getConflictCheckCalendars($hostIds);
 
         if (!$conflictItems) {
             return $books;

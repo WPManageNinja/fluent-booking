@@ -157,10 +157,10 @@ abstract class BaseCalendar
         ];
     }
 
-    public function getConflictCheckCalendars($userId)
+    public function getConflictCheckCalendars($hostIds)
     {
         $metaItems = Meta::where('object_type', '_'.$this->calendarKey.'_user_token')
-            ->where('object_id', $userId)
+            ->whereIn('object_id', $hostIds)
             ->get();
 
         if ($metaItems->isEmpty()) {

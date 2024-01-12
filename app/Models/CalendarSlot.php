@@ -110,6 +110,10 @@ class CalendarSlot extends Model
         return $this->event_type == 'round_robin' || $this->event_type == 'collective';
     }
 
+    public function isRoundRobin() {
+        return $this->event_type == 'round_robin';
+    }
+
     public function getAuthorProfile($public = true, $userID = null)
     {
         $userID = $userID ?: $this->user_id;
@@ -636,10 +640,20 @@ class CalendarSlot extends Model
         return $redirectUrl;
     }
 
-    public function isCommonSchedule()
+    public function isTeamDefaultSchedule()
     {
         if ($this->isTeamEvent()) {
             if (!Arr::isTrue($this->settings, 'common_schedule', false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isTeamCommonSchedule()
+    {
+        if ($this->isTeamEvent()) {
+            if (Arr::isTrue($this->settings, 'common_schedule', false)) {
                 return true;
             }
         }
@@ -728,7 +742,7 @@ class CalendarSlot extends Model
             return $this->getProcessedWeeklySlots($schedule);
         }
 
-        if ($this->isCommonSchedule()) {
+        if ($this->isTeamDefaultSchedule()) {
             return $this->mergeTeamSchedules();
         }
 
@@ -737,8 +751,9 @@ class CalendarSlot extends Model
             return $this->getProcessedWeeklySlots($schedule);
         }
 
-        $schedule = SanitizeService::weeklySchedules(Arr::get($this->settings,'weekly_schedules',[]), 'UTC', $this->calendar->author_timezone);
-        return AvailabilityService::getUtcWeeklySchedules($schedule, $scheduleTimezone);
+        $scheduleData = Arr::get($this->settings,'weekly_schedules',[]);
+        $schedule = SanitizeService::weeklySchedules($scheduleData, 'UTC', $this->calendar->author_timezone);
+        return AvailabilityService::getUtcWeeklySchedules($schedule, $this->calendar->author_timezone);
     }
 
     public function getDateOverrides($hostId = null)
@@ -748,7 +763,7 @@ class CalendarSlot extends Model
             return $this->getProcessedDateOverrides($schedule);
         }
 
-        if ($this->isCommonSchedule()) {
+        if ($this->isTeamDefaultSchedule()) {
             return $this->mergeTeamOverrides();
         }
 
@@ -759,7 +774,7 @@ class CalendarSlot extends Model
 
         $scheduleData = Arr::get($this->settings,'date_overrides',[]);
         $schedule = SanitizeService::slotDateOverrides($scheduleData, 'UTC', $this->calendar->author_timezone);
-        return AvailabilityService::getUtcDateOverrides($schedule, $scheduleTimezone);
+        return AvailabilityService::getUtcDateOverrides($schedule, $this->calendar->author_timezone);
     }
 
     public function getHostIdsSortedByBookings($startDate)
