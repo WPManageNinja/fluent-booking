@@ -67,7 +67,7 @@
                                     <input disabled="{field.disabled}" class="fcal_input" type="number"
                                            placeholder="{field.placeholder}" bind:value={form[field.name]}/>
                                 {:else if field.type === 'phone'}
-                                    <PhoneFieldSkeleton field={field} form="{form}"/>
+                                    <PhoneFieldSkeleton field={field} bind:form="{form}"/>
                                 {:else if field.type === 'textarea'}
                                     <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
                                               class="fcal_input" bind:value={form[field.name]}/>
