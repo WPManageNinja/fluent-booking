@@ -197,9 +197,9 @@ class Bootstrap extends BaseCalendar
 
         $cacheTime = Arr::get($config, 'caching_time', 5);
 
-        $hostId = $hostId ?: $calendarSlot->user_id;
+        $hostIds = $calendarSlot->getHostIds($hostId);
 
-        $items = GoogleHelper::getConflictCheckCalendars($hostId);
+        $items = GoogleHelper::getConflictCheckCalendars($hostIds);
 
         if (!$items) {
             return $books;

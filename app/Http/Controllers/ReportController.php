@@ -253,13 +253,11 @@ class ReportController extends Controller
 
         if ($permissionAccess) {
             $totalBooked = Booking::count();
-
             $bookingCompleted = Booking::where('status', 'completed')->count();
             $bookingCancelled = Booking::where('status', 'cancelled')->count();
             $totalGuests = Booking::distinct()->count('email');
         } else {
             $totalBooked = Booking::where('host_user_id', get_current_user_id())->count();
-
             $bookingCompleted = Booking::where('status', 'completed')->where('host_user_id', get_current_user_id())->count();
             $bookingCancelled = Booking::where('status', 'cancelled')->where('host_user_id', get_current_user_id())->count();
             $totalGuests = Booking::distinct()->where('host_user_id', get_current_user_id())->count('email');
