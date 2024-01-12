@@ -291,6 +291,8 @@ export default {
             if (!updatedValue) {
                 return;
             }
+            this.calendar_event.settings.multi_duration.available_durations = updatedValue.sort((a, b) => a - b);
+            
             const durations = updatedValue.map(duration => ({
                 value: duration,
                 label: `${duration} ${this.$t('Minutes')}`
