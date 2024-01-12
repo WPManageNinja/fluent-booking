@@ -1249,6 +1249,64 @@ class Helper
         ]);
     }
 
+    public static function getBookingStatusChangingTimes()
+    {
+        return apply_filters('fluent_booking/booking_status_changing_times_schema', [
+            [
+                'value' => '5',
+                'label' => __('5 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '10',
+                'label' => __('10 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '20',
+                'label' => __('20 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '30',
+                'label' => __('30 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '40',
+                'label' => __('40 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '50',
+                'label' => __('50 Minutes', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '60',
+                'label' => __('1 Hour', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '120',
+                'label' => __('2 Hours', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '180',
+                'label' => __('3 Hours', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '360',
+                'label' => __('6 Hours', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '720',
+                'label' => __('12 Hours', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '1440',
+                'label' => __('1 Day', 'fluent-booking-pro')
+            ],
+            [
+                'value' => '2880',
+                'label' => __('2 Days', 'fluent-booking-pro')
+            ]
+        ]);
+    }
+
     public static function getWeekSelectTimes()
     {
         return apply_filters('fluent_booking/week_select_times_schema', [
