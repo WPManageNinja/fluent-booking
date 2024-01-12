@@ -14,7 +14,7 @@ class BookingCompletedTrigger extends BaseTrigger
 {
     public function __construct()
     {
-        $this->triggerName = 'fluent_booking/after_booking_completed';
+        $this->triggerName = 'fluent_booking/booking_schedule_completed';
         $this->actionArgNum = 1;
         $this->priority = 20;
         parent::__construct();
