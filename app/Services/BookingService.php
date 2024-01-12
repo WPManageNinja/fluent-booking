@@ -87,8 +87,8 @@ class BookingService
         if ($additionalGuests) {
             Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
         }
-
-        $booking->hosts()->attach($calendarSlot->user_id, [
+        
+        $booking->hosts()->attach($booking->host_user_id, [
             'status' => 'confirmed'
         ]);
 

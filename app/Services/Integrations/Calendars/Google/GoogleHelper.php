@@ -151,10 +151,10 @@ class GoogleHelper
         return Arr::get($jwtPayload, 'email');
     }
 
-    public static function getConflictCheckCalendars($userId)
+    public static function getConflictCheckCalendars($hostIds)
     {
         $metaItems = Meta::where('object_type', '_google_user_token')
-            ->where('object_id', $userId)
+            ->whereIn('object_id', $hostIds)
             ->get();
 
         if ($metaItems->isEmpty()) {
@@ -162,7 +162,6 @@ class GoogleHelper
         }
 
         $calendars = [];
-
         foreach ($metaItems as $item) {
             $settings = $item->value;
             $checkIds = Arr::get($settings, 'conflict_check_ids', []);

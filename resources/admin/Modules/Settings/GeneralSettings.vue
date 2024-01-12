@@ -47,45 +47,6 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-row :gutter="30">
-                            <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Summary Email')">
-                                    <el-checkbox v-model="administration.summary_notification" true-label="yes"
-                                                 false-label="no"> {{ $t('Enable Booking Summary Notification') }}
-                                    </el-checkbox>
-                                </el-form-item>
-                            </el-col>
-                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
-                                <el-row :gutter="30">
-                                    <el-col :sm="24" :md="12">
-                                        <el-form-item :label="$t('Email Frequency?')">
-                                            <el-select v-model="administration.notification_frequency"
-                                                       :placeholder="$t('Select Frequency')" popper-class="fcal_select"
-                                                       placement="bottom">
-                                                <el-option value="daily" :label="$t('Daily')"></el-option>
-                                                <el-option value="weekly" :label="$t('Weekly')"></el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :sm="24" :md="12">
-                                        <el-form-item v-if="administration.notification_frequency == 'weekly'"
-                                                      :label="$t('In which day to send the email?')">
-                                            <el-select v-model="administration.notification_day"
-                                                       :placeholder="$t('Select Day')"
-                                                       popper-class="fcal_select" placement="bottom">
-                                                <el-option value="mon" :label="$t('Monday')"></el-option>
-                                                <el-option value="tue" :label="$t('Tuesday')"></el-option>
-                                                <el-option value="wed" :label="$t('Wednesday')"></el-option>
-                                                <el-option value="thu" :label="$t('Thursday')"></el-option>
-                                                <el-option value="fri" :label="$t('Friday')"></el-option>
-                                                <el-option value="sat" :label="$t('Saturday')"></el-option>
-                                                <el-option value="sun" :label="$t('Sunday')"></el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                            </el-col>
-                        </el-row>
 
                         <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
@@ -139,6 +100,46 @@
                                         />
                                     </el-select>
                                 </el-form-item>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="30">
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Summary Email')">
+                                    <el-checkbox v-model="administration.summary_notification" true-label="yes"
+                                                 false-label="no"> {{ $t('Enable Booking Summary Notification') }}
+                                    </el-checkbox>
+                                </el-form-item>
+                            </el-col>
+                            <el-col v-if="administration.summary_notification == 'yes'" :sm="24" :md="16">
+                                <el-row :gutter="30">
+                                    <el-col :sm="24" :md="12">
+                                        <el-form-item :label="$t('Email Frequency?')">
+                                            <el-select v-model="administration.notification_frequency"
+                                                       :placeholder="$t('Select Frequency')" popper-class="fcal_select"
+                                                       placement="bottom">
+                                                <el-option value="daily" :label="$t('Daily')"></el-option>
+                                                <el-option value="weekly" :label="$t('Weekly')"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :sm="24" :md="12">
+                                        <el-form-item v-if="administration.notification_frequency == 'weekly'"
+                                                      :label="$t('In which day to send the email?')">
+                                            <el-select v-model="administration.notification_day"
+                                                       :placeholder="$t('Select Day')"
+                                                       popper-class="fcal_select" placement="bottom">
+                                                <el-option value="mon" :label="$t('Monday')"></el-option>
+                                                <el-option value="tue" :label="$t('Tuesday')"></el-option>
+                                                <el-option value="wed" :label="$t('Wednesday')"></el-option>
+                                                <el-option value="thu" :label="$t('Thursday')"></el-option>
+                                                <el-option value="fri" :label="$t('Friday')"></el-option>
+                                                <el-option value="sat" :label="$t('Saturday')"></el-option>
+                                                <el-option value="sun" :label="$t('Sunday')"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
                             </el-col>
                         </el-row>
 

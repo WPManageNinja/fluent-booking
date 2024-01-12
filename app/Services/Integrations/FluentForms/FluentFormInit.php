@@ -17,6 +17,8 @@ use FluentForm\App\Services\FormBuilder\ShortCodeParser;
 
 class FluentFormInit
 {
+    protected $hostId;
+
     public function init()
     {
         $this->registerHooks();
@@ -98,8 +100,25 @@ class FluentFormInit
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
+        $hostIds = null;
+        $this->hostId = null;
+        if ($calendarEvent->isTeamEvent()) {
+            $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
+        }
+
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+
+        if ($hostIds) {
+            foreach ($hostIds as $hostId) {
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
+                if ($isSpotAvailable) {
+                    $this->hostId = $hostId;
+                    break;
+                }
+            }
+        } else {
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        }
 
         if (!$isSpotAvailable) {
             $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro');
@@ -125,7 +144,6 @@ class FluentFormInit
         }
 
         $locationFieldKey = $this->getLocationFieldKey($calendarEvent);
-
 
         if ($locationFieldKey) {
             $requiredKeys = [];
@@ -300,6 +318,10 @@ class FluentFormInit
 
             if ($entry->user_id) {
                 $bookingData['person_user_id'] = $entry->user_id;
+            }
+
+            if ($this->hostId) {
+                $bookingData['host_user_id'] = $this->hostId;
             }
 
             $selectedLocation = LocationService::getLocationDetails($event, Arr::get($ffFieldData, 'location_config', []), $ffFieldData);

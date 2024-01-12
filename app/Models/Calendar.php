@@ -43,10 +43,6 @@ class Calendar extends Model
             }
             $model->hash = md5(wp_generate_uuid4() . time());
         });
-
-        static::deleting(function ($model) {
-            $model->availabilities()->delete();
-        });
     }
 
     public function setSettingsAttribute($settings)
@@ -84,6 +80,11 @@ class Calendar extends Model
         return $this->hasMany(Availability::class, 'object_id', 'user_id');
     }
 
+    public function isTeamCalendar()
+    {
+        return $this->type == 'team';
+    }
+
     public function getAuthorPhoto()
     {
         $photo = $this->getMeta('profile_photo_url');
@@ -114,14 +115,12 @@ class Calendar extends Model
             $name = $user->display_name;
         }
 
-        $photo = $this->getAuthorPhoto();
-
         $data = [
             'name'           => $name,
             'author_slug'    => $user->user_nicename,
             'first_name'     => $user->first_name,
             'last_name'      => $user->last_name,
-            'avatar'         => $photo,
+            'avatar'         => $this->getAuthorPhoto(),
             'phone'          => $this->user->getMeta('host_phone'),
             'featured_image' => $this->getMeta('featured_image_url')
         ];
@@ -131,54 +130,6 @@ class Calendar extends Model
         }
 
         return $data;
-    }
-
-    public function getLocationFields()
-    {
-        return apply_filters('fluent_booking/get_location_fields', [
-            'conferencing' => [
-                'label'   => __('Conferencing', 'fluent-booking-pro'),
-                'options' => [],
-            ],
-            'in_person'    => [
-                'label'   => __('In Person', 'fluent-booking-pro'),
-                'options' => [
-                    'in_person_guest'     => [
-                        'title' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
-                    ],
-                    'in_person_organizer' => [
-                        'title' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
-                    ],
-                ],
-            ],
-            'phone'        => [
-                'label'   => __('Phone', 'fluent-booking-pro'),
-                'options' => [
-                    'phone_guest'     => [
-                        'title' => __('Attendee Phone Number', 'fluent-booking-pro'),
-                    ],
-                    'phone_organizer' => [
-                        'title' => __('Organizer Phone Number', 'fluent-booking-pro'),
-                    ],
-                ],
-            ],
-            'online'       => [
-                'label'   => __('Online', 'fluent-booking-pro'),
-                'options' => [
-                    'online_meeting' => [
-                        'title' => __('Online Meeting', 'fluent-booking-pro'),
-                    ],
-                ],
-            ],
-            'other'        => [
-                'label'   => __('Other', 'fluent-booking-pro'),
-                'options' => [
-                    'custom' => [
-                        'title' => __('Custom', 'fluent-booking-pro'),
-                    ],
-                ],
-            ],
-        ], $this);
     }
 
     public function getMeta($key, $default = null)

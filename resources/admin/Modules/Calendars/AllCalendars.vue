@@ -5,9 +5,25 @@
                 <h3>{{ $t('Calendars') }}</h3>
             </div>
             <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
-                <el-button class="fcal_primary_btn" @click="isNewBookingOpen = true">
-                    <span>+</span> {{ $t('Add New Host') }}
-                </el-button>
+                <el-dropdown trigger="click" popper-class="fcal_select">
+                    <span class="el-dropdown-link">
+                        <el-button class="fcal_primary_btn">
+                            <span>+</span> {{ $t('New') }}
+                        </el-button>
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item
+                                @click="isNewBookingOpen = true">
+                                {{ $t('Add New Host') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item 
+                                @click="isNewTeamOpen = true">
+                                {{ $t('Add New Team') }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
         <div class="fcal_section_body">
@@ -40,19 +56,13 @@
                     <p>{{ $t('AllCalendars/create_host_desc') }}</p>
                 </el-form-item>
                 <el-button
-                    @click="createOneToOneSlot"
+                    @click="createCalendarEvent('single')"
                     :disabled="!user_id">
                     <div class="icons-wrap">
-                        <el-icon>
-                            <User/>
-                        </el-icon>
-                        <el-icon>
-                            <Right/>
-                        </el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
                         <div class="icons">
-                            <el-icon>
-                                <User/>
-                            </el-icon>
+                            <el-icon><User/></el-icon>
                         </div>
                     </div>
                     <div class="content">
@@ -65,22 +75,14 @@
                     </div>
                 </el-button>
                 <el-button
-                    @click="createGroupSlot"
+                    @click="createCalendarEvent('group')"
                     :disabled="!user_id">
                     <div class="icons-wrap">
-                        <el-icon>
-                            <User/>
-                        </el-icon>
-                        <el-icon>
-                            <Right/>
-                        </el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
                         <div class="icons">
-                            <el-icon>
-                                <User/>
-                            </el-icon>
-                            <el-icon>
-                                <User/>
-                            </el-icon>
+                            <el-icon><User/></el-icon>
+                            <el-icon><User/></el-icon>
                         </div>
                     </div>
                     <div class="content">
@@ -94,13 +96,50 @@
                 </el-button>
             </div>
         </el-drawer>
+
+        <el-drawer
+            v-model="isNewTeamOpen"
+            :title="$t('Add New Team') + ' (' + $t('beta') + ')'"
+            :zIndex="999"
+            label-position="top"
+            modal-class="fcal_drawer">
+            <div class="fcal_create_new_booking_type_drawer">
+                <el-form-item :label="$t('Team Name')">
+                    <el-input
+                        v-model="team_name"
+                        type="text"
+                        :placeholder="$t('Enter Name of this team')"
+                    />
+                </el-form-item>
+                <el-button
+                    @click="createTeamEvent('round_robin')"
+                    :disabled="!team_name">
+                    <div class="icons-wrap">
+                        <el-icon><User/></el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
+                        <div class="icons">
+                            <el-icon><User/></el-icon>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>{{ $t('Round Robin') }}</h3>
+                        <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                        <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
+                        <el-icon class="icon-right">
+                            <Right/>
+                        </el-icon>
+                    </div>
+                </el-button>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
-<script type="text/babel">
-import Pagination from "../../Pieces/Pagination.vue";
-import CalendarEventBlock from "./parts/CalendarEventBlock.vue";
-import {User, Right} from '@element-plus/icons-vue';
+<script>
+import Pagination from "../../Pieces/Pagination";
+import CalendarEventBlock from "./parts/CalendarEventBlock";
+import { User, Right } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
 
@@ -124,7 +163,9 @@ export default {
                 current_page: 1
             },
             isNewBookingOpen: false,
-            user_id: ''
+            isNewTeamOpen: false,
+            user_id: '',
+            team_name: ''
         }
     },
     methods: {
@@ -145,16 +186,17 @@ export default {
                     this.loading = false;
                 });
         },
-        createOneToOneSlot() {
+        createCalendarEvent(eventType) {
             this.$router.push({
                 name: 'create_calendar',
-                params: {host_id: this.user_id, event_type: 'single'}
+                params: {host_id: this.user_id, event_type: eventType}
             })
         },
-        createGroupSlot() {
+        createTeamEvent(eventType) {
             this.$router.push({
                 name: 'create_calendar',
-                params: {host_id: this.user_id, event_type: 'group'}
+                params: {host_id: this.appVars.me.id, event_type: eventType},
+                query: {team_name: this.team_name}
             })
         }
     },

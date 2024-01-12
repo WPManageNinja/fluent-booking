@@ -37,6 +37,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/events/{event_id}/availability', 'CalendarController@getAvailabilitySettings')->int('event_id');
     $router->post('/{id}/events/{event_id}/details', 'CalendarController@updateEventDetails')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/availability', 'CalendarController@updateEventAvailability')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/assignments', 'CalendarController@updateAssignments')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/limits', 'CalendarController@updateEventLimits')->int('id')->int('event_id');
 
     $router->get('/{id}/events/{event_id}/email-notifications', 'CalendarController@getEventEmailNotifications')->int('id')->int('event_id');
@@ -49,6 +50,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('remaining-hosts', 'AdminController@getRemainingHosts');
     $router->get('other-hosts', 'AdminController@getOtherHosts');
+    $router->get('all-hosts', 'AdminController@getAllHosts');
 });
 
 $router->prefix('bookings')->withPolicy('AdminPolicy')->group(function ($router) {

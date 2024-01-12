@@ -16,7 +16,7 @@
             </div>
             <div class="fcal_cal_actions">
                 <el-button class="fcal_plain_btn" @click="goToCalendarSetting">
-                    <el-icon><Setting /></el-icon> {{ $t('Host Settings') }}
+                    <el-icon><Setting /></el-icon> {{ getSettingLabel }}
                 </el-button>
 
                 <el-button
@@ -57,46 +57,68 @@
             modal-class="fcal_drawer"
         >
             <div class="fcal_create_new_booking_type_drawer">
-                <el-button @click="createSlot('single')">
-                    <div class="icons-wrap">
-                        <el-icon><User /></el-icon>
-                        <el-icon><Right /></el-icon>
-                        <div class="icons">
+                <template v-if="calendar.type == 'team'">
+                    <el-button @click="createSlot('round_robin')">
+                        <div class="icons-wrap">
                             <el-icon><User /></el-icon>
+                            <el-icon><User /></el-icon>
+                            <el-icon><Right /></el-icon>
+                            <div class="icons">
+                                <el-icon><User /></el-icon>
+                            </div>
                         </div>
-                    </div>
-                    <div class="content">
-                        <h3>{{ $t('One-to-One') }}</h3>
-                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
-                        <p>{{ $t('Good for: coffee chats, 1:1 interviews, etc.') }}</p>
-                        <el-icon class="icon-right"><Right /></el-icon>
-                    </div>
-                </el-button>
-                <el-button @click="createSlot('group')">
-                    <div class="icons-wrap">
-                        <el-icon><User /></el-icon>
-                        <el-icon><Right /></el-icon>
-                        <div class="icons">
-                            <el-icon><User /></el-icon>
-                            <el-icon><User /></el-icon>
+                        <div class="content">
+                            <h3>{{ $t('Round Robin') }}</h3>
+                            <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                            <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
+                            <el-icon class="icon-right">
+                                <Right/>
+                            </el-icon>
                         </div>
-                    </div>
-                    <div class="content">
-                        <h3>{{ $t('Group') }}</h3>
-                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('Group of invitees') }}</strong></h4>
-                        <p>{{ $t('Good for: webinars, online classes, etc.') }}</p>
-                        <el-icon class="icon-right"><Right /></el-icon>
-                    </div>
-                </el-button>
+                    </el-button>
+                </template>
+                <template v-else>
+                    <el-button @click="createSlot('single')">
+                        <div class="icons-wrap">
+                            <el-icon><User /></el-icon>
+                            <el-icon><Right /></el-icon>
+                            <div class="icons">
+                                <el-icon><User /></el-icon>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3>{{ $t('One-to-One') }}</h3>
+                            <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                            <p>{{ $t('Good for: coffee chats, 1:1 interviews, etc.') }}</p>
+                            <el-icon class="icon-right"><Right /></el-icon>
+                        </div>
+                    </el-button>
+                    <el-button @click="createSlot('group')">
+                        <div class="icons-wrap">
+                            <el-icon><User /></el-icon>
+                            <el-icon><Right /></el-icon>
+                            <div class="icons">
+                                <el-icon><User /></el-icon>
+                                <el-icon><User /></el-icon>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3>{{ $t('Group') }}</h3>
+                            <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('Group of invitees') }}</strong></h4>
+                            <p>{{ $t('Good for: webinars, online classes, etc.') }}</p>
+                            <el-icon class="icon-right"><Right /></el-icon>
+                        </div>
+                    </el-button>
+                </template>
             </div>
         </el-drawer>
     </div>
 </template>
 
-<script type="text/babel">
-import EachSlot from "./EachSlot.vue";
+<script>
+import EachSlot from "./EachSlot";
 import { Setting, User, Right, MoreFilled, Delete } from '@element-plus/icons-vue';
-import CalendarSettings from "./CalendarSettings.vue";
+import CalendarSettings from "./CalendarSettings";
 
 export default {
     name: 'CalendarEventBlock',
@@ -114,6 +136,11 @@ export default {
         return {
             showSettings: false,
             isNewBookingOpen: false
+        }
+    },
+    computed: {
+        getSettingLabel() {
+            return this.calendar.type == 'team' ? this.$t('Team Settings') : this.$t('Host Settings');
         }
     },
     methods: {

@@ -28,29 +28,43 @@ class Bootstrap extends BaseCalendar
         $this->boot();
         add_action('wp_ajax_fluent_booking_outlook_auth', [$this, 'handleAuthCallback']);
 
-        add_filter('fluent_booking/get_location_fields', function ($fields, $calendar) {
-            $outlookQuery = Meta::where('object_type', '_outlook_user_token')
-                ->where('object_id', $calendar->user_id);
+        add_filter('fluent_booking/get_location_fields', function ($fields, $calendarEvent) {
+            foreach ($calendarEvent->getHostIds() as $hostId) {
+                $outlookQuery = Meta::where('object_type', '_outlook_user_token')
+                ->where('object_id', $hostId);
 
-            $teamsExist = $outlookQuery->first();
-            $message = !$teamsExist ? ' ' . __('(Connect Outlook First)', 'fluent-booking-pro') : '';
+                $teamsExist = $outlookQuery->first();
+                $message = !$teamsExist ? __('Connect Outlook First', 'fluent-booking-pro') : '';
 
-            if (!$message) {
-                // now check if the user calendar event create enabled
-                $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($calendar->user_id);
-                if (!$calConfig || Arr::get($calConfig, 'driver') != 'outlook') {
-                    $message = __('(Set Outlook Event Creat First)', 'fluent-booking-pro');
-                    $teamsExist = false;
-                } elseif (!empty($configId = Arr::get($calConfig, 'id'))) {
-                    $metaId = explode('__||__', $configId)[0];
-                    $meta = $outlookQuery->where('id', $metaId)->first();
-                    $isEnabled = Arr::get($meta->value, 'additional_settings.teams_enabled', '');
-                    if ($isEnabled != 'yes') {
-                        $message = __('(Enable MS Teams From Outlook Settings)', 'fluent-booking-pro');
+                if (!$teamsExist) {
+                    break;
+                }
+
+                if (!$message) {
+                    // now check if the user calendar event create enabled
+                    $calConfig = RemoteCalendarHelper::getUserRemoteCreatableCalendarSettings($hostId);
+                    if (!$calConfig || Arr::get($calConfig, 'driver') != 'outlook') {
+                        $message = __('Set Outlook Event Creat First', 'fluent-booking-pro');
                         $teamsExist = false;
+                        break;
+                    } elseif (!empty($configId = Arr::get($calConfig, 'id'))) {
+                        $metaId = explode('__||__', $configId)[0];
+                        $meta = $outlookQuery->where('id', $metaId)->first();
+                        $isEnabled = Arr::get($meta->value, 'additional_settings.teams_enabled', '');
+                        if ($isEnabled != 'yes') {
+                            $message = __('Enable MS Teams From Outlook Settings', 'fluent-booking-pro');
+                            $teamsExist = false;
+                            break;
+                        }
                     }
                 }
             }
+
+            if ($calendarEvent->isTeamEvent()) {
+                $message = $message ? __('All Hosts Need to ', 'fluent-booking-pro') . $message : '';
+            }
+
+            $message = $message ? ' (' . $message . ')' : '';
 
             $fields['conferencing']['options']['ms_teams'] = [
                 'title'         => __('MS Teams', 'fluent-booking-pro') . $message,
@@ -66,7 +80,7 @@ class Bootstrap extends BaseCalendar
             }
             // Show the Outlook last error
             add_action('fluent_booking/calendar', function (&$calendar, $type) {
-                if ($type != 'lists') {
+                if ($type != 'lists' || $calendar->type == 'team') {
                     return $calendar;
                 }
 
@@ -233,7 +247,7 @@ class Bootstrap extends BaseCalendar
         return $feeds;
     }
 
-    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $isDoingBooking)
+    public function getBookedSlots($books, $calendarSlot, $toTimeZone, $dateRange, $hostId, $isDoingBooking)
     {
         $config = OutlookHelper::getApiConfig();
 
@@ -241,7 +255,9 @@ class Bootstrap extends BaseCalendar
             return $books;
         }
 
-        $items = OutlookHelper::getConflictCheckCalendars($calendarSlot->user_id);
+        $hostIds = $calendarSlot->getHostIds($hostId);
+
+        $items = OutlookHelper::getConflictCheckCalendars($hostIds);
 
         if (!$items) {
             return $books;
@@ -311,7 +327,7 @@ class Bootstrap extends BaseCalendar
 
     public function createEvent($config, Booking $booking)
     {
-        if (($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event') && $booking->event_type == 'single')) {
+        if (($booking->status != 'scheduled' || $booking->getMeta('__outlook_calendar_event') && $booking->event_type != 'group')) {
             return; // already created
         }
 
@@ -381,9 +397,7 @@ class Bootstrap extends BaseCalendar
                 'dateTime' => gmdate('Y-m-d\TH:i:s', strtotime($booking->end_time)),
                 'timeZone' => 'UTC'
             ],
-            'attendees'             => [
-                $guestAttendees,
-            ],
+            'attendees'             => $guestAttendees,
             'organizer'             => [
                 'emailAddress' => [
                     'name'    => $author['name'],
@@ -398,7 +412,7 @@ class Bootstrap extends BaseCalendar
             'transactionId'         => $booking->id,
         ];
 
-        if ($booking->event_type == 'single') {
+        if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',
                 'content'     => ''

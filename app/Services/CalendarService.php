@@ -9,12 +9,12 @@ use FluentBooking\App\Services\PermissionManager;
 
 class CalendarService
 {
-    public static function getSlotOptions($userId)
+    public static function getSlotOptions($calendarId)
     {
         $calendarSlots = CalendarSlot::select(['id', 'title'])
-            ->where('user_id', $userId)
+            ->where('calendar_id', $calendarId)
             ->latest()
-            ->get(); 
+            ->get();
 
         $options = [];
         foreach ($calendarSlots as $slot) {
@@ -23,7 +23,7 @@ class CalendarService
                 'label' => $slot->title,
             ];
         }
-        return apply_filters('fluent_booking/calendar_event_options', $options, $userId);
+        return apply_filters('fluent_booking/calendar_event_options', $options, $calendarId);
     }
 
     public static function getCalendarOptionsByHost()
@@ -82,6 +82,7 @@ class CalendarService
                 }
                 if (!empty($options)) {
                     $formattedCalendars[$index] = [
+                        'id'      => Arr::get($calendar, 'id'),
                         'title'   => Arr::get($calendar, 'title'),
                         'options' => $options
                     ];
