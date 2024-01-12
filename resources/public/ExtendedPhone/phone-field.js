@@ -2,7 +2,6 @@ import StandAlonePhoneField from './StandAlonePhoneField.svelte';
 import './style.scss';
 
 document.body.addEventListener('fcal_init_phone_field', function (e) {
-    console.log('Init Phone Field', e.detail);
     new StandAlonePhoneField({
         target: e.detail.elem,
         props: {
