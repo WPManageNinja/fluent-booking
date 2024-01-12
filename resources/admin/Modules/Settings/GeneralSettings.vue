@@ -52,17 +52,11 @@
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Mark booking as cancelled automatically after')">
                                     <el-select popper-class="fcal_select" v-model="administration.auto_cancel_timing">
-                                        <el-option value="5" :label="$t('5 Minutes')"></el-option>
-                                        <el-option value="10" :label="$t('10 Minutes')"></el-option>
-                                        <el-option value="20" :label="$t('20 Minutes')"></el-option>
-                                        <el-option value="30" :label="$t('30 Minutes')"></el-option>
-                                        <el-option value="40" :label="$t('40 Minutes')"></el-option>
-                                        <el-option value="50" :label="$t('50 Minutes')"></el-option>
-                                        <el-option value="60" :label="$t('60 Minutes')"></el-option>
-                                        <el-option value="120" :label="$t('2 Hours')"></el-option>
-                                        <el-option value="180" :label="$t('3 Hours')"></el-option>
-                                        <el-option value="360" :label="$t('6 Hours')"></el-option>
-                                        <el-option value="720" :label="$t('12 Hours')"></el-option>
+                                        <el-option 
+                                            v-for="time in statusChangingTimes"
+                                            :value="time.value"
+                                            :label="time.label">
+                                        </el-option>
                                     </el-select>
                                     <p>{{ $t('if customer does not complete the payment for paid events.') }}</p>
                                 </el-form-item>
@@ -70,17 +64,11 @@
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Mark booking as completed automatically after')">
                                     <el-select popper-class="fcal_select" v-model="administration.auto_complete_timing">
-                                        <el-option value="5" :label="$t('5 Minutes')"></el-option>
-                                        <el-option value="10" :label="$t('10 Minutes')"></el-option>
-                                        <el-option value="20" :label="$t('20 Minutes')"></el-option>
-                                        <el-option value="30" :label="$t('30 Minutes')"></el-option>
-                                        <el-option value="40" :label="$t('40 Minutes')"></el-option>
-                                        <el-option value="50" :label="$t('50 Minutes')"></el-option>
-                                        <el-option value="60" :label="$t('60 Minutes')"></el-option>
-                                        <el-option value="120" :label="$t('2 Hours')"></el-option>
-                                        <el-option value="180" :label="$t('3 Hours')"></el-option>
-                                        <el-option value="360" :label="$t('6 Hours')"></el-option>
-                                        <el-option value="720" :label="$t('12 Hours')"></el-option>
+                                        <el-option 
+                                            v-for="time in statusChangingTimes"
+                                            :value="time.value"
+                                            :label="time.label">
+                                        </el-option>
                                     </el-select>
                                     <p>{{ $t('from the event end time') }}</p>
                                 </el-form-item>
@@ -272,7 +260,8 @@ export default {
             loading: false,
             saving: false,
             timeFormat: '12',
-            all_countries: {}
+            all_countries: {},
+            statusChangingTimes: this.appVars.status_changing_times
         }
     },
     methods: {

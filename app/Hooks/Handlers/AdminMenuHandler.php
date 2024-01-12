@@ -236,6 +236,7 @@ class AdminMenuHandler
         $customFieldTypes = Helper::getCustomFieldTypes();
         $weekSelectTimes = Helper::getWeekSelectTimes();
         $overrideSelectTimes = Helper::getOverrideSelectTimes();
+        $statusChangingTimes = Helper::getBookingStatusChangingTimes();
         $locationFields = (new CalendarSlot())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
@@ -254,6 +255,7 @@ class AdminMenuHandler
             'custom_field_types' => $customFieldTypes,
             'week_select_times'  => $weekSelectTimes,
             'override_select_times' => $overrideSelectTimes,
+            'status_changing_times' => $statusChangingTimes,
             'me'                 => [
                 'id'          => $currentUser->ID,
                 'calendar_id' => $calendarId,
