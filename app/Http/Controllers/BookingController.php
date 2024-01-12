@@ -143,7 +143,7 @@ class BookingController extends Controller
             'address'          => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
             'ip_address'       => Helper::getIp(),
             'status'           => sanitize_text_field($postedData['status']),
-            'source'           => 'web',
+            'source'           => 'admin',
             'event_type'       => $calendarEvent->event_type,
             'slot_minutes'     => $duration
         ];
