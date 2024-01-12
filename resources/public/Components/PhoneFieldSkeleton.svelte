@@ -17,7 +17,9 @@
         elem = document.getElementById(currentFieldId);
 
         elem.addEventListener('value_changed', (e) => {
-            form[field.name] = e.detail.value;
+            if (e.detail.value) {
+                form[field.name] = e.detail.value;
+            }
         });
 
         document.body.dispatchEvent(new CustomEvent('fcal_init_phone_field', {
