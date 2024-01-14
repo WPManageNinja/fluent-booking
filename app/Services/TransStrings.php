@@ -198,6 +198,7 @@ class TransStrings
             'Days Before'                                                                      => __('Days Before', 'fluent-booking-pro'),
             '+ Add Another Reminder'                                                           => __('+ Add Another Reminder', 'fluent-booking-pro'),
             'Additional Recipients'                                                            => __('Additional Recipients', 'fluent-booking-pro'),
+            'Additional Guests'                                                                => __('Additional Guests', 'fluent-booking-pro'),
             'Enter email addresses separated by commas'                                        => __('Enter email addresses separated by commas', 'fluent-booking-pro'),
             'EditNotificationSettings/additional_recipients_desc'                              => __('Provided email addresses will set as CC to this email notification', 'fluent-booking-pro'),
             'Enable this notification email'                                                   => __('Enable this notification email', 'fluent-booking-pro'),
@@ -712,6 +713,7 @@ class TransStrings
             'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro'),
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
+            'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability')
         );
 
     }

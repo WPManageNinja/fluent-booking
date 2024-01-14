@@ -420,7 +420,7 @@ class TimeSlotService
         return $this->maybeSortDaySlots($formattedSlots);
     }
 
-    public function getAvailableSpots($startDate, $timeZone = 'UTC', $duration = null)
+    public function getAvailableSpots($startDate, $timeZone = 'UTC', $duration = null, $hostId = null)
     {
         $slot     = $this->calendarSlot;
         $calendar = $this->calendar;
@@ -459,7 +459,7 @@ class TimeSlotService
         $startDate = DateTimeHelper::convertToUtc($startDate, $timeZone);
         $endDate   = DateTimeHelper::convertToUtc($endDate, $timeZone);
 
-        $slots = $this->getDates($startDate, $endDate, $duration);
+        $slots = $this->getDates($startDate, $endDate, $duration, $hostId);
 
         $convertedSpots = [];
 

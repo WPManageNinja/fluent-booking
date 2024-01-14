@@ -25,6 +25,19 @@
                     </el-option-group>
                 </el-select>
             </el-form-item>
+            <el-form-item v-if="teamMembers.length" :label="$t('Select Host')">
+                <el-select
+                    v-model="newBooking.host_user_id"
+                    :clearable="true"
+                    popper-class="fcal_select">
+                    <el-option v-for="member in teamMembers"
+                        :key="member.ID"
+                        :label="member.name"
+                        :value="member.ID">
+                    </el-option>
+                </el-select>
+                <span>{{ $t('NewBooking/host_selection_text') }}</span>
+            </el-form-item>
             <el-form-item :label="getTimezoneLabel">
                 <TimeZoneSelector v-model="newBooking.timezone"/>
             </el-form-item>
@@ -212,6 +225,7 @@ export default {
                 duration: '',
                 event_date: null,
                 event_time: '',
+                host_user_id: null,
                 source_url: window.location.href,
                 custom_fields: {},
                 status: 'scheduled'
@@ -219,7 +233,8 @@ export default {
             eventDate: null,
             eventYear: new Date().getFullYear(),
             eventMonth: new Date().getMonth(),
-            selectEventDate: false
+            selectEventDate: false,
+            teamMembers: []
         }
     },
     watch: {
@@ -227,24 +242,20 @@ export default {
             this.$emit('closeModal');
         },
         'ignoreAvailability': function () {
-            this.newBooking.event_date = null;
-            this.newBooking.event_time = '';
+            this.resetSelection();
         },
         'newBooking.event_id': function () {
-            this.newBooking.event_date = null;
-            this.newBooking.event_time = '';
+            this.fetchEvent();
+        },
+        'newBooking.host_user_id' : function () {
             this.fetchEvent();
         },
         'newBooking.timezone': function () {
-            this.newBooking.event_date = null;
-            this.newBooking.event_time = '';
             if (this.event?.id) {
                 this.fetchEvent();
             }
         },
         'newBooking.duration': function () {
-            this.newBooking.event_date = null;
-            this.newBooking.event_time = '';
             this.fetchEvent();
         },
         'newBooking.event_date': function () {
@@ -275,16 +286,19 @@ export default {
     methods: {
         fetchEvent() {
             this.loading = true;
+            this.resetSelection();
             this.$get('bookings/event', {
                 event_id: this.newBooking.event_id,
                 timezone: this.newBooking.timezone,
                 duration: this.newBooking.duration,
+                host_id:  this.newBooking.host_user_id,
                 start_date: this.dayjs(this.eventYear +'-'+ (this.eventMonth+1) + '-' + '01').format('YYYY-MM-DD HH:mm')
             })
                 .then(response => {
                     this.formFields = response.calendar_event.form_fields;
                     this.availableSlots = response.available_slots;
                     this.locationType = response.calendar_event.slot.location_settings[0].type;
+                    this.teamMembers = response.calendar_event?.team_member_profiles ?? [];
                     if (this.event?.id != response.calendar_event.slot.id) {
                         this.event = response.calendar_event.slot;
                         this.updateDurations();
@@ -311,6 +325,10 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        resetSelection() {
+            this.newBooking.event_date = null;
+            this.newBooking.event_time = '';
         },
         validateAndCreate() {
             if (!this.newBooking.name) {
