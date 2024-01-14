@@ -173,10 +173,32 @@ class BookingController extends Controller
             $bookingData['source_url'] = sanitize_url($sourceUrl);
         }
 
+        if ($hostUserId = Arr::get($postedData, 'host_user_id', null)) {
+            $bookingData['host_user_id'] = (int)$hostUserId;
+        }
+
+        $hostIds = null;
+        if ($calendarEvent->isTeamEvent() && !$hostUserId) {
+            $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
+            $bookingData['host_user_id'] = $hostIds[0];
+        }
+
         // Check if the time is available or not for this slot
         if (!Arr::isTrue($postedData, 'ignore_availability')) {
             $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+            $isSpotAvailable = false;
+            if ($hostIds) {
+                foreach ($hostIds as $hostId) {
+                    $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
+                    
+                    if ($isSpotAvailable) {
+                        $bookingData['host_user_id'] = $hostId;
+                        break;
+                    }
+                }
+            } else {
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
+            }
             
             if (!$isSpotAvailable) {
                 wp_send_json([
@@ -240,9 +262,11 @@ class BookingController extends Controller
         }
         
         $duration = $calendarEvent->getDuration($request->get('duration'));
+
+        $hostId = $request->get('host_id', null);
         
         $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
-        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
+        $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration, $hostId);
 
         if (is_wp_error($availableSpots)) {
             wp_send_json([
