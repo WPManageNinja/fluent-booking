@@ -615,15 +615,15 @@ class FrontEndHandler
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
-        $hostIds = null;
-        if ($calendarSlot->isTeamEvent()) {
-            $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
-        }
-        
         if ($additionalGuests) {
             $guestField = BookingFieldService::getBookingFieldByName($calendarSlot, 'guests');
             $guestLimit = Arr::get($guestField, 'limit', 10);
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
+        }
+
+        $hostIds = null;
+        if ($calendarSlot->isTeamEvent()) {
+            $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
         }
 
         // Check if the time is available or not for this slot

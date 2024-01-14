@@ -737,7 +737,7 @@ class CalendarSlot extends Model
 
     public function getWeeklySlots($hostId = null)
     {
-        if ($hostId) {
+        if ($hostId && !$this->isTeamCommonSchedule()) {
             $schedule = AvailabilityService::getDefaultSchedule($hostId);
             return $this->getProcessedWeeklySlots($schedule);
         }

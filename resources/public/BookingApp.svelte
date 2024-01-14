@@ -286,7 +286,7 @@
                                     {/if}
                                 {/if}
 
-                                {#if slot.total_payment }
+                                {#if !isFluentform && slot.total_payment }
                                     {@html slot.total_payment}
                                 {/if}
                                 {#if selectedDateTime.start}
