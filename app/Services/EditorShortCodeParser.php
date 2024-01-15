@@ -38,11 +38,10 @@ class EditorShortCodeParser
 
     protected static function setData($booking)
     {
-        $bookingEvent = $booking->calendar_event;
         static::$store['booking'] = $booking;
-        static::$store['booking_event'] = $bookingEvent;
+        static::$store['booking_event'] = $booking->calendar_event;
         static::$store['calendar'] = $booking->calendar;
-        static::$store['host'] = $bookingEvent->getAuthorProfile(false);
+        static::$store['host'] = $booking->getHostDetails(false);
         static::$store['custom_booking_data'] = null;
         static::$store['payment_order'] = null;
     }
@@ -170,8 +169,8 @@ class EditorShortCodeParser
         }
 
         if ($key == 'timezone') {
-            $calendar = static::$store['calendar'];
-            return $calendar->author_timezone;
+            $booking = static::$store['booking'];
+            return $booking->getHostTimezone();
         }
 
         return Arr::get($host, $key, '');
