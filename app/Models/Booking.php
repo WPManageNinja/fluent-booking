@@ -628,12 +628,14 @@ class Booking extends Model
     public function getHostTimezone()
     {
         if ($this->host_user_id) {
-            $authorTimezone = Calendar::where('user_id', $this->host_user_id)
+            $calendar = Calendar::where('user_id', $this->host_user_id)
                 ->where('type', '!=', 'team')
-                ->first()
-                ->value('author_timezone');
+                ->first();
 
-            return $authorTimezone ?? '';
+            if (!$calendar) {
+                return '';
+            }
+            return $calendar->author_timezone;
         }
         return '';
     }
