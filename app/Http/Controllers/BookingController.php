@@ -90,8 +90,12 @@ class BookingController extends Controller
             $messages['location_description.required'] = __("Please provide attendee's address", 'fluent-booking-pro');
         }
 
+        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
+            $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
+        }
+
         $requiredFields = array_filter($calendarEvent->getMeta('booking_fields', []), function ($field) {
-            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && Arr::get($field, 'name') == 'message';
+            return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
         });
 
         foreach ($requiredFields as $field) {
@@ -171,6 +175,12 @@ class BookingController extends Controller
 
         if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
+        }
+
+        if ($additionalGuests) {
+            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
+            $guestLimit = Arr::get($guestField, 'limit', 10);
+            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         if ($hostUserId = Arr::get($postedData, 'host_user_id', null)) {

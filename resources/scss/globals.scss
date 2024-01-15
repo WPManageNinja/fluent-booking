@@ -983,6 +983,17 @@
                             }
                         }
                     }
+                    .fcal_new_booking_guests {
+                        width: 100%;
+                        .fcal_new_booking_guest {
+                            display: flex;
+                            margin-bottom: 0.5rem;
+                            .el-icon {
+                                margin-left: 0.5rem;
+                                align-self: center;
+                            }
+                        }
+                    }
                     .fcal_new_booking_radio {
                         display: flex;
                         flex-direction: column;

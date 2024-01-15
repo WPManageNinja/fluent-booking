@@ -571,6 +571,7 @@ class TransStrings
             'Edit:'                                                                            => __('Edit:', 'fluent-booking-pro'),
             'Last 3 months'                                                                    => __('Last 3 months', 'fluent-booking-pro'),
             'booked a new meeting at'                                                          => __('booked a new meeting at', 'fluent-booking-pro'),
+            'Add guests'                                                                       => __('Add guests', 'fluent-booking-pro'),
             'guests with'                                                                      => __('guests with', 'fluent-booking-pro'),
             'as group booking type'                                                            => __('as group booking type', 'fluent-booking-pro'),
             'meeting between'                                                                  => __('meeting between', 'fluent-booking-pro'),
