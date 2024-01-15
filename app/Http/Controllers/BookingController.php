@@ -209,8 +209,11 @@ class BookingController extends Controller
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
 
+        $booking = array();
         try {
             $booking = BookingService::createBooking($bookingData, $calendarEvent, $customFieldsData);
+
+            do_action('fluent_booking/after_creating_schedule', $booking, $postedData, $calendarEvent);
         } catch (\Exception $e) {
             wp_send_json([
                 'message' => $e->getMessage()
