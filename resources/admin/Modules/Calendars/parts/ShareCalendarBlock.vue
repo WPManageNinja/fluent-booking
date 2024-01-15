@@ -11,7 +11,7 @@
                 <span class="fcal_slot_meta_mins">
                     <el-icon><Clock /></el-icon> {{ slot.duration }} {{ $t('minutes') }}
                 </span>
-                <span class="fcal_slog_meta_event">
+                <span class="fcal_slot_meta_event">
                     {{ eventType }}
                 </span>
             </p>
