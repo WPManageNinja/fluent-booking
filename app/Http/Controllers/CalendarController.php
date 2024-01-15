@@ -464,7 +464,11 @@ class CalendarController extends Controller
             'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),
         ];
 
+        do_action('fluent_booking/before_create_event', $calendar, $slotData);
+
         $createdSlot = CalendarSlot::create($slotData);
+
+        do_action('fluent_booking/after_create_event', $calendar, $slotData);
 
         return [
             'message' => __('New Event Type has been created successfully', 'fluent-booking-pro'),
@@ -549,6 +553,8 @@ class CalendarController extends Controller
         ];
 
         $event->save();
+
+        do_action('fluent_booking/after_update_event', $event);
 
         return [
             'message' => __('Data has been updated', 'fluent-booking-pro'),
