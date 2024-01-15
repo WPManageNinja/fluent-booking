@@ -468,7 +468,7 @@ class CalendarController extends Controller
 
         $createdSlot = CalendarSlot::create($slotData);
 
-        do_action('fluent_booking/after_create_event', $calendar, $slotData);
+        do_action('fluent_booking/after_create_event', $calendar, $createdSlot);
 
         return [
             'message' => __('New Event Type has been created successfully', 'fluent-booking-pro'),
