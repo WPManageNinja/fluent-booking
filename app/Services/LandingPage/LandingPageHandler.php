@@ -154,12 +154,13 @@ class LandingPageHandler
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
         }
 
+
         $assetUrl = App::getInstance('url.assets');
         $data = [
             'calendar'    => $calendar,
             'events'      => $activeEvents,
             'author'      => $authorProfile,
-            'title'       => $authorProfile['name'],
+            'title'       => $calendar->title .' - '.get_bloginfo('name'),
             'description' => $metaDescription,
             'url'         => home_url($wp->request),
             'css_files'   => [
