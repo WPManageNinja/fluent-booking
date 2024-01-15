@@ -73,7 +73,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'full_start_end_host_timezone') {
-            return $booking->getShortBookingDateTime($calendar->author_timezone) . ' (' . $calendar->author_timezone . ')';
+            return $booking->getShortBookingDateTime($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
         }
 
         if ($key == 'start_date_time') {
@@ -85,7 +85,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'start_date_time_for_host') {
-            return DateTimeHelper::convertFromUtc($booking->start_time, $calendar->author_timezone, 'Y-m-d H:i:s');
+            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->getHostTimezone(), 'Y-m-d H:i:s');
         }
 
         if ($key == 'cancel_reason') {
@@ -97,7 +97,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'previous_meeting_time') {
-            return $booking->getPreviousMeetingTime($calendar->author_timezone) . ' (' . $calendar->author_timezone . ')';
+            return $booking->getPreviousMeetingTime($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
         }
 
         if ($key == 'start_time_human_format') {
