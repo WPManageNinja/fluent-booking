@@ -220,7 +220,13 @@ class AdminMenuHandler
             }
         }
 
-        $calendarId = Calendar::where('user_id', $currentUser->ID)->where('type','!=','team')->first()->value('id');
+        $calendarId = null;
+
+        $firstCalendar = Calendar::where('user_id', $currentUser->ID)->where('type','!=','team')->first();
+
+        if($firstCalendar) {
+            $calendarId = $firstCalendar->id;
+        }
 
         $hasAllAccess = false;
         if (PermissionManager::hasAllCalendarAccess()) {
