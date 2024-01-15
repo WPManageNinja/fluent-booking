@@ -46,10 +46,13 @@
             </div>
             <p class="fcal_slot_meta">
                 <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} {{ $t('minutes') }}</span>
-                <span class="fcal_slog_meta_event">
-                    <span class="icons">
-                        <el-icon><User/></el-icon>
-                        <el-icon v-if="isTeam"><User/></el-icon>
+                <span class="fcal_slot_meta_event">
+                    <span class="icons" :class="isTeam ? 'round-robin-icons' : ''">
+                        <span class="left-icons">
+                            <el-icon><User/></el-icon>
+                            <el-icon v-if="isTeam"><User/></el-icon>
+                            <el-icon v-if="isTeam"><User/></el-icon>
+                        </span>
                         <el-icon><Right/></el-icon>
                         <span class="right">
                             <el-icon><User/></el-icon>
@@ -57,7 +60,7 @@
                         </span>
                     </span> {{ getEventType(slot.event_type) }}
                 </span>
-                <span v-if="slot.price_total" class="fcal_slog_meta_event">
+                <span v-if="slot.price_total" class="fcal_slot_meta_event">
                     <el-icon><CreditCard/></el-icon>
                     <span>{{currencyFormat(slot.price_total)}}</span>
                 </span>
