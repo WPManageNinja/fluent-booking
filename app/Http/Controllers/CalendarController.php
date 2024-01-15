@@ -108,7 +108,7 @@ class CalendarController extends Controller
             $user = get_user_by('ID', get_current_user_id());
         }
 
-        if(!$user) {
+        if (!$user) {
             return $this->sendError([
                 'message' => __('User not found', 'fluent-booking-pro')
             ], 422);
@@ -124,12 +124,17 @@ class CalendarController extends Controller
             ], 422);
         }
 
-        $userName = $user->user_login;
-        if (is_email($userName)) {
-            $userName = explode('@', $userName);
-            $userName = $userName[0] . '-' . time();
+        if (!$isTeam) {
+            $userName = $user->user_login;
+            if (is_email($userName)) {
+                $userName = explode('@', $userName);
+                $userName = $userName[0] . '-' . time();
+            }
+            $data['slug'] = sanitize_title($userName, '', 'display');
+        } else {
+            $data['slug'] = sanitize_title($title, '', 'display');
         }
-        $data['slug'] = sanitize_title($userName, '', 'display');
+
 
         if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
             $data['slug'] .= '-' . time();
@@ -149,10 +154,10 @@ class CalendarController extends Controller
             }
 
             $calendarData = [
-                'slug'    => $slug,
-                'user_id' => $user->ID,
-                'title'   => $isTeam ? $title : $personName,
-                'type'    => $isTeam ? 'team' : 'simple',
+                'slug'            => $slug,
+                'user_id'         => $user->ID,
+                'title'           => $isTeam ? $title : $personName,
+                'type'            => $isTeam ? 'team' : 'simple',
                 'author_timezone' => sanitize_text_field($data['author_timezone']) ?: 'UTC',
             ];
             $calendar = Calendar::create($calendarData);
@@ -389,7 +394,7 @@ class CalendarController extends Controller
         $availableSchedules = AvailabilityService::availabilitySchedules($slot->calendar->author_timezone);
 
         $scheduleOptions = AvailabilityService::getScheduleOptions();
-        
+
         return [
             'schedule_options'    => $scheduleOptions,
             'available_schedules' => $availableSchedules
@@ -545,7 +550,7 @@ class CalendarController extends Controller
                 'is_query_string' => Arr::get($data, 'custom_redirect.is_query_string') == 'yes' ? 'yes' : 'no',
                 'query_string'    => sanitize_text_field(Arr::get($data, 'custom_redirect.query_string')),
             ],
-            'multi_duration' => [
+            'multi_duration'  => [
                 'enabled'             => Arr::isTrue($data, 'multi_duration.enabled'),
                 'default_duration'    => Arr::get($data, 'multi_duration.default_duration', ''),
                 'available_durations' => array_map('sanitize_text_field', Arr::get($data, 'multi_duration.available_durations', []))
@@ -580,7 +585,7 @@ class CalendarController extends Controller
 
         $event->availability_id = (int)Arr::get($data, 'availability_id');
         $event->availability_type = SanitizeService::checkCollection(Arr::get($data, 'availability_type'), ['existing_schedule', 'custom']);
-        
+
         $event->save();
 
         return [
@@ -593,13 +598,13 @@ class CalendarController extends Controller
     {
         $data = $request->all();
 
-        $this->validate($data, 
+        $this->validate($data,
             ['team_members' => 'required'],
             ['team_members.required' => __('There should be at least one member', 'fluent-booking-pro')]
         );
 
         $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
-        
+
         $event->settings = [
             'team_members' => array_map('intval', Arr::get($data, 'team_members', []))
         ];
@@ -634,7 +639,7 @@ class CalendarController extends Controller
             'can_cancel'          => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
             'can_reschedule'      => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
-            
+
         $event->save();
 
         return [
@@ -667,7 +672,7 @@ class CalendarController extends Controller
         $originalEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($eventId);
 
         $clonedEvent = $originalEvent->replicate();
-        
+
         $clonedEvent->title = $originalEvent->title . ' (clone)';
 
         $clonedEvent->slug = Helper::generateSlotSlug($clonedEvent->duration . 'min', $calendar);
@@ -758,7 +763,7 @@ class CalendarController extends Controller
     public function saveEventBookingFields(Request $request, $calendarId, $eventId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
-        $currencySign  = CurrenciesHelper::getGlobalCurrencySign();
+        $currencySign = CurrenciesHelper::getGlobalCurrencySign();
 
         $bookingFields = $request->get('booking_fields');
 
