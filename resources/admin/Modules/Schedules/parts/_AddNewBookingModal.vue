@@ -127,6 +127,15 @@
             <el-form-item :label="$t('What is this meeting about?')">
                 <el-input v-model="newBooking.message" type="textarea" :rows="3"/>
             </el-form-item>
+            <el-form-item v-if="isMultiGuestEnabled" :label="multiGuestField.label + (multiGuestField.required ? ' *' : '')">
+                <div class="fcal_new_booking_guests">
+                    <div v-for="(guest, index) in newBooking.guests" class="fcal_new_booking_guest">
+                        <el-input v-model="newBooking.guests[index]" type="email"/>
+                        <el-icon v-if="isRemovable" @click="removeGuest(index)"><CloseBold/></el-icon>
+                    </div>
+                </div>
+                <div v-if="isAddable" @click="addNewGuest"> + {{ $t('Add guests') }}</div>
+            </el-form-item>
             <div v-for="field in formFields" :key="field.name">
                 <div v-if="field.enabled && !field.system_defined">
                     <el-form-item v-if="['text', 'email', 'phone'].includes(field.type)" :label="field.label + (field.required ? ' *' : '')">
@@ -146,6 +155,16 @@
                         <el-checkbox-group v-model="customFields[field.name]">
                             <el-checkbox v-for="option in field.options" :label="option"/>
                         </el-checkbox-group>
+                    </el-form-item>
+                    <el-form-item v-if="field.type === 'date'" :label="field.label + (field.required ? ' *' : '')">
+                        <el-date-picker
+                            v-model="customFields[field.name]"
+                            type="date"
+                            size="small"
+                            :placeholder="field.placeholder"
+                            :format="appVars.date_format"
+                            :value-format="appVars.date_format"
+                        />
                     </el-form-item>
                     <el-form-item v-if="field.type === 'dropdown'" :label="field.label + (field.required ? ' *' : '')">
                         <el-select
@@ -192,7 +211,7 @@
 </template>
 
 <script>
-import { ArrowRight, ArrowLeft } from '@element-plus/icons-vue';
+import { ArrowRight, ArrowLeft, CloseBold } from '@element-plus/icons-vue';
 import TimeZoneSelector from "@/Modules/Calendars/parts/TimeZoneSelector";
 export default {
     name: 'AddNewBookingModal',
@@ -201,7 +220,8 @@ export default {
     components: {
         ArrowLeft,
         ArrowRight,
-        TimeZoneSelector
+        TimeZoneSelector,
+        CloseBold
     },
     data() {
         return {
@@ -224,6 +244,7 @@ export default {
                 timezone: '',
                 duration: '',
                 event_date: null,
+                guests: [''],
                 event_time: '',
                 host_user_id: null,
                 source_url: window.location.href,
@@ -234,7 +255,8 @@ export default {
             eventYear: new Date().getFullYear(),
             eventMonth: new Date().getMonth(),
             selectEventDate: false,
-            teamMembers: []
+            teamMembers: [],
+            multiGuestField: []
         }
     },
     watch: {
@@ -282,6 +304,23 @@ export default {
                 return slot.remaining + ' ' + this.$t('spots left');
             }
         },
+        isAddable() {
+            const length = this.newBooking.guests.length;
+            return length < this.multiGuestField.limit && this.newBooking.guests[length - 1] != '';
+        },
+        isRemovable() {
+            return this.newBooking.guests.length > 1;
+        },
+        isMultiGuestEnabled() {
+            if (this.formFields.length) {
+                const multiGuestField = this.formFields.find(field => field.name === 'guests' && field.enabled);
+                if (multiGuestField) {
+                    this.multiGuestField = multiGuestField;
+                    return true;
+                }
+            }
+            return false;
+        }
     },
     methods: {
         fetchEvent() {
@@ -291,7 +330,8 @@ export default {
                 event_id: this.newBooking.event_id,
                 timezone: this.newBooking.timezone,
                 duration: this.newBooking.duration,
-                host_id:  this.newBooking.host_user_id,
+                host_id: this.newBooking.host_user_id,
+                guests: this.newBooking.guests,
                 start_date: this.dayjs(this.eventYear +'-'+ (this.eventMonth+1) + '-' + '01').format('YYYY-MM-DD HH:mm')
             })
                 .then(response => {
@@ -435,6 +475,12 @@ export default {
                 return lastDayOfNextMonth.getTime() > maxLookupDate.getTime();
             }
             return false;
+        },
+        addNewGuest() {
+            this.newBooking.guests.push('');
+        },
+        removeGuest(index) {
+            this.newBooking.guests.splice(index, 1);
         }
     }
 }
