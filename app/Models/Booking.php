@@ -625,6 +625,19 @@ class Booking extends Model
         return $data;
     }
 
+    public function getHostTimezone()
+    {
+        if ($this->host_user_id) {
+            $authorTimezone = Calendar::where('user_id', $this->host_user_id)
+                ->where('type', '!=', 'team')
+                ->first()
+                ->value('author_timezone');
+
+            return $authorTimezone ?? '';
+        }
+        return '';
+    }
+
     public function getAdditionalData($isHtml = false)
     {
         $customData = BookingFieldService::getFormattedCustomBookingData($this);
