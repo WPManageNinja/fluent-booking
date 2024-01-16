@@ -49,6 +49,7 @@ return array(
     'FluentBooking\\App\\Http\\Controllers\\ZoomController' => $baseDir . '/app/Http/Controllers/ZoomController.php',
     'FluentBooking\\App\\Http\\Policies\\AdminPolicy' => $baseDir . '/app/Http/Policies/AdminPolicy.php',
     'FluentBooking\\App\\Http\\Policies\\AvailabilityPolicy' => $baseDir . '/app/Http/Policies/AvailabilityPolicy.php',
+    'FluentBooking\\App\\Http\\Policies\\CalendarEventPolicy' => $baseDir . '/app/Http/Policies/CalendarEventPolicy.php',
     'FluentBooking\\App\\Http\\Policies\\CalendarPolicy' => $baseDir . '/app/Http/Policies/CalendarPolicy.php',
     'FluentBooking\\App\\Http\\Policies\\MeetingPolicy' => $baseDir . '/app/Http/Policies/MeetingPolicy.php',
     'FluentBooking\\App\\Http\\Policies\\PublicPolicy' => $baseDir . '/app/Http/Policies/PublicPolicy.php',
