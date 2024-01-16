@@ -22,8 +22,7 @@ class CalendarController extends Controller
     {
         do_action('fluent_booking/before_get_all_calendars', $request);
 
-        $permission = PermissionManager::userCan(['manage_other_calendars', 'read_other_calendars']);
-        if ($permission) {
+        if (PermissionManager::hasAllCalendarAccess(true)) {
             $calendars = Calendar::with(['slots'])->latest()->paginate();
         } else {
             $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
