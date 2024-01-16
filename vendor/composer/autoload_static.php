@@ -75,6 +75,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\App\\Http\\Controllers\\ZoomController' => __DIR__ . '/../..' . '/app/Http/Controllers/ZoomController.php',
         'FluentBooking\\App\\Http\\Policies\\AdminPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/AdminPolicy.php',
         'FluentBooking\\App\\Http\\Policies\\AvailabilityPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/AvailabilityPolicy.php',
+        'FluentBooking\\App\\Http\\Policies\\CalendarEventPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/CalendarEventPolicy.php',
         'FluentBooking\\App\\Http\\Policies\\CalendarPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/CalendarPolicy.php',
         'FluentBooking\\App\\Http\\Policies\\MeetingPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/MeetingPolicy.php',
         'FluentBooking\\App\\Http\\Policies\\PublicPolicy' => __DIR__ . '/../..' . '/app/Http/Policies/PublicPolicy.php',
