@@ -26,42 +26,42 @@ class AdminController extends Controller
 
         $search_term = sanitize_text_field($request->get('search'));
 
-        $args = array(
-            'role__not_in' => array('subscriber'),
+        $queryArgs = [
+            'role__not_in' => ['subscriber'],
             'number'       => 50,
-        );
+            'fields'       => ['ID', 'user_email', 'display_name'],
+            'search'       => '*' . $search_term . '*'
+        ];
 
-        if (is_email($search_term)) {
-            $args['search'] = '*' . $search_term . '*';
-        } else {
-            $search_fields = array(
-                'first_name',
-                'last_name',
-                'user_login',
-                'email',
-                'username',
-                'nickname',
-            );
-
-            $args['meta_query'] = array('relation' => 'OR');
-
-            foreach ($search_fields as $field) {
-                $args['meta_query'][] = array(
-                    'key'     => $field,
+        $metaQueryArgs = [
+            'role__not_in' => ['subscriber'],
+            'number'       => 50,
+            'fields'       => ['ID', 'user_email', 'display_name'],
+            'meta_query' => [
+                'relation' => 'OR',
+                [
+                    'key'     => 'first_name',
                     'value'   => $search_term,
-                    'compare' => 'LIKE',
-                );
-            }
-        }
+                    'compare' => 'LIKE'
+                ],
+                [
+                    'key'     => 'last_name',
+                    'value'   => $search_term,
+                    'compare' => 'LIKE'
+                ]
+            ],
+        ];
 
+        $metaQueryArgs = apply_filters('fluent_booking/user_search_meta_query_arguments', $metaQueryArgs, $search_term);
 
-        $users = get_users($args);
+        $queryResult = get_users($queryArgs);
+        $metaQueryResult = get_users($metaQueryArgs);
 
+        $users = array_unique(array_merge($queryResult, $metaQueryResult), SORT_REGULAR);
+        
         $hosts = [];
         $pushedIds = [];
-
         $calendarUserIds = Calendar::all()->pluck('user_id')->toArray();
-
         foreach ($users as $user) {
             $pushedIds[] = $user->ID;
             $hosts[] = [
