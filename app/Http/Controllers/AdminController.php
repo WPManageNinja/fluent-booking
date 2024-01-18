@@ -23,11 +23,37 @@ class AdminController extends Controller
                 ]
             ];
         }
+
+        $search_term = sanitize_text_field($request->get('search'));
+
         $args = array(
             'role__not_in' => array('subscriber'),
             'number'       => 50,
-            'search'       => '*' . sanitize_text_field($request->get('search')) . '*',
         );
+
+        if (is_email($search_term)) {
+            $args['search'] = '*' . $search_term . '*';
+        } else {
+            $search_fields = array(
+                'first_name',
+                'last_name',
+                'user_login',
+                'email',
+                'username',
+                'nickname',
+            );
+
+            $args['meta_query'] = array('relation' => 'OR');
+
+            foreach ($search_fields as $field) {
+                $args['meta_query'][] = array(
+                    'key'     => $field,
+                    'value'   => $search_term,
+                    'compare' => 'LIKE',
+                );
+            }
+        }
+
 
         $users = get_users($args);
 

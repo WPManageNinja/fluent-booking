@@ -258,7 +258,11 @@ class AvailabilityController extends Controller
             ], 422);
         }
 
+        do_action('fluent_booking/before_delete_availability_schedule', $schedule);
+
         $schedule->delete();
+
+        do_action('fluent_booking/after_delete_availability_schedule', $scheduleId);
 
         return [
             'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
