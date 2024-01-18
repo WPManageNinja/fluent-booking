@@ -211,7 +211,7 @@ class PermissionManager
 
         if ($calendar) {
             $user = wp_get_current_user();
-            $roles = (array)$user->roles;
+            $roles = array_values((array)$user->roles);
             return Arr::get($roles, 0);
         }
 
@@ -223,7 +223,7 @@ class PermissionManager
         }
 
         $user = wp_get_current_user();
-        $roles = (array)$user->roles;
+        $roles = array_values((array)$user->roles);
 
         return Arr::get($roles, 0);
     }
