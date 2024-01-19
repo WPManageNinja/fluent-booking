@@ -359,7 +359,7 @@ export default {
         fetchSettings() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id, {
-                calendar_id : this.calendar_id,
+                calendar_id: this.calendar_event.calendar_id,
                 with: ['smart_codes']
             })
                 .then(response => {

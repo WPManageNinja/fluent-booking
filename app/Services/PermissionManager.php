@@ -21,9 +21,13 @@ class PermissionManager
         ];
     }
 
-    public static function hasAllCalendarAccess()
+    public static function hasAllCalendarAccess($readAccess = false)
     {
-        $hasCalendarAccess = self::userCan('manage_own_calendar') && self::userCan('manage_other_calendars');
+        $hasCalendarAccess = self::userCan('manage_other_calendars');
+
+        if ($readAccess) {
+            $hasCalendarAccess = $hasCalendarAccess || self::userCan('read_other_calendars');
+        }
         
         return apply_filters('fluent_booking/has_all_calendar_access', current_user_can('manage_options')) || $hasCalendarAccess;
     }
@@ -207,7 +211,7 @@ class PermissionManager
 
         if ($calendar) {
             $user = wp_get_current_user();
-            $roles = (array)$user->roles;
+            $roles = array_values((array)$user->roles);
             return Arr::get($roles, 0);
         }
 
@@ -219,7 +223,7 @@ class PermissionManager
         }
 
         $user = wp_get_current_user();
-        $roles = (array)$user->roles;
+        $roles = array_values((array)$user->roles);
 
         return Arr::get($roles, 0);
     }

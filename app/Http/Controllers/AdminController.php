@@ -23,19 +23,45 @@ class AdminController extends Controller
                 ]
             ];
         }
-        $args = array(
-            'role__not_in' => array('subscriber'),
+
+        $search_term = sanitize_text_field($request->get('search'));
+
+        $queryArgs = [
+            'role__not_in' => ['subscriber'],
             'number'       => 50,
-            'search'       => '*' . sanitize_text_field($request->get('search')) . '*',
-        );
+            'fields'       => ['ID', 'user_email', 'display_name'],
+            'search'       => '*' . $search_term . '*'
+        ];
 
-        $users = get_users($args);
+        $metaQueryArgs = [
+            'role__not_in' => ['subscriber'],
+            'number'       => 50,
+            'fields'       => ['ID', 'user_email', 'display_name'],
+            'meta_query' => [
+                'relation' => 'OR',
+                [
+                    'key'     => 'first_name',
+                    'value'   => $search_term,
+                    'compare' => 'LIKE'
+                ],
+                [
+                    'key'     => 'last_name',
+                    'value'   => $search_term,
+                    'compare' => 'LIKE'
+                ]
+            ],
+        ];
 
+        $metaQueryArgs = apply_filters('fluent_booking/user_search_meta_query_arguments', $metaQueryArgs, $search_term);
+
+        $queryResult = get_users($queryArgs);
+        $metaQueryResult = get_users($metaQueryArgs);
+
+        $users = array_unique(array_merge($queryResult, $metaQueryResult), SORT_REGULAR);
+        
         $hosts = [];
         $pushedIds = [];
-
         $calendarUserIds = Calendar::all()->pluck('user_id')->toArray();
-
         foreach ($users as $user) {
             $pushedIds[] = $user->ID;
             $hosts[] = [
