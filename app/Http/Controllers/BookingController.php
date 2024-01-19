@@ -90,8 +90,8 @@ class BookingController extends Controller
             $messages['location_description.required'] = __("Please provide attendee's address", 'fluent-booking-pro');
         }
 
-        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
-            $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
+        if ($additionalGuests = array_filter(Arr::get($postedData, 'guests', []))) {
+            $postedData['guests'] = array_map('sanitize_email', $additionalGuests);
         }
 
         $requiredFields = array_filter($calendarEvent->getMeta('booking_fields', []), function ($field) {
@@ -219,7 +219,6 @@ class BookingController extends Controller
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
 
-        $booking = array();
         try {
             $booking = BookingService::createBooking($bookingData, $calendarEvent, $customFieldsData);
 

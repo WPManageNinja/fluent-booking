@@ -29,7 +29,7 @@ class CalendarService
     public static function getCalendarOptionsByHost()
     {
         $calendars = Calendar::select(['id', 'title'])
-            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+            ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
             })
             ->with(['slots'])
@@ -61,7 +61,7 @@ class CalendarService
     public static function getCalendarOptionsByTitle()
     {
         $calendars = Calendar::select(['id', 'title'])
-            ->when(!PermissionManager::hasAllCalendarAccess(), function ($query) {
+            ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
             })
             ->with(['slots'])
