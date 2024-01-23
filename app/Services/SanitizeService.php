@@ -45,7 +45,6 @@ class SanitizeService
 
     public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $event = false)
     {
-
         $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $validOverrides = [];
