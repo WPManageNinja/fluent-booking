@@ -288,7 +288,7 @@ class AvailabilityService
     }
 
     public static function getUtcDateOverrides($overrides, $fromTimeZone = false, $toTimeZone = 'UTC')
-    {        
+    {
         if (!$overrides) {
             return [];
         }
@@ -308,7 +308,7 @@ class AvailabilityService
 
             $nextDayIndex = 0;
             foreach ($slots as $index => $slot) {
-                if (empty($slot['start']) || empty($slot['end'])) {
+                if (empty($slot['start']) || empty($slot['end']) || $slot['start'] == $slot['end']) {
                     unset($slots[$index]);
                     continue;
                 }
@@ -393,5 +393,57 @@ class AvailabilityService
         }
 
         return $validOverrides;
+    }
+
+    public static function getDateOverrideDays($overrides, $fromTimeZone, $toTimeZone = 'UTC')
+    {
+        if (!$overrides || !$fromTimeZone || !$toTimeZone) {
+            return [];
+        }
+
+        $overrideDays = [];
+        foreach ($overrides as $date => $slots) {
+            $dayStart = gmdate('Y-m-d 00:00:00', strtotime($date));
+            $dayEnd   = gmdate('Y-m-d 24:00:00', strtotime($date));
+
+            $convertedStart = DateTimeHelper::convertToTimeZone($dayStart, $fromTimeZone, $toTimeZone);
+            $convertedEnd   = DateTimeHelper::convertToTimeZone($dayEnd, $fromTimeZone, $toTimeZone);
+
+            $startDate = gmdate('Y-m-d', strtotime($convertedStart));
+            $endDate   = gmdate('Y-m-d', strtotime($convertedEnd));
+
+            if (strtotime($dayStart) == strtotime($convertedStart)) {
+                $overrideDays[$startDate] = [
+                    'start' => gmdate('H:i', strtotime($dayStart)),
+                    'end'   => gmdate('H:i', strtotime($dayEnd))
+                ];
+                continue;
+            }
+
+            if (isset($overrideDays[$startDate])) {
+                $overrideDays[$startDate] = [
+                    'start' =>'00:00',
+                    'end'   =>'24:00'
+                ];
+            } else {
+                $overrideDays[$startDate] = [
+                    'start' => gmdate('H:i', strtotime($convertedStart)),
+                    'end'   => '24:00'
+                ];
+            }
+
+            if (isset($overrideDays[$endDate])) {
+                $overrideDays[$endDate] = [
+                    'start' => '00:00',
+                    'end'   => '24:00'
+                ];
+            } else {
+                $overrideDays[$endDate] = [
+                    'start' => '00:00',
+                    'end'   => gmdate('H:i', strtotime($convertedEnd))
+                ];
+            }
+        }
+        return $overrideDays;
     }
 }
