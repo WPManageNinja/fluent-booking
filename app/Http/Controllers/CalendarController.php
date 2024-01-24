@@ -360,7 +360,9 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
+        $userCalendarId = $calendar->type != 'team' ? $calendarId : null;
+        
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($userCalendarId);
 
         $schema = [
             'title'             => '',
