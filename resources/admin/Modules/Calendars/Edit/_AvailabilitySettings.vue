@@ -57,11 +57,11 @@
                                             :no-data-text="$t('No Data')"
                                         >
                                             <el-option-group
-                                                v-for="schedulesHosts in scheduleOptions"
-                                                    :key="schedulesHosts.hostName"
-                                                    :label="schedulesHosts.hostName">
+                                                v-for="(schedulesHosts, host) in scheduleOptions"
+                                                    :key="host"
+                                                    :label="host">
                                                     <el-option
-                                                        v-for="schedule in schedulesHosts.schedules"
+                                                        v-for="schedule in schedulesHosts"
                                                         :key="schedule.value"
                                                         :label="schedule.label"
                                                         :value="schedule.value">

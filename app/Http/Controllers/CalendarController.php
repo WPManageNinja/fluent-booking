@@ -836,8 +836,11 @@ class CalendarController extends Controller
     public function deleteCalendar(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
+
         do_action('fluent_booking/before_delete_calendar', $calendar);
+
         $calendar->delete();
+        
         do_action('fluent_booking/after_delete_calendar', $calendarId);
 
         return [
