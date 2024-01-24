@@ -12,7 +12,7 @@ class AvailabilityService
 {
     public static function availabilitySchedules($toTimezone)
     {
-        $availabilities = Availability::where('object_type', 'availability')->get();
+        $availabilities = Availability::get();
 
         $formattedSchedules = [];
 
@@ -60,8 +60,7 @@ class AvailabilityService
             return false;
         }
 
-        $scheduleTitles = Availability::where('object_type', 'availability')
-            ->where('object_id', $userId)
+        $scheduleTitles = Availability::where('object_id', $userId)
             ->pluck('key')
             ->toArray();
 
@@ -74,8 +73,7 @@ class AvailabilityService
 
     public static function updateOtherDefaultStatus($schedule, $id)
     {
-        $schedules = Availability::where('object_type', 'availability')
-            ->where('object_id', $schedule->object_id)
+        $schedules = Availability::where('object_id', $schedule->object_id)
             ->where('id', '!=', $id)
             ->get();
 
@@ -95,36 +93,31 @@ class AvailabilityService
 
     public static function getScheduleOptions()
     {
-        $calendars = Calendar::with(['user'])->where('type', '!=', 'team')->get();
+        $availabilities = Availability::get();
 
         $scheduleOptions = [];
+        foreach ($availabilities as $availability) {
+            $calendar = Calendar::with(['user'])
+                ->where('type', '!=', 'team')
+                ->where('user_id', $availability->object_id)
+                ->first();
 
-        foreach ($calendars as $index => $calendar) {
-            $availabilities = Availability::where('object_type', 'availability')
-                ->where('object_id', $calendar->user_id)
-                ->get()
-                ->toArray();
-
-            $options = [];
-            foreach ($availabilities as $availability) {
-                $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
-                $options[] = [
-                    'label' => Arr::get($availability, 'key') . $default,
-                    'value' => Arr::get($availability, 'id')
-                ];
+            if ($calendar) {
+                $hostName = $calendar->user->full_name;
+                if ($calendar->user_id == get_current_user_id()) {
+                    $hostName = __('My Schedules', 'fluent-booking-pro');
+                }
+            } else {
+                $hostName = __('Deleted User', 'fluent-booking-pro');
             }
-
-            $hostName = $calendar->user->full_name;
-            if ($calendar->user_id == get_current_user_id()) {
-                $hostName = __('My Schedules', 'fluent-booking-pro');
-            }
-
-            if (!empty($options)) {
-                $scheduleOptions[$index] = [
-                    'hostName'  => $hostName,
-                    'schedules' => $options
-                ];
-            }
+            
+            $scheduleOptions[$hostName] = $scheduleOptions[$hostName] ?? [];
+            
+            $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
+            $scheduleOptions[$hostName][] = [
+                'label' => Arr::get($availability, 'key') . $default,
+                'value' => Arr::get($availability, 'id')
+            ];
         }
 
         return apply_filters('fluent_booking/availability_schedule_options', $scheduleOptions);
