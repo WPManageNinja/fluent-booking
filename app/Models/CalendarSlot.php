@@ -192,8 +192,10 @@ class CalendarSlot extends Model
         return false;
     }
 
-    public function getSlotSettingsSchema()
+    public function getSlotSettingsSchema($calendarId = null)
     {
+        $calendarEvent = $calendarId ? CalendarSlot::where('calendar_id', $calendarId)->first() : null;
+
         return [
             'schedule_type'       => 'weekly_schedules',
             'weekly_schedules'    => Helper::getWeeklyScheduleSchema(),
@@ -205,7 +207,7 @@ class CalendarSlot extends Model
                 'value' => 4,
                 'unit'  => 'hours'
             ],
-            'location_fields'     => $this->getLocationFields()
+            'location_fields'     => $this->getLocationFields($calendarEvent)
         ];
     }
 
@@ -502,7 +504,7 @@ class CalendarSlot extends Model
         return $exist;
     }
 
-    public function getLocationFields()
+    public function getLocationFields($calendarEvent = null)
     {
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
@@ -547,7 +549,7 @@ class CalendarSlot extends Model
                     ],
                 ],
             ],
-        ], $this);
+        ], $calendarEvent ?: $this);
     }
 
     public function defaultPaymentIcon($currency, $amount)

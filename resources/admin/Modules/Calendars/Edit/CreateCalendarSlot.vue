@@ -130,7 +130,7 @@ export default {
         },
     },
     mounted() {
-        this.$changeTitle(this.$t('Create new Event Type'));
+        this.$changeTitle(this.$t('Create New Event Type'));
         this.getEventSchema();
     }
 }
