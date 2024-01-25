@@ -286,14 +286,14 @@
                         <span>{getDateTimeStringI18(year, 'mNumber')}</span></h3>
                 </div>
                 <div class="calendar_nav">
-                    <button aria-label="Previous Month" type="button" class:fcal_nav_active={!prevDisabled}
+                    <button aria-label="Previous Month" type="button" class="{prevDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}"
                             on:click={()=>prev()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
                                   d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                         </svg>
                     </button>
-                    <button aria-label="Next Month" type="button" class:fcal_nav_active={!nextDisabled}
+                    <button aria-label="Next Month" type="button" class="{nextDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}"
                             on:click={()=>next()}>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                             <path fill="currentColor"
@@ -322,25 +322,27 @@
             <div class="fcal_slot_picker_header">
                 <div aria-label="Back to Date Selection" class="fcal_back" on:keypress="{(e) => {selectedDate = false}}"
                      on:click={resetSelection}>
-                    <i class="fcal_svg">
+                    <button type="button" class="fcal_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                              viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z"/>
                             <path
                                 d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
                         </svg>
-                    </i>
+                    </button>
                 </div>
                 <span class="fcal_slot_date_info">{ dateTimeI18(selectedDate, 'ddd') }
                     <span>{getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span></span>
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
-                        <input type="radio" id="12_hours_selector" bind:group={formatHours} value="12"/>
-                        <label for="12_hours_selector">{i18('12h')}</label>
+                        <button type="button" class="{formatHours === '12' ? 'active' : ''}" on:click={() => formatHours = '12'}>
+                            {i18('12h')}
+                        </button>
                     </div>
                     <div class="format-hour">
-                        <input type="radio" id="24_hours_selector" bind:group={formatHours} value="24"/>
-                        <label for="24_hours_selector">{i18('24h')}</label>
+                        <button type="button" class="{formatHours === '24' ? 'active' : ''}" on:click={() => formatHours = '24'}>
+                            {i18('24h')}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -365,14 +367,14 @@
                             {#if selectedDateTime && selectedDateTime.start == day.start}
                                 {#if isFluentform}
                                         <span class="fcal_spot_confirm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="60px"
-                                                 height="60px"><path
-                                                d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="60px" height="60px">
+                                                <path d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z"/>
+                                            </svg>
                                         </span>
                                 {:else }
-                                    <div aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
+                                    <button type="button" aria-label="Confirm Time" on:keypress="{(e) => {selectedDateTime = day}}"
                                          on:click={slotSpotConfirmed} class="fcal_spot_confirm"> {i18('Next')}
-                                    </div>
+                                    </button>
                                 {/if}
                             {/if}
                         </div>
