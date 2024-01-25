@@ -1830,7 +1830,7 @@ class Helper
                 'auto_complete_timing'   => '60',
                 'default_phone_country'  => ''
             ],
-            'time_format'    => '24',
+            'time_format'    => '12',
             'theme'          => 'system-default'
         ];
 
