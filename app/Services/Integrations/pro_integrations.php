@@ -113,7 +113,6 @@ add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items,
     return $items;
 }, 1, 2);
 
-
 add_action('init', function () {
 // Woo Integration
     if (defined('WC_PLUGIN_FILE')) {
