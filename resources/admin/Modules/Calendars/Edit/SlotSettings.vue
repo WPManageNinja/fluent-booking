@@ -49,7 +49,7 @@ import EventIcon from '../../../Components/Icons/EventIcon';
 import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import {Clock, Link, Message, Notification, Share, Money, Connection} from '@element-plus/icons-vue';
+import { Clock, Link, Message, Notification, Share, Money, Connection } from '@element-plus/icons-vue';
 import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {

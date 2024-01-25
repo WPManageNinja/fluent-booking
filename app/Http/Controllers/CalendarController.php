@@ -360,7 +360,9 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema();
+        $userCalendarId = $calendar->type != 'team' ? $calendarId : null;
+        
+        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($userCalendarId);
 
         $schema = [
             'title'             => '',
@@ -836,8 +838,11 @@ class CalendarController extends Controller
     public function deleteCalendar(Request $request, $calendarId)
     {
         $calendar = Calendar::findOrFail($calendarId);
+
         do_action('fluent_booking/before_delete_calendar', $calendar);
+
         $calendar->delete();
+        
         do_action('fluent_booking/after_delete_calendar', $calendarId);
 
         return [

@@ -45,19 +45,24 @@ class TimeSlotService
 
         $todayDate = gmdate('Y-m-d');
 
-        $overrides = $this->calendarSlot->getDateOverrides($hostId);
+        $dateOverrides = $this->calendarSlot->getDateOverrides($hostId);
+        $overrideSlots = $dateOverrides[0];
+        $overrideDays  = $dateOverrides[1];
 
         $rangedValidSlots = [];
 
         foreach ($ranges as $date) {
-            if ($overrides && isset($overrides[$date])) {
-                $availableSlots = $this->convertSlotSetsToFlat($overrides[$date], $duration);
-            } else {
-                $day = strtolower(gmdate('D', strtotime($date))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                if (empty($daySlots[$day])) {
-                    continue;
-                }
-                $availableSlots = $daySlots[$day];
+            $day = strtolower(gmdate('D', strtotime($date))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $availableSlots = $daySlots[$day] ?? [];
+
+            if ($overrideDays && isset($overrideDays[$date])) {
+                $availableSlots = $this->removeOverrideSlots($availableSlots, $overrideDays[$date], $hostId);
+            }
+            
+            if ($overrideSlots && isset($overrideSlots[$date])) {
+                $flatOverrideSlots = $this->convertSlotSetsToFlat($overrideSlots[$date], $duration);
+                $availableSlots = array_merge($availableSlots, $flatOverrideSlots);
+                $availableSlots = $this->maybeSortDaySlots($availableSlots, true);
             }
 
             if (!$availableSlots) {
@@ -420,6 +425,36 @@ class TimeSlotService
         return $this->maybeSortDaySlots($formattedSlots);
     }
 
+    protected function removeOverrideSlots($availableSlots, $overrideDay, $hostId = null)
+    {
+        if (!$availableSlots || !$overrideDay) {
+            return $availableSlots;
+        }
+
+        if ($this->calendarSlot->isRoundRobinDefaultSchedule($hostId)) {
+            $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay) {
+                foreach ($overrideDay as $times) {
+                    $startTime = strtotime($times['start']);
+                    $endTime = strtotime($times['end']);
+                    if (strtotime($slot) < $startTime || strtotime($slot) >= $endTime) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            return $filteredSlots;
+        }
+        
+        $startTime = strtotime($overrideDay['start']);
+        $endTime   = strtotime($overrideDay['end']);
+
+        $filteredSlots = array_filter($availableSlots, function ($slot) use ($startTime, $endTime) {
+            return strtotime($slot) < $startTime || strtotime($slot) >= $endTime;
+        });
+
+        return $filteredSlots;
+    }
+
     public function getAvailableSpots($startDate, $timeZone = 'UTC', $duration = null, $hostId = null)
     {
         $slot     = $this->calendarSlot;
@@ -775,9 +810,9 @@ class TimeSlotService
             ->sum('slot_minutes');
     }
 
-    protected function maybeSortDaySlots($daySlots)
+    protected function maybeSortDaySlots($daySlots, $forceSort = false)
     {
-        if (!$this->calendarSlot->isTeamDefaultSchedule()) {
+        if (!$forceSort && !$this->calendarSlot->isTeamDefaultSchedule()) {
             return $daySlots;
         }
 
@@ -792,7 +827,7 @@ class TimeSlotService
 
     protected function maybeMergedBookedSlots($dateRange, $hostId = null, $isDoingBooking = false)
     {
-        if (!$hostId && $this->calendarSlot->isRoundRobin() && $this->calendarSlot->isTeamCommonSchedule()) {
+        if ($this->calendarSlot->isRoundRobinCommonSchedule($hostId)) {
             $allBookedSlots = [];
             $hostIds = $this->calendarSlot->getHostIds();
             foreach ($hostIds as $id) {
@@ -804,7 +839,7 @@ class TimeSlotService
             foreach ($allBookedSlots as $index => $bookedSlots) {
                 foreach ($bookedSlots as $date => $slots) {
                     foreach ($slots as $slot) {
-                        if (isset($selectedSlots[$slot['start']]) && $selectedSlots[$slot['start']] == $slot['end']) {
+                        if (($selectedSlots[$slot['start']] ?? null) == $slot['end']) {
                             continue;
                         }
                         $booked = 1;
@@ -818,7 +853,9 @@ class TimeSlotService
                                 break;
                             }
                             foreach ($otherBookedSlots[$date] as $otherSlot) {
-                                if ($start >= strtotime($otherSlot['start']) && $end <= strtotime($otherSlot['end'])) {
+                                $startTime = strtotime($otherSlot['start']);
+                                $endTime = strtotime($otherSlot['end']);
+                                if ($start >= $startTime && $end <= $endTime) {
                                     $booked++;
                                     break;
                                 }

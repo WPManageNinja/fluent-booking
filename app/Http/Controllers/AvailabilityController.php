@@ -167,8 +167,6 @@ class AvailabilityController extends Controller
 
     public function updateSchedule(Request $request, $scheduleId)
     {
-        $userId = get_current_user_id();
-
         $schedule = Availability::findOrFail($scheduleId);
 
         $timezone = Arr::get($schedule, 'value.timezone');
@@ -242,12 +240,19 @@ class AvailabilityController extends Controller
     {
         $schedule = Availability::findOrFail($scheduleId);
 
+        if (!$schedule) {
+            return;
+        }
+
         $isDefault = Arr::isTrue($schedule, 'value.default');
 
         if ($isDefault) {
-            return $this->sendError([
-                'message' => __('Default Schedule can not be deleted', 'fluent-booking-pro')
-            ], 422);
+            $calendar = Calendar::where('user_id', $schedule->object_id)->first();
+            if ($calendar) {
+                return $this->sendError([
+                    'message' => __('Default Schedule can not be deleted', 'fluent-booking-pro')
+                ], 422);
+            }
         }
 
         $usageCount = AvailabilityService::getAvailabilityUsageCount($scheduleId);
@@ -258,7 +263,11 @@ class AvailabilityController extends Controller
             ], 422);
         }
 
+        do_action('fluent_booking/before_delete_availability_schedule', $schedule);
+
         $schedule->delete();
+
+        do_action('fluent_booking/after_delete_availability_schedule', $scheduleId);
 
         return [
             'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
