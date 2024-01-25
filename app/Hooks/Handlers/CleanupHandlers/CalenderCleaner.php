@@ -46,9 +46,12 @@ class CalenderCleaner
                         return $memberId != $calendar->user_id;
                     });
                     $event->settings = [
-                        'team_members' => $updatedTeamMembers ?: [(int)$event->user_id]
+                        'team_members' => array_values($updatedTeamMembers) ?: [(int)$event->user_id]
                     ];
                     $event->save();
+
+                    Booking::query()->where('event_id', $event->id)
+                        ->where('host_user_id', $calendar->user_id)->delete();
                 }
             }
         }
