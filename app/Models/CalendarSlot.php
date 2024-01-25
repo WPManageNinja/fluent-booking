@@ -148,7 +148,10 @@ class CalendarSlot extends Model
         $teamMemberIds = $this->getHostIds();
 
         foreach ($teamMemberIds as $teamMemberId) {
-            $teamMembers[] = $this->getAuthorProfile($public, $teamMemberId);
+            $calendar = Calendar::where('user_id', $teamMemberId)->where('type', '!=', 'team')->first();
+            if ($calendar) {
+                $teamMembers[] = $calendar->getAuthorProfile($public);
+            }
         }
 
         return $teamMembers;
