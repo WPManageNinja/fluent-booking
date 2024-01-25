@@ -12,7 +12,7 @@ class AvailabilityService
 {
     public static function availabilitySchedules($toTimezone)
     {
-        $availabilities = Availability::where('object_type', 'availability')->get();
+        $availabilities = Availability::get();
 
         $formattedSchedules = [];
 
@@ -60,8 +60,7 @@ class AvailabilityService
             return false;
         }
 
-        $scheduleTitles = Availability::where('object_type', 'availability')
-            ->where('object_id', $userId)
+        $scheduleTitles = Availability::where('object_id', $userId)
             ->pluck('key')
             ->toArray();
 
@@ -74,8 +73,7 @@ class AvailabilityService
 
     public static function updateOtherDefaultStatus($schedule, $id)
     {
-        $schedules = Availability::where('object_type', 'availability')
-            ->where('object_id', $schedule->object_id)
+        $schedules = Availability::where('object_id', $schedule->object_id)
             ->where('id', '!=', $id)
             ->get();
 
@@ -95,36 +93,31 @@ class AvailabilityService
 
     public static function getScheduleOptions()
     {
-        $calendars = Calendar::with(['user'])->where('type', '!=', 'team')->get();
+        $availabilities = Availability::get();
 
         $scheduleOptions = [];
+        foreach ($availabilities as $availability) {
+            $calendar = Calendar::with(['user'])
+                ->where('type', '!=', 'team')
+                ->where('user_id', $availability->object_id)
+                ->first();
 
-        foreach ($calendars as $index => $calendar) {
-            $availabilities = Availability::where('object_type', 'availability')
-                ->where('object_id', $calendar->user_id)
-                ->get()
-                ->toArray();
-
-            $options = [];
-            foreach ($availabilities as $availability) {
-                $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
-                $options[] = [
-                    'label' => Arr::get($availability, 'key') . $default,
-                    'value' => Arr::get($availability, 'id')
-                ];
+            if ($calendar) {
+                $hostName = $calendar->user->full_name;
+                if ($calendar->user_id == get_current_user_id()) {
+                    $hostName = __('My Schedules', 'fluent-booking-pro');
+                }
+            } else {
+                $hostName = __('Deleted User', 'fluent-booking-pro');
             }
-
-            $hostName = $calendar->user->full_name;
-            if ($calendar->user_id == get_current_user_id()) {
-                $hostName = __('My Schedules', 'fluent-booking-pro');
-            }
-
-            if (!empty($options)) {
-                $scheduleOptions[$index] = [
-                    'hostName'  => $hostName,
-                    'schedules' => $options
-                ];
-            }
+            
+            $scheduleOptions[$hostName] = $scheduleOptions[$hostName] ?? [];
+            
+            $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
+            $scheduleOptions[$hostName][] = [
+                'label' => Arr::get($availability, 'key') . $default,
+                'value' => Arr::get($availability, 'id')
+            ];
         }
 
         return apply_filters('fluent_booking/availability_schedule_options', $scheduleOptions);
@@ -288,7 +281,7 @@ class AvailabilityService
     }
 
     public static function getUtcDateOverrides($overrides, $fromTimeZone = false, $toTimeZone = 'UTC')
-    {        
+    {
         if (!$overrides) {
             return [];
         }
@@ -308,7 +301,7 @@ class AvailabilityService
 
             $nextDayIndex = 0;
             foreach ($slots as $index => $slot) {
-                if (empty($slot['start']) || empty($slot['end'])) {
+                if (empty($slot['start']) || empty($slot['end']) || $slot['start'] == $slot['end']) {
                     unset($slots[$index]);
                     continue;
                 }
@@ -393,5 +386,57 @@ class AvailabilityService
         }
 
         return $validOverrides;
+    }
+
+    public static function getDateOverrideDays($overrides, $fromTimeZone, $toTimeZone = 'UTC')
+    {
+        if (!$overrides || !$fromTimeZone || !$toTimeZone) {
+            return [];
+        }
+
+        $overrideDays = [];
+        foreach ($overrides as $date => $slots) {
+            $dayStart = gmdate('Y-m-d 00:00:00', strtotime($date));
+            $dayEnd   = gmdate('Y-m-d 24:00:00', strtotime($date));
+
+            $convertedStart = DateTimeHelper::convertToTimeZone($dayStart, $fromTimeZone, $toTimeZone);
+            $convertedEnd   = DateTimeHelper::convertToTimeZone($dayEnd, $fromTimeZone, $toTimeZone);
+
+            $startDate = gmdate('Y-m-d', strtotime($convertedStart));
+            $endDate   = gmdate('Y-m-d', strtotime($convertedEnd));
+
+            if (strtotime($dayStart) == strtotime($convertedStart)) {
+                $overrideDays[$startDate] = [
+                    'start' => gmdate('H:i', strtotime($dayStart)),
+                    'end'   => gmdate('H:i', strtotime($dayEnd))
+                ];
+                continue;
+            }
+
+            if (isset($overrideDays[$startDate])) {
+                $overrideDays[$startDate] = [
+                    'start' =>'00:00',
+                    'end'   =>'24:00'
+                ];
+            } else {
+                $overrideDays[$startDate] = [
+                    'start' => gmdate('H:i', strtotime($convertedStart)),
+                    'end'   => '24:00'
+                ];
+            }
+
+            if (isset($overrideDays[$endDate])) {
+                $overrideDays[$endDate] = [
+                    'start' => '00:00',
+                    'end'   => '24:00'
+                ];
+            } else {
+                $overrideDays[$endDate] = [
+                    'start' => '00:00',
+                    'end'   => gmdate('H:i', strtotime($convertedEnd))
+                ];
+            }
+        }
+        return $overrideDays;
     }
 }
