@@ -71,7 +71,7 @@ export default {
             if(this.showing_id) {
                 return guestName;
             }
-            return '<b>' + this.booking?.calendar_event.title +'</b> ' + this.$t('meeting between') + ' ' + guestName + ' & '+ this.booking.author.name;
+            return '<b>' + this.booking?.calendar_event?.title +'</b> ' + this.$t('meeting between') + ' ' + guestName + ' & '+ this.booking.author.name;
         },
         currentStatus() {
             const statusLabels = {
