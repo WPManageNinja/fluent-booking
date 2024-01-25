@@ -17,11 +17,7 @@ class CalenderEventCleaner
             return;
         }
 
-        $bookings = Booking::query()->where('event_id', $calendarEvent->id)
-            ->when($calendar, function ($query, $booking) {
-                $query->where('calendar_id', $booking->id);
-            })
-            ->get();
+        $bookings = Booking::query()->where('event_id', $calendarEvent->id)->get();
 
         foreach ($bookings as $booking){
             do_action('fluent_booking/before_delete_booking', $booking);
