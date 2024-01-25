@@ -25,4 +25,4 @@ require __DIR__ . '/vendor/autoload.php';
 
 call_user_func(function ($bootstrap) {
     $bootstrap(__FILE__);
-}, require(__DIR__ . '/boot/fluent_app.php'));
+}, require(__DIR__ . '/boot/app.php'));
