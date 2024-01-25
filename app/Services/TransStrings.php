@@ -577,7 +577,7 @@ class TransStrings
             'meeting between'                                                                  => __('meeting between', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/description'                                              => __('All connected zoom accounts by you and your team members. You can review who connected their zoom account from Host Settings and manage from here for all of your team members.', 'fluent-booking-pro'),
             'Please read the documentation'                                                    => __('Please read the documentation', 'fluent-booking-pro'),
-            'Read the documentation'                                                           -> __('Read the documentation'),
+            'Read the documentation'                                                           => __('Read the documentation'),
             'ZoomIntegrationSettings/sub_description'                                          => __('for step by step guide to know how connect zoom account.', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/didnot_connect_zoom_desc'                                 => __('Looks like you did not connect FluentBooking with your Zoom Account yet!', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/connect_zoom_desc'                                        => __('Connect your Zoom account to create dynamic meeting in zoom for your bookings.', 'fluent-booking-pro'),
