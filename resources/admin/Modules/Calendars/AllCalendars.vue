@@ -103,7 +103,7 @@
             :zIndex="999"
             label-position="top"
             modal-class="fcal_drawer">
-            <div class="fcal_create_new_booking_type_drawer">
+            <div v-if="appVars.has_pro" class="fcal_create_new_booking_type_drawer">
                 <el-form-item :label="$t('Team Name')">
                     <el-input
                         v-model="team_name"
@@ -130,6 +130,12 @@
                         </el-icon>
                     </div>
                 </el-button>
+            </div>
+            <div v-else>
+                <p class="fcal_need_pro">{{ $t('Team') + ' ' + $t('Need Pro Version')}}</p>
+                <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_primary_btn">
+                    {{$t('Upgrade to Pro')}}
+                </a>
             </div>
         </el-drawer>
     </div>

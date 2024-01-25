@@ -714,7 +714,8 @@ class TransStrings
             'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro'),
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
-            'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability')
+            'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability'),
+            'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.')
         );
 
     }
