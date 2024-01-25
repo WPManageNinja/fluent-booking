@@ -1893,7 +1893,7 @@ msgstr "Désactiver la fonctionnalité de la page d'atterrissage"
 
 #: app/Services/TransStrings.php:243
 msgid "Disabled"
-msgstr "Handicapés"
+msgstr "Désactivé"
 
 #: app/Services/TransStrings.php:450
 msgid "Discard"
