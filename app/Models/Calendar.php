@@ -116,6 +116,7 @@ class Calendar extends Model
         }
 
         $data = [
+            'ID'             => $user->ID,
             'name'           => $name,
             'author_slug'    => $user->user_nicename,
             'first_name'     => $user->first_name,
