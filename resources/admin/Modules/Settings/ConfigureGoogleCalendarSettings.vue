@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="fcal_configure_integration_body">
-                        <h4>{{ $t('googleIntegrationSettings/app_type')}}</h4>
+                        <h4>{{ $t('GoogleIntegrationSettings/app_type')}}</h4>
                         <el-radio-group @change="maybeResetConfig()" v-model="settings.driver_type">
                             <el-radio label="system_defined">{{ $t('GoogleIntegrationSettings/default_app') }}</el-radio>
                             <el-radio label="custom_defined">{{ $t('GoogleIntegrationSettings/own_app') }}</el-radio>
