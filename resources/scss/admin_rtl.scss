@@ -1,0 +1,224 @@
+html[dir="rtl"] {
+	.fcrm-smartcodes-popover {
+		.el_pop_data_group {
+			.el_pop_data_body {
+				ul {
+					li {
+						text-align: right;
+					}
+				}
+			}
+		}
+	}
+	.el-select-dropdown{
+		&.is-multiple {
+			.el-select-dropdown__item{
+				&.selected {
+					&::after {
+						right: auto;
+						left: 20px;
+					}
+				}
+			}
+		}
+	}
+	.el-popper {
+		&.fcal_select {
+			ul {
+				.el-select-dropdown__item,
+				.el-dropdown-menu__item {
+					text-align: right;
+				}
+			}
+		}
+	}
+	#fluent-booking-app {
+		.fcal_date_range_radio {
+			.fcal_date_range_radio_item {
+				.el-radio {
+					margin-right: 0;
+					margin-left: 32px;
+				}
+				.el-input {
+					&.el-input-group {
+						.el-input-group__append {
+							border-radius: 8px 0 0 8px;
+						}
+					}
+					.el-input__wrapper {
+						border-radius: 0 8px 8px 0 !important;
+						border-left: none;
+					}
+				}
+			}
+		}
+		.el-tag {
+			.el-tag__close {
+				margin-left: 0;
+				margin-right: 6px;
+			}
+		}
+		.el-select__tags {
+			padding-right: 6px;
+			.el-tag {
+				margin-right: 0;
+				margin-left: 6px;
+			}
+		}
+		.fcal_color_select_wrap {
+			.el-input {
+				.el-input-group__prepend {
+					border-radius: 0 8px 8px 0 !important;
+					border-right: 1px solid #D6DAE1;
+					border-left: none;
+				}
+			}
+		}
+		.el-switch__label--right {
+			margin-left: 0;
+			margin-right: 10px;
+		}
+		.el-checkbox {
+			.el-checkbox__label {
+				padding-left: 0;
+				padding-right: 8px;
+			}
+		}
+		.el-radio {
+			.el-radio__label {
+				padding-left: 0;
+				padding-right: 8px;
+			}
+		}
+		.fcal_dashboard_overview {
+			.overview-widgets {
+				.overview-widget {
+					h1 {
+						text-align: left;
+					}
+				}
+			}
+		}
+		.fcal_each_cal {
+			.fcal_event_block {
+				.fcal_cal_slots {
+					.fcal_cal_slot {
+						.fcal_slot_body {
+							h3 {
+								.fcal_slot_config {
+									right: auto;
+									left: 0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.fcal_create_calendar_wrap {
+			.fcal_create_calendar_body {
+				.fcal_create_calendar_form_body {
+					.el-form {
+						.el-form-item {
+							.el-input{
+								&.el-input-group--prepend {
+									.el-input__wrapper {
+										border-radius: 8px 0 0 8px !important;
+									}
+								}
+							}
+							.el-form-item__label {
+								text-align: right;
+							}
+							.fcal_location_selector_wrap {
+								.fcal_locations_lists {
+									.fcal_location_list {
+										.fcal_location_actions {
+											right: auto;
+											left: 35px;
+										}
+									}
+								}
+							}
+
+							.fcal_event_card {
+								.fcal_event_child_card {
+									.fcal_popover_shortcode {
+										.el-input__wrapper {
+											border-radius: 0 8px 8px 0;
+										}
+										.el-input-group__append {
+											border-radius: 8px 0 0 8px;
+											box-shadow: none;
+											border: 1px solid #dcdfe6;
+											border-right: none;
+										}
+									}
+									.fcal_booking_duration {
+										.el-input-group__append {
+											border-radius: 8px 0 0 8px;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.fcal_single_integration_wrap {
+			.fcal_single_integration_body {
+				.fcal_settings_landing_page {
+					.el-form {
+						.el-form-item {
+							.el-form-item__label {
+								text-align: right;
+							}
+							.el-checkbox {
+								.el-checkbox__label {
+									padding-left: 0;
+									padding-right: 8px;
+								}
+							}
+							.el-radio-group {
+								column-gap: 32px;
+								.el-radio {
+									margin: 0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		#fluent-booking-app .fcal_create_calendar_wrap .fcal_create_calendar_body .fcal_create_calendar_form_body .el-form .el-form-item .fcal_event_card .fcal_event_child_card .fcal_popover_shortcode .el-input-group__append
+	}
+	.el-dialog__headerbtn {
+		right: auto;
+		left: 0;
+	}
+	.el-dialog {
+		&.fcal_share_event_dialog {
+			.el-tabs {
+				.fcal_create_calendar_body {
+					.el-input {
+						&.el-input-group--append {
+							.el-input__wrapper {
+								border-radius: 0 8px 8px 0;
+							}
+							.el-input-group__append {
+								.el-button {
+									&:nth-child(2) {
+										border-radius: 8px 0 0 8px;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

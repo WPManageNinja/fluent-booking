@@ -177,6 +177,8 @@ class AdminMenuHandler
             'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION, 'all'
         );
 
+        wp_enqueue_style('fluent_booking_rtl_css', $assets . 'admin/admin_rtl.css', [], FLUENT_BOOKING_ASSETS_VERSION);
+
         do_action($slug . '_loading_app');
 
         wp_enqueue_script(

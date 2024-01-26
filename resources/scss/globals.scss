@@ -331,6 +331,7 @@
                 height: auto;
                 line-height: 24px;
                 text-align: left;
+                gap: 4px;
                 &.selected,
                 &:hover {
                     color: $dark;
@@ -432,6 +433,7 @@
         box-shadow: 0 32px 80px -4px #1B25331F;
         border-radius: 16px;
         border: none;
+        z-index: 9999 !important;
         .el-date-range-picker {
             border-radius: 16px;
         }

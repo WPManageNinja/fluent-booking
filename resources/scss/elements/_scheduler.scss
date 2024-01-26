@@ -86,6 +86,7 @@
 
         .fcal_cal_actions {
           display: flex;
+          gap: 8px;
           @media (max-width: 708px) {
             width: 100%;
             flex-wrap: wrap;
@@ -106,7 +107,7 @@
               }
             }
             + .el-button {
-              margin-left: 8px;
+              margin: 0;
             }
           }
         }
@@ -1412,7 +1413,7 @@
                       .el-button {
                         background: none;
                         border: none;
-                        padding: 13px 10px;
+                        padding: 11px 10px;
                         margin: 0;
                         &:hover {
                           color: $primaryColor;
