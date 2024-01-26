@@ -240,7 +240,7 @@ class TimeSlotService
         $hostIds = $this->calendarSlot->getHostIds($hostId);
         $status = ['pending', 'approved', 'scheduled', 'completed'];
 
-        $bookings = Booking::with('calendar_event')
+        $bookings = Booking::with(['calendar_event'])
             ->whereIn('host_user_id', $hostIds)
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
