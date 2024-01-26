@@ -21,7 +21,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1.2.52 (Date: 25 Jan 2023)
+1.2.52 (Date: 26 Jan 2023)
 - Fixed fluent booking menu not showing issue
 - Improved Host/Team Member Searching
 - Fixed Date Override issue
@@ -30,6 +30,8 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 - Fixed issue with deleted Calendar Event
 - Added Calendar Avatar on Round Robin
 - Added few missing translation
+- Fixed double event created issue
+- Updated Buffer Time by host
 
 1.2.51 (Date: 17 Jan 2023)
 - Fixed Manual Booking Issue with Google Calendar
