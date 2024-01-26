@@ -491,9 +491,6 @@ class TimeSlotService
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
 
-        $startDate = DateTimeHelper::convertToUtc($startDate, $timeZone);
-        $endDate   = DateTimeHelper::convertToUtc($endDate, $timeZone);
-
         $slots = $this->getDates($startDate, $endDate, $duration, $hostId);
 
         $convertedSpots = [];

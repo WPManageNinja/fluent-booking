@@ -374,9 +374,7 @@ class CalendarSlot extends Model
         }
 
         $cutOutSeconds = $this->getCutoutSeconds();
-        $currentAuthorTimezoneDateTime = DateTimeHelper::convertToTimeZone(gmdate('Y-m-d H:i:s'), 'UTC', $this->calendar->author_timezone); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-
-        $totalCutStamp = strtotime($currentAuthorTimezoneDateTime) + $cutOutSeconds;
+        $totalCutStamp = DateTimeHelper::getTimestamp() + $cutOutSeconds;
 
         if (strtotime($startDate) < $totalCutStamp) {
             $startDate = gmdate('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
