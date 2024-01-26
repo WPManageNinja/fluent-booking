@@ -671,4 +671,38 @@ class Booking extends Model
         return $html;
     }
 
+    public function getConfirmationData()
+    {
+        $author = $this->getHostDetails(false);
+
+        $guestName = trim($this->first_name . ' ' . $this->last_name);
+        
+        $meetingTitle = $this->getMeetingTitle();
+        
+        $sections = [
+            'what'  => [
+                'title'   => __('What', 'fluent-booking-pro'),
+                'content' => $meetingTitle,
+            ],
+            'when'  => [
+                'title'   => __('When', 'fluent-booking-pro'),
+                'content' => $this->getFullBookingDateTimeText($this->person_time_zone, true) . ' (' . $this->person_time_zone . ')',
+            ],
+            'who'   => [
+                'title'   => __('Who', 'fluent-booking-pro'),
+                'content' => $author['name'] . ' - ' . __('Organizer', 'fluent-booking-pro') . PHP_EOL . $author['email'] . PHP_EOL . PHP_EOL . $guestName . PHP_EOL . $this->email
+            ],
+            'where' => [
+                'title'   => __('Where', 'fluent-booking-pro'),
+                'content' => $this->getLocationAsText()
+            ],
+        ];
+        
+        $lines = array_map(function ($section) {
+            return $section['title'] . ': ' . PHP_EOL . esc_html($section['content']);
+        }, $sections);
+        
+        return implode(PHP_EOL . PHP_EOL, $lines) . PHP_EOL . PHP_EOL;
+    }
+
 }
