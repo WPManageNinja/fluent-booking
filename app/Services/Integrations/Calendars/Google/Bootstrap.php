@@ -310,10 +310,20 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
+        $author = $booking->getHostDetails(false);
+
+        $calendarOwnerEmail = $meta->key;
+        $calendarOwnerName  = $author['name'];
+
+        if ($user = get_user_by('email', $calendarOwnerEmail)) {
+            $calendarOwnerName = trim($user->first_name . ' ' . $user->last_name) ?: $user->display_name;
+        }
+        
         $mainGuest = array_filter([
             'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
             'email'        => $booking->email,
-            'comment'      => $booking->message
+            'comment'      => $booking->message,
+            'responseStatus' => 'accepted'
         ]);
 
         $additionalGuests = $booking->getAdditionalGuests();
@@ -321,11 +331,12 @@ class Bootstrap extends BaseCalendar
         $guestAttendees = array_merge(
             [$mainGuest],
             array_map(function ($guest) {
-                return ['email' => $guest];
+                return [
+                    'email' => $guest,
+                    'responseStatus' => 'accepted'
+                ];
             }, $additionalGuests ?? [])
         );
-
-        $author = $booking->getHostDetails(false);
 
         $data = [
             'start'              => [
@@ -336,8 +347,9 @@ class Bootstrap extends BaseCalendar
             ],
             'attendees'          => array_merge($guestAttendees, [
                 [
-                    'display_name' => $author['name'],
-                    'email'        => $author['email']
+                    'display_name'   => $calendarOwnerName,
+                    'email'          => $calendarOwnerEmail,
+                    'responseStatus' => 'accepted'
                 ]
             ]),
             'source'             => [
@@ -359,7 +371,7 @@ class Bootstrap extends BaseCalendar
         ];
 
         if ($booking->event_type != 'group') {
-            $data['description'] = '';
+            $data['description'] = $booking->getConfirmationData();
             if ($booking->message) {
                 $data['description'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
             }

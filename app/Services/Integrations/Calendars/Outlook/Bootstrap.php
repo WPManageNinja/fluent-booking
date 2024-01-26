@@ -365,6 +365,15 @@ class Bootstrap extends BaseCalendar
             ]);
             return false;
         }
+        
+        $author = $booking->getHostDetails(false);
+
+        $calendarOwnerEmail = $calendarApi->getMetaModel()->key;
+        $calendarOwnerName  = $author['name'];
+
+        if ($user = get_user_by('email', $calendarOwnerEmail)) {
+            $calendarOwnerName = trim($user->first_name . ' ' . $user->last_name) ?: $user->display_name;
+        }
 
         $mainGuest = [
             'emailAddress' => array_filter([
@@ -386,8 +395,6 @@ class Bootstrap extends BaseCalendar
             }, $additionalGuests ?? [])
         );
 
-        $author = $booking->getHostDetails(false);
-
         $data = [
             'start'                 => [
                 'dateTime' => gmdate('Y-m-d\TH:i:s', strtotime($booking->start_time)),
@@ -400,8 +407,8 @@ class Bootstrap extends BaseCalendar
             'attendees'             => $guestAttendees,
             'organizer'             => [
                 'emailAddress' => [
-                    'name'    => $author['name'],
-                    'address' => $author['email']
+                    'name'    => $calendarOwnerName,
+                    'address' => $calendarOwnerEmail
                 ]
             ],
             'allowNewTimeProposals' => false,
@@ -415,7 +422,7 @@ class Bootstrap extends BaseCalendar
         if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',
-                'content'     => ''
+                'content'     => $booking->getConfirmationData()
             ];
             if ($booking->message) {
                 $data['body']['content'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
