@@ -272,23 +272,24 @@ class TimeSlotService
             }
 
             $remaining = 0;
-
             if ($this->calendarSlot->id == $booking->event_id) {
                 $remaining = max(0, $maxBooking - $booked);
-                if ($bufferTime) {
-                    $beforeBufferTime = gmdate('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    $afterBufferTime = gmdate('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    if ($remaining) {
-                        if ($beforeBufferTime < $booking->start_time) {
-                            $books[$date][] = $this->bookSlot(null, $beforeBufferTime, $booking->start_time);
-                        }
-                        if ($afterBufferTime > $booking->end_time) {
-                            $books[$date][] = $this->bookSlot(null, $booking->end_time, $afterBufferTime);
-                        }
-                    } else {
-                        $booking->start_time = $beforeBufferTime;
-                        $booking->end_time = $afterBufferTime;
+            }
+            
+            $bufferTime = $booking->calendar_event->getTotalBufferTime();
+            if ($bufferTime) {
+                $beforeBufferTime = gmdate('Y-m-d H:i:s', strtotime($booking->start_time . " -$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $afterBufferTime = gmdate('Y-m-d H:i:s', strtotime($booking->end_time . " +$bufferTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                if ($remaining) {
+                    if ($beforeBufferTime < $booking->start_time) {
+                        $books[$date][] = $this->bookSlot(null, $beforeBufferTime, $booking->start_time);
                     }
+                    if ($afterBufferTime > $booking->end_time) {
+                        $books[$date][] = $this->bookSlot(null, $booking->end_time, $afterBufferTime);
+                    }
+                } else {
+                    $booking->start_time = $beforeBufferTime;
+                    $booking->end_time = $afterBufferTime;
                 }
             }
 
