@@ -241,6 +241,7 @@ class TimeSlotService
         $status = ['pending', 'approved', 'scheduled', 'completed'];
 
         $bookings = Booking::whereIn('host_user_id', $hostIds)
+            ->with(['calendar_event'])
             ->whereBetween('start_time', $dateRange)
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
