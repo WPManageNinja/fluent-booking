@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.2.51
+Stable tag: 1.2.52
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,18 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.2.52 (Date: 26 Jan 2023)
+- Fixed fluent booking menu not showing issue
+- Improved Host/Team Member Searching
+- Fixed Date Override issue
+- Fixed conference options not coming in new event location issue
+- Fixed issue with deleted Availability
+- Fixed issue with deleted Calendar Event
+- Added Calendar Avatar on Round Robin
+- Added few missing translation
+- Fixed double event created issue
+- Updated Buffer Time by host
 
 1.2.51 (Date: 17 Jan 2023)
 - Fixed Manual Booking Issue with Google Calendar
