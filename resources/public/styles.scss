@@ -308,9 +308,10 @@ body >.fcal_calendar_wrap {
               padding: 0;
               left: 0;
               top: 0;
-              appearance: none;
-              visibility: hidden;
               opacity: 0;
+              &:focus ~ .fcal_radio_icon {
+                border-color: var(--fcal_primary_color);
+              }
 
               &:checked ~ .fcal_radio_icon {
                 border-color: var(--fcal_primary_color);
@@ -322,7 +323,7 @@ body >.fcal_calendar_wrap {
             }
             .fcal_radio_icon {
                 position: absolute;
-                border: 1.5px solid #D1D5DB;
+                border: 1.5px solid var(--fcal_slot_border);
                 width: 20px;
                 height: 20px;
                 border-radius: 50%;
@@ -581,6 +582,9 @@ body >.fcal_calendar_wrap {
             position: absolute;
             left: 0;
             opacity: 0;
+            &:focus ~ .checkbox_mark {
+              border-color: var(--fcal_primary_color);
+            }
             &:checked ~ .checkbox_mark {
               border-color: var(--fcal_primary_color);
               background: var(--fcal_primary_color);
