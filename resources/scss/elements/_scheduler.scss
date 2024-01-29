@@ -4,6 +4,48 @@
       background: #ffffff;
     }
   }
+  .round-robin-icons {
+    .left-icons {
+      width: 34px;
+      height: 34px;
+      position: relative;
+      z-index: 1;
+      &:before {
+        content: "";
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1px solid #dcdcdc;
+        position: absolute;
+        left: -3px;
+        top: 2px;
+      }
+      .el-icon {
+        position: absolute;
+        left: 0;
+        top: -5px;
+        z-index: 2;
+        background: #ffffff;
+        padding: 1px;
+        border-radius: 2px;
+        width: 17px;
+        height: 17px;
+        font-size: 13px;
+        color: #8F97A2;
+        &:nth-child(2) {
+          top: auto;
+          bottom: -2px;
+          left: -1px;
+        }
+        &:last-child {
+          left: auto;
+          right: 0;
+          top: 10px;
+          color: #000000;
+        }
+      }
+    }
+  }
   .fcal_each_cal {
     background: #ffffff;
     border-radius: 8px;
@@ -251,48 +293,6 @@
                 .icons {
                   display: inline-flex;
                   align-items: center;
-                }
-
-                .round-robin-icons {
-                  .left-icons {
-                    width: 34px;
-                    height: 34px;
-                    position: relative;
-                    z-index: 1;
-                    &:before {
-                      content: "";
-                      width: 28px;
-                      height: 28px;
-                      border-radius: 50%;
-                      border: 1px solid #dcdcdc;
-                      position: absolute;
-                      left: -3px;
-                      top: 2px;
-                    }
-                    .el-icon {
-                      position: absolute;
-                      left: 0;
-                      top: -5px;
-                      z-index: 2;
-                      background: #ffffff;
-                      padding: 1px;
-                      border-radius: 2px;
-                      width: 17px;
-                      height: 17px;
-                      font-size: 13px;
-                      &:nth-child(2) {
-                        top: auto;
-                        bottom: -2px;
-                        left: -1px;
-                      }
-                      &:last-child {
-                        left: auto;
-                        right: 0;
-                        top: 10px;
-                        color: #000000;
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -662,9 +662,9 @@
             min-width: 160px;
             flex-wrap: wrap;
             max-width: 160px;
+            gap: 10px;
 
             .fcal_spot_color {
-              margin-right: 10px;
 
               .fcal_scheduled {
                 border: 1px solid #ffffff;
@@ -2654,6 +2654,14 @@
 
         table {
           width: 100% !important;
+        }
+      }
+
+      .ff_all_data {
+        .field-label {
+          th {
+            text-align: right !important;
+          }
         }
       }
     }

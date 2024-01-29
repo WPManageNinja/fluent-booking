@@ -359,6 +359,12 @@
                     padding: 0;
                     margin: 0;
                     justify-content: flex-start;
+                    > span {
+                        gap: 5px;
+                        i {
+                            margin: 0;
+                        }
+                    }
                 }
             }
         }
@@ -1139,8 +1145,12 @@
                 background: transparent;
                 border-top: 1px solid #EAECF0;
                 padding: 18px 0;
+                gap: 12px;
+                display: flex;
+                align-items: center;
                 .el-button {
                     padding: 10px 22px !important;
+                    margin: 0;
                 }
             }
         }
@@ -1176,6 +1186,13 @@
             .el-popper__arrow {
                 display: none;
             }
+
+            .el-calendar {
+                .el-calendar__header {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
             .el-dialog__body {
                 display: flex;
                 gap: 48px;
@@ -1187,6 +1204,10 @@
                 margin-bottom: 0;
                 align-items: center;
                 padding: 0 0 12px 0;
+                .el-dialog__headerbtn {
+                    top: 15px;
+                    left: 10px;
+                }
             }
             * {
                 box-sizing: border-box;
