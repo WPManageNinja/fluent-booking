@@ -676,6 +676,20 @@ body >.fcal_calendar_wrap {
             }
           }
         }
+        .fcal_validation_error {
+            display: flex;
+            gap: 0.5rem;
+            color: rgb(185 28 28);
+            align-items: center;
+            margin-top: 0.25rem;
+            svg {
+                height: 0.75rem;
+                width: 0.75rem;
+            }
+            p {
+                margin: 0;
+            }
+        }
       }
       .fcal_custom_phone_field {
         .svelte-select {

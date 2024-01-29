@@ -117,7 +117,7 @@ class CalendarController extends Controller
 
         $isTeam = $title ? true : false;
 
-        if (!$isTeam && Calendar::where('user_id', $user->ID)->first()) {
+        if (!$isTeam && Calendar::where('user_id', $user->ID)->where('type', '!=', 'team')->first()) {
             return $this->sendError([
                 'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
             ], 422);
