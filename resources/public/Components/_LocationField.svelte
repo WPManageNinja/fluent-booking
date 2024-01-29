@@ -1,33 +1,43 @@
-<div class="fcal_input_wrap fcal_input_location_wrap">
-    {#each field.options as option}
-        <label class="fcal_radio_group">
-            {i18(option.title)}
-            <input type="radio" on:change={onChangeDriver} data-driver="{option.type}"
-                   checked={form.location_config.driver == option.slug}
-                   name={field.name} value={option.slug}/>
-            <span class="fcal_radio_icon"></span>
-        </label>
-    {/each}
-    {#if form.location_config.driverType == 'phone_guest' }
-        <PhoneFieldSkeleton field={ { name: 'user_location_input'} } bind:form={form.location_config}/>
-    {:else if form.location_config.driverType == 'in_person_guest'}
-        <div class="fcal_input_wrap address">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round"
-                 class="feather feather-map-pin">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <textarea style="padding-left: 32px;" class="fcal_input" disabled="{field.disabled}"
-                      bind:value={form.location_config.user_location_input}
-                      placeholder="{i18('Your address')}"></textarea>
+<div class="fcal_input_content">
+    {#if field.label}
+        <div class="fcal_input_label">
+            {field.label}
+            {#if field.required}
+                <span>*</span>
+            {/if}
         </div>
     {/if}
-    {#if appData.is_fluentform}
-        <input type="hidden" name="{appData.name + '__location' }"
-               value={JSON.stringify(form.location_config)}/>
-    {/if}
+    <div class="fcal_input_wrap fcal_input_location_wrap">
+        {#each field.options as option}
+            <label class="fcal_radio_group">
+                {i18(option.title)}
+                <input type="radio" required on:change={onChangeDriver} data-driver="{option.type}"
+                       checked={form.location_config.driver == option.slug}
+                       name={field.name} value={option.slug}/>
+                <span class="fcal_radio_icon"></span>
+            </label>
+        {/each}
+        {#if form.location_config.driverType == 'phone_guest' }
+            <PhoneFieldSkeleton field={ { name: 'user_location_input'} } bind:form={form.location_config}/>
+        {:else if form.location_config.driverType == 'in_person_guest'}
+            <div class="fcal_input_wrap address">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-map-pin">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <textarea style="padding-left: 32px;" class="fcal_input" disabled="{field.disabled}"
+                          required="{field.required}" bind:value={form.location_config.user_location_input}
+                          placeholder="{i18('Your address')}"></textarea>
+            </div>
+        {/if}
+        {#if appData.is_fluentform}
+            <input type="hidden" name="{appData.name + '__location' }"
+                   value={JSON.stringify(form.location_config)}/>
+        {/if}
+    </div>
 </div>
 
 <script>

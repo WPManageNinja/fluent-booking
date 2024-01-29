@@ -61,7 +61,7 @@ class AdminController extends Controller
         
         $hosts = [];
         $pushedIds = [];
-        $calendarUserIds = Calendar::all()->pluck('user_id')->toArray();
+        $calendarUserIds = Calendar::where('type', '!=', 'team')->pluck('user_id')->toArray();
         foreach ($users as $user) {
             $pushedIds[] = $user->ID;
             $hosts[] = [
