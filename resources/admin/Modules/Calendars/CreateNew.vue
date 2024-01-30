@@ -23,7 +23,7 @@
                     <div class="fcal_create_calendar_basic_info">
                         <event-details ref="basicInfo" :is_board="is_board" :calendar_event="calendar.slot" :event_type="calendar.slot.event_type" :new_event="true"/>
                     </div>
-                    <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone">
+                    <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone fcal_event_timezone">
                         <time-zone-selector v-model="calendar.author_timezone"/>
                     </el-form-item>
                 </div>
