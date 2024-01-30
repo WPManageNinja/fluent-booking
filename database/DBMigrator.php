@@ -39,7 +39,9 @@ class DBMigrator
         MetaMigrator::migrate();
         BookingActivityMigrator::migrate();
 
-        self::migratePaymentTables();
+        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            self::migratePaymentTables();
+        }
     }
 
     public static function migratePaymentTables()
