@@ -22,16 +22,13 @@ class BookingCleaner
             return;
         }
 
-        BookingMeta::query()->where('booking_id', $booking->id)->delete();
         BookingHost::query()->where('booking_id', $booking->id)->delete();
-        BookingActivity::query()->where('booking_id', $booking->id)->delete();
 
         $order = Order::query()
             ->where('parent_id', $booking->id)
             ->first();
 
         if ($order) {
-
             do_action('fluent_booking/before_delete_order', $order, $booking);
             $order->delete();
             do_action('fluent_booking/after_delete_order', $order, $booking);

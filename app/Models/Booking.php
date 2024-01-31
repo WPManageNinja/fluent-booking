@@ -96,8 +96,8 @@ class Booking extends Model
         });
 
         static::deleting(function ($model) { // before delete() method call this
-            $model->hosts()->delete();
             $model->booking_meta()->delete();
+            $model->booking_activities()->delete();
         });
 
         static::addGlobalScope('main_bookings', function ($builder) {
@@ -123,6 +123,11 @@ class Booking extends Model
     public function booking_meta()
     {
         return $this->hasMany(BookingMeta::class, 'booking_id');
+    }
+
+    public function booking_activities()
+    {
+        return $this->hasMany(BookingActivity::class, 'booking_id');
     }
 
     public function user()
