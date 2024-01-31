@@ -61,13 +61,29 @@
                         @change="handlePeriodChange()"
                         placement="bottom"
                     >
+                        <el-option value="all" :label="$t('All Event Types')"/>
+                        <el-option value="single" :label="$t('One-to-One')"/>
+                        <el-option value="group" :label="$t('Group')"/>
+                        <el-option value="round_robin" :label="$t('Round Robin')"/>
+                    </el-select>
+
+                    <el-select
+                        v-if="filters.author == appVars.me.calendar_id"
+                        v-model="filters.event"
+                        class="fcal_select"
+                        :aria-placeholder="$t('Select Event')"
+                        popper-class="fcal_select"
+                        @change="handlePeriodChange()"
+                        placement="bottom"
+                    >
                         <template v-if="event_types.length">
                             <el-option value="all" :label="$t('All Events')" />
-                            <el-option v-for="event in event_types" :key="event.id" 
+                            <el-option v-for="event in event_types" :key="event.id"
                                 :value="event.id" :label="event.label">
                             </el-option>
                         </template>
                     </el-select>
+
                     <el-select
                         v-model="filters.author"
                         class="fcal_select"
@@ -168,6 +184,7 @@ export default {
             filters: {
                 period: 'upcoming',
                 author: this.appVars.me.calendar_id,
+                event: 'all',
                 event_type: 'all',
                 search: ''
             },
@@ -339,7 +356,6 @@ export default {
             this.fetchSchedules();
         },
         hideSidebar() {
-            const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");
             this.isHideSidebar = !this.isHideSidebar;
             localStorage.setItem("hide_schedule_details_sidebar", this.isHideSidebar);
         },
