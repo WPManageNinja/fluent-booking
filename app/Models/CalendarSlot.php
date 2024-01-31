@@ -332,11 +332,13 @@ class CalendarSlot extends Model
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
+        $lastDay = gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
         if ($rangeType == 'range_indefinite') {
-            return gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            return $lastDay;
         }
 
-        $maxDate = gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $maxDate = $lastDay;
 
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
@@ -346,15 +348,12 @@ class CalendarSlot extends Model
                 }
             }
         } else {
-            $rangeDays = Arr::get($this->settings, 'range_days', 60);
-            if (!$rangeDays) {
-                $rangeDays = 60;
-            }
+            $rangeDays = Arr::get($this->settings, 'range_days', 60) ?: 60;
             $maxDate = gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        if (strtotime($maxDate) > strtotime(gmdate('Y-m-t 23:59:59', strtotime($startDate)))) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            return gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        if (strtotime($maxDate) > strtotime($lastDay)) {
+            return $lastDay;
         }
 
         return $maxDate;
@@ -398,10 +397,7 @@ class CalendarSlot extends Model
             }
         }
 
-        $rangeDays = Arr::get($this->settings, 'range_days', 60);
-        if (!$rangeDays) {
-            $rangeDays = 60;
-        }
+        $rangeDays = Arr::get($this->settings, 'range_days', 60) ?: 60;
 
         return gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
@@ -429,6 +425,15 @@ class CalendarSlot extends Model
         }
 
         return strtotime('+' . $conditions['value'] . ' ' . $conditions['unit'], 0) - strtotime('+0 seconds', 0);
+    }
+
+    public function isWithinMaxLookUpDate($date)
+    {
+        if ($maxDate = $this->getMaxLookUpDate()) {
+            return strtotime($maxDate) >= strtotime($date);
+        }
+
+        return true;
     }
 
     public function getHostIds($hostId = null)
