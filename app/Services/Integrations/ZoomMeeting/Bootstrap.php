@@ -33,7 +33,9 @@ class Bootstrap
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'maybeCreateZoomMeeting'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeCancelZoomMeeting'], 10, 1);
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'maybeRescheduleZoomMeeting'], 10, 2);
-
+        
+        add_action('fluent_booking/before_delete_booking', [$this, 'maybeDeleteZoomMeeting'], 10, 1);
+        add_action('fluent_booking/delete_booking_async_zoom', [$this, 'asyncDeleteZoomMeeting'], 10, 2);
         /*
          * Location Hooks
          */
@@ -315,5 +317,30 @@ class Bootstrap
         ]);
 
         return true;
+    }
+
+    public function asyncDeleteZoomMeeting($hostId, $zoomMeetingId)
+    {
+        $apiClient = ZoomHelper::getZoomClient($hostId);
+
+        $apiClient->deleteMeeting($zoomMeetingId);
+    }
+
+    public function maybeDeleteZoomMeeting(Booking $booking)
+    {
+        if (Arr::get($booking->location_details, 'type') !== 'zoom_meeting') {
+            return false; // not our location
+        }
+        
+        $bookingMeta = $booking->getMeta('__zoom_meeting_details');
+
+        if (!$bookingMeta || !($zoomMeetingId = Arr::get($bookingMeta, 'id'))) {
+            return false; // Nothing to cancel as there is no previous record
+        }
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_zoom', [
+            $booking->host_user_id,
+            $zoomMeetingId
+        ], 'fluent-booking');
     }
 }
