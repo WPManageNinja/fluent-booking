@@ -444,6 +444,7 @@ class TransStrings
             'Select Status'                                                                    => __('Select Status', 'fluent-booking-pro'),
             'Select Time'                                                                      => __('Select Time', 'fluent-booking-pro'),
             'All Events'                                                                       => __('All Events', 'fluent-booking-pro'),
+            'All Event Types'                                                                  => __('All Event Types', 'fluent-booking-pro'),
             'My Meetings'                                                                      => __('My Meetings', 'fluent-booking-pro'),
             'All Meetings'                                                                     => __('All Meetings', 'fluent-booking-pro'),
             'Single'                                                                           => __('Single', 'fluent-booking-pro'),
