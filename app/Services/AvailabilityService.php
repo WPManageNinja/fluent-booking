@@ -256,6 +256,7 @@ class AvailabilityService
                         if ($slot['end'] != '00:00') {
                             $nextDayIndex = 1;
                             $nextDay = $weekDays[($dayIndex + 1) % 7];
+                            $schedules[$nextDay]['enabled'] = true;
                             array_unshift($schedules[$nextDay]['slots'], [
                                 'start' => '00:00',
                                 'end'   => $slot['end'],

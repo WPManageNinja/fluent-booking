@@ -1786,6 +1786,12 @@
             }
           }
         }
+        &.fcal_event_timezone {
+            border: 1px solid #EAECF0;
+            padding: 1.5rem;
+            border-radius: 8px;     
+            margin-top: 18px;   
+        }
       }
     }
     .fcal_create_calendar_body_wrap {
