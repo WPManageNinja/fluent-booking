@@ -37,12 +37,8 @@ class Client
 
     public function getUserDetails()
     {
-
-        $token = 'EwBYA+l3BAAUshnlKUacyQdQKOqcUGR00eGLdnwAASenhupRIC6MGM7aV9jUDJCgcjKDc6xa2Nd/CFGHUiYHZb4Q6PVHMxqZK2Ry1sLXrsQMEfiLCTfbk4qD6/xXdGc4Cft3cjyrR8nEOawwXLOcq4FLhFizxqcHZqaPKgLzOG88l7JR/LWM5n/oGZApuyZdBCG8FqVUp3nXGi3kql7KupvVRBkmJwMOmuWZNbyJEXK+HPfSRZcPziBUswFL0T6vB8ewu8fPCZH//Nr66v4HHkvQa3OggI94QcNJ0K8V6huFf4SDL5xFFwC4LzCOZzkrYzhTOSpVMGNNNiXRpnZWKn5h+3XPOsfL6QZKU9DGaEOWxZNv+/fxp+hekfPbU3QDZgAACOP4Ejx7E4UEKALAAk8f8EDkwkAsidVpKVchmsUHVpkFAp2F9pICoW0YzqnufxeddRl8EHrgfWxcdTrHJst0B76QQNg0cI6Q+cMFmo9nPGYMUwiM81C6ZqsjkNti6cTTpHdFpk9mtYPxVNU9lZq5a/6djaB71VwX/KKzNghdy4ITqRBk2cWKVhDyHQpCFMhz/15xuxCPNrDsxVZySxV/GW5cIDEunfbUPRftU4Z3VkAY2+QFOdExuINjC3QecihqUyJ9jU3zb7FsggjrvrOhCdL7lzDXM/NSgN0chaOrXsIX0YgB+wNR68XcAXBnc6WR2SHPkYtZPb/SIo/3MpmYBSZUsra5ggS58yVk/D2yDPWlAGz7RuOH+0CQeo7zsCEoZl8sn9Dy4n8tx/p09qFikM/Q06KCOvaHS5q460AJjNHexrh/95/v7DpuUsuQQYFogEo3TDmFVgWLnPG0YsBPd6Oxr8//eDg2AJ5turmbEKpNirx0lxLSLX/3eu/MLkvwswdXik2BbYGiRnoGdHV4o4EhCRGV9uvtbtySbhY9rOIEeb4xViMDERRfn5uo3PoQkwbPp7pMBf1HHnBSERC2Jn8Okie3mR1EcPNS+4AO71ZlufFgKIcwQ+iwkvXDVtf6UltdSH/U0xUPmz4DbGrZGidPRSJhqnpt188La25jVjFyg8mZBhGXE4oJVYltU9leYHFOrcZXC0WXhCLgkrIieyunz9Lsn/u+60aMSwuo4kBCFORLAg==';
-
-
         $headers = [
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . '',
             'Content-Type'  => 'application/json'
         ];
 

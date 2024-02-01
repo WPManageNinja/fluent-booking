@@ -8,7 +8,6 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\User;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\TransStrings;
 
@@ -177,6 +176,8 @@ class AdminMenuHandler
             'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION, 'all'
         );
 
+        wp_enqueue_style('fluent_booking_rtl_css', $assets . 'admin/admin_rtl.css', [], FLUENT_BOOKING_ASSETS_VERSION);
+
         do_action($slug . '_loading_app');
 
         wp_enqueue_script(
@@ -277,8 +278,6 @@ class AdminMenuHandler
             'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ]),
-            'currency'           => CurrenciesHelper::getGlobalCurrency(),
-            'currency_sign'      => CurrenciesHelper::getGlobalCurrencySign(),
             'has_pro'            => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
             'trans'              => TransStrings::getStrings(),
             'date_format'        => DateTimeHelper::getDateFormatter(true),

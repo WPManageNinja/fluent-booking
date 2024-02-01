@@ -15,10 +15,10 @@
                         </div>
                     </div>
                     <div class="fcal_configure_integration_body">
-                        <h4>oAuth Application Type</h4>
+                        <h4>{{ $t('GoogleIntegrationSettings/app_type')}}</h4>
                         <el-radio-group @change="maybeResetConfig()" v-model="settings.driver_type">
-                            <el-radio label="system_defined">Default Verified App (Recommended)</el-radio>
-                            <el-radio label="custom_defined">Own App (Not Recommended)</el-radio>
+                            <el-radio label="system_defined">{{ $t('GoogleIntegrationSettings/default_app') }}</el-radio>
+                            <el-radio label="custom_defined">{{ $t('GoogleIntegrationSettings/own_app') }}</el-radio>
                         </el-radio-group>
 
                         <template v-if="settings.driver_type == 'custom_defined'">
@@ -71,7 +71,7 @@
                             </template>
                         </template>
                         <template v-else>
-                            <p>FluentBooking will use the official verified app to connect with your Google Calendar. You can connect your Google Calendar from your host settings. <a href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">Read the documentation</a></p>
+                            <p>{{ $t('GoogleIntegrationSettings/official_app_desc') }} <a target="_blank" href="https://fluentbooking.com/docs/google-calendar-meet-integration-with-fluent-booking/">{{ $t("Read the documentation") }}</a></p>
                             <el-form style="margin-top: 20px;" v-model="settings" label-position="top">
                                 <el-form-item :label="fieldSettings.fields.caching_time.label">
                                     <el-select popper-class="fcal_select" v-model="settings.caching_time">

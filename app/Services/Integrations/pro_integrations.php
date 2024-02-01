@@ -113,6 +113,11 @@ add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items,
     return $items;
 }, 1, 2);
 
+add_filter('fluent_booking/admin_vars', function ($vars) {
+    $vars['currency'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrency();
+    $vars['currency_sign'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
+    return $vars;
+});
 
 add_action('init', function () {
 // Woo Integration
