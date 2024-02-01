@@ -155,6 +155,12 @@ class AvailabilityController extends Controller
 
         $clonedSchedule->key = $clonedSchedule->key . ' (Clone)';
 
+        $clonedScheduleValue = $clonedSchedule->value;
+
+        $clonedScheduleValue['default'] = false;
+
+        $clonedSchedule->value = $clonedScheduleValue;
+
         $clonedSchedule->save();
 
         do_action('fluent_booking/availability_schedule_cloned', $clonedSchedule);
