@@ -25,7 +25,9 @@ class SchedulesController extends Controller
 
         $period = Arr::get($filters, 'period', 'upcoming');
 
-        $slotId = Arr::get($filters, 'event_type');
+        $eventId = Arr::get($filters, 'event');
+
+        $eventType = Arr::get($filters, 'event_type');
 
         $query = Booking::with(['calendar_event']);
 
@@ -48,8 +50,12 @@ class SchedulesController extends Controller
         if ($author && $author !== 'all') {
             $query->where('calendar_id', $author);
 
-            if ($slotId && $slotId !== 'all') {
-                $query->where('event_id', $slotId);
+            if ($eventId && $eventId !== 'all') {
+                $query->where('event_id', $eventId);
+            }
+
+            if ($eventType && $eventType !== 'all') {
+                $query->where('event_type', $eventType);
             }
         }
 
@@ -213,11 +219,17 @@ class SchedulesController extends Controller
     {
         $booking = Booking::findOrFail($bookingId);
 
+        $eventId = $booking->event_id;
+
         do_action('fluent_booking/before_delete_booking', $booking);
 
         $booking->delete();
 
         do_action('fluent_booking/after_delete_booking', $bookingId);
+
+        if ($booking->event_type == 'group') {
+            Booking::where('event_id', $eventId)->delete();
+        }
 
         return [
             'message' => __('Booking Deleted Successfully!', 'fluent-booking-pro')

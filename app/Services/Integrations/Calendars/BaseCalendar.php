@@ -40,6 +40,7 @@ abstract class BaseCalendar
 
         add_action('fluent_booking/cancel_remote_calendar_event_' . $this->calendarKey, [$this, 'cancelEvent'], 10, 2);
         add_action('fluent_booking/patch_remote_calendar_event_' . $this->calendarKey, [$this, 'patchEvent'], 10, 4);
+        add_action('fluent_booking/delete_remote_calendar_event_' . $this->calendarKey, [$this, 'deleteEvent'], 10, 2);
 
     }
 
@@ -114,6 +115,8 @@ abstract class BaseCalendar
     abstract public function createEvent($config, Booking $booking);
 
     abstract public function cancelEvent($config, Booking $booking);
+
+    abstract public function deleteEvent($config, Booking $booking);
 
     abstract public function patchEvent($config, Booking $booking, $updateData, $isRescheduling);
 

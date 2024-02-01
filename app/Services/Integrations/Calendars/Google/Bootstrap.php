@@ -86,6 +86,8 @@ class Bootstrap extends BaseCalendar
                 $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
+
+        add_action('fluent_booking/delete_booking_async_google', [$this, 'asyncDeleteEvent'], 10, 4);
     }
 
     public function pushToGlobalMenu($menuItems)
@@ -310,10 +312,20 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
+        $author = $booking->getHostDetails(false);
+
+        $calendarOwnerEmail = $meta->key;
+        $calendarOwnerName  = $author['name'];
+
+        if ($user = get_user_by('email', $calendarOwnerEmail)) {
+            $calendarOwnerName = trim($user->first_name . ' ' . $user->last_name) ?: $user->display_name;
+        }
+        
         $mainGuest = array_filter([
             'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
             'email'        => $booking->email,
-            'comment'      => $booking->message
+            'comment'      => $booking->message,
+            'responseStatus' => 'accepted'
         ]);
 
         $additionalGuests = $booking->getAdditionalGuests();
@@ -321,11 +333,12 @@ class Bootstrap extends BaseCalendar
         $guestAttendees = array_merge(
             [$mainGuest],
             array_map(function ($guest) {
-                return ['email' => $guest];
+                return [
+                    'email' => $guest,
+                    'responseStatus' => 'accepted'
+                ];
             }, $additionalGuests ?? [])
         );
-
-        $author = $booking->getHostDetails(false);
 
         $data = [
             'start'              => [
@@ -336,8 +349,9 @@ class Bootstrap extends BaseCalendar
             ],
             'attendees'          => array_merge($guestAttendees, [
                 [
-                    'display_name' => $author['name'],
-                    'email'        => $author['email']
+                    'display_name'   => $calendarOwnerName,
+                    'email'          => $calendarOwnerEmail,
+                    'responseStatus' => 'accepted'
                 ]
             ]),
             'source'             => [
@@ -359,7 +373,7 @@ class Bootstrap extends BaseCalendar
         ];
 
         if ($booking->event_type != 'group') {
-            $data['description'] = '';
+            $data['description'] = $booking->getConfirmationData();
             if ($booking->message) {
                 $data['description'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
             }
@@ -664,6 +678,46 @@ class Bootstrap extends BaseCalendar
 
             return true;
         }
+    }
+
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $bookingMeta = $booking->getMeta('__google_calendar_event');
+
+        if (!$bookingMeta || !($googleEventId = Arr::get($bookingMeta, 'id'))) {
+            return false; // Nothing to update as there is no previous response of this booking
+        }
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['db_id'],
+            $config['remote_calendar_id'],
+            $googleEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $dbId, $remoteCalendarId, $googleEventId)
+    {
+        $meta = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $hostId)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+        
+        $updateData = [
+            'status' => 'cancelled'
+        ];
+
+        $api = new GoogleCalendar($meta);
+
+        $api->patchEvent($remoteCalendarId, $googleEventId, $updateData);
     }
 
     public function getAuthUrl($userId = null)

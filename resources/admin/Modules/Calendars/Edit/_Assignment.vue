@@ -42,7 +42,7 @@
                                     </el-button>
                                 </div>
                             </div>
-                            <div v-else>
+                            <div v-else class="fcal_skeleton">
                                 <el-skeleton :rows="3" animated/>
                             </div>
                         </div>
@@ -145,6 +145,7 @@ export default {
     },
     mounted() {
         this.getAllHosts();
+        console.log(typeof(this.settings.team_members));
     }
 }
 </script>

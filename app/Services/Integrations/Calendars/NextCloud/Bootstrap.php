@@ -52,6 +52,8 @@ class Bootstrap extends BaseCalendar
         });
 
         add_filter('fluent_booking/verify_save_caldav_credential_' . $this->calendarKey, [$this, 'saveUserCredentials'], 10, 3);
+
+        add_action('fluent_booking/delete_booking_async_next_cloud_calendar', [$this, 'asyncDeleteEvent'], 10, 4);
     }
 
     public function getClientSettingsForView($settings)
@@ -317,7 +319,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $data = $this->prepareEventData($booking);
+        $data = $this->prepareEventData($config, $booking);
 
         try {
             $apiCalendar = new Calendar([
@@ -419,7 +421,7 @@ class Bootstrap extends BaseCalendar
 
             $apiEvent = $apiCalendar->getEvent(Arr::get($calDavEvent, 'remote_event_id'));
 
-            $eventData = $this->prepareEventData($booking);
+            $eventData = $this->prepareEventData($config, $booking);
 
             $eventData['attendees'] = $apiEvent->attendees;
 
@@ -497,7 +499,7 @@ class Bootstrap extends BaseCalendar
         try {
             $apiCalendar = new Calendar(['href' => $parentCalendarId], $client->getClient());
             $apiEvent = $apiCalendar->getEvent($parentEventId);
-            $eventData = $this->prepareEventData($parentBooking);
+            $eventData = $this->prepareEventData($config, $parentBooking);
             $eventData['attendees'] = $attendees;
             $eventData['description'] = __('This is a group event.', 'fluent-booking-pro');
             foreach ($eventData as $key => $datum) {
@@ -519,6 +521,52 @@ class Bootstrap extends BaseCalendar
                 $missingBooking->updateMeta('__next_cloud_calendar_event', $parentMeta);
             }
         }
+    }
+
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $calDavEvent = $booking->getMeta('__next_cloud_calendar_event');
+
+        if (!$calDavEvent || !($calDavEventId = Arr::get($calDavEvent, 'remote_event_id'))) {
+            return false;
+        }
+
+        $remoteCalendar = Arr::get($calDavEvent, 'remote_calendar');
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['db_id'],
+            $remoteCalendar,
+            $calDavEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $dbId, $remoteCalendar, $calDavEventId)
+    {
+        $meta = Meta::where('object_type', '_next_cloud_calendar_user_token')
+            ->where('object_id', $hostId)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false;
+        }
+
+        $client = NextCloudHelper::getClientByMeta($meta);
+
+        if (!$client) {
+            return false;
+        }
+
+        $apiCalendar = new Calendar([
+            'href' => $remoteCalendar
+        ], $client->getClient());
+
+        $apiCalendar->deleteEvent($calDavEventId);
     }
 
     public function getAuthUrl($userId = null)
@@ -602,9 +650,25 @@ class Bootstrap extends BaseCalendar
         return $response;
     }
 
-    private function prepareEventData(Booking $booking)
+    private function prepareEventData($config, Booking $booking)
     {
+        $meta = Meta::where('object_type', '_apple_calendar_user_token')
+            ->where('object_id', $booking->host_user_id)
+            ->where('id', $config['db_id'])
+            ->first();
+
+        if (!$meta) {
+            return;
+        }
+
         $host = $booking->getHostDetails(false);
+
+        $calendarOwnerEmail = $meta->key;
+        $calendarOwnerName  = $host['name'];
+
+        if ($user = get_user_by('email', $calendarOwnerEmail)) {
+            $calendarOwnerName = trim($user->first_name . ' ' . $user->last_name) ?: $user->display_name;
+        }
 
         $mainGuest = [
             'email' => $booking->email,
@@ -628,13 +692,15 @@ class Bootstrap extends BaseCalendar
             'location'  => $booking->getLocationAsText(),
             'attendees' => $attendees,
             'organizer' => [
-                'email' => $host['email'],
-                'name'  => $host['name']
+                'email' => $calendarOwnerEmail,
+                'name'  => $calendarOwnerName
             ]
         ];
 
+        $data['description'] = str_replace(PHP_EOL, '\\n', $booking->getConfirmationData());
+
         if ($booking->message) {
-            $data['description'] = $booking->message;
+            $data['description'] .= __('Note: ', 'fluent-booking-pro') . '\\n' . $booking->message . '\\n' . '\\n';
         }
 
         if ($additionalData = $booking->getAdditionalData(false)) {

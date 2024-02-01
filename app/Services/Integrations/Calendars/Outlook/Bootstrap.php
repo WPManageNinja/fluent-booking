@@ -96,6 +96,8 @@ class Bootstrap extends BaseCalendar
                 $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Outlook Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
+
+        add_action('fluent_booking/delete_booking_async_outlook', [$this, 'asyncDeleteEvent'], 10, 3);
     }
 
     public function getClientSettingsForView($settings)
@@ -365,6 +367,15 @@ class Bootstrap extends BaseCalendar
             ]);
             return false;
         }
+        
+        $author = $booking->getHostDetails(false);
+
+        $calendarOwnerEmail = $calendarApi->getMetaModel()->key;
+        $calendarOwnerName  = $author['name'];
+
+        if ($user = get_user_by('email', $calendarOwnerEmail)) {
+            $calendarOwnerName = trim($user->first_name . ' ' . $user->last_name) ?: $user->display_name;
+        }
 
         $mainGuest = [
             'emailAddress' => array_filter([
@@ -386,8 +397,6 @@ class Bootstrap extends BaseCalendar
             }, $additionalGuests ?? [])
         );
 
-        $author = $booking->getHostDetails(false);
-
         $data = [
             'start'                 => [
                 'dateTime' => gmdate('Y-m-d\TH:i:s', strtotime($booking->start_time)),
@@ -400,8 +409,8 @@ class Bootstrap extends BaseCalendar
             'attendees'             => $guestAttendees,
             'organizer'             => [
                 'emailAddress' => [
-                    'name'    => $author['name'],
-                    'address' => $author['email']
+                    'name'    => $calendarOwnerName,
+                    'address' => $calendarOwnerEmail
                 ]
             ],
             'allowNewTimeProposals' => false,
@@ -415,7 +424,7 @@ class Bootstrap extends BaseCalendar
         if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',
-                'content'     => ''
+                'content'     => $booking->getConfirmationData()
             ];
             if ($booking->message) {
                 $data['body']['content'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
@@ -700,6 +709,36 @@ class Bootstrap extends BaseCalendar
         return true;
     }
 
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $bookingMeta = $booking->getMeta('__outlook_calendar_event');
+
+        if (!$bookingMeta || !($outlookEventId = Arr::get($bookingMeta, 'id'))) {
+            return false; // Nothing to delete as there is no previous response of this booking
+        }
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['remote_calendar_id'],
+            $outlookEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $remoteCalendarId, $outlookEventId)
+    {
+        $calendarApi = OutlookHelper::getApiClientByUserId($hostId, $remoteCalendarId);
+        if (!$calendarApi) {
+            return;
+        }
+
+        // Let's delete the event
+        $calendarApi->deleteEvent($outlookEventId);
+    }
+    
     public function authDisconnect($meta)
     {
         // Let's remove the cache first
