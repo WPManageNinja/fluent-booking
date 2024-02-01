@@ -13,16 +13,16 @@
                 {#if field.enabled}
                     <div class="fcal_form_item">
                         {#if field.name === 'location'}
-                            <LocationField {appData} field={field} bind:form="{form}"/>
+                            <LocationField {appData} field={field} {validating} {hasError} bind:form={form}/>
                         {:else if field.type == 'multi-guests'}
-                            <MultiGuests field={field} bind:form="{form}" />
+                            <MultiGuests field={field} {validating} {hasError} bind:form={form} />
                         {:else if field.type === 'multi-select' }
-                            <MultiSelect field={field} bind:form={form} />
+                            <MultiSelect field={field} {validating} {hasError} bind:form={form} />
                         {:else}
-                            <label class="fcal_input_content">
+                            <label class="fcal_input_content" aria-label={field?.label ?? ''}>
                                 {#if field.label}
                                     <div class="fcal_input_label">
-                                        {#if !( field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'))}
+                                        {#if shouldRenderLabel(field)}
                                             {field.label}
                                             {#if field.required}
                                                 <span>*</span>
@@ -41,22 +41,23 @@
                                                 <circle cx="12" cy="10" r="3"/>
                                             </svg>
                                         {/if}
-                                        <input disabled="{field.disabled}" class="fcal_input" type="text" placeholder="{field.placeholder}"
-                                            required="{field.required}" bind:value={form[field.name]}/>
+                                        <input disabled={field.disabled} class="fcal_input" type="text" placeholder={field.placeholder}
+                                            aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                     </div>
                                 {:else if field.type === 'email'}
-                                    <input disabled="{field.disabled}" class="fcal_input" type="email"
-                                           placeholder="{field.placeholder}" required="{field.required}" bind:value={form[field.name]}/>
+                                    <input disabled={field.disabled} class="fcal_input" type="email" placeholder={field.placeholder}
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}
+                                    />
                                 {:else if field.type === 'number'}
-                                    <input disabled="{field.disabled}" class="fcal_input" type="number"
-                                           placeholder="{field.placeholder}" required="{field.required}" bind:value={form[field.name]}/>
+                                    <input disabled={field.disabled} class="fcal_input" type="number" placeholder={field.placeholder} 
+                                    aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'phone'}
-                                    <PhoneFieldSkeleton field={field} bind:form="{form}"/>
+                                    <PhoneFieldSkeleton field={field} bind:form={form}/>
                                 {:else if field.type === 'textarea'}
-                                    <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
-                                              class="fcal_input" required="{!field.required}" bind:value={form[field.name]}/>
+                                    <textarea class="fcal_input" placeholder={field.placeholder} disabled={field.disabled}
+                                              aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'checkbox'}
-                                    <label class="fcal_custom_checkbox">
+                                    <label class="fcal_custom_checkbox" aria-label={field.label}>
                                         <input type="checkbox" bind:checked={form[field.name]}/>
                                         <span>{field.label}</span>
                                         <span class="checkbox_mark"></span>
@@ -64,24 +65,26 @@
                                 {:else if field.type === 'radio'}
                                     <div role="radiogroup">
                                         {#each field.options as option}
-                                            <label class="fcal_radio_group" for={field.name+option}>
-                                                <input type="radio" bind:group={form[field.name]} 
+                                            <label class="fcal_radio_group" for={field.name+option} aria-label={option}>
+                                                <input type="radio" bind:group={form[field.name]}
                                                     id={field.name+option} value={option}>
                                                 {option}<span class="fcal_radio_icon"></span>
                                             </label>
                                         {/each}
                                     </div>
                                     {:else if field.type === 'dropdown'}
-                                    <select required="{field.required}" bind:value={form[field.name]}>
+                                    <select aria-required={field.required} bind:value={form[field.name]}>
                                         <option value="" disabled selected>{field.placeholder}</option>
                                         {#each field.options as option (option)}
                                             <option value={option}>{option}</option>
                                         {/each}
                                     </select>
                                 {:else if field.type === 'checkbox-group'}
-                                    {#each field.options as option (option)}
-                                        <label class="fcal_checkbox_group fcal_custom_checkbox">
-                                            <input type="checkbox" bind:group={form[field.name]} value={option}/>
+                                    {#each field.options as option}
+                                        <label class="fcal_checkbox_group fcal_custom_checkbox" 
+                                            for={field.name+option} aria-label={option}>
+                                            <input type="checkbox" bind:group={form[field.name]} 
+                                                id={field.name+option} value={option}/>
                                                 {option}
                                             <span class="checkbox_mark"></span>
                                         </label>
@@ -130,12 +133,12 @@
                 {/if}
                 <div class="fcal_form_item fcal_submit">
                     {#if !hasPaymentItem()}
-                        <button disabled="{submitting}" type="submit"
+                        <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Schedule_Meeting}
                         </button>
                     {:else}
-                        <button disabled="{submitting}" type="submit"
+                        <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Continue_to_Payments}
                         </button>
@@ -178,6 +181,8 @@
 
     let hasError = false;
 
+    let validating = false;
+
     const currentUrl = window.location.href;
 
     setTimeout(() => {
@@ -208,17 +213,37 @@
         return subtotal;
     }
 
+    function handleError(errors) {
+        hasError = false;
+        validating = !validating;
+        formFields.forEach((field) => {
+            field.error = null;
+        })
+        for (let error in errors) {
+            const [fieldName, errorType] = error.split('.');
+            if (fieldName === 'location_config') {
+                hasError = true;
+                continue;
+            }
+            const field = formFields.find((f) => f.name === fieldName);
+            if (field && errorType === 'required') {
+                hasError = true;
+                field.error = i18('This field is required.');
+            }
+        };
+    }
+
     function validateForm() {
         hasError = false;
+        validating = !validating;
         formFields.forEach((field) => {
-            if (field.required && !form[field.name]) {
+            field.error = null;
+            if (field.required && !form[field.name] && field.name != 'location') {
                 hasError = true;
-                field.error = 'This field is required.';
-            } else {
-                field.error = null;
+                field.error = i18('This field is required.');
             }
         });
-        return hasError;
+        return !hasError;
     };
 
     function submitForm(e) {
@@ -274,7 +299,12 @@
                 dispatch('bookingConfirmed', res);
             })
             .catch(err => {
-                errors = getErrorText(err.response);
+                if (err.response?.errors) {
+                    handleError(err.response.errors);
+                }
+                if (!hasError) {
+                    errors = getErrorText(err.response);
+                }
             })
             .finally(() => {
                 submitting = false;
@@ -288,6 +318,10 @@
 
     function handleDateClear(formName) {
         form[formName] = '';
+    }
+
+    function shouldRenderLabel(field) {
+        return !(field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'));
     }
 
 </script>
