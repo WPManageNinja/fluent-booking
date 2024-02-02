@@ -383,7 +383,7 @@
                         <div
                             class="fcal_date_event_details {showingPayments ? 'is_payment' : ''} { selectedDateTime.start ? 'is_active' : ''}">
                             <div class="fcal_date_event_details_header">
-                                <h2>
+                                <h3>
                                     {#if showingPayments}
                                         {i18('Payment Details')}
                                     {:else}
@@ -404,7 +404,7 @@
                                             {i18('Enter Details')}
                                         {/if}
                                     {/if}
-                                </h2>
+                                </h3>
                             </div>
                             {#if selectedDateTime.start}
                                 <BookingForm
