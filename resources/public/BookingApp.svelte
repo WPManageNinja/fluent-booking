@@ -225,7 +225,7 @@
                                 </div>
                             {/if}
                             <div class="fcal_slot_info">
-                                <h2 class="fcal_slot_heading">{slot.title}</h2>
+                                <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
                                 <div class="slot_timing fcal_icon_item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                          viewBox="0 0 18 18"

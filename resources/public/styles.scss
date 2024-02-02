@@ -12,7 +12,7 @@ $whiteBG: #ffffff;
   --fcal_slot_border: #D6DAE1;
   --fcal_date_disabled_bg: #ffffff;
   --fcal_enable_day_bg: #e5e7eb;
-  --fcal_date_disabled_color: rgb(152 160 166);
+  --fcal_date_disabled_color: #6b7280;
   --fcal_thBG: #f5f6f7;
   --fcal_dark: #1B2533;
   --fcal_whiteColor: #ffffff;
@@ -1114,7 +1114,7 @@ body >.fcal_calendar_wrap {
       justify-content: space-between;
 
       .calendar-month-year {
-        h3 {
+        h2 {
           margin: 0;
           font-size: 18px;
           color: var(--fcal_dark);

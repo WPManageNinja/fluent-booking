@@ -11,7 +11,7 @@
                 <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); ?>/images/check-mark.png" />
             </div>
         <?php endif; ?>
-        <h3><?php echo esc_html($title); ?></h3>
+        <h2><?php echo esc_html($title); ?></h2>
         <p><?php echo wp_kses_post($sub_heading); ?></p>
     </div>
     <div class="fcal_confirm_body">
