@@ -41,7 +41,7 @@
                                                 <circle cx="12" cy="10" r="3"/>
                                             </svg>
                                         {/if}
-                                        <input disabled={field.disabled} class="fcal_input" type="text" placeholder={field.placeholder}
+                                        <input disabled={field.disabled} class="fcal_input" id={'fcalInputID'+field.name} type="text" placeholder={field.placeholder}
                                             aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                     </div>
                                 {:else if field.type === 'email'}
@@ -161,7 +161,7 @@
 <script>
     import { Pulse } from 'svelte-loading-spinners';
     import { util, i18, getErrorText } from '../util.js';
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
     import MultiGuests from "./_MultiGuests.svelte";
@@ -328,5 +328,11 @@
     function shouldRenderLabel(field) {
         return !(field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'));
     }
+
+    onMount(() => {
+        setTimeout(() => {
+            document.getElementById('fcalInputIDname').focus();
+        }, 500);
+    });
 
 </script>

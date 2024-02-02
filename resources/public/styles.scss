@@ -5,7 +5,7 @@ $lightDark: #6b7280;
 $whiteBG: #ffffff;
 
 :root {
-  --fcal_primary_color: #306ae0;
+  --fcal_primary_color: #386bb8;
   --fcal_date_radius: 4px;
   --fcal_avatar_radius: 8px;
   --fcal_cal_bg: #ffffff;
@@ -706,14 +706,18 @@ body >.fcal_calendar_wrap {
       }
 
       button {
-        font-size: 14px;
+        font-size: 0.875rem;
         font-weight: 500;
-        line-height: 20px;
+        line-height: 1.5;
         color: var(--fcal_whiteColor);
-        padding: 10px 20px;
+        padding: 0.6rem 1.2rem;
         background: var(--fcal_primary_color);
+        border-color: var(--fcal_primary_color);
         border-radius: 8px;
         margin-bottom: 0;
+        &:hover {
+            opacity: 0.8;
+        }
       }
 
       &.fcal_submit {
@@ -1328,6 +1332,9 @@ body >.fcal_calendar_wrap {
         width: 1rem;
         height: 1rem;
       }
+      .fcal_duration_title {
+        margin-top: -0.2rem;
+      }
     }
 
     &.slot_timezone {
@@ -1832,7 +1839,7 @@ body >.fcal_calendar_wrap {
 
 .fcal_multi_locations {
   position: relative;
-  margin-bottom: 0.375rem;
+  margin-bottom: 0.625rem;
 
   .fcal_multi_location_title {
     display: flex;
