@@ -282,8 +282,8 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h3>{getDateTimeStringI18(monthNames[month], 'month')}
-                        <span>{getDateTimeStringI18(year, 'mNumber')}</span></h3>
+                    <h2>{getDateTimeStringI18(monthNames[month], 'month')}
+                        <span>{getDateTimeStringI18(year, 'mNumber')}</span></h2>
                 </div>
                 <div class="calendar_nav">
                     <button aria-label="Previous Month" type="button" class="{prevDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}"
@@ -310,7 +310,7 @@
             />
 
             <div class="fcal_timezone_select">
-                <label for="fcal_timezone_selector">{i18('Timezone')}</label>
+                <label aria-label="Select Timezone" for="fcal_timezone_selector">{i18('Timezone')}</label>
                 <TimeZoneSelector bind:timezone={timezone}/>
             </div>
 
@@ -335,12 +335,12 @@
                     <span>{getDateTimeStringI18(dateTimeI18(selectedDate, 'DD'), 'mNumber')}</span></span>
                 <div class="fcal_slot_picker_header_action">
                     <div class="format-hour">
-                        <button type="button" class="{formatHours === '12' ? 'active' : ''}" on:click={() => formatHours = '12'}>
+                        <button aria-label="12th Hour Format" type="button" class="{formatHours === '12' ? 'active' : ''}" on:click={() => formatHours = '12'}>
                             {i18('12h')}
                         </button>
                     </div>
                     <div class="format-hour">
-                        <button type="button" class="{formatHours === '24' ? 'active' : ''}" on:click={() => formatHours = '24'}>
+                        <button aria-label="24th Hour Format" type="button" class="{formatHours === '24' ? 'active' : ''}" on:click={() => formatHours = '24'}>
                             {i18('24h')}
                         </button>
                     </div>

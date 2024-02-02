@@ -19,7 +19,7 @@
                         {:else if field.type === 'multi-select' }
                             <MultiSelect field={field} {validating} {hasError} bind:form={form} />
                         {:else}
-                            <label class="fcal_input_content" aria-label={field?.label ?? ''}>
+                            <label class="fcal_input_content" aria-label={field?.label ?? ''} id="{field.name}-label">
                                 {#if field.label}
                                     <div class="fcal_input_label">
                                         {#if shouldRenderLabel(field)}
@@ -50,12 +50,12 @@
                                     />
                                 {:else if field.type === 'number'}
                                     <input disabled={field.disabled} class="fcal_input" type="number" placeholder={field.placeholder} 
-                                    aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'phone'}
                                     <PhoneFieldSkeleton field={field} bind:form={form}/>
                                 {:else if field.type === 'textarea'}
                                     <textarea class="fcal_input" placeholder={field.placeholder} disabled={field.disabled}
-                                              aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'checkbox'}
                                     <label class="fcal_custom_checkbox" aria-label={field.label}>
                                         <input type="checkbox" bind:checked={form[field.name]}/>
@@ -63,7 +63,7 @@
                                         <span class="checkbox_mark"></span>
                                     </label>
                                 {:else if field.type === 'radio'}
-                                    <div role="radiogroup">
+                                    <div role="radiogroup" aria-labelledby="{field.name}-label">
                                         {#each field.options as option}
                                             <label class="fcal_radio_group" for={field.name+option} aria-label={option}>
                                                 <input type="radio" bind:group={form[field.name]}
