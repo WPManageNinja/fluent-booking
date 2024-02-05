@@ -43,6 +43,9 @@
                     />
                     <p class="fcal_input_desc">{{ $t('This number will be used for sending sms notification') }}</p>
                 </el-form-item>
+                <el-form-item :label="$t('Host Timezone')" class="fcal_global_timezone">
+                    <TimeZoneSelector v-model="calendar.author_timezone"/>
+                </el-form-item>
                 <el-form-item :label="$t('About')">
                     <el-input
                         v-model="calendar.description"
@@ -86,15 +89,17 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {Share} from '@element-plus/icons-vue';
-import PhotoWidget from '@/Pieces/PhotoWidget.vue'
+<script>
+import { Share } from '@element-plus/icons-vue';
+import PhotoWidget from '@/Pieces/PhotoWidget.vue';
+import TimeZoneSelector from '../../parts/TimeZoneSelector.vue';
 export default {
     name: 'LandingPageCalendarSettings',
     props: ['calendar'],
     components: {
         Share,
-        PhotoWidget
+        PhotoWidget,
+        TimeZoneSelector
     },
     data() {
         return {
@@ -130,6 +135,7 @@ export default {
                     description: this.calendar.description,
                     title: this.calendar.title,
                     phone: this.calendar.author_profile.phone,
+                    timezone: this.calendar.author_timezone,
                     calendar_avatar: this.calendar.author_profile.avatar,
                     featured_image: this.calendar.author_profile.featured_image
                 }

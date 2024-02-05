@@ -532,6 +532,7 @@ class TransStrings
             'Field Type'                                                                       => __('Field Type', 'fluent-booking-pro'),
             'Label field is required'                                                          => __('Label field is required', 'fluent-booking-pro'),
             'Host Number'                                                                      => __('Host Number', 'fluent-booking-pro'),
+            'Host Timezone'                                                                    => __('Host Timezone', 'fluent-booking-pro'),
             'Custom Number'                                                                    => __('Custom Number', 'fluent-booking-pro'),
             'Please set the host phone number from'                                            => __('Please set the host phone number from', 'fluent-booking-pro'),
             'Enter number with country code'                                                   => __('Enter number with country code', 'fluent-booking-pro'),

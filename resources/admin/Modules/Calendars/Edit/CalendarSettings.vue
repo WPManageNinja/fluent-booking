@@ -47,8 +47,8 @@ export default {
                 with: ['settings_menu']
             })
             .then(response => {
-                this.menuItems = response.settings_menu
-                this.calendar = response.calendar
+                this.menuItems = response.settings_menu;
+                this.calendar = response.calendar;
             })
             .catch(errors => {
                 this.$handleError(errors);
