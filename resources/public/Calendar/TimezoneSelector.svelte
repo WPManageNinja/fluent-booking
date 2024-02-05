@@ -26,7 +26,7 @@
 </script>
 
 <Select on:input={handleTimeZoneChange} {groupBy}
-        id="fcal_timezone_selector"
+    id="fcal_timezone_selector"
     {floatingConfig}
     clearable={false}
     value={timezone}

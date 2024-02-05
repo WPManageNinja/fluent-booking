@@ -42,7 +42,7 @@ $whiteBG: #ffffff;
   --fcal_primary_color: #ffffff;
   --fcal_date_disabled_bg: transparent;
   --fcal_enable_day_bg: #2b2b2b;
-  --fcal_date_disabled_color: #575757;
+  --fcal_date_disabled_color: #8b8e99;
   --fcal_thBG: #2b2b2b;
   --fcal_whiteColor: #1B2533;
   --fcal_input_bg: #101010;
@@ -1106,6 +1106,7 @@ body >.fcal_calendar_wrap {
       max-width: 540px;
       padding: 30px 20px;
       transition: .3s;
+      position: relative;
     }
 
     .calendar-header {
@@ -1121,7 +1122,7 @@ body >.fcal_calendar_wrap {
           line-height: 1.5;
 
           span {
-            color: #6b7280;
+            color: var(--fcal_date_disabled_color);
           }
         }
       }
@@ -1132,7 +1133,6 @@ body >.fcal_calendar_wrap {
           width: 30px;
           height: 30px;
           cursor: pointer;
-          outline: 0;
           color: #6b7280;
           background: none;
           border: none;
@@ -2034,6 +2034,53 @@ body >.fcal_calendar_wrap {
     padding-left: 20px !important;
     border-radius: 8px !important;
   }
+}
+
+.fcal_no_availability {
+    width: max-content;
+    background: var(--fcal_cal_bg);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+    border-width: 2px;
+    position: absolute;
+    border: 1px solid var(--fcal_slot_border);
+    top: 40%;
+    left: 21%;
+    z-index: 9;
+
+    h4 {
+        color: var(--fcal_dark);
+        font-weight: 400;
+    }
+
+    button {
+        cursor: pointer;
+        margin-top: 1rem;
+        font-weight: 500;
+        font-size: .875rem;
+        line-height: 1.25rem;
+        padding: 0.625rem 1rem;
+        border-radius: 8px;
+        color: var(--fcal_whiteColor);
+        background-color: var(--fcal_primary_color);
+        align-items: center;
+        display: inline-flex;
+        height: 2.25rem;
+        position: relative;
+        border: 0 solid;
+
+        svg {
+            width: 1rem;
+            height: 1rem;
+            margin-left: 0.5rem;
+            &.fcal_prev_month {
+                margin-left: 0;
+                margin-right: 0.5rem;
+                transform: rotate(180deg);
+            }
+        }
+    }
 }
 
 .fcal_date_wrapper {

@@ -471,7 +471,10 @@ class FrontEndHandler
                 'Time'                          => __('Time', 'fluent-booking-pro'),
                 'Add guests'                    => __('Add guests', 'fluent-booking-pro'),
                 'Add another'                   => __('Add another', 'fluent-booking-pro'),
-                'This field is required.'       => __('This field is required.', 'fluent-booking-pro')
+                'This field is required.'       => __('This field is required.', 'fluent-booking-pro'),
+                'No availability in'            => __('No availability in', 'fluent-booking-pro'),
+                'View next month'               => __('View next month', 'fluent-booking-pro'),
+                'View previous month'           => __('View previous month', 'fluent-booking-pro')
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];

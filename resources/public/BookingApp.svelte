@@ -248,7 +248,7 @@
                                                         <span
                                                             on:keypress={()=>durationSelected(value)}
                                                             on:click={()=>durationSelected(value)}
-                                                            class="fcal_duration {duration == value ? 'is_selected' : ''}">
+                                                            role="button" tabindex="0" class="fcal_duration {duration == value ? 'is_selected' : ''}">
                                                             {value} {i18('minutes')}
                                                         </span>
                                                 {/each}
