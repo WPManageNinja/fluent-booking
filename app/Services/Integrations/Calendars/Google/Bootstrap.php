@@ -86,6 +86,8 @@ class Bootstrap extends BaseCalendar
                 $calendar->generic_error = '<p style="color: red; margin:0;">' . __('Google Calendar API Error:', 'fluent-booking-pro') . ' ' . $error . '. <a href="' . Helper::getAppBaseUrl('calendars/' . $calendar->id . '/settings/remote-calendars') . '">' . __('Click Here to Review', 'fluent-booking-pro') . '</a></p>';
             }, 10, 2);
         });
+
+        add_action('fluent_booking/delete_booking_async_google', [$this, 'asyncDeleteEvent'], 10, 4);
     }
 
     public function pushToGlobalMenu($menuItems)
@@ -676,6 +678,46 @@ class Bootstrap extends BaseCalendar
 
             return true;
         }
+    }
+
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $bookingMeta = $booking->getMeta('__google_calendar_event');
+
+        if (!$bookingMeta || !($googleEventId = Arr::get($bookingMeta, 'id'))) {
+            return false; // Nothing to update as there is no previous response of this booking
+        }
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['db_id'],
+            $config['remote_calendar_id'],
+            $googleEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $dbId, $remoteCalendarId, $googleEventId)
+    {
+        $meta = Meta::where('object_type', '_google_user_token')
+            ->where('object_id', $hostId)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false; //  Meta could not be found
+        }
+        
+        $updateData = [
+            'status' => 'cancelled'
+        ];
+
+        $api = new GoogleCalendar($meta);
+
+        $api->patchEvent($remoteCalendarId, $googleEventId, $updateData);
     }
 
     public function getAuthUrl($userId = null)

@@ -219,11 +219,17 @@ class SchedulesController extends Controller
     {
         $booking = Booking::findOrFail($bookingId);
 
+        $eventId = $booking->event_id;
+
         do_action('fluent_booking/before_delete_booking', $booking);
 
         $booking->delete();
 
         do_action('fluent_booking/after_delete_booking', $bookingId);
+
+        if ($booking->event_type == 'group') {
+            Booking::where('event_id', $eventId)->delete();
+        }
 
         return [
             'message' => __('Booking Deleted Successfully!', 'fluent-booking-pro')

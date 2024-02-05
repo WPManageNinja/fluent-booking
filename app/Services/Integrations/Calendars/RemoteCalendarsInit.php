@@ -20,6 +20,8 @@ class RemoteCalendarsInit
 
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'checkForRemoteCalendarEventReschedule'], 10, 2);
 
+        add_action('fluent_booking/before_delete_booking', [$this, 'checkForRemoteCalendarEventDelete'], 10, 1);
+
         add_action('fluent_booking/after_disconnect_remote_calendar', function ($metaId, $calendar) {
             $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
             if (!$config) {
@@ -125,5 +127,16 @@ class RemoteCalendarsInit
             'start' => $booking->start_time,
             'end'   => $booking->end_time
         ], true);
+    }
+
+    public function checkForRemoteCalendarEventDelete(Booking $booking)
+    {
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
+
+        if (!$config) {
+            return; // no integration available
+        }
+
+        do_action('fluent_booking/delete_remote_calendar_event_' . $config['driver'], $config, $booking);
     }
 }

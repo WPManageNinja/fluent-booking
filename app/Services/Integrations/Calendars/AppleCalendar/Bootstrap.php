@@ -53,6 +53,8 @@ class Bootstrap extends BaseCalendar
         });
 
         add_filter('fluent_booking/verify_save_caldav_credential_' . $this->calendarKey, [$this, 'saveUserCredentials'], 10, 3);
+
+        add_action('fluent_booking/delete_booking_async_apple_calendar', [$this, 'asyncDeleteEvent'], 10, 4);
     }
 
     public function getClientSettingsForView($settings)
@@ -515,6 +517,52 @@ class Bootstrap extends BaseCalendar
                 $missingBooking->updateMeta('__apple_calendar_event', $parentMeta);
             }
         }
+    }
+
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $appleEvent = $booking->getMeta('__apple_calendar_event');
+
+        if (!$appleEvent || !($appleEventId = Arr::get($appleEvent, 'remote_event_id'))) {
+            return false;
+        }
+
+        $remoteCalendar = Arr::get($appleEvent, 'remote_calendar');
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['db_id'],
+            $remoteCalendar,
+            $appleEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $dbId, $remoteCalendar, $appleEventId)
+    {
+        $meta = Meta::where('object_type', '_apple_calendar_user_token')
+            ->where('object_id', $hostId)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false;
+        }
+
+        $client = AppleHelper::getClientByMeta($meta);
+
+        if (!$client) {
+            return false;
+        }
+
+        $apiCalendar = new Calendar([
+            'href' => $remoteCalendar
+        ], $client->getClient());
+
+        $apiCalendar->deleteEvent($appleEventId);
     }
 
     public function getAuthUrl($userId = null)

@@ -117,7 +117,7 @@ class CalendarController extends Controller
 
         $isTeam = $title ? true : false;
 
-        if (!$isTeam && Calendar::where('user_id', $user->ID)->first()) {
+        if (!$isTeam && Calendar::where('user_id', $user->ID)->where('type', '!=', 'team')->first()) {
             return $this->sendError([
                 'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
             ], 422);
@@ -266,7 +266,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'description', 'calendar_avatar', 'featured_image', 'phone']);
+        $calendarDataItems = Arr::only($request->get('calendar_data', []), ['title', 'timezone', 'description', 'calendar_avatar', 'featured_image', 'phone']);
 
         if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
@@ -275,6 +275,7 @@ class CalendarController extends Controller
             ]);
 
             $calendar->title = sanitize_text_field(Arr::get($calendarDataItems, 'title'));
+            $calendar->author_timezone = sanitize_text_field(Arr::get($calendarDataItems, 'timezone'));
             $calendar->description = wp_kses_post(Arr::get($calendarDataItems, 'description'));
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
