@@ -153,7 +153,9 @@
                     <line x1="12" x2="12" y1="16" y2="12"></line>
                     <line x1="12" x2="12.01" y1="8" y2="8"></line>
                 </svg>
-                {@html errors}
+                <div>
+                    {@html errors}
+                </div>
             </div>
         {/if}
     </div>
@@ -240,14 +242,18 @@
 
     function validateForm() {
         hasError = false;
+        errors = '';
         validating = !validating;
         formFields.forEach((field) => {
             field.error = null;
-            if (field.required && !form[field.name] && field.name != 'location') {
+            if (field.enabled && field.required && !form[field.name] && field.name != 'location') {
                 hasError = true;
                 field.error = i18('This field is required.');
             }
         });
+        if (hasError) {
+            errors = i18('Please fill up the required data');
+        }
         return !hasError;
     };
 
@@ -307,9 +313,7 @@
                 if (err.response?.errors) {
                     handleError(err.response.errors);
                 }
-                if (!hasError) {
-                    errors = getErrorText(err.response);
-                }
+                errors = getErrorText(err.response);
             })
             .finally(() => {
                 submitting = false;
