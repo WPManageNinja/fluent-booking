@@ -19,7 +19,7 @@
                         {:else if field.type === 'multi-select' }
                             <MultiSelect field={field} {validating} {hasError} bind:form={form} />
                         {:else}
-                            <label class="fcal_input_content" aria-label={field?.label ?? ''} id="{field.name}-label">
+                            <label class="fcal_input_content" aria-label={field?.label} id="{field.name}-label">
                                 {#if field.label}
                                     <div class="fcal_input_label">
                                         {#if shouldRenderLabel(field)}
