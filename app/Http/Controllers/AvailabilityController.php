@@ -175,9 +175,11 @@ class AvailabilityController extends Controller
     {
         $schedule = Availability::findOrFail($scheduleId);
 
-        $timezone = Arr::get($schedule, 'value.timezone');
+        $scheduleTimezone = Arr::get($schedule, 'value.timezone');
 
         $data = $request->all();
+
+        $timezone = Arr::get($data, 'schedule.settings.timezone', $scheduleTimezone);
 
         $scheduleData = [
             'default'          => Arr::isTrue($schedule, 'value.default'),

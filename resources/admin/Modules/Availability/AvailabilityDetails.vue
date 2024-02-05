@@ -49,14 +49,9 @@
                             </template>
                         </el-dropdown>
                     </el-form-item>
-                    <el-form-item class="fcal_availability_header" :label="$t('Timezone:')">
-                    <div class="timezone">
-                        <div class="fcal_timezone_text">
-                            <el-icon><TimezoneIcon/></el-icon>
-                            <p>{{ scheduleInfo.settings?.timezone }}</p>
-                        </div>
-                    </div>
-                </el-form-item>
+                    <el-form-item v-if="scheduleInfo" :label="$t('Timezone:')" class="fcal_availability_header fcal_global_timezone">
+                        <TimeZoneSelector v-model="scheduleInfo.settings.timezone"/>
+                    </el-form-item>
                 </div>
 
                 <el-form-item class="fcal_tab_schedule">
@@ -136,6 +131,7 @@ import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from '../../Components/Icons/TimezoneIcon';
 import SaveButton from '../../Components/Buttons/SaveButton.vue';
 import Pagination from '../../Pieces/Pagination';
+import TimeZoneSelector from '../Calendars/parts/TimeZoneSelector';
 
 export default {
     name: "AvailabilityDetails",
@@ -147,6 +143,7 @@ export default {
         SaveButton,
         ScheduleIcon,
         Pagination,
+        TimeZoneSelector,
         StarFilled,
         Setting,
         Delete,
