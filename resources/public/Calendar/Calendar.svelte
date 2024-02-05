@@ -45,7 +45,7 @@
         display: grid;
         width: 100%;
         gap: 0.6rem;
-        grid-template-columns: repeat(7, minmax(0, 50px));
+        grid-template-columns: repeat(7, minmax(0, 3rem));
         overflow: auto;
         align-items: center;
     }

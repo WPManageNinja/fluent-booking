@@ -52,6 +52,8 @@ class Bootstrap extends BaseCalendar
         });
 
         add_filter('fluent_booking/verify_save_caldav_credential_' . $this->calendarKey, [$this, 'saveUserCredentials'], 10, 3);
+
+        add_action('fluent_booking/delete_booking_async_next_cloud_calendar', [$this, 'asyncDeleteEvent'], 10, 4);
     }
 
     public function getClientSettingsForView($settings)
@@ -519,6 +521,52 @@ class Bootstrap extends BaseCalendar
                 $missingBooking->updateMeta('__next_cloud_calendar_event', $parentMeta);
             }
         }
+    }
+
+    public function deleteEvent($config, Booking $booking)
+    {
+        if (!$this->isConfigured()) {
+            return false;
+        }
+
+        $calDavEvent = $booking->getMeta('__next_cloud_calendar_event');
+
+        if (!$calDavEvent || !($calDavEventId = Arr::get($calDavEvent, 'remote_event_id'))) {
+            return false;
+        }
+
+        $remoteCalendar = Arr::get($calDavEvent, 'remote_calendar');
+
+        as_enqueue_async_action('fluent_booking/delete_booking_async_' . $config['driver'], [
+            $booking->host_user_id,
+            $config['db_id'],
+            $remoteCalendar,
+            $calDavEventId
+        ], 'fluent-booking');
+    }
+
+    public function asyncDeleteEvent($hostId, $dbId, $remoteCalendar, $calDavEventId)
+    {
+        $meta = Meta::where('object_type', '_next_cloud_calendar_user_token')
+            ->where('object_id', $hostId)
+            ->where('id', $dbId)
+            ->first();
+
+        if (!$meta) {
+            return false;
+        }
+
+        $client = NextCloudHelper::getClientByMeta($meta);
+
+        if (!$client) {
+            return false;
+        }
+
+        $apiCalendar = new Calendar([
+            'href' => $remoteCalendar
+        ], $client->getClient());
+
+        $apiCalendar->deleteEvent($calDavEventId);
     }
 
     public function getAuthUrl($userId = null)

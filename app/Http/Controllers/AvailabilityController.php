@@ -155,6 +155,12 @@ class AvailabilityController extends Controller
 
         $clonedSchedule->key = $clonedSchedule->key . ' (Clone)';
 
+        $clonedScheduleValue = $clonedSchedule->value;
+
+        $clonedScheduleValue['default'] = false;
+
+        $clonedSchedule->value = $clonedScheduleValue;
+
         $clonedSchedule->save();
 
         do_action('fluent_booking/availability_schedule_cloned', $clonedSchedule);
@@ -169,9 +175,11 @@ class AvailabilityController extends Controller
     {
         $schedule = Availability::findOrFail($scheduleId);
 
-        $timezone = Arr::get($schedule, 'value.timezone');
+        $scheduleTimezone = Arr::get($schedule, 'value.timezone');
 
         $data = $request->all();
+
+        $timezone = Arr::get($data, 'schedule.settings.timezone', $scheduleTimezone);
 
         $scheduleData = [
             'default'          => Arr::isTrue($schedule, 'value.default'),

@@ -212,10 +212,7 @@
     .fcal_settings_content_wrap {
         .el-form {
             .el-form-item {
-                margin-bottom: 16px;
-                &:last-child {
-                    margin-bottom: 0;
-                }
+                margin-bottom: 0;
                 .el-form-item__label,
                 .input-label {
                     font-size: 14px;
@@ -289,6 +286,18 @@
                                     gap: 4px;
                                 }
                             }
+                        }
+                    }
+                }
+                .fcal_time_zone_selector {
+                    .el-input__wrapper {
+                        font-size: 14px;
+                        padding: 6px 16px;
+                    }
+                    span {
+                        font-size: 13px;
+                        code {
+                            font-size: 12px;
                         }
                     }
                 }
@@ -530,7 +539,6 @@
 
     .fcal_availability_header_wrap {
         display: flex;
-        align-items: flex-start;
         gap: 24px;
         @media (max-width: 668px) {
             flex-direction: column;
@@ -780,8 +788,6 @@
         }
     }
     .fcal_settings_content_wrap {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
         padding: 24px 18px 24px 24px;
         .el-form {
             .el-form-item {
@@ -827,15 +833,17 @@
                                 line-height: 20px;
                             }
                         }
-                        .el-input {
-                            .el-input__wrapper {
-                                border-top-right-radius: 0;
-                                border-bottom-right-radius: 0;
-                            }
-                            .el-input-group__append {
-                                border-top-right-radius: 8px;
-                                border-bottom-right-radius: 8px;
-
+                        .fcal_edit_availability_title {
+                            .el-input {
+                                .el-input__wrapper {
+                                    border-top-right-radius: 0;
+                                    border-bottom-right-radius: 0;
+                                }
+                                .el-input-group__append {
+                                    border-top-right-radius: 8px;
+                                    border-bottom-right-radius: 8px;
+    
+                                }
                             }
                         }
                     }

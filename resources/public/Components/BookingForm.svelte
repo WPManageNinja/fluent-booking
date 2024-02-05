@@ -13,36 +13,20 @@
                 {#if field.enabled}
                     <div class="fcal_form_item">
                         {#if field.name === 'location'}
-                            <div class="fcal_input_content">
-                                {#if field.label}
-                                    <div class="fcal_input_label">
-                                        {field.label}
-                                        {#if field.required}<span>*</span>{/if}
-                                    </div>
-                                {/if}
-                                <LocationField {appData} field={field} bind:form="{form}"/>
-                            </div>
+                            <LocationField {appData} field={field} {validating} {hasError} bind:form={form}/>
                         {:else if field.type == 'multi-guests'}
-                            <MultiGuests {appData} field={field} bind:form="{form}" />
+                            <MultiGuests field={field} {validating} {hasError} bind:form={form} />
                         {:else if field.type === 'multi-select' }
-                            <div class="fcal_input_content">
-                                {#if field.label}
-                                    <div class="fcal_input_label">
-                                        {field.label}
-                                        {#if field.required}<span>*</span>{/if}
-                                    </div>
-                                {/if}
-
-                                <MultiSelect {appData} field={field} bind:form={form} />
-                            </div>
-
+                            <MultiSelect field={field} {validating} {hasError} bind:form={form} />
                         {:else}
-                            <label class="fcal_input_content">
+                            <label class="fcal_input_content" aria-label={field?.label} id="{field.name}-label">
                                 {#if field.label}
                                     <div class="fcal_input_label">
-                                        {#if !( field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'))}
+                                        {#if shouldRenderLabel(field)}
                                             {field.label}
-                                            {#if field.required}<span>*</span>{/if}
+                                            {#if field.required}
+                                                <span>*</span>
+                                            {/if}
                                         {/if}
                                     </div>
                                 {/if}
@@ -57,61 +41,76 @@
                                                 <circle cx="12" cy="10" r="3"/>
                                             </svg>
                                         {/if}
-                                        <input disabled="{field.disabled}" class="fcal_input" type="text"
-                                               placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                        <input disabled={field.disabled} class="fcal_input" id={'fcalInputID'+field.name} type="text" placeholder={field.placeholder}
+                                            aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                     </div>
                                 {:else if field.type === 'email'}
-                                    <input disabled="{field.disabled}" class="fcal_input" type="email"
-                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                    <input disabled={field.disabled} class="fcal_input" type="email" placeholder={field.placeholder}
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}
+                                    />
                                 {:else if field.type === 'number'}
-                                    <input disabled="{field.disabled}" class="fcal_input" type="number"
-                                           placeholder="{field.placeholder}" bind:value={form[field.name]}/>
+                                    <input disabled={field.disabled} class="fcal_input" type="number" placeholder={field.placeholder} 
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'phone'}
-                                    <PhoneFieldSkeleton field={field} bind:form="{form}"/>
+                                    <PhoneFieldSkeleton field={field} bind:form={form}/>
                                 {:else if field.type === 'textarea'}
-                                    <textarea placeholder="{field.placeholder}" disabled="{field.disabled}"
-                                              class="fcal_input" bind:value={form[field.name]}/>
+                                    <textarea class="fcal_input" placeholder={field.placeholder} disabled={field.disabled}
+                                        aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'checkbox'}
-                                    <label class="fcal_custom_checkbox">
-                                        <input type="checkbox" bind:checked={form[field.name]} />
+                                    <label class="fcal_custom_checkbox" aria-label={field.label}>
+                                        <input type="checkbox" bind:checked={form[field.name]}/>
                                         <span>{field.label}</span>
                                         <span class="checkbox_mark"></span>
                                     </label>
                                 {:else if field.type === 'radio'}
-                                    {#each field.options as option}
-                                        <label class="fcal_radio_group">
-                                            {option}
-                                            <input type="radio" bind:group={form[field.name]} value={option}>
-                                            <span class="fcal_radio_icon"></span>
-                                        </label>
-                                    {/each}
-                                {:else if field.type === 'dropdown'}
-                                    <select bind:value={form[field.name]}>
+                                    <div role="radiogroup" aria-labelledby="{field.name}-label">
+                                        {#each field.options as option}
+                                            <label class="fcal_radio_group" for={field.name+option} aria-label={option}>
+                                                <input type="radio" bind:group={form[field.name]}
+                                                    id={field.name+option} value={option}>
+                                                {option}<span class="fcal_radio_icon"></span>
+                                            </label>
+                                        {/each}
+                                    </div>
+                                    {:else if field.type === 'dropdown'}
+                                    <select aria-required={field.required} bind:value={form[field.name]}>
                                         <option value="" disabled selected>{field.placeholder}</option>
                                         {#each field.options as option (option)}
                                             <option value={option}>{option}</option>
                                         {/each}
                                     </select>
                                 {:else if field.type === 'checkbox-group'}
-                                    {#each field.options as option (option)}
-                                        <label class="fcal_checkbox_group fcal_custom_checkbox">
-                                            <input type="checkbox" bind:group={form[field.name]} value={option}/>{option}
+                                    {#each field.options as option}
+                                        <label class="fcal_checkbox_group fcal_custom_checkbox" 
+                                            for={field.name+option} aria-label={option}>
+                                            <input type="checkbox" bind:group={form[field.name]} 
+                                                id={field.name+option} value={option}/>
+                                                {option}
                                             <span class="checkbox_mark"></span>
                                         </label>
                                     {/each}
                                 {:else if field.type === 'date' }
                                     <span class="fcal_date_field">
-                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field.name))} />
+                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field.name))}/>
                                         <input class="set_date" type="text" placeholder={appData.date_formatter} bind:value={form[field.name]} />
                                         {#if form[field.name]}
                                             <span class="clear_date_icon" on:keydown={(() => handleDateClear(field.name))} on:click={(() => handleDateClear(field.name))}>+</span>
                                         {/if}
                                     </span>
-
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
                                     <Payments field={field}/>
-                                {:else if field.type === 'hidden' }
+                                {:else if field.type === 'hidden'}
                                     <input type="hidden" bind:value={form[field.name]}/>
+                                {/if}
+                                {#if hasError && field.error}
+                                    <div class="fcal_validation_error">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 ltr:mr-2 rtl:ml-2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" x2="12" y1="16" y2="12"></line>
+                                            <line x1="12" x2="12.01" y1="8" y2="8"></line>
+                                        </svg>
+                                        <p>{field.error}</p>
+                                    </div>
                                 {/if}
                             </label>
                         {/if}
@@ -134,12 +133,12 @@
                 {/if}
                 <div class="fcal_form_item fcal_submit">
                     {#if !hasPaymentItem()}
-                        <button disabled="{submitting}" type="submit"
+                        <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Schedule_Meeting}
                         </button>
                     {:else}
-                        <button disabled="{submitting}" type="submit"
+                        <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Continue_to_Payments}
                         </button>
@@ -149,15 +148,22 @@
         </form>
         {#if errors}
             <div class="fcal_errors">
-                {@html errors}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-blue-900 dark:text-blue-200" data-testid="info" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" x2="12" y1="16" y2="12"></line>
+                    <line x1="12" x2="12.01" y1="8" y2="8"></line>
+                </svg>
+                <div>
+                    {@html errors}
+                </div>
             </div>
         {/if}
     </div>
 </div>
 <script>
-    import {Pulse} from 'svelte-loading-spinners';
-    import {util, i18, getErrorText} from '../util.js';
-    import {createEventDispatcher} from 'svelte';
+    import { Pulse } from 'svelte-loading-spinners';
+    import { util, i18, getErrorText } from '../util.js';
+    import { createEventDispatcher, onMount } from 'svelte';
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
     import MultiGuests from "./_MultiGuests.svelte";
@@ -179,6 +185,10 @@
     let dispatch = createEventDispatcher();
 
     let errors = '';
+
+    let hasError = false;
+
+    let validating = false;
 
     const currentUrl = window.location.href;
 
@@ -210,7 +220,45 @@
         return subtotal;
     }
 
+    function handleError(errors) {
+        hasError = false;
+        validating = !validating;
+        formFields.forEach((field) => {
+            field.error = null;
+        })
+        for (let error in errors) {
+            const [fieldName, errorType] = error.split('.');
+            if (fieldName === 'location_config') {
+                hasError = true;
+                continue;
+            }
+            const field = formFields.find((f) => f.name === fieldName);
+            if (field && errorType === 'required') {
+                hasError = true;
+                field.error = i18('This field is required.');
+            }
+        };
+    }
+
+    function validateForm() {
+        hasError = false;
+        errors = '';
+        validating = !validating;
+        formFields.forEach((field) => {
+            field.error = null;
+            if (field.enabled && field.required && !form[field.name] && field.name != 'location') {
+                hasError = true;
+                field.error = i18('This field is required.');
+            }
+        });
+        if (hasError) {
+            errors = i18('Please fill up the required data');
+        }
+        return !hasError;
+    };
+
     function submitForm(e) {
+        if (!validateForm()) return;
         const formFields = e.target.elements;
         const selectedMethod = (formFields?.stripe_payment_method?.value) ? formFields.stripe_payment_method.value : '';
         const postdata = {
@@ -262,6 +310,9 @@
                 dispatch('bookingConfirmed', res);
             })
             .catch(err => {
+                if (err.response?.errors) {
+                    handleError(err.response.errors);
+                }
                 errors = getErrorText(err.response);
             })
             .finally(() => {
@@ -277,5 +328,15 @@
     function handleDateClear(formName) {
         form[formName] = '';
     }
+
+    function shouldRenderLabel(field) {
+        return !(field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'));
+    }
+
+    onMount(() => {
+        setTimeout(() => {
+            document.getElementById('fcalInputIDname').focus();
+        }, 500);
+    });
 
 </script>

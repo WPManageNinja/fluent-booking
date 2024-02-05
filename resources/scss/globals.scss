@@ -2648,6 +2648,11 @@
                                 }
                             }
                         }
+                        &.fcal_global_timezone {
+                            .fcal_time_zone_selector {
+                                width: 100%;
+                            }
+                        }
                     }
                 }
             }

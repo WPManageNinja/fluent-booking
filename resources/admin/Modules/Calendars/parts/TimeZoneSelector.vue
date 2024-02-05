@@ -25,7 +25,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 export default {
     name: 'TimeZoneSelector',
     props: ['modelValue', 'disabled'],
@@ -50,7 +50,7 @@ export default {
         }
     },
     mounted() {
-        if(!this.value) {
+        if(!this.modelValue) {
             this.selected = window.dayjs.tz.guess();
             this.timeZoneChanged();
         } else {
