@@ -12,6 +12,7 @@ use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
+use FluentBooking\App\Services\CalendarService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
@@ -274,8 +275,13 @@ class CalendarController extends Controller
                 'calendar_avatar' => 'url'
             ]);
 
+            $updatedTimezone = sanitize_text_field(Arr::get($calendarDataItems, 'timezone'));
+            if ($updatedTimezone && $updatedTimezone != $calendar->author_timezone) {
+                CalendarService::updateCalendarEventsSchedule($calendarId, $calendar->author_timezone, $updatedTimezone);
+                $calendar->author_timezone = $updatedTimezone;
+            }
+
             $calendar->title = sanitize_text_field(Arr::get($calendarDataItems, 'title'));
-            $calendar->author_timezone = sanitize_text_field(Arr::get($calendarDataItems, 'timezone'));
             $calendar->description = wp_kses_post(Arr::get($calendarDataItems, 'description'));
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
