@@ -542,6 +542,15 @@ class CalendarController extends Controller
 
         $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
 
+        if ($slug = sanitize_title(Arr::get($data, 'slug'))) {
+            if (!Helper::isEventSlugAvailable($slug, true, $calendarId, $eventId)) {
+                return $this->sendError([
+                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking-pro')
+                ], 422);
+            }
+            $event->slug = $slug;
+        }
+
         $event->title = sanitize_text_field($data['title']);
         $event->duration = (int)$data['duration'];
         $event->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);

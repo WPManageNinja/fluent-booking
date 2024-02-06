@@ -204,6 +204,24 @@
                             </div>
                         </div>
                     </el-form-item>
+
+                    <el-form-item v-if="!is_board && !new_event">
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
+                                <span>{{ $t('EventDetails/slug_setting_description') }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="editSlug"/>
+                            </div>
+                            <div class="fcal_event_child_card" v-if="editSlug">
+                                <el-form-item :label="$t('Slug')">
+                                    <el-input v-model="calendarEventSlug"/>
+                                    <p class="fcal_event_input_hint">{{ $t('EventDetails/slug_setting_hint') }}</p>
+                                </el-form-item>
+                            </div>
+                        </div>
+                    </el-form-item>
                 </el-form>
             </div>
             <div v-if="!is_board && !new_event" class="fcal_create_calendar_form_footer">
@@ -237,8 +255,10 @@ export default {
         return {
             saving: false,
             loading: false,
+            editSlug: false,
             urlPopupVisible: false,
             queryPopupVisible: false,
+            calendarEventSlug: this.calendar_event.slug,
             isEnable: this.calendar_event.status === 'active' ? true : false,
             isDisplaySpots: this.calendar_event.is_display_spots == 1 ? true : false,
             isGroupMeeting: this.calendar_event.event_type == 'group',
@@ -314,6 +334,11 @@ export default {
         getMeetingDuration() {
             return this.calendar_event.duration === 'custom' ? this.calendar_event.custom_duration : this.calendar_event.duration;
         },
+        checkSlugUpdated(res) {
+            if (res.event.slug != this.calendar_event.slug) {
+                window.location.reload();
+            }
+        },
         checkValidation() {
             if (!this.calendar_event.title) {
                 this.$handleError(this.$t('Event Title is required'));
@@ -386,9 +411,11 @@ export default {
                 is_display_spots: this.calendar_event.is_display_spots,
                 location_settings: this.calendar_event.location_settings,
                 custom_redirect: this.calendar_event.settings.custom_redirect,
-                multi_duration: this.calendar_event.settings.multi_duration
+                multi_duration: this.calendar_event.settings.multi_duration,
+                slug: this.calendarEventSlug
             })
                 .then(response => {
+                    this.checkSlugUpdated(response);
                     this.$handleSuccess(response);
                 })
                 .catch(errors => {
