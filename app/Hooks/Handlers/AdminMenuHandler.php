@@ -284,7 +284,6 @@ class AdminMenuHandler
             'time_format'        => DateTimeHelper::getTimeFormatter(true),
             'date_time_formatter' => DateTimeHelper::getDateFormatter(true).', '.DateTimeHelper::getTimeFormatter(true)
         ]);
-
     }
 
     protected function getRestInfo($app)
