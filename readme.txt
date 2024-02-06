@@ -22,7 +22,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 == Changelog ==
 
 1.2.60 (Date: 06 Feb 2023)
-- Improved frontend accessiblity - achieve 100% score in lighthouse report
+- Improved frontend accessibility - achieve 100% score in lighthouse report
 - RTL support
 - Added booking type filter in booking listing
 - Improved all cleanups
@@ -31,7 +31,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 - Allow author to update timezone
 - Added event slug update ability
 - Displayed error messages of booking form
-- Added no availibility behaviour on schedule meeting
+- Added no availability behaviour on schedule meeting
 - Improved UI-UX
 
 1.2.52 (Date: 26 Jan 2023)
