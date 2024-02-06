@@ -5,7 +5,6 @@ namespace FluentBooking\App\Services;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Services\PermissionManager;
 
 class CalendarService
 {
@@ -90,5 +89,29 @@ class CalendarService
             }
         }
         return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
+    }
+
+    public static function updateCalendarEventsSchedule($calendarId, $oldTimezone, $updatedTimezone)
+    {
+        $calendarEvents = CalendarSlot::query()->where('calendar_id', $calendarId)->get();
+
+        foreach ($calendarEvents as $event)
+        {
+            if ($weeklySchedule = Arr::get($event->settings, 'weekly_schedules', [])) {
+                $originalSchedule = SanitizeService::weeklySchedules($weeklySchedule, 'UTC', $oldTimezone);
+                $weeklySchedule = SanitizeService::weeklySchedules($originalSchedule, $updatedTimezone, 'UTC');
+            }
+
+            if ($dateOverride = Arr::get($event->settings, 'date_overrides', [])) {
+                $originalOverride = SanitizeService::slotDateOverrides($dateOverride, 'UTC', $oldTimezone);
+                $dateOverride = SanitizeService::slotDateOverrides($originalOverride, $updatedTimezone, 'UTC');
+            }
+
+            $event->settings = [
+                'weekly_schedules' => $weeklySchedule,
+                'date_overrides'   => $dateOverride
+            ];
+            $event->save();
+        }
     }
 }
