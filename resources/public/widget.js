@@ -29,6 +29,7 @@ if (calendarApps.length) {
                         target: elem,
                         props: {
                             appData: response.app_vars,
+                            handleBack: false
                         }
                     });
                     elem.dataset.app_booted = true;

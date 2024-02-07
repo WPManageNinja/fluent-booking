@@ -13,7 +13,7 @@
             <p>{{ $t('Thank You or Choosing FluentBooking. Let\'s -') }} <b>{{ $t('Create Your First Booking Event') }}</b> <br>{{ $t('(Will Take Less Than a Minute!)') }}</p>
         </div>
         <div class="fcal_create_calendar_header">
-            <h1 v-if="!is_board" style="text-align: left;display:flex;align-items:center;gap:8px;cursor:pointer;" @click="$router.push({name: 'calendars'})">
+            <h1 v-if="!is_board" class="fcal_calendar_header_title" @click="$router.push({name: 'calendars'})">
                 <el-icon><Back /></el-icon> {{ calendarTitle }}
             </h1>
         </div>

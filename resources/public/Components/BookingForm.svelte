@@ -334,9 +334,11 @@
     }
 
     onMount(() => {
-        setTimeout(() => {
-            document.getElementById('fcalInputIDname').focus();
-        }, 500);
+        if (!appData.is_fluentform) {
+            setTimeout(() => {
+                document.getElementById('fcalInputIDname').focus();
+            }, 500);
+        }
     });
 
 </script>
