@@ -397,9 +397,7 @@ class CalendarController extends Controller
 
     public function getAvailabilitySettings(Request $request, $calendarId, $slotId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
-
-        $availableSchedules = AvailabilityService::availabilitySchedules($slot->calendar->author_timezone);
+        $availableSchedules = AvailabilityService::availabilitySchedules();
 
         $scheduleOptions = AvailabilityService::getScheduleOptions();
 
