@@ -125,6 +125,21 @@
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("LimitSettings/lock_timezone") }}</span>
+                                <span>{{ $t("LimitSettings/lock_timezone_description") }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="settings.lock_timezone.enabled"/>
+                            </div>
+                            <div class="fcal_event_child_card" v-if="settings.lock_timezone.enabled">
+                                <TimeZoneSelector v-model="settings.lock_timezone.timezone"/>
+                            </div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/attendee_permissions") }}</span>
                             </div>
                             <div class="fcal_event_child_card">
@@ -152,6 +167,7 @@ import WeeklySchedules from "../parts/WeeklySchedules";
 import DateOverRides from "./_DateOverRides";
 import SchedulingConditions from "./__SchedulingConditions";
 import ExistingSchedule from './_ExistingSchedule';
+import TimeZoneSelector from "../parts/TimeZoneSelector.vue";
 import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
@@ -165,6 +181,7 @@ export default {
         DateOverRides,
         WeeklySchedules,
         ExistingSchedule,
+        TimeZoneSelector,
         ScheduleIcon,
         TimezoneIcon,
         SaveButton,

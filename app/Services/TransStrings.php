@@ -296,6 +296,8 @@ class TransStrings
             'LimitSettings/future_booking'                                                     => __('Limit future bookings', 'fluent-booking-pro'),
             'LimitSettings/future_booking_description'                                         => __('Limit how far in the future this event can be booked', 'fluent-booking-pro'),
             'LimitSettings/attendee_permissions'                                               => __('Attendee Permissions', 'fluent-booking-pro'),
+            'LimitSettings/lock_timezone'                                                      => __('Lock timezone on booking page', 'fluent-booking-pro'),
+            'LimitSettings/lock_timezone_description'                                          => __('To lock the timezone on booking page, useful for in-person events', 'fluent-booking-pro'),
             'Attendee can cancel booking'                                                      => __('Attendee can cancel booking', 'fluent-booking-pro'),
             'Attendee can reschedule booking'                                                  => __('Attendee can reschedule booking', 'fluent-booking-pro'),
             'Before Event'                                                                     => __('Before Event', 'fluent-booking-pro'),

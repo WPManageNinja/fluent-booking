@@ -651,6 +651,10 @@ class CalendarController extends Controller
                 'enabled' => Arr::isTrue($data, 'settings.booking_duration.enabled'),
                 'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_duration.limits'))
             ],
+            'lock_timezone'       => [
+                'enabled'  => Arr::isTrue($data, 'settings.lock_timezone.enabled'),
+                'timezone' => sanitize_text_field(Arr::get($data, 'settings.lock_timezone.timezone'))
+            ],
             'can_cancel'          => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
             'can_reschedule'      => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
