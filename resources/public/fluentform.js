@@ -22,6 +22,7 @@ if (calendarApps.length) {
                 target: elem,
                 props: {
                     appData: appData,
+                    handleBack: false
                 }
             });
 

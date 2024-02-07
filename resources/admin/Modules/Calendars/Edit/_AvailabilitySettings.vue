@@ -70,7 +70,7 @@
                                         </el-select>
                                         <ExistingSchedule
                                             :existing_schedules="selectedSchedule"
-                                            :timezone="calendar_event.calendar.author_timezone"
+                                            :timezone="selectedSchedule.timezone"
                                             :availability_id="calendar_event.availability_id"
                                         />
     

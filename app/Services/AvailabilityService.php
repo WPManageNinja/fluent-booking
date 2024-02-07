@@ -10,20 +10,27 @@ use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityService
 {
-    public static function availabilitySchedules($toTimezone)
+    public static function availabilitySchedules()
     {
-        $availabilities = Availability::get();
+        $permissions = ['read_and_use_other_availabilities', 'manage_other_availabilities', 'read_other_calendars', 'manage_other_calendars'];
+
+        $availabilities = Availability::when(
+            !PermissionManager::userCan($permissions),
+            function ($query) {
+                return $query->where('object_id', get_current_user_id());
+            }
+        )->get()->toArray();
 
         $formattedSchedules = [];
-
         foreach ($availabilities as $availability) {
+            $toTimezone = Arr::get($availability, 'value.timezone', 'UTC');
             $formattedSchedules[] = [
-                'id'        => (int)Arr::get($availability, 'id'),
-                'object_id' => (int)Arr::get($availability, 'object_id'),
-                'title'     => sanitize_text_field(Arr::get($availability, 'key')),
+                'id'        => Arr::get($availability, 'id'),
+                'object_id' => Arr::get($availability, 'object_id'),
+                'title'     => Arr::get($availability, 'key'),
                 'settings'  => [
                     'default'          => Arr::isTrue($availability, 'value.default'),
-                    'timezone'         => sanitize_text_field($toTimezone),
+                    'timezone'         => $toTimezone,
                     'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($availability, 'value.date_overrides', []), 'UTC', $toTimezone),
                     'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($availability, 'value.weekly_schedules', []), 'UTC', $toTimezone),
                 ]
@@ -93,7 +100,14 @@ class AvailabilityService
 
     public static function getScheduleOptions()
     {
-        $availabilities = Availability::get();
+        $permissions = ['read_and_use_other_availabilities', 'manage_other_availabilities', 'read_other_calendars', 'manage_other_calendars'];
+
+        $availabilities = Availability::when(
+            !PermissionManager::userCan($permissions),
+            function ($query) {
+                return $query->where('object_id', get_current_user_id());
+            }
+        )->get();
 
         $scheduleOptions = [];
         foreach ($availabilities as $availability) {
@@ -114,6 +128,7 @@ class AvailabilityService
             $scheduleOptions[$hostName] = $scheduleOptions[$hostName] ?? [];
             
             $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
+            
             $scheduleOptions[$hostName][] = [
                 'label' => Arr::get($availability, 'key') . $default,
                 'value' => Arr::get($availability, 'id')

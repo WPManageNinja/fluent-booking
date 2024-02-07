@@ -41,7 +41,6 @@ class AvailabilityController extends Controller
 
         $schedules = $query->paginate();
 
-
         do_action('fluent_booking/availability_schedules', $schedules);
 
         $formattedSchedules = [];
