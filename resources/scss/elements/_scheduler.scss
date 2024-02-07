@@ -1181,6 +1181,14 @@
         line-height: 36px;
         color: $dark;
       }
+
+      .fcal_calendar_header_title {
+        cursor: pointer;
+        display: flex;
+        text-align: left;
+        align-items: center;
+        gap: 8px;
+      }
     }
 
     .fcal_header {
@@ -1523,6 +1531,13 @@
                     border-top-right-radius: 8px;
                     border-bottom-right-radius: 8px;
                   }
+                }
+                .fcal_time_zone_selector {
+                    display: flex;
+                    flex-direction: column;
+                    .el-select {
+                        width: 45%;
+                    }
                 }
               }
             }

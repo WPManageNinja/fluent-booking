@@ -27,6 +27,7 @@ document.body.addEventListener('ffc_init_custom_field', function (e) {
             target: element,
             props: {
                 appData: appData,
+                handleBack: false
             },
         });
 

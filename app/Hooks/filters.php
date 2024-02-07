@@ -59,5 +59,12 @@
             'available_durations' => []
         ];
     }
+
+    if (!isset($settings['lock_timezone'])) {
+        $settings['lock_timezone'] = [
+            'enabled'  => false,
+            'timezone' => ''
+        ];
+    }
     return $settings;
 }, 10, 1);

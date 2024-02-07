@@ -2,6 +2,8 @@
     import Select from 'svelte-select';
     
     export let timezone;
+
+    export let isDisabled;
     
     const timezones = window.fluentCalendarPublicVars.timezones;
 
@@ -25,8 +27,11 @@
 
 </script>
 
-<Select on:input={handleTimeZoneChange} {groupBy}
+<Select 
     id="fcal_timezone_selector"
+    on:input={handleTimeZoneChange}
+    {groupBy}
+    disabled={isDisabled}
     {floatingConfig}
     clearable={false}
     value={timezone}
