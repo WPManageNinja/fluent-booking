@@ -212,7 +212,9 @@
                                 <span>{{ $t('EventDetails/slug_setting_description') }}</span>
                             </div>
                             <div class="card_action">
-                                <el-switch v-model="editSlug"/>
+                                <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
+                                    <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                </el-button>
                             </div>
                             <div class="fcal_event_child_card" v-if="editSlug">
                                 <el-form-item :label="$t('Slug')">
@@ -238,7 +240,7 @@ import HostSelector from "@/Pieces/HostSelector";
 import SaveButton from "@/Components/Buttons/SaveButton";
 import Popover from "@/Components/Popover";
 import { markRaw } from "vue";
-import { More } from '@element-plus/icons-vue';
+import { EditPen,More } from '@element-plus/icons-vue';
 
 export default {
     name: 'EventDetails',
@@ -249,6 +251,7 @@ export default {
         EventIcon,
         SaveButton,
         Popover,
+        EditPen,
         More
     },
     data() {
