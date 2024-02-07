@@ -421,7 +421,6 @@
                                     <div slot="before_form">
                                         {#if isFluentform}
                                             <Summary
-                                                {appData}
                                                 {slot}
                                                 {timezone}
                                                 {selectedDateTime}

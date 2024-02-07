@@ -99,7 +99,7 @@
 
         <el-drawer
             v-model="isNewTeamOpen"
-            :title="$t('Add New Team') + ' (' + $t('beta') + ')'"
+            :title="$t('Add New Team')"
             :zIndex="999"
             label-position="top"
             modal-class="fcal_drawer">
