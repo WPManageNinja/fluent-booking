@@ -1532,6 +1532,13 @@
                     border-bottom-right-radius: 8px;
                   }
                 }
+                .fcal_time_zone_selector {
+                    display: flex;
+                    flex-direction: column;
+                    .el-select {
+                        width: 45%;
+                    }
+                }
               }
             }
 

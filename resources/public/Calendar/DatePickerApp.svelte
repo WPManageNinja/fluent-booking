@@ -1,9 +1,9 @@
 <script>
-    import {util, i18, getDateTimeStringI18, dateTimeI18} from '../util';
+    import { util, i18, getDateTimeStringI18, dateTimeI18 } from '../util';
     import Calendar from "./Calendar.svelte";
-    import {Pulse} from 'svelte-loading-spinners';
+    import { Pulse } from 'svelte-loading-spinners';
     import TimeZoneSelector from "./TimezoneSelector.svelte";
-    import {createEventDispatcher, onMount} from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
 
     export let slot;
     export let timezone;
@@ -16,6 +16,7 @@
     const isFFConversational = appData.isFFConversational;
 
     const id = appData.id;
+    const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled ? true : false;
 
     let dispatch = createEventDispatcher();
 
@@ -311,7 +312,7 @@
             />
             <div class="fcal_timezone_select">
                 <label aria-label="Select Timezone" for="fcal_timezone_selector">{i18('Timezone')}</label>
-                <TimeZoneSelector bind:timezone={timezone}/>
+                <TimeZoneSelector bind:timezone={timezone} isDisabled={isTimezoneDisabled}/>
             </div>
             <slot/>
             {#if noAvailability}
