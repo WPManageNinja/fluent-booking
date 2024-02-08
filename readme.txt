@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.2.60
+Stable tag: 1.2.61
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,12 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1.2.60 (Date: 06 Feb 2023)
+1.2.61 (Date: 09 Feb 2024)
+- Implemented Timezone Lock Feature
+- Fixed Issue With Daylight Saving Time
+- Fixed Booking Summary Email Issue
+
+1.2.60 (Date: 06 Feb 2024)
 - Improved frontend accessibility - achieve 100% score in lighthouse report
 - RTL support
 - Added booking type filter in booking listing
@@ -34,7 +39,7 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 - Added no availability behaviour on schedule meeting
 - Improved UI-UX
 
-1.2.52 (Date: 26 Jan 2023)
+1.2.52 (Date: 26 Jan 2024)
 - Fixed fluent booking menu not showing issue
 - Improved Host/Team Member Searching
 - Fixed Date Override issue
@@ -46,11 +51,11 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 - Fixed double event created issue
 - Updated Buffer Time by host
 
-1.2.51 (Date: 17 Jan 2023)
+1.2.51 (Date: 17 Jan 2024)
 - Fixed Manual Booking Issue with Google Calendar
 - Fixed Calendar Event Permission Issue
 
-1.2.50 (Date: 15 Jan 2023)
+1.2.50 (Date: 15 Jan 2024)
 - Arrange Round Robin Meetings
 - Invite Additional Guests Field
 - Multi-select Field Form Field
