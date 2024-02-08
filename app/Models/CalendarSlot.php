@@ -287,6 +287,20 @@ class CalendarSlot extends Model
         return $this->updateMeta('booking_fields', $bookingFields);
     }
 
+    public function getScheduleTimezone($hostId = null)
+    {
+        if ($hostId && !$this->isTeamCommonSchedule()) {
+            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            return Arr::get($schedule, 'value.timezone', 'UTC');
+        }
+        
+        if ($this->availability_type == 'existing_schedule') {
+            $schedule = Availability::findOrFail($this->availability_id);
+            return Arr::get($schedule, 'value.timezone', 'UTC');
+        }
+        return $this->calendar->author_timezone;
+    }
+
     public function getDuration($duration = null)
     {
         if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {

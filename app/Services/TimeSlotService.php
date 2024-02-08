@@ -47,6 +47,9 @@ class TimeSlotService
 
         $bufferTime = $this->calendarSlot->getTotalBufferTime() * 60;
 
+        $scheduleTimezone = $this->calendarSlot->getScheduleTimezone($hostId);
+        $dstTime = DateTimeHelper::getDaylightSavingTime($scheduleTimezone);
+
         $dateOverrides = $this->calendarSlot->getDateOverrides($hostId);
         $overrideSlots = $dateOverrides[0];
         $overrideDays  = $dateOverrides[1];
@@ -88,7 +91,7 @@ class TimeSlotService
                 }
 
                 if (!$currentBookedSlots) {
-                    $validSlots[] = $slot;
+                    $validSlots[] = $this->maybeDayLightSaving($slot, $dstTime, $scheduleTimezone);
                     continue;
                 }
 
@@ -121,7 +124,7 @@ class TimeSlotService
                 }
 
                 if ($isSpotAvailable) {
-                    $validSlots[] = $slot;
+                    $validSlots[] = $this->maybeDayLightSaving($slot, $dstTime, $scheduleTimezone);
                 }
             }
 
@@ -522,9 +525,10 @@ class TimeSlotService
                 }
 
                 $start = DateTimeHelper::convertToTimeZone($spot['start'], 'UTC', $timeZone);
+                $end   = DateTimeHelper::convertToTimeZone($spot['end'], 'UTC', $timeZone);
                 $convertedSpots[$startDate][$start] = [
                     'start'     => $start,
-                    'end'       => DateTimeHelper::convertToTimeZone($spot['end'], 'UTC', $timeZone),
+                    'end'       => $end,
                     'remaining' => $remainingSlots,
                 ];
             }
@@ -814,6 +818,18 @@ class TimeSlotService
             ->whereBetween('start_time', [$start, $end])
             ->whereIn('status', ['scheduled', 'completed'])
             ->sum('slot_minutes');
+    }
+
+    protected function maybeDayLightSaving($slot, $dstTime, $scheduleTimezone)
+    {
+        if ($dstTime) {
+            $scheduleStartTime = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $scheduleTimezone);
+            if (DateTimeHelper::isDstActive($scheduleStartTime, $scheduleTimezone)) {
+                $slot['start'] = gmdate('Y-m-d H:i:s', strtotime($slot['start'] . " -$dstTime minutes"));
+                $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " -$dstTime minutes"));
+            }
+        }
+        return $slot;
     }
 
     protected function maybeSortDaySlots($daySlots, $forceSort = false)
