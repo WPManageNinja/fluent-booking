@@ -1099,6 +1099,14 @@ body >.fcal_calendar_wrap {
           width: 100%;
           font-size: 16px;
         }
+
+        .fcal_timezone_selector input {
+            cursor: pointer !important;
+        }
+
+        .fcal_timezone_selector.disabled input {
+            cursor: not-allowed !important;
+        }
       }
     }
 

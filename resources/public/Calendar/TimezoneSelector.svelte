@@ -29,6 +29,7 @@
 
 <Select 
     id="fcal_timezone_selector"
+    class="fcal_timezone_selector {isDisabled ? 'disabled' : ''}"
     on:input={handleTimeZoneChange}
     {groupBy}
     disabled={isDisabled}
