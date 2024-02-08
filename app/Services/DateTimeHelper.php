@@ -238,4 +238,29 @@ class DateTimeHelper
 
         return $originalDateTime->format('z') - $currentDate->format('z');
     }
+
+    public static function getDaylightSavingTime($timezone)
+    {
+        $timezone = new \DateTimeZone($timezone);
+        $dateTime = new \DateTime('now', $timezone);
+
+        $currentOffset = $timezone->getOffset($dateTime);
+
+        $sixMonthsAgo = clone $dateTime;
+        $sixMonthsAgo->modify('-6 month');
+        $offsetBefore = $timezone->getOffset($sixMonthsAgo);
+
+        $dstDifference = $currentOffset - $offsetBefore;
+
+        return abs($dstDifference) / 60;
+    }
+
+    public static function isDstActive($dateTime, $timezone)
+    {
+        $now = new \DateTime($dateTime, new \DateTimeZone($timezone));
+
+        $isDst = $now->format('I');
+
+        return $isDst;
+    }
 }
