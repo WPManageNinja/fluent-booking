@@ -257,10 +257,12 @@ class DateTimeHelper
 
     public static function isDstActive($dateTime, $timezone)
     {
-        $now = new \DateTime($dateTime, new \DateTimeZone($timezone));
+        $timezone  = new \DateTimeZone($timezone);
+        $dateTime  = new \DateTime($dateTime, $timezone);
 
-        $isDst = $now->format('I');
+        $timeStamp   = $dateTime->getTimestamp();
+        $transitions = $timezone->getTransitions($timeStamp, $timeStamp);
 
-        return $isDst;
+        return $transitions[0]['isdst'];
     }
 }
