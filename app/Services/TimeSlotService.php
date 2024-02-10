@@ -91,7 +91,7 @@ class TimeSlotService
                 }
 
                 if (!$currentBookedSlots) {
-                    $validSlots[] = $this->maybeDayLightSaving($slot, $dstTime, $scheduleTimezone);
+                    $validSlots[] = $slot;
                     continue;
                 }
 
@@ -124,7 +124,7 @@ class TimeSlotService
                 }
 
                 if ($isSpotAvailable) {
-                    $validSlots[] = $this->maybeDayLightSaving($slot, $dstTime, $scheduleTimezone);
+                    $validSlots[] = $slot;
                 }
             }
 
