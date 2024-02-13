@@ -48,7 +48,7 @@ class TimeSlotService
         $bufferTime = $this->calendarSlot->getTotalBufferTime() * 60;
 
         $scheduleTimezone = $this->calendarSlot->getScheduleTimezone($hostId);
-        $dstTime = DateTimeHelper::getDaylightSavingTime($scheduleTimezone);
+        $daylightSavingTime = DateTimeHelper::getDaylightSavingTime($scheduleTimezone);
 
         $dateOverrides = $this->calendarSlot->getDateOverrides($hostId);
         $overrideSlots = $dateOverrides[0];
@@ -91,7 +91,7 @@ class TimeSlotService
                 }
 
                 if (!$currentBookedSlots) {
-                    $validSlots[] = $slot;
+                    $validSlots[] = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
                     continue;
                 }
 
@@ -124,7 +124,7 @@ class TimeSlotService
                 }
 
                 if ($isSpotAvailable) {
-                    $validSlots[] = $slot;
+                    $validSlots[] = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
                 }
             }
 
@@ -444,17 +444,7 @@ class TimeSlotService
         }
 
         if ($this->calendarSlot->isRoundRobinDefaultSchedule($hostId)) {
-            $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay) {
-                foreach ($overrideDay as $times) {
-                    $startTime = strtotime($times['start']);
-                    $endTime = strtotime($times['end']);
-                    if (strtotime($slot) < $startTime || strtotime($slot) >= $endTime) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            return $filteredSlots;
+            return $this->removeMergedOverrideSlots($availableSlots, $overrideDay);
         }
         
         $startTime = strtotime($overrideDay['start']);
@@ -464,6 +454,21 @@ class TimeSlotService
             return strtotime($slot) < $startTime || strtotime($slot) >= $endTime;
         });
 
+        return $filteredSlots;
+    }
+
+    protected function removeMergedOverrideSlots($availableSlots, $overrideDay)
+    {
+        $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay) {
+            foreach ($overrideDay as $times) {
+                $startTime = strtotime($times['start']);
+                $endTime = strtotime($times['end']);
+                if (strtotime($slot) < $startTime || strtotime($slot) >= $endTime) {
+                    return true;
+                }
+            }
+            return false;
+        });
         return $filteredSlots;
     }
 
@@ -515,7 +520,10 @@ class TimeSlotService
                     continue;
                 }
 
-                $startDate = DateTimeHelper::convertToTimeZone($spot['start'], 'UTC', $timeZone, 'Y-m-d');
+                $start = DateTimeHelper::convertToTimeZone($spot['start'], 'UTC', $timeZone);
+                $end   = DateTimeHelper::convertToTimeZone($spot['end'], 'UTC', $timeZone);
+                
+                $startDate = gmdate('Y-m-d', strtotime($start)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 $convertedSpots[$startDate] = $convertedSpots[$startDate] ?? [];
 
@@ -524,8 +532,6 @@ class TimeSlotService
                     $remainingSlots = Arr::get($spot, 'remaining', $maxBooking);
                 }
 
-                $start = DateTimeHelper::convertToTimeZone($spot['start'], 'UTC', $timeZone);
-                $end   = DateTimeHelper::convertToTimeZone($spot['end'], 'UTC', $timeZone);
                 $convertedSpots[$startDate][$start] = [
                     'start'     => $start,
                     'end'       => $end,
@@ -820,13 +826,13 @@ class TimeSlotService
             ->sum('slot_minutes');
     }
 
-    protected function maybeDayLightSaving($slot, $dstTime, $scheduleTimezone)
+    protected function maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone)
     {
-        if ($dstTime) {
+        if ($daylightSavingTime) {
             $scheduleStartTime = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $scheduleTimezone);
-            if (DateTimeHelper::isDstActive($scheduleStartTime, $scheduleTimezone)) {
-                $slot['start'] = gmdate('Y-m-d H:i:s', strtotime($slot['start'] . " -$dstTime minutes"));
-                $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " -$dstTime minutes"));
+            if (DateTimeHelper::isDaylightSavingActive($scheduleStartTime, $scheduleTimezone)) {
+                $slot['start'] = gmdate('Y-m-d H:i:s', strtotime($slot['start'] . " -$daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " -$daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
         return $slot;
