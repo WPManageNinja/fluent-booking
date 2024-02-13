@@ -211,8 +211,8 @@ class AvailabilityService
                 }
                 
                 $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
-                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['start'] = DateTimeHelper::convertTimeToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['end'] = DateTimeHelper::convertTimeToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
 
                 if ($nextDayIndex) {
                     array_splice($schedules[$nextDay]['slots'], $nextDayIndex, 0, [[
@@ -323,8 +323,8 @@ class AvailabilityService
                 }
 
                 $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
-                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['start'] = DateTimeHelper::convertTimeToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['end'] = DateTimeHelper::convertTimeToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
 
                 if ($nextDayIndex) {
                     $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400 * $dayDiff)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date

@@ -30,8 +30,8 @@ class SanitizeService
                 }
 
                 if ($toTimeZone && $fromTimeZone) {
-                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['start'] = DateTimeHelper::convertTimeToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['end'] = DateTimeHelper::convertTimeToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
                 }
 
                 $schedule['slots'][$index] = $slot;
@@ -70,8 +70,8 @@ class SanitizeService
 
                 $utcSlots[] = $slot;
                 if ($toTimeZone && $fromTimeZone && $toTimeZone != $fromTimeZone) {
-                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['start'] = DateTimeHelper::convertTimeToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['end'] = DateTimeHelper::convertTimeToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
                 }
 
                 $slots[$index] = $slot;
@@ -87,7 +87,9 @@ class SanitizeService
         }
 
         if ($isSkipped && $fromTimeZone == 'UTC' && $event) {
-            $event->settings['date_overrides'] = $updatedOverRides;
+            $event->settings = [
+                'date_overrides' => $updatedOverRides
+            ];
             $event->save();
         }
 

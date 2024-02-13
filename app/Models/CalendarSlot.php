@@ -293,6 +293,10 @@ class CalendarSlot extends Model
             $schedule = AvailabilityService::getDefaultSchedule($hostId);
             return Arr::get($schedule, 'value.timezone', 'UTC');
         }
+
+        if ($this->isTeamDefaultSchedule()) {
+            return 'UTC';
+        }
         
         if ($this->availability_type == 'existing_schedule') {
             $schedule = Availability::findOrFail($this->availability_id);

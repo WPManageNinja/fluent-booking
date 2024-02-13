@@ -93,6 +93,24 @@ class DateTimeHelper
         return $dateTime->format($format);
     }
 
+    public static function convertTimeToTimeZone($time, $fromTimeZone, $toTimeZone, $format = 'H:i')
+    {
+        $date = self::getDateWithoutDST($fromTimeZone);
+        $time = gmdate('Y-m-d H:i', strtotime($date . ' ' . gmdate('H:i', strtotime($time)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        
+        $dateTime = new \DateTime($time, new \DateTimeZone($fromTimeZone));
+        $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
+        return $dateTime->format($format);
+    }
+
+    public static function getDateWithoutDST($timezone)
+    {
+        if (!self::isDaylightSavingActive('2024-01-01', $timezone)) {
+            return '2024-01-01';
+        }
+        return '2024-06-01';
+    }
+
     public static function convertToIso($dateTime, $fromTimeZone = 'UTC')
     {
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
@@ -242,12 +260,12 @@ class DateTimeHelper
     public static function getDaylightSavingTime($timezone)
     {
         $timezone = new \DateTimeZone($timezone);
-        $dateTime = new \DateTime('now', $timezone);
+        $dateTime = new \DateTime('2024-01-01', $timezone);
 
         $currentOffset = $timezone->getOffset($dateTime);
 
         $sixMonthsAgo = clone $dateTime;
-        $sixMonthsAgo->modify('-6 month');
+        $sixMonthsAgo->modify('+6 month');
         $offsetBefore = $timezone->getOffset($sixMonthsAgo);
 
         $dstDifference = $currentOffset - $offsetBefore;
@@ -255,7 +273,7 @@ class DateTimeHelper
         return abs($dstDifference) / 60;
     }
 
-    public static function isDstActive($dateTime, $timezone)
+    public static function isDaylightSavingActive($dateTime, $timezone)
     {
         $timezone  = new \DateTimeZone($timezone);
         $dateTime  = new \DateTime($dateTime, $timezone);
