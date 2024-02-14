@@ -82,23 +82,17 @@ class DateTimeHelper
         return $dateTime->format($format);
     }
 
-    public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s')
+    public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s', $date = null)
     {
         if ($fromTimeZone == $toTimeZone) {
             return gmdate($format, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
-        $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
-        return $dateTime->format($format);
-    }
+        if ($date) {
+            $dateTime = gmdate('Y-m-d H:i', strtotime($date . ' ' . gmdate('H:i', strtotime($dateTime)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
 
-    public static function convertTimeToTimeZone($time, $fromTimeZone, $toTimeZone, $format = 'H:i')
-    {
-        $date = self::getDateWithoutDST($fromTimeZone);
-        $time = gmdate('Y-m-d H:i', strtotime($date . ' ' . gmdate('H:i', strtotime($time)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        
-        $dateTime = new \DateTime($time, new \DateTimeZone($fromTimeZone));
+        $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
         $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
         return $dateTime->format($format);
     }
@@ -275,6 +269,11 @@ class DateTimeHelper
 
     public static function isDaylightSavingActive($dateTime, $timezone)
     {
+        if (!$dateTime || !$timezone) {
+            return false;
+        }
+
+        $datee = $dateTime;
         $timezone  = new \DateTimeZone($timezone);
         $dateTime  = new \DateTime($dateTime, $timezone);
 
