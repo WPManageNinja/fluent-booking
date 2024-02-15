@@ -102,7 +102,7 @@
 
     function maybeNoAvailability() {
         const dateKeys = Object.keys(availableDates);
-        if (!dateKeys.length || new Date(dateKeys[0]).getMonth() != month) {
+        if (!dateKeys.length || new Date(dateKeys[parseInt(dateKeys.length/2)]).getMonth() != month) {
             noAvailability = true;
         } else {
             noAvailability = false;

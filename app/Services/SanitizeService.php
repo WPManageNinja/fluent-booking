@@ -8,6 +8,8 @@ class SanitizeService
 {
     public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = true)
     {
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+
         foreach ($schedules as $day => &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
             if (!$schedule['enabled'] || empty($schedule['slots'])) {
@@ -30,8 +32,8 @@ class SanitizeService
                 }
 
                 if ($toTimeZone && $fromTimeZone) {
-                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
+                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
                 }
 
                 $schedule['slots'][$index] = $slot;
@@ -52,6 +54,8 @@ class SanitizeService
 
         $isSkipped = false;
 
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+
         foreach ($overrides as $date => $slots) {
             if (strtotime($date) < $todayTimeStamp) {
                 $isSkipped = true;
@@ -70,8 +74,8 @@ class SanitizeService
 
                 $utcSlots[] = $slot;
                 if ($toTimeZone && $fromTimeZone && $toTimeZone != $fromTimeZone) {
-                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                    $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
+                    $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
                 }
 
                 $slots[$index] = $slot;
@@ -87,7 +91,9 @@ class SanitizeService
         }
 
         if ($isSkipped && $fromTimeZone == 'UTC' && $event) {
-            $event->settings['date_overrides'] = $updatedOverRides;
+            $event->settings = [
+                'date_overrides' => $updatedOverRides
+            ];
             $event->save();
         }
 

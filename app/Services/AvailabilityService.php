@@ -188,6 +188,8 @@ class AvailabilityService
 
         $weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+
         foreach ($schedules as $day => &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
             if (!$schedule['enabled'] || empty($schedule['slots'])) {
@@ -211,8 +213,8 @@ class AvailabilityService
                 }
                 
                 $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
-                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
+                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
 
                 if ($nextDayIndex) {
                     array_splice($schedules[$nextDay]['slots'], $nextDayIndex, 0, [[
@@ -306,6 +308,8 @@ class AvailabilityService
             return $overrides;
         }
 
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+
         $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $validOverrides = [];
@@ -323,8 +327,8 @@ class AvailabilityService
                 }
 
                 $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
-                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i');
-                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i');
+                $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
+                $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
 
                 if ($nextDayIndex) {
                     $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400 * $dayDiff)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
