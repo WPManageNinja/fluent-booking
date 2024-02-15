@@ -81,7 +81,7 @@ class TimeSlotService
 
             foreach ($availableSlots as $start) {
                 $end = gmdate('H:i', strtotime($start) + $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $endDate = $start > $end ? gmdate('Y-m-d', strtotime($date) + 86400) : $date; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $endDate = $start < $end ? $date : gmdate('Y-m-d', strtotime($date) + 86400); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 $slot = [
                     'start' => $date . ' ' . $start . ':00',
@@ -396,7 +396,7 @@ class TimeSlotService
         $formattedSlots = [];
         $days = array_keys($items);
         // create range of each day slots from $items array above with $period minutes interval
-        foreach ($items as $day => $slots) {
+        foreach ($items as $day => &$slots) {
             $daySlots = [];
             foreach ($slots as $slot) {
                 $slot['end'] = ($slot['end'] == '00:00') ? '24:00' : $slot['end'];
@@ -435,7 +435,7 @@ class TimeSlotService
         return $formattedSlots;
     }
 
-    protected function convertSlotSetsToFlat($overrideSlots, $date, $duration = null)
+    protected function convertSlotSetsToFlat(&$overrideSlots, $date, $duration = null)
     {
         $period = ($this->calendarSlot->getDuration($duration)) * 60;
 
@@ -456,7 +456,7 @@ class TimeSlotService
             }
 
             if ($slot['end'] == '24:00' && $start < $end) {
-                $nextDayIndex = gmdate('Y-m-d', strtotime($date) + 86400);
+                $nextDayIndex = gmdate('Y-m-d', strtotime($date) + 86400); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 if (isset($overrideSlots[$nextDayIndex])) {
                     $nextDay = $overrideSlots[$nextDayIndex];
