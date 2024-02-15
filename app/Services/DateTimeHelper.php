@@ -82,15 +82,27 @@ class DateTimeHelper
         return $dateTime->format($format);
     }
 
-    public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s')
+    public static function convertToTimeZone($dateTime, $fromTimeZone, $toTimeZone, $format = 'Y-m-d H:i:s', $date = null)
     {
         if ($fromTimeZone == $toTimeZone) {
             return gmdate($format, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
+        if ($date) {
+            $dateTime = gmdate('Y-m-d H:i', strtotime($date . ' ' . gmdate('H:i', strtotime($dateTime)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
+
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
         $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
         return $dateTime->format($format);
+    }
+
+    public static function getDateWithoutDST($timezone)
+    {
+        if (!self::isDaylightSavingActive('2024-01-01', $timezone)) {
+            return '2024-01-01';
+        }
+        return '2024-06-01';
     }
 
     public static function convertToIso($dateTime, $fromTimeZone = 'UTC')
@@ -242,12 +254,12 @@ class DateTimeHelper
     public static function getDaylightSavingTime($timezone)
     {
         $timezone = new \DateTimeZone($timezone);
-        $dateTime = new \DateTime('now', $timezone);
+        $dateTime = new \DateTime('2024-01-01', $timezone);
 
         $currentOffset = $timezone->getOffset($dateTime);
 
         $sixMonthsAgo = clone $dateTime;
-        $sixMonthsAgo->modify('-6 month');
+        $sixMonthsAgo->modify('+6 month');
         $offsetBefore = $timezone->getOffset($sixMonthsAgo);
 
         $dstDifference = $currentOffset - $offsetBefore;
@@ -255,8 +267,13 @@ class DateTimeHelper
         return abs($dstDifference) / 60;
     }
 
-    public static function isDstActive($dateTime, $timezone)
+    public static function isDaylightSavingActive($dateTime, $timezone)
     {
+        if (!$dateTime || !$timezone) {
+            return false;
+        }
+
+        $datee = $dateTime;
         $timezone  = new \DateTimeZone($timezone);
         $dateTime  = new \DateTime($dateTime, $timezone);
 
