@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.3
-Stable tag: 1.2.62
+Stable tag: 1.2.63
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,11 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.2.63 (Date: 16 Feb 2024)
+- Added Daylight Saving Time Fix
+- Fixed Issue With Multi-hour Slot Availability
+- Resolved Minor UI Issue
 
 1.2.62 (Date: 10 Feb 2024)
 - Reverting Daylight Saving Time Fix
