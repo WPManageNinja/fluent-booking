@@ -51,6 +51,7 @@ class FluentCrmInit
         new NewBookingTrigger();
         new CancelBookingTrigger();
         new BookingCompletedTrigger();
+        new BookingRescheduledTrigger();
     }
 
     private function getSubscriberId($email)
