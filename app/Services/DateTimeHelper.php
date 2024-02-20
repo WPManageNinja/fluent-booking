@@ -273,13 +273,12 @@ class DateTimeHelper
             return false;
         }
 
-        $datee = $dateTime;
         $timezone  = new \DateTimeZone($timezone);
         $dateTime  = new \DateTime($dateTime, $timezone);
 
         $timeStamp   = $dateTime->getTimestamp();
         $transitions = $timezone->getTransitions($timeStamp, $timeStamp);
 
-        return $transitions[0]['isdst'];
+        return $transitions && $transitions[0]['isdst'];
     }
 }

@@ -88,12 +88,14 @@ class TimeSlotService
                     'end'   => $endDate . ' ' . $end . ':00'
                 ];
 
+                $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
+
                 if ($isToday && strtotime($slot['start']) < $cutOutTimeStamp) {
                     continue;
                 }
 
                 if (!$currentBookedSlots) {
-                    $validSlots[] = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
+                    $validSlots[] = $slot;
                     continue;
                 }
 
@@ -126,7 +128,7 @@ class TimeSlotService
                 }
 
                 if ($isSpotAvailable) {
-                    $validSlots[] = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
+                    $validSlots[] = $slot;
                 }
             }
 
@@ -339,9 +341,13 @@ class TimeSlotService
             return apply_filters('fluent_booking/booked_events', $books, $this->calendarSlot, $toTimeZone, $dateRange, $isDoingBooking);
         }
 
-        if (!$isGroupBooking) {
+        $scheduleTimezone = $this->calendarSlot->getScheduleTimezone($hostId);
 
+        $daylightSavingTime = DateTimeHelper::getDaylightSavingTime($scheduleTimezone);
+
+        if (!$isGroupBooking) {
             foreach ($remoteBookings as $slot) {
+                $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, '+');
                 $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                     'start'  => $slot['start'],
                     'end'    => $slot['end'],
@@ -360,6 +366,7 @@ class TimeSlotService
         }
 
         foreach ($remoteBookings as $slot) {
+            $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, '+');
             $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                 'start' => $slot['start'],
                 'end'   => $slot['end']
@@ -867,14 +874,20 @@ class TimeSlotService
             ->sum('slot_minutes');
     }
 
-    protected function maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone)
+    protected function maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, $adjustSign = '-')
     {
-        if ($daylightSavingTime) {
-            $scheduleStartTime = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $scheduleTimezone);
-            if (DateTimeHelper::isDaylightSavingActive($scheduleStartTime, $scheduleTimezone)) {
-                $slot['start'] = gmdate('Y-m-d H:i:s', strtotime($slot['start'] . " -$daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " -$daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            }
+        if (!$daylightSavingTime) {
+            return $slot;
+        }
+
+        $scheduleStartTime = DateTimeHelper::convertToTimeZone($slot['start'], 'UTC', $scheduleTimezone);
+        if (DateTimeHelper::isDaylightSavingActive($scheduleStartTime, $scheduleTimezone)) {
+            $slot['start'] = gmdate('Y-m-d H:i:s', strtotime($slot['start'] . " $adjustSign $daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
+
+        $scheduleEndTime   = DateTimeHelper::convertToTimeZone($slot['end'], 'UTC', $scheduleTimezone);
+        if (DateTimeHelper::isDaylightSavingActive($scheduleEndTime, $scheduleTimezone)) {
+            $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " $adjustSign $daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
         return $slot;
     }
