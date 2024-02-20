@@ -310,8 +310,8 @@ class Bootstrap extends BaseCalendar
 
                 if ($remoteSlots && !is_wp_error($remoteSlots)) {
                     foreach ($remoteSlots as $slot) {
-                        $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone, Arr::get($slot, 'rec_start'));
-                        $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone, Arr::get($slot, 'rec_start'));
+                        $start = RemoteCalendarHelper::convertToTimeZoneOffset($slot['start'], $toTimeZone);
+                        $end = RemoteCalendarHelper::convertToTimeZoneOffset($slot['end'], $toTimeZone);
                         $books[] = [
                             'type'     => 'remote',
                             'start'    => $start,
