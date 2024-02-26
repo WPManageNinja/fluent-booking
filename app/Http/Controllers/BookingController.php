@@ -200,7 +200,7 @@ class BookingController extends Controller
             $isSpotAvailable = false;
             if ($hostIds) {
                 foreach ($hostIds as $hostId) {
-                    $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration, $hostId);
+                    $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
                     
                     if ($isSpotAvailable) {
                         $bookingData['host_user_id'] = $hostId;
@@ -208,7 +208,7 @@ class BookingController extends Controller
                     }
                 }
             } else {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration, $hostUserId);
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
             }
             
             if (!$isSpotAvailable) {

@@ -173,15 +173,8 @@ class TimeSlotService
         return $rangedValidSlots;
     }
 
-    public function isSpotAvailable($fromTime, $toTime, $timezone = 'UTC', $duration = null, $hostId = null)
-    {
-        $daylightSavingTime = DateTimeHelper::getDaylightSavingTime($timezone);
-
-        if ($daylightSavingTime) {
-            $fromTime = $this->maybeDayLightSavingTime($fromTime, $daylightSavingTime, $timezone);
-            $toTime = $this->maybeDayLightSavingTime($toTime, $daylightSavingTime, $timezone);
-        }
-        
+    public function isSpotAvailable($fromTime, $toTime, $duration = null, $hostId = null)
+    {   
         $fromTimeStamp = strtotime($fromTime);
         $toTimeStamp = strtotime($toTime);
 
