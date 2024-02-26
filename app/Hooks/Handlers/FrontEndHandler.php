@@ -638,14 +638,14 @@ class FrontEndHandler
 
         if ($hostIds) {
             foreach ($hostIds as $hostId) {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration, $hostId);
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
                 if ($isSpotAvailable) {
                     $bookingData['host_user_id'] = $hostId;
                     break;
                 }
             }
         } else {
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration);
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
         }
 
         if (!$isSpotAvailable) {
