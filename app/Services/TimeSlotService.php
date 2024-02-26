@@ -88,7 +88,7 @@ class TimeSlotService
                     'end'   => $endDate . ' ' . $end . ':00'
                 ];
 
-                $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone);
+                $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone);
 
                 if ($isToday && strtotime($slot['start']) < $cutOutTimeStamp) {
                     continue;
@@ -173,8 +173,15 @@ class TimeSlotService
         return $rangedValidSlots;
     }
 
-    public function isSpotAvailable($fromTime, $toTime, $duration = null, $hostId = null)
+    public function isSpotAvailable($fromTime, $toTime, $timezone = 'UTC', $duration = null, $hostId = null)
     {
+        $daylightSavingTime = DateTimeHelper::getDaylightSavingTime($timezone);
+
+        if ($daylightSavingTime) {
+            $fromTime = $this->maybeDayLightSavingTime($fromTime, $daylightSavingTime, $timezone);
+            $toTime = $this->maybeDayLightSavingTime($toTime, $daylightSavingTime, $timezone);
+        }
+        
         $fromTimeStamp = strtotime($fromTime);
         $toTimeStamp = strtotime($toTime);
 
@@ -263,6 +270,10 @@ class TimeSlotService
             ->get()
             ->groupBy('group_id');
 
+        $scheduleTimezone = $this->calendarSlot->getScheduleTimezone($hostId);
+
+        $daylightSavingTime = DateTimeHelper::getDaylightSavingTime($scheduleTimezone);
+
         $maxBooking = $this->calendarSlot->getMaxBookingPerSlot();
 
         $isGroupBooking = $maxBooking > 1;
@@ -273,6 +284,11 @@ class TimeSlotService
 
             $booked = $booking->count();
             $booking = $booking[0];
+
+            if ($daylightSavingTime) {
+                $booking->start_time = $this->maybeDayLightSavingTime($booking->start_time, $daylightSavingTime, $scheduleTimezone);
+                $booking->end_time = $this->maybeDayLightSavingTime($booking->end_time, $daylightSavingTime, $scheduleTimezone);
+            }
 
             if ($toTimeZone != 'UTC') {
                 $booking->start_time = DateTimeHelper::convertToTimeZone($booking->start_time, 'UTC', $toTimeZone);
@@ -347,7 +363,8 @@ class TimeSlotService
 
         if (!$isGroupBooking) {
             foreach ($remoteBookings as $slot) {
-                $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, '+');
+                $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone, '+');
+
                 $rangedItems = $this->createDateRangeArrayFromSlotConfig([
                     'start'  => $slot['start'],
                     'end'    => $slot['end'],
@@ -358,7 +375,10 @@ class TimeSlotService
                     if (!isset($books[$rangedDate])) {
                         $books[$rangedDate] = [];
                     }
-                    $books[$rangedDate][] = $rangedSlot;
+                
+                    if (!$this->isLocalBooking($books[$rangedDate], $rangedSlot)) {
+                        $books[$rangedDate][] = $rangedSlot;
+                    }
                 }
             }
 
@@ -366,16 +386,22 @@ class TimeSlotService
         }
 
         foreach ($remoteBookings as $slot) {
-            $slot = $this->maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, '+');
+            $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone, '+');
+
             $rangedItems = $this->createDateRangeArrayFromSlotConfig([
-                'start' => $slot['start'],
-                'end'   => $slot['end']
+                'start'  => $slot['start'],
+                'end'    => $slot['end'],
+                'source' => $slot['source']
             ]);
+
             foreach ($rangedItems as $rangedDate => $rangedSlot) {
                 if (!isset($books[$rangedDate])) {
                     $books[$rangedDate] = [];
                 }
-                $books[$rangedDate][] = $rangedSlot;
+            
+                if (!$this->isLocalBooking($books[$rangedDate], $rangedSlot)) {
+                    $books[$rangedDate][] = $rangedSlot;
+                }
             }
         }
 
@@ -874,7 +900,7 @@ class TimeSlotService
             ->sum('slot_minutes');
     }
 
-    protected function maybeDayLightSaving($slot, $daylightSavingTime, $scheduleTimezone, $adjustSign = '-')
+    protected function maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone, $adjustSign = '-')
     {
         if (!$daylightSavingTime) {
             return $slot;
@@ -889,7 +915,29 @@ class TimeSlotService
         if (DateTimeHelper::isDaylightSavingActive($scheduleEndTime, $scheduleTimezone)) {
             $slot['end'] = gmdate('Y-m-d H:i:s', strtotime($slot['end'] . " $adjustSign $daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
+
         return $slot;
+    }
+
+    protected function maybeDayLightSavingTime($time, $daylightSavingTime, $timezone)
+    {
+        $scheduleTime = DateTimeHelper::convertToTimeZone($time, 'UTC', $timezone);
+        if (DateTimeHelper::isDaylightSavingActive($scheduleTime, $timezone)) {
+            $time = gmdate('Y-m-d H:i:s', strtotime($time . " +$daylightSavingTime minutes")); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
+
+        return $time;
+    }
+
+    protected function isLocalBooking($bookings, $slot)
+    {
+        foreach ($bookings as $book) {
+            if ($book['start'] == $slot['start'] && $book['end'] == $slot['end']) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     protected function maybeSortDaySlots($daySlots, $forceSort = false)
