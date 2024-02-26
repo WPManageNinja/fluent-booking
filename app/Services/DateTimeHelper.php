@@ -273,12 +273,10 @@ class DateTimeHelper
             return false;
         }
 
-        $timezone  = new \DateTimeZone($timezone);
-        $dateTime  = new \DateTime($dateTime, $timezone);
+        $dateTimeObject = new \DateTime($dateTime, new \DateTimeZone($timezone));
 
-        $timeStamp   = $dateTime->getTimestamp();
-        $transitions = $timezone->getTransitions($timeStamp, $timeStamp);
+        $isDstActive = $dateTimeObject->format('I');
 
-        return $transitions && $transitions[0]['isdst'];
+        return $isDstActive;
     }
 }

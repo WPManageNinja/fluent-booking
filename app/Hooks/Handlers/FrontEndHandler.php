@@ -84,7 +84,7 @@ class FrontEndHandler
                     ], 422);
                 }
 
-                $endDateTime = gmdate('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60));
+                $endDateTime = gmdate('Y-m-d H:i:s', strtotime($bookingData['start_time']) + ($existingBooking->slot_minutes * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
                 $previousBooking = clone $existingBooking;
 
@@ -585,13 +585,14 @@ class FrontEndHandler
             return;
         }
 
+        $timezone = Arr::get($postedData, 'timezone', 'UTC');
         $duration = $calendarSlot->getDuration(Arr::get($_REQUEST, 'duration', null));
 
-        $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $postedData['timezone']);
-        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $timezone);
+        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $bookingData = [
-            'person_time_zone' => sanitize_text_field($postedData['timezone']),
+            'person_time_zone' => sanitize_text_field($timezone),
             'start_time'       => $startDateTime,
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
@@ -637,14 +638,14 @@ class FrontEndHandler
 
         if ($hostIds) {
             foreach ($hostIds as $hostId) {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
+                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration, $hostId);
                 if ($isSpotAvailable) {
                     $bookingData['host_user_id'] = $hostId;
                     break;
                 }
             }
         } else {
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $timezone, $duration);
         }
 
         if (!$isSpotAvailable) {
@@ -697,7 +698,7 @@ class FrontEndHandler
         $startDate = Arr::get($_REQUEST, 'start_date'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
-            $startDate = gmdate('Y-m-d H:i:s');
+            $startDate = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
         $timeZone = Arr::get($_REQUEST, 'timezone'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
