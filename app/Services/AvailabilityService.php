@@ -427,8 +427,8 @@ class AvailabilityService
 
             if (strtotime($dayStart) == strtotime($convertedStart)) {
                 $overrideDays[$startDate] = [
-                    'start' => gmdate('H:i', strtotime($dayStart)),
-                    'end'   => gmdate('H:i', strtotime($dayEnd))
+                    'start' => '00:00',
+                    'end'   => '24:00'
                 ];
                 continue;
             }

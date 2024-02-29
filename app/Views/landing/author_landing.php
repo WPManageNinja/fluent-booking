@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -60,8 +62,6 @@
     <?php do_action('fluent_booking/main_landing'); ?>
 </head>
 <body>
-
-
     <?php \FluentBooking\App\App::getInstance('view')->render('landing.author_html', [
         'author' => $author,
         'calendar' => $calendar,
