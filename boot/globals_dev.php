@@ -3,8 +3,8 @@
 /**
  * Enable Query Log
  */
-if (!function_exists('fluentcalendar_eql')) {
-    function fluentcalendar_eql()
+if (!function_exists('fluentbooking_eql')) {
+    function fluentbooking_eql()
     {
         defined('SAVEQUERIES') || define('SAVEQUERIES', true);
     }
@@ -13,8 +13,8 @@ if (!function_exists('fluentcalendar_eql')) {
 /**
  * Get Query Log
  */
-if (!function_exists('fluentcalendar_gql')) {
-    function fluentcalendar_gql()
+if (!function_exists('fluentbooking_gql')) {
+    function fluentbooking_gql()
     {
         $result = [];
         foreach ((array)$GLOBALS['wpdb']->queries as $key => $query) {

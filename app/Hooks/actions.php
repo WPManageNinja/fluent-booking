@@ -17,6 +17,8 @@
  * Register all the grouped action handlers
  */
 
+defined( 'ABSPATH' ) || exit;
+
 use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
 use FluentBooking\Framework\Support\Arr;
 
