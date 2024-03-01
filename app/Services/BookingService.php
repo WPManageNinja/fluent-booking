@@ -12,7 +12,7 @@ class BookingService
     public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
-            throw new \Exception(__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
+            throw new \Exception(esc_html__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
         }
 
         if (!$calendarSlot) {

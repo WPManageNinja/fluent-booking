@@ -16,27 +16,27 @@ if($nodeBuild) {
     if($err1) {
         print_r($err1);
     }
-    echo implode("\n", $out1);
+    echo implode("\n", $out1); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     echo "\nBuilding FluentFormEditor Script\n";
     exec("cd resources/FluentFormEditor;npx mix --production", $out2, $err2);
     if($err2) {
         print_r($err2);
     }
-    echo implode("\n", $out2);
+    echo implode("\n", $out2); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
     echo "\nBuilding Main App Frontend\n";
     $ret = exec("npx mix --mix-config=public-webpack.mix.js --production", $out3, $err3);
     if($err3) {
         print_r($err3);
     }
-    echo implode("\n", $out3);
+    echo implode("\n", $out3); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
     echo "\nBuilding Main App\n";
     $ret = exec("npx mix --production", $out3, $err4);
     if($err4) {
         print_r($err4);
     }
-    echo implode("\n", $out3);
+    echo implode("\n", $out3); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 define('WP_USE_THEMES', false);
@@ -112,14 +112,14 @@ WP_Filesystem();
 
 function deleteFileOrFolder($fileOrFolder)
 {
-    echo 'Deleting: ' . $fileOrFolder;
+    echo 'Deleting: ' . $fileOrFolder; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     // new line
     echo "\n";
     $fileSystemDirect = new WP_Filesystem_Direct(false);
     $result = $fileSystemDirect->rmdir($fileOrFolder, true);
 
     if(!$result) {
-        echo 'ERROR on Delete: '.$fileOrFolder;
+        echo 'ERROR on Delete: '.$fileOrFolder; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }
 
@@ -133,7 +133,7 @@ function copyFileOrFolder($src, $dest)
     $result = copy_dir($src, $dest);
 
     if(is_wp_error($result)) {
-        echo 'ERROR: '.$result->get_error_message();
+        echo 'ERROR: '.$result->get_error_message(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }
 
@@ -155,7 +155,7 @@ foreach ($fileLists as $file) {
 foreach ($folderLists as $folder) {
     $source = __DIR__ . '/' . $folder;
     $target = $targetFolder . '/' . $folder;
-    echo $target . "\n";
+    echo $target . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     copyFileOrFolder($source, $target);
 }
 
@@ -204,9 +204,9 @@ function replace_text_domain($directory_path) {
 
         if ($content !== $modified_content) {
             file_put_contents($file->getPathname(), $modified_content);
-            echo "Modified: " . $file->getPathname() . PHP_EOL;
+            echo "Modified: " . $file->getPathname() . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         } else {
-            echo "No modification needed: " . $file->getPathname() . PHP_EOL;
+            echo "No modification needed: " . $file->getPathname() . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
     }
 }

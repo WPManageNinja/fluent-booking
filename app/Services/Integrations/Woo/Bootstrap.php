@@ -119,21 +119,21 @@ class Bootstrap
             }
             ?>
             <div class="fcal_booking_details">
-                <h2 class="woocommerce-column__title"><?php _e('Booking Details', 'fluent-booking-pro'); ?></h2>
+                <h2 class="woocommerce-column__title"><?php esc_html_e('Booking Details', 'fluent-booking-pro'); ?></h2>
                 <div class="fcal_booking_info">
                     <ul>
                         <li>
-                            <b><?php _e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getMeetingTitle(); ?>
+                            <b><?php esc_html_e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getMeetingTitle()); ?>
                         </li>
                         <li>
-                            <b><?php _e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getShortBookingDateTime($booking->person_time_zone); ?>
-                            (<?php echo $booking->person_time_zone; ?>)
+                            <b><?php esc_html_e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getShortBookingDateTime($booking->person_time_zone)); ?>
+                            (<?php echo esc_html($booking->person_time_zone); ?>)
                         </li>
                         <li>
-                            <b><?php _e('Status:', 'fluent-booking-pro'); ?><?php echo ucfirst($booking->status); ?></b>
+                            <b><?php esc_html_e('Status:', 'fluent-booking-pro'); ?><?php echo esc_html(ucfirst($booking->status)); ?></b>
                         </li>
                         <li>
-                            <a href="<?php echo $booking->getConfirmationUrl(); ?>"><?php _e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>
+                            <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"><?php esc_html_e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>
                         </li>
                     </ul>
                 </div>
@@ -321,7 +321,7 @@ class Bootstrap
             'order_id' => $orderId,
         ]);
 
-        echo '<p><a href="' . $order->get_edit_order_url() . '" target="_blank">' . __('View Order', 'fluent-booking-pro') . '</a></p>';
+        echo '<p><a href="' . esc_url($order->get_edit_order_url()) . '" target="_blank">' . esc_html_e('View Order', 'fluent-booking-pro') . '</a></p>';
 
         $orderSummary = ob_get_clean();
 

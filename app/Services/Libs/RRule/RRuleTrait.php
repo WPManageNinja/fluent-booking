@@ -192,14 +192,18 @@ trait RRuleTrait
 					$date = new \DateTime($date);
 				}
 			} catch (\Exception $e) { // PHP 5.6
-                $message = wp_kses_post($e->getMessage());
 				throw new \InvalidArgumentException(
-					"Failed to parse the date ({$message})"
+                    sprintf(
+                        "Failed to parse the date (%s)",
+                        wp_kses_post($e->getMessage())
+                    )
 				);
 			} catch (\Throwable $e) { // PHP 7+
-                $message = wp_kses_post($e->getMessage());
 				throw new \InvalidArgumentException(
-					"Failed to parse the date ({$message})"
+					sprintf(
+                        "Failed to parse the date (%s)",
+                        wp_kses_post($e->getMessage())
+                    )
 				);
 			}
 		}

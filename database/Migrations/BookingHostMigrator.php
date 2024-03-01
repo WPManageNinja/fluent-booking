@@ -13,7 +13,7 @@ class BookingHostMigrator
         $charsetCollate = $wpdb->get_charset_collate();
         $table = $wpdb->prefix . static::$tableName;
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -25,6 +25,9 @@ class BookingHostMigrator
                 KEY `fcal_bu_user_id` (`user_id`),
                 KEY `fcal_bu_status` (`status`)
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

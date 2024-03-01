@@ -15,7 +15,7 @@ class BookingTransactionsMigrator
         $table = $wpdb->prefix . static::$tableName;
         $indexPrefix = $wpdb->prefix . 'fct_ot_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `object_id` BIGINT UNSIGNED NOT NULL DEFAULT '0',
@@ -40,6 +40,9 @@ class BookingTransactionsMigrator
                 INDEX `{$indexPrefix}_status_idx` (`status` ASC),
                 INDEX `{$indexPrefix}_object_id_idx` (`object_id` ASC)
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

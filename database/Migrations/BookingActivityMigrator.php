@@ -18,7 +18,7 @@ class BookingActivityMigrator
         $table = $wpdb->prefix .'fcal_booking_activity';
         $indexPrefix = $wpdb->prefix .'fcal_ba_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` BIGINT UNSIGNED NOT NULL,
@@ -33,6 +33,9 @@ class BookingActivityMigrator
                  INDEX `{$indexPrefix}_mt_idx` (`booking_id`),
                  INDEX `{$indexPrefix}_mto_type` (`type`)
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

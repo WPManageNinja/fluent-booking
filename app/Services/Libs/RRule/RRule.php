@@ -201,7 +201,7 @@ class RRule implements RRuleInterface
 			else {
 				throw new \InvalidArgumentException(sprintf(
 					'The first argument must be a string or an array (%s provided)',
-					gettype($parts)
+					esc_html(gettype($parts))
 				));
 			}
 		}
@@ -211,7 +211,7 @@ class RRule implements RRuleInterface
 		if (! empty($unsupported)) {
 			throw new \InvalidArgumentException(
 				'Unsupported parameter(s): '
-				.implode(',',array_keys($unsupported))
+				. esc_html(implode(',',array_keys($unsupported)))
 			);
 		}
 
@@ -223,7 +223,7 @@ class RRule implements RRuleInterface
 		if (! array_key_exists($parts['WKST'], self::WEEKDAYS)) {
 			throw new \InvalidArgumentException(
 				'The WKST rule part must be one of the following: '
-				.implode(', ',array_keys(self::WEEKDAYS))
+				.implode(', ',array_keys(self::WEEKDAYS)) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);
 		}
 		$this->wkst = self::WEEKDAYS[$parts['WKST']];
@@ -233,7 +233,7 @@ class RRule implements RRuleInterface
 			if ($parts['FREQ'] > self::SECONDLY || $parts['FREQ'] < self::YEARLY) {
 				throw new \InvalidArgumentException(
 					'The FREQ rule part must be one of the following: '
-					.implode(', ',array_keys(self::FREQUENCIES))
+					.implode(', ',array_keys(self::FREQUENCIES)) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				);
 			}
 			$this->freq = $parts['FREQ'];
@@ -243,7 +243,7 @@ class RRule implements RRuleInterface
 			if (! array_key_exists($parts['FREQ'], self::FREQUENCIES)) {
 				throw new \InvalidArgumentException(
 					'The FREQ rule part must be one of the following: '
-					.implode(', ',array_keys(self::FREQUENCIES))
+					.implode(', ',array_keys(self::FREQUENCIES)) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				);
 			}
 			$this->freq = self::FREQUENCIES[$parts['FREQ']];
@@ -332,7 +332,7 @@ class RRule implements RRuleInterface
 				$value = trim(strtoupper($value));
 				$valid = preg_match('/^([+-]?[0-9]+)?([A-Z]{2})$/', $value, $matches);
 				if (! $valid || (not_empty($matches[1]) && ($matches[1] == 0 || $matches[1] > 53 || $matches[1] < -53)) || ! array_key_exists($matches[2], self::WEEKDAYS)) {
-					throw new \InvalidArgumentException('Invalid BYDAY value: '.$value);
+					throw new \InvalidArgumentException('Invalid BYDAY value: ' . esc_html($value));
 				}
 
 				if ($matches[1]) {
@@ -371,7 +371,7 @@ class RRule implements RRuleInterface
 			$this->bymonthday_negative = array();
 			foreach ($parts['BYMONTHDAY'] as $value) {
 				if (!$value || filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => -31, 'max_range' => 31))) === false) {
-					throw new \InvalidArgumentException('Invalid BYMONTHDAY value: '.$value.' (valid values are 1 to 31 or -31 to -1)');
+					throw new \InvalidArgumentException('Invalid BYMONTHDAY value: ' . esc_html($value) . ' (valid values are 1 to 31 or -31 to -1)');
 				}
 				$value = (int) $value;
 				if ($value < 0) {
@@ -395,7 +395,7 @@ class RRule implements RRuleInterface
 			$this->bysetpos = array();
 			foreach ($parts['BYYEARDAY'] as $value) {
 				if (! $value || filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => -366, 'max_range' => 366))) === false) {
-					throw new \InvalidArgumentException('Invalid BYSETPOS value: '.$value.' (valid values are 1 to 366 or -366 to -1)');
+					throw new \InvalidArgumentException('Invalid BYSETPOS value: '. esc_html($value) .' (valid values are 1 to 366 or -366 to -1)');
 				}
 
 				$this->byyearday[] = (int) $value;
@@ -415,7 +415,7 @@ class RRule implements RRuleInterface
 			$this->byweekno = array();
 			foreach ($parts['BYWEEKNO'] as $value) {
 				if (! $value || filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => -53, 'max_range' => 53))) === false) {
-					throw new \InvalidArgumentException('Invalid BYWEEKNO value: '.$value.' (valid values are 1 to 53 or -53 to -1)');
+					throw new \InvalidArgumentException('Invalid BYWEEKNO value: '.esc_html($value).' (valid values are 1 to 53 or -53 to -1)');
 				}
 				$this->byweekno[] = (int) $value;
 			}
@@ -431,7 +431,7 @@ class RRule implements RRuleInterface
 			$this->bymonth = array();
 			foreach ($parts['BYMONTH'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 12))) === false) {
-					throw new \InvalidArgumentException('Invalid BYMONTH value: '.$value);
+					throw new \InvalidArgumentException('Invalid BYMONTH value: '.esc_html($value));
 				}
 				$this->bymonth[] = (int) $value;
 			}
@@ -452,7 +452,7 @@ class RRule implements RRuleInterface
 			$this->bysetpos = array();
 			foreach ($parts['BYSETPOS'] as $value) {
 				if (! $value || filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => -366, 'max_range' => 366))) === false) {
-					throw new \InvalidArgumentException('Invalid BYSETPOS value: '.$value.' (valid values are 1 to 366 or -366 to -1)');
+					throw new \InvalidArgumentException('Invalid BYSETPOS value: '.esc_html($value).' (valid values are 1 to 366 or -366 to -1)');
 				}
 
 				$this->bysetpos[] = (int) $value;
@@ -467,7 +467,7 @@ class RRule implements RRuleInterface
 			$this->byhour = array();
 			foreach ($parts['BYHOUR'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 23))) === false) {
-					throw new \InvalidArgumentException('Invalid BYHOUR value: '.$value);
+					throw new \InvalidArgumentException('Invalid BYHOUR value: '.esc_html($value));
 				}
 				$this->byhour[] = (int) $value;
 			}
@@ -486,7 +486,7 @@ class RRule implements RRuleInterface
 			$this->byminute = array();
 			foreach ($parts['BYMINUTE'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 59))) === false) {
-					throw new \InvalidArgumentException('Invalid BYMINUTE value: '.$value);
+					throw new \InvalidArgumentException('Invalid BYMINUTE value: '.esc_html($value));
 				}
 				$this->byminute[] = (int) $value;
 			}
@@ -507,7 +507,7 @@ class RRule implements RRuleInterface
 				//  December 31, 2005 23:59:60 UTC is a valid date...
 				// so is 2012-06-30T23:59:60UTC
 				if (filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 60))) === false) {
-					throw new \InvalidArgumentException('Invalid BYSECOND value: '.$value);
+					throw new \InvalidArgumentException('Invalid BYSECOND value: '.esc_html($value));
 				}
 				$this->bysecond[] = (int) $value;
 			}
@@ -932,7 +932,7 @@ class RRule implements RRuleInterface
 	public function offsetGet($offset)
 	{
 		if (! is_numeric($offset) || $offset < 0 || is_float($offset)) {
-			throw new \InvalidArgumentException('Illegal offset type: '.gettype($offset));
+			throw new \InvalidArgumentException('Illegal offset type: '. esc_html(gettype($offset)));
 		}
 
 		if (isset($this->cache[$offset])) {
@@ -1991,7 +1991,7 @@ class RRule implements RRuleInterface
 		}
 		else {
 			if (! preg_match('/^([a-z]{2})(?:(?:_|-)[A-Z][a-z]+)?(?:(?:_|-)([A-Za-z]{2}))?(?:(?:_|-)[A-Z]*)?(?:\.[a-zA-Z\-0-9]*)?$/', $locale, $matches)) {
-				throw new \InvalidArgumentException("The locale option does not look like a valid locale: $locale. For more option install the intl extension.");
+				throw new \InvalidArgumentException('The locale option does not look like a valid locale: ' . esc_html($locale) . '. For more option install the intl extension.');
 			}
 
 			$files[] = $matches[1];
@@ -2050,7 +2050,7 @@ class RRule implements RRuleInterface
 			if (!is_null($fallback)) {
 				return self::i18nLoad($fallback, null, $use_intl);
 			}
-			throw new \RuntimeException("Failed to load translations for '$locale'");
+			throw new \RuntimeException('Failed to load translations for ' . esc_html($locale));
 		}
 
 		return $result;
@@ -2142,7 +2142,7 @@ class RRule implements RRuleInterface
 					$timezone
 				);
 				if (! $formatter) {
-					throw new \RuntimeException('IntlDateFormatter::create() failed. Error Code: '.intl_get_error_code().' "'. intl_get_error_message().'" (this should not happen, please open a bug report!)');
+					throw new \RuntimeException('IntlDateFormatter::create() failed. Error Code: '.esc_html(intl_get_error_code()).' "'. esc_html(intl_get_error_message()).'" (this should not happen, please open a bug report!)');
 				}
 				$opt['date_formatter'] = function($date) use ($formatter) {
 					return $formatter->format($date);
