@@ -14,7 +14,7 @@ class BookingMigrator
 
         $table = $wpdb->prefix . static::$tableName;
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `hash` VARCHAR(192) NULL,
@@ -65,6 +65,9 @@ class BookingMigrator
                 KEY `fcal_b_booking_type` (`booking_type`),
                 KEY `fcal_b_start_time` (`start_time`)
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

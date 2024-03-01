@@ -13,13 +13,13 @@ class DataExporter
     {
 
         if (!PermissionManager::hasAllCalendarAccess()) {
-            die(__('You do not have permission to export data', 'fluent-booking-pro'));
+            die(esc_html__('You do not have permission to export data', 'fluent-booking-pro'));
         }
 
         $groupId = (int)$_REQUEST['group_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$groupId) {
-            die(__('Please provide Group ID', 'fluent-booking-pro'));
+            die(esc_html__('Please provide Group ID', 'fluent-booking-pro'));
         }
 
         $attendees = Booking::where('group_id', $groupId)->get();

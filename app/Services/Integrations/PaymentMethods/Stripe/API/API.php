@@ -29,7 +29,7 @@ class API
         $sessionResponse = wp_remote_post($url, $requestData);
 
         if (is_wp_error($sessionResponse)) {
-            echo __("API Error: ", "fluent-booking-pro") . esc_html($sessionResponse->get_error_message());
+            echo esc_html__("API Error: ", "fluent-booking-pro") . esc_html($sessionResponse->get_error_message());
             exit;
         }
 

@@ -11,7 +11,7 @@ class OrdersItemsMigrator
 		$charsetCollate = $wpdb->get_charset_collate();
 		$table          = $wpdb->prefix . static::$tableName;
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) != $table ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) != $table ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `order_id` BIGINT UNSIGNED NOT NULL DEFAULT '0',
@@ -25,6 +25,9 @@ class OrdersItemsMigrator
                 `created_at` TIMESTAMP NULL,
                 `updated_at` TIMESTAMP NULL
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
 			dbDelta( $sql );
 		}
 	}
