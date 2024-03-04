@@ -112,6 +112,7 @@ class AvailabilityController extends Controller
         $isTitleExist = AvailabilityService::isTitleAlreadyExist($data['title'], $userId);
 
         if ($isTitleExist) {
+            /* translators: %s is the existing availability title */
             $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $data['title']);
             return $this->sendError([
                 'message' => $message,
@@ -207,6 +208,7 @@ class AvailabilityController extends Controller
         $isTitleExist = AvailabilityService::isTitleAlreadyExist($title, $schedule->object_id, $schedule->key);
 
         if ($isTitleExist) {
+            /* translators: %s is the existing availability title */
             $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $title);
             return $this->sendError([
                 'message' => $message,
@@ -265,8 +267,10 @@ class AvailabilityController extends Controller
         $usageCount = AvailabilityService::getAvailabilityUsageCount($scheduleId);
 
         if ($usageCount) {
+            /* translators: Number of events dependent on the schedule */
+            $message = sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking-pro'), $usageCount);
             return $this->sendError([
-                'message' => sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking-pro'), $usageCount),
+                'message' => $message
             ], 422);
         }
 

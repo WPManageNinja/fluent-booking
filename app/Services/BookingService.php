@@ -180,6 +180,7 @@ class BookingService
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {
+            // translators: %s is the name of the person scheduled
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
@@ -200,6 +201,7 @@ class BookingService
 
         $confirmationData = [
             'author'      => $author,
+            // translators: %s is the status of the meeting
             'title'       => sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus),
             'sub_heading' => $subHeading,
             'sections'    => $sections,

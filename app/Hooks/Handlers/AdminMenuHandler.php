@@ -156,6 +156,7 @@ class AdminMenuHandler
     {
         add_filter('admin_footer_text', function ($content) {
             $url = 'https://fluentbooking.com/';
+            /* translators: %s: URL of the FluentBooking website */
             return sprintf(wp_kses(__('Thank you for using <a href="%s">FluentBooking</a>.', 'fluent-booking-pro'), array('a' => array('href' => array()))), esc_url($url)) . '<span title="based on your WP timezone settings" style="margin-left: 10px;" data-timestamp="' . current_time('timestamp') . '" id="fcal_server_timestamp"></span>';
         });
 

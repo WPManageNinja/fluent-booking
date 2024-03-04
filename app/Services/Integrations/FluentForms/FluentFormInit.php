@@ -77,6 +77,7 @@ class FluentFormInit
             if (empty($bookingData['start_time']) || empty($bookingData['timezone'])) {
                 $error = Arr::get($field, 'rules.required.message');
                 if (!$error) {
+                    // translators: %s is the label of the required field
                     $error = sprintf(__('%s field is required', 'fluent-booking-pro'), Arr::get($field, 'raw.settings.label'));
                 }
                 return $error;
@@ -355,6 +356,7 @@ class FluentFormInit
                     'component'        => 'FluentBooking',
                     'status'           => 'info',
                     'title'            => __('Booking has been created on FluentBooking', 'fluent-booking-pro'),
+                    /* translators: %1$s is the opening anchor tag, %2$s is the closing anchor tag. */
                     'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1sView Booking Details%2s', 'fluent-booking-pro'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
                 ]);
 

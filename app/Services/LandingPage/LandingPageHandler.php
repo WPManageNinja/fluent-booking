@@ -113,6 +113,7 @@ class LandingPageHandler
             if ($activeEvent->description) {
                 $activeEvent->description = Helper::excerpt($activeEvent->description);
             } else {
+                // translators: %d is the duration of the meeting in minutes
                 $activeEvent->description = sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $activeEvent->duration);
             }
 
