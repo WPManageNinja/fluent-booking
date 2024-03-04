@@ -108,8 +108,10 @@ class LicenseManager
 
         if ($status != 'valid') {
             return [
+                // translators: %s is replaced with the plugin title, and %s and %s are used for HTML anchors
                 'message'         => sprintf(__('The %s license needs to be activated. %sActivate Now%s', 'fluent-booking-pro'),
-                    $this->getVar('plugin_title'), '<a href="' . $this->getVar('activate_url') . '">',
+                    $this->getVar('plugin_title'),
+                    '<a href="' . $this->getVar('activate_url') . '">',
                     '</a>'),
                 'type'            => 'global',
                 'license_details' => $licenseDetails

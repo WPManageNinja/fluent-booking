@@ -44,7 +44,7 @@
         <?php endif; ?>
 
         <?php if ($action_type == 'cancel'): ?>
-            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
+            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr($action_type); ?>">
                 <form id="fcal_cancellation_form" action="<?php echo esc_url($action_url); ?>" method="POST"
                         class="fcal_form_cancellation">
                     <label for="cancellation_reason"><?php esc_html_e('Reason for cancellation', 'fluent-booking-pro') ?></label>

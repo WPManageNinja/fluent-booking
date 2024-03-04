@@ -180,6 +180,7 @@ class EmailNotificationService
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Reminder Email Sent', 'fluent-booking-pro'),
             'type'        => 'activity',
+            /* translators: Email address where the reminder email was sent */
             'description' => sprintf(__('Reminder email sent to %s.', 'fluent-booking-pro'), $emailTo),
             'booking_id'  => $booking->id
         ]);
@@ -267,6 +268,7 @@ class EmailNotificationService
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Cancelled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
             'type'        => 'activity',
+            /* translators: Email address where the cancellation email was sent */
             'description' => sprintf(__('Cancellation email sent to %s'), $emailTo),
             'booking_id'  => $booking->id
         ]);
@@ -347,6 +349,7 @@ class EmailNotificationService
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Rescheduled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
             'type'        => 'activity',
+            /* translators: Email address where the rescheduling email was sent */
             'description' => sprintf(__('Rescheduling email sent to %s', 'fluent-booking-pro'), $emailTo),
             'booking_id'  => $booking->id
         ]);

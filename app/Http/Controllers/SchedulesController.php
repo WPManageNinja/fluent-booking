@@ -185,6 +185,7 @@ class SchedulesController extends Controller
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
 
         return [
+            /* translators: Updated column name */
             'message' => sprintf(__('%s has been updated', 'fluent-booking-pro'), $column)
         ];
     }

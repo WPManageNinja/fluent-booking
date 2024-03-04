@@ -307,7 +307,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Google Calendar API. */
+                'description' => sprintf(__('Failed to connect with google calendar API. API Response: %s', 'fluent-booking-pro'), $api->lastError->get_error_message())
             ]);
             return false;
         }
@@ -407,7 +408,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to create event in Google calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Google Calendar API. */
+                'description' => sprintf(__('Failed to create event in Google calendar. API Response: %s', 'fluent-booking-pro'), $response->get_error_message())
             ]);
             return false;
         }
@@ -434,7 +436,8 @@ class Bootstrap extends BaseCalendar
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Google Calendar event created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Google calendar event has been created. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            /* translators: %s is the error message returned by the Google Calendar API. */
+            'description' => sprintf(__('Google calendar event has been created. %s',  'fluent-booking-pro'), '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>')
         ]);
 
         return true;
@@ -496,7 +499,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with google calendar API. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Google Calendar API. */
+                'description' => sprintf(__('Failed to connect with google calendar API. API Response: %s', 'fluent-booking-pro'), $api->lastError->get_error_message())
             ]);
             return false;
         }
@@ -538,7 +542,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Google calendar. API Response: %s', $api->lastError->get_error_message()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Google Calendar API. */
+                'description' => sprintf(__('Failed to update event in Google calendar. API Response: %s', 'fluent-booking-pro'), $api->lastError->get_error_message())
             ]);
             return false;
         }
@@ -557,7 +562,8 @@ class Bootstrap extends BaseCalendar
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Google Calendar event updated', 'fluent-booking-pro'),
-            'description' => __(sprintf('Google calendar event has been updated. %s', '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            /* translators: %s is the error message returned by the Google Calendar API. */
+            'description' => sprintf(__('Google calendar event has been updated. %s', 'fluent-booking-pro'), '<a target="_blank" href="' . $response['htmlLink'] . '">' . __('View on Google Calendar', 'fluent-booking-pro') . '</a>')
         ]);
 
         return true;
@@ -598,7 +604,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to add attendee in Google calendar. API Response: %s', $updatedEvent->get_error_message()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Google Calendar API. */
+                'description' => sprintf(__('Failed to add attendee in Google calendar. API Response: %s', 'fluent-booking-pro'), $updatedEvent->get_error_message())
             ]);
             return false;
         }
@@ -630,7 +637,8 @@ class Bootstrap extends BaseCalendar
                     'status'      => 'closed',
                     'type'        => 'error',
                     'title'       => __('Google Calendar API Error', 'fluent-booking-pro'),
-                    'description' => __(sprintf('Failed to connect with Google calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                    /* translators: %s is the error message returned by the Google Calendar API. */
+                    'description' => sprintf(__('Failed to connect with Google calendar API. API Response: %s', 'fluent-booking-pro'), $response->get_error_message())
                 ]);
             }
             return false;
