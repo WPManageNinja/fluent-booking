@@ -354,7 +354,6 @@ class FrontEndHandler
                 'user_id' => $currentUser->ID
             ];
         } else {
-
             $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
             // Check for url params
@@ -362,8 +361,7 @@ class FrontEndHandler
                 $currentPerson['name'] = $name;
             }
 
-            if ($email = Arr::get($request, 'invitee_email')) {
-                $email = sanitize_email($email);
+            if ($email = sanitize_email(Arr::get($request, 'invitee_email'))) {
                 if (is_email($email)) {
                     $currentPerson['email'] = $email;
                 }
@@ -586,10 +584,11 @@ class FrontEndHandler
             return;
         }
 
-        $timezone = Arr::get($postedData, 'timezone', 'UTC');
-        $duration = $calendarSlot->getDuration(Arr::get($_REQUEST, 'duration', null));
+        $startDate = sanitize_text_field(Arr::get($postedData, 'start_date'));
+        $timezone  = sanitize_text_field(Arr::get($postedData, 'timezone', 'UTC'));
+        $duration  = (int)$calendarSlot->getDuration(Arr::get($postedData, 'duration', null));
 
-        $startDateTime = DateTimeHelper::convertToUtc($postedData['start_date'], $timezone);
+        $startDateTime = DateTimeHelper::convertToUtc($startDate, $timezone);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $bookingData = [
@@ -695,14 +694,16 @@ class FrontEndHandler
             ], 422);
         }
 
+        $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
         $calendar = $slot->calendar;
-        $startDate = Arr::get($_REQUEST, 'start_date'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $startDate = sanitize_text_field(Arr::get($request, 'start_date')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
             $startDate = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
-        $timeZone = Arr::get($_REQUEST, 'timezone'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $timeZone = sanitize_text_field(Arr::get($request, 'timezone')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$timeZone) {
             $timeZone = wp_timezone_string();
@@ -712,7 +713,7 @@ class FrontEndHandler
             $timeZone = $calendar->author_timezone;
         }
 
-        $duration = $slot->getDuration(Arr::get($_REQUEST, 'duration', null));
+        $duration = (int)$slot->getDuration(Arr::get($request, 'duration', null));
 
         $timeSlotService = new TimeSlotService($calendar, $slot);
 

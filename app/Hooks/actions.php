@@ -38,7 +38,7 @@ $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 
 add_action('init', function () {
-    if (!isset($_REQUEST['gcal'])) {
+    if (!isset($_REQUEST['gcal'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return;
     }
 

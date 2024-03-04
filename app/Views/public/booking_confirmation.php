@@ -21,7 +21,7 @@
                     <h4><?php echo esc_html($section['title']); ?></h4>
                 </div>
                 <div class="fcal_confirm_section_content">
-                    <?php echo esc_html($section['content']); ?>
+                    <?php echo wp_kses_post($section['content']); ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -30,7 +30,7 @@
         <hr />
         <div class="fcal_payment_html">
             <h3 style="margin-bottom: 10px;"><?php esc_html_e('Payment Details', 'fluent-booking-pro'); ?></h3>
-            <?php echo esc_html($extra_html); ?>
+            <?php echo wp_kses_post($extra_html); ?>
         </div>
         <style>
             .fluent_booking_payment_receipt {

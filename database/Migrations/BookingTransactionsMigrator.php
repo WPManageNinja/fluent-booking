@@ -15,7 +15,7 @@ class BookingTransactionsMigrator
         $table = $wpdb->prefix . static::$tableName;
         $indexPrefix = $wpdb->prefix . 'fct_ot_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `object_id` BIGINT UNSIGNED NOT NULL DEFAULT '0',

@@ -51,17 +51,19 @@ class LandingPageHandler
             return;
         }
 
-        if (empty($_REQUEST['host'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            do_action('fluent_booking/landing_page_route_' . $route, $_REQUEST);
+        $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        if (empty($request['host'])) {
+            do_action('fluent_booking/landing_page_route_' . $route, $request);
             return;
         }
 
-        $authorSlug = sanitize_text_field($_REQUEST['host']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $authorSlug = sanitize_text_field($request['host']);
 
         $slotSlug = null;
 
-        if (!empty($_REQUEST['event'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            $slotSlug = sanitize_text_field($_REQUEST['event']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (!empty($request['event'])) {
+            $slotSlug = sanitize_text_field($request['event']);
         }
 
         $this->routeView($authorSlug, $slotSlug);

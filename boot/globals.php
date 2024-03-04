@@ -16,6 +16,18 @@ if ($app->config->get('app.env') == 'dev') {
     is_readable($globalsDevFile) && include $globalsDevFile;
 }
 
+if (!function_exists('dd')) {
+    function dd()
+    {
+        foreach (func_get_args() as $arg) {
+            echo "<pre>";
+            print_r($arg);
+            echo "</pre>";
+        }
+        die();
+    }
+}
+
 function fluentbookingFormattedAmount($amountInCents, $currencySettings)
 {
     $default = [

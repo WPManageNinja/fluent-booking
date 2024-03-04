@@ -30,7 +30,7 @@ return function ($file) {
                 add_action('admin_notices', function () use ($licenseMessage) {
                     $class = 'notice notice-error fc_message';
                     $message = $licenseMessage['message'];
-                    printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
+                    printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), wp_kses_post($message));
                 });
             }
         }
