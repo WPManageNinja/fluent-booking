@@ -12,7 +12,7 @@ class BookingService
     public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
-            throw new \Exception(__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
+            throw new \Exception(esc_html__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
         }
 
         if (!$calendarSlot) {
@@ -180,6 +180,7 @@ class BookingService
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {
+            // translators: %s is the name of the person scheduled
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
         }
 
@@ -200,6 +201,7 @@ class BookingService
 
         $confirmationData = [
             'author'      => $author,
+            // translators: %s is the status of the meeting
             'title'       => sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus),
             'sub_heading' => $subHeading,
             'sections'    => $sections,
@@ -216,15 +218,13 @@ class BookingService
             $confirmationData['extra_html'] = EditorShortCodeParser::parse('{{payment.receipt_html}}', $booking);
         }
 
-
         if ($booking->canCancel()) {
             $confirmationData['action_url'] = add_query_arg([
                 'action'       => 'fcal_cancel_meeting',
                 'meeting_hash' => $booking->hash,
-                'scope'        => Arr::get($_REQUEST, 'scope')
+                'scope'        => Arr::get($_REQUEST, 'scope') // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             ], admin_url('admin-ajax.php'));
         }
-
 
         if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
             $assetsUrl = App::getInstance('url.assets');

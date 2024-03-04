@@ -7,6 +7,8 @@
  * so the $app is not available here, only declare functions here.
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ($app->config->get('app.env') == 'dev') {
 
     $globalsDevFile = __DIR__ . '/globals_dev.php';
@@ -26,9 +28,8 @@ if (!function_exists('dd')) {
     }
 }
 
-function fcalFormattedAmount($amountInCents, $currencySettings)
+function fluentbookingFormattedAmount($amountInCents, $currencySettings)
 {
-
     $default = [
         'currency_sign' => '',
         'currency_position' => 'left',

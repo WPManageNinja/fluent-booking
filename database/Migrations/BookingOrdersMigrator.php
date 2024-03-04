@@ -15,7 +15,7 @@ class BookingOrdersMigrator
         $table = $wpdb->prefix . static::$tableName;
         $indexPrefix = $wpdb->prefix . 'fct_ord_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `status` VARCHAR(20) NOT NULL DEFAULT 'draft',
@@ -49,6 +49,9 @@ class BookingOrdersMigrator
                 INDEX `{$indexPrefix}_status_type` (`type` ASC),
                 INDEX `{$indexPrefix}_customer_id` (`customer_id` ASC)
             ) $charsetCollate;";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

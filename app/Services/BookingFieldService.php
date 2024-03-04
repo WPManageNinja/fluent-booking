@@ -21,6 +21,7 @@ class BookingFieldService
         foreach ($customFields as $fieldKey => $customField) {
             $value = wp_unslash(Arr::get($postedData, $fieldKey));
             if (!$value && Arr::isTrue($customField, 'required')) {
+                // translators: %s is the label of the required field
                 $errors[$fieldKey . '.required'] = sprintf(__('%s is required', 'fluent-booking-pro'), $customField['label']);
                 continue;
             }

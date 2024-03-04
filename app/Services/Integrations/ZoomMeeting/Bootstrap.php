@@ -126,6 +126,7 @@ class Bootstrap
             ],
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
             'start_time'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            /* translators: 1: Calendar slot title, 2: Full name of the person */
             'topic'        => sprintf(__('%1s meeting with %2s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
         ], $booking, $calendarSlot);
 
@@ -137,7 +138,8 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Zoom API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf(__('Failed to create meeting with Zoom API. API Response: %1s', 'fluent-booking-pro'), esc_attr($response->get_error_message())), 'fluent-booking-pro')
+                /* translators: Notification message for the failure to create a meeting with Zoom API. %s is the error message returned by the API */
+                'description' => sprintf(__('Failed to create meeting with Zoom API. API Response: %1s', 'fluent-booking-pro'), esc_attr($response->get_error_message()))
             ]);
             return false;
         }
@@ -156,7 +158,8 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Zoom Meeting has been created', 'fluent-booking-pro'),
-            'description' => __(sprintf(__('Zoom Meeting has been scheduled. %1s', 'fluent-booking-pro'), '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            /* translators: Notification message for the successful scheduling of a Zoom meeting. %s is a link to start the meeting */
+            'description' => sprintf(__('Zoom Meeting has been scheduled. %1s', 'fluent-booking-pro'), '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>')
         ]);
 
         return true;

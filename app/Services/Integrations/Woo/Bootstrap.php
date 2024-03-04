@@ -119,21 +119,21 @@ class Bootstrap
             }
             ?>
             <div class="fcal_booking_details">
-                <h2 class="woocommerce-column__title"><?php _e('Booking Details', 'fluent-booking-pro'); ?></h2>
+                <h2 class="woocommerce-column__title"><?php esc_html_e('Booking Details', 'fluent-booking-pro'); ?></h2>
                 <div class="fcal_booking_info">
                     <ul>
                         <li>
-                            <b><?php _e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getMeetingTitle(); ?>
+                            <b><?php esc_html_e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getMeetingTitle()); ?>
                         </li>
                         <li>
-                            <b><?php _e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo $booking->getShortBookingDateTime($booking->person_time_zone); ?>
-                            (<?php echo $booking->person_time_zone; ?>)
+                            <b><?php esc_html_e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getShortBookingDateTime($booking->person_time_zone)); ?>
+                            (<?php echo esc_html($booking->person_time_zone); ?>)
                         </li>
                         <li>
-                            <b><?php _e('Status:', 'fluent-booking-pro'); ?><?php echo ucfirst($booking->status); ?></b>
+                            <b><?php esc_html_e('Status:', 'fluent-booking-pro'); ?><?php echo esc_html(ucfirst($booking->status)); ?></b>
                         </li>
                         <li>
-                            <a href="<?php echo $booking->getConfirmationUrl(); ?>"><?php _e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>
+                            <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"><?php esc_html_e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>
                         </li>
                     </ul>
                 </div>
@@ -199,12 +199,12 @@ class Bootstrap
                     'status'      => 'closed',
                     'type'        => 'success',
                     'title'       => __('Woo: Booking status could not be changed', 'fluent-booking-pro'),
-                    'description' => __(sprintf(
-                        'Booking status could not changed as it\'s in %1s status. %2sView Order%3s',
-                        $booking->status,
-                        '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
-                        '</a>'
-                    ), 'fluent-booking-pro')
+                    'description' => sprintf(
+                    /* translators: Notification message indicating that the booking status could not be changed because it is in a certain status. %1$s is the current booking status, %2$s is a link to view the order */
+                    __('Booking status could not be changed as it is in %1$s status. %2$sView Order%3$s', 'fluent-booking-pro'),
+                    $booking->status,
+                    '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
+                    '</a>')
                 ]);
                 return;
             }
@@ -219,13 +219,13 @@ class Bootstrap
                 'status'      => 'closed',
                 'type'        => 'success',
                 'title'       => __('Woo: Booking status changed to scheduled', 'fluent-booking-pro'),
-                'description' => __(sprintf(
-                    'Woocommerce order status changed to %1s and booking status changed to scheduled. %2sView Order%3s',
+                'description' => sprintf(
+                    /* translators: Notification message for the change of Woocommerce order status and booking status to scheduled. %1$s is the new order status, %2$s is a link to view the order */
+                    __('Woocommerce order status changed to %1$s and booking status changed to scheduled. %2$sView Order%3$s', 'fluent-booking-pro'),
                     $to,
                     '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
-                    '</a>'
-                ), 'fluent-booking-pro')
-            ]);
+                    '</a>')
+                ]);
 
             $bookingData = [
                 'name'  => $booking->first_name . ' ' . $booking->last_name,
@@ -241,6 +241,7 @@ class Bootstrap
             // Order Comment
             $order->add_order_note(
                 sprintf(
+                    /* translators: Notification message for the change of booking status to scheduled. %1$s is the booking ID, %2$s is the full booking date and time with timezone, %3$s is a link to view the booking */
                     __('Booking #%1s status changed to scheduled at %2s. %3sView Booking%4s', 'fluent-booking-pro'),
                     $booking->id,
                     $booking->getFullBookingDateTimeText($booking->calendar->author_timezone, true) . ' (' . $booking->calendar->author_timezone . ')',
@@ -275,6 +276,7 @@ class Bootstrap
 
         $order->add_order_note(
             sprintf(
+                /* translators: 1: Booking ID, 2: Opening link tag, 3: Closing link tag */
                 __('Booking #%1s status changed to cancelled. %2sView Booking%3s', 'fluent-booking-pro'),
                 $booking->id,
                 '<a target="_blank" href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '">',
@@ -286,12 +288,13 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'error',
             'title'       => __('Woo: Booking status changed to cancelled', 'fluent-booking-pro'),
-            'description' => __(sprintf(
-                'Woocommerce order status changed to %1s and booking status changed to cancelled. %2sView Order%3s',
+            'description' => sprintf(
+                /* translators: Notification message for the change of Woocommerce order status and booking status to cancelled. %1$s is the new order status, %2$s is a link to view the order */
+                __('Woocommerce order status changed to %1s and booking status changed to cancelled. %2sView Order%3s', 'fluent-booking-pro'),
                 $to,
                 '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
                 '</a>'
-            ), 'fluent-booking-pro')
+            )
         ]);
     }
 
@@ -321,7 +324,7 @@ class Bootstrap
             'order_id' => $orderId,
         ]);
 
-        echo '<p><a href="' . $order->get_edit_order_url() . '" target="_blank">' . __('View Order', 'fluent-booking-pro') . '</a></p>';
+        echo '<p><a href="' . esc_url($order->get_edit_order_url()) . '" target="_blank">' . esc_html_e('View Order', 'fluent-booking-pro') . '</a></p>';
 
         $orderSummary = ob_get_clean();
 

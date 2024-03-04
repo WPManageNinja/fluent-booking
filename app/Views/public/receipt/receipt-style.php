@@ -1,3 +1,8 @@
+<?php
+    defined('ABSPATH') || exit;
+?>
+
+<!-- CSS styles for fluent booking payment receipt -->
 <style>
     .fluent_booking_payment_receipt{
         display: block !important;

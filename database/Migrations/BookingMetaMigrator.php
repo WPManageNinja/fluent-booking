@@ -19,7 +19,7 @@ class BookingMetaMigrator
 
         $indexPrefix = $wpdb->prefix .'fcal_bmt_';
 
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) != $table) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $sql = "CREATE TABLE $table (
                 `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` BIGINT NULL,
@@ -30,6 +30,8 @@ class BookingMetaMigrator
                  INDEX `{$indexPrefix}_bmto_id_idx` (`booking_id` ),
                  INDEX `{$indexPrefix}_bmto_id_key` (`meta_key` )
             ) $charsetCollate;";
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
             dbDelta($sql);
         }
     }

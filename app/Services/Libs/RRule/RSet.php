@@ -102,7 +102,7 @@ class RSet implements RRuleInterface
 						$exdates = array_merge($exdates, RfcParser::parseExDate($line));
 					break;
 					default:
-						throw new \InvalidArgumentException("Failed to parse RFC, unknown property: $property_name");
+						throw new \InvalidArgumentException('Failed to parse RFC, unknown property: ' . esc_html($property_name));
 				}
 			}
 			foreach ($rrules as $rrule) {
@@ -504,7 +504,7 @@ class RSet implements RRuleInterface
 	public function offsetGet($offset)
 	{
 		if (! is_numeric($offset) || $offset < 0 || is_float($offset)) {
-			throw new \InvalidArgumentException('Illegal offset type: '.gettype($offset));
+			throw new \InvalidArgumentException('Illegal offset type: '. esc_html(gettype($offset)));
 		}
 
 		if (isset($this->cache[$offset])) {

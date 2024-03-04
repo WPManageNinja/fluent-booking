@@ -23,62 +23,62 @@
 </head>
 <body class="booking-confirmation-page">
 
-<div class="confirmation_page">
-    <div class="fcal_conf_wrap">
-        <?php echo $body; ?>
+    <div class="confirmation_page">
+        <div class="fcal_conf_wrap">
+            <?php echo wp_kses_post($body); ?>
+        </div>
     </div>
-</div>
 
-<script>
-    <?php foreach ($js_vars as $varKey => $values): ?>
-    var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+    <script>
+        <?php foreach ($js_vars as $varKey => $values): ?>
+        var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+        <?php endforeach; ?>
+    </script>
+
+    <?php foreach ($js_files as $fileKey => $file): ?>
+        <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>" defer="defer"></script>
     <?php endforeach; ?>
-</script>
 
-<?php foreach ($js_files as $fileKey => $file): ?>
-    <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>" defer="defer"></script>
-<?php endforeach; ?>
+    <script>
+        const theme = '<?php echo esc_attr($theme); ?>';
 
-<script>
-    const theme = '<?php echo esc_attr($theme); ?>';
+        const confirmationPage = document.querySelector('.confirmation_page');
+        function applyModeClasses(element, darkMode) {
+            const darkClass  = 'fcal-dark-mode';
+            const lightClass = 'fcal-light-mode';
 
-    const confirmationPage = document.querySelector('.confirmation_page');
-    function applyModeClasses(element, darkMode) {
-        const darkClass  = 'fcal-dark-mode';
-        const lightClass = 'fcal-light-mode';
-
-        if (element) {
-            if (darkMode) {
-                element.classList.add(darkClass);
-                element.classList.remove(lightClass);
-            } else {
-                element.classList.add(lightClass);
-                element.classList.remove(darkClass);
+            if (element) {
+                if (darkMode) {
+                    element.classList.add(darkClass);
+                    element.classList.remove(lightClass);
+                } else {
+                    element.classList.add(lightClass);
+                    element.classList.remove(darkClass);
+                }
             }
         }
-    }
 
-    if (confirmationPage) {
-        if (theme === 'system-default') {
-            const runColorMode = (fn) => {
-                if (!window.matchMedia) {
-                    return;
-                }
-                const query = window.matchMedia('(prefers-color-scheme: dark)');
-                fn(query.matches);
-                query.addEventListener('change', (event) => fn(event.matches));
-            };
+        if (confirmationPage) {
+            if (theme === 'system-default') {
+                const runColorMode = (fn) => {
+                    if (!window.matchMedia) {
+                        return;
+                    }
+                    const query = window.matchMedia('(prefers-color-scheme: dark)');
+                    fn(query.matches);
+                    query.addEventListener('change', (event) => fn(event.matches));
+                };
 
-            runColorMode((isDarkMode) => {
-                applyModeClasses(confirmationPage, isDarkMode);
-            });
-        } else if (theme === 'dark-mode') {
-            applyModeClasses(confirmationPage, true);
-        } else {
-            applyModeClasses(confirmationPage, false);
+                runColorMode((isDarkMode) => {
+                    applyModeClasses(confirmationPage, isDarkMode);
+                });
+            } else if (theme === 'dark-mode') {
+                applyModeClasses(confirmationPage, true);
+            } else {
+                applyModeClasses(confirmationPage, false);
+            }
         }
-    }
 
-</script>
+    </script>
 </body>
 </html>
