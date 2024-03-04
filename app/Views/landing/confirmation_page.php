@@ -25,7 +25,7 @@
 
     <div class="confirmation_page">
         <div class="fcal_conf_wrap">
-            <?php echo esc_html($body); ?>
+            <?php echo wp_kses_post($body); ?>
         </div>
     </div>
 

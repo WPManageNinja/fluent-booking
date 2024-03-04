@@ -218,15 +218,13 @@ class BookingService
             $confirmationData['extra_html'] = EditorShortCodeParser::parse('{{payment.receipt_html}}', $booking);
         }
 
-
         if ($booking->canCancel()) {
             $confirmationData['action_url'] = add_query_arg([
                 'action'       => 'fcal_cancel_meeting',
                 'meeting_hash' => $booking->hash,
-                'scope'        => Arr::get($_REQUEST, 'scope')
+                'scope'        => Arr::get($_REQUEST, 'scope') // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             ], admin_url('admin-ajax.php'));
         }
-
 
         if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
             $assetsUrl = App::getInstance('url.assets');
