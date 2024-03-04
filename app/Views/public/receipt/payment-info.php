@@ -15,7 +15,7 @@
                 <td>
                     <div class="fluent_booking_payment_info_item fluent_booking_payment_info_item_date">
                         <div class="fluent_booking_item_heading"><?php esc_html_e('Date:', 'fluent-booking-pro'); ?></div>
-                        <div class="fluent_booking_item_value"><?php echo esc_attr(date(get_option('date_format'), strtotime($order->created_at))); ?></div>
+                        <div class="fluent_booking_item_value"><?php echo esc_attr(gmdate(get_option('date_format'), strtotime($order->created_at))); ?></div>
                     </div>
                 </td>
                 <?php if ($order->total_amount) : ?>

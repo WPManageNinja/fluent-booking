@@ -256,8 +256,8 @@ class Bootstrap extends BaseCalendar
                     if (strpos($event->dtstart, 'Z')) {
                         $remoteBooks[] = [
                             'type'     => 'remote',
-                            'start'    => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
-                            'end'      => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
+                            'start'    => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
+                            'end'      => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
                             'source'   => 'next_cloud_calendar',
                             'event_id' => null
                         ];
