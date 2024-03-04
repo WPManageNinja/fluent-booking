@@ -189,7 +189,7 @@ class BookingElement extends BaseFieldManager
 
         $elMarkup = '<div class="fcal_cal_wrap"><div class="' . esc_attr($calClass) . '" data-element_id="' . esc_attr($element_id) . '"></div></div>';
         $html = $this->buildElementMarkup($elMarkup, $data, $form);
-        echo apply_filters('fluentform/rendering_field_html_' . $elementName, $html, $data, $form);
+        echo apply_filters('fluentform/rendering_field_html_' . $elementName, $html, $data, $form); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $html is escaped before being passed in.
     }
 
     public function renderResponse($data, $field, $form_id)

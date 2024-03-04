@@ -363,7 +363,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                /* translators: API response message when failed to connect with Outlook calendar API */
+                'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $calendarApi->lastError->get_error_message())
             ]);
             return false;
         }
@@ -450,7 +451,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to create event in Outlook calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                /* translators: API response message when failed to create event in Outlook calendar */
+                'description' => sprintf(__('Failed to create event in Outlook calendar. API Response: %s', 'fluent-booking-pro'), $response->get_error_message())
             ]);
             return false;
         }
@@ -477,7 +479,8 @@ class Bootstrap extends BaseCalendar
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Outlook Calendar event created', 'fluent-booking-pro'),
-            'description' => __(sprintf('Outlook calendar event has been created. %s', '<a target="_blank" href="' . $response['webLink'] . '">' . __('View on Outlook Calendar', 'fluent-booking-pro') . '</a>'), 'fluent-booking-pro')
+            /* translators: Notification message for the creation of an Outlook calendar event. %s is a link to view the event on Outlook Calendar */
+            'description' => sprintf(__('Outlook calendar event has been created. %s', 'fluent-booking-pro'), '<a target="_blank" href="' . $response['webLink'] . '">' . __('View on Outlook Calendar', 'fluent-booking-pro') . '</a>'),
         ]);
 
         return true;
@@ -534,7 +537,8 @@ class Bootstrap extends BaseCalendar
                     'status'      => 'closed',
                     'type'        => 'error',
                     'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                    /* translators: API response message when failed to connect with Outlook calendar API */
+                    'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $calendarApi->lastError->get_error_message()),
                 ]);
             }
             return false;
@@ -552,7 +556,8 @@ class Bootstrap extends BaseCalendar
                     'status'      => 'closed',
                     'type'        => 'error',
                     'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                    /* translators: API response message when failed to connect with Outlook calendar API */
+                    'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $response->get_error_message()),
                 ]);
             }
             return false;
@@ -626,7 +631,8 @@ class Bootstrap extends BaseCalendar
                     'status'      => 'closed',
                     'type'        => 'error',
                     'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                    'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                    /* translators: API response message when failed to connect with Outlook calendar API */
+                    'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $calendarApi->lastError->get_error_message()),
                 ]);
             }
             return false;
@@ -640,7 +646,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                /* translators: API response message when failed to connect with Outlook calendar API */
+                'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $response->get_error_message()),
             ]);
             return false;
         }
@@ -673,7 +680,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to connect with Outlook calendar API. API Response: %s', $calendarApi->lastError->get_error_message()), 'fluent-booking-pro')
+                /* translators: API response message when failed to connect with Outlook calendar API */
+                'description' => sprintf(__('Failed to connect with Outlook calendar API. API Response: %s', 'fluent-booking-pro'), $calendarApi->lastError->get_error_message()),
             ]);
             return false;
         }
@@ -693,7 +701,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Outlook Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to delete event in Outlook calendar. API Response: %s', $response->get_error_message()), 'fluent-booking-pro')
+                /* translators: API response message when failed to delete event in Outlook calendar */
+                'description' => sprintf(__('Failed to delete event in Outlook calendar. API Response: %s', 'fluent-booking-pro'), $response->get_error_message()),
             ]);
             return false;
         }

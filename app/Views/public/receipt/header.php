@@ -1,5 +1,5 @@
 <div class="fluent_booking_submission_header">
     <div class="fluent_booking_submission_message" style="margin-bottom: 20px;">
-        <?php echo $header_content; ?>
+        <?php echo $header_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
     </div>
 </div>

@@ -72,8 +72,10 @@ abstract class BaseCalendar
             'key'                  => $this->calendarKey,
             'icon'                 => $this->logo,
             'title'                => $this->calendarTitle,
-            'subtitle'             => __(sprintf('Configure %s to sync your events', $this->calendarTitle), 'fluent-booking-pro'),
-            'btn_text'             => __(sprintf('Connect with %s', $this->calendarTitle), 'fluent-booking-pro'),
+            /* translators: %s is the name of the calendar title. */
+            'subtitle'             => sprintf(__('Configure %s to sync your events', 'fluent-booking-pro'), $this->calendarTitle),
+            /* translators: %s is the name of the calendar title. */
+            'btn_text'             => sprintf(__('Connect with %s', 'fluent-booking-pro'), $this->calendarTitle),
             'auth_url'             => $this->getAuthUrl($userId),
             'is_global_configured' => $this->isConfigured(),
             'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/'.$this->calendarKey),
@@ -155,7 +157,8 @@ abstract class BaseCalendar
                     '15' => __('15 minutes', 'fluent-booking-pro'),
                 ],
                 'label'       => __('Caching Time', 'fluent-booking-pro'),
-                'inline_help' => __(sprintf('Select for how many minutes the %1s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2s then you may lower the value', $this->calendarTitle, $this->calendarTitle), 'fluent-booking-pro')
+                /* translators: Explanation for the cache duration setting. %1$s is the calendar title, %2$s is the calendar title repeated. */
+                'inline_help' => sprintf(__('Select for how many minutes the %1s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2s then you may lower the value',  'fluent-booking-pro'), $this->calendarTitle, $this->calendarTitle)
             ],
         ];
     }

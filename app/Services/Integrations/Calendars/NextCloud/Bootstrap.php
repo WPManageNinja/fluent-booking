@@ -103,8 +103,10 @@ class Bootstrap extends BaseCalendar
                 'button_text'    => __('Connect with Nextcloud Calendar', 'fluent-booking-pro')
             ],
             'title'                => $this->calendarTitle,
-            'subtitle'             => __(sprintf('Configure %s to sync your events', $this->calendarTitle), 'fluent-booking-pro'),
-            'btn_text'             => __(sprintf('Connect with %s', $this->calendarTitle), 'fluent-booking-pro'),
+            /* translators: %s is the name of the calendar title. */
+            'subtitle'             => sprintf(__('Configure %s to sync your events', 'fluent-booking-pro'), $this->calendarTitle),
+            /* translators: %s is the name of the calendar title. */
+            'btn_text'             => sprintf(__('Connect with %s', 'fluent-booking-pro'), $this->calendarTitle),
             'auth_url'             => $this->getAuthUrl($userId),
             'is_global_configured' => $this->isConfigured(),
             'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/' . $this->calendarKey),
@@ -254,8 +256,8 @@ class Bootstrap extends BaseCalendar
                     if (strpos($event->dtstart, 'Z')) {
                         $remoteBooks[] = [
                             'type'     => 'remote',
-                            'start'    => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
-                            'end'      => DateTimeHelper::convertFromUtc(date('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
+                            'start'    => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
+                            'end'      => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
                             'source'   => 'next_cloud_calendar',
                             'event_id' => null
                         ];
@@ -343,7 +345,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'success',
                 'title'       => __('Nextcloud Calendar event created', 'fluent-booking-pro'),
-                'description' => __(sprintf('Nextcloud calendar event has been created. EventID: %s', $event->uid), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Nextcloud Calendar API. */
+                'description' => sprintf(__('Nextcloud calendar event has been created. EventID: %s', 'fluent-booking-pro'), $event->uid)
             ]);
         } catch (\Exception $exception) {
             do_action('fluent_booking/log_booking_activity', [
@@ -351,7 +354,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Nextcloud Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to create event in Nextcloud calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Nextcloud Calendar API. */
+                'description' => sprintf(__('Failed to create event in Nextcloud calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
         }
     }
@@ -395,7 +399,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Nextcloud Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to delete event in Nextcloud calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Nextcloud Calendar API. */
+                'description' => sprintf(__('Failed to delete event in Nextcloud calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
             return false;
         }
@@ -443,7 +448,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Nextcloud Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Nextcloud calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Nextcloud Calendar API. */
+                'description' => sprintf(__('Failed to update event in Nextcloud calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
             return false;
         }
@@ -512,7 +518,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Nextcloud Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Nextcloud calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Nextcloud Calendar API. */
+                'description' => sprintf(__('Failed to update event in Nextcloud calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
         }
 

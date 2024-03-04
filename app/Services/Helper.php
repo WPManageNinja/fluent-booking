@@ -759,7 +759,7 @@ class Helper
      *
      * @return mixed $input
      */
-    public static function fluentBookingSanitizer($input, $attribute = null, $fields = [])
+    public static function fluentbookingSanitizer($input, $attribute = null, $fields = [])
     {
         if (is_string($input)) {
             $element = Arr::get($fields, $attribute . '.element');
@@ -779,7 +779,7 @@ class Helper
             foreach ($input as $key => &$value) {
                 $attribute = $attribute ? $attribute . '[' . $key . ']' : $key;
 
-                $value = self::fluentBookingSanitizer($value, $attribute, $fields);
+                $value = self::fluentbookingSanitizer($value, $attribute, $fields);
 
                 $attribute = null;
             }

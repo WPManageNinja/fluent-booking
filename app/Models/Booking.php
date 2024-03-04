@@ -453,7 +453,7 @@ class Booking extends Model
             if ($cancelledByUserId && $user = get_user_by('ID', $cancelledByUserId)) {
                 $userName = $user->display_name;
             }
-
+            /* translators: Name of the user who cancelled the meeting */
             $this->addCancelReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
         }
 
@@ -473,6 +473,7 @@ class Booking extends Model
 
         $guestName = trim($this->first_name . ' ' . $this->last_name);
 
+        /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
         return sprintf(__('%1s Meeting between %2s and %3s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
     }
 

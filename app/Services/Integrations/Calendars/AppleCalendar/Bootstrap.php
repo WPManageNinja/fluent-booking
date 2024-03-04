@@ -93,14 +93,17 @@ class Bootstrap extends BaseCalendar
             'is_caldav'            => true,
             'caldav_settings'      => [
                 'heading'        => __('Connect to Apple Server', 'fluent-booking-pro'),
-                'description'    => __(sprintf('To connect to Apple Server, please enter your Apple Email and app specific password. Generate App Specific Password at %s Your credentials will be stored as encrypted.', '<a target="_blank" rel="noopener" href="https://appleid.apple.com/account/manage">https://appleid.apple.com/account/manage</a>'), 'fluent-booking-pro'),
+                /* translators: Instruction for connecting to Apple Server. %s is a link to manage Apple ID */
+                'description'    => sprintf(__('To connect to Apple Server, please enter your Apple Email and app specific password. Generate App Specific Password at %s Your credentials will be stored as encrypted.', 'fluent-booking-pro'), '<a target="_blank" rel="noopener" href="https://appleid.apple.com/account/manage">https://appleid.apple.com/account/manage</a>'),
                 'username_label' => __('Apple ID (Email)', 'fluent-booking-pro'),
                 'password_label' => __('App Specific Password', 'fluent-booking-pro'),
                 'button_text'    => __('Connect with Apple Calendar', 'fluent-booking-pro')
             ],
             'title'                => $this->calendarTitle,
-            'subtitle'             => __(sprintf('Configure %s to sync your events', $this->calendarTitle), 'fluent-booking-pro'),
-            'btn_text'             => __(sprintf('Connect with %s', $this->calendarTitle), 'fluent-booking-pro'),
+            /* translators: %s is the name of the calendar title. */
+            'subtitle'             => sprintf(__('Configure %s to sync your events', 'fluent-booking-pro'), $this->calendarTitle),
+            /* translators: %s is the name of the calendar title. */
+            'btn_text'             => sprintf(__('Connect with %s', 'fluent-booking-pro'), $this->calendarTitle),
             'auth_url'             => $this->getAuthUrl($userId),
             'is_global_configured' => $this->isConfigured(),
             'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/' . $this->calendarKey),
@@ -338,7 +341,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'success',
                 'title'       => __('Apple Calendar event created', 'fluent-booking-pro'),
-                'description' => __(sprintf('Aplle calendar event has been created. EventID: %s', $event->uid), 'fluent-booking-pro')
+                /* translators: %s is the event id of apple calendar */
+                'description' => sprintf(__('Aplle calendar event has been created. EventID: %s', 'fluent-booking-pro'), $event->uid)
             ]);
 
         } catch (\Exception $exception) {
@@ -347,7 +351,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to create event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Apple Calendar API. */
+                'description' => sprintf(__('Failed to create event in Apple calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
         }
     }
@@ -391,7 +396,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to delete event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Apple Calendar API. */
+                'description' => sprintf(__('Failed to delete event in Apple calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
             return false;
         }
@@ -439,7 +445,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Apple Calendar API. */
+                'description' => sprintf(__('Failed to update event in Apple calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
             return false;
         }
@@ -508,7 +515,8 @@ class Bootstrap extends BaseCalendar
                 'status'      => 'closed',
                 'type'        => 'error',
                 'title'       => __('Apple Calendar API Error', 'fluent-booking-pro'),
-                'description' => __(sprintf('Failed to update event in Apple calendar. API Response: %s', $exception->getMessage()), 'fluent-booking-pro')
+                /* translators: %s is the error message returned by the Apple Calendar API. */
+                'description' => sprintf(__('Failed to update event in Apple calendar. API Response: %s', 'fluent-booking-pro'), $exception->getMessage())
             ]);
         }
 

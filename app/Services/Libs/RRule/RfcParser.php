@@ -50,7 +50,7 @@ class RfcParser
 			array_splice($tmp,0,1);
 			foreach ($tmp as $pair) {
 				if (strpos($pair,'=') === false) {
-					throw new \InvalidArgumentException('Failed to parse RFC line, invalid property parameters: '.$pair);
+					throw new \InvalidArgumentException('Failed to parse RFC line, invalid property parameters: '. esc_html($pair));
 				}
 				list($key,$value) = explode('=',$pair);
 				$property['params'][$key] = $value;
@@ -150,7 +150,7 @@ class RfcParser
 					foreach (explode(';',$property['value']) as $pair) {
 						$pair = explode('=', $pair);
 						if (! isset($pair[1]) || isset($pair[2])) {
-							throw new \InvalidArgumentException("Failed to parse RFC string, malformed RRULE property: {$property['value']}");
+							throw new \InvalidArgumentException('Failed to parse RFC string, malformed RRULE property: ' . esc_html($property['value']));
 						}
 						list($key, $value) = $pair;
 						if ($key === 'UNTIL') {
@@ -198,7 +198,7 @@ class RfcParser
 					}
 					break;
 				default:
-					throw new \InvalidArgumentException('Failed to parse RFC string, unsupported property: '.$property['name']);
+					throw new \InvalidArgumentException('Failed to parse RFC string, unsupported property: ' . esc_html($property['name']));
 			}
 		}
 
@@ -212,7 +212,7 @@ class RfcParser
 	{
 		$property = self::parseLine($line);
 		if ($property['name'] !== 'RDATE') {
-			throw new \InvalidArgumentException("Failed to parse RDATE line, this is a {$property['name']} property");
+			throw new \InvalidArgumentException('Failed to parse RDATE line, this is a ' . esc_html($property['name']) . 'property');
 		}
 
 		$period = false;
@@ -231,11 +231,11 @@ class RfcParser
 							$period = true;
 						break;
 						default:
-							throw new \InvalidArgumentException("Unknown VALUE value for RDATE: $value, must be one of DATE-TIME, DATE or PERIOD");
+							throw new \InvalidArgumentException('Unknown VALUE value for RDATE: ' . esc_html($value) . ', must be one of DATE-TIME, DATE or PERIOD');
 					}
 				break;
 				default:
-					throw new \InvalidArgumentException("Unknown property parameter: $name");
+					throw new \InvalidArgumentException('Unknown property parameter: ' . esc_html($name));
 			}
 		}
 
@@ -273,7 +273,7 @@ class RfcParser
 	{
 		$property = self::parseLine($line);
 		if ($property['name'] !== 'EXDATE') {
-			throw new \InvalidArgumentException("Failed to parse EXDATE line, this is a {$property['name']} property");
+			throw new \InvalidArgumentException('Failed to parse EXDATE line, this is a ' . esc_html($property['name']) . 'property');
 		}
 
 		$tz = null;
@@ -286,7 +286,7 @@ class RfcParser
 					$tz = new \DateTimeZone($value);
 				break;
 				default:
-					throw new \InvalidArgumentException("Unknown property parameter: $name");
+					throw new \InvalidArgumentException('Unknown property parameter: ' . esc_html($name));
 			}
 		}
 

@@ -29,7 +29,7 @@ class API
         $sessionResponse = wp_remote_post($url, $requestData);
 
         if (is_wp_error($sessionResponse)) {
-            echo __("API Error: ", "fluent-booking-pro") . esc_html($sessionResponse->get_error_message());
+            echo esc_html__("API Error: ", "fluent-booking-pro") . esc_html($sessionResponse->get_error_message());
             exit;
         }
 
@@ -59,15 +59,7 @@ class API
             return;
         }
 
-        $post_data = '';
-        if (ini_get('allow_url_fopen')) {
-            $post_data = file_get_contents('php://input');
-        } else {
-            // If allow_url_fopen is not enabled, then make sure that post_max_size is large enough
-            ini_set('post_max_size', '12M');
-        }
-
-        error_log('ipn data received');
+        $post_data = @file_get_contents('php://input');
 
         $data =  json_decode($post_data);
 
@@ -75,8 +67,6 @@ class API
             status_header(200);
             return $data;
         } else {
-            error_log("specific event");
-            error_log(print_r($data));
             return false;
         }
 

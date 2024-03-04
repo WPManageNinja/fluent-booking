@@ -8,7 +8,7 @@
     <div class="fcal_confirm_header">
         <?php if ($booking->status == 'scheduled'): ?>
             <div class="fcal_check_holder" style="min-height: 50px;">
-                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); ?>/images/check-mark.png" />
+                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/images/check-mark.png" />
             </div>
         <?php endif; ?>
         <h2><?php echo esc_html($title); ?></h2>
@@ -21,7 +21,7 @@
                     <h4><?php echo esc_html($section['title']); ?></h4>
                 </div>
                 <div class="fcal_confirm_section_content">
-                    <?php echo $section['content']; ?>
+                    <?php echo wp_kses_post($section['content']); ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -29,8 +29,8 @@
         <?php if($extra_html): ?>
         <hr />
         <div class="fcal_payment_html">
-            <h3 style="margin-bottom: 10px;"><?php _e('Payment Details', 'fluent-booking-pro'); ?></h3>
-            <?php echo $extra_html; ?>
+            <h3 style="margin-bottom: 10px;"><?php esc_html_e('Payment Details', 'fluent-booking-pro'); ?></h3>
+            <?php echo wp_kses_post($extra_html); ?>
         </div>
         <style>
             .fluent_booking_payment_receipt {
@@ -44,10 +44,10 @@
         <?php endif; ?>
 
         <?php if ($action_type == 'cancel'): ?>
-            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr_e($action_type); ?>">
+            <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr($action_type); ?>">
                 <form id="fcal_cancellation_form" action="<?php echo esc_url($action_url); ?>" method="POST"
                         class="fcal_form_cancellation">
-                    <label for="cancellation_reason"><?php _e('Reason for cancellation', 'fluent-booking-pro') ?></label>
+                    <label for="cancellation_reason"><?php esc_html_e('Reason for cancellation', 'fluent-booking-pro') ?></label>
                     <div class="fcal_form_field">
                 <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking-pro'); ?>"
                             name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
@@ -63,13 +63,13 @@
         <?php else: ?>
             <?php if ($booking->canCancel() || $booking->canReschedule()): ?>
                 <div class="fcal_booking_manage fcal_normal_booking_footer">
-                    <?php echo __('Need to make a change?', 'fluent-booking-pro') ?>
+                    <?php echo esc_html_e('Need to make a change?', 'fluent-booking-pro') ?>
                     <?php if ($booking->canCancel()): ?>
-                        <a href="<?php echo esc_url($booking->getCancelUrl()); ?>"><?php _e('Cancel', 'fluent-booking-pro') ?></a>
+                        <a href="<?php echo esc_url($booking->getCancelUrl()); ?>"><?php esc_html_e('Cancel', 'fluent-booking-pro') ?></a>
                     <?php endif; ?>
-                    <?php ($booking->canCancel() && $booking->canReschedule()) ? _e('or', 'fluent-booking-pro') : ''; ?>
+                    <?php ($booking->canCancel() && $booking->canReschedule()) ? esc_html_e('or', 'fluent-booking-pro') : ''; ?>
                     <?php if ($booking->canReschedule()): ?>
-                        <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php _e('Reschedule', 'fluent-booking-pro');  ?></a>
+                        <a href="<?php echo esc_url($booking->getRescheduleUrl()); ?>"><?php esc_html_e('Reschedule', 'fluent-booking-pro');  ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -77,7 +77,7 @@
 
         <?php if ($bookmarks): ?>
             <div class="fcal_booking_manage fcal_to_calendars">
-                <span><?php _e('Add to calendar', 'fluent-booking-pro'); ?></span>
+                <span><?php esc_html_e('Add to calendar', 'fluent-booking-pro'); ?></span>
                 <div class="fcal_cal_items">
                     <?php foreach ($bookmarks as $bookmark): ?>
                     <div title="<?php echo esc_attr($bookmark['title']); ?>">
