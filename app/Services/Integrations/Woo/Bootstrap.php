@@ -242,7 +242,7 @@ class Bootstrap
             $order->add_order_note(
                 sprintf(
                     /* translators: Notification message for the change of booking status to scheduled. %1$s is the booking ID, %2$s is the full booking date and time with timezone, %3$s is a link to view the booking */
-                    __('Booking #%1s status changed to scheduled at %2s. %3sView Booking%4s', 'fluent-booking-pro'),
+                    __('Booking #%1$s status changed to scheduled at %2$s. %3$sView Booking%4$s', 'fluent-booking-pro'),
                     $booking->id,
                     $booking->getFullBookingDateTimeText($booking->calendar->author_timezone, true) . ' (' . $booking->calendar->author_timezone . ')',
                     '<a target="_blank" href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '">',
@@ -277,7 +277,7 @@ class Bootstrap
         $order->add_order_note(
             sprintf(
                 /* translators: 1: Booking ID, 2: Opening link tag, 3: Closing link tag */
-                __('Booking #%1s status changed to cancelled. %2sView Booking%3s', 'fluent-booking-pro'),
+                __('Booking #%1$s status changed to cancelled. %2$sView Booking%3$s', 'fluent-booking-pro'),
                 $booking->id,
                 '<a target="_blank" href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '">',
                 '</a>'
@@ -290,7 +290,7 @@ class Bootstrap
             'title'       => __('Woo: Booking status changed to cancelled', 'fluent-booking-pro'),
             'description' => sprintf(
                 /* translators: Notification message for the change of Woocommerce order status and booking status to cancelled. %1$s is the new order status, %2$s is a link to view the order */
-                __('Woocommerce order status changed to %1s and booking status changed to cancelled. %2sView Order%3s', 'fluent-booking-pro'),
+                __('Woocommerce order status changed to %1$s and booking status changed to cancelled. %2$sView Order%3$s', 'fluent-booking-pro'),
                 $to,
                 '<a target="_blank" href="' . $order->get_edit_order_url() . '">',
                 '</a>'
