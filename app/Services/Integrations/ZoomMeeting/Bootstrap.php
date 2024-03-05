@@ -127,7 +127,7 @@ class Bootstrap
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
             'start_time'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
             /* translators: 1: Calendar slot title, 2: Full name of the person */
-            'topic'        => sprintf(__('%1s meeting with %2s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
+            'topic'        => sprintf(__('%1$s meeting with %2$s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
         ], $booking, $calendarSlot);
 
         $response = $apiClient->createMeeting($data);
@@ -158,8 +158,8 @@ class Bootstrap
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Zoom Meeting has been created', 'fluent-booking-pro'),
-            /* translators: Notification message for the successful scheduling of a Zoom meeting. %s is a link to start the meeting */
-            'description' => sprintf(__('Zoom Meeting has been scheduled. %1s', 'fluent-booking-pro'), '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>')
+            /* translators: Notification message for the successful scheduling of a Zoom meeting. %1$s is a link to start the meeting */
+            'description' => sprintf(__('Zoom Meeting has been scheduled. %1$s', 'fluent-booking-pro'), '<a target="_blank" href="' . $location['online_platform_start_link'] . '">' . __('Start Meeting URL', 'fluent-booking-pro') . '</a>')
         ]);
 
         return true;

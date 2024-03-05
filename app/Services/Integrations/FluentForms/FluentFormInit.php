@@ -346,7 +346,7 @@ class FluentFormInit
                 wpFluent()->table('fluentform_submissions')
                     ->where('id', $entryId)
                     ->update([
-                        'response' => json_encode($submittedData, JSON_UNESCAPED_UNICODE)
+                        'response' => wp_json_encode($submittedData, JSON_UNESCAPED_UNICODE)
                     ]);
 
                 do_action('fluentform/log_data', [
@@ -357,7 +357,7 @@ class FluentFormInit
                     'status'           => 'info',
                     'title'            => __('Booking has been created on FluentBooking', 'fluent-booking-pro'),
                     /* translators: %1$s is the opening anchor tag, %2$s is the closing anchor tag. */
-                    'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1sView Booking Details%2s', 'fluent-booking-pro'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
+                    'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1$sView Booking Details%2$s', 'fluent-booking-pro'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
                 ]);
 
             } catch (\Exception $exception) {
