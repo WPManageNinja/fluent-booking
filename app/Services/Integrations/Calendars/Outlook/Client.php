@@ -149,7 +149,7 @@ class Client
 
         $data['transactionId'] = $siteUid . '__' . $data['transactionId'];
 
-        return $this->makeRequest($url, json_encode($data), 'POST', $this->getAuthorizationHeader());
+        return $this->makeRequest($url, wp_json_encode($data), 'POST', $this->getAuthorizationHeader());
     }
 
     public function patchEvent($eventId, $data, $args = [])
@@ -160,7 +160,7 @@ class Client
             $url = add_query_arg($args, $url);
         }
 
-        return $this->makeRequest($url, json_encode($data), 'PATCH', $this->getAuthorizationHeader());
+        return $this->makeRequest($url, wp_json_encode($data), 'PATCH', $this->getAuthorizationHeader());
     }
 
     public function getEvent($calendarId, $eventId, $args = [])
@@ -269,7 +269,7 @@ class Client
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, wp_json_encode($body));
 
         // Execute the cURL session
         $response = curl_exec($ch);
