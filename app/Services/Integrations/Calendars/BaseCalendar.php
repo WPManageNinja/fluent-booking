@@ -158,7 +158,7 @@ abstract class BaseCalendar
                 ],
                 'label'       => __('Caching Time', 'fluent-booking-pro'),
                 /* translators: Explanation for the cache duration setting. %1$s is the calendar title, %2$s is the calendar title repeated. */
-                'inline_help' => sprintf(__('Select for how many minutes the %1s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2s then you may lower the value',  'fluent-booking-pro'), $this->calendarTitle, $this->calendarTitle)
+                'inline_help' => sprintf(__('Select for how many minutes the %1$s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2$s then you may lower the value',  'fluent-booking-pro'), $this->calendarTitle, $this->calendarTitle)
             ],
         ];
     }
