@@ -38,11 +38,11 @@ use FluentBooking\App\Models\Booking;
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
     <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>">
 
-    <?php foreach ($css_files as $css_file): ?>
-        <link rel="stylesheet"
-              href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>"
-              media="all"/>
-    <?php endforeach; ?>
+    <?php
+        foreach ($css_files as $css_file) {
+            wp_enqueue_style('fluent-booking-'.md5($css_file),esc_url($css_file),array(),FLUENT_BOOKING_ASSETS_VERSION,'all');
+        }
+    ?>
 
     <style>
         .fcal_wrap {
@@ -53,31 +53,31 @@ use FluentBooking\App\Models\Booking;
     </style>
 
     <?php do_action('fluent_booking/author_landing_head', $calendar_event); ?>
-
 </head>
 <body>
-
-<div class="calendar_wrap">
-    <?php do_action('fluent_booking/before_calendar_event_landing_page', $calendar_event); ?>
-    <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int)$calendar->id; ?>"
-         data-event_id="<?php echo (int)$calendar_event->id; ?>">
-        <h3><?php esc_html_e('Loading...', 'fluent-booking-pro'); ?></h3>
+    <div class="calendar_wrap">
+        <?php do_action('fluent_booking/before_calendar_event_landing_page', $calendar_event); ?>
+        <div class="fluent_booking_app fcal_loading" data-calendar_id="<?php echo (int)$calendar->id; ?>"
+            data-event_id="<?php echo (int)$calendar_event->id; ?>">
+            <h3><?php esc_html_e('Loading...', 'fluent-booking-pro'); ?></h3>
+        </div>
     </div>
-</div>
-</div>
+    </div>
 
-<script>
-    <?php foreach ($js_vars as $varKey => $values): ?>
-    var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
-    <?php endforeach; ?>
-</script>
+    <script>
+        <?php foreach ($js_vars as $varKey => $values): ?>
+            var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+        <?php endforeach; ?>
+    </script>
 
-<?php foreach ($js_files as $fileKey => $file): ?>
-    <script id="<?php echo esc_attr($fileKey); ?>"
-            src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>"
-            defer="defer"></script>
-<?php endforeach; ?>
+    <?php
+        foreach ($js_files as $handle => $url) {
+            wp_enqueue_script(esc_attr($handle), esc_url($url), array(), FLUENT_BOOKING_ASSETS_VERSION, array('strategy'=>'defer'));
+        }
+    ?>
 
-<?php do_action('fluent_booking/author_landing_footer', $calendar_event); ?>
+    <?php wp_footer(); ?>
+
+    <?php do_action('fluent_booking/author_landing_footer', $calendar_event); ?>
 </body>
 </html>
