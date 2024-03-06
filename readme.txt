@@ -21,10 +21,10 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1.2.63 (Date: 16 Feb 2024)
-- Added Daylight Saving Time Fix
-- Fixed Issue With Multi-hour Slot Availability
-- Resolved Minor UI Issue
+1.2.63 (Date: 26 Feb 2024)
+- Daylight saving time fix
+- Fixed issues With multi-hour slot availability
+- Resolved minor UI issues
 
 1.2.62 (Date: 10 Feb 2024)
 - Reverting Daylight Saving Time Fix
