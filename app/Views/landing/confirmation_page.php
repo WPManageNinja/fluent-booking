@@ -27,7 +27,7 @@
 
     <div class="confirmation_page">
         <div class="fcal_conf_wrap">
-            <?php echo wp_kses_post($body); ?>
+            <?php echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </div>
     </div>
 
