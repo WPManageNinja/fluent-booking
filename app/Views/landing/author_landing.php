@@ -21,16 +21,9 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
     <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>"/>
 
-    <?php if (!empty($author['featured_image'])) {
-        ?>
+    <?php if (!empty($author['featured_image'])) { ?>
         <meta property="og:image" content="<?php echo esc_url($author['featured_image']); ?>"/>
     <?php } ?>
-
-    <?php foreach ($css_files as $css_file): ?>
-        <link rel="stylesheet"
-              href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_html(FLUENT_BOOKING_ASSETS_VERSION); ?>"
-              media="screen"/>
-    <?php endforeach; ?>
 
     <style>
         :root {
@@ -38,7 +31,6 @@
             --fcal_primaryColor: #2653C7;
             --fcal_gray: #6b7280;
         }
-
         .fluent_booking_wrap {
             max-width: 752px;
             margin: 40px auto;
@@ -55,9 +47,15 @@
         }
     </style>
 
-    <?php foreach ($header_js_files as $fileKey => $file): ?>
-        <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>"></script>
-    <?php endforeach; ?>
+    <?php
+        foreach ($css_files as $css_file) {
+            wp_enqueue_style('fluent-booking-'.md5($css_file),esc_url($css_file),array(),FLUENT_BOOKING_ASSETS_VERSION,'screen');
+        }
+
+        foreach ($header_js_files as $handle => $url) {
+            wp_enqueue_script(esc_attr($handle), esc_url($url), array(), FLUENT_BOOKING_ASSETS_VERSION, false);
+        }
+    ?>
 
     <?php do_action('fluent_booking/main_landing'); ?>
 </head>
@@ -67,18 +65,18 @@
         'calendar' => $calendar,
         'events' => $events
     ]); ?>
-    </div>
-</div>
 
-<script>
-<?php foreach ($js_vars as $varKey => $values): ?>
-var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
-<?php endforeach; ?>
-</script>
+    <?php
+        foreach ($js_vars as $varKey => $values) {
+            wp_add_inline_script(esc_attr($handle), sprintf('var %s = %s;', esc_attr($varKey), wp_json_encode($values)));
+        }
 
-<?php foreach ($js_files as $fileKey => $file): ?>
-<script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
-<?php endforeach; ?>
+        foreach ($js_files as $handle => $url) {
+            wp_enqueue_script(esc_attr($handle), esc_url($url), array(), FLUENT_BOOKING_ASSETS_VERSION, array('strategy'=>'defer'));
+        }
+    ?>
+
+    <?php wp_footer(); ?>
 
 </body>
 </html>

@@ -30,7 +30,7 @@
         <hr />
         <div class="fcal_payment_html">
             <h3 style="margin-bottom: 10px;"><?php esc_html_e('Payment Details', 'fluent-booking-pro'); ?></h3>
-            <?php echo wp_kses_post($extra_html); ?>
+            <?php echo $extra_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </div>
         <style>
             .fluent_booking_payment_receipt {
