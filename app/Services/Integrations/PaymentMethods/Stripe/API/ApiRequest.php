@@ -7,11 +7,6 @@ use FluentBooking\Framework\Support\Arr;
 // this file is not in use right now
 
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
-
-
-if (!defined('ABSPATH')) {
     exit;
 }
 

@@ -92,4 +92,16 @@ class OrderHelper
         return Order::where('uuid', $hash)->first();
     }
 
+    public function updateOrderStatus($orderHash, $status = 'pending')
+    {
+        $order = $this->getOrderByHash($orderHash);
+
+        if (!$order) {
+            return;
+        }
+        
+        $order->status = $status;
+        $order->save();
+    }
+
 }

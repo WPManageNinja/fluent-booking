@@ -395,6 +395,7 @@ class FrontEndHandler
                 'Summary'                       => __('Summary', 'fluent-booking-pro'),
                 'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
                 'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
+                'Payment Method'                => __('Payment Method', 'fluent-booking-pro'),
                 'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),
                 'processing'                    => __('Processing', 'fluent-booking-pro'),
                 'date_time_config'              => [

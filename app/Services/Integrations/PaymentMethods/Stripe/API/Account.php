@@ -5,10 +5,6 @@ namespace FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API;
 use FluentBooking\Framework\Support\Arr;
 
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
-
-if (!defined('ABSPATH')) {
     exit;
 }
 

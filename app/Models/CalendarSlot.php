@@ -851,6 +851,8 @@ class CalendarSlot extends Model
 
         $defaults = [
             'enabled'        => 'no',
+            'stripe_enabled' => 'yes',
+            'paypal_enabled' => 'yes',
             'driver'         => 'native',
             'items'          => [
                 [

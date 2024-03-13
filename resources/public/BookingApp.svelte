@@ -73,6 +73,7 @@
         }
         appReady = true;
         checkDevice();
+        console.log(appData)
     });
 
     window.onresize = function () {

@@ -9,7 +9,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import WithLabel from './WithLabel';
 import InputText from './InputText';
 import InlineCheckbox from './InlineCheckbox'

@@ -38,6 +38,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     abstract public function fields();
 
+    abstract public function validSettingKeys();
 
     /**
      * This method should return the name of the method that will be passed from webhook to listen payment events
@@ -88,7 +89,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function addPaymentMethodToBookingData($bookingData, $calendarSlot, $customData)
     {
-
         if (Arr::get($bookingData, 'source') != 'web') {
             return $bookingData;
         }
@@ -104,9 +104,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function afterBookingPending($booking, $calendarSlot, $bookingData)
     {
         $paymentMethod = Arr::get($bookingData, 'payment_method', 'stripe');
+
         if ($calendarSlot->type === 'paid' && $booking->source === 'web' && $paymentMethod) {
-            //make draft orders
-            (new OrderHelper())->processDraftOrder($booking, $calendarSlot);
+            (new OrderHelper())->processDraftOrder($booking, $calendarSlot); // make draft order
             do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
         }
     }
@@ -151,7 +151,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             ]
         ];
         return $menuItems;
-
     }
 
     public function setRoutes()
@@ -238,23 +237,14 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function updateSettings($data)
     {
         $settings = $this->getSettings();
+
         $settings = wp_parse_args($data, $settings);
+
+        $settings = Arr::only($settings, $this->validSettingKeys());
 
         $settings = apply_filters('fluent_booking/payment/payment_settings_before_update_' . $this->slug, $settings);
 
         update_option($this->methodHandler, $settings, 'no');
-
-        $isActive = Arr::get($settings, 'is_active', 'no') == 'yes';
-
-        $globalSettings = get_option('fluent_booking_global_payment_settings', []);
-
-        if(!$globalSettings) {
-            $globalSettings = [];
-        }
-
-        $globalSettings['is_active'] = $isActive ? 'yes' : 'no';
-
-        update_option('fluent_booking_global_payment_settings', $globalSettings, 'no');
 
         return $this->getSettings();
     }
@@ -284,8 +274,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     protected function getSuccessUrl($orderItem, $args = null)
     {
-        $paymentHelper = new PaymentHelper($this->slug);
-        return $paymentHelper->successUrl($orderItem, $args);
+        return (new PaymentHelper($this->slug))->successUrl($orderItem, $args);
     }
 
     protected function getListenerUrl($args = null)

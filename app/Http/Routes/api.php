@@ -80,6 +80,7 @@ $router->prefix('integrations')->withPolicy('SettingsPolicy')->group(function ($
 $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($router) {
     $router->get('/general', 'SettingsController@getGeneralSettings');
     $router->post('/general', 'SettingsController@updateGeneralSettings');
+    $router->post('/payment', 'SettingsController@updatePaymentSettings');
     $router->get('/menu', 'SettingsController@getSettingsMenu');
     $router->get('/global-modules', 'SettingsController@getGlobalModules');
     $router->post('/global-modules', 'SettingsController@updateGlobalModules');
