@@ -19,9 +19,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use FluentBooking\App\Services\Integrations\Calendars\RemoteCalendarHelper;
-use FluentBooking\Framework\Support\Arr;
-
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();

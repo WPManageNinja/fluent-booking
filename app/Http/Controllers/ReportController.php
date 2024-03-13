@@ -3,9 +3,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\Order;
 use FluentBooking\App\Models\BookingActivity;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\ReportingHelperTrait;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\Framework\Support\Arr;
@@ -70,9 +68,10 @@ class ReportController extends Controller
             } else {
                 $currencySign = 'USD';
             }
+            $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getCurrencySign($currencySign);
             $widgets[] = [
                 'title'   => __('Total Payment', 'fluent-booking-pro'),
-                'number'  => CurrenciesHelper::getCurrencySign($currencySign) . $paymentWidget['totalPayment'],
+                'number'  => $currencySign . $paymentWidget['totalPayment'],
                 'content' => $paymentWidget['paymentComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M15.0235 10.5932C13.8049 10.9264 13.0704 11.8615 13.0704 12.7449C13.0704 13.6283 13.8049 14.5634 15.0235 14.8966V10.5932Z" fill="white"/>
@@ -286,6 +285,10 @@ class ReportController extends Controller
 
     private function getPaymentWidgets($startTime, $endTime)
     {
+        if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            return;
+        }
+
         $stripSettings = get_option('fluent_booking_payment_settings_stripe');
 
         $isActive = Arr::get($stripSettings, 'is_active');
@@ -310,7 +313,7 @@ class ReportController extends Controller
         }
 
 
-        $currentMonthTotal = Order::where('status', 'paid')
+        $currentMonthTotal = \FluentBooking\App\Models\Order::where('status', 'paid')
             ->whereBetween('created_at', [$startTime, $endTime])
             ->when($current_user_email, function ($query, $email) {
                 return $query->whereHas('booking', function ($query) use ($email) {
@@ -321,7 +324,7 @@ class ReportController extends Controller
             ->first()
             ->total;
 
-        $lastMonthTotal = Order::where('status', 'paid')
+        $lastMonthTotal = \FluentBooking\App\Models\Order::where('status', 'paid')
             ->whereBetween('created_at', [$lastMonthStartTime, $startTime])
             ->when($current_user_email, function ($query, $email) {
                 return $query->whereHas('booking', function ($query) use ($email) {

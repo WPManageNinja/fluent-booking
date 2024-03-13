@@ -4,8 +4,6 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class BookingFieldService
@@ -187,6 +185,8 @@ class BookingFieldService
         if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
+            $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
+            $paymentItems = \FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
             if ($isEnables) {
                 $exist = Arr::get($existingFields, 'payment_method', []);
                 if (!$exist) {
@@ -197,13 +197,13 @@ class BookingFieldService
                         'required'       => false,
                         'enabled'        => true,
                         'system_defined' => true,
-                        'payment_items'  => PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items')),
+                        'payment_items'  => $paymentItems,
                         'label'          => __('Payment Summary', 'fluent-booking-pro'),
-                        'currency_sign'  => CurrenciesHelper::getGlobalCurrencySign(),
+                        'currency_sign'  => $currencySign,
                     ];
                 } else {
-                    $exist['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
-                    $exist['payment_items'] = PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
+                    $exist['currency_sign'] = $currencySign;
+                    $exist['payment_items'] = $paymentItems;
                 }
                 $existingFields['payment_method'] = $exist;
             } else {
