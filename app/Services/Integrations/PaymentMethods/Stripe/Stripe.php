@@ -217,17 +217,14 @@ class Stripe extends BasePaymentMethod
 
             $orderItem->payment_args = $paymentArgs;
 
-            wp_send_json_success(
-                [
-                    'nextAction' => 'stripe',
-                    'actionName' => 'custom',
-                    'status'     => 'success',
-                    'message'    => __('Order has been placed successfully', 'fluent-booking-pro'),
-                    'data'       => $orderItem,
-                    'intent'     => $invoiceResponse,
-                ],
-                200
-            );
+            wp_send_json_success([
+                'nextAction' => 'stripe',
+                'actionName' => 'custom',
+                'status'     => 'success',
+                'message'    => __('Order has been placed successfully', 'fluent-booking-pro'),
+                'data'       => $orderItem,
+                'intent'     => $invoiceResponse,
+            ], 200);
         } catch (\Exception $e) {
             wp_send_json_error([
                 'status'  => 'failed',
@@ -258,6 +255,7 @@ class Stripe extends BasePaymentMethod
         $currency = CurrenciesHelper::getGlobalCurrency();
 
         $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
+
         $sessionPayload = array(
             'amount'               => intval($args['amount']),
             'currency'             => $currency,
@@ -381,44 +379,61 @@ class Stripe extends BasePaymentMethod
 
     public function fields()
     {
-        $currencies = CurrenciesHelper::getFormattedCurrencies();
-        return array(
-            'is_active'    => array(
+        return [
+            'label'        => __('Stripe Payments', 'fluent-booking-pro'),
+            'description'  => __('Configure stripe to accept payments on your booking events and monetize your time slots', 'fluent-booking-pro'),
+            'is_active'    => [
                 'value' => 'no',
-                'label' => __('Enable Stripe payment payment for booking payment', 'fluent-booking-pro'),
+                'label' => __('Enable Stripe payment for booking payment', 'fluent-booking-pro'),
                 'type'  => 'inline_checkbox'
-            ),
-            'payment_mode' => array(
+            ],
+            'payment_mode' => [
                 'value'   => 'test',
                 'label'   => __('Payment Mode', 'fluent-booking-pro'),
-                'options' => array(
+                'options' => [
                     'test' => __('Test Mode', 'fluent-booking-pro'),
                     'live' => __('Live Mode', 'fluent-booking-pro')
-                ),
+                ],
                 'type'    => 'radio'
-            ),
-//            'checkout_mode' => array(
+            ],
+//            'checkout_mode' => [
 //                'value' => 'onsite',
 //                'label' => __('Checkout Mode', 'fluent-booking'),
-//                'options' => array(
+//                'options' => [
 //                    'onsite' => __('Onsite', 'fluent-booking'),
 //                    'hosted' => __('Hosted', 'fluent-booking')
 //                ),
 //                'type' => 'radio'
 //            ),
-            'provider'     => array(
+            'provider'     => [
                 'value' => 'connect',
                 'label' => __('Provider', 'fluent-booking-pro'),
                 'type'  => 'provider'
-            ),
-            'currency'     => array(
-                'value'   => 'USD',
-                'label'   => __('Currency', 'fluent-booking-pro'),
-                'options' => $currencies,
-                'type'    => 'select'
-            ),
-        );
+            ],
+            // 'currency'     => [
+            //     'value'   => 'USD',
+            //     'label'   => __('Currency', 'fluent-booking-pro'),
+            //     'options' => $currencies,
+            //     'type'    => 'select'
+            // ]
+        ];
+    }
 
+    public function validSettingKeys()
+    {
+        return [
+            'is_active',
+            'test_publishable_key',
+            'test_secret_key',
+            'live_publishable_key',
+            'live_secret_key',
+            'payment_mode',
+            'provider',
+            'test_account_id',
+            'live_account_id',
+            'checkout_mode',
+            'currency'
+        ];
     }
 
     public function webHookPaymentMethodName()

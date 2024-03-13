@@ -32,37 +32,28 @@ class PaymentMethodController extends Controller
 
     public function store(Request $request)
     {
+        $data = $request->get('settings', []);
+        $method = $request->get('method', '');
+        $isActive = Arr::get($data, 'is_active') === 'yes';
 
-        if ($request->get('method') == 'stripe') {
-            $settings = $request->get('settings', []);
-            $isActive = Arr::get($settings, 'is_active') === 'yes';
-            $paymentMode = Arr::get($settings, 'payment_mode', 'test');
-
-            if ($isActive) {
-                if (empty($settings[$paymentMode . '_publishable_key']) || empty($settings[$paymentMode . '_secret_key'])) {
-                    return $this->sendError([
-                        'message' => __('Please connect your Stripe account first.', 'fluent-booking-pro')
-                    ]);
-                }
-
-                if (!Arr::get($settings, 'currency')) {
+        if ($isActive) {
+            if ($method == 'stripe') {
+                $paymentMode = Arr::get($data, 'payment_mode', 'test');
+                if (empty($data[$paymentMode . '_publishable_key']) || empty($data[$paymentMode . '_secret_key'])) {
                     return $this->sendError([
                         'message' => __('Please connect your Stripe account first.', 'fluent-booking-pro')
                     ]);
                 }
             }
+            if ($method == 'paypal') {
+                $data['paypal_email'] = sanitize_email(Arr::get($data, 'paypal_email', ''));
+                if (!$data['paypal_email'] || !is_email($data['paypal_email'])) {
+                    return $this->sendError([
+                        'message' => __('Please enter a valid email address', 'fluent-booking-pro')
+                    ]);
+                }
+            }
         }
-
-        $data = $request->settings;
-
-        $currency = Arr::get($data, 'currency');
-        $isActive = Arr::get($data, 'is_active');
-        update_option('fluent_booking_global_payment_settings', [
-            'currency'  => sanitize_textarea_field($currency),
-            'is_active' => ($isActive == 'yes') ? 'yes' : 'no'
-        ], 'no');
-
-        $method = sanitize_text_field($request->method);
 
         do_action('fluent_booking/payment/payment_settings_update_' . $method, $data);
     }
@@ -110,6 +101,8 @@ class PaymentMethodController extends Controller
             'settings' => $calendarSlot->getPaymentSettings(),
             'config'   => [
                 'native_enabled'     => Helper::isPaymentEnabled(),
+                'stripe_configured'  => Helper::isPaymentConfigured('stripe'),
+                'paypal_configured'  => Helper::isPaymentConfigured('paypal'),
                 'native_config_link' => Helper::getAppBaseUrl('settings/configure-integrations/payment/stripe'),
                 'woo_config_link'    => Helper::getAppBaseUrl('settings/configure-integrations/global-modules'),
                 'has_woo'            => defined('WC_PLUGIN_FILE'),
@@ -123,6 +116,7 @@ class PaymentMethodController extends Controller
     public function updateSettings($id, $event_id)
     {
         $data = $this->request->settings;
+
         $event = CalendarSlot::findOrFail($event_id);
 
         if (!$event) {
@@ -131,7 +125,9 @@ class PaymentMethodController extends Controller
             ], 422);
         }
 
-        $isEnabled = Arr::get($data, 'enabled') === 'yes';
+        $isEnabled = Arr::get($data, 'enabled', 'no') === 'yes';
+        $stripeEnabled = Arr::get($data, 'stripe_enabled', 'no') === 'yes';
+        $paypalEnabled = Arr::get($data, 'paypal_enabled', 'no') === 'yes';
 
         $driver = Arr::get($data, 'driver');
         $eventType = $isEnabled ? 'paid' : 'free';
@@ -142,6 +138,14 @@ class PaymentMethodController extends Controller
                 return $this->sendError([
                     'message' => __('Please select a payment method', 'fluent-booking-pro')
                 ], 422);
+            }
+
+            if ($driver == 'native') {
+                if (!$stripeEnabled && !$paypalEnabled) {
+                    return $this->sendError([
+                        'message' => __('Please enable at least one payment method', 'fluent-booking-pro')
+                    ], 422);
+                }
             }
 
             if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {

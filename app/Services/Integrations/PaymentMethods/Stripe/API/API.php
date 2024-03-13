@@ -12,9 +12,8 @@ class API
 
     public function makeRequest($path, $data, $apiKey, $method = 'GET')
     {
-        $stripeApiKey = $apiKey;
         $sessionHeaders = array(
-            'Authorization' => 'Bearer ' . $stripeApiKey,
+            'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 

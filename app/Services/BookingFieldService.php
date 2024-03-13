@@ -187,6 +187,8 @@ class BookingFieldService
         if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
+            $isStripeEnabled = Arr::get($paymentSettings, 'stripe_enabled') === 'yes';
+            $isPayPalEnabled = Arr::get($paymentSettings, 'paypal_enabled') === 'yes';
             if ($isEnables) {
                 $exist = Arr::get($existingFields, 'payment_method', []);
                 if (!$exist) {
@@ -202,10 +204,20 @@ class BookingFieldService
                         'currency_sign'  => CurrenciesHelper::getGlobalCurrencySign(),
                     ];
                 } else {
+                    $exist['required']      = true;
                     $exist['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
                     $exist['payment_items'] = PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
                 }
+
+                if ($isStripeEnabled) {
+                    $exist['payment_methods'][] = 'stripe';
+                }
+                if ($isPayPalEnabled) {
+                    $exist['payment_methods'][] = 'paypal';
+                }
                 $existingFields['payment_method'] = $exist;
+
+                
             } else {
                 unset($existingFields['payment_method']);
             }
