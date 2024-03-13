@@ -67,6 +67,7 @@ if($isProBuild) {
     ];
 
     $deleteFolders = [
+        'app/Services/Integrations',
         'app/Services/Libs/Rrule',
         'app/Services/PluginManager',
         'app/Services/Integrations/Calendars',
@@ -77,6 +78,7 @@ if($isProBuild) {
         'app/Services/Integrations/WebHook',
         'app/Services/Integrations/ZoomMeeting'
     ];
+
     $deleteFiles = [
         'app/Services/Integrations/pro_integrations.php',
         'app/Http/Routes/pro_routes.php',
@@ -93,7 +95,7 @@ if($isProBuild) {
         'database/Migrations/BookingTransactionsMigrator.php',
         'database/Migrations/OrdersItemsMigrator.php',
     ];
-    $targetFolder = 'builds/fluent-booking';
+    $targetFolder = '../fluent-booking';
 }
 
 $folderLists = [
