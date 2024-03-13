@@ -69,25 +69,29 @@ if($isProBuild) {
     $deleteFolders = [
         'app/Services/Integrations',
         'app/Services/Libs/Rrule',
-        'app/Services/PluginManager',
-        'app/Services/Integrations/Calendars',
-        'app/Services/Integrations/FluentCRM',
-        'app/Services/Integrations/FluentForms',
-        'app/Services/Integrations/PaymentMethods',
-        'app/Services/Integrations/Twilio',
-        'app/Services/Integrations/WebHook',
-        'app/Services/Integrations/ZoomMeeting'
+        'app/Services/PluginManager'
     ];
 
     $deleteFiles = [
+        'app/Models/Webhook.php',
+        'app/Models/Order.php',
+        'app/Models/OrderItems.php',
+        'app/Models/Transactions.php',
+        'app/Services/OrderHelper.php',
+        'app/Services/GlobalModules.php',
         'app/Services/Integrations/pro_integrations.php',
         'app/Http/Routes/pro_routes.php',
         'app/Hooks/includes.php',
         'app/Hooks/Handlers/GlobalPaymentHandler.php',
+        'app/Hooks/Handlers/GlobalNotificationHandler.php',
         'app/Http/Controllers/LicenseController.php',
         'app/Http/Controllers/WebhookController.php',
         'app/Http/Controllers/ZoomController.php',
+        'app/Http/Controllers/TwilioController.php',
         'app/Http/Controllers/PaymentMethodController.php',
+        'app/Http/Controllers/IntegrationController.php',
+        'app/Http/Controllers/IntegrationSettingsController.php',
+        'app/Http/Controllers/IntegrationManagerController.php',
         'app/Http/Controllers/CalendarIntegrationController.php',
         'language/fluent-booking-pro.pot',
         'app/ComposerScript.php',

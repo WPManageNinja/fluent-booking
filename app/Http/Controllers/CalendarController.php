@@ -782,7 +782,6 @@ class CalendarController extends Controller
     public function saveEventBookingFields(Request $request, $calendarId, $eventId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
-        $currencySign = CurrenciesHelper::getGlobalCurrencySign();
 
         $bookingFields = $request->get('booking_fields');
 
@@ -809,7 +808,7 @@ class CalendarController extends Controller
             $formattedField['index'] = (int)Arr::get($value, 'index');
             if ($value['type'] == 'payment' && $calendarEvent->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
-                $formattedField['currency_sign'] = $currencySign;
+                $formattedField['currency_sign'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
             }
             if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
