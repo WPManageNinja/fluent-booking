@@ -67,12 +67,24 @@ if($isProBuild) {
     ];
 
     $deleteFolders = [
-        'app/Services/Integrations',
+        'app/Services/Integrations/Calendars',
+        'app/Services/Integrations/FluentCRM',
+        'app/Services/Integrations/FluentForms',
+        'app/Services/Integrations/PaymentMethods',
+        'app/Services/Integrations/Twilio',
+        'app/Services/Integrations/Webhook',
+        'app/Services/Integrations/Woo',
+        'app/Services/Integrations/ZoomMeeting',
         'app/Services/Libs/Rrule',
         'app/Services/PluginManager'
     ];
 
     $deleteFiles = [
+        'app/Services/Integrations/CaledarIntegrationService.php',
+        'app/Services/Integrations/IntegrationManager.php',
+        'app/Services/Integrations/IntegrationManagerHelper.php',
+        'app/Services/Integrations/IntegrationHelper.php',
+        'app/Services/Integrations/pro_integrations.php',
         'app/Models/Webhook.php',
         'app/Models/Order.php',
         'app/Models/OrderItems.php',
@@ -83,7 +95,6 @@ if($isProBuild) {
         'app/Http/Routes/pro_routes.php',
         'app/Hooks/includes.php',
         'app/Hooks/Handlers/GlobalPaymentHandler.php',
-        'app/Hooks/Handlers/GlobalNotificationHandler.php',
         'app/Http/Controllers/LicenseController.php',
         'app/Http/Controllers/WebhookController.php',
         'app/Http/Controllers/ZoomController.php',
