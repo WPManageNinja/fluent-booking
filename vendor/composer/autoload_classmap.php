@@ -126,7 +126,7 @@ return array(
     'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\ConnectConfig' => $baseDir . '/app/Services/Integrations/PaymentMethods/Stripe/ConnectConfig.php',
     'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\Stripe' => $baseDir . '/app/Services/Integrations/PaymentMethods/Stripe/Stripe.php',
     'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\StripeSettings' => $baseDir . '/app/Services/Integrations/PaymentMethods/Stripe/StripeSettings.php',
-    'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\API\\API' => $baseDir . '/app/Services/Integrations/PaymentMethods/Paypal/API/IPN.php',
+    'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\API\\IPN' => $baseDir . '/app/Services/Integrations/PaymentMethods/Paypal/API/IPN.php',
     'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\Paypal' => $baseDir . '/app/Services/Integrations/PaymentMethods/Paypal/Paypal.php',
     'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\PaypalSettings' => $baseDir . '/app/Services/Integrations/PaymentMethods/Paypal/PaypalSettings.php',
     'FluentBooking\\App\\Services\\Integrations\\Twilio\\Bootstrap' => $baseDir . '/app/Services/Integrations/Twilio/Bootstrap.php',

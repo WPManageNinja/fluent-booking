@@ -9,6 +9,7 @@ class OrderItems extends BaseModel
     protected $table = 'fcal_order_items';
 
     protected $guarded = ['id'];
+    
     protected $fillable = [
         'order_id',
         'booking_id',

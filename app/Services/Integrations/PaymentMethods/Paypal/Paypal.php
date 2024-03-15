@@ -5,10 +5,12 @@ namespace FluentBooking\App\Services\Integrations\PaymentMethods\Paypal;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\BasePaymentMethod;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
-use FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\API\API;
-use FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\API\ApiRequest;
 use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
+use FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\API\IPN;
 use FluentBooking\App\Services\OrderHelper;
+use FluentBooking\App\Models\Transactions;
+use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Order;
 use FluentBooking\Framework\Support\Arr;
 
 class Paypal extends BasePaymentMethod
@@ -30,6 +32,8 @@ class Paypal extends BasePaymentMethod
     public function register()
     {
         $this->init();
+
+        add_action('fluent_booking/ipn_paypal_action_web_accept', [$this, 'confirmPaypalPayment'], 10, 2);
     }
 
     public function isEnabled(): bool
@@ -132,7 +136,7 @@ class Paypal extends BasePaymentMethod
 
         $counter = 1;
         foreach ($items as $item) {
-            if (empty($item['value'])) {
+            if (!Arr::get($item, 'value')) {
                 continue;
             }
 
@@ -145,57 +149,64 @@ class Paypal extends BasePaymentMethod
         return $paypalArgs;
     }
 
-    private function getRedirectUrl($args)
+    private function getRedirectUrl($args = [])
     {
-        $paypalRedirect = 'https://www.paypal.com/cgi-bin/webscr/?';
-
-        if ($this->paypalSettings->getMode() == 'test') {
-            $paypalRedirect = 'https://www.sandbox.paypal.com/cgi-bin/webscr/?test_ipn=1&';
+        $sandbox = '';
+        if ($this->paypalSettings->isTest()) {
+            $sandbox = '.sandbox';
+            $args['test_ipn'] = 1;
         }
+
+        $paypalRedirect = 'https://www' . $sandbox .'.paypal.com/cgi-bin/webscr/?';
 
         return $paypalRedirect . http_build_query($args, '', '&');
     }
 
-    public function confirmPaypalPayment()
+    public function confirmPaypalPayment($data, $bookingId)
     {
-        if (!isset($_REQUEST['intentId'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            return;
+        $paymentStatus = strtolower($data['payment_status']);
+
+        if ('completed' == $paymentStatus || 'pending' == $paymentStatus) {
+            $status = 'paid';
+
+            if ($paymentStatus == 'pending') {
+                $status = 'processing';
+            }
+
+            $metaData = [
+                'payer_email'      => sanitize_text_field($data['payer_email']),
+                'payer_name'       => $this->getPayerName($data),
+                'shipping_address' => $this->getPayerAddress($data),
+            ];
+
+            $paymentData = [
+                'vendor_charge_id' => sanitize_text_field($data['txn_id']),
+                'status'           => $status,
+                'meta'             => json_encode($metaData),
+            ];
+
+            $order = Order::where('parent_id', $bookingId)->first();
+            if (!$order) {
+                return;
+            }
+
+            if (strtolower($order->currency) != strtolower($data['mc_currency'])) {
+                $paymentData['status'] = 'failed';
+                $paymentData['failed_reason'] = __('Payment failed due to invalid currency in Paypal IPN', 'fluent-booking-pro');
+            }
+    
+            if (number_format((float)($order->total_amount / 100), 2) - number_format((float)$data['mc_gross'], 2) > 1) {
+                $paymentData['status'] = 'failed';
+                $paymentData['failed_reason'] = __('Payment failed due to invalid amount in Paypal IPN', 'fluent-booking-pro');
+            }
+
+            if (Arr::get($data, 'pending_reason')) {
+                $paymentData['status'] = 'pending';
+                $paymentData['pending_reason'] = $this->getPendingReason($data['pending_reason']);
+            }
+
+            $this->updateOrderData($order->uuid, $paymentData);
         }
-
-        $intentId = $_REQUEST['intentId']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        $path = 'payment_intents/' . $intentId;
-
-        $api = new API();
-        $response = $api->makeRequest($path, [], (new PaypalSettings())->getApiKey());
-
-        if (!$response || is_wp_error($response)) {
-            return;
-        }
-
-        $orderHash = Arr::get($response, 'metadata.ref_id');
-        $amount = intval(Arr::get($response, 'amount_received'));
-
-        //verify order
-        $order = (new OrderHelper())->getOrderByHash($orderHash);
-        if (intval($order->total_amount) !== $amount) {
-            return;
-        }
-
-        $status = Arr::get($response, 'status') === 'succeeded' ? 'paid' : 'pending';
-
-        $last_4 = Arr::get($response, 'charges.data.0.payment_method_details.card.last4', '');
-        $brand = Arr::get($response, 'charges.data.0.payment_method_details.card.brand', '');
-
-        $updateData = [
-            'status'           => sanitize_text_field($status),
-            'vendor_charge_id' => sanitize_text_field($intentId),
-            'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
-            'card_last_4'      => sanitize_text_field($last_4),
-            'card_brand'       => sanitize_text_field($brand),
-        ];
-
-        $order = (new OrderHelper())->getOrderByHash($orderHash);
-        $this->updateOrderData($order, $updateData);
     }
 
     public function renderDescription()
@@ -253,43 +264,64 @@ class Paypal extends BasePaymentMethod
         ];
     }
 
+    private function getPayerName($data)
+    {
+        $firstName = sanitize_text_field(Arr::get($data, 'first_name'));
+        
+        $lastName = sanitize_text_field(Arr::get($data, 'last_name'));
+
+        return $firstName . ' ' . $lastName;
+    }
+
+    private function getPayerAddress($data)
+    {
+        $address = [];
+
+        $fields = [
+            'address_street' => 'address_line1',
+            'address_city' => 'address_city',
+            'address_state' => 'address_state',
+            'address_zip' => 'address_zip',
+            'address_country_code' => 'address_country'
+        ];
+    
+        foreach ($fields as $dataKey => $addressKey) {
+            if (Arr::get($data, $dataKey)) {
+                $address[$addressKey] = sanitize_text_field($data[$dataKey]);
+            }
+        }
+    
+        return implode(', ', $address);
+    }
+
+    private function getPendingReason($reason)
+    {
+        $messages = [
+            'echeck' => __('Payment made via eCheck and will clear automatically in 5-8 days', 'fluent-booking-pro'),
+            'address' => __('Payment requires a confirmed customer address and must be accepted manually through PayPal', 'fluent-booking-pro'),
+            'intl' => __('Payment must be accepted manually through PayPal due to international account regulations', 'fluent-booking-pro'),
+            'multi-currency' => __('Payment received in non-shop currency and must be accepted manually through PayPal', 'fluent-booking-pro'),
+            'paymentreview' => __('Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations', 'fluent-booking-pro'),
+            'regulatory_review' => __('Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations', 'fluent-booking-pro'),
+            'unilateral' => __('Payment was sent to non-confirmed or non-registered email address.', 'fluent-booking-pro'),
+            'upgrade' => __('PayPal account must be upgraded before this payment can be accepted', 'fluent-booking-pro'),
+            'verify' => __('PayPal account is not verified. Verify account in order to accept this payment', 'fluent-booking-pro'),
+            'other' => __('Payment is pending for unknown reasons. Contact PayPal support for assistance', 'fluent-booking-pro')
+        ];
+    
+        $reason = strtolower($reason);
+    
+        return $messages[$reason] ?? __('Payment marked as pending', 'fluent-booking-pro');
+    }
+
     public function webHookPaymentMethodName()
     {
         return $this->slug;
     }
 
-
     public function onPaymentEventTriggered()
     {
-        $data = (new IPN())->verifyIPN();
-
-        if (!$data) {
-            error_log('invalid data');
-            return;
-        }
-
-        $this->verifyInvoiceAndUpdate($data->id);
-    }
-
-
-    public static function getOrderHash($event)
-    {
-        $eventType = $event->type;
-
-        $metaDataEvents = [
-            'checkout.session.completed',
-            'charge.refunded',
-            'charge.succeeded',
-            'invoice.paid'
-        ];
-
-        if (in_array($eventType, $metaDataEvents)) {
-            $data = $event->data->object;
-            $metaData = (array)$data->metadata;
-            return Arr::get($metaData, 'ref_id');
-        }
-
-        return false;
+        (new IPN())->verifyIPN();
     }
 
     public function render($method)

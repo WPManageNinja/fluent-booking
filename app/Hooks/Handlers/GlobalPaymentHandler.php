@@ -63,7 +63,7 @@ class GlobalPaymentHandler
     {
         if (isset($_REQUEST['fluent_booking_payment_listener'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             add_action('wp', function () {
-                $paymentMethod = sanitize_text_field($_REQUEST['method']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                $paymentMethod = sanitize_text_field($_REQUEST['payment_method']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 do_action('fluent_booking/payment/ipn_endpoint_' . $paymentMethod);
             });
         }

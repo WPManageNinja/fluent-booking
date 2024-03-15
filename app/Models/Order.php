@@ -9,6 +9,7 @@ class Order extends BaseModel
     protected $table = 'fcal_orders';
 
     protected $guarded = ['id'];
+    
     protected $fillable = [
         'status',
         'parent_id',

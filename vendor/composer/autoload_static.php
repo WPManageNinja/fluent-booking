@@ -152,7 +152,7 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\ConnectConfig' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Stripe/ConnectConfig.php',
         'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\Stripe' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Stripe/Stripe.php',
         'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Stripe\\StripeSettings' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Stripe/StripeSettings.php',
-        'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\API\\IPN' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Paypal/API/API.php',
+        'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\API\\IPN' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Paypal/API/IPN.php',
         'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\Paypal' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Paypal/Paypal.php',
         'FluentBooking\\App\\Services\\Integrations\\PaymentMethods\\Paypal\\PaypalSettings' => __DIR__ . '/../..' . '/app/Services/Integrations/PaymentMethods/Paypal/PaypalSettings.php',
         'FluentBooking\\App\\Services\\Integrations\\Twilio\\Bootstrap' => __DIR__ . '/../..' . '/app/Services/Integrations/Twilio/Bootstrap.php',
