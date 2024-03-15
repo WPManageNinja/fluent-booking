@@ -44,6 +44,16 @@ class PaypalSettings
         return $this->settings['is_active'] == 'yes';
     }
 
+    public function isEnabledIPN()
+    {
+        return $this->settings['disable_ipn_verification'] != 'yes';
+    }
+
+    public function isTest()
+    {
+        return $this->getMode() == 'test';
+    }
+
     public function getMode()
     {
         return $this->settings['payment_mode'];

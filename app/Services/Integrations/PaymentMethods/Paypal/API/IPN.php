@@ -4,6 +4,7 @@ namespace FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\API;
 
 use FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\PaypalSettings;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Models\Booking;
 
 class IPN
 {
@@ -11,11 +12,7 @@ class IPN
     {
         status_header(200);
 
-        if (!isset($_REQUEST['fluent_booking_payment_listener'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            return;
-        }
-
-        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] != 'POST') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
             return;
         }
 
@@ -54,8 +51,6 @@ class IPN
 
         $encoded_data_array = apply_filters('fluent_booking/process_paypal_ipn_data', $encoded_data_array);
 
-        $bookingId = intval(Arr::get($_GET, 'booking_id'));
-
         $defaults = array(
             'txn_type'       => '',
             'payment_status' => '',
@@ -64,7 +59,62 @@ class IPN
 
         $encoded_data_array = wp_parse_args($encoded_data_array, $defaults);
 
-        do_action('fluent_booking/ipn_paypal_action_web_accept', $encoded_data_array, $bookingId);
+        $bookingId = intval(Arr::get($_GET, 'booking_id', ''));
+        
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return;
+        }
+
+        $paypalSettings = new PaypalSettings();
+        
+        $isEnabledIPN = $paypalSettings->isEnabledIPN();
+
+        if ($isEnabledIPN) {
+            $validate_ipn = wp_unslash($_POST); // WPCS: CSRF ok, input var ok.
+
+            $validate_ipn['cmd'] = '_notify-validate';
+
+            // Send back post vars to paypal.
+            $params = [
+                'body'        => $validate_ipn,
+                'timeout'     => 60,
+                'httpversion' => '1.1',
+                'compress'    => false,
+                'decompress'  => false,
+                'user-agent'  => 'FluentBooking/' . FLUENT_BOOKING_VERSION,
+            ];
+
+            $sandbox = $paypalSettings->isTest() ? '.sandbox' : '';
+
+            $paypalApi = 'https://www' . $sandbox . '.paypal.com/cgi-bin/webscr';
+
+            // Post back to get a response.
+            $response = wp_safe_remote_post($paypalApi, $params);
+            if (is_wp_error($response)) {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $bookingId,
+                    'status'      => 'closed',
+                    'type'        => 'error',
+                    'title'       => __('Paypal IPN Error', 'fluent-booking-pro'),
+                    'description' => __('Payment failed for paypal IPN error', 'fluent-booking-pro')
+                ]);
+                return;
+            }
+            if (wp_remote_retrieve_body($response) !== 'VERIFIED') {
+                do_action('fluent_booking/log_booking_activity', [
+                    'booking_id'  => $bookingId,
+                    'status'      => 'closed',
+                    'type'        => 'error',
+                    'title'       => __('Paypal IPN Not Verified', 'fluent-booking-pro'),
+                    'description' => __('Payment failed for paypal IPN verification', 'fluent-booking-pro')
+                ]);
+                return;
+            }
+        }
+
+        do_action('fluent_booking/ipn_paypal_action_web_accept', $encoded_data_array, $bookingId, $booking);
 
         exit(200);
     }

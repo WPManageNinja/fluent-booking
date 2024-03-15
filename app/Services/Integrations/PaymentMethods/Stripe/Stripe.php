@@ -165,9 +165,7 @@ class Stripe extends BasePaymentMethod
             'card_brand'       => sanitize_text_field($brand),
         ];
 
-        $order = (new OrderHelper())->getOrderByHash($orderHash);
-        $this->updateOrderData($order, $updateData);
-
+        $this->updateOrderData($orderHash, $updateData);
     }
 
     public function verifyInvoiceAndUpdate($eventId)
@@ -197,10 +195,8 @@ class Stripe extends BasePaymentMethod
             $updateData['payment_mode'] = $invoice->data->object->livemode ? 'live' : 'test';
         }
 
-        $order = (new OrderHelper())->getOrderByHash($orderHash);
-        $this->updateOrderData($order, $updateData);
+        $this->updateOrderData($orderHash, $updateData);
     }
-
 
     /**
      * @param $orderItem

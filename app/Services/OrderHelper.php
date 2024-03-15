@@ -80,8 +80,7 @@ class OrderHelper
             'status' => 'pending',
             'total' => $order->total_amount,
             'rate' => 1,
-            'uuid' => $order->uuid,
-
+            'uuid' => $order->uuid
         ];
 
         Transactions::create($data);

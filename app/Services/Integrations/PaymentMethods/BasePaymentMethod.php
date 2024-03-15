@@ -76,15 +76,15 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
         add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
 
-        add_filter('fluent_booking/payment/get_all_methods', array($this, 'getAllMethods'), 10, 1);
+        add_filter('fluent_booking/payment/get_all_methods', [$this, 'getAllMethods'], 10, 1);
 
-        add_filter('fluent_booking/payment_methods_renderer', array($this, 'getMethodsTemplate'), 10, 1);
+        add_filter('fluent_booking/payment_methods_renderer', [$this, 'getMethodsTemplate'], 10, 1);
 
-        add_filter('fluent_booking/public_event_vars', array($this, 'addPaymentRendererTemplates'), 10, 2);
+        add_filter('fluent_booking/public_event_vars', [$this, 'addPaymentRendererTemplates'], 10, 2);
 
-        add_action('fluent_booking/pre_after_booking_pending', array($this, 'afterBookingPending'), 1, 3);
+        add_action('fluent_booking/pre_after_booking_pending', [$this, 'afterBookingPending'], 1, 3);
 
-        add_filter('fluent_booking/booking_data', array($this, 'addPaymentMethodToBookingData'), 10, 3);
+        add_filter('fluent_booking/booking_data', [$this, 'addPaymentMethodToBookingData'], 10, 3);
     }
 
     public function addPaymentMethodToBookingData($bookingData, $calendarSlot, $customData)
@@ -282,34 +282,103 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return (new PaymentHelper($this->slug))->listenerUrl($args);
     }
 
-    public function updateOrderData($order, $transactionData = [])
+    public function updateOrderData($orderHash, $orderData = [])
     {
-        $orderHash = $order->uuid;
-        $order = (new OrderHelper())->getOrderByHash($orderHash);
-        if ($order == null) {
+        $this->updateOrder($orderHash, $orderData);
+        $this->updateTransaction($orderHash, $orderData);
+        $this->updateBooking($orderHash, $orderData);
+    }
+
+    public function updateOrder($orderHash, $data)
+    {
+        $order = Order::where('uuid', $orderHash)->first();
+
+        if (!$order) {
             return;
         }
-        $order->update($transactionData);
 
-        $transaction = Transactions::where('object_id', $order->id)->where('uuid', $orderHash)->first();
-        if ($transaction) {
-            $transaction->update($transactionData);
+        $order->update($data);
+    }
+
+    public function updateTransaction($orderHash, $data)
+    {
+        $transaction = Transactions::where('uuid', $orderHash)->first();
+
+        if (!$transaction) {
+            return;
+        }
+        
+        $transaction->update($data);
+    }
+
+    public function updateBooking($orderHash, $data)
+    {
+        $booking = Booking::with(['calendar_event', 'calendar'])
+            ->where('hash', $orderHash)
+            ->first();
+
+        if (!$booking) {
+            return;
         }
 
-        $booking = Booking::where('hash', $orderHash)->first();
+        if ($data['status'] == 'paid') {
+            $booking->status = 'scheduled';
+        }
 
-        $booking->status = 'scheduled';
-        $booking->payment_status = 'paid';
+        $booking->payment_status = $data['status'];
         $booking->save();
 
-        do_action('fluent_booking/payment/update_payment_status_paid', $booking);
+        do_action('fluent_booking/payment/update_payment_status_' . $data['status'], $booking);
 
-        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event);
+        if ($booking->status == 'scheduled') {
+            do_action('fluent_booking/log_booking_activity', $this->getSuccessActivity($booking->id, $data));
 
-        // We are just renewing this as this may have been changed by the pre hook
-        $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
+            do_action('fluent_booking/pre_after_booking_scheduled', $booking, $booking->calendar_event);
+            // We are just renewing this as this may have been changed by the pre hook
+            $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
+            do_action('fluent_booking/after_booking_scheduled', $booking, $booking->calendar_event);
+        }
 
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->calendar_event);
+        if ($booking->status == 'pending') {
+            do_action('fluent_booking/log_booking_activity', $this->getPendingActivity($booking->id, $data));
+        }
+
+        if ($booking->status == 'failed') {
+            do_action('fluent_booking/log_booking_activity', $this->getFailedActivity($booking->id, $data));
+        }
+    }
+
+    public function getSuccessActivity($bookingId, $data)
+    {
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Payment Successfully Completed', 'fluent-booking-pro'),
+            'description' => sprintf(__('Transaction marked as paid and %s Transaction ID: %s ', 'fluent-booking-pro'), $this->title, $data['vendor_charge_id'])
+        ];
+    }
+
+    public function getPendingActivity($bookingId, $data)
+    {
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'info',
+            'type'        => 'error',
+            'title'       => sprintf(__('%s Payment Pending', 'fluent-booking-pro'), $this->title),
+            'description' => $data['pending_reason']
+        ];
+    }
+
+    public function getFailedActivity($bookingId, $data)
+    {
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'closed',
+            'type'        => 'error',
+            'title'       => sprintf(__('%s Payment Failed', 'fluent-booking-pro'), $this->title),
+            'description' => $data['failed_reason']
+        ];
     }
 
     public function maybeUpdatePayment()

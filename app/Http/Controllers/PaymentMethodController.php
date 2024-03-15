@@ -126,14 +126,23 @@ class PaymentMethodController extends Controller
         }
 
         $isEnabled = Arr::get($data, 'enabled', 'no') === 'yes';
-        $stripeEnabled = Arr::get($data, 'stripe_enabled', 'no') === 'yes';
-        $paypalEnabled = Arr::get($data, 'paypal_enabled', 'no') === 'yes';
 
         $driver = Arr::get($data, 'driver');
         $eventType = $isEnabled ? 'paid' : 'free';
         $data['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
 
         if ($isEnabled) {
+            if (!Helper::isPaymentConfigured('stripe')) {
+                $data['stripe_enabled'] = 'no';
+            }
+    
+            if (!Helper::isPaymentConfigured('paypal')) {
+                $data['paypal_enabled'] = 'no';
+            }
+            
+            $stripeEnabled = Arr::get($data, 'stripe_enabled', 'no') === 'yes';
+            $paypalEnabled = Arr::get($data, 'paypal_enabled', 'no') === 'yes';
+
             if (!$driver) {
                 return $this->sendError([
                     'message' => __('Please select a payment method', 'fluent-booking-pro')
