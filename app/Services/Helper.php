@@ -8,7 +8,6 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\BookingMeta;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class Helper

@@ -5,7 +5,6 @@ namespace FluentBooking\App\Services;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class EditorShortCodeParser
@@ -258,7 +257,8 @@ class EditorShortCodeParser
         $order = static::$store['payment_order'];
 
         if ($key == 'payment_total') {
-            if (CurrenciesHelper::isZeroDecimal($order->currency)) {
+            $isZeroDecimal = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::isZeroDecimal($order->currency);
+            if ($isZeroDecimal) {
                 return $order->total_amount;
             } else {
                 return $order->total_amount / 100;
