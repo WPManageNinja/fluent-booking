@@ -28,13 +28,12 @@ class IPN
 
         if ($post_data || strlen($post_data) > 0) {
             $encoded_data .= $arg_separator . $post_data;
-        } else {
-            if (!$_POST) {
-                return;
-            }
+        } elseif ($_POST) {
             foreach ($_POST as $key => $value) {
                 $encoded_data .= $arg_separator . "$key=" . urlencode($value);
             }
+        } else {
+            return;
         }
 
         // Convert collected post data to an array
