@@ -163,6 +163,7 @@ class Stripe extends BasePaymentMethod
             'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
             'card_last_4'      => sanitize_text_field($last_4),
             'card_brand'       => sanitize_text_field($brand),
+            'total_paid'       => $amount
         ];
 
         $this->updateOrderData($orderHash, $updateData);

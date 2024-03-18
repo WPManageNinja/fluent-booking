@@ -29,8 +29,7 @@ class PaypalSettings
             'is_active'                => 'no',
             'paypal_email'             => '',
             'payment_mode'             => 'test',
-            'disable_ipn_verification' => 'yes',
-            'ipn_url'                  => self::getIpnUrl()
+            'disable_ipn_verification' => 'no'
         ];
     }
 

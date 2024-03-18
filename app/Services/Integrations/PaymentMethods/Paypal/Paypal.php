@@ -33,7 +33,7 @@ class Paypal extends BasePaymentMethod
     {
         $this->init();
 
-        add_action('fluent_booking/ipn_paypal_action_web_accept', [$this, 'confirmPaypalPayment'], 10, 2);
+        add_action('fluent_booking/ipn_paypal_action_web_accept', [$this, 'confirmPaypalPayment'], 10, 3);
     }
 
     public function isEnabled(): bool
@@ -162,9 +162,23 @@ class Paypal extends BasePaymentMethod
         return $paypalRedirect . http_build_query($args, '', '&');
     }
 
-    public function confirmPaypalPayment($data, $bookingId)
+    public function confirmPaypalPayment($data, $bookingId, $booking)
     {
-        $paymentStatus = strtolower($data['payment_status']);
+        $paymentStatus = strtolower(sanitize_text_field($data['payment_status']));
+
+        $order = Order::where('parent_id', $bookingId)->first();
+        if (!$order) {
+            return;
+        }
+
+        if ($paymentStatus == 'refunded' || $paymentStatus == 'reversed') {
+            $this->processRefund($data, $order, $booking);
+            return;
+        }
+
+        if ($booking->getMeta('is_paypal_action_fired') == 'yes') {
+            return;
+        }
 
         if ('completed' == $paymentStatus || 'pending' == $paymentStatus) {
             $status = 'paid';
@@ -181,14 +195,10 @@ class Paypal extends BasePaymentMethod
 
             $paymentData = [
                 'vendor_charge_id' => sanitize_text_field($data['txn_id']),
+                'total_paid'       => $data['mc_gross'] * 100,
                 'status'           => $status,
                 'meta'             => json_encode($metaData),
             ];
-
-            $order = Order::where('parent_id', $bookingId)->first();
-            if (!$order) {
-                return;
-            }
 
             if (strtolower($order->currency) != strtolower($data['mc_currency'])) {
                 $paymentData['status'] = 'failed';
@@ -205,8 +215,33 @@ class Paypal extends BasePaymentMethod
                 $paymentData['pending_reason'] = $this->getPendingReason($data['pending_reason']);
             }
 
+            if ($paymentData['status'] != 'failed') {
+                $booking->updateMeta('is_paypal_action_fired', 'yes');
+            }
+
             $this->updateOrderData($order->uuid, $paymentData);
         }
+    }
+
+    private function processRefund($data, $order, $booking)
+    {
+        if ($booking->payment_status == 'refunded') {
+            return;
+        }
+
+        $refundExist = $this->getTransaction($data['txn_id']);
+        if ($refundExist) {
+            return;
+        }
+
+        $transaction = $this->getTransaction($data['parent_txn_id']);
+        if (!$transaction) {
+            return;
+        }
+
+        $refundAmount = $data['mc_gross'] * -100;
+
+        $this->updateRefundData($refundAmount, $order, $transaction, $booking, 'paypal', $data['txn_id'], 'Refund From Paypal');
     }
 
     public function renderDescription()
@@ -239,17 +274,10 @@ class Paypal extends BasePaymentMethod
                 'type'  => 'email'
             ],
             'disable_ipn_verification' => [
-                'value'       => 'yes',
+                'value'       => 'no',
                 'label'       => __('Disable Paypal IPN Verification', 'fluent-booking-pro'),
                 'type'        => 'inline_switch',
                 'inline_help' => __('If you are unable to use Payment Data Transfer and payments are not getting marked as complete, then check this box. This forces the site to use a slightly less secure method of verifying purchases.', 'fluent-booking-pro')
-            ],
-            'ipn_url'  => [
-                'type'        => 'text',
-                'label'       => __('IPN URI', 'fluent-booking-pro'),
-                'readonly'    => true,
-                'copy_btn'    => true,
-                'inline_help' => __('If you would like to configure paypal IPN ', 'fluent-booking-pro') . ' <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/how-to-setup-paypal-ipn-with-wp-fluent-booking/">' . __('Read the documentation', 'fluent-booking-pro') . '</a>'
             ]
         ];
     }
