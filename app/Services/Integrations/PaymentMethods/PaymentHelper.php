@@ -12,24 +12,44 @@ class PaymentHelper
         $this->slug = $slug;
     }
 
-    public function listenerUrl($args = null)
+    public function listenerUrl($args = [])
     {
-        $listener = '?fluent_booking_payment_listener=1&method=' . $this->slug;
-        $listener = apply_filters('fluent_booking_ipn_url_' . $this->slug, site_url($listener));
-        return add_query_arg($listener, is_array($args)?$args:[]);
+        $queryArgs = array_merge([
+            'fluent_booking_payment_listener' => 1,
+            'payment_method'                  => $this->slug
+        ], is_array($args) ? $args : []);
+
+        return add_query_arg($queryArgs, site_url('index.php'));
     }
 
     public function successUrl(Booking $booking, $args = null)
     {
-
-        $queryArgs =  array_merge(
-            array(
+        $queryArgs = array_merge([
                 'payment_method' => $this->slug,
                 'payment_success' => 'yes'
-            ),
-            is_array($args)? $args:[]
+            ], is_array($args) ? $args: []
         );
+
         return add_query_arg($queryArgs, $booking->getConfirmationUrl());
+    }
+
+    public static function formatPaymentItem($string, $limit = 127)
+    {
+        $string = wp_strip_all_tags($string);
+
+        $string = preg_replace('/[^a-zA-Z0-9\s]/', '', $string);
+
+        $string = self::limitLength($string, $limit);
+
+        return html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
+    }
+
+    public static function limitLength($string, $limit = 127)
+    {
+        if (strlen($string) > $limit) {
+            $string = substr($string, 0, $limit - 3) . '...';
+        }
+        return $string;
     }
 
     public static function getReceiptTemplate($items)

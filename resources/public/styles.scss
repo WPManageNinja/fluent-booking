@@ -2281,6 +2281,19 @@ body >.fcal_calendar_wrap {
 
   background: transparent;
   border-radius: 4px;
+
+  .fcal_payment_methods {
+    margin-top: 16px;
+    p {
+        color: var(--fcal_dark);
+        font-weight: 500;
+    }
+    .fcal_payment_radio {
+        font-weight: 400;
+        padding: 10px 17px;
+        color: var(--fcal_dark);
+    }
+  }
 }
 
 .fluent_booking_payment_processor {

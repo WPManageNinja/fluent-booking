@@ -24,7 +24,7 @@
                                     <div class="fcal_input_label">
                                         {#if shouldRenderLabel(field)}
                                             {field.label}
-                                            {#if field.required}
+                                            {#if field.required && field.type != 'payment'}
                                                 <span>*</span>
                                             {/if}
                                         {/if}
@@ -98,7 +98,7 @@
                                         {/if}
                                     </span>
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
-                                    <Payments field={field}/>
+                                    <Payments field={field} bind:form={form} />
                                 {:else if field.type === 'hidden'}
                                     <input type="hidden" bind:value={form[field.name]}/>
                                 {/if}
@@ -119,7 +119,6 @@
             {/each}
 
             {#if !appData.is_fluentform}
-                <!--{/if}-->
                 {#if hasPaymentItem() && appData.payment_items}
                     <div class="fluent_booking_payment_processor" style="display:none;">
                         <h3 class="label">{i18('Total Payment')}
@@ -259,8 +258,6 @@
 
     function submitForm(e) {
         if (!validateForm()) return;
-        const formFields = e.target.elements;
-        const selectedMethod = (formFields?.stripe_payment_method?.value) ? formFields.stripe_payment_method.value : '';
         const postdata = {
             ...form,
             timezone,
@@ -268,7 +265,6 @@
             start_date: spot.start,
             event_id: slot.id,
             source_url: currentUrl,
-            payment_method: selectedMethod,
             action: 'fluent_cal_schedule_meeting'
         }
 

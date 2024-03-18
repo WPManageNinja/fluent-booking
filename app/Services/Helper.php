@@ -751,6 +751,13 @@ class Helper
         return false;
     }
 
+    public static function isPaymentConfigured($method = 'stripe')
+    {
+        $settings = get_option('fluent_booking_payment_settings_' . $method, []);
+
+        return Arr::get($settings, 'is_active', 'no') == 'yes';
+    }
+
     /**
      * Sanitize form inputs recursively.
      *
@@ -1846,6 +1853,10 @@ class Helper
     public static function getGlobalSettings($settingsKey = null)
     {
         $defaults = [
+            'payments'       => [
+                'currency'               => 'USD',
+                'is_active'              => 'no'
+            ],
             'emailing'       => [
                 'from_name'               => '',
                 'from_email'              => '',
@@ -1875,6 +1886,12 @@ class Helper
             $settings = [];
         }
 
+        $paymentSettings = get_option('fluent_booking_global_payment_settings', []);
+
+        if ($paymentSettings) {
+            $settings['payments'] = $paymentSettings;
+        }
+        
         $settings = wp_parse_args($settings, $defaults);
 
         $emailSettings = $settings['emailing'];

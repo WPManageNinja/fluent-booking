@@ -212,7 +212,10 @@
     .fcal_settings_content_wrap {
         .el-form {
             .el-form-item {
-                margin-bottom: 0;
+                margin-bottom: 16px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
                 .el-form-item__label,
                 .input-label {
                     font-size: 14px;
@@ -300,6 +303,65 @@
                             font-size: 12px;
                         }
                     }
+                }
+            }
+            .fcal_availability_header_wrap {
+                .el-form-item {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        .fc-payment-col {
+            margin-bottom: 1rem;
+            .el-form-item {
+                p {
+                    margin: 0.5rem 0;
+                }
+                .el-input {
+                    &.is-disabled {
+                        .el-input__wrapper {
+                            border-radius: 8px 0 0 8px;
+                            border: none;
+                            background: #F5F6F7;
+                        }
+                        .el-input-group__append {
+                            padding: 0;
+                            box-shadow: none;
+                            background: none;
+                            button {
+                                margin: 0;
+                                background: rgba(38, 83, 199, 0.15);
+                                color: #306ae0;
+                                padding: 14px 16px;
+                                height: auto;
+                                border-radius: 0 8px 8px 0;
+                            }
+                            span {
+                                gap: 4px;
+                            }
+                        }
+                    }
+                }
+                .el-select {
+                    .el-input__wrapper {
+                        padding: 1px 16px;
+                    }
+                }
+                .el-switch {
+                    .el-switch__label {
+                        &.is-active {
+                            color: var(--el-text-color-primary);
+                        }
+                    }
+                    &.is-checked {
+                        .el-switch__core {
+                            border-color: #306ae0;
+                            background-color: #306ae0;
+                        }
+                    }
+                }
+                .el-form-item__label {
+                    color: #000;
                 }
             }
         }

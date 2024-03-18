@@ -148,6 +148,52 @@
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">
                         <div class="content">
+                            <h3>{{ $t('Payment Settings') }}</h3>
+                            <p>{{ $t('GeneralSettings/payment_settings_description') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body">
+                    <el-form v-model="payments" label-position="top">
+                        <el-row>
+                            <el-form-item>
+                                <el-checkbox v-model="payments.is_active" true-label="yes" false-label="no">
+                                    {{ $t('Enable Payment Module') }}
+                                </el-checkbox>
+                            </el-form-item>
+                        </el-row>
+                        <el-row>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Currency')">
+                                    <el-select filterable v-model="payments.currency" popper-class="fcal_select"
+                                               :placeholder="$t('Select')" placement="bottom">
+                                        <el-option
+                                            v-for="currency in all_currencies"
+                                            :key="currency.value"
+                                            :label="currency.label"
+                                            :value="currency.value"
+                                        />
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
+                        <el-button :disabled="paymentSaving" v-loading="paymentSaving" @click="savePaymentSettings()"
+                                   class="fcal_primary_btn">
+                            {{ $t('Save Settings') }}
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
+            <div class="fcal_configure_integration_card">
+                <div class="fcal_configure_integration_card_header">
+                    <div class="left">
+                        <div class="content">
                             <h3>{{ $t('Emailing Settings') }}</h3>
                             <p>{{ $t('GeneralSettings/email_settings_description') }}</p>
                         </div>
@@ -165,7 +211,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="fcal_settings_body_inner fcal_settings_apperance">
             <div class="fcal_configure_integration_card">
@@ -207,7 +252,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import FormBuilder from '@/Components/FormBuilder/FormBuilder.vue';
 import SystemDefault from "@/Pieces/theme/SystemDefault";
 import ModeLight from "@/Pieces/theme/ModeLight";
@@ -224,6 +269,7 @@ export default {
     data() {
         return {
             emailing: {},
+            payments: {},
             emailingFields: {},
             administration: {},
             theme: '',
@@ -259,8 +305,10 @@ export default {
             ],
             loading: false,
             saving: false,
+            paymentSaving: false,
             timeFormat: '12',
             all_countries: {},
+            all_currencies: {},
             statusChangingTimes: this.appVars.status_changing_times
         }
     },
@@ -270,11 +318,13 @@ export default {
             this.$get('settings/general')
                 .then(response => {
                     this.emailing = response.emailing;
+                    this.payments = response.payments;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;
                     this.theme = response.theme;
                     this.timeFormat = response.time_format;
                     this.all_countries = response.all_countries;
+                    this.all_currencies = response.all_currencies;
                 })
                 .catch(error => {
                     this.$handleError(error);
@@ -287,6 +337,7 @@ export default {
             this.saving = true;
             this.$post('settings/general', {
                 emailing: this.emailing,
+                payments: this.payments,
                 administration: this.administration,
                 timeFormat: this.timeFormat,
                 theme: this.theme,
@@ -299,6 +350,21 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
+                });
+        },
+        savePaymentSettings() {
+            this.paymentSaving = true;
+            this.$post('settings/payment', {
+                payments: this.payments
+            })
+                .then(response => {
+                    this.$notify.success(response.message);
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.paymentSaving = false;
                 });
         }
     },

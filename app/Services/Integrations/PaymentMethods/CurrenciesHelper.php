@@ -7,7 +7,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
 class CurrenciesHelper
 {
     public static function getGlobalCurrency()

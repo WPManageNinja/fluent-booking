@@ -191,8 +191,8 @@ class LandingPageHandler
                     </style>
                 <?php
             });
-        }
 
+        }
 
         $app = App::getInstance();
         status_header(200);

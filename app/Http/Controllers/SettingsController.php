@@ -3,9 +3,11 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Services\GlobalModules\GlobalModules;
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Libs\Countries;
 use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Support\Arr;
 
 class SettingsController extends Controller
 {
@@ -77,6 +79,8 @@ class SettingsController extends Controller
 
         $settings['all_countries'] = Countries::get();
 
+        $settings['all_currencies'] = CurrenciesHelper::getFormattedCurrencies();
+
         return $settings;
     }
 
@@ -104,6 +108,23 @@ class SettingsController extends Controller
         return [
             'message'  => __('Settings updated successfully', 'fluent-booking-pro'),
             'settings' => $formattedSettings
+        ];
+    }
+
+    public function updatePaymentSettings(Request $request)
+    {
+        $paymentSettings = $request->get('payments', []);
+
+        $currency = Arr::get($paymentSettings, 'currency');
+        $isActive = Arr::get($paymentSettings, 'is_active', 'no');
+
+        update_option('fluent_booking_global_payment_settings', [
+            'currency'  => sanitize_textarea_field($currency),
+            'is_active' => ($isActive == 'yes') ? 'yes' : 'no'
+        ], 'no');
+
+        return [
+            'message'  => __('Settings updated successfully', 'fluent-booking-pro')
         ];
     }
 

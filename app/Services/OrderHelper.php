@@ -80,8 +80,7 @@ class OrderHelper
             'status' => 'pending',
             'total' => $order->total_amount,
             'rate' => 1,
-            'uuid' => $order->uuid,
-
+            'uuid' => $order->uuid
         ];
 
         Transactions::create($data);
@@ -90,6 +89,18 @@ class OrderHelper
     public function getOrderByHash($hash)
     {
         return Order::where('uuid', $hash)->first();
+    }
+
+    public function updateOrderStatus($orderHash, $status = 'pending')
+    {
+        $order = $this->getOrderByHash($orderHash);
+
+        if (!$order) {
+            return;
+        }
+        
+        $order->status = $status;
+        $order->save();
     }
 
 }

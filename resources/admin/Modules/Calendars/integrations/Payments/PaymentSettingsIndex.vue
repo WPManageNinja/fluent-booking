@@ -1,10 +1,11 @@
 <template>
     <div class="fcal_settings_body_inner">
         <div class="fcal_settings_header">
-            <div class="fcal_settings_head">
-                <h2>{{ $t('Stripe Payments') }}</h2>
-                <p>{{ $t('PaymentSettingsIndex/configure_stripe_desc') }}</p>
+            <div v-if="!loading" class="fcal_settings_head">
+                <h2>{{ fields?.label }}</h2>
+                <p>{{ fields?.description }}</p>
             </div>
+            <el-skeleton v-else :rows="1" animated/>
             <div class="fcal_settings_actions">
                 <el-button size="large" :loading="saving" @click="saveSettings()" type="primary">
                     {{ $t('Save Settings') }}
@@ -12,7 +13,7 @@
             </div>
         </div>
 
-        <el-skeleton :rows="4" animated v-if="fetching"/>
+        <el-skeleton :rows="4" animated v-if="loading"/>
 
         <div v-else class="fcal_calendar_body">
             <Renderer
@@ -23,7 +24,7 @@
         </div>
     </div>
 </template>
-<script type="text/babel">
+<script>
 import Renderer from "../Payments/PaymentComponet/Renderer.vue";
 
 export default {
@@ -36,7 +37,7 @@ export default {
             fields: {},
             settings: {},
             saving: false,
-            fetching: false,
+            loading: false,
             is_key_defined: false,
             labelPosition: 'top',
             webhook_url: '',
@@ -59,7 +60,7 @@ export default {
             this.settings = settings;
         },
         getSettings() {
-            this.fetching = true;
+            this.loading = true;
             this.$get('integrations/settings/payment-methods', {
                 method: this.route_name
             })
@@ -71,7 +72,7 @@ export default {
                     this.$handleError(errors);
                 })
                 .finally(() => {
-                    this.fetching = false;
+                    this.loading = false;
                 });
         },
         saveSettings() {
