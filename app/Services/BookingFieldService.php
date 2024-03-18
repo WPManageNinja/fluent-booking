@@ -185,6 +185,8 @@ class BookingFieldService
         if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
+            $isStripeEnabled = Arr::get($paymentSettings, 'stripe_enabled') === 'yes';
+            $isPayPalEnabled = Arr::get($paymentSettings, 'paypal_enabled') === 'yes';
             $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
             $paymentItems = \FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
             if ($isEnables) {
@@ -202,10 +204,20 @@ class BookingFieldService
                         'currency_sign'  => $currencySign,
                     ];
                 } else {
+                    $exist['required']      = true;
                     $exist['currency_sign'] = $currencySign;
                     $exist['payment_items'] = $paymentItems;
                 }
+
+                if ($isStripeEnabled) {
+                    $exist['payment_methods'][] = 'stripe';
+                }
+                if ($isPayPalEnabled) {
+                    $exist['payment_methods'][] = 'paypal';
+                }
                 $existingFields['payment_method'] = $exist;
+
+                
             } else {
                 unset($existingFields['payment_method']);
             }

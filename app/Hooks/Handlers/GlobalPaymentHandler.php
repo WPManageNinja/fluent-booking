@@ -6,6 +6,7 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\Stripe;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\ConnectConfig;
+use FluentBooking\App\Services\Integrations\PaymentMethods\Paypal\Paypal;
 use FluentBooking\Framework\Support\Arr;
 
 class GlobalPaymentHandler
@@ -19,6 +20,7 @@ class GlobalPaymentHandler
     public function init()
     {
         (new Stripe())->register();
+        (new Paypal())->register();
 
         //This hook will allow others to register their payment method with ours
         do_action('fluent_booking/register_payment_methods');
@@ -33,17 +35,14 @@ class GlobalPaymentHandler
 
         $eventVars['slot']['total_payment'] = '';
 
-        if (Arr::get($paymentSettings, 'enabled') != 'yes') {
+        if (Arr::get($paymentSettings, 'enabled', 'no') != 'yes') {
             return $eventVars;
         }
 
         $driver = Arr::get($paymentSettings, 'driver');
 
         if ($driver == 'native') {
-            $total = 0;
-            foreach ($paymentSettings['items'] as $payment) {
-                $total += (int)$payment['value'];
-            }
+            $total = $calendarEvent->getPricingTotal();
             $currency = CurrenciesHelper::getGlobalCurrencySign();
             $eventVars['slot']['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
             return $eventVars;
@@ -64,7 +63,7 @@ class GlobalPaymentHandler
     {
         if (isset($_REQUEST['fluent_booking_payment_listener'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             add_action('wp', function () {
-                $paymentMethod = sanitize_text_field($_REQUEST['method']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                $paymentMethod = sanitize_text_field($_REQUEST['payment_method']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
                 do_action('fluent_booking/payment/ipn_endpoint_' . $paymentMethod);
             });
         }
