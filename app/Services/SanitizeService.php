@@ -8,7 +8,9 @@ class SanitizeService
 {
     public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = true)
     {
-        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+        $dstTimeZone = $fromTimeZone == 'UTC' ? $toTimeZone : $fromTimeZone;
+
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($dstTimeZone);
 
         foreach ($schedules as $day => &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
