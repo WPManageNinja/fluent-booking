@@ -12,6 +12,7 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Validator\Validator;
 use FluentBooking\App\Services\OrderHelper;
+use FluentBooking\App\Services\Helper;
 
 
 abstract class BasePaymentMethod implements BasePaymentInterface
@@ -93,7 +94,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             return $bookingData;
         }
 
-        if ($calendarSlot->type === 'paid') {
+        if ($calendarSlot->isPaymentEnabled()) {
             $bookingData['status'] = 'pending';
             $bookingData['payment_status'] = 'pending';
             $bookingData['payment_method'] = Arr::get($customData, 'payment_method', '');
@@ -105,7 +106,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         $paymentMethod = Arr::get($bookingData, 'payment_method', 'stripe');
 
-        if ($calendarSlot->type === 'paid' && $booking->source === 'web' && $paymentMethod) {
+        if ($calendarSlot->isPaymentEnabled() && $booking->source === 'web' && $paymentMethod) {
             (new OrderHelper())->processDraftOrder($booking, $calendarSlot); // make draft order
             do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
         }
@@ -113,11 +114,11 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function getAllMethods()
     {
-        static::$methods[$this->slug] = array(
+        static::$methods[$this->slug] = [
             'title'  => $this->title,
             'image'  => $this->logo,
-            "status" => $this->isEnabled(),
-        );
+            "status" => $this->isEnabled()
+        ];
         return static::$methods;
     }
 
@@ -182,13 +183,15 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function getMode()
     {
         $settings = $this->getSettings();
+
         return Arr::get($settings, 'payment_mode', 'test');
     }
 
     public function getActiveStatus()
     {
         $settings = $this->getSettings();
-        return Arr::get($settings, 'is_active') === 'yes' ? true : false;
+
+        return Arr::get($settings, 'is_active', 'no') === 'yes';
     }
 
     public function hasLiveRefund()
@@ -285,59 +288,6 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     protected function getTransaction($chargeId)
     {
         return Transactions::where('vendor_charge_id', $chargeId)->first();
-    }
-
-    public function updateRefundData($refundAmount, $order, $transaction, $booking, $method = '', $refundId = '', $refundNote = 'Refunded')
-    {
-        $status = 'refunded';
-
-        $alreadyRefunded = $this->getRefundTotal($order->id);
-
-        $totalRefund = intval($refundAmount + $alreadyRefunded);
-
-        if ($totalRefund < $transaction->total) {
-            $status = 'partially-refunded';
-        }
-
-        $order->total_paid = $order->total_amount - $totalRefund;
-        $order->refunded_at = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        $order->status = $status;
-        $order->note = $refundNote;
-        $order->save();
-
-        $transaction->status = $status;
-        $transaction->save();
-
-        $booking->payment_status = $status;
-        $booking->save();
-
-        do_action('fluent_booking/payment/update_payment_status_' . $status, $booking);
-
-        $uniqueHash = md5('refund_' . $booking->id . '-' . time() . '-' . mt_rand(100, 999));
-
-        $refundData = [
-            'uuid' => $uniqueHash,
-            'object_id' => $order->id,
-            'object_type' => 'order',
-            'vendor_charge_id' => $refundId,
-            'transaction_type' => 'refund',
-            'payment_method' => $order->payment_method,
-            'total' => $refundAmount,
-            'status' => $status,
-            'rate' => 1
-        ];
-
-        Transactions::create($refundData);
-
-        $logData = [
-            'booking_id'  => $booking->id,
-            'status'      => 'closed',
-            'type'        => 'success',
-            'title'       => __('Payment Refunded Successfully', 'fluent-booking-pro'),
-            'description' => sprintf(__('Amount %s refunded successfully', 'fluent-booking-pro'), CurrenciesHelper::getGlobalCurrencySign() . number_format($refundAmount / 100, 2))
-        ];
-
-        do_action('fluent_booking/log_booking_activity', $logData);
     }
 
     public function updateOrderData($orderHash, $orderData = [])
@@ -445,6 +395,60 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         ];
     }
 
+    public function updateRefundData($refundAmount, $order, $transaction, $booking, $method = '', $refundId = '', $refundNote = 'Refunded')
+    {
+        $status = 'refunded';
+
+        $alreadyRefunded = $this->getRefundTotal($order->id);
+
+        $totalRefund = intval($refundAmount + $alreadyRefunded);
+
+        if ($totalRefund < $transaction->total) {
+            $status = 'partially-refunded';
+        }
+
+        $order->total_paid = $order->total_amount - $totalRefund;
+        $order->refunded_at = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $order->status = $status;
+        $order->note = $refundNote;
+        $order->save();
+
+        $transaction->status = $status;
+        $transaction->save();
+
+        $booking->payment_status = $status;
+        $booking->save();
+
+        do_action('fluent_booking/payment/update_payment_status_' . $status, $booking);
+
+        $uniqueHash = md5('refund_' . $booking->id . '-' . time() . '-' . mt_rand(100, 999));
+
+        $refundData = [
+            'uuid' => $uniqueHash,
+            'object_id' => $order->id,
+            'object_type' => 'order',
+            'vendor_charge_id' => $refundId,
+            'transaction_type' => 'refund',
+            'payment_method' => $order->payment_method,
+            'total' => $refundAmount,
+            'status' => $status,
+            'rate' => 1
+        ];
+
+        Transactions::create($refundData);
+
+        $logData = [
+            'booking_id'  => $booking->id,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Payment Refunded Successfully', 'fluent-booking-pro'),
+            'description' => sprintf(__('Amount %s refunded successfully. Transaction ID: %s ', 'fluent-booking-pro'),
+                CurrenciesHelper::getGlobalCurrencySign() . number_format($refundAmount / 100, 2), $refundId)
+        ];
+
+        do_action('fluent_booking/log_booking_activity', $logData);
+    }
+
     public function getRefundTotal($orderId)
     {
         $totalRefund = Transactions::where('object_id', $orderId)
@@ -460,17 +464,21 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return false;
     }
 
-    public function render($method)
+    public function renderMethod($method)
     {
-        return '';
+        return '
+            <input checked value="' . esc_attr($method) . '" name="' . esc_attr($method) . '_payment_method' . '" type="radio"  id="' . esc_attr($method) . '_payment_method">
+            <label for="' . esc_attr($method) . '_payment_method">
+              ' . sprintf(__('%s', 'fluent-booking-pro'), ucfirst($method)) . '
+            </label>
+        ';
     }
 
     public function getMethodsTemplate($data)
     {
         $methods = GlobalPaymentHandler::getAllMethods();
 
-        $settings = $this->getSettings();
-        if (isset($settings['is_active']) && $settings['is_active'] !== 'yes') {
+        if (!Helper::isPaymentEnabled()) {
             return $data['template'] = '<div class="fluent_booking_payment_methods">' . __('Please activate payment first!', 'fluent-booking-pro') . '</div>';
         }
 
@@ -481,17 +489,18 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         $hasActiveMethod = false;
         $radio = "<div class='payment-methods-radio fluent_booking_payment_methods'><div style='display: flex; gap: 20px;'>" . __('Pay with:', 'fluent-booking-pro');
         foreach ($methods as $slug => $methodData) {
-            if (isset($methodData['status']) && $methodData['status']) {
+            if (Arr::isTrue($methodData, 'status')) {
                 $hasActiveMethod = true;
-                $radio .= $this->render($slug);
+                $radio .= $this->renderMethod($slug);
             }
         }
-        $radio .= "</div></div>";
+        $radio .= "</div>";
 
-        $templates['template'] = $radio;
         if (!$hasActiveMethod) {
             return $data['template'] = '<p style="color:#fb7373; font-size:16px; margin: 0 auto;">'. __('Please active at least one payment method!', 'fluent-booking-pro') .'</p>';
         }
+        
+        $templates['template'] = $radio;
 
         return $data['template'] = $templates;
     }

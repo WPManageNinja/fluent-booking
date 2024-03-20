@@ -184,19 +184,21 @@ class BookingFieldService
 
         if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
+
             $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
-            $isStripeEnabled = Arr::get($paymentSettings, 'stripe_enabled') === 'yes';
-            $isPayPalEnabled = Arr::get($paymentSettings, 'paypal_enabled') === 'yes';
             $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
             $paymentItems = \FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
             if ($isEnables) {
+                $stripeEnabled = Arr::get($paymentSettings, 'stripe_enabled') === 'yes' && Helper::isPaymentConfigured('stripe');
+                $paypalEnabled = Arr::get($paymentSettings, 'paypal_enabled') === 'yes' && Helper::isPaymentConfigured('paypal');
+
                 $exist = Arr::get($existingFields, 'payment_method', []);
                 if (!$exist) {
                     $exist = [
                         'index'          => 20,
                         'type'           => 'payment',
                         'name'           => 'payment_method',
-                        'required'       => false,
+                        'required'       => true,
                         'enabled'        => true,
                         'system_defined' => true,
                         'payment_items'  => $paymentItems,
@@ -209,15 +211,13 @@ class BookingFieldService
                     $exist['payment_items'] = $paymentItems;
                 }
 
-                if ($isStripeEnabled) {
+                if ($stripeEnabled) {
                     $exist['payment_methods'][] = 'stripe';
                 }
-                if ($isPayPalEnabled) {
+                if ($paypalEnabled) {
                     $exist['payment_methods'][] = 'paypal';
                 }
                 $existingFields['payment_method'] = $exist;
-
-                
             } else {
                 unset($existingFields['payment_method']);
             }
