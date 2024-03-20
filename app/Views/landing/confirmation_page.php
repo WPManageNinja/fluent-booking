@@ -17,11 +17,9 @@
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
     <meta property="og:author" content="<?php echo esc_attr($author['name']); ?>">
 
-    <?php
-        foreach ($css_files as $css_file) {
-            wp_enqueue_style('fluent-booking-'.md5($css_file),esc_url($css_file),array(),FLUENT_BOOKING_ASSETS_VERSION,'all');
-        }
-    ?>
+    <?php foreach ($css_files as $css_file): ?>
+        <link rel="stylesheet" href="<?php echo esc_url($css_file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" media="all" />
+    <?php endforeach; ?>
 </head>
 <body class="booking-confirmation-page">
 
@@ -33,17 +31,13 @@
 
     <script>
         <?php foreach ($js_vars as $varKey => $values): ?>
-            var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+        var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
         <?php endforeach; ?>
     </script>
 
-    <?php
-        foreach ($js_files as $handle => $url) {
-            wp_enqueue_script(esc_attr($handle), esc_url($url), array(), FLUENT_BOOKING_ASSETS_VERSION, array('strategy'=>'defer'));
-        }
-    ?>
-
-    <?php wp_footer(); ?>
+    <?php foreach ($js_files as $fileKey => $file): ?>
+        <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>" defer="defer"></script>
+    <?php endforeach; ?>
 
     <script>
         const theme = '<?php echo esc_attr($theme); ?>';
