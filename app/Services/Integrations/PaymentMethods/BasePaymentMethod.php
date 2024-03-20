@@ -442,7 +442,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Payment Refunded Successfully', 'fluent-booking-pro'),
-            'description' => sprintf(__('Amount %s refunded successfully', 'fluent-booking-pro'), CurrenciesHelper::getGlobalCurrencySign() . number_format($refundAmount / 100, 2))
+            'description' => sprintf(__('Amount %s refunded successfully. Transaction ID: %s ', 'fluent-booking-pro'),
+                CurrenciesHelper::getGlobalCurrencySign() . number_format($refundAmount / 100, 2), $refundId)
         ];
 
         do_action('fluent_booking/log_booking_activity', $logData);
