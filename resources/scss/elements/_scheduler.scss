@@ -648,6 +648,16 @@
               background: #e8f5f1;
               color: #16896b;
             }
+            &.failed {
+                background: #fde2e2;
+                color: #f56c6c;
+            }
+            &.pending,
+            &.refunded,
+            &.partially-refunded {
+                background: #FDE8CD;
+                color: #F58E07;
+            }
           }
           .fcal_spot_payment_amount {
             margin: 0;

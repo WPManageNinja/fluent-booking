@@ -31,13 +31,13 @@ class GlobalPaymentHandler
 
     public function maybePushPaymentVars($eventVars, CalendarSlot $calendarEvent)
     {
-        $paymentSettings = $calendarEvent->getPaymentSettings();
-
         $eventVars['slot']['total_payment'] = '';
-
-        if (Arr::get($paymentSettings, 'enabled', 'no') != 'yes') {
+        
+        if (!$calendarEvent->isPaymentEnabled()) {
             return $eventVars;
         }
+        
+        $paymentSettings = $calendarEvent->getPaymentSettings();
 
         $driver = Arr::get($paymentSettings, 'driver');
 

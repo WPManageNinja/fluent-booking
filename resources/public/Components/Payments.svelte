@@ -3,7 +3,7 @@
     <div class="fcal_payment_items">
         {@html field?.payment_items?.template}
     </div>
-    {#if field.payment_methods.length > 1}
+    {#if field?.payment_methods?.length > 1}
         <div class="fcal_payment_methods">
             <div class="fcal_input_label">
                 {i18('Payment Method')}
@@ -19,6 +19,10 @@
                 {/each}
             </div>
         </div>
+    {:else if !field?.payment_methods}
+        <div class="fcal_validation_error">
+            <p>{i18('No_payment_method_description')}</p>
+        </div>
     {/if}
 </div>
 <script>
@@ -27,5 +31,5 @@
     export let field;
     export let form;
 
-    form[field.name] = form[field.name] || field.payment_methods[0];
+    form[field.name] = form[field.name] || (field?.payment_methods && field.payment_methods[0]);
 </script>
