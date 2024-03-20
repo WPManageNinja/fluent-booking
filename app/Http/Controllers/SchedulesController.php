@@ -304,7 +304,7 @@ class SchedulesController extends Controller
         }
 
         $order = null;
-        if ($booking->payment_method == 'stripe' && $booking->payment_order) {
+        if ($booking->payment_method && $booking->payment_order) {
             $order = $booking->payment_order;
             $order->load(['items', 'transaction']);
             $order->currency_sign = CurrenciesHelper::getCurrencySign($order->currency);
