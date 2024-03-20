@@ -596,21 +596,18 @@ class CalendarSlot extends Model
         return LocationService::getLocationIconHeadingHtml($default, $this);
     }
 
+    public function isPaymentEnabled()
+    {
+        return $this->type == 'paid' && Helper::isPaymentEnabled();
+    }
+
     public function getPricingTotal()
     {
-        if ($this->type != 'paid') {
-            return 0;
-        }
-
-        if (!Helper::isPaymentEnabled()) {
+        if (!$this->isPaymentEnabled()) {
             return 0;
         }
 
         $paymentSettings = $this->getMeta('payment_settings', []);
-
-        if (!$paymentSettings || Arr::get($paymentSettings, 'enabled') != 'yes') {
-            return 0;
-        }
 
         $items = Arr::get($paymentSettings, 'items', []);
         $total = 0;
@@ -851,8 +848,8 @@ class CalendarSlot extends Model
 
         $defaults = [
             'enabled'        => 'no',
-            'stripe_enabled' => 'yes',
-            'paypal_enabled' => 'yes',
+            'stripe_enabled' => 'no',
+            'paypal_enabled' => 'no',
             'driver'         => 'native',
             'items'          => [
                 [

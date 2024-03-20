@@ -500,6 +500,7 @@ class TransStrings
             'GeneralSettings/email_settings_description'                                       => __('Configure your email settings for booking related emails', 'fluent-booking-pro'),
             'Payment Settings'                                                                 => __('Payment Settings', 'fluent-booking-pro'),
             'GeneralSettings/payment_settings_description'                                     => __('Configure your global payment settings for booking related payments', 'fluent-booking-pro'),
+            'GeneralSettings/payment_tips_error'                                               => __('Payment Module has been disabled currently. No Payments will be processed and associated functions will be disabled', 'fluent-booking-pro'),
             'License Management'                                                               => __('License Management', 'fluent-booking-pro'),
             'Fetching License Information Please wait'                                         => __('Fetching License Information Please wait', 'fluent-booking-pro'),
             'Looks like your license has been expired'                                         => __('Looks like your license has been expired', 'fluent-booking-pro'),

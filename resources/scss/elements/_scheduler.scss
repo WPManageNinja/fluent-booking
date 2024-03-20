@@ -648,6 +648,10 @@
               background: #e8f5f1;
               color: #16896b;
             }
+            &.pending {
+                background: #FDE8CD;
+                color: #F58E07;
+              }
           }
           .fcal_spot_payment_amount {
             margin: 0;

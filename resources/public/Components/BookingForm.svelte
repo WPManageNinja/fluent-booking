@@ -240,18 +240,27 @@
     }
 
     function validateForm() {
-        hasError = false;
         errors = '';
+        hasError = false;
+        let paymentError = false;
         validating = !validating;
         formFields.forEach((field) => {
             field.error = null;
-            if (field.enabled && field.required && !form[field.name] && field.name != 'location') {
-                hasError = true;
-                field.error = i18('This field is required.');
+            if (field.enabled && field.required && !form[field.name]) {
+                if (field.name != 'location' && field.name != 'payment_method') {
+                    hasError = true;
+                    field.error = i18('This field is required.');
+                }
+                if (field.name == 'payment_method') {
+                    paymentError = true;
+                }
             }
         });
         if (hasError) {
             errors = i18('Please fill up the required data');
+        } else if (paymentError) {
+            hasError = true;
+            errors = i18('Please select a valid payment method');
         }
         return !hasError;
     };

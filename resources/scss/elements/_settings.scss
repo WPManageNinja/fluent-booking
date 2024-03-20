@@ -410,6 +410,31 @@
             }
         }
     }
+
+    .fcal_configure_integration_body {
+        .el-form {
+            .el-form-item {
+                .el-form-item__content {
+                    .el-input {
+                        .el-input__wrapper {
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+        }
+        .fcal_tips_error {
+            background-color: #fde2e2;
+            border-left: 5px solid #f56c6c;
+            border-radius: 4px;
+            margin: 20px 0;
+            padding: 8px 16px;
+            p {
+                margin: 0;
+                font-size: 15px;
+            }
+        }
+    }
 }
 .fcal_settings_general {
     .el-form {

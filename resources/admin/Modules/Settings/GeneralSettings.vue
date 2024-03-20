@@ -178,6 +178,9 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
+                        <div v-if="payments.is_active == 'no'" class="fcal_tips_error">
+                            <p> {{ $t('GeneralSettings/payment_tips_error') }} </p>
+                        </div>
                     </el-form>
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
                         <el-button :disabled="paymentSaving" v-loading="paymentSaving" @click="savePaymentSettings()"
