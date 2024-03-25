@@ -39,7 +39,7 @@ class TwilioController extends Controller
             $formattedNotifications[$key] = [
                 'title'   => sanitize_text_field(Arr::get($value, 'title')),
                 'enabled' => Arr::isTrue($value, 'enabled'),
-                'sms'     => $this->sanitize_notification_data(Arr::get($value, 'sms')),
+                'sms'     => $this->sanitizeNotificationData(Arr::get($value, 'sms')),
                 'is_host' => Arr::isTrue($value, 'is_host')
             ];
         }
@@ -51,15 +51,15 @@ class TwilioController extends Controller
         ];
     }
 
-    private function sanitize_notification_data($settings)
+    private function sanitizeNotificationData($settings)
     {
         $sanitizerMap = [
-            'value'                 => 'intval',
-            'unit'                  => 'sanitize_text_field',
-            'body'                  => 'fcal_sanitize_html',
-            'number'                => 'sanitize_text_field',
-            'reciever'              => 'sanitize_text_field',
-            'send_to'               => 'sanitize_text_field',
+            'value'    => 'intval',
+            'unit'     => 'sanitize_text_field',
+            'body'     => 'fcal_sanitize_html',
+            'number'   => 'sanitize_text_field',
+            'reciever' => 'sanitize_text_field',
+            'send_to'  => 'sanitize_text_field',
         ];
 
         return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);

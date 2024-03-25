@@ -144,6 +144,8 @@ class TimeSlotService
         $addedDates = [];
 
         foreach ($this->groupedSlots as $slot) {
+            $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone);
+
             $date = gmdate('Y-m-d', strtotime($slot['start']));
             if ($todayDate == $date && strtotime($slot['start']) < $cutOutTimeStamp) {
                 continue;
@@ -274,7 +276,6 @@ class TimeSlotService
         $books = [];
 
         foreach ($bookings as $booking) {
-
             $booked = $booking->count();
             $booking = $booking[0];
 
