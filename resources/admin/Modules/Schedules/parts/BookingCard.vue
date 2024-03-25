@@ -66,7 +66,7 @@ export default {
             const guestName = this.booking.first_name + ' ' + this.booking.last_name;
             if (eventType === 'group') {
                 const booked = this.booking.booked_count;
-                return booked + ' '+this.$t('guests with')+' '+ this.booking.author.name + this.$t('as group booking type');
+                return booked + ' ' + this.$t('guests with') + ' ' + this.booking.author.name + ' ' + this.$t('as group booking type');
             }
             if(this.showing_id) {
                 return guestName;
