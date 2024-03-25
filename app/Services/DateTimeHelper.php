@@ -240,12 +240,16 @@ class DateTimeHelper
         return $format;
     }
 
-    public static function getDayDifference($dateTime, $fromTimeZone, $toTimeZone)
+    public static function getDayDifference($dateTime, $fromTimeZone, $toTimeZone, $refDate = 'now')
     {
-        $currentDate = new \DateTime('now', new \DateTimeZone($fromTimeZone));
+        if ($refDate != 'now') {
+            $dateTime = gmdate('Y-m-d H:i', strtotime($refDate . ' ' . gmdate('H:i', strtotime($dateTime)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
+
+        $currentDate = new \DateTime($refDate, new \DateTimeZone($fromTimeZone));
 
         $originalDateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
-
+        
         $originalDateTime->setTimezone(new \DateTimeZone($toTimeZone));
 
         return $originalDateTime->format('z') - $currentDate->format('z');

@@ -212,7 +212,7 @@ class AvailabilityService
                     continue;
                 }
                 
-                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
+                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone, $dateWithoutDST);
                 $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
                 $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
 
@@ -326,7 +326,7 @@ class AvailabilityService
                     continue;
                 }
 
-                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone);
+                $dayDiff = DateTimeHelper::getDayDifference($slot['start'], $fromTimeZone, $toTimeZone, $dateWithoutDST);
                 $slot['start'] = DateTimeHelper::convertToTimeZone($slot['start'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
                 $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
 
