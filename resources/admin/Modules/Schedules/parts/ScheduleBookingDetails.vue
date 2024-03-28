@@ -4,13 +4,19 @@
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
                     {{ meetingDetails }} - {{ $t(ucFirst(showing_booking.status)) }}
-
                     <el-dropdown v-if="hasAccess('manage_all_bookings')" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
+                                <el-dropdown-item 
+                                    v-if="canMarkAsPaid" @click="updateScheduleStatus('scheduled')">
+                                    <el-icon>
+                                        <Check/>
+                                    </el-icon>
+                                    {{ $t('Mark As Paid') }}
+                                </el-dropdown-item>
                                 <el-dropdown-item 
                                     v-if="canMarkAsCompleted" @click="updateScheduleStatus('completed')">
                                     <el-icon>
@@ -275,7 +281,10 @@ export default {
             return this.showing_booking.status == 'cancelled';
         },
         canMarkAsCompleted() {
-            return !this.isBookingCompleted && !this.isBookingCancelled;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid;
+        },
+        canMarkAsPaid() {
+            return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid';
         },
         canReschedule() {
             return !this.isBookingCompleted && !this.isBookingCancelled;
