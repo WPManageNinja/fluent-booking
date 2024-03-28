@@ -93,8 +93,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         if (Arr::get($bookingData, 'source') != 'web') {
             return $bookingData;
         }
-
-        if ($calendarSlot->isPaymentEnabled()) {
+        
+        $duration = Arr::get($bookingData, 'slot_minutes');
+        if ($calendarSlot->isPaymentEnabled($duration)) {
             $bookingData['status'] = 'pending';
             $bookingData['payment_status'] = 'pending';
             $bookingData['payment_method'] = Arr::get($customData, 'payment_method', '');
@@ -106,7 +107,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     {
         $paymentMethod = Arr::get($bookingData, 'payment_method', 'stripe');
 
-        if ($calendarSlot->isPaymentEnabled() && $booking->source === 'web' && $paymentMethod) {
+        if ($calendarSlot->isPaymentEnabled($booking->slot_minutes) && $booking->source === 'web' && $paymentMethod) {
             (new OrderHelper())->processDraftOrder($booking, $calendarSlot); // make draft order
             do_action('fluent_booking/payment/pay_order_with_' . sanitize_text_field($paymentMethod), $booking, $calendarSlot);
         }
@@ -129,6 +130,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             $vars['payment_methods'] = $this->getMethodsTemplate(['templates' => '']);
             $vars['payment_items'] = Arr::get($paymentSettings, 'items');
             $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
+            if ($slot->isMultiDurationEnabled() && Arr::get($paymentSettings, 'multi_payment_enabled') === 'yes') {
+                $vars['multi_payment_items'] = Arr::get($paymentSettings, 'multi_payment_items');
+            }
         }
         return $vars;
     }

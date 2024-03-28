@@ -20,9 +20,8 @@ class OrderHelper
 
     public function processDraftOrder($booking, $calendarSlot = [])
     {
-        $paymentInfo = $calendarSlot->getMeta('payment_settings');
+        $items = $calendarSlot->getPaymentItems($booking->slot_minutes);
 
-        $items = Arr::get($paymentInfo, 'items');
         $total = $this->getTotal($items);
 
         $currency = CurrenciesHelper::getGlobalCurrency();

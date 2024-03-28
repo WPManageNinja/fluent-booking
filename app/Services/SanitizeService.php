@@ -56,7 +56,9 @@ class SanitizeService
 
         $isSkipped = false;
 
-        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+        $dstTimeZone = $fromTimeZone == 'UTC' ? $toTimeZone : $fromTimeZone;
+
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($dstTimeZone);
 
         foreach ($overrides as $date => $slots) {
             if (strtotime($date) < $todayTimeStamp) {
