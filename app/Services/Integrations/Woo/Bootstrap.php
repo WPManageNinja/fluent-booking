@@ -16,7 +16,9 @@ class Bootstrap
                 return $bookingData;
             }
 
-            $wooProductId = $this->getEventProductId($calendarSlot);
+            $duration = Arr::get($bookingData, 'slot_minutes');
+            
+            $wooProductId = $this->getEventProductId($calendarSlot, $duration);
 
             if (!$wooProductId) {
                 return $bookingData;
@@ -342,11 +344,22 @@ class Bootstrap
         return defined('WC_PLUGIN_FILE') && Helper::isModuleEnabled('woo');
     }
 
-    private function getEventProductId($calendarSlot)
+    private function getEventProductId($calendarEvent, $duration = null)
     {
-        $paymentSettings = $calendarSlot->getMeta('payment_settings');
+        $paymentSettings = $calendarEvent->getMeta('payment_settings');
 
-        if (!$paymentSettings || empty($paymentSettings['woo_product_id']) || Arr::get($paymentSettings, 'enabled') != 'yes' || Arr::get($paymentSettings, 'driver') != 'woo') {
+        if (!$paymentSettings || Arr::get($paymentSettings, 'enabled') != 'yes' || Arr::get($paymentSettings, 'driver') != 'woo') {
+            return null;
+        }
+
+        if ($calendarEvent->isMultiDurationEnabled() && Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
+            if ($productId = Arr::get($paymentSettings, 'multi_payment_woo_ids.'. $duration)) {
+                return (int)$productId;
+            }
+            return null;
+        }
+
+        if (empty($paymentSettings['woo_product_id'])) {
             return null;
         }
 

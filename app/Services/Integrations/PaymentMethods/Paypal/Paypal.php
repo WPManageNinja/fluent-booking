@@ -70,9 +70,7 @@ class Paypal extends BasePaymentMethod
 
     public function makePayment($orderItem, $calendarEvent)
     {
-        $paymentInfo = $calendarEvent->getMeta('payment_settings');
-        
-        $items = Arr::get($paymentInfo, 'items', []);
+        $items = $calendarEvent->getPaymentItems($orderItem->slot_minutes);
         
         if (!$items) {
             return;
@@ -90,10 +88,6 @@ class Paypal extends BasePaymentMethod
             'fs_id'            => $orderItem->id,
             'transaction_hash' => $orderItem->hash
         ];
-
-        if (!$paymentInfo) {
-            return;
-        }
 
         $paymentArgs = [
             'cmd'           => '_cart',

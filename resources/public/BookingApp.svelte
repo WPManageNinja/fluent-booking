@@ -4,7 +4,7 @@
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
     import Summary from "./Fluentform/Summary.svelte";
-    import {createEventDispatcher} from 'svelte';
+    import { createEventDispatcher } from 'svelte';
 
     window['fcal_translate'] = i18;
 
@@ -73,7 +73,6 @@
         }
         appReady = true;
         checkDevice();
-        console.log(appData)
     });
 
     window.onresize = function () {
@@ -90,10 +89,17 @@
 
     function durationSelected(value) {
         duration = value;
+        maybeUpdatePayment(value)
     }
 
     function formatHours(e) {
         slot.time_format = e;
+    }
+
+    function maybeUpdatePayment(duration) {
+        if (appData.multi_payment_items) {
+            slot.total_payment = appData.multi_payment_items[duration]?.value;
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
@@ -291,8 +297,14 @@
                                     {/if}
                                 {/if}
 
-                                {#if !isFluentform && slot.total_payment }
-                                    {@html slot.total_payment}
+                                {#if !isFluentform && slot.total_payment && slot.total_payment != 0 }
+                                    <div class="fcal_slot_payment_item">
+                                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
+                                            <path fill="currentColor" d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z"></path>
+                                            <path fill="currentColor" d="M768 192H128v448h640V192zm64-22.976v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H105.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096C65.536 682.432 64 677.248 64 663.04V169.024c0-14.272 1.472-19.456 4.288-24.64a29.056 29.056 0 0 1 12.096-12.16C85.568 129.536 90.752 128 104.96 128h685.952c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64z"></path>
+                                            <path fill="currentColor" d="M448 576a160 160 0 1 1 0-320 160 160 0 0 1 0 320zm0-64a96 96 0 1 0 0-192 96 96 0 0 0 0 192z"></path>
+                                        </svg> {@html slot.currency}{slot.total_payment}
+                                    </div>
                                 {/if}
                                 {#if selectedDateTime.start}
                                     <div class="slot_time_range fcal_icon_item">

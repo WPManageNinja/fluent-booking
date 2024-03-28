@@ -99,10 +99,10 @@ class DateTimeHelper
 
     public static function getDateWithoutDST($timezone)
     {
-        if (!self::isDaylightSavingActive('2024-01-01', $timezone)) {
-            return '2024-01-01';
+        if (!self::isDaylightSavingActive('2024-01-03', $timezone)) {
+            return '2024-01-03';
         }
-        return '2024-06-01';
+        return '2024-06-03';
     }
 
     public static function convertToIso($dateTime, $fromTimeZone = 'UTC')
