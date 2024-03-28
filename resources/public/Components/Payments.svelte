@@ -1,8 +1,17 @@
 <div class="fcal_payment_items_wrapper">
     <div class="fcal_payment_items_provider_script"></div>
-    <div class="fcal_payment_items">
-        {@html field?.payment_items?.template}
-    </div>
+    {#if multiPayments}
+        <div class="fcal_payment_items">
+            <p class="fcal_payment_item_single">{multiPayments[duration]?.title}
+                <span class="amount"> {@html field.currency_sign}{multiPayments[duration]?.value}</span>
+            </p>
+        </div>
+    {:else}
+        <div class="fcal_payment_items">
+            {@html field?.payment_items?.template}
+        </div>
+    {/if}
+
     {#if field?.payment_methods?.length > 1}
         <div class="fcal_payment_methods">
             <div class="fcal_input_label">
@@ -30,6 +39,9 @@
 
     export let field;
     export let form;
+    export let duration;
+
+    const multiPayments = field.multi_payment_items;
 
     form[field.name] = form[field.name] || (field?.payment_methods && field.payment_methods[0]);
 </script>

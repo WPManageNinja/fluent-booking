@@ -1,6 +1,7 @@
 <template>
     <el-select
         filterable
+        clearable
         remote
         v-model="selected"
         reserve-keyword
@@ -22,7 +23,7 @@
     </el-select>
 </template>
 
-<script type="text/babel">
+<script>
 export default {
     name: 'WooProductSelector',
     props: ['modelValue'],

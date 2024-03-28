@@ -42,18 +42,13 @@ class GlobalPaymentHandler
         $driver = Arr::get($paymentSettings, 'driver');
 
         if ($driver == 'native') {
-            $total = $calendarEvent->getPricingTotal();
-            $currency = CurrenciesHelper::getGlobalCurrencySign();
-            $eventVars['slot']['total_payment'] = $calendarEvent->defaultPaymentIcon($currency, $total);
-            return $eventVars;
+            $eventVars['slot']['currency'] = CurrenciesHelper::getGlobalCurrencySign();
+            $eventVars['slot']['total_payment'] = $calendarEvent->getPricingTotal();
         }
 
         if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {
-            $productId = Arr::get($paymentSettings, 'woo_product_id');
-            $product = wc_get_product($productId);
-            if ($product) {
-                $eventVars['slot']['total_payment'] = $calendarEvent->defaultPaymentIcon(get_woocommerce_currency_symbol(), $product->get_price());
-            }
+            $eventVars['slot']['currency'] = get_woocommerce_currency_symbol();
+            $eventVars['slot']['total_payment'] = $calendarEvent->getWooProductPrice();
         }
 
         return $eventVars;

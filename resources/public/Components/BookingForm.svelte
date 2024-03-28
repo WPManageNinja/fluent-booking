@@ -97,8 +97,8 @@
                                             <span class="clear_date_icon" on:keydown={(() => handleDateClear(field.name))} on:click={(() => handleDateClear(field.name))}>+</span>
                                         {/if}
                                     </span>
-                                {:else if field.type === 'payment' && appData?.slot?.type === 'paid'}
-                                    <Payments field={field} bind:form={form} />
+                                {:else if field.type === 'payment' && appData?.slot?.type === 'paid' && hasPaymentItem()}
+                                    <Payments field={field} bind:form={form} {duration}/>
                                 {:else if field.type === 'hidden'}
                                     <input type="hidden" bind:value={form[field.name]}/>
                                 {/if}
@@ -208,10 +208,17 @@
     }, 100)
 
     function hasPaymentItem() {
+        if (slot.total_payment == 0) {
+            return false;
+        }
         return !!(slot.total_payment);
     }
 
     let getSubTotal = (items) => {
+        if (appData.multi_payment_items) {
+            return parseFloat(slot.total_payment);
+        }
+
         let subtotal = 0;
         for (let item of items) {
             subtotal += parseFloat(item.value);
@@ -251,7 +258,7 @@
                     hasError = true;
                     field.error = i18('This field is required.');
                 }
-                if (field.name == 'payment_method') {
+                if (field.name == 'payment_method' && hasPaymentItem()) {
                     paymentError = true;
                 }
             }
@@ -335,7 +342,7 @@
     }
 
     function shouldRenderLabel(field) {
-        return !(field.type === 'checkbox' || (field.type === 'payment' && appData?.slot?.type === 'free'));
+        return !(field.type === 'checkbox' || (field.type === 'payment' && !hasPaymentItem()));
     }
 
     onMount(() => {

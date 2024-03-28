@@ -305,9 +305,14 @@ class CalendarSlot extends Model
         return $this->calendar->author_timezone;
     }
 
+    public function isMultiDurationEnabled()
+    {
+        return Arr::isTrue($this->settings, 'multi_duration.enabled');
+    }
+
     public function getDuration($duration = null)
     {
-        if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
+        if ($this->isMultiDurationEnabled()) {
             if (in_array($duration, Arr::get($this->settings, 'multi_duration.available_durations', []))) {
                 return $duration;
             } else {
@@ -320,7 +325,7 @@ class CalendarSlot extends Model
 
     public function getDefaultDuration()
     {
-        if (Arr::isTrue($this->settings, 'multi_duration.enabled')) {
+        if ($this->isMultiDurationEnabled()) {
             return Arr::get($this->settings, 'multi_duration.default_duration', '');
         }
         
@@ -596,9 +601,31 @@ class CalendarSlot extends Model
         return LocationService::getLocationIconHeadingHtml($default, $this);
     }
 
-    public function isPaymentEnabled()
+    public function isPaymentEnabled($duration = null)
     {
+        if ($this->isMultiDurationEnabled()) {
+            $paymentSettings = $this->getPaymentSettings();
+            if (Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
+                $duration = $duration ?? $this->getDefaultDuration();
+                if (!Arr::get($paymentSettings, 'multi_payment_items.'. $duration .'.value')) {
+                    return false;
+                }
+            }
+        }
+
         return $this->type == 'paid' && Helper::isPaymentEnabled();
+    }
+
+    public function getPaymentItems($duration = null)
+    {
+        $paymentSettings = $this->getPaymentSettings();
+
+        if ($this->isMultiDurationEnabled() && Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
+            $duration = $duration ?? $this->getDefaultDuration();
+            return [Arr::get($paymentSettings, 'multi_payment_items.'. $duration)];
+        }
+
+        return Arr::get($paymentSettings, 'items', []);
     }
 
     public function getPricingTotal()
@@ -607,16 +634,33 @@ class CalendarSlot extends Model
             return 0;
         }
 
-        $paymentSettings = $this->getMeta('payment_settings', []);
-
-        $items = Arr::get($paymentSettings, 'items', []);
         $total = 0;
-
+        $items = $this->getPaymentItems();
         foreach ($items as $item) {
             $total += (int)$item['value'];
         }
 
         return $total;
+    }
+
+    public function getWooProductPrice()
+    {
+        $paymentSettings = $this->getPaymentSettings();
+
+        $productId = $paymentSettings['woo_product_id'];
+
+        if (Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
+            $duration = $this->getDefaultDuration();
+            $productId = Arr::get($paymentSettings, 'multi_payment_woo_ids.' . $duration);
+        }
+
+        $price = 0;
+        $product = wc_get_product($productId);
+        if ($product) {
+            $price = $product->get_price();
+        }
+        
+        return $price;
     }
 
     public function getRedirectUrlWithQuery($booking)
@@ -829,11 +873,9 @@ class CalendarSlot extends Model
 
         $hostBookings = [];
         foreach ($hostIds as $hostId) {
-            $hostBookings[$hostId] = Booking::getHostTotalBooking(
-                $this->id,
-                [$hostId],
-                [gmdate('Y-m-d 00:00:00',strtotime($startDate)), gmdate('Y-m-d 23:59:59',strtotime($startDate))]
-            );
+            $dayStart = gmdate('Y-m-d 00:00:00',strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dayEnd   = gmdate('Y-m-d 23:59:59',strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $hostBookings[$hostId] = Booking::getHostTotalBooking($this->id, [$hostId], [$dayStart, $dayEnd]);
         }
         usort($hostIds, function ($a, $b) use ($hostBookings) {
             return $hostBookings[$a] - $hostBookings[$b];
@@ -846,18 +888,30 @@ class CalendarSlot extends Model
     {
         $settings = $this->getMeta('payment_settings', []);
 
+        $duration = $this->getDefaultDuration();
+
         $defaults = [
-            'enabled'        => 'no',
-            'stripe_enabled' => 'no',
-            'paypal_enabled' => 'no',
-            'driver'         => 'native',
-            'items'          => [
+            'enabled'               => 'no',
+            'multi_payment_enabled' => 'no',
+            'stripe_enabled'        => 'no',
+            'paypal_enabled'        => 'no',
+            'driver'                => 'native',
+            'items'                 => [
                 [
                     'title' => __('Booking Fee', 'fluent-booking-pro'),
-                    'value' => 100,
+                    'value' => 100
                 ]
             ],
-            'woo_product_id' => ''
+            'woo_product_id'        => '',
+            'multi_payment_items'   => [
+                $duration => [
+                    'title' => __('Booking Fee', 'fluent-booking-pro'),
+                    'value' => 0
+                ]
+            ],
+            'multi_payment_woo_ids' => [
+                $duration => ''
+            ]
         ];
 
         if (!$settings) {

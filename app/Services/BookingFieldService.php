@@ -185,12 +185,13 @@ class BookingFieldService
         if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
             $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
 
-            $isEnables = Arr::get($paymentSettings, 'enabled') === 'yes';
+            $isEnabled = Arr::get($paymentSettings, 'enabled') === 'yes';
             $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
             $paymentItems = \FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
-            if ($isEnables) {
-                $stripeEnabled = Arr::get($paymentSettings, 'stripe_enabled') === 'yes' && Helper::isPaymentConfigured('stripe');
-                $paypalEnabled = Arr::get($paymentSettings, 'paypal_enabled') === 'yes' && Helper::isPaymentConfigured('paypal');
+            if ($isEnabled) {
+                $stripeEnabled  = Arr::get($paymentSettings, 'stripe_enabled') === 'yes' && Helper::isPaymentConfigured('stripe');
+                $paypalEnabled  = Arr::get($paymentSettings, 'paypal_enabled') === 'yes' && Helper::isPaymentConfigured('paypal');
+                $isMultiEnabled = Arr::get($paymentSettings, 'multi_payment_enabled') === 'yes';
 
                 $exist = Arr::get($existingFields, 'payment_method', []);
                 if (!$exist) {
@@ -216,6 +217,9 @@ class BookingFieldService
                 }
                 if ($paypalEnabled) {
                     $exist['payment_methods'][] = 'paypal';
+                }
+                if ($calendarSlot->isMultiDurationEnabled() && $isMultiEnabled) {
+                    $exist['multi_payment_items'] = Arr::get($paymentSettings, 'multi_payment_items');
                 }
                 $existingFields['payment_method'] = $exist;
             } else {

@@ -188,7 +188,9 @@ class AvailabilityService
 
         $weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
-        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+        $dstTimeZone = $fromTimeZone == 'UTC' ? $toTimeZone : $fromTimeZone;
+
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($dstTimeZone);
 
         foreach ($schedules as $day => &$schedule) {
             $schedule['enabled'] = Arr::isTrue($schedule, 'enabled');
@@ -308,7 +310,9 @@ class AvailabilityService
             return $overrides;
         }
 
-        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($fromTimeZone);
+        $dstTimeZone = $fromTimeZone == 'UTC' ? $toTimeZone : $fromTimeZone;
+
+        $dateWithoutDST = DateTimeHelper::getDateWithoutDST($dstTimeZone);
 
         $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 

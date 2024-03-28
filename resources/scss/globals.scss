@@ -2754,6 +2754,12 @@
                             }
                         }
                     }
+                    .fcal_group_checkbox {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 8px;
+                    }
                 }
             }
         }
@@ -2876,10 +2882,62 @@
                             align-items: flex-start;
                         }
                     }
+                    &.fcal_payment_label {
+                        .el-form-item__label {
+                            margin-bottom: 1rem;
+                        }
+                    }
                     .el-radio-group {
                         gap: 10px 25px;
                         .el-radio {
                             margin: 0;
+                        }
+                    }
+                    .fcal_multi_payments {
+                        width: 100%;
+                        display: block;
+                        border: 1px solid #d1d5db;
+                        border-radius: 6px;
+                        .el-row {
+                            flex-wrap: nowrap;
+                            padding: 0.8rem 1rem;
+                            border-bottom: 1px solid #d1d5db;
+                            p {
+                                font-size: 14px;
+                            }
+                            .el-input {
+                                width: 80%;
+                                height: 80%;
+                            }
+                            .el-col {
+                                display: flex;
+                                align-items: center;
+                            }
+                            &.fcal_woo_row .el-input {
+                                width: 100%;
+                            }
+                            &:last-child {
+                                border-bottom: 0px;
+                            }
+                            &.fcal_multi_payments_header {
+                                padding: 0 1rem;
+                                background-color: #FAFAFA;
+                                border-top-left-radius: 8px;
+                                border-top-right-radius: 8px;
+                                p {
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    line-height: 20px;
+                                }
+                            }
+                        }
+                        .fcal_payment_item {
+                            display: flex;
+                            gap: 8px;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 0.5rem 1rem;
+                            border-bottom: 1px solid #d1d5db;
                         }
                     }
                 }
