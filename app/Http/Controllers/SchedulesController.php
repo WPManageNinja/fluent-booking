@@ -7,8 +7,6 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\Meta;
-use FluentBooking\App\Models\Order;
-use FluentBooking\App\Models\Transactions;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
@@ -163,6 +161,22 @@ class SchedulesController extends Controller
             $value = sanitize_text_field($value);
             if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'no_show'])) {
                 return $this->sendError(['message' => __('Invalid status', 'fluent-booking-pro')]);
+            }
+
+            if ($value == 'scheduled') {
+                if ($booking->payment_method && $booking->payment_order) {
+                    $order = $booking->payment_order;
+                    $order->total_paid = $order->total_amount;
+                    $order->completed_at = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $order->status = 'paid';
+                    $order->save();
+
+                    $updateData['payment_status'] = 'paid';
+
+                    do_action('fluent_booking/log_booking_activity', $this->getPaymentLog($booking->id));
+
+                    do_action('fluent_booking/payment/update_payment_status_paid', $booking);
+                }
             }
 
             if ($value == 'cancelled') {
@@ -346,6 +360,17 @@ class SchedulesController extends Controller
         $booking->slot = $booking->calendar_event;
 
         return $booking;
+    }
+
+    private function getPaymentLog($bookingId)
+    {
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Payment Successfully Completed', 'fluent-booking-pro'),
+            'description' => __('Payment marked as paid by admin', 'fluent-booking-pro')
+        ];
     }
 
 }
