@@ -95,10 +95,10 @@ class PaymentMethodController extends Controller
 
     public function getCalendarEventSettings($id, $event_id)
     {
-        $calendarSlot = CalendarSlot::findOrFail($event_id);
+        $calendarEvent = CalendarSlot::findOrFail($event_id);
 
         $data = [
-            'settings' => $calendarSlot->getPaymentSettings(),
+            'settings' => $calendarEvent->getPaymentSettings(),
             'config'   => [
                 'native_enabled'     => Helper::isPaymentEnabled(),
                 'stripe_configured'  => Helper::isPaymentConfigured('stripe'),
@@ -158,18 +158,21 @@ class PaymentMethodController extends Controller
             }
 
             if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {
-                $productId = Arr::get($data, 'woo_product_id');
-                if (!$productId) {
-                    return $this->sendError([
-                        'message' => __('Please select a product', 'fluent-booking-pro')
-                    ], 422);
-                }
-
-                $product = wc_get_product($productId);
-                if (!$product || !$product->get_id()) {
-                    return $this->sendError([
-                        'message' => __('Product not found. Please select a product', 'fluent-booking-pro')
-                    ], 422);
+                $isMultiEnabled = Arr::get($data, 'multi_payment_enabled', 'no') === 'yes';
+                if (!$isMultiEnabled) {
+                    $productId = Arr::get($data, 'woo_product_id');
+                    if (!$productId) {
+                        return $this->sendError([
+                            'message' => __('Please select a product', 'fluent-booking-pro')
+                        ], 422);
+                    }
+    
+                    $product = wc_get_product($productId);
+                    if (!$product || !$product->get_id()) {
+                        return $this->sendError([
+                            'message' => __('Product not found. Please select a product', 'fluent-booking-pro')
+                        ], 422);
+                    }
                 }
 
                 $eventType = 'woo';

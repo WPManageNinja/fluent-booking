@@ -546,7 +546,9 @@ class FrontEndHandler
             }
         }
 
-        if ($calendarSlot->isPaymentEnabled()) {
+        $duration  = (int)$calendarSlot->getDuration(Arr::get($postedData, 'duration', null));
+
+        if ($calendarSlot->isPaymentEnabled($duration)) {
             $rules['payment_method'] = 'required';
             $messages['payment_method.required'] = __('Please select a valid payment method', 'fluent-booking-pro');
         }
@@ -593,7 +595,6 @@ class FrontEndHandler
 
         $startDate = sanitize_text_field(Arr::get($postedData, 'start_date'));
         $timezone  = sanitize_text_field(Arr::get($postedData, 'timezone', 'UTC'));
-        $duration  = (int)$calendarSlot->getDuration(Arr::get($postedData, 'duration', null));
 
         $startDateTime = DateTimeHelper::convertToUtc($startDate, $timezone);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date

@@ -98,14 +98,13 @@ class Stripe extends BasePaymentMethod
         $apiKey = $stripeSettings->getApiKey();
         $publicKey = $stripeSettings->getPublicKey();
         $stripeSetting = $this->getSettings();
-        $paymentInfo = $calendarSlot->getMeta('payment_settings');
         $currency = CurrenciesHelper::getGlobalCurrency();
 
-        if (empty($paymentInfo)) {
+        $items = $calendarSlot->getPaymentItems($orderItem->slot_minutes);
+        if (!$items) {
             return;
         }
 
-        $items = Arr::get($paymentInfo, 'items');
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
         $paymentArgs = array(
