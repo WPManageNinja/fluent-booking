@@ -837,6 +837,12 @@
                         }
                     }
                 }
+                .el-checkbox {
+                    &.fcal_refund_checkbox {
+                        display: flex;
+                        margin-top: 8px;
+                    }
+                }
             }
             .el-dialog__footer {
                 padding-bottom: 0;
