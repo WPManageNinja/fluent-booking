@@ -227,7 +227,6 @@ class Stripe extends BasePaymentMethod
                 'message' => $e->getMessage()
             ], 422);
         }
-
     }
 
     public function getPayableAmount($items, $currency)

@@ -436,6 +436,7 @@ class TransStrings
             'Payment Status'                                                                   => __('Payment Status', 'fluent-booking-pro'),
             'Transaction ID'                                                                   => __('Transaction ID', 'fluent-booking-pro'),
             'Mark As Completed'                                                                => __('Mark As Completed', 'fluent-booking-pro'),
+            'Mark As Paid'                                                                     => __('Mark As Paid', 'fluent-booking-pro'),
             'Meeting Information'                                                              => __('Meeting Information', 'fluent-booking-pro'),
             'Meeting Host'                                                                     => __('Meeting Host', 'fluent-booking-pro'),
             'Meeting Title'                                                                    => __('Meeting Title', 'fluent-booking-pro'),
