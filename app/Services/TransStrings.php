@@ -436,6 +436,7 @@ class TransStrings
             'Payment Status'                                                                   => __('Payment Status', 'fluent-booking-pro'),
             'Transaction ID'                                                                   => __('Transaction ID', 'fluent-booking-pro'),
             'Mark As Completed'                                                                => __('Mark As Completed', 'fluent-booking-pro'),
+            'Mark As Paid'                                                                     => __('Mark As Paid', 'fluent-booking-pro'),
             'Meeting Information'                                                              => __('Meeting Information', 'fluent-booking-pro'),
             'Meeting Host'                                                                     => __('Meeting Host', 'fluent-booking-pro'),
             'Meeting Title'                                                                    => __('Meeting Title', 'fluent-booking-pro'),
@@ -732,6 +733,7 @@ class TransStrings
             'Choose a common schedule'                                                         => __('Choose a common schedule', 'fluent-booking-pro'),
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
+            'Refund payment from stripe'                                                       => __('Refund payment from stripe', 'fluent-booking-pro'),
             'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.')
         );

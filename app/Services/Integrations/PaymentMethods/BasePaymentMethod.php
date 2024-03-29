@@ -53,6 +53,8 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     abstract public function makePayment($orderItem, $calendarSlot);
 
+    abstract public function refundPayment($orderItem, $calendarSlot);
+
     public function resolveOrderHash($orderItem)
     {
         return $orderItem->hash;
@@ -74,6 +76,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         add_action('fluent_booking/payment/payment_settings_update_' . $this->slug, [$this, 'update'], 10, 1);
         add_filter('fluent_booking/payment/payment_method_settings_routes', [$this, 'setRoutes']);
         add_action('fluent_booking/payment/pay_order_with_' . $this->slug, [$this, 'makePayment'], 10, 2);
+        add_action('fluent_booking/refund_payment_' . $this->slug, [$this, 'refundPayment'], 10, 2);
         add_action('fluent_booking/payment/ipn_endpoint_' . $this->webHookPaymentMethodName(), [$this, 'onPaymentEventTriggered']);
         add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
 
