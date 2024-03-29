@@ -57,20 +57,22 @@
                                                         <p>{{ $t('Amount') }}</p>
                                                     </el-col>
                                                 </el-row>
-                                                <el-row v-if="!loading" v-for="(item, index) in paymentSettings.multi_payment_items" :key="index">
-                                                    <el-col :span="6">
-                                                        <p>{{ getDuration(index) }}</p>
-                                                    </el-col>
-                                                    <el-col :span="12">
-                                                        <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
-                                                    </el-col>
-                                                    <el-col :span="6">
-                                                        <el-input class="fcal_group_input" min="0" type="number"
-                                                            v-model="item.value">
-                                                            <template #prepend>{{ appVars.currency_sign }}</template>
-                                                        </el-input>
-                                                    </el-col>
-                                                </el-row>
+                                                <template v-if="!loading" v-for="(item, index) in paymentSettings.multi_payment_items" :key="index">
+                                                    <el-row v-if="isDurationAvailable(index)">
+                                                        <el-col :span="6">
+                                                            <p>{{ getDuration(index) }}</p>
+                                                        </el-col>
+                                                        <el-col :span="12">
+                                                            <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
+                                                        </el-col>
+                                                        <el-col :span="6">
+                                                            <el-input class="fcal_group_input" min="0" type="number"
+                                                                v-model="item.value">
+                                                                <template #prepend>{{ appVars.currency_sign }}</template>
+                                                            </el-input>
+                                                        </el-col>
+                                                    </el-row>
+                                                </template>
                                             </div>
                                             <div v-else>
                                                 <el-row style="margin-bottom: 20px;" :gutter="20"
@@ -132,14 +134,16 @@
                                             <p>{{ $t('Product') }}</p>
                                         </el-col>
                                     </el-row>
-                                    <el-row v-if="!loading" v-for="(item, index) in paymentSettings.multi_payment_woo_ids" :key="index" class="fcal_woo_row">
-                                        <el-col :span="6">
-                                            <p>{{ getDuration(index) }}</p>
-                                        </el-col>
-                                        <el-col :span="16">
-                                            <woo-product-selector v-model="paymentSettings.multi_payment_woo_ids[index]"/>
-                                        </el-col>
-                                    </el-row>
+                                    <template v-if="!loading" v-for="(item, index) in paymentSettings.multi_payment_woo_ids" :key="index">
+                                        <el-row v-if="isDurationAvailable(index)" class="fcal_woo_row">
+                                            <el-col :span="6">
+                                                <p>{{ getDuration(index) }}</p>
+                                            </el-col>
+                                            <el-col :span="16">
+                                                <woo-product-selector v-model="paymentSettings.multi_payment_woo_ids[index]"/>
+                                            </el-col>
+                                        </el-row>
+                                    </template>
                                 </div>
                                 <woo-product-selector v-else v-model="paymentSettings.woo_product_id"/>
                                 <p>{{ $t('PaymentSettings/woo_payment_description') }}</p>
@@ -241,6 +245,9 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        isDurationAvailable(duration) {
+            return this.multiDuration.available_durations.includes(duration);
         },
         getDuration(duration) {
             return duration + ' ' + this.$t('Minutes');
