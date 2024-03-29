@@ -71,7 +71,6 @@ class Paypal extends BasePaymentMethod
     public function makePayment($orderItem, $calendarEvent)
     {
         $items = $calendarEvent->getPaymentItems($orderItem->slot_minutes);
-        
         if (!$items) {
             return;
         }
@@ -122,6 +121,11 @@ class Paypal extends BasePaymentMethod
             'status'      => 'success',
             'message'     => __('Order has been placed successfully', 'fluent-booking-pro'),
         ], 200);
+    }
+
+    public function refundPayment($orderItem, $calendarSlot)
+    {
+        return;
     }
 
     private function getCartSummery($items)

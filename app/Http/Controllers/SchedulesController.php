@@ -124,6 +124,7 @@ class SchedulesController extends Controller
         $oldSBooking = clone $booking;
 
         $data = $request->all();
+        
         $this->validate($data, [
             'column' => 'required',
         ]);
@@ -182,6 +183,11 @@ class SchedulesController extends Controller
             if ($value == 'cancelled') {
                 $cancelReason = $data['cancel_reason'];
                 $booking->cancelMeeting($cancelReason, 'host', get_current_user_id());
+
+                if ($booking->payment_method && Arr::get($data, 'refund_payment') == 'yes') {
+                    do_action('fluent_booking/refund_payment_' . $booking->payment_method, $booking, $booking->calendar_event);
+                }
+
                 return [
                     'message' => __('The booking has been cancelled', 'fluent-booking-pro')
                 ];
