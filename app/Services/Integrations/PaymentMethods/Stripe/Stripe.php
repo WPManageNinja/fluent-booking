@@ -8,6 +8,8 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\API;
 use FluentBooking\App\Services\Integrations\PaymentMethods\Stripe\API\ApiRequest;
 use FluentBooking\App\Services\OrderHelper;
+use FluentBooking\App\Models\Transactions;
+use FluentBooking\App\Models\Order;
 use FluentBooking\Framework\Support\Arr;
 
 class Stripe extends BasePaymentMethod
@@ -156,13 +158,18 @@ class Stripe extends BasePaymentMethod
         $last_4 = Arr::get($response, 'charges.data.0.payment_method_details.card.last4', '');
         $brand = Arr::get($response, 'charges.data.0.payment_method_details.card.brand', '');
 
+        $metaData = [
+            'charge_id' => Arr::get($response, 'charges.data.0.id', '')
+        ];
+
         $updateData = [
             'status'           => sanitize_text_field($status),
             'vendor_charge_id' => sanitize_text_field($intentId),
             'payment_mode'     => Arr::get($response, 'livemode') ? 'live' : 'test',
             'card_last_4'      => sanitize_text_field($last_4),
             'card_brand'       => sanitize_text_field($brand),
-            'total_paid'       => $amount
+            'total_paid'       => $amount,
+            'meta'             => json_encode($metaData)
         ];
 
         $this->updateOrderData($orderHash, $updateData);
@@ -227,7 +234,40 @@ class Stripe extends BasePaymentMethod
                 'message' => $e->getMessage()
             ], 422);
         }
+    }
 
+    public function refundPayment($orderItem, $calendarSlot)
+    {
+        if ($orderItem->payment_status == 'refunded') {
+            return;
+        }
+
+        $order = Order::where('parent_id', $orderItem->id)->first();
+        if (!$order) {
+            return;
+        }
+
+        $transaction = Transactions::where('object_id', $order->id)->where('uuid', $order->uuid)->first();
+        if (!$transaction) {
+            return;
+        }
+
+        $transactionMeta = json_decode($transaction->meta, true);
+
+        $refundData = [
+            'charge' => Arr::get($transactionMeta, 'charge_id'),
+            'amount' => intval($transaction->total)
+        ];
+
+        $apiKey = (new StripeSettings())->getApiKey();
+
+        $response = (new API())->makeRequest('refunds', $refundData, $apiKey, 'POST');
+        
+        if (!$response || is_wp_error($response)) {
+            return;
+        }
+
+        $this->updateRefundData($refundData['amount'], $order, $transaction, $orderItem, 'stripe', $refundData['charge'], 'Refund From Stripe');
     }
 
     public function getPayableAmount($items, $currency)

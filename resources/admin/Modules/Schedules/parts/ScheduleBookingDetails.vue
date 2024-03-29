@@ -66,7 +66,6 @@
                             {{ $t('Meeting Information') }}
                         </h1>
                     </div>
-
                     <div class="fcal_schedule_details_event">
                         <div class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Meeting Host') }}</h3>
@@ -159,23 +158,23 @@
                     }}</b></p>
                 <p class="fcal_meeting_time">{{ meetingTime }}</p>
                 <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
-                <el-input type="textarea" v-model="cancel_reason"
-                          :placeholder="$t('Reason for cancellation')"></el-input>
+                <el-input type="textarea" v-model="cancel_reason" :placeholder="$t('Reason for cancellation')"></el-input>
+                <el-checkbox v-if="isRefundable" true-label="yes" false-label="no" class="fcal_refund_checkbox" v-model="refund_payment">
+                    {{ $t('Refund payment from stripe') }}
+                </el-checkbox>
             </div>
             <template #footer>
               <span class="dialog-footer">
                 <el-button
                     @click="cancelDialog = false"
-                    class="fcal_plain_btn"
-                >
+                    class="fcal_plain_btn">
                     {{ $t("No, Don't cancel") }}
                 </el-button>
                 <el-button
                     v-loading="updating"
                     :disabled="updating"
                     class="fcal_primary_btn"
-                    @click="cancelEvent()"
-                >
+                    @click="cancelEvent()">
                     {{ $t('Yes, Cancel') }}
                 </el-button>
               </span>
@@ -252,7 +251,7 @@ export default {
             cancelDialog: false,
             deleteDialog: false,
             cancel_reason: '',
-
+            refund_payment: 'no',
             loading_sidebar: false,
             activities: [],
             sidebar_contents: [],
@@ -297,6 +296,9 @@ export default {
         },
         isGroupEvent() {
             return this.showing_booking.event_type == 'group';
+        },
+        isRefundable() {
+            return this.showing_booking.payment_method == 'stripe' && this.showing_booking.payment_status != 'refunded';
         },
         meetingDetails() {
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
@@ -358,6 +360,7 @@ export default {
             };
             if (new_status == 'cancelled') {
                 data.cancel_reason = this.cancel_reason;
+                data.refund_payment = this.refund_payment;
             }
 
             this.$put(`schedules/${this.showing_booking.id}`, data)
