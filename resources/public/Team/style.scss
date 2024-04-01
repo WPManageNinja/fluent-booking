@@ -1,8 +1,9 @@
 @import "calendar";
-.fcal_teams {
+.fcal_teams,
+.fcal_calendar_wrapper {
   display: block;
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--fcal_cal_bg);
   * {
     box-sizing: border-box;
   }
@@ -122,7 +123,8 @@
     flex: none;
     transition: .4s;
 
-    .fcal_calendar_wrap {
+    .fcal_calendar_wrap,
+    .fcal_calendar_wrap_block {
       display: flex;
       flex-wrap: nowrap;
       overflow: hidden;
