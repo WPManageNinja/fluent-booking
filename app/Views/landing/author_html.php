@@ -1,4 +1,4 @@
-<div class="fcal_calendar_wrap">
+<div class="fcal_calendar_wrap<?php echo esc_attr(isset($block) ? '_block' : ''); ?>">
     <div class="fluent_booking_wrap">
         <div class="fcal_author_header">
             <img src="<?php echo esc_url($author['avatar']); ?>"/>
