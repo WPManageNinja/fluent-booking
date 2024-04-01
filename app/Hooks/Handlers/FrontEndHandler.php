@@ -308,6 +308,49 @@ class FrontEndHandler
         ]);
     }
 
+    public function renderCalendarBlock($calendar, $headerConfig = [])
+    {
+        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
+        wp_enqueue_script('fluent-booking-calendar', App::getInstance('url.assets') . 'public/js/calendar_app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+        $calendarHtml = (string)(string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
+            'author'   => $calendar->getAuthorProfile(),
+            'calendar' => $calendar,
+            'events'   => $calendar->activeEvents,
+            'block'    => true
+        ]);
+
+        $eventCount = count($calendar->activeEvents);
+
+        $vars['fcal_host_calendar' ] = [
+            'calendar_html'   => $calendarHtml,
+            'event_count'     => $eventCount,
+            'target_event_id' => ($eventCount == 1) ? $calendar->activeEvents[0]->id : 0
+        ];
+
+
+        foreach ($calendar->activeEvents as $event) {
+            $itemVars = $this->getCalendarEventVars($event->calendar, $event);
+            $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
+            if ($extraJs) {
+                $itemVars['lazy_js_files'] = $extraJs;
+            }
+            wp_localize_script('fluent-booking-calendar', 'fcal_public_vars_' . $event->calendar_id . '_' . $event->id, $itemVars);
+        }
+
+        wp_localize_script('fluent-booking-calendar', $wrapperId, $vars);
+
+        $assetUrl = App::getInstance('url.assets');
+        wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+        $this->loadGlobalVars();
+
+        return App::make('view')->make('public.calendar_page', [
+            'calendar'      => $calendar,
+            'wrapper_id'    => $wrapperId,
+            'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
+        ]);
+    }
+
     public function handleReceiptShortcode($atts, $content)
     {
         if (!isset($_REQUEST['hash'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended

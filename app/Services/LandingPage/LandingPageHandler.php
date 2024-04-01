@@ -174,7 +174,8 @@ class LandingPageHandler
             ],
             'js_vars'     => $jsVars,
             'header_js_files' => [
-                'fluent_booking_team_app-js' => $assetUrl. 'public/js/team_app.js'
+                'fluent_booking_team_app-js' => $assetUrl. 'public/js/team_app.js',
+                'fluent_booking_calendar_app-js' => $assetUrl. 'public/js/calendar_app.js'
             ]
         ];
 

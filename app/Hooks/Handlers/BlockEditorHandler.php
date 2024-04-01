@@ -23,9 +23,11 @@ class BlockEditorHandler
                 FLUENT_BOOKING_ASSETS_VERSION,
                 true
             );
+
             wp_localize_script('fluent-booking/calendar', 'fluentCalendarGutenbergVars', [
                 'ajaxurl'        => admin_url('admin-ajax.php'),
             ]);
+
             wp_enqueue_script(
                 'fluent-booking/team-management',
                 $assets . 'admin/fluent-booking-team-management-index.js',
@@ -34,10 +36,17 @@ class BlockEditorHandler
                 true
             );
 
+            wp_enqueue_script(
+                'fluent-booking/calendar-management',
+                $assets . 'admin/fluent-booking-calendar-management-index.js',
+                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element'),
+                FLUENT_BOOKING_ASSETS_VERSION,
+                true
+            );
+
             $calendars = Calendar::with(['events' => function ($query) {
                 $query->where('status', 'active');
-            }])
-                ->get();
+            }])->get();
 
             $formattedCalendars = [];
 
@@ -52,7 +61,10 @@ class BlockEditorHandler
                 foreach ($calendar->events as $event) {
                     $formattedEvents[] = [
                         'id'    => (string)$event->id,
-                        'title' => $event->title
+                        'title' => $event->title,
+                        'duration' => (array)$event->duration,
+                        'desctiption' => $event->description,
+                        'color_schema' => $event->color_schema
                     ];
                 }
 
@@ -73,7 +85,7 @@ class BlockEditorHandler
 
         register_block_type('fluent-booking/calendar', array(
             'editor_script'   => 'fluent-booking/calendar',
-            'render_callback' => array($this, 'fcal_render_block'),
+            'render_callback' => array($this, 'fcalRenderBlock'),
             'attributes'      => [
                 'slotId'         => [
                     'type'    => 'string',
@@ -112,7 +124,7 @@ class BlockEditorHandler
 
         register_block_type('fluent-booking/team-management', array(
             'editor_script'   => 'fluent-booking/team-management',
-            'render_callback' => array($this, 'fcal_render_team_management_block'),
+            'render_callback' => array($this, 'fcalRenderTeamManagementBlock'),
             'attributes'      => array(
                 'title'       => array(
                     'type'    => 'string',
@@ -132,9 +144,24 @@ class BlockEditorHandler
                 )
             )
         ));
+
+        register_block_type('fluent-booking/calendar-management', array(
+            'editor_script'   => 'fluent-booking/calendar-management',
+            'render_callback' => array($this, 'fcalRenderCalendarManagementBlock'),
+            'attributes'      => array(
+                'calendarId'  => array(
+                    'type'    => 'string',
+                    'default' => ''
+                ),
+                'eventIds'  => array(
+                    'type'    => 'array',
+                    'default' => []
+                )
+            )
+        ));
     }
 
-    public function fcal_render_team_management_block($attributes)
+    public function fcalRenderTeamManagementBlock($attributes)
     {
         $hosts = Arr::get($attributes, 'calendarHosts', []);
 
@@ -186,7 +213,48 @@ class BlockEditorHandler
         ]);
     }
 
-    public function fcal_render_block($attributes)
+    public function fcalRenderCalendarManagementBlock($attributes)
+    {
+        $calendarId = Arr::get($attributes, 'calendarId', []);
+
+        $eventIds = Arr::get($attributes, 'eventIds', []);
+
+        $wrapperClassName = Arr::get($attributes, 'className');
+
+        if (!$calendarId || !$eventIds) {
+            return '';
+        }
+
+        $calendar = Calendar::find($calendarId);
+        if (!$calendar) {
+            return '';
+        }
+
+        $isAll = in_array('all', $eventIds);
+
+        if ($isAll) {
+            $events = CalendarSlot::where('calendar_id', $calendar->id)
+                ->where('status', 'active')
+                ->get();
+        } else {
+            $events = CalendarSlot::where('calendar_id', $calendar->id)
+                ->whereIn('id', $eventIds)
+                ->where('status', 'active')
+                ->get();
+        }
+
+        if ($events->isEmpty()) {
+            return '';
+        }
+
+        $calendar->activeEvents = $events;
+
+        return (new FrontEndHandler())->renderCalendarBlock($calendar, [
+            'wrapper_class' => $wrapperClassName
+        ]);
+    }
+
+    public function fcalRenderBlock($attributes)
     {
         $output = '<style>
             :root {
