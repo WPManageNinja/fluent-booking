@@ -26,11 +26,12 @@ function handleEventBlockClick(link) {
         app.$destroy();
         elemItem.remove();
         bookingWrap.style.height = 'auto';
-        bookingWrap.style.marginLeft = 'auto';
 
         const parentTeam = elem.closest('.fcal_calendar_wrapper');
-        if (!parentTeam) {
+        if (parentTeam) {
             bookingWrap.style.marginLeft = '0';
+        } else {
+            bookingWrap.style.marginLeft = 'auto';
         }
 
         if (window.history.pushState && window.fcal_landing_page) {
@@ -70,7 +71,7 @@ if (teamVars) {
     const calendarVars = teamVars['fcal_host_calendar'];
     
     let teamViewHtml = document.createElement('div');
-    
+
     teamViewHtml.className = 'fluent_booking_team_view';
     
     teamViewHtml.innerHTML = calendarVars.calendar_html;

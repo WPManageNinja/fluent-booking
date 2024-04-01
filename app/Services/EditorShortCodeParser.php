@@ -67,12 +67,20 @@ class EditorShortCodeParser
             return $booking->getAdditionalGuests(true);
         }
 
-        if ('full_start_end_guest_timezone' == $key) {
+        if ($key == 'full_start_end_guest_timezone') {
             return $booking->getShortBookingDateTime($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
         }
 
         if ($key == 'full_start_end_host_timezone') {
             return $booking->getShortBookingDateTime($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
+        }
+
+        if ($key == 'full_start_and_end_guest_timezone') {
+            return $booking->getFullBookingDateTimeText($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
+        }
+
+        if ($key == 'full_start_and_end_host_timezone') {
+            return $booking->getFullBookingDateTimeText($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
         }
 
         if ($key == 'start_date_time') {
