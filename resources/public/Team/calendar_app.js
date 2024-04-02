@@ -56,16 +56,16 @@ function handleEventBlockClick(link) {
     }
 }
 
-function faCalOpenBookingPage(item, event) {
+function faCalOpenBookingPageBlock(item, event) {
     event.preventDefault();
     handleEventBlockClick(item);
 }
 
-window.faCalOpenBookingPage = faCalOpenBookingPage;
+window.faCalOpenBookingPageBlock = faCalOpenBookingPageBlock;
 
 const calendar = document.querySelector('.fcal_calendar_wrapper');
 
-const teamVars = window[calendar.id];
+const teamVars = window[calendar?.id];
 
 if (teamVars) {
     const calendarVars = teamVars['fcal_host_calendar'];
@@ -74,7 +74,7 @@ if (teamVars) {
 
     teamViewHtml.className = 'fluent_booking_team_view';
     
-    teamViewHtml.innerHTML = calendarVars.calendar_html;
+    teamViewHtml.innerHTML = calendarVars?.calendar_html;
     
     calendar.querySelector('.fcal_calendar_loading').remove();
 

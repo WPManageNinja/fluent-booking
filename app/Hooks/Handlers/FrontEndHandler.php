@@ -328,7 +328,6 @@ class FrontEndHandler
             'target_event_id' => ($eventCount == 1) ? $calendar->activeEvents[0]->id : 0
         ];
 
-
         foreach ($calendar->activeEvents as $event) {
             $itemVars = $this->getCalendarEventVars($event->calendar, $event);
             $extraJs = (new LandingPageHandler())->getEventLandingExtraJsFiles($itemVars['form_fields'], $event);
