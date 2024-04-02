@@ -18,6 +18,7 @@ class LandingPageHelper
         ];
 
         $settings = wp_parse_args($sharingSettings, $defaults);
+        
         return apply_filters('fluent_booking/calendar/sharing_settings', $settings, $calendar, $scope);
     }
 

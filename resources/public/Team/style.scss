@@ -2,6 +2,8 @@
 .fcal_teams,
 .fcal_calendar_wrapper {
   display: block;
+  margin: auto;
+  max-width: 1000px;
   border-radius: 4px;
   background: var(--fcal_cal_bg);
   * {
