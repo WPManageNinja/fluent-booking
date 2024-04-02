@@ -10,32 +10,27 @@ class AppleHelper
 {
     public static function getApiConfig()
     {
-        $settings = get_option('_fcal_apple_calendar_client_details');
-
-        if (!$settings || Arr::get($settings, 'is_enabled') != 'yes') {
-            return [
-                'is_enabled' => 'no'
-            ];
-        }
-
-        return [
-            'is_enabled' => 'yes'
+        $defaults = [
+            'is_enabled'   => 'no',
+            'caching_time' => '5'
         ];
+
+        $settings = get_option('_fcal_apple_calendar_client_details', []);
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        return $settings;
     }
 
     public static function updateConfig($settings)
     {
-        if (Arr::get($settings, 'is_enabled') == 'no') {
-            $settings = [
-                'is_enabled' => 'no'
-            ];
-        } else {
-            $settings = [
-                'is_enabled' => 'yes'
-            ];
-        }
+        $settings = [
+            'is_enabled'   => Arr::get($settings, 'is_enabled', 'no'),
+            'caching_time' => Arr::get($settings, 'caching_time', 5)
+        ];
 
         update_option('_fcal_apple_calendar_client_details', $settings, 'no');
+
         return $settings;
     }
 
@@ -48,7 +43,6 @@ class AppleHelper
         if (!$userName || !$passWord) {
             return new \WP_Error('invalid_credentials', __('Invalid credentials', 'fluent-booking-pro'));
         }
-
 
         return new IcloudClient($userName, $passWord);
     }
