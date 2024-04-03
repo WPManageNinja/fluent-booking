@@ -156,6 +156,10 @@ class BlockEditorHandler
                 'eventIds'  => array(
                     'type'    => 'array',
                     'default' => []
+                ),
+                'hideInfo'  => array(
+                    'type'    => 'boolean',
+                    'default' => false
                 )
             )
         ));
@@ -219,6 +223,8 @@ class BlockEditorHandler
 
         $eventIds = Arr::get($attributes, 'eventIds', []);
 
+        $hideInfo = Arr::isTrue($attributes, 'hideInfo');
+
         $wrapperClassName = Arr::get($attributes, 'className');
 
         if (!$calendarId || !$eventIds) {
@@ -250,7 +256,8 @@ class BlockEditorHandler
         $calendar->activeEvents = $events;
 
         return (new FrontEndHandler())->renderCalendarBlock($calendar, [
-            'wrapper_class' => $wrapperClassName
+            'wrapper_class' => $wrapperClassName,
+            'hide_info'     => $hideInfo
         ]);
     }
 

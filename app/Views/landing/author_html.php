@@ -1,16 +1,18 @@
 <div class="fcal_calendar_wrap<?php echo esc_attr(isset($block) ? '_block' : ''); ?>">
     <div class="fluent_booking_wrap">
-        <div class="fcal_author_header">
-            <img src="<?php echo esc_url($author['avatar']); ?>"/>
-            <div class="author_info">
-                <h1>
-                    <?php echo esc_html($calendar->title); ?>
-                </h1>
-                <?php if ($calendar->description) { ?>
-                    <p class="fcal_description"><?php echo wp_kses_post($calendar->description); ?></p>
-                <?php } ?>
+        <?php if (!isset($hideInfo) || !$hideInfo) { ?>
+            <div class="fcal_author_header">
+                <img src="<?php echo esc_url($author['avatar']); ?>"/>
+                <div class="author_info">
+                    <h1>
+                        <?php echo esc_html($calendar->title); ?>
+                    </h1>
+                    <?php if ($calendar->description) { ?>
+                        <p class="fcal_description"><?php echo wp_kses_post($calendar->description); ?></p>
+                    <?php } ?>
+                </div>
             </div>
-        </div>
+        <?php } ?>
         <div class="fcal_slots_wrap">
             <div class="fcal_slots">
                 <?php foreach ($events as $event): ?>

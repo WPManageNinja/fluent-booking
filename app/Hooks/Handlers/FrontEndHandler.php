@@ -317,6 +317,7 @@ class FrontEndHandler
             'author'   => $calendar->getAuthorProfile(),
             'calendar' => $calendar,
             'events'   => $calendar->activeEvents,
+            'hideInfo' => Arr::isTrue($headerConfig, 'hide_info'),
             'block'    => true
         ]);
 

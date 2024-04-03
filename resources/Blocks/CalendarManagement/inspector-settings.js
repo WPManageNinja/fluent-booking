@@ -16,6 +16,7 @@ const InspectorSettings = props => {
         attributes: {
             calendarId,
             eventIds,
+            hideInfo,
         }, setAttributes
     } = props;
 
@@ -161,6 +162,20 @@ const InspectorSettings = props => {
                                 }
                             </ul>
                         </div>
+                        {calendarId && calendar && 
+                            <div className="fcal_block_inspector_widget">
+                                <CheckboxControl
+                                    label={__('Hide Calendar Info')}
+                                    value={hideInfo}
+                                    checked={hideInfo}
+                                    onChange={() => {
+                                        setAttributes({
+                                            hideInfo: !hideInfo
+                                        })
+                                    }}
+                                />
+                            </div>
+                        }
                     </div>
                 </PanelRow>
             </PanelBody>

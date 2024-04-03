@@ -10,4 +10,8 @@ export const attributes = {
         type: 'array',
         default: []
     },
+    hideInfo: {
+        type: 'boolean',
+        default: false
+    }
 };
