@@ -42,9 +42,10 @@ export const LandingPage = props => {
                                             <div className="fcal_slot" key={index}>
                                                 <div className="fcal_card fcal_event_card">
                                                     <div className="fcal_slot_content">
-                                                        <h2>{event.title}</h2>
-                                                        {event.description && 
-                                                            <p className="fcal_description">{event.description}</p>
+                                                        <h2><span className="fcal_slot_color_schema" style={{ backgroundColor: event?.color_schema }}></span> {event.title}</h2>
+                                                        {
+                                                            event?.desctiption &&
+                                                                <p className="fcal_description">{event.desctiption}</p>
                                                         }
                                                         {event.duration.map((duration, index) => (
                                                             <span className="fcal_slot_duration" key={index}>
