@@ -12,7 +12,8 @@ export const LandingPage = props => {
     let {
         attributes: {
             calendarId,
-            eventIds
+            eventIds,
+            hideInfo
         },
     } = props;
 
@@ -27,10 +28,12 @@ export const LandingPage = props => {
             <div className="fcal_calendar_management_block_wrap">
                 { eventIds.length && calendar.events?.length ?
                     <div>
-                        <div className="fcal_calendar_management_block_header">
-                            <img src={calendar?.author?.avatar} alt={calendar?.title} />
-                            <h4>{calendar?.title}</h4>
-                        </div>
+                        {!hideInfo && 
+                            <div className="fcal_calendar_management_block_header">
+                                <img src={calendar?.author?.avatar} alt={calendar?.title} />
+                                <h4>{calendar?.title}</h4>
+                            </div>
+                        }
                         <div className="fcal_slots_wrap">
                             <div className="fcal_slots">
                                 {calendar.events.map((event, index) => {
@@ -40,7 +43,9 @@ export const LandingPage = props => {
                                                 <div className="fcal_card fcal_event_card">
                                                     <div className="fcal_slot_content">
                                                         <h2>{event.title}</h2>
-                                                        <p className="fcal_description">{event.description}</p>
+                                                        {event.description && 
+                                                            <p className="fcal_description">{event.description}</p>
+                                                        }
                                                         {event.duration.map((duration, index) => (
                                                             <span className="fcal_slot_duration" key={index}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
