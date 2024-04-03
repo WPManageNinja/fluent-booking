@@ -22,7 +22,7 @@ class PaymentHelper
         return add_query_arg($queryArgs, site_url('index.php'));
     }
 
-    public function successUrl(Booking $booking, $args = null)
+    public function successUrl(Booking $booking, $calendarEvent, $args = null)
     {
         $queryArgs = array_merge([
                 'payment_method' => $this->slug,
@@ -30,7 +30,11 @@ class PaymentHelper
             ], is_array($args) ? $args: []
         );
 
-        return add_query_arg($queryArgs, $booking->getConfirmationUrl());
+        $redirectUrl = $calendarEvent->getRedirectUrlWithQuery($booking);
+
+        $confirmationUrl = $redirectUrl ?: $booking->getConfirmationUrl();
+
+        return add_query_arg($queryArgs, $confirmationUrl);
     }
 
     public static function formatPaymentItem($string, $limit = 127)
