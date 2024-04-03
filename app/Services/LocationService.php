@@ -189,7 +189,7 @@ class LocationService
             $locationType = Arr::get($location, 'type');
 
             if ($locationType == 'custom') {
-                if ($location['display_on_booking'] == 'yes') {
+                if (Arr::get($location, 'display_on_booking') == 'yes') {
                     $title = Arr::get($location, 'description');
                 } else {
                     $title = Arr::get($location, 'title');
