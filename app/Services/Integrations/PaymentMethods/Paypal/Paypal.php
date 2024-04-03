@@ -79,7 +79,7 @@ class Paypal extends BasePaymentMethod
 
         $currency    = CurrenciesHelper::getGlobalCurrency();
         $cancelUrl   = $orderItem->getCancelUrl();
-        $successUrl  = $this->getSuccessUrl($orderItem);
+        $successUrl  = $this->getSuccessUrl($orderItem, $calendarEvent);
         $listenerUrl = $this->getListenerUrl(['booking_id' => $orderItem->id]);
         $listenerUrl = PaymentHelper::limitLength($listenerUrl, 255);
 

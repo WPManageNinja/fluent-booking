@@ -109,15 +109,15 @@ class Stripe extends BasePaymentMethod
 
         $paymentTotal = $this->getPayableAmount($items, $currency);
 
-        $paymentArgs = array(
+        $paymentArgs = [
             'client_reference_id' => $hash,
             'items'               => $items,
             'amount'              => (int)round($paymentTotal),
             'currency'            => strtolower($currency),
             'description'         => __('Payment for Order', 'fluent-booking-pro'),
             'customer_email'      => $orderItem->email,
-            'success_url'         => $this->getSuccessUrl($orderItem),
-        );
+            'success_url'         => $this->getSuccessUrl($orderItem, $calendarSlot),
+        ];
 
         //Subscription only available for hosted, will implement onsite later
         if ($stripeSetting['checkout_mode'] === apply_filters('fluent_booking_global_checkout_mode', 'onsite')) {
