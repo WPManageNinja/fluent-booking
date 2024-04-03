@@ -21,6 +21,21 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
+1.3.0 (Date: 3 Apr 2024)
+- New Gutenberg Block - FluentBooking Calendar
+- Added Multi-payment Option Based on Meeting Duration
+- Implemented PayPal Integration
+- Added Stripe Refund Option for Admin
+- Mark as Paid Option for Admin
+- Custom Redirect URL on Paid Bookings
+- Catching Time in Apple Calendar & NextCloud Calendar
+- Added New Shortcode - Full Start and End Date Time
+- Added Booking Rescheduled Trigger
+- Resolved Daylight Saving Time Issue with Europe Timezones
+- Fixed Group Event Double Slot Appears Issue
+- Fixed Availability Permission Issue
+- Improved UI
+
 1.2.63 (Date: 26 Feb 2024)
 - Daylight saving time fix
 - Fixed issues With multi-hour slot availability
