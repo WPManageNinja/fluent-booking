@@ -347,6 +347,9 @@ class FrontEndHandler
         return App::make('view')->make('public.calendar_page', [
             'calendar'      => $calendar,
             'wrapper_id'    => $wrapperId,
+            'logo'          => Arr::get($headerConfig, 'logo', ''),
+            'title'         => Arr::get($headerConfig, 'title', ''),
+            'description'   => Arr::get($headerConfig, 'description', ''),
             'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
         ]);
     }
