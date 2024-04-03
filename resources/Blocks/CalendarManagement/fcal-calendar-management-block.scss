@@ -125,48 +125,12 @@
 }
 .wp-block{
 	&.is-selected {
-		.fcal_team_management_block_wrap {
-			.fcal_team_management_block_header {
+		.fcal_calendar_management_block_wrap {
+			.fcal_calendar_management_block_header {
 				.empty-text {
 					display: block;
 				}
 			}
-		}
-	}
-}
-.fcal_team_management_block_hosts {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 16px;
-	.fcal_team_management_block_host {
-		width: 100%;
-		border: 1px solid #e5e7eb;
-		border-radius: 8px;
-		padding: 16px;
-		display: block;
-		text-decoration: none;
-		transition: .2s;
-		&:hover {
-			background: #f9fafb;
-		}
-		img {
-			display: block;
-			width: 32px;
-			height: 32px;
-			border-radius: 50%;
-		}
-		h3 {
-			font-size: 16px;
-			line-height: 24px;
-			color: #374151;
-			margin: 8px 0 0;
-			font-weight: 500;
-		}
-		p {
-			font-size: 14px;
-			line-height: 24px;
-			color: #6b7280;
-			margin: 0;
 		}
 	}
 }

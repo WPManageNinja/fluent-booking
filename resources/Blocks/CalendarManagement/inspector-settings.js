@@ -1,5 +1,5 @@
 /*eslint-disable*/
-const { InspectorControls } = wp.blockEditor;
+const { InspectorControls, MediaUpload } = wp.blockEditor;
 const {__} = wp.i18n;
 const {
     PanelBody,
@@ -14,6 +14,7 @@ const calendars = Object.values(calendarsVar);
 const InspectorSettings = props => {
     const {
         attributes: {
+            headerImage,
             calendarId,
             eventIds,
             hideInfo,
@@ -60,6 +61,12 @@ const InspectorSettings = props => {
         });
     }
 
+    function removeImage() {
+        setAttributes({
+            headerImage: {}
+        })
+    }
+
     const isChecked = (event) => {
         let matched = false;
         if (eventIds) {
@@ -78,6 +85,48 @@ const InspectorSettings = props => {
 
     return (
         <InspectorControls>
+            <PanelBody title={__('Header Settings')} initialOpen={true}>
+                <PanelRow>
+                    <div className="fcal_block_settings">
+                        <div className="fcal_block_inspector_widget fcal_block_media">
+                            <MediaUpload
+                                onSelect={(media) => {
+                                    setAttributes({
+                                        headerImage: {
+                                            title: media.title,
+                                            filename: media.filename,
+                                            url: media.url,
+                                        },
+                                    });
+                                }}
+                                multiple={false}
+                                render={({open}) => (
+                                    <>
+                                    <button onClick={open}>
+                                        {
+                                            headerImage.url ?
+                                                __('Change Image')
+                                                : __('Upload Image')
+                                        }
+
+                                    </button>
+                                        <p className='fcal-render-image'>
+                                            {
+                                                headerImage.url ?
+                                                    <button className="fcal-remove-image" onClick={() => { removeImage(); }}>+</button>
+                                                    : ''
+                                            }
+                                            {headerImage === null
+                                                ? ''
+                                                : <img src={headerImage.url} alt={headerImage.title}/>}
+                                        </p>
+                                    </>
+                                )}
+                            />
+                        </div>
+                    </div>
+                </PanelRow>
+            </PanelBody>
             <PanelBody title="General Settings" initialOpen={true}>
                 <PanelRow>
                     <div className="fcal_block_settings">

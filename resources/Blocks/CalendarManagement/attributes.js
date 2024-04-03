@@ -2,6 +2,18 @@
 const { __ } = wp.i18n;
 
 export const attributes = {
+    title: {
+        type: 'string',
+        default: ''
+    },
+    description: {
+        type: 'string',
+        default: ''
+    },
+    headerImage: {
+        type: 'object',
+        default: {}
+    },
     calendarId: {
         type: 'string',
         default: ''
