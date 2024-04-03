@@ -19,7 +19,7 @@
                            data-event_hash="<?php echo esc_attr($event->hash); ?>"
                            data-event_slug="<?php echo esc_attr($event->slug); ?>"
                            data-event_id="<?php echo (int)$event->id; ?>"
-                           onclick="faCalOpenBookingPage(this, event)"
+                           onclick="<?php echo 'faCalOpenBookingPage' . (isset($block) ? 'Block' : ''); ?>(this, event)"
                            href="<?php echo esc_url($event->public_url); ?>" class="fcal_card fcal_event_card">
                             <div class="fcal_slot_content">
                                 <h2>

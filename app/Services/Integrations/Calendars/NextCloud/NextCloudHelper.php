@@ -10,36 +10,29 @@ class NextCloudHelper
 {
     public static function getApiConfig()
     {
-        $settings = get_option('_fcal_next_cloud_calendar_client_details');
-
-        if (!$settings || Arr::get($settings, 'is_enabled') != 'yes') {
-            return [
-                'is_enabled' => 'no',
-                'base_url'   => ''
-            ];
-        }
-
-        return [
-            'is_enabled' => 'yes',
-            'base_url'   => Arr::get($settings, 'base_url')
+        $defaults = [
+            'is_enabled'   => 'no',
+            'base_url'     => '',
+            'caching_time' => 5
         ];
+
+        $settings = get_option('_fcal_next_cloud_calendar_client_details', []);
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        return $settings;
     }
 
     public static function updateConfig($settings)
     {
-        if (Arr::get($settings, 'is_enabled') == 'no') {
-            $settings = [
-                'is_enabled' => 'no',
-                'base_url'   => ''
-            ];
-        } else {
-            $settings = [
-                'is_enabled' => 'yes',
-                'base_url'   => Arr::get($settings, 'base_url')
-            ];
-        }
+        $settings = [
+            'is_enabled'   => Arr::get($settings, 'is_enabled', 'no'),
+            'base_url'     => Arr::get($settings, 'base_url', ''),
+            'caching_time' => Arr::get($settings, 'caching_time', 5)
+        ];
 
         update_option('_fcal_next_cloud_calendar_client_details', $settings, 'no');
+
         return $settings;
     }
 
