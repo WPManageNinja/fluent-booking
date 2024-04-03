@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja
 Author URI: https://fluentbooking.com/
 Tags: booking, appointment booking, appointments, booking system, scheduling, event booking system
 Requires at least: 6.0
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 7.3
 Stable tag: 1.3.0
 License: GPLv2 or later
