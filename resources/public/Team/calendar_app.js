@@ -75,6 +75,8 @@ if (teamVars) {
     teamViewHtml.className = 'fluent_booking_team_view';
     
     teamViewHtml.innerHTML = calendarVars?.calendar_html;
+
+    calendar.querySelector('.fcal_cals_wrap').style.display = 'block';
     
     calendar.querySelector('.fcal_calendar_loading').remove();
 

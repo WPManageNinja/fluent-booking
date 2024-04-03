@@ -10,21 +10,24 @@
     box-sizing: border-box;
   }
 
-  .fcal_team_header {
+  .fcal_team_header,
+  .fcal_calendar_header {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
-    .fcal_team_title {
+    .fcal_team_title,
+    .fcal_calendar_title {
       font-size: 1.5rem;
       margin: 6px 0 .2rem 0;
       line-height: 1.2;
       color: var(--fcal_dark);
       font-weight: 500;
     }
-    .fcal_team_description {
+    .fcal_team_description,
+    .fcal_calendar_description {
       font-size: 14px;
       line-height: 20px;
       color: #6b7280;
@@ -113,7 +116,8 @@
     flex-wrap: nowrap;
     overflow: hidden;
   }
-  .fcal_teams_wrap {
+  .fcal_teams_wrap,
+  .fcal_cals_wrap {
     flex: none;
     display: block;
     width: 100%;
@@ -131,11 +135,20 @@
       flex-wrap: nowrap;
       overflow: hidden;
 
-      .fluent_booking_app,
-      .fluent_booking_wrap {
+      .fluent_booking_app {
         flex: none;
         width: 100%;
         transition: .4s;
+      }
+
+      .fluent_booking_wrap {
+        flex: none;
+        padding-top: 0;
+        width: 100%;
+        transition: .4s;
+        .fcal_slots_wrap {
+            margin-top: 1rem;
+        }
       }
     }
   }

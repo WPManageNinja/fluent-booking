@@ -149,6 +149,18 @@ class BlockEditorHandler
             'editor_script'   => 'fluent-booking/calendar-management',
             'render_callback' => array($this, 'fcalRenderCalendarManagementBlock'),
             'attributes'      => array(
+                'title'       => array(
+                    'type'    => 'string',
+                    'default' => ''
+                ),
+                'description' => array(
+                    'type'    => 'string',
+                    'default' => ''
+                ),
+                'headerImage' => array(
+                    'type'    => 'object',
+                    'default' => ''
+                ),
                 'calendarId'  => array(
                     'type'    => 'string',
                     'default' => ''
@@ -223,10 +235,6 @@ class BlockEditorHandler
 
         $eventIds = Arr::get($attributes, 'eventIds', []);
 
-        $hideInfo = Arr::isTrue($attributes, 'hideInfo');
-
-        $wrapperClassName = Arr::get($attributes, 'className');
-
         if (!$calendarId || !$eventIds) {
             return '';
         }
@@ -256,8 +264,11 @@ class BlockEditorHandler
         $calendar->activeEvents = $events;
 
         return (new FrontEndHandler())->renderCalendarBlock($calendar, [
-            'wrapper_class' => $wrapperClassName,
-            'hide_info'     => $hideInfo
+            'title'         => Arr::get($attributes, 'title'),
+            'description'   => Arr::get($attributes, 'description'),
+            'wrapper_class' => Arr::get($attributes, 'className'),
+            'logo'          => Arr::get($attributes, 'headerImage.url'),
+            'hide_info'     => Arr::isTrue($attributes, 'hideInfo')
         ]);
     }
 
