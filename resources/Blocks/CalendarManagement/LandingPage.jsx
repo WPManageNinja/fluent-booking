@@ -1,5 +1,6 @@
 /*eslint-disable*/
 const { Fragment } = wp.element;
+const { RichText } = wp.blockEditor;
 const {__} = wp.i18n;
 
 import './fcal-calendar-management-block.scss';
@@ -11,10 +12,13 @@ const calendars = Object.values(calendarsVar);
 export const LandingPage = props => {
     let {
         attributes: {
+            title,
+            description,
+            headerImage,
             calendarId,
             eventIds,
             hideInfo
-        },
+        }, setAttributes
     } = props;
 
     let calendar = {};
@@ -26,6 +30,30 @@ export const LandingPage = props => {
     return [
         <Fragment>
             <div className="fcal_calendar_management_block_wrap">
+                <div className="fcal_calendar_management_block_header">
+                    {
+                        headerImage.url != '' ?
+                        <img src={headerImage.url} alt={headerImage.title} />
+                        :
+                        <img src={assetsUrl+'/images/logo.svg'} alt="Logo" />
+                    }
+                    <RichText
+                        className={title?'':'empty-text'}
+                        tagName="h1"
+                        value={ title }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link', 'core/text-color' ] }
+                        onChange={ ( heading ) => setAttributes( { title: heading } ) }
+                        placeholder={__('Enter title here...')}
+                    />
+                    <RichText
+                        className={description?'':'empty-text'}
+                        tagName="p"
+                        value={ description }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link', 'core/text-color' ] }
+                        onChange={ ( heading ) => setAttributes( { description: heading } ) }
+                        placeholder={__('Enter description here...')}
+                    />
+                </div>
                 { eventIds.length && calendar.events?.length ?
                     <div>
                         {!hideInfo && 
