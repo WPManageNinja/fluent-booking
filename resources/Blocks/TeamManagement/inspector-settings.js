@@ -120,6 +120,12 @@ const InspectorSettings = props => {
         return false;
     }
 
+    function handleRemoveImage() {
+        setAttributes({
+            headerImage: {}
+        })
+    }
+
     return (
         <InspectorControls>
             <PanelBody title={__('Header Settings')}
@@ -141,15 +147,20 @@ const InspectorSettings = props => {
                                 multiple={false}
                                 render={({open}) => (
                                     <>
-                                        <button onClick={open}>
+                                    <button onClick={open}>
+                                        {
+                                            headerImage.url ?
+                                                __('Change Image')
+                                                : __('Upload Image')
+                                        }
+
+                                    </button>
+                                        <p className='fcal-render-image'>
                                             {
                                                 headerImage.url ?
-                                                    __('Change Image')
-                                                    : __('Upload Image')
+                                                    <button className="fcal-remove-image" onClick={() => { handleRemoveImage(); }}>+</button>
+                                                    : ''
                                             }
-
-                                        </button>
-                                        <p className='fcal-render-image'>
                                             {headerImage === null
                                                 ? ''
                                                 : <img src={headerImage.url} alt={headerImage.title}/>}
