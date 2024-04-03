@@ -282,9 +282,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return $data;
     }
 
-    protected function getSuccessUrl($orderItem, $args = null)
+    protected function getSuccessUrl($orderItem, $calendarEvent, $args = null)
     {
-        return (new PaymentHelper($this->slug))->successUrl($orderItem, $args);
+        return (new PaymentHelper($this->slug))->successUrl($orderItem, $calendarEvent, $args);
     }
 
     protected function getListenerUrl($args = null)
