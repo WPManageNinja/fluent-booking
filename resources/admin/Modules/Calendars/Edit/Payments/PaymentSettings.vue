@@ -155,6 +155,9 @@
             <div v-else class="fcal_settings_body">
                 <p class="fcal_empty_text">
                     {{ $t('PaymentSettings/enable_global_payment_settings') }}
+                    <router-link :to="{name: 'general_settings'}">
+                        {{ $t('Go to Payment Settings') }}. <span class="anim-icon">👈</span>
+                    </router-link>
                 </p>
             </div>
             <div v-if="global_enabled && !loading" class="fcal_create_calendar_form_footer">
