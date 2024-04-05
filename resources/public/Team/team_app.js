@@ -76,7 +76,7 @@ window.fcalBackToTeam = function (item) {
     const parentTeam = item.closest('.fcal_teams');
     if(parentTeam) {
         parentTeam.querySelector('.fluent_booking_team_view').innerHTML = '';
-        parentTeam.querySelector('.fcal_teams_wrap').style.display = 'block';
+        parentTeam.querySelector('.fcal_teams_wrap').classList.remove('hide');
         parentTeam.querySelector('.fcal_teams_wrap').style.marginLeft = '0';
     }
 };
@@ -115,11 +115,9 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
             if (hostVars.host_html) {
 
                 teamViewHtml.innerHTML = hostVars.host_html;
-                // hide .fcal_teams_wrap
 
                 teams.querySelector('.fcal_teams_wrap').style.marginLeft = '-100%';
                 teams.querySelector('.fcal_teams_wrap').classList.add('hide');
-                // teams.querySelector('.fcal_teams_wrap').style.display = 'none';
                 currentState = 'view_member';
             }
         });
