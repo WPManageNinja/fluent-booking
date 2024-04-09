@@ -616,11 +616,18 @@ class CalendarSlot extends Model
         return $this->type == 'paid' && Helper::isPaymentEnabled();
     }
 
+    public function isWooEnabled()
+    {
+        return $this->type == 'woo' && defined('WC_PLUGIN_FILE') && Helper::isPaymentEnabled();
+    }
+
     public function getPaymentItems($duration = null)
     {
         $paymentSettings = $this->getPaymentSettings();
 
-        if ($this->isMultiDurationEnabled() && Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
+        $isMultiEnabled = Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes';
+
+        if ($this->isMultiDurationEnabled() && $isMultiEnabled) {
             $duration = $duration ?? $this->getDefaultDuration();
             return [Arr::get($paymentSettings, 'multi_payment_items.'. $duration)];
         }
@@ -661,6 +668,22 @@ class CalendarSlot extends Model
         }
         
         return $price;
+    }
+
+    public function getWooProductPriceByDuration($productIds = [])
+    {
+        $productPrices = [];
+
+        foreach ($productIds as $duration => $productId) {
+            $product = wc_get_product($productId);
+            if ($product) {
+                $productPrices[$duration] = [
+                    'value' => $product->get_price()
+                ];
+            }
+        }
+
+        return $productPrices;
     }
 
     public function getRedirectUrlWithQuery($booking)
