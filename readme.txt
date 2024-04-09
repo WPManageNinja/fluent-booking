@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 7.3
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,12 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.3.1 (Date: 10 Apr 2024)
+- Displayed woo product price on booking page
+- Fixed stripe payment issue with shortcode
+- Fixed gutenberg block's back to team button issue
+- Fixed minor typo
 
 1.3.0 (Date: 3 Apr 2024)
 - New Gutenberg Block - FluentBooking Calendar
