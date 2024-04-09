@@ -10,7 +10,7 @@
                 {{ $t('Congratulations!') }}
                 <PartyIcon class="party_icon" />
             </h1>
-            <p>{{ $t('Thank You or Choosing FluentBooking. Let\'s -') }} <b>{{ $t('Create Your First Booking Event') }}</b> <br>{{ $t('(Will Take Less Than a Minute!)') }}</p>
+            <p>{{ $t('Thank You For Choosing FluentBooking. Let\'s -') }} <b>{{ $t('Create Your First Booking Event') }}</b> <br>{{ $t('(Will Take Less Than a Minute!)') }}</p>
         </div>
         <div class="fcal_create_calendar_header">
             <h1 v-if="!is_board" class="fcal_calendar_header_title" @click="$router.push({name: 'calendars'})">

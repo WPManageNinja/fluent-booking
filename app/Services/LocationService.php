@@ -49,7 +49,7 @@ class LocationService
                 if ($displayOnBooking == 'yes') {
                     $html .= '<span class="fcal_loc_text">' . $location['description'] . '</span>';
                 } else {
-                    $html .= '<span class="fcal_loc_text"> In Person (Organizer Address) </span>';
+                    $html .= '<span class="fcal_loc_text">' . __('In Person (Organizer Address)', 'fluent-booking-pro') . '</span>';
                 }
             } else if ($location['type'] == 'phone_guest') {
                 $html .= '<img class="fcal_loc_icon" src="' . $app['url.assets'] . 'images/phone_call.svg" alt="' . __('Phone', 'fluent-booking-pro') . '" />';

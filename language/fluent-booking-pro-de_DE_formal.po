@@ -5819,8 +5819,8 @@ msgstr ""
 
 #: app/Services/TransStrings.php:587
 #, fuzzy
-#| msgid "Thank You or Choosing FluentBooking. Let’s -"
-msgid "Thank You or Choosing FluentBooking. Let's -"
+#| msgid "Thank You For Choosing FluentBooking. Let’s -"
+msgid "Thank You For Choosing FluentBooking. Let's -"
 msgstr ""
 "Danke, dass Sie sich für FluentBooking entschieden haben. Lassen Sie uns -"
 
