@@ -584,7 +584,7 @@ class TransStrings
             'EachSlot/delete_event_confirmation_desc'                                          => __('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted', 'fluent-booking-pro'),
             'Delete Booking Type'                                                              => __('Delete Booking Type', 'fluent-booking-pro'),
             'Select Host'                                                                      => __('Select Host', 'fluent-booking-pro'),
-            'Thank You or Choosing FluentBooking. Let\'s -'                                     => __('Thank You or Choosing FluentBooking. Let\'s -', 'fluent-booking-pro'),
+            'Thank You For Choosing FluentBooking. Let\'s -'                                   => __('Thank You For Choosing FluentBooking. Let\'s -', 'fluent-booking-pro'),
             'Create Your First Booking Event'                                                  => __('Create Your First Booking Event', 'fluent-booking-pro'),
             '(Will Take Less Than a Minute!)'                                                  => __('(Will Take Less Than a Minute!)', 'fluent-booking-pro'),
             'scheduled'                                                                        => __('scheduled', 'fluent-booking-pro'),

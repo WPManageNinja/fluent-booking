@@ -129,14 +129,28 @@ abstract class BasePaymentMethod implements BasePaymentInterface
     public function addPaymentRendererTemplates($vars, $slot)
     {
         $paymentSettings = $slot->getPaymentSettings();
-        if (Arr::get($paymentSettings, 'enabled') === 'yes' && Arr::get($paymentSettings, 'driver') === 'native') {
-            $vars['payment_methods'] = $this->getMethodsTemplate(['templates' => '']);
-            $vars['payment_items'] = Arr::get($paymentSettings, 'items');
-            $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
-            if ($slot->isMultiDurationEnabled() && Arr::get($paymentSettings, 'multi_payment_enabled') === 'yes') {
-                $vars['multi_payment_items'] = Arr::get($paymentSettings, 'multi_payment_items');
+
+        $driver = Arr::get($paymentSettings, 'driver');
+        $isMultiEnabled = Arr::get($paymentSettings, 'multi_payment_enabled') === 'yes';
+
+        if (Arr::get($paymentSettings, 'enabled') === 'yes') {
+            if ($driver === 'native') {
+                $vars['payment_methods'] = $this->getMethodsTemplate(['templates' => '']);
+                $vars['payment_items'] = Arr::get($paymentSettings, 'items');
+                $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
+                if ($slot->isMultiDurationEnabled() && $isMultiEnabled) {
+                    $vars['multi_payment_items'] = Arr::get($paymentSettings, 'multi_payment_items');
+                }
+            }
+            
+            if ($driver == 'woo' && defined('WC_PLUGIN_FILE')) {
+                if ($slot->isMultiDurationEnabled() && $isMultiEnabled) {
+                    $productIds = Arr::get($paymentSettings, 'multi_payment_woo_ids', []);
+                    $vars['multi_payment_woo_ids'] = $slot->getWooProductPriceByDuration($productIds);
+                }
             }
         }
+        
         return $vars;
     }
 
@@ -471,14 +485,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return false;
     }
 
-    public function renderMethod($method)
+    public function render($method)
     {
-        return '
-            <input checked value="' . esc_attr($method) . '" name="' . esc_attr($method) . '_payment_method' . '" type="radio"  id="' . esc_attr($method) . '_payment_method">
-            <label for="' . esc_attr($method) . '_payment_method">
-              ' . sprintf(__('%s', 'fluent-booking-pro'), ucfirst($method)) . '
-            </label>
-        ';
+        return '';
     }
 
     public function getMethodsTemplate($data)
@@ -498,7 +507,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         foreach ($methods as $slug => $methodData) {
             if (Arr::isTrue($methodData, 'status')) {
                 $hasActiveMethod = true;
-                $radio .= $this->renderMethod($slug);
+                $radio .= $this->render($slug);
             }
         }
         $radio .= "</div>";

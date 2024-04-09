@@ -100,6 +100,10 @@
         if (appData.multi_payment_items) {
             slot.total_payment = appData.multi_payment_items[duration]?.value;
         }
+
+        if (appData.multi_payment_woo_ids) {
+            slot.total_payment = appData.multi_payment_woo_ids[duration]?.value;
+        }
     }
 
     function handleBookingConfirmation(confirmation) {
@@ -256,12 +260,12 @@
                                         {:else}
                                             <div class="fcal_multi_duration">
                                                 {#each availableDurations as value}
-                                                        <span
-                                                            on:keypress={()=>durationSelected(value)}
-                                                            on:click={()=>durationSelected(value)}
-                                                            role="button" tabindex="0" class="fcal_duration {duration == value ? 'is_selected' : ''}">
-                                                            {value} {i18('minutes')}
-                                                        </span>
+                                                    <span
+                                                        on:keypress={()=>durationSelected(value)}
+                                                        on:click={()=>durationSelected(value)}
+                                                        role="button" tabindex="0" class="fcal_duration {duration == value ? 'is_selected' : ''}">
+                                                        {value} {i18('minutes')}
+                                                    </span>
                                                 {/each}
                                             </div>
                                         {/if}
