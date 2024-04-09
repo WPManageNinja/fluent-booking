@@ -33,7 +33,7 @@ class GlobalPaymentHandler
     {
         $eventVars['slot']['total_payment'] = '';
         
-        if (!$calendarEvent->isPaymentEnabled()) {
+        if (!$calendarEvent->isPaymentEnabled() && !$calendarEvent->isWooEnabled()) {
             return $eventVars;
         }
         
