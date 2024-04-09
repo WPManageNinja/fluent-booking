@@ -5662,7 +5662,7 @@ msgid "Thank you for using <a href=\"%s\">FluentBooking</a>."
 msgstr ""
 
 #: app/Services/TransStrings.php:587
-msgid "Thank You or Choosing FluentBooking. Let's -"
+msgid "Thank You For Choosing FluentBooking. Let's -"
 msgstr ""
 
 #. %1$s is replaced with the plugin title, and %2$s and %3$s are used for HTML anchors

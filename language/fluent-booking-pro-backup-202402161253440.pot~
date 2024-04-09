@@ -5271,7 +5271,7 @@ msgid "Thank you for using <a href=\"%s\">FluentBooking</a>."
 msgstr ""
 
 #: app/Services/TransStrings.php:567
-msgid "Thank You or Choosing FluentBooking. Let's -"
+msgid "Thank You For Choosing FluentBooking. Let's -"
 msgstr ""
 
 #: app/Services/PluginManager/LicenseManager.php:111
