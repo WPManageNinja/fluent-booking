@@ -471,14 +471,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         return false;
     }
 
-    public function renderMethod($method)
+    public function render($method)
     {
-        return '
-            <input checked value="' . esc_attr($method) . '" name="' . esc_attr($method) . '_payment_method' . '" type="radio"  id="' . esc_attr($method) . '_payment_method">
-            <label for="' . esc_attr($method) . '_payment_method">
-              ' . sprintf(__('%s', 'fluent-booking-pro'), ucfirst($method)) . '
-            </label>
-        ';
+        return '';
     }
 
     public function getMethodsTemplate($data)
@@ -498,7 +493,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         foreach ($methods as $slug => $methodData) {
             if (Arr::isTrue($methodData, 'status')) {
                 $hasActiveMethod = true;
-                $radio .= $this->renderMethod($slug);
+                $radio .= $this->render($slug);
             }
         }
         $radio .= "</div>";
