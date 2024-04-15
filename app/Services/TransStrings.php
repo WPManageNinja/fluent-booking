@@ -294,7 +294,7 @@ class TransStrings
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking-pro'),
             'EventDetails/redirect_url_description'                                            => __('Redirect to a custom URL after a successful booking', 'fluent-booking-pro'),
             'EventDetails/redirect_url_placeholder'                                            => __('https://example.com/redirect-to-my-success-page', 'fluent-booking-pro'),
-            'EventDetails/redirect_query_string_hint'                                          => __('Sample: email={guest.email}&phone={booking.phone}', 'fluent-booking-pro'),
+            'EventDetails/redirect_query_string_hint'                                          => __('Sample: email={{guest.email}}&phone={{booking.phone}}', 'fluent-booking-pro'),
             'EventDetails/slug_setting_description'                                            => __('Update the slug to customize your event landing page URL', 'fluent-booking-pro'),
             'EventDetails/slug_setting_hint'                                                   => __('Slug must be unique to avoid any conflicts with other events', 'fluent-booking-pro'),
             'LimitSettings/booking_frequency'                                                  => __('Limit booking frequency', 'fluent-booking-pro'),
