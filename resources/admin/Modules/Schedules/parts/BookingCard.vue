@@ -10,9 +10,9 @@
             <div class="fcal_spot_desc">
                 <h3 v-html="spotTitle" class="fcal_spot_title"></h3>
                 <div class="fcal_spot_desc_sub_info">
-                    <div v-if="booking.happening_status" class="fcal_spot_happening">
-                        <span :class="'fcal_'+booking.happening_status">
-                            {{ getTextFromSlug(booking.happening_status) }}
+                    <div v-if="happening_slug" class="fcal_spot_happening">
+                        <span :class="'fcal_'+happening_slug">
+                            {{ happening_title }}
                         </span>
                     </div>
 
@@ -43,11 +43,20 @@ export default {
     data() {
         return {
             booking_id: this.$route.query.booking_id,
+            happening_slug: '',
+            happening_title: ''
         }
     },
     methods: {
         showDetails() {
             this.$emit('showDetails', this.booking);
+        },
+        getHappeningFormatText(slug) {
+            const keys   = Object.keys(slug);
+            const values = Object.values(slug);
+
+            this.happening_slug  = keys[0];
+            this.happening_title = values[0]
         }
     },
     computed: {
@@ -96,6 +105,9 @@ export default {
             }
             return price;
         }
+    },
+    mounted() {
+        this.getHappeningFormatText(this.booking.happening_status);
     }
 }
 </script>

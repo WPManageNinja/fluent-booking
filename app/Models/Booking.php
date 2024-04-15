@@ -359,14 +359,22 @@ class Booking extends Model
         $endTime = strtotime($this->end_time);
 
         if ($currentTime > $startTime && $currentTime < $endTime) {
-            return 'happening_now';
+            return [
+                'happening_now' => __('Happening Now', 'fluent-booking-pro')
+            ];
         } elseif (($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
-            return 'starting_soon';
+            return [
+                'starting_soon' => __('Starting Soon', 'fluent-booking-pro')
+            ];
         } else if (($endTime - $currentTime) > -3600 && ($endTime - $currentTime) < 0) {
-            return 'recently_happened';
+            return [
+                'recently_happened' => __('Recently Happened', 'fluent-booking-pro')
+            ];
         }
 
-        return '';
+        return [
+            'happening_now' => __('Happening Now', 'fluent-booking-pro')
+        ];
     }
 
     public function payment_order()
