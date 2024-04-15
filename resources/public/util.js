@@ -70,7 +70,7 @@ export const getErrorText = function (response) {
         errorMessage = convertToText(response);
     }
     if (!errorMessage) {
-        errorMessage = 'Something is wrong!';
+        errorMessage = i18('Something is wrong!');
     }
 
     console.log(errorMessage, response);
