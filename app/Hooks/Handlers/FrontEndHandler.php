@@ -522,7 +522,9 @@ class FrontEndHandler
                 'View previous month'                  => __('View previous month', 'fluent-booking-pro'),
                 'No_payment_method_description'        => __('No activated payment method found. If you are an admin please check the event payment settings', 'fluent-booking-pro'),
                 'Please fill up the required data'     => __('Please fill up the required data', 'fluent-booking-pro'),
-                'Please select a valid payment method' => __('Please select a valid payment method', 'fluent-booking-pro')
+                'Please select a valid payment method' => __('Please select a valid payment method', 'fluent-booking-pro'),
+                'Please Select'                        => __('Please Select', 'fluent-booking-pro'),
+                'Something is wrong!'                  => __('Something is wrong!', 'fluent-booking-pro'),
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];

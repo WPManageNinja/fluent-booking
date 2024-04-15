@@ -9,6 +9,7 @@
     {/if}
     <div class="fcal_input_wrap fcal_input_multi_select_wrap">
         <Select
+            :placeholder="i18('Please Select')"
             multiple={true}
             clearable={false}
             items={field.options}

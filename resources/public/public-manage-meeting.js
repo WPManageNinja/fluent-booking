@@ -1,4 +1,5 @@
 import {request} from './request';
+import { i18 } from './util';
 // document on load
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     })
                     .catch((errors) => {
-                        let message = errors.response?.message || 'Something is wrong!';
+                        let message = errors.response?.message || i18('Something is wrong!');
                         // add error message to the form bottom
                         const errorElement = document.createElement('div');
                         errorElement.classList.add('fcal_error_message');
