@@ -372,9 +372,7 @@ class Booking extends Model
             ];
         }
 
-        return [
-            'happening_now' => __('Happening Now', 'fluent-booking-pro')
-        ];
+        return [];
     }
 
     public function payment_order()
