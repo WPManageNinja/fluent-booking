@@ -133,6 +133,10 @@ class EditorShortCodeParser
             return $booking->getLocationDetailsHtml();
         }
 
+        if ($key == 'location_details_text') {
+            return $booking->getLocationAsText();
+        }
+
         if ($key == 'booking_hash') {
             return $booking->hash;
         }
