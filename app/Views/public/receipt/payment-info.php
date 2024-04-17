@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
+
 <div class="fluent_booking_payment_info">
     <table width="100%">
         <tbody>

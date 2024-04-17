@@ -1,8 +1,11 @@
 <?php
-/*
- * @var $booking \FluentBooking\App\Models\Booking
- */
+    /*
+    * @var $booking \FluentBooking\App\Models\Booking
+    */
+
+    defined( 'ABSPATH' ) || exit;
 ?>
+
 <div class="fcal_confirmation">
     <?php do_action('fluent_booking/booking_details_header', $booking); ?>
     <div class="fcal_confirm_header">

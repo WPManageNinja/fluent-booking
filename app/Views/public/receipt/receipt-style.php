@@ -1,6 +1,4 @@
-<?php
-    defined('ABSPATH') || exit;
-?>
+<?php defined('ABSPATH') || exit; ?>
 
 <!-- CSS styles for fluent booking payment receipt -->
 <style>

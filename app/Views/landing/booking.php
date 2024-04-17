@@ -18,6 +18,9 @@ use FluentBooking\App\Models\Booking;
  * @var string $url
  */
 ?>
+
+<?php defined( 'ABSPATH' ) || exit; ?>
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
