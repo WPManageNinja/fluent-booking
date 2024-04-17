@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
+
 <div id="<?php echo esc_attr($wrapper_id); ?>" class="fcal_calendar_wrapper <?php echo esc_attr($wrapper_class); ?>">
     <div class="fcal_calendar_block_inner">
         <div style="display: none;" class="fcal_cals_wrap">

@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
+
 <div class="fcal_calendar_wrap<?php echo esc_attr(isset($block) ? '_block' : ''); ?>">
     <div class="fluent_booking_wrap">
         <?php if (!isset($hideInfo) || !$hideInfo) { ?>

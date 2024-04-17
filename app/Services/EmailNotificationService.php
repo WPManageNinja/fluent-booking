@@ -269,7 +269,7 @@ class EmailNotificationService
             'title'       => __('Cancelled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
             'type'        => 'activity',
             /* translators: Email address where the cancellation email was sent */
-            'description' => sprintf(__('Cancellation email sent to %s'), $emailTo),
+            'description' => sprintf(__('Cancellation email sent to %s', 'fluent-booking-pro'), $emailTo),
             'booking_id'  => $booking->id
         ]);
 

@@ -601,7 +601,7 @@ class TransStrings
             'meeting between'                                                                  => __('meeting between', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/description'                                              => __('All connected zoom accounts by you and your team members. You can review who connected their zoom account from Host Settings and manage from here for all of your team members.', 'fluent-booking-pro'),
             'Please read the documentation'                                                    => __('Please read the documentation', 'fluent-booking-pro'),
-            'Read the documentation'                                                           => __('Read the documentation'),
+            'Read the documentation'                                                           => __('Read the documentation', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/sub_description'                                          => __('for step by step guide to know how connect zoom account.', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/didnot_connect_zoom_desc'                                 => __('Looks like you did not connect FluentBooking with your Zoom Account yet!', 'fluent-booking-pro'),
             'ZoomIntegrationSettings/connect_zoom_desc'                                        => __('Connect your Zoom account to create dynamic meeting in zoom for your bookings.', 'fluent-booking-pro'),
@@ -734,8 +734,8 @@ class TransStrings
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
             'Refund payment from stripe'                                                       => __('Refund payment from stripe', 'fluent-booking-pro'),
-            'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability'),
-            'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.')
+            'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability', 'fluent-booking-pro'),
+            'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );
 
     }

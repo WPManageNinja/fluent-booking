@@ -3,6 +3,8 @@
      * @var $theme
      * @var $calenderEvent
      */
+    
+    defined( 'ABSPATH' ) || exit;
 
     $mode = '';
     if ($theme == 'dark') {
