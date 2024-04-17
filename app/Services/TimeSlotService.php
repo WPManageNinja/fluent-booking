@@ -424,10 +424,10 @@ class TimeSlotService
             $slots = $weeklySlot['slots'];
             $items[$weekDay] = $slots;
         }
-
+        
+        // create range of each day slots from $items array above with $period minutes interval
         $formattedSlots = [];
         $days = array_keys($items);
-        // create range of each day slots from $items array above with $period minutes interval
         foreach ($items as $day => &$slots) {
             $daySlots = [];
             foreach ($slots as $slot) {
@@ -447,13 +447,21 @@ class TimeSlotService
                         $nextDay = $items[$days[$nextDayIndex]];
 
                         if ($nextDay && $nextDay[0]['start'] == '00:00') {
-                            $nextDayStart = strtotime($nextDay[0]['start']);
                             $nextDayEnd = strtotime($nextDay[0]['end']);
                             $reserveTime = $end - $start;
 
-                            if ($nextDayStart + $period <= $nextDayEnd + $reserveTime) {
-                                $daySlots[] = gmdate('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                                $items[$days[$nextDayIndex]][0]['start'] = gmdate('H:i', $nextDayStart + $interval - $reserveTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                            while ($period - $reserveTime <= $nextDayEnd) {
+                                $startTime = gmdate('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                                $nextDayStart = gmdate('H:i', $interval - $reserveTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                                $daySlots[] = $startTime;
+                                
+                                if ($nextDayStart < $startTime) {
+                                    $items[$days[$nextDayIndex]][0]['start'] = $nextDayStart;
+                                    break;
+                                }
+
+                                $start += $interval;
+                                $reserveTime = $end - $start;
                             }
                         }
                     }
@@ -494,13 +502,21 @@ class TimeSlotService
                     $nextDay = $overrideSlots[$nextDayIndex];
 
                     if ($nextDay && $nextDay[0]['start'] == '00:00') {
-                        $nextDayStart = strtotime($nextDay[0]['start']);
                         $nextDayEnd = strtotime($nextDay[0]['end']);
                         $reserveTime = $end - $start;
 
-                        if ($nextDayStart + $period <= $nextDayEnd + $reserveTime) {
-                            $formattedSlots[] = gmdate('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                            $overrideSlots[$nextDayIndex][0]['start'] = gmdate('H:i', $nextDayStart + $interval - $reserveTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                        while ($period - $reserveTime <= $nextDayEnd) {
+                            $startTime = gmdate('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                            $nextDayStart = gmdate('H:i', $interval - $reserveTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                            $formattedSlots[] = $startTime;
+
+                            if ($startTime > $nextDayStart) {
+                                $overrideSlots[$nextDayIndex][0]['start'] = $nextDayStart;
+                                break;
+                            }
+
+                            $start += $interval;
+                            $reserveTime = $end - $start;
                         }
                     }
                 }
