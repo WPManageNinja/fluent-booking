@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 use FluentBooking\Framework\Foundation\Application;
 use FluentBooking\App\Hooks\Handlers\ActivationHandler;
 use FluentBooking\App\Hooks\Handlers\DeactivationHandler;
