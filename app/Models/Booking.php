@@ -480,7 +480,9 @@ class Booking extends Model
         $guestName = trim($this->first_name . ' ' . $this->last_name);
 
         /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
-        return sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+        $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+
+        return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $calendarSlot, $this);
     }
 
     public function getActivities()
