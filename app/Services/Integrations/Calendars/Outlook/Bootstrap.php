@@ -47,7 +47,7 @@ class Bootstrap extends BaseCalendar
                         $message = __('Set Outlook Event Creat First', 'fluent-booking-pro');
                         $teamsExist = false;
                         break;
-                    } elseif (!empty($configId = Arr::get($calConfig, 'id'))) {
+                    } else if (!empty($configId = Arr::get($calConfig, 'id'))) {
                         $metaId = explode('__||__', $configId)[0];
                         $meta = $outlookQuery->where('id', $metaId)->first();
                         $isEnabled = Arr::get($meta->value, 'additional_settings.teams_enabled', '');
