@@ -162,6 +162,7 @@ class GoogleCalendar
         $argsDefaults = [
             'sendUpdates' => 'all'
         ];
+
         $queryArgs = wp_parse_args($queryArgs, $argsDefaults);
 
         return ($this->getAccessClient())->patchEvent($calendarId, $eventId, $eventData, $queryArgs);

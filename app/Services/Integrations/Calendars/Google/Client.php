@@ -171,7 +171,6 @@ class Client
 
     public function createEvent($calendarId, $data, $args = [])
     {
-
         $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarId . '/events';
 
         if (!empty($data['conferenceData'])) {
