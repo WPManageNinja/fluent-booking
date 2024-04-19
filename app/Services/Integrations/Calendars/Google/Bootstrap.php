@@ -168,13 +168,19 @@ class Bootstrap extends BaseCalendar
                 $remoteCalendars = [];
             }
 
+            $additionalSettings = $this->getAdditionalSettings($item->value);
+
+            $additionalSettingFields = $this->getAdditionalSettingFields();
+
             $feeds[] = [
-                'driver'             => 'google',
-                'db_id'              => $item->id,
-                'identifier'         => $item->key,
-                'remote_calendars'   => $remoteCalendars,
-                'errors'             => $errors,
-                'conflict_check_ids' => Arr::get($item->value, 'conflict_check_ids', [])
+                'driver'                    => 'google',
+                'db_id'                     => $item->id,
+                'identifier'                => $item->key,
+                'remote_calendars'          => $remoteCalendars,
+                'errors'                    => $errors,
+                'conflict_check_ids'        => Arr::get($item->value, 'conflict_check_ids', []),
+                'additional_settings'       => $additionalSettings,
+                'additional_setting_fields' => $additionalSettingFields
             ];
         }
 
@@ -266,7 +272,7 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        if ($booking->getMeta('__apple_calendar_event') && $booking->event_type != 'group') {
+        if ($booking->getMeta('__google_calendar_event') && $booking->event_type != 'group') {
             return false; // Already created
         }
 
@@ -394,13 +400,18 @@ class Bootstrap extends BaseCalendar
                     ]
                 ]
             ];
-
             $isGoogleMeet = true;
         }
 
-        $data = apply_filters('fluent_booking/google_event_data', $data, $booking);
+        $notificationEnabled = Arr::get($settings, 'additional_settings.notification_enabled', 'yes') != 'no';
 
-        $response = $api->createEvent($config['remote_calendar_id'], $data);
+        $queryArgs = [
+            'sendUpdates' => $notificationEnabled ? 'all' : 'none'
+        ];
+
+        $data = apply_filters('fluent_booking/google_event_data', $data, $booking, $queryArgs);
+
+        $response = $api->createEvent($config['remote_calendar_id'], $data, $queryArgs);
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -534,7 +545,13 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
-        $response = $api->patchEvent($config['remote_calendar_id'], $googleEventId, $updateData);
+        $notificationEnabled = Arr::get($settings, 'additional_settings.notification_enabled', 'yes') != 'no';
+
+        $queryArgs = [
+            'sendUpdates' => $notificationEnabled ? 'all' : 'none'
+        ];
+
+        $response = $api->patchEvent($config['remote_calendar_id'], $googleEventId, $updateData, $queryArgs);
 
         if (is_wp_error($response)) {
             do_action('fluent_booking/log_booking_activity', [
@@ -867,5 +884,30 @@ class Bootstrap extends BaseCalendar
             'key'         => $tokenData['remote_email'],
             'value'       => $tokenData
         ]);
+    }
+
+    private function getAdditionalSettings($settings)
+    {
+        $additionalSettings = Arr::get($settings, 'additional_settings', '');
+
+        if (!$additionalSettings) {
+            return [
+                'notification_enabled' => 'yes'
+            ];
+        }
+
+        return $additionalSettings;
+    }
+
+    private function getAdditionalSettingFields()
+    {
+        $fields = [
+            'notification_enabled' => [
+                'type'           => 'yes_no_checkbox',
+                'checkbox_label' => __('Enable Google Calendar Notification', 'fluent-booking-pro'),
+            ]
+        ];
+
+        return apply_filters('fluent_booking/google_additional_setting_fields', $fields);
     }
 }
