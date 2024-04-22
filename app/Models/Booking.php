@@ -4,6 +4,7 @@ namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
 use FluentBooking\App\Services\BookingFieldService;
+use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
@@ -480,7 +481,9 @@ class Booking extends Model
         $guestName = trim($this->first_name . ' ' . $this->last_name);
 
         /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
-        return sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+        $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+
+        return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $calendarSlot, $this);
     }
 
     public function getActivities()
@@ -715,6 +718,53 @@ class Booking extends Model
         }, $sections);
         
         return implode(PHP_EOL . PHP_EOL, $lines) . PHP_EOL . PHP_EOL;
+    }
+
+    public function getMeetingBookmarks($assetsUrl = '')
+    {
+        return apply_filters('fluent_booking/meeting_bookmarks', [
+            'google'   => [
+                'title' => __('Google Calendar', 'fluent-booking-pro'),
+                'url'   => add_query_arg([
+                    'dates'    => gmdate('Ymd\THis\Z', strtotime($this->start_time)) . '/' . gmdate('Ymd\THis\Z', strtotime($this->end_time)),
+                    'text'     => $this->getMeetingTitle(),
+                    'details'  => $this->title,
+                    'location' => urlencode(LocationService::getBookingLocationUrl($this)),
+                ], 'https://calendar.google.com/calendar/r/eventedit'),
+                'icon'  => $assetsUrl . 'images/g-icon.svg'
+            ],
+            'outlook'  => [
+                'title' => __('Outlook', 'fluent-booking-pro'),
+                'url'   => add_query_arg([
+                    'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
+                    'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
+                    'subject'  => $this->getMeetingTitle(),
+                    'path'     => '/calendar/action/compose',
+                    'body'     => $this->title,
+                    'rru'      => 'addevent',
+                    'location' => urlencode(LocationService::getBookingLocationUrl($this)),
+                ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
+                'icon'  => $assetsUrl . 'images/ol-icon.svg'
+            ],
+            'msoffice' => [
+                'title' => __('Microsoft Office', 'fluent-booking-pro'),
+                'url'   => add_query_arg([
+                    'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
+                    'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
+                    'subject'  => $this->getMeetingTitle(),
+                    'path'     => '/calendar/action/compose',
+                    'body'     => $this->title,
+                    'rru'      => 'addevent',
+                    'location' => urlencode(LocationService::getBookingLocationUrl($this)),
+                ], 'https://outlook.office.com/calendar/0/deeplink/compose'),
+                'icon'  => $assetsUrl . 'images/msoffice.svg'
+            ],
+            'other'    => [
+                'title' => __('Other Calendar', 'fluent-booking-pro'),
+                'url'   => $this->getIcsDownloadUrl(),
+                'icon'  => $assetsUrl . 'images/ics.svg'
+            ]
+        ], $this);
     }
 
 }

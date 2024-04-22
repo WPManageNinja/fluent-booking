@@ -43,6 +43,7 @@ class EditorShortCodeParser
         static::$store['host'] = $booking->getHostDetails(false);
         static::$store['custom_booking_data'] = null;
         static::$store['payment_order'] = null;
+        static::$store['meeting_bookmarks'] = null;
     }
 
     protected static function getBookingData($key)
@@ -144,7 +145,7 @@ class EditorShortCodeParser
         $fillables = (new Booking())->getFillable();
         $fillables[] = 'id';
         $fillables[] = 'created_at';
-        $fillables[] = 'updated_ar';
+        $fillables[] = 'updated_at';
 
         if (in_array($key, $fillables)) {
             return $booking->{$key};
@@ -326,10 +327,23 @@ class EditorShortCodeParser
 
     protected static function getOtherData($key)
     {
+        self::$store['meeting_bookmarks'] ??= static::$store['booking']->getMeetingBookmarks();
+
         if (0 === strpos($key, 'date.')) {
             $format = str_replace('date.', '', $key);
             return gmdate($format, strtotime(current_time('mysql'))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        } elseif ('add_booking_to_calendar' === $key) {
+            return static::parseShortCodes(Helper::getAddToCalendarHtml());
+        } elseif ('add_to_g_calendar_url' === $key) {
+            return Arr::get(self::$store['meeting_bookmarks'], 'google.url');
+        } elseif ('add_to_ol_calendar_url' === $key) {
+            return Arr::get(self::$store['meeting_bookmarks'], 'outlook.url');
+        } elseif ('add_to_ms_calendar_url' === $key) {
+            return Arr::get(self::$store['meeting_bookmarks'], 'msoffice.url');
+        } elseif ('add_to_ics_calendar_url' === $key) {
+            return Arr::get(self::$store['meeting_bookmarks'], 'other.url');
         }
+
         return $key;
     }
 
@@ -373,7 +387,7 @@ class EditorShortCodeParser
             if (false !== strpos($match, 'guest.')) {
                 $guestProperty = substr($match, strlen('guest.'));
                 $value = static::getGuestData($guestProperty);
-            } else if (false !== strpos($match, 'booking.custom.')) {
+            } elseif (false !== strpos($match, 'booking.custom.')) {
                 $customBookingProp = substr($match, strlen('booking.custom.'));
                 $value = static::getBookingCustomData($customBookingProp);
             } elseif (false !== strpos($match, 'booking.')) {
@@ -388,7 +402,7 @@ class EditorShortCodeParser
             } elseif (false !== strpos($match, 'calendar.')) {
                 $calendarProperty = substr($match, strlen('calendar.'));
                 $value = static::getCalendarData($calendarProperty);
-            } else if (false !== strpos($match, 'payment.')) {
+            } elseif (false !== strpos($match, 'payment.')) {
                 $paymentProperty = substr($match, strlen('payment.'));
                 $value = static::getPaymentData($paymentProperty);
             } else {
