@@ -228,49 +228,7 @@ class BookingService
 
         if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
             $assetsUrl = App::getInstance('url.assets');
-            $confirmationData['bookmarks'] = apply_filters('fluent_booking/meeting_bookmarks', [
-                'google'   => [
-                    'title' => __('Google Calendar', 'fluent-booking-pro'),
-                    'url'   => add_query_arg([
-                        'dates'    => gmdate('Ymd\THis\Z', strtotime($booking->start_time)) . '/' . gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
-                        'text'     => $meetingTitle,
-                        'details'  => $booking->title,
-                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
-                    ], 'https://calendar.google.com/calendar/r/eventedit'),
-                    'icon'  => $assetsUrl . 'images/g-icon.svg'
-                ],
-                'outlook'  => [
-                    'title' => __('Outlook', 'fluent-booking-pro'),
-                    'url'   => add_query_arg([
-                        'startdt'  => gmdate('Ymd\THis\Z', strtotime($booking->start_time)),
-                        'enddt'    => gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
-                        'subject'  => $meetingTitle,
-                        'path'     => '/calendar/action/compose',
-                        'body'     => $booking->title,
-                        'rru'      => 'addevent',
-                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
-                    ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
-                    'icon'  => $assetsUrl . 'images/ol-icon.svg'
-                ],
-                'msoffice' => [
-                    'title' => __('Microsoft Office', 'fluent-booking-pro'),
-                    'url'   => add_query_arg([
-                        'startdt'  => gmdate('Ymd\THis\Z', strtotime($booking->start_time)),
-                        'enddt'    => gmdate('Ymd\THis\Z', strtotime($booking->end_time)),
-                        'subject'  => $meetingTitle,
-                        'path'     => '/calendar/action/compose',
-                        'body'     => $booking->title,
-                        'rru'      => 'addevent',
-                        'location' => urlencode(LocationService::getBookingLocationUrl($booking)),
-                    ], 'https://outlook.office.com/calendar/0/deeplink/compose'),
-                    'icon'  => $assetsUrl . 'images/msoffice.svg'
-                ],
-                'other'    => [
-                    'title' => __('Other Calendar', 'fluent-booking-pro'),
-                    'url'   => $booking->getIcsDownloadUrl(),
-                    'icon'  => $assetsUrl . 'images/ics.svg'
-                ]
-            ], $booking);
+            $confirmationData['bookmarks'] = $booking->getMeetingBookmarks($assetsUrl);
         }
 
         $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);
