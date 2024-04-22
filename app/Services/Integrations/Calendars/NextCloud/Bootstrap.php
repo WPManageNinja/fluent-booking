@@ -232,7 +232,9 @@ class Bootstrap extends BaseCalendar
                 }, $cacheTime * 60);
 
                 $missedSlots = [];
-                foreach ($events['events'] as $event) {
+                
+                $bookedEvents = Arr::get($events, 'events', []);
+                foreach ($bookedEvents as $event) {
                     if ($event->timezone) {
                         $timeZone = $event->timezone;
                     }

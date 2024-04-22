@@ -83,11 +83,11 @@
                 <span><?php esc_html_e('Add to calendar', 'fluent-booking-pro'); ?></span>
                 <div class="fcal_cal_items">
                     <?php foreach ($bookmarks as $bookmark): ?>
-                    <div title="<?php echo esc_attr($bookmark['title']); ?>">
-                        <a href="<?php echo esc_url($bookmark['url']); ?>" target="_blank" rel="noopener">
-                            <img style="width: 20px; height: 20px;" src="<?php echo esc_url($bookmark['icon']); ?>" alt="<?php echo esc_attr($bookmark['title']); ?>"/>
-                        </a>
-                    </div>
+                        <div title="<?php echo esc_attr($bookmark['title']); ?>">
+                            <a href="<?php echo esc_url($bookmark['url']); ?>" target="_blank" rel="noopener">
+                                <img style="width: 20px; height: 20px;" src="<?php echo esc_url($bookmark['icon']); ?>" alt="<?php echo esc_attr($bookmark['title']); ?>"/>
+                            </a>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </div>
