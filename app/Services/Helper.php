@@ -1549,7 +1549,7 @@ class Helper
                 'title'   => __('Booking Confirmation Email to Attendee', 'fluent-booking-pro'),
                 'email'   => [
                     'subject' => 'Booking Confirmation between {{host.name}} & {{guest.full_name}}',
-                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</a></p>'
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '<hr/>' . self::getAddToCalendarHtml()
                 ],
             ],
             'booking_conf_host'       => [
@@ -1631,6 +1631,15 @@ class Helper
         ]);
     }
 
+    public static function getAddToCalendarHtml()
+    {
+        $assetUrl = App::getInstance()['url.assets'];
+
+        $html = '<table style="margin: 0 auto; border: none;"><tbody><tr><td style="border: none; font-size: 1rem;">' . __('Add to calendar', 'fluent-booking-pro') . '</td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_g_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/g-icon.png" alt="Google Calendar" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ol_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ol-icon.png" alt="Outlook" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ms_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/msoffice.png" alt="Microsoft Office" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ics_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ics.png" alt="Other Calendar" /></a></td></tr></tbody></table>';
+
+        return apply_filters('fluent_booking/add_to_calendar_html', $html);
+    }
+
     public static function getEditorShortCodes($calendarEvent = null, $isHtmlSupported = false)
     {
         if (!$isHtmlSupported) {
@@ -1685,10 +1694,11 @@ class Helper
                     'title'      => __('Other', 'fluent-booking-pro'),
                     'key'        => 'other',
                     'shortcodes' => [
-                        '{{event.id}}'             => __('Event ID', 'fluent-booking-pro'),
-                        '{{calendar.id}}'          => __('Calendar ID', 'fluent-booking-pro'),
-                        '{{calendar.title}}'       => __('Calendar Title', 'fluent-booking-pro'),
-                        '{{calendar.description}}' => __('Calendar Description', 'fluent-booking-pro'),
+                        '{{event.id}}'                => __('Event ID', 'fluent-booking-pro'),
+                        '{{calendar.id}}'             => __('Calendar ID', 'fluent-booking-pro'),
+                        '{{calendar.title}}'          => __('Calendar Title', 'fluent-booking-pro'),
+                        '{{calendar.description}}'    => __('Calendar Description', 'fluent-booking-pro'),
+                        '{{add_booking_to_calendar}}' => __('Add Booking to Calendar', 'fluent-booking-pro'),
                     ]
                 ]
             ];
@@ -1745,10 +1755,11 @@ class Helper
                     'title'      => __('Other', 'fluent-booking-pro'),
                     'key'        => 'other',
                     'shortcodes' => [
-                        '{{event.id}}'             => __('Event ID', 'fluent-booking-pro'),
-                        '{{event.calendar_id}}'    => __('Calendar ID', 'fluent-booking-pro'),
-                        '{{calendar.title}}'       => __('Calendar Title', 'fluent-booking-pro'),
-                        '{{calendar.description}}' => __('Calendar Description', 'fluent-booking-pro'),
+                        '{{event.id}}'                => __('Event ID', 'fluent-booking-pro'),
+                        '{{event.calendar_id}}'       => __('Calendar ID', 'fluent-booking-pro'),
+                        '{{calendar.title}}'          => __('Calendar Title', 'fluent-booking-pro'),
+                        '{{calendar.description}}'    => __('Calendar Description', 'fluent-booking-pro'),
+                        '{{add_booking_to_calendar}}' => __('Add Booking to Calendar', 'fluent-booking-pro'),
                     ]
                 ]
             ];

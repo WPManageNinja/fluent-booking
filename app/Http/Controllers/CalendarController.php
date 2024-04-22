@@ -349,7 +349,7 @@ class CalendarController extends Controller
             $data['calendar'] = $calendar;
         }
 
-        if (in_array('smart_codes', $request->get('with', []))) {
+        if (in_array('smart_codes', $this->request->get('with', []))) {
             $data['smart_codes'] = [
                 'texts' => Helper::getEditorShortCodes($calendarEvent),
                 'html'  => Helper::getEditorShortCodes($calendarEvent, true)
@@ -723,7 +723,6 @@ class CalendarController extends Controller
     public function getEventEmailNotifications(Request $request, $calendarId, $slotId)
     {
         $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
-
 
         /*
          * Confirmation Email to Attendee
