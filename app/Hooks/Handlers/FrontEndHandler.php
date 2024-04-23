@@ -71,7 +71,14 @@ class FrontEndHandler
                     ], 422);
                 }
 
-                if (!$existingBooking->canReschedule()) {
+                $rescheduleBy = 'guest';
+                if ($existingBooking->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings')) {
+                    $rescheduleBy = 'host';
+                }
+
+                $existingBooking->updateMeta('rescheduled_by_type', $rescheduleBy);
+
+                if ($rescheduleBy == 'guest' && !$existingBooking->canReschedule()) {
                     wp_send_json([
                         'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking-pro')
                     ], 422);
@@ -111,13 +118,6 @@ class FrontEndHandler
                 $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
                 $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
                 $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
-
-                $rescheduleBy = 'guest';
-                if ($existingBooking->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings')) {
-                    $rescheduleBy = 'host';
-                }
-
-                $existingBooking->updateMeta('rescheduled_by_type', $rescheduleBy);
 
                 do_action('fluent_booking/log_booking_activity', [
                     'booking_id'  => $existingBooking->id,
