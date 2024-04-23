@@ -53,18 +53,18 @@ class EmailNotificationService
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
         $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
 
-        $from = '';
         // Assign-To & Reply-To
         if ('host' == $emailTo) {
             $to = $hostAddress;
-            $replyTo = $guestAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
         } else {
             $to = $guestAddress;
             $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
             $fromName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
             $from = sprintf('%1s <%2s>', $fromName, $replyFromEmail);
@@ -138,14 +138,15 @@ class EmailNotificationService
         $from = '';
         if ('host' == $emailTo) {
             $to = $hostAddress;
-            $replyTo = $guestAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
         } else {
             $to = $guestAddress;
             $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
             $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
             $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
@@ -230,14 +231,15 @@ class EmailNotificationService
 
         if ('host' == $emailTo) {
             $to = $hostAddress;
-            $replyTo = $guestAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
         } else {
             $to = $guestAddress;
             $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
             $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
             $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
@@ -246,6 +248,10 @@ class EmailNotificationService
         $headers = [
             'Reply-To: ' . $replyTo
         ];
+
+        if ($from) {
+            $headers[] = 'From: ' . $from;
+        }
 
         if (isset($email['recipients'])) {
             $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
@@ -311,14 +317,15 @@ class EmailNotificationService
 
         if ('host' == $emailTo) {
             $to = $hostAddress;
-            $replyTo = $guestAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
         } else {
             $to = $guestAddress;
             $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
             $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
 
-            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail: $author['email'];
-            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail: $replayToEmail;
+            $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
+            $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
 
             $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
             $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
@@ -327,6 +334,10 @@ class EmailNotificationService
         $headers = [
             'Reply-To: ' . $replyTo
         ];
+
+        if ($from) {
+            $headers[] = 'From: ' . $from;
+        }
 
         if (isset($email['recipients'])) {
             $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
