@@ -106,6 +106,8 @@ class RemoteCalendarsInit
                 // we need to refresh the group members
                 do_action('fluent_booking/refresh_remote_calendar_group_members_' . $config['driver'], $config, $booking, $previousGroupBookings, true);
                 $booking->status = 'scheduled';
+            } else {
+                do_action('fluent_booking/delete_remote_calendar_event_' . $config['driver'], $config, $booking);
             }
 
             $newGroupings = Booking::query()->where('group_id', $booking->group_id)
