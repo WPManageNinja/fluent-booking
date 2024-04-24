@@ -319,6 +319,8 @@ class Bootstrap extends BaseCalendar
             return false;
         }
 
+        $guestListEnabled = Arr::get($settings, 'additional_settings.guest_list_enabled', 'no') === 'yes';
+
         $author = $booking->getHostDetails(false);
 
         $calendarOwnerEmail = $meta->key;
@@ -368,7 +370,7 @@ class Bootstrap extends BaseCalendar
             'location'           => $booking->getLocationAsText(),
             'summary'            => $booking->getMeetingTitle(),
             'guestsCanInviteOthers' => false,
-            'guestsCanSeeOtherGuests' => false,
+            'guestsCanSeeOtherGuests' => $guestListEnabled ? true : false,
             'extendedProperties' => [
                 'shared' => [
                     'created_by' => 'fluent-booking-pro',
@@ -403,7 +405,7 @@ class Bootstrap extends BaseCalendar
             $isGoogleMeet = true;
         }
 
-        $notificationEnabled = Arr::get($settings, 'additional_settings.notification_enabled', 'yes') != 'no';
+        $notificationEnabled = Arr::get($settings, 'additional_settings.notification_enabled', 'no') === 'yes';
 
         $queryArgs = [
             'sendUpdates' => $notificationEnabled ? 'all' : 'none'
@@ -631,9 +633,10 @@ class Bootstrap extends BaseCalendar
 
         if ($booking->status == 'scheduled') {
             $attendee = array_filter([
-                'display_name' => trim($booking->first_name . ' ' . $booking->last_name),
-                'email'        => $booking->email,
-                'comment'      => $booking->message
+                'display_name'   => trim($booking->first_name . ' ' . $booking->last_name),
+                'email'          => $booking->email,
+                'comment'        => $booking->message,
+                'responseStatus' => 'accepted'
             ]);
             $attendees[] = $attendee;
         } else {
@@ -892,7 +895,8 @@ class Bootstrap extends BaseCalendar
 
         if (!$additionalSettings) {
             return [
-                'notification_enabled' => 'yes'
+                'notification_enabled' => 'no',
+                'guest_list_enabled'   => 'no'
             ];
         }
 
@@ -905,6 +909,10 @@ class Bootstrap extends BaseCalendar
             'notification_enabled' => [
                 'type'           => 'yes_no_checkbox',
                 'checkbox_label' => __('Enable Google Calendar Notification', 'fluent-booking-pro'),
+            ],
+            'guest_list_enabled' => [
+                'type'           => 'yes_no_checkbox',
+                'checkbox_label' => __('Guests can see other guests', 'fluent-booking-pro'),
             ]
         ];
 
