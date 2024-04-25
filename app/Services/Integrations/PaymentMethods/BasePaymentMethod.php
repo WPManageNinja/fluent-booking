@@ -371,7 +371,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             // We are just renewing this as this may have been changed by the pre hook
             $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
 
-            do_action('fluent_booking/after_booking_scheduled', $booking, $booking->calendar_event);
+            do_action('fluent_booking/after_booking_scheduled', $booking, $booking->calendar_event, $orderHast);
         }
 
         if ($booking->status == 'pending') {

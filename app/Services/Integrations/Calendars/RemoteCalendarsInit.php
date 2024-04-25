@@ -16,11 +16,14 @@ class RemoteCalendarsInit
         (new \FluentBooking\App\Services\Integrations\Calendars\NextCloud\Bootstrap())->register();
 
         add_action('fluent_booking/pre_after_booking_scheduled', [$this, 'checkForRemoteCalendarEventInsert'], 11, 2);
+
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'checkForRemoteCalendarEventCancel'], 10, 1);
 
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'checkForRemoteCalendarEventReschedule'], 10, 2);
 
         add_action('fluent_booking/before_delete_booking', [$this, 'checkForRemoteCalendarEventDelete'], 10, 1);
+
+        add_action('fluent_booking/after_patch_booking_email', [$this, 'checkForRemoteCalendarEventEmailUpdate'], 10, 3);
 
         add_action('fluent_booking/after_disconnect_remote_calendar', function ($metaId, $calendar) {
             $config = RemoteCalendarHelper::getRemoteCalendarConfig($calendar->user_id);
@@ -128,6 +131,20 @@ class RemoteCalendarsInit
         do_action('fluent_booking/patch_remote_calendar_event_' . $config['driver'], $config, $booking, [
             'start' => $booking->start_time,
             'end'   => $booking->end_time
+        ], true);
+    }
+
+    public function checkForRemoteCalendarEventEmailUpdate(Booking $booking, $calendarEvent, $oldEmail)
+    {
+        $config = RemoteCalendarHelper::getRemoteCalendarConfig($booking->host_user_id);
+
+        if (!$config) {
+            return; // no integration available
+        }
+
+        do_action('fluent_booking/patch_remote_calendar_event_' . $config['driver'], $config, $booking, [
+            'email'     => $booking->email,
+            'old_email' => $oldEmail
         ], true);
     }
 
