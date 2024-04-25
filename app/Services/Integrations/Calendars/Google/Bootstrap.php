@@ -382,13 +382,7 @@ class Bootstrap extends BaseCalendar
         ];
 
         if ($booking->event_type != 'group') {
-            $data['description'] = $booking->getConfirmationData();
-            if ($booking->message) {
-                $data['description'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
-            }
-            if ($booking->getAdditionalData(false)) {
-                $data['description'] .= $booking->getAdditionalData(false);
-            }
+            $data['description'] = $this->getBookingDescription($booking);
         }
 
         $isGoogleMeet = false;
@@ -519,6 +513,7 @@ class Bootstrap extends BaseCalendar
         }
 
         $googleEventId = Arr::get($bookingMeta, 'id');
+        $remoteCalendarId = Arr::get($bookingMeta, 'remote_calendar_id');
 
         if (!$googleEventId) {
             return false;
@@ -529,6 +524,8 @@ class Bootstrap extends BaseCalendar
             'end',
             'status',
             'attendees',
+            'email',
+            'old_email'
         ];
 
         $updateData = Arr::only($updateData, $validKeys);
@@ -541,6 +538,28 @@ class Bootstrap extends BaseCalendar
             $updateData['end'] = [
                 'dateTime' => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time))
             ];
+        }
+
+        if (Arr::get($updateData, 'email')) {
+            $calendarApi = GoogleHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
+            if (!$calendarApi) {
+                return false;
+            }
+    
+            $updatedEvent = $calendarApi->getEvent($remoteCalendarId, $googleEventId);
+            
+            $attendees = $updatedEvent['attendees'] ?? [];
+
+            $attendees = array_map(function ($attendee) use ($updateData) {
+                if ($attendee['email'] == $updateData['old_email']) {
+                    $attendee['email'] = $updateData['email'];
+                }
+                return $attendee;
+            }, $attendees);
+
+            $updateData['attendees'] = $attendees;
+
+            $updateData['description'] = $this->getBookingDescription($booking);
         }
 
         if (!array_filter($updateData)) {
@@ -887,6 +906,21 @@ class Bootstrap extends BaseCalendar
             'key'         => $tokenData['remote_email'],
             'value'       => $tokenData
         ]);
+    }
+
+    private function getBookingDescription($booking)
+    {
+        $description = $booking->getConfirmationData();
+
+        if ($booking->message) {
+            $description .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
+        }
+    
+        if ($booking->getAdditionalData(false)) {
+            $description .= $booking->getAdditionalData(false);
+        }
+    
+        return $description;
     }
 
     private function getAdditionalSettings($settings)

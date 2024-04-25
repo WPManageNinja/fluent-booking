@@ -121,7 +121,7 @@ class SchedulesController extends Controller
     public function patchBooking(Request $request, $bookingId)
     {
         $booking = Booking::findOrFail($bookingId);
-        $oldSBooking = clone $booking;
+        $oldBooking = clone $booking;
 
         $data = $request->all();
         
@@ -132,7 +132,12 @@ class SchedulesController extends Controller
         do_action('fluent_booking/before_patch_booking_schedule', $booking, $data);
 
         $value = $request->get('value');
+
         $column = $data['column'];
+
+        if ($booking->{$column} == $value) {
+            return $this->sendError(['message' => __('No changes found', 'fluent-booking-pro')]);
+        }
 
         $validColumns = [
             'internal_note',
@@ -198,11 +203,13 @@ class SchedulesController extends Controller
         $booking->fill($updateData);
         $booking->save();
 
-        if ($column === 'status' && $oldSBooking->status != $booking->status) {
+        if ($column === 'status') {
             do_action('fluent_booking/booking_schedule_' . $value, $booking, $booking->calendar_event);
         }
 
-        do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldSBooking);
+        do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldBooking);
+
+        do_action('fluent_booking/after_patch_booking_' . $column, $booking, $booking->calendar_event, $oldBooking->{$column});
 
         return [
             /* translators: Updated column name */
