@@ -12,8 +12,12 @@
                     <p>{{ booking.first_name }} {{ booking.last_name }}</p>
                 </div>
                 <div class="fcal_schedule_details_event_item">
-                    <h3>{{ $t('Invitee Email') }}</h3>
-                    <p>{{ booking.email }}</p>
+                    <editable-booking-data
+                        input_type="textarea"
+                        data_key="email"
+                        :input_label="$t('Invitee Email')"
+                        :booking="booking">
+                    </editable-booking-data>
                 </div>
                 <div v-if="booking.additional_guests.length" class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Additional Guests') }}</h3>
@@ -47,9 +51,14 @@
 </template>
 
 <script>
+import EditableBookingData from "./EditableBookingData";
+
 export default {
     name: "SingleInviteeInfo",
     props: ['booking'],
+    components: {
+        EditableBookingData
+    },
 
     methods: {
         bookedAtHandler(date) {
