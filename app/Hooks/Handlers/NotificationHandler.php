@@ -15,7 +15,8 @@ class NotificationHandler
         add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'emailOnBookingRescheduled'], 10, 2);
-        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled']);
+        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled'], 10, 1);
+        add_action('fluent_booking/after_patch_booking_email', [$this, 'emailToUpdatedEmail'], 10, 2);
     }
 
     private function getReminderTime($time)
@@ -70,6 +71,18 @@ class NotificationHandler
             $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'host');
         }
 
+    }
+
+    public function emailToUpdatedEmail($booking, $calendarEvent)
+    {
+        $notifications = $calendarEvent->getNotifications();
+
+        if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled') || (Arr::isTrue($notifications, 'booking_conf_host.enabled'))) {
+            as_enqueue_async_action('fluent_booking/after_booking_scheduled_async', [
+                $booking->id,
+                $calendarEvent->id
+            ], 'fluent-booking');
+        }
     }
 
     public function bookingScheduledEmails($bookingId, $slotId)

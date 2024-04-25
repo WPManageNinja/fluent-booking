@@ -441,6 +441,17 @@ class Bootstrap extends BaseCalendar
 
             $eventData['attendees'] = $apiEvent->attendees;
 
+            if (Arr::get($updateData, 'email')) {
+                $eventData['attendees'] = array_map(function ($attendee) use ($updateData) {
+                    if ($attendee['email'] == $updateData['old_email']) {
+                        $attendee['email'] = $updateData['email'];
+                    }
+                    return $attendee;
+                }, $eventData['attendees']);
+
+                $eventData['description'] = $this->getBookingDescription($booking);
+            }
+            
             foreach ($eventData as $key => $datum) {
                 $apiEvent->{$key} = $datum;
             }
@@ -712,23 +723,7 @@ class Bootstrap extends BaseCalendar
             ]
         ];
 
-        $data['description'] = str_replace(PHP_EOL, '\\n', $booking->getConfirmationData());
-
-        if ($booking->message) {
-            $data['description'] .= __('Note: ', 'fluent-booking-pro') . '\\n' . $booking->message . '\\n' . '\\n';
-        }
-
-        if ($additionalData = $booking->getAdditionalData(false)) {
-            if (!empty($data['description'])) {
-                $data['description'] .= "\\n";
-            } else {
-                $data['description'] = '';
-            }
-
-            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
-
-            $data['description'] .= $additionalData;
-        }
+        $data['description'] = $this->getBookingDescription($booking);
 
         return $data;
     }
@@ -751,4 +746,26 @@ class Bootstrap extends BaseCalendar
         return AppleHelper::getClientByMeta($meta);
     }
 
+    private function getBookingDescription($booking)
+    {
+        $description = str_replace(PHP_EOL, '\\n', $booking->getConfirmationData());
+
+        if ($booking->message) {
+            $description  .= __('Note: ', 'fluent-booking-pro') . '\\n' . $booking->message . '\\n' . '\\n';
+        }
+
+        if ($additionalData = $booking->getAdditionalData(false)) {
+            if (!empty($description )) {
+                $description  .= "\\n";
+            } else {
+                $description  = '';
+            }
+
+            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
+
+            $description  .= $additionalData;
+        }
+
+        return $description;
+    }
 }

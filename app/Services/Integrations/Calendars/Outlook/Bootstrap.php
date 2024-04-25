@@ -425,14 +425,8 @@ class Bootstrap extends BaseCalendar
         if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',
-                'content'     => $booking->getConfirmationData()
+                'content'     => $this->getBookingDescription($booking)
             ];
-            if ($booking->message) {
-                $data['body']['content'] .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
-            }
-            if ($booking->getAdditionalData(false)) {
-                $data['body']['content'] .= $booking->getAdditionalData(false);
-            }
         }
 
         $isMsTeamMeeting = false;
@@ -618,6 +612,20 @@ class Bootstrap extends BaseCalendar
                 'timeZone' => 'UTC'
             ],
         ];
+
+        if (Arr::get($updatedData, 'email')) {
+            $data['attendees'] = [
+                'emailAddress' => array_filter([
+                    'name'    => trim($booking->first_name . ' ' . $booking->last_name),
+                    'address' => $booking->email
+                ]),
+                'type'         => 'required'
+            ];
+            $data['body'] = [
+                'contentType' => 'text',
+                'content'     => $this->getBookingDescription($booking)
+            ];
+        }
 
         $calendarApi = OutlookHelper::getApiClientByUserId($booking->host_user_id, $config['remote_calendar_id']);
         if (!$calendarApi) {
@@ -819,6 +827,21 @@ class Bootstrap extends BaseCalendar
         $calendarClient->updateSettinsValueByKey('last_calendar_lists_fetched', time());
 
         return $remoteCalendars;
+    }
+
+    private function getBookingDescription($booking)
+    {
+        $description = $booking->getConfirmationData();
+
+        if ($booking->message) {
+            $description .= __('Note: ', 'fluent-booking-pro') . PHP_EOL . $booking->message . PHP_EOL . PHP_EOL;
+        }
+    
+        if ($booking->getAdditionalData(false)) {
+            $description .= $booking->getAdditionalData(false);
+        }
+    
+        return $description;
     }
 
     private function getAdditionalSettings($settings)
