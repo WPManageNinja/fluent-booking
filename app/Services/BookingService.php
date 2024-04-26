@@ -238,25 +238,31 @@ class BookingService
 
     public static function generateBookingICS(Booking $booking)
     {
-        $meetingTitle = $booking->getMeetingTitle();
+        $author = $booking->getHostDetails(false);
 
         // Initialize the ICS content
         $icsContent = "BEGIN:VCALENDAR\r\n";
         $icsContent .= "VERSION:2.0\r\n";
-        $icsContent .= "PRODID:-//Your Organization//Your Application//EN\r\n";
+        $icsContent .= "PRODID:-//Google Inc//Fluent Booking//EN\r\n";
+        $icsContent .= "METHOD:REQUEST\r\n";
+        $icsContent .= "STATUS:CONFIRMED\r\n";
 
         $icsContent .= "BEGIN:VEVENT\r\n";
         $icsContent .= "UID:" . md5($booking->hash) . "\r\n"; // Unique ID for the event
 
         // Event details
-        $icsContent .= "SUMMARY:" . esc_html($booking->calendar_event->title) . "\r\n";
-        $icsContent .= "DESCRIPTION:" . $meetingTitle . "\r\n";
+        $icsContent .= "SUMMARY:" . $booking->getMeetingTitle() . "\r\n";
+        $icsContent .= "DESCRIPTION:" . $booking->getIcsBookingDescription() . "\r\n";
 
         // Date and time formatting (assuming eventStart and eventEnd are DateTime objects)
         $icsContent .= "DTSTART:" . gmdate('Ymd\THis\Z', strtotime($booking->start_time)) . "\r\n";
         $icsContent .= "DTEND:" . gmdate('Ymd\THis\Z', strtotime($booking->end_time)) . "\r\n";
 
-        $icsContent .= "LOCATION:" . wp_kses_post(LocationService::getBookingLocationUrl($booking)) . "\r\n";
+        $icsContent .= "LOCATION:" . $booking->getLocationAsText() . "\r\n";
+
+        $icsContent .= "ORGANIZER;CN=\"" . $author['name'] . "\":mailto:" . $author['email'] . "\r\n";
+
+        $icsContent .= "ATTENDEE;CN=\"" . $booking->email . "\";ROLE=REQ-PARTICIPANT;RSVP=TRUE;PARTSTAT=ACCEPTED:mailto:" . $booking->email . "\r\n";
 
         $icsContent .= "END:VEVENT\r\n";
 
