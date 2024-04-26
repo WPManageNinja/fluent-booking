@@ -82,6 +82,13 @@ class EmailNotificationService
             $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
         }
 
+        $icsContent = BookingService::generateBookingICS($booking);
+
+        $filePath = wp_tempnam(null, 'event') . '.ics';
+        file_put_contents($filePath, $icsContent);
+
+        $attachments = [$filePath];
+
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'   => $emailBody,
             'email_footer' => self::getGlobalEmailFooter(),
@@ -91,7 +98,11 @@ class EmailNotificationService
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string)$emogrifier->emogrify();
 
-        return Mailer::send($to, $emailSubject, $body, $headers);
+        $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
+
+        unlink($filePath);
+
+        return $result;
     }
 
     /**

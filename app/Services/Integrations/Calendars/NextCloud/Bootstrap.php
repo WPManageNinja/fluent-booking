@@ -455,7 +455,7 @@ class Bootstrap extends BaseCalendar
                     ]
                 ];
 
-                $eventData['description'] = $this->getBookingDescription($booking);
+                $eventData['description'] = $booking->getIcsBookingDescription();
             }
 
             foreach ($eventData as $key => $datum) {
@@ -724,19 +724,18 @@ class Bootstrap extends BaseCalendar
         );
 
         $data = [
-            'dtstart'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'dtend'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
-            'status'    => 'confirmed',
-            'summary'   => $booking->getMeetingTitle(),
-            'location'  => $booking->getLocationAsText(),
-            'attendees' => $attendees,
-            'organizer' => [
+            'dtstart'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
+            'dtend'       => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
+            'status'      => 'confirmed',
+            'summary'     => $booking->getMeetingTitle(),
+            'location'    => $booking->getLocationAsText(),
+            'description' => $booking->getIcsBookingDescription(),
+            'attendees'   => $attendees,
+            'organizer'   => [
                 'email' => $calendarOwnerEmail,
                 'name'  => $calendarOwnerName
             ]
         ];
-
-        $data['description'] = $this->getBookingDescription($booking);
 
         return $data;
     }
@@ -757,28 +756,5 @@ class Bootstrap extends BaseCalendar
         }
 
         return NextCloudHelper::getClientByMeta($meta);
-    }
-
-    private function getBookingDescription($booking)
-    {
-        $description = str_replace(PHP_EOL, '\\n', $booking->getConfirmationData());
-
-        if ($booking->message) {
-            $description .= __('Note: ', 'fluent-booking-pro') . '\\n' . $booking->message . '\\n' . '\\n';
-        }
-
-        if ($additionalData = $booking->getAdditionalData(false)) {
-            if (!empty($description)) {
-                $description .= "\\n";
-            } else {
-                $description = '';
-            }
-
-            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
-
-            $description .= $additionalData;
-        }
-
-        return $description;
     }
 }
