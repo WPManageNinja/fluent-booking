@@ -451,7 +451,7 @@ class Bootstrap extends BaseCalendar
                         'name'     => trim($booking->first_name . ' ' . $booking->last_name),
                         'email'    => $booking->email,
                         'rsvp'     => true,
-                        'partstat' => 'accepted'
+                        'partstat' => 'accepted',
                     ]
                 ];
 
@@ -515,7 +515,7 @@ class Bootstrap extends BaseCalendar
                 'name'     => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
                 'email'    => $groupBooking->email,
                 'rsvp'     => true,
-                'partstat' => 'accepted'
+                'partstat' => 'accepted',
             ];
         }
 
@@ -711,7 +711,7 @@ class Bootstrap extends BaseCalendar
             'email'    => $booking->email,
             'name'     => trim($booking->first_name . ' ' . $booking->last_name),
             'rsvp'     => true,
-            'partstat' => 'accepted'
+            'partstat' => 'accepted',
         ];
         
         $additionalGuests = $booking->getAdditionalGuests();

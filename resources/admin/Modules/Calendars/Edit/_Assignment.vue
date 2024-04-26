@@ -89,7 +89,7 @@ export default {
         updateTeamMembers() {
             this.teamMembers = this.settings.team_members.map((id) => {
                 return this.all_hosts.find(host => host.id === id);
-            });
+            }).filter(host => host);
         },
         addTeamMember(id) {
             this.settings.team_members.push(id);
@@ -145,7 +145,6 @@ export default {
     },
     mounted() {
         this.getAllHosts();
-        console.log(typeof(this.settings.team_members));
     }
 }
 </script>
