@@ -135,13 +135,15 @@ $event = [
             'name' => 'Arif',
             'email' => 'arif@ymail.com',
             'role' => 'participant',
-            'rsvp' => true
+            'rsvp' => true,
+            'partstat' => 'accepted'
         ],
         [
             'name' => 'Jewel',
             'email' => 'jewel@ymail.com',
             'role' => 'chair',
-            'rsvp' => true
+            'rsvp' => true,
+            'partstat' => 'accepted'
         ]
     ],
     'organizer' => [
