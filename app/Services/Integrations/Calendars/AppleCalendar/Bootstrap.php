@@ -439,19 +439,19 @@ class Bootstrap extends BaseCalendar
 
             $eventData = $this->prepareEventData($config, $booking);
 
-            $eventData['attendees'] = $apiEvent->attendees;
-
             if (Arr::get($updateData, 'email')) {
-                $eventData['attendees'] = array_map(function ($attendee) use ($updateData) {
-                    if ($attendee['email'] == $updateData['old_email']) {
-                        $attendee['email'] = $updateData['email'];
-                    }
-                    return $attendee;
-                }, $eventData['attendees']);
+                $eventData['attendees'] = [
+                    [
+                        'name'     => trim($booking->first_name . ' ' . $booking->last_name),
+                        'email'    => $booking->email,
+                        'rsvp'     => true,
+                        'partstat' => 'accepted'
+                    ]
+                ];
 
                 $eventData['description'] = $this->getBookingDescription($booking);
             }
-            
+
             foreach ($eventData as $key => $datum) {
                 $apiEvent->{$key} = $datum;
             }
@@ -506,8 +506,10 @@ class Bootstrap extends BaseCalendar
                 continue;
             }
             $attendees[] = [
-                'name'  => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
-                'email' => $groupBooking->email
+                'name'     => trim($groupBooking->first_name . ' ' . $groupBooking->last_name),
+                'email'    => $groupBooking->email,
+                'rsvp'     => true,
+                'partstat' => 'accepted'
             ];
         }
 
@@ -697,8 +699,10 @@ class Bootstrap extends BaseCalendar
         }
 
         $mainGuest = [
-            'email' => $booking->email,
-            'name'  => trim($booking->first_name . ' ' . $booking->last_name),
+            'email'    => $booking->email,
+            'name'     => trim($booking->first_name . ' ' . $booking->last_name),
+            'rsvp'     => true,
+            'partstat' => 'accepted'
         ];
         
         $additionalGuests = $booking->getAdditionalGuests();
