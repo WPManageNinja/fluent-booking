@@ -655,6 +655,29 @@ class Booking extends Model
         return '';
     }
 
+    public function getIcsBookingDescription()
+    {
+        $description = str_replace(PHP_EOL, '\\n', $this->getConfirmationData());
+
+        if ($this->message) {
+            $description  .= __('Note: ', 'fluent-booking-pro') . '\\n' . $this->message . '\\n' . '\\n';
+        }
+
+        if ($additionalData = $this->getAdditionalData(false)) {
+            if (!empty($description )) {
+                $description  .= "\\n";
+            } else {
+                $description  = '';
+            }
+
+            $additionalData = str_replace(PHP_EOL, '\\n', $additionalData);
+
+            $description  .= $additionalData;
+        }
+
+        return $description;
+    }
+
     public function getAdditionalData($isHtml = false)
     {
         $customData = BookingFieldService::getFormattedCustomBookingData($this);
