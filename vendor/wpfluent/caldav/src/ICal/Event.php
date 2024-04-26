@@ -148,16 +148,19 @@ class Event implements \JsonSerializable
 
 				if ($key == 'name') {
 					$str .= "CN={$value};";
-				} elseif($key == 'role') {
+				} elseif ($key == 'role') {
 					$value = strtoupper($value);
 					$str .= "ROLE={$value};";
-				}  elseif($key == 'rsvp') {
+				}  elseif ($key == 'rsvp') {
 					if (is_bool($value)) {
 						$value = $value === true ? 'TRUE' : 'FALSE';
 					}
 					$value = strtoupper($value);
 					$str .= "RSVP={$value};";
-				}
+				} elseif ($key == 'partstat') {
+                    $value = strtoupper($value);
+                    $str .= "PARTSTAT={$value};";
+                }
 			}
 
 			$str = rtrim($str, ';');
