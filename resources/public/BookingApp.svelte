@@ -42,6 +42,8 @@
         dispatch('handleBack');
     }
 
+    console.log("totalPayment", slot.total_payment)
+
     function checkDevice() {
         let timeout = 0;
         let conversationalPage = document.getElementsByClassName('ff_conversation_page_body');

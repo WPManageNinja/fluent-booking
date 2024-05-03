@@ -6,5 +6,6 @@
     "/assets/public/js/phone-field.js": "/assets/public/js/phone-field.js",
     "/assets/public/js/public-manage-meeting.js": "/assets/public/js/public-manage-meeting.js",
     "/assets/public/js/team_app.js": "/assets/public/js/team_app.js",
-    "/assets/public/js/calendar_app.js": "/assets/public/js/calendar_app.js"
+    "/assets/public/js/calendar_app.js": "/assets/public/js/calendar_app.js",
+    "/assets/public/js/bookings.js": "/assets/public/js/bookings.js"
 }

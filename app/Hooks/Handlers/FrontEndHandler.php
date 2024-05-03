@@ -27,6 +27,8 @@ class FrontEndHandler
 
         add_shortcode('fluent_booking_team', [$this, 'handleTeamShortcode']);
 
+        add_shortcode('fluent_booking_lists', [$this, 'handleBookingListsShortcode']);
+
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
 
         add_action('wp_ajax_fluent_cal_schedule_meeting', [$this, 'ajaxScheduleMeeting']);
@@ -351,6 +353,73 @@ class FrontEndHandler
             'title'         => Arr::get($headerConfig, 'title', ''),
             'description'   => Arr::get($headerConfig, 'description', ''),
             'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
+        ]);
+    }
+
+    public function handleBookingListsShortcode($atts, $content)
+    {
+        $atts = shortcode_atts([
+            'title' => __('My Bookings', 'fluent-booking-pro'),
+        ], $atts);
+        
+        $userData = get_userdata(get_current_user_id());
+        
+        $userEmail = $userData ? $userData->user_email : null;
+        
+        if (!$userEmail) {
+            return __('Please login to view your bookings', 'fluent-booking-pro');
+        }
+        
+        $data = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        $perPage       = intval(Arr::get($data, 'booking_per_page', 10));
+        $currentPage   = intval(Arr::get($data, 'booking_page', 1));
+        $bookingPeriod = sanitize_text_field(Arr::get($data, 'booking_period', 'all'));
+
+        $bookings = Booking::query()->with('calendar_event')
+            ->where('email', $userEmail)
+            ->orderBy('start_time', 'DESC')
+            ->applyComputedStatus($bookingPeriod)
+            ->paginate($perPage, ['*'], 'booking_page', $currentPage)
+            ->appends(['booking_page' => $currentPage])
+            ->withQueryString();
+        
+        foreach ($bookings as &$booking) {
+            $booking->author_name      = $booking->getHostDetails(false)['name'];
+            $booking->happening_status = $booking->getOngoingStatus();
+
+            $booking->booking_date = DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'date');
+            $booking->booking_time = DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time');
+        }
+
+        $currentPage = $bookings->currentPage();
+        $lastPage    = $bookings->lastPage();
+        $startPage   = max(1, $currentPage - 2);
+        $endPage     = min($lastPage, $currentPage + 2);
+
+        // Adjust if near the beginning or the end
+        if ($currentPage < 3) {
+            $endPage = min($lastPage, 5);
+        }
+        if ($currentPage > $lastPage - 2) {
+            $startPage = max(1, $lastPage - 4);
+        }
+
+        $periodOptions = Helper::getBookingPeriodOptions();
+
+        $pageOptions = apply_filters('fluent_booking/booking_per_page_options', [5, 10, 20, 50, 100]);
+
+        wp_enqueue_script('fluent-booking-list', App::getInstance('url.assets') . 'public/js/bookings.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
+
+        return App::make('view')->make('public.bookings', [
+            'bookings'       => $bookings,
+            'booking_title'  => $atts['title'],
+            'per_page'       => $perPage,
+            'start_page'     => $startPage,
+            'end_page'       => $endPage,
+            'booking_period' => $bookingPeriod,
+            'page_options'   => $pageOptions,
+            'period_options' => $periodOptions
         ]);
     }
 
