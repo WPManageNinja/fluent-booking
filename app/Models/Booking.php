@@ -252,6 +252,16 @@ class Booking extends Model
         return $html;
     }
 
+    public function getAttendeeStartTime($format = 'Y-m-d H:i:s')
+    {
+        return DateTimeHelper::convertFromUtc($this->start_time, $this->person_time_zone, $format);
+    }
+
+    public function getAttendeeEndTime($format = 'Y-m-d H:i:s')
+    {
+        return DateTimeHelper::convertFromUtc($this->end_time, $this->person_time_zone, $format);
+    }
+
     public function getLocationDetailsHtml()
     {
         $details = $this->location_details;
@@ -352,7 +362,7 @@ class Booking extends Model
     public function getOngoingStatus()
     {
         if ($this->status == 'cancelled') {
-            return '';
+            return [];
         }
 
         $currentTime = time();
@@ -360,17 +370,15 @@ class Booking extends Model
         $endTime = strtotime($this->end_time);
 
         if ($currentTime > $startTime && $currentTime < $endTime) {
-            return [
-                'happening_now' => __('Happening Now', 'fluent-booking-pro')
-            ];
-        } elseif (($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
-            return [
-                'starting_soon' => __('Starting Soon', 'fluent-booking-pro')
-            ];
-        } else if (($endTime - $currentTime) > -3600 && ($endTime - $currentTime) < 0) {
-            return [
-                'recently_happened' => __('Recently Happened', 'fluent-booking-pro')
-            ];
+            return ['happening_now' => __('Happening Now', 'fluent-booking-pro')];
+        }
+        
+        if (($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
+            return ['starting_soon' => __('Starting Soon', 'fluent-booking-pro')];
+        }
+        
+        if (($endTime - $currentTime) > -3600 && ($endTime - $currentTime) < 0) {
+            return ['recently_happened' => __('Recently Happened', 'fluent-booking-pro')];
         }
 
         return [];
@@ -472,7 +480,7 @@ class Booking extends Model
         return $this->getMeta('reschedule_reason', '');
     }
 
-    public function getMeetingTitle()
+    public function getMeetingTitle($html = false)
     {
         $calendarSlot = $this->calendar_event;
 
@@ -480,8 +488,10 @@ class Booking extends Model
 
         $guestName = trim($this->first_name . ' ' . $this->last_name);
 
+        $formattedTitle = $html ? "<strong>{$calendarSlot->title}</strong>" : $calendarSlot->title;
+
         /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
-        $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $calendarSlot->title, $guestName, $author['name']);
+        $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $formattedTitle, $guestName, $author['name']);
 
         return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $calendarSlot, $this);
     }
