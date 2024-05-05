@@ -59,6 +59,7 @@
                 .fcal_booking {
                     border-bottom: 1px solid #eaecf0;
                     position: relative;
+                    cursor: pointer;
                     &:last-child {
                         border-bottom: none;
                     }
@@ -169,6 +170,8 @@
                             }
                         }
                         .fcal_spot_actions {
+                            display: flex;
+                            gap: 0.5rem;
                             align-self: center;
                         }
                     }

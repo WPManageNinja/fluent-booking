@@ -20,7 +20,7 @@
         <div class="fcal_bookings">
             <div class="fcal_booking_wrapper">
                 <?php foreach ($bookings as $booking) : ?>
-                    <div class="fcal_booking">
+                    <div class="fcal_booking" onclick="location.href='<?= esc_url($booking->getConfirmationUrl()); ?>'">
                         <div class="fcal_spot_wrapper <?= 'fcal_spot_status_' . esc_attr($booking->status) ?>">
                             <div class="fcal_spot_line">
                                 <div class="fcal_spot_timing">
@@ -55,13 +55,10 @@
                                     </div>
                                 </div>
                                 <div class="fcal_spot_actions">
-                                    <button class="fcal_plain_btn" onclick="location.href='<?= esc_url($booking->getConfirmationUrl()); ?>'"><?=__('View')?></button>
-                                    <?php if ($booking->canCancel()): ?>
-                                        <button class="fcal_plain_btn" onclick="location.href='<?= esc_url($booking->getCancelUrl()); ?>'"><?=__('Cancel')?></button>
-                                    <?php endif; ?>
-                                    <?php if ($booking->canReschedule()): ?>
-                                        <button class="fcal_plain_btn" onclick="location.href='<?= esc_url($booking->getRescheduleUrl()); ?>'"><?=__('Reschedule')?></button>
-                                    <?php endif; ?>
+                                    <button class="fcal_plain_btn"
+                                        onclick="location.href='<?= esc_url($booking->getConfirmationUrl()); ?>'">
+                                        <?=__('View')?>
+                                    </button>
                                 </div>
                             </div>
                         </div>
