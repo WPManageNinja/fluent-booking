@@ -2,18 +2,20 @@
 
 <div class="container">
     <div class="fcal_booking_header">
-        <h3><?= esc_html($booking_title) ?></h3>
+        <h3><?= esc_html($attributes['title']) ?></h3>
         <div class="fcal_booking_header_actions">
-            <form action="" method="GET">
-                <?php foreach ($period_options as $value => $label): ?>
-                    <div class="fcal_radio_btn">
-                        <input type="radio" name="booking_period" id="fcal_period_<?= esc_attr($value) ?>"
-                            value="<?= esc_attr($value) ?>" <?= $booking_period == $value ? 'checked' : '' ?>
-                            onchange="this.form.submit()">
-                        <label for="fcal_period_<?= esc_attr($value) ?>"><?= esc_html($label) ?></label>
-                    </div>
-                <?php endforeach; ?>
-            </form>
+            <?php if ($attributes['filter'] == 'show') : ?>
+                <form action="" method="GET">
+                    <?php foreach ($period_options as $value => $label): ?>
+                        <div class="fcal_radio_btn">
+                            <input type="radio" name="booking_period" id="fcal_period_<?= esc_attr($value) ?>"
+                                value="<?= esc_attr($value) ?>" <?= $booking_period == $value ? 'checked' : '' ?>
+                                onchange="this.form.submit()">
+                            <label for="fcal_period_<?= esc_attr($value) ?>"><?= esc_html($label) ?></label>
+                        </div>
+                    <?php endforeach; ?>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
     <div class="fcal_all_bookings">
@@ -74,7 +76,7 @@
     </div>
 
     <!-- Pagination -->
-    <?php if ($bookings->lastPage() > 1): ?>
+    <?php if ($attributes['pagination'] == 'show' && $bookings->lastPage() > 1): ?>
         <ul class="fcal_pagination">
             <span><?=__('Total', 'fluent-booking-pro') . ' ' . esc_html($bookings->total())?></span>
 
