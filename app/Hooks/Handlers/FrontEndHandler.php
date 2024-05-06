@@ -359,7 +359,11 @@ class FrontEndHandler
     public function handleBookingListsShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'title' => __('My Bookings', 'fluent-booking-pro'),
+            'title'      => __('My Bookings', 'fluent-booking-pro'),
+            'filter'     => 'show',
+            'pagination' => 'show',
+            'period'     => 'all',
+            'per_page'   => 10
         ], $atts);
         
         $userData = get_userdata(get_current_user_id());
@@ -372,9 +376,9 @@ class FrontEndHandler
         
         $data = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $perPage       = intval(Arr::get($data, 'booking_per_page', 10));
+        $perPage       = intval(Arr::get($data, 'booking_per_page', $atts['per_page']));
         $currentPage   = intval(Arr::get($data, 'booking_page', 1));
-        $bookingPeriod = sanitize_text_field(Arr::get($data, 'booking_period', 'all'));
+        $bookingPeriod = sanitize_text_field(Arr::get($data, 'booking_period', $atts['period']));
 
         $bookings = Booking::query()->with('calendar_event')
             ->where('email', $userEmail)
@@ -413,7 +417,7 @@ class FrontEndHandler
 
         return App::make('view')->make('public.bookings', [
             'bookings'       => $bookings,
-            'booking_title'  => $atts['title'],
+            'attributes'     => $atts,
             'per_page'       => $perPage,
             'start_page'     => $startPage,
             'end_page'       => $endPage,
