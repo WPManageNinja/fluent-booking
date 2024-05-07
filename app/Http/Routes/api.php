@@ -56,6 +56,7 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
 });
 
 $router->prefix('bookings')->withPolicy('CalendarEventPolicy')->group(function ($router) {
+    $router->get('/', 'BookingController@getBookings');
     $router->get('event', 'BookingController@getEvent');
     $router->post('create/{event_id}', 'BookingController@createBooking')->int('event_id');
 });

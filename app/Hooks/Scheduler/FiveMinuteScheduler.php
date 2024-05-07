@@ -40,7 +40,7 @@ class FiveMinuteScheduler
     {
         $autoCancelTimeOut = (int)Helper::getGlobalAdminSetting('auto_cancel_timing', 10) * 60; // 10 minutes
 
-        \FluentBooking\App\Models\Booking::query()
+        Booking::query()
             ->where('created_at', '<=', gmdate('Y-m-d H:i:s', time() - $autoCancelTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->where('status', 'pending')
             ->update([

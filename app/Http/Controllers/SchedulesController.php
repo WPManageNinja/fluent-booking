@@ -13,7 +13,6 @@ use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\CalendarService;
-use FluentBooking\Framework\Pagination\LengthAwarePaginator;
 
 class SchedulesController extends Controller
 {
