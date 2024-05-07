@@ -322,7 +322,7 @@ class BookingController extends Controller
         
         $calendarIds = $request->get('calendar_ids', []);
 
-        if ($calendarIds[0] != 'all') {
+        if (!in_array('all', $calendarIds)) {
             $calendarIds = array_map('intval', $calendarIds);
             $bookingQuery->whereIn('calendar_id', $calendarIds);
         }
