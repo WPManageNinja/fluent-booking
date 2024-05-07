@@ -165,13 +165,11 @@ class FrontEndHandler
         }
 
         $calendarEvent = CalendarSlot::query()->find($atts['id']);
-
         if (!$calendarEvent) {
             return '';
         }
 
         $calendar = $calendarEvent->calendar;
-
         if (!$calendar) {
             return __('Calendar not found', 'fluent-booking-pro');
         }
@@ -359,11 +357,12 @@ class FrontEndHandler
     public function handleBookingListsShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'title'      => __('My Bookings', 'fluent-booking-pro'),
-            'filter'     => 'show',
-            'pagination' => 'show',
-            'period'     => 'all',
-            'per_page'   => 10
+            'title'        => __('My Bookings', 'fluent-booking-pro'),
+            'filter'       => 'show',
+            'pagination'   => 'show',
+            'period'       => 'all',
+            'calendar_ids' => 'all',
+            'per_page'     => 10
         ], $atts);
         
         $userData = get_userdata(get_current_user_id());
@@ -380,11 +379,17 @@ class FrontEndHandler
         $currentPage   = intval(Arr::get($data, 'booking_page', 1));
         $bookingPeriod = sanitize_text_field(Arr::get($data, 'booking_period', $atts['period']));
 
-        $bookings = Booking::query()->with('calendar_event')
+        $bookingQuery = Booking::query()->with('calendar_event')
             ->where('email', $userEmail)
             ->orderBy('start_time', 'DESC')
-            ->applyComputedStatus($bookingPeriod)
-            ->paginate($perPage, ['*'], 'booking_page', $currentPage)
+            ->applyComputedStatus($bookingPeriod);
+
+        if ($atts['calendar_ids'] != 'all') {
+            $calendarIds = array_map('intval', explode(',', $atts['calendar_ids']));
+            $bookingQuery->whereIn('calendar_id', $calendarIds);
+        }
+
+        $bookings = $bookingQuery->paginate($perPage, ['*'], 'booking_page', $currentPage)
             ->appends(['booking_page' => $currentPage])
             ->withQueryString();
         
@@ -411,7 +416,7 @@ class FrontEndHandler
 
         $periodOptions = Helper::getBookingPeriodOptions();
 
-        $pageOptions = apply_filters('fluent_booking/booking_per_page_options', [5, 10, 20, 50, 100]);
+        $pageOptions = apply_filters('fluent_booking/booking_per_page_options', [5, 10, 15, 20, 50, 100]);
 
         wp_enqueue_script('fluent-booking-list', App::getInstance('url.assets') . 'public/js/bookings.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
 

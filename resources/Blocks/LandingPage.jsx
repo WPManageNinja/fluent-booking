@@ -24,7 +24,6 @@ export const LandingPage = props => {
     const [slot, setSlot] = useState('');
     const [error, setError] = useState(false);
 
-
     const apiFetch = wp.apiFetch;
     const {addQueryArgs} = wp.url;
 
@@ -135,7 +134,6 @@ export const LandingPage = props => {
                                     attributes={props.attributes}
                                     setAttributes={props.setAttributes} />
                             </div>
-
                         </div>
                     :
                     <div className="fcal_block_select_cal">
