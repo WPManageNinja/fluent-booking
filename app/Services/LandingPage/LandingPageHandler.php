@@ -112,9 +112,8 @@ class LandingPageHandler
 
         foreach ($activeEvents as $activeEvent) {
             $activeEvent->public_url = $activeEvent->getPublicUrl();
-            if ($activeEvent->description) {
-                $activeEvent->description = Helper::excerpt($activeEvent->description);
-            } else {
+            
+            if (!$activeEvent->description) {
                 // translators: %d is the duration of the meeting in minutes
                 $activeEvent->description = sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $activeEvent->duration);
             }
@@ -123,6 +122,8 @@ class LandingPageHandler
                 $activeEvent->description = __('Choose your duration and book a meeting with me', 'fluent-booking-pro');
                 $activeEvent->duration = Arr::get($activeEvent->settings, 'multi_duration.available_durations');
             }
+
+            $activeEvent->short_description = Helper::excerpt($activeEvent->description);
         }
 
         $metaDescription = Helper::excerpt($calendar->description);
@@ -153,10 +154,8 @@ class LandingPageHandler
             if ($extraJs) {
                 $vars['lazy_js_files'] = $extraJs;
             }
-
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
         }
-
 
         $assetUrl = App::getInstance('url.assets');
         $data = [
