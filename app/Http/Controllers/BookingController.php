@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\App;
+use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
@@ -295,6 +296,60 @@ class BookingController extends Controller
         return [
             'calendar_event'  => $calendarEventVars,
             'available_slots' => $availableSpots
+        ];
+    }
+
+    public function getBookings(Request $request)
+    {
+        $userData = get_userdata(get_current_user_id());
+        
+        $userEmail = $userData ? $userData->user_email : null;
+
+        if (!$userEmail) {
+            return $this->sendError([
+                'message' => __('Please login to view your bookings', 'fluent-booking-pro')
+            ]);
+        }
+
+        $perPage = intval($request->get('per_page', 10));
+
+        $bookingPeriod = sanitize_text_field($request->get('period', 'all'));
+
+        $bookingQuery = Booking::query()->with('calendar_event')
+            ->where('email', $userEmail)
+            ->orderBy('start_time', 'DESC')
+            ->applyComputedStatus($bookingPeriod);
+        
+        $calendarIds = $request->get('calendar_ids', []);
+
+        if ($calendarIds[0] != 'all') {
+            $calendarIds = array_map('intval', $calendarIds);
+            $bookingQuery->whereIn('calendar_id', $calendarIds);
+        }
+
+        do_action_ref_array('fluent_booking/bookings_query', [&$bookingQuery]);
+
+        $totalBookings = $bookingQuery->count();
+
+        $bookings = $bookingQuery->limit($perPage)->get();
+        
+        $formattedBookings = [];
+        foreach ($bookings as $booking) {
+            $formattedBookings[] = [
+                'id'                => $booking->id,
+                'person_time_zone'  => $booking->person_time_zone,
+                'status'            => $booking->status,
+                'payment_status'    => $booking->payment_status,
+                'meeting_title'     => $booking->getMeetingTitle(true),
+                'author_name'       => $booking->getHostDetails(false)['name'],
+                'booking_date'      => DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'date'),
+                'booking_time'      => DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time'),
+            ];
+        }
+
+        return [
+            'bookings' => $formattedBookings,
+            'total'    => $totalBookings
         ];
     }
 }

@@ -44,6 +44,14 @@ class BlockEditorHandler
                 true
             );
 
+            wp_enqueue_script(
+                'fluent-booking/booking-management',
+                $assets . 'admin/fluent-booking-booking-management-index.js',
+                array('wp-blocks', 'wp-components', 'wp-block-editor', 'wp-element'),
+                FLUENT_BOOKING_ASSETS_VERSION,
+                true
+            );
+
             $calendars = Calendar::with(['events' => function ($query) {
                 $query->where('status', 'active');
             }])->get();
@@ -87,62 +95,62 @@ class BlockEditorHandler
             'editor_script'   => 'fluent-booking/calendar',
             'render_callback' => array($this, 'fcalRenderBlock'),
             'attributes'      => [
-                'slotId'         => [
-                    'type'    => 'string',
-                    'default' => '',
-                ],
-                'calendarId'     => [
-                    'type'    => 'string',
-                    'default' => '',
-                ],
-                'avatar_rounded' => [
-                    'type'    => 'boolean',
-                    'default' => false
-                ],
-                'primary_color'  => [
-                    'type'    => 'string',
-                    'default' => '#4587EC'
-                ],
-                'date_round'     => [
-                    'type'    => 'string',
-                    'default' => '4px'
-                ],
-                'avatarStyle'    => [
-                    'type'    => 'string',
-                    'default' => '8px'
-                ],
-                'hideHostInfo'   => [
-                    'type'    => 'string',
-                    'default' => 'no'
-                ],
-                'theme'   => [
-                    'type'    => 'string',
-                    'default' => 'light'
-                ]
+                    'slotId'      => [
+                        'type'    => 'string',
+                        'default' => '',
+                    ],
+                    'calendarId'     => [
+                        'type'    => 'string',
+                        'default' => '',
+                    ],
+                    'avatar_rounded' => [
+                        'type'    => 'boolean',
+                        'default' => false
+                    ],
+                    'primary_color'  => [
+                        'type'    => 'string',
+                        'default' => '#4587EC'
+                    ],
+                    'date_round'     => [
+                        'type'    => 'string',
+                        'default' => '4px'
+                    ],
+                    'avatarStyle'    => [
+                        'type'    => 'string',
+                        'default' => '8px'
+                    ],
+                    'hideHostInfo'   => [
+                        'type'    => 'string',
+                        'default' => 'no'
+                    ],
+                    'theme'   => [
+                        'type'    => 'string',
+                        'default' => 'light'
+                    ]
             ]
         ));
 
         register_block_type('fluent-booking/team-management', array(
             'editor_script'   => 'fluent-booking/team-management',
             'render_callback' => array($this, 'fcalRenderTeamManagementBlock'),
-            'attributes'      => array(
-                'title'       => array(
-                    'type'    => 'string',
-                    'default' => ''
-                ),
-                'description' => array(
-                    'type'    => 'string',
-                    'default' => ''
-                ),
-                'headerImage' => array(
-                    'type'    => 'object',
-                    'default' => ''
-                ),
-                'hosts'       => array(
-                    'type'    => 'object',
-                    'default' => ''
-                )
-            )
+            'attributes'      => [
+                    'title'       => [
+                        'type'    => 'string',
+                        'default' => ''
+                    ],
+                    'description' => [
+                        'type'    => 'string',
+                        'default' => ''
+                    ],
+                    'headerImage' => [
+                        'type'    => 'object',
+                        'default' => ''
+                    ],
+                    'hosts'       => [
+                        'type'    => 'object',
+                        'default' => ''
+                    ]
+            ]
         ));
 
         register_block_type('fluent-booking/calendar-management', array(
@@ -174,6 +182,37 @@ class BlockEditorHandler
                     'default' => false
                 )
             )
+        ));
+
+        register_block_type('fluent-booking/booking-management', array(
+            'editor_script'   => 'fluent-booking/booking-management',
+            'render_callback' => array($this, 'fcalRenderBookingManagementBlock'),
+            'attributes'      => [
+                    'title'       => [
+                        'type'    => 'string',
+                        'default' => __('My Bookings', 'fluent-booking-pro')
+                    ],
+                    'showFilter' => [
+                        'type'    => 'boolean',
+                        'default' => true
+                    ],
+                    'showPagination' => [
+                        'type'    => 'boolean',
+                        'default' => true
+                    ],
+                    'period'  => [
+                        'type'    => 'string',
+                        'default' => 'all'
+                    ],
+                    'perPage'  => [
+                        'type'    => 'number',
+                        'default' => 5
+                    ],
+                    'calendarIds'  => [
+                        'type'    => 'array',
+                        'default' => ['all']
+                    ]
+            ]
         ));
     }
 
@@ -270,6 +309,23 @@ class BlockEditorHandler
             'logo'          => Arr::get($attributes, 'headerImage.url'),
             'hide_info'     => Arr::isTrue($attributes, 'hideInfo')
         ]);
+    }
+
+    public function fcalRenderBookingManagementBlock($attributes)
+    {
+        $calendarIds = Arr::get($attributes, 'calendarIds', []);
+        
+        $title = sanitize_text_field(Arr::get($attributes, 'title'));
+
+        $period = sanitize_text_field(Arr::get($attributes, 'period', 'all'));
+
+        $perPage = intval(Arr::get($attributes, 'perPage', 10));
+
+        $showFilter = Arr::isTrue($attributes, 'showFilter', true) ? 'show' : 'hide';
+
+        $showPagination = Arr::isTrue($attributes, 'showPagination', true) ? 'show' : 'hide';
+
+        return do_shortcode("[fluent_booking_lists title=\"$title\" period=$period per_page=$perPage filter=$showFilter pagination=$showPagination calendar_ids=" . implode(',', $calendarIds) . "]");
     }
 
     public function fcalRenderBlock($attributes)

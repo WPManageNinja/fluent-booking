@@ -55,4 +55,6 @@ mix.js('resources/public/Team/team_app.js', 'assets/public/js');
 
 mix.js('resources/public/Team/calendar_app.js', 'assets/public/js');
 
+mix.js('resources/public/Booking/bookings.js', 'assets/public/js');
+
 mix.disableNotifications();

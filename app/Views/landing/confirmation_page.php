@@ -33,7 +33,7 @@
 
     <script>
         <?php foreach ($js_vars as $varKey => $values): ?>
-        var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
+            var <?php echo esc_attr($varKey); ?> = <?php echo wp_json_encode($values); ?>;
         <?php endforeach; ?>
     </script>
 

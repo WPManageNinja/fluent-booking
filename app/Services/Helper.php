@@ -1349,6 +1349,17 @@ class Helper
         ]);
     }
 
+    public static function getBookingPeriodOptions()
+    {
+        return apply_filters('fluent_booking/booking_period_options', [
+            'upcoming'  => __('Upcoming', 'fluent-booking-pro'),
+            'completed' => __('Completed', 'fluent-booking-pro'),
+            'pending'   => __('Pending', 'fluent-booking-pro'),
+            'cancelled' => __('Cancelled', 'fluent-booking-pro'),
+            'all'       => __('All', 'fluent-booking-pro'),
+        ]);
+    }
+
     public static function getWeekSelectTimes()
     {
         return apply_filters('fluent_booking/week_select_times_schema', [
