@@ -113,7 +113,7 @@ class Bootstrap
         }
 
         // let's prepare the booking data
-        $data = apply_filters('fluent_booking/zoom_meeting_data', [
+        $data = [
             'agenda'       => $calendarSlot->title,
             'duration'     => 30,
             'type'         => 2,
@@ -126,9 +126,14 @@ class Bootstrap
             ],
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
             'start_time'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            /* translators: 1: Calendar slot title, 2: Full name of the person */
-            'topic'        => sprintf(__('%1$s meeting with %2$s', 'fluent-booking-pro'), $calendarSlot->title, trim($booking->first_name . ' ' . $booking->last_name)),
-        ], $booking, $calendarSlot);
+            'topic'        => $booking->getMeetingTitle(),
+        ];
+
+        if ($booking->event_type == 'group') {
+            $data['topic'] = $calendarSlot->title;
+        }
+
+        $data = apply_filters('fluent_booking/zoom_meeting_data', $data, $booking, $calendarSlot);
 
         $response = $apiClient->createMeeting($data);
 
