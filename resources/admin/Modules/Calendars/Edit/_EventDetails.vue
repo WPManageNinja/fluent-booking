@@ -373,6 +373,10 @@ export default {
                     this.$handleError(this.$t('Location Title is required'));
                     return false;
                 }
+                if ((location.type == 'online_meeting') && !location.meeting_link) {
+                    this.$handleError(this.$t('Meeting link is required'));
+                    return false;
+                }
                 if ((location.type == 'in_person_organizer' || location.type == 'custom') && !location.description) {
                     this.$handleError(this.$t('Location Description is required'));
                     return false;
