@@ -100,7 +100,7 @@ const InspectorSettings = props => {
                         </div>
                         <div className="fcal_block_inspector_widget">
                             <SelectControl
-                                label={__('Select Period')}
+                                label={__('Default Period')}
                                 value={period}
                                 options={[
                                     { label: 'Upcoming', value: 'upcoming' },
