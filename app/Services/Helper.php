@@ -1552,7 +1552,11 @@ class Helper
 
     public static function getDefaultEmailNotificationSettings()
     {
-        $checkImage = App::getInstance()['url.assets'] . 'images/check-mark.png';
+        $assetUrl = App::getInstance()['url.assets'];
+
+        $checkImage      = $assetUrl . 'images/check-mark.png';
+        $cancelImage     = $assetUrl . 'images/cancel-mark.png';
+        $rescheduleImage = $assetUrl . 'images/reschedule-mark.png';
 
         return apply_filters('fluent_booking/default_email_notification_settings', [
             'booking_conf_attendee'   => [
@@ -1610,7 +1614,7 @@ class Helper
                 'email'   => [
                     'additional_recipients' => '',
                     'subject'               => 'A booking was cancelled with {{guest.full_name}}',
-                    'body'                  => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>A scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                    'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $cancelImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>A scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'cancelled_by_host'       => [
@@ -1618,7 +1622,7 @@ class Helper
                 'title'   => __('Booking Cancelled by Organizer (email to Attendee)', 'fluent-booking-pro'),
                 'email'   => [
                     'subject' => 'Your booking was cancelled with {{host.name}}',
-                    'body'    => '<h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p>'
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $cancelImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Cancellation</h2><hr /><p>Your scheduled meeting has been canceled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(cancelled)</strong></span></p><p><strong>Cancellation Reason</strong></p><p>{{booking.cancel_reason}}</p>'
                 ],
             ],
             'rescheduled_by_attendee' => [
@@ -1628,7 +1632,7 @@ class Helper
                 'email'   => [
                     'additional_recipients' => '',
                     'subject'               => 'A booking was rescheduled with {{guest.full_name}}',
-                    'body'                  => '<h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>A scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                    'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $rescheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>A scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'rescheduled_by_host'     => [
@@ -1636,7 +1640,7 @@ class Helper
                 'title'   => __('Booking Rescheduled by Organizer (email to Attendee)', 'fluent-booking-pro'),
                 'email'   => [
                     'subject' => 'Your booking was rescheduled with {{host.name}}',
-                    'body'    => '<h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p>'
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $rescheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p>'
                 ],
             ]
         ]);
