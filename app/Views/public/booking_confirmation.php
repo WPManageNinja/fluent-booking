@@ -14,6 +14,11 @@
                 <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/images/check-mark.png" />
             </div>
         <?php endif; ?>
+        <?php if ($booking->status == 'cancelled'): ?>
+            <div class="fcal_check_holder" style="min-height: 50px;">
+                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/images/cancel-mark.png" />
+            </div>
+        <?php endif; ?>
         <h2><?php echo esc_html($title); ?></h2>
         <p><?php echo wp_kses_post($sub_heading); ?></p>
     </div>

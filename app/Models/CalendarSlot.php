@@ -618,7 +618,7 @@ class CalendarSlot extends Model
 
     public function isWooEnabled()
     {
-        return $this->type == 'woo' && defined('WC_PLUGIN_FILE') && Helper::isPaymentEnabled();
+        return $this->type == 'woo' && defined('WC_PLUGIN_FILE');
     }
 
     public function getPaymentItems($duration = null)
