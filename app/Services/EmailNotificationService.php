@@ -357,6 +357,13 @@ class EmailNotificationService
         $subject = EditorShortCodeParser::parse($email['subject'], $booking);
         $html = EditorShortCodeParser::parse($email['body'], $booking);
 
+        $icsContent = BookingService::generateBookingICS($booking);
+
+        $filePath = wp_tempnam(null, 'event') . '.ics';
+        file_put_contents($filePath, $icsContent);
+
+        $attachments = [$filePath];
+
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'   => $html,
             'email_footer' => self::getGlobalEmailFooter()
@@ -366,7 +373,9 @@ class EmailNotificationService
         $emogrifier->disableInvisibleNodeRemoval();
         $body = (string)$emogrifier->emogrify();
 
-        $result = Mailer::send($to, $subject, $body, $headers);
+        $result = Mailer::send($to, $subject, $body, $headers, $attachments);
+
+        unlink($filePath);
 
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Rescheduled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
