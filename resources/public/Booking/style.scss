@@ -34,6 +34,9 @@
                             box-shadow: none;
                             color: #374151;
                         }
+                        &:hover~label {
+                            color: #306ae0;
+                        }
                     }
                     label {
                         display: block;
@@ -199,6 +202,7 @@
         height: auto;
         line-height: 1;
         padding: 8px 16px;
+        background: transparent;
         transition: .2s;
         span {
             gap: 8px;
