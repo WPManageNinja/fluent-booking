@@ -113,7 +113,7 @@ class CancelBookingTrigger extends BaseTrigger
             'last_name'  => $booking->last_name,
             'email'      => $booking->email,
             'phone'      => $booking->phone,
-            'user_id'    => $booking->user_id,
+            'user_id'    => $booking->person_user_id,
             'timezone'   => $booking->person_time_zone,
             'status'     => Arr::get($funnel->settings, 'subscription_status'),
         ]);
