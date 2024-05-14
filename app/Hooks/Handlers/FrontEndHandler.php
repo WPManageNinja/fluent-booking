@@ -602,6 +602,7 @@ class FrontEndHandler
                 'Please select a valid payment method' => __('Please select a valid payment method', 'fluent-booking-pro'),
                 'Please Select'                        => __('Please Select', 'fluent-booking-pro'),
                 'Something is wrong!'                  => __('Something is wrong!', 'fluent-booking-pro'),
+                'Requires Confirmation'                => __('Requires Confirmation', 'fluent-booking-pro'),
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
@@ -738,6 +739,10 @@ class FrontEndHandler
             'event_type'       => $calendarSlot->event_type,
             'slot_minutes'     => $duration
         ];
+
+        if ($calendarSlot->isConfirmationRequired($startDateTime)) {
+            $bookingData['status'] = 'pending';
+        }
 
         $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
         if ($selectedLocation['type'] == 'phone_guest') {

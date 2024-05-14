@@ -42,8 +42,6 @@
         dispatch('handleBack');
     }
 
-    console.log("totalPayment", slot.total_payment)
-
     function checkDevice() {
         let timeout = 0;
         let conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
@@ -243,6 +241,15 @@
                             {/if}
                             <div class="fcal_slot_info">
                                 <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
+                                {#if slot.settings?.requires_confirmation?.enabled}
+                                    <div class="fcal_requires_confirmation fcal_icon_item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-check relative z-20 mr-2 mt-[2px] h-4 w-4 flex-shrink-0 rtl:ml-2">
+                                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                        <span>{i18('Requires Confirmation')}</span>
+                                    </div>
+                                {/if}
                                 <div class="slot_timing fcal_icon_item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                          viewBox="0 0 18 18"

@@ -237,6 +237,18 @@ class CalendarSlot extends Model
             if (!Arr::get($statuses, 'rescheduled_by_attendee')) {
                 $statuses['rescheduled_by_attendee'] = $defaults['rescheduled_by_attendee'];
             }
+            
+            if (!Arr::get($statuses, 'booking_request_host')) {
+                $statuses['booking_request_host'] = $defaults['booking_request_host'];
+            }
+
+            if (!Arr::get($statuses, 'booking_request_attendee')) {
+                $statuses['booking_request_attendee'] = $defaults['booking_request_attendee'];
+            }
+
+            if (!Arr::get($statuses, 'declined_by_host')) {
+                $statuses['declined_by_host'] = $defaults['declined_by_host'];
+            }
 
             return $statuses;
         }
@@ -255,15 +267,26 @@ class CalendarSlot extends Model
 
         if ($statuses) {
 
-            if ($isEdit) {
-                $defaults = TwilioHelper::getDefaultSmsNotificationSettings();
+            $defaults = TwilioHelper::getDefaultSmsNotificationSettings();
 
+            if ($isEdit) {
                 foreach ($defaults as $key => $default) {
                     if (isset($statuses[$key])) {
                         $statuses[$key]['title'] = $default['title'];
                     }
                 }
+            }
 
+            if (!Arr::get($statuses, 'booking_request_host')) {
+                $statuses['booking_request_host'] = $defaults['booking_request_host'];
+            }
+
+            if (!Arr::get($statuses, 'booking_request_attendee')) {
+                $statuses['booking_request_attendee'] = $defaults['booking_request_attendee'];
+            }
+
+            if (!Arr::get($statuses, 'declined_by_host')) {
+                $statuses['declined_by_host'] = $defaults['declined_by_host'];
             }
 
             return $statuses;
@@ -581,10 +604,33 @@ class CalendarSlot extends Model
         ], $calendarEvent ?: $this);
     }
 
-    public function defaultPaymentIcon($currency, $amount)
+    public function isConfirmationEnabled()
     {
-        $html = '<div class="fcal_slot_payment_item"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z"></path><path fill="currentColor" d="M768 192H128v448h640V192zm64-22.976v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H105.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096C65.536 682.432 64 677.248 64 663.04V169.024c0-14.272 1.472-19.456 4.288-24.64a29.056 29.056 0 0 1 12.096-12.16C85.568 129.536 90.752 128 104.96 128h685.952c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64z"></path><path fill="currentColor" d="M448 576a160 160 0 1 1 0-320 160 160 0 0 1 0 320zm0-64a96 96 0 1 0 0-192 96 96 0 0 0 0 192z"></path></svg>' . $currency . $amount . '</div>';
-        return $html;
+        return Arr::isTrue($this->settings, 'requires_confirmation.enabled');
+    }
+
+    public function isConfirmationRequired($bookingStartTime, $bookingCreatedTime = null)
+    {
+        if ($this->isConfirmationEnabled()) {
+            $type = Arr::get($this->settings, 'requires_confirmation.type', 'always');
+            if ($type == 'always') {
+                return true;
+            }
+            
+            $bookingStartTime   = strtotime($bookingStartTime);
+            $bookingCreatedTime = $bookingCreatedTime ? strtotime($bookingCreatedTime) : time();
+
+            $conditionUnit  = Arr::get($this->settings, 'requires_confirmation.condition.unit', 'minutes');
+            $conditionValue = Arr::get($this->settings, 'requires_confirmation.condition.value', 0);
+
+            $conditionTime = $conditionValue * 60;
+            if ($conditionUnit == 'hours') {
+                $conditionTime = $conditionTime * 60;
+            }
+
+            return $bookingStartTime - $bookingCreatedTime < $conditionTime;
+        }
+        return false;
     }
 
     public function defaultLocationHtml()
@@ -599,6 +645,12 @@ class CalendarSlot extends Model
         }
 
         return LocationService::getLocationIconHeadingHtml($default, $this);
+    }
+
+    public function defaultPaymentIcon($currency, $amount)
+    {
+        $html = '<div class="fcal_slot_payment_item"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z"></path><path fill="currentColor" d="M768 192H128v448h640V192zm64-22.976v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H105.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096C65.536 682.432 64 677.248 64 663.04V169.024c0-14.272 1.472-19.456 4.288-24.64a29.056 29.056 0 0 1 12.096-12.16C85.568 129.536 90.752 128 104.96 128h685.952c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64z"></path><path fill="currentColor" d="M448 576a160 160 0 1 1 0-320 160 160 0 0 1 0 320zm0-64a96 96 0 1 0 0-192 96 96 0 0 0 0 192z"></path></svg>' . $currency . $amount . '</div>';
+        return $html;
     }
 
     public function isPaymentEnabled($duration = null)

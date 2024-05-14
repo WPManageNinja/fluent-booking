@@ -9,14 +9,9 @@
 <div class="fcal_confirmation">
     <?php do_action('fluent_booking/booking_details_header', $booking); ?>
     <div class="fcal_confirm_header">
-        <?php if ($booking->status == 'scheduled'): ?>
+        <?php if ($confirm_icon): ?>
             <div class="fcal_check_holder" style="min-height: 50px;">
-                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/images/check-mark.png" />
-            </div>
-        <?php endif; ?>
-        <?php if ($booking->status == 'cancelled'): ?>
-            <div class="fcal_check_holder" style="min-height: 50px;">
-                <img style="max-width: 44px;" src="<?php echo \FluentBooking\App\App::getInstance('url.assets'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>/images/cancel-mark.png" />
+                <img style="max-width: 44px;" src="<?php echo $confirm_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" />
             </div>
         <?php endif; ?>
         <h2><?php echo esc_html($title); ?></h2>

@@ -689,6 +689,11 @@ class Helper
         return apply_filters('fluent_booking/admin_base_url', admin_url('admin.php?page=fluent-booking#/' . $extension), $extension);
     }
 
+    public static function getAdminBookingUrl($bookingId)
+    {
+        return self::getAppBaseUrl('scheduled-events?booking_id=' . $bookingId);
+    }
+
     public static function getNextBookingGroup()
     {
         $lastBooking = Booking::orderBy('group_id', 'desc')->first(['group_id']);
@@ -1554,9 +1559,9 @@ class Helper
     {
         $assetUrl = App::getInstance()['url.assets'];
 
-        $checkImage      = $assetUrl . 'images/check-mark.png';
-        $cancelImage     = $assetUrl . 'images/cancel-mark.png';
-        $rescheduleImage = $assetUrl . 'images/reschedule-mark.png';
+        $checkImage    = $assetUrl . 'images/check-mark.png';
+        $cancelImage   = $assetUrl . 'images/cancel-mark.png';
+        $scheduleImage = $assetUrl . 'images/schedule-mark.png';
 
         return apply_filters('fluent_booking/default_email_notification_settings', [
             'booking_conf_attendee'   => [
@@ -1564,7 +1569,7 @@ class Helper
                 'title'   => __('Booking Confirmation Email to Attendee', 'fluent-booking-pro'),
                 'email'   => [
                     'subject' => 'Booking Confirmation between {{host.name}} & {{guest.full_name}}',
-                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</p><hr/>' . self::getAddToCalendarHtml()
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $checkImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your event has been scheduled</h2><hr /><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</p><hr/>' . self::getAddToCalendarHtml($assetUrl)
                 ],
             ],
             'booking_conf_host'       => [
@@ -1632,7 +1637,7 @@ class Helper
                 'email'   => [
                     'additional_recipients' => '',
                     'subject'               => 'A booking was rescheduled with {{guest.full_name}}',
-                    'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $rescheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>A scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                    'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>A scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr /><p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
                 ],
             ],
             'rescheduled_by_host'     => [
@@ -1640,19 +1645,54 @@ class Helper
                 'title'   => __('Booking Rescheduled by Organizer (email to Attendee)', 'fluent-booking-pro'),
                 'email'   => [
                     'subject' => 'Your booking was rescheduled with {{host.name}}',
-                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $rescheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</a></p><hr/>' . self::getAddToCalendarHtml()
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</a></p><hr/>' . self::getAddToCalendarHtml($assetUrl)
                 ],
-            ]
+            ],
+            'booking_request_host'       => [
+                'enabled' => true,
+                'is_host' => true,
+                'title'   => __('Booking Approval Request to Host (email to Organizer)', 'fluent-booking-pro'),
+                'email'   => [
+                    'additional_recipients' => '',
+                    'subject'               => 'Awaiting Approval: {{guest.full_name}} @ {{booking.start_date_time_for_host}}',
+                    'body'                  => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">A booking is still waiting for your approval</h2><hr /><p>Someone has requested to schedule an event on your calendar. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} ({{guest.email}}) - Guest</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Note</strong></p><p>{{guest.note}}</p><p><strong>Additional Data</strong></p><p>{{guest.form_data_html}}</p><hr />' . self::getConfirmAndRejectButton($assetUrl) . '<p style="text-align: center;"><a href="##booking.admin_booking_url##">View on the Website</a></p>'
+                ],
+            ],
+            'booking_request_attendee'   => [
+                'enabled' => true,
+                'title'   => __('Booking Submission Confirmation (email to Attendee)', 'fluent-booking-pro'),
+                'email'   => [
+                    'subject' => 'Booking Submitted: Meeting between {{host.name}} & {{guest.full_name}}',
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 class="p1" style="text-align: center;">Your booking has been submitted</h2><hr /><p>Please wait for the host to confirm your booking.</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{host.name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_guest_timezone}}</p><p><strong>Who</strong></p><ul><li>{{host.name}} - Organizer</li><li>{{guest.full_name}} - you</li></ul><p><strong>Where</strong></p><p>{{booking.location_details_html}}</p><p><strong>Additional notes</strong></p><p>{{guest.note}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking-pro') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking-pro') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking-pro') . '</p>'
+                ],
+            ],
+            'declined_by_host'       => [
+                'enabled' => true,
+                'title'   => __('Booking Declined by Organizer (email to Attendee)', 'fluent-booking-pro'),
+                'email'   => [
+                    'subject' => 'Booking Declined: Your booking was declined with {{host.name}}',
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $cancelImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Declined</h2><hr /><p>Your booking request has been declined. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>{{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(declined)</strong></span></p><p><strong>Reason</strong></p><p>{{booking.reject_reason}}</p>'
+                ],
+            ],
         ]);
     }
 
-    public static function getAddToCalendarHtml()
+    public static function getAddToCalendarHtml($assetUrl = '')
     {
-        $assetUrl = App::getInstance()['url.assets'];
+        $assetUrl = $assetUrl ?: App::getInstance()['url.assets'];
 
         $html = '<table style="margin: 0 auto; border: none;"><tbody><tr><td style="border: none; font-size: 1rem;">' . __('Add to calendar', 'fluent-booking-pro') . '</td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_g_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/g-icon.png" alt="Google Calendar" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ol_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ol-icon.png" alt="Outlook" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ms_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/msoffice.png" alt="Microsoft Office" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ics_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ics.png" alt="Other Calendar" /></a></td></tr></tbody></table>';
 
         return apply_filters('fluent_booking/add_to_calendar_html', $html);
+    }
+
+    public static function getConfirmAndRejectButton($assetUrl = '')
+    {
+        $assetUrl = $assetUrl ?: App::getInstance()['url.assets'];
+
+        $html = '<table style="margin: 16px auto; border: none;"><tbody><tr><td style="border: none; border-radius: 3px;" align="center" valign="middle"><p style="display: inline-block; background: #292929; color: #ffffff; font-size: 14px; font-weight: 500; line-height: 16px; margin: 0; text-decoration: none; text-transform: none; padding: 10px 16px 10px 14px; border-radius: 6px; box-sizing: border-box; height: 36px;"><a href="##booking.booking_confirm_url##" style="color: #ffffff; text-decoration: none; display: flex; margin: auto;"><img src="' . $assetUrl . 'images/confirm-mark.png" style="height: 16px; width: 16px; margin-left: 0; margin-right: 0.5rem;" alt="" width="16px" data-bit="iit" />'. __('Confirm', 'fluent-booking-pro') . '</a></p><p style="width: 16px; height: 16px; display: inline-block;"> </p><p style="display: inline-block; background: #ffffff; border: 1px solid #d1d5db; color: #ffffff; font-size: 14px; font-weight: 500; line-height: 16px; margin: 0; text-decoration: none; text-transform: none; padding: 10px 16px 10px 14px; border-radius: 6px; box-sizing: border-box; height: 36px;"><a href="##booking.booking_reject_url##" style="color: #292929; text-decoration: none; display: flex; margin: auto;"><img src="' . $assetUrl . 'images/reject-mark.png" style="height: 16px; width: 16px; margin-left: 0; margin-right: 8px;" alt="" width="16px" data-bit="iit" />' . __('Reject', 'fluent-booking-pro') . '</a></p></td></tr></tbody></table>';
+
+        return apply_filters('fluent_booking/confirm_and_reject_button_html', $html);
     }
 
     public static function getEditorShortCodes($calendarEvent = null, $isHtmlSupported = false)

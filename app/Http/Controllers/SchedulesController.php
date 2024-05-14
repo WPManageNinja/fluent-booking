@@ -156,45 +156,47 @@ class SchedulesController extends Controller
                 return $this->sendError(['message' => __('Invalid email address', 'fluent-booking-pro')]);
             }
             $value = sanitize_email($value);
-        } else if ($column === 'internal_note') {
-            $value = sanitize_textarea_field($value);
         } else {
-            $value = sanitize_textarea_field($value);
+            $value = sanitize_text_field($value);
         }
 
         if ($column == 'status') {
-            $value = sanitize_text_field($value);
-            if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'no_show'])) {
+            if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'rejected', 'no_show'])) {
                 return $this->sendError(['message' => __('Invalid status', 'fluent-booking-pro')]);
             }
 
-            if ($value == 'scheduled') {
-                if ($booking->payment_method && $booking->payment_order) {
-                    $order = $booking->payment_order;
-                    $order->total_paid = $order->total_amount;
-                    $order->completed_at = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                    $order->status = 'paid';
-                    $order->save();
+            if ($value == 'scheduled' && $booking->payment_method && $booking->payment_order) {
+                $order = $booking->payment_order;
+                $order->total_paid = $order->total_amount;
+                $order->completed_at = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $order->status = 'paid';
+                $order->save();
 
-                    $updateData['payment_status'] = 'paid';
+                $updateData['payment_status'] = 'paid';
 
-                    do_action('fluent_booking/log_booking_activity', $this->getPaymentLog($booking->id));
+                do_action('fluent_booking/log_booking_activity', $this->getPaymentLog($booking->id));
 
-                    do_action('fluent_booking/payment/update_payment_status_paid', $booking);
-                }
+                do_action('fluent_booking/payment/update_payment_status_paid', $booking);
             }
 
             if ($value == 'cancelled') {
-                $cancelReason = $data['cancel_reason'];
+                $cancelReason = sanitize_text_field($data['cancel_reason']);
                 $booking->cancelMeeting($cancelReason, 'host', get_current_user_id());
-
-                if ($booking->payment_method && Arr::get($data, 'refund_payment') == 'yes') {
-                    do_action('fluent_booking/refund_payment_' . $booking->payment_method, $booking, $booking->calendar_event);
-                }
-
                 return [
                     'message' => __('The booking has been cancelled', 'fluent-booking-pro')
                 ];
+            }
+
+            if ($value == 'rejected') {
+                $rejectReason = sanitize_text_field($data['reject_reason']);
+                $booking->rejectMeeting($rejectReason, get_current_user_id());
+                return [
+                    'message' => __('The booking has been rejected', 'fluent-booking-pro')
+                ];
+            }
+
+            if ($booking->payment_method && Arr::get($data, 'refund_payment') == 'yes' && in_array($value, ['cancelled', 'rejected'])) {
+                do_action('fluent_booking/refund_payment_' . $booking->payment_method, $booking, $booking->calendar_event);
             }
         }
 
@@ -204,6 +206,12 @@ class SchedulesController extends Controller
 
         if ($column === 'status') {
             do_action('fluent_booking/booking_schedule_' . $value, $booking, $booking->calendar_event);
+
+            do_action('fluent_booking/pre_after_booking_' . $value, $booking, $booking->calendar_event);
+
+            $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
+        
+            do_action('fluent_booking/after_booking_' . $value, $booking, $booking->calendar_event, $booking);
         }
 
         do_action('fluent_booking/after_patch_booking_schedule', $booking, $oldBooking);
@@ -351,10 +359,11 @@ class SchedulesController extends Controller
     {
         $autoCompleteTimeOut = (int) Helper::getGlobalAdminSetting('auto_complete_timing', 60) * 60; // 10 minutes
 
-        if ($booking->status == 'scheduled' && (time() - strtotime($booking->end_time)) > $autoCompleteTimeOut) {
-            $booking->status = 'completed';
+        if (in_array($booking->status, ['scheduled', 'pending']) && (time() - strtotime($booking->end_time)) > $autoCompleteTimeOut) {
+            $bookingStatus = $booking->status == 'pending' ? 'cancelled' : 'completed';
+            $booking->status = $bookingStatus;
             $booking->save();
-            do_action('fluent_booking/booking_schedule_completed', $booking, $booking->calendar_event);
+            do_action('fluent_booking/booking_schedule_' . $bookingStatus, $booking, $booking->calendar_event);
         }
 
         if ($booking->event_type == 'group') {
