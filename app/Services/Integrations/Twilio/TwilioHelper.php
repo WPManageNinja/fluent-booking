@@ -159,7 +159,7 @@ class TwilioHelper
             'rescheduled_by_attendee' => [
                 'enabled' => false,
                 'is_host' => true,
-                'title'   => __('Booking Rescheduled by Attendee (email to Organizer)', 'fluent-booking-pro'),
+                'title'   => __('Booking Rescheduled by Attendee (SMS to Organizer)', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'receiver'=> 'host_number',
@@ -169,11 +169,39 @@ class TwilioHelper
             ],
             'rescheduled_by_host'     => [
                 'enabled' => false,
-                'title'   => __('Booking Rescheduled by Organizer (email to Attendee)', 'fluent-booking-pro'),
+                'title'   => __('Booking Rescheduled by Organizer (SMS to Attendee)', 'fluent-booking-pro'),
                 'sms'   => [
                     'send_to' => 'phone',
                     'number' => '',
                     'body'   => "Your scheduled meeting has been rescheduled."."\r\n"."Event: {{booking.event_name}} with {{guest.full_name}}"."\r\n"."New Time: {{booking.full_start_end_host_timezone}}"."\r\n"."Previous Time: {{booking.previous_meeting_time}}"."\r\n"."Rescheduling Reason: {{booking.reschedule_reason}}"."\r\n"."Where: {{booking.location_details_html}}"."\r\n"."Additional Notes: {{guest.note}}",
+                ],
+            ],
+            'booking_request_host'       => [
+                'enabled' => false,
+                'is_host' => true,
+                'title'   => __('Booking Approval Request to Host (SMS to Organizer)', 'fluent-booking-pro'),
+                'sms'   => [
+                    'send_to' => 'phone',
+                    'number'  => '',
+                    'body'   => "An event is still waiting for your approval."."\r\n"."Event: {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_guest_timezone}}"."\r\n"."Where: {{booking.location_details_html}}"."\r\n"."Additional Notes: {{guest.note}}"
+                ],
+            ],
+            'booking_request_attendee'   => [
+                'enabled' => false,
+                'title'   => __('Booking Submission Confirmation (SMS to Attendee)', 'fluent-booking-pro'),
+                'sms'   => [
+                    'send_to' => 'phone',
+                    'number'  => '',
+                    'body'   => "Your event has been submitted."."\r\n"."Event: {{booking.event_name}} with {{host.name}} At {{booking.full_start_end_guest_timezone}}"."\r\n"."Where: {{booking.location_details_html}}"."\r\n"."Additional Notes: {{guest.note}}"
+                ],
+            ],
+            'declined_by_host'          => [
+                'enabled' => false,
+                'title'   => __('Booking Declined by Organizer (SMS to Attendee)', 'fluent-booking-pro'),
+                'sms'   => [
+                    'send_to' => 'phone',
+                    'number' => '',
+                    'body'   => "Your booking request has been declined."."\r\n"."Event: {{booking.event_name}} with {{guest.full_name}} At {{booking.full_start_end_host_timezone}} (Declined)"."\r\n"."Reason: {{booking.reject_reason}}"."\r\n"."Where: {{booking.location_details_html}}"."\r\n"."Additional Notes: {{guest.note}}"
                 ],
             ]
         ]);

@@ -862,6 +862,14 @@ body >.fcal_calendar_wrap {
       font-size: 15px;
     }
 
+    .fcal_requires_confirmation {
+        &.fcal_icon_item {
+            margin-bottom: 0.875rem;
+        }
+        span {
+            margin-top: -0.2rem;
+        }
+    }
   }
 
   .fcal_date_wrapper {

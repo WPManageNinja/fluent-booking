@@ -9,15 +9,14 @@ use FluentBooking\Framework\Support\Arr;
 
 class EmailNotificationService
 {
-
     /**
      * @param \FluentBooking\App\Models\Booking $booking
-     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
      * @param $email
      * @param $emailTo
+     * @param $actionType
      * @return bool|mixed
      */
-    public static function emailOnBooked(Booking $booking, $email, $emailTo)
+    public static function emailOnBooked(Booking $booking, $email, $emailTo, $actionType = 'scheduled')
     {
         $emailSubject = EditorShortCodeParser::parse($email['subject'], $booking);
         $emailBody = EditorShortCodeParser::parse($email['body'], $booking);
@@ -82,12 +81,15 @@ class EmailNotificationService
             $headers[] = 'bcc: ' . implode(', ', $email['recipients']);
         }
 
-        $icsContent = BookingService::generateBookingICS($booking);
-
-        $filePath = wp_tempnam(null, 'event') . '.ics';
-        file_put_contents($filePath, $icsContent);
-
-        $attachments = [$filePath];
+        $attachments = [];
+        if ($actionType == 'scheduled') {
+            $icsContent = BookingService::generateBookingICS($booking);
+    
+            $filePath = wp_tempnam(null, 'event') . '.ics';
+            file_put_contents($filePath, $icsContent);
+    
+            $attachments = [$filePath];
+        }
 
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'   => $emailBody,
@@ -100,14 +102,15 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
 
-        unlink($filePath);
+        if ($actionType == 'scheduled') {
+            unlink($filePath);
+        }
 
         return $result;
     }
 
     /**
      * @param \FluentBooking\App\Models\Booking $booking
-     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
      * @param $email
      * @param $time
      * @param $emailTo
@@ -202,12 +205,12 @@ class EmailNotificationService
 
     /**
      * @param \FluentBooking\App\Models\Booking $booking
-     * @param \FluentBooking\App\Models\CalendarSlot $calendarEvent
      * @param $email
      * @param $emailTo
+     * @param $actionType
      * @return bool|mixed
      */
-    public static function bookingCancelledEmail(Booking $booking, $email, $emailTo)
+    public static function bookingCancelOrRejectEmail(Booking $booking, $email, $emailTo, $actionType = 'cancel')
     {
         $calendarEvent = $booking->calendar_event;
         $author = $booking->getHostDetails(false);
@@ -282,17 +285,24 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
+        $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking-pro') : __('Cancellation', 'fluent-booking-pro');
+
         do_action('fluent_booking/log_booking_note', [
-            'title'       => __('Cancelled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
+            'title'       => $actionType . __(' booking email sent to ', 'fluent-booking-pro') . $emailTo,
             'type'        => 'activity',
-            /* translators: Email address where the cancellation email was sent */
-            'description' => sprintf(__('Cancellation email sent to %s', 'fluent-booking-pro'), $emailTo),
+            'description' => $actionType . __(' email sent to ', 'fluent-booking-pro') . $emailTo,
             'booking_id'  => $booking->id
         ]);
 
         return $result;
     }
 
+    /**
+     * @param \FluentBooking\App\Models\Booking $booking
+     * @param $email
+     * @param $emailTo
+     * @return bool|mixed
+     */
     public static function bookingRescheduledEmail(Booking $booking, $email, $emailTo)
     {
         $calendarEvent = $booking->calendar_event;

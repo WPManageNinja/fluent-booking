@@ -207,13 +207,19 @@ class Booking extends Model
 
         if ($status == 'upcoming') {
             return $query->where('end_time', '>=', gmdate('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            ->where('status', 'scheduled');
+                ->where('status', 'scheduled');
         }
 
         if ($status == 'completed') {
             return $query->where('end_time', '<', gmdate('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            ->where('status', '!=', 'cancelled')
+                ->where('status', '!=', 'cancelled')
+                ->orWhere('status', '!=', 'rejected')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
+        }
+
+        if ($status == 'cancelled') {
+            return $query->where('status', 'cancelled')
+                ->orWhere('status', 'rejected');
         }
 
         return $query->where('status', $status);
@@ -361,7 +367,7 @@ class Booking extends Model
 
     public function getOngoingStatus()
     {
-        if ($this->status == 'cancelled') {
+        if ($this->status != 'scheduled') {
             return [];
         }
 
@@ -389,37 +395,53 @@ class Booking extends Model
         return $this->hasOne(Order::class, 'parent_id');
     }
 
-    public function getCancelReason($isHtml = false)
+    public function getCancelReason($isText = false, $isHtml = false)
     {
         $row = BookingActivity::where('booking_id', $this->id)
             ->where('type', 'cancel_reason')
             ->first();
 
-        if ($isHtml && $row) {
-            return wp_unslash($row->description);
+        if ($row) {
+            if ($isText) {
+                return $row->description;
+            }
+            if ($isHtml) {
+                return wp_unslash($row->description);
+            }
         }
 
         return $row;
     }
 
-    public function getCancelReasonDescription()
+    public function getRejectReason($isText = false, $isHtml = false)
     {
-        $cancelReason = $this->getCancelReason();
+        $row = BookingActivity::where('booking_id', $this->id)
+            ->where('type', 'reject_reason')
+            ->first();
 
-        if ($cancelReason) {
-            return $cancelReason->description;
+        if ($row) {
+            if ($isText) {
+                return $row->description;
+            }
+            if ($isHtml) {
+                return wp_unslash($row->description);
+            }
         }
 
-        return '';
+        return $row;
     }
 
-    public function addCancelReason($title, $reason)
+    public function addCancelOrRejectReason($title, $reason, $type = 'cancel_reason')
     {
         if (!$reason && !$title) {
             return null;
         }
 
-        $exist = $this->getCancelReason();
+        if ($type == 'cancel_reason') {
+            $exist = $this->getCancelReason();
+        } else {
+            $exist = $this->getRejectReason();
+        }
 
         if ($exist) {
             $exist->title = $title;
@@ -430,7 +452,7 @@ class Booking extends Model
 
         return BookingActivity::create([
             'booking_id'  => $this->id,
-            'type'        => 'cancel_reason',
+            'type'        => $type,
             'title'       => $title,
             'description' => $reason
         ]);
@@ -469,10 +491,33 @@ class Booking extends Model
                 $userName = $user->display_name;
             }
             /* translators: Name of the user who cancelled the meeting */
-            $this->addCancelReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
+            $this->addCancelOrRejectReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
         }
 
         do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
+    }
+
+    public function rejectMeeting($reason = '', $rejectByUserId = null)
+    {
+        if ($this->status != 'pending') {
+            return;
+        }
+
+        $this->status = 'rejected';
+        $this->save();
+
+        $rejectByUserId = $rejectByUserId ?: get_current_user_id();
+
+        if ($reason) {
+            $userName = 'host';
+            if ($rejectByUserId && $user = get_user_by('ID', $rejectByUserId)) {
+                $userName = $user->display_name;
+            }
+            /* translators: Name of the user who rejected the booking */
+            $this->addCancelOrRejectReason(sprintf(__('Booking request has been rejected by %s', 'fluent-booking-pro'), $userName), $reason, 'reject_reason');
+        }
+
+        do_action('fluent_booking/booking_schedule_rejected', $this, $this->calendar_event);
     }
 
     public function getRescheduleReason()
