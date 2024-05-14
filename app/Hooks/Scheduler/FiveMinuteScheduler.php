@@ -16,6 +16,7 @@ class FiveMinuteScheduler
     {
         $this->maybeAutoCancelBooking();
         $this->maybeAutoCompleteBookings();
+        $this->maybeAutoCancelPastBookings();
     }
 
     private function maybeAutoCompleteBookings()
@@ -36,6 +37,21 @@ class FiveMinuteScheduler
         return true;
     }
 
+    private function maybeAutoCancelPastBookings()
+    {
+        $autoCompleteTimeOut = (int)Helper::getGlobalAdminSetting('auto_complete_timing', 60) * 60; // 10 minutes
+
+        Booking::query()
+            ->where('status', 'pending')
+            ->where('end_time', '<', gmdate('Y-m-d H:i:s', time() - $autoCompleteTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->update([
+                'status'     => 'cancelled',
+                'updated_at' => gmdate('Y-m-d H:i:s') // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ]);
+
+        return true;
+    }
+
     private function maybeAutoCancelBooking()
     {
         $autoCancelTimeOut = (int)Helper::getGlobalAdminSetting('auto_cancel_timing', 10) * 60; // 10 minutes
@@ -43,6 +59,7 @@ class FiveMinuteScheduler
         Booking::query()
             ->where('created_at', '<=', gmdate('Y-m-d H:i:s', time() - $autoCancelTimeOut)) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ->where('status', 'pending')
+            ->where('payment_status', 'pending')
             ->update([
                 'status'     => 'cancelled',
                 'updated_at' => gmdate('Y-m-d H:i:s') // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date

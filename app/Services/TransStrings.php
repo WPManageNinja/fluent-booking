@@ -306,6 +306,9 @@ class TransStrings
             'LimitSettings/attendee_permissions'                                               => __('Attendee Permissions', 'fluent-booking-pro'),
             'LimitSettings/lock_timezone'                                                      => __('Lock timezone on booking page', 'fluent-booking-pro'),
             'LimitSettings/lock_timezone_description'                                          => __('To lock the timezone on booking page, useful for in-person events', 'fluent-booking-pro'),
+            'LimitSettings/requires_confirmation_description'                                  => __('The booking needs to be manually confirmed before it is pushed to the integrations and a confirmation mail is sent', 'fluent-booking-pro'),
+            'Requires Confirmation'                                                            => __('Requires Confirmation', 'fluent-booking-pro'),
+            'When booking notice is less than'                                                 => __('When booking notice is less than', 'fluent-booking-pro'),
             'Attendee can cancel booking'                                                      => __('Attendee can cancel booking', 'fluent-booking-pro'),
             'Attendee can reschedule booking'                                                  => __('Attendee can reschedule booking', 'fluent-booking-pro'),
             'Before Event'                                                                     => __('Before Event', 'fluent-booking-pro'),
@@ -444,6 +447,7 @@ class TransStrings
             'Internal Note'                                                                    => __('Internal Note', 'fluent-booking-pro'),
             'Cancel Meeting'                                                                   => __('Cancel Meeting', 'fluent-booking-pro'),
             'ScheduleBookingDetails/cancel_event_desc'                                         => __('Please confirm that you would like to cancel this event. A cancellation email will also go out to the invitee', 'fluent-booking-pro'),
+            'ScheduleBookingDetails/reject_event_desc'                                         => __('Please confirm that you would like to reject this event. A rejection email will also go out to the invitee', 'fluent-booking-pro'),
             'Reason for cancellation'                                                          => __('Reason for cancellation', 'fluent-booking-pro'),
             "No, Don't cancel"                                                                 => __("No, Don't cancel", "fluent-booking-pro"),
             'Yes, Cancel'                                                                      => __('Yes, Cancel', 'fluent-booking-pro'),
@@ -734,6 +738,7 @@ class TransStrings
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
             'Refund payment from stripe'                                                       => __('Refund payment from stripe', 'fluent-booking-pro'),
+            'Unconfirmed'                                                                      => __('Unconfirmed', 'fluent-booking-pro'),
             'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );

@@ -354,7 +354,9 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             return;
         }
 
-        if ($data['status'] == 'paid') {
+        $isRequireConfirmation = $booking->calendar_event->isRequireConfirmation($booking->start_time, $booking->created_at);
+
+        if ($data['status'] == 'paid' && !$isRequireConfirmation) {
             $booking->status = 'scheduled';
         }
 
@@ -363,22 +365,22 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         do_action('fluent_booking/payment/update_payment_status_' . $data['status'], $booking);
 
-        if ($booking->status == 'scheduled') {
+        if ($booking->payment_status == 'scheduled') {
             do_action('fluent_booking/log_booking_activity', $this->getSuccessLog($booking->id, $data));
 
-            do_action('fluent_booking/pre_after_booking_scheduled', $booking, $booking->calendar_event);
+            do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event);
 
             // We are just renewing this as this may have been changed by the pre hook
             $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
 
-            do_action('fluent_booking/after_booking_scheduled', $booking, $booking->calendar_event, $orderHast);
+            do_action('fluent_booking/after_booking_' . $booking->status, $booking, $booking->calendar_event, $data);
         }
 
-        if ($booking->status == 'pending') {
+        if ($booking->payment_status == 'pending') {
             do_action('fluent_booking/log_booking_activity', $this->getPendingLog($booking->id, $data));
         }
 
-        if ($booking->status == 'failed') {
+        if ($booking->payment_status == 'failed') {
             do_action('fluent_booking/log_booking_activity', $this->getFailedLog($booking->id, $data));
         }
     }

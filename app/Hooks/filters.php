@@ -66,5 +66,16 @@
             'timezone' => ''
         ];
     }
+
+    if (!isset($settings['requires_confirmation'])) {
+        $settings['requires_confirmation'] = [
+            'enabled'   => false,
+            'type'      => 'always',
+            'condition' => [
+                'unit'  => 'minutes',
+                'value' => 30
+            ]
+        ];
+    }
     return $settings;
 }, 10, 1);
