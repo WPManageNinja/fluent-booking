@@ -140,6 +140,32 @@
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
+                                <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="settings.requires_confirmation.enabled"/>
+                            </div>
+                            <div class="fcal_event_child_card" v-if="settings.requires_confirmation.enabled">
+                                <el-radio-group v-model="settings.requires_confirmation.type">
+                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                    <el-radio label="conditional">{{ $t('When booking notice is less than') }}
+                                        <span>
+                                            <el-input v-model="settings.requires_confirmation.condition.value"></el-input>
+                                            <el-select v-model="settings.requires_confirmation.condition.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                <el-option value="hours" :label="$t('Hours')"></el-option>
+                                            </el-select>
+                                        </span>
+                                    </el-radio>
+                                </el-radio-group>
+                            </div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("LimitSettings/attendee_permissions") }}</span>
                             </div>
                             <div class="fcal_event_child_card">

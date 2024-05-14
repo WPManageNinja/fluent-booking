@@ -178,12 +178,6 @@ class BookingService
             }
         }
 
-        $subHeading = '';
-        if ($booking->status == 'scheduled') {
-            // translators: %s is the name of the person scheduled
-            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
-        }
-
         switch ($booking->status) {
             case 'cancelled':
                 $bookingStatus = __('cancelled', 'fluent-booking-pro');
@@ -199,19 +193,35 @@ class BookingService
                 break;
         }
 
+        $subHeading = '';
+        if ($booking->status == 'scheduled') {
+            // translators: %s is the name of the person scheduled
+            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
+        }
+        
+        // translators: %s is the status of the meeting
+        $title = sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus);
+        if ($booking->status == 'pending' && $booking->payment_status != 'pending') {
+            $title = __('Your booking has been submitted', 'fluent-booking-pro');
+            $subHeading = __('Please wait for the host to confirm your booking', 'fluent-booking-pro');
+        }
+
+        $assetsUrl = App::getInstance('url.assets');
+
         $confirmationData = [
-            'author'      => $author,
-            // translators: %s is the status of the meeting
-            'title'       => sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus),
-            'sub_heading' => $subHeading,
-            'sections'    => $sections,
-            'slot'        => $calendarSlot,
-            'booking'     => $booking,
-            'message'     => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking-pro'),
-            'action_type' => $actionType,
-            'can_cancel'  => $booking->canCancel(),
-            'bookmarks'   => [],
-            'extra_html'  => ''
+            'author'       => $author,
+            'title'        => $title,
+            'sub_heading'  => $subHeading,
+            'sections'     => $sections,
+            'slot'         => $calendarSlot,
+            'booking'      => $booking,
+            'message'      => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking-pro'),
+            'action_type'  => $actionType,
+            'can_cancel'   => $booking->canCancel(),
+            'bookmarks'    => [],
+            'confirm_icon' => $assetsUrl . '/images/check-mark.png',
+            'action_url'   => '',
+            'extra_html'   => ''
         ];
 
         if ($booking->payment_status) {
@@ -227,8 +237,11 @@ class BookingService
         }
 
         if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
-            $assetsUrl = App::getInstance('url.assets');
             $confirmationData['bookmarks'] = $booking->getMeetingBookmarks($assetsUrl);
+        }
+
+        if ($booking->status == 'cancelled') {
+            $confirmationData['confirm_icon'] = $assetsUrl . '/images/cancel-mark.png';
         }
 
         $confirmationData = apply_filters('fluent_booking/schedule_receipt_data', $confirmationData, $booking);

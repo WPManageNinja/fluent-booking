@@ -643,6 +643,10 @@
               color: #674399 !important;
               background: rgb(103 67 153 / 11%) !important;
             }
+            &.unconfirmed {
+                background: #FDE8CD;
+                color: #F58E07;
+            }
           }
           .fcal_spot_payment_status {
             &.paid {
@@ -1011,7 +1015,8 @@
     }
   }
 
-  .fcal_spoot_status_cancelled * {
+  .fcal_spoot_status_cancelled,
+  .fcal_spoot_status_rejected * {
     text-decoration: line-through;
   }
   .fcal_section_body {
@@ -1552,6 +1557,30 @@
                     flex-direction: column;
                     .el-select {
                         width: 45%;
+                    }
+                }
+                .el-radio-group {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 8px;
+                    .el-radio__label {
+                        font-size: 14px;
+                        span {
+                            display: inline-flex;
+                            gap: 8px;
+                            margin-left: 8px;
+                            .el-input {
+                                width: 80px;
+                                .el-input__wrapper {
+                                    padding: 3px 16px;
+                                }
+                            }
+                            .el-select {
+                                .el-input {
+                                    width: 120px;
+                                }
+                            }
+                        }
                     }
                 }
               }
@@ -2707,6 +2736,19 @@
         line-height: 28px;
         border-bottom: 1px solid #EAECF0;
         padding: 0 0 16px 0;
+      }
+      .fcal_invitee_header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #EAECF0;
+        margin-bottom: 16px;
+        h1 {
+          &.fcal_header_title {
+            margin-bottom: 0;
+            margin-top: 4px;
+            border-bottom: none;
+          }
+        }
       }
     }
     .fcal_schedule_group_header {

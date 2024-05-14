@@ -655,8 +655,16 @@ class CalendarController extends Controller
                 'enabled'  => Arr::isTrue($data, 'settings.lock_timezone.enabled'),
                 'timezone' => sanitize_text_field(Arr::get($data, 'settings.lock_timezone.timezone'))
             ],
-            'can_cancel'          => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
-            'can_reschedule'      => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
+            'requires_confirmation' => [
+                'enabled' => Arr::isTrue($data, 'settings.requires_confirmation.enabled'),
+                'type'    => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.type')),
+                'condition' => [
+                    'unit'  => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.condition.unit')),
+                    'value' => intval(Arr::get($data, 'settings.requires_confirmation.condition.value'))
+                ]
+            ],
+            'can_cancel'            => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
+            'can_reschedule'        => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
 
         $event->save();

@@ -16,7 +16,7 @@
                         </span>
                     </div>
 
-                    <span class="fcal_spot_period_status" :class="booking.status=='no_show'?'no_show':''" v-else-if="currentStatus">
+                    <span v-else-if="currentStatus" class="fcal_spot_period_status" :class="booking.status=='no_show' ? 'no_show' : ''">
                         {{ $t(currentStatus) }}
                     </span>
                     
@@ -25,6 +25,8 @@
                     </span>
 
                     <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status) }}</p>
+
+                    <p v-if="isUnconfirmed" class="fcal_spot_period_status unconfirmed">{{ $t('Unconfirmed') }}</p>
                 </div>
             </div>
             <div class="fcal_spot_actions">
@@ -87,6 +89,7 @@ export default {
                 scheduled: this.$t('Upcoming'),
                 completed: this.$t('Completed'),
                 cancelled: this.$t('Cancelled'),
+                rejected: this.$t('Rejected'),
                 pending: this.$t('Pending'),
                 no_show: this.$t('No Show')
             };
@@ -104,6 +107,9 @@ export default {
                 return '';
             }
             return price;
+        },
+        isUnconfirmed() {
+            return this.booking.status === 'pending' && this.booking.payment_status != 'pending';
         }
     },
     mounted() {

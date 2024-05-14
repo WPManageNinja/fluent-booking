@@ -97,7 +97,11 @@ class EditorShortCodeParser
         }
 
         if ($key == 'cancel_reason') {
-            return $booking->getCancelReasonDescription();
+            return $booking->getCancelReason(true);
+        }
+
+        if ($key == 'reject_reason') {
+            return $booking->getRejectReason(true);
         }
 
         if ($key == 'reschedule_reason') {
@@ -127,7 +131,15 @@ class EditorShortCodeParser
         }
 
         if ($key == 'admin_booking_url') {
-            return Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
+            return Helper::getAdminBookingUrl($booking->id) . '&period=upcoming';
+        }
+
+        if ($key == 'booking_confirm_url') {
+            return Helper::getAdminBookingUrl($booking->id) . 'period=pending&confirm_booking=true';
+        }
+
+        if ($key == 'booking_reject_url') {
+            return Helper::getAdminBookingUrl($booking->id) . '&period=pending&reject_booking=true';
         }
 
         if ($key == 'location_details_html') {

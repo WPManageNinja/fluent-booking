@@ -13,9 +13,12 @@ class NotificationHandler
     {
         add_action('fluent_booking/after_booking_scheduled', [$this, 'pushBookingScheduledToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
+        add_action('fluent_booking/after_booking_pending', [$this, 'pushBookingPendingToQueue'], 10, 2);
+        add_action('fluent_booking/after_booking_pending_async', [$this, 'bookingRequestEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'emailOnBookingRescheduled'], 10, 2);
-        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled'], 10, 1);
+        add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled'], 10, 2);
+        add_action('fluent_booking/booking_schedule_rejected', [$this, 'emailOnBookingRejected'], 10, 2);
         add_action('fluent_booking/after_patch_booking_email', [$this, 'emailToUpdatedEmail'], 10, 2);
     }
 
@@ -70,7 +73,18 @@ class NotificationHandler
             $reminderTimes = Arr::get($notifications, 'reminder_to_host.email.times', []);
             $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'host');
         }
+    }
 
+    public function pushBookingPendingToQueue($booking, $bookingEvent)
+    {
+        $notifications = $bookingEvent->getNotifications();
+
+        if (Arr::isTrue($notifications, 'booking_request_host.enabled') || (Arr::isTrue($notifications, 'booking_request_attendee.enabled'))) {
+            as_enqueue_async_action('fluent_booking/after_booking_pending_async', [
+                $booking->id,
+                $bookingEvent->id
+            ], 'fluent-booking');
+        }
     }
 
     public function emailToUpdatedEmail($booking, $calendarEvent)
@@ -141,7 +155,33 @@ class NotificationHandler
             }
             EmailNotificationService::reminderEmail($booking, $email, $emailTo);
         }
+    }
 
+    public function bookingRequestEmails($bookingId, $calendarEventId)
+    {
+        $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
+
+        if (!$booking || !$booking->calendar_event) {
+            return '';
+        }
+
+        $notifications = $booking->calendar_event->getNotifications();
+
+        if (Arr::isTrue($notifications, 'booking_request_attendee.enabled')) {
+            $email = Arr::get($notifications, 'booking_request_attendee.email', []);
+            EmailNotificationService::emailOnBooked($booking, $email, 'guest', 'request');
+        }
+
+        if (Arr::isTrue($notifications, 'booking_request_host.enabled')) {
+            $email = Arr::get($notifications, 'booking_request_host.email', []);
+            $additionalRecipients = Arr::get($email, 'additional_recipients', false);
+            if ($additionalRecipients) {
+                $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
+            }
+            EmailNotificationService::emailOnBooked($booking, $email, 'host', 'request');
+        }
+
+        return true;
     }
 
     public function getAdditionalRecipients($additionalRecipients)
@@ -154,15 +194,13 @@ class NotificationHandler
         return [];
     }
 
-    public function emailOnBookingCancelled(Booking $booking)
+    public function emailOnBookingCancelled(Booking $booking, $calendarEvent)
     {
-        $calendarEvent = $booking->calendar_event;
         if (!$calendarEvent) {
             return;
         }
 
         $notifications = $calendarEvent->getNotifications();
-
         if (!$notifications) {
             return;
         }
@@ -173,7 +211,7 @@ class NotificationHandler
             if (Arr::isTrue($notifications, 'cancelled_by_host.enabled')) {
                 // This from the host
                 $email = Arr::get($notifications, 'cancelled_by_host.email', []);
-                EmailNotificationService::bookingCancelledEmail($booking, $email, 'guest');
+                EmailNotificationService::bookingCancelOrRejectEmail($booking, $email, 'guest');
             }
             return;
         }
@@ -184,7 +222,7 @@ class NotificationHandler
             if ($additionalRecipients) {
                 $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
             }
-            EmailNotificationService::bookingCancelledEmail($booking, $email, 'host');
+            EmailNotificationService::bookingCancelOrRejectEmail($booking, $email, 'host');
         }
     }
 
@@ -196,7 +234,6 @@ class NotificationHandler
         }
 
         $notifications = $calendarEvent->getNotifications();
-
         if (!$notifications) {
             return;
         }
@@ -219,6 +256,23 @@ class NotificationHandler
                 $email['recipients'] = $this->getAdditionalRecipients($additionalRecipients);
             }
             EmailNotificationService::bookingRescheduledEmail($booking, $email, 'host');
+        }
+    }
+
+    public function emailOnBookingRejected(Booking $booking, $calendarEvent)
+    {
+        if (!$calendarEvent) {
+            return;
+        }
+
+        $notifications = $calendarEvent->getNotifications();
+        if (!$notifications) {
+            return;
+        }
+
+        if (Arr::isTrue($notifications, 'declined_by_host.enabled')) {
+            $email = Arr::get($notifications, 'declined_by_host.email', []);
+            EmailNotificationService::bookingCancelOrRejectEmail($booking, $email, 'guest', 'reject');
         }
     }
 }
