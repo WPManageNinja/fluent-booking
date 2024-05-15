@@ -233,7 +233,7 @@ class Booking extends Model
         $html = DateTimeHelper::formatToLocale($startDateTime, 'time') . ' - ' . DateTimeHelper::formatToLocale($endDateTime, 'time') . ', ';
         $html .= DateTimeHelper::formatToLocale($startDateTime, 'date');
 
-        if ($isHtml && $this->status == 'cancelled') {
+        if ($isHtml && in_array($this->status, ['cancelled', 'rejected'])) {
             $html = '<del>' . $html . '</del>';
         }
 

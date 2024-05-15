@@ -155,7 +155,17 @@ class BookingService
             $sections = array_merge([
                 'cancellation_reason' => [
                     'title'   => __('Cancellation Reason', 'fluent-booking-pro'),
-                    'content' => $booking->getCancelReason(true)
+                    'content' => $booking->getCancelReason(false, true)
+                ]
+            ], $sections);
+        }
+
+        if ($booking->status == 'rejected') {
+            // add rejection reason at the beginning
+            $sections = array_merge([
+                'cancellation_reason' => [
+                    'title'   => __('Rejection Reason', 'fluent-booking-pro'),
+                    'content' => $booking->getRejectReason(false, true)
                 ]
             ], $sections);
         }
@@ -178,20 +188,15 @@ class BookingService
             }
         }
 
-        switch ($booking->status) {
-            case 'cancelled':
-                $bookingStatus = __('cancelled', 'fluent-booking-pro');
-                break;
-            case 'rescheduled':
-                $bookingStatus = __('rescheduled', 'fluent-booking-pro');
-                break;
-            case 'scheduled':
-                $bookingStatus = __('scheduled', 'fluent-booking-pro');
-                break;
-            default:
-                $bookingStatus = $booking->status;
-                break;
-        }
+        $bookingStatuses = [
+            'pending'     => __('Pending', 'fluent-booking-pro'),
+            'scheduled'   => __('Scheduled', 'fluent-booking-pro'),
+            'cancelled'   => __('Cancelled', 'fluent-booking-pro'),
+            'rejected'    => __('Rejected', 'fluent-booking-pro'),
+            'rescheduled' => __('Rescheduled', 'fluent-booking-pro')
+        ];
+
+        $bookingStatus = $bookingStatuses[$booking->status];
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {
@@ -219,7 +224,7 @@ class BookingService
             'action_type'  => $actionType,
             'can_cancel'   => $booking->canCancel(),
             'bookmarks'    => [],
-            'confirm_icon' => $assetsUrl . '/images/check-mark.png',
+            'confirm_icon' => '',
             'action_url'   => '',
             'extra_html'   => ''
         ];
@@ -237,10 +242,11 @@ class BookingService
         }
 
         if ($booking->status == 'scheduled' && $actionType == 'confirmation') {
-            $confirmationData['bookmarks'] = $booking->getMeetingBookmarks($assetsUrl);
+            $confirmationData['confirm_icon'] = $assetsUrl . '/images/check-mark.png';
+            $confirmationData['bookmarks']    = $booking->getMeetingBookmarks($assetsUrl);
         }
 
-        if ($booking->status == 'cancelled') {
+        if ($booking->status == 'cancelled' || $booking->status == 'rejected') {
             $confirmationData['confirm_icon'] = $assetsUrl . '/images/cancel-mark.png';
         }
 
