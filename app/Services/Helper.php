@@ -1929,13 +1929,14 @@ class Helper
                 'is_active'              => 'no'
             ],
             'emailing'       => [
-                'from_name'               => '',
-                'from_email'              => '',
-                'reply_to_name'           => '',
-                'reply_to_email'          => '',
-                'use_host_name'           => '',
-                'use_host_email_on_reply' => '',
-                'email_footer'            => ''
+                'from_name'                  => '',
+                'from_email'                 => '',
+                'reply_to_name'              => '',
+                'reply_to_email'             => '',
+                'use_host_name'              => '',
+                'use_host_email_on_reply'    => '',
+                'attach_ics_on_confirmation' => '',
+                'email_footer'               => ''
             ],
             'administration' => [
                 'admin_email'            => '{{wp.admin_email}}',

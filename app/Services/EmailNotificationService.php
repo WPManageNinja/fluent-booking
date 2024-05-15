@@ -47,6 +47,7 @@ class EmailNotificationService
         $globalSettings = Helper::getGlobalSettings();
         $useHostName = Arr::get($globalSettings, 'emailing.use_host_name', 'yes');
         $useHostEmailOnReply = Arr::get($globalSettings, 'emailing.use_host_email_on_reply', 'yes');
+        $attachIcsFile = Arr::get($globalSettings, 'emailing.attach_ics_on_confirmation', 'no');
         $settingsFromName = Arr::get($globalSettings, 'emailing.from_name', '');
         $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
@@ -82,7 +83,7 @@ class EmailNotificationService
         }
 
         $attachments = [];
-        if ($actionType == 'scheduled') {
+        if ($attachIcsFile == 'yes' && $actionType == 'scheduled') {
             $icsContent = BookingService::generateBookingICS($booking);
     
             $filePath = wp_tempnam(null, 'event') . '.ics';
@@ -102,7 +103,7 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
 
-        if ($actionType == 'scheduled') {
+        if ($attachments) {
             unlink($filePath);
         }
 
@@ -331,6 +332,7 @@ class EmailNotificationService
         $globalSettings = Helper::getGlobalSettings();
         $useHostName = Arr::get($globalSettings, 'emailing.use_host_name', 'yes');
         $useHostEmailOnReply = Arr::get($globalSettings, 'emailing.use_host_email_on_reply', 'yes');
+        $attachIcsFile = Arr::get($globalSettings, 'emailing.attach_ics_on_confirmation', 'no');
         $settingsFromName = Arr::get($globalSettings, 'emailing.from_name', '');
         $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
@@ -367,12 +369,15 @@ class EmailNotificationService
         $subject = EditorShortCodeParser::parse($email['subject'], $booking);
         $html = EditorShortCodeParser::parse($email['body'], $booking);
 
-        $icsContent = BookingService::generateBookingICS($booking);
-
-        $filePath = wp_tempnam(null, 'event') . '.ics';
-        file_put_contents($filePath, $icsContent);
-
-        $attachments = [$filePath];
+        $attachments = [];
+        if ($attachIcsFile == 'yes') {
+            $icsContent = BookingService::generateBookingICS($booking);
+    
+            $filePath = wp_tempnam(null, 'event') . '.ics';
+            file_put_contents($filePath, $icsContent);
+    
+            $attachments = [$filePath];
+        }
 
         $body = (string)App::make('view')->make('emails.template', [
             'email_body'   => $html,
@@ -385,7 +390,9 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers, $attachments);
 
-        unlink($filePath);
+        if ($attachments) {
+            unlink($filePath);
+        }
 
         do_action('fluent_booking/log_booking_note', [
             'title'       => __('Rescheduled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
