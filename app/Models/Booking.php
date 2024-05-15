@@ -8,6 +8,7 @@ use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Services\PermissionManager;
 
 class Booking extends Model
 {
@@ -538,7 +539,7 @@ class Booking extends Model
         /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
         $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $formattedTitle, $guestName, $author['name']);
 
-        return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $calendarSlot, $this);
+        return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $author['name'], $guestName, $calendarSlot, $this);
     }
 
     public function getActivities()
@@ -653,9 +654,15 @@ class Booking extends Model
         ], Helper::getBookingReceiptLandingBaseUrl());
     }
 
+    public function hasBookingAccess()
+    {
+        return $this->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings');
+    }
+
     public function canCancel()
     {
-        $hasPermission = Arr::get($this->calendar_event, 'settings.can_cancel', 'yes') == 'yes';
+        $canCancel     = Arr::get($this->calendar_event, 'settings.can_cancel', 'yes') == 'yes';
+        $hasPermission = $this->hasBookingAccess() || $canCancel;
         $isCancelable  = in_array($this->status, ['scheduled', 'pending']);
 
         return $hasPermission && $isCancelable;
@@ -663,8 +670,10 @@ class Booking extends Model
 
     public function canReschedule()
     {
-        $hasPermission   = Arr::get($this->calendar_event, 'settings.can_reschedule', 'yes') == 'yes';
+        $canReschedule   = Arr::get($this->calendar_event, 'settings.can_reschedule', 'yes') == 'yes';
+        $hasPermission   = $this->hasBookingAccess() || $canReschedule;
         $isReschedulable = in_array($this->status, ['scheduled', 'pending']);
+
         
         return $hasPermission && $isReschedulable;
     }

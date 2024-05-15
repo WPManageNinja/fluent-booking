@@ -33,7 +33,7 @@
             <div v-else class="fcal_calendars_wrap">
                 <template v-if="calendars.length">
                     <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar"/>
+                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" :eventLists="event_lists"/>
                     </div>
                 </template>
                 <el-empty v-else class="fcal_empty" :description="$t('No Calendars found')"/>
@@ -170,7 +170,8 @@ export default {
             isNewBookingOpen: false,
             isNewTeamOpen: false,
             user_id: '',
-            team_name: ''
+            team_name: '',
+            event_lists: []
         }
     },
     methods: {
@@ -178,11 +179,13 @@ export default {
             this.loading = true;
             this.$get('calendars', {
                 per_page: this.pagination.per_page,
-                page: this.pagination.current_page
+                page: this.pagination.current_page,
+                with: ['calendar_event_lists']
             })
                 .then(response => {
                     this.calendars = response.calendars.data;
                     this.pagination.total = response.calendars.total;
+                    this.event_lists = response.calendar_event_lists;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
