@@ -29,7 +29,7 @@
                 <div class="fcal_schedule_details_event_item">
                     <editable-booking-data
                         v-if="isEmailEditable"
-                        input_type="textarea"
+                        input_type="text"
                         data_key="email"
                         :input_label="$t('Invitee Email')"
                         :booking="booking">
@@ -87,7 +87,7 @@
                 <el-button
                     @click="rejectDialog = false"
                     class="fcal_plain_btn">
-                    {{ $t("Don't reject") }}
+                    {{ $t("Don't Reject") }}
                 </el-button>
                 <el-button
                     v-loading="updating"
