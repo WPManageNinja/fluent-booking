@@ -177,6 +177,9 @@ class SchedulesController extends Controller
                 do_action('fluent_booking/log_booking_activity', $this->getPaymentLog($booking->id));
 
                 do_action('fluent_booking/payment/update_payment_status_paid', $booking);
+
+            } else if ($value == 'scheduled') {
+                do_action('fluent_booking/log_booking_activity', $this->getConfirmLog($booking->id));
             }
 
             if ($value == 'cancelled') {
@@ -394,4 +397,20 @@ class SchedulesController extends Controller
         ];
     }
 
+    private function getConfirmLog($bookingId)
+    {
+        $confirmedBy = 'host';
+        $userId = get_current_user_id();
+        if ($userId && $user = get_user_by('ID', $userId)) {
+            $confirmedBy = $user->display_name;
+        }
+
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Booking Confirmed', 'fluent-booking-pro'),
+            'description' => __('Booking has been confirmed by ', 'fluent-booking-pro') . $confirmedBy
+        ];
+    }
 }

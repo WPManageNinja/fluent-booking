@@ -135,7 +135,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'booking_confirm_url') {
-            return Helper::getAdminBookingUrl($booking->id) . 'period=pending&confirm_booking=true';
+            return Helper::getAdminBookingUrl($booking->id) . '&period=pending&confirm_booking=true';
         }
 
         if ($key == 'booking_reject_url') {
