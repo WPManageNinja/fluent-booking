@@ -69,6 +69,13 @@ class SettingsController extends Controller
                 'true_label'     => 'yes',
                 'false_label'    => 'no',
             ],
+            'attach_ics_on_confirmation' => [
+                'wrapper_class'  => 'fc_full_width fc_mb_0',
+                'type'           => 'inline-checkbox',
+                'checkbox_label' => __('Include ICS file attachment in email confirmations', 'fluent-booking-pro'),
+                'true_label'     => 'yes',
+                'false_label'    => 'no',
+            ],
             'email_footer'            => [
                 'wrapper_class' => 'fc_full_width fc_mb_0 fc_wp_editor',
                 'type'          => 'wp-editor-field',
