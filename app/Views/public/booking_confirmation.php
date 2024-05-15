@@ -9,11 +9,13 @@
 <div class="fcal_confirmation">
     <?php do_action('fluent_booking/booking_details_header', $booking); ?>
     <div class="fcal_confirm_header">
-        <?php if ($confirm_icon): ?>
-            <div class="fcal_check_holder" style="min-height: 50px;">
+        <div class="fcal_check_holder">
+            <?php if ($confirm_icon): ?>
                 <img style="max-width: 44px;" src="<?php echo $confirm_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" />
-            </div>
-        <?php endif; ?>
+            <?php else: ?>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-emphasis h-5 w-5"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+            <?php endif; ?>
+        </div>
         <h2><?php echo esc_html($title); ?></h2>
         <p><?php echo wp_kses_post($sub_heading); ?></p>
     </div>
