@@ -292,6 +292,7 @@ class TransStrings
             'Select Schedule'                                                                  => __('Select Schedule', 'fluent-booking-pro'),
             'Set Custom Hours'                                                                 => __('Set Custom Hours', 'fluent-booking-pro'),
             "Invitees can't schedule within..."                                                => __("Invitees can't schedule within...", "fluent-booking-pro"),
+            "CalendarEvent/select_event_description"                                           => __("Select a calendar event from another calendar to clone it into your calendar", 'fluent-booking-pro'),
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking-pro'),
             'EventDetails/redirect_url_description'                                            => __('Redirect to a custom URL after a successful booking', 'fluent-booking-pro'),
             'EventDetails/redirect_url_placeholder'                                            => __('https://example.com/redirect-to-my-success-page', 'fluent-booking-pro'),
@@ -746,8 +747,11 @@ class TransStrings
             'Refund payment from stripe'                                                       => __('Refund payment from stripe', 'fluent-booking-pro'),
             'Unconfirmed'                                                                      => __('Unconfirmed', 'fluent-booking-pro'),
             'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability', 'fluent-booking-pro'),
+            'Clone from'                                                                       => __('Clone from', 'fluent-booking-pro'),
+            'Clone Event'                                                                      => __('Clone Event', 'fluent-booking-pro'),
+            'Clone Calendar Event'                                                             => __('Clone Calendar Event', 'fluent-booking-pro'),
+            'Select Calendar Event'                                                            => __('Select Calendar Event', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );
-
     }
 }
