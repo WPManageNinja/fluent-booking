@@ -452,7 +452,6 @@ class FluentFormInit
 
     public function getLocalizedData($calendarEvent, $data, $form)
     {
-
         $element_id = $this->makeElementId($data, $form);
 
         $calendar = $calendarEvent->calendar;

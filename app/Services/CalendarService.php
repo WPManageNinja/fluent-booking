@@ -57,16 +57,22 @@ class CalendarService
         return $formattedCalendars;
     }
 
-    public static function getCalendarOptionsByTitle()
+    public static function getCalendarOptionsByTitle($condition = '')
     {
-        $calendars = Calendar::select(['id', 'title'])
+        $calendarQuery = Calendar::select(['id', 'title'])
             ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
-            })
-            ->with(['slots'])
-            ->latest()
-            ->get();
+            });
 
+        if ($condition == 'without_team') {
+            $calendarQuery->where('type', '!=', 'team');
+        }
+
+        if ($condition == 'only_team') {
+            $calendarQuery->where('type', 'team');
+        }
+
+        $calendars = $calendarQuery->with(['slots'])->latest()->get();
 
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {

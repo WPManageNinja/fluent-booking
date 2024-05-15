@@ -354,7 +354,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
             return;
         }
 
-        $isRequireConfirmation = $booking->calendar_event->isRequireConfirmation($booking->start_time, $booking->created_at);
+        $isRequireConfirmation = $booking->calendar_event->isConfirmationRequired($booking->start_time, $booking->created_at);
 
         if ($data['status'] == 'paid' && !$isRequireConfirmation) {
             $booking->status = 'scheduled';
@@ -365,7 +365,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         do_action('fluent_booking/payment/update_payment_status_' . $data['status'], $booking);
 
-        if ($booking->payment_status == 'scheduled') {
+        if ($booking->payment_status == 'paid') {
             do_action('fluent_booking/log_booking_activity', $this->getSuccessLog($booking->id, $data));
 
             do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event);

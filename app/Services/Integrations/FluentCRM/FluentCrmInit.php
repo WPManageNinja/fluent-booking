@@ -25,7 +25,6 @@ class FluentCrmInit
     {
         $this->addContactMenuSection();
         $this->addAutomations();
-        $this->addActions();
     }
 
     public function registerHooks()
@@ -51,11 +50,6 @@ class FluentCrmInit
         new CancelBookingTrigger();
         new BookingCompletedTrigger();
         new BookingRescheduledTrigger();
-    }
-
-    public function addActions()
-    {
-        new BookingReminderInWaitTime();
     }
 
     private function getSubscriberId($email)
