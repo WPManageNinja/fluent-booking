@@ -257,7 +257,6 @@ class LandingPageHandler
             ]
         ];
 
-
         $extraJs = $this->getEventLandingExtraJsFiles($eventVars['form_fields'], $calendarEvent);
 
         if ($extraJs) {

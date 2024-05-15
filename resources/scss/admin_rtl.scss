@@ -286,7 +286,8 @@ html[dir="rtl"] {
 				}
 			}
 		}
-		.fcal_create_new_booking_type_drawer {
+		.fcal_create_new_booking_type_drawer,
+        .fcal_clone_event_drawer {
 			.el-button {
 				.icons-wrap {
 					transform: rotateY(180deg);

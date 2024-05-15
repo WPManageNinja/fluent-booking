@@ -45,9 +45,18 @@ class CalendarController extends Controller
             do_action_ref_array('fluent_booking/calendar', [&$calendar, 'lists']);
         }
 
-        return [
+        $data = [
             'calendars' => $calendars
         ];
+
+        if (in_array('calendar_event_lists', $request->get('with', []))) {
+            $data['calendar_event_lists'] = [
+                'events' => CalendarService::getCalendarOptionsByTitle('without_team'),
+                'teams'  => CalendarService::getCalendarOptionsByTitle('only_team')
+            ];
+        }
+
+        return $data;
     }
 
     public function checkSlug(Request $request)
@@ -694,11 +703,17 @@ class CalendarController extends Controller
 
     public function cloneCalendarEvent(Request $request, $calendarId, $eventId)
     {
-        $calendar = Calendar::findOrFail($calendarId);
+        $newCalendarId = intval($request->get('new_calendar_id')) ?: $calendarId;
 
-        $originalEvent = CalendarSlot::where('calendar_id', $calendar->id)->findOrFail($eventId);
+        $calendar = Calendar::findOrFail($newCalendarId);
+
+        $originalEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $clonedEvent = $originalEvent->replicate();
+
+        $clonedEvent->calendar_id = $calendar->id;
+
+        $clonedEvent->user_id = $calendar->user_id;
 
         $clonedEvent->title = $originalEvent->title . ' (clone)';
 

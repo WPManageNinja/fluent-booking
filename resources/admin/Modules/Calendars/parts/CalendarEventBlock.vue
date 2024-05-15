@@ -32,7 +32,11 @@
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item command="delete"><el-icon><Delete /></el-icon>
-                                {{ $t('Delete') }}</el-dropdown-item>
+                                {{ $t('Delete') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item command="clone"><el-icon><CopyDocument /></el-icon>
+                                {{ $t('Clone from') }}
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -54,8 +58,7 @@
             v-model="isNewBookingOpen"
             :title="$t('Create New Event Type')"
             :zIndex="999"
-            modal-class="fcal_drawer"
-        >
+            modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <template v-if="calendar.type == 'team'">
                     <el-button @click="createSlot('round_robin')">
@@ -112,17 +115,51 @@
                 </template>
             </div>
         </el-drawer>
+
+        <el-drawer
+            v-model="isCloneOpen"
+            :title="$t('Clone Calendar Event')"
+            :zIndex="999"
+            label-position="top"
+            modal-class="fcal_drawer">
+            <div class="fcal_clone_event_drawer">
+                <el-form-item :label="$t('Select Calendar Event')">
+                    <el-select
+                        v-model="cloneEventId"
+                        :placeholder="$t('Select Schedule')"
+                        popper-class="fcal_select"
+                        placement="bottom"
+                        :no-match-text="$t('No Data match')"
+                        :no-data-text="$t('No Data')">
+                        <el-option-group
+                            v-for="cal in filteredEventList"
+                                :key="cal.id"
+                                :label="cal.title">
+                                <el-option
+                                    v-for="event in cal.options"
+                                    :key="event.id"
+                                    :label="event.title"
+                                    :value="event.id">
+                                </el-option>
+                        </el-option-group>
+                    </el-select>
+                    <p>{{ $t('CalendarEvent/select_event_description') }}</p>
+                </el-form-item>
+                <SaveButton :saving="saving" :disabled="!cloneEventId" :label="$t('Clone Event')" @click="cloneEvent"/>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
 <script>
 import EachSlot from "./EachSlot";
-import { Setting, User, Right, MoreFilled, Delete } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Delete, CopyDocument } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings";
+import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 
 export default {
     name: 'CalendarEventBlock',
-    props: ['calendar'],
+    props: ['calendar', 'eventLists'],
     components: {
         EachSlot,
         Setting,
@@ -130,17 +167,26 @@ export default {
         Right,
         CalendarSettings,
         MoreFilled,
-        Delete
+        Delete,
+        CopyDocument,
+        SaveButton
     },
     data() {
         return {
+            saving: false,
+            cloneEventId: '',
+            calendarEvents: [],
             showSettings: false,
-            isNewBookingOpen: false
+            isNewBookingOpen: false,
+            isCloneOpen: false
         }
     },
     computed: {
         getSettingLabel() {
             return this.calendar.type == 'team' ? this.$t('Team Settings') : this.$t('Host Settings');
+        },
+        filteredEventList() {
+            return this.calendarEvents.filter(calendarEvent => calendarEvent.id != this.calendar.id);
         }
     },
     methods: {
@@ -159,7 +205,22 @@ export default {
                 params: {calendar_id: this.calendar.id, event_type: eventType}
             })
         },
+        goToEvent(slot) {
+            this.$router.push({ 
+                name: 'event_details',
+                params: {calendar_id: slot.calendar_id, event_id: slot.id},
+            })
+        },
+        getCalendarId(eventId) {
+            const event = this.calendarEvents.find(event => event.options.some(option => option.id == eventId));
+            return event.id;
+        },
         handleCommand(command) {
+            if (command == 'clone') {
+                this.isCloneOpen = true;
+                return;
+            }
+
             if (command == 'delete') {
                 this.$confirm(this.$t('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted'), this.$t('Delete Calendar'), {
                     confirmButtonText: this.$t('Delete'),
@@ -177,9 +238,30 @@ export default {
                             this.$handleError(errors);
                         });
                 })
-                return;
             }
+        },
+        cloneEvent() {
+            this.saving = true;
+            const cloneEventCalId = this.getCalendarId(this.cloneEventId);
+            this.$post('calendars/' + cloneEventCalId + '/clone-event/' + this.cloneEventId, {
+                calendar_id: this.cloneEventCalId,
+                new_calendar_id: this.calendar.id
+            })
+                .then(response => {
+                    this.isCloneOpen = false;
+                    this.$handleSuccess(response.message);
+                    this.goToEvent(response.slot);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
         }
+    },
+    mounted() {
+        this.calendarEvents = this.calendar.type == 'team' ? this.eventLists.teams : this.eventLists.events;
     }
 }
 </script>
