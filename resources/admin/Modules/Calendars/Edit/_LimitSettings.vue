@@ -137,7 +137,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item>
+                    <el-form-item v-if="showRequiresConfirmation">
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
@@ -234,6 +234,9 @@ export default {
             return (settings) => {
                 return settings.limits.length < 3;
             }
+        },
+        showRequiresConfirmation() {
+            return this.calendar_event.event_type != 'group';
         }
     },
     methods: {
