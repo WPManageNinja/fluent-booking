@@ -11,7 +11,6 @@ class DataExporter
 
     public function exportBookingHosts()
     {
-
         if (!PermissionManager::hasAllCalendarAccess()) {
             die(esc_html__('You do not have permission to export data', 'fluent-booking-pro'));
         }
@@ -24,7 +23,6 @@ class DataExporter
 
         $attendees = Booking::where('group_id', $groupId)->get();
 
-        $csvData = [];
         $csvData[] = [
             'First Name',
             'Last Name',
@@ -33,8 +31,11 @@ class DataExporter
             'Location Details',
             'Source',
             'Booking Type',
+            'Status',
             'Source URL',
+            'Duration',
             'Start Time',
+            'End Time',
             'Payment Status',
             'Payment Order Status',
             'Payment Method',
@@ -55,11 +56,14 @@ class DataExporter
                 $attendee->last_name,
                 $attendee->email,
                 $attendee->message,
-                $attendee->location_details['description'],
+                $attendee->getLocationAsText(),
                 $attendee->source,
                 $attendee->booking_type,
+                $attendee->status,
                 $attendee->source_url,
+                $attendee->slot_minutes,
                 $attendee->start_time,
+                $attendee->end_time,
                 $attendee->payment_status,
             ];
 
