@@ -199,7 +199,6 @@ class BookingFieldService
                         'index'          => 20,
                         'type'           => 'payment',
                         'name'           => 'payment_method',
-                        'required'       => true,
                         'enabled'        => true,
                         'system_defined' => true,
                         'payment_items'  => $paymentItems,
@@ -207,11 +206,13 @@ class BookingFieldService
                         'currency_sign'  => $currencySign,
                     ];
                 } else {
-                    $exist['required']      = true;
                     $exist['currency_sign'] = $currencySign;
                     $exist['payment_items'] = $paymentItems;
                 }
 
+                $exist['required'] = true;
+                $exist['disable_alter'] = true;
+                
                 if ($stripeEnabled) {
                     $exist['payment_methods'][] = 'stripe';
                 }
