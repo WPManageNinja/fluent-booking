@@ -678,6 +678,25 @@ class Booking extends Model
         return $hasPermission && $isReschedulable;
     }
 
+    public function getInviteePhoneNumber($calendarEvent)
+    {
+        if ($this->phone) {
+            return $this->phone;
+        }
+
+        $customFormData = $this->getCustomFormData(false);
+
+        $customFields = BookingFieldService::getBookingFields($calendarEvent);
+
+        foreach ($customFields as $field) {
+            if ($field['type'] == 'phone' && Arr::get($customFormData, $field['name'])) {
+                return $customFormData[$field['name']];
+            }
+        }
+
+        return '';
+    }
+
     public function getHostDetails($isPublic = true)
     {
         if ($this->host_user_id && $user = get_user_by('ID', $this->host_user_id)) {
