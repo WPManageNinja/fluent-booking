@@ -290,7 +290,7 @@ class Stripe extends BasePaymentMethod
     {
         $currency = CurrenciesHelper::getGlobalCurrency();
 
-        $bookingUrl = Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id);
+        $bookingUrl = Helper::getAdminBookingUrl($booking->id) . '&period=upcoming';
 
         $sessionPayload = array(
             'amount'               => intval($args['amount']),

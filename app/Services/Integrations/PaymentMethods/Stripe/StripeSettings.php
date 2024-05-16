@@ -104,6 +104,7 @@ class StripeSettings
 
         // Remove illegal characters
         $descriptor = str_replace(['<', '>', '"', "'"], '', $descriptor);
+        $descriptor = preg_replace('/[^a-zA-Z ]/', '', $descriptor);
 
         // Descriptor should be 22 characters max
         $descriptor = substr($descriptor, 0, 22);
