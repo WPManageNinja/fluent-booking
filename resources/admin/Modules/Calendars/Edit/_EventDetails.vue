@@ -240,7 +240,7 @@ import HostSelector from "@/Pieces/HostSelector";
 import SaveButton from "@/Components/Buttons/SaveButton";
 import Popover from "@/Components/Popover";
 import { markRaw } from "vue";
-import { EditPen,More } from '@element-plus/icons-vue';
+import { EditPen, More } from '@element-plus/icons-vue';
 
 export default {
     name: 'EventDetails',
@@ -280,7 +280,7 @@ export default {
     },
     computed: {
         showMultiDuration() {
-            return !this.is_board && !this.new_event && !this.isGroupMeeting
+            return !this.is_board && !this.new_event && !this.isGroupMeeting;
         },
         enabledQueryString() {
             return (this.calendar_event.settings?.custom_redirect?.is_query_string == 'yes')
@@ -311,7 +311,7 @@ export default {
             this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
         updateDefaultDurations(updatedValue) {
-            if (!updatedValue) {
+            if (!updatedValue.length) {
                 return;
             }
             this.calendar_event.settings.multi_duration.available_durations = updatedValue.sort((a, b) => a - b);

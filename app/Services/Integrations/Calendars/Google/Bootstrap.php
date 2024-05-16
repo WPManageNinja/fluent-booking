@@ -929,7 +929,7 @@ class Bootstrap extends BaseCalendar
 
         if (!$additionalSettings) {
             return [
-                'notification_enabled' => 'no',
+                'notification_enabled' => 'yes',
                 'guest_list_enabled'   => 'no'
             ];
         }
@@ -946,7 +946,7 @@ class Bootstrap extends BaseCalendar
             ],
             'guest_list_enabled' => [
                 'type'           => 'yes_no_checkbox',
-                'checkbox_label' => __('Guests can see other guests', 'fluent-booking-pro'),
+                'checkbox_label' => __('Guests can see other guests of the slot', 'fluent-booking-pro'),
             ]
         ];
 
