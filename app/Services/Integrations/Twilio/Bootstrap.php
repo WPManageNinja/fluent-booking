@@ -217,7 +217,7 @@ class Bootstrap
             $sms = Arr::get($notifications, 'booking_conf_attendee.sms', []);
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
-            $smsData['receiver_number'] = Arr::get($booking, 'phone');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
             $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -274,7 +274,7 @@ class Bootstrap
             $sms = Arr::get($notifications, 'reminder_to_attendee.sms', []);
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
-            $smsData['receiver_number'] = Arr::get($booking, 'phone');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
             $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -357,7 +357,7 @@ class Bootstrap
             $sms = Arr::get($notifications, 'cancelled_by_attendee.sms', []);
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
-            $smsData['receiver_number'] = Arr::get($booking, 'phone');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
             $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -420,7 +420,7 @@ class Bootstrap
             $sms = Arr::get($notifications, 'rescheduled_by_attendee.sms', []);
 
             $smsData['send_to'] = Arr::get($sms, 'send_to');
-            $smsData['receiver_number'] = Arr::get($booking, 'phone');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
             $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
