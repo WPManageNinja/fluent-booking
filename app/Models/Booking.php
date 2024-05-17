@@ -214,7 +214,7 @@ class Booking extends Model
         if ($status == 'completed') {
             return $query->where('end_time', '<', gmdate('Y-m-d H:i:s')) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 ->where('status', '!=', 'cancelled')
-                ->orWhere('status', '!=', 'rejected')
+                ->where('status', '!=', 'rejected')
                 ->orWhere('status', 'completed'); // maybe cron did not mark few as completed yet
         }
 
