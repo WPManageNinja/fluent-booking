@@ -361,9 +361,15 @@ class FrontEndHandler
             'pagination'   => 'show',
             'period'       => 'all',
             'calendar_ids' => 'all',
+            'no_bookings'  => __('No bookings found', 'fluent-booking-pro'),
             'per_page'     => 10
         ], $atts);
         
+        $atts['title'] = sanitize_text_field($atts['title']);
+        $atts['filter'] = sanitize_text_field($atts['filter']);
+        $atts['pagination'] = sanitize_text_field($atts['pagination']);
+        $atts['no_bookings'] = sanitize_text_field($atts['no_bookings']);
+
         $userData = get_userdata(get_current_user_id());
         
         $userEmail = $userData ? $userData->user_email : null;
@@ -384,8 +390,8 @@ class FrontEndHandler
             ->applyComputedStatus($bookingPeriod);
 
         if ($atts['calendar_ids'] != 'all') {
-            $calendarIds = array_map('intval', explode(',', $atts['calendar_ids']));
-            $bookingQuery->whereIn('calendar_id', $calendarIds);
+            $atts['calendar_ids'] = array_map('intval', explode(',', $atts['calendar_ids']));
+            $bookingQuery->whereIn('calendar_id', $atts['calendar_ids']);
         }
 
         $bookings = $bookingQuery->paginate($perPage, ['*'], 'booking_page', $currentPage)

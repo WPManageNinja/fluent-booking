@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
-<div class="container">
+<div class="fcal_container">
     <div class="fcal_booking_header">
         <h3><?= esc_html($attributes['title']) ?></h3>
         <div class="fcal_booking_header_actions">
@@ -39,13 +39,13 @@
                                             <?php foreach ($booking->happening_status as $slug => $status) : ?>
                                                 <div class="fcal_spot_happening">
                                                     <span class=<?= 'fcal_' . esc_attr($slug) ?>>
-                                                        <?= esc_html($status) ?>
+                                                        <?= esc_html(ucfirst($status)) ?>
                                                     </span>
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php else : ?>
                                             <span class="fcal_spot_period_status">
-                                                <?= esc_html($booking->status) ?>
+                                                <?= esc_html(ucfirst($booking->status)) ?>
                                             </span>
                                         <?php endif; ?>
 
@@ -68,7 +68,7 @@
                 <?php endforeach; ?>
                 <?php if ($bookings->isEmpty()): ?>
                     <div class="fcal_no_bookings">
-                        <p><?=__('No bookings found', 'fluent-booking-pro')?></p>
+                        <p><?=esc_html($attributes['no_bookings'])?></p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -91,9 +91,11 @@
             </form>
 
             <?php if ($bookings->onFirstPage()): ?>
-                <a class="fcal_btn prev disabled">«</a>
+                <a class="fcal_btn prev disabled" aria-label="Previous page is disabled" role="button">«</a>
             <?php else: ?>
-                <a class="fcal_btn prev" href="<?= esc_url($bookings->previousPageUrl()); ?>">«</a>
+                <a class="fcal_btn prev" aria-label="Go to previous page" role="button"
+                    href="<?= esc_url($bookings->previousPageUrl()); ?>">«
+                </a>
             <?php endif; ?>
 
             <ul class="fcal_pager">
@@ -101,15 +103,19 @@
                     <?php if ($page == $bookings->currentPage()): ?>
                         <li class="active"><span><?= esc_html($page); ?></span></li>
                     <?php else: ?>
-                        <li><a href="<?= esc_url($bookings->url($page)); ?>"><?= esc_html($page); ?></a></li>
+                        <li><a aria-label="Go to page <?= esc_attr($page); ?>"
+                            href="<?= esc_url($bookings->url($page)); ?>"><?= esc_html($page); ?></a>
+                        </li>
                     <?php endif; ?>
                 <?php endfor; ?>
             </ul>
 
             <?php if ($bookings->hasMorePages()): ?>
-                <a class="fcal_btn next" href="<?= esc_url($bookings->nextPageUrl()); ?>">»</a>
+                <a class="fcal_btn next" aria-label="Go to next page" role="button"
+                    href="<?= esc_url($bookings->nextPageUrl()); ?>">»
+                </a>
             <?php else: ?>
-                <a class="fcal_btn next disabled">»</a>
+                <a class="fcal_btn next disabled" aria-label="Next page is disabled" role="button">»</a>
             <?php endif; ?>
         </ul>
     <?php endif; ?>
