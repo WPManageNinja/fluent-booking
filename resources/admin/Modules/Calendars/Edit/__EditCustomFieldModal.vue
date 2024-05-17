@@ -48,6 +48,9 @@
                     {{ '+ ' + $t('Add new option') }}
                 </el-link>
             </el-form-item>
+            <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
+                <el-input v-model="fieldData.help_text" type="text"/>
+            </el-form-item>
             <el-form-item :label="$t('Required')">
                 <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
                     <el-radio :label="true">{{ $t('Yes') }}</el-radio>
@@ -89,6 +92,7 @@ export default {
                 name: '',
                 type: 'text',
                 placeholder: '',
+                help_text: '',
                 enabled: true,
                 required: false,
                 options: ['Option 1', 'Option 2']
@@ -122,6 +126,9 @@ export default {
         },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email'].includes(this.fieldData.type);
+        },
+        hasHelpText() {
+            return !['guests', 'payment_method', 'location'].includes(this.fieldData.name);
         }
     },
     methods: {
