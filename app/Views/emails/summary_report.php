@@ -84,7 +84,7 @@
                 font-size: 16px !important;
             }
 
-            .container {
+            .fcal_container {
                 padding: 0 !important;
                 width: 100% !important;
             }
@@ -112,7 +112,7 @@
     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
         <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;"
             valign="top"></td>
-        <td class="container" width="600"
+        <td class="fcal_container" width="600"
             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;"
             valign="top">
             <div class="content"

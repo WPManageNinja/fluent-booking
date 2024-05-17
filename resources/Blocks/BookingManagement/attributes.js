@@ -22,6 +22,10 @@ export const attributes = {
         type: 'number',
         default: 5
     },
+    noBookingsMessage: {
+        type: 'string',
+        default: 'No bookings found'
+    },
     calendarIds: {
         type: 'array',
         default: ['all']

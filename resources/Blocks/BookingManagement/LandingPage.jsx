@@ -15,6 +15,7 @@ export const LandingPage = props => {
             showPagination,
             period,
             perPage,
+            noBookingsMessage,
         }, setAttributes
     } = props;
 
@@ -132,7 +133,7 @@ export const LandingPage = props => {
                                             </div>
                                         ))}
                                     </div> : <div className='fcal_no_bookings'>
-                                        <p>{__('No Bookings Found!')}</p>
+                                        <p>{noBookingsMessage}</p>
                                     </div>
                             }
                         </div>
