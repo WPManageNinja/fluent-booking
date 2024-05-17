@@ -694,6 +694,12 @@ body >.fcal_calendar_wrap {
                 margin: 0;
             }
         }
+        .fcal_help_text {
+            font-size: 0.75rem;
+            font-style: italic;
+            color: var(--fcal_dark);
+            margin: 8px 0;
+        }
       }
       .fcal_custom_phone_field {
         .svelte-select {
