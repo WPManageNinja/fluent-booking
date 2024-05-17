@@ -709,7 +709,6 @@ class TransStrings
             'Tomorrow'                                                                         => __('Tomorrow', 'fluent-booking-pro'),
             'Use WooCommerce Checkout'                                                         => __('Use WooCommerce Checkout', 'fluent-booking-pro'),
             'Use Native Payment Methods by FluentBooking'                                      => __('Use Native Payment Methods by FluentBooking', 'fluent-booking-pro'),
-            'Currently FluentBooking has integration with FluentCRM.After install'             => __('Currently FluentBooking has integration with FluentCRM.After install', 'fluent-booking-pro'),
             'To'                                                                               => __('To', 'fluent-booking-pro'),
             'if customer does not complete the payment for paid events.'                       => __('if customer does not complete the payment for paid events.', 'fluent-booking-pro'),
             'from the event end time'                                                          => __('from the event end time', 'fluent-booking-pro'),

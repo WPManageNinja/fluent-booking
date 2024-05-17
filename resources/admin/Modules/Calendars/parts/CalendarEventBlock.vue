@@ -34,6 +34,9 @@
                             <el-dropdown-item command="delete"><el-icon><Delete /></el-icon>
                                 {{ $t('Delete') }}
                             </el-dropdown-item>
+                            <el-dropdown-item v-if="calendar.public_url" command="copy"><el-icon><Link /></el-icon>
+                                {{ $t('Copy link') }}
+                            </el-dropdown-item>
                             <el-dropdown-item command="clone"><el-icon><CopyDocument /></el-icon>
                                 {{ $t('Clone from') }}
                             </el-dropdown-item>
@@ -153,9 +156,10 @@
 
 <script>
 import EachSlot from "./EachSlot";
-import { Setting, User, Right, MoreFilled, Delete, CopyDocument } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Delete, CopyDocument, Link } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
+import { copyToClipBoard } from '@/Bits/data_config.js';
 
 export default {
     name: 'CalendarEventBlock',
@@ -169,6 +173,7 @@ export default {
         MoreFilled,
         Delete,
         CopyDocument,
+        Link,
         SaveButton
     },
     data() {
@@ -218,6 +223,12 @@ export default {
         handleCommand(command) {
             if (command == 'clone') {
                 this.isCloneOpen = true;
+                return;
+            }
+
+            if (command == 'copy') {
+                copyToClipBoard(this.calendar.public_url);
+                this.$handleSuccess(this.$t('Link Copied'));
                 return;
             }
 
