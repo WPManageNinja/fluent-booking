@@ -193,7 +193,8 @@ class BookingService
             'scheduled'   => __('Scheduled', 'fluent-booking-pro'),
             'cancelled'   => __('Cancelled', 'fluent-booking-pro'),
             'rejected'    => __('Rejected', 'fluent-booking-pro'),
-            'rescheduled' => __('Rescheduled', 'fluent-booking-pro')
+            'rescheduled' => __('Rescheduled', 'fluent-booking-pro'),
+            'completed'   => __('Completed', 'fluent-booking-pro')
         ];
 
         $bookingStatus = $bookingStatuses[$booking->status];
