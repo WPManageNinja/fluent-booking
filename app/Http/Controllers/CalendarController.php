@@ -811,7 +811,7 @@ class CalendarController extends Controller
 
         $formattedFields = [];
 
-        $textFields = ['type', 'name', 'label', 'placeholder', 'limit'];
+        $textFields = ['type', 'name', 'label', 'placeholder', 'limit', 'help_text'];
         $booleanFields = ['enabled', 'required', 'system_defined', 'disable_alter'];
 
         foreach ($bookingFields as $value) {
