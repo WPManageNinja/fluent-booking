@@ -939,15 +939,15 @@ class FrontEndHandler
 
         $meeting = Booking::where('hash', $meetingHash)->first();
 
-        if (!$meeting->canCancel()) {
-            wp_send_json([
-                'message' => __('Sorry! you can not cancel this meeting', 'fluent-booking-pro')
-            ], 422);
-        }
-
         if (!$meeting) {
             wp_send_json([
                 'message' => __('Sorry! meeting could not be found', 'fluent-booking-pro')
+            ], 422);
+        }
+
+        if (!$meeting->canCancel()) {
+            wp_send_json([
+                'message' => __('Sorry! you can not cancel this meeting', 'fluent-booking-pro')
             ], 422);
         }
 
