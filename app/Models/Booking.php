@@ -674,27 +674,23 @@ class Booking extends Model
         $hasPermission   = $this->hasBookingAccess() || $canReschedule;
         $isReschedulable = in_array($this->status, ['scheduled', 'pending']);
 
-        
         return $hasPermission && $isReschedulable;
     }
 
     public function getInviteePhoneNumber($calendarEvent)
     {
-        if ($this->phone) {
-            return $this->phone;
-        }
-
         $customFormData = $this->getCustomFormData(false);
 
         $customFields = BookingFieldService::getBookingFields($calendarEvent);
 
         foreach ($customFields as $field) {
-            if ($field['type'] == 'phone' && Arr::get($customFormData, $field['name'])) {
-                return $customFormData[$field['name']];
+            $fieldValue = Arr::get($customFormData, $field['name']);
+            if ($fieldValue && $field['type'] == 'phone' && Arr::isTrue($field, 'is_sms_number')) {
+                return $fieldValue;
             }
         }
 
-        return '';
+        return $this->phone;
     }
 
     public function getHostDetails($isPublic = true)

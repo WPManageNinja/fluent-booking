@@ -51,6 +51,9 @@
             <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
                 <el-input v-model="fieldData.help_text" type="text"/>
             </el-form-item>
+            <el-form-item v-if="isPhoneField">
+                <el-checkbox v-model="fieldData.is_sms_number">{{ $t('Use this number for sending sms notification') }}</el-checkbox>
+            </el-form-item>
             <el-form-item :label="$t('Required')">
                 <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
                     <el-radio :label="true">{{ $t('Yes') }}</el-radio>
@@ -112,6 +115,11 @@ export default {
             if (this.fieldData.type == 'checkbox') {
                 this.fieldData.required = false;
             }
+        },
+        'fieldData.is_sms_number': function (newValue, oldValue) {
+            if (newValue && newValue != oldValue) {
+                this.updateOtherSmsFields();
+            }
         }
     },
     computed: {
@@ -123,6 +131,9 @@ export default {
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
+        },
+        isPhoneField() {
+            return this.fieldData.type == 'phone';
         },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email'].includes(this.fieldData.type);
@@ -155,6 +166,16 @@ export default {
                 }
             });
             return index + 1;
+        },
+        updateOtherSmsFields() {
+            if (this.fieldData.type != 'phone' || !this.fieldData.is_sms_number) {
+                return;
+            }
+            this.fields.forEach(field => {
+                if (field.is_sms_number && field.name != this.fieldData.name) {
+                    field.is_sms_number = false;
+                }
+            });
         },
         validateLimit(limit) {
             this.fieldData.limit = Math.max(1, Math.min(50, limit));
