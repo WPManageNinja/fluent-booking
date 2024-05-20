@@ -21,4 +21,180 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 
 == Changelog ==
 
-1
+1.4.0 (Date: 20 May 2024)
+- New Gutenberg Block: Logged-in user bookings
+- New shortcode: Add booking to calendar
+- Implemented booking confirmation require feature
+- Google Calendar additional settings
+- Clone meetings from other host
+- Added formatted date shortcode for mapping with FluentCRM birthday field
+- Added ICS file attachment option
+- Added Invitee email edit option for admin
+- Added option to use custom phone field for sending SMS
+- Added help message field in custom fields
+- Added format field for date
+- Updated group event title for remote group events
+- Resolved Nextcloud Calendar sync issue
+- Fixed an issue with event details for long descriptions
+- Fixed email sent from Fluent SMTP instead of the default From address of FluentBooking
+- Fixed the meeting reschedule permission issue for admin
+- Corrected display of available days for rescheduled group events syncing with Google Calendar
+- Fixed Stripe payment issue when the event was set in other language
+- Resolved availability issues for the booking calendar
+- Fixed the Gutenberg block's primary color not reflecting across the booking calendar
+- Added missing translation strings to improve UI
+
+1.3.1 (Date: 10 Apr 2024)
+- Displayed woo product price on booking page
+- Fixed stripe payment issue with shortcode
+- Fixed gutenberg block's back to team button issue
+- Fixed minor typo
+
+1.3.0 (Date: 3 Apr 2024)
+- New Gutenberg Block - FluentBooking Calendar
+- Added Multi-payment Option Based on Meeting Duration
+- Implemented PayPal Integration
+- Added Stripe Refund Option for Admin
+- Mark as Paid Option for Admin
+- Custom Redirect URL on Paid Bookings
+- Catching Time in Apple Calendar & NextCloud Calendar
+- Added New Shortcode - Full Start and End Date Time
+- Added Booking Rescheduled Trigger
+- Resolved Daylight Saving Time Issue with Europe Timezones
+- Fixed Group Event Double Slot Appears Issue
+- Fixed Availability Permission Issue
+- Improved UI
+
+1.2.63 (Date: 26 Feb 2024)
+- Daylight saving time fix
+- Fixed issues With multi-hour slot availability
+- Resolved minor UI issues
+
+1.2.62 (Date: 10 Feb 2024)
+- Reverting Daylight Saving Time Fix
+
+1.2.61 (Date: 09 Feb 2024)
+- Implemented Timezone Lock Feature
+- Fixed Issue With Daylight Saving Time
+- Fixed Booking Summary Email Issue
+
+1.2.60 (Date: 06 Feb 2024)
+- Improved frontend accessibility - achieve 100% score in lighthouse report
+- RTL support
+- Added booking type filter in booking listing
+- Improved all cleanups
+- Fixed booking date mismatch issue
+- Fixed cutout time issue of availabilities
+- Allow author to update timezone
+- Added event slug update ability
+- Displayed error messages of booking form
+- Added no availability behaviour on schedule meeting
+- Improved UI-UX
+
+1.2.52 (Date: 26 Jan 2024)
+- Fixed fluent booking menu not showing issue
+- Improved Host/Team Member Searching
+- Fixed Date Override issue
+- Fixed conference options not coming in new event location issue
+- Fixed issue with deleted Availability
+- Fixed issue with deleted Calendar Event
+- Added Calendar Avatar on Round Robin
+- Added few missing translation
+- Fixed double event created issue
+- Updated Buffer Time by host
+
+1.2.51 (Date: 17 Jan 2024)
+- Fixed Manual Booking Issue with Google Calendar
+- Fixed Calendar Event Permission Issue
+
+1.2.50 (Date: 15 Jan 2024)
+- Arrange Round Robin Meetings
+- Invite Additional Guests Field
+- Multi-select Field Form Field
+- Custom Date Field in Form Builder
+- Internal Improvements & Bug Fixes
+
+1.2.41 (Date: 14 Dec 2023)
+- Nextcloud Calendar Integration
+- Redirection Option After Booking
+- New Custom Field Types in Question Settings
+- Multiple Meeting Duration
+- Manual Booking Add from Admin Panel
+- Fixed Issues with Fluent Forms Integration
+- Other Improvements & Bug Fixes
+
+1.2.3 (Date: 24 Nov 2023)
+- Fixed Integration Settings
+- Added Privacy Flag for Google Calendar Integration
+- Fix Apple Calendar Integration Issue
+- Added Padding to Fluent Forms Block
+
+1.2.2 (Date: 24 Nov 2023)
+- Apple Calendar Integration
+- Microsoft Teams Support
+- One-click Google Calendar Integration
+- Dark Mode
+- Control Booking Frequency and duration
+- Reschedule or Cancel Group Meeting
+- Added Default Country for Phone Field
+- Improvements and Bug Fixes
+
+1.2.1 (Date: 14 Nov 2023)
+- Fixed Location issue for Google Meet
+- Added Validation for Location Fields
+
+1.2.0 (Date: 14 Nov 2023)
+- Added Outlook integration
+- Added Team Block
+- Ajax-based Landing Page
+- More translation strings added
+- Added Pretty URL for Landing Pages
+- All day and recurring events for google calendar sync issue fixed
+
+1.1.0 (Date: 02 Nov 2023)
+- Added WooCommerce Checkout Integration
+- Added Deep integration with FluentCRM
+- Personalization shortcodes for FluentCRM Automation
+- Fluent Forms Conversational Form support
+- One-Click Clone Calendar Events
+- Added missing translation strings
+- All reported bug fixed & other improvements
+
+1.0.7 (Date: 31 Oct 2023)
+- Fixed timezone issue for end of the month / year
+- Added Missing Translation Strings
+- Responsive Issue fixed
+- Added French Translation File (Thanks to Ricardo Da Silva) - 85% Coverage
+
+1.0.6 (Date: 26 Oct 2023)
+- Twilio Integration for SMS & WhatsApp Notification
+- Added Buffer Time before & after the booking slots
+- Translation-Ready - 100% string coverage for translation
+- Fluent Forms Integration Improved
+- Added Booking delete option for Admin
+- Added Booking Reschedule option for Admin
+- Show message if Google Calendar API got disconnected
+- Added support for past recurring events for Google Calendars Sync
+- UI Improvements
+
+1.0.5 (Date: 22 Oct 2023)
+- Fix Google Access Token issue
+
+1.0.3 (Date: 20 Oct 2023)
+- Added Email Notification on Booking Reschedule
+- Minor UI Improvements
+- Added Time Format Pre-Selected based on settings
+- Zoom Link issue with Google Calendar fixed
+- Current date highlighted on the calendar
+
+1.0.1 (Date: 19 Oct 2023)
+- Added External Location details like Zoom / Custom Address / Phone Number to Google Calendar
+- Added Caching time settings for Google Calendar event conflict check
+- Added Block Options to customize the calendar & booking form
+- Set default 12h / 24h time format from settings
+- Multiple Locations selection issue fixed
+- Timezone issue fixed on Availability
+- Reminder Email Notification Fixed
+
+1.0.0 (Date: 18 Oct 2023)
+- Initial release
