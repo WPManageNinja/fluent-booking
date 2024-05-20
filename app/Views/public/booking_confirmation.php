@@ -2,7 +2,6 @@
     /*
     * @var $booking \FluentBooking\App\Models\Booking
     */
-
     defined( 'ABSPATH' ) || exit;
 ?>
 

@@ -6,6 +6,20 @@
   height: 100vh;
   overflow-x: hidden;
   padding: 40px 0;
+  .fcal_back_btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 4px;
+      svg {
+        stroke: var(--fcal_primary_color);
+      }
+        a {
+            color: var(--fcal_primary_color);
+            text-decoration: none;
+        }
+  }
   .fcal_conf_wrap {
     max-width: 600px;
     margin: auto;
