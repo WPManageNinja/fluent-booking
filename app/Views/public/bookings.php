@@ -2,7 +2,7 @@
 
 <div class="fcal_container">
     <div class="fcal_booking_header">
-        <h3><?= esc_html($attributes['title']) ?></h3>
+        <h2><?= esc_html($attributes['title']) ?></h2>
         <div class="fcal_booking_header_actions">
             <?php if ($attributes['filter'] == 'show') : ?>
                 <form action="" method="GET">
