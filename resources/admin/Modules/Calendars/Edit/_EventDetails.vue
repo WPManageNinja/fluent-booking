@@ -311,7 +311,7 @@ export default {
             this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
         updateDefaultDurations(updatedValue) {
-            if (!updatedValue.length) {
+            if (!updatedValue || !updatedValue.length) {
                 return;
             }
             this.calendar_event.settings.multi_duration.available_durations = updatedValue.sort((a, b) => a - b);
