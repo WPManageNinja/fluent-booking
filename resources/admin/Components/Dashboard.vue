@@ -39,9 +39,9 @@
                 <div
                     v-for="(widget, i) in widgets"
                     :key="i"
-                    class="overview-widget">
+                    :class="['overview-widget', { navigation: widget.period }]">
                     <h1 v-html="widget.number"></h1>
-                    <p>{{ widget.title }}</p>
+                    <p @click="goToBookingLists(widget.period)">{{ widget.title }}</p>
                     <h3><span :class="{'stat': true, 'down': widget.stat < 0}"><el-icon><Top /></el-icon>
                         {{ widget.stat }}%</span>{{ widget.content }}</h3>
                     <span class="icon" v-html="widget.icon"></span>
@@ -202,6 +202,14 @@ export default {
                 name: 'scheduled_events',
                 query:{booking_id: scheduleId}
             })
+        },
+        goToBookingLists($period) {
+            if ($period) {
+                this.$router.push({
+                    name: 'scheduled_events',
+                    query: {period: $period}
+                })
+            }
         },
         fetchReports() {
             this.loading = true;
