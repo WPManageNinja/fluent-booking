@@ -79,3 +79,12 @@
     }
     return $settings;
 }, 10, 1);
+
+$app->addFilter('fluent_booking/public_event_vars', function($eventVars) {
+    foreach ($eventVars['form_fields'] as &$field) {
+        if ($field['type'] === 'date' && !empty($field['date_format'])) {
+            $field['date_format'] = \FluentBooking\App\Services\DateTimeHelper::convertPhpDateToDayJSFormay($field['date_format']);
+        }
+    }
+    return $eventVars;
+}, 10, 1);
