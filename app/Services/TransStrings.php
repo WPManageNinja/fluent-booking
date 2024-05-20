@@ -381,6 +381,7 @@ class TransStrings
             'ShareCalendarBlock/copy_and_use_shortcode_desc'                                   => __('Copy and use the shortcode Page/Post of your website', 'fluent-booking-pro'),
             'Landing Page'                                                                     => __('Landing Page', 'fluent-booking-pro'),
             'Copy'                                                                             => __('Copy', 'fluent-booking-pro'),
+            'Copy link'                                                                        => __('Copy link', 'fluent-booking-pro'),
             'To get the landing page url, please enable from'                                  => __('To get the landing page url, please enable from', 'fluent-booking-pro'),
             'here'                                                                             => __('here', 'fluent-booking-pro'),
             'Add Calendar to Gutenberg Block'                                                  => __('Add Calendar to Gutenberg Block', 'fluent-booking-pro'),

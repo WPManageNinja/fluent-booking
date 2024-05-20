@@ -422,6 +422,10 @@ class Bootstrap extends BaseCalendar
             'transactionId'         => $booking->id,
         ];
 
+        if ($booking->event_type == 'group') {
+            $data['subject'] = $booking->calendar_event->title;
+        }
+
         if ($booking->event_type != 'group') {
             $data['body'] = [
                 'contentType' => 'text',

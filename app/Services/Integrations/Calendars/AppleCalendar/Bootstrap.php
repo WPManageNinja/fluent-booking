@@ -728,6 +728,10 @@ class Bootstrap extends BaseCalendar
             ]
         ];
 
+        if ($booking->event_type == 'group') {
+            $data['summary'] = $booking->calendar_event->title;
+        }
+
         return $data;
     }
 
