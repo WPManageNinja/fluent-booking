@@ -50,7 +50,7 @@ export default {
         }
     },
     mounted() {
-        if(!this.value) {
+        if(!this.modelValue) {
             this.selected = window.dayjs.tz.guess();
             this.timeZoneChanged();
         } else {
