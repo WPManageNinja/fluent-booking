@@ -750,6 +750,7 @@ class TransStrings
             'Clone Event'                                                                      => __('Clone Event', 'fluent-booking-pro'),
             'Clone Calendar Event'                                                             => __('Clone Calendar Event', 'fluent-booking-pro'),
             'Select Calendar Event'                                                            => __('Select Calendar Event', 'fluent-booking-pro'),
+            'Use this number for sending sms notification'                                     => __('Use this number for sending sms notification', 'fluent-booking-pro'),
             'Help Message'                                                                     => __('Help Message', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );
