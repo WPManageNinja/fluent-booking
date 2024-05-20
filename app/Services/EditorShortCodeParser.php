@@ -178,6 +178,11 @@ class EditorShortCodeParser
         }
 
         if (self::$store['custom_booking_data']) {
+            if (preg_match('/format\.([a-zA-Z\-]+)/', $key, $matches)) {
+                $value = Arr::get(self::$store['custom_booking_data'], preg_split('/\.format\./', $key)[0]);
+                return gmdate($matches[1], strtotime($value)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            }
+
             return Arr::get(self::$store['custom_booking_data'], $key);
         }
 
