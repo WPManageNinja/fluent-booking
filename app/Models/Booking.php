@@ -295,7 +295,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . __('(Host phone number)', 'fluent-booking-pro');
+            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . __(' (Host phone number)', 'fluent-booking-pro');
         }
 
         if ($locationType == 'custom') {
