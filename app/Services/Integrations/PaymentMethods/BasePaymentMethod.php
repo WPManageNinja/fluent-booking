@@ -86,7 +86,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
         add_filter('fluent_booking/public_event_vars', [$this, 'addPaymentRendererTemplates'], 10, 2);
 
-        add_action('fluent_booking/pre_after_booking_pending', [$this, 'afterBookingPending'], 1, 3);
+        add_action('fluent_booking/pre_after_booking_pending', [$this, 'afterBookingPending'], 10, 3);
 
         add_filter('fluent_booking/booking_data', [$this, 'addPaymentMethodToBookingData'], 10, 3);
     }
@@ -368,7 +368,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
         if ($booking->payment_status == 'paid') {
             do_action('fluent_booking/log_booking_activity', $this->getSuccessLog($booking->id, $data));
 
-            do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event);
+            do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $booking->calendar_event, $data);
 
             // We are just renewing this as this may have been changed by the pre hook
             $booking = Booking::with(['calendar_event', 'calendar'])->find($booking->id);
