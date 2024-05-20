@@ -283,7 +283,8 @@ class AdminMenuHandler
             'trans'              => TransStrings::getStrings(),
             'date_format'        => DateTimeHelper::getDateFormatter(true),
             'time_format'        => DateTimeHelper::getTimeFormatter(true),
-            'date_time_formatter' => DateTimeHelper::getDateFormatter(true).', '.DateTimeHelper::getTimeFormatter(true)
+            'date_time_formatter' => DateTimeHelper::getDateFormatter(true).', '.DateTimeHelper::getTimeFormatter(true),
+            'available_date_formats' => DateTimeHelper::getAvailableDateFormats()
         ]);
     }
 
