@@ -40,6 +40,7 @@ class ReportController extends Controller
         $widgets = [
             [
                 'title'   => __('Total Bookings', 'fluent-booking-pro'),
+                'period'  => 'all',
                 'number'  => $bookingWidgetNumbers['totalBooked'],
                 'content' => $bookingWidgetStats['bookedComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -50,6 +51,7 @@ class ReportController extends Controller
             ],
             [
                 'title'   => __('Completed Bookings', 'fluent-booking-pro'),
+                'period'  => 'completed',
                 'number'  => $bookingWidgetNumbers['bookingCompleted'],
                 'content' => $bookingWidgetStats['completedComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -83,6 +85,7 @@ class ReportController extends Controller
         } else {
             $widgets[] = [
                 'title'   => __('Cancelled Bookings', 'fluent-booking-pro'),
+                'period'  => 'cancelled',
                 'number'  => $bookingWidgetNumbers['bookingCancelled'],
                 'content' => $bookingWidgetStats['cancelledComparison'],
                 'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
