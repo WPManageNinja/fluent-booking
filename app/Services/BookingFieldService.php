@@ -133,6 +133,7 @@ class BookingFieldService
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
+                'is_sms_number'  => true,
                 'help_text'      => ''
             ];
         } else if ($calendarSlot->isAddressRequired()) {
