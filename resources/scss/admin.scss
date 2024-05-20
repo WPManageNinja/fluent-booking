@@ -537,6 +537,11 @@
           position: relative;
           z-index: 3;
         }
+        &.navigation {
+            p {
+                cursor: pointer;
+            }
+        }
       }
     }
   }
