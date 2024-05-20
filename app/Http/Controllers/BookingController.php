@@ -338,7 +338,7 @@ class BookingController extends Controller
             $formattedBookings[] = [
                 'id'                => $booking->id,
                 'person_time_zone'  => $booking->person_time_zone,
-                'status'            => $booking->status,
+                'status'            => ucfirst($booking->status),
                 'payment_status'    => $booking->payment_status,
                 'meeting_title'     => $booking->getMeetingTitle(true),
                 'author_name'       => $booking->getHostDetails(false)['name'],

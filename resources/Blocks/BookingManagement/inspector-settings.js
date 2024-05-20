@@ -19,7 +19,8 @@ const InspectorSettings = props => {
             period,
             perPage,
             showFilter,
-            showPagination
+            showPagination,
+            noBookingsMessage
         }, setAttributes
     } = props;
 
@@ -149,6 +150,13 @@ const InspectorSettings = props => {
                                     setAttributes({
                                         showPagination: !showPagination
                                     })
+                                }}
+                            />
+                            <TextControl
+                                label="No Bookings Message"
+                                value={noBookingsMessage}
+                                onChange={(value) => {
+                                    setAttributes({ noBookingsMessage: value });
                                 }}
                             />
                         </div>

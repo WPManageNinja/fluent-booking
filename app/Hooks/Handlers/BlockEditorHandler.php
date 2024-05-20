@@ -208,6 +208,10 @@ class BlockEditorHandler
                         'type'    => 'number',
                         'default' => 5
                     ],
+                    'noBookingsMessage'  => [
+                        'type'    => 'string',
+                        'default' => __('No bookings found', 'fluent-booking-pro')
+                    ],
                     'calendarIds'  => [
                         'type'    => 'array',
                         'default' => ['all']
@@ -325,7 +329,9 @@ class BlockEditorHandler
 
         $showPagination = Arr::isTrue($attributes, 'showPagination', true) ? 'show' : 'hide';
 
-        return do_shortcode("[fluent_booking_lists title=\"$title\" period=$period per_page=$perPage filter=$showFilter pagination=$showPagination calendar_ids=" . implode(',', $calendarIds) . "]");
+        $noBookingsMessage = sanitize_text_field(Arr::get($attributes, 'noBookingsMessage'));
+
+        return do_shortcode("[fluent_booking_lists title=\"$title\" period=$period per_page=$perPage filter=$showFilter pagination=$showPagination no_bookings=\"$noBookingsMessage\" calendar_ids=" . implode(',', $calendarIds) . "]");
     }
 
     public function fcalRenderBlock($attributes)
