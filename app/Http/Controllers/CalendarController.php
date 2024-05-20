@@ -295,7 +295,7 @@ class CalendarController extends Controller
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
-            
+
             if ($calendar->user) {
                 $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
             }
