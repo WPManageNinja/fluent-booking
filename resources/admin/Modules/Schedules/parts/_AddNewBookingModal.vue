@@ -124,7 +124,7 @@
             <el-form-item :label="getEmailLabel">
                 <el-input v-model="newBooking.email"/>
             </el-form-item>
-            <el-form-item :label="$t('What is this meeting about?')">
+            <el-form-item :label="$t('What is this meeting about?') + (isAboutRequired ? ' *' : '')">
                 <el-input v-model="newBooking.message" type="textarea" :rows="3"/>
             </el-form-item>
             <el-form-item v-if="isMultiGuestEnabled" :label="multiGuestField.label + (multiGuestField.required ? ' *' : '')">
@@ -138,7 +138,7 @@
             </el-form-item>
             <div v-for="field in formFields" :key="field.name">
                 <div v-if="field.enabled && !field.system_defined">
-                    <el-form-item v-if="['text', 'email', 'phone'].includes(field.type)" :label="field.label + (field.required ? ' *' : '')">
+                    <el-form-item v-if="['text', 'email', 'phone', 'textarea'].includes(field.type)" :label="field.label + (field.required ? ' *' : '')">
                         <el-input v-model="customFields[field.name]" :type="field.type" :placeholder="field.placeholder"/>
                     </el-form-item>
                     <el-form-item v-if="field.type === 'checkbox'">
@@ -320,6 +320,9 @@ export default {
                 }
             }
             return false;
+        },
+        isAboutRequired() {
+            return this.formFields.length && this.formFields.find(field => field.name === 'message' && field.required);
         }
     },
     methods: {
@@ -339,6 +342,7 @@ export default {
                     this.availableSlots = response.available_slots;
                     this.locationType = response.calendar_event.slot.location_settings[0].type;
                     this.teamMembers = response.calendar_event?.team_member_profiles ?? [];
+                    console.log(this.formFields);
                     if (this.event?.id != response.calendar_event.slot.id) {
                         this.event = response.calendar_event.slot;
                         this.updateDurations();
