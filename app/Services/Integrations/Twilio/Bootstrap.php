@@ -12,16 +12,31 @@ class Bootstrap
 {
     public function register()
     {
+        $this->registerClientHooks();
+        $this->registerBookingHooks();
+    }
+
+    protected function registerClientHooks()
+    {
         add_filter('fluent_booking/settings_menu_items', [$this, 'addGlobalMenu'], 12, 1);
         add_filter('fluent_booking/get_client_settings_twilio', [$this, 'getOauthClientSettings']);
         add_filter('fluent_booking/get_client_field_settings_twilio', [$this, 'getOauthClientSettingsFields']);
         add_action('fluent_booking/save_client_settings_twilio', [$this, 'saveOauthClientSettings'], 10, 1);
+    }
 
+    protected function registerBookingHooks()
+    {
+        if (!TwilioHelper::isConnected()) {
+            return;
+        }
         add_action('fluent_booking/after_booking_scheduled', [$this, 'pushBookingScheduledToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_scheduled_sms_async', [$this, 'bookingScheduledSms'], 10, 1);
+        add_action('fluent_booking/after_booking_pending', [$this, 'pushBookingPendingToQueue'], 10, 2);
+        add_action('fluent_booking/after_booking_pending_sms_async', [$this, 'bookingRequestSms'], 10, 2);
         add_action('fluent_booking/after_booking_rescheduled', [$this, 'smsOnBookingRescheduled'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder_sms', [$this, 'bookingReminderSms'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'smsOnBookingCancelled'], 10, 1);
+        add_action('fluent_booking/booking_schedule_rejected', [$this, 'smsOnBookingRejected'], 10, 2);
     }
 
     public function addGlobalMenu($menuItems)
@@ -178,11 +193,7 @@ class Bootstrap
     }
 
     public function pushBookingScheduledToQueue($booking, $bookingEvent)
-    {
-        if (!TwilioHelper::isConnected()) {
-            return;
-        }
-        
+    {   
         $notifications = $bookingEvent->getSmsNotifications();
 
         if (Arr::isTrue($notifications, 'booking_conf_attendee.enabled') || (Arr::isTrue($notifications, 'booking_conf_host.enabled'))) {
@@ -200,7 +211,18 @@ class Bootstrap
             $reminderTimes = Arr::get($notifications, 'reminder_to_host.sms.times', []);
             $this->pushRemindersToQueue($booking, $reminderTimes, 'host');
         }
+    }
 
+    public function pushBookingPendingToQueue($booking, $bookingEvent)
+    {
+        $notifications = $bookingEvent->getSmsNotifications();
+
+        if (Arr::isTrue($notifications, 'booking_request_host.enabled') || (Arr::isTrue($notifications, 'booking_request_attendee.enabled'))) {
+            as_enqueue_async_action('fluent_booking/after_booking_pending_sms_async', [
+                $booking->id,
+                $bookingEvent->id
+            ], 'fluent-booking');
+        }
     }
 
     public function bookingScheduledSms($bookingId)
@@ -226,7 +248,7 @@ class Bootstrap
                 do_action('fluent_booking/log_booking_note', [
                     'title'       => __('SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
-                    'description' => __('Booking Confirmation SMS has been aent to attendee'),
+                    'description' => __('Booking Confirmation SMS has been sent to attendee'),
                     'booking_id'  => $booking->id
                 ]);
             }
@@ -258,6 +280,10 @@ class Bootstrap
 
     public function bookingReminderSms($bookingId, $emailTo)
     {
+        if (!TwilioHelper::isConnected()) {
+            return;
+        }
+
         $booking = Booking::with(['user', 'calendar_event'])->find($bookingId);
 
         if (!$booking || $booking->status != 'scheduled') {
@@ -310,12 +336,43 @@ class Bootstrap
         }
     }
 
-    public function smsOnBookingCancelled(Booking $booking)
+    public function bookingRequestSms($bookingId, $calendarEventId)
     {
-        if (!TwilioHelper::isConnected()) {
+        $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
+
+        if (!$booking || !$booking->calendar_event) {
+            return '';
+        }
+
+        $notifications = $booking->calendar_event->getSmsNotifications();
+        if (!$notifications) {
             return;
         }
 
+        if (Arr::isTrue($notifications, 'booking_request_attendee.enabled')) {
+            $sms = Arr::get($notifications, 'booking_request_attendee.sms', []);
+
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
+
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+        }
+
+        if (Arr::isTrue($notifications, 'booking_request_host.enabled')) {
+            $sms = Arr::get($notifications, 'booking_request_host.sms', []);
+            $hostPhone = $booking->user->getMeta('host_phone');
+
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
+            $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
+
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+        }
+    }
+
+    public function smsOnBookingCancelled(Booking $booking)
+    {
         $calendarEvent = $booking->calendar_event;
         if (!$calendarEvent) {
             return;
@@ -333,19 +390,17 @@ class Bootstrap
                 // This from the host
                 $sms = Arr::get($notifications, 'cancelled_by_host.sms', []);
     
-                $hostPhone = $booking->user->getMeta('host_phone');
-
                 $smsData['send_to'] = Arr::get($sms, 'send_to');
-                $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
+                $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
                 $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
     
                 $smsSend = $this->sendSmsNotification($booking, $smsData);
-
+    
                 if ($smsSend) {
                     do_action('fluent_booking/log_booking_note', [
                         'title'       => __('Cancellation SMS Sent Successfully', 'fluent-booking-pro'),
                         'type'        => 'activity',
-                        'description' => __('Booking Cancellation SMS has been sent to the host'),
+                        'description' => __('Booking Cancellation SMS has been sent to the Attendee'),
                         'booking_id'  => $booking->id
                     ]);
                 }
@@ -356,8 +411,10 @@ class Bootstrap
         if (Arr::isTrue($notifications, 'cancelled_by_attendee.enabled')) {
             $sms = Arr::get($notifications, 'cancelled_by_attendee.sms', []);
 
+            $hostPhone = $booking->user->getMeta('host_phone');
+
             $smsData['send_to'] = Arr::get($sms, 'send_to');
-            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($booking->calendar_event);
+            $smsData['receiver_number'] = (Arr::get($sms, 'receiver') == 'host_number') ? $hostPhone : Arr::get($sms, 'number');
             $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
 
             $smsSend = $this->sendSmsNotification($booking, $smsData);
@@ -366,19 +423,37 @@ class Bootstrap
                 do_action('fluent_booking/log_booking_note', [
                     'title'       => __('Cancellation SMS Sent Successfully', 'fluent-booking-pro'),
                     'type'        => 'activity',
-                    'description' => __('Booking Cancellation SMS has been sent to the Attendee'),
+                    'description' => __('Booking Cancellation SMS has been sent to the host'),
                     'booking_id'  => $booking->id
                 ]);
             }
         }
     }
 
-    public function smsOnBookingRescheduled(Booking $booking)
+    public function smsOnBookingRejected(Booking $booking, $calendarEvent)
     {
-        if (!TwilioHelper::isConnected()) {
+        if (!$calendarEvent) {
             return;
         }
 
+        $notifications = $calendarEvent->getSmsNotifications();
+        if (!$notifications) {
+            return;
+        }
+
+        if (Arr::isTrue($notifications, 'declined_by_host.enabled')) {
+            $sms = Arr::get($notifications, 'declined_by_host.sms', []);
+
+            $smsData['send_to'] = Arr::get($sms, 'send_to');
+            $smsData['receiver_number'] = $booking->getInviteePhoneNumber($calendarEvent);
+            $smsData['message'] = EditorShortCodeParser::parse(Arr::get($sms, 'body'), $booking);
+
+            $smsSend = $this->sendSmsNotification($booking, $smsData);
+        }
+    }
+
+    public function smsOnBookingRescheduled(Booking $booking)
+    {
         $calendarEvent = $booking->calendar_event;
         if (!$calendarEvent) {
             return;
