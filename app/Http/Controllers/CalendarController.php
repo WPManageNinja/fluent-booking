@@ -295,7 +295,10 @@ class CalendarController extends Controller
             $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
-            $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
+            
+            if ($calendar->user) {
+                $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
+            }
         }
 
         $sharingSettings = $request->get('landing_page_settings', []);
@@ -377,7 +380,7 @@ class CalendarController extends Controller
         $calendar = Calendar::findOrFail($calendarId);
 
         $userCalendarId = $calendar->type != 'team' ? $calendarId : null;
-        
+
         $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($userCalendarId);
 
         $schema = [
@@ -648,25 +651,25 @@ class CalendarController extends Controller
         $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $event->settings = [
-            'schedule_conditions' => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
-            'buffer_time_before'  => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '0')),
-            'buffer_time_after'   => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '0')),
-            'slot_interval'       => sanitize_text_field(Arr::get($data, 'settings.slot_interval', '')),
-            'booking_frequency'   => [
+            'schedule_conditions'   => SanitizeService::scheduleConditions(Arr::get($data['settings'], 'schedule_conditions', [])),
+            'buffer_time_before'    => sanitize_text_field(Arr::get($data, 'settings.buffer_time_before', '0')),
+            'buffer_time_after'     => sanitize_text_field(Arr::get($data, 'settings.buffer_time_after', '0')),
+            'slot_interval'         => sanitize_text_field(Arr::get($data, 'settings.slot_interval', '')),
+            'booking_frequency'     => [
                 'enabled' => Arr::isTrue($data, 'settings.booking_frequency.enabled'),
                 'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_frequency.limits'))
             ],
-            'booking_duration'    => [
+            'booking_duration'      => [
                 'enabled' => Arr::isTrue($data, 'settings.booking_duration.enabled'),
                 'limits'  => $this->sanitize_mapped_data(Arr::get($data, 'settings.booking_duration.limits'))
             ],
-            'lock_timezone'       => [
+            'lock_timezone'         => [
                 'enabled'  => Arr::isTrue($data, 'settings.lock_timezone.enabled'),
                 'timezone' => sanitize_text_field(Arr::get($data, 'settings.lock_timezone.timezone'))
             ],
             'requires_confirmation' => [
-                'enabled' => Arr::isTrue($data, 'settings.requires_confirmation.enabled'),
-                'type'    => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.type')),
+                'enabled'   => Arr::isTrue($data, 'settings.requires_confirmation.enabled'),
+                'type'      => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.type')),
                 'condition' => [
                     'unit'  => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.condition.unit')),
                     'value' => intval(Arr::get($data, 'settings.requires_confirmation.condition.value'))
@@ -881,7 +884,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/before_delete_calendar', $calendar);
 
         $calendar->delete();
-        
+
         do_action('fluent_booking/after_delete_calendar', $calendarId);
 
         return [
