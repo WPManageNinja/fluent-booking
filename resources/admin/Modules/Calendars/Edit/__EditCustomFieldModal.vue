@@ -61,6 +61,7 @@
                     >
                     </el-option>
                 </el-select>
+                <span>{{ $t('The default date format will be applied if no format is chosen.') }}</span>
             </el-form-item>
             <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
                 <el-input v-model="fieldData.help_text" type="text"/>
