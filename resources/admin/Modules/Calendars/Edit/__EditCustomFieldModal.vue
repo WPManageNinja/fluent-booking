@@ -48,6 +48,20 @@
                     {{ '+ ' + $t('Add new option') }}
                 </el-link>
             </el-form-item>
+            <el-form-item v-if="isDateField" :label="$t('Format')">
+                <el-select
+                    popper-class="fcal_select"
+                    v-model="fieldData.date_format"
+                    :placeholder="$t('Select Format')">
+                    <el-option
+                        v-for="(type, index) in dateFormats"
+                        :key="index"
+                        :label="type.label"
+                        :value="type.value"
+                    >
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
                 <el-input v-model="fieldData.help_text" type="text"/>
             </el-form-item>
@@ -85,6 +99,7 @@ export default {
         return {
             openModal: this.showModal,
             fieldsTypes: this.appVars.custom_field_types,
+            dateFormats: this.appVars.available_date_formats,
             defaultOptions: ['Option 1', 'Option 2'],
             CloseBoldIcon: markRaw(CloseBold),
             isNewEntry: false,
@@ -127,13 +142,19 @@ export default {
             return this.isNewEntry ? this.$t('Add Question') : this.$t('Update Question');
         },
         isOptionRequired() {
-            return this.fieldData.name != 'location' && ['dropdown', 'multi-select', 'radio', 'checkbox-group'].includes(this.fieldData.type);
+            if (this.fieldData.name == 'location') {
+                return false;
+            }
+            return ['dropdown', 'multi-select', 'radio', 'checkbox-group'].includes(this.fieldData.type);
         },
         isRemovable() {
             return this.fieldData.options.length > 2;
         },
         isPhoneField() {
             return this.fieldData.type == 'phone';
+        },
+        isDateField() {
+            return this.fieldData.type == 'date';
         },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email'].includes(this.fieldData.type);

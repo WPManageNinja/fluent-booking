@@ -140,6 +140,31 @@ class DateTimeHelper
         return date_i18n($dateFormat, strtotime($dateTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
+    public static function getAvailableDateFormats()
+    {
+        $dateFormats = apply_filters('fluent_booking/available_date_formats', [
+            'm/d/Y'       => 'm/d/Y - (Ex: 05/20/2024)', // USA
+            'd/m/Y'       => 'd/m/Y - (Ex: 20/05/2024)', // Canada, UK
+            'd.m.Y'       => 'd.m.Y - (Ex: 20.05.2024)', // Germany
+            'n/j/y'       => 'n/j/y - (Ex: 5/20/24)',
+            'm/d/y'       => 'm/d/y - (Ex: 05/20/24)',
+            'M/d/Y'       => 'M/d/Y - (Ex: May/20/2024)',
+            'y/m/d'       => 'y/m/d - (Ex: 24/05/20)',
+            'Y-m-d'       => 'Y-m-d - (Ex: 2024-05-20)',
+            'd-M-y'       => 'd-M-y - (Ex: 20-May-24)',
+            'F j, Y'      => 'F j, Y - (Ex: May 20, 2024)'
+        ]);
+
+        $formatted = [];
+        foreach ($dateFormats as $format => $label) {
+            $formatted[] = [
+                'label' => $label,
+                'value' => $format,
+            ];
+        }
+        return $formatted;
+    }
+
     public static function convertPhpDateToDayJSFormay($phpFormat)
     {
         // Mapping PHP date format characters to Day.js format characters

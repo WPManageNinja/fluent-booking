@@ -1821,9 +1821,12 @@ class Helper
         }
 
         if ($calendarEvent) {
-            $customFields = BookingFieldService::getCustomFields($calendarEvent, false);
-            foreach ($customFields as $fieldKey => $fieldLabel) {
-                $groups['booking']['shortcodes']['{{booking.custom.' . $fieldKey . '}}'] = $fieldLabel;
+            $customFields = BookingFieldService::getCustomFields($calendarEvent, true);
+            foreach ($customFields as $fieldKey => $field) {
+                $groups['booking']['shortcodes']['{{booking.custom.' . $fieldKey . '}}'] = $field['label'];
+                if ($field['type'] == 'date') {
+                    $groups['booking']['shortcodes']['{{booking.custom.' . $fieldKey . '.format.Y-m-d}}'] = $field['label'] . ' (Ex: 2024-05-20)';
+                }
             }
 
             if (Helper::isPaymentEnabled($calendarEvent)) {

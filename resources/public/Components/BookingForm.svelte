@@ -91,8 +91,8 @@
                                     {/each}
                                 {:else if field.type === 'date' }
                                     <span class="fcal_date_field">
-                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field.name))}/>
-                                        <input class="set_date" type="text" placeholder={appData.date_formatter} bind:value={form[field.name]} />
+                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field))}/>
+                                        <input class="set_date" type="text" placeholder={field.date_format || appData.date_formatter} bind:value={form[field.name]} />
                                         {#if form[field.name]}
                                             <span class="clear_date_icon" on:keydown={(() => handleDateClear(field.name))} on:click={(() => handleDateClear(field.name))}>+</span>
                                         {/if}
@@ -335,9 +335,10 @@
             });
     }
 
-    function handleDateFormatChange(event, formName) {
+    function handleDateFormatChange(event, field) {
         const inputValue = event.target.value;
-        form[formName]   = util.dayjs(inputValue).format(appData.date_formatter);
+        const dateFormat = field.date_format || appData.date_formatter;
+        form[field.name] = util.dayjs(inputValue).format(dateFormat);
     }
 
     function handleDateClear(formName) {
