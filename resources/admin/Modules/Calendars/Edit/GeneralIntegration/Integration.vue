@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <template v-else-if="isEmpty(available_integrations)">
-                        <p style="font-size: 16px;">{{ $t('Currently FluentBooking has integration with FluentCRM.After install') }} <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>{{ $t('Integration/FluentCRM_not_active_desc') }}</p>
+                        <p style="font-size: 16px;">{{ $t('Currently FluentBooking has integration with FluentCRM. After install') }} <a target="_blank" rel="nofollow" href="https://fluentcrm.com">FluentCRM</a>{{ $t('Integration/FluentCRM_not_active_desc') }}</p>
                     </template>
                     <div v-else class="getting_started_message" style="padding-top: 16px; padding-bottom: 10px;">
                         <p style="font-size: 16px;">{{ $t('Integration/empty_integrations_title') }}</p>

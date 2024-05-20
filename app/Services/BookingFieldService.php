@@ -67,6 +67,7 @@ class BookingFieldService
                 'disable_alter'  => true,
                 'is_visible'     => true,
                 'placeholder'    => __('Your Name', 'fluent-booking-pro'),
+                'help_text'      => ''
             ],
             'email' => [
                 'index'          => 2,
@@ -79,6 +80,7 @@ class BookingFieldService
                 'disable_alter'  => true,
                 'is_visible'     => true,
                 'placeholder'    => __('Your Email', 'fluent-booking-pro'),
+                'help_text'      => ''
             ],
             'message' => [
                 'index'          => 3,
@@ -89,6 +91,7 @@ class BookingFieldService
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => false,
+                'help_text'      => ''
             ]
         ];
 
@@ -117,7 +120,7 @@ class BookingFieldService
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
-                'placeholder'    => esc_attr__('Location', 'fluent-booking-pro'),
+                'placeholder'    => esc_attr__('Location', 'fluent-booking-pro')
             ];
         } else if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
@@ -129,7 +132,9 @@ class BookingFieldService
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
-                'disable_alter'  => true
+                'disable_alter'  => true,
+                'is_sms_number'  => true,
+                'help_text'      => ''
             ];
         } else if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
@@ -143,6 +148,7 @@ class BookingFieldService
                 'system_defined' => true,
                 'disable_alter'  => true,
                 'placeholder'    => esc_attr__('Address', 'fluent-booking-pro'),
+                'help_text'      => ''
             ];
         }
 
