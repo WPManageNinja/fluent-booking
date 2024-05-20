@@ -143,7 +143,7 @@
                                         <b><?php esc_html_e('Hello There,', 'fluent-booking-pro'); ?></b><br/>
                                         <?php 
                                             // Translators: %d is replaced with the number of days.
-                                            printf(esc_html_e('Let\'s see how many events are booked in the last %d days.', 'fluent-booking-pro'), esc_html($days));
+                                            printf(esc_html_e('Let\'s see how many events are booked in the last %d days.', 'fluent-booking-pro'), $days);
                                         ?>
                                     </td>
                                 </tr>
