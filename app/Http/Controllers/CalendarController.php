@@ -42,6 +42,10 @@ class CalendarController extends Controller
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
+            if(empty($calendar->author_profile['ID'])) {
+                $calendar->generic_error = '<p style="color: red; margin:0;">Connected Host user is missing</p>';
+            }
+
             do_action_ref_array('fluent_booking/calendar', [&$calendar, 'lists']);
         }
 
