@@ -12,6 +12,12 @@
             </div>
         </div>
         <div v-loading="loading" class="fcal_settings_body">
+
+            <div style="padding: 20px;background: #ffdcd1; margin: 10px 0 20px;" v-if="calendar.author_profile && !calendar.author_profile.ID">
+                <h3 style="margin: 0;">Connected Host user is missing</h3>
+                <p>FluentBooking could not retrive the connected host user in WP Users Database Table. Most probably the user was deleted. You may delete this calendar from all calendars screen.</p>
+            </div>
+
             <el-form v-model="settings" label-position="top">
                 <el-row :gutter="30">
                     <el-col :span="12">
