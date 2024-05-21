@@ -1249,6 +1249,11 @@
             color: $dark;
             gap: 10px;
             font-weight: 500;
+            .el-icon {
+                &.operation {
+                    transform: rotate(90deg);
+                }
+            }
           }
         }
 
@@ -1892,6 +1897,9 @@
                 .el-icon {
                     .icon {
                         padding-bottom: 4px;
+                    }
+                    &.advanced_settings {
+                        transform: rotate(90deg);
                     }
                 }
             }
