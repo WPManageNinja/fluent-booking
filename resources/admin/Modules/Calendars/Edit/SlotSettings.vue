@@ -20,7 +20,7 @@
                 <ul class="fcal_settings_sidebar">
                     <li v-for="(menu, index) in menuItems" :key="index">
                         <router-link v-if="isRouteVisible(menu)" :to="menu.route">
-                            <el-icon>
+                            <el-icon :class="menu.route.name">
                                 <div v-if="menu.svgIcon" class="icon" v-html="menu.svgIcon"></div>
                                 <component v-else-if="menu.elIcon" :is="menu.elIcon"></component>
                             </el-icon>
@@ -49,7 +49,7 @@ import EventIcon from '../../../Components/Icons/EventIcon';
 import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
-import { Clock, Link, Message, Notification, Share, Money, Connection } from '@element-plus/icons-vue';
+import { Clock, Link, Message, Notification, Share, Money, Connection, Operation } from '@element-plus/icons-vue';
 import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 
 export default {
@@ -66,7 +66,8 @@ export default {
         Money,
         Message,
         Connection,
-        Notification
+        Notification,
+        Operation
     },
     data() {
         return {

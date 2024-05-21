@@ -74,6 +74,18 @@ add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items,
         'label'   => __('SMS Notification', 'fluent-booking-pro'),
         'elIcon' => 'Notification'
     ];
+    $items['advanced_settings'] = [
+        'type'    => 'route',
+        'route'   => [
+            'name'   => 'advanced_settings',
+            'params' => [
+                'calendar_id' => $event->calendar_id,
+                'event_id'    => $event->id
+            ]
+        ],
+        'label'   => __('Advanced', 'fluent-booking-pro'),
+        'elIcon' => 'Operation'
+    ];
     $items['payment_settings'] = [
         'type'    => 'route',
         'route'   => [
