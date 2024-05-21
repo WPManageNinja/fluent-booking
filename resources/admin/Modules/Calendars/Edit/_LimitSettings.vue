@@ -137,32 +137,6 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item v-if="showRequiresConfirmation">
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
-                                <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.requires_confirmation.enabled"/>
-                            </div>
-                            <div class="fcal_event_child_card" v-if="settings.requires_confirmation.enabled">
-                                <el-radio-group v-model="settings.requires_confirmation.type">
-                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                    <el-radio label="conditional">{{ $t('When booking notice is less than') }}
-                                        <span>
-                                            <el-input v-model="settings.requires_confirmation.condition.value"></el-input>
-                                            <el-select v-model="settings.requires_confirmation.condition.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
-                                                <el-option value="hours" :label="$t('Hours')"></el-option>
-                                            </el-select>
-                                        </span>
-                                    </el-radio>
-                                </el-radio-group>
-                            </div>
-                        </div>
-                    </el-form-item>
-
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
@@ -189,13 +163,8 @@
 </template>
 
 <script>
-import WeeklySchedules from "../parts/WeeklySchedules";
-import DateOverRides from "./_DateOverRides";
 import SchedulingConditions from "./__SchedulingConditions";
-import ExistingSchedule from './_ExistingSchedule';
 import TimeZoneSelector from "../parts/TimeZoneSelector.vue";
-import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
-import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
 import { Clock, CloseBold } from '@element-plus/icons-vue';
 import { markRaw } from "vue";
@@ -204,12 +173,7 @@ export default {
     name: '_LimitSettings',
     components: {
         SchedulingConditions,
-        DateOverRides,
-        WeeklySchedules,
-        ExistingSchedule,
         TimeZoneSelector,
-        ScheduleIcon,
-        TimezoneIcon,
         SaveButton,
         CloseBold,
         Clock
@@ -234,9 +198,6 @@ export default {
             return (settings) => {
                 return settings.limits.length < 3;
             }
-        },
-        showRequiresConfirmation() {
-            return this.calendar_event.event_type != 'group';
         }
     },
     methods: {

@@ -9,6 +9,7 @@ import LimitSettings from "./Modules/Calendars/Edit/_LimitSettings.vue";
 import EmailNotification from "./Modules/Calendars/Edit/_EmailNotificationSettings.vue";
 import SMSNotification from "./Modules/Calendars/Edit/_SmsNotificationSettings.vue";
 import QuestionSettings from "./Modules/Calendars/Edit/_QuestionSettings.vue";
+import AdvancedSettings from "./Modules/Calendars/Edit/_AdvancedSettings.vue";
 import PaymentSettings from "./Modules/Calendars/Edit/Payments/PaymentSettings.vue";
 import WebhookSettings from "./Modules/Calendars/Edit/WebHook/WebhookSettings.vue";
 import Integrations from "./Modules/Calendars/Edit/GeneralIntegration/Integration.vue";
@@ -178,6 +179,15 @@ export var routes = [
                 path: 'question-settings',
                 name: 'question_settings',
                 component: QuestionSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars'
+                },
+            },
+            {
+                path: 'advanced-settings',
+                name: 'advanced_settings',
+                component: AdvancedSettings,
                 props: true,
                 meta: {
                     active_menu: 'calendars'
