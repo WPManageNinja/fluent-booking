@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 7.3
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,29 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.4.0 (Date: 20 May 2024)
+- New Gutenberg Block: Logged-in user bookings
+- New shortcode: Add booking to calendar
+- Implemented booking confirmation require feature
+- Google Calendar additional settings
+- Clone meetings from other host
+- Added formatted date shortcode for mapping with FluentCRM birthday field
+- Added ICS file attachment option
+- Added Invitee email edit option for admin
+- Added option to use custom phone field for sending SMS
+- Added help message field in custom fields
+- Added format field for date
+- Updated group event title for remote group events
+- Resolved Nextcloud Calendar sync issue
+- Fixed an issue with event details for long descriptions
+- Fixed email sent from Fluent SMTP instead of the default From address of FluentBooking
+- Fixed the meeting reschedule permission issue for admin
+- Corrected display of available days for rescheduled group events syncing with Google Calendar
+- Fixed Stripe payment issue when the event was set in other language
+- Resolved availability issues for the booking calendar
+- Fixed the Gutenberg block's primary color not reflecting across the booking calendar
+- Added missing translation strings to improve UI
 
 1.3.1 (Date: 10 Apr 2024)
 - Displayed woo product price on booking page
