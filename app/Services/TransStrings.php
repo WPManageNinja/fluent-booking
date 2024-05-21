@@ -755,6 +755,7 @@ class TransStrings
             'Help Message'                                                                     => __('Help Message', 'fluent-booking-pro'),
             'Format'                                                                           => __('Format', 'fluent-booking-pro'),
             'Select Format'                                                                    => __('Select Format', 'fluent-booking-pro'),
+            'Advanced Settings'                                                                => __('Advanced Settings', 'fluent-booking-pro'),
             'The default date format will be applied if no format is chosen.'                  => __('The default date format will be applied if no format is chosen.', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );

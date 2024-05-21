@@ -514,9 +514,7 @@ class CalendarController extends Controller
             'duration'                              => 'required|numeric',
             'location_settings.*.type'              => 'required',
             'location_settings.*.title'             => 'required_if:location_settings.*.type,in_person_organizer',
-            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer',
-            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true',
-            'custom_redirect.query_string'          => 'required_if:custom_redirect.is_query_string,yes'
+            'location_settings.*.host_phone_number' => 'required_if:location_settings.*.type,phone_organizer'
         ];
 
         $messages = [
@@ -524,9 +522,7 @@ class CalendarController extends Controller
             'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
             'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
             'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
-            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro'),
-            'custom_redirect.redirect_url.required_if'          => __('Event redirect url field is required', 'fluent-booking-pro'),
-            'custom_redirect.query_string.required_if'          => __('Event query string field is required', 'fluent-booking-pro')
+            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
         ];
 
         if ('group' === $event->event_type) {
@@ -556,15 +552,6 @@ class CalendarController extends Controller
 
         $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
 
-        if ($slug = sanitize_title(Arr::get($data, 'slug'))) {
-            if (!Helper::isEventSlugAvailable($slug, true, $calendarId, $eventId)) {
-                return $this->sendError([
-                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking-pro')
-                ], 422);
-            }
-            $event->slug = $slug;
-        }
-
         $event->title = sanitize_text_field($data['title']);
         $event->duration = (int)$data['duration'];
         $event->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
@@ -575,12 +562,6 @@ class CalendarController extends Controller
         $event->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
 
         $event->settings = [
-            'custom_redirect' => [
-                'enabled'         => Arr::isTrue($data, 'custom_redirect.enabled'),
-                'redirect_url'    => sanitize_text_field(Arr::get($data, 'custom_redirect.redirect_url')),
-                'is_query_string' => Arr::get($data, 'custom_redirect.is_query_string') == 'yes' ? 'yes' : 'no',
-                'query_string'    => sanitize_text_field(Arr::get($data, 'custom_redirect.query_string')),
-            ],
             'multi_duration'  => [
                 'enabled'             => Arr::isTrue($data, 'multi_duration.enabled'),
                 'default_duration'    => Arr::get($data, 'multi_duration.default_duration', ''),
@@ -590,7 +571,7 @@ class CalendarController extends Controller
 
         $event->save();
 
-        do_action('fluent_booking/after_update_event', $event);
+        do_action('fluent_booking/after_update_event_details', $event);
 
         return [
             'message' => __('Data has been updated', 'fluent-booking-pro'),
@@ -671,19 +652,90 @@ class CalendarController extends Controller
                 'enabled'  => Arr::isTrue($data, 'settings.lock_timezone.enabled'),
                 'timezone' => sanitize_text_field(Arr::get($data, 'settings.lock_timezone.timezone'))
             ],
-            'requires_confirmation' => [
-                'enabled'   => Arr::isTrue($data, 'settings.requires_confirmation.enabled'),
-                'type'      => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.type')),
-                'condition' => [
-                    'unit'  => sanitize_text_field(Arr::get($data, 'settings.requires_confirmation.condition.unit')),
-                    'value' => intval(Arr::get($data, 'settings.requires_confirmation.condition.value'))
-                ]
-            ],
             'can_cancel'            => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
             'can_reschedule'        => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
 
         $event->save();
+
+        return [
+            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'event'   => $event
+        ];
+    }
+
+    public function updateAdvancedSettings(Request $request, $calendarId, $eventId)
+    {
+        $data = $request->all();
+
+        $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+
+        $rules = [
+            'slug'                         => 'required',
+            'custom_redirect.redirect_url' => 'required_if:custom_redirect.enabled,true',
+            'custom_redirect.query_string' => 'required_if:custom_redirect.is_query_string,yes',
+            'requires_confirmation.type'   => [
+                'required_if:requires_confirmation.enabled,true',
+                'in:always,conditional'
+            ],
+            'requires_confirmation.condition.unit' => [
+                'required_if:requires_confirmation.type,conditional',
+                'in:minutes,hours,days'
+            ],
+            'requires_confirmation.condition.value' => [
+                'required_if:requires_confirmation.type,conditional',
+                'integer'
+            ],
+        ];
+
+        $messages = [
+            'slug.required'                                     => __('Event slug field is required', 'fluent-booking-pro'),
+            'custom_redirect.redirect_url.required_if'          => __('Event redirect url field is required', 'fluent-booking-pro'),
+            'custom_redirect.query_string.required_if'          => __('Event query string field is required', 'fluent-booking-pro'),
+            'requires_confirmation.type.required_if'            => __('Event confirmation type field is required', 'fluent-booking-pro'),
+            'requires_confirmation.type.in'                     => __('Event confirmation type field is invalid', 'fluent-booking-pro'),
+            'requires_confirmation.condition.unit.in'           => __('Event confirmation condition unit field is invalid', 'fluent-booking-pro'),
+            'requires_confirmation.condition.value.integer'     => __('Event confirmation condition value field is invalid', 'fluent-booking-pro'),
+            'requires_confirmation.condition.unit.required_if'  => __('Event confirmation condition unit field is required', 'fluent-booking-pro'),
+            'requires_confirmation.condition.value.required_if' => __('Event confirmation condition value field is required', 'fluent-booking-pro')
+        ];
+
+        $validationConfig = apply_filters('fluent_booking/update_advanced_settings_validation_rule', [
+            'rules'    => $rules,
+            'messages' => $messages
+        ], $event);
+
+        $this->validate($data, $validationConfig['rules'], $validationConfig['messages']);
+
+        if ($slug = sanitize_title(Arr::get($data, 'slug'))) {
+            if (!Helper::isEventSlugAvailable($slug, true, $calendarId, $eventId)) {
+                return $this->sendError([
+                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking-pro')
+                ], 422);
+            }
+            $event->slug = $slug;
+        }
+
+        $event->settings = [
+            'custom_redirect' => [
+                'enabled'         => Arr::isTrue($data, 'custom_redirect.enabled'),
+                'redirect_url'    => sanitize_text_field(Arr::get($data, 'custom_redirect.redirect_url')),
+                'is_query_string' => Arr::get($data, 'custom_redirect.is_query_string') == 'yes' ? 'yes' : 'no',
+                'query_string'    => sanitize_text_field(Arr::get($data, 'custom_redirect.query_string')),
+            ],
+            'requires_confirmation' => [
+                'enabled'   => Arr::isTrue($data, 'requires_confirmation.enabled'),
+                'type'      => sanitize_text_field(Arr::get($data, 'requires_confirmation.type')),
+                'condition' => [
+                    'unit'  => sanitize_text_field(Arr::get($data, 'requires_confirmation.condition.unit')),
+                    'value' => intval(Arr::get($data, 'requires_confirmation.condition.value'))
+                ]
+            ],
+        ];
+
+        $event->save();
+
+        do_action('fluent_booking/after_update_advanced_settings', $event);
 
         return [
             'message' => __('Data has been updated', 'fluent-booking-pro'),
