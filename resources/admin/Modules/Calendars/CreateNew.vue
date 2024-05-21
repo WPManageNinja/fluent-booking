@@ -85,7 +85,7 @@ export default {
                 slug: '',
                 title: '',
                 description: '',
-                author_timezone: 'UTC',
+                author_timezone: '',
                 user_id: '',
                 slot: {
                     duration: '15',
