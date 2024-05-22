@@ -303,6 +303,30 @@
     }
 }
 
+@media (max-width: 992px) {
+    .fcal_container {
+        .fcal_booking_header {
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+        .fcal_all_bookings {
+            .fcal_bookings {
+                .fcal_booking_wrapper {
+                    .fcal_booking {
+                        .fcal_spot_line {
+                            .fcal_spot_desc {
+                                @media (max-width: 992px) {
+                                    min-width: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 @media (max-width: 767px) {
     .fcal_container {
         .fcal_booking_header {
@@ -316,6 +340,21 @@
                     .fcal_spot_desc {
                         padding: 16px 0;
                     }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 441px) {
+    .fcal_container {
+        .fcal_booking_header {
+            flex-direction: column;
+            align-items: flex-start;
+            .fcal_booking_header_actions {
+                width: 100%;
+                form {
+                    width: 100%;
+                    flex-wrap: wrap;
                 }
             }
         }
