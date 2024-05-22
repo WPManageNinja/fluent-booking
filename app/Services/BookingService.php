@@ -188,16 +188,7 @@ class BookingService
             }
         }
 
-        $bookingStatuses = [
-            'pending'     => __('Pending', 'fluent-booking-pro'),
-            'scheduled'   => __('Scheduled', 'fluent-booking-pro'),
-            'cancelled'   => __('Cancelled', 'fluent-booking-pro'),
-            'rejected'    => __('Rejected', 'fluent-booking-pro'),
-            'rescheduled' => __('Rescheduled', 'fluent-booking-pro'),
-            'completed'   => __('Completed', 'fluent-booking-pro')
-        ];
-
-        $bookingStatus = $bookingStatuses[$booking->status];
+        $bookingStatus = $booking->getBookingStatus();
 
         $subHeading = '';
         if ($booking->status == 'scheduled') {

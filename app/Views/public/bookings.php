@@ -39,19 +39,25 @@
                                             <?php foreach ($booking->happening_status as $slug => $status) : ?>
                                                 <div class="fcal_spot_happening">
                                                     <span class=<?= 'fcal_' . esc_attr($slug) ?>>
-                                                        <?= esc_html(ucfirst($status)) ?>
+                                                        <?= esc_html($status) ?>
                                                     </span>
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php else : ?>
                                             <span class="fcal_spot_period_status">
-                                                <?= esc_html(ucfirst($booking->status)) ?>
+                                                <?= esc_html($booking->booking_status_text) ?>
                                             </span>
                                         <?php endif; ?>
 
                                         <?php if ($booking->payment_status) : ?>
                                             <p class="fcal_spot_payment_status <?= esc_attr($booking->payment_status) ?>">
-                                                <?= esc_html($booking->payment_status) ?>
+                                                <?= esc_html($booking->payment_status_text) ?>
+                                            </p>
+                                        <?php endif; ?>
+
+                                        <?php if ($booking->status == 'pending' && $booking->payment_status != 'pending') : ?>
+                                            <p class="fcal_spot_period_status unconfirmed">
+                                                <?= __('Unconfirmed') ?>
                                             </p>
                                         <?php endif; ?>
                                     </div>
