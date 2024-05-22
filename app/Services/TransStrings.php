@@ -745,7 +745,7 @@ class TransStrings
             'Already assigned'                                                                 => __('Already assigned', 'fluent-booking-pro'),
             'Maximum Guest Limit'                                                              => __('Maximum Guest Limit', 'fluent-booking-pro'),
             'Refund payment from stripe'                                                       => __('Refund payment from stripe', 'fluent-booking-pro'),
-            'Unconfirmed'                                                                      => __('Unconfirmed', 'fluent-booking-pro'),
+            'unconfirmed'                                                                      => __('unconfirmed', 'fluent-booking-pro'),
             'NewBooking/host_selection_text'                                                   => __('If not selected, the system will select one based on their availability', 'fluent-booking-pro'),
             'Clone from'                                                                       => __('Clone from', 'fluent-booking-pro'),
             'Clone Event'                                                                      => __('Clone Event', 'fluent-booking-pro'),

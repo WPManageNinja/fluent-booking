@@ -399,8 +399,10 @@ class FrontEndHandler
             ->withQueryString();
         
         foreach ($bookings as &$booking) {
-            $booking->author_name      = $booking->getHostDetails(false)['name'];
-            $booking->happening_status = $booking->getOngoingStatus();
+            $booking->author_name         = $booking->getHostDetails(false)['name'];
+            $booking->happening_status    = $booking->getOngoingStatus();
+            $booking->booking_status_text = $booking->getBookingStatus();
+            $booking->payment_status_text = $booking->getPaymentStatus();
 
             $booking->booking_date = DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'date');
             $booking->booking_time = DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time');
