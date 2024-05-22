@@ -391,6 +391,38 @@ class Booking extends Model
         return [];
     }
 
+    public function getBookingStatus()
+    {
+        $status = $this->status;
+        
+        $statusLabels = [
+            'scheduled'   => __('Scheduled', 'fluent-booking-pro'),
+            'rescheduled' => __('Rescheduled', 'fluent-booking-pro'),
+            'completed'   => __('Completed', 'fluent-booking-pro'),
+            'pending'     => __('Pending', 'fluent-booking-pro'),
+            'cancelled'   => __('Cancelled', 'fluent-booking-pro'),
+            'rejected'    => __('Rejected', 'fluent-booking-pro')
+        ];
+
+        return Arr::get($statusLabels, $status, $status);
+    }
+
+    public function getPaymentStatus()
+    {
+        $status = $this->payment_status;
+        
+        $statusLabels = [
+            'pending'            => __('Pending', 'fluent-booking-pro'),
+            'paid'               => __('Paid', 'fluent-booking-pro'),
+            'failed'             => __('Failed', 'fluent-booking-pro'),
+            'refunded'           => __('Refunded', 'fluent-booking-pro'),
+            'partially-paid'     => __('Partially Paid', 'fluent-booking-pro'),
+            'partially-refunded' => __('Partially Refunded', 'fluent-booking-pro')
+        ];
+
+        return Arr::get($statusLabels, $status, $status);
+    }
+
     public function payment_order()
     {
         return $this->hasOne(Order::class, 'parent_id');
