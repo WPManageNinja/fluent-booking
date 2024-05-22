@@ -24,7 +24,7 @@
                         {{ booking.source }}
                     </span>
 
-                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status) }}</p>
+                    <p v-if="booking.payment_status" class="fcal_spot_payment_status" :class="booking.payment_status">{{ $t(booking.payment_status_text) }}</p>
 
                     <p v-if="isUnconfirmed" class="fcal_spot_period_status unconfirmed">{{ $t('Unconfirmed') }}</p>
                 </div>

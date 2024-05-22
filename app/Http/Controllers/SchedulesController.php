@@ -375,11 +375,13 @@ class SchedulesController extends Controller
             $booking->additional_guests = $booking->getAdditionalGuests();
         }
 
-        $booking->author           = $booking->getHostDetails(false);
-        $booking->location         = $booking->getLocationDetailsHtml();
-        $booking->reschedule_url   = $booking->getRescheduleUrl();
-        $booking->happening_status = $booking->getOngoingStatus();
-        $booking->custom_form_data = $booking->getCustomFormData();
+        $booking->author              = $booking->getHostDetails(false);
+        $booking->location            = $booking->getLocationDetailsHtml();
+        $booking->reschedule_url      = $booking->getRescheduleUrl();
+        $booking->happening_status    = $booking->getOngoingStatus();
+        $booking->booking_status_text = $booking->getBookingStatus();
+        $booking->payment_status_text = $booking->getPaymentStatus();
+        $booking->custom_form_data    = $booking->getCustomFormData();
 
         $booking->slot = $booking->calendar_event;
 
