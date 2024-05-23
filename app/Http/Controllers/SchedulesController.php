@@ -102,7 +102,7 @@ class SchedulesController extends Controller
 
         if ($request->get('page') == 1) {
             if ($author && $author !== 'all') {
-                $pendingCount = Booking::where('host_user_id', $author)
+                $pendingCount = Booking::where('calendar_id', $author)
                     ->where('status', 'pending')
                     ->count();
             } else {
