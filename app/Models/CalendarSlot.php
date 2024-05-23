@@ -634,6 +634,30 @@ class CalendarSlot extends Model
         return false;
     }
 
+    public function getCanNotCancelSettings()
+    {
+        if (!isset($this->settings['can_not_cancel'])) {
+            $enabled = Arr::get($this->settings, 'can_cancel') == 'no' ? true : false;
+            return [
+                'enabled' => $enabled,
+                'type'    => 'always',
+            ];
+        }
+        return Arr::get($this->settings, 'can_not_cancel', []);
+    }
+
+    public function getCanNotRescheduleSettings()
+    {
+        if (!isset($this->settings['can_not_reschedule'])) {
+            $enabled = Arr::get($this->settings, 'can_reschedule') == 'no' ? true : false;
+            return [
+                'enabled' => $enabled,
+                'type'    => 'always',
+            ];
+        }
+        return Arr::get($this->settings, 'can_not_reschedule', []);
+    }
+
     public function defaultLocationHtml()
     {
         if (empty($this->location_settings)) {
