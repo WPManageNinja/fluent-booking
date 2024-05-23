@@ -108,7 +108,7 @@ abstract class BasePaymentMethod implements BasePaymentInterface
 
     public function afterBookingPending($booking, $calendarSlot, $bookingData)
     {
-        $paymentMethod = Arr::get($bookingData, 'payment_method', 'stripe');
+        $paymentMethod = Arr::get($bookingData, 'payment_method');
 
         if ($calendarSlot->isPaymentEnabled($booking->slot_minutes) && $booking->source === 'web' && $paymentMethod) {
             (new OrderHelper())->processDraftOrder($booking, $calendarSlot); // make draft order
