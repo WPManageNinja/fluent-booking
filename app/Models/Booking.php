@@ -691,22 +691,46 @@ class Booking extends Model
         return $this->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings');
     }
 
+    private function canPerformAction($settings)
+    {
+        if (!in_array($this->status, ['scheduled', 'pending'])) {
+            return false;
+        }
+
+        if (!Arr::isTrue($settings, 'enabled')) {
+            return true;
+        }
+
+        if (Arr::get($settings, 'type') == 'conditional') {
+            $conditionUnit  = Arr::get($settings, 'condition.unit');
+            $conditionValue = Arr::get($settings, 'condition.value');
+    
+            $bookingStartTime = strtotime($this->start_time);
+            $currentTime = time();
+    
+            $conditionTime = $conditionValue * 60;
+            if ($conditionUnit == 'hours') {
+                $conditionTime = $conditionTime * 60;
+            }
+    
+            return $bookingStartTime - $currentTime > $conditionTime;
+        }
+
+        return false;
+    }
+
     public function canCancel()
     {
-        $canCancel     = Arr::get($this->calendar_event, 'settings.can_cancel', 'yes') == 'yes';
-        $hasPermission = $this->hasBookingAccess() || $canCancel;
-        $isCancelable  = in_array($this->status, ['scheduled', 'pending']);
+        $settings = $this->calendar_event->getCanNotCancelSettings();
 
-        return $hasPermission && $isCancelable;
+        return $this->canPerformAction($settings);
     }
 
     public function canReschedule()
     {
-        $canReschedule   = Arr::get($this->calendar_event, 'settings.can_reschedule', 'yes') == 'yes';
-        $hasPermission   = $this->hasBookingAccess() || $canReschedule;
-        $isReschedulable = in_array($this->status, ['scheduled', 'pending']);
+        $settings = $this->calendar_event->getCanNotRescheduleSettings();
 
-        return $hasPermission && $isReschedulable;
+        return $this->canPerformAction($settings);
     }
 
     public function getInviteePhoneNumber($calendarEvent)

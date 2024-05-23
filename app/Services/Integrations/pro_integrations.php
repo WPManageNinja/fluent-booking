@@ -83,7 +83,7 @@ add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items,
                 'event_id'    => $event->id
             ]
         ],
-        'label'   => __('Advanced', 'fluent-booking-pro'),
+        'label'   => __('Advanced Settings', 'fluent-booking-pro'),
         'elIcon' => 'Operation'
     ];
     $items['payment_settings'] = [

@@ -51,7 +51,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         // add error message to the form bottom
                         const errorElement = document.createElement('div');
                         errorElement.classList.add('fcal_error_message');
-                        errorElement.innerHTML = message;
+                        errorElement.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-blue-900 dark:text-blue-200" data-testid="info" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg> ${message}
+                        `;
                         form.appendChild(errorElement);
                     })
                     .finally(() => {
