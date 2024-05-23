@@ -77,6 +77,10 @@ class NotificationHandler
 
     public function pushBookingPendingToQueue($booking, $bookingEvent)
     {
+        if ($booking->payment_status != 'pending' || !$bookingEvent->isConfirmationEnabled()) {
+            return;
+        }
+
         $notifications = $bookingEvent->getNotifications();
 
         if (Arr::isTrue($notifications, 'booking_request_host.enabled') || (Arr::isTrue($notifications, 'booking_request_attendee.enabled'))) {

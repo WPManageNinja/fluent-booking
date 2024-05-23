@@ -211,7 +211,12 @@ class Bootstrap
                 return;
             }
 
-            $booking->status = 'scheduled';
+            $isRequireConfirmation = $booking->calendar_event->isConfirmationRequired($booking->start_time, $booking->created_at);
+
+            if (!$isRequireConfirmation) {
+                $booking->status = 'scheduled';
+            }
+
             $booking->payment_status = 'paid';
             $booking->source_id = $order->get_id();
             $booking->save();
