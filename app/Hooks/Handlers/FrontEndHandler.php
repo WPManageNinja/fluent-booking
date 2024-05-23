@@ -82,13 +82,13 @@ class FrontEndHandler
 
                 if ($rescheduleBy == 'guest' && !$existingBooking->canReschedule()) {
                     wp_send_json([
-                        'message' => __('Sorry, you can not reschedule this meeting.', 'fluent-booking-pro')
+                        'message' => __('Sorry! you can not reschedule this meeting, please contact host', 'fluent-booking-pro')
                     ], 422);
                 }
 
                 if ($bookingData['start_time'] == $existingBooking->start_time) {
                     wp_send_json([
-                        'message' => __('Sorry, you can not reschedule to the same time.', 'fluent-booking-pro')
+                        'message' => __('Sorry! you can not reschedule to the same time.', 'fluent-booking-pro')
                     ], 422);
                 }
 
@@ -949,7 +949,7 @@ class FrontEndHandler
 
         if (!$meeting->canCancel()) {
             wp_send_json([
-                'message' => __('Sorry! you can not cancel this meeting', 'fluent-booking-pro')
+                'message' => __('Sorry! you can not cancel this meeting, please contact host', 'fluent-booking-pro')
             ], 422);
         }
 

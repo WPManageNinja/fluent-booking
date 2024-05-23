@@ -1,5 +1,7 @@
 <?php
 
+use FluentBooking\Framework\Support\Arr;
+
 /**
  * All registered filter's handlers should be in app\Hooks\Handlers,
  * addFilter is similar to add_filter and addCustomFlter is just a
@@ -38,9 +40,28 @@
         ];
     }
 
-    if (!isset($settings['can_cancel'], $settings['can_reschedule'])) {
-        $settings['can_cancel'] = 'yes';
-        $settings['can_reschedule'] = 'yes';
+    if (!isset($settings['can_not_cancel'])) {
+        $enabled = Arr::get($settings, 'can_cancel') == 'no' ? true : false;
+        $settings['can_not_cancel'] = [
+            'enabled'   => $enabled,
+            'type'      => 'always',
+            'condition' => [
+                'unit'  => 'minutes',
+                'value' => 30
+            ]
+        ];
+    }
+
+    if (!isset($settings['can_not_reschedule'])) {
+        $enabled = Arr::get($settings, 'can_reschedule') == 'no' ? true : false;
+        $settings['can_not_reschedule'] = [
+            'enabled'   => $enabled,
+            'type'      => 'always',
+            'condition' => [
+                'unit'  => 'minutes',
+                'value' => 30
+            ]
+        ];
     }
 
     if (!isset($settings['custom_redirect'])) {

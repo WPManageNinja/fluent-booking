@@ -13,8 +13,8 @@
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Redirect after booking") }}</span>
-                                <span>{{ $t("EventDetails/redirect_url_description") }}</span>
+                                <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
+                                <span>{{ $t("AdvancedSettings/redirect_url_description") }}</span>
                             </div>
                             <div class="card_action">
                                 <el-switch v-model="settings.custom_redirect.enabled"/>
@@ -31,7 +31,7 @@
                                         <template #popoverButton>
                                             <el-input
                                                 type="text"
-                                                :placeholder="$t('EventDetails/redirect_url_placeholder')"
+                                                :placeholder="$t('AdvancedSettings/redirect_url_placeholder')"
                                                 v-model="settings.custom_redirect.redirect_url">
                                                 <template #append>
                                                     <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
@@ -62,7 +62,7 @@
                                         </template>
                                     </popover>
                                     <p v-if="enabledQueryString" class="fcal_event_input_hint">
-                                        <em>{{ $t('EventDetails/redirect_query_string_hint') }}</em>
+                                        <em>{{ $t('AdvancedSettings/redirect_query_string_hint') }}</em>
                                     </p>
                                 </el-form-item>
                             </div>
@@ -83,8 +83,62 @@
                                     <el-radio label="always"> {{ $t('Always') }}</el-radio>
                                     <el-radio label="conditional">{{ $t('When booking notice is less than') }}
                                         <span>
-                                            <el-input v-model="settings.requires_confirmation.condition.value"></el-input>
-                                            <el-select v-model="settings.requires_confirmation.condition.unit" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                            <el-input v-model="settings.requires_confirmation.condition.value" @input="validateInput(settings.requires_confirmation)"></el-input>
+                                            <el-select v-model="settings.requires_confirmation.condition.unit" @change="validateInput(settings.requires_confirmation)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                <el-option value="hours" :label="$t('Hours')"></el-option>
+                                            </el-select>
+                                        </span>
+                                    </el-radio>
+                                </el-radio-group>
+                            </div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("Attendee Cannot Cancel") }}</span>
+                                <span v-if="settings.can_not_cancel.enabled">{{ $t("AdvancedSettings/cannot_cancel_description") }}</span>
+                                <span v-else>{{ $t("AdvancedSettings/can_cancel_description") }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="settings.can_not_cancel.enabled"/>
+                            </div>
+                            <div class="fcal_event_child_card" v-if="settings.can_not_cancel.enabled">
+                                <el-radio-group v-model="settings.can_not_cancel.type">
+                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                    <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                        <span>
+                                            <el-input v-model="settings.can_not_cancel.condition.value" @input="validateInput(settings.can_not_cancel)"></el-input>
+                                            <el-select v-model="settings.can_not_cancel.condition.unit" @change="validateInput(settings.can_not_cancel)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                <el-option value="hours" :label="$t('Hours')"></el-option>
+                                            </el-select>
+                                        </span>
+                                    </el-radio>
+                                </el-radio-group>
+                            </div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="card_contents">
+                                <span class="sub-label card-title">{{ $t("Attendee Cannot Reschedule") }}</span>
+                                <span v-if="settings.can_not_reschedule.enabled">{{ $t("AdvancedSettings/cannot_reschedule_description") }}</span>
+                                <span v-else>{{ $t("AdvancedSettings/can_reschedule_description") }}</span>
+                            </div>
+                            <div class="card_action">
+                                <el-switch v-model="settings.can_not_reschedule.enabled"/>
+                            </div>
+                            <div class="fcal_event_child_card" v-if="settings.can_not_reschedule.enabled">
+                                <el-radio-group v-model="settings.can_not_reschedule.type">
+                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                    <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                        <span>
+                                            <el-input v-model="settings.can_not_reschedule.condition.value" @input="validateInput(settings.can_not_reschedule)"></el-input>
+                                            <el-select v-model="settings.can_not_reschedule.condition.unit" @change="validateInput(settings.can_not_reschedule)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                                 <el-option value="minutes" :label="$t('Minutes')"></el-option>
                                                 <el-option value="hours" :label="$t('Hours')"></el-option>
                                             </el-select>
@@ -99,7 +153,7 @@
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
-                                <span>{{ $t('EventDetails/slug_setting_description') }}</span>
+                                <span>{{ $t('AdvancedSettings/slug_setting_description') }}</span>
                             </div>
                             <div class="card_action">
                                 <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
@@ -109,7 +163,7 @@
                             <div class="fcal_event_child_card" v-if="editSlug">
                                 <el-form-item :label="$t('Slug')">
                                     <el-input v-model="calendarEventSlug"/>
-                                    <p class="fcal_event_input_hint">{{ $t('EventDetails/slug_setting_hint') }}</p>
+                                    <p class="fcal_event_input_hint">{{ $t('AdvancedSettings/slug_setting_hint') }}</p>
                                 </el-form-item>
                             </div>
                         </div>
@@ -157,7 +211,7 @@ export default {
             smart_codes: {
                 texts: {},
                 html: {}
-            },
+            }
         }
     },
     computed: {
@@ -189,6 +243,17 @@ export default {
         checkSlugUpdated(res) {
             if (res.event.slug != this.calendar_event.slug) {
                 window.location.reload();
+            }
+        },
+        validateInput(item) {
+            const limitValues = {
+                minutes: 1000,
+                hours: 24
+            };
+            if (isNaN(item.condition.value) || item.condition.value <= 0) {
+                item.condition.value = '';
+            } else if (item.condition.value > limitValues[item.condition.unit]) {
+                item.condition.value = limitValues[item.condition.unit];
             }
         },
         changeContentEvent() {
@@ -249,6 +314,8 @@ export default {
                 calendar_id: this.calendar_event.calendar_id,
                 custom_redirect: this.settings.custom_redirect,
                 requires_confirmation: this.settings.requires_confirmation,
+                can_not_cancel: this.settings.can_not_cancel,
+                can_not_reschedule: this.settings.can_not_reschedule,
                 slug: this.calendarEventSlug
             })
                 .then(response => {
@@ -261,6 +328,12 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        }
+    },
+    mounted() {
+        this.fetchSettings();
+        if (this.hasWpEditor) {
+            this.initEditor();
         }
     }
 }

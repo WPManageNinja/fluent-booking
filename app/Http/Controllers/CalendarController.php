@@ -652,8 +652,6 @@ class CalendarController extends Controller
                 'enabled'  => Arr::isTrue($data, 'settings.lock_timezone.enabled'),
                 'timezone' => sanitize_text_field(Arr::get($data, 'settings.lock_timezone.timezone'))
             ],
-            'can_cancel'            => Arr::get($data, 'settings.can_cancel') == 'no' ? 'no' : 'yes',
-            'can_reschedule'        => Arr::get($data, 'settings.can_reschedule') == 'no' ? 'no' : 'yes'
         ];
 
         $event->save();
@@ -671,21 +669,18 @@ class CalendarController extends Controller
         $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $rules = [
-            'slug'                         => 'required',
-            'custom_redirect.redirect_url' => 'required_if:custom_redirect.enabled,true',
-            'custom_redirect.query_string' => 'required_if:custom_redirect.is_query_string,yes',
-            'requires_confirmation.type'   => [
-                'required_if:requires_confirmation.enabled,true',
-                'in:always,conditional'
-            ],
-            'requires_confirmation.condition.unit' => [
-                'required_if:requires_confirmation.type,conditional',
-                'in:minutes,hours,days'
-            ],
-            'requires_confirmation.condition.value' => [
-                'required_if:requires_confirmation.type,conditional',
-                'integer'
-            ],
+            'slug'                                  => 'required',
+            'custom_redirect.redirect_url'          => 'required_if:custom_redirect.enabled,true',
+            'custom_redirect.query_string'          => 'required_if:custom_redirect.is_query_string,yes',
+            'can_not_cancel.type'                   => ['required_if:can_not_cancel.enabled,true','in:always,conditional'],
+            'can_not_cancel.condition.unit'         => ['required_if:can_not_cancel.type,conditional','in:minutes,hours,days'],
+            'can_not_cancel.condition.value'        => ['required_if:can_not_cancel.type,conditional','integer','min:1'],
+            'can_not_reschedule.type'               => ['required_if:can_not_reschedule.enabled,true','in:always,conditional'],
+            'can_not_reschedule.condition.unit'     => ['required_if:can_not_reschedule.type,conditional','in:minutes,hours,days'],
+            'can_not_reschedule.condition.value'    => ['required_if:can_not_reschedule.type,conditional','integer','min:1'],
+            'requires_confirmation.type'            => ['required_if:requires_confirmation.enabled,true','in:always,conditional'],
+            'requires_confirmation.condition.unit'  => ['required_if:requires_confirmation.type,conditional','in:minutes,hours,days'],
+            'requires_confirmation.condition.value' => ['required_if:requires_confirmation.type,conditional','integer','min:1'],
         ];
 
         $messages = [
@@ -731,6 +726,22 @@ class CalendarController extends Controller
                     'value' => intval(Arr::get($data, 'requires_confirmation.condition.value'))
                 ]
             ],
+            'can_not_cancel'       => [
+                'enabled'   => Arr::isTrue($data, 'can_not_cancel.enabled'),
+                'type'      => sanitize_text_field(Arr::get($data, 'can_not_cancel.type')),
+                'condition' => [
+                    'unit'  => sanitize_text_field(Arr::get($data, 'can_not_cancel.condition.unit')),
+                    'value' => intval(Arr::get($data, 'can_not_cancel.condition.value'))
+                ]
+            ],
+            'can_not_reschedule'   => [
+                'enabled'   => Arr::isTrue($data, 'can_not_reschedule.enabled'),
+                'type'      => sanitize_text_field(Arr::get($data, 'can_not_reschedule.type')),
+                'condition' => [
+                    'unit'  => sanitize_text_field(Arr::get($data, 'can_not_reschedule.condition.unit')),
+                    'value' => intval(Arr::get($data, 'can_not_reschedule.condition.value'))
+                ]
+            ]
         ];
 
         $event->save();
