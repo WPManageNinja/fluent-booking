@@ -43,9 +43,16 @@
     let nextDisabled = false;
     let formatHours = appData.slot?.time_format;
 
-    if (slot.pre_selects) {
+    if (slot.pre_selects?.month && slot.pre_selects?.year) {
         month = slot.pre_selects.month - 1;
         year = slot.pre_selects.year;
+    }
+
+    if (slot.pre_selects?.duration && slot.settings?.multi_duration?.enabled) {
+        const availableDurations = slot.settings?.multi_duration?.available_durations || [];
+        if (availableDurations.includes(slot.pre_selects.duration)) {
+            duration = slot.pre_selects.duration;
+        }
     }
 
     var days = [];	//	The days to display in each box
@@ -132,7 +139,7 @@
                 availableDates = response.available_slots;
                 maybeNoAvailability();
 
-                if (firstLoading && slot.pre_selects && slot.pre_selects.day) {
+                if (firstLoading && slot.pre_selects?.day) {
                     selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
                     dayClick({
                         date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day

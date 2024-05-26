@@ -19,7 +19,7 @@
     const author = appData.author_profile;
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
-    const availableDurations = slot.settings?.multi_duration?.available_durations;
+    const availableDurations = slot.settings?.multi_duration?.available_durations || [];
     let form = window.fluentCalendarPublicVars.current_person || {};
 
     let appReady = false;
