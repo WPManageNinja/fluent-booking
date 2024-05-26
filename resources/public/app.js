@@ -3,11 +3,12 @@ import './styles.scss';
 import './saas.scss';
 
 // get month get parameter from url
-let preSelects = null;
+let preSelects = {};
 
 const urlParams = new URLSearchParams(window.location.search);
 const monthYear = urlParams.get('month');
 const fullDate = urlParams.get('date');
+const duration = urlParams.get('duration');
 
 if (fullDate && fullDate.length >= 10) {
     preSelects = {
@@ -20,6 +21,10 @@ if (fullDate && fullDate.length >= 10) {
         year: monthYear.substr(0, 4),
         month: monthYear.substr(5, 2),
     }
+}
+
+if (duration) {
+    preSelects.duration = duration;
 }
 
 window.fluentCalBootApp = function (elem, handleBack = false) {
