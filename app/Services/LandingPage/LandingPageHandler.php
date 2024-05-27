@@ -275,16 +275,15 @@ class LandingPageHandler
 
     private function showBookingConfimationPage($booking, $actionType = 'confirmation')
     {
-        $validActions = [
-            'confirmation',
-            'cancel',
-            'reschedule'
-        ];
+        $validActions = ['confirmation'];
+
+        if (in_array($booking->status, ['scheduled', 'pending', 'rescheduled'])) {
+            $validActions = array_merge($validActions, ['reschedule', 'cancel']);
+        }
 
         if (!in_array($actionType, $validActions)) {
             $actionType = 'confirmation';
         }
-
 
         if ($actionType == 'reschedule') {
             $this->handleRescheduleView($booking);
