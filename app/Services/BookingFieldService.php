@@ -53,7 +53,7 @@ class BookingFieldService
 
     public static function getBookingFields(CalendarSlot $calendarSlot)
     {
-        $requiredIndexes = ['name', 'email', 'message'];
+        $requiredIndexes = ['name', 'email', 'message', 'cancellation_reason', 'rescheduling_reason'];
 
         $defaultFields = [
             'name' => [
@@ -92,12 +92,37 @@ class BookingFieldService
                 'system_defined' => true,
                 'disable_alter'  => false,
                 'help_text'      => ''
-            ]
+            ],
+            'cancellation_reason' => [
+                'index'          => 4,
+                'type'           => 'textarea',
+                'name'           => 'cancellation_reason',
+                'label'          => __('Reason for cancellation', 'fluent-booking-pro'),
+                'placeholder'    => __('Why are you cancelling?', 'fluent-booking-pro'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => false,
+                'help_text'      => ''
+            ],
+            'rescheduling_reason' => [
+                'index'          => 5,
+                'type'           => 'textarea',
+                'name'           => 'rescheduling_reason',
+                'label'          => __('Reason for reschedule', 'fluent-booking-pro'),
+                'placeholder'    => __('Let others know why you need to reschedule', 'fluent-booking-pro'),
+                'required'       => true,
+                'enabled'        => true,
+                'system_defined' => true,
+                'disable_alter'  => false,
+                'help_text'      => ''
+            ],
         ];
 
         if ($calendarSlot->isGuestFieldRequired()) {
             $requiredIndexes[] = 'guests';
             $defaultFields['guests'] = [
+                'index'          => 6,
                 'type'           => 'multi-guests',
                 'name'           => 'guests',
                 'label'          => __('Additional Guests', 'fluent-booking-pro'),
@@ -111,7 +136,7 @@ class BookingFieldService
         if ($calendarSlot->isLocationFieldRequired()) {
             $requiredIndexes[] = 'location';
             $defaultFields['location'] = [
-                'index'          => 4,
+                'index'          => 7,
                 'type'           => 'radio',
                 'name'           => 'location',
                 'label'          => __('Location', 'fluent-booking-pro'),
@@ -125,7 +150,7 @@ class BookingFieldService
         } else if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
             $defaultFields['phone_number'] = [
-                'index'          => 5,
+                'index'          => 8,
                 'type'           => 'phone',
                 'name'           => 'phone_number',
                 'label'          => __('Your Phone Number', 'fluent-booking-pro'),
@@ -139,7 +164,7 @@ class BookingFieldService
         } else if ($calendarSlot->isAddressRequired()) {
             $requiredIndexes[] = 'address';
             $defaultFields['address'] = [
-                'index'          => 6,
+                'index'          => 9,
                 'type'           => 'text',
                 'name'           => 'address',
                 'label'          => __('Your Address', 'fluent-booking-pro'),
