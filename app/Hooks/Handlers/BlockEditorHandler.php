@@ -259,6 +259,13 @@ class BlockEditorHandler
                 continue;
             }
 
+            foreach ($events as $event) {
+                $event->public_url = $event->getPublicUrl();
+                $event->durations = $event->getAvailableDurations();
+                $event->description = $event->getDescription();
+                $event->short_description = Helper::excerpt($event->description);
+            }
+
             $calendar->activeEvents = $events;
 
             $hostItems[$calendar->id] = $calendar;
@@ -304,6 +311,13 @@ class BlockEditorHandler
             return '';
         }
 
+        foreach ($events as $event) {
+            $event->public_url = $event->getPublicUrl();
+            $event->durations = $event->getAvailableDurations();
+            $event->description = $event->getDescription();
+            $event->short_description = Helper::excerpt($event->description);
+        }
+        
         $calendar->activeEvents = $events;
 
         return (new FrontEndHandler())->renderCalendarBlock($calendar, [

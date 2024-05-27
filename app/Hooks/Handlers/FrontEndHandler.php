@@ -240,6 +240,9 @@ class FrontEndHandler
             if (!isset($calendarEvents[$event->calendar_id])) {
                 $calendarEvents[$event->calendar_id] = [];
             }
+            $event->durations = $event->getAvailableDurations();
+            $event->description = $event->getDescription();
+            $event->short_description = Helper::excerpt($event->description);
             $calendarEvents[$event->calendar_id][] = $event;
         }
 
@@ -264,7 +267,6 @@ class FrontEndHandler
 
         $vars = [];
         foreach ($calendars as $calendar) {
-
             $hostHtml = (string)(string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
                 'author'   => $calendar->getAuthorProfile(),
                 'calendar' => $calendar,
