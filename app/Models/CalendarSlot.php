@@ -356,6 +356,29 @@ class CalendarSlot extends Model
         return $this->duration;
     }
 
+    public function getAvailableDurations()
+    {
+        if ($this->isMultiDurationEnabled()) {
+            return Arr::get($this->settings, 'multi_duration.available_durations', []);
+        }
+
+        return [$this->duration];
+    }
+
+    public function getDescription()
+    {
+        if ($this->description) {
+            return $this->description;
+        }
+
+        if ($this->isMultiDurationEnabled()) {
+            return __('Choose your duration and book a meeting with me', 'fluent-booking-pro');
+        }
+
+        // translators: %d is the duration of the meeting in minutes
+        return sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $this->duration);
+    }
+
     public function getSlotInterval($duration = null)
     {
         $duration = $duration ?: $this->duration;

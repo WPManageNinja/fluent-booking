@@ -112,17 +112,8 @@ class LandingPageHandler
 
         foreach ($activeEvents as $activeEvent) {
             $activeEvent->public_url = $activeEvent->getPublicUrl();
-            
-            if (!$activeEvent->description) {
-                // translators: %d is the duration of the meeting in minutes
-                $activeEvent->description = sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $activeEvent->duration);
-            }
-
-            if (Arr::isTrue($activeEvent->settings, 'multi_duration.enabled')) {
-                $activeEvent->description = __('Choose your duration and book a meeting with me', 'fluent-booking-pro');
-                $activeEvent->duration = Arr::get($activeEvent->settings, 'multi_duration.available_durations');
-            }
-
+            $activeEvent->durations = $activeEvent->getAvailableDurations();
+            $activeEvent->description = $activeEvent->getDescription();
             $activeEvent->short_description = Helper::excerpt($activeEvent->description);
         }
 
