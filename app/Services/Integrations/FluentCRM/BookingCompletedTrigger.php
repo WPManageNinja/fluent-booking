@@ -66,8 +66,8 @@ class BookingCompletedTrigger extends BaseTrigger
     public function getSettingsFields($funnel)
     {
         return [
-            'title'       => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
-            'description' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro'),
+            'title'       => __('Booking Completed Funnel', 'fluent-booking-pro'),
+            'sub_title' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro'),
             'fields'      => [
                 'event_id'                 => [
                     'type'        => 'grouped-select',

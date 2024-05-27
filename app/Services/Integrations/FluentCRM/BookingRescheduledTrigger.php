@@ -64,7 +64,7 @@ class BookingRescheduledTrigger extends BaseTrigger
     public function getSettingsFields($funnel)
     {
         return [
-            'title'     => __('Booking Rescheduled', 'fluent-booking-pro'),
+            'title'     => __('Booking Rescheduled Funnel', 'fluent-booking-pro'),
             'sub_title' => __('This Funnel will be initiated when a booking has been rescheduled.', 'fluent-booking-pro'),
             'fields'    => [
                 'event_id'            => [

@@ -66,8 +66,8 @@ class CancelBookingTrigger extends BaseTrigger
     public function getSettingsFields($funnel)
     {
         return [
-            'title'     => __('New Booking Confirm Funnel', 'fluent-booking-pro'),
-            'sub_title' => __('This Funnel will be initiated when a new booking has been confirmed.', 'fluent-booking-pro'),
+            'title'     => __('Booking Cancelled Funnel', 'fluent-booking-pro'),
+            'sub_title' => __('This Funnel will be initiated when a booking has been cancelled.', 'fluent-booking-pro'),
             'fields'    => [
                 'event_id'            => [
                     'type'        => 'grouped-select',
