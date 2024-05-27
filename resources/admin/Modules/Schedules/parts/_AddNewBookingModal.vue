@@ -342,7 +342,6 @@ export default {
                     this.availableSlots = response.available_slots;
                     this.locationType = response.calendar_event.slot.location_settings[0].type;
                     this.teamMembers = response.calendar_event?.team_member_profiles ?? [];
-                    console.log(this.formFields);
                     if (this.event?.id != response.calendar_event.slot.id) {
                         this.event = response.calendar_event.slot;
                         this.updateDurations();
