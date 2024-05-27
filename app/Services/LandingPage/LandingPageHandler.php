@@ -352,28 +352,16 @@ class LandingPageHandler
     private function handleRescheduleView(Booking $booking)
     {
         add_filter('fluent_booking/public_event_vars', function ($eventVars) use ($booking) {
-            $onlyFields = [
-                'name', 'email'
-            ];
+            $onlyFields = ['name', 'email', 'rescheduling_reason'];
 
             $formFields = $eventVars['form_fields'];
 
             $formFields = Collection::make($formFields)->filter(function ($field) use ($onlyFields) {
                 return in_array($field['name'], $onlyFields);
             })->map(function ($item) {
-                $item['disabled'] = true;
+                $item['disabled'] = $item['name'] == 'rescheduling_reason' ? false : true;
                 return $item;
             })->toArray();
-
-            $formFields[] = [
-                'type'        => 'textarea',
-                'name'        => '_rescheduling_reason',
-                'label'       => __('Reason of rescheduling', 'fluent-booking-pro'),
-                'placeholder' => __('Rescheduling Reason', 'fluent-booking-pro'),
-                'required'    => true,
-                'disabled'    => false,
-                'enabled'     => true
-            ];
 
             $formFields[] = [
                 'type'    => 'hidden',

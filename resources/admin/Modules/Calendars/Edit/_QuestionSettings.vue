@@ -26,7 +26,7 @@
                                     </p>
                                 </div>
                                 <div class="fcal_question_actions">
-                                    <el-switch v-if="!field.disable_alter" v-model="field.enabled" @change="saveSettings"/>
+                                    <el-switch v-if="isHideable(field)" v-model="field.enabled" @change="saveSettings"/>
                                     <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
                                     <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
                                         <el-icon><Delete /></el-icon>
@@ -117,7 +117,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number'];
+            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number', 'cancellation_reason', 'rescheduling_reason'];
             return allowedFields.includes(name);
         },
         moveUp(index) {
@@ -132,6 +132,9 @@ export default {
                 const currentIndex = this.fields[index + 1];
                 this.fields.splice(index, 2, currentIndex, this.fields[index]);
             }
+        },
+        isHideable(field) {
+            return !field.disable_alter && !['cancellation_reason', 'rescheduling_reason'].includes(field.name);
         },
         fetchFields() {
             this.loading = true;
