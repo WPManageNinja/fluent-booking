@@ -518,14 +518,25 @@ class Booking extends Model
         $this->save();
         $this->updateMeta('cancelled_by_type', $cancelledByType);
 
+        $userName = $cancelledByType;
+        if ($cancelledByUserId && $user = get_user_by('ID', $cancelledByUserId)) {
+            $userName = $user->display_name;
+        }
+
         if ($reason) {
-            $userName = $cancelledByType;
-            if ($cancelledByUserId && $user = get_user_by('ID', $cancelledByUserId)) {
-                $userName = $user->display_name;
-            }
             /* translators: Name of the user who cancelled the meeting */
             $this->addCancelOrRejectReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
+            do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
+            return;
         }
+
+        BookingActivity::create([
+            'booking_id'  => $this->id,
+            'status'      => 'closed',
+            'type'        => 'error',
+            'title'       => __('Meeting Cancelled', 'fluent-booking-pro'),
+            'description' => sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName)
+        ]);
 
         do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
     }

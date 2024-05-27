@@ -49,18 +49,25 @@
 
         <?php if ($action_type == 'cancel'): ?>
             <div class="fcal_booking_manage fcal_cancellation_wrap fcal_action_<?php esc_attr($action_type); ?>">
-                <form id="fcal_cancellation_form" action="<?php echo esc_url($action_url); ?>" method="POST"
-                        class="fcal_form_cancellation">
-                    <label for="cancellation_reason"><?php esc_html_e('Reason for cancellation', 'fluent-booking-pro') ?></label>
+                <form id="fcal_cancellation_form" action="<?= esc_url($action_url); ?>" method="POST" class="fcal_form_cancellation">
+                    <label for="cancellation_reason">
+                        <?= esc_html($cancel_field['label'])?>
+                        <?php if ($cancel_field['required']) : ?>
+                            <span class="required">*</span>
+                        <?php endif; ?>
+                    </label>
                     <div class="fcal_form_field">
-                <textarea placeholder="<?php esc_attr_e('Please provide cancellation reason', 'fluent-booking-pro'); ?>"
+                        <textarea placeholder="<?= esc_attr($cancel_field['placeholder']); ?>"
                             name="cancellation_reason" id="cancellation_reason" rows="3"></textarea>
+                        <?php if ($cancel_field['help_text']) : ?>
+                            <p class="fcal_help_text"><?= esc_html($cancel_field['help_text']) ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="fcal_form_actions">
-                        <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"
-                            class="fcal_btn fcal_btn_secondary"><?php esc_html_e('Nevermind', 'fluent-booking-pro'); ?></a>
+                        <a href="<?= esc_url($booking->getConfirmationUrl()); ?>"
+                            class="fcal_btn fcal_btn_secondary"><?= esc_html('Nevermind', 'fluent-booking-pro'); ?></a>
                         <button class="fcal_btn fcal_btn_primary fcal_cancel_btn"
-                                type="submit"><?php esc_html_e('Cancel Booking', 'fluent-booking-pro'); ?></button>
+                                type="submit"><?= esc_html('Cancel Booking', 'fluent-booking-pro'); ?></button>
                     </div>
                 </form>
             </div>
