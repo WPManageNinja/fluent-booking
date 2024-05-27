@@ -228,6 +228,7 @@ class BookingService
         if ($actionType == 'cancel') {
             $confirmationData['title'] = __('Booking Cancellation', 'fluent-booking-pro');
             $confirmationData['sub_heading'] = __('Confirm and cancel the scheduled booking', 'fluent-booking-pro');
+            $confirmationData['cancel_field'] = BookingFieldService::getBookingFieldByName($calendarSlot, 'cancellation_reason');
             $confirmationData['action_url'] = add_query_arg([
                 'action'       => 'fcal_cancel_meeting',
                 'meeting_hash' => $booking->hash,

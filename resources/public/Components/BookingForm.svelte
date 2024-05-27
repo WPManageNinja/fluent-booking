@@ -194,6 +194,15 @@
 
     const currentUrl = window.location.href;
 
+    if (!isReschedulingForm(formFields)) {
+        let excludeNames = ['cancellation_reason', 'rescheduling_reason'];
+        formFields = formFields.filter(field => !excludeNames.includes(field.name));
+    }
+
+    function isReschedulingForm(fields) {
+        return fields.some(field => field.name === 'rescheduling_hash' && field.enabled);
+    }
+
     setTimeout(() => {
         const wrap    = document.querySelector(".fcal_date_event_details.is_active .fcal_booking_form_wrap");
         const sidebar = document.querySelector(".fcal_calendar_inner.fcal_day_selected.fcal_spot_selected .fcal_side");

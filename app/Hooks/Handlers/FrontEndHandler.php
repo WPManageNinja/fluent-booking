@@ -52,16 +52,18 @@ class FrontEndHandler
                 return [];
             });
 
-            add_filter('fluent_booking/schedule_validation_rules_data', function ($data) {
+            add_filter('fluent_booking/schedule_validation_rules_data', function ($data, $postedData, $calendarEvent) {
+                $rules = $messages = [];
+                $rescheduleField = BookingFieldService::getBookingFieldByName($calendarEvent, 'rescheduling_reason');
+                if (Arr::isTrue($rescheduleField, 'required')) {
+                    $rules['rescheduling_reason'] = 'required';
+                    $messages['rescheduling_reason.required'] = __('Please provide a rescheduling reason', 'fluent-booking-pro');
+                }
                 return [
-                    'messages' => [
-                        '_rescheduling_reason.required' => __('Please provide a rescheduling reason', 'fluent-booking-pro')
-                    ],
-                    'rules'    => [
-                        '_rescheduling_reason' => 'required'
-                    ]
+                    'rules'    => $rules,
+                    'messages' => $messages
                 ];
-            });
+            }, 10, 3);
 
             add_action('fluent_booking/before_creating_schedule', function ($bookingData, $postedData, $calendarEvent) {
                 $existingHash = Arr::get($postedData, 'rescheduling_hash');
@@ -117,9 +119,12 @@ class FrontEndHandler
                 $existingBooking->end_time = $endDateTime;
                 $existingBooking->save();
 
-                $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, '_rescheduling_reason'));
-                $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
                 $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
+                
+                $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, 'rescheduling_reason'));
+                if ($reschedulingMessage) {
+                    $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);
+                }
 
                 do_action('fluent_booking/log_booking_activity', [
                     'booking_id'  => $existingBooking->id,
@@ -957,12 +962,13 @@ class FrontEndHandler
 
         $message = sanitize_textarea_field(Arr::get($data, 'cancellation_reason', ''));
 
-        if (!$message) {
+        $cancelField = BookingFieldService::getBookingFieldByName($meeting->calendar_event, 'cancellation_reason');
+
+        if (!$message && Arr::isTrue($cancelField, 'required')) {
             wp_send_json([
                 'message' => __('Please provide a reason for cancellation', 'fluent-booking-pro')
             ], 422);
         }
-
 
         $result = $meeting->cancelMeeting($message, 'guest', get_current_user_id());
 
