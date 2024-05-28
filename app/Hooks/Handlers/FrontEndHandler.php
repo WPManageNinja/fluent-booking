@@ -52,13 +52,16 @@ class FrontEndHandler
                 return [];
             });
 
-            add_filter('fluent_booking/schedule_validation_rules_data', function ($data, $postedData, $calendarEvent) {
+            add_filter('fluent_booking/schedule_validation_rules_data', function ($data, $postedData, $calendarEvent)
+            {
                 $rules = $messages = [];
                 $rescheduleField = BookingFieldService::getBookingFieldByName($calendarEvent, 'rescheduling_reason');
+
                 if (Arr::isTrue($rescheduleField, 'required')) {
                     $rules['rescheduling_reason'] = 'required';
                     $messages['rescheduling_reason.required'] = __('Please provide a rescheduling reason', 'fluent-booking-pro');
                 }
+
                 return [
                     'rules'    => $rules,
                     'messages' => $messages
@@ -84,7 +87,7 @@ class FrontEndHandler
 
                 if ($rescheduleBy == 'guest' && !$existingBooking->canReschedule()) {
                     wp_send_json([
-                        'message' => __('Sorry! you can not reschedule this meeting, please contact host', 'fluent-booking-pro')
+                        'message' => $existingBooking->getRescheduleMessage()
                     ], 422);
                 }
 
@@ -956,7 +959,7 @@ class FrontEndHandler
 
         if (!$meeting->canCancel()) {
             wp_send_json([
-                'message' => __('Sorry! you can not cancel this meeting, please contact host', 'fluent-booking-pro')
+                'message' => $meeting->getCancellationMessage()
             ], 422);
         }
 

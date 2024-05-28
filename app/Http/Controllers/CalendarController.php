@@ -730,6 +730,7 @@ class CalendarController extends Controller
             'can_not_cancel'       => [
                 'enabled'   => Arr::isTrue($data, 'can_not_cancel.enabled'),
                 'type'      => sanitize_text_field(Arr::get($data, 'can_not_cancel.type')),
+                'message'   => sanitize_text_field(Arr::get($data, 'can_not_cancel.message')),
                 'condition' => [
                     'unit'  => sanitize_text_field(Arr::get($data, 'can_not_cancel.condition.unit')),
                     'value' => intval(Arr::get($data, 'can_not_cancel.condition.value'))
@@ -738,6 +739,7 @@ class CalendarController extends Controller
             'can_not_reschedule'   => [
                 'enabled'   => Arr::isTrue($data, 'can_not_reschedule.enabled'),
                 'type'      => sanitize_text_field(Arr::get($data, 'can_not_reschedule.type')),
+                'message'   => sanitize_text_field(Arr::get($data, 'can_not_reschedule.message')),
                 'condition' => [
                     'unit'  => sanitize_text_field(Arr::get($data, 'can_not_reschedule.condition.unit')),
                     'value' => intval(Arr::get($data, 'can_not_reschedule.condition.value'))

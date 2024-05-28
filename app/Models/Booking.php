@@ -776,6 +776,32 @@ class Booking extends Model
         return $this->phone;
     }
 
+    public function getCancellationMessage()
+    {
+        $message = Arr::get($this->calendar_event->settings, 'can_not_cancel.message');
+
+        $message = EditorShortCodeParser::parse($message, $this);
+
+        if ($message) {
+            return $message;
+        }
+
+        return __('Sorry! you can not cancel this', 'fluent-booking-pro');
+    }
+
+    public function getRescheduleMessage()
+    {
+        $message = Arr::get($this->calendar_event->settings, 'can_not_reschedule.message');
+
+        $message = EditorShortCodeParser::parse($message, $this);
+
+        if ($message) {
+            return $message;
+        }
+
+        return __('Sorry! you can not reschedule this', 'fluent-booking-pro');
+    }
+
     public function getHostDetails($isPublic = true)
     {
         if ($this->host_user_id && $user = get_user_by('ID', $this->host_user_id)) {
