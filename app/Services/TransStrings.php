@@ -194,6 +194,8 @@ class TransStrings
             '+ Add new option'                                                                 => __('+ Add new option', 'fluent-booking-pro'),
             'Yes'                                                                              => __('Yes', 'fluent-booking-pro'),
             'No'                                                                               => __('No', 'fluent-booking-pro'),
+            'Question Settings'                                                                => __('Question Settings', 'fluent-booking-pro'),
+            'Other Questions'                                                                  => __('Other Questions', 'fluent-booking-pro'),
             'Add Question'                                                                     => __('Add Question', 'fluent-booking-pro'),
             'Update Question'                                                                  => __('Update Question', 'fluent-booking-pro'),
             'Shortcodes'                                                                       => __('Shortcodes', 'fluent-booking-pro'),
@@ -312,6 +314,10 @@ class TransStrings
             'AdvancedSettings/can_cancel_description'                                          => __('Please ensure the cancel link is included in the confirmation email', 'fluent-booking-pro'),
             'AdvancedSettings/cannot_reschedule_description'                                   => __('Please ensure the reschedule link is removed from the confirmation email', 'fluent-booking-pro'),
             'AdvancedSettings/can_reschedule_description'                                      => __('Please ensure the reschedule link is included in the confirmation email', 'fluent-booking-pro'),
+            'AdvancedSettings/cannot_cancel_message_hint'                                      => __('User will see this if they attempt to cancel without permission', 'fluent-booking-pro'),
+            'AdvancedSettings/cannot_reschedule_message_hint'                                  => __('User will see this if they attempt to reschedule without permission', 'fluent-booking-pro'),
+            'Sorry! you can not cancel this'                                                   => __('Sorry! you can not cancel this', 'fluent-booking-pro'),
+            'Sorry! you can not reschedule this'                                               => __('Sorry! you can not reschedule this', 'fluent-booking-pro'),
             'Requires Confirmation'                                                            => __('Requires Confirmation', 'fluent-booking-pro'),
             'When booking notice is less than'                                                 => __('When booking notice is less than', 'fluent-booking-pro'),
             'When meeting starts in less than'                                                 => __('When meeting starts in less than', 'fluent-booking-pro'),
@@ -764,6 +770,8 @@ class TransStrings
             'Booking Title'                                                                    => __('Booking Title', 'fluent-booking-pro'),
             'Advanced Settings'                                                                => __('Advanced Settings', 'fluent-booking-pro'),
             'The default date format will be applied if no format is chosen.'                  => __('The default date format will be applied if no format is chosen.', 'fluent-booking-pro'),
+            'Customize the questions asked on the booking page'                                => __('Customize the questions asked on the booking page', 'fluent-booking-pro'),
+            'Customize booking cancel and reschedule fields'                                   => __('Customize booking cancel and reschedule fields', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro')
         );
     }
