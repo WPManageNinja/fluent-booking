@@ -122,12 +122,12 @@ class BookingService
 
         $guestName = trim($booking->first_name . ' ' . $booking->last_name);
 
-        $meetingTitle = $booking->getMeetingTitle();
+        $bookingTitle = $booking->getBookingTitle();
 
         $sections = [
             'what'  => [
                 'title'   => __('What', 'fluent-booking-pro'),
-                'content' => $meetingTitle
+                'content' => $bookingTitle
             ],
             'when'  => [
                 'title'   => __('When', 'fluent-booking-pro'),
@@ -265,7 +265,7 @@ class BookingService
         $icsContent .= "UID:" . md5($booking->hash) . "\r\n"; // Unique ID for the event
 
         // Event details
-        $icsContent .= "SUMMARY:" . $booking->getMeetingTitle() . "\r\n";
+        $icsContent .= "SUMMARY:" . $booking->getBookingTitle() . "\r\n";
         $icsContent .= "DESCRIPTION:" . $booking->getIcsBookingDescription() . "\r\n";
 
         // Date and time formatting (assuming eventStart and eventEnd are DateTime objects)

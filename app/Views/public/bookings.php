@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="fcal_spot_desc">
                                 <h3 class="fcal_spot_title">
-                                    <?= wp_kses_post($booking->getMeetingTitle(true)); ?>
+                                    <?= wp_kses_post($booking->getBookingTitle(true)); ?>
                                 </h3>
                                     <div class="fcal_spot_desc_sub_info">
                                         <?php if ($booking->happening_status) : ?>
