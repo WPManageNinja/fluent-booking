@@ -804,7 +804,7 @@ class CalendarSlot extends Model
         if (!$isEnabled || empty($redirectUrl)) {
             return '';
         }
-            
+
         $redirectUrl = EditorShortCodeParser::parse($redirectUrl, $booking);
 
         $isUrlParser = apply_filters('fluent_booking/will_parse_redirect_url_value', true, $this);
