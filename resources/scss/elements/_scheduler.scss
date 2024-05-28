@@ -1547,6 +1547,14 @@
                 width: 100%;
                 padding: 1.5rem;
                 border-top: 1px solid #EAECF0;
+                .el-form-item {
+                    .el-form-item__label {
+                        color: #445164;
+                    }
+                }
+                .fcal_help_text {
+                    margin: 4px 0 0 0;
+                }
                 .fcal_inline_items {
                   margin-bottom: 0.5rem;
                   .el-select {

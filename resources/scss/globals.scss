@@ -1930,6 +1930,21 @@
 }
 
 .fcal_questions_wrapper {
+    padding: 1.5rem;
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    .fcal_questions_title {
+        margin-bottom: 0.6rem;
+        h3 {
+            margin: 0 0 4px 0;
+        }
+        p {
+            font-size: 14px;
+            line-height: 24px;
+            margin: 0;
+        }
+    }
     .fcal_question_footer {
         display: flex;
         justify-content: space-between;

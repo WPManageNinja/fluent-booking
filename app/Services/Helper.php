@@ -1681,7 +1681,7 @@ class Helper
     {
         $assetUrl = $assetUrl ?: App::getInstance()['url.assets'];
 
-        $html = '<table style="margin: 0 auto; border: none;"><tbody><tr><td style="border: none; font-size: 1rem;">' . __('Add to calendar', 'fluent-booking-pro') . '</td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_g_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/g-icon.png" alt="Google Calendar" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ol_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ol-icon.png" alt="Outlook" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ms_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/msoffice.png" alt="Microsoft Office" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ics_calendar_url##"><img style="width: 20px; height: 20px;" src="' . $assetUrl . 'images/ics.png" alt="Other Calendar" /></a></td></tr></tbody></table>';
+        $html = '<table style="margin: 0 auto; border: none;"><tbody><tr><td style="border: none; font-size: 1rem;">' . __('Add to calendar', 'fluent-booking-pro') . '</td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_g_calendar_url##"><img width="20" height="20" src="' . $assetUrl . 'images/g-icon.png" alt="Google Calendar" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ol_calendar_url##"><img width="20" height="20" src="' . $assetUrl . 'images/ol-icon.png" alt="Outlook" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ms_calendar_url##"><img width="20" height="20" src="' . $assetUrl . 'images/msoffice.png" alt="Microsoft Office" /></a></td><td style="border: 1px solid black; padding: 5px 5px 0 5px;"><a href="##add_to_ics_calendar_url##"><img width="20" height="20" src="' . $assetUrl . 'images/ics.png" alt="Other Calendar" /></a></td></tr></tbody></table>';
 
         return apply_filters('fluent_booking/add_to_calendar_html', $html);
     }
@@ -1718,6 +1718,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                        => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                       => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.booking_title}}'                     => __('Booking Title', 'fluent-booking-pro'),
                         '{{booking.additional_guests}}'                 => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}'     => __('Full Start Date Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'      => __('Full Start Date Time (with host timezone)', 'fluent-booking-pro'),
@@ -1779,6 +1780,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                        => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                       => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.booking_title}}'                     => __('Booking Title', 'fluent-booking-pro'),
                         '{{booking.additional_guests}}'                 => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}'     => __('Full Start Date Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'      => __('Full Start Date Time (with host timezone)', 'fluent-booking-pro'),

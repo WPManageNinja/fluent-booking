@@ -19,7 +19,7 @@
                                     placement="bottom-end"
                                     :isVisible="titlePopupVisible"
                                     class="fcal_popover_shortcode"
-                                    @command="handleRedirectTitleCommand">
+                                    @command="handleBookingTitleCommand">
                                     <template #popoverButton>
                                         <el-input
                                             type="text"
@@ -129,20 +129,45 @@
                             <div class="card_action">
                                 <el-switch v-model="settings.can_not_cancel.enabled"/>
                             </div>
-                            <div class="fcal_event_child_card" v-if="settings.can_not_cancel.enabled">
-                                <el-radio-group v-model="settings.can_not_cancel.type">
-                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                    <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
-                                        <span>
-                                            <el-input v-model="settings.can_not_cancel.condition.value" @input="validateInput(settings.can_not_cancel)"></el-input>
-                                            <el-select v-model="settings.can_not_cancel.condition.unit" @change="validateInput(settings.can_not_cancel)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
-                                                <el-option value="hours" :label="$t('Hours')"></el-option>
-                                            </el-select>
-                                        </span>
-                                    </el-radio>
-                                </el-radio-group>
-                            </div>
+                            <template v-if="settings.can_not_cancel.enabled">
+                                <div class="fcal_event_child_card">
+                                    <el-radio-group v-model="settings.can_not_cancel.type">
+                                        <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                        <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                            <span>
+                                                <el-input v-model="settings.can_not_cancel.condition.value" @input="validateInput(settings.can_not_cancel)"></el-input>
+                                                <el-select v-model="settings.can_not_cancel.condition.unit" @change="validateInput(settings.can_not_cancel)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                    <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                    <el-option value="hours" :label="$t('Hours')"></el-option>
+                                                </el-select>
+                                            </span>
+                                        </el-radio>
+                                    </el-radio-group>
+                                </div>
+                                <div class="fcal_event_child_card">
+                                    <el-form-item :label="$t('Permission Denied Message')">
+                                        <popover
+                                            :groupTitle="$t('Shortcodes')"
+                                            :data="smart_codes.texts"
+                                            placement="bottom-end"
+                                            :isVisible="cancelPopupVisible"
+                                            class="fcal_popover_shortcode"
+                                            @command="handleCancelCommand">
+                                            <template #popoverButton>
+                                                <el-input
+                                                    type="text"
+                                                    :placeholder="$t('Sorry! you can not cancel this')"
+                                                    v-model="settings.can_not_cancel.message">
+                                                    <template #append>
+                                                        <el-button :icon="MoreIcon" @click="toggleCancelPopupVisible"></el-button>
+                                                    </template>
+                                                </el-input>
+                                            </template>
+                                        </popover>
+                                        <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_cancel_message_hint") }}</p>
+                                    </el-form-item>
+                                </div>
+                            </template>
                         </div>
                     </el-form-item>
 
@@ -156,20 +181,45 @@
                             <div class="card_action">
                                 <el-switch v-model="settings.can_not_reschedule.enabled"/>
                             </div>
-                            <div class="fcal_event_child_card" v-if="settings.can_not_reschedule.enabled">
-                                <el-radio-group v-model="settings.can_not_reschedule.type">
-                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                    <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
-                                        <span>
-                                            <el-input v-model="settings.can_not_reschedule.condition.value" @input="validateInput(settings.can_not_reschedule)"></el-input>
-                                            <el-select v-model="settings.can_not_reschedule.condition.unit" @change="validateInput(settings.can_not_reschedule)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
-                                                <el-option value="hours" :label="$t('Hours')"></el-option>
-                                            </el-select>
-                                        </span>
-                                    </el-radio>
-                                </el-radio-group>
-                            </div>
+                            <template v-if="settings.can_not_reschedule.enabled">
+                                <div class="fcal_event_child_card">
+                                    <el-radio-group v-model="settings.can_not_reschedule.type">
+                                        <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                        <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                            <span>
+                                                <el-input v-model="settings.can_not_reschedule.condition.value" @input="validateInput(settings.can_not_reschedule)"></el-input>
+                                                <el-select v-model="settings.can_not_reschedule.condition.unit" @change="validateInput(settings.can_not_reschedule)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                    <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                    <el-option value="hours" :label="$t('Hours')"></el-option>
+                                                </el-select>
+                                            </span>
+                                        </el-radio>
+                                    </el-radio-group>
+                                </div>
+                                <div class="fcal_event_child_card">
+                                    <el-form-item :label="$t('Permission Denied Message')">
+                                        <popover
+                                            :groupTitle="$t('Shortcodes')"
+                                            :data="smart_codes.texts"
+                                            placement="bottom-end"
+                                            :isVisible="reschedulePopupVisible"
+                                            class="fcal_popover_shortcode"
+                                            @command="handleRescheduleCommand">
+                                            <template #popoverButton>
+                                                <el-input
+                                                    type="text"
+                                                    :placeholder="$t('Sorry! you can not reschedule this')"
+                                                    v-model="settings.can_not_reschedule.message">
+                                                    <template #append>
+                                                        <el-button :icon="MoreIcon" @click="toggleReschedulePopupVisible"></el-button>
+                                                    </template>
+                                                </el-input>
+                                            </template>
+                                        </popover>
+                                        <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_reschedule_message_hint") }}</p>
+                                    </el-form-item>
+                                </div>
+                            </template>
                         </div>
                     </el-form-item>
 
@@ -227,6 +277,8 @@ export default {
             titlePopupVisible: false,
             urlPopupVisible: false,
             queryPopupVisible: false,
+            cancelPopupVisible: false,
+            reschedulePopupVisible: false,
             calendarEventSlug: this.calendar_event.slug,
             settings: this.calendar_event.settings,
             hasWpEditor: !!window.wp.editor,
@@ -257,9 +309,23 @@ export default {
         toggleTitlePopupVisible() {
             this.titlePopupVisible = !this.titlePopupVisible;
         },
-        handleRedirectTitleCommand(command) {
+        handleBookingTitleCommand(command) {
             this.settings.booking_title += command;
             this.titlePopupVisible = false;
+        },
+        toggleCancelPopupVisible() {
+            this.cancelPopupVisible = !this.cancelPopupVisible;
+        },
+        handleCancelCommand(command) {
+            this.settings.can_not_cancel.message += command;
+            this.cancelPopupVisible = false;
+        },
+        toggleReschedulePopupVisible() {
+            this.reschedulePopupVisible = !this.reschedulePopupVisible;
+        },
+        handleRescheduleCommand(command) {
+            this.settings.can_not_reschedule.message += command;
+            this.reschedulePopupVisible = false;
         },
         toggleUrlPopupVisible() {
             this.urlPopupVisible = !this.urlPopupVisible;

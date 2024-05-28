@@ -2,13 +2,17 @@
     <div class="fcal_create_calendar_body">
         <div class="fcal_create_calendar_form">
             <div class="fcal_create_calendar_form_header">
-                <h2><QuestionIcon/> {{ $t('Booking Questions') }} </h2>
+                <h2><QuestionIcon/> {{ $t('Question Settings') }} </h2>
             </div>
             <div class="fcal_create_calendar_form_body">
                 <div class="fcal_questions_wrapper">
+                    <div class="fcal_questions_title">
+                        <h3>{{ $t('Booking Questions') }}</h3>
+                        <p>{{ $t('Customize the questions asked on the booking page') }}</p>
+                    </div>
                     <el-skeleton animated v-if="loading" />
                     <div v-else class="fcal_questions">
-                        <div class="fcal_question" v-for="(field, index) in fields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
+                        <div class="fcal_question" v-for="(field, index) in questionFields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
                             <div class="fcal_question_sorting">
                                 <el-icon @click="moveUp(index)"><Top /></el-icon>
                                 <el-icon @click="moveDown(index)"><Bottom /></el-icon>
@@ -42,6 +46,38 @@
                         <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
                     </div>
                 </div>
+
+                <div class="fcal_questions_wrapper">
+                    <div class="fcal_questions_title">
+                        <h3>{{ $t('Other Questions') }}</h3>
+                        <p>{{ $t('Customize booking cancel and reschedule fields') }}</p>
+                    </div>
+                    <el-skeleton animated v-if="loading" />
+                    <div v-else class="fcal_questions">
+                        <div class="fcal_question" v-for="(field, index) in otherFields" :class="{fcal_field_type_disabled: !field.enabled}" :key="index">
+                            <div class="fcal_question_card">
+                                <div class="fcal_question_content">
+                                    <h2>{{ field.label }}
+                                        <span class="required" title="Required Field" v-if="field.required">{{ $t('Required') }}</span>
+                                        <span class="required" v-if="field.system_defined">{{ $t('System') }}</span>
+                                        <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
+                                    </h2>
+                                    <p>
+                                        <span v-if="field.system_defined">{{ field.name }}</span>
+                                        <span v-else>{{ field.type }}</span>
+                                    </p>
+                                </div>
+                                <div class="fcal_question_actions">
+                                    <el-switch v-if="isHideable(field)" v-model="field.enabled" @change="saveSettings"/>
+                                    <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
+                                    <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
+                                        <el-icon><Delete /></el-icon>
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <EditCustomFieldModal 
                 v-if="showModal"
@@ -68,6 +104,7 @@ export default {
         QuestionIcon,
         EditCustomFieldModal,
         SaveButton,
+        Delete,
         Bottom,
         Top
     },
@@ -78,6 +115,14 @@ export default {
             field: '',
             fields : [],
             showModal: false
+        }
+    },
+    computed: {
+        questionFields() {
+            return this.fields.filter(field => !['cancellation_reason', 'rescheduling_reason'].includes(field.name));
+        },
+        otherFields() {
+            return this.fields.filter(field => ['cancellation_reason', 'rescheduling_reason'].includes(field.name));
         }
     },
     methods: {
