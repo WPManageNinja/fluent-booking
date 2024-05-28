@@ -85,7 +85,7 @@ class FluentCrmInit
         return $formattedTime;
     }
 
-    private function getMeetingTitle($meeting)
+    private function getBookingTitle($meeting)
     {
         $host = $meeting->calendar->getAuthorProfile();
         $title = $meeting->slot->title . ' with ' . $host['name'];
@@ -114,7 +114,7 @@ class FluentCrmInit
 
             $formattedMeetings[] = [
                 'id'         => '#' . $meeting->group_id,
-                'title'      => $this->getMeetingTitle($meeting),
+                'title'      => $this->getBookingTitle($meeting),
                 'status'     => $meeting->status,
                 'meeting_at' => $this->getFormattedTime($meeting),
                 'action'     => $this->getActionUrl($meeting)

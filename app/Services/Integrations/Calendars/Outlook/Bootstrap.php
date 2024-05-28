@@ -418,7 +418,7 @@ class Bootstrap extends BaseCalendar
             'location'              => [
                 'displayName' => $booking->getLocationAsText(),
             ],
-            'subject'               => $booking->getMeetingTitle(),
+            'subject'               => $booking->getBookingTitle(),
             'transactionId'         => $booking->id,
         ];
 

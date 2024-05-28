@@ -125,7 +125,7 @@ class Bootstrap
                 <div class="fcal_booking_info">
                     <ul>
                         <li>
-                            <b><?php esc_html_e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getMeetingTitle()); ?>
+                            <b><?php esc_html_e('Meeting Info:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getBookingTitle()); ?>
                         </li>
                         <li>
                             <b><?php esc_html_e('Date & Time:', 'fluent-booking-pro'); ?></b> <?php echo esc_html($booking->getShortBookingDateTime($booking->person_time_zone)); ?>

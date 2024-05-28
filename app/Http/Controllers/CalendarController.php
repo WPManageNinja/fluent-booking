@@ -712,6 +712,7 @@ class CalendarController extends Controller
         }
 
         $event->settings = [
+            'booking_title'   => sanitize_text_field(Arr::get($data, 'booking_title')),
             'custom_redirect' => [
                 'enabled'         => Arr::isTrue($data, 'custom_redirect.enabled'),
                 'redirect_url'    => sanitize_text_field(Arr::get($data, 'custom_redirect.redirect_url')),

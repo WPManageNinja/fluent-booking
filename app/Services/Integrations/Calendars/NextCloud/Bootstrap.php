@@ -727,7 +727,7 @@ class Bootstrap extends BaseCalendar
             'dtstart'     => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
             'dtend'       => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->end_time)),
             'status'      => 'confirmed',
-            'summary'     => $booking->getMeetingTitle(),
+            'summary'     => $booking->getBookingTitle(),
             'location'    => $booking->getLocationAsText(),
             'description' => $booking->getIcsBookingDescription(),
             'attendees'   => $attendees,

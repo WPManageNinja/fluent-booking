@@ -9,6 +9,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\EditorShortCodeParser;
 
 class Booking extends Model
 {
@@ -569,20 +570,35 @@ class Booking extends Model
         return $this->getMeta('reschedule_reason', '');
     }
 
-    public function getMeetingTitle($html = false)
+    private function generateBookingTitle($eventTitle, $authorName, $guestName)
     {
-        $calendarSlot = $this->calendar_event;
+        /* translators: 1: Calendar slot title, 2: Author name, 3: Full name of the gueset */
+        $bookingTitle = sprintf(__('%1$s meeting between %2$s and %3$s', 'fluent-booking-pro'), $eventTitle, $authorName, $guestName);
 
-        $author = $this->getHostDetails(false);
+        return $bookingTitle;
+    }
+
+    public function getBookingTitle($html = false)
+    {
+        $calendarEvent = $this->calendar_event;
+
+        $eventTitle = $calendarEvent->title;
+
+        $authorName = $this->getHostDetails(false)['name'];
 
         $guestName = trim($this->first_name . ' ' . $this->last_name);
 
-        $formattedTitle = $html ? "<strong>{$calendarSlot->title}</strong>" : $calendarSlot->title;
+        $bookingTitle = Arr::get($calendarEvent, 'settings.booking_title');
 
-        /* translators: 1: Calendar slot title, 2: Full name of the gueset, 3: Author name */
-        $meetingTitle = sprintf(__('%1$s Meeting between %2$s and %3$s', 'fluent-booking-pro'), $formattedTitle, $guestName, $author['name']);
+        $bookingTitle = EditorShortCodeParser::parse($bookingTitle, $this);
 
-        return apply_filters('fluent_booking/booking_meeting_title', $meetingTitle, $author['name'], $guestName, $calendarSlot, $this);
+        $bookingTitle = $bookingTitle ?: $this->generateBookingTitle($eventTitle, $authorName, $guestName);
+
+        if ($html && strpos($bookingTitle, $eventTitle) !== false) {
+            $bookingTitle = str_replace($eventTitle, "<strong>{$eventTitle}</strong>", $bookingTitle);
+        }
+
+        return apply_filters('fluent_booking/booking_meeting_title', $bookingTitle, $authorName, $guestName, $calendarEvent, $this);
     }
 
     public function getActivities()
@@ -861,12 +877,12 @@ class Booking extends Model
 
         $guestName = trim($this->first_name . ' ' . $this->last_name);
         
-        $meetingTitle = $this->getMeetingTitle();
+        $bookingTitle = $this->getBookingTitle();
         
         $sections = [
             'what'  => [
                 'title'   => __('What', 'fluent-booking-pro'),
-                'content' => $meetingTitle,
+                'content' => $bookingTitle,
             ],
             'when'  => [
                 'title'   => __('When', 'fluent-booking-pro'),
@@ -891,13 +907,17 @@ class Booking extends Model
 
     public function getMeetingBookmarks($assetsUrl = '')
     {
+        $bookingTitle = $this->getBookingTitle();
+
+        $eventTitle = $this->calendar_event->title;
+
         return apply_filters('fluent_booking/meeting_bookmarks', [
             'google'   => [
                 'title' => __('Google Calendar', 'fluent-booking-pro'),
                 'url'   => add_query_arg([
                     'dates'    => gmdate('Ymd\THis\Z', strtotime($this->start_time)) . '/' . gmdate('Ymd\THis\Z', strtotime($this->end_time)),
-                    'text'     => $this->getMeetingTitle(),
-                    'details'  => $this->title,
+                    'text'     => $bookingTitle,
+                    'details'  => $eventTitle,
                     'location' => urlencode(LocationService::getBookingLocationUrl($this)),
                 ], 'https://calendar.google.com/calendar/r/eventedit'),
                 'icon'  => $assetsUrl . 'images/g-icon.svg'
@@ -907,9 +927,9 @@ class Booking extends Model
                 'url'   => add_query_arg([
                     'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
                     'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
-                    'subject'  => $this->getMeetingTitle(),
+                    'subject'  => $bookingTitle,
                     'path'     => '/calendar/action/compose',
-                    'body'     => $this->title,
+                    'body'     => $eventTitle,
                     'rru'      => 'addevent',
                     'location' => urlencode(LocationService::getBookingLocationUrl($this)),
                 ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
@@ -920,9 +940,9 @@ class Booking extends Model
                 'url'   => add_query_arg([
                     'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
                     'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
-                    'subject'  => $this->getMeetingTitle(),
+                    'subject'  => $bookingTitle,
                     'path'     => '/calendar/action/compose',
-                    'body'     => $this->title,
+                    'body'     => $eventTitle,
                     'rru'      => 'addevent',
                     'location' => urlencode(LocationService::getBookingLocationUrl($this)),
                 ], 'https://outlook.office.com/calendar/0/deeplink/compose'),
