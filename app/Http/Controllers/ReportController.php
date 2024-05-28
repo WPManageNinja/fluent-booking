@@ -375,7 +375,8 @@ class ReportController extends Controller
             }
 
             if ($meeting->event_type == 'group') {
-                $meeting->booked_count = Booking::where('group_id', $meeting->group_id)->count();
+                $meeting->booked_count = Booking::where('group_id', $meeting->group_id)
+                    ->whereIn('status', ['scheduled', 'completed'])->count();
             }
         }
         return $nextMeetings;

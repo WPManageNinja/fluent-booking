@@ -370,11 +370,13 @@ class SchedulesController extends Controller
         }
 
         if ($booking->event_type == 'group') {
-            $booking->booked_count = Booking::where('group_id', $booking->group_id)->count();
+            $booking->booked_count = Booking::where('group_id', $booking->group_id)
+                ->whereIn('status', ['scheduled', 'completed'])->count();
         } else {
             $booking->additional_guests = $booking->getAdditionalGuests();
         }
 
+        $booking->title               = $booking->getBookingTitle(true);
         $booking->author              = $booking->getHostDetails(false);
         $booking->location            = $booking->getLocationDetailsHtml();
         $booking->reschedule_url      = $booking->getRescheduleUrl();

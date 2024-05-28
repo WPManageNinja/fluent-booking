@@ -73,16 +73,15 @@ export default {
             return `${formatStartTime} - ${formatEndTime}`;
         },
         spotTitle() {
-            const eventType = this.booking.event_type;
             const guestName = this.booking.first_name + ' ' + this.booking.last_name;
-            if (eventType === 'group') {
+            if (this.booking.event_type === 'group') {
                 const booked = this.booking.booked_count;
                 return booked + ' ' + this.$t('guests with') + ' ' + this.booking.author.name + ' ' + this.$t('as group booking type');
             }
             if(this.showing_id) {
                 return guestName;
             }
-            return '<b>' + this.booking?.calendar_event?.title +'</b> ' + this.$t('meeting between') + ' ' + guestName + ' & '+ this.booking.author.name;
+            return this.booking.title;
         },
         currentStatus() {
             const statusLabels = {
