@@ -1718,6 +1718,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                        => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                       => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.booking_title}}'                     => __('Booking Title', 'fluent-booking-pro'),
                         '{{booking.additional_guests}}'                 => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}'     => __('Full Start Date Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'      => __('Full Start Date Time (with host timezone)', 'fluent-booking-pro'),
@@ -1779,6 +1780,7 @@ class Helper
                     'shortcodes' => [
                         '{{booking.event_name}}'                        => __('Event Name', 'fluent-booking-pro'),
                         '{{booking.description}}'                       => __('Event Description', 'fluent-booking-pro'),
+                        '{{booking.booking_title}}'                     => __('Booking Title', 'fluent-booking-pro'),
                         '{{booking.additional_guests}}'                 => __('Additional Guests', 'fluent-booking-pro'),
                         '{{booking.full_start_end_guest_timezone}}'     => __('Full Start Date Time (with guest timezone)', 'fluent-booking-pro'),
                         '{{booking.full_start_end_host_timezone}}'      => __('Full Start Date Time (with host timezone)', 'fluent-booking-pro'),

@@ -64,6 +64,10 @@ class EditorShortCodeParser
             return $bookingEvent->description;
         }
 
+        if ($key == 'booking_title') {
+            return $booking->getBookingTitle();
+        }
+
         if ($key == 'additional_guests') {
             return $booking->getAdditionalGuests(true);
         }
