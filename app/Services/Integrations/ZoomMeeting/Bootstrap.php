@@ -126,7 +126,7 @@ class Bootstrap
             ],
             'schedule_for' => Arr::get($apiClient, 'origin_email'),
             'start_time'   => gmdate('Y-m-d\TH:i:s\Z', strtotime($booking->start_time)),
-            'topic'        => $booking->getMeetingTitle(),
+            'topic'        => $booking->getBookingTitle(),
         ];
 
         if ($booking->event_type == 'group') {

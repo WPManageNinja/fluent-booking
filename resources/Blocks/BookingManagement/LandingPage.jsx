@@ -115,7 +115,7 @@ export const LandingPage = props => {
                                                         </div>
                                                         <div className="fcal_spot_desc">
                                                             <h3 className="fcal_spot_title"
-                                                                dangerouslySetInnerHTML={{ __html: booking.meeting_title }}>
+                                                                dangerouslySetInnerHTML={{ __html: booking.booking_title }}>
                                                             </h3>
                                                             <div className="fcal_spot_desc_sub_info">
                                                                 <span className="fcal_spot_period_status">

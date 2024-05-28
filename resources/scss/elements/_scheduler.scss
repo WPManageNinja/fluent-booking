@@ -1531,6 +1531,18 @@
                         margin-bottom: 2px;
                     }
                 }
+                .fcal_booking_duration, .fcal_popover_shortcode {
+                    width: 100%;
+                    .el-input__wrapper {
+                      border-radius: 0px;
+                      border-top-left-radius: 8px;
+                      border-bottom-left-radius: 8px;
+                    }
+                    .el-input-group__append {
+                      border-top-right-radius: 8px;
+                      border-bottom-right-radius: 8px;
+                    }
+                  }
               .fcal_event_child_card {
                 width: 100%;
                 padding: 1.5rem;
@@ -1549,18 +1561,6 @@
                 }
                 .el-checkbox {
                   margin-bottom: 0.5rem;
-                }
-                .fcal_booking_duration, .fcal_popover_shortcode {
-                  width: 100%;
-                  .el-input__wrapper {
-                    border-radius: 0px;
-                    border-top-left-radius: 8px;
-                    border-bottom-left-radius: 8px;
-                  }
-                  .el-input-group__append {
-                    border-top-right-radius: 8px;
-                    border-bottom-right-radius: 8px;
-                  }
                 }
                 .fcal_time_zone_selector {
                     display: flex;

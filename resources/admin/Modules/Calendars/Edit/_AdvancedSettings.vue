@@ -11,6 +11,30 @@
                 <el-form label-position="top">
 
                     <el-form-item>
+                        <div class="fcal_event_card">
+                            <el-form-item :label="$t('Booking Title')">
+                                <popover
+                                    :groupTitle="$t('Shortcodes')"
+                                    :data="smart_codes.texts"
+                                    placement="bottom-end"
+                                    :isVisible="titlePopupVisible"
+                                    class="fcal_popover_shortcode"
+                                    @command="handleRedirectTitleCommand">
+                                    <template #popoverButton>
+                                        <el-input
+                                            type="text"
+                                            :placeholder="bookingTitle"
+                                            v-model="settings.booking_title">
+                                            <template #append>
+                                                <el-button :icon="MoreIcon" @click="toggleTitlePopupVisible"></el-button>
+                                            </template>
+                                        </el-input>
+                                    </template>
+                                </popover>
+                            </el-form-item>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="card_contents">
                                 <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
@@ -200,6 +224,7 @@ export default {
             saving: false,
             loading: false,
             editSlug: false,
+            titlePopupVisible: false,
             urlPopupVisible: false,
             queryPopupVisible: false,
             calendarEventSlug: this.calendar_event.slug,
@@ -223,9 +248,19 @@ export default {
         },
         showRequiresConfirmation() {
             return this.calendar_event.event_type != 'group';
+        },
+        bookingTitle() {
+            return this.calendar_event.title + ' ' + this.$t('meeting between') + ' ' + this.calendar_event.author_profile?.name + ' and {{guest.first_name}}';
         }
     },
     methods: {
+        toggleTitlePopupVisible() {
+            this.titlePopupVisible = !this.titlePopupVisible;
+        },
+        handleRedirectTitleCommand(command) {
+            this.settings.booking_title += command;
+            this.titlePopupVisible = false;
+        },
         toggleUrlPopupVisible() {
             this.urlPopupVisible = !this.urlPopupVisible;
         },
@@ -312,6 +347,7 @@ export default {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/advanced-settings', {
                 calendar_id: this.calendar_event.calendar_id,
+                booking_title: this.settings.booking_title,
                 custom_redirect: this.settings.custom_redirect,
                 requires_confirmation: this.settings.requires_confirmation,
                 can_not_cancel: this.settings.can_not_cancel,

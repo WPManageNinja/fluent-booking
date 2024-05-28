@@ -40,6 +40,10 @@ use FluentBooking\Framework\Support\Arr;
         ];
     }
 
+    if (!isset($settings['booking_title'])) {
+        $settings['booking_title'] = '';
+    }
+
     if (!isset($settings['can_not_cancel'])) {
         $enabled = Arr::get($settings, 'can_cancel') == 'no' ? true : false;
         $settings['can_not_cancel'] = [

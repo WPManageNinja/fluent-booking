@@ -368,7 +368,7 @@ class Bootstrap extends BaseCalendar
                 'url'   => $booking->source_url
             ],
             'location'           => $booking->getLocationAsText(),
-            'summary'            => $booking->getMeetingTitle(),
+            'summary'            => $booking->getBookingTitle(),
             'guestsCanInviteOthers' => false,
             'guestsCanSeeOtherGuests' => $guestListEnabled ? true : false,
             'extendedProperties' => [

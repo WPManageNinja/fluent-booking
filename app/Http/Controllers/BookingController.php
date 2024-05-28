@@ -340,7 +340,7 @@ class BookingController extends Controller
                 'person_time_zone'  => $booking->person_time_zone,
                 'status'            => ucfirst($booking->status),
                 'payment_status'    => $booking->payment_status,
-                'meeting_title'     => $booking->getMeetingTitle(true),
+                'booking_title'     => $booking->getBookingTitle(true),
                 'author_name'       => $booking->getHostDetails(false)['name'],
                 'booking_date'      => DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'date'),
                 'booking_time'      => DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time'),
