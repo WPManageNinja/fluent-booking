@@ -1,13 +1,6 @@
 <?php
 
-add_action('fluentform/loaded', function () {
-    (new \FluentBooking\App\Services\Integrations\FluentForms\FluentFormInit())->init();
-});
-
-add_action('fluentcrm_loaded', function () {
-    (new \FluentBooking\App\Services\Integrations\FluentCRM\FluentCrmInit());
-    (new \FluentBooking\App\Services\Integrations\FluentCRM\Bootstrap());
-});
+use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 
 /*
  * Remote calendars
@@ -17,14 +10,23 @@ add_action('fluentcrm_loaded', function () {
 (new \FluentBooking\App\Services\Integrations\ZoomMeeting\Bootstrap())->register();
 (new \FluentBooking\App\Services\Integrations\Webhook\WebhookIntegration())->register();
 
-
-/*
- * Global Modules Intialization
- */
+// Global Modules Intialization
 (new \FluentBooking\App\Services\GlobalModules\GlobalModules())->register();
+
+// Global Notification Handler
+(new \FluentBooking\App\Hooks\Handlers\GlobalNotificationHandler())->register();
 
 // payment Methods
 (new FluentBooking\App\Hooks\Handlers\GlobalPaymentHandler)->register();
+
+add_action('fluentform/loaded', function () {
+    (new \FluentBooking\App\Services\Integrations\FluentForms\FluentFormInit())->init();
+});
+
+add_action('fluentcrm_loaded', function () {
+    (new \FluentBooking\App\Services\Integrations\FluentCRM\FluentCrmInit());
+    (new \FluentBooking\App\Services\Integrations\FluentCRM\Bootstrap());
+});
 
 add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $calendar) {
     $items['remote_calendars'] = [
@@ -125,11 +127,34 @@ add_filter('fluent_booking/calendar_event_setting_menu_items', function ($items,
     return $items;
 }, 1, 2);
 
+add_filter('fluent_booking/general_settings', function ($settings) {
+    $settings['all_currencies'] = CurrenciesHelper::getFormattedCurrencies();
+    return $settings;
+});
+
 add_filter('fluent_booking/admin_vars', function ($vars) {
-    $vars['currency'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrency();
-    $vars['currency_sign'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
+    $vars['currency'] = CurrenciesHelper::getGlobalCurrency();
+    $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
     return $vars;
 });
+
+add_filter('fluent_booking/total_payment_widget', function ($widget, $paymentWidget) {
+    if (isset($paymentWidget['totalPayment']) && $paymentWidget['totalPayment'] != 0) {
+        $currencySign = CurrenciesHelper::getGlobalCurrencySign();
+        $widget = [
+            'title'   => __('Total Payment', 'fluent-booking-pro'),
+            'number'  => $currencySign . $paymentWidget['totalPayment'],
+            'content' => $paymentWidget['paymentComparison'],
+            'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M15.0235 10.5932C13.8049 10.9264 13.0704 11.8615 13.0704 12.7449C13.0704 13.6283 13.8049 14.5634 15.0235 14.8966V10.5932Z" fill="white"/>
+                <path d="M16.9766 17.1036V21.407C18.1953 21.0738 18.9298 20.1387 18.9298 19.2553C18.9298 18.3719 18.1953 17.4368 16.9766 17.1036Z" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M29.0209 16.0001C29.0209 23.1913 23.1913 29.0209 16.0001 29.0209C8.80887 29.0209 2.97925 23.1913 2.97925 16.0001C2.97925 8.80887 8.80887 2.97925 16.0001 2.97925C23.1913 2.97925 29.0209 8.80887 29.0209 16.0001ZM16.0001 7.21102C16.5394 7.21102 16.9766 7.64824 16.9766 8.18758V8.6C19.0996 8.98012 20.8829 10.5751 20.8829 12.7449C20.8829 13.2842 20.4457 13.7214 19.9063 13.7214C19.367 13.7214 18.9298 13.2842 18.9298 12.7449C18.9298 11.8615 18.1953 10.9264 16.9766 10.5932V15.1104C19.0996 15.4905 20.8829 17.0855 20.8829 19.2553C20.8829 21.4251 19.0996 23.02 16.9766 23.4002V23.8126C16.9766 24.3519 16.5394 24.7891 16.0001 24.7891C15.4607 24.7891 15.0235 24.3519 15.0235 23.8126V23.4002C12.9006 23.02 11.1173 21.4251 11.1173 19.2553C11.1173 18.716 11.5545 18.2787 12.0938 18.2787C12.6332 18.2787 13.0704 18.716 13.0704 19.2553C13.0704 20.1387 13.8049 21.0738 15.0235 21.407V16.8898C12.9006 16.5096 11.1173 14.9147 11.1173 12.7449C11.1173 10.5751 12.9006 8.98012 15.0235 8.6V8.18758C15.0235 7.64824 15.4607 7.21102 16.0001 7.21102Z" fill="white"/>
+                </svg>',
+            'stat'    => $paymentWidget['paymentStat']
+        ];
+    }
+    return $widget;
+}, 10, 2);
 
 add_action('init', function () {
 // Woo Integration
