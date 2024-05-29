@@ -536,6 +536,7 @@ class Booking extends Model
             'status'      => 'closed',
             'type'        => 'error',
             'title'       => __('Meeting Cancelled', 'fluent-booking-pro'),
+            /* translators: Name of the user who cancelled the meeting */
             'description' => sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName)
         ]);
 
