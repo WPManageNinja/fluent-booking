@@ -101,7 +101,7 @@ class DataExporter
             fputcsv($output, $row);
         }
 
-        fclose($output);
+        fclose($output); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         exit();
     }
 
