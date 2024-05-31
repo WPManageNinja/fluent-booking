@@ -87,9 +87,8 @@ class EmailNotificationService
             $icsContent = BookingService::generateBookingICS($booking);
     
             $filePath = wp_tempnam(null, 'event') . '.ics';
-            $filesystem = WP_Filesystem();
             
-            if ($filesystem) {
+            if (WP_Filesystem()) {
                 global $wp_filesystem;
                 $wp_filesystem->put_contents($filePath, $icsContent);
                 $attachments = [$filePath];
@@ -378,9 +377,8 @@ class EmailNotificationService
             $icsContent = BookingService::generateBookingICS($booking);
     
             $filePath = wp_tempnam(null, 'event') . '.ics';
-            $filesystem = WP_Filesystem();
 
-            if ($filesystem) {
+            if (WP_Filesystem()) {
                 global $wp_filesystem;
                 $wp_filesystem->put_contents($filePath, $icsContent);
                 $attachments = [$filePath];
