@@ -145,7 +145,7 @@ class FrontEndHandler
                     return $data;
                 });
 
-                $redirectUrl = $calendarEvent->getRedirectUrlWithQuery($existingBooking);
+                $redirectUrl = $existingBooking->getRedirectUrlWithQuery();
 
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
@@ -826,7 +826,7 @@ class FrontEndHandler
             return;
         }
 
-        $redirectUrl = $calendarSlot->getRedirectUrlWithQuery($booking);
+        $redirectUrl = $booking->getRedirectUrlWithQuery();
 
         $html = BookingService::getBookingConfirmationHtml($booking);
 
