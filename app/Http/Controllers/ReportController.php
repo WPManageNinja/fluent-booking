@@ -231,7 +231,6 @@ class ReportController extends Controller
 
     private function getAllBookingWidgetNumbers()
     {
-
         $permissionAccess = PermissionManager::userCan(['read_all_bookings', 'manage_all_bookings', 'read_other_calendars', 'manage_other_calendars']);
 
         if ($permissionAccess) {
