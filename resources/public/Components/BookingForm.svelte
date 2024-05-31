@@ -122,7 +122,7 @@
             {/each}
 
             {#if !appData.is_fluentform}
-                {#if hasPaymentItem() && appData.payment_items}
+                {#if hasPaymentItem()}
                     <div class="fluent_booking_payment_processor" style="display:none;">
                         <h3 class="label">{i18('Total Payment')}
                             : {@html appData?.currency_sign}{getSubTotal(appData?.payment_items)}</h3>
@@ -134,15 +134,15 @@
                     </div>
                 {/if}
                 <div class="fcal_form_item fcal_submit">
-                    {#if !hasPaymentItem()}
+                    {#if hasPaymentItem()}
                         <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                            {appData.i18n.Schedule_Meeting}
+                            {appData.i18n.Continue_to_Payments}
                         </button>
                     {:else}
                         <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
-                            {appData.i18n.Continue_to_Payments}
+                            {appData.i18n.Schedule_Meeting}
                         </button>
                     {/if}
                 </div>
@@ -220,7 +220,7 @@
     }, 100)
 
     function hasPaymentItem() {
-        if (slot.total_payment == 0) {
+        if (!appData.payment_items || slot.total_payment == 0) {
             return false;
         }
         return !!(slot.total_payment);
