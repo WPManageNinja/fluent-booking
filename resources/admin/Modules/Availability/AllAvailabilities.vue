@@ -121,7 +121,7 @@ import Pagination from "../../Pieces/Pagination.vue";
 
 export default {
     name: 'AllAvailabilities',
-    components: {Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton, Plus},
+    components: { Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton, Plus },
     data() {
         return {
             loading: false,
