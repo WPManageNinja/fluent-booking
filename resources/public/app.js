@@ -10,18 +10,23 @@ const monthYear = urlParams.get('month');
 const fullDate = urlParams.get('date');
 const duration = urlParams.get('duration');
 
-if (fullDate && fullDate.length >= 10) {
-    preSelects = {
-        year: fullDate.substr(0, 4),
-        month: fullDate.substr(5, 2),
-        day: fullDate.substr(8, 2),
+function setPreSelects(fullDate, monthYear = null) {
+    if (fullDate && fullDate.length >= 10) {
+        return {
+            year: fullDate.substr(0, 4),
+            month: fullDate.substr(5, 2),
+            day: fullDate.substr(8, 2),
+        };
+    } else if (monthYear && monthYear.length >= 7) {
+        return {
+            year: monthYear.substr(0, 4),
+            month: monthYear.substr(5, 2),
+        };
     }
-} else if (monthYear && monthYear.length >= 7) {
-    preSelects = {
-        year: monthYear.substr(0, 4),
-        month: monthYear.substr(5, 2),
-    }
+    return {};
 }
+
+preSelects = setPreSelects(fullDate, monthYear);
 
 if (duration) {
     preSelects.duration = duration;

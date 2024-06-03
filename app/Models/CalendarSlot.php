@@ -429,8 +429,10 @@ class CalendarSlot extends Model
         return $maxDate;
     }
 
-    public function getMinBookableDateTime($startDate)
+    public function getMinBookableDateTime($startDate = null)
     {
+        $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_date_between') {

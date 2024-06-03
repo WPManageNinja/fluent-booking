@@ -638,11 +638,11 @@ class FrontEndHandler
     {
         $app = App::getInstance();
 
-        $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $eventId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $calendarSlot = CalendarSlot::find($slotId);
+        $calendarEvent = CalendarSlot::find($eventId);
 
-        if (!$calendarSlot || $calendarSlot->status != 'active') {
+        if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
                 'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ], 422);
@@ -667,17 +667,17 @@ class FrontEndHandler
             'start_date.required' => __('Please select a date and time', 'fluent-booking-pro')
         ];
 
-        if ($calendarSlot->isPhoneRequired()) {
+        if ($calendarEvent->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
             $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
-        } else if ($calendarSlot->isAddressRequired()) {
+        } else if ($calendarEvent->isAddressRequired()) {
             $rules['address'] = 'required';
             $messages['address.required'] = __('Please provide your Address', 'fluent-booking-pro');
-        } else if ($calendarSlot->isLocationFieldRequired()) {
+        } else if ($calendarEvent->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
             $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
 
-            $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
+            $selectedLocation = LocationService::getLocationDetails($calendarEvent, Arr::get($postedData, 'location_config', []), $postedData);
             $selectedLocationDriver = Arr::get($selectedLocation, 'type');
             // is user input required
             if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
@@ -690,9 +690,9 @@ class FrontEndHandler
             }
         }
 
-        $duration  = (int)$calendarSlot->getDuration(Arr::get($postedData, 'duration', null));
+        $duration  = (int)$calendarEvent->getDuration(Arr::get($postedData, 'duration', null));
 
-        if ($calendarSlot->isPaymentEnabled($duration)) {
+        if ($calendarEvent->isPaymentEnabled($duration)) {
             $rules['payment_method'] = 'required';
             $messages['payment_method.required'] = __('Please select a valid payment method', 'fluent-booking-pro');
         }
@@ -701,7 +701,7 @@ class FrontEndHandler
             $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
         }
 
-        $requiredFields = array_filter($calendarSlot->getMeta('booking_fields', []), function ($field) {
+        $requiredFields = array_filter($calendarEvent->getMeta('booking_fields', []), function ($field) {
             return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
         });
 
@@ -715,7 +715,7 @@ class FrontEndHandler
         $validationConfig = apply_filters('fluent_booking/schedule_validation_rules_data', [
             'rules'    => $rules,
             'messages' => $messages
-        ], $postedData, $calendarSlot);
+        ], $postedData, $calendarEvent);
 
         $validator = $app->validator->make($postedData, $validationConfig['rules'], $validationConfig['messages']);
         if ($validator->validate()->fails()) {
@@ -726,8 +726,8 @@ class FrontEndHandler
             return;
         }
 
-        $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarSlot);
-        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', $customFieldsData, $customFieldsData, $calendarSlot);
+        $customFieldsData = BookingFieldService::getCustomFieldsData($postedData, $calendarEvent);
+        $customFieldsData = apply_filters('fluent_booking/schedule_custom_field_data', $customFieldsData, $customFieldsData, $calendarEvent);
 
         if (is_wp_error($customFieldsData)) {
             wp_send_json([
@@ -754,15 +754,15 @@ class FrontEndHandler
             'ip_address'       => Helper::getIp(),
             'status'           => 'scheduled',
             'source'           => 'web',
-            'event_type'       => $calendarSlot->event_type,
+            'event_type'       => $calendarEvent->event_type,
             'slot_minutes'     => $duration
         ];
 
-        if ($calendarSlot->isConfirmationRequired($startDateTime)) {
+        if ($calendarEvent->isConfirmationRequired($startDateTime)) {
             $bookingData['status'] = 'pending';
         }
 
-        $selectedLocation = LocationService::getLocationDetails($calendarSlot, Arr::get($postedData, 'location_config', []), $postedData);
+        $selectedLocation = LocationService::getLocationDetails($calendarEvent, Arr::get($postedData, 'location_config', []), $postedData);
         if ($selectedLocation['type'] == 'phone_guest') {
             $bookingData['phone'] = $selectedLocation['description'];
         }
@@ -778,18 +778,18 @@ class FrontEndHandler
         }
 
         if ($additionalGuests) {
-            $guestField = BookingFieldService::getBookingFieldByName($calendarSlot, 'guests');
+            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
             $guestLimit = Arr::get($guestField, 'limit', 10);
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         $hostIds = null;
-        if ($calendarSlot->isTeamEvent()) {
-            $hostIds = $calendarSlot->getHostIdsSortedByBookings($startDateTime);
+        if ($calendarEvent->isTeamEvent()) {
+            $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
         }
 
         // Check if the time is available or not for this slot
-        $timeSlotService = new TimeSlotService($calendarSlot->calendar, $calendarSlot);
+        $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
         $isSpotAvailable = false;
 
         if ($hostIds) {
@@ -810,10 +810,10 @@ class FrontEndHandler
             ], 422);
         }
 
-        do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarSlot);
+        do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
 
         try {
-            $booking = BookingService::createBooking($bookingData, $calendarSlot, $customFieldsData);
+            $booking = BookingService::createBooking($bookingData, $calendarEvent, $customFieldsData);
 
             if (is_wp_error($booking)) {
                 throw new \Exception(wp_kses_post($booking->get_error_message()), 422);
@@ -841,10 +841,12 @@ class FrontEndHandler
     public function ajaxGetAvailableDates()
     {
         $startBenchmark = microtime(true);
-        $slotId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        $slot = CalendarSlot::findOrfail($slotId);
 
-        if (!$slot || $slot->status != 'active') {
+        $eventId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        $calendarEvent = CalendarSlot::findOrfail($eventId);
+
+        if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
                 'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
             ], 422);
@@ -852,7 +854,7 @@ class FrontEndHandler
 
         $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $calendar = $slot->calendar;
+        $calendar = $calendarEvent->calendar;
         $startDate = sanitize_text_field(Arr::get($request, 'start_date')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$startDate) {
@@ -869,9 +871,9 @@ class FrontEndHandler
             $timeZone = $calendar->author_timezone;
         }
 
-        $duration = (int)$slot->getDuration(Arr::get($request, 'duration', null));
+        $duration = (int)$calendarEvent->getDuration(Arr::get($request, 'duration', null));
 
-        $timeSlotService = new TimeSlotService($calendar, $slot);
+        $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
 
@@ -880,34 +882,32 @@ class FrontEndHandler
                 'available_slots' => [],
                 'timezone'        => $timeZone,
                 'invalid_dates'   => true,
-                'max_lookup_date' => $slot->getMaxLookUpDate(),
+                'max_lookup_date' => $calendarEvent->getMaxLookUpDate(),
             ], 200);
         }
 
         $availableSpots = array_filter($availableSpots);
-        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $slot, $calendar, $timeZone, $duration);
+        $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $calendarEvent, $calendar, $timeZone, $duration);
 
         wp_send_json([
             'available_slots' => $availableSpots,
             'timezone'        => $timeZone,
-            'max_lookup_date' => $slot->getMaxLookUpDate(),
+            'max_lookup_date' => $calendarEvent->getMaxLookUpDate(),
             'execution_time'  => microtime(true) - $startBenchmark
         ], 200);
     }
 
     public function getCalendarEventVars(Calendar $calendar, CalendarSlot $calendarEvent)
     {
-        $calendarEvent->max_lookup_date = $calendarEvent->getMaxLookUpDate();
-        $calendarEvent->min_lookup_date = $calendarEvent->getMinLookUpDate();
-
         $calendarEvent->description = wpautop($calendarEvent->description);
         $calendarEvent->location_icon_html = $calendarEvent->defaultLocationHtml();
         $formFields = BookingFieldService::getBookingFields($calendarEvent);
 
         $eventData = [
             'id'                 => $calendarEvent->id,
-            'max_lookup_date'    => $calendarEvent->max_lookup_date,
-            'min_lookup_date'    => $calendarEvent->min_lookup_date,
+            'max_lookup_date'    => $calendarEvent->getMaxLookUpDate(),
+            'min_lookup_date'    => $calendarEvent->getMinLookUpDate(),
+            'min_bookable_date'  => $calendarEvent->getMinBookableDateTime(),
             'duration'           => $calendarEvent->getDefaultDuration(),
             'title'              => $calendarEvent->title,
             'location_settings'  => $calendarEvent->location_settings,

@@ -38,6 +38,9 @@ export const util = {
     toDate: function (date, format) {
         return dayjs(date).format(format);
     },
+    toTimezone: function (date, timezone, format) {
+        return dayjs(date).utc('z').local().tz(timezone).format(format);
+    },
     dateTimeI18
 }
 
