@@ -43,6 +43,12 @@
     let nextDisabled = false;
     let formatHours = appData.slot?.time_format;
 
+    if (slot.min_bookable_date) {
+        const minBookableDate = util.toTimezone(slot.min_bookable_date, timezone, 'YYYY-MM-DD');
+        month = minBookableDate.split('-')[1] - 1;
+        year = minBookableDate.split('-')[0];
+    }
+
     if (slot.pre_selects?.month && slot.pre_selects?.year) {
         month = slot.pre_selects.month - 1;
         year = slot.pre_selects.year;
@@ -71,7 +77,7 @@
 
     let primaryColor = 'var(--fcal_primary_color)';
 
-    $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date()).getTime();
+    $: prevDisabled = (new Date(year, month, 1)).getTime() < (new Date(slot.min_lookup_date)).getTime();
 
     function maybeMaxDateDisabled() {
         let result = false;
