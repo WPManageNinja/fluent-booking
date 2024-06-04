@@ -30,7 +30,7 @@ class PaymentHelper
             ], is_array($args) ? $args: []
         );
 
-        $redirectUrl = $calendarEvent->getRedirectUrlWithQuery($booking);
+        $redirectUrl = $booking->getRedirectUrlWithQuery();
 
         $confirmationUrl = $redirectUrl ?: $booking->getConfirmationUrl();
 

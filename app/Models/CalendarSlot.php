@@ -429,8 +429,10 @@ class CalendarSlot extends Model
         return $maxDate;
     }
 
-    public function getMinBookableDateTime($startDate)
+    public function getMinBookableDateTime($startDate = null)
     {
+        $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_date_between') {
@@ -784,50 +786,6 @@ class CalendarSlot extends Model
         }
 
         return $productPrices;
-    }
-
-    public function getRedirectUrlWithQuery($booking)
-    {
-        $isEnabled     = Arr::isTrue($this->settings, 'custom_redirect.enabled');
-        $redirectUrl   = Arr::get($this->settings, 'custom_redirect.redirect_url', '');
-        $queryString   = Arr::get($this->settings, 'custom_redirect.query_string', '');
-        $isQueryString = Arr::get($this->settings, 'custom_redirect.is_query_string', 'no') == 'yes';
-
-        if ($isQueryString && $queryString) {
-            if (strpos($redirectUrl, '?')) {
-                $redirectUrl .= '&' . $queryString;
-            } else {
-                $redirectUrl .= '?' . $queryString;
-            }
-        }
-
-        if (!$isEnabled || empty($redirectUrl)) {
-            return '';
-        }
-
-        $redirectUrl = EditorShortCodeParser::parse($redirectUrl, $booking);
-
-        $isUrlParser = apply_filters('fluent_booking/will_parse_redirect_url_value', true, $this);
-
-        if ($isUrlParser) {
-            if (strpos($redirectUrl, '=&') || '=' == substr($redirectUrl, -1)) {
-                $urlArray    = explode('?', $redirectUrl);
-                $baseUrl     = array_shift($urlArray);
-                $query       = wp_parse_url($redirectUrl)['query'];
-                $queryParams = explode('&', $query);
-
-                $params = [];
-                foreach ($queryParams as $queryParam) {
-                    $paramArray = explode('=', $queryParam);
-                    if (!empty($paramArray[1])) {
-                        $params[$paramArray[0]] = $paramArray[1];
-                    }
-                }
-                $redirectUrl = add_query_arg($params, $baseUrl);
-            }
-        }
-
-        return $redirectUrl;
     }
 
     public function isTeamDefaultSchedule()
