@@ -87,9 +87,12 @@ class EmailNotificationService
             $icsContent = BookingService::generateBookingICS($booking);
     
             $filePath = wp_tempnam(null, 'event') . '.ics';
-            file_put_contents($filePath, $icsContent);
-    
-            $attachments = [$filePath];
+            
+            if (WP_Filesystem()) {
+                global $wp_filesystem;
+                $wp_filesystem->put_contents($filePath, $icsContent);
+                $attachments = [$filePath];
+            }
         }
 
         $body = (string)App::make('view')->make('emails.template', [
@@ -104,7 +107,7 @@ class EmailNotificationService
         $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
 
         if ($attachments) {
-            unlink($filePath);
+            wp_delete_file($filePath);
         }
 
         return $result;
@@ -374,9 +377,12 @@ class EmailNotificationService
             $icsContent = BookingService::generateBookingICS($booking);
     
             $filePath = wp_tempnam(null, 'event') . '.ics';
-            file_put_contents($filePath, $icsContent);
-    
-            $attachments = [$filePath];
+
+            if (WP_Filesystem()) {
+                global $wp_filesystem;
+                $wp_filesystem->put_contents($filePath, $icsContent);
+                $attachments = [$filePath];
+            }
         }
 
         $body = (string)App::make('view')->make('emails.template', [
@@ -391,7 +397,7 @@ class EmailNotificationService
         $result = Mailer::send($to, $subject, $body, $headers, $attachments);
 
         if ($attachments) {
-            unlink($filePath);
+            wp_delete_file($filePath);
         }
 
         do_action('fluent_booking/log_booking_note', [

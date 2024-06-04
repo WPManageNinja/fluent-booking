@@ -3,7 +3,6 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Services\GlobalModules\GlobalModules;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Libs\Countries;
 use FluentBooking\Framework\Request\Request;
@@ -86,9 +85,7 @@ class SettingsController extends Controller
 
         $settings['all_countries'] = Countries::get();
 
-        $settings['all_currencies'] = CurrenciesHelper::getFormattedCurrencies();
-
-        return $settings;
+        return apply_filters('fluent_booking/general_settings', $settings);
     }
 
     public function updateGeneralSettings(Request $request)

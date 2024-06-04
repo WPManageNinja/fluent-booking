@@ -233,6 +233,7 @@ export default {
         },
     },
     mounted() {
+        this.$changeTitle(this.$t('Dashboard'));
         this.fetchReports();
     }
 };

@@ -370,7 +370,6 @@ export default {
         if (this.$route.query.period) {
             this.filters.period = this.$route.query.period;
         }
-        this.$changeTitle('Schedules');
         this.fetchSchedules();
         if (this.$route.query.booking_id) {
             this.booking_id = this.$route.query.booking_id;

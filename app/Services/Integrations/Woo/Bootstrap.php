@@ -119,6 +119,11 @@ class Bootstrap
             if (!$booking) {
                 return;
             }
+
+            if ($redirectUrl = $booking->getRedirectUrlWithQuery()) {
+                wp_redirect($redirectUrl);
+                exit;
+            }
             ?>
             <div class="fcal_booking_details">
                 <h2 class="woocommerce-column__title"><?php esc_html_e('Booking Details', 'fluent-booking-pro'); ?></h2>
@@ -132,7 +137,7 @@ class Bootstrap
                             (<?php echo esc_html($booking->person_time_zone); ?>)
                         </li>
                         <li>
-                            <b><?php esc_html_e('Status:', 'fluent-booking-pro'); ?><?php echo esc_html(ucfirst($booking->status)); ?></b>
+                            <b><?php esc_html_e('Status:', 'fluent-booking-pro'); ?></b> <?php echo esc_html(ucfirst($booking->status)); ?>
                         </li>
                         <li>
                             <a href="<?php echo esc_url($booking->getConfirmationUrl()); ?>"><?php esc_html_e('View Full Meeting Details', 'fluent-booking-pro'); ?></a>

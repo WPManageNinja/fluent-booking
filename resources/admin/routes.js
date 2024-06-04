@@ -71,7 +71,7 @@ export var routes = [
                 component: RemoteCalendarsSettings,
                 meta: {
                     active_menu: 'calendars',
-                    title: 'Booking Types'
+                    title: 'Remote Calendar Settings'
                 },
             },
             {
@@ -89,7 +89,7 @@ export var routes = [
                 component: UserZoomSettings,
                 meta: {
                     active_menu: 'calendars',
-                    title: 'Calendar Settings'
+                    title: 'Zoom Settings'
                 },
             },
             {
@@ -110,7 +110,8 @@ export var routes = [
         component: CreateCalendar,
         props: true,
         meta: {
-            active_menu: 'calendars'
+            active_menu: 'calendars',
+            title: 'Create Calendar'
         }
     },
     {
@@ -118,7 +119,8 @@ export var routes = [
         component: SlotSettings,
         props: true,
         meta: {
-            active_menu: 'calendars'
+            active_menu: 'calendars',
+            title: 'Event Settings'
         },
         children: [
             {
@@ -127,7 +129,8 @@ export var routes = [
                 component: EventDetails,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Event Details'
                 },
             },
             {
@@ -136,7 +139,8 @@ export var routes = [
                 component: AvailabilitySettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Availability Settings'
                 },
             },
             {
@@ -145,7 +149,8 @@ export var routes = [
                 component: Assignment,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Assignment'
                 },
             },
             {
@@ -154,7 +159,8 @@ export var routes = [
                 component: LimitSettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Limit Settings'
                 },
             },
             {
@@ -163,7 +169,8 @@ export var routes = [
                 component: EmailNotification,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Email Notification'
                 },
             },
             {
@@ -172,7 +179,8 @@ export var routes = [
                 component: SMSNotification,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'SMS Notification'
                 },
             },
             {
@@ -181,7 +189,8 @@ export var routes = [
                 component: QuestionSettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Question Settings'
                 },
             },
             {
@@ -190,7 +199,8 @@ export var routes = [
                 component: AdvancedSettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Advanced Settings'
                 },
             },
             {
@@ -199,7 +209,8 @@ export var routes = [
                 component: PaymentSettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Payment Settings'
                 },
             },
             {
@@ -208,7 +219,8 @@ export var routes = [
                 component: WebhookSettings,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Webhook Settings'
                 },
             },
             {
@@ -217,7 +229,8 @@ export var routes = [
                 component: Integrations,
                 props: true,
                 meta: {
-                    active_menu: 'calendars'
+                    active_menu: 'calendars',
+                    title: 'Integrations'
                 },
             },
         ]
@@ -228,7 +241,8 @@ export var routes = [
         component: IntegrationEditor,
         props: true,
         meta: {
-            active_menu: 'calendars'
+            active_menu: 'calendars',
+            title: 'Integrations'
         }
     },
     {
@@ -237,7 +251,8 @@ export var routes = [
         component: CreateCalendarSlot,
         props: true,
         meta: {
-            active_menu: 'calendars'
+            active_menu: 'calendars',
+            title: 'Create Event Type'
         }
     },
     {
@@ -245,7 +260,8 @@ export var routes = [
         name: 'scheduled_events',
         component: AllSchedules,
         meta: {
-            active_menu: 'scheduled-events'
+            active_menu: 'scheduled-events',
+            title: 'Bookings'
         }
     },
     {
@@ -262,6 +278,7 @@ export var routes = [
                 component: GeneralSettings,
                 meta: {
                     active_menu: 'settings',
+                    title: 'Settings'
                 }
             },
             {
@@ -298,7 +315,7 @@ export var routes = [
                 component: ConfigureIntegrationSettings,
                 meta: {
                     active_menu: 'settings',
-                    title: 'Configure Integrations'
+                    title: 'Configure Calendar'
                 },
             },
             {
@@ -308,7 +325,7 @@ export var routes = [
                 component: PaymentSettingsIndex,
                 meta: {
                     active_menu: 'settings',
-                    title: 'Configure Integrations'
+                    title: 'Payment Settings'
                 },
             },
             {
@@ -317,14 +334,18 @@ export var routes = [
                 component: GloablModules,
                 meta: {
                     active_menu: 'settings',
-                    title: 'Gloabl Feature Modules'
+                    title: 'Gloabl Modules'
                 },
             },
             {
                 name: 'license',
                 path: 'license',
                 props: true,
-                component: License
+                component: License,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'License'
+                },
             },
         ]
     },
@@ -333,13 +354,18 @@ export var routes = [
         component: AvailabilityRoute,
         props: true,
         meta: {
-            active_menu: 'availability'
+            active_menu: 'availability',
+            title: 'Availability'
         },
         children: [
             {
                 name: 'availability',
                 path: '',
                 component: AllAvailabilities,
+                meta: {
+                    active_menu: 'availability',
+                    title: 'Availability'
+                },
             },
             {
                 path: ':schedule_id',
@@ -347,7 +373,8 @@ export var routes = [
                 component: AvailabilityDetails,
                 props: true,
                 meta: {
-                    active_menu: 'availability'
+                    active_menu: 'availability',
+                    title: 'Availability Details'
                 },
             }
         ]

@@ -143,7 +143,7 @@
             </div>
         </div>
 
-        <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
+        <div v-if="appVars.has_pro" style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
                     <div class="left">
