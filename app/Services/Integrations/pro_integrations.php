@@ -19,6 +19,14 @@ add_action('fluentcrm_loaded', function () {
 
 
 /*
+ * Elementor
+ */
+if (defined('ELEMENTOR_VERSION')) {
+    (new \FluentBooking\App\Services\Integrations\Elementor\ElementorIntegration())->register();
+}
+
+
+/*
  * Global Modules Intialization
  */
 (new \FluentBooking\App\Services\GlobalModules\GlobalModules())->register();
