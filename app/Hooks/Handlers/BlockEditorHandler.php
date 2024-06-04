@@ -281,7 +281,7 @@ class BlockEditorHandler
 
     public function fcalRenderCalendarManagementBlock($attributes)
     {
-        $calendarId = Arr::get($attributes, 'calendarId', []);
+        $calendarId = Arr::get($attributes, 'calendarId');
 
         $eventIds = Arr::get($attributes, 'eventIds', []);
 
