@@ -23,10 +23,20 @@ class CalendarController extends Controller
     {
         do_action('fluent_booking/before_get_all_calendars', $request);
 
+        $search = sanitize_text_field(Arr::get($request->get(), 'search'));
+
         if (PermissionManager::hasAllCalendarAccess(true)) {
-            $calendars = Calendar::with(['slots'])->latest()->paginate();
+            $calendars = Calendar::with(['slots' => function($q) use ($search) {
+                $q->where('title', 'LIKE', '%' . $search . '%');
+            }])->whereHas('slots', function($q) use ($search) {
+                $q->where('title', 'LIKE', '%' . $search . '%');
+            })->latest()->paginate();
         } else {
-            $calendars = Calendar::with(['slots'])->where('user_id', get_current_user_id())->latest()->paginate();
+            $calendars = Calendar::with(['slots' => function($q) use ($search) {
+                $q->where('title', 'LIKE', '%' . $search . '%');
+            }])->where('user_id', get_current_user_id())->whereHas('slots', function($q) use ($search) {
+                $q->where('title', 'LIKE', '%' . $search . '%');
+            })->latest()->paginate();
         }
 
         foreach ($calendars as $calendar) {
