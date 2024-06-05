@@ -138,7 +138,7 @@ class FrontEndHandler
                     'description' => sprintf(__('Meeting has been rescheduled by %1$s from Web UI. Previous date time: %2$s (UTC)', 'fluent-booking-pro'), $rescheduleBy, $previousBooking->start_time)
                 ]);
 
-                do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
+                do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking, $calendarEvent);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
                     $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking-pro');
