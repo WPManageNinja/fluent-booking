@@ -244,7 +244,7 @@
                     </el-radio-group>
 
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
+                        <el-button :disabled="themeSaving" v-loading="themeSaving" @click="saveThemeSettings()"
                                    class="fcal_primary_btn">
                             {{ $t('Save Settings') }}
                         </el-button>
@@ -309,6 +309,7 @@ export default {
             loading: false,
             saving: false,
             paymentSaving: false,
+            themeSaving: false,
             timeFormat: '12',
             all_countries: {},
             all_currencies: {},
@@ -342,8 +343,7 @@ export default {
                 emailing: this.emailing,
                 payments: this.payments,
                 administration: this.administration,
-                timeFormat: this.timeFormat,
-                theme: this.theme,
+                timeFormat: this.timeFormat
             })
                 .then(response => {
                     this.$notify.success(response.message);
@@ -368,6 +368,21 @@ export default {
                 })
                 .finally(() => {
                     this.paymentSaving = false;
+                });
+        },
+        saveThemeSettings() {
+            this.themeSaving = true;
+            this.$post('settings/theme', {
+                theme: this.theme
+            })
+                .then(response => {
+                    this.$notify.success(response.message);
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.themeSaving = false;
                 });
         }
     },
