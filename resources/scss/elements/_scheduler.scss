@@ -1179,6 +1179,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      .el-breadcrumb {
+        .el-breadcrumb__item {
+          overflow-wrap: anywhere;
+        }
+      }
       .fcal_copy_btn {
         background: rgb(39 83 199 / 10%);
       }
