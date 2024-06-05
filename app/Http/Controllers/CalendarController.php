@@ -25,19 +25,21 @@ class CalendarController extends Controller
 
         $search = sanitize_text_field(Arr::get($request->get(), 'search'));
 
-        if (PermissionManager::hasAllCalendarAccess(true)) {
-            $calendars = Calendar::with(['slots' => function($q) use ($search) {
-                $q->where('title', 'LIKE', '%' . $search . '%');
-            }])->whereHas('slots', function($q) use ($search) {
-                $q->where('title', 'LIKE', '%' . $search . '%');
-            })->latest()->paginate();
-        } else {
-            $calendars = Calendar::with(['slots' => function($q) use ($search) {
-                $q->where('title', 'LIKE', '%' . $search . '%');
-            }])->where('user_id', get_current_user_id())->whereHas('slots', function($q) use ($search) {
-                $q->where('title', 'LIKE', '%' . $search . '%');
-            })->latest()->paginate();
+        $applySearchFilter = function($query) use ($search) {
+            if (!empty($search)) {
+                $query->where('title', 'LIKE', '%' . $search . '%');
+            }
+        };
+
+        $calendarsQuery = Calendar::with(['slots' => $applySearchFilter])
+            ->whereHas('slots', $applySearchFilter)
+            ->latest();
+
+        if (!PermissionManager::hasAllCalendarAccess(true)) {
+            $calendarsQuery->where('user_id', get_current_user_id());
         }
+
+        $calendars = $calendarsQuery->paginate();
 
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
