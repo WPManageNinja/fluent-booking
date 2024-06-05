@@ -1,11 +1,21 @@
 <template>
     <div class="fcal_section fcal_section_narrow">
-        <div v-if="hasSupport('multi_users')" class="fcal_section_header">
+        <div class="fcal_section_header">
             <div class="fcal_title">
                 <h3>{{ $t('Calendars') }}</h3>
             </div>
-            <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
-                <el-dropdown trigger="click" popper-class="fcal_select">
+            <div class="fcal_actions">
+                <el-input class="fcal_search_input"
+                          v-model="search"
+                          clearable
+                          @clear="getCalendars"
+                          @keyup.enter.native="getCalendars"
+                          :placeholder="$t('Search Events')">
+                    <template #append>
+                        <el-button @click="getCalendars"><el-icon><Search /></el-icon></el-button>
+                    </template>
+                </el-input>
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" trigger="click" popper-class="fcal_select">
                     <span class="el-dropdown-link">
                         <el-button class="fcal_primary_btn">
                             <span>+</span> {{ $t('New') }}
@@ -144,7 +154,7 @@
 <script>
 import Pagination from "../../Pieces/Pagination";
 import CalendarEventBlock from "./parts/CalendarEventBlock";
-import { User, Right } from '@element-plus/icons-vue';
+import { User, Right, Search } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
 
@@ -155,6 +165,7 @@ export default {
         HostSelector,
         User,
         Right,
+        Search,
         Pagination,
         CalendarEventBlock
     },
@@ -171,7 +182,8 @@ export default {
             isNewTeamOpen: false,
             user_id: '',
             team_name: '',
-            event_lists: []
+            event_lists: [],
+            search: ''
         }
     },
     methods: {
@@ -180,7 +192,8 @@ export default {
             this.$get('calendars', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                with: ['calendar_event_lists']
+                with: ['calendar_event_lists'],
+                search: this.search
             })
                 .then(response => {
                     this.calendars = response.calendars.data;
