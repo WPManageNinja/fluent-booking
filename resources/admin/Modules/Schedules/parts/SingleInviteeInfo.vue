@@ -163,6 +163,7 @@ export default {
                 })
                 .finally(() => {
                     this.updating = false;
+                    this.rejectDialog = false;
                 });
         },
     },

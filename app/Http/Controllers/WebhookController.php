@@ -117,6 +117,14 @@ class WebhookController extends Controller
             [
                 'label' => __('Booking Completed', 'fluent-booking-pro'),
                 'value' => 'booking_schedule_completed'
+            ],
+            [
+                'label' => __('Booking Rescheduled', 'fluent-booking-pro'),
+                'value' => 'after_booking_rescheduled'
+            ],
+            [
+                'label' => __('Booking Rejected', 'fluent-booking-pro'),
+                'value' => 'booking_schedule_rejected'
             ]
         ];
     }
