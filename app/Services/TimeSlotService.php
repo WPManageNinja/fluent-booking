@@ -477,7 +477,7 @@ class TimeSlotService
 
     protected function convertSlotSetsToFlat(&$overrideSlots, $date, $duration = null)
     {
-        $period = ($this->calendarSlot->getDuration($duration)) * 60;
+        $period = $this->calendarSlot->getDuration($duration) * 60;
 
         $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
@@ -548,24 +548,35 @@ class TimeSlotService
 
     protected function removeMergedOverrideSlots($availableSlots, $overrideDay)
     {
-        $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay) {
-            foreach ($overrideDay as $times) {
-                $startTime = strtotime($times['start']);
-                $endTime = strtotime($times['end']);
-                if (strtotime($slot) < $startTime || strtotime($slot) >= $endTime) {
-                    return true;
+        $totalHosts = count($this->calendarSlot->getHostIds());
+        if ($totalHosts != count($overrideDay)) {
+            return $availableSlots;
+        }
+        
+        $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay, $totalHosts) {
+            $slotTime = strtotime($slot);
+            $unavailable = 0;
+            foreach ($overrideDay as $hostOverride) {
+                foreach ($hostOverride as $times) {
+                    $startTime = strtotime($times['start']);
+                    $endTime   = strtotime($times['end']);
+                    if ($slotTime >= $startTime && $slotTime < $endTime) {
+                        $unavailable++;
+                        break;
+                    }
                 }
             }
-            return false;
+            return $totalHosts != $unavailable;
         });
+        
         return $filteredSlots;
     }
 
     public function getAvailableSpots($startDate, $timeZone = 'UTC', $duration = null, $hostId = null)
     {
-        $slot     = $this->calendarSlot;
+        $event    = $this->calendarSlot;
         $calendar = $this->calendar;
-        $duration = $this->calendarSlot->getDuration($duration);
+        $duration = $event->getDuration($duration);
         
         // Extract current month and year
         $requestedDate = $startDate;
@@ -587,11 +598,11 @@ class TimeSlotService
             $startDate = gmdate('Y-m-01 00:00:00', strtotime($requestedDate));
         }
 
-        $eventType      = $slot->event_type;
-        $isDisplaySpots = $slot->is_display_spots;
-        $maxBooking     = $slot->getMaxBookingPerSlot();
-        $endDate        = $slot->getMaxBookableDateTime($startDate);
-        $startDate      = $slot->getMinBookableDateTime($startDate);
+        $eventType      = $event->event_type;
+        $isDisplaySpots = $event->is_display_spots;
+        $maxBooking     = $event->getMaxBookingPerSlot();
+        $endDate        = $event->getMaxBookableDateTime($startDate);
+        $startDate      = $event->getMinBookableDateTime($startDate);
 
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
