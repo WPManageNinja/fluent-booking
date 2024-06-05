@@ -114,15 +114,16 @@ export default {
             saving: false,
             field: '',
             fields : [],
-            showModal: false
+            showModal: false,
+            otherFieldNames: ['cancellation_reason', 'rescheduling_reason']
         }
     },
     computed: {
         questionFields() {
-            return this.fields.filter(field => !['cancellation_reason', 'rescheduling_reason'].includes(field.name));
+            return this.fields.filter(field => !this.otherFieldNames.includes(field.name));
         },
         otherFields() {
-            return this.fields.filter(field => ['cancellation_reason', 'rescheduling_reason'].includes(field.name));
+            return this.fields.filter(field => this.otherFieldNames.includes(field.name));
         }
     },
     methods: {
@@ -162,8 +163,14 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number', 'cancellation_reason', 'rescheduling_reason'];
+            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number'];
+            allowedFields.push(...this.otherFieldNames);
             return allowedFields.includes(name);
+        },
+        updateFields() {
+            const questionFields = this.fields.filter(field => !this.otherFieldNames.includes(field.name));
+            const otherFields = this.fields.filter(field => this.otherFieldNames.includes(field.name));
+            this.fields = [...questionFields, ...otherFields];
         },
         moveUp(index) {
             if (index > 0) {
@@ -174,12 +181,15 @@ export default {
         },
         moveDown(index) {
             if (index < this.fields.length - 1) {
-                const currentIndex = this.fields[index + 1];
-                this.fields.splice(index, 2, currentIndex, this.fields[index]);
+                const currentField = this.fields[index];
+                const nextField = this.fields[index + 1];
+                if (!this.otherFieldNames.includes(nextField.name)) {
+                    this.fields.splice(index, 2, nextField, currentField);
+                }
             }
         },
         isHideable(field) {
-            return !field.disable_alter && !['cancellation_reason', 'rescheduling_reason'].includes(field.name);
+            return !field.disable_alter && !this.otherFieldNames.includes(field.name);
         },
         fetchFields() {
             this.loading = true;
@@ -188,6 +198,7 @@ export default {
             })
                 .then(response => {
                     this.fields = response.fields;
+                    this.updateFields();
                 })
                 .catch(errors => {
                     this.$handleError(errors);
