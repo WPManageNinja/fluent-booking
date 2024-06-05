@@ -31,14 +31,14 @@
             <div class="fcal_override_date">
                 <table v-if="dateOverridesNotEmpty" class="fcal_table_compact fcal_table_stripe">
                     <tbody>
-                        <tr v-for="(date, index) in existing_schedules.date_overrides" style="cursor: pointer;">
+                        <tr v-for="date in overrides">
                             <td>
-                                <span class="date">{{index}}</span>
+                                <span class="date">{{date.label}}</span>
                             </td>
                             <td style="text-align: right;">
                                 <ul class="fcal_slots_list">
-                                    <li v-for="time in date">
-                                        {{toDateFormat('2022-12-12 ' + time.start, 'HH:mma')}} - {{toDateFormat('2022-12-12 ' + time.end, 'HH:mma')}}
+                                    <li v-for="time in date.slots">
+                                        {{ overriddenDate(time) }}
                                     </li>
                                 </ul>
                             </td>
@@ -54,6 +54,7 @@
 <script>
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import { Edit } from '@element-plus/icons-vue';
+import each from 'lodash/each';
 
 export default {
     name: "_ExistingSchedule.vue",
@@ -68,7 +69,50 @@ export default {
                 return Object.keys(this.existing_schedules?.date_overrides).length;
             }
             return false;
-        }
+        },
+        overrides() {
+            const formatted = [];
+            let firstDay = false;
+            let dateGroups = [];
+            const overrides = this.existing_schedules.date_overrides;
+            each(overrides, (slot, day) => {
+                if(!firstDay) {
+                    firstDay = day;
+                }
+                dateGroups.push(day);
+
+                let nextDay = new Date(day);
+                nextDay.setDate(nextDay.getDate() + 1);
+                nextDay = nextDay.toISOString().slice(0, 10);
+
+                if(JSON.stringify(overrides[day]) === JSON.stringify(overrides[nextDay])) {
+                    return;
+                }
+
+                let label = this.toDateFormat(day, 'D MMM, YYYY ');
+                if(firstDay != day) {
+                    label = this.toDateFormat(firstDay, 'D MMM ') + ' - ' + label;
+                }
+
+                formatted.push({
+                    dates: dateGroups,
+                    label: label,
+                    slots: overrides[day]
+                });
+                firstDay = false;
+                dateGroups = [];
+            });
+
+            return formatted;
+        },
+        overriddenDate() {
+            return (slot) => {
+                if (slot.start === "00:00" && slot.end === "00:00") {
+                    return this.$t('Unavailable');
+                }
+                return this.toDateFormat('2022-12-12 ' + slot.start, 'HH:mma') + ' - ' + this.toDateFormat('2022-12-12 ' + slot.end, 'HH:mma');
+            }
+        },
     },
     methods: {
         goToEdit() {

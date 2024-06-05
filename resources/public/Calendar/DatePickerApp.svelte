@@ -115,11 +115,8 @@
 
     function maybeNoAvailability() {
         const dateKeys = Object.keys(availableDates);
-        if (!dateKeys.length || new Date(dateKeys[parseInt(dateKeys.length/2)]).getMonth() != month) {
-            noAvailability = true;
-        } else {
-            noAvailability = false;
-        }
+        const hasReqMonthDate = dateKeys.some(date => month == date.substring(5, 7) - 1);
+        noAvailability = !hasReqMonthDate;
     }
 
     // choose what date/day gets displayed in each date box.
