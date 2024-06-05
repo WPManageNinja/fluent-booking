@@ -1,10 +1,10 @@
 <template>
     <div class="fcal_section fcal_section_narrow">
-        <div v-if="hasSupport('multi_users')" class="fcal_section_header">
+        <div class="fcal_section_header">
             <div class="fcal_title">
                 <h3>{{ $t('Calendars') }}</h3>
             </div>
-            <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
+            <div class="fcal_actions">
                 <el-input class="fcal_search_input"
                           v-model="search"
                           clearable
@@ -15,7 +15,7 @@
                         <el-button @click="getCalendars"><el-icon><Search /></el-icon></el-button>
                     </template>
                 </el-input>
-                <el-dropdown trigger="click" popper-class="fcal_select">
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" trigger="click" popper-class="fcal_select">
                     <span class="el-dropdown-link">
                         <el-button class="fcal_primary_btn">
                             <span>+</span> {{ $t('New') }}
