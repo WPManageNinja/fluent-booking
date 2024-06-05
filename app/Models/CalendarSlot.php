@@ -843,9 +843,9 @@ class CalendarSlot extends Model
             $schedule = AvailabilityService::getDefaultSchedule($teamMemberId);
             if ($schedule) {
                 if ($dataKey == 'date_overrides') {
-                    $teamSchedules[] = $this->getProcessedDateOverrides($schedule);
+                    $teamSchedules[$teamMemberId] = $this->getProcessedDateOverrides($schedule);
                 } else {
-                    $teamSchedules[] = $this->getProcessedWeeklySlots($schedule);
+                    $teamSchedules[$teamMemberId] = $this->getProcessedWeeklySlots($schedule);
                 }
             }
         }
@@ -858,7 +858,7 @@ class CalendarSlot extends Model
 
         $teamOverrideSlots = [];
         $teamOverrideDays = [];
-        foreach ($teamOverrides as $dateOverrides) {
+        foreach ($teamOverrides as $memberId => $dateOverrides) {
             $overrideSlots = $dateOverrides[0];
             foreach ($overrideSlots as $date => $slots) {
                 if (!isset($teamOverrideSlots[$date])) {
@@ -871,12 +871,11 @@ class CalendarSlot extends Model
             }
             $overrideDays = $dateOverrides[1];
             foreach ($overrideDays as $date => $slots) {
-                if (!isset($teamOverrideDays[$date])) {
-                    $teamOverrideDays[$date] = [$slots];
+                if (!isset($teamOverrideDays[$date][$memberId])) {
+                    $teamOverrideDays[$date][$memberId] = [$slots];
                 } else {
-                    $combinedSlots = array_merge($teamOverrideDays[$date], [$slots]);
-                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
-                    $teamOverrideDays[$date] = array_values($uniqueCombinedSlots);
+                    $combinedSlots = array_merge($teamOverrideDays[$date][$memberId], [$slots]);
+                    $teamOverrideDays[$date][$memberId] = array_values($combinedSlots);
                 }
             }
         }
