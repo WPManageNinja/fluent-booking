@@ -601,8 +601,8 @@ class TimeSlotService
         $eventType      = $event->event_type;
         $isDisplaySpots = $event->is_display_spots;
         $maxBooking     = $event->getMaxBookingPerSlot();
-        $endDate        = $event->getMaxBookableDateTime($startDate);
-        $startDate      = $event->getMinBookableDateTime($startDate);
+        $endDate        = $event->getMaxBookableDateTime($startDate, $timeZone);
+        $startDate      = $event->getMinBookableDateTime($startDate, $timeZone);
 
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));

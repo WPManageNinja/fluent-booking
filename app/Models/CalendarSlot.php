@@ -398,11 +398,15 @@ class CalendarSlot extends Model
         return $bufferTimeBefore + $bufferTimeAfter;
     }
 
-    public function getMaxBookableDateTime($startDate)
+    public function getMaxBookableDateTime($startDate, $timeZone = null)
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         $lastDay = gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+        if ($timeZone) {
+            $lastDay = DateTimeHelper::convertToTimeZone($lastDay, $timeZone, 'UTC', 'Y-m-d 23:59:59');
+        }
 
         if ($rangeType == 'range_indefinite') {
             return $lastDay;
@@ -422,6 +426,8 @@ class CalendarSlot extends Model
             $maxDate = gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
+        $maxDate = DateTimeHelper::convertToTimeZone($maxDate, $timeZone, 'UTC', 'Y-m-d 23:59:59');
+
         if (strtotime($maxDate) > strtotime($lastDay)) {
             return $lastDay;
         }
@@ -429,7 +435,7 @@ class CalendarSlot extends Model
         return $maxDate;
     }
 
-    public function getMinBookableDateTime($startDate = null)
+    public function getMinBookableDateTime($startDate = null, $timeZone = null)
     {
         $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         
