@@ -1332,6 +1332,7 @@ body >.fcal_calendar_wrap {
       .day-name {
         line-height: 3;
         color: var(--fcal_dark);
+        word-wrap: normal;
       }
     }
   }
