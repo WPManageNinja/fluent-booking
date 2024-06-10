@@ -24,13 +24,13 @@ class TimeSlotService
         $this->calendarSlot = $calendarSlot;
     }
 
-    public function getDates($fromDate = false, $toDate = false, $duration = null, $hostId = null, $isDoingBooking = false)
+    public function getDates($fromDate = false, $toDate = false, $duration = null, $hostId = null, $isDoingBooking = false, $timeZone = 'UTC')
     {
         $duration = $this->calendarSlot->getDuration($duration);
         $period   = $duration * 60;
 
-        $fromDate = $fromDate ? $fromDate : gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        $toDate = $toDate ? $toDate : gmdate('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $fromDate = $fromDate ?: gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $toDate = $toDate ?: gmdate('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
@@ -43,7 +43,11 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp();
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $todayDate = gmdate('Y-m-d');
+        $maxBookingTime = $this->calendarSlot->getMaxBookableDateTime($fromDate, $timeZone, 'Y-m-d H:i:s');
+        $maxBookingTimeStamp = strtotime($maxBookingTime);
+
+        $todayDate = gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $lastDate  = end($ranges);
 
         $bufferTime = $this->calendarSlot->getTotalBufferTime() * 60;
 
@@ -77,8 +81,9 @@ class TimeSlotService
             $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
-            $validSlots = [];
+            $isLastDay = $date === $lastDate;
 
+            $validSlots = [];
             foreach ($availableSlots as $start) {
                 $end = gmdate('H:i', strtotime($start) + $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $endDate = $start < $end ? $date : gmdate('Y-m-d', strtotime($date) + 86400); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -90,7 +95,11 @@ class TimeSlotService
 
                 $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone);
 
-                if ($isToday && strtotime($slot['start']) < $cutOutTimeStamp) {
+                if (($isToday && strtotime($slot['start']) < $cutOutTimeStamp) || ($isLastDay && strtotime($slot['end']) > $maxBookingTimeStamp)) {
+                    continue;
+                }
+
+                if ($isLastDay && strtotime($slot['end']) > $maxBookingTimeStamp) {
                     continue;
                 }
 
@@ -231,14 +240,14 @@ class TimeSlotService
         $endDate = strtotime($endDate);
         $oneDay = 24 * 60 * 60;
 
-        $date_array = [];
+        $dateArray = [];
 
         while ($currentDate <= $endDate) {
-            $date_array[] = gmdate('Y-m-d', $currentDate); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dateArray[] = gmdate('Y-m-d', $currentDate); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $currentDate += $oneDay;
         }
 
-        return $date_array;
+        return $dateArray;
     }
 
     protected function bookSlot($eventId, $start, $end, $remaining = 0, $source = null)
@@ -608,7 +617,7 @@ class TimeSlotService
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
 
-        $slots = $this->getDates($startDate, $endDate, $duration, $hostId);
+        $slots = $this->getDates($startDate, $endDate, $duration, $hostId, false, $timeZone);
 
         $convertedSpots = [];
 
@@ -702,14 +711,12 @@ class TimeSlotService
         }
 
         $isBookingFrequencyEnabled = !!Arr::get($this->calendarSlot->settings, 'booking_frequency.enabled');
-
         if (!$isBookingFrequencyEnabled) {
             return $ranges;
         }
 
-        $frequenceyLimits = Arr::get($this->calendarSlot->settings, 'booking_frequency.limits', []);
-
         $keyedFrequenceyLimits = [];
+        $frequenceyLimits = Arr::get($this->calendarSlot->settings, 'booking_frequency.limits', []);
         foreach ($frequenceyLimits as $limit) {
             if (!empty($limit['value'])) {
                 $keyedFrequenceyLimits[$limit['unit']] = $limit['value'];
