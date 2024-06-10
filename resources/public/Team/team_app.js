@@ -1,4 +1,5 @@
 import './style.scss';
+import './team-style-rtl.scss';
 
 function handleEventBlockClick(link) {
     const elem = link;

@@ -931,7 +931,8 @@ class FrontEndHandler
                 'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
                 'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
             ],
-            'date_formatter' => DateTimeHelper::getDateFormatter(true)
+            'date_formatter' => DateTimeHelper::getDateFormatter(true),
+            'isRtl' => Helper::fluentbooking_is_rtl()
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);

@@ -22,7 +22,7 @@ use FluentBooking\App\Models\Booking;
 <?php defined( 'ABSPATH' ) || exit; ?>
 
 <!DOCTYPE html>
-<html lang='en'>
+<html <?php language_attributes(); ?>>
 <head>
     <title><?php echo esc_attr($title); ?></title>
     <meta charset='utf-8'>
