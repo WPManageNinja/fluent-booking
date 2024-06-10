@@ -19,17 +19,17 @@ class BookingService
             $calendarSlot = CalendarSlot::findOrFail($data['event_id']);
         }
 
-        if (empty($data['first_name']) && !empty($data['name'])) {
-            $nameArray = explode(' ', trim($data['name']));
-            $data['first_name'] = array_shift($nameArray);
-            $data['last_name'] = implode(' ', $nameArray);
-        }
-
         $defaults = [
             'event_id'     => $calendarSlot->id,
             'calendar_id'  => $calendarSlot->calendar_id,
             'host_user_id' => $calendarSlot->user_id,
         ];
+
+        if (empty($data['first_name']) && !empty($data['name'])) {
+            $nameArray = explode(' ', trim($data['name']));
+            $data['first_name'] = array_shift($nameArray);
+            $data['last_name'] = implode(' ', $nameArray);
+        }
 
         if (empty($data['slot_minutes'])) {
             $data['slot_minutes'] = $calendarSlot->duration;
