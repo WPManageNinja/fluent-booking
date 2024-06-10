@@ -2095,4 +2095,17 @@ class Helper
 
         return isset($settings[$module]) && $settings[$module] === 'yes';
     }
+
+    /**
+     * @return mixed|void
+     */
+    public static function fluentbooking_is_rtl()
+    {
+        /**
+         * If FluentBooking is running on RTL Mode
+         *
+         * @param bool $is_rtl
+         */
+        return apply_filters('fluent_booking/is_rtl', is_rtl());
+    }
 }
