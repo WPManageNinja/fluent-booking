@@ -100,14 +100,16 @@ export default {
             this.saveSettings();
         },
         updatefilteredHosts() {
-            this.filteredHosts = this.all_hosts.map((host) => {
-                const updatedHost = { ...host };
-                if (this.settings.team_members.includes(updatedHost.id)) {
-                    updatedHost.disabled = true;
-                    updatedHost.name = updatedHost.name + ' (' + this.$t('Already assigned') + ')';
-                }
-                return updatedHost;
-            });
+            this.filteredHosts = this.all_hosts
+                .filter((host) => !host.deleted_user)
+                .map((host) => {
+                    const updatedHost = { ...host };
+                    if (this.settings.team_members.includes(updatedHost.id)) {
+                        updatedHost.disabled = true;
+                        updatedHost.name = updatedHost.name + ' (' + this.$t('Already assigned') + ')';
+                    }
+                    return updatedHost;
+                });
         },
         getAllHosts() {
             this.loading = true;
