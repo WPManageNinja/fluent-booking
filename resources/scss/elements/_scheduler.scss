@@ -2796,6 +2796,15 @@
             border-bottom: none;
           }
         }
+        .fcal_event_actions {
+          display: flex;
+          gap: 12px;
+          align-self: flex-start;
+          align-items: center;
+          .el-button {
+            margin: 0;
+          }
+        }
       }
     }
     .fcal_schedule_group_header {
