@@ -36,12 +36,14 @@
                     </el-form-item>
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
-                                <span>{{ $t("AdvancedSettings/redirect_url_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.custom_redirect.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
+                                    <span>{{ $t("AdvancedSettings/redirect_url_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.custom_redirect.enabled"/>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="settings.custom_redirect.enabled">
                                 <el-form-item :label="$t('Redirect URL')">
@@ -95,12 +97,14 @@
 
                     <el-form-item v-if="showRequiresConfirmation">
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
-                                <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.requires_confirmation.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
+                                    <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.requires_confirmation.enabled"/>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="settings.requires_confirmation.enabled">
                                 <el-radio-group v-model="settings.requires_confirmation.type">
@@ -121,13 +125,15 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Attendee Cannot Cancel") }}</span>
-                                <span v-if="settings.can_not_cancel.enabled">{{ $t("AdvancedSettings/cannot_cancel_description") }}</span>
-                                <span v-else>{{ $t("AdvancedSettings/can_cancel_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.can_not_cancel.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Attendee Cannot Cancel") }}</span>
+                                    <span v-if="settings.can_not_cancel.enabled">{{ $t("AdvancedSettings/cannot_cancel_description") }}</span>
+                                    <span v-else>{{ $t("AdvancedSettings/can_cancel_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.can_not_cancel.enabled"/>
+                                </div>
                             </div>
                             <template v-if="settings.can_not_cancel.enabled">
                                 <div class="fcal_event_child_card">
@@ -173,13 +179,15 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Attendee Cannot Reschedule") }}</span>
-                                <span v-if="settings.can_not_reschedule.enabled">{{ $t("AdvancedSettings/cannot_reschedule_description") }}</span>
-                                <span v-else>{{ $t("AdvancedSettings/can_reschedule_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.can_not_reschedule.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Attendee Cannot Reschedule") }}</span>
+                                    <span v-if="settings.can_not_reschedule.enabled">{{ $t("AdvancedSettings/cannot_reschedule_description") }}</span>
+                                    <span v-else>{{ $t("AdvancedSettings/can_reschedule_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.can_not_reschedule.enabled"/>
+                                </div>
                             </div>
                             <template v-if="settings.can_not_reschedule.enabled">
                                 <div class="fcal_event_child_card">
@@ -225,14 +233,16 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
-                                <span>{{ $t('AdvancedSettings/slug_setting_description') }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
-                                    <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
-                                </el-button>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
+                                    <span>{{ $t('AdvancedSettings/slug_setting_description') }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
+                                        <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                    </el-button>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="editSlug">
                                 <el-form-item :label="$t('Slug')">
