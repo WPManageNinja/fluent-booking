@@ -7,7 +7,7 @@
         <el-form v-if="openModal" label-position="top">
             <el-form-item :label="$t('Select Event') + ' *'">
                 <el-select
-                    popper-class="fcal_select"
+                    popper-class="fcal_select fcal_select_event"
                     v-model="newBooking.event_id"
                     :no-match-text="$t('No Data match')"
                     :no-data-text="$t('No Data')"
