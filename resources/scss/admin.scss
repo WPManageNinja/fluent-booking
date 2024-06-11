@@ -734,6 +734,15 @@
   p {
     margin: 5px 0;
   }
+  .fcal_actions {
+    .el-dropdown {
+      .el-button {
+        > span {
+          gap: 4px;
+        }
+      }
+    }
+  }
 }
 
 
