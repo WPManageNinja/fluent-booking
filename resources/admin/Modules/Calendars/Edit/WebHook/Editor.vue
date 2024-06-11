@@ -182,14 +182,14 @@
 
         <div class="fcal_webhook_form_footer">
             <el-button @click="saveWebHook" class="fcal_primary_btn">
-                {{ $t('Save Feed') }}
+                <el-icon><SuccessFilled /></el-icon> {{ $t('Save Feed') }}
             </el-button>
         </div>
     </el-form>
 </template>
 
 <script type="text/babel">
-import { Plus, Minus } from '@element-plus/icons-vue';
+import { Plus, Minus, SuccessFilled } from '@element-plus/icons-vue';
 import Popover from '../../../../Components/Popover';
 
 export default {
@@ -221,7 +221,8 @@ export default {
     components: {
         Plus,
         Minus,
-        Popover
+        Popover,
+        SuccessFilled
     },
     data() {
         return  {

@@ -1758,7 +1758,7 @@
                 padding: 0;
             }
         }
-        &.fcal_availability_dialog {
+        &.fcal_dialog_body_p0 {
             .el-dialog__body {
                 padding: 0;
             }
@@ -3336,6 +3336,12 @@
             border: 0;
             padding-top: 15px;
         }
+    }
+    .fcal_empty_inline_text {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
     }
 }
 
