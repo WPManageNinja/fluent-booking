@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <p v-else>
+                    <p v-else class="fcal_empty_inline_text">
                         {{ $t("You don't have any feeds configured. Let's go") }}
                         <el-link :underline="true" @click="add">{{ $t('create one!') }}</el-link>
                     </p>

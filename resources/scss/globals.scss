@@ -702,6 +702,16 @@
             }
         }
     }
+    &.fcal_select_event {
+        max-width: 620px;
+        box-sizing: border-box;
+        ul {
+            .el-select-dropdown__item {
+                overflow-wrap: anywhere;
+                white-space: break-spaces;
+            }
+        }
+    }
 }
 
 
@@ -1212,7 +1222,7 @@
                 padding: 0 0 12px 0;
                 .el-dialog__headerbtn {
                     top: 15px;
-                    left: 10px;
+                    right: 10px;
                 }
             }
             * {
@@ -1417,6 +1427,9 @@
                         gap: 4px;
                     }
                 }
+            }
+            .el-dialog__body {
+                padding: 0;
             }
             .el-tabs {
                 .el-tabs__header {
@@ -1741,6 +1754,11 @@
             }
         }
         &.fcal_add_team_member_dialog {
+            .el-dialog__body {
+                padding: 0;
+            }
+        }
+        &.fcal_dialog_body_p0 {
             .el-dialog__body {
                 padding: 0;
             }
@@ -3318,6 +3336,12 @@
             border: 0;
             padding-top: 15px;
         }
+    }
+    .fcal_empty_inline_text {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
     }
 }
 
