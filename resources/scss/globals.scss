@@ -1740,7 +1740,7 @@
                         }
                         .el-textarea {
                             textarea {
-                                height: 120px !important;
+                                min-height: 120px !important;
                             }
                         }
                         .el-form-item__content {

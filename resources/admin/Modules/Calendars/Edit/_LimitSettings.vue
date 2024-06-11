@@ -60,12 +60,14 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("LimitSettings/booking_frequency") }}</span>
-                                <span>{{ $t("LimitSettings/booking_frequency_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.booking_frequency.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("LimitSettings/booking_frequency") }}</span>
+                                    <span>{{ $t("LimitSettings/booking_frequency_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.booking_frequency.enabled"/>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="settings.booking_frequency.enabled">
                                 <div v-for="(frequency, index) in settings.booking_frequency.limits" :key="index" class="fcal_inline_items">
@@ -92,12 +94,14 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("LimitSettings/booking_duration") }}</span>
-                                <span>{{ $t("LimitSettings/booking_duration_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.booking_duration.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("LimitSettings/booking_duration") }}</span>
+                                    <span>{{ $t("LimitSettings/booking_duration_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.booking_duration.enabled"/>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="settings.booking_duration.enabled">
                                 <div v-for="(duration, index) in settings.booking_duration.limits" :key="index" class="fcal_inline_items">
@@ -124,12 +128,14 @@
 
                     <el-form-item>
                         <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="card_contents">
-                                <span class="sub-label card-title">{{ $t("LimitSettings/lock_timezone") }}</span>
-                                <span>{{ $t("LimitSettings/lock_timezone_description") }}</span>
-                            </div>
-                            <div class="card_action">
-                                <el-switch v-model="settings.lock_timezone.enabled"/>
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("LimitSettings/lock_timezone") }}</span>
+                                    <span>{{ $t("LimitSettings/lock_timezone_description") }}</span>
+                                </div>
+                                <div class="card_action">
+                                    <el-switch v-model="settings.lock_timezone.enabled"/>
+                                </div>
                             </div>
                             <div class="fcal_event_child_card" v-if="settings.lock_timezone.enabled">
                                 <TimeZoneSelector v-model="settings.lock_timezone.timezone"/>
