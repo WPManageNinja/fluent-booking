@@ -320,9 +320,8 @@
                     type="primary"
                     :loading="saving"
                     @click="saveNotification"
-                    icon="el-icon-success"
                 >
-                    {{ $t('Save Feed') }}
+                    <el-icon><SuccessFilled /></el-icon> {{ $t('Save Feed') }}
                 </el-button>
             </template>
         </el-form>
@@ -346,7 +345,7 @@ import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 
 import Notice from '@/Components/Notice/Notice.vue';
 import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
-import {InfoFilled} from '@element-plus/icons-vue';
+import {InfoFilled, SuccessFilled} from '@element-plus/icons-vue';
 
 export default {
     name: 'general_notification_edit',
@@ -363,7 +362,8 @@ export default {
         BtnGroupItem,
         Notice,
         InfoFilled,
-        'wp_editor': wpEditor
+        'wp_editor': wpEditor,
+        SuccessFilled
     },
     props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro', 'smart_codes'],
     watch: {},

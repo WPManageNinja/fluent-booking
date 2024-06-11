@@ -4,6 +4,11 @@
       background: #ffffff;
     }
   }
+  .fcal_white_box {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+  }
   .round-robin-icons {
     .left-icons {
       width: 34px;
@@ -207,6 +212,9 @@
               font-size: 18px;
               overflow-wrap: anywhere;
               padding-right: 16px;
+              .fcal_slot_title {
+                cursor: pointer;
+              }
 
               .fcal_status_badge {
                 border-radius: 50%;
