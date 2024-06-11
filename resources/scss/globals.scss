@@ -1403,8 +1403,10 @@
                     display: flex;
                     justify-content: flex-end;
                     margin-top: auto;
+                    gap: 10px;
                     > .el-button {
                         padding: 10px 16px;
+                        margin: 0;
                     }
                 }
             }
