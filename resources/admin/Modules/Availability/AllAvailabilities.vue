@@ -91,7 +91,7 @@
             v-model="creatingNew"
             :title="$t('Add New Availability Schedule')"
             width="40%"
-            class="fcal_dialog"
+            class="fcal_dialog fcal_availability_dialog"
             :close-on-press-escape="false"
             :close-on-click-modal="false"
         >

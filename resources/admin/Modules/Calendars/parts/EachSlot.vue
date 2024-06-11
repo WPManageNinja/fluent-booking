@@ -2,7 +2,7 @@
     <div :class="'fcal_cal_slot_wrapper ' + 'fcal_status_'+slot.status">
         <div class="fcal_slot_body">
             <h3>
-                <span class="fcal_status_badge" :style="{background: slot.color_schema}"></span> {{ slot.title }}
+                <span class="fcal_status_badge" :style="{background: slot.color_schema}"></span> <span class="fcal_slot_title" @click="editSlot">{{ slot.title }}</span>
                 <div class="fcal_slot_config">
                     <el-dropdown @command="handleCommand" trigger="click" popper-class="fcal_select">
                         <el-icon class="fcal_slog_setting_icon">
