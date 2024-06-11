@@ -18,6 +18,7 @@
     const id = appData.id;
     const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled ? true : false;
 
+    const isRTL = appData.isRtl;
     let dispatch = createEventDispatcher();
 
     let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -302,15 +303,27 @@
                 <div class="calendar_nav">
                     <button aria-label="Previous Month" type="button" tabindex={prevDisabled ? '-1' : '0'} class={prevDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}
                             on:click={()=>prev()}>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
-                            <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
-                        </svg>
+                        {#if isRTL}
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
+                                <path fill="currentColor"d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
+                            </svg>
+                            {:else}
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
+                                <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
+                            </svg>
+                        {/if}
                     </button>
                     <button aria-label="Next Month" type="button" tabindex={nextDisabled ? '-1' : '0'} class="{nextDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}"
                             on:click={()=>next()}>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
-                            <path fill="currentColor"d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
-                        </svg>
+                        {#if isRTL}
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
+                                <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
+                            </svg>
+                            {:else}
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
+                                <path fill="currentColor"d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
+                            </svg>
+                        {/if}
                     </button>
                 </div>
             </div>
