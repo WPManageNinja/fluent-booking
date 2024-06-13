@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Models;
 
 use FluentBooking\App\Models\Model;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -90,7 +91,7 @@ class Calendar extends Model
         $photo = $this->getMeta('profile_photo_url');
 
         if (!$photo) {
-            $photo = apply_filters('fluent_booking/author_photo', get_avatar_url($this->user_id), $this->user_id);
+            $photo = Helper::fluentBookingUserAvatar($this->user_id, $this->user_id);
         }
 
         return $photo;

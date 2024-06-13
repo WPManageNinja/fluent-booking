@@ -862,7 +862,7 @@ class Booking extends Model
                 'email'      => $user->user_email,
                 'first_name' => $user->first_name,
                 'last_name'  => $user->last_name,
-                'avatar'     => apply_filters('fluent_booking/author_photo', get_avatar_url($user->ID), $user)
+                'avatar'     => Helper::fluentBookingUserAvatar($user->ID, $user)
             ];
         } else {
             $data = $this->calendar->getAuthorProfile(false);

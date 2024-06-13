@@ -366,6 +366,21 @@
                         }
                     }
                 }
+
+                .fcal_select_title {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 2px 0;
+                    img {
+                        display: block;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        flex: none;
+                    }
+                }
             }
         }
     }

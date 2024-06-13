@@ -17,7 +17,11 @@
                                 :disabled="host.disabled"
                                 :label="host.name"
                                 :value="host.id"
-                            />
+                            >
+                                <div class="fcal_select_title">
+                                    <img :src="host.avatar" :alt="host.name"> {{ host.name }}
+                                </div>
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="$t('Team Members')">

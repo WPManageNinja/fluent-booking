@@ -4,6 +4,7 @@ namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\ZoomMeeting\Client;
 use FluentBooking\App\Services\Integrations\ZoomMeeting\ZoomHelper;
 use FluentBooking\App\Services\PermissionManager;
@@ -30,7 +31,7 @@ class ZoomController extends Controller
                     'user_id'    => $user->ID,
                     'name'       => $name,
                     'user_email' => $user->user_email,
-                    'avatar'     => get_avatar_url($user->user_email)
+                    'avatar'     => Helper::fluentBookingUserAvatar($user->user_email, $user)
                 ];
             } else {
                 $userData = [
