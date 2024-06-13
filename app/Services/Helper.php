@@ -2108,4 +2108,12 @@ class Helper
          */
         return apply_filters('fluent_booking/is_rtl', is_rtl());
     }
+
+    public static function fluentBookingUserAvatar($id_or_email, $args)
+    {
+        if (empty($id_or_email)) {
+            return '';
+        }
+        return apply_filters('fluent_booking/author_photo', get_avatar_url($id_or_email), $args);
+    }
 }

@@ -6,6 +6,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Request\Request;
+use FluentBooking\App\Services\Helper;
 
 class AdminController extends Controller
 {
@@ -67,6 +68,7 @@ class AdminController extends Controller
             $hosts[] = [
                 'id'       => $user->ID,
                 'label'    => $user->display_name . ' (' . $user->user_email . ')',
+                'avatar'   => Helper::fluentBookingUserAvatar($user->user_email, $user),
                 'disabled' => in_array($user->ID, $calendarUserIds)
             ];
         }
@@ -78,6 +80,7 @@ class AdminController extends Controller
                     $hosts[] = [
                         'id'       => $user->ID,
                         'label'    => $user->display_name . ' (' . $user->user_email . ')',
+                        'avatar'   => Helper::fluentBookingUserAvatar($user->user_email, $user),
                         'disabled' => in_array($user->ID, $calendarUserIds)
                     ];
                 }
@@ -219,7 +222,7 @@ class AdminController extends Controller
                 'id'          => (string) $meta->object_id,
                 'name'        => $name,
                 'email'       => $user->user_email,
-                'avatar'      => apply_filters('fluent_booking/author_photo', get_avatar_url($user->id), $user->id),
+                'avatar'      => Helper::fluentBookingUserAvatar($user->id, $user->id),
                 'is_admin'    => false,
                 'permissions' => $meta->value
             ];

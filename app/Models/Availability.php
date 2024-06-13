@@ -2,6 +2,8 @@
 
 namespace FluentBooking\App\Models;
 
+use FluentBooking\App\Services\Helper;
+
 class Availability extends Model
 {
     protected $table = 'fcal_meta';
@@ -59,7 +61,7 @@ class Availability extends Model
 
         return [
             'name' => $name,
-            'avatar' => apply_filters('fluent_booking/author_photo', get_avatar_url($user->user_email), $user)
+            'avatar' => Helper::fluentBookingUserAvatar($user->user_email, $user)
         ];
     }
 }

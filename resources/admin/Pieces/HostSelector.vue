@@ -18,7 +18,11 @@
             :disabled="item.disabled"
             :label="item.label"
             :value="item.id"
-        />
+        >
+            <div class="fcal_select_title">
+                <img :src="item.avatar" :alt="item.label"> {{ item.label }}
+            </div>
+        </el-option>
     </el-select>
 
 </template>
