@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" class="ff_chained_filter">
+    <div v-loading="loading" class="fcal_chained_filter">
         <el-select :class="select_class" @change="handleCategoryChange()" clearable v-model="chained_settings.category" :placeholder="field.category_label">
             <el-option
                 v-for="item in categories"
@@ -51,7 +51,7 @@
         methods: {
             fetchSettings() {
                 this.loading = true;
-                FluentFormsGlobal.$get( {
+                FluentFormsGlobal.$get({
                     settings: this.settings
                 },this.field.remote_url)
                 .then(response => {
