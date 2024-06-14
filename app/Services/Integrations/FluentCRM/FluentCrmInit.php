@@ -7,7 +7,6 @@ use FluentBooking\App\Services\DateTimeHelper;
 
 class FluentCrmInit
 {
-
     public function __construct()
     {
         $this->registerHooks();

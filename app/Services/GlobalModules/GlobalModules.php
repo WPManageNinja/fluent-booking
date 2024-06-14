@@ -61,6 +61,16 @@ class GlobalModules
                 'install_url'    => admin_url('plugin-install.php?s=Fluent%20Forms&tab=search&type=term'),
                 'is_system'      => 'yes',
                 'is_active'      => defined('FLUENTFORM')
+            ],
+            'fluentboards' => [
+                'logo'           => $assetUrl . 'images/fluentboards.png',
+                'name'           => 'fluentboards',
+                'title'          => __('Fluent Boards', 'fluent-booking-pro'),
+                'description'    => __('Seamlessly create tasks in Fluent Boards using your booking field', 'fluent-booking-pro'),
+                'is_unavailable' => defined('FLUENT_BOARDS'),
+                'install_url'    => admin_url('plugin-install.php?s=FluentBoards&tab=search&type=term'),
+                'is_system'      => 'yes',
+                'is_active'      => defined('FLUENT_BOARDS')
             ]
         ]);
     }

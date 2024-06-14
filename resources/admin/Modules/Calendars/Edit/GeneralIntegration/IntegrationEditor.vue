@@ -134,7 +134,7 @@
                         <filter-fields
                             :fields="inputs"
                             :conditionals="settings[field.key]"
-                            :hasPro="has_pro"/>
+                            :hasPro="!!has_pro"/>
 
                         <notice class="ff_alert_between" type="danger-soft" v-if="!has_pro">
                             <div>
@@ -250,9 +250,11 @@
                     <template v-else-if="field.component == 'chained_select'">
                         <chained-selects
                             v-if="has_pro"
+                            :editingIntegration="editingIntegration"
+                            :calendarEvent="calendar_event"
                             :settings="settings"
-                            v-model="settings[field.key]"
                             :field="field"
+                            v-model="settings[field.key]"
                         ></chained-selects>
 
                         <notice class="ff_alert_between" type="danger-soft" v-else>
@@ -315,14 +317,16 @@
             </template>
 
             <template v-if="maybeShowSaveButton">
-                <hr class="mt-3 mb-4">
-                <el-button
-                    type="primary"
-                    :loading="saving"
-                    @click="saveNotification"
-                >
-                    <el-icon><SuccessFilled /></el-icon> {{ $t('Save Feed') }}
-                </el-button>
+                <div class="fcal_integration_save_btn">
+                    <el-button
+                        type="primary"
+                        :loading="saving"
+                        class="fcal_primary_btn"
+                        @click="saveNotification"
+                        >
+                        <el-icon><SuccessFilled /></el-icon> {{ $t('Save Feed') }}
+                    </el-button>
+                </div>
             </template>
         </el-form>
         <el-skeleton v-else animated :rows="6"></el-skeleton>
@@ -339,13 +343,16 @@ import FiledGeneral from './_FieldGeneral.vue';
 import ListSelectFilter from './_ListSelectFilter.vue';
 import DropDownLabelRepeater from './_DropdownLabelRepeater.vue';
 import DropDownManyFields from './_DropdownManyFields.vue';
+import SelectionRouting from "./_SelectionRouting.vue";
+import ChainedSelects from './_ChainedSelects.vue';
+import ChainedFields from "./_ChainedFields.vue";
 
 import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
 import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 
 import Notice from '@/Components/Notice/Notice.vue';
 import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
-import {InfoFilled, SuccessFilled} from '@element-plus/icons-vue';
+import { InfoFilled, SuccessFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'general_notification_edit',
@@ -358,6 +365,9 @@ export default {
         ListSelectFilter,
         DropDownLabelRepeater,
         DropDownManyFields,
+        SelectionRouting,
+        ChainedSelects,
+        ChainedFields,
         BtnGroup,
         BtnGroupItem,
         Notice,
@@ -365,8 +375,7 @@ export default {
         'wp_editor': wpEditor,
         SuccessFilled
     },
-    props: ['editingIntegration', 'calendar_event', 'editingIntegration', 'inputs', 'has_pro', 'smart_codes'],
-    watch: {},
+    props: ['editingIntegration', 'calendar_event', 'inputs', 'has_pro', 'smart_codes'],
     data() {
         return {
             loading_app: false,
