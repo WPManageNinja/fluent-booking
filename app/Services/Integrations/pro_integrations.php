@@ -10,7 +10,18 @@ use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
 (new \FluentBooking\App\Services\Integrations\ZoomMeeting\Bootstrap())->register();
 (new \FluentBooking\App\Services\Integrations\Webhook\WebhookIntegration())->register();
 
-// Global Modules Intialization
+
+/*
+ * Elementor
+ */
+if (defined('ELEMENTOR_VERSION')) {
+    (new \FluentBooking\App\Services\Integrations\Elementor\ElementorIntegration())->register();
+}
+
+
+/*
+ * Global Modules Intialization
+ */
 (new \FluentBooking\App\Services\GlobalModules\GlobalModules())->register();
 
 // Global Notification Handler
@@ -26,6 +37,10 @@ add_action('fluentform/loaded', function () {
 add_action('fluentcrm_loaded', function () {
     (new \FluentBooking\App\Services\Integrations\FluentCRM\FluentCrmInit());
     (new \FluentBooking\App\Services\Integrations\FluentCRM\Bootstrap());
+});
+
+add_action('fluent_boards_loaded', function () {
+    (new \FluentBooking\App\Services\Integrations\FluentBoards\Bootstrap());
 });
 
 add_filter('fluent_booking/calendar_setting_menu_items', function ($items, $calendar) {

@@ -136,11 +136,14 @@ class AdminController extends Controller
             ->where('type', '!=', 'team')
             ->get();
 
+        $deletedUser = __('Deleted User', 'fluent-booking-pro');
+        
         $hosts = $calendars->map(function ($calendar) {
             $user = $calendar->user;
             return [
                 'id'           => $user ? $user->ID : (int)$calendar->user_id,
-                'name'         => $user ? $user->full_name : __('Deleted User', 'fluent-booking-pro'),
+                'name'         => $user ? $user->full_name : $deletedUser,
+                'label'        => $user ? $user->display_name . ' (' . $user->user_email . ')' : $deletedUser,
                 'avatar'       => $calendar->getAuthorPhoto(),
                 'calendar_id'  => $calendar->id,
                 'deleted_user' => $user ? false : true
