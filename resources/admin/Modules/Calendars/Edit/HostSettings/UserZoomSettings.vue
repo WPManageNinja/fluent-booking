@@ -18,8 +18,14 @@
                     {{ $t('Connect Your Zoom Account') }}
                 </el-button>
 
-                <el-dialog :append-to-body="true" :close-on-click-modal="false" v-model="showingForm"
-                           :title="$t('Connect Your Zoom Account')" width="50%">
+                <el-dialog
+                    :append-to-body="true"
+                    :close-on-click-modal="false"
+                    v-model="showingForm"
+                    :title="$t('Connect Your Zoom Account')"
+                    width="50%"
+                    class="fcal_dialog fcal_dialog_body_p0 fcal_zoom_dialog"
+                >
                     <integration-form @connected="fetchConnection()"
                                       :calendar_id="calendar.id"
                                       v-if="showingForm"

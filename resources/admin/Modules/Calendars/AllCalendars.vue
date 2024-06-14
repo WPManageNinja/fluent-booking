@@ -1,11 +1,21 @@
 <template>
     <div class="fcal_section fcal_section_narrow">
-        <div v-if="hasSupport('multi_users')" class="fcal_section_header">
+        <div class="fcal_section_header">
             <div class="fcal_title">
                 <h3>{{ $t('Calendars') }}</h3>
             </div>
-            <div v-if="hasAccess('invite_team_members')" class="fcal_actions">
-                <el-dropdown trigger="click" popper-class="fcal_select">
+            <div class="fcal_actions">
+                <el-input class="fcal_search_input"
+                          v-model="search"
+                          clearable
+                          @clear="getCalendars"
+                          @keyup.enter.native="getCalendars"
+                          :placeholder="$t('Search Events')">
+                    <template #append>
+                        <el-button @click="getCalendars"><el-icon><Search /></el-icon></el-button>
+                    </template>
+                </el-input>
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" trigger="click" popper-class="fcal_select">
                     <span class="el-dropdown-link">
                         <el-button class="fcal_primary_btn">
                             <span>+</span> {{ $t('New') }}
@@ -104,16 +114,20 @@
             label-position="top"
             modal-class="fcal_drawer">
             <div v-if="appVars.has_pro" class="fcal_create_new_booking_type_drawer">
-                <el-form-item :label="$t('Team Name')">
+                <el-form-item :label="$t('Team Name') + ' *'">
                     <el-input
                         v-model="team_name"
                         type="text"
                         :placeholder="$t('Enter Name of this team')"
                     />
                 </el-form-item>
+                <el-form-item :label="$t('Select Team Members') + ' *'">
+                    <TeamMemberSelector v-model="team_members"/>
+                    <p>{{ $t('Please select the members you want to assign to this team') }}</p>
+                </el-form-item>
                 <el-button
                     @click="createTeamEvent('round_robin')"
-                    :disabled="!team_name">
+                    :disabled="!team_name || !team_members.length">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
                         <el-icon><Right/></el-icon>
@@ -144,8 +158,9 @@
 <script>
 import Pagination from "../../Pieces/Pagination";
 import CalendarEventBlock from "./parts/CalendarEventBlock";
-import { User, Right } from '@element-plus/icons-vue';
+import { User, Right, Search } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
+import TeamMemberSelector from "../../Pieces/TeamMemberSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
 
 export default {
@@ -153,8 +168,10 @@ export default {
     components: {
         SkeletonLoader,
         HostSelector,
+        TeamMemberSelector,
         User,
         Right,
+        Search,
         Pagination,
         CalendarEventBlock
     },
@@ -171,7 +188,9 @@ export default {
             isNewTeamOpen: false,
             user_id: '',
             team_name: '',
-            event_lists: []
+            team_members: [],
+            event_lists: [],
+            search: ''
         }
     },
     methods: {
@@ -180,7 +199,8 @@ export default {
             this.$get('calendars', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                with: ['calendar_event_lists']
+                with: ['calendar_event_lists'],
+                search: this.search
             })
                 .then(response => {
                     this.calendars = response.calendars.data;
@@ -204,7 +224,7 @@ export default {
             this.$router.push({
                 name: 'create_calendar',
                 params: {host_id: this.appVars.me.id, event_type: eventType},
-                query: {team_name: this.team_name}
+                query: {team_name: this.team_name, team_members: this.team_members}
             })
         }
     },

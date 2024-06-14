@@ -14,8 +14,16 @@ class WebhookIntegration
         add_action('fluent_booking/after_booking_scheduled', [$this, 'maybeHandleWebHookAsync'], 10, 2);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'maybeHandleWebHookAsync'], 10, 2);
         add_action('fluent_booking/booking_schedule_completed', [$this, 'maybeHandleWebHookAsync'], 10, 2);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'maybeHandleRescheduled'], 10, 3);
+        add_action('fluent_booking/booking_schedule_rejected', [$this, 'maybeHandleWebHookAsync'], 10, 2);
 
         add_action('fluent_booking/run_webhook', [$this, 'runWebhook'], 10, 2);
+    }
+
+    public function maybeHandleRescheduled($booking, $previousBooking, $calendarEvent)
+    {
+        $booking->status = 'rescheduled';
+        $this->maybeHandleWebHookAsync($booking, $calendarEvent);
     }
 
     public function maybeHandleWebHookAsync($booking, $calendarSlot)
@@ -23,9 +31,11 @@ class WebhookIntegration
         $status = $booking->status;
 
         $maps = [
-            'scheduled' => 'after_booking_scheduled',
-            'cancelled' => 'booking_schedule_cancelled',
-            'completed' => 'booking_schedule_completed'
+            'scheduled'   => 'after_booking_scheduled',
+            'cancelled'   => 'booking_schedule_cancelled',
+            'completed'   => 'booking_schedule_completed',
+            'rescheduled' => 'after_booking_rescheduled',
+            'rejected'    => 'booking_schedule_rejected'
         ];
 
         if (!isset($maps[$status])) {

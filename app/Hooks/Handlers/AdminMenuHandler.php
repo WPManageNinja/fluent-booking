@@ -169,15 +169,19 @@ class AdminMenuHandler
     {
         $app = App::getInstance();
 
+        $isRtl = Helper::fluentbooking_is_rtl();
+
         $assets = $app['url.assets'];
 
         $slug = $app->config->get('app.slug');
 
-        wp_enqueue_style(
-            'fluent_booing_admin_app', $assets . 'admin/admin.css', [], FLUENT_BOOKING_ASSETS_VERSION, 'all'
-        );
+        $adminAppCss = 'admin/admin.css';
+        if ($isRtl) {
+            $adminAppCss = 'admin/admin-rtl.css';
+            wp_enqueue_style('fluentbooking_admin_rtl', $assets . 'admin/fluentbooking_admin_rtl.css', [], FLUENT_BOOKING_ASSETS_VERSION);
+        }
+        wp_enqueue_style('fluent_booing_admin_app', $assets . $adminAppCss, [], FLUENT_BOOKING_ASSETS_VERSION, 'all');
 
-        wp_enqueue_style('fluent_booking_rtl_css', $assets . 'admin/admin_rtl.css', [], FLUENT_BOOKING_ASSETS_VERSION);
 
         do_action($slug . '_loading_app');
 

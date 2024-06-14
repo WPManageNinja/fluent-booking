@@ -1,5 +1,5 @@
 <template>
-    <div class="action-btns">
+    <div class="fcal_action_btns">
         <slot/>
     </div>
 </template>

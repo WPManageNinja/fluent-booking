@@ -1,13 +1,13 @@
 <template>
-    <div class="ff-filter-fields-wrap">
+    <div class="fcal_filter_fields_wrap">
         <el-checkbox v-model="conditionals.status" v-if="hasPro">
             {{ labels.status_label }}
         </el-checkbox>
 
         <div v-if="conditionals.status" class="mt-3">
-            <div class="mb-3">
+            <div class="fcal_filter_label">
                 {{ labels.notification_if_start }}
-                <select class="ff-select ff-select-small ml-1 mr-1" v-model="conditionals.type">
+                <select class="fcal_select fcal_select_small ml-1 mr-1" v-model="conditionals.type">
                     <option v-for="(label, value) in {all: 'All', any: 'Any'}" :key="value" :value="value">
                         {{ label }}
                     </option>
@@ -15,7 +15,7 @@
                 {{ labels.notification_if_end }}
             </div>
 
-            <el-row class="items-center" v-for="(logic, key) in items" :key="key" :gutter="12">
+            <el-row class="items_center" v-for="(logic, key) in items" :key="key" :gutter="12">
                 <el-col :md="8">
                     <div class="mb-2">
                         <el-select v-model="items[key].field" style="width: 100%" @change="items[key].value = ''"
@@ -78,7 +78,7 @@
                 </el-col>
 
                 <el-col :md="3">
-                    <action-btn class="mb-2">
+                    <action-btn>
                         <action-btn-add @click="add(key)"></action-btn-add>
                         <action-btn-remove @click="remove(key)" v-if="items.length > 1"></action-btn-remove>
                     </action-btn>

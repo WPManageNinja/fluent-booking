@@ -235,6 +235,11 @@ class Bootstrap extends IntegrationManagerController
         return [];
     }
 
+    public function getConfigFieldOptions($settings, $slotId)
+    {
+        return [];
+    }
+
     protected function getLists()
     {
         $lists = Lists::orderBy('title', 'ASC')->get();

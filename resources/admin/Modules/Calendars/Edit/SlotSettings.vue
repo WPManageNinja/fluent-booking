@@ -14,7 +14,9 @@
             </div>
         </div>
 
-        <el-skeleton v-if="loading" />
+        <div v-if="loading" class="fcal_white_box">
+            <el-skeleton animated :rows="6" />
+        </div>
         <div v-else class="fcal_create_calendar_body_wrap">
             <el-aside>
                 <ul class="fcal_settings_sidebar">

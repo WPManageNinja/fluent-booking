@@ -105,7 +105,6 @@ class SettingsController extends Controller
             $formattedSettings[$settingKey] = $santizedSettings;
         }
         $formattedSettings['time_format'] = $request->get('timeFormat');
-        $formattedSettings['theme'] = $request->get('theme');
 
         update_option('_fluent_booking_settings', $formattedSettings, 'no');
 
@@ -122,13 +121,30 @@ class SettingsController extends Controller
         $currency = Arr::get($paymentSettings, 'currency');
         $isActive = Arr::get($paymentSettings, 'is_active', 'no');
 
+        error_log($currency);
+
         update_option('fluent_booking_global_payment_settings', [
-            'currency'  => sanitize_textarea_field($currency),
+            'currency'  => sanitize_text_field($currency),
             'is_active' => ($isActive == 'yes') ? 'yes' : 'no'
         ], 'no');
 
         return [
             'message'  => __('Settings updated successfully', 'fluent-booking-pro')
+        ];
+    }
+
+    public function updateThemeSettings(Request $request)
+    {
+        $themeSettings = sanitize_text_field($request->get('theme'));
+
+        $bookingOption = get_option('_fluent_booking_settings', []);
+
+        $bookingOption['theme'] = $themeSettings;
+
+        update_option('_fluent_booking_settings', $bookingOption, 'no');
+
+        return [
+            'message' => __('Settings updated successfully', 'fluent-booking-pro')
         ];
     }
 

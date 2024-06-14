@@ -24,13 +24,13 @@ class TimeSlotService
         $this->calendarSlot = $calendarSlot;
     }
 
-    public function getDates($fromDate = false, $toDate = false, $duration = null, $hostId = null, $isDoingBooking = false)
+    public function getDates($fromDate = false, $toDate = false, $duration = null, $hostId = null, $isDoingBooking = false, $timeZone = 'UTC')
     {
         $duration = $this->calendarSlot->getDuration($duration);
         $period   = $duration * 60;
 
-        $fromDate = $fromDate ? $fromDate : gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        $toDate = $toDate ? $toDate : gmdate('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $fromDate = $fromDate ?: gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $toDate = $toDate ?: gmdate('Y-m-t 23:59:59', strtotime($fromDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $ranges = $this->getCurrentDateRange($fromDate, $toDate);
 
@@ -43,7 +43,11 @@ class TimeSlotService
         $timeStamp = DateTimeHelper::getTimestamp();
         $cutOutTimeStamp = $timeStamp + $this->calendarSlot->getCutoutSeconds();
 
-        $todayDate = gmdate('Y-m-d');
+        $maxBookingTime = $this->calendarSlot->getMaxBookableDateTime($fromDate, $timeZone, 'Y-m-d H:i:s');
+        $maxBookingTimeStamp = strtotime($maxBookingTime);
+
+        $todayDate = gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $lastDate  = end($ranges);
 
         $bufferTime = $this->calendarSlot->getTotalBufferTime() * 60;
 
@@ -77,8 +81,9 @@ class TimeSlotService
             $currentBookedSlots = $bookedSlots[$date] ?? [];
 
             $isToday = $date === $todayDate;
-            $validSlots = [];
+            $isLastDay = $date === $lastDate;
 
+            $validSlots = [];
             foreach ($availableSlots as $start) {
                 $end = gmdate('H:i', strtotime($start) + $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                 $endDate = $start < $end ? $date : gmdate('Y-m-d', strtotime($date) + 86400); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -90,7 +95,11 @@ class TimeSlotService
 
                 $slot = $this->maybeDayLightSavingSlot($slot, $daylightSavingTime, $scheduleTimezone);
 
-                if ($isToday && strtotime($slot['start']) < $cutOutTimeStamp) {
+                if (($isToday && strtotime($slot['start']) < $cutOutTimeStamp) || ($isLastDay && strtotime($slot['end']) > $maxBookingTimeStamp)) {
+                    continue;
+                }
+
+                if ($isLastDay && strtotime($slot['end']) > $maxBookingTimeStamp) {
                     continue;
                 }
 
@@ -231,14 +240,14 @@ class TimeSlotService
         $endDate = strtotime($endDate);
         $oneDay = 24 * 60 * 60;
 
-        $date_array = [];
+        $dateArray = [];
 
         while ($currentDate <= $endDate) {
-            $date_array[] = gmdate('Y-m-d', $currentDate); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dateArray[] = gmdate('Y-m-d', $currentDate); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $currentDate += $oneDay;
         }
 
-        return $date_array;
+        return $dateArray;
     }
 
     protected function bookSlot($eventId, $start, $end, $remaining = 0, $source = null)
@@ -477,7 +486,7 @@ class TimeSlotService
 
     protected function convertSlotSetsToFlat(&$overrideSlots, $date, $duration = null)
     {
-        $period = ($this->calendarSlot->getDuration($duration)) * 60;
+        $period = $this->calendarSlot->getDuration($duration) * 60;
 
         $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
@@ -548,24 +557,35 @@ class TimeSlotService
 
     protected function removeMergedOverrideSlots($availableSlots, $overrideDay)
     {
-        $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay) {
-            foreach ($overrideDay as $times) {
-                $startTime = strtotime($times['start']);
-                $endTime = strtotime($times['end']);
-                if (strtotime($slot) < $startTime || strtotime($slot) >= $endTime) {
-                    return true;
+        $totalHosts = count($this->calendarSlot->getHostIds());
+        if ($totalHosts != count($overrideDay)) {
+            return $availableSlots;
+        }
+        
+        $filteredSlots = array_filter($availableSlots, function ($slot) use ($overrideDay, $totalHosts) {
+            $slotTime = strtotime($slot);
+            $unavailable = 0;
+            foreach ($overrideDay as $hostOverride) {
+                foreach ($hostOverride as $times) {
+                    $startTime = strtotime($times['start']);
+                    $endTime   = strtotime($times['end']);
+                    if ($slotTime >= $startTime && $slotTime < $endTime) {
+                        $unavailable++;
+                        break;
+                    }
                 }
             }
-            return false;
+            return $totalHosts != $unavailable;
         });
+        
         return $filteredSlots;
     }
 
     public function getAvailableSpots($startDate, $timeZone = 'UTC', $duration = null, $hostId = null)
     {
-        $slot     = $this->calendarSlot;
+        $event    = $this->calendarSlot;
         $calendar = $this->calendar;
-        $duration = $this->calendarSlot->getDuration($duration);
+        $duration = $event->getDuration($duration);
         
         // Extract current month and year
         $requestedDate = $startDate;
@@ -587,17 +607,17 @@ class TimeSlotService
             $startDate = gmdate('Y-m-01 00:00:00', strtotime($requestedDate));
         }
 
-        $eventType      = $slot->event_type;
-        $isDisplaySpots = $slot->is_display_spots;
-        $maxBooking     = $slot->getMaxBookingPerSlot();
-        $endDate        = $slot->getMaxBookableDateTime($startDate);
-        $startDate      = $slot->getMinBookableDateTime($startDate);
+        $eventType      = $event->event_type;
+        $isDisplaySpots = $event->is_display_spots;
+        $maxBooking     = $event->getMaxBookingPerSlot();
+        $endDate        = $event->getMaxBookableDateTime($startDate, $timeZone);
+        $startDate      = $event->getMinBookableDateTime($startDate, $timeZone);
 
         if (strtotime($startDate) > strtotime($endDate)) {
             return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
         }
 
-        $slots = $this->getDates($startDate, $endDate, $duration, $hostId);
+        $slots = $this->getDates($startDate, $endDate, $duration, $hostId, false, $timeZone);
 
         $convertedSpots = [];
 
@@ -691,14 +711,12 @@ class TimeSlotService
         }
 
         $isBookingFrequencyEnabled = !!Arr::get($this->calendarSlot->settings, 'booking_frequency.enabled');
-
         if (!$isBookingFrequencyEnabled) {
             return $ranges;
         }
 
-        $frequenceyLimits = Arr::get($this->calendarSlot->settings, 'booking_frequency.limits', []);
-
         $keyedFrequenceyLimits = [];
+        $frequenceyLimits = Arr::get($this->calendarSlot->settings, 'booking_frequency.limits', []);
         foreach ($frequenceyLimits as $limit) {
             if (!empty($limit['value'])) {
                 $keyedFrequenceyLimits[$limit['unit']] = $limit['value'];
