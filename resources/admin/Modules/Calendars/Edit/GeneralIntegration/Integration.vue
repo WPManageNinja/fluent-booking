@@ -124,8 +124,8 @@
                     :calendar_event="calendar_event"
                     :inputs="fields"
                     :has_pro="appVars.has_pro"
-                    @back="hideEditor"
                     :smart_codes="smart_codes"
+                    @back="hideEditor"
                 />
             </div>
         </div>
@@ -230,7 +230,6 @@ export default {
                 .finally(() => (this.saving = false));
         },
         removeFeed(feed_id) {
-
             const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + feed_id;
             let data = {
                 calendar_id : this.calendar_id,

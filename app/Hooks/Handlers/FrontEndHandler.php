@@ -27,6 +27,8 @@ class FrontEndHandler
 
         add_shortcode('fluent_booking_team', [$this, 'handleTeamShortcode']);
 
+        add_shortcode('fluent_booking_calendar', [$this, 'handleCalendarShortcode']);
+
         add_shortcode('fluent_booking_lists', [$this, 'handleBookingListsShortcode']);
 
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
@@ -138,7 +140,7 @@ class FrontEndHandler
                     'description' => sprintf(__('Meeting has been rescheduled by %1$s from Web UI. Previous date time: %2$s (UTC)', 'fluent-booking-pro'), $rescheduleBy, $previousBooking->start_time)
                 ]);
 
-                do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking);
+                do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking, $calendarEvent);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
                     $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking-pro');
@@ -314,6 +316,64 @@ class FrontEndHandler
             'title'         => Arr::get($headerConfig, 'title', ''),
             'description'   => Arr::get($headerConfig, 'description', ''),
             'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
+        ]);
+    }
+
+    public function handleCalendarShortcode($atts, $content)
+    {
+        $atts = shortcode_atts([
+            'calendar_id' => '',
+            'event_ids'   => '',
+            'title'       => '',
+            'description' => '',
+            'logo'        => '',
+            'hide_info'   => false
+        ], $atts);
+
+        $calendarId = intval($atts['calendar_id']);
+        $title = sanitize_text_field($atts['title']);
+        $description = sanitize_text_field($atts['description']);
+        $logo = sanitize_text_field($atts['logo']);
+        $hideInfo = $atts['hide_info'] ? true : false;
+        $eventIds = array_filter(array_map('intval', explode(',', $atts['event_ids'])));
+
+        if (!$calendarId) {
+            return '';
+        }
+
+        $calendar = Calendar::find($calendarId);
+        if (!$calendar) {
+            return '';
+        }
+
+        $calendarEventQuery = CalendarSlot::where('calendar_id', $calendar->id)
+            ->where('status', 'active');
+        
+        if ($eventIds && $eventIds != 'all') {
+            $calendarEventQuery->whereIn('id', $eventIds);
+        }
+
+        $calendarEvents = $calendarEventQuery->get();
+
+        if ($calendarEvents->isEmpty()) {
+            return '';
+        }
+
+        foreach ($calendarEvents as $event) {
+            $event->public_url = $event->getPublicUrl();
+            $event->durations = $event->getAvailableDurations();
+            $event->description = $event->getDescription();
+            $event->short_description = Helper::excerpt($event->description);
+        }
+        
+        $calendar->activeEvents = $calendarEvents;
+
+        return $this->renderCalendarBlock($calendar, [
+            'title'         => $title,
+            'description'   => $description,
+            'logo'          => $logo,
+            'hide_info'     => $hideInfo,
+            'wrapper_class' => '',
         ]);
     }
 
@@ -931,7 +991,8 @@ class FrontEndHandler
                 'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
                 'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
             ],
-            'date_formatter' => DateTimeHelper::getDateFormatter(true)
+            'date_formatter' => DateTimeHelper::getDateFormatter(true),
+            'isRtl' => Helper::fluentbooking_is_rtl()
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);

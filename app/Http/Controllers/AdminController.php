@@ -132,16 +132,20 @@ class AdminController extends Controller
         $calendars = Calendar::with(['user'])
             ->where('type', '!=', 'team')
             ->get();
+
+        $deletedUser = __('Deleted User', 'fluent-booking-pro');
         
-        $hosts = [];
-        foreach ($calendars as $calendar) {
-            $hosts[] = [
-                'id'          => $calendar->user->ID,
-                'name'        => $calendar->user->full_name,
-                'avatar'      => $calendar->getAuthorPhoto(),
-                'calendar_id' => $calendar->id
+        $hosts = $calendars->map(function ($calendar) {
+            $user = $calendar->user;
+            return [
+                'id'           => $user ? $user->ID : (int)$calendar->user_id,
+                'name'         => $user ? $user->full_name : $deletedUser,
+                'label'        => $user ? $user->display_name . ' (' . $user->user_email . ')' : $deletedUser,
+                'avatar'       => $calendar->getAuthorPhoto(),
+                'calendar_id'  => $calendar->id,
+                'deleted_user' => $user ? false : true
             ];
-        }
+        });
 
         return [
             'hosts' => $hosts

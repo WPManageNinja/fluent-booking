@@ -279,20 +279,23 @@ export default {
         isBookingCancelled() {
             return this.showing_booking.status == 'cancelled';
         },
+        isBookingRejected() {
+            return this.showing_booking.status == 'rejected';
+        },
         canMarkAsCompleted() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid && !this.isBookingRejected;
         },
         canMarkAsPaid() {
-            return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid';
+            return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid' && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canReschedule() {
-            return !this.isBookingCompleted && !this.isBookingCancelled;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canMakeNoShow() {
-            return this.showing_booking.status != 'no_show' && this.isBookingCompleted;
+            return this.showing_booking.status != 'no_show' && this.isBookingCompleted && !this.isBookingRejected;
         },
         canCancel() {
-            return !this.isBookingCompleted && !this.isBookingCancelled;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected;
         },
         isGroupEvent() {
             return this.showing_booking.event_type == 'group';

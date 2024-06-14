@@ -94,4 +94,22 @@ class CalendarIntegrationController extends Controller
             ], 422);
         }
     }
+
+    public function getConfigFieldOptions($calendarId, $calendarEventId, $integrationId)
+    {
+        try {
+            $integrationName = $this->request->get('integration_name');
+            $settings = $this->request->get('settings');
+            
+            $fieldOptions = apply_filters('fluent_booking/get_integration_config_field_options_' . $integrationName, $settings, $calendarEventId);
+
+            return $this->sendSuccess([
+                'field_options' => $fieldOptions,
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
 }

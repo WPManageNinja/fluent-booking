@@ -229,6 +229,12 @@ class LandingPageHandler
 
         $eventVars = (new FrontEndHandler())->getCalendarEventVars($calendar, $calendarEvent);
 
+        $isRtl = Helper::fluentbooking_is_rtl();
+
+        $publicCss = 'public/saas.css';
+        if ($isRtl) {
+            $publicCss = 'public/saas-rtl.css';
+        }
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
@@ -237,7 +243,7 @@ class LandingPageHandler
             'description'    => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'url'            => home_url($wp->request),
             'css_files'      => [
-                $assetUrl . 'public/saas.css'
+                $assetUrl . $publicCss
             ],
             'js_files'       => [
                 'fluent-booking-public-js' => $assetUrl . 'public/js/app.js',
@@ -276,6 +282,7 @@ class LandingPageHandler
     private function showBookingConfimationPage($booking, $actionType = 'confirmation')
     {
         $validActions = ['confirmation'];
+        $isRtl = Helper::fluentbooking_is_rtl();
 
         if (in_array($booking->status, ['scheduled', 'pending', 'rescheduled'])) {
             $validActions = array_merge($validActions, ['reschedule', 'cancel']);
@@ -304,12 +311,16 @@ class LandingPageHandler
 
         $authorProfile = $calendarEvent->getAuthorProfile(true);
 
+        $publicCss = 'public/saas_public.css';
+        if ($isRtl) {
+            $publicCss = 'public/saas_public-rtl.css';
+        }
         $data = [
             'title'       => __('Confirmation: ', 'fluent-booking-pro') . $calendarEvent->title . ' ' . __('with', 'fluent-booking-pro') . ' ' . $authorProfile['name'],
             'body'        => $responseHtml,
             'description' => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'css_files'   => [
-                App::getInstance('url.assets') . 'public/saas_public.css'
+                App::getInstance('url.assets') . $publicCss
             ],
             'js_files'    => [],
             'js_vars'     => [],

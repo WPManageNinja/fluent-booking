@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <p v-else>
+                    <p v-else class="fcal_empty_inline_text">
                         {{ $t("You don't have any feeds configured. Let's go") }}
                         <el-link :underline="true" @click="add">{{ $t('create one!') }}</el-link>
                     </p>
@@ -227,15 +227,15 @@ export default {
             this.getFeeds();
         },
         getEventName(name) {
-            if (name == 'after_booking_scheduled') {
-                return this.$t('Booking Confirmed');
-            }
-            if (name == 'booking_schedule_completed') {
-                return this.$t('Booking Completed');
-            }
-            if (name == 'booking_schedule_cancelled') {
-                return this.$t('Booking Cancelled');
-            }
+            const eventNames = {
+                'after_booking_scheduled': 'Booking Confirmed',
+                'booking_schedule_completed': 'Booking Completed',
+                'booking_schedule_cancelled': 'Booking Cancelled',
+                'after_booking_rescheduled': 'Booking Rescheduled',
+                'booking_schedule_rejected': 'Booking Rejected'
+            };
+
+            return this.$t(eventNames[name]);
         }
     },
     computed: {

@@ -398,29 +398,23 @@ class CalendarSlot extends Model
         return $bufferTimeBefore + $bufferTimeAfter;
     }
 
-    public function getMaxBookableDateTime($startDate)
+    public function getMaxBookableDateTime($startDate, $timeZone = 'UTC', $format = 'Y-m-d 23:59:59')
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         $lastDay = gmdate('Y-m-t 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
+        if ($timeZone != 'UTC') {
+            $lastDay = DateTimeHelper::convertToTimeZone($lastDay, $timeZone, 'UTC', $format);
+        }
+
         if ($rangeType == 'range_indefinite') {
             return $lastDay;
         }
 
-        $maxDate = $lastDay;
+        $maxLookupDate = $this->getMaxLookUpDate();
 
-        if ($rangeType == 'range_date_between') {
-            $range = Arr::get($this->settings, 'range_date_between', []);
-            if (is_array($range) && count(array_filter($range)) == 2) {
-                if (strtotime($maxDate) > strtotime($range[1])) {
-                    $maxDate = gmdate('Y-m-d 23:59:59', strtotime($range[1])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-                }
-            }
-        } else {
-            $rangeDays = Arr::get($this->settings, 'range_days', 60) ?: 60;
-            $maxDate = gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        }
+        $maxDate = DateTimeHelper::convertToTimeZone($maxLookupDate, $this->calendar->author_timezone, 'UTC');
 
         if (strtotime($maxDate) > strtotime($lastDay)) {
             return $lastDay;
@@ -429,7 +423,7 @@ class CalendarSlot extends Model
         return $maxDate;
     }
 
-    public function getMinBookableDateTime($startDate = null)
+    public function getMinBookableDateTime($startDate = null, $timeZone = null)
     {
         $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         
@@ -497,15 +491,6 @@ class CalendarSlot extends Model
         }
 
         return strtotime('+' . $conditions['value'] . ' ' . $conditions['unit'], 0) - strtotime('+0 seconds', 0);
-    }
-
-    public function isWithinMaxLookUpDate($date)
-    {
-        if ($maxDate = $this->getMaxLookUpDate()) {
-            return strtotime($maxDate) >= strtotime($date);
-        }
-
-        return true;
     }
 
     public function getHostIds($hostId = null)
@@ -843,9 +828,9 @@ class CalendarSlot extends Model
             $schedule = AvailabilityService::getDefaultSchedule($teamMemberId);
             if ($schedule) {
                 if ($dataKey == 'date_overrides') {
-                    $teamSchedules[] = $this->getProcessedDateOverrides($schedule);
+                    $teamSchedules[$teamMemberId] = $this->getProcessedDateOverrides($schedule);
                 } else {
-                    $teamSchedules[] = $this->getProcessedWeeklySlots($schedule);
+                    $teamSchedules[$teamMemberId] = $this->getProcessedWeeklySlots($schedule);
                 }
             }
         }
@@ -858,7 +843,7 @@ class CalendarSlot extends Model
 
         $teamOverrideSlots = [];
         $teamOverrideDays = [];
-        foreach ($teamOverrides as $dateOverrides) {
+        foreach ($teamOverrides as $memberId => $dateOverrides) {
             $overrideSlots = $dateOverrides[0];
             foreach ($overrideSlots as $date => $slots) {
                 if (!isset($teamOverrideSlots[$date])) {
@@ -871,12 +856,11 @@ class CalendarSlot extends Model
             }
             $overrideDays = $dateOverrides[1];
             foreach ($overrideDays as $date => $slots) {
-                if (!isset($teamOverrideDays[$date])) {
-                    $teamOverrideDays[$date] = [$slots];
+                if (!isset($teamOverrideDays[$date][$memberId])) {
+                    $teamOverrideDays[$date][$memberId] = [$slots];
                 } else {
-                    $combinedSlots = array_merge($teamOverrideDays[$date], [$slots]);
-                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
-                    $teamOverrideDays[$date] = array_values($uniqueCombinedSlots);
+                    $combinedSlots = array_merge($teamOverrideDays[$date][$memberId], [$slots]);
+                    $teamOverrideDays[$date][$memberId] = array_values($combinedSlots);
                 }
             }
         }

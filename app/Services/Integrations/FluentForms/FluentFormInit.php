@@ -317,6 +317,10 @@ class FluentFormInit
                 'slot_minutes'     => $duration
             ];
 
+            if ($event->isConfirmationRequired($startDateTime)) {
+                $bookingData['status'] = 'pending';
+            }
+
             if ($entry->user_id) {
                 $bookingData['person_user_id'] = $entry->user_id;
             }

@@ -88,7 +88,7 @@
             :before-close="() => { showModal = false; editingMember = null; }"
             :title="$t('Edit Team Member')"
             width="50%"
-            class="fcal_dialog"
+            class="fcal_dialog fcal_add_team_member_dialog"
         >
             <el-form v-if="editingMember" label-position="top">
                 <el-form-item :label="$t('Access Permissions for this user')">

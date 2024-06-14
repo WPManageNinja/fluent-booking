@@ -442,8 +442,33 @@ body >.fcal_calendar_wrap {
           &.fcal_input_multi_select_wrap {
             .svelte-select {
               border-radius: 8px;
+              &.focused {
+                &.list-open {
+                  .value-container {
+                    &:before {
+                      top: 20px;
+                      transform: rotate(136deg);
+                    }
+                  }
+                }
+              }
               .value-container {
                 padding-left: 10px;
+                position: relative;
+                &:before {
+                  content: "";
+                  width: 6px;
+                  height: 6px;
+                  border-left: 1px solid var(--fcal_dark);
+                  border-bottom: 1px solid var(--fcal_dark);
+                  position: absolute;
+                  z-index: 1;
+                  right: 15px;
+                  top: 18px;
+                  transform: rotate(-45deg);
+                  transition: .2s;
+                  -webkit-transition: .2s;
+                }
                 > input {
                   border: none;
                   border-radius: 0;
@@ -1332,6 +1357,7 @@ body >.fcal_calendar_wrap {
       .day-name {
         line-height: 3;
         color: var(--fcal_dark);
+        word-wrap: normal;
       }
     }
   }
@@ -2494,3 +2520,4 @@ input.fcal_input:disabled {
     transform: translate3d(0,-.5em,0) rotate(45deg);
   }
 }
+@import "styles-rtl";

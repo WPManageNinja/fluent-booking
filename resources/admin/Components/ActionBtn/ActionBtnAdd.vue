@@ -1,5 +1,5 @@
 <template>
-    <el-icon class="action_btn" :class="[isSize, isType]" @click="$emit('clicked')">
+    <el-icon class="fcal_icon_btn" :class="[isSize, isType]" @click="$emit('clicked')">
         <Plus />
     </el-icon>
 </template>
