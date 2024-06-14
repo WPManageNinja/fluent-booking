@@ -28,6 +28,11 @@ class ElementorIntegration
     public function editorScripts()
     {
         wp_enqueue_script('fcal-custom-elementor', plugin_dir_url(__FILE__) . 'fcal-custom-elementor.js', ['jquery'], time(), true);
+
+        wp_localize_script('fcal-custom-elementor', 'fcal_elementor_ajax_object', array(
+            'nonce'   => wp_create_nonce('calendar_events_nonce'),
+            'ajaxurl' => admin_url('admin-ajax.php'),
+        ));
     }
 
 
@@ -90,6 +95,11 @@ class ElementorIntegration
     }
 
     public function ajaxGetCalendarEvents() {
+        if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'calendar_events_nonce')) {
+            wp_send_json_error(['message' => __('Nonce verification failed', 'fluent-booking-pro')]);
+            exit;
+        }
+
         if (!isset($_POST['cal_id'])) {
             wp_send_json_error(['message' => __('No calendar ID provided', 'fluent-booking-pro')]);
         }
