@@ -212,6 +212,7 @@ export default {
         if (this.$route.query.team_name) {
             this.is_team = true;
             this.calendar.title = this.$route.query.team_name;
+            this.calendar.slot.settings.team_members = this.$route.query.team_members;
         }
 
         if(!this.hasSupport('is_hosted')) {

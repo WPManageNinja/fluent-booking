@@ -25,9 +25,9 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import EventDetails from './_EventDetails.vue';
-import {Back} from '@element-plus/icons-vue';
+import { Back } from '@element-plus/icons-vue';
 
 
 export default {
