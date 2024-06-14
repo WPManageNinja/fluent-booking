@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system, scheduling, ev
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 7.3
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,20 @@ Go beyond regular booking and scheduling with features tailored for you. FluentB
 Install the fluent-booking-pro.zip file to your WordPress plugin upload and then just activate and use it.
 
 == Changelog ==
+
+1.4.2 (Date: 14 Jun 2024)
+- New: FluentBoards Integration
+- New: Elementor Integration
+- New: Fluent Booking Calendar Shortcode
+- New: Reschedule and Cancel Event Triggers in Webhook Feeds
+- Assign Team Member Option When Creating Team Meeting
+- Added Calendar Event Search Option
+- Added Full RTL Support
+- Applied Redirection Url in Woo Booking
+- Applied Jump to the Next Available Slot Within Date Ranges
+- Fixed Round Robin Issue with Unavailable Date
+- Fixed Question Fields Not Moving Issue
+- Fixed Require Confirmation  Not Working With Fluentform
 
 1.4.1 (Date: 28 May 2024)
 - Implemented feature: Can not cancel/reschedule before meeting start
