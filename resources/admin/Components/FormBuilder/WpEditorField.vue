@@ -1,6 +1,26 @@
 <template>
     <div class="wp_vue_editor_wrapper">
-        <textarea v-if="hasWpEditor" class="wp_vue_editor" :id="editor_id">{{ model }}</textarea>
+        <popover
+            v-if="hasWpEditor"
+            class="popover-wrapper"
+            :groupTitle="$t('Shortcodes')"
+            :data="editorShortcodes"
+            :isVisible="isPopupVisible"
+            @command="handleCommand">
+            <template #popoverButton>
+                <el-button
+                    type="info"
+                    :icon="ArrowDownIcon"
+                    @click="togglePopup"
+                    class="editor-add-shortcode el-button--soft">
+                    {{ $t('Add Shortcodes') }}
+                </el-button>
+            </template>
+        </popover>
+        <textarea v-if="hasWpEditor"
+            class="wp_vue_editor"
+            :id="editor_id">{{ model }}
+        </textarea>
         <textarea v-else
                   class="wp_vue_editor wp_vue_editor_plain"
                   v-model="plain_content"
@@ -9,7 +29,10 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
+import Popover from '../Popover.vue';
+import { markRaw } from "vue";
+import { ArrowDown } from '@element-plus/icons-vue';
 export default {
     name: 'wp_editor',
     $emits: ['update:modelValue'],
@@ -27,7 +50,7 @@ export default {
             }
         },
         editorShortcodes: {
-            type: Array,
+            type: Object,
             default() {
                 return []
             }
@@ -44,6 +67,10 @@ export default {
             }
         }
     },
+    components: {
+        Popover,
+        ArrowDown
+    },
     data() {
         return {
             model: this.modelValue,
@@ -54,7 +81,9 @@ export default {
             cursorPos: (this.modelValue) ? this.modelValue.length : 0,
             app_ready: false,
             buttonInitiated: false,
-            currentEditor: false
+            currentEditor: false,
+            isPopupVisible: false,
+            ArrowDownIcon: markRaw(ArrowDown)
         }
     },
     watch: {
@@ -83,8 +112,11 @@ export default {
                 that.changeContentEvent();
             });
         },
+        togglePopup() {
+            this.isPopupVisible = !this.isPopupVisible;
+        },
         changeContentEvent() {
-            const content = wp.editor.getContent(this.editor_id);
+            const content = wp.editor.getContent(this.editor_id).replace(/\r?\n/g, '');
             this.$emit('update:modelValue', content);
         },
         showInsertButtonModal(editor) {
@@ -96,7 +128,8 @@ export default {
         },
         handleCommand(command) {
             if (this.hasWpEditor) {
-                window.tinymce.activeEditor.insertContent(command);
+                this.isPopupVisible = false;
+                tinymce.activeEditor.insertContent(command);
             } else {
                 var part1 = this.plain_content.slice(0, this.cursorPos);
                 var part2 = this.plain_content.slice(this.cursorPos, this.plain_content.length);
