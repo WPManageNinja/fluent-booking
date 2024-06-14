@@ -2803,6 +2803,14 @@
                         gap: 8px;
                     }
                 }
+                .fcal_webhook_form_footer {
+                    border-top: 1px solid #EAECF0;
+                    padding-top: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 8px;
+                }
             }
         }
     }
