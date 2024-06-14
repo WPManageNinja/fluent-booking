@@ -16,8 +16,11 @@
             :key="host.id"
             :disabled="host.disabled"
             :label="host.label"
-            :value="host.id"
-        />
+            :value="host.id">
+            <div class="fcal_select_title">
+                <img :src="host.avatar" :alt="host.label"> {{ host.label }}
+            </div>
+        </el-option>
     </el-select>
 
 </template>
