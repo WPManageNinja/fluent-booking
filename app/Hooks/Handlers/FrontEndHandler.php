@@ -27,6 +27,8 @@ class FrontEndHandler
 
         add_shortcode('fluent_booking_team', [$this, 'handleTeamShortcode']);
 
+        add_shortcode('fluent_booking_calendar', [$this, 'handleCalendarShortcode']);
+
         add_shortcode('fluent_booking_lists', [$this, 'handleBookingListsShortcode']);
 
         add_shortcode('fluent_booking_receipt', [$this, 'handleReceiptShortcode']);
@@ -314,6 +316,64 @@ class FrontEndHandler
             'title'         => Arr::get($headerConfig, 'title', ''),
             'description'   => Arr::get($headerConfig, 'description', ''),
             'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
+        ]);
+    }
+
+    public function handleCalendarShortcode($atts, $content)
+    {
+        $atts = shortcode_atts([
+            'calendar_id' => '',
+            'event_ids'   => '',
+            'title'       => '',
+            'description' => '',
+            'logo'        => '',
+            'hide_info'   => false
+        ], $atts);
+
+        $calendarId = intval($atts['calendar_id']);
+        $title = sanitize_text_field($atts['title']);
+        $description = sanitize_text_field($atts['description']);
+        $logo = sanitize_text_field($atts['logo']);
+        $hideInfo = $atts['hide_info'] ? true : false;
+        $eventIds = array_filter(array_map('intval', explode(',', $atts['event_ids'])));
+
+        if (!$calendarId) {
+            return '';
+        }
+
+        $calendar = Calendar::find($calendarId);
+        if (!$calendar) {
+            return '';
+        }
+
+        $calendarEventQuery = CalendarSlot::where('calendar_id', $calendar->id)
+            ->where('status', 'active');
+        
+        if ($eventIds && $eventIds != 'all') {
+            $calendarEventQuery->whereIn('id', $eventIds);
+        }
+
+        $calendarEvents = $calendarEventQuery->get();
+
+        if ($calendarEvents->isEmpty()) {
+            return '';
+        }
+
+        foreach ($calendarEvents as $event) {
+            $event->public_url = $event->getPublicUrl();
+            $event->durations = $event->getAvailableDurations();
+            $event->description = $event->getDescription();
+            $event->short_description = Helper::excerpt($event->description);
+        }
+        
+        $calendar->activeEvents = $calendarEvents;
+
+        return $this->renderCalendarBlock($calendar, [
+            'title'         => $title,
+            'description'   => $description,
+            'logo'          => $logo,
+            'hide_info'     => $hideInfo,
+            'wrapper_class' => '',
         ]);
     }
 
