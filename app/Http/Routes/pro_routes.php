@@ -42,6 +42,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
             $router->post('/', 'CalendarIntegrationController@update')->int('id')->int('slot_id')->int('integration_id');
             $router->delete('/', 'CalendarIntegrationController@delete')->int('id')->int('slot_id')->int('integration_id');
             $router->get('/merge-fields', 'CalendarIntegrationController@integrationListComponent');
+            $router->get('/config-field-options', 'CalendarIntegrationController@getConfigFieldOptions');
         });
     });
 

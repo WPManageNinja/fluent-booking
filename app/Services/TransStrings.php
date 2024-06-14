@@ -772,8 +772,10 @@ class TransStrings
             'The default date format will be applied if no format is chosen.'                  => __('The default date format will be applied if no format is chosen.', 'fluent-booking-pro'),
             'Customize the questions asked on the booking page'                                => __('Customize the questions asked on the booking page', 'fluent-booking-pro'),
             'Customize booking cancel and reschedule fields'                                   => __('Customize booking cancel and reschedule fields', 'fluent-booking-pro'),
+            'Please select the members you want to assign to this team'                        => __('Select the members you want to assign to this team', 'fluent-booking-pro'),
             'Need Pro Version'                                                                 => __('is not available with the free version. Please upgrade to pro to get all the advanced features.', 'fluent-booking-pro'),
-            'Search Events'                                                                    => __('Search Events', 'fluent-booking-pro')
+            'Search Events'                                                                    => __('Search Events', 'fluent-booking-pro'),
+            'Select Team Members'                                                              => __('Select Team Members', 'fluent-booking-pro')
         );
     }
 }

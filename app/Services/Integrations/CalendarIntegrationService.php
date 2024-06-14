@@ -90,9 +90,7 @@ class CalendarIntegrationService
             $metaKey = $integrationName . '_feeds';
         }
 
-
         // Validate the meta values
-
         if ($metaValue['enabled']) {
             // Required fields
 
@@ -109,7 +107,6 @@ class CalendarIntegrationService
             }
         }
 
-
         $data = [
             'object_id'   => $slotId,
             'object_type' => 'integration',
@@ -117,10 +114,8 @@ class CalendarIntegrationService
             'value'       => $metaValue,
         ];
 
-
         $data = apply_filters('fluent_booking/save_integration_settings_' . $integrationName, $data, $integrationId);
         $created = false;
-
 
         if ($integrationId) {
             $integration = Meta::where('object_id', $slotId)
