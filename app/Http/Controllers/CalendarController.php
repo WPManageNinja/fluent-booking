@@ -159,7 +159,20 @@ class CalendarController extends Controller
         } else {
             $data['slug'] = sanitize_title($title, '', 'display');
         }
+        
+        $slot = $data['slot'];
 
+        if ($isTeam) {
+            $teamMembers = array_map('intval', Arr::get($slot, 'settings.team_members', []));
+            if (!in_array($user->ID, $teamMembers)) {
+                $user = get_user_by('ID', reset($teamMembers));
+                if (!$user) {
+                    return $this->sendError([
+                        'message' => __('Invalid Team Member', 'fluent-booking-pro')
+                    ], 422);
+                }
+            }
+        }
 
         if (!Helper::isCalendarSlugAvailable($data['slug'], true)) {
             $data['slug'] .= '-' . time();
@@ -208,8 +221,6 @@ class CalendarController extends Controller
             $availability = Availability::create($defaultSchedule);
         }
 
-        $slot = $data['slot'];
-
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $slotData = [
@@ -220,7 +231,7 @@ class CalendarController extends Controller
             'duration'          => (int)$slot['duration'],
             'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [
-                'team_members'     => $isTeam ? [$user->ID] : [],
+                'team_members'     => $isTeam ? $teamMembers : [],
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],

@@ -3133,6 +3133,12 @@
                             }
                         }
                     }
+                    .el-select__input {
+                        &:focus {
+                            border-color: none;
+                            box-shadow: none;
+                        }
+                    }
                 }
                 .el-input {
                     .el-input__wrapper {

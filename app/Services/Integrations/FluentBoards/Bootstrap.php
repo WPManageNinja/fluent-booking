@@ -71,19 +71,14 @@ class Bootstrap extends IntegrationManagerController
                 'stage_id'   => '',
                 'label_ids'  => '',
                 'member_ids' => [],
-                'priority'   => ''
+                'priority'   => 'low'
             ],
             'task_title'   => '',
             'author_name'  => '',
             'email'        => '',
             'description'  => '',
             'position'     => 'bottom',
-            'due_at_days'  => 1,
-            'conditionals' => [
-                'conditions' => [],
-                'status'     => false,
-                'type'       => 'all'
-            ],
+            'due_at_days'  => 0,
             'enabled'      => true
         ];
     }
@@ -183,12 +178,6 @@ class Bootstrap extends IntegrationManagerController
                     'bottom' => 'Bottom',
                     'top'    => 'Top'
                 ]
-            ],
-            [
-                'key'          => 'conditionals',
-                'label'        => 'Conditional Logics',
-                'tips'         => 'Allow integration conditionally based on your submission values',
-                'component'    => 'conditional_block'
             ],
             [
                 'require_list'   => false,
@@ -303,7 +292,7 @@ class Bootstrap extends IntegrationManagerController
     {
         return [
             'low'    => 'Low',
-            'normal' => 'Normal',
+            'medium' => 'Medium',
             'high'   => 'High'
         ];
     }
@@ -327,15 +316,15 @@ class Bootstrap extends IntegrationManagerController
         if ($due_time > 0) {
             $currentTime = current_time('mysql');
             $readyString = '+' . $due_time . ' ' . $unit;
-            return date('Y-m-d H:i:s', strtotime($readyString, strtotime($currentTime)));
+            return gmdate('Y-m-d H:i:s', strtotime($readyString, strtotime($currentTime))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
         return null;
     }
 
     public function notify($feed, $booking, $calendarEvent)
     {
-        $feedData = $feed['processedValues'];
-        $data = Arr::only($feedData, ['task_title', 'description', 'board_config', 'email', 'position', 'due_at_days']);
+        $validData = ['task_title', 'description', 'board_config', 'author_name', 'email', 'position', 'due_at_days'];
+        $data = Arr::only($feed['processedValues'], $validData);
 
         $boardId     = intval(Arr::get($data, 'board_config.board_id'));
         $stageId     = intval(Arr::get($data, 'board_config.stage_id'));
@@ -368,6 +357,8 @@ class Bootstrap extends IntegrationManagerController
             'due_at'         => $this->dueDateConvertion($dueAtDays, 'day'),
             'source'         => 'FluentBooking'
         ];
+
+        $data['started_at'] = $data['due_at'] ? gmdate('Y-m-d H:i:s', strtotime(current_time('mysql'))) : null; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $existingUser = User::where('user_email', $authorEmail)->first();
         if ($existingUser) {
