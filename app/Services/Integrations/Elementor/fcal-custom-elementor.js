@@ -1,57 +1,66 @@
-document.addEventListener('DOMContentLoaded', function() {
-    elementor.hooks.addAction('panel/open_editor/widget', function(panel, model, view) {
-        var controlContainer = document.querySelector('.elementor-control-selected_cal_id select');
+document.addEventListener('DOMContentLoaded', () => {
+    elementor.hooks.addAction('panel/open_editor/widget', (panel, model, view) => {
 
-        function fetchEvents(calId) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', ajaxurl, true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        const controlContainer = document.querySelector('.elementor-control-selected_cal_id select');
 
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 400) {
-                    var response = JSON.parse(xhr.responseText);
-                    var options = response.data;
-                    var eventControl = document.querySelector('.elementor-control-selected_event_ids select');
+        let calId = '';
+        if (controlContainer) {
+            calId = controlContainer.value;
+            fetchEvents().catch(error => console.error('Initial fetch error:', error));
+
+            controlContainer.addEventListener('change', async (event) => {
+                calId = event.target.value;
+                try {
+                    await fetchEvents();
+                } catch (error) {
+                    console.error('Error fetching events on change:', error);
+                }
+            });
+        }
+
+        async function fetchEvents() {
+            if (!calId) {
+                return;
+            }
+            try {
+                const response = await fetch(window.fcal_elementor_ajax_object.ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    body: new URLSearchParams({
+                        action: 'get_calendar_events',
+                        cal_id: calId,
+                        security: window.fcal_elementor_ajax_object.nonce // this is the nonce
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Process the events
+                    console.log(result.data);
+
+                    const eventControl = document.querySelector('.elementor-control-selected_event_ids select');
 
                     if (eventControl) {
                         // Clear existing options
                         eventControl.innerHTML = '';
 
                         // Add new options
-                        for (var key in options) {
-                            if (options.hasOwnProperty(key)) {
-                                var option = document.createElement('option');
-                                option.value = key;
-                                option.text = options[key];
-                                eventControl.appendChild(option);
-                            }
-                        }
-
-                        // Trigger change event
-                        // var event = new Event('change');
-                        // eventControl.dispatchEvent(event);
+                        Object.entries(result.data).forEach(([key, value]) => {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = value;
+                            eventControl.appendChild(option);
+                        });
                     }
                 } else {
-                    console.error('Error fetching events: ', xhr);
+                    console.error(result.data.message);
                 }
-            };
-
-            xhr.onerror = function() {
-                console.error('Error fetching events: ', xhr);
-            };
-
-            xhr.send('action=get_calendar_events&cal_id=' + encodeURIComponent(calId));
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
         }
-
-        if (controlContainer) {
-            var selectedCalId = controlContainer.value;
-            fetchEvents(selectedCalId);
-            controlContainer.addEventListener('change', function() {
-                fetchEvents(this.value);
-            });
-        } else {
-            console.log('Control container not found ' + controlContainer);
-        }
-
     });
 });
