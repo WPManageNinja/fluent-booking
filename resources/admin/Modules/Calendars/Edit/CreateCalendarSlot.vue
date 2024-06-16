@@ -42,6 +42,7 @@ export default {
             slot: null,
             loading: true,
             saving: false,
+            teamMembers: []
         }
     },
     computed:  {
@@ -70,6 +71,7 @@ export default {
             })
                 .then(response => {
                     this.slot = response.slot;
+                    this.maybeAddTeamMembers();
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -77,6 +79,9 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        maybeAddTeamMembers() {
+            this.slot.settings.team_members =this.teamMembers.length ? this.teamMembers : [];
         },
         checkValidation() {
             for (const location of this.slot.location_settings) {
@@ -133,6 +138,7 @@ export default {
         },
     },
     mounted() {
+        this.teamMembers = this.$route.query.team_members ?? [];
         this.$changeTitle(this.$t('Create New Event Type'));
         this.getEventSchema();
     }
