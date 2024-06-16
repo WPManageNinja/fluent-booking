@@ -64,7 +64,12 @@
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <template v-if="calendar.type == 'team'">
-                    <el-button @click="createSlot('round_robin')">
+                    <el-form-item :label="$t('Select Team Members') + ' *'">
+                        <TeamMemberSelector v-model="teamMembers"/>
+                        <p>{{ $t('Please select the members you want to assign to this team') }}</p>
+                    </el-form-item>
+                    <el-button @click="createRountRobinSlot()"
+                        :disabled="!teamMembers.length">
                         <div class="icons-wrap">
                             <el-icon><User /></el-icon>
                             <el-icon><User /></el-icon>
@@ -160,6 +165,7 @@ import { Setting, User, Right, MoreFilled, Delete, CopyDocument, Link } from '@e
 import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
+import TeamMemberSelector from "@/Pieces/TeamMemberSelector.vue";
 
 export default {
     name: 'CalendarEventBlock',
@@ -170,6 +176,7 @@ export default {
         User,
         Right,
         CalendarSettings,
+        TeamMemberSelector,
         MoreFilled,
         Delete,
         CopyDocument,
@@ -183,7 +190,8 @@ export default {
             calendarEvents: [],
             showSettings: false,
             isNewBookingOpen: false,
-            isCloneOpen: false
+            isCloneOpen: false,
+            teamMembers: []
         }
     },
     computed: {
@@ -208,6 +216,14 @@ export default {
             this.$router.push({
                 name: 'create_slot_event',
                 params: {calendar_id: this.calendar.id, event_type: eventType}
+            })
+        },
+        createRountRobinSlot() {
+            this.$router.push({
+                name: 'create_slot_event',
+                params: {calendar_id: this.calendar.id, event_type: 'round_robin'},
+                query: {team_members: this.teamMembers}
+
             })
         },
         goToEvent(slot) {
