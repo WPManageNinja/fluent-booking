@@ -501,7 +501,7 @@ class CalendarController extends Controller
                 'buffer_time_before'  => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_before', '0')),
                 'buffer_time_after'   => sanitize_text_field(Arr::get($slot['settings'], 'buffer_time_after', '0')),
                 'slot_interval'       => sanitize_text_field(Arr::get($slot['settings'], 'slot_interval', '')),
-                'team_members'        => $calendar->type == 'team' ? [$calendar->user_id] : [],
+                'team_members'        => array_map('intval', Arr::get($slot['settings'], 'team_members', []))
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft'], 'active'),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
