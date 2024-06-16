@@ -22,8 +22,8 @@ Install the fluent-booking-pro.zip file to your WordPress plugin upload and then
 == Changelog ==
 
 1.4.3 (Date: 16 Jun 2024)
-- Fixed Conflict With Other Plugins
-- Added Assign Team Member Option in Team Event
+- Assign Other Team Members in Team Events
+- Fixed Conflict With WP Fusion
 
 1.4.2 (Date: 14 Jun 2024)
 - New: FluentBoards Integration
