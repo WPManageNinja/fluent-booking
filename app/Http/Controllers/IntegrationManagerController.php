@@ -84,16 +84,13 @@ abstract class IntegrationManagerController extends IntegrationManagerHelper
 
         add_filter('fluent_booking/global_notification_feed_' . $this->settingsKey, [$this, 'setFeedAttributes'], 10, 2);
 
-        add_filter('fluent_booking/get_integration_defaults_' . $this->integrationKey, [$this, 'getIntegrationDefaults'],
-            10, 2);
-        add_filter('fluent_booking/get_integration_settings_fields_' . $this->integrationKey, [$this, 'getSettingsFields'],
-            10, 2);
-        add_filter('fluent_booking/get_integration_merge_fields_' . $this->integrationKey, [$this, 'getMergeFields'], 10,
-            3);
+        add_filter('fluent_booking/get_integration_defaults_' . $this->integrationKey, [$this, 'getIntegrationDefaults'], 10, 2);
+        add_filter('fluent_booking/get_integration_settings_fields_' . $this->integrationKey, [$this, 'getSettingsFields'], 10, 2);
+        add_filter('fluent_booking/get_integration_merge_fields_' . $this->integrationKey, [$this, 'getMergeFields'], 10, 3);
+        add_filter('fluent_booking/get_integration_config_field_options_' . $this->integrationKey, [$this, 'getConfigFieldOptions'], 10, 2);
+        add_filter('fluent_booking/get_integration_values_' . $this->integrationKey, [$this, 'prepareIntegrationFeed'], 10, 3);
 
         add_filter('fluent_booking/save_integration_settings_' . $this->integrationKey, [$this, 'setMetaKey'], 10, 2);
-        add_filter('fluent_booking/get_integration_values_' . $this->integrationKey, [$this, 'prepareIntegrationFeed'], 10,
-            3);
     }
 
     public function registerNotificationHooks()
