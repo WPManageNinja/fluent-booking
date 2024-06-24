@@ -9,7 +9,9 @@
                     clearable
                     :placeholder="field.options_labels[optionKey].placeholder"
                     :multiple="field.options_labels[optionKey].type == 'multi-select'"
-                    v-model="modelValue[optionKey]">
+                    v-model="modelValue[optionKey]"
+                    popper-class="fcal_select"
+                >
                     <el-option v-for="(option,optionId) in options" :key="optionId" :value="optionId"
                                :label="option"></el-option>
                 </el-select>
