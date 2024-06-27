@@ -122,7 +122,7 @@ class TimeSlotService
 
             if ($validSlots) {
                 $currentSlots = $rangedSlots[$date] ?? [];
-                $rangedSlots[$date] = array_merge($currentSlots, $validSlots);
+                $rangedSlots[$date] = $this->mergeAndSortSlots($currentSlots, $validSlots);
             }
         }
 
@@ -456,7 +456,7 @@ class TimeSlotService
                 }
             }
             if ($daySlots) {
-                $formattedSlots[$day] = $this->maybeSortDaySlots($daySlots);
+                $formattedSlots[$day] = $daySlots;
             }
         }
 
@@ -521,7 +521,7 @@ class TimeSlotService
         if ($overrideSlots && isset($overrideSlots[$date])) {
             $flatOverrideSlots = $this->convertSlotSetsToFlat($overrideSlots, $date, $duration);
             $availableSlots = array_merge($availableSlots, $flatOverrideSlots);
-            $availableSlots = $this->maybeSortDaySlots($availableSlots, true);
+            $availableSlots = $this->sortDaySlots($availableSlots);
         }
 
         return $availableSlots;
@@ -552,7 +552,7 @@ class TimeSlotService
             }
         }
 
-        return $this->maybeSortDaySlots($formattedSlots);
+        return $formattedSlots;
     }
 
     protected function handleNextDayOverrideSlot($formattedSlots, $start, $end, $interval, $period, &$overrideSlots, $date)
@@ -1018,14 +1018,23 @@ class TimeSlotService
         return false;
     }
 
-    protected function maybeSortDaySlots($daySlots, $forceSort = false)
+    protected function mergeAndSortSlots($currentSlots, $validSlots)
     {
-        if (!$forceSort && !$this->calendarSlot->isTeamDefaultSchedule()) {
-            return $daySlots;
+        if (!$currentSlots) {
+            return $validSlots;
         }
 
-        $daySlots = array_unique($daySlots);
+        $mergedSlots = array_merge($currentSlots, $validSlots);
 
+        usort($mergedSlots, function ($a, $b) {
+            return strtotime($a['start']) - strtotime($b['start']);
+        });
+
+        return $mergedSlots;
+    }
+
+    protected function sortDaySlots($daySlots)
+    {
         usort($daySlots, function ($a, $b) {
             return strtotime($a) - strtotime($b);
         });
