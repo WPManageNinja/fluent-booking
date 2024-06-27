@@ -121,8 +121,6 @@ class SettingsController extends Controller
         $currency = Arr::get($paymentSettings, 'currency');
         $isActive = Arr::get($paymentSettings, 'is_active', 'no');
 
-        error_log($currency);
-
         update_option('fluent_booking_global_payment_settings', [
             'currency'  => sanitize_text_field($currency),
             'is_active' => ($isActive == 'yes') ? 'yes' : 'no'
