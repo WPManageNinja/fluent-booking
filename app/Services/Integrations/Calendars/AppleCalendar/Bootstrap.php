@@ -245,7 +245,8 @@ class Bootstrap extends BaseCalendar
                         ], $dateRange[0], $dateRange[1], [
                             'type'     => 'remote',
                             'source'   => 'apple_calendar',
-                            'event_id' => null
+                            'event_id' => null,
+                            'host_id'  => $meta->object_id
                         ], $timeZone);
 
                         if ($recurringDates) {
@@ -270,7 +271,8 @@ class Bootstrap extends BaseCalendar
                             'start'    => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtstart)), $toTimeZone),
                             'end'      => DateTimeHelper::convertFromUtc(gmdate('Y-m-d H:i:s', strtotime($event->dtend)), $toTimeZone),
                             'source'   => 'apple_calendar',
-                            'event_id' => null
+                            'event_id' => null,
+                            'host_id'  => $meta->object_id
                         ];
                         continue;
                     }
@@ -283,7 +285,8 @@ class Bootstrap extends BaseCalendar
                         'start'    => $event->dtstart,
                         'end'      => $event->dtend,
                         'source'   => 'apple_calendar',
-                        'event_id' => null
+                        'event_id' => null,
+                        'host_id'  => $meta->object_id
                     ];
 
                     if ($timeZone) {
