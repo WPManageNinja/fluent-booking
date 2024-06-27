@@ -123,6 +123,7 @@ $border-color_1: var(--fcal_primaryColor);
     transition: .3s;
     gap: 8px;
     position: relative;
+    flex: none;
 
     svg {
       transition: .3s;
