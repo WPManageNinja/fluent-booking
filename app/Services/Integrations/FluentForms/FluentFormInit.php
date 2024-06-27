@@ -101,22 +101,10 @@ class FluentFormInit
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
-        $hostIds = null;
-        $this->hostId = null;
-        if ($calendarEvent->isTeamEvent()) {
-            $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
-        }
-
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-
-        if ($hostIds) {
-            foreach ($hostIds as $hostId) {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
-                if ($isSpotAvailable) {
-                    $this->hostId = $hostId;
-                    break;
-                }
-            }
+        
+        if ($calendarEvent->isTeamEvent()) {
+            $isSpotAvailable = $timeSlotService->isAnySpotAvailable($startDateTime, $endDateTime, $duration);
         } else {
             $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
         }
@@ -124,6 +112,10 @@ class FluentFormInit
         if (!$isSpotAvailable) {
             $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro');
             wp_send_json(['errors' => [$message]], 422);
+        }
+
+        if ($calendarEvent->isTeamEvent()) {
+            $this->hostId = $timeSlotService->hostUserId;
         }
 
         if (!is_user_logged_in()) {
