@@ -257,7 +257,8 @@ class Bootstrap extends BaseCalendar
                         'start'    => DateTimeHelper::convertFromUtc($slot['start'], $toTimeZone),
                         'end'      => DateTimeHelper::convertFromUtc($slot['end'], $toTimeZone),
                         'source'   => 'google',
-                        'event_id' => null
+                        'event_id' => null,
+                        'host_id'  => $meta->object_id
                     ];
                 }
             }

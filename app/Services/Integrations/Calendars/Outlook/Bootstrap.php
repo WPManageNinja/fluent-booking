@@ -317,7 +317,8 @@ class Bootstrap extends BaseCalendar
                             'start'    => $start,
                             'end'      => $end,
                             'source'   => 'outlook',
-                            'event_id' => null
+                            'event_id' => null,
+                            'host_id'  => $meta->object_id
                         ];
                     }
                 }
