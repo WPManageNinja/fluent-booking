@@ -56,13 +56,11 @@ class CalenderCleaner
             }
         }
 
-        $availabilitySchedules = Availability::query()
-            ->where('object_id', $calendar->user_id)->get();
+        $availabilitySchedules = Availability::where('object_id', $calendar->user_id)->get();
 
         if ($availabilitySchedules->count()) {
             foreach ($availabilitySchedules as $schedule) {
-                $eventAssociated = CalendarSlot::where('availability_type', 'existing_schedule')
-                    ->where('availability_id', $schedule->id)
+                $eventAssociated = CalendarSlot::where('availability_id', $schedule->id)
                     ->where('user_id', '!=', $schedule->object_id)
                     ->count();
 

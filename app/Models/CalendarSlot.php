@@ -318,14 +318,11 @@ class CalendarSlot extends Model
             return Arr::get($schedule, 'value.timezone', 'UTC');
         }
 
-        if ($this->isTeamDefaultSchedule()) {
-            return 'UTC';
-        }
-        
         if ($this->availability_type == 'existing_schedule') {
             $schedule = Availability::findOrFail($this->availability_id);
             return Arr::get($schedule, 'value.timezone', 'UTC');
         }
+
         return $this->calendar->author_timezone;
     }
 
@@ -793,12 +790,12 @@ class CalendarSlot extends Model
         return false;
     }
 
-    public function isRoundRobinDefaultSchedule($hostId = null) {
-        return !$hostId && $this->isRoundRobin() && $this->isTeamDefaultSchedule();
+    public function isRoundRobinDefaultSchedule() {
+        return $this->isRoundRobin() && $this->isTeamDefaultSchedule();
     }
 
-    public function isRoundRobinCommonSchedule($hostId = null) {
-        return !$hostId && $this->isRoundRobin() && $this->isTeamCommonSchedule();
+    public function isRoundRobinCommonSchedule() {
+        return $this->isRoundRobin() && $this->isTeamCommonSchedule();
     }
 
     private function getProcessedWeeklySlots($schedule)
@@ -819,84 +816,11 @@ class CalendarSlot extends Model
         return [$overrideSlots, $overrideDays];
     }
 
-    protected function getTeamScheduleData($dataKey = 'weekly_schedules')
-    {
-        $teamSchedules = [];
-        $teamMemberIds = $this->getHostIds();
-
-        foreach ($teamMemberIds as $teamMemberId) {
-            $schedule = AvailabilityService::getDefaultSchedule($teamMemberId);
-            if ($schedule) {
-                if ($dataKey == 'date_overrides') {
-                    $teamSchedules[$teamMemberId] = $this->getProcessedDateOverrides($schedule);
-                } else {
-                    $teamSchedules[$teamMemberId] = $this->getProcessedWeeklySlots($schedule);
-                }
-            }
-        }
-        return $teamSchedules;
-    }
-
-    protected function mergeTeamOverrides()
-    {
-        $teamOverrides = $this->getTeamScheduleData('date_overrides');
-
-        $teamOverrideSlots = [];
-        $teamOverrideDays = [];
-        foreach ($teamOverrides as $memberId => $dateOverrides) {
-            $overrideSlots = $dateOverrides[0];
-            foreach ($overrideSlots as $date => $slots) {
-                if (!isset($teamOverrideSlots[$date])) {
-                    $teamOverrideSlots[$date] = $slots;
-                } else {
-                    $combinedSlots = array_merge($teamOverrideSlots[$date], $slots);
-                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
-                    $teamOverrideSlots[$date] = array_values($uniqueCombinedSlots);
-                }
-            }
-            $overrideDays = $dateOverrides[1];
-            foreach ($overrideDays as $date => $slots) {
-                if (!isset($teamOverrideDays[$date][$memberId])) {
-                    $teamOverrideDays[$date][$memberId] = [$slots];
-                } else {
-                    $combinedSlots = array_merge($teamOverrideDays[$date][$memberId], [$slots]);
-                    $teamOverrideDays[$date][$memberId] = array_values($combinedSlots);
-                }
-            }
-        }
-        return [$teamOverrideSlots, $teamOverrideDays];
-    }
-
-    protected function mergeTeamSchedules()
-    {
-        $teamSchedules = $this->getTeamScheduleData('weekly_schedules');
-
-        $teamSchedule = [];
-        foreach ($teamSchedules as $schedule) {
-            foreach ($schedule as $day => $dayData) {
-                if (!isset($teamSchedule[$day])) {
-                    $teamSchedule[$day] = $dayData;
-                } else {
-                    $combinedSlots = array_merge($teamSchedule[$day]['slots'], $dayData['slots']);
-                    $uniqueCombinedSlots = array_unique($combinedSlots, SORT_REGULAR);
-                    $teamSchedule[$day]['slots'] = array_values($uniqueCombinedSlots);
-                    $teamSchedule[$day]['enabled'] = $teamSchedule[$day]['enabled'] || $dayData['enabled'];
-                }
-            }
-        }
-
-        return $teamSchedule;
-    }
-
     public function getWeeklySlots($hostId = null)
     {
         if ($hostId && !$this->isTeamCommonSchedule()) {
             $schedule = AvailabilityService::getDefaultSchedule($hostId);
             return $this->getProcessedWeeklySlots($schedule);
-        }
-
-        if ($this->isTeamDefaultSchedule()) {
-            return $this->mergeTeamSchedules();
         }
 
         if ($this->availability_type === 'existing_schedule') {
@@ -916,10 +840,6 @@ class CalendarSlot extends Model
             return $this->getProcessedDateOverrides($schedule);
         }
 
-        if ($this->isTeamDefaultSchedule()) {
-            return $this->mergeTeamOverrides();
-        }
-
         if ($this->availability_type === 'existing_schedule') {
             $schedule = Availability::findOrFail($this->availability_id);
             return $this->getProcessedDateOverrides($schedule);
@@ -935,6 +855,10 @@ class CalendarSlot extends Model
     public function getHostIdsSortedByBookings($startDate)
     {
         $hostIds = $this->getHostIds();
+
+        if (count($hostIds) <= 1) {
+            return $hostIds;
+        }
 
         $hostBookings = [];
         foreach ($hostIds as $hostId) {

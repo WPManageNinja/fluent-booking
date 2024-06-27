@@ -14,6 +14,7 @@ use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\App\Services\TeamTimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Collection;
@@ -843,23 +844,10 @@ class FrontEndHandler
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
-        $hostIds = null;
-        if ($calendarEvent->isTeamEvent()) {
-            $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
-        }
-
-        // Check if the time is available or not for this slot
         $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        $isSpotAvailable = false;
-
-        if ($hostIds) {
-            foreach ($hostIds as $hostId) {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostId);
-                if ($isSpotAvailable) {
-                    $bookingData['host_user_id'] = $hostId;
-                    break;
-                }
-            }
+        
+        if ($calendarEvent->isTeamEvent()) {
+            $isSpotAvailable = $timeSlotService->isAnySpotAvailable($startDateTime, $endDateTime, $duration);
         } else {
             $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
         }
@@ -868,6 +856,10 @@ class FrontEndHandler
             wp_send_json([
                 'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
             ], 422);
+        }
+
+        if ($calendarEvent->isTeamEvent()) {
+            $bookingData['host_user_id'] = $timeSlotService->hostUserId;
         }
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
@@ -933,7 +925,11 @@ class FrontEndHandler
 
         $duration = (int)$calendarEvent->getDuration(Arr::get($request, 'duration', null));
 
-        $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
+        if ($calendarEvent->isTeamEvent()) {
+            $timeSlotService = new TeamTimeSlotService($calendar, $calendarEvent);
+        } else {
+            $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
+        }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
 
