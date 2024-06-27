@@ -95,7 +95,7 @@ class Bootstrap extends IntegrationManagerController
             ],
             [
                 'key'            => 'board_config',
-                'label'          => 'Fluent Boards Configuration',
+                'label'          => __('Fluent Boards Configuration', 'fluent-booking-pro'),
                 'required'       => true,
                 'component'      => 'chained_select',
                 'primary_key'    => 'board_id',
@@ -108,75 +108,75 @@ class Bootstrap extends IntegrationManagerController
                 ],
                 'options_labels' => [
                     'board_id'       => [
-                        'label'       => 'Select Board',
+                        'label'       => __('Select Board', 'fluent-booking-pro'),
                         'type'        => 'select',
-                        'placeholder' => 'Select Board'
+                        'placeholder' => __('Select Board', 'fluent-booking-pro')
                     ],
                     'stage_id'       => [
-                        'label'       => 'Select Stage',
+                        'label'       => __('Select Stage', 'fluent-booking-pro'),
                         'type'        => 'select',
-                        'placeholder' => 'Select Stage'
+                        'placeholder' => __('Select Stage', 'fluent-booking-pro')
                     ],
                     'label_ids' => [
-                        'label'       => 'Select Labels',
+                        'label'       => __('Select Labels', 'fluent-booking-pro'),
                         'type'        => 'multi-select',
-                        'placeholder' => 'Select Labels'
+                        'placeholder' => __('Select Labels', 'fluent-booking-pro')
                     ],
                     'member_ids'     => [
-                        'label'       => 'Select Assignees',
+                        'label'       => __('Select Assignees', 'fluent-booking-pro'),
                         'type'        => 'multi-select',
-                        'placeholder' => 'Select Assignees'
+                        'placeholder' => __('Select Assignees', 'fluent-booking-pro')
                     ],
                     'priority'       => [
-                        'label'       => 'Select Priority',
+                        'label'       => __('Select Priority', 'fluent-booking-pro'),
                         'type'        => 'select',
-                        'placeholder' => 'Priority'
+                        'placeholder' => __('Priority', 'fluent-booking-pro')
                     ]
                 ]
             ],
             [
                 'key'         => 'task_title',
-                'label'       => 'Task Title',
+                'label'       => __('Task Title', 'fluent-booking-pro'),
                 'required'    => true,
-                'placeholder' => 'Task Title',
+                'placeholder' => __('Task Title', 'fluent-booking-pro'),
                 'component'   => 'value_text'
             ],
             [
                 'key'         => 'description',
-                'label'       => 'Description',
+                'label'       => __('Description', 'fluent-booking-pro'),
                 'required'    => false,
-                'placeholder' => 'Describe your task',
+                'placeholder' => __('Describe your task', 'fluent-booking-pro'),
                 'component'   => 'wp_editor',
             ],
             [
                 'key'         => 'author_name',
-                'label'       => 'Submitter Name',
+                'label'       => __('Submitter Name', 'fluent-booking-pro'),
                 'required'    => true,
-                'placeholder' => 'Submitter Name',
+                'placeholder' => __('Submitter Name', 'fluent-booking-pro'),
                 'component'   => 'value_text'
             ],
             [
                 'key'         => 'email',
-                'label'       => 'Submitter Email',
+                'label'       => __('Submitter Email', 'fluent-booking-pro'),
                 'required'    => true,
-                'placeholder' => 'Submitter Email',
+                'placeholder' => __('Submitter Email', 'fluent-booking-pro'),
                 'component'   => 'value_text'
             ],
             [
                 'key'       => 'due_at_days',
-                'label'     => 'Due Date',
-                'tips'      => 'Days after booking scheduled, values less than zero will set due date to null.',
+                'label'     => __('Due Date', 'fluent-booking-pro'),
+                'tips'      => __('Days after booking scheduled, values less than zero will set due date to null.', 'fluent-booking-pro'),
                 'component' => 'number'
             ],
             [
                 'key'         => 'position',
-                'label'       => 'Task Position',
+                'label'       => __('Task Position', 'fluent-booking-pro'),
                 'required'    => true,
-                'placeholder' => 'Position',
+                'placeholder' => __('Position', 'fluent-booking-pro'),
                 'component'   => 'radio_choice',
                 'options'     => [
-                    'bottom' => 'Bottom',
-                    'top'    => 'Top'
+                    'bottom' => __('Bottom', 'fluent-booking-pro'),
+                    'top'    => __('Top', 'fluent-booking-pro')
                 ]
             ],
             [
@@ -291,9 +291,9 @@ class Bootstrap extends IntegrationManagerController
     private function getBoardPriorities()
     {
         return [
-            'low'    => 'Low',
-            'medium' => 'Medium',
-            'high'   => 'High'
+            'low'    => __('Low', 'fluent-booking-pro'),
+            'medium' => __('Medium', 'fluent-booking-pro'),
+            'high'   => __('High', 'fluent-booking-pro')
         ];
     }
 
