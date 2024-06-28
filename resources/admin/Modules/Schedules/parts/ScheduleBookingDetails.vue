@@ -3,7 +3,7 @@
         <div class="fcal_schedule_details_content">
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
-                    {{ meetingDetails }} - {{ $t(ucFirst(showing_booking.status)) }}
+                    <div><span v-html="meetingDetails"></span> - {{ $t(ucFirst(showing_booking.status)) }}</div> 
                     <el-dropdown v-if="hasAccess('manage_all_bookings')" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Meeting Duration') }}</h3>
-                            <p>{{ showing_booking.slot_minutes }} {{ $t('minutes') }}</p>
+                            <p>{{ getMeetingDuration(showing_booking.slot_minutes) }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Location') }}</h3>
@@ -256,7 +256,8 @@ export default {
             activities: [],
             sidebar_contents: [],
             payment_order: null,
-            main_body_contents: []
+            main_body_contents: [],
+            durationLookup: []
         }
     },
     watch: {
@@ -303,16 +304,23 @@ export default {
         isRefundable() {
             return this.showing_booking.payment_method == 'stripe' && this.showing_booking.payment_status != 'refunded';
         },
-        meetingDetails() {
+        generateTitle() {
             const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
-            const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
-            return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName} @ ${startTime}`;
+            return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName}`;
         },
-        meetingTime() {
+        meetingDetails() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
-            const endTime = this.toCurrentTimezone(this.showing_booking.end_time, this.appVars.date_time_formatter);
-            return `${startTime} - ${endTime}`;
+            if (this.showing_booking.event_type === 'group') {
+                const booked = this.showing_booking.booked_count;
+                return `${booked} ${this.$t('guests with')} ${this.$t('you')} @ ${startTime}`;
+            }
+            return this.showing_booking.title;
         },
+        getMeetingDuration() {
+            return (duration) => {
+                return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
+            }
+        }
     },
     methods: {
         fetchBooking() {
@@ -329,6 +337,7 @@ export default {
                     this.payment_order = response.payment_order;
                     this.main_body_contents = response.main_body_contents;
 
+                    this.updateDurationLookup();
                     this.$emit('bookingFetched', response.schedule);
                 })
                 .catch((errors) => {
@@ -408,12 +417,20 @@ export default {
         updateAdditionalInfo(activities, sidebarContents) {
             this.activities = activities;
             this.sidebar_contents = sidebarContents;
+        },
+        updateDurationLookup() {
+            if (this.showing_booking?.calendar_event?.settings?.multi_duration?.enabled) {
+                this.durationLookup = this.appVars.multi_duration_lookup;
+            } else {
+                this.durationLookup = this.appVars.duration_lookup;
+            }
         }
     },
     mounted() {
         if (!this.booking) {
             this.fetchBooking();
         }
+        this.updateDurationLookup();
         this.getAdditionalData();
     }
 }

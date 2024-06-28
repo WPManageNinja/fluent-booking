@@ -45,7 +45,7 @@
                 </div>
             </div>
             <p class="fcal_slot_meta">
-                <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon> {{ slot.duration }} {{ $t('minutes') }}</span>
+                <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon>{{ getDuration(slot.duration) }}</span>
                 <span class="fcal_slot_meta_event">
                     <span class="icons" :class="isTeam ? 'round-robin-icons' : ''">
                         <span class="left-icons">
@@ -149,7 +149,8 @@ export default {
             updating: false,
             isCopied: false,
             openShare: false,
-            shareSlot: null
+            shareSlot: null,
+            durationLookup: []
         }
     },
     computed: {
@@ -170,7 +171,12 @@ export default {
                 }
             })
             return isDisabled;
-        }
+        },
+        getDuration() {
+            return (duration) => {
+                return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
+            }
+        },
     },
     methods: {
         editSlot() {
@@ -283,6 +289,13 @@ export default {
                 this.cloneEvent();
             }
         }
-    }
+    },
+    mounted() {
+        if (this.slot.settings?.multi_duration?.enabled) {
+            this.durationLookup = this.appVars.multi_duration_lookup;
+        } else {
+            this.durationLookup = this.appVars.duration_lookup;
+        }
+    },
 }
 </script>

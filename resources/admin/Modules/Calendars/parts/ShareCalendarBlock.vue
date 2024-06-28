@@ -9,7 +9,7 @@
     
             <p class="fcal_slot_meta">
                 <span class="fcal_slot_meta_mins">
-                    <el-icon><Clock /></el-icon> {{ slot.duration }} {{ $t('minutes') }}
+                    <el-icon><Clock /></el-icon> {{ getDuration(slot.duration) }}
                 </span>
                 <span class="fcal_slot_meta_event">
                     {{ eventType }}
@@ -101,6 +101,7 @@ export default {
         return {
             showShare: this.openShare,
             activeTab: 'copy-shortcode',
+            durationLookup: []
         }
     },
     watch: {
@@ -114,6 +115,11 @@ export default {
         },
         eventType() {
             return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+        },
+        getDuration() {
+            return (duration) => {
+                return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
+            }
         }
     },
     methods: {
@@ -131,6 +137,15 @@ export default {
         copyLandingPageUrl(text) {
             copyToClipBoard(text);
             this.$handleSuccess(this.$t('Copied to clipboard'));
+        }
+    },
+    mounted() {
+        if (this.slot.settings?.multi_duration?.enabled) {
+            this.slot.duration = this.slot.settings.multi_duration.default_duration;
+            this.durationLookup = this.appVars.multi_duration_lookup;
+        } else {
+            this.slot.duration = this.slot.duration == 'custom' ? this.slot.custom_duration : this.slot.duration;
+            this.durationLookup = this.appVars.duration_lookup;
         }
     }
 }

@@ -59,7 +59,7 @@
         {#if appData.slot.location_settings[0]?.type == 'phone_organizer'}
             <div class="slot_location fcal_icon_item">
                 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1rem" height="1rem" data-testid="phone-call-icon" data-id="details-item-icon"><title>Phone call</title><path d="M15.415 22.655c2.356 1.51 5.218 1.174 7.238-.84l.842-.838c.673-.672.673-2.014 0-2.685l-3.012-3.006c-.673-.671-1.541-.2-2.215.472-.673.671-2.679 1.334-3.352.663l-7.35-7.144c-.674-.671-.016-2.677.658-3.348.673-.671.673-2.014 0-2.685L5.65.67C4.977 0 3.63 0 2.957.671l-.841.671C.264 3.356-.073 6.21 1.274 8.558a56.353 56.353 0 0014.14 14.097z" fill="currentColor"></path></svg>
-                <span>Phone Call</span>
+                <span>{i18('Phone Call')}</span>
             </div>
         {:else if appData.slot.location_settings[0]?.type == 'in_person_organizer'}
             <div class="slot_location fcal_icon_item">
