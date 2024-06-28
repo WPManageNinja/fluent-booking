@@ -1196,6 +1196,18 @@ class Helper
         ]);
     }
 
+    public static function getDurationLookup($multiDuration = false)
+    {
+        $durations = $multiDuration ? self::getMeetingMultiDurations() : self::getMeetingDurations();
+
+        $durationLookup = [];
+        foreach ($durations as $duration) {
+            $durationLookup[$duration['value']] = $duration['label'];
+        }
+
+        return $durationLookup;
+    }
+
     public static function getBufferTimes()
     {
         return apply_filters('fluent_booking/buffer_times_schema', [

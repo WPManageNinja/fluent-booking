@@ -565,7 +565,7 @@ class FcalCalendar extends \Elementor\Widget_Base
                                                                   stroke="#445164" stroke-linecap="round"
                                                                   stroke-linejoin="round"></path>
                                                         </svg>
-                                                        <?php echo esc_html($duration) . ' ' . _e('minutes', 'fluent-booking-pro'); ?>
+                                                        <?php echo esc_html($duration); ?>
                                                     </span>
                                                 <?php endforeach; ?>
                                             </div>

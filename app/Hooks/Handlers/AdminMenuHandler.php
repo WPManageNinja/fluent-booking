@@ -242,6 +242,8 @@ class AdminMenuHandler
         $eventColors = Helper::getEventColors();
         $meetingDurations = Helper::getMeetingDurations();
         $multiDurations = Helper::getMeetingMultiDurations();
+        $durationLookup = Helper::getDurationLookup();
+        $multiDurationLookup = Helper::getDurationLookup(true);
         $scheduleSchema = Helper::getWeeklyScheduleSchema();
         $bufferTimes = Helper::getBufferTimes();
         $slotIntervals = Helper::getSlotIntervals();
@@ -266,6 +268,8 @@ class AdminMenuHandler
             'location_fields'    => $locationFields,
             'custom_field_types' => $customFieldTypes,
             'week_select_times'  => $weekSelectTimes,
+            'duration_lookup'    => $durationLookup,
+            'multi_duration_lookup' => $multiDurationLookup,
             'override_select_times' => $overrideSelectTimes,
             'status_changing_times' => $statusChangingTimes,
             'me'                 => [
