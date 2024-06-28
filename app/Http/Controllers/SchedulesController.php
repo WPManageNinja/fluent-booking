@@ -229,7 +229,7 @@ class SchedulesController extends Controller
 
     public function getBooking(Request $request, $bookingId)
     {
-        $booking = Booking::with('slot');
+        $booking = Booking::with('calendar_event');
 
         if (!PermissionManager::userCanSeeAllBookings()) {
             $booking->whereHas('calendar', function ($q) {
@@ -384,8 +384,6 @@ class SchedulesController extends Controller
         $booking->booking_status_text = $booking->getBookingStatus();
         $booking->payment_status_text = $booking->getPaymentStatus();
         $booking->custom_form_data    = $booking->getCustomFormData();
-
-        $booking->slot = $booking->calendar_event;
 
         return $booking;
     }

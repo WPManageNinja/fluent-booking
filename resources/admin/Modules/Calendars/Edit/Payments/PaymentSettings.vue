@@ -199,6 +199,7 @@ export default {
             currencies: [],
             calendarId: '',
             eventId: '',
+            durationLookup: this.appVars.multi_duration_lookup
         };
     },
     computed: {
@@ -253,7 +254,7 @@ export default {
             return this.multiDuration.available_durations.includes(duration);
         },
         getDuration(duration) {
-            return duration + ' ' + this.$t('Minutes');
+            return this.durationLookup[duration];
         },
         addItem() {
             this.paymentSettings.items.push({

@@ -177,6 +177,7 @@ export default {
             colors: this.appVars.event_colors,
             meetingDurations: this.appVars.meeting_durations,
             multiDurations: this.appVars.multi_durations,
+            durationLookup: this.appVars.multi_duration_lookup,
             defaultDurations: []
         }
     },
@@ -195,6 +196,9 @@ export default {
         validateDuration(calendar_event) {
             this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
         },
+        getDuration(duration) {
+            return this.durationLookup[duration];
+        },
         updateDefaultDurations(updatedValue) {
             if (!updatedValue || !updatedValue.length) {
                 return;
@@ -203,7 +207,7 @@ export default {
             
             const durations = updatedValue.map(duration => ({
                 value: duration,
-                label: `${duration} ${this.$t('Minutes')}`
+                label: this.getDuration(duration)
             }));
             this.defaultDurations = durations;
 

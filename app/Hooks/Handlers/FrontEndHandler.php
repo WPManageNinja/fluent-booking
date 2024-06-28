@@ -591,7 +591,7 @@ class FrontEndHandler
             'start_day'      => $startDay,
             'i18'            => [
                 'Timezone'                      => __('Timezone', 'fluent-booking-pro'),
-                'minutes'                       => __('minutes', 'fluent-booking-pro'),
+                'Minutes'                       => __('Minutes', 'fluent-booking-pro'),
                 'Enter Details'                 => __('Enter Details', 'fluent-booking-pro'),
                 'Summary'                       => __('Summary', 'fluent-booking-pro'),
                 'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
@@ -663,6 +663,7 @@ class FrontEndHandler
                 'Google Meet'                          => __('Google Meet', 'fluent-booking-pro'),
                 'Zoom Meeting'                         => __('Zoom Meeting', 'fluent-booking-pro'),
                 'Online Meeting'                       => __('Online Meeting', 'fluent-booking-pro'),
+                'Phone Call'                           => __('Phone Call', 'fluent-booking-pro'),
                 'Processing...'                        => __('Processing...', 'fluent-booking-pro'),
                 'Loading Payment Processor...'         => __('Loading Payment Processor...', 'fluent-booking-pro'),
                 'PM'                                   => __('PM', 'fluent-booking-pro'),
@@ -979,16 +980,18 @@ class FrontEndHandler
         $author['name'] = $calendar->title;
 
         $eventVars = [
-            'slot'           => $eventData,
-            'author_profile' => $author,
-            'form_fields'    => $formFields,
-            'i18n'           => [
+            'slot'            => $eventData,
+            'author_profile'  => $author,
+            'form_fields'     => $formFields,
+            'i18n'            => [
                 'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
                 'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
                 'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
             ],
-            'date_formatter' => DateTimeHelper::getDateFormatter(true),
-            'isRtl' => Helper::fluentbooking_is_rtl()
+            'date_formatter'  => DateTimeHelper::getDateFormatter(true),
+            'isRtl'           => Helper::fluentbooking_is_rtl(),
+            'duration_lookup' => Helper::getDurationLookup(),
+            'multi_duration_lookup' => Helper::getDurationLookup(true)
         ];
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
