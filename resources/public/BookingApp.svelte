@@ -92,6 +92,16 @@
         maybeUpdatePayment(value)
     }
 
+    function getDuration(duration) {
+        const durationLookup = appData.duration_lookup;
+        return durationLookup[duration] ?? duration + ' ' + i18('Minutes');
+    }
+
+    function getMultiDuration(duration) {
+        const durationLookup = appData.multi_duration_lookup;
+        return durationLookup[duration];
+    }
+
     function formatHours(e) {
         slot.time_format = e;
     }
@@ -265,7 +275,7 @@
                                     </svg>
                                     {#if slot.settings?.multi_duration?.enabled}
                                         {#if selectedDateTime.start}
-                                            <span class="fcal_duration_title">{duration} {i18('minutes')}</span>
+                                            <span class="fcal_duration_title">{ getMultiDuration(duration) }</span>
                                         {:else}
                                             <div class="fcal_multi_duration">
                                                 {#each availableDurations as value}
@@ -273,13 +283,13 @@
                                                         on:keypress={()=>durationSelected(value)}
                                                         on:click={()=>durationSelected(value)}
                                                         role="button" tabindex="0" class="fcal_duration {duration == value ? 'is_selected' : ''}">
-                                                        {value} {i18('minutes')}
+                                                        { getMultiDuration(value) }
                                                     </span>
                                                 {/each}
                                             </div>
                                         {/if}
                                     {:else}
-                                        <span class="fcal_duration_title">{slot.duration} {i18('minutes')}</span>
+                                        <span class="fcal_duration_title">{ getDuration(slot.duration) }</span>
                                     {/if}
                                 </div>
 

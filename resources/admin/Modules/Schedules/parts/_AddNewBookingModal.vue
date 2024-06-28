@@ -48,7 +48,7 @@
                     :disabled="!event?.id">
                     <el-option v-for="duration in availableDurations"
                         :key="duration"
-                        :label="duration + ' ' + $t('minutes')"
+                        :label="getDuration(duration)"
                         :value="duration">
                     </el-option>
                 </el-select>
@@ -256,7 +256,8 @@ export default {
             eventMonth: new Date().getMonth(),
             selectEventDate: false,
             teamMembers: [],
-            multiGuestField: []
+            multiGuestField: [],
+            durationLookup: this.appVars.multi_duration_lookup
         }
     },
     watch: {
@@ -323,6 +324,11 @@ export default {
         },
         isAboutRequired() {
             return this.formFields.length && this.formFields.find(field => field.name === 'message' && field.required);
+        },
+        getDuration() {
+            return (duration) => {
+                return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
+            }
         }
     },
     methods: {

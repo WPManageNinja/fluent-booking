@@ -2,8 +2,8 @@
     <div :class="'fcal_spot_wrapper fcal_spoot_status_' + booking.status">
         <div @click="showDetails()" class="fcal_spot_line">
             <div class="fcal_spot_timing">
-                <div v-if="booking.slot" class="fcal_spot_color">
-                    <span :style="{background: booking.slot.color_schema}"></span>
+                <div v-if="booking.calendar_event" class="fcal_spot_color">
+                    <span :style="{background: booking.calendar_event.color_schema}"></span>
                 </div>
                 <span style="line-height: 120%;" v-html="formattedTimeRange"></span>
             </div>
