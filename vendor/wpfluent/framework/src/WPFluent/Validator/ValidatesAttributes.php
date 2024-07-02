@@ -3,9 +3,14 @@
 namespace FluentBooking\Framework\Validator;
 
 use Countable;
+use Exception;
+use ValueError;
+use DateTimeInterface;
 use InvalidArgumentException;
 use FluentBooking\Framework\Support\Str;
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\Framework\Support\Helper;
+use FluentBooking\Framework\Support\DateTime;
 use FluentBooking\Framework\Validator\Contracts\File;
 
 trait ValidatesAttributes
@@ -97,6 +102,17 @@ trait ValidatesAttributes
     }
 
     /**
+     * Check if parameter should be converted to boolean.
+     *
+     * @param  string  $parameter
+     * @return bool
+     */
+    protected function shouldConvertToBoolean($parameter)
+    {
+        return in_array('boolean', Arr::get($this->rules, $parameter, []));
+    }
+
+    /**
      * Convert the given values to boolean if they are string "true" / "false".
      *
      * @param array $values
@@ -113,6 +129,19 @@ trait ValidatesAttributes
             }
 
             return $value;
+        }, $values);
+    }
+
+    /**
+     * Convert the given values to null if they are string "null".
+     *
+     * @param  array  $values
+     * @return array
+     */
+    protected function convertValuesToNull($values)
+    {
+        return array_map(function ($value) {
+            return Str::lower($value) === 'null' ? null : $value;
         }, $values);
     }
 
@@ -151,6 +180,10 @@ trait ValidatesAttributes
     protected function validateRequiredIf($attribute, $value, $parameters)
     {
         $this->requireParameterCount(2, $parameters, 'required_if');
+        
+        if (preg_match('/\.\d\./', $attribute, $matches)) {
+            $parameters[0] = str_replace(['.*.'], $matches, $parameters[0]);
+        }
 
         $other = Arr::get($this->data, $parameters[0]);
 
@@ -272,6 +305,61 @@ trait ValidatesAttributes
     }
 
     /**
+     * Validate that an attribute is a integer.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function validateInt($attribute, $value)
+    {
+        return $this->validateInteger($attribute, $value);
+    }
+
+    /**
+     * Validate that an attribute is a integer.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function validateInteger($attribute, $value)
+    {
+        return is_int($value);
+    }
+
+    /**
+     * Validate that an attribute has a given number of decimal places.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array<int, int|string>  $parameters
+     * @return bool
+     */
+    public function validateDecimal($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'decimal');
+
+        if (!$this->validateNumeric($attribute, $value)) {
+            return false;
+        }
+
+        $matches = [];
+
+        if (preg_match('/^[+-]?\d*\.?(\d*)$/', $value, $matches) !== 1) {
+            return false;
+        }
+
+        $decimals = strlen(end($matches));
+
+        if (!isset($parameters[1])) {
+            return $decimals == $parameters[0];
+        }
+
+        return $decimals >= $parameters[0] && $decimals <= $parameters[1];
+    }
+
+    /**
      * Validate that an attribute is numeric.
      *
      * @param string $attribute
@@ -282,6 +370,63 @@ trait ValidatesAttributes
     protected function validateNumeric($attribute, $value)
     {
         return is_numeric($value);
+    }
+
+    /**
+     * Validate that an attribute is a valid date.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function validateDate($attribute, $value)
+    {
+        if ($value instanceof DateTimeInterface) {
+            return true;
+        }
+
+        try {
+            if ((!is_string($value) && !is_numeric($value)) || strtotime($value) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
+        $date = date_parse($value);
+
+        return checkdate($date['month'], $date['day'], $date['year']);
+    }
+
+    /**
+     * Validate that an attribute matches a date format.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array<int, int|string>  $parameters
+     * @return bool
+     */
+    public function validateDateFormat($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'date_format');
+
+        if (!is_string($value) && !is_numeric($value)) {
+            return false;
+        }
+
+        foreach ($parameters as $format) {
+            try {
+                $date = DateTime::createFromFormat('!'.$format, $value);
+
+                if ($date && $date->format($format) == $value) {
+                    return true;
+                }
+            } catch (ValueError $e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -462,6 +607,48 @@ trait ValidatesAttributes
         }
 
         return empty(array_diff_key($value, array_fill_keys($parameters, '')));
+    }
+
+    /**
+     * Validate that an array has all of the given keys.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array<int, int|string>  $parameters
+     * @return bool
+     */
+    public function validateRequiredArrayKeys($attribute, $value, $parameters)
+    {
+        if (!is_array($value)) {
+            return false;
+        }
+
+        foreach ($parameters as $param) {
+            if (!Arr::exists($value, $param)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate that an attribute passes a regular expression check.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array<int, int|string>  $parameters
+     * @return bool
+     */
+    public function validateRegex($attribute, $value, $parameters)
+    {
+        if (! is_string($value) && ! is_numeric($value)) {
+            return false;
+        }
+
+        $this->requireParameterCount(1, $parameters, 'regex');
+
+        return preg_match($parameters[0], $value) > 0;
     }
 
     /**

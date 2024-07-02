@@ -134,17 +134,20 @@ class DateTime extends PHPDateTime
     }
 
     /**
-     * Create a DateTime object from a string, UNIX timestamp, or other DateTimeInterface object.
+     * Create a DateTime object from a string, UNIX timestamp,
+     * or other DateTimeInterface object.
      * 
      * @param  string|int|\DateTimeInterface  $time
      * @return static
      * @throws \Exception
      */
-    public static function create($time, $tz = null)
+    public static function create($time = null, $tz = null)
     {
         if (func_num_args() > 2) {
             return static::createFromDate(...func_get_args());
         }
+
+        $time = $time ?: static::now();
 
         if (is_null($tz)) {
             $timezone = (new static)->getDefaultTimezone();
@@ -220,10 +223,17 @@ class DateTime extends PHPDateTime
             throw new InvalidArgumentException('Invalid timezone.');
         }
 
-        $dateTime = new PHPDateTime($datetimeString, $timezone);
+        $dateTime = PHPDateTime::createFromFormat($format, $datetimeString);
+        
+        if ($dateTime !== false) {
+            
+            if (!$dateTime instanceof static) {
+                return new static($dateTime->format(ltrim($format, '!')), $timezone);
+            }
 
-        if (!$dateTime instanceof static) {
-            return new static($dateTime->format($format), $timezone);
+            $dateTime->setTimezone($timezone);
+
+            return $dateTime;
         }
 
         throw new InvalidArgumentException(
@@ -261,10 +271,13 @@ class DateTime extends PHPDateTime
     }
 
     /**
-     * Given a date in UTC or GMT timezone, returns that date in the timezone of the site.
+     * Given a date in UTC or GMT timezone, returns
+     * that date in the timezone of the site.
      *
      * Requires a date in the Y-m-d H:i:s format.
-     * Default return format of 'Y-m-d H:i:s' can be overridden using the `$format` parameter.
+     * 
+     * Default return format of 'Y-m-d H:i:s' can be
+     * overridden using the `$format` parameter.
      *
      * @param string $date_string The date to be converted, in UTC or GMT timezone.
      * @param string $format      The format string for the returned date. Default 'Y-m-d H:i:s'.
@@ -433,7 +446,9 @@ class DateTime extends PHPDateTime
     {
         $startOfWeek = intval(get_option('start_of_week'));
 
-        return $this->modify('this Sunday + ' . ($startOfWeek - 1) . ' days')->endOfDay();
+        return $this->modify(
+            'this Sunday + ' . ($startOfWeek - 1) . ' days'
+        )->endOfDay();
     }
 
     /**
@@ -610,17 +625,23 @@ class DateTime extends PHPDateTime
     {
         // Convert the $from value to unix timestamp if needed.
         if (is_null($from)) {
-            $from = (new DateTime($this->format($this->getDateFormat())))->getTimestamp();
+            $from = (new DateTime(
+                $this->format($this->getDateFormat())
+            ))->getTimestamp();
         } else {
             if (!is_numeric($from)) {
-                $from = ($from instanceof DateTime ? $from : new DateTime($from))->getTimestamp();
+                $from = (
+                    $from instanceof DateTime ? $from : new DateTime($from)
+                )->getTimestamp();
             }
         }
 
         // Convert the $to value to unix timestamp if needed.
         if (!is_null($to)) {
             if (!is_numeric($to)) {
-                $to = ($to instanceof DateTime ? $to : new DateTime($to))->getTimestamp();
+                $to = (
+                    $to instanceof DateTime ? $to : new DateTime($to)
+                )->getTimestamp();
             }
         }
 
@@ -648,8 +669,8 @@ class DateTime extends PHPDateTime
      * 
      * Return format can be overridden using the $format parameter.
      *
-     * @param string $date_string The date to be converted, in the timezone of the site.
-     * @param string $format      The format string for the returned date. Default 'Y-m-d H:i:s'.
+     * @param string $dateString The date to be converted, in the timezone of the site.
+     * @param string $format The format string for the returned date. Default 'Y-m-d H:i:s'.
      * @see https://developer.wordpress.org/reference/functions/get_gmt_from_date/
      * 
      * @return string Formatted version of the date, in UTC.

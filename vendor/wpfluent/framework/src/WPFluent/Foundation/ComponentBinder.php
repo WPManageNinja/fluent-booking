@@ -2,14 +2,15 @@
 
 namespace FluentBooking\Framework\Foundation;
 
+use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Str;
 use FluentBooking\Framework\View\View;
 use FluentBooking\Framework\Http\URL;
 use FluentBooking\Framework\Http\Router;
 use FluentBooking\Framework\Support\Facade;
 use FluentBooking\Framework\Support\Pipeline;
-use FluentBooking\Framework\Request\Request;
-use FluentBooking\Framework\Response\Response;
+use FluentBooking\Framework\Http\Request\Request;
+use FluentBooking\Framework\Http\Response\Response;
 use FluentBooking\Framework\Events\Dispatcher;
 use FluentBooking\Framework\Database\Orm\Model;
 use FluentBooking\Framework\Validator\Validator;
@@ -20,6 +21,7 @@ use FluentBooking\Framework\Pagination\AbstractCursorPaginator;
 use FluentBooking\Framework\Pagination\AbstractPaginator;
 use FluentBooking\Framework\Pagination\CursorPaginator;
 use FluentBooking\Framework\Pagination\Cursor;
+use WpOrg\Requests\Exception\Http\Status401;
 
 class ComponentBinder
 {
@@ -85,12 +87,14 @@ class ComponentBinder
         $app->resolving(RequestGuard::class, function($request) use ($app) {
 
             if (method_exists($request, 'authorize')) {
-                !$request->authorize() && $request->abort(401);
+                if(!$request->authorize()) throw new Status401;
             }
 
             $request->merge($request->beforeValidation());
             $request->validate();
-            $request->merge($request->afterValidation());
+            $request->merge((array) $request->afterValidation(
+                $app->make('validator')
+            ));
         });
     }
 
@@ -170,6 +174,8 @@ class ComponentBinder
         });
 
         $this->app->alias(Request::class, 'request');
+
+        $this->addBackwardCompatibleAlias(Request::class);
     }
 
     /**
@@ -183,6 +189,8 @@ class ComponentBinder
         });
 
         $this->app->alias(Response::class, 'response');
+        
+        $this->addBackwardCompatibleAlias(Response::class);
     }
 
     /**
@@ -333,5 +341,39 @@ class ComponentBinder
         if (is_readable($globals)) {
             require_once $globals;
         }
+    }
+
+    /**
+     * Adds new alias to maintain ther backward compatibility.
+     *
+     * @param string $class
+     * @return void
+     */
+    protected function addBackwardCompatibleAlias($class)
+    {
+        $this->app->alias(
+            $class, $alias = $this->getAlias($class)
+        );
+
+        if (!class_exists($alias)) {
+            class_alias($class, $alias);
+        }
+    }
+
+    /**
+     * Resolves the backward compatible alias.
+     * 
+     * @param string $class
+     * @return string New alias
+     */
+    protected function getAlias($class)
+    {
+        $pieces = explode('\\', $class);
+        
+        if ($index = Arr::findPath($pieces, 'Http')) {
+            unset($pieces[$index]);
+        }
+        
+        return implode('\\', $pieces);
     }
 }

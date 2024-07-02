@@ -3,6 +3,7 @@
 namespace FluentBooking\Framework\Foundation;
 
 use InvalidArgumentException;
+use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Foundation\Config;
 use FluentBooking\Framework\Container\Container;
 use FluentBooking\Framework\Foundation\ComponentBinder;
@@ -121,7 +122,7 @@ class Application extends Container
             );
         }
 
-        return $section ? static::$composer[$section] : static::$composer;
+        return $section ? Arr::get(static::$composer, $section) : static::$composer;
     }
 
     /**
@@ -204,7 +205,7 @@ class Application extends Container
 
         if (is_dir($this['path.config'])) {
             foreach (glob($this['path.config'] . '*.php') as $file) {
-                $data[basename($file, '.php')] = require_once($file);
+                $data[basename($file, '.php')] = require($file);
             }
         }
 

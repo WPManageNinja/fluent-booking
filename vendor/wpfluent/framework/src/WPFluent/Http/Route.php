@@ -112,6 +112,13 @@ class Route
     ];
 
     /**
+     * Skips middlewar if true
+     * 
+     * @var boolean
+     */
+    protected $skipMiddleware = false;
+
+    /**
      * Predefined Regex foe where constraints
      * @var array
      */
@@ -126,14 +133,14 @@ class Route
      * Route parameters
      * @var null|array
      */
-    protected static $parameters = null;
+    protected $parameters = null;
 
     /**
      * Route substituted parameters
      * 
      * @var null|array
      */
-    protected static $substitutedParameters = [];
+    protected $substitutedParameters = [];
 
     /**
      * Construct the route instance
@@ -197,6 +204,16 @@ class Route
         }
         
         return $this->meta;
+    }
+
+    /**
+     * Get route options
+     * 
+     * @return mixed
+     */
+    public function getOptions()
+    {
+        return $this->getOption();
     }
 
     /**
@@ -418,9 +435,11 @@ class Route
     {
         $this->setOptions();
 
-        $uri = $this->compileRoute($this->uri);
+        $uri = '/' . trim($this->compileRoute($this->uri), '/');
 
-        return register_rest_route($this->restNamespace, "/{$uri}", $this->options);
+        return register_rest_route(
+            $this->restNamespace, $uri, $this->getOptions()
+        );
     }
 
     /**
@@ -524,15 +543,23 @@ class Route
                 }
             }
             
-            return $this->app->make(Pipeline::class)
-                ->send($response)
-                ->through($this->collectMiddleWare('after'))
-                ->then(function($response) {
-                    if (!$response instanceof WP_REST_Response) {
-                        $response = new WP_REST_Response($response);
-                    }
-                    return $response;
-                });
+            if (!$this->skipMiddleware) {
+                $response = $this->app->make(Pipeline::class)
+                    ->send($response)
+                    ->through($this->collectMiddleWare('after'))
+                    ->then(function($response) {
+                        if (!$response instanceof WP_REST_Response) {
+                            $response = new WP_REST_Response($response);
+                        }
+                        return $response;
+                    });
+
+                if (!$response) {
+                    $response = $this->app->request->abort();
+                }
+            }
+
+            return $response;
 
         } catch (ValidationException $e) {
             return $this->app->response->sendError(
@@ -545,7 +572,7 @@ class Route
         } catch (Exception $e) {
             return $this->app->response->sendError([
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], $e->getCode() ?: 500);
         }
     }
 
@@ -556,23 +583,51 @@ class Route
      */
     public function permissionCallback($wpRestRequest)
     {
-        $this->app->instance('route', $this);
+        try {
+
+            $this->app->instance('route', $this);
         
-        if (!$this->app->bound('wprestrequest')) {
-            $this->app->instance('wprestrequest', $wpRestRequest);
-            $this->app->request->mergeInputsFromRestRequest($wpRestRequest);
+            if (!$this->app->bound('wprestrequest')) {
+                $this->app->instance('wprestrequest', $wpRestRequest);
+                $this->app->request->mergeInputsFromRestRequest($wpRestRequest);
 
-            if (method_exists($this, 'prepareCallbacks')) {
-                $this->prepareCallbacks($this->app->request);
+                if (method_exists($this, 'prepareCallbacks')) {
+                    $this->prepareCallbacks($this->app->request);
+                }
             }
-        }
 
-        return $this->app->make(Pipeline::class)
-            ->send($this->app->request)
-            ->through($this->collectMiddleWare('before'))
-            ->then(function($request) {
-                return $this->dispatchPermissionHandler();
-            });
+            $response = $this->app->make(Pipeline::class)
+                ->send($this->app->request)
+                ->through($this->collectMiddleWare('before'))
+                ->then(function($request) {
+                    return $this->dispatchPermissionHandler();
+                });
+
+            if (is_wp_error($response)) {
+                throw new Exception(
+                    $response->get_error_message(),
+                    is_int($code = $response->get_error_code()) ? $code : 403
+                );
+            }
+
+            if ($response instanceof WP_REST_Response) {
+                $data = $response->get_data();
+
+                throw new Exception(
+                    $data['message'] ?? $response->get_status(), $response->get_status()
+                );
+            }
+
+            return $response;
+
+        } catch (Exception $e) {
+            $this->skipMiddleware = true;
+            $this->action = function() use ($e) {
+                return $this->app->response->sendError(
+                    ['message' => $e->getMessage()], $e->getCode()
+                );
+            };
+        }
     }
 
     /**
@@ -599,12 +654,12 @@ class Route
     {
         $routeParameters = [];
 
-        if (!static::$substitutedParameters) {
+        if (!$this->substitutedParameters) {
             if ($routeParameters = $this->getParameter()) {
                 $routeParameters = $this->SubstituteParameters($routeParameters);
             }
         } else {
-            $routeParameters = static::$substitutedParameters;
+            $routeParameters = $this->substitutedParameters;
         }
 
         return $routeParameters;
@@ -640,8 +695,6 @@ class Route
                 $routeArray = $routeArray[$type];
             }
         }
-
-        if (!$routeArray) return [];
 
         foreach ($this->middleware[$type] as $routeMiddleware) {
 
@@ -747,8 +800,21 @@ class Route
             return [$this, 'defaultPolicyHandler'];
         }
 
-        if ($policyHandler instanceof Closure) {
+        if (is_callable($policyHandler)) {
             return $policyHandler;
+        }
+
+        if (is_string($policyHandler)) {
+            
+            if (function_exists($policyHandler)) {
+                return $policyHandler;
+            }
+
+            $policyHandlerFunction = substr($policyHandler, strrpos($policyHandler, '\\') + 1);
+            
+            if (function_exists($policyHandlerFunction)) {
+                return $policyHandlerFunction;
+            }
         }
 
         if ($this->isPolicyHandlerParseable($policyHandler)) {
@@ -883,7 +949,7 @@ class Route
         $this->action = $handler;
 
         if ($routeParameters = $this->getParameter()) {
-            static::$substitutedParameters = $this->SubstituteParameters(
+            $this->substitutedParameters = $this->SubstituteParameters(
                 $routeParameters
             );
         }
@@ -900,11 +966,11 @@ class Route
      */
     public function getParameter($key = null)
     {
-        if (is_null(static::$parameters)) {
-            static::$parameters = $this->app->request->get_url_params();
+        if (is_null($this->parameters)) {
+            $this->parameters = $this->app->request->get_url_params();
         }
 
-        return $key ? static::$parameters[$key] : static::$parameters;
+        return $key ? $this->parameters[$key] : $this->parameters;
     }
 
     /**

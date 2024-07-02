@@ -36,9 +36,9 @@ abstract class Controller
     /**
      * Construct the controller instance
      */
-    public function __construct()
+    public function __construct($app = null)
     {
-        $this->app = App::getInstance();
+        $this->app = $app ?: App::getInstance();
         $this->request = $this->app['request'];
         $this->response = $this->app['response'];
     }

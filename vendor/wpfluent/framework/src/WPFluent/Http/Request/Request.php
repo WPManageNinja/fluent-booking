@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentBooking\Framework\Request;
+namespace FluentBooking\Framework\Http\Request;
 
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Support\Helper;
@@ -222,6 +222,22 @@ class Request
     }
 
     /**
+     * Check if current request is a Rest request
+     * 
+     * @return boolean
+     */
+    public function isRest()
+    {
+        $isRest = (defined('REST_REQUEST') && REST_REQUEST) || $this->query('rest_route');
+
+        return $isRest || (function() {
+            $currentUrl = wp_parse_url(add_query_arg([]));
+            $restUrl = wp_parse_url(trailingslashit(rest_url()));
+            return strpos($currentUrl['path'] ?? '/', $restUrl['path']);
+        })() !== false;
+    }
+
+    /**
      * Retrieve an item from the json payload of the request
      * @param  string $key
      * @param  string $default
@@ -380,15 +396,15 @@ class Request
     public function mergeInputsFromRestRequest($wpRestRequest)
     {
         $this->request = array_merge(
-            $this->request, $this->clean($wpRestRequest->get_params())
+            $this->request, $wpRestRequest->get_params()
         );
         
         $this->post = array_merge(
-            $this->post, $this->clean($wpRestRequest->get_body_params())
+            $this->post, $wpRestRequest->get_body_params()
         );
 
         $this->get = array_merge(
-            $this->get, $this->clean($wpRestRequest->get_query_params())
+            $this->get, $wpRestRequest->get_query_params()
         );
 
         $this->wpRestRequest = true;
@@ -540,7 +556,9 @@ class Request
      */
     public function url()
     {
-        return get_site_url() . rtrim(preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']), '/');
+        return get_site_url() . rtrim(
+            preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']), '/'
+        );
     }
 
     /**
@@ -585,17 +603,26 @@ class Request
      * 
      * @param  integer $status
      * @param  string  $message
-     * @return null
+     * @return \WP_REST_Response
      */
     public function abort($status = 403, $message = null)
     {
+        if (is_object($status)) {
+            if (method_exists($status, 'errors')) {
+                throw new ValidationException(
+                    'Unprocessable Entity!', 422, null, $status->errors()
+                );
+            }
+        }
+
         if (!$message && !is_numeric($status) && is_string($status)) {
             $message = $status;
+            $status = 403;
         }
 
         $message = $message ?: 'Request has benn aborted.';
 
-        $this->app->response->json(
+        return new \WP_REST_Response(
             is_array($message) ? $message : ['message' => (string) $message], $status
         );
     }

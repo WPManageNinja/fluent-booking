@@ -2,7 +2,7 @@
 
 namespace FluentBooking\Framework\Foundation;
 
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 
 abstract class Policy
 {
