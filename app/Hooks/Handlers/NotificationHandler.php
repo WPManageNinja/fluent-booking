@@ -3,7 +3,6 @@
 namespace FluentBooking\App\Hooks\Handlers;
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\EmailNotificationService;
 use FluentBooking\Framework\Support\Arr;
 

@@ -17,8 +17,6 @@ use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\TeamTimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
-use FluentBooking\Framework\Support\Collection;
-use FluentBooking\Framework\Validator\ValidationException;
 
 class FrontEndHandler
 {
