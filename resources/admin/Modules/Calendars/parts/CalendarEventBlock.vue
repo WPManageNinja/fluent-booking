@@ -89,9 +89,9 @@
                     </el-button>
                 </template>
                 <template v-else-if="calendar.type == 'event'">
-                    <el-form-item :label="$t('Select Event Members') + ' *'">
-                        <TeamMemberSelector v-model="eventMembers" :modelPlaceholder="$t('Select Event Members')"/>
-                        <p>{{ $t('Please select the members you want to assign to this event') }}</p>
+                    <el-form-item :label="$t('Select Event Hosts') + ' *'">
+                        <TeamMemberSelector v-model="eventMembers" :modelPlaceholder="$t('Select Event Hosts')"/>
+                        <p>{{ $t('Please select the hosts you want to assign to this event') }}</p>
                     </el-form-item>
                     <el-button @click="createEventCalendar('single_event')"
                         :disabled="!eventMembers.length">

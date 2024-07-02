@@ -12,7 +12,6 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LocationService;
-use FluentBooking\App\Services\ReceiptHelper;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\TeamTimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
@@ -516,7 +515,7 @@ class FrontEndHandler
 
         $hash = sanitize_text_field($_REQUEST['hash']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        return (new ReceiptHelper())->getReceipt($hash);
+        return (new \FluentBookingPro\App\Services\ReceiptHelper())->getReceipt($hash);
     }
 
     private function loadGlobalVars()

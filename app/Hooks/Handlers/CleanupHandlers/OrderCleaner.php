@@ -3,9 +3,8 @@
 namespace FluentBooking\App\Hooks\Handlers\CleanupHandlers;
 
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\Order;
-use FluentBooking\App\Models\OrderItems;
-use FluentBooking\App\Models\Transactions;
+use FluentBookingPro\App\Models\Transactions;
+use FluentBookingPro\App\Models\OrderItems;
 
 class OrderCleaner
 {

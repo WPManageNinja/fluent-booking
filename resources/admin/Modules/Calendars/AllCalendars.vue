@@ -170,9 +170,9 @@
                         :placeholder="$t('Enter Name of this event calendar')"
                     />
                 </el-form-item>
-                <el-form-item :label="$t('Select Event Members') + ' *'">
-                    <TeamMemberSelector v-model="event_members" :modelPlaceholder="$t('Select Event Members')"/>
-                    <p>{{ $t('Please select the members you want to assign to this event') }}</p>
+                <el-form-item :label="$t('Select Event Hosts') + ' *'">
+                    <TeamMemberSelector v-model="event_members" :modelPlaceholder="$t('Select Event Hosts')"/>
+                    <p>{{ $t('Please select the hosts you want to assign to this event') }}</p>
                 </el-form-item>
                 <el-button
                     @click="createEventCalendar('single_event')"

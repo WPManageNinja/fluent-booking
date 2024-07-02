@@ -291,7 +291,7 @@ class EditorShortCodeParser
         $order = static::$store['payment_order'];
 
         if ($key == 'payment_total') {
-            $isZeroDecimal = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::isZeroDecimal($order->currency);
+            $isZeroDecimal = CurrenciesHelper::isZeroDecimal($order->currency);
             if ($isZeroDecimal) {
                 return $order->total_amount;
             } else {
@@ -300,7 +300,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'receipt_html') {
-            return (new ReceiptHelper())->getReceipt($booking->hash);
+            return (new \FluentBookingPro\App\Services\ReceiptHelper())->getReceipt($booking->hash);
         }
 
         if ($key == 'payment_status') {
@@ -315,7 +315,7 @@ class EditorShortCodeParser
             return $order->created_at;
         }
 
-        $fillables = (new \FluentBooking\App\Models\Order())->getFillable();
+        $fillables = (new \FluentBookingPro\App\Models\Order())->getFillable();
 
         if (in_array($key, $fillables)) {
             return $order->{$key};

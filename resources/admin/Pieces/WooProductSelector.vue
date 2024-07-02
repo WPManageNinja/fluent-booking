@@ -44,7 +44,7 @@ export default {
     methods: {
         remoteFetch(search = '') {
             this.loading = true;
-            this.$get('reports/options/woo-products', {
+            this.$get('integrations/options/woo-products', {
                 search: search,
                 include_id: this.selected
             })

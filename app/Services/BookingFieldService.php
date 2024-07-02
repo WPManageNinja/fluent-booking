@@ -213,51 +213,9 @@ class BookingFieldService
             }
         }
 
-        if ($calendarSlot->type == 'paid' && Helper::isPaymentEnabled()) {
-            $paymentSettings = $calendarSlot->getMeta('payment_settings', []);
+        $paymentField = apply_filters('fluent_booking/payment_booking_field', [], $calendarSlot, $existingFields);
 
-            $isEnabled = Arr::get($paymentSettings, 'enabled') === 'yes';
-            $currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
-            $paymentItems = \FluentBooking\App\Services\Integrations\PaymentMethods\PaymentHelper::getReceiptTemplate(Arr::get($paymentSettings, 'items'));
-            if ($isEnabled) {
-                $stripeEnabled  = Arr::get($paymentSettings, 'stripe_enabled') === 'yes' && Helper::isPaymentConfigured('stripe');
-                $paypalEnabled  = Arr::get($paymentSettings, 'paypal_enabled') === 'yes' && Helper::isPaymentConfigured('paypal');
-                $isMultiEnabled = Arr::get($paymentSettings, 'multi_payment_enabled') === 'yes';
-
-                $exist = Arr::get($existingFields, 'payment_method', []);
-                if (!$exist) {
-                    $exist = [
-                        'index'          => 20,
-                        'type'           => 'payment',
-                        'name'           => 'payment_method',
-                        'enabled'        => true,
-                        'system_defined' => true,
-                        'payment_items'  => $paymentItems,
-                        'label'          => __('Payment Summary', 'fluent-booking-pro'),
-                        'currency_sign'  => $currencySign,
-                    ];
-                } else {
-                    $exist['currency_sign'] = $currencySign;
-                    $exist['payment_items'] = $paymentItems;
-                }
-
-                $exist['required'] = true;
-                $exist['disable_alter'] = true;
-                
-                if ($stripeEnabled) {
-                    $exist['payment_methods'][] = 'stripe';
-                }
-                if ($paypalEnabled) {
-                    $exist['payment_methods'][] = 'paypal';
-                }
-                if ($calendarSlot->isMultiDurationEnabled() && $isMultiEnabled) {
-                    $exist['multi_payment_items'] = Arr::get($paymentSettings, 'multi_payment_items');
-                }
-                $existingFields['payment_method'] = $exist;
-            } else {
-                unset($existingFields['payment_method']);
-            }
-        } else {
+        if (!$paymentField) {
             unset($existingFields['payment_method']);
         }
 
