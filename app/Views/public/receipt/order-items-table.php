@@ -5,7 +5,8 @@ defined( 'ABSPATH' ) || exit;
 if (!$order->items) {
     return '';
 }
-$currencySign = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
+$currencySign = \FluentBooking\App\Services\CurrenciesHelper::getGlobalCurrencySign();
+
 $currencySetting = [
         'currency_sign' => $currencySign,
 ];

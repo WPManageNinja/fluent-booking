@@ -8,7 +8,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
+use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
@@ -341,10 +341,12 @@ class SchedulesController extends Controller
         }
 
         $order = null;
-        if ($booking->payment_method && $booking->payment_order) {
-            $order = $booking->payment_order;
-            $order->load(['items', 'transaction']);
-            $order->currency_sign = CurrenciesHelper::getCurrencySign($order->currency);
+        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            if ($booking->payment_method && $booking->payment_order) {
+                $order = $booking->payment_order;
+                $order->load(['items', 'transaction']);
+                $order->currency_sign = CurrenciesHelper::getCurrencySign($order->currency);
+            }
         }
 
         $mainBodyContents = apply_filters('fluent_booking/booking_meta_info_main_meta', $mainBodyContents, $booking);

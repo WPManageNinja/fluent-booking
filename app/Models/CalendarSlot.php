@@ -12,7 +12,6 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\EditorShortCodeParser;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
-use FluentBooking\App\Services\Integrations\Twilio\TwilioHelper;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\Framework\Support\Arr;
 
@@ -260,45 +259,6 @@ class CalendarSlot extends Model
     public function setNotifications($notifications)
     {
         $this->updateMeta('email_notifications', $notifications);
-    }
-
-    public function getSmsNotifications($isEdit = false)
-    {
-        $statuses = $this->getMeta('sms_notifications');
-
-        if ($statuses) {
-
-            $defaults = TwilioHelper::getDefaultSmsNotificationSettings();
-
-            if ($isEdit) {
-                foreach ($defaults as $key => $default) {
-                    if (isset($statuses[$key])) {
-                        $statuses[$key]['title'] = $default['title'];
-                    }
-                }
-            }
-
-            if (!Arr::get($statuses, 'booking_request_host')) {
-                $statuses['booking_request_host'] = $defaults['booking_request_host'];
-            }
-
-            if (!Arr::get($statuses, 'booking_request_attendee')) {
-                $statuses['booking_request_attendee'] = $defaults['booking_request_attendee'];
-            }
-
-            if (!Arr::get($statuses, 'declined_by_host')) {
-                $statuses['declined_by_host'] = $defaults['declined_by_host'];
-            }
-
-            return $statuses;
-        }
-
-        return TwilioHelper::getDefaultSmsNotificationSettings();
-    }
-
-    public function setSmsNotifications($notifications)
-    {
-        $this->updateMeta('sms_notifications', $notifications);
     }
 
     public function getBookingFields()

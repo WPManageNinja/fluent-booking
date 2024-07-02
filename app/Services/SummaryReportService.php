@@ -5,7 +5,6 @@ namespace FluentBooking\App\Services;
 use FluentBooking\App\App;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\Order;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\Libs\Emogrifier\Emogrifier;
 

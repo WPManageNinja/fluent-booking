@@ -9,7 +9,15 @@ class CleanupHandler
         (new CalenderCleaner())->register();
         (new CalenderEventCleaner())->register();
         (new BookingCleaner())->register();
-        (new OrderCleaner())->register();
         (new UserCleaner())->register();
+
+        $this->registerProCleaners();
+    }
+
+    private function registerProCleaners()
+    {
+        if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            (new OrderCleaner())->register();
+        }
     }
 }

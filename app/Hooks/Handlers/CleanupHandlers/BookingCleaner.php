@@ -6,8 +6,6 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\BookingHost;
 use FluentBooking\App\Models\BookingMeta;
-use FluentBooking\App\Models\Order;
-use FluentBooking\App\Models\OrderItems;
 
 class BookingCleaner
 {
@@ -25,7 +23,7 @@ class BookingCleaner
         BookingHost::query()->where('booking_id', $booking->id)->delete();
 
         if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
-            $order = Order::query()
+            $order = \FluentBookingPro\App\Models\Order::query()
                 ->where('parent_id', $booking->id)
                 ->first();
     
@@ -35,6 +33,5 @@ class BookingCleaner
                 do_action('fluent_booking/after_delete_order', $order, $booking);
             }
         }
-
     }
 }

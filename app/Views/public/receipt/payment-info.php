@@ -22,7 +22,7 @@
                 </td>
                 <?php if ($order->total_amount) : ?>
                     <?php
-                        $currencySetting['currency_sign'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getCurrencySign($order->currency);
+                        $currencySetting['currency_sign'] = \FluentBooking\App\Services\CurrenciesHelper::getCurrencySign($order->currency);
                     ?>
                 <td>
                     <div class="fluent_booking_payment_info_item fluent_booking_payment_info_item_total">

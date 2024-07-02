@@ -26,10 +26,6 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
     $router->post('/{id}/sharing-settings', 'CalendarController@saveSharingSettings')->int('id');
 
-    // General Integrations
-    $router->get('/{id}/integrations/general_integration_feed', 'IntegrationSettingsController@getGeneralIntegrationFeed')->int('id');
-    $router->post('/{id}/integrations/general_integration_feed/disconnect', 'IntegrationSettingsController@disconnectGeneralIntegrationFeed')->int('id');
-
     $router->post('/{id}/clone-event/{event_id}', 'CalendarController@cloneCalendarEvent')->int('id')->int('event_id');
 
     $router->get('/{id}/events/{event_id}', 'CalendarController@getEvent')->int('id')->int('event_id');
@@ -107,7 +103,6 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
     $router->get('/', 'ReportController@getReports');
     $router->get('/graph-reports', 'ReportController@getGraphReports');
     $router->get('/activities', 'ReportController@getActivities');
-    $router->get('/options/woo-products', 'PaymentMethodController@getWooProducts');
 });
 
 $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($router) {

@@ -7,7 +7,7 @@ use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper;
+use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
@@ -927,7 +927,7 @@ class CalendarController extends Controller
             $formattedField['index'] = (int)Arr::get($value, 'index');
             if ($value['type'] == 'payment' && $calendarEvent->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
-                $formattedField['currency_sign'] = \FluentBooking\App\Services\Integrations\PaymentMethods\CurrenciesHelper::getGlobalCurrencySign();
+                $formattedField['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
             }
             if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));

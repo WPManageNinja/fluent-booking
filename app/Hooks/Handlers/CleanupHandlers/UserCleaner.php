@@ -16,7 +16,6 @@ class UserCleaner
 
     public function handleBeforeDelete($userId, $reassignId)
     {
-
         return;
         if ($reassignId) {
             $assignable = [
@@ -30,13 +29,6 @@ class UserCleaner
             }
             return;
         }
-
-//        $calendars = Calendar::where('user_id', $userId)->get();
-//
-//        foreach ($calendars as $calendar) {
-//            $this->removeCalendarAssets($calendar->id);
-//            $calendar->delete();
-//        }
         return;
     }
 

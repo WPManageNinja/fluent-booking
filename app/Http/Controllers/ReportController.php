@@ -296,7 +296,7 @@ class ReportController extends Controller
         }
 
 
-        $currentMonthTotal = \FluentBooking\App\Models\Order::where('status', 'paid')
+        $currentMonthTotal = \FluentBookingPro\App\Models\Order::where('status', 'paid')
             ->whereBetween('created_at', [$startTime, $endTime])
             ->when($current_user_email, function ($query, $email) {
                 return $query->whereHas('booking', function ($query) use ($email) {
@@ -307,7 +307,7 @@ class ReportController extends Controller
             ->first()
             ->total;
 
-        $lastMonthTotal = \FluentBooking\App\Models\Order::where('status', 'paid')
+        $lastMonthTotal = \FluentBookingPro\App\Models\Order::where('status', 'paid')
             ->whereBetween('created_at', [$lastMonthStartTime, $startTime])
             ->when($current_user_email, function ($query, $email) {
                 return $query->whereHas('booking', function ($query) use ($email) {
