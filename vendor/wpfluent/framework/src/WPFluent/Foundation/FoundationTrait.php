@@ -5,18 +5,47 @@ namespace FluentBooking\Framework\Foundation;
 trait FoundationTrait
 {
     use HooksRemovalTrait;
-    
+
     /**
-     * Determine the environment
+     * Check if wp debug mode is on.
+     * 
+     * @return boolean
+     */
+    public function isDebugOn()
+    {
+        return defined('WP_DEBUG') && WP_DEBUG;
+    }
+
+    /**
+     * Check whether multi-site or not.
+     * 
+     * @return boolean
+     */
+    public function isMultiSite()
+    {
+        return function_exists('is_multisite') && is_multisite();
+    }
+
+    /**
+     * Determine the environment.
+     * 
      * @return string
      */
     public function env()
     {
-        if (defined(WP_DEBUG) && WP_DEBUG) {
-            return 'dev';
-        }
+        $env = $this->isDebugOn() ? 'dev' : '';
         
-        return $this->config->get('app.env');
+        return $env ?: $this->config->get('app.env', 'prod');
+    }
+
+    /**
+     * Get current namespace for the plugin.
+     * 
+     * @return string
+     */
+    public function getCurrentNamespace()
+    {
+        return $this->getComposer('extra.wpfluent.namespace.current');
     }
 
     /**
@@ -68,6 +97,8 @@ trait FoundationTrait
         if (is_string($handler)) {
 
             if (function_exists($handler)) return $handler;
+
+            $handler = ltrim($handler, '\\');
 
             $handler = $this->getPolicyNamespace($handler) . '\\' . $handler;
 
@@ -218,6 +249,106 @@ trait FoundationTrait
             $action,
             $this->parseHookHandler($handler)
         );
+    }
+
+    /**
+     * Checks if any action has been fired.
+     * 
+     * @param  string $action
+     * @return int Number of times the action was fired
+     */
+    public function didAction($action)
+    {
+        return did_action($action);
+    }
+
+    /**
+     * Checks if any action has been registered.
+     * 
+     * @param  string $action
+     * @param  mixed $callback
+     * @return bool
+     */
+    public function hasAction($action, $callback = false)
+    {   
+        return has_action($action, $callback);
+    }
+
+    /**
+     * Checks if any custom action has been fired.
+     * 
+     * @param  string $action
+     * @return int Number of times the action was fired
+     */
+    public function didCustomAction($action)
+    {
+        return did_action(
+            $this->config->get('app.hook_prefix') . $action
+        );
+    }
+
+    /**
+     * Checks if any custom action has been registered.
+     * 
+     * @param  string $action
+     * @param  mixed $callback
+     * @return bool
+     */
+    public function hasCustomAction($action, $callback = false)
+    {
+        $prefix = $this->config->get('app.hook_prefix');
+        
+        return has_action($prefix.$action, $callback);
+    }
+
+    /**
+     * Checks if any action has been fired.
+     * 
+     * @param  string $action
+     * @return int Number of times the action was fired
+     */
+    public function didFilter($action)
+    {
+        return did_filter($action);
+    }
+
+    /**
+     * Checks if any action has been registered.
+     * 
+     * @param  string $action
+     * @param  mixed $callback
+     * @return bool
+     */
+    public function hasFilter($action, $callback = false)
+    {   
+        return has_filter($action, $callback);
+    }
+
+    /**
+     * Checks if any custom action has been fired.
+     * 
+     * @param  string $action
+     * @return int Number of times the action was fired
+     */
+    public function didCustomFilter($action)
+    {
+        return did_filter(
+            $this->config->get('app.hook_prefix') . $action
+        );
+    }
+
+    /**
+     * Checks if any custom action has been registered.
+     * 
+     * @param  string $action
+     * @param  mixed $callback
+     * @return bool
+     */
+    public function hasCustomFilter($action, $callback = false)
+    {
+        $prefix = $this->config->get('app.hook_prefix');
+        
+        return has_filter($prefix.$action, $callback);
     }
 
     /**

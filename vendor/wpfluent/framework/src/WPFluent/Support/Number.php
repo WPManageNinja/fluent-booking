@@ -13,6 +13,7 @@ class Number
 	 * @param  int|float $value
 	 * @param  integer $dec
 	 * @return Formatted number
+	 * @see    https://developer.wordpress.org/reference/functions/number_format_i18n
 	 */
 	public static function format($value, $dec = 0)
 	{
@@ -191,7 +192,9 @@ class Number
      * @param  int|null  $maxPrecision
      * @return string
      */
-    public static function forHumans($number, $precision = 0, $maxPrecision = null, $abbr = false)
+    public static function forHumans(
+    	$number, $precision = 0, $maxPrecision = null, $abbr = false
+    )
     {
         return static::summarize($number, $precision, $maxPrecision, $abbr ? [
             3 => 'K',
@@ -217,7 +220,9 @@ class Number
      * @param  array  $units
      * @return string
      */
-    protected static function summarize($number, $precision = 0, $maxPrecision = null, $units = [])
+    protected static function summarize(
+    	$number, $precision = 0, $maxPrecision = null, $units = []
+    )
     {
         if (empty($units)) {
             $units = [
@@ -254,10 +259,14 @@ class Number
 	 * 
 	 * @param  int|float $number
 	 * @param  boolean $round whether to round (float to int)
-	 * @param  boolean $inCents whether the result should say "and n cents" for the fraction
-	 * @return string number in words (in human readable words), i.e: from 199900010500.91 to:
-	 * one hundred and ninety nine billion nine hundred million ten thousand five hundred and
-	 * ninety one cents
+	 * @param  boolean $inCents whether the result should say
+	 * "and n cents" for the fraction.
+	 * 
+	 * @return string number in words (in human readable words),
+	 * i.e: from 199900010500.91 to:
+	 * one hundred and ninety nine billion nine hundred million
+	 * ten thousand five hundred and ninety one cents.
+	 * 
 	 * @throws \RangeException
 	 */
 	public static function inWords($number, $options = [])
@@ -277,7 +286,7 @@ class Number
 
 		if (is_int($number) && $number > strval(PHP_INT_MAX)) {
 			throw new RangeException('out of range', 500);
-		} elseif (is_float($number) && $number > strval(PHP_FLOAT_MAX)) {
+		} elseif (is_float($number) && printf('%0.0f', $number) > PHP_FLOAT_MAX) {
 			throw new RangeException('out of range', 500);
 		}
 
@@ -331,7 +340,6 @@ class Number
 	        		$decimalPart, $numberWords, $decimalSeparator
 	        	);
 	    	} else {
-	    		// $decimalPart = (int) (($number - floor($number)) * 100);
 	    		$decimalPart = (int) str_replace($decimalSeparator, '', $decimalPart);
 		        
 		        $cents = static::toCents($decimalPart, $numberWords, $tensWords);

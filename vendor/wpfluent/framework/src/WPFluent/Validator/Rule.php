@@ -142,7 +142,7 @@ class Rule
                 }
             }
 
-            ($msg && !$rule) && throw new InvalidArgumentException($msg, 500);
+            if($msg && !$rule) throw new InvalidArgumentException($msg, 500);
         }
         
         $classExists = false;

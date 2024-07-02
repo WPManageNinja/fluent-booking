@@ -34,6 +34,17 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Makes an acronum from a string of words
+     * 
+     * @param  string $delimiter
+     * @return self
+     */
+    public function acronym(string $delimiter = '')
+    {
+        return new static(Str::acronym($this->value, $delimiter));
+    }
+
+    /**
      * Return the remainder of a string after the first occurrence of a given value.
      *
      * @param  string  $search
@@ -86,6 +97,84 @@ class Stringable implements JsonSerializable
     public function ascii($language = 'en')
     {
         return new static(Str::ascii($this->value, $language));
+    }
+
+    /**
+     * Checks if the word(s) are in capitalized form.
+     * 
+     * @param  boolean $onlyFirst if true, checks only the first charatcer
+     * @return boolean
+     */
+    public function isCapitalized($onlyFirst = false)
+    {
+        return Str::isCapitalized($this->value, $onlyFirst);
+    }
+
+    /**
+     * Checks if the first character is in capital form.
+     * 
+     * @return boolean
+     */
+    public function isCapital()
+    {
+        return $this->isCapitalized(true);
+    }
+
+    /**
+     * Checks if the chracters are in upper case
+     * 
+     * @return boolean
+     */
+    public static function isUpper()
+    {
+        return Str::isUpper($this->value);
+    }
+
+    /**
+     * Checks if the chracters are in lower case
+     * 
+     * @return boolean
+     */
+    public static function isLower()
+    {
+        return Str::isLower($this->value);
+    }
+
+    /**
+     * Checks if two words sounds alike
+     * 
+     * @param string $str
+     * 
+     * @return bool
+     */
+    public function soundsAlike($str)
+    {
+        return Str::soundsAlike($this->value, $str);
+    }
+
+    /**
+     * Checks if two words are similar
+     * 
+     * @param string $str
+     * @param int $accuracy
+     * 
+     * @return bool
+     */
+    public function isSimilar($str, $accuracy = 50)
+    {
+        return Str::isSimilar($this->value, $str, $accuracy);
+    }
+
+    /**
+     * Checks if two words are similar
+     * 
+     * @param string $str
+     * 
+     * @return bool
+     */
+    public function similarityOf($str)
+    {
+        return Str::similarityOf($this->value, $str);
     }
 
     /**

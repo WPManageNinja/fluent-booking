@@ -1005,10 +1005,24 @@ class Builder
         );
 
         $segments = preg_split('/\s+as\s+/i', $this->query->from);
+        
+        $tableAlias = end($segments);
+        
+        $connectionName = $this->model->getConnection()->getName();
 
-        $qualifiedColumn = end($segments).'.'.$column;
+        if ($connectionName === 'sqlite') {
+            if (count($segments) > 1) {
+                $qualifiedColumn = $tableAlias . '.' . $column;
+            } else {
+                $qualifiedColumn = $column;
+            }
+        } else {
+            $qualifiedColumn = $tableAlias . '.' . $column;
+        }
 
-        $values[$qualifiedColumn] = Arr::get($values, $qualifiedColumn, $values[$column]);
+        $values[$qualifiedColumn] = Arr::get(
+            $values, $qualifiedColumn, $values[$column]
+        );
 
         unset($values[$column]);
 

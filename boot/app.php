@@ -22,19 +22,5 @@ return function ($file) {
 
     add_action('plugins_loaded', function () use ($app) {
         do_action('fluent_booking/loaded', $app);
-        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
-            $licenseManager = new \FluentBooking\App\Services\PluginManager\LicenseManager();
-            $licenseManager->initUpdater();
-
-            $licenseMessage = $licenseManager->getLicenseMessages();
-
-            if ($licenseMessage) {
-                add_action('admin_notices', function () use ($licenseMessage) {
-                    $class = 'notice notice-error fc_message';
-                    $message = $licenseMessage['message'];
-                    printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), wp_kses_post($message));
-                });
-            }
-        }
     });
 };

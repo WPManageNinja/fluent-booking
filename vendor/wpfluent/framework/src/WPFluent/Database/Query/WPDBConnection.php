@@ -9,10 +9,13 @@ namespace FluentBooking\Framework\Database\Query;
 use Closure;
 use Exception;
 use DateTimeInterface;
+use FluentBooking\Framework\Foundation\App;
+use FluentBooking\Framework\Database\Schema;
 use FluentBooking\Framework\Database\QueryException;
 use FluentBooking\Framework\Database\Query\Processor;
 use FluentBooking\Framework\Database\Query\Expression;
 use FluentBooking\Framework\Database\ConnectionInterface;
+use FluentBooking\Framework\Database\Events\QueryExecuted;
 use FluentBooking\Framework\Database\Query\Builder as QueryBuilder;
 use FluentBooking\Framework\Database\Query\Grammar as QueryGrammar;
 
@@ -74,6 +77,13 @@ class WPDBConnection implements ConnectionInterface
     protected $transactionCount = 0;
 
     /**
+     * The number of total transactions.
+     *
+     * @var FluentBooking\Framework\Events
+     */
+    protected $event = null;
+
+    /**
      * Create a new database connection instance.
      *
      * @param  $wpdb $pdo
@@ -82,7 +92,9 @@ class WPDBConnection implements ConnectionInterface
      * @param  array  $config
      * @return void
      */
-    public function __construct($pdo, $database = '', $tablePrefix = '', array $config = [])
+    public function __construct(
+        $pdo, $database = '', $tablePrefix = '', array $config = []
+    )
     {
         $this->setupWpdbInstance($pdo);
 
@@ -101,6 +113,8 @@ class WPDBConnection implements ConnectionInterface
         $this->useDefaultQueryGrammar();
 
         $this->useDefaultPostProcessor();
+
+        $this->event = App::make('events');
     }
 
     /**
@@ -113,7 +127,9 @@ class WPDBConnection implements ConnectionInterface
     {
         $this->wpdb = $wpdb;
 
-        $this->wpdb->show_errors(false);
+        if (!str_starts_with(App::env(), 'prod')) {
+            $this->wpdb->show_errors(false);
+        }
     }
 
     /**
@@ -190,15 +206,19 @@ class WPDBConnection implements ConnectionInterface
      */
     public function selectOne($query, $bindings = [], $useReadPdo = true)
     {
-        $query = $this->bindParams($query, $bindings);
+        return $this->run($query, $bindings, function($query, $bindings) {
+            $query = $this->bindParams($query, $bindings);
 
-        $result = $this->wpdb->get_row($query);
+            $result = $this->wpdb->get_row($query);
 
-        if ($result === false || $this->wpdb->last_error) {
-            throw new QueryException($query, $bindings, new Exception($this->wpdb->last_error));
-        }
+            if ($result === false || $this->wpdb->last_error) {
+                throw new QueryException(
+                    $query, $bindings, new Exception($this->wpdb->last_error)
+                );
+            }
 
-        return $result;
+            return $result;
+        });
     }
 
     /**
@@ -211,15 +231,19 @@ class WPDBConnection implements ConnectionInterface
      */
     public function select($query, $bindings = [], $useReadPdo = true)
     {
-        $query = $this->bindParams($query, $bindings);
+        return $this->run($query, $bindings, function($query, $bindings) {
+            $query = $this->bindParams($query, $bindings);
 
-        $result = $this->wpdb->get_results($query);
+            $result = $this->wpdb->get_results($query);
 
-        if ($result === false || $this->wpdb->last_error) {
-            throw new QueryException($query, $bindings, new Exception($this->wpdb->last_error));
-        }
+            if ($result === false || $this->wpdb->last_error) {
+                throw new QueryException(
+                    $query, $bindings, new Exception($this->wpdb->last_error)
+                );
+            }
 
-        return $result;
+            return $result;
+        });
     }
 
     /**
@@ -340,6 +364,8 @@ class WPDBConnection implements ConnectionInterface
             ...$bindings
         );
 
+        $start = microtime(true);
+
         if ($statement->execute()) {
 
             $result = $statement->get_result();
@@ -358,6 +384,12 @@ class WPDBConnection implements ConnectionInterface
                 );
             }
 
+            $time = $this->getElapsedTime($this->wpdb->time_start);
+
+            $this->event->dispatch(
+                new QueryExecuted($query, $bindings, $time, $this)
+            );
+
             $i = 0;
             while ($row = $result->fetch_assoc()) {
                 $this->wpdb->last_result[$i] = $row;
@@ -366,11 +398,14 @@ class WPDBConnection implements ConnectionInterface
             }
 
             return;
-
         }
 
         if ($statement->error || $statement->errno) {
-            $this->wpdb->last_error = __($statement->error || 'Mysqli Error No: ' . $statement->errno);
+            
+            $this->wpdb->last_error = __(
+                $statement->error || 'Mysqli Error No: ' . $statement->errno
+            );
+
             throw new QueryException(
                 $query, $bindings, new Exception(
                     $statement->error || 'Mysqli Error No: ' . $statement->errno
@@ -424,15 +459,19 @@ class WPDBConnection implements ConnectionInterface
      */
     public function statement($query, $bindings = [])
     {
-        $newQuery = $this->bindParams($query, $bindings, true);
+        return $this->run($query, $bindings, function($query, $bindings) {
+            $query = $this->bindParams($query, $bindings, true);
 
-        $result = $this->unprepared($newQuery);
+            $result = $this->unprepared($query);
 
-        if ($result === false || $this->wpdb->last_error) {
-            throw new QueryException($newQuery, $bindings, new Exception($this->wpdb->last_error));
-        }
+            if ($result === false || $this->wpdb->last_error) {
+                throw new QueryException(
+                    $query, $bindings, new Exception($this->wpdb->last_error)
+                );
+            }
 
-        return $result;
+            return $result;
+        });
     }
 
     /**
@@ -444,15 +483,19 @@ class WPDBConnection implements ConnectionInterface
      */
     public function affectingStatement($query, $bindings = [])
     {
-        $newQuery = $this->bindParams($query, $bindings, true);
+        return $this->run($query, $bindings, function($query, $bindings) {
+            $query = $this->bindParams($query, $bindings, true);
 
-        $result = $this->wpdb->query($newQuery);
+            $result = $this->wpdb->query($query);
 
-        if ($result === false || $this->wpdb->last_error) {
-            throw new QueryException($newQuery, $bindings, new Exception($this->wpdb->last_error));
-        }
+            if ($result === false || $this->wpdb->last_error) {
+                throw new QueryException(
+                    $query, $bindings, new Exception($this->wpdb->last_error)
+                );
+            }
 
-        return intval($result);
+            return intval($result);
+        });
     }
 
     /**
@@ -499,6 +542,25 @@ class WPDBConnection implements ConnectionInterface
         }
 
         return $bindings;
+    }
+
+    public function run($query, $bindings, $callback)
+    {
+        $start = microtime(true);
+
+        try {
+            $result = $callback($query, $bindings);
+        } catch (Exception $e) {
+            $result = $e;
+        }
+
+        $time = $this->getElapsedTime($start);
+            
+        $this->event->dispatch(
+            new QueryExecuted($query, $bindings, $time, $this)
+        );
+
+        return $result;
     }
 
     /**
@@ -599,7 +661,7 @@ class WPDBConnection implements ConnectionInterface
      */
     public function getName()
     {
-        return 'mysql';
+        return $this->isSqlite() ? 'sqlite' : 'mysql';
     }
 
     /**
@@ -703,6 +765,49 @@ class WPDBConnection implements ConnectionInterface
      */
     public function getColumnListing($table)
     {
-        return $this->wpdb->get_col($table, 0);
+        return Schema::getColumns($table);
+    }
+
+    /**
+     * Alias for getColumnListing.
+     * 
+     * @param  @param  string  $t
+     * @return array
+     */
+    public function getColumns($t)
+    {
+        return $this->getColumnListing($t);
+    }
+
+    
+    /**
+     * Try to guess the underlying db
+     * @return boolean
+     */
+    public function isSqlite()
+    {
+        return defined('DB_ENGINE') && DB_ENGINE === 'sqlite';
+    }
+
+    /**
+     * Register a database query listener with the connection.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function listen(Closure $callback)
+    {
+        $this->event->listen(QueryExecuted::class, $callback);
+    }
+
+    /**
+     * Get the elapsed time since a given starting point.
+     *
+     * @param  int  $start
+     * @return float
+     */
+    protected function getElapsedTime($start)
+    {
+        return round((microtime(true) - $start) * 1000, 2);
     }
 }

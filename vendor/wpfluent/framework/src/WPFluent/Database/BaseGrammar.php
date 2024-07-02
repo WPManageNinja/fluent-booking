@@ -47,12 +47,13 @@ abstract class BaseGrammar
 
     /**
      * Get the grammar's full table name.
-     * Handles multisite table names
+     * 
+     * Also Handles multisite table names.
      *
      * @param  string  $table
      * @return string $tableName
      */
-    protected function getTableNameWithPrefix($table)
+    public function getTableNameWithPrefix($table)
     {
         global $wpdb;
 

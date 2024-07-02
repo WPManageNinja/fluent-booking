@@ -59,6 +59,10 @@ class App
      */
     public static function __callStatic($method, $params)
     {
+        if (method_exists(static::$instance, $method)) {
+            return static::$instance->{$method}(...$params);
+        }
+
         return static::getInstance($method, ...$params);
     }
 }
