@@ -2,6 +2,8 @@
 
 namespace FluentBooking\Framework\Database\Orm\Concerns;
 
+use FluentBooking\Framework\Support\DateTime;
+
 trait HasTimestamps
 {
     /**
@@ -82,7 +84,7 @@ trait HasTimestamps
      */
     public function freshTimestamp()
     {
-        return current_time('mysql');
+        return DateTime::now();
     }
 
     /**

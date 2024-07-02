@@ -1,7 +1,8 @@
 <?php
 
-namespace FluentBooking\Framework\Request;
+namespace FluentBooking\Framework\Http\Request;
 
+use RuntimeException;
 use FluentBooking\Framework\Validator\Contracts\File as Contract;
 
 class File extends \SplFileInfo implements Contract
@@ -875,6 +876,16 @@ class File extends \SplFileInfo implements Contract
     }
 
     /**
+     * Returns the original file name.
+     *
+     * @return string The Name Of the file
+     */
+    public function getClientOriginalName()
+    {
+        return $this->originalName;
+    }
+
+    /**
      * Returns the original file extension.
      *
      * It is extracted from the original file name that was uploaded.
@@ -938,7 +949,7 @@ class File extends \SplFileInfo implements Contract
      *
      * @return string the contents of the file
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getContents()
     {
@@ -947,9 +958,74 @@ class File extends \SplFileInfo implements Contract
         error_reporting($level);
         if (false === $content) {
             $error = error_get_last();
-            throw new \RuntimeException($error['message']);
+            throw new RuntimeException($error['message']);
         }
 
         return $content;
+    }
+
+    /**
+     * Move the file to a new location.
+     *
+     * @param string $directory Target Path
+     * @param string $name Target file name (optional)
+     * @return self
+     * @throws RuntimeException
+     */
+    public function move($directory, $name = null)
+    {
+        $error = '';
+
+        $target = $this->getTargetFile($directory, $name);
+
+        set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+
+        try {
+            $renamed = rename($this->getPathname(), $target);
+        } finally {
+            restore_error_handler();
+        }
+
+        if (!$renamed) {
+            throw new RuntimeException(
+                sprintf(
+                    'Could not move the file "%s" to "%s" (%s).',
+                    $this->getPathname(), $target, strip_tags($error)
+                )
+            );
+        }
+
+        @chmod($target, 0666 & ~umask());
+
+        return $target;
+    }
+
+    /**
+     * Get the target file name to move (full path).
+     *
+     * @param string $directory Target Path
+     * @param string $name Target file name (optional)
+     * @return self
+     * @throws RuntimeException
+     */
+    protected function getTargetFile($directory, $name = null)
+    {
+        if (!is_dir($directory)) {
+            if (false === @mkdir($directory, 0777, true) && !is_dir($directory)) {
+                throw new RuntimeException(
+                    sprintf('Unable to create the "%s" directory.', $directory)
+                );
+            }
+        } elseif (!is_writable($directory)) {
+            throw new RuntimeException(
+                sprintf('Unable to write in the "%s" directory.', $directory)
+            );
+        }
+
+        $target = rtrim($directory, "/\\") . DIRECTORY_SEPARATOR . (
+            null === $name ? $this->getBasename() : $this->getName($name)
+        );
+
+        return new self($target, false);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentBooking\Framework\Response;
+namespace FluentBooking\Framework\Http\Response;
 
 use WP_Error;
 use WP_REST_Response;

@@ -126,7 +126,9 @@ class BoundMethod
         $dependencies = [];
 
         foreach (static::getCallReflector($callback)->getParameters() as $parameter) {
-            static::addDependencyForCallParameter($container, $parameter, $parameters, $dependencies);
+            static::addDependencyForCallParameter(
+                $container, $parameter, $parameters, $dependencies
+            );
         }
 
         return array_merge($dependencies, array_values($parameters));
@@ -164,8 +166,9 @@ class BoundMethod
      *
      * @throws \FluentBooking\Framework\Container\Contracts\BindingResolutionException
      */
-    protected static function addDependencyForCallParameter($container, $parameter,
-                                                            array &$parameters, &$dependencies)
+    protected static function addDependencyForCallParameter(
+        $container, $parameter, array &$parameters, &$dependencies
+    )
     {
         if (array_key_exists($paramName = $parameter->getName(), $parameters)) {
             $dependencies[] = $parameters[$paramName];

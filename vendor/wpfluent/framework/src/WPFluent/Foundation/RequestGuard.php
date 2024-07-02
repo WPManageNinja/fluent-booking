@@ -3,7 +3,6 @@
 namespace FluentBooking\Framework\Foundation;
 
 use FluentBooking\Framework\Foundation\App;
-use FluentBooking\Framework\Validator\Validator;
 use FluentBooking\Framework\Validator\ValidationException;
 
 abstract class RequestGuard
@@ -39,7 +38,7 @@ abstract class RequestGuard
      * Allow the developer tinker with data after the validation.
      * @return array
      */
-    public function afterValidation()
+    public function afterValidation($validator)
     {
         return [];
     }
@@ -60,13 +59,40 @@ abstract class RequestGuard
                 $messages ?: (array) $this->messages()
             );
         } catch (ValidationException $e) {
+            
+            $validator = App::make('validator');
+            
+            $validator->addError($e->errors());
 
-            if (defined('REST_REQUEST') && REST_REQUEST) {
+            $after = $this->afterValidation($validator);
+
+            if (!($errors = $validator->errors())) {
+                return;
+            }
+
+            $e = new ValidationException(
+                'Unprocessable Entity!', 422, null, $e->errors()
+            );
+
+            if ($this->shouldThrowException()) {
                 throw $e;
             } else {
-                App::getInstance()->doCustomAction('handle_exception', $e);
+                App::make()->doCustomAction('handle_exception', $e);
             }
         }
+    }
+
+    /**
+     * Check if exceptions should be thrown.
+     * 
+     * @return bool
+     */
+    protected function shouldThrowException()
+    {
+        $isTrue = $this->isRest();
+        $isTrue = $isTrue || str_contains('test', App::make()->env());
+        $isTrue = $isTrue || str_contains(strtolower(php_sapi_name()), 'cli');
+        return $isTrue;
     }
 
     /**
