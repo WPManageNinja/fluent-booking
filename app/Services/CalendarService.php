@@ -64,12 +64,16 @@ class CalendarService
                 return $query->where('user_id', get_current_user_id());
             });
 
-        if ($condition == 'without_team') {
-            $calendarQuery->where('type', '!=', 'team');
-        }
-
-        if ($condition == 'only_team') {
-            $calendarQuery->where('type', 'team');
+        switch ($condition) {
+            case 'only_hosts':
+                $calendarQuery->where('type', 'simple');
+                break;
+            case 'only_teams':
+                $calendarQuery->where('type', 'team');
+                break;
+            case 'only_events':
+                $calendarQuery->where('type', 'event');
+                break;
         }
 
         $calendars = $calendarQuery->with(['slots'])->latest()->get();

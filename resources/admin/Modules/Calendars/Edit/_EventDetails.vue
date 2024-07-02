@@ -125,7 +125,7 @@
                         </div>
                     </el-form-item>
 
-                    <template v-if="isGroupMeeting">
+                    <template v-if="showMaxInvitees">
                         <el-form-item>
                             <div class="fcal_event_card">
                                 <div>
@@ -173,7 +173,9 @@ export default {
             loading: false,
             isEnable: this.calendar_event.status === 'active' ? true : false,
             isDisplaySpots: this.calendar_event.is_display_spots == 1 ? true : false,
-            isGroupMeeting: this.calendar_event.event_type == 'group',
+            isGroupMeeting: false,
+            isGroupEvent: false,
+            isEventCalendar: false,
             colors: this.appVars.event_colors,
             meetingDurations: this.appVars.meeting_durations,
             multiDurations: this.appVars.multi_durations,
@@ -183,7 +185,10 @@ export default {
     },
     computed: {
         showMultiDuration() {
-            return !this.is_board && !this.new_event && !this.isGroupMeeting;
+            return !this.is_board && !this.new_event && !this.isGroupMeeting && !this.isEventCalendar;
+        },
+        showMaxInvitees () {
+            return this.isGroupMeeting || this.isGroupEvent;
         }
     },
     methods: {
@@ -295,6 +300,8 @@ export default {
         this.updateDefaultDurations(this.calendar_event.settings?.multi_duration?.available_durations);
         this.calendar_event.event_type = this.event_type ? this.event_type : this.calendar_event.event_type;
         this.isGroupMeeting = this.calendar_event.event_type == 'group';
+        this.isGroupEvent = this.calendar_event.event_type == 'group_event';
+        this.isEventCalendar = this.isGroupEvent || this.calendar_event.event_type == 'single_event';
     }
 }
 </script>

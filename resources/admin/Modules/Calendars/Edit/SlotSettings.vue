@@ -86,7 +86,14 @@ export default {
     computed: {
         isRouteVisible() {
             return (menu) => {
-                if (menu.type != 'route' || (this.calendar.type != 'team' && menu.route.name == 'assignment')) {
+                if (menu.type != 'route') {
+                    return false;
+                }
+                const hiddenRoutes = {
+                    simple: 'assignment',
+                    event: 'limit_settings'
+                };
+                if (menu.route.name === hiddenRoutes[this.calendar.type]) {
                     return false;
                 }
                 return true;

@@ -48,7 +48,7 @@ use FluentBooking\Framework\Support\Arr;
         $enabled = Arr::get($settings, 'can_cancel') == 'no' ? true : false;
         $settings['can_not_cancel'] = [
             'enabled'   => $enabled,
-            'message'   => '',
+            'message'   => 'Sorry! you can not cancel this',
             'type'      => 'always',
             'condition' => [
                 'unit'  => 'minutes',
@@ -61,7 +61,7 @@ use FluentBooking\Framework\Support\Arr;
         $enabled = Arr::get($settings, 'can_reschedule') == 'no' ? true : false;
         $settings['can_not_reschedule'] = [
             'enabled'   => $enabled,
-            'message'   => '',
+            'message'   => 'Sorry! you can not reschedule this',
             'type'      => 'always',
             'condition' => [
                 'unit'  => 'minutes',

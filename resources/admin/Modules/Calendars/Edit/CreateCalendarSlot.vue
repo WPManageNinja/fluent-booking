@@ -60,7 +60,9 @@ export default {
                 'single': 'One-to-One',
                 'group': 'Group',
                 'round_robin': 'Round Robin',
-                'collective': 'Collective'
+                'collective': 'Collective',
+                'single_event': 'Single Event',
+                'group_event': 'Group Event'
             };
             return typeMap[eventType];
         },
@@ -81,7 +83,7 @@ export default {
                 });
         },
         maybeAddTeamMembers() {
-            this.slot.settings.team_members =this.teamMembers.length ? this.teamMembers : [];
+            this.slot.settings.team_members = this.teamMembers.length ? this.teamMembers : [];
         },
         checkValidation() {
             for (const location of this.slot.location_settings) {

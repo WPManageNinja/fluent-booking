@@ -148,7 +148,7 @@ class CalendarSlot extends Model
         $teamMemberIds = $this->getHostIds();
 
         foreach ($teamMemberIds as $teamMemberId) {
-            $calendar = Calendar::where('user_id', $teamMemberId)->where('type', '!=', 'team')->first();
+            $calendar = Calendar::where('user_id', $teamMemberId)->where('type', 'simple')->first();
             if ($calendar) {
                 $teamMembers[] = $calendar->getAuthorProfile($public);
             }
@@ -356,19 +356,10 @@ class CalendarSlot extends Model
     public function getAvailableDurations()
     {
         if ($this->isMultiDurationEnabled()) {
-            $durationLookup = Helper::getDurationLookup(true);
-            $availableDurations = Arr::get($this->settings, 'multi_duration.available_durations', []);
-
-            return array_map(function ($duration) use ($durationLookup) {
-                return $durationLookup[$duration];
-            }, $availableDurations);
+            return Arr::get($this->settings, 'multi_duration.available_durations', []);
         }
 
-        $durationLookup = Helper::getDurationLookup();
-
-        $duration = $durationLookup[$this->duration] ?? $this->duration;
-
-        return [$duration];
+        return [$this->duration];
     }
 
     public function getDescription()

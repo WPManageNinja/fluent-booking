@@ -879,7 +879,7 @@ class Booking extends Model
     {
         if ($this->host_user_id) {
             $calendar = Calendar::where('user_id', $this->host_user_id)
-                ->where('type', '!=', 'team')
+                ->where('type', 'simple')
                 ->first();
 
             if (!$calendar) {
