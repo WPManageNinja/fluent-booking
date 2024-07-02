@@ -209,7 +209,12 @@ class Helper
      *
      * @throws \Exception
      */
-    public static function retry($times, callable $callback, $sleepMilliseconds = 0, $when = null)
+    public static function retry(
+        $times,
+        callable $callback,
+        $sleepMilliseconds = 0,
+        $when = null
+    )
     {
         $attempts = 0;
 
@@ -230,5 +235,121 @@ class Helper
 
             goto beginning;
         }
+    }
+
+    /**
+     * Retrieve header status text by http code
+     * @param  int $code HTTP status code
+     * @return string
+     */
+    public static function getHeaderStatusText($code)
+    {
+        return get_status_header_desc($code);
+    }
+
+    /**
+     * Retrieve the writable temp dir path
+     * 
+     * @return string
+     */
+    public static function getTempDirPath()
+    {
+        return get_temp_dir();
+    }
+
+    /**
+     * Retrieves the list of allowed mime types and file extensions.
+     *
+     * @param int|WP_User $user Optional. User to check. Defaults to current user.
+     * @return string[] Mime types keyed by the file extension regex corresponding types.
+     */
+    public static function getAllowedMimeTypes()
+    {
+        return get_allowed_mime_types();
+    }
+
+    /**
+     * Get the content of a JSON file as array.
+     * 
+     * @param  string $filename
+     * @param  array  $options
+     * @return array json decoded content of the file
+     */
+    public static function getJsonFile($filename, $options = [])
+    {
+        return wp_json_file_decode($filename, $options);
+    }
+
+    /**
+     * Gets the size of a directory.
+     *
+     * @param string $directory Full path of a directory. 
+     * @return int|false|null Size in bytes if valid directory or false. Null if timeout.
+     */
+    public static function getSizeOf($dirPath)
+    {
+        return recurse_dirsize($dirPath);
+    }
+
+    /**
+     * Creates an \stdClass from an array
+     * @param  array $array
+     * @return \stdClass
+     */
+    public static function objectCreate(array $array)
+    {
+        return StdObject::create($array);
+    }
+
+    /**
+     * Transforms an \stdClass to array
+     * @param  \stdClass $object
+     * @return array
+     */
+    public static function objectToArray(\stdClass $object)
+    {
+        return StdObject::toArray($object);
+    }
+
+    /**
+     * Get an item from an object using "dot" notation.
+     *
+     * @param  object  $object
+     * @param  string|null  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public static function objectGet($object, $key, $default = null)
+    {
+        if (is_null($key) || trim($key) === '') {
+            return $object;
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (! is_object($object) || ! isset($object->{$segment})) {
+                return static::value($default);
+            }
+
+            $object = $object->{$segment};
+        }
+
+        return $object;
+    }
+
+    /**
+     * Replace a given pattern with each value in the array in sequentially.
+     *
+     * @param  string  $pattern
+     * @param  array  $replacements
+     * @param  string  $subject
+     * @return string
+     */
+    public static function pregReplaceArray($pattern, array $replacements, $subject)
+    {
+        return preg_replace_callback($pattern, function () use (&$replacements) {
+            foreach ($replacements as $value) {
+                return array_shift($replacements);
+            }
+        }, $subject);
     }
 }

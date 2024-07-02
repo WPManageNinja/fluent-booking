@@ -232,7 +232,7 @@ class Router
     /**
      * Declare a GET route endpoint
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function get($uri, $handler)
@@ -247,7 +247,7 @@ class Router
     /**
      * Declare a POST route endpoint
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function post($uri, $handler)
@@ -262,7 +262,7 @@ class Router
     /**
      * Declare a PUT route endpoint
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function put($uri, $handler)
@@ -277,7 +277,7 @@ class Router
     /**
      * Declare a PATCH route endpoint
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function patch($uri, $handler)
@@ -292,7 +292,7 @@ class Router
     /**
      * Declare a DELETE route endpoint
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function delete($uri, $handler)
@@ -307,7 +307,7 @@ class Router
     /**
      * Declare a route endpoint that matches any HTTP Verb/Method
      * @param  string $uri
-     * @param  string|Closure $handler
+     * @param  array|string|Closure $handler
      * @return \FluentBooking\Framework\Http\Route
      */
     public function any($uri, $handler)
@@ -364,7 +364,9 @@ class Router
     {
         $version = $this->app->config->get('app.rest_version');
 
-        $namespace = trim($this->app->config->get('app.rest_namespace'), '/');
+        $namespace = trim(
+            $this->app->config->get('app.rest_namespace', ''), '/'
+        );
 
         return "{$namespace}/{$version}";
     }

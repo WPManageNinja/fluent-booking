@@ -15,17 +15,26 @@ trait HooksRemovalTrait
 	 */
 	public function removeFilter($action, $class = '', $method = '', $priority = 10)
     {
-        if (function_exists($class)) {
+        if (is_string($class) && function_exists($class)) {
             return remove_filter(
                 $action, $class, is_numeric($method) ? $method : $priority
             );
         }
 
-        if (str_contains($class, '@') === false && is_string($method)) {
-            $class = $class . '@' . $method;
+        $class = is_object($class) ? get_class($class) : $class;
+        
+        if (!str_contains($class, 'class@anonymous')) {
+            
+            if (str_contains($class, '@') === false && is_string($method)) {
+                $class = $class . '@' . $method;
+            }
+            
+            $handler = $this->parseHookHandler($class);
+            
+        } else {
+            $object = $this->make($class);
+            $handler = [$object, $method];
         }
-
-        $handler = $this->parseHookHandler($class);
 
         return $this->removeHook(
         	$action,

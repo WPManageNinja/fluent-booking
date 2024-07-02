@@ -43,6 +43,30 @@ class Str
     }
 
     /**
+     * Makes an acronum from a string of words
+     * 
+     * @param  string $string
+     * @param  string $delimiter
+     * @return string
+     */
+    public static function acronym($string, $delimiter = '')
+    {
+        if (empty($string)) {
+            return '';
+        }
+     
+        $acronym = '';
+        foreach (preg_split('/[^\p{L}]+/u', $string) as $word) {
+            if(!empty($word)){
+                $first_letter = mb_substr($word, 0, 1);
+                $acronym .= $first_letter . $delimiter;
+            }
+        }
+     
+        return $acronym;
+    }
+
+    /**
      * Return the remainder of a string after the first occurrence of a given value.
      *
      * @param  string  $subject
@@ -474,6 +498,101 @@ class Str
     }
 
     /**
+     * Checks if the word(s) are in capitalized form.
+     * @param  string $str
+     * @param  boolean $onlyFirst if true, checks only the first charatcer
+     * @return boolean
+     */
+    public static function isCapitalized($str, $onlyFirst = false)
+    {
+        if ($onlyFirst) {
+            return static::isUpper($str[0]);
+        }
+
+        if ($words = mb_split('\s', $str)) {
+            foreach ($words as $word) {
+                $isCap[] = static::isUpper($word[0]) && static::isLower(mb_substr($word, 1));
+            }
+            return count(array_filter($isCap)) === count($isCap);
+        }
+    }
+
+    /**
+     * Checks if the first character is in capital form.
+     * 
+     * @param string $str
+     * @return boolean
+     */
+    public static function isCapital($str)
+    {
+        return static::isCapitalized($str, true);
+    }
+
+    /**
+     * Checks if the chracters are in upper case
+     * 
+     * @param string $str
+     * @return boolean
+     */
+    public static function isUpper($str)
+    {
+        return $str === static::upper($str);
+    }
+
+    /**
+     * Checks if the chracters are in lower case
+     * 
+     * @param string $str
+     * @return boolean
+     */
+    public static function isLower($str)
+    {
+        return $str === static::lower($str);
+    }
+
+    /**
+     * Checks if two words sounds alike
+     * 
+     * @param string $str1
+     * @param string $str2
+     * @return bool
+     */
+    public static function soundsAlike($str1, $str2)
+    {
+        return soundex($str1) == soundex($str2);
+    }
+
+    /**
+     * Checks if two words are similar
+     * 
+     * @param string $str1
+     * @param string $str2
+     * 
+     * @return bool
+     */
+    public static function isSimilar($str1, $str2, $accuracy = 60)
+    {
+        $percent = static::similarityOf($str1, $str2);
+
+        return $percent > $accuracy;
+    }
+
+    /**
+     * Checks if two words are similar
+     * 
+     * @param string $str1
+     * @param string $str2
+     * 
+     * @return bool
+     */
+    public static function similarityOf($str1, $str2)
+    {
+        similar_text($str1, $str2, $percent);
+
+        return $percent;
+    }
+
+    /**
      * Determine if a given value is valid JSON.
      *
      * @param  mixed  $value
@@ -549,7 +668,9 @@ class Str
             return false;
         }
 
-        return preg_match('/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iD', $value) > 0;
+        return preg_match(
+            '/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iD', $value
+        ) > 0;
     }
 
     /**
@@ -1216,7 +1337,12 @@ class Str
      * @param  bool  $cutLongWords
      * @return string
      */
-    public static function wordWrap($string, $characters = 75, $break = "\n", $cutLongWords = false)
+    public static function wordWrap(
+        $string,
+        $characters = 75,
+        $break = "\n",
+        $cutLongWords = false
+    )
     {
         return wordwrap($string, $characters, $break, $cutLongWords);
     }

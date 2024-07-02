@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentBooking\Framework\Request;
+namespace FluentBooking\Framework\Http\Request;
 
 trait Cleaner
 {
