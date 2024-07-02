@@ -5,7 +5,7 @@
         filterable
         clearable
         reserve-keyword
-        :placeholder="' '+$t('Select Team Members')"
+        :placeholder="' '+ placeholder"
         :loading="loading"
         @change="$emit('update:modelValue', selected_members)"
         popper-class="fcal_select"
@@ -28,13 +28,14 @@
 <script>
 export default {
     name: 'TeamMemberSelector',
-    props: ['modelValue'],
+    props: ['modelValue', 'modelPlaceholder'],
     $emits: ['update:modelValue'],
     data() {
         return {
             hosts: [],
             loading: false,
             selected_members: this.modelValue,
+            placeholder: this.modelPlaceholder || this.$t('Select Team Members')
         }
     },
     computed: {

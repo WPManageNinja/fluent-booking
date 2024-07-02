@@ -28,6 +28,12 @@ defined( 'ABSPATH' ) || exit;
 (new \FluentBooking\App\Hooks\Scheduler\DailyScheduler())->register();
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
 
+
+(new \FluentBooking\App\Modules\SingleEvent\SingleEvent())->register();
+
+/*
+ * Register all the single action handlers
+ */
 $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
 

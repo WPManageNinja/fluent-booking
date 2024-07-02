@@ -407,6 +407,7 @@ class TransStrings
             'Add New Team'                                                                     => __('Add New Team', 'fluent-booking-pro'),
             'Add New Booking'                                                                  => __('Add New Booking', 'fluent-booking-pro'),
             'Add New Calendar Host'                                                            => __('Add New Calendar Host', 'fluent-booking-pro'),
+            'Add Single Event'                                                                 => __('Add Single Event', 'fluent-booking-pro'),
             'AllCalendars/create_host_desc'                                                    => __('A particular user can have one calendar with multiple events. Please select a user who does not have a calendar yet', 'fluent-booking-pro'),
             'Congratulations!'                                                                 => __('Congratulations!', 'fluent-booking-pro'),
             'Booking Type'                                                                     => __('Booking Type', 'fluent-booking-pro'),

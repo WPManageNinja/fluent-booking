@@ -62,7 +62,7 @@ class AdminController extends Controller
         
         $hosts = [];
         $pushedIds = [];
-        $calendarUserIds = Calendar::where('type', '!=', 'team')->pluck('user_id')->toArray();
+        $calendarUserIds = Calendar::where('type', 'simple')->pluck('user_id')->toArray();
         foreach ($users as $user) {
             $pushedIds[] = $user->ID;
             $hosts[] = [
@@ -104,7 +104,7 @@ class AdminController extends Controller
 
         $calendars = Calendar::with(['user'])
             ->where('user_id', '!=', $currentUserId)
-            ->where('type', '!=', 'team')
+            ->where('type', 'simple')
             ->get();
 
         $allHosts = [];
@@ -133,7 +133,7 @@ class AdminController extends Controller
     public function getAllHosts(Request $request)
     {
         $calendars = Calendar::with(['user'])
-            ->where('type', '!=', 'team')
+            ->where('type', 'simple')
             ->get();
 
         $deletedUser = __('Deleted User', 'fluent-booking-pro');
@@ -159,7 +159,7 @@ class AdminController extends Controller
     {
         $teamMembers = [];
 
-        $calendars = Calendar::where('type', '!=', 'team')->get();
+        $calendars = Calendar::where('type', 'simple')->get();
 
         foreach ($calendars as $calendar) {
             $user = get_user_by('ID', $calendar->user_id);

@@ -112,7 +112,7 @@ class AvailabilityService
         $scheduleOptions = [];
         foreach ($availabilities as $availability) {
             $calendar = Calendar::with(['user'])
-                ->where('type', '!=', 'team')
+                ->where('type', 'simple')
                 ->where('user_id', $availability->object_id)
                 ->first();
 

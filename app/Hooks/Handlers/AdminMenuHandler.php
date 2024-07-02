@@ -228,7 +228,7 @@ class AdminMenuHandler
 
         $calendarId = null;
 
-        $firstCalendar = Calendar::where('user_id', $currentUser->ID)->where('type','!=','team')->first();
+        $firstCalendar = Calendar::where('user_id', $currentUser->ID)->where('type','simple')->first();
 
         if($firstCalendar) {
             $calendarId = $firstCalendar->id;

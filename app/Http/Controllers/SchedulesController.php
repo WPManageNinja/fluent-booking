@@ -36,7 +36,7 @@ class SchedulesController extends Controller
 
         if (!PermissionManager::userCanSeeAllBookings()) {
             $authorCalendar = Calendar::where('user_id', get_current_user_id())
-                ->where('type', '!=', 'team')
+                ->where('type', 'simple')
                 ->first();
 
             if($authorCalendar) {

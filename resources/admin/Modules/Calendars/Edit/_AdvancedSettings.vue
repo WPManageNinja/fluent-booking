@@ -177,7 +177,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item>
+                    <el-form-item v-if="showReschedulingCondition">
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="fcal_event_card_header">
                                 <div class="card_contents">
@@ -302,14 +302,15 @@ export default {
         }
     },
     computed: {
-        showRequiresConfirmation() {
-            return this.calendar_event.event_type != 'group';
-        },
         enabledQueryString() {
-            return (this.settings?.custom_redirect?.is_query_string == 'yes')
+            return this.settings?.custom_redirect?.is_query_string == 'yes';
         },
         showRequiresConfirmation() {
-            return this.calendar_event.event_type != 'group';
+            return this.calendar_event.event_type == 'single';
+        },
+        showReschedulingCondition() {
+            const eventType = this.calendar_event.event_type;
+            return eventType != 'single_event' && eventType != 'group_event';
         },
         bookingTitle() {
             return this.calendar_event.title + ' ' + this.$t('meeting between') + ' ' + this.calendar_event.author_profile?.name + ' and {{guest.first_name}}';

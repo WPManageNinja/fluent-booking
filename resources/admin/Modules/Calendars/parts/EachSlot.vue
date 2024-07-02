@@ -50,15 +50,16 @@
                     <span class="icons" :class="isTeam ? 'round-robin-icons' : ''">
                         <span class="left-icons">
                             <el-icon><User/></el-icon>
+                            <el-icon v-if="isEventCalendar"><User/></el-icon>
                             <el-icon v-if="isTeam"><User/></el-icon>
                             <el-icon v-if="isTeam"><User/></el-icon>
                         </span>
                         <el-icon><Right/></el-icon>
                         <span class="right">
                             <el-icon><User/></el-icon>
-                            <el-icon v-if="isGroup" class="last-icon"><User/></el-icon>
+                            <el-icon v-if="isGroup || isGroupEvent" class="last-icon"><User/></el-icon>
                         </span>
-                    </span> {{ getEventType(slot.event_type) }}
+                    </span> {{ getEventType(eventType) }}
                 </span>
                 <span v-if="slot.price_total" class="fcal_slot_meta_event">
                     <el-icon><CreditCard/></el-icon>
@@ -150,18 +151,22 @@ export default {
             isCopied: false,
             openShare: false,
             shareSlot: null,
+            eventType: this.slot.event_type,
             durationLookup: []
         }
     },
     computed: {
         isTeam() {
-            return this.slot.event_type == 'round_robin' || this.slot.event_type == 'collective';
+            return this.eventType == 'round_robin' || this.eventType == 'collective';
         },
         isGroup() {
-            return this.slot.event_type == 'group';
+            return this.eventType == 'group';
         },
-        eventType() {
-            return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+        isGroupEvent() {
+            return this.eventType == 'group_event';
+        },
+        isEventCalendar() {
+            return this.eventType == 'single_event' || this.eventType == 'group_event';
         },
         isLocationDisabled() {
             let isDisabled = false;
@@ -198,7 +203,9 @@ export default {
                 'single': 'One-to-One',
                 'group': 'Group',
                 'round_robin': 'Round Robin',
-                'collective': 'Collective'
+                'collective': 'Collective',
+                'single_event': 'Single Event',
+                'group_event': 'Group Event'
             };
             return typeMap[eventType];
         },

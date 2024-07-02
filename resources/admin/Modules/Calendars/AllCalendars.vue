@@ -25,11 +25,15 @@
                         <el-dropdown-menu>
                             <el-dropdown-item
                                 @click="isNewBookingOpen = true">
-                                {{ $t('Add New Host') }}
+                                {{ $t('Add Host') }}
                             </el-dropdown-item>
                             <el-dropdown-item 
                                 @click="isNewTeamOpen = true">
-                                {{ $t('Add New Team') }}
+                                {{ $t('Add Team') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item 
+                                @click="isSingleEventOpen = true">
+                                {{ $t('One-off Event') }}
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -130,10 +134,9 @@
                     :disabled="!team_name || !team_members.length">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
+                        <el-icon><User/></el-icon>
                         <el-icon><Right/></el-icon>
-                        <div class="icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        </div>
+                        <el-icon><User/></el-icon>
                     </div>
                     <div class="content">
                         <h3>{{ $t('Round Robin') }}</h3>
@@ -147,6 +150,72 @@
             </div>
             <div v-else>
                 <p class="fcal_need_pro">{{ $t('Team') + ' ' + $t('Need Pro Version')}}</p>
+                <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_primary_btn">
+                    {{$t('Upgrade to Pro')}}
+                </a>
+            </div>
+        </el-drawer>
+
+        <el-drawer
+            v-model="isSingleEventOpen"
+            :title="$t('Add One-off Event')"
+            :zIndex="999"
+            label-position="top"
+            modal-class="fcal_drawer">
+            <div v-if="appVars.has_pro" class="fcal_create_new_booking_type_drawer">
+                <el-form-item :label="$t('Event Calendar Name') + ' *'">
+                    <el-input
+                        v-model="event_name"
+                        type="text"
+                        :placeholder="$t('Enter Name of this event calendar')"
+                    />
+                </el-form-item>
+                <el-form-item :label="$t('Select Event Members') + ' *'">
+                    <TeamMemberSelector v-model="event_members" :modelPlaceholder="$t('Select Event Members')"/>
+                    <p>{{ $t('Please select the members you want to assign to this event') }}</p>
+                </el-form-item>
+                <el-button
+                    @click="createEventCalendar('single_event')"
+                    :disabled="!event_name || !event_members.length">
+                    <div class="icons-wrap">
+                        <el-icon><User/></el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
+                        <el-icon><User/></el-icon>
+                    </div>
+                    <div class="content">
+                        <h3>{{ $t('Single Event') }}</h3>
+                        <h4><strong>{{ $t('Invite someone') }}</strong> <span>{{ $t('to pick a time to meet with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                        <p>{{ $t('Good for: higher priority meetings.') }}</p>
+                        <el-icon class="icon-right">
+                            <Right/>
+                        </el-icon>
+                    </div>
+                </el-button>
+                <el-button
+                    @click="createEventCalendar('group_event')"
+                    :disabled="!event_name || !event_members.length">
+                    <div class="icons-wrap">
+                        <div class="icons">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <el-icon><Right/></el-icon>
+                        <div class="icons">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>{{ $t('Group Event') }}</h3>
+                        <h4><strong>{{ $t('Reserve spots') }}</strong> <span>{{ $t('for a scheduled event with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                        <p>{{ $t('Good for: reservation or ticketing system') }}</p>
+                        <el-icon class="icon-right">
+                            <Right/>
+                        </el-icon>
+                    </div>
+                </el-button>
+            </div>
+            <div v-else>
+                <p class="fcal_need_pro">{{ $t('Single Event') + ' ' + $t('Need Pro Version')}}</p>
                 <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_primary_btn">
                     {{$t('Upgrade to Pro')}}
                 </a>
@@ -186,9 +255,12 @@ export default {
             },
             isNewBookingOpen: false,
             isNewTeamOpen: false,
+            isSingleEventOpen: false,
             user_id: '',
             team_name: '',
             team_members: [],
+            event_name: 'One-off event',
+            event_members: [],
             event_lists: [],
             search: ''
         }
@@ -199,8 +271,8 @@ export default {
             this.$get('calendars', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                with: ['calendar_event_lists'],
-                search: this.search
+                search: this.search,
+                with: ['calendar_event_lists']
             })
                 .then(response => {
                     this.calendars = response.calendars.data;
@@ -225,6 +297,13 @@ export default {
                 name: 'create_calendar',
                 params: {host_id: this.appVars.me.id, event_type: eventType},
                 query: {team_name: this.team_name, team_members: this.team_members}
+            })
+        },
+        createEventCalendar(eventType) {
+            this.$router.push({
+                name: 'create_calendar',
+                params: {host_id: this.appVars.me.id, event_type: eventType},
+                query: {event_name: this.event_name, event_members: this.event_members}
             })
         }
     },

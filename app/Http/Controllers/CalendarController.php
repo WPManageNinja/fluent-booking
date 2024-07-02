@@ -67,8 +67,9 @@ class CalendarController extends Controller
 
         if (in_array('calendar_event_lists', $request->get('with', []))) {
             $data['calendar_event_lists'] = [
-                'events' => CalendarService::getCalendarOptionsByTitle('without_team'),
-                'teams'  => CalendarService::getCalendarOptionsByTitle('only_team')
+                'hosts'  => CalendarService::getCalendarOptionsByTitle('only_hosts'),
+                'teams'  => CalendarService::getCalendarOptionsByTitle('only_teams'),
+                'events' => CalendarService::getCalendarOptionsByTitle('only_events')
             ];
         }
 
@@ -139,30 +140,30 @@ class CalendarController extends Controller
             ], 422);
         }
 
-        $title = sanitize_text_field(Arr::get($data, 'title', ''));
+        $type = sanitize_text_field(Arr::get($data, 'type', 'simple'));
 
-        $isTeam = $title ? true : false;
+        $isHostCalendar = $type == 'simple' ? true : false;
 
-        if (!$isTeam && Calendar::where('user_id', $user->ID)->where('type', '!=', 'team')->first()) {
+        if ($isHostCalendar && Calendar::where('user_id', $user->ID)->where('type', 'simple')->first()) {
             return $this->sendError([
                 'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
             ], 422);
         }
 
-        if (!$isTeam) {
+        if ($isHostCalendar) {
             $userName = $user->user_login;
             if (is_email($userName)) {
                 $userName = explode('@', $userName);
                 $userName = $userName[0] . '-' . time();
             }
             $data['slug'] = sanitize_title($userName, '', 'display');
-        } else {
-            $data['slug'] = sanitize_title($title, '', 'display');
         }
         
         $slot = $data['slot'];
 
-        if ($isTeam) {
+        if (!$isHostCalendar) {
+            $title = sanitize_text_field(Arr::get($data, 'title', ''));
+            $data['slug'] = sanitize_title($title, '', 'display');
             $teamMembers = array_map('intval', Arr::get($slot, 'settings.team_members', []));
             if (!in_array($user->ID, $teamMembers)) {
                 $user = get_user_by('ID', reset($teamMembers));
@@ -194,8 +195,8 @@ class CalendarController extends Controller
             $calendarData = [
                 'slug'            => $slug,
                 'user_id'         => $user->ID,
-                'title'           => $isTeam ? $title : $personName,
-                'type'            => $isTeam ? 'team' : 'simple',
+                'title'           => $isHostCalendar ? $personName : $title,
+                'type'            => $type,
                 'author_timezone' => sanitize_text_field($data['author_timezone']) ?: 'UTC',
             ];
             $calendar = Calendar::create($calendarData);
@@ -231,7 +232,7 @@ class CalendarController extends Controller
             'duration'          => (int)$slot['duration'],
             'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
             'settings'          => [
-                'team_members'     => $isTeam ? $teamMembers : [],
+                'team_members'     => !$isHostCalendar ? $teamMembers : [],
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
                 'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
             ],
@@ -406,7 +407,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $userCalendarId = $calendar->type != 'team' ? $calendarId : null;
+        $userCalendarId = $calendar->type == 'simple' ? $calendarId : null;
 
         $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($userCalendarId);
 

@@ -46,15 +46,15 @@
             </div>
 
             <div class="fcal_create_calendar_form_footer">
-                <el-button v-if="step==1 && !is_team" class="fcal_primary_btn" @click="handleStep(2)">{{ $t('Continue') }}</el-button>
-                <el-button v-if="step==2 && !is_team" class="fcal_plain_btn" @click="handleStep(1)">{{ $t('Back') }}</el-button>
-                <SaveButton v-if="step==2 || is_team" :saving="saving" :label="$t('Continue')" @save="createCalendar"/>
+                <el-button v-if="step==1 && is_host_calendar" class="fcal_primary_btn" @click="handleStep(2)">{{ $t('Continue') }}</el-button>
+                <el-button v-if="step==2 && is_host_calendar" class="fcal_plain_btn" @click="handleStep(1)">{{ $t('Back') }}</el-button>
+                <SaveButton v-if="step==2 || !is_host_calendar" :saving="saving" :label="$t('Continue')" @save="createCalendar"/>
             </div>
         </div>
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import WeeklySchedules from './parts/WeeklySchedules.vue';
 import TimeZoneSelector from './parts/TimeZoneSelector.vue';
 import HostSelector from '../../Pieces/HostSelector.vue';
@@ -79,11 +79,12 @@ export default {
     data() {
         return {
             user_id: '',
-            is_team: false,
+            is_host_calendar: true,
             require_slug: false,
             calendar: {
                 slug: '',
                 title: '',
+                type: 'simple',
                 description: '',
                 author_timezone: '',
                 user_id: '',
@@ -198,7 +199,9 @@ export default {
                 'single': 'One-to-One',
                 'group': 'Group',
                 'round_robin': 'Round Robin',
-                'collective': 'Collective'
+                'collective': 'Collective',
+                'single_event': 'Single Event',
+                'group_event': 'Group Event'
             };
             return typeMap[eventType];
         }
@@ -210,9 +213,17 @@ export default {
         }
 
         if (this.$route.query.team_name) {
-            this.is_team = true;
+            this.calendar.type = 'team';
+            this.is_host_calendar = false;
             this.calendar.title = this.$route.query.team_name;
             this.calendar.slot.settings.team_members = this.$route.query.team_members;
+        }
+
+        if (this.$route.query.event_name) {
+            this.calendar.type = 'event';
+            this.is_host_calendar = false;
+            this.calendar.title = this.$route.query.event_name;
+            this.calendar.slot.settings.team_members = this.$route.query.event_members;
         }
 
         if(!this.hasSupport('is_hosted')) {

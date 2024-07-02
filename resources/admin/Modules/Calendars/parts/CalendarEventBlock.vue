@@ -88,6 +88,49 @@
                         </div>
                     </el-button>
                 </template>
+                <template v-else-if="calendar.type == 'event'">
+                    <el-form-item :label="$t('Select Event Members') + ' *'">
+                        <TeamMemberSelector v-model="eventMembers" :modelPlaceholder="$t('Select Event Members')"/>
+                        <p>{{ $t('Please select the members you want to assign to this event') }}</p>
+                    </el-form-item>
+                    <el-button @click="createEventCalendar('single_event')"
+                        :disabled="!eventMembers.length">
+                        <div class="icons-wrap">
+                            <el-icon><User/></el-icon>
+                            <el-icon><User/></el-icon>
+                            <el-icon><Right/></el-icon>
+                            <el-icon><User/></el-icon>
+                        </div>
+                        <div class="content">
+                            <h3>{{ $t('Single Event') }}</h3>
+                            <h4><strong>{{ $t('Invite someone') }}</strong> <span>{{ $t('to pick a time to meet with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                            <p>{{ $t('Good for: higher priority meetings.') }}</p>
+                            <el-icon class="icon-right">
+                                <Right/>
+                            </el-icon>
+                        </div>
+                    </el-button>
+                    <el-button @click="createEventCalendar('group_event')"
+                        :disabled="!eventMembers.length">
+                        <div class="icons-wrap">
+                            <div class="icons">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <el-icon><Right/></el-icon>
+                            <div class="icons">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3>{{ $t('Group Event') }}</h3>
+                            <h4><strong>{{ $t('Reserve spots') }}</strong> <span>{{ $t('for a scheduled event with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                            <p>{{ $t('Good for: reservation or ticketing system') }}</p>
+                            <el-icon class="icon-right">
+                                <Right/>
+                            </el-icon>
+                        </div>
+                    </el-button>
+                </template>
                 <template v-else>
                     <el-button @click="createSlot('single')">
                         <div class="icons-wrap">
@@ -191,7 +234,8 @@ export default {
             showSettings: false,
             isNewBookingOpen: false,
             isCloneOpen: false,
-            teamMembers: []
+            teamMembers: [],
+            eventMembers: []
         }
     },
     computed: {
@@ -224,6 +268,13 @@ export default {
                 params: {calendar_id: this.calendar.id, event_type: 'round_robin'},
                 query: {team_members: this.teamMembers}
 
+            })
+        },
+        createEventCalendar(eventType) {
+            this.$router.push({
+                name: 'create_slot_event',
+                params: {calendar_id: this.calendar.id, event_type: eventType},
+                query: {team_members: this.eventMembers}
             })
         },
         goToEvent(slot) {
@@ -288,7 +339,13 @@ export default {
         }
     },
     mounted() {
-        this.calendarEvents = this.calendar.type == 'team' ? this.eventLists.teams : this.eventLists.events;
+        if (this.calendar.type == 'team') {
+            this.calendarEvents = this.eventLists.teams;
+        } else if (this.calendar.type == 'event'){
+            this.calendarEvents = this.eventLists.events;
+        } else {
+            this.calendarEvents = this.eventLists.hosts;
+        }
     }
 }
 </script>
