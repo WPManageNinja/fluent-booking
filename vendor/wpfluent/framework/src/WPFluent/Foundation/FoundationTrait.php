@@ -82,6 +82,12 @@ trait FoundationTrait
             }
         }
 
+        if ($ns && str_contains($handler, $ns)) {
+            if (strpos($handler, $ns) !== false) {
+                $handler = trim(str_replace($ns, '', $handler), '\\');
+            }
+        }
+        
         $handler = $ns ? $ns . '\\' . $handler : $handler;
 
         return $this->getControllerNamespace($handler) . '\\' . $handler;

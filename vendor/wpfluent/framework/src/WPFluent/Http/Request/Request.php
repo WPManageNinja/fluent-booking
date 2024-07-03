@@ -79,6 +79,15 @@ class Request
     protected $validated = [];
 
     /**
+     * $safe Determines the input source when data retrieval methods get called.
+     * If true, the data will be returned from the $validated array.
+     * If false, the data will be returned from the $request array.
+     * 
+     * @var boolean
+     */
+    protected $safe = false;
+
+    /**
      * Construct the request instance
      * @param \FluentBooking\Framework\Foundation\Application $app
      * @param array/$_GET $get
@@ -338,17 +347,21 @@ class Request
      */
     public function only($keys)
     {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
         return Arr::only($this->inputs(), $keys);
     }
 
     /**
-     * Return a subset of the request inputs except the given args
-     * @param  array $args
+     * Return a subset of the request inputs except the given keys
+     * @param  array $keys
      * @return array
      */
-    public function except($args)
+    public function except($keys)
     {
-        return Arr::except($this->inputs(), $args);
+        $keys = is_array($keys) ? $keys : func_get_args();
+        
+        return Arr::except($this->inputs(), $keys);
     }
 
     /**
@@ -436,6 +449,7 @@ class Request
 
     /**
      * Get all inputs
+     * 
      * @return array $this->request
      */
     protected function inputs()
@@ -446,7 +460,24 @@ class Request
             }
         }
 
+        if ($this->safe === true) {
+            $this->safe = false;
+            return $this->validated;
+        }
+
         return $this->request;
+    }
+
+    /**
+     * To get item(s) from validated inputs
+     *
+     * @return self
+     */
+    public function safe()
+    {
+        $this->safe = true;
+
+        return $this;
     }
 
     /**
