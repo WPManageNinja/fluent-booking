@@ -39,12 +39,9 @@ class ComposerStaticInit78e842760d4b2c304f7701ee34fd8f8e
         'FluentBooking\\Database\\Migrations\\BookingHostMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingHostMigrator.php',
         'FluentBooking\\Database\\Migrations\\BookingMetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMetaMigrator.php',
         'FluentBooking\\Database\\Migrations\\BookingMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingMigrator.php',
-        'FluentBooking\\Database\\Migrations\\BookingOrdersMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingOrdersMigrator.php',
-        'FluentBooking\\Database\\Migrations\\BookingTransactionsMigrator' => __DIR__ . '/../..' . '/database/Migrations/BookingTransactionsMigrator.php',
         'FluentBooking\\Database\\Migrations\\CalendarMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarMigrator.php',
         'FluentBooking\\Database\\Migrations\\CalendarSlotsMigrator' => __DIR__ . '/../..' . '/database/Migrations/CalendarSlotsMigrator.php',
         'FluentBooking\\Database\\Migrations\\MetaMigrator' => __DIR__ . '/../..' . '/database/Migrations/MetaMigrator.php',
-        'FluentBooking\\Database\\Migrations\\OrdersItemsMigrator' => __DIR__ . '/../..' . '/database/Migrations/OrdersItemsMigrator.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

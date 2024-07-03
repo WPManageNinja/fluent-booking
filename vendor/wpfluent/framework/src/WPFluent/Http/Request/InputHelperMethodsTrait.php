@@ -6,7 +6,7 @@ use FluentBooking\Framework\Support\Arr;
 
 trait InputHelperMethodsTrait
 {
-	/**
+    /**
      * Get an item from the request filtering by the callback
      * 
      * @param  string|null $key

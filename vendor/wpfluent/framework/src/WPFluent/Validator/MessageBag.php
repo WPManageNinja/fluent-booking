@@ -68,13 +68,14 @@ trait MessageBag
             ' ', '', ucwords(str_replace(['-', '_'], ' ', $rule))
         );
 
-        $originalMessageKey = '';
-        if(!empty($originalRuleKey)){
-            $originalMessageKey = $originalRuleKey.'.'.$rule;
+        $originalKey = '';
+        
+        if (!empty($originalRuleKey)){
+            $originalKey = $originalRuleKey.'.'.$rule;
         }
 
         if ($this->hasMethod($method)) {
-            return $this->$method($attribute, $parameters, $originalMessageKey);
+            return $this->$method($attribute, $parameters, $originalKey);
         } else {
             return $this->generateDefaultMessage($attribute, $parameters);
         }
@@ -101,19 +102,20 @@ trait MessageBag
     /**
      * Get the replacement text of the error message.
      *
-     * @param $customMessagesKey
+     * @param $customKey
      * @param $bagAccessor
-     * @param $originalMessageKey
+     * @param $originalKey
      *
      * @return string
      */
-    protected function getReplacementText($customMessagesKey, $bagAccessor, $originalMessageKey = null)
+    protected function getReplacementText($customKey, $bagAccessor, $originalKey = null)
     {
-        if (isset($this->customMessages[$customMessagesKey])) {
-            return $this->customMessages[$customMessagesKey];
-        } elseif (isset($this->customMessages[$originalMessageKey])) {
-            return $this->customMessages[$originalMessageKey];
+        if (isset($this->customMessages[$customKey])) {
+            return $this->customMessages[$customKey];
+        } elseif (isset($this->customMessages[$originalKey])) {
+            return $this->customMessages[$originalKey];
         }
+
         return Arr::get($this->bag, $bagAccessor, '');
     }
 
@@ -139,12 +141,14 @@ trait MessageBag
      *
      * @param $attribute
      * @param $parameters
-     * @param $originalMessageKey
+     * @param $originalKey
      * @return string
      */
-    protected function replaceString($attribute, $parameters, $originalMessageKey)
+    protected function replaceString($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.string', 'string', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.string', 'string', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -154,12 +158,12 @@ trait MessageBag
      *
      * @param $attribute
      * @param $parameters
-     * @param $originalMessageKey
+     * @param $originalKey
      * @return string
      */
-    protected function replaceInt($attribute, $parameters)
+    protected function replaceInt($attribute, $parameters, $originalKey)
     {
-        return $this->replaceInteger($attribute, $parameters);
+        return $this->replaceInteger($attribute, $parameters, $originalKey);
     }
 
     /**
@@ -167,13 +171,15 @@ trait MessageBag
      *
      * @param $attribute
      * @param $parameters
-     * @param $originalMessageKey
+     * @param $originalKey
      *
      * @return string
      */
-    protected function replaceInteger($attribute, $parameters, $originalMessageKey)
+    protected function replaceInteger($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.integer', 'integer', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.integer', 'integer', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -186,9 +192,11 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceAlpha($attribute, $parameters,  $originalMessageKey)
+    protected function replaceAlpha($attribute, $parameters,  $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.alpha', 'alpha',  $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.alpha', 'alpha',  $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -201,9 +209,11 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceAlphanum($attribute, $parameters,  $originalMessageKey)
+    protected function replaceAlphanum($attribute, $parameters,  $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.alphanum', 'alphanum', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.alphanum', 'alphanum', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -216,9 +226,11 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceAlphadash($attribute, $parameters,  $originalMessageKey)
+    protected function replaceAlphadash($attribute, $parameters,  $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.alphadash', 'alphadash', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.alphadash', 'alphadash', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -228,13 +240,15 @@ trait MessageBag
      *
      * @param $attribute
      * @param $parameters
-     * @param $originalMessageKey
+     * @param $originalKey
      *
      * @return string
      */
-    protected function replaceRequired($attribute, $parameters, $originalMessageKey)
+    protected function replaceRequired($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.required', 'required', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.required', 'required', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -247,13 +261,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceRequiredIf($attribute, $parameters,  $originalMessageKey)
+    protected function replaceRequiredIf($attribute, $parameters,  $originalKey)
     {
         if (preg_match('/\.\d\./', $attribute, $matches)) {
             $parameters[0] = str_replace(['.*.'], $matches, $parameters[0]);
         }
         
-        $text = $this->getReplacementText($attribute.'.required_if', 'required_if', $originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.required_if', 'required_if', $originalKey);
 
         $value = end($parameters);
         
@@ -272,9 +286,11 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceEmail($attribute, $parameters, $originalMessageKey)
+    protected function replaceEmail($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.email', 'email', $originalMessageKey);
+        $text = $this->getReplacementText(
+            $attribute.'.email', 'email', $originalKey
+        );
 
         return str_replace(':attribute', $attribute, $text);
     }
@@ -287,11 +303,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceDateformat($attribute, $parameters, $originalMessageKey)
+    protected function replaceDateformat($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.date_format', 'date_format', $$originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.date_format', 'date_format', $$originalKey);
 
-        return str_replace([':attribute', ':value'], [$attribute, $parameters[0]], $text);
+        return str_replace(
+            [':attribute', ':value'], [$attribute, $parameters[0]], $text
+        );
     }
 
     /**
@@ -302,11 +320,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceSize($attribute, $parameters, $originalMessageKey)
+    protected function replaceSize($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.size', $this->makeBagKey($attribute, 'size'),  $originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.size', $this->makeBagKey($attribute, 'size'),  $originalKey);
 
-        return str_replace([':attribute', ':size'], [$attribute, $parameters[0]], $text);
+        return str_replace(
+            [':attribute', ':size'], [$attribute, $parameters[0]], $text
+        );
     }
 
     /**
@@ -317,11 +337,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceMin($attribute, $parameters, $originalMessageKey)
+    protected function replaceMin($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.min', $this->makeBagKey($attribute, 'min'),  $originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.min', $this->makeBagKey($attribute, 'min'),  $originalKey);
 
-        return str_replace([':attribute', ':min'], [$attribute, $parameters[0]], $text);
+        return str_replace(
+            [':attribute', ':min'], [$attribute, $parameters[0]], $text
+        );
     }
 
     /**
@@ -332,11 +354,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceMax($attribute, $parameters, $originalMessageKey)
+    protected function replaceMax($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.max', $this->makeBagKey($attribute, 'max'), $originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.max', $this->makeBagKey($attribute, 'max'), $originalKey);
 
-        return str_replace([':attribute', ':max'], [$attribute, $parameters[0]], $text);
+        return str_replace(
+            [':attribute', ':max'], [$attribute, $parameters[0]], $text
+        );
     }
 
     /**
@@ -347,11 +371,13 @@ trait MessageBag
      *
      * @return string
      */
-    protected function replaceSame($attribute, $parameters, $originalMessageKey)
+    protected function replaceSame($attribute, $parameters, $originalKey)
     {
-        $text = $this->getReplacementText($attribute.'.same', 'same', $originalMessageKey);
+        $text = $this->getReplacementText($attribute.'.same', 'same', $originalKey);
 
-        return str_replace([':attribute', ':other'], [$attribute, $parameters[0]], $text);
+        return str_replace(
+            [':attribute', ':other'], [$attribute, $parameters[0]], $text
+        );
     }
 
     /**
