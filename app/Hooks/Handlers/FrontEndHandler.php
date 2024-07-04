@@ -11,9 +11,9 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
+use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\TimeSlotService;
-use FluentBooking\App\Services\TeamTimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
@@ -515,7 +515,7 @@ class FrontEndHandler
 
         $hash = sanitize_text_field($_REQUEST['hash']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        return (new \FluentBookingPro\App\Services\ReceiptHelper())->getReceipt($hash);
+        return apply_filters('fluent_booking/payment_receipt_html', '', $hash);
     }
 
     private function loadGlobalVars()
@@ -842,13 +842,13 @@ class FrontEndHandler
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
-        $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        
-        if ($calendarEvent->isTeamEvent()) {
-            $isSpotAvailable = $timeSlotService->isAnySpotAvailable($startDateTime, $endDateTime, $duration);
-        } else {
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);
+
+        if (is_wp_error($timeSlotService)) {
+            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
         }
+
+        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
         if (!$isSpotAvailable) {
             wp_send_json([
@@ -923,21 +923,16 @@ class FrontEndHandler
 
         $duration = (int)$calendarEvent->getDuration(Arr::get($request, 'duration', null));
 
-        if ($calendarEvent->isTeamEvent()) {
-            $timeSlotService = new TeamTimeSlotService($calendar, $calendarEvent);
-        } else {
-            $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
+        $timeSlotService = TimeSlotServiceHandler::initService($calendar, $calendarEvent);
+        
+        if (is_wp_error($timeSlotService)) {
+            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timeZone);
         }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration);
 
         if (is_wp_error($availableSpots)) {
-            wp_send_json([
-                'available_slots' => [],
-                'timezone'        => $timeZone,
-                'invalid_dates'   => true,
-                'max_lookup_date' => $calendarEvent->getMaxLookUpDate(),
-            ], 200);
+            return TimeSlotServiceHandler::sendError($availableSpots, $calendarEvent, $timeZone);
         }
 
         $availableSpots = array_filter($availableSpots);

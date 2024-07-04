@@ -8,7 +8,6 @@ use FluentBooking\Framework\Support\Arr;
 
 abstract class BaseCalendar
 {
-
     protected $calendarKey;
 
     protected $calendarTitle;
@@ -46,17 +45,8 @@ abstract class BaseCalendar
 
     public function pushToGlobalMenu($menuItems)
     {
-        $menuItems[$this->calendarKey] = [
-            'title'          => $this->calendarTitle,
-            'icon_url'       => $this->logo,
-            'component_type' => 'GlobalSettingsComponent',
-            'route'          => [
-                'name'   => 'configure-integrations',
-                'params' => [
-                    'settings_key' => $this->calendarKey
-                ]
-            ]
-        ];
+        $menuItems[$this->calendarKey]['disable'] = false;
+
         return $menuItems;
     }
 

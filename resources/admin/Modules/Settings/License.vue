@@ -4,7 +4,7 @@
             <div class="fcal_settings_head">
                 <h3>{{$t('License Management')}}</h3>
             </div>
-            <div class="fcal_settings_actions">
+            <div v-if="!disabled" class="fcal_settings_actions">
                 <el-button
                     class="refresh-setting-icon"
                     @click="getSettings">
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div v-loading="verifying" class="fcal_configure_integration_body">
+        <div v-if="!disabled" v-loading="verifying" class="fcal_configure_integration_body">
             <div v-if="fetching" v-loading="fetching" class="text-align-center">
                 <h3>{{$t("Fetching License Information Please wait")}}</h3>
             </div>
@@ -64,88 +64,93 @@
 
             <p class="fcal_warning" v-html="errorMessage"></p>
         </div>
+        <ProNotice v-else/>
     </div>
 </template>
 
-<script type="text/babel">
-    import { Refresh, Lock, CircleCheck } from '@element-plus/icons-vue';
+<script>
+import ProNotice from '@/Components/Common/ProNotice.vue';
+import { Refresh, Lock, CircleCheck } from '@element-plus/icons-vue';
+export default {
+    name: 'License',
+    props: ['disabled'],
+    components: {
+        Lock,
+        Refresh,
+        CircleCheck,
+        ProNotice
+    },
+    data() {
+        return {
+            fetching: true,
+            verifying: false,
+            licenseData: {},
+            licenseKey: '',
+            showNewLicenseInput: false,
+            errorMessage: ''
+        };
+    },
+    methods: {
+        getSettings() {
+            this.errorMessage = '';
+            this.fetching = true;
 
-    export default {
-        name: 'License',
-        components: {
-            Lock,
-            Refresh,
-            CircleCheck,
-        },
-        data() {
-            return {
-                fetching: true,
-                verifying: false,
-                licenseData: {},
-                licenseKey: '',
-                showNewLicenseInput: false,
-                errorMessage: ''
-            };
-        },
-        methods: {
-            getSettings() {
-                this.errorMessage = '';
-                this.fetching = true;
-
-                this.$get('settings/license', { verify: true })
-                    .then(response => {
-                        this.licenseData = response;
-                    })
-                    .catch(errors => {
-                        this.$handleError(errors);
-                    })
-                    .finally(() => {
-                        this.fetching = false;
-                    });
-            },
-            verifyLicense() {
-                if (!this.licenseKey) {
-                    this.$handleError(this.$t('Please provide a license key'));
-                    this.errorMessage = this.$t('Please provide a license key');
-                    return;
-                }
-
-                this.verifying = true;
-
-                this.errorMessage = '';
-
-                this.$post('settings/license', {
-                    license_key: this.licenseKey,
+            this.$get('settings/license', { verify: true })
+                .then(response => {
+                    this.licenseData = response;
                 })
-                    .then(response => {
-                        this.licenseData = response.license_data;
-                        this.$handleSuccess(response.message);
-                    })
-                    .catch(errorResponse => {
-                        this.errorMessage = this.$handleError(errorResponse);
-                    })
-                    .finally(() => {
-                        this.verifying = false;
-                    });
-            },
-            deactivateLicense() {
-                this.verifying = true;
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.fetching = false;
+                });
+        },
+        verifyLicense() {
+            if (!this.licenseKey) {
+                this.$handleError(this.$t('Please provide a license key'));
+                this.errorMessage = this.$t('Please provide a license key');
+                return;
+            }
 
-                this.$del('settings/license')
-                    .then(response => {
-                        this.licenseData = response.license_data;
-                        this.$handleSuccess(response.message);
-                    })
-                    .catch(errors => {
-                        this.$handleError(errors);
-                    })
-                    .finally(() => {
-                        this.verifying = false;
-                    });
-            },
+            this.verifying = true;
+
+            this.errorMessage = '';
+
+            this.$post('settings/license', {
+                license_key: this.licenseKey,
+            })
+                .then(response => {
+                    this.licenseData = response.license_data;
+                    this.$handleSuccess(response.message);
+                })
+                .catch(errorResponse => {
+                    this.errorMessage = this.$handleError(errorResponse);
+                })
+                .finally(() => {
+                    this.verifying = false;
+                });
         },
-        mounted() {
+        deactivateLicense() {
+            this.verifying = true;
+
+            this.$del('settings/license')
+                .then(response => {
+                    this.licenseData = response.license_data;
+                    this.$handleSuccess(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.verifying = false;
+                });
+        },
+    },
+    mounted() {
+        if (!this.disabled) {
             this.getSettings();
-        },
-    };
+        }
+    }
+};
 </script>

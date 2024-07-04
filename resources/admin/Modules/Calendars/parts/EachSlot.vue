@@ -49,15 +49,24 @@
                 <span class="fcal_slot_meta_event">
                     <span class="icons" :class="isTeam ? 'round-robin-icons' : ''">
                         <span class="left-icons">
-                            <el-icon><User/></el-icon>
-                            <el-icon v-if="isEventCalendar"><User/></el-icon>
-                            <el-icon v-if="isTeam"><User/></el-icon>
-                            <el-icon v-if="isTeam"><User/></el-icon>
+                            <template v-if="!isGroupEvent">
+                                <el-icon><User/></el-icon>
+                                <el-icon v-if="isTeam || isEventCalendar"><User/></el-icon>
+                                <el-icon v-if="isTeam"><User/></el-icon>
+                            </template>
+                            <div v-else class="icons">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
                         </span>
                         <el-icon><Right/></el-icon>
                         <span class="right">
-                            <el-icon><User/></el-icon>
-                            <el-icon v-if="isGroup || isGroupEvent" class="last-icon"><User/></el-icon>
+                            <template v-if="!isGroupEvent">
+                                <el-icon><User/></el-icon>
+                                <el-icon v-if="isGroup" class="last-icon"><User/></el-icon>
+                            </template>
+                            <div v-else class="icons">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
                         </span>
                     </span> {{ getEventType(eventType) }}
                 </span>

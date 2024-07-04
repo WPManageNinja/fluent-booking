@@ -12,16 +12,18 @@
         <div v-else class="fcal_single_integration_body_wrap">
             <el-aside>
                 <ul class="fcal_settings_sidebar">
-                    <li v-for="(menu, index) in menuItems" :key="index">
-                        <router-link v-if="menu.type == 'route'" :to="menu.route" class="calendar_route">
-                            <el-icon><div class="icon" v-html="menu.svgIcon"></div></el-icon>
-                            {{ menu.label }}
-                        </router-link>
-                    </li>
+                    <template v-for="(menu, index) in menuItems">
+                        <li v-if="isRouteVisible(menu)" :key="index">
+                            <router-link :to="menu.route" @click.native="setCurrentMenu(menu)" class="calendar_route">
+                                <el-icon><div class="icon" v-html="menu.svgIcon"></div></el-icon>
+                                {{ menu.label }}
+                            </router-link>
+                        </li>
+                    </template>
                 </ul>
             </el-aside>
             <div v-if="calendar.id" class="fcal_single_integration_body">
-                <router-view :calendar="calendar" />
+                <router-view :calendar="calendar" :disabled="currentMenu.disable"/>
             </div>
         </div>
     </div>
@@ -36,10 +38,28 @@ export default {
             calendar_id: this.$route.params.calendar_id,
             loading: false,
             menuItems: {},
-            calendar: {}
+            calendar: {},
+            currentMenu: {}
+        }
+    },
+    computed: {
+        isRouteVisible() {
+            return (menu) => {
+                return menu.type == 'route' && menu.visible;
+            }
         }
     },
     methods: {
+        setCurrentMenu(menu) {
+            this.currentMenu = menu;
+        },
+        updateCurrentMenu() {
+            const currentRouteName = this.$route.name;
+            const currentMenu = Object.values(this.menuItems).find(menu => menu.route.name === currentRouteName);
+            if (currentMenu) {
+                this.currentMenu = currentMenu;
+            }
+        },
         getSettings() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id, {
@@ -49,6 +69,7 @@ export default {
             .then(response => {
                 this.menuItems = response.settings_menu;
                 this.calendar = response.calendar;
+                this.updateCurrentMenu();
             })
             .catch(errors => {
                 this.$handleError(errors);

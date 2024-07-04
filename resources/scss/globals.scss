@@ -2205,6 +2205,33 @@
         }
     }
 
+    .fcal_pro_notice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;        
+        background-color: #ffefee;
+        border-left: 5px solid #f56c6c;
+        border-radius: 4px;
+        margin-top: 20px;
+        padding: 16px;
+        p {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-top: 6px;
+        }
+        h3 {
+            margin: 0;
+            color: #1e1f21;
+            font-size: 16px;
+        }
+        .fcal_danger_btn {
+            color: #fff;
+            border-color: #ff6154;
+            background-color: #ff6154;
+        }
+    }
+
     .el-breadcrumb {
         .el-breadcrumb__item {
             &:first-child {
