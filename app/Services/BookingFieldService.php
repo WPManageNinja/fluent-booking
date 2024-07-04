@@ -217,6 +217,8 @@ class BookingFieldService
 
         if (!$paymentField) {
             unset($existingFields['payment_method']);
+        } else {
+            $existingFields['payment_method'] = $paymentField;
         }
 
         $existingFields['email']['disabled'] = false;

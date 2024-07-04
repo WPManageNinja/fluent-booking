@@ -300,7 +300,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'receipt_html') {
-            return (new \FluentBookingPro\App\Services\ReceiptHelper())->getReceipt($booking->hash);
+            return apply_filters('fluent_booking/payment_receipt_html', '', $booking->hash);
         }
 
         if ($key == 'payment_status') {

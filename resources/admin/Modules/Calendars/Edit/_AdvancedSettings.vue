@@ -7,142 +7,113 @@
                     {{ $t('Advanced Settings') }}
                 </h2>
             </div>
-            <div class="fcal_create_calendar_form_body">
-                <el-form label-position="top">
-
-                    <el-form-item>
-                        <div class="fcal_event_card">
-                            <el-form-item :label="$t('Booking Title')">
-                                <popover
-                                    :groupTitle="$t('Shortcodes')"
-                                    :data="smart_codes.texts"
-                                    placement="bottom-end"
-                                    :isVisible="titlePopupVisible"
-                                    class="fcal_popover_shortcode"
-                                    @command="handleBookingTitleCommand">
-                                    <template #popoverButton>
-                                        <el-input
-                                            type="text"
-                                            :placeholder="bookingTitle"
-                                            v-model="settings.booking_title">
-                                            <template #append>
-                                                <el-button :icon="MoreIcon" @click="toggleTitlePopupVisible"></el-button>
+            <template v-if="!disabled">
+                <div class="fcal_create_calendar_form_body">
+                    <el-form label-position="top">
+    
+                        <el-form-item>
+                            <div class="fcal_event_card">
+                                <el-form-item :label="$t('Booking Title')">
+                                    <popover
+                                        :groupTitle="$t('Shortcodes')"
+                                        :data="smart_codes.texts"
+                                        placement="bottom-end"
+                                        :isVisible="titlePopupVisible"
+                                        class="fcal_popover_shortcode"
+                                        @command="handleBookingTitleCommand">
+                                        <template #popoverButton>
+                                            <el-input
+                                                type="text"
+                                                :placeholder="bookingTitle"
+                                                v-model="settings.booking_title">
+                                                <template #append>
+                                                    <el-button :icon="MoreIcon" @click="toggleTitlePopupVisible"></el-button>
+                                                </template>
+                                            </el-input>
+                                        </template>
+                                    </popover>
+                                </el-form-item>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
+                                        <span>{{ $t("AdvancedSettings/redirect_url_description") }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-switch v-model="settings.custom_redirect.enabled"/>
+                                    </div>
+                                </div>
+                                <div class="fcal_event_child_card" v-if="settings.custom_redirect.enabled">
+                                    <el-form-item :label="$t('Redirect URL')">
+                                        <popover
+                                            :groupTitle="$t('Shortcodes')"
+                                            :data="smart_codes.texts"
+                                            placement="bottom-end"
+                                            :isVisible="urlPopupVisible"
+                                            class="fcal_popover_shortcode"
+                                            @command="handleRedirectUrlCommand">
+                                            <template #popoverButton>
+                                                <el-input
+                                                    type="text"
+                                                    :placeholder="$t('AdvancedSettings/redirect_url_placeholder')"
+                                                    v-model="settings.custom_redirect.redirect_url">
+                                                    <template #append>
+                                                        <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
+                                                    </template>
+                                                </el-input>
                                             </template>
-                                        </el-input>
-                                    </template>
-                                </popover>
-                            </el-form-item>
-                        </div>
-                    </el-form-item>
-                    <el-form-item>
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="fcal_event_card_header">
-                                <div class="card_contents">
-                                    <span class="sub-label card-title">{{ $t("Redirect After Booking") }}</span>
-                                    <span>{{ $t("AdvancedSettings/redirect_url_description") }}</span>
-                                </div>
-                                <div class="card_action">
-                                    <el-switch v-model="settings.custom_redirect.enabled"/>
-                                </div>
-                            </div>
-                            <div class="fcal_event_child_card" v-if="settings.custom_redirect.enabled">
-                                <el-form-item :label="$t('Redirect URL')">
-                                    <popover
-                                        :groupTitle="$t('Shortcodes')"
-                                        :data="smart_codes.texts"
-                                        placement="bottom-end"
-                                        :isVisible="urlPopupVisible"
-                                        class="fcal_popover_shortcode"
-                                        @command="handleRedirectUrlCommand">
-                                        <template #popoverButton>
-                                            <el-input
-                                                type="text"
-                                                :placeholder="$t('AdvancedSettings/redirect_url_placeholder')"
-                                                v-model="settings.custom_redirect.redirect_url">
-                                                <template #append>
-                                                    <el-button :icon="MoreIcon" @click="toggleUrlPopupVisible"></el-button>
-                                                </template>
-                                            </el-input>
-                                        </template>
-                                    </popover>
-                                </el-form-item>
-                                <el-form-item :label="$t('Redirect Query String')">
-                                    <el-checkbox true-label="yes" false-label="no" v-model="settings.custom_redirect.is_query_string">{{ $t('Pass Field Data Via Query String') }}</el-checkbox>
-                                    <popover
-                                        v-if="enabledQueryString"
-                                        :groupTitle="$t('Shortcodes')"
-                                        :data="smart_codes.texts"
-                                        placement="bottom-end"
-                                        :isVisible="queryPopupVisible"
-                                        class="fcal_popover_shortcode"
-                                        @command="handleRedirectQueryCommand">
-                                        <template #popoverButton>
-                                            <el-input
-                                                type="text"
-                                                :placeholder="$t('Redirect Query String')"
-                                                v-model="settings.custom_redirect.query_string">
-                                                <template #append>
-                                                    <el-button :icon="MoreIcon" @click="toggleQueryPopupVisible"></el-button>
-                                                </template>
-                                            </el-input>
-                                        </template>
-                                    </popover>
-                                    <p v-if="enabledQueryString" class="fcal_event_input_hint">
-                                        <em>{{ $t('AdvancedSettings/redirect_query_string_hint') }}</em>
-                                    </p>
-                                </el-form-item>
-                            </div>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item v-if="showRequiresConfirmation">
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="fcal_event_card_header">
-                                <div class="card_contents">
-                                    <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
-                                    <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
-                                </div>
-                                <div class="card_action">
-                                    <el-switch v-model="settings.requires_confirmation.enabled"/>
+                                        </popover>
+                                    </el-form-item>
+                                    <el-form-item :label="$t('Redirect Query String')">
+                                        <el-checkbox true-label="yes" false-label="no" v-model="settings.custom_redirect.is_query_string">{{ $t('Pass Field Data Via Query String') }}</el-checkbox>
+                                        <popover
+                                            v-if="enabledQueryString"
+                                            :groupTitle="$t('Shortcodes')"
+                                            :data="smart_codes.texts"
+                                            placement="bottom-end"
+                                            :isVisible="queryPopupVisible"
+                                            class="fcal_popover_shortcode"
+                                            @command="handleRedirectQueryCommand">
+                                            <template #popoverButton>
+                                                <el-input
+                                                    type="text"
+                                                    :placeholder="$t('Redirect Query String')"
+                                                    v-model="settings.custom_redirect.query_string">
+                                                    <template #append>
+                                                        <el-button :icon="MoreIcon" @click="toggleQueryPopupVisible"></el-button>
+                                                    </template>
+                                                </el-input>
+                                            </template>
+                                        </popover>
+                                        <p v-if="enabledQueryString" class="fcal_event_input_hint">
+                                            <em>{{ $t('AdvancedSettings/redirect_query_string_hint') }}</em>
+                                        </p>
+                                    </el-form-item>
                                 </div>
                             </div>
-                            <div class="fcal_event_child_card" v-if="settings.requires_confirmation.enabled">
-                                <el-radio-group v-model="settings.requires_confirmation.type">
-                                    <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                    <el-radio label="conditional">{{ $t('When booking notice is less than') }}
-                                        <span>
-                                            <el-input v-model="settings.requires_confirmation.condition.value" @input="validateInput(settings.requires_confirmation)"></el-input>
-                                            <el-select v-model="settings.requires_confirmation.condition.unit" @change="validateInput(settings.requires_confirmation)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                                <el-option value="minutes" :label="$t('Minutes')"></el-option>
-                                                <el-option value="hours" :label="$t('Hours')"></el-option>
-                                            </el-select>
-                                        </span>
-                                    </el-radio>
-                                </el-radio-group>
-                            </div>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item>
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="fcal_event_card_header">
-                                <div class="card_contents">
-                                    <span class="sub-label card-title">{{ $t("Attendee Cannot Cancel") }}</span>
-                                    <span v-if="settings.can_not_cancel.enabled">{{ $t("AdvancedSettings/cannot_cancel_description") }}</span>
-                                    <span v-else>{{ $t("AdvancedSettings/can_cancel_description") }}</span>
+                        </el-form-item>
+    
+                        <el-form-item v-if="showRequiresConfirmation">
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Requires Confirmation") }}</span>
+                                        <span>{{ $t("LimitSettings/requires_confirmation_description") }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-switch v-model="settings.requires_confirmation.enabled"/>
+                                    </div>
                                 </div>
-                                <div class="card_action">
-                                    <el-switch v-model="settings.can_not_cancel.enabled"/>
-                                </div>
-                            </div>
-                            <template v-if="settings.can_not_cancel.enabled">
-                                <div class="fcal_event_child_card">
-                                    <el-radio-group v-model="settings.can_not_cancel.type">
+                                <div class="fcal_event_child_card" v-if="settings.requires_confirmation.enabled">
+                                    <el-radio-group v-model="settings.requires_confirmation.type">
                                         <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                        <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                        <el-radio label="conditional">{{ $t('When booking notice is less than') }}
                                             <span>
-                                                <el-input v-model="settings.can_not_cancel.condition.value" @input="validateInput(settings.can_not_cancel)"></el-input>
-                                                <el-select v-model="settings.can_not_cancel.condition.unit" @change="validateInput(settings.can_not_cancel)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                <el-input v-model="settings.requires_confirmation.condition.value" @input="validateInput(settings.requires_confirmation)"></el-input>
+                                                <el-select v-model="settings.requires_confirmation.condition.unit" @change="validateInput(settings.requires_confirmation)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
                                                     <el-option value="minutes" :label="$t('Minutes')"></el-option>
                                                     <el-option value="hours" :label="$t('Hours')"></el-option>
                                                 </el-select>
@@ -150,120 +121,153 @@
                                         </el-radio>
                                     </el-radio-group>
                                 </div>
-                                <div class="fcal_event_child_card">
-                                    <el-form-item :label="$t('Permission Denied Message')">
-                                        <popover
-                                            :groupTitle="$t('Shortcodes')"
-                                            :data="smart_codes.texts"
-                                            placement="bottom-end"
-                                            :isVisible="cancelPopupVisible"
-                                            class="fcal_popover_shortcode"
-                                            @command="handleCancelCommand">
-                                            <template #popoverButton>
-                                                <el-input
-                                                    type="text"
-                                                    :placeholder="$t('Sorry! you can not cancel this')"
-                                                    v-model="settings.can_not_cancel.message">
-                                                    <template #append>
-                                                        <el-button :icon="MoreIcon" @click="toggleCancelPopupVisible"></el-button>
-                                                    </template>
-                                                </el-input>
-                                            </template>
-                                        </popover>
-                                        <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_cancel_message_hint") }}</p>
+                            </div>
+                        </el-form-item>
+    
+                        <el-form-item>
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Attendee Cannot Cancel") }}</span>
+                                        <span v-if="settings.can_not_cancel.enabled">{{ $t("AdvancedSettings/cannot_cancel_description") }}</span>
+                                        <span v-else>{{ $t("AdvancedSettings/can_cancel_description") }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-switch v-model="settings.can_not_cancel.enabled"/>
+                                    </div>
+                                </div>
+                                <template v-if="settings.can_not_cancel.enabled">
+                                    <div class="fcal_event_child_card">
+                                        <el-radio-group v-model="settings.can_not_cancel.type">
+                                            <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                            <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                                <span>
+                                                    <el-input v-model="settings.can_not_cancel.condition.value" @input="validateInput(settings.can_not_cancel)"></el-input>
+                                                    <el-select v-model="settings.can_not_cancel.condition.unit" @change="validateInput(settings.can_not_cancel)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                        <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                        <el-option value="hours" :label="$t('Hours')"></el-option>
+                                                    </el-select>
+                                                </span>
+                                            </el-radio>
+                                        </el-radio-group>
+                                    </div>
+                                    <div class="fcal_event_child_card">
+                                        <el-form-item :label="$t('Permission Denied Message')">
+                                            <popover
+                                                :groupTitle="$t('Shortcodes')"
+                                                :data="smart_codes.texts"
+                                                placement="bottom-end"
+                                                :isVisible="cancelPopupVisible"
+                                                class="fcal_popover_shortcode"
+                                                @command="handleCancelCommand">
+                                                <template #popoverButton>
+                                                    <el-input
+                                                        type="text"
+                                                        :placeholder="$t('Sorry! you can not cancel this')"
+                                                        v-model="settings.can_not_cancel.message">
+                                                        <template #append>
+                                                            <el-button :icon="MoreIcon" @click="toggleCancelPopupVisible"></el-button>
+                                                        </template>
+                                                    </el-input>
+                                                </template>
+                                            </popover>
+                                            <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_cancel_message_hint") }}</p>
+                                        </el-form-item>
+                                    </div>
+                                </template>
+                            </div>
+                        </el-form-item>
+    
+                        <el-form-item v-if="showReschedulingCondition">
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Attendee Cannot Reschedule") }}</span>
+                                        <span v-if="settings.can_not_reschedule.enabled">{{ $t("AdvancedSettings/cannot_reschedule_description") }}</span>
+                                        <span v-else>{{ $t("AdvancedSettings/can_reschedule_description") }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-switch v-model="settings.can_not_reschedule.enabled"/>
+                                    </div>
+                                </div>
+                                <template v-if="settings.can_not_reschedule.enabled">
+                                    <div class="fcal_event_child_card">
+                                        <el-radio-group v-model="settings.can_not_reschedule.type">
+                                            <el-radio label="always"> {{ $t('Always') }}</el-radio>
+                                            <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
+                                                <span>
+                                                    <el-input v-model="settings.can_not_reschedule.condition.value" @input="validateInput(settings.can_not_reschedule)"></el-input>
+                                                    <el-select v-model="settings.can_not_reschedule.condition.unit" @change="validateInput(settings.can_not_reschedule)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
+                                                        <el-option value="minutes" :label="$t('Minutes')"></el-option>
+                                                        <el-option value="hours" :label="$t('Hours')"></el-option>
+                                                    </el-select>
+                                                </span>
+                                            </el-radio>
+                                        </el-radio-group>
+                                    </div>
+                                    <div class="fcal_event_child_card">
+                                        <el-form-item :label="$t('Permission Denied Message')">
+                                            <popover
+                                                :groupTitle="$t('Shortcodes')"
+                                                :data="smart_codes.texts"
+                                                placement="bottom-end"
+                                                :isVisible="reschedulePopupVisible"
+                                                class="fcal_popover_shortcode"
+                                                @command="handleRescheduleCommand">
+                                                <template #popoverButton>
+                                                    <el-input
+                                                        type="text"
+                                                        :placeholder="$t('Sorry! you can not reschedule this')"
+                                                        v-model="settings.can_not_reschedule.message">
+                                                        <template #append>
+                                                            <el-button :icon="MoreIcon" @click="toggleReschedulePopupVisible"></el-button>
+                                                        </template>
+                                                    </el-input>
+                                                </template>
+                                            </popover>
+                                            <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_reschedule_message_hint") }}</p>
+                                        </el-form-item>
+                                    </div>
+                                </template>
+                            </div>
+                        </el-form-item>
+    
+                        <el-form-item>
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
+                                        <span>{{ $t('AdvancedSettings/slug_setting_description') }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
+                                            <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="fcal_event_child_card" v-if="editSlug">
+                                    <el-form-item :label="$t('Slug')">
+                                        <el-input v-model="calendarEventSlug"/>
+                                        <p class="fcal_event_input_hint">{{ $t('AdvancedSettings/slug_setting_hint') }}</p>
                                     </el-form-item>
                                 </div>
-                            </template>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item v-if="showReschedulingCondition">
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="fcal_event_card_header">
-                                <div class="card_contents">
-                                    <span class="sub-label card-title">{{ $t("Attendee Cannot Reschedule") }}</span>
-                                    <span v-if="settings.can_not_reschedule.enabled">{{ $t("AdvancedSettings/cannot_reschedule_description") }}</span>
-                                    <span v-else>{{ $t("AdvancedSettings/can_reschedule_description") }}</span>
-                                </div>
-                                <div class="card_action">
-                                    <el-switch v-model="settings.can_not_reschedule.enabled"/>
-                                </div>
                             </div>
-                            <template v-if="settings.can_not_reschedule.enabled">
-                                <div class="fcal_event_child_card">
-                                    <el-radio-group v-model="settings.can_not_reschedule.type">
-                                        <el-radio label="always"> {{ $t('Always') }}</el-radio>
-                                        <el-radio label="conditional">{{ $t('When meeting starts in less than') }}
-                                            <span>
-                                                <el-input v-model="settings.can_not_reschedule.condition.value" @input="validateInput(settings.can_not_reschedule)"></el-input>
-                                                <el-select v-model="settings.can_not_reschedule.condition.unit" @change="validateInput(settings.can_not_reschedule)" :placeholder="$t('Select Unit')" popper-class="fcal_select">
-                                                    <el-option value="minutes" :label="$t('Minutes')"></el-option>
-                                                    <el-option value="hours" :label="$t('Hours')"></el-option>
-                                                </el-select>
-                                            </span>
-                                        </el-radio>
-                                    </el-radio-group>
-                                </div>
-                                <div class="fcal_event_child_card">
-                                    <el-form-item :label="$t('Permission Denied Message')">
-                                        <popover
-                                            :groupTitle="$t('Shortcodes')"
-                                            :data="smart_codes.texts"
-                                            placement="bottom-end"
-                                            :isVisible="reschedulePopupVisible"
-                                            class="fcal_popover_shortcode"
-                                            @command="handleRescheduleCommand">
-                                            <template #popoverButton>
-                                                <el-input
-                                                    type="text"
-                                                    :placeholder="$t('Sorry! you can not reschedule this')"
-                                                    v-model="settings.can_not_reschedule.message">
-                                                    <template #append>
-                                                        <el-button :icon="MoreIcon" @click="toggleReschedulePopupVisible"></el-button>
-                                                    </template>
-                                                </el-input>
-                                            </template>
-                                        </popover>
-                                        <p class="fcal_help_text">{{ $t("AdvancedSettings/cannot_reschedule_message_hint") }}</p>
-                                    </el-form-item>
-                                </div>
-                            </template>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item>
-                        <div class="fcal_event_card fcal_event_card_wrap">
-                            <div class="fcal_event_card_header">
-                                <div class="card_contents">
-                                    <span class="sub-label card-title">{{ $t("Landing Page")  }} {{ $t("Settings") }}</span>
-                                    <span>{{ $t('AdvancedSettings/slug_setting_description') }}</span>
-                                </div>
-                                <div class="card_action">
-                                    <el-button @click="editSlug = !editSlug" class="fcal_plain_btn">
-                                        <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
-                                    </el-button>
-                                </div>
-                            </div>
-                            <div class="fcal_event_child_card" v-if="editSlug">
-                                <el-form-item :label="$t('Slug')">
-                                    <el-input v-model="calendarEventSlug"/>
-                                    <p class="fcal_event_input_hint">{{ $t('AdvancedSettings/slug_setting_hint') }}</p>
-                                </el-form-item>
-                            </div>
-                        </div>
-                    </el-form-item>
-
-                </el-form>
-            </div>
-            <div class="fcal_create_calendar_form_footer">
-                <SaveButton :saving="saving" :label="$t('Save Changes')" @click="saveSettings"/>
-            </div>
+                        </el-form-item>
+    
+                    </el-form>
+                </div>
+                <div class="fcal_create_calendar_form_footer">
+                    <SaveButton :saving="saving" :label="$t('Save Changes')" @click="saveSettings"/>
+                </div>
+            </template>
+            <ProNotice v-else/>
         </div>
     </div>
 </template>
 
 <script>
 import SaveButton from "@/Components/Buttons/SaveButton";
+import ProNotice from "@/Components/Common/ProNotice.vue";
 import Popover from "@/Components/Popover";
 import { CloseBold, Operation, More, EditPen } from '@element-plus/icons-vue';
 import { markRaw } from "vue";
@@ -271,14 +275,15 @@ import { markRaw } from "vue";
 export default {
     name: '_AdvancedSettings',
     components: {
-        SaveButton,
-        CloseBold,
-        Operation,
-        More,
-        EditPen,
-        Popover
-    },
-    props: ['calendar_event'],
+    SaveButton,
+    CloseBold,
+    Operation,
+    More,
+    EditPen,
+    Popover,
+    ProNotice
+},
+    props: ['calendar_event', 'disabled'],
     data() {
         return {
             saving: false,
@@ -444,9 +449,11 @@ export default {
         }
     },
     mounted() {
-        this.fetchSettings();
-        if (this.hasWpEditor) {
-            this.initEditor();
+        if (!this.disabled) {
+            this.fetchSettings();
+            if (this.hasWpEditor) {
+                this.initEditor();
+            }
         }
     }
 }

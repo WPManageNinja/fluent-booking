@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use FluentBooking\App\Services\GlobalModules\GlobalModules;
+use FluentBooking\App\Hooks\Handlers\AdminMenuHandler;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Libs\Countries;
 use FluentBooking\Framework\Request\Request;
@@ -13,7 +14,7 @@ class SettingsController extends Controller
     public function getSettingsMenu()
     {
         return [
-            'menu_items' => apply_filters('fluent_booking/settings_menu_items', []),
+            'menu_items' => AdminMenuHandler::settingsMenuItems()
         ];
     }
 
