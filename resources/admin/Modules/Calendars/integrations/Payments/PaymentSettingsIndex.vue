@@ -1,36 +1,49 @@
 <template>
     <div class="fcal_settings_body_inner">
         <div class="fcal_settings_header">
-            <div v-if="!loading" class="fcal_settings_head">
-                <h2>{{ fields?.label }}</h2>
-                <p>{{ fields?.description }}</p>
+            <template v-if="!disabled">
+                <div v-if="!loading" class="fcal_settings_head">
+                    <h2>{{ fields?.label }}</h2>
+                    <p>{{ fields?.description }}</p>
+                </div>
+                <el-skeleton v-else :rows="1" animated/>
+            </template>
+            <div v-else-if="headerInfo">
+                <div class="fcal_settings_head">
+                    <h2>{{ headerInfo.label }}</h2>
+                    <p>{{ headerInfo.description }}</p>
+                </div>
             </div>
-            <el-skeleton v-else :rows="1" animated/>
-            <div class="fcal_settings_actions">
+            <div v-if="!disabled" class="fcal_settings_actions">
                 <el-button size="large" :loading="saving" @click="saveSettings()" type="primary">
                     {{ $t('Save Settings') }}
                 </el-button>
             </div>
         </div>
 
-        <el-skeleton :rows="4" animated v-if="loading"/>
-
-        <div v-else class="fcal_calendar_body">
-            <Renderer
-                @onSettingsChange="updateSettings"
-                :route_name="route_name"
-                :fields="fields"
-                :settings="settings"/>
-        </div>
+        <template v-if="!disabled">
+            <div v-if="!loading" class="fcal_calendar_body">
+                <Renderer
+                    @onSettingsChange="updateSettings"
+                    :route_name="route_name"
+                    :fields="fields"
+                    :settings="settings"/>
+            </div>
+            <el-skeleton v-else :rows="4" animated/>
+        </template>
+        <ProNotice v-else/>
     </div>
 </template>
 <script>
+import ProNotice from "@/Components/Common/ProNotice.vue";
 import Renderer from "../Payments/PaymentComponet/Renderer.vue";
 
 export default {
     name: 'PaymentSettingsIndex',
+    props: ['disabled'],
     components: {
-        Renderer
+        Renderer,
+        ProNotice
     },
     data() {
         return {
@@ -52,7 +65,24 @@ export default {
     watch: {
         $route(to, from) {
             this.getRoute();
-            this.getSettings();
+            if (!this.disabled) {
+                this.getSettings();
+            }
+        }
+    },
+    computed: {
+        headerInfo() {
+            const headerInfo = {
+                stripe: {
+                    label: this.$t('Stripe Payments'),
+                    description: this.$t('Configure stripe to accept payments on your booking events')
+                },
+                paypal: {
+                    label: this.$t('Paypal Payments'),
+                    description: this.$t('Configure Paypal to accept payments on your booking eventsl')
+                }
+            };
+            return headerInfo[this.route_name] || false;
         }
     },
     methods: {
@@ -100,13 +130,13 @@ export default {
     },
     mounted() {
         this.getRoute();
-        this.getSettings();
+        if (!this.disabled) {
+            this.getSettings();
+        }
         if (window.outerWidth < 500) {
             this.labelPosition = "top";
         }
     }
 }
 
-</script>
-<script setup>
 </script>

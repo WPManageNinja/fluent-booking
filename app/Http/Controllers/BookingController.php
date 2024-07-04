@@ -9,8 +9,8 @@ use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\BookingFieldService;
-use FluentBooking\App\Services\TeamTimeSlotService;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
+use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\Framework\Request\Request;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
@@ -35,7 +35,11 @@ class BookingController extends Controller
             $timeZone = 'UTC';
         }
 
-        $timeSlotService = new TimeSlotService($calendar, $slot);
+        $timeSlotService = TimeSlotServiceHandler::initService($calendar, $slot);
+
+        if (is_wp_error($timeSlotService)) {
+            return TimeSlotServiceHandler::sendError($timeSlotService, $slot, $timezone);
+        }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
 
@@ -198,13 +202,13 @@ class BookingController extends Controller
 
         // Check if the time is available or not for this slot
         if (!Arr::isTrue($postedData, 'ignore_availability')) {
-            $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        
-            if ($calendarEvent->isTeamEvent() && !$hostUserId) {
-                $isSpotAvailable = $timeSlotService->isAnySpotAvailable($startDateTime, $endDateTime, $duration);
-            } else {
-                $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
+            $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);
+
+            if (is_wp_error($timeSlotService)) {
+                return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
             }
+
+            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
 
             if (!$isSpotAvailable) {
                 wp_send_json([
@@ -277,10 +281,10 @@ class BookingController extends Controller
 
         $hostId = $request->get('host_id', null);
         
-        if ($calendarEvent->isTeamEvent()) {
-            $timeSlotService = new TeamTimeSlotService($calendar, $calendarEvent);
-        } else {
-            $timeSlotService = new TimeSlotService($calendar, $calendarEvent);
+        $timeSlotService = TimeSlotServiceHandler::initService($calendar, $calendarEvent);
+
+        if (is_wp_error($timeSlotService)) {
+            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
         }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration, $hostId);

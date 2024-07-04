@@ -426,7 +426,10 @@ class Booking extends Model
 
     public function payment_order()
     {
-        return $this->hasOne(\FluentBookingPro\App\Models\Order::class, 'parent_id');
+        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            return $this->hasOne(\FluentBookingPro\App\Models\Order::class, 'parent_id');
+        }
+        return $this->belongsTo(static::class, 'parent_id')->whereNull('id');
     }
 
     public function getCancelReason($isText = false, $isHtml = false)

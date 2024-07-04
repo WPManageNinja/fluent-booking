@@ -13,73 +13,76 @@
                         <p>{{ $t('TeamManagement/description') }}</p>
                     </div>
                 </div>
-                <div class="right">
+                <div v-if="!disabled" class="right">
                     <el-button type="primary" @click="initShow()">
                         <el-icon><Plus /></el-icon>
                         <span>{{ $t('Team Member') }}</span>
                     </el-button>
                 </div>
             </div>
-            <el-skeleton animated v-if="loading"></el-skeleton>
-            <div v-else class="fcal_configure_integration_body">
-                <div class="fcal_integration_items">
-                    <div class="fcal_integration_item" v-for="member in members" :key="member.id">
-                        <div class="fcal_card_wrap">
-                            <div class="fcal_integration_icon">
-                                <img class="general_integration_logo" :src="member.avatar"/>
+            <template v-if="!disabled">
+                <el-skeleton animated v-if="loading"></el-skeleton>
+                <div v-else class="fcal_configure_integration_body">
+                    <div class="fcal_integration_items">
+                        <div class="fcal_integration_item" v-for="member in members" :key="member.id">
+                            <div class="fcal_card_wrap">
+                                <div class="fcal_integration_icon">
+                                    <img class="general_integration_logo" :src="member.avatar"/>
+                                </div>
+                                <div class="fcal_card_item_details">
+                                    <h3>{{ member.name }}</h3>
+                                    <ul class="event_triggers">
+                                        <template v-if="member.is_admin">
+                                            <li style="color: green;">
+                                                <el-icon>
+                                                    <Lock/>
+                                                </el-icon>
+                                                <span>{{ $t('Administrator') }}</span>
+                                            </li>
+                                        </template>
+                                        <template v-else-if="member.permissions">
+                                            <li v-for="permission in member.permissions" :key="permission">
+                                                <el-icon>
+                                                    <Lock/>
+                                                </el-icon>
+                                                <span>{{ getPermissionName(permission) }}</span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="fcal_card_item_details">
-                                <h3>{{ member.name }}</h3>
-                                <ul class="event_triggers">
-                                    <template v-if="member.is_admin">
-                                        <li style="color: green;">
+                            <div v-if="!member.is_admin" class="fcal_card_actions">
+                                <el-button
+                                    size="small"
+                                    type="success"
+                                    @click="initEdit(member)"
+                                >
+                                    <el-icon>
+                                        <Edit/>
+                                    </el-icon>
+                                </el-button>
+    
+                                <el-popconfirm
+                                    popper-class="fcal_confirm_dialog"
+                                    :title="$t('Are you sure to delete this?')"
+                                    :confirm-button-text="$t('Yes')"
+                                    :cancel-button-text="$t('No')"
+                                    @confirm="deleteTeamMember(member)">
+                                    <template #reference>
+                                        <el-button v-if="!member.is_calendar_user" type="danger" size="small"
+                                                   class="fcal_danger_btn">
                                             <el-icon>
-                                                <Lock/>
+                                                <Delete/>
                                             </el-icon>
-                                            <span>{{ $t('Administrator') }}</span>
-                                        </li>
+                                        </el-button>
                                     </template>
-                                    <template v-else-if="member.permissions">
-                                        <li v-for="permission in member.permissions" :key="permission">
-                                            <el-icon>
-                                                <Lock/>
-                                            </el-icon>
-                                            <span>{{ getPermissionName(permission) }}</span>
-                                        </li>
-                                    </template>
-                                </ul>
+                                </el-popconfirm>
                             </div>
-                        </div>
-                        <div v-if="!member.is_admin" class="fcal_card_actions">
-                            <el-button
-                                size="small"
-                                type="success"
-                                @click="initEdit(member)"
-                            >
-                                <el-icon>
-                                    <Edit/>
-                                </el-icon>
-                            </el-button>
-
-                            <el-popconfirm
-                                popper-class="fcal_confirm_dialog"
-                                :title="$t('Are you sure to delete this?')"
-                                :confirm-button-text="$t('Yes')"
-                                :cancel-button-text="$t('No')"
-                                @confirm="deleteTeamMember(member)">
-                                <template #reference>
-                                    <el-button v-if="!member.is_calendar_user" type="danger" size="small"
-                                               class="fcal_danger_btn">
-                                        <el-icon>
-                                            <Delete/>
-                                        </el-icon>
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
+            <ProNotice v-else/>
         </div>
         <el-dialog
             v-model="showModal"
@@ -141,14 +144,24 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import TeamIcon from '@/Components/Icons/TeamIcon.vue';
-import {Edit, Lock, Delete, Plus} from '@element-plus/icons-vue';
+import { Edit, Lock, Delete, Plus } from '@element-plus/icons-vue';
 import HostSelector from "@/Pieces/HostSelector";
+import ProNotice from '@/Components/Common/ProNotice.vue';
 
 export default {
     name: 'TeamManagement',
-    components: {HostSelector, TeamIcon, Edit, Lock, Delete, Plus},
+    props: ['disabled'],
+    components: {
+    HostSelector,
+    TeamIcon,
+    Edit,
+    Lock,
+    Delete,
+    Plus,
+    ProNotice
+},
     data() {
         return {
             members: [],
@@ -244,7 +257,9 @@ export default {
         }
     },
     mounted() {
-        this.fetch();
+        if (!this.disabled) {
+            this.fetch();
+        }
     }
 }
 </script>

@@ -35,9 +35,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/events/{event_id}/availability', 'CalendarController@getAvailabilitySettings')->int('event_id');
     $router->post('/{id}/events/{event_id}/details', 'CalendarController@updateEventDetails')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/availability', 'CalendarController@updateEventAvailability')->int('id')->int('event_id');
-    $router->post('/{id}/events/{event_id}/assignments', 'CalendarController@updateAssignments')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/limits', 'CalendarController@updateEventLimits')->int('id')->int('event_id');
-    $router->post('/{id}/events/{event_id}/advanced-settings', 'CalendarController@updateAdvancedSettings')->int('id')->int('event_id');
 
     $router->get('/{id}/events/{event_id}/email-notifications', 'CalendarController@getEventEmailNotifications')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/email-notifications', 'CalendarController@saveEventEmailNotifications')->int('id')->int('event_id');

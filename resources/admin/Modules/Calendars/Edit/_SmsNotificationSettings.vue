@@ -12,55 +12,60 @@
         </div>
 
         <div v-if="!loading">
-            <div v-if="notifications">
-                <div class="fcal_notification_container_wrap">
-                    <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
-                        v-for="(notification, index) in notifications" :key="index">
-                        <div class="fcal_notification_header">
-                            <span :class="['header_left']">
-                                {{ notification.title }}
-                            </span>
-                            <div class="header_right">
-                                <span>
-                                    <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
-                                        <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
-                                    </el-button>
+            <template v-if="!disabled">
+                <div v-if="notifications">
+                    <div class="fcal_notification_container_wrap">
+                        <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
+                            v-for="(notification, index) in notifications" :key="index">
+                            <div class="fcal_notification_header">
+                                <span :class="['header_left']">
+                                    {{ notification.title }}
                                 </span>
-                                <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                                <div class="header_right">
+                                    <span>
+                                        <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
+                                            <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                        </el-button>
+                                    </span>
+                                    <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="fcal_create_calendar_form_footer">
+                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+                    </div>
+    
+                    <el-dialog
+                        v-model="showEdit"
+                        v-if="showEdit"
+                        :title="(editingNotification) ? $t('Edit:')+' ' + editingNotification.title : $t('Edit Notification')"
+                        class="fcal_modal fcal_notification_modal"
+                        :close-on-click-modal="false"
+                    >
+                        <EditSmsNotificationSettings 
+                            v-if="editingNotification.sms"
+                            :smart_codes="smart_codes"
+                            :host_phone="calendar_event.calendar.author_profile.phone"
+                            :calendar_id="calendar_event.calendar_id"
+                            :notification="editingNotification"
+                        />
+                        <template #footer>
+                            <div class="dialog-footer">
+                                <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
+                                    {{ $t('Save SMS') }}
+                                </el-button>
+                            </div>
+                        </template>
+                    </el-dialog>
                 </div>
-                <div class="fcal_create_calendar_form_footer">
-                    <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+                <div v-else>
+                    <p>{{ $t('SmsNotificationSettings/configure_twilio_desc') }} 
+                        <span><el-link @click="goToTwilioSettings">{{ $t('here') }}</el-link></span>
+                    </p>
                 </div>
-
-                <el-dialog
-                    v-model="showEdit"
-                    v-if="showEdit"
-                    :title="(editingNotification) ? $t('Edit:')+' ' + editingNotification.title : $t('Edit Notification')"
-                    class="fcal_modal fcal_notification_modal"
-                    :close-on-click-modal="false"
-                >
-                    <EditSmsNotificationSettings 
-                        v-if="editingNotification.sms"
-                        :smart_codes="smart_codes"
-                        :host_phone="calendar_event.calendar.author_profile.phone"
-                        :calendar_id="calendar_event.calendar_id"
-                        :notification="editingNotification"
-                    />
-                    <template #footer>
-                        <div class="dialog-footer">
-                            <el-button class="fcal_primary_btn" :disabled="saving" v-loading="saving" @click="saveSettings">
-                                {{ $t('Save SMS') }}
-                            </el-button>
-                        </div>
-                    </template>
-                </el-dialog>
-            </div>
-            <div v-else>
-                <p>{{ $t('SmsNotificationSettings/configure_twilio_desc') }} <span><el-link @click="goToTwilioSettings">{{ $t('here') }}</el-link></span> </p>
-            </div>
+            </template>
+            <ProNotice v-else/>
         </div>
         <div v-else class="fcal_section_body">
             <el-skeleton :rows="1" animated/>
@@ -69,22 +74,24 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import EditSmsNotificationSettings from './__EditSmsNotificationSettings.vue';
-import {EditPen, Close, Notification} from '@element-plus/icons-vue';
+import { EditPen, Close, Notification } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
+import ProNotice from '@/Components/Common/ProNotice.vue';
 
 export default {
     name: 'SmsNotificationSettings',
-    props: ['calendar_event'],
+    props: ['calendar_event', 'disabled'],
     components: {
         EditSmsNotificationSettings,
         SaveButton,
         NoficationIcon,
         Notification,
         EditPen,
-        Close
+        Close,
+        ProNotice
     },
     data() {
         return {
@@ -157,7 +164,9 @@ export default {
         }
     },
     mounted() {
-        this.fetch();
+        if (!this.disabled) {
+            this.fetch();
+        }
     }
 }
 </script>

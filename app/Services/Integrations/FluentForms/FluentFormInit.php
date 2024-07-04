@@ -9,6 +9,7 @@ use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\TimeSlotService;
+use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentForm\App\Models\Submission;
 use FluentForm\App\Modules\Form\FormFieldsParser;
@@ -101,13 +102,13 @@ class FluentFormInit
         $startDateTime = DateTimeHelper::convertToUtc($startTime, $timeZone);
         $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
 
-        $timeSlotService = new TimeSlotService($calendarEvent->calendar, $calendarEvent);
-        
-        if ($calendarEvent->isTeamEvent()) {
-            $isSpotAvailable = $timeSlotService->isAnySpotAvailable($startDateTime, $endDateTime, $duration);
-        } else {
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);
+
+        if (is_wp_error($timeSlotService)) {
+            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
         }
+
+        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
         if (!$isSpotAvailable) {
             $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro');

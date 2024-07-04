@@ -160,7 +160,7 @@ import SaveButton from "@/Components/Buttons/SaveButton";
 
 export default {
     name: 'EventDetails',
-    props: ['calendar_event', 'event_type', 'is_board', 'new_event'],   
+    props: ['calendar_event', 'event_type', 'is_board', 'new_event'],
     components: {
         HostSelector,
         LocationSelector,
