@@ -128,6 +128,8 @@
 
     let firstLoading = true;
 
+    let error = false;
+
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
@@ -141,6 +143,7 @@
             .then(response => {
                 timezone = response.timezone;
                 availableDates = response.available_slots;
+                error = response.error;
                 maybeNoAvailability();
 
                 if (firstLoading && slot.pre_selects?.day) {
@@ -341,7 +344,7 @@
             {#if noAvailability && !isLoadingDates}
                 <div class="fcal_no_availability">
                     <h3>{i18('No availability in')} {getDateTimeStringI18(monthNames[month], 'month')}</h3>
-                    {#if !nextDisabled}
+                    {#if !nextDisabled && !error}
                         <button type="button" tabindex="0" on:click={()=>next()}>
                             {i18('View next month')}
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fcal_next_month">
@@ -349,7 +352,7 @@
                                 <polyline points="12 5 19 12 12 19"></polyline>
                             </svg>
                         </button>
-                    {:else if !prevDisabled}
+                    {:else if !prevDisabled && !error}
                         <button type="button" tabindex="0" on:click={()=>prev()}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fcal_prev_month">
                                 <line x1="5" x2="19" y1="12" y2="12"></line>

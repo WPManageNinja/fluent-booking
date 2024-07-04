@@ -4,6 +4,7 @@ import CreateCalendar from './Modules/Calendars/CreateNew.vue';
 import SlotSettings from "./Modules/Calendars/Edit/SlotSettings.vue";
 import EventDetails from "./Modules/Calendars/Edit/_EventDetails.vue";
 import AvailabilitySettings from "./Modules/Calendars/Edit/_AvailabilitySettings.vue";
+import EventAvailabilitySettings from "./Modules/Calendars/Edit/_EventAvailabilitySettings.vue";
 import Assignment from "./Modules/Calendars/Edit/_Assignment.vue";
 import LimitSettings from "./Modules/Calendars/Edit/_LimitSettings.vue";
 import EmailNotification from "./Modules/Calendars/Edit/_EmailNotificationSettings.vue";
@@ -137,6 +138,16 @@ export var routes = [
                 path: 'availability-settings',
                 name: 'availability_settings',
                 component: AvailabilitySettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Availability Settings'
+                },
+            },
+            {
+                path: 'event-availability-settings',
+                name: 'event_availability_settings',
+                component: EventAvailabilitySettings,
                 props: true,
                 meta: {
                     active_menu: 'calendars',

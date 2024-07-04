@@ -1,6 +1,8 @@
 <?php
 
 use FluentBooking\Framework\Support\Arr;
+use FluentBooking\App\Services\CurrenciesHelper;
+use FluentBooking\App\Services\DateTimeHelper;
 
 /**
  * All registered filter's handlers should be in app\Hooks\Handlers,
@@ -14,6 +16,30 @@ use FluentBooking\Framework\Support\Arr;
 /**
  * @var $app FluentBooking\Framework\Foundation\Application
  */
+
+ $app->addFilter('fluent_booking/calendar_event_setting_menu_items', function ($items, $event) {
+    if ($event->calendar->type != 'simple') {
+        $items['assignment']['visible'] = true;
+    }
+    if ($event->calendar->type == 'event') {
+        $items['limit_settings']['visible'] = false;
+    }
+    return $items;
+}, 10, 2);
+
+$app->addFilter('fluent_booking/calendar_setting_menu_items', function ($items, $calendar) {
+    if ($calendar->type != 'simple') {
+        $teamLabel = __('Team Settings', 'fluent-booking-pro');
+        $eventLabel = __('Calendar Settings', 'fluent-booking-pro');
+
+        $label = $calendar->type == 'event' ? $eventLabel : $teamLabel;
+        $items['calendar_settings']['label'] = $label;
+
+        $items['remote_calendars']['visible'] = false;
+        $items['zoom_meeting']['visible'] = false;
+    }
+    return $items;
+}, 20, 2);
 
  $app->addFilter('fluent_booking/get_calendar_event_settings', function($settings) {
     if (!isset($settings['buffer_time_before'], $settings['buffer_time_after'])) {
@@ -107,10 +133,21 @@ use FluentBooking\Framework\Support\Arr;
     return $settings;
 }, 10, 1);
 
+$app->addFilter('fluent_booking/admin_vars', function ($vars) {
+    $vars['currency'] = CurrenciesHelper::getGlobalCurrency();
+    $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
+    return $vars;
+});
+
+$app->addFilter('fluent_booking/general_settings', function ($settings) {
+    $settings['all_currencies'] = CurrenciesHelper::getFormattedCurrencies();
+    return $settings;
+});
+
 $app->addFilter('fluent_booking/public_event_vars', function($eventVars) {
     foreach ($eventVars['form_fields'] as &$field) {
         if ($field['type'] === 'date' && !empty($field['date_format'])) {
-            $field['date_format'] = \FluentBooking\App\Services\DateTimeHelper::convertPhpDateToDayJSFormay($field['date_format']);
+            $field['date_format'] = DateTimeHelper::convertPhpDateToDayJSFormay($field['date_format']);
         }
     }
     return $eventVars;

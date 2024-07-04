@@ -143,7 +143,7 @@ import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
 import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 import IntegrationEditor from './IntegrationEditor.vue';
 
-import {ArrowDown, Back, Edit, Delete} from '@element-plus/icons-vue';
+import { ArrowDown, Back, Edit, Delete } from '@element-plus/icons-vue';
 import QuestionIcon from "@/Components/Icons/QuestionIcon.vue";
 import EventIcon from "@/Components/Icons/EventIcon.vue";
 
@@ -250,7 +250,6 @@ export default {
         },
         getFeeds() {
             this.loading = true;
-
             const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations';
             this.$get(url, {
                 calendar_id : this.calendar_id

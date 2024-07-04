@@ -101,16 +101,44 @@ class CalendarSlot extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function isTeamEvent() {
-        if ($this->calendar) {
-            return $this->calendar->type == 'team';
-        }
-        
-        return $this->event_type == 'round_robin' || $this->event_type == 'collective';
+    public function isGroup()
+    {
+        return $this->event_type == 'group';
     }
 
-    public function isRoundRobin() {
+    public function isSingleEvent()
+    {
+        return $this->event_type == 'single_event';
+    }
+
+    public function isGroupEvent()
+    {
+        return $this->event_type == 'group_event';
+    }
+
+    public function isRoundRobin()
+    {
         return $this->event_type == 'round_robin';
+    }
+
+    public function isCollective()
+    {
+        return $this->event_type == 'collective';
+    }
+
+    public function isTeamEvent()
+    {
+        return $this->isRoundRobin() || $this->isCollective();
+    }
+
+    public function isOneOffEvent()
+    {
+        return $this->isSingleEvent() || $this->isGroupEvent();
+    }
+
+    public function isProEvent()
+    {
+        return $this->isTeamEvent() || $this->isOneOffEvent();
     }
 
     public function getAuthorProfile($public = true, $userID = null)
@@ -185,14 +213,9 @@ class CalendarSlot extends Model
         return false;
     }
 
-    public function isGroupEvent()
-    {
-        return $this->event_type == 'group';
-    }
-
     public function isGuestFieldRequired()
     {
-        return !$this->isGroupEvent();
+        return !$this->isGroup();
     }
 
     public function getSlotSettingsSchema($calendarId = null)
@@ -812,9 +835,9 @@ class CalendarSlot extends Model
         return [$overrideSlots, $overrideDays];
     }
 
-    public function getHostIdsSortedByBookings($startDate)
+    public function getHostIdsSortedByBookings($startDate, $hostId = null)
     {
-        $hostIds = $this->getHostIds();
+        $hostIds = $this->getHostIds($hostId);
 
         if (count($hostIds) <= 1) {
             return $hostIds;

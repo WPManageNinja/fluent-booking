@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * All registered action's handlers should be in app\Hooks\Handlers,
  * addAction is similar to add_action and addCustomAction is just a
@@ -17,8 +19,6 @@
  * Register all the grouped action handlers
  */
 
-defined( 'ABSPATH' ) || exit;
-
 (new \FluentBooking\App\Hooks\Handlers\FrontEndHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\CleanupHandlers\CleanupHandler())->register();
 (new \FluentBooking\App\Hooks\Handlers\NotificationHandler())->register();
@@ -28,8 +28,6 @@ defined( 'ABSPATH' ) || exit;
 (new \FluentBooking\App\Hooks\Scheduler\DailyScheduler())->register();
 (new \FluentBooking\App\Services\LandingPage\LandingPageHandler())->boot();
 
-
-(new \FluentBooking\App\Modules\SingleEvent\SingleEvent())->register();
 
 /*
  * Register all the single action handlers

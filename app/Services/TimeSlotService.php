@@ -16,13 +16,12 @@ class TimeSlotService
     protected $calendar;
 
     protected $hostId = null;
-
-    public $hostUserId = null;
     
     protected $groupedSlots = [];
 
     public function __construct(Calendar $calendar, CalendarSlot $calendarSlot)
     {
+        $this->hostId = null;
         $this->groupedSlots = [];
         $this->calendar = $calendar;
         $this->calendarSlot = $calendarSlot;
@@ -247,21 +246,6 @@ class TimeSlotService
                 $left = $mid + 1;
             } else {
                 $right = $mid - 1;
-            }
-        }
-
-        return false;
-    }
-
-    public function isAnySpotAvailable($fromTime, $toTime, $duration = null)
-    {
-        $hostIds = $this->calendarSlot->getHostIdsSortedByBookings($fromTime);
-
-        foreach ($hostIds as $id) {
-            $isSpotAvailable = $this->isSpotAvailable($fromTime, $toTime, $duration, $id);
-            if ($isSpotAvailable) {
-                $this->hostUserId = $id;
-                return true;
             }
         }
 

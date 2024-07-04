@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fcal_configure_integration_body">
+                    <div v-if="!disabled" class="fcal_configure_integration_body">
                         <el-skeleton v-if="loading" :rows="3" animated></el-skeleton>
                         <template v-else>
                             <div v-if="!connected_users.length" class="fcal_box_padded">
@@ -44,6 +44,7 @@
                             </template>
                         </template>
                     </div>
+                    <ProNotice v-else/>
                 </div>
             </div>
         </div>
@@ -55,16 +56,19 @@
     </div>
 </template>
 
-<script title="text/babel">
+<script>
 import IntegrationForm from "@/Modules/Settings/ZoomIntegration/IntegrationForm.vue";
 import EachZoomAccount from './EachAccount.vue';
+import ProNotice from "@/Components/Common/ProNotice.vue";
 
 export default {
     name: 'ZoomIntegrationSettings',
+    props: ['disabled'],
     components: {
-        EachZoomAccount,
-        IntegrationForm
-    },
+    EachZoomAccount,
+    IntegrationForm,
+    ProNotice
+},
     data() {
         return {
             connected_users: [],
@@ -93,7 +97,9 @@ export default {
         },
     },
     mounted() {
-        this.fetchConnectedUsers();
+        if (!this.disabled) {
+            this.fetchConnectedUsers();
+        }
     }
 }
 </script>

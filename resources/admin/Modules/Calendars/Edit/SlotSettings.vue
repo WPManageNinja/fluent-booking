@@ -20,19 +20,21 @@
         <div v-else class="fcal_create_calendar_body_wrap">
             <el-aside>
                 <ul class="fcal_settings_sidebar">
-                    <li v-for="(menu, index) in menuItems" :key="index">
-                        <router-link v-if="isRouteVisible(menu)" :to="menu.route">
-                            <el-icon :class="menu.route.name">
-                                <div v-if="menu.svgIcon" class="icon" v-html="menu.svgIcon"></div>
-                                <component v-else-if="menu.elIcon" :is="menu.elIcon"></component>
-                            </el-icon>
-                            {{ menu.label }}
-                        </router-link>
-                    </li>
+                    <template v-for="(menu, index) in menuItems">
+                        <li v-if="isRouteVisible(menu)" :key="index">
+                            <router-link :to="menu.route" @click.native="setCurrentMenu(menu)">
+                                <el-icon :class="menu.route.name">
+                                    <div v-if="menu.svgIcon" class="icon" v-html="menu.svgIcon"></div>
+                                    <component v-else-if="menu.elIcon" :is="menu.elIcon"></component>
+                                </el-icon>
+                                {{ menu.label }}
+                            </router-link>
+                        </li>
+                    </template>
                 </ul>
             </el-aside>
             <div v-if="slot.id" class="fcal_settings_content">
-                <router-view :calendar_event="slot" />
+                <router-view :calendar_event="slot" :disabled="currentMenu.disable"/>
             </div>
         </div>
 
@@ -75,6 +77,7 @@ export default {
         return {
             calendar: {},
             menuItems: {},
+            currentMenu: {},
             event_id: this.$route.params.event_id,
             calendar_id: this.$route.params.calendar_id,
             slot: null,
@@ -86,21 +89,21 @@ export default {
     computed: {
         isRouteVisible() {
             return (menu) => {
-                if (menu.type != 'route') {
-                    return false;
-                }
-                const hiddenRoutes = {
-                    simple: 'assignment',
-                    event: 'limit_settings'
-                };
-                if (menu.route.name === hiddenRoutes[this.calendar.type]) {
-                    return false;
-                }
-                return true;
+                return menu.type == 'route' && menu.visible;
             }
         }
     },
     methods: {
+        setCurrentMenu(menu) {
+            this.currentMenu = menu;
+        },
+        updateCurrentMenu() {
+            const currentRouteName = this.$route.name;
+            const currentMenu = Object.values(this.menuItems).find(menu => menu.route.name === currentRouteName);
+            if (currentMenu) {
+                this.currentMenu = currentMenu;
+            }
+        },
         getSlot() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id, {
@@ -111,6 +114,7 @@ export default {
                     this.menuItems = response.settings_menu;
                     this.calendar = response.calendar;
                     this.slot = response.calendar_event;
+                    this.updateCurrentMenu();
                 })
                 .catch(errors => {
                     this.$handleError(errors);

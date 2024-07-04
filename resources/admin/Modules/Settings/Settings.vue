@@ -6,34 +6,19 @@
         <div class="fcal_settings_body">
             <el-aside v-loading="loading">
                 <ul class="fcal_settings_sidebar">
-                    <li class="fcal_settings_submenu_item">
-                        <router-link class="fcal_img_menu_link" :to="{ name: 'general_settings' }">
-                            <el-icon><Operation /></el-icon>
-                            <span>{{ $t('General Settings') }}</span>
-                        </router-link>
-                    </li>
-                    <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
-                        <router-link class="fcal_img_menu_link" :to="{ name: 'team_members' }">
-                            <el-icon><TeamIcon /></el-icon>
-                            <span>{{ $t('Team') }}</span>
-                        </router-link>
-                    </li>
                     <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
-                        <router-link class="fcal_img_menu_link" :to="menu.route">
-                            <img class="fcal_img_icon" :src="menu.icon_url"/>
+                        <router-link class="fcal_img_menu_link" :to="menu.route" @click.native="setMenuStatus(menu.disable)">
+                            <img v-if="menu.icon_url" class="fcal_img_icon" :src="menu.icon_url"/>
+                            <el-icon v-else-if="menu.el_icon" class="fcal_img_icon">
+                                <component :is="menu.el_icon"/>
+                            </el-icon>
                             <span>{{ menu.title }}</span>
-                        </router-link>
-                    </li>
-                    <li v-if="appVars.has_pro" class="fcal_settings_submenu_item">
-                        <router-link class="fcal_img_menu_link" :to="{ name: 'license' }">
-                            <el-icon><Lock /></el-icon>
-                            <span>{{ $t('License') }}</span>
                         </router-link>
                     </li>
                 </ul>
             </el-aside>
             <div class="fcal_settings_container">
-                <router-view v-if="!loading"/>
+                <router-view v-if="!loading" :disabled="menuDisabled"/>
                 <el-skeleton v-else animated>
                     <template #template>
                         <el-skeleton-item/>
@@ -48,28 +33,39 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import TeamIcon from "@/Components/Icons/TeamIcon.vue";
-import { Lock } from '@element-plus/icons-vue';
+import { Lock, Operation } from '@element-plus/icons-vue';
 
 export default {
     name: 'Settings',
     components: {
         Lock,
+        Operation,
         TeamIcon,
     },
     data() {
         return {
             loading: true,
+            menuDisabled: false,
             menuItems: {}
         }
     },
     methods: {
+        setMenuStatus(status) {
+            this.menuDisabled = status;
+        },
+        updateMenuStatus() {
+            const currentRouteName = this.$route.name;
+            const currentMenu = Object.values(this.menuItems).find(menu => menu.route.name === currentRouteName);
+            this.menuDisabled = currentMenu.disable || false;
+        },
         fetchMenuItems() {
             this.loading = true;
             this.$get('settings/menu')
                 .then(response => {
                     this.menuItems = response.menu_items;
+                    this.updateMenuStatus();
                 })
                 .catch(error => {
                     this.$handleError(error);
@@ -77,9 +73,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        gotoMenu(menu) {
-            console.log(menu);
         }
     },
     mounted() {
