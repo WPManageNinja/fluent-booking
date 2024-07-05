@@ -23,7 +23,7 @@ class BookingController extends Controller
 
         if ($slot->status != 'active') {
             return $this->sendError([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ]);
         }
 
@@ -65,7 +65,7 @@ class BookingController extends Controller
 
         if ($calendarEvent->status != 'active') {
             return $this->sendError([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ]);
         }
 
@@ -79,21 +79,21 @@ class BookingController extends Controller
         ];
 
         $messages = [
-            'name.required'       => __("Please enter attendee's name", 'fluent-booking-pro'),
-            'email.required'      => __("Please enter attendee's email address", 'fluent-booking-pro'),
-            'email.email'         => __('Please provide a valid email address', 'fluent-booking-pro'),
-            'timezone.required'   => __('Please select the timezone', 'fluent-booking-pro'),
-            'event_time.required' => __('Please select a date and time', 'fluent-booking-pro')
+            'name.required'       => __("Please enter attendee's name", 'fluent-booking'),
+            'email.required'      => __("Please enter attendee's email address", 'fluent-booking'),
+            'email.email'         => __('Please provide a valid email address', 'fluent-booking'),
+            'timezone.required'   => __('Please select the timezone', 'fluent-booking'),
+            'event_time.required' => __('Please select a date and time', 'fluent-booking')
         ];
 
         $locationType = Arr::get($postedData, 'location_type');
 
         if ($calendarEvent->isPhoneRequired()) {
             $rules['location_description'] = 'required';
-            $messages['location_description.required'] = __("Please provide attendee's phone number", 'fluent-booking-pro');
+            $messages['location_description.required'] = __("Please provide attendee's phone number", 'fluent-booking');
         } else if ($calendarEvent->isAddressRequired()) {
             $rules['location_description'] = 'required';
-            $messages['location_description.required'] = __("Please provide attendee's address", 'fluent-booking-pro');
+            $messages['location_description.required'] = __("Please provide attendee's address", 'fluent-booking');
         }
 
         if ($additionalGuests = array_filter(Arr::get($postedData, 'guests', []))) {
@@ -107,7 +107,7 @@ class BookingController extends Controller
         foreach ($requiredFields as $field) {
             if (empty($rules[$field['name']])) {
                 $rules[$field['name']] = 'required';
-                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking-pro');
+                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking');
             }
         }
 
@@ -121,7 +121,7 @@ class BookingController extends Controller
         $validator = $app->validator->make($postedData, $validationConfig['rules'], $validationConfig['messages']);
         if ($validator->validate()->fails()) {
             wp_send_json([
-                'message' => __('Please fill up the required data', 'fluent-booking-pro'),
+                'message' => __('Please fill up the required data', 'fluent-booking'),
                 'errors'  => $validator->errors()
             ], 422);
             return;
@@ -212,7 +212,7 @@ class BookingController extends Controller
 
             if (!$isSpotAvailable) {
                 wp_send_json([
-                    'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
+                    'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
                 ], 422);
             }
 
@@ -235,7 +235,7 @@ class BookingController extends Controller
 
         return [
             'booking' => $booking,
-            'message' => __('Booking has been created', 'fluent-booking-pro'),
+            'message' => __('Booking has been created', 'fluent-booking'),
         ];
     }
 
@@ -247,7 +247,7 @@ class BookingController extends Controller
 
         if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ], 422);
         }
 
@@ -255,7 +255,7 @@ class BookingController extends Controller
 
         if (!$calendar) {
             return $this->sendError([
-                'message' => __('Calendar not found', 'fluent-booking-pro')
+                'message' => __('Calendar not found', 'fluent-booking')
             ]);
         }
 
@@ -314,7 +314,7 @@ class BookingController extends Controller
 
         if (!$userEmail) {
             return $this->sendError([
-                'message' => __('Please login to view your bookings', 'fluent-booking-pro')
+                'message' => __('Please login to view your bookings', 'fluent-booking')
             ]);
         }
 

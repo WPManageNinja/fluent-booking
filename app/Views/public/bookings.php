@@ -57,7 +57,7 @@
 
                                         <?php if ($booking->status == 'pending' && $booking->payment_status != 'pending') : ?>
                                             <p class="fcal_spot_period_status unconfirmed">
-                                                <?php esc_html_e('Unconfirmed', 'fluent-booking-pro') ?>
+                                                <?php esc_html_e('Unconfirmed', 'fluent-booking') ?>
                                             </p>
                                         <?php endif; ?>
                                     </div>
@@ -65,7 +65,7 @@
                                 <div class="fcal_spot_actions">
                                     <button class="fcal_plain_btn"
                                         onclick="location.href='<?php echo esc_url($booking->getConfirmationUrl()); ?>'">
-                                        <?php esc_html_e('View', 'fluent-booking-pro')?>
+                                        <?php esc_html_e('View', 'fluent-booking')?>
                                     </button>
                                 </div>
                             </div>
@@ -84,13 +84,13 @@
     <!-- Pagination -->
     <?php if ($attributes['pagination'] == 'show' && $bookings->lastPage() > 1): ?>
         <ul class="fcal_pagination">
-            <span><?php echo esc_html(__('Total', 'fluent-booking-pro') . ' ' . $bookings->total())?></span>
+            <span><?php echo esc_html(__('Total', 'fluent-booking') . ' ' . $bookings->total())?></span>
 
             <form action="" method="GET">
                 <select name="booking_per_page" id="fcal_booking_per_page" onchange="this.form.submit()">
                     <?php foreach ($page_options as $option): ?>
                         <option value="<?php echo esc_attr($option); ?>" <?php $per_page == $option ? 'selected' : '' ?>>
-                            <?php echo esc_html($option) . '/' . esc_html__('page', 'fluent-booking-pro') ?>
+                            <?php echo esc_html($option) . '/' . esc_html__('page', 'fluent-booking') ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

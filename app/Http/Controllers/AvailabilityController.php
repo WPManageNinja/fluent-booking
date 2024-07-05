@@ -113,7 +113,7 @@ class AvailabilityController extends Controller
 
         if ($isTitleExist) {
             /* translators: %s is the existing availability title */
-            $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $data['title']);
+            $message = sprintf(__('%s is already exist', 'fluent-booking'), $data['title']);
             return $this->sendError([
                 'message' => $message,
             ], 422);
@@ -141,7 +141,7 @@ class AvailabilityController extends Controller
 
         return [
             'schedule' => $createdSchedule,
-            'message'  => __('Schedule has been created successfully', 'fluent-booking-pro'),
+            'message'  => __('Schedule has been created successfully', 'fluent-booking'),
         ];
     }
 
@@ -167,7 +167,7 @@ class AvailabilityController extends Controller
 
         return [
             'schedule' => $clonedSchedule,
-            'message'  => __('Schedule has been cloned successfully', 'fluent-booking-pro'),
+            'message'  => __('Schedule has been cloned successfully', 'fluent-booking'),
         ];
     }
 
@@ -194,7 +194,7 @@ class AvailabilityController extends Controller
         do_action('fluent_booking/avaibility_schedule_updated', $schedule, $scheduleData);
 
         return [
-            'message'  => __('Schedule has been updated successfully', 'fluent-booking-pro'),
+            'message'  => __('Schedule has been updated successfully', 'fluent-booking'),
             'schedule' => $schedule
         ];
     }
@@ -209,7 +209,7 @@ class AvailabilityController extends Controller
 
         if ($isTitleExist) {
             /* translators: %s is the existing availability title */
-            $message = sprintf(__('%s is already exist', 'fluent-booking-pro'), $title);
+            $message = sprintf(__('%s is already exist', 'fluent-booking'), $title);
             return $this->sendError([
                 'message' => $message,
             ], 422);
@@ -219,7 +219,7 @@ class AvailabilityController extends Controller
         $schedule->save();
 
         return [
-            'message' => __('Schedule title has been updated successfully', 'fluent-booking-pro'),
+            'message' => __('Schedule title has been updated successfully', 'fluent-booking'),
             'title'   => $schedule->key
         ];
     }
@@ -241,7 +241,7 @@ class AvailabilityController extends Controller
         AvailabilityService::updateOtherDefaultStatus($schedule, $scheduleId);
 
         return [
-            'message' => __('Status has been updated successfully', 'fluent-booking-pro')
+            'message' => __('Status has been updated successfully', 'fluent-booking')
         ];
     }
 
@@ -259,7 +259,7 @@ class AvailabilityController extends Controller
             $calendar = Calendar::where('user_id', $schedule->object_id)->first();
             if ($calendar) {
                 return $this->sendError([
-                    'message' => __('Default Schedule can not be deleted', 'fluent-booking-pro')
+                    'message' => __('Default Schedule can not be deleted', 'fluent-booking')
                 ], 422);
             }
         }
@@ -268,7 +268,7 @@ class AvailabilityController extends Controller
 
         if ($usageCount) {
             /* translators: Number of events dependent on the schedule */
-            $message = sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking-pro'), $usageCount);
+            $message = sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount);
             return $this->sendError([
                 'message' => $message
             ], 422);
@@ -281,7 +281,7 @@ class AvailabilityController extends Controller
         do_action('fluent_booking/after_delete_availability_schedule', $scheduleId);
 
         return [
-            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking-pro')
+            'message' => __('Schedule Availability has been deleted successfully', 'fluent-booking')
         ];
     }
 }

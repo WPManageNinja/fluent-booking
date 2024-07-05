@@ -197,10 +197,10 @@ class EmailNotificationService
         $result = Mailer::send($to, $subject, $body, $headers);
 
         do_action('fluent_booking/log_booking_note', [
-            'title'       => __('Reminder Email Sent', 'fluent-booking-pro'),
+            'title'       => __('Reminder Email Sent', 'fluent-booking'),
             'type'        => 'activity',
             /* translators: Email address where the reminder email was sent */
-            'description' => sprintf(__('Reminder email sent to %s.', 'fluent-booking-pro'), $emailTo),
+            'description' => sprintf(__('Reminder email sent to %s.', 'fluent-booking'), $emailTo),
             'booking_id'  => $booking->id
         ]);
 
@@ -289,12 +289,12 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $subject, $body, $headers);
 
-        $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking-pro') : __('Cancellation', 'fluent-booking-pro');
+        $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking') : __('Cancellation', 'fluent-booking');
 
         do_action('fluent_booking/log_booking_note', [
-            'title'       => $actionType . __(' booking email sent to ', 'fluent-booking-pro') . $emailTo,
+            'title'       => $actionType . __(' booking email sent to ', 'fluent-booking') . $emailTo,
             'type'        => 'activity',
-            'description' => $actionType . __(' email sent to ', 'fluent-booking-pro') . $emailTo,
+            'description' => $actionType . __(' email sent to ', 'fluent-booking') . $emailTo,
             'booking_id'  => $booking->id
         ]);
 
@@ -401,10 +401,10 @@ class EmailNotificationService
         }
 
         do_action('fluent_booking/log_booking_note', [
-            'title'       => __('Rescheduled booking email sent to', 'fluent-booking-pro') . ' ' . $emailTo,
+            'title'       => __('Rescheduled booking email sent to', 'fluent-booking') . ' ' . $emailTo,
             'type'        => 'activity',
             /* translators: Email address where the rescheduling email was sent */
-            'description' => sprintf(__('Rescheduling email sent to %s', 'fluent-booking-pro'), $emailTo),
+            'description' => sprintf(__('Rescheduling email sent to %s', 'fluent-booking'), $emailTo),
             'booking_id'  => $booking->id
         ]);
 

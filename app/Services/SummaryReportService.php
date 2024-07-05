@@ -50,7 +50,7 @@ class SummaryReportService
         }
 
         // translators: %d is replaced with the number of days
-        $emailSubject = sprintf(esc_html__('Email Summary of Your Bookings (Last %d Days)', 'fluent-booking-pro'), $reportDays);
+        $emailSubject = sprintf(esc_html__('Email Summary of Your Bookings (Last %d Days)', 'fluent-booking'), $reportDays);
 
         $emailBody = (string)App::make('view')->make('emails.summary_report', $data);
 

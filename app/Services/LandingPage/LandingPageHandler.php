@@ -239,7 +239,7 @@ class LandingPageHandler
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
             'author'         => $authorProfile,
-            'title'          => $calendarEvent->title . ' ' . __('with', 'fluent-booking-pro') . ' ' . $authorProfile['name'],
+            'title'          => $calendarEvent->title . ' ' . __('with', 'fluent-booking') . ' ' . $authorProfile['name'],
             'description'    => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'url'            => home_url($wp->request),
             'css_files'      => [
@@ -316,7 +316,7 @@ class LandingPageHandler
             $publicCss = 'public/saas_public-rtl.css';
         }
         $data = [
-            'title'       => __('Confirmation: ', 'fluent-booking-pro') . $calendarEvent->title . ' ' . __('with', 'fluent-booking-pro') . ' ' . $authorProfile['name'],
+            'title'       => __('Confirmation: ', 'fluent-booking') . $calendarEvent->title . ' ' . __('with', 'fluent-booking') . ' ' . $authorProfile['name'],
             'body'        => $responseHtml,
             'description' => substr(strip_shortcodes(wp_strip_all_tags(str_replace(PHP_EOL, ' ', $calendarEvent->description))), 0, 300) . '...',
             'css_files'   => [
@@ -397,16 +397,16 @@ class LandingPageHandler
         }, 10, 1);
 
         add_filter('fluent_booking/public_event_vars', function ($vars, $calendarEvent) {
-            $vars['i18']['Schedule_Meeting'] = __('Confirm Reschedule', 'fluent-booking-pro');
-            $vars['i18']['Continue_to_Payments'] = __('Confirm Reschedule', 'fluent-booking-pro');
-            $vars['i18']['Confirm_Payment'] = __('Confirm Reschedule', 'fluent-booking-pro');
+            $vars['i18']['Schedule_Meeting'] = __('Confirm Reschedule', 'fluent-booking');
+            $vars['i18']['Continue_to_Payments'] = __('Confirm Reschedule', 'fluent-booking');
+            $vars['i18']['Confirm_Payment'] = __('Confirm Reschedule', 'fluent-booking');
             return $vars;
         }, 10, 2);
 
         add_action('fluent_booking/before_calendar_event_landing_page', function ($calendarEvent) use ($booking) {
             ?>
             <div class="fcal_rescheduling_wrap">
-                <h3> <?php esc_html_e('You are rescheduling the booking: ', 'fluent-booking-pro');
+                <h3> <?php esc_html_e('You are rescheduling the booking: ', 'fluent-booking');
                     echo wp_kses_post($booking->getFullBookingDateTimeText($booking->person_time_zone, true)); ?>
                     (<?php echo esc_html($booking->person_time_zone); ?>) </h3>
             </div>
