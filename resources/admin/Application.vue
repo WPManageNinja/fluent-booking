@@ -1,16 +1,19 @@
 <template>
     <div class="fl_app">
+        <NoticeBlock />
         <router-view></router-view>
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import OnBoard from './Components/OnBoard';
+import NoticeBlock from './Components/Notice/NoticeBlock';
 
 export default {
     name: 'DashboardApplication',
     components: {
-        OnBoard
+        OnBoard,
+        NoticeBlock
     },
     mounted() {
         jQuery('.notice-warning, .notice-error').remove();
