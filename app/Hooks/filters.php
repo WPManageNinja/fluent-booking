@@ -29,8 +29,8 @@ use FluentBooking\App\Services\DateTimeHelper;
 
 $app->addFilter('fluent_booking/calendar_setting_menu_items', function ($items, $calendar) {
     if ($calendar->type != 'simple') {
-        $teamLabel = __('Team Settings', 'fluent-booking-pro');
-        $eventLabel = __('Calendar Settings', 'fluent-booking-pro');
+        $teamLabel = __('Team Settings', 'fluent-booking');
+        $eventLabel = __('Calendar Settings', 'fluent-booking');
 
         $label = $calendar->type == 'event' ? $eventLabel : $teamLabel;
         $items['calendar_settings']['label'] = $label;

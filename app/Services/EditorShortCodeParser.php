@@ -118,9 +118,9 @@ class EditorShortCodeParser
 
         if ($key == 'start_time_human_format') {
             if (time() > strtotime($booking->start_time)) {
-                $suffix = __(' ago', 'fluent-booking-pro');
+                $suffix = __(' ago', 'fluent-booking');
             } else {
-                $suffix = __(' from now', 'fluent-booking-pro');
+                $suffix = __(' from now', 'fluent-booking');
             }
 
             return human_time_diff(time(), strtotime($booking->start_time)) . ' ' . $suffix;
@@ -228,7 +228,7 @@ class EditorShortCodeParser
         }
 
         if ($key == 'form_data_html') {
-            return __('will be available soon', 'fluent-booking-pro');
+            return __('will be available soon', 'fluent-booking');
         }
 
         return Arr::get($guest, $key, '');

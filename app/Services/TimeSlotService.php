@@ -606,7 +606,7 @@ class TimeSlotService
         }
 
         if (strtotime($startDate) > strtotime($endDate)) {
-            return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking-pro'));
+            return new \WP_Error('invalid_date_range', __('Invalid date range', 'fluent-booking'));
         }
 
         $slots = $this->getDates($startDate, $endDate, $duration, false, $timeZone);

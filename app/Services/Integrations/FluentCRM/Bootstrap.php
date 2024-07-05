@@ -18,7 +18,7 @@ class Bootstrap extends IntegrationManagerController
     public function __construct()
     {
         parent::__construct(
-            __('FluentCRM', 'fluent-booking-pro'),
+            __('FluentCRM', 'fluent-booking'),
             'fluentcrm',
             '_fluent_booking_fluentcrm_settings',
             'fluentcrm_feeds',
@@ -27,7 +27,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->logo = FLUENTCRM_PLUGIN_URL . 'assets/images/fluentcrm-logo.svg';
 
-        $this->description = __('Connect FluentCRM with Fluent Booking and subscribe a contact when a booking is created.', 'fluent-booking-pro');
+        $this->description = __('Connect FluentCRM with Fluent Booking and subscribe a contact when a booking is created.', 'fluent-booking');
 
         $this->registerAdminHooks();
 
@@ -37,13 +37,13 @@ class Bootstrap extends IntegrationManagerController
     public function pushIntegration($integrations, $calendarEventId)
     {
         $integrations[$this->integrationKey] = [
-            'title'                 => $this->title . ' ' . __('Integration', 'fluent-booking-pro'),
+            'title'                 => $this->title . ' ' . __('Integration', 'fluent-booking'),
             'logo'                  => $this->logo,
             'is_active'             => $this->isConfigured(),
-            'configure_title'       => __('Configuration required!', 'fluent-booking-pro'),
+            'configure_title'       => __('Configuration required!', 'fluent-booking'),
             'global_configure_url'  => '#',
-            'configure_message'     => __('FluentCRM is not configured yet! Please configure your FluentCRM api first', 'fluent-booking-pro'),
-            'configure_button_text' => __('Set FluentCRM', 'fluent-booking-pro'),
+            'configure_message'     => __('FluentCRM is not configured yet! Please configure your FluentCRM api first', 'fluent-booking'),
+            'configure_button_text' => __('Set FluentCRM', 'fluent-booking'),
         ];
 
         return $integrations;
@@ -91,7 +91,7 @@ class Bootstrap extends IntegrationManagerController
             $fieldOptions[$field['slug']] = $field['label'];
         }
 
-        $fieldOptions['avatar'] = __('Profile Photo', 'fluent-booking-pro');
+        $fieldOptions['avatar'] = __('Profile Photo', 'fluent-booking');
 
         unset($fieldOptions['email']);
         unset($fieldOptions['first_name']);
@@ -103,51 +103,51 @@ class Bootstrap extends IntegrationManagerController
         $fields = [
             [
                 'key'         => 'name',
-                'label'       => __('Feed Name', 'fluent-booking-pro'),
+                'label'       => __('Feed Name', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Your Feed Name', 'fluent-booking-pro'),
+                'placeholder' => __('Your Feed Name', 'fluent-booking'),
                 'component'   => 'text',
             ],
             [
                 'key'                => 'CustomFields',
                 'require_list'       => false,
-                'label'              => __('Map Primary Fields', 'fluent-booking-pro'),
-                'tips'               => __('Associate your FluentCRM merge tags to the appropriate Fluent Form fields by selecting the appropriate form field from the list.', 'fluent-booking-pro'),
+                'label'              => __('Map Primary Fields', 'fluent-booking'),
+                'tips'               => __('Associate your FluentCRM merge tags to the appropriate Fluent Form fields by selecting the appropriate form field from the list.', 'fluent-booking'),
                 'component'          => 'map_fields',
-                'field_label_remote' => __('FluentCRM Field', 'fluent-booking-pro'),
-                'field_label_local'  => __('Booking Field', 'fluent-booking-pro'),
+                'field_label_remote' => __('FluentCRM Field', 'fluent-booking'),
+                'field_label_local'  => __('Booking Field', 'fluent-booking'),
                 'primary_fields'     => [
                     [
                         'key'           => 'email',
-                        'label'         => __('Email Address', 'fluent-booking-pro'),
+                        'label'         => __('Email Address', 'fluent-booking'),
                         'required'      => true,
                         'input_options' => 'emails',
                     ],
                     [
                         'key'   => 'first_name',
-                        'label' => __('First Name', 'fluent-booking-pro'),
+                        'label' => __('First Name', 'fluent-booking'),
                     ],
                     [
                         'key'   => 'last_name',
-                        'label' => __('Last Name', 'fluent-booking-pro'),
+                        'label' => __('Last Name', 'fluent-booking'),
                     ]
                 ],
             ],
             [
                 'key'                => 'other_fields',
                 'require_list'       => false,
-                'label'              => __('Other Fields', 'fluent-booking-pro'),
-                'tips'               => __('Select which Fluent Form fields pair with their<br /> respective FlunentCRM fields.', 'fluent-booking-pro'),
+                'label'              => __('Other Fields', 'fluent-booking'),
+                'tips'               => __('Select which Fluent Form fields pair with their<br /> respective FlunentCRM fields.', 'fluent-booking'),
                 'component'          => 'dropdown_many_fields',
-                'field_label_remote' => __('FluentCRM Field', 'fluent-booking-pro'),
-                'field_label_local'  => __('Form Field', 'fluent-booking-pro'),
+                'field_label_remote' => __('FluentCRM Field', 'fluent-booking'),
+                'field_label_local'  => __('Form Field', 'fluent-booking'),
                 'options'            => $fieldOptions,
             ],
             [
                 'key'         => 'list_ids',
-                'label'       => __('FluentCRM Lists', 'fluent-booking-pro'),
-                'placeholder' => __('Select FluentCRM Lists', 'fluent-booking-pro'),
-                'tips'        => __('Select the FluentCRM Lists you would like to add your contacts to.', 'fluent-booking-pro'),
+                'label'       => __('FluentCRM Lists', 'fluent-booking'),
+                'placeholder' => __('Select FluentCRM Lists', 'fluent-booking'),
+                'tips'        => __('Select the FluentCRM Lists you would like to add your contacts to.', 'fluent-booking'),
                 'component'   => 'select',
                 'is_multiple' => true,
                 'required'    => false,
@@ -156,8 +156,8 @@ class Bootstrap extends IntegrationManagerController
             [
                 'key'          => 'tag_ids',
                 'require_list' => false,
-                'label'        => __('Contact Tags', 'fluent-booking-pro'),
-                'placeholder'  => __('Select Tags', 'fluent-booking-pro'),
+                'label'        => __('Contact Tags', 'fluent-booking'),
+                'placeholder'  => __('Select Tags', 'fluent-booking'),
                 'component'    => 'select',
                 'is_multiple'  => true,
                 'options'      => $this->getTags(),
@@ -165,50 +165,50 @@ class Bootstrap extends IntegrationManagerController
             [
                 'key'            => 'skip_if_exists',
                 'require_list'   => false,
-                'checkbox_label' => __('Skip if contact already exist in FluentCRM', 'fluent-booking-pro'),
+                'checkbox_label' => __('Skip if contact already exist in FluentCRM', 'fluent-booking'),
                 'component'      => 'checkbox-single',
             ],
             [
                 'key'            => 'skip_primary_data',
                 'require_list'   => false,
-                'checkbox_label' => __('Skip name update if existing contact have old data (per primary field)', 'fluent-booking-pro'),
+                'checkbox_label' => __('Skip name update if existing contact have old data (per primary field)', 'fluent-booking'),
                 'component'      => 'checkbox-single',
             ],
             [
                 'key'            => 'double_opt_in',
                 'require_list'   => false,
-                'checkbox_label' => __('Enable Double opt-in for new contacts', 'fluent-booking-pro'),
+                'checkbox_label' => __('Enable Double opt-in for new contacts', 'fluent-booking'),
                 'component'      => 'checkbox-single',
             ],
             [
                 'key'            => 'force_subscribe',
                 'require_list'   => false,
-                'checkbox_label' => __('Enable Force Subscribe if contact is not in subscribed status (Existing contact only)', 'fluent-booking-pro'),
+                'checkbox_label' => __('Enable Force Subscribe if contact is not in subscribed status (Existing contact only)', 'fluent-booking'),
                 'component'      => 'checkbox-single',
-                'inline_tip'     => __('If you enable this then contact will forcefully subscribed no matter in which status that contact had', 'fluent-booking-pro'),
+                'inline_tip'     => __('If you enable this then contact will forcefully subscribed no matter in which status that contact had', 'fluent-booking'),
             ],
             [
                 'require_list'   => false,
                 'required'       => true,
                 'key'            => 'event_trigger',
                 'options'        => [
-                    'after_booking_scheduled'    => __('Booking Confirmed', 'fluent-booking-pro'),
-                    'booking_schedule_completed' => __('Booking Completed', 'fluent-booking-pro'),
-                    'booking_schedule_cancelled' => __('Booking Canceled', 'fluent-booking-pro'),
+                    'after_booking_scheduled'    => __('Booking Confirmed', 'fluent-booking'),
+                    'booking_schedule_completed' => __('Booking Completed', 'fluent-booking'),
+                    'booking_schedule_cancelled' => __('Booking Canceled', 'fluent-booking'),
                 ],
-                'tips'           => __('Select in which booking stage you want to trigger this feed', 'fluent-booking-pro'),
-                'label'          => __('Event Trigger', 'fluent-booking-pro'),
+                'tips'           => __('Select in which booking stage you want to trigger this feed', 'fluent-booking'),
+                'label'          => __('Event Trigger', 'fluent-booking'),
                 'component'      => 'checkbox-multiple-text',
-                'checkbox_label' => __('Event Trigger For This Feed', 'fluent-booking-pro'),
+                'checkbox_label' => __('Event Trigger For This Feed', 'fluent-booking'),
             ]
         ];
 
         $fields[] = [
             'require_list' => false,
             'key'          => 'remove_tags',
-            'label'        => __('Remove Contact Tags', 'fluent-booking-pro'),
-            'placeholder'  => __('Select Tags (remove from contact)', 'fluent-booking-pro'),
-            'tips'         => __('(Optional) The selected tags will be removed from the contact (if exist)', 'fluent-booking-pro'),
+            'label'        => __('Remove Contact Tags', 'fluent-booking'),
+            'placeholder'  => __('Select Tags (remove from contact)', 'fluent-booking'),
+            'tips'         => __('(Optional) The selected tags will be removed from the contact (if exist)', 'fluent-booking'),
             'component'    => 'select',
             'is_multiple'  => true,
             'required'     => false,
@@ -218,9 +218,9 @@ class Bootstrap extends IntegrationManagerController
         $fields[] = [
             'require_list'   => false,
             'key'            => 'enabled',
-            'label'          => __('Status', 'fluent-booking-pro'),
+            'label'          => __('Status', 'fluent-booking'),
             'component'      => 'checkbox-single',
-            'checkbox_label' => __('Enable This feed', 'fluent-booking-pro'),
+            'checkbox_label' => __('Enable This feed', 'fluent-booking'),
         ];
 
         return [
@@ -287,7 +287,7 @@ class Bootstrap extends IntegrationManagerController
         if (!is_email($contact['email'])) {
             $this->addLog(
                 $feed['settings']['name'],
-                __('FluentCRM API called skipped because no valid email available', 'fluent-booking-pro'),
+                __('FluentCRM API called skipped because no valid email available', 'fluent-booking'),
                 $booking->id,
                 'failed'
             );
@@ -298,7 +298,7 @@ class Bootstrap extends IntegrationManagerController
         if ($subscriber && Arr::isTrue($data, 'skip_if_exists')) {
             $this->addLog(
                 $feed['settings']['name'],
-                __('Contact creation has been skipped because contact already exist in the database', 'fluent-booking-pro'),
+                __('Contact creation has been skipped because contact already exist in the database', 'fluent-booking'),
                 $booking->id,
                 'failed'
             );
@@ -381,7 +381,7 @@ class Bootstrap extends IntegrationManagerController
 
             $this->addLog(
                 $feed['settings']['name'],
-                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent-booking-pro') . $subscriber->id,
+                __('Contact has been created in FluentCRM. Contact ID: ', 'fluent-booking') . $subscriber->id,
                 $booking->id,
                 'success'
             );
@@ -422,7 +422,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->addLog(
             $feed['settings']['name'],
-            __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent-booking-pro') . $subscriber->id,
+            __('Contact has been updated in FluentCRM. Contact ID: ', 'fluent-booking') . $subscriber->id,
             $booking->id,
             'success'
         );

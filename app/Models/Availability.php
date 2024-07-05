@@ -49,7 +49,7 @@ class Availability extends Model
         $user = get_user_by('ID', $this->object_id);
         if(!$user) {
             return [
-                'name' => __('Deleted user', 'fluent-booking-pro'),
+                'name' => __('Deleted user', 'fluent-booking'),
                 'avatar' => ''
             ];
         }

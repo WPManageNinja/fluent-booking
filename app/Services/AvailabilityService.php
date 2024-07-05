@@ -119,10 +119,10 @@ class AvailabilityService
             if ($calendar) {
                 $hostName = $calendar->user->full_name;
                 if ($calendar->user_id == get_current_user_id()) {
-                    $hostName = __('My Schedules', 'fluent-booking-pro');
+                    $hostName = __('My Schedules', 'fluent-booking');
                 }
             } else {
-                $hostName = __('Deleted User', 'fluent-booking-pro');
+                $hostName = __('Deleted User', 'fluent-booking');
             }
             
             $scheduleOptions[$hostName] = $scheduleOptions[$hostName] ?? [];
