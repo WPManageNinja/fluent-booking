@@ -12,7 +12,7 @@ class BookingService
     public static function createBooking($data = [], $calendarSlot = null, $customFieldsData = [])
     {
         if (empty($data['email']) || empty($data['start_time']) || empty($data['person_time_zone'])) {
-            throw new \Exception(esc_html__('Email, Start Time and timezone are required to create a booking', 'fluent-booking-pro'), 422);
+            throw new \Exception(esc_html__('Email, Start Time and timezone are required to create a booking', 'fluent-booking'), 422);
         }
 
         if (!$calendarSlot) {
@@ -126,26 +126,26 @@ class BookingService
 
         $sections = [
             'what'  => [
-                'title'   => __('What', 'fluent-booking-pro'),
+                'title'   => __('What', 'fluent-booking'),
                 'content' => $bookingTitle
             ],
             'when'  => [
-                'title'   => __('When', 'fluent-booking-pro'),
+                'title'   => __('When', 'fluent-booking'),
                 'content' => $booking->getFullBookingDateTimeText($booking->person_time_zone, true) . ' (' . $booking->person_time_zone . ')'
             ],
             'who'   => [
-                'title'   => __('Who', 'fluent-booking-pro'),
-                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">' . __('Host', 'fluent-booking-pro') . '</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
+                'title'   => __('Who', 'fluent-booking'),
+                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">' . __('Host', 'fluent-booking') . '</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
             ],
             'where' => [
-                'title'   => __('Where', 'fluent-booking-pro'),
+                'title'   => __('Where', 'fluent-booking'),
                 'content' => $booking->getLocationDetailsHtml()
             ]
         ];
 
         if ($guests = $booking->getAdditionalGuests(true)) {
             $sections['guests'] = [
-                'title'   => __('Additional Guests', 'fluent-booking-pro'),
+                'title'   => __('Additional Guests', 'fluent-booking'),
                 'content' => $guests
             ];
         }
@@ -154,7 +154,7 @@ class BookingService
             // add cancellation reason at the beginning
             $sections = array_merge([
                 'cancellation_reason' => [
-                    'title'   => __('Cancellation Reason', 'fluent-booking-pro'),
+                    'title'   => __('Cancellation Reason', 'fluent-booking'),
                     'content' => $booking->getCancelReason(false, true)
                 ]
             ], $sections);
@@ -164,7 +164,7 @@ class BookingService
             // add rejection reason at the beginning
             $sections = array_merge([
                 'cancellation_reason' => [
-                    'title'   => __('Rejection Reason', 'fluent-booking-pro'),
+                    'title'   => __('Rejection Reason', 'fluent-booking'),
                     'content' => $booking->getRejectReason(false, true)
                 ]
             ], $sections);
@@ -172,7 +172,7 @@ class BookingService
 
         if ($booking->message) {
             $sections['note'] = [
-                'title'   => __('Additional Note', 'fluent-booking-pro'),
+                'title'   => __('Additional Note', 'fluent-booking'),
                 'content' => wpautop($booking->message)
             ];
         }
@@ -193,14 +193,14 @@ class BookingService
         $subHeading = '';
         if ($booking->status == 'scheduled') {
             // translators: %s is the name of the person scheduled
-            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking-pro'), $author['name']);
+            $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
         }
         
         // translators: %s is the status of the meeting
-        $title = sprintf(__('Your meeting has been %s', 'fluent-booking-pro'), $bookingStatus);
+        $title = sprintf(__('Your meeting has been %s', 'fluent-booking'), $bookingStatus);
         if ($booking->status == 'pending' && $booking->payment_status != 'pending') {
-            $title = __('Your booking has been submitted', 'fluent-booking-pro');
-            $subHeading = __('Please wait for the host to confirm your booking', 'fluent-booking-pro');
+            $title = __('Your booking has been submitted', 'fluent-booking');
+            $subHeading = __('Please wait for the host to confirm your booking', 'fluent-booking');
         }
 
         $assetsUrl = App::getInstance('url.assets');
@@ -212,7 +212,7 @@ class BookingService
             'sections'     => $sections,
             'slot'         => $calendarSlot,
             'booking'      => $booking,
-            'message'      => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking-pro'),
+            'message'      => __('A confirmation has been sent to your email address along with meeting location details.', 'fluent-booking'),
             'action_type'  => $actionType,
             'can_cancel'   => $booking->canCancel(),
             'bookmarks'    => [],
@@ -226,8 +226,8 @@ class BookingService
         }
 
         if ($actionType == 'cancel') {
-            $confirmationData['title'] = __('Booking Cancellation', 'fluent-booking-pro');
-            $confirmationData['sub_heading'] = __('Confirm and cancel the scheduled booking', 'fluent-booking-pro');
+            $confirmationData['title'] = __('Booking Cancellation', 'fluent-booking');
+            $confirmationData['sub_heading'] = __('Confirm and cancel the scheduled booking', 'fluent-booking');
             $confirmationData['cancel_field'] = BookingFieldService::getBookingFieldByName($calendarSlot, 'cancellation_reason');
             $confirmationData['action_url'] = add_query_arg([
                 'action'       => 'fcal_cancel_meeting',

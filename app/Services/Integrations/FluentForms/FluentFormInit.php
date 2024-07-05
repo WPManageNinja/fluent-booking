@@ -79,7 +79,7 @@ class FluentFormInit
                 $error = Arr::get($field, 'rules.required.message');
                 if (!$error) {
                     // translators: %s is the label of the required field
-                    $error = sprintf(__('%s field is required', 'fluent-booking-pro'), Arr::get($field, 'raw.settings.label'));
+                    $error = sprintf(__('%s field is required', 'fluent-booking'), Arr::get($field, 'raw.settings.label'));
                 }
                 return $error;
             }
@@ -91,7 +91,7 @@ class FluentFormInit
         $calendarEvent = CalendarSlot::find($eventId);
 
         if (!$calendarEvent || $calendarEvent->status != 'active') {
-            return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro');
+            return __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking');
         }
 
         $duration = $calendarEvent->getDuration(Arr::get($bookingData, 'duration', null));
@@ -111,7 +111,7 @@ class FluentFormInit
         $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
         if (!$isSpotAvailable) {
-            $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro');
+            $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking');
             wp_send_json(['errors' => [$message]], 422);
         }
 
@@ -124,11 +124,11 @@ class FluentFormInit
             // Now check if the email field is given or not
             $emailFieldKey = Arr::get($field, 'raw.settings.cal_guest_fields.email_field');
             if (!$emailFieldKey) {
-                $fieldError = __('Email is required for this appointment. Looks like this field does not have email field selected.', 'fluent-booking-pro');
+                $fieldError = __('Email is required for this appointment. Looks like this field does not have email field selected.', 'fluent-booking');
             } else {
                 $email = Arr::get($formData, $emailFieldKey);
                 if (!$email || !is_email($email)) {
-                    $fieldError = __('Email is required for this appointment. Please provide a valid email', 'fluent-booking-pro');
+                    $fieldError = __('Email is required for this appointment. Please provide a valid email', 'fluent-booking');
                 }
             }
 
@@ -160,7 +160,7 @@ class FluentFormInit
 
             foreach ($requiredKeys as $requiredKey) {
                 if (!Arr::get($bookingData['form'], $requiredKey)) {
-                    return __('Please provide a valid location for this meeting', 'fluent-booking-pro');
+                    return __('Please provide a valid location for this meeting', 'fluent-booking');
                 }
             }
         }
@@ -284,8 +284,8 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'error',
-                    'title'            => __('Appointment could not be created', 'fluent-booking-pro'),
-                    'description'      => __('Appointment could not be created because email is not given or invalid', 'fluent-booking-pro'),
+                    'title'            => __('Appointment could not be created', 'fluent-booking'),
+                    'description'      => __('Appointment could not be created because email is not given or invalid', 'fluent-booking'),
                 ]);
                 continue;
             }
@@ -352,9 +352,9 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'info',
-                    'title'            => __('Booking has been created on FluentBooking', 'fluent-booking-pro'),
+                    'title'            => __('Booking has been created on FluentBooking', 'fluent-booking'),
                     /* translators: %1$s is the opening anchor tag, %2$s is the closing anchor tag. */
-                    'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1$sView Booking Details%2$s', 'fluent-booking-pro'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
+                    'description'      => sprintf(__('A new appointment has been created on FluentBooking. %1$sView Booking Details%2$s', 'fluent-booking'), '<a rel="noopener" href="' . $booking->getAdminViewUrl() . '" target="_blank">', '</a>'),
                 ]);
 
             } catch (\Exception $exception) {
@@ -364,7 +364,7 @@ class FluentFormInit
                     'source_id'        => $entry->id,
                     'component'        => 'FluentBooking',
                     'status'           => 'error',
-                    'title'            => __('Failed to create booking', 'fluent-booking-pro'),
+                    'title'            => __('Failed to create booking', 'fluent-booking'),
                     'description'      => $exception->getMessage(),
                 ]);
             }
@@ -421,7 +421,7 @@ class FluentFormInit
             $smartCode = '{all_data}';
 
             if ($submission->payment_total) {
-                $smartCode .= '<h3>' . __('Related Payments', 'fluent-booking-pro') . '</h3>{payment.receipt}';
+                $smartCode .= '<h3>' . __('Related Payments', 'fluent-booking') . '</h3>{payment.receipt}';
             }
 
             $entryHtmlData = ShortCodeParser::parse(
@@ -433,11 +433,11 @@ class FluentFormInit
                 true
             );
 
-            $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">' . __('View Form Submission', 'fluent-booking-pro') . '</a></p>';
+            $entryHtmlData .= '<p><a target="_blank" rel="noopener" href="' . admin_url('admin.php?page=fluent_forms&route=entries&form_id=' . $submission->form_id . '#/entries/' . $submission->id) . '">' . __('View Form Submission', 'fluent-booking') . '</a></p>';
 
             $meta[] = [
                 'id'      => 'fluentform',
-                'title'   => __('Related Form Data', 'fluent-booking-pro'),
+                'title'   => __('Related Form Data', 'fluent-booking'),
                 'content' => $entryHtmlData
             ];
         } catch (\Exception $e) {

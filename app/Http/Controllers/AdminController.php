@@ -110,13 +110,13 @@ class AdminController extends Controller
         $allHosts = [];
 
         foreach ($calendars as $calendar) {
-            $userName = __('Deleted User', 'fluent-booking-pro');
+            $userName = __('Deleted User', 'fluent-booking');
             if ($calendar->user) {
                 $userName = $calendar->user->full_name;
             }
 
             if ($currentUserId == $calendar->user_id) {
-                $userName = __('My Meetings', 'fluent-booking-pro');
+                $userName = __('My Meetings', 'fluent-booking');
             }
 
             $allHosts[] = [
@@ -136,7 +136,7 @@ class AdminController extends Controller
             ->where('type', 'simple')
             ->get();
 
-        $deletedUser = __('Deleted User', 'fluent-booking-pro');
+        $deletedUser = __('Deleted User', 'fluent-booking');
         
         $hosts = $calendars->map(function ($calendar) use ($deletedUser) {
             $user = $calendar->user;

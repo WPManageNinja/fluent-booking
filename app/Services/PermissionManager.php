@@ -11,13 +11,13 @@ class PermissionManager
     public static function allPermissionSets()
     {
         return [
-            'manage_own_calendar'               => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking-pro'),
-            'read_all_bookings'                 => __('Read Access to All Bookings', 'fluent-booking-pro'),
-            'manage_all_bookings'               => __('Read & Write Access to All Bookings', 'fluent-booking-pro'),
-            'read_other_calendars'              => __('Read Access of Other Users Calendars', 'fluent-booking-pro'),
-            'manage_other_calendars'            => __('Manage Other Users Calendars', 'fluent-booking-pro'),
-            'read_and_use_other_availabilities' => __('Read & Use Access of All Availabilities', 'fluent-booking-pro'),
-            'manage_other_availabilities'       => __('Manage All Availabilities', 'fluent-booking-pro')
+            'manage_own_calendar'               => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking'),
+            'read_all_bookings'                 => __('Read Access to All Bookings', 'fluent-booking'),
+            'manage_all_bookings'               => __('Read & Write Access to All Bookings', 'fluent-booking'),
+            'read_other_calendars'              => __('Read Access of Other Users Calendars', 'fluent-booking'),
+            'manage_other_calendars'            => __('Manage Other Users Calendars', 'fluent-booking'),
+            'read_and_use_other_availabilities' => __('Read & Use Access of All Availabilities', 'fluent-booking'),
+            'manage_other_availabilities'       => __('Manage All Availabilities', 'fluent-booking')
         ];
     }
 
@@ -155,7 +155,7 @@ class PermissionManager
             ]);
 
             if ($formatted) {
-                return ['manage_own_calendar' => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking-pro')];
+                return ['manage_own_calendar' => __('Manage only own Calendar, Events, Bookings & Availability', 'fluent-booking')];
             }
             return ['manage_own_calendar'];
         }

@@ -10,7 +10,7 @@ class TimeSlotServiceHandler
     {
         if ($calendarEvent->isProEvent()) {
             if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
-                return new \WP_Error('pro_plugin_required', __('Pro plugin is required for this event.', 'fluent-booking-pro'));
+                return new \WP_Error('pro_plugin_required', __('Pro plugin is required for this event.', 'fluent-booking'));
             }
 
             if ($calendarEvent->isTeamEvent()) {

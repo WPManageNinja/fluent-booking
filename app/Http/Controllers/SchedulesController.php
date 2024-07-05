@@ -135,7 +135,7 @@ class SchedulesController extends Controller
         $column = $data['column'];
 
         if ($booking->{$column} == $value) {
-            return $this->sendError(['message' => __('No changes found', 'fluent-booking-pro')]);
+            return $this->sendError(['message' => __('No changes found', 'fluent-booking')]);
         }
 
         $validColumns = [
@@ -148,12 +148,12 @@ class SchedulesController extends Controller
         ];
 
         if (!in_array($column, $validColumns)) {
-            return $this->sendError(['message' => __('Invalid column', 'fluent-booking-pro')]);
+            return $this->sendError(['message' => __('Invalid column', 'fluent-booking')]);
         }
 
         if ($column === 'email') {
             if (!$value || !is_email($value)) {
-                return $this->sendError(['message' => __('Invalid email address', 'fluent-booking-pro')]);
+                return $this->sendError(['message' => __('Invalid email address', 'fluent-booking')]);
             }
             $value = sanitize_email($value);
         } else {
@@ -162,7 +162,7 @@ class SchedulesController extends Controller
 
         if ($column == 'status') {
             if (!in_array($value, ['scheduled', 'completed', 'cancelled', 'rejected', 'no_show'])) {
-                return $this->sendError(['message' => __('Invalid status', 'fluent-booking-pro')]);
+                return $this->sendError(['message' => __('Invalid status', 'fluent-booking')]);
             }
 
             if ($value == 'scheduled' && $booking->payment_method && $booking->payment_order) {
@@ -186,7 +186,7 @@ class SchedulesController extends Controller
                 $cancelReason = sanitize_text_field($data['cancel_reason']);
                 $booking->cancelMeeting($cancelReason, 'host', get_current_user_id());
                 return [
-                    'message' => __('The booking has been cancelled', 'fluent-booking-pro')
+                    'message' => __('The booking has been cancelled', 'fluent-booking')
                 ];
             }
 
@@ -194,7 +194,7 @@ class SchedulesController extends Controller
                 $rejectReason = sanitize_text_field($data['reject_reason']);
                 $booking->rejectMeeting($rejectReason, get_current_user_id());
                 return [
-                    'message' => __('The booking has been rejected', 'fluent-booking-pro')
+                    'message' => __('The booking has been rejected', 'fluent-booking')
                 ];
             }
 
@@ -223,7 +223,7 @@ class SchedulesController extends Controller
 
         return [
             /* translators: Updated column name */
-            'message' => sprintf(__('%s has been updated', 'fluent-booking-pro'), $column)
+            'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
         ];
     }
 
@@ -270,7 +270,7 @@ class SchedulesController extends Controller
         }
 
         return [
-            'message' => __('Booking Deleted Successfully!', 'fluent-booking-pro')
+            'message' => __('Booking Deleted Successfully!', 'fluent-booking')
         ];
     }
 
@@ -287,7 +287,7 @@ class SchedulesController extends Controller
         $booking = $booking->where('group_id', $groupId)->first();
 
         if (!$booking || $booking->event_type != 'group') {
-            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking-pro')]);
+            return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
         $attendees = Booking::where('group_id', $booking->group_id);
@@ -334,7 +334,7 @@ class SchedulesController extends Controller
             if ($profileHtml) {
                 $sidebarContents[] = [
                     'id'      => 'fluent_crm_profule',
-                    'title'   => __('CRM Profile', 'fluent-booking-pro'),
+                    'title'   => __('CRM Profile', 'fluent-booking'),
                     'content' => $profileHtml
                 ];
             }
@@ -394,8 +394,8 @@ class SchedulesController extends Controller
             'booking_id'  => $bookingId,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Payment Successfully Completed', 'fluent-booking-pro'),
-            'description' => __('Payment marked as paid by admin', 'fluent-booking-pro')
+            'title'       => __('Payment Successfully Completed', 'fluent-booking'),
+            'description' => __('Payment marked as paid by admin', 'fluent-booking')
         ];
     }
 
@@ -411,8 +411,8 @@ class SchedulesController extends Controller
             'booking_id'  => $bookingId,
             'status'      => 'closed',
             'type'        => 'success',
-            'title'       => __('Booking Confirmed', 'fluent-booking-pro'),
-            'description' => __('Booking has been confirmed by ', 'fluent-booking-pro') . $confirmedBy
+            'title'       => __('Booking Confirmed', 'fluent-booking'),
+            'description' => __('Booking has been confirmed by ', 'fluent-booking') . $confirmedBy
         ];
     }
 }

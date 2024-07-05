@@ -83,8 +83,8 @@ class CalendarIntegrationService
             $metaKey = $integrationData->key;
         } else {
             if (empty($metaValue['name'])) {
-                $errors['name'] = [__('Feed name is required', 'fluent-booking-pro')];
-                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent-booking-pro'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                $errors['name'] = [__('Feed name is required', 'fluent-booking')];
+                throw new ValidationException(__('Validation Failed! Feed name is required', 'fluent-booking'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
             $metaValue = apply_filters('fluent_booking/save_integration_value_' . $integrationName, $metaValue, $integrationId, $slotId);
             $metaKey = $integrationName . '_feeds';
@@ -95,15 +95,15 @@ class CalendarIntegrationService
             // Required fields
 
             if(empty($metaValue['email'])) {
-                $errors['email'] = [__('Email is required', 'fluent-booking-pro')];
+                $errors['email'] = [__('Email is required', 'fluent-booking')];
             }
 
             if(empty($metaValue['event_trigger'])) {
-                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking-pro')];
+                $errors['event_trigger'] = [__('Event trigger is required', 'fluent-booking')];
             }
 
             if($errors) {
-                throw new ValidationException(__('Validation Failed! Please fill up required fields', 'fluent-booking-pro'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+                throw new ValidationException(__('Validation Failed! Please fill up required fields', 'fluent-booking'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             }
         }
 
@@ -130,7 +130,7 @@ class CalendarIntegrationService
         }
 
         return [
-            'message'          => __('Integration successfully saved', 'fluent-booking-pro'),
+            'message'          => __('Integration successfully saved', 'fluent-booking'),
             'integration_id'   => $integrationId,
             'integration_name' => $integrationName,
             'created'          => $created,

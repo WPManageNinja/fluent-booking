@@ -280,7 +280,7 @@ class Booking extends Model
         }
 
         if ($locationType == 'in_person_guest') {
-            return '<b>' . __('Invitee Address:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description');
+            return '<b>' . __('Invitee Address:', 'fluent-booking') . ' </b>' . Arr::get($details, 'description');
         }
 
         if ($locationType == 'in_person_organizer') {
@@ -292,11 +292,11 @@ class Booking extends Model
         }
 
         if ($locationType == 'phone_guest') {
-            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . $this->phone;
+            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . $this->phone;
         }
 
         if ($locationType == 'phone_organizer') {
-            return '<b>' . __('Phone Call:', 'fluent-booking-pro') . ' </b>' . Arr::get($details, 'description') . __(' (Host phone number)', 'fluent-booking-pro');
+            return '<b>' . __('Phone Call:', 'fluent-booking') . ' </b>' . Arr::get($details, 'description') . __(' (Host phone number)', 'fluent-booking');
         }
 
         if ($locationType == 'custom') {
@@ -307,16 +307,16 @@ class Booking extends Model
 
         if (in_array($locationType, ['google_meet', 'online_meeting', 'zoom_meeting', 'ms_teams'])) {
             $platformLabels = [
-                'google_meet'    => __('Google Meet', 'fluent-booking-pro'),
-                'online_meeting' => __('Online Meeting', 'fluent-booking-pro'),
-                'zoom_meeting'   => __('Zoom Video', 'fluent-booking-pro'),
-                'ms_teams'       => __('MS Teams', 'fluent-booking-pro'),
+                'google_meet'    => __('Google Meet', 'fluent-booking'),
+                'online_meeting' => __('Online Meeting', 'fluent-booking'),
+                'zoom_meeting'   => __('Zoom Video', 'fluent-booking'),
+                'ms_teams'       => __('MS Teams', 'fluent-booking'),
             ];
 
             $html = '<b>' . $platformLabels[$locationType] . '</b> ';
 
             if ($meetingLink = Arr::get($details, 'online_platform_link')) {
-                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Join Meeting', 'fluent-booking-pro') . '</a>';
+                $html .= '<a target="_blank" href="' . esc_url($meetingLink) . '">' . __('Join Meeting', 'fluent-booking') . '</a>';
             }
 
             return $html;
@@ -378,15 +378,15 @@ class Booking extends Model
         $endTime = strtotime($this->end_time);
 
         if ($currentTime > $startTime && $currentTime < $endTime) {
-            return ['happening_now' => __('Happening Now', 'fluent-booking-pro')];
+            return ['happening_now' => __('Happening Now', 'fluent-booking')];
         }
         
         if (($startTime - $currentTime) < 1800 && ($startTime - $currentTime) > 0) {
-            return ['starting_soon' => __('Starting Soon', 'fluent-booking-pro')];
+            return ['starting_soon' => __('Starting Soon', 'fluent-booking')];
         }
         
         if (($endTime - $currentTime) > -3600 && ($endTime - $currentTime) < 0) {
-            return ['recently_happened' => __('Recently Happened', 'fluent-booking-pro')];
+            return ['recently_happened' => __('Recently Happened', 'fluent-booking')];
         }
 
         return [];
@@ -397,12 +397,12 @@ class Booking extends Model
         $status = $this->status;
         
         $statusLabels = [
-            'scheduled'   => __('Scheduled', 'fluent-booking-pro'),
-            'rescheduled' => __('Rescheduled', 'fluent-booking-pro'),
-            'completed'   => __('Completed', 'fluent-booking-pro'),
-            'pending'     => __('Pending', 'fluent-booking-pro'),
-            'cancelled'   => __('Cancelled', 'fluent-booking-pro'),
-            'rejected'    => __('Rejected', 'fluent-booking-pro')
+            'scheduled'   => __('Scheduled', 'fluent-booking'),
+            'rescheduled' => __('Rescheduled', 'fluent-booking'),
+            'completed'   => __('Completed', 'fluent-booking'),
+            'pending'     => __('Pending', 'fluent-booking'),
+            'cancelled'   => __('Cancelled', 'fluent-booking'),
+            'rejected'    => __('Rejected', 'fluent-booking')
         ];
 
         return Arr::get($statusLabels, $status, $status);
@@ -413,12 +413,12 @@ class Booking extends Model
         $status = $this->payment_status;
         
         $statusLabels = [
-            'pending'            => __('Pending', 'fluent-booking-pro'),
-            'paid'               => __('Paid', 'fluent-booking-pro'),
-            'failed'             => __('Failed', 'fluent-booking-pro'),
-            'refunded'           => __('Refunded', 'fluent-booking-pro'),
-            'partially-paid'     => __('Partially Paid', 'fluent-booking-pro'),
-            'partially-refunded' => __('Partially Refunded', 'fluent-booking-pro')
+            'pending'            => __('Pending', 'fluent-booking'),
+            'paid'               => __('Paid', 'fluent-booking'),
+            'failed'             => __('Failed', 'fluent-booking'),
+            'refunded'           => __('Refunded', 'fluent-booking'),
+            'partially-paid'     => __('Partially Paid', 'fluent-booking'),
+            'partially-refunded' => __('Partially Refunded', 'fluent-booking')
         ];
 
         return Arr::get($statusLabels, $status, $status);
@@ -507,7 +507,7 @@ class Booking extends Model
         ];
 
         if (!in_array($this->status, $cancellableStatuses)) {
-            return new \WP_Error('invalid_status', __('This booking is not cancellable.', 'fluent-booking-pro'));
+            return new \WP_Error('invalid_status', __('This booking is not cancellable.', 'fluent-booking'));
         }
 
         $this->status = 'cancelled';
@@ -529,7 +529,7 @@ class Booking extends Model
 
         if ($reason) {
             /* translators: Name of the user who cancelled the meeting */
-            $this->addCancelOrRejectReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName), $reason);
+            $this->addCancelOrRejectReason(sprintf(__('Meeting has been cancelled by %s', 'fluent-booking'), $userName), $reason);
             do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
             return;
         }
@@ -538,9 +538,9 @@ class Booking extends Model
             'booking_id'  => $this->id,
             'status'      => 'closed',
             'type'        => 'error',
-            'title'       => __('Meeting Cancelled', 'fluent-booking-pro'),
+            'title'       => __('Meeting Cancelled', 'fluent-booking'),
             /* translators: Name of the user who cancelled the meeting */
-            'description' => sprintf(__('Meeting has been cancelled by %s', 'fluent-booking-pro'), $userName)
+            'description' => sprintf(__('Meeting has been cancelled by %s', 'fluent-booking'), $userName)
         ]);
 
         do_action('fluent_booking/booking_schedule_cancelled', $this, $this->calendar_event);
@@ -563,7 +563,7 @@ class Booking extends Model
                 $userName = $user->display_name;
             }
             /* translators: Name of the user who rejected the booking */
-            $this->addCancelOrRejectReason(sprintf(__('Booking request has been rejected by %s', 'fluent-booking-pro'), $userName), $reason, 'reject_reason');
+            $this->addCancelOrRejectReason(sprintf(__('Booking request has been rejected by %s', 'fluent-booking'), $userName), $reason, 'reject_reason');
         }
 
         do_action('fluent_booking/booking_schedule_rejected', $this, $this->calendar_event);
@@ -577,7 +577,7 @@ class Booking extends Model
     private function generateBookingTitle($eventTitle, $authorName, $guestName)
     {
         /* translators: 1: Calendar slot title, 2: Author name, 3: Full name of the gueset */
-        $bookingTitle = sprintf(__('%1$s meeting between %2$s and %3$s', 'fluent-booking-pro'), $eventTitle, $authorName, $guestName);
+        $bookingTitle = sprintf(__('%1$s meeting between %2$s and %3$s', 'fluent-booking'), $eventTitle, $authorName, $guestName);
 
         return $bookingTitle;
     }
@@ -836,7 +836,7 @@ class Booking extends Model
             return $message;
         }
 
-        return __('Sorry! you can not cancel this', 'fluent-booking-pro');
+        return __('Sorry! you can not cancel this', 'fluent-booking');
     }
 
     public function getRescheduleMessage()
@@ -849,7 +849,7 @@ class Booking extends Model
             return $message;
         }
 
-        return __('Sorry! you can not reschedule this', 'fluent-booking-pro');
+        return __('Sorry! you can not reschedule this', 'fluent-booking');
     }
 
     public function getHostDetails($isPublic = true)
@@ -898,7 +898,7 @@ class Booking extends Model
         $description = str_replace(PHP_EOL, '\\n', $this->getConfirmationData());
 
         if ($this->message) {
-            $description  .= __('Note: ', 'fluent-booking-pro') . '\\n' . $this->message . '\\n' . '\\n';
+            $description  .= __('Note: ', 'fluent-booking') . '\\n' . $this->message . '\\n' . '\\n';
         }
 
         if ($additionalData = $this->getAdditionalData(false)) {
@@ -957,19 +957,19 @@ class Booking extends Model
         
         $sections = [
             'what'  => [
-                'title'   => __('What', 'fluent-booking-pro'),
+                'title'   => __('What', 'fluent-booking'),
                 'content' => $bookingTitle,
             ],
             'when'  => [
-                'title'   => __('When', 'fluent-booking-pro'),
+                'title'   => __('When', 'fluent-booking'),
                 'content' => $this->getFullBookingDateTimeText($this->person_time_zone, true) . ' (' . $this->person_time_zone . ')',
             ],
             'who'   => [
-                'title'   => __('Who', 'fluent-booking-pro'),
-                'content' => $author['name'] . ' - ' . __('Organizer', 'fluent-booking-pro') . PHP_EOL . $author['email'] . PHP_EOL . PHP_EOL . $guestName . PHP_EOL . $this->email
+                'title'   => __('Who', 'fluent-booking'),
+                'content' => $author['name'] . ' - ' . __('Organizer', 'fluent-booking') . PHP_EOL . $author['email'] . PHP_EOL . PHP_EOL . $guestName . PHP_EOL . $this->email
             ],
             'where' => [
-                'title'   => __('Where', 'fluent-booking-pro'),
+                'title'   => __('Where', 'fluent-booking'),
                 'content' => $this->getLocationAsText()
             ],
         ];
@@ -989,7 +989,7 @@ class Booking extends Model
 
         return apply_filters('fluent_booking/meeting_bookmarks', [
             'google'   => [
-                'title' => __('Google Calendar', 'fluent-booking-pro'),
+                'title' => __('Google Calendar', 'fluent-booking'),
                 'url'   => add_query_arg([
                     'dates'    => gmdate('Ymd\THis\Z', strtotime($this->start_time)) . '/' . gmdate('Ymd\THis\Z', strtotime($this->end_time)),
                     'text'     => $bookingTitle,
@@ -999,7 +999,7 @@ class Booking extends Model
                 'icon'  => $assetsUrl . 'images/g-icon.svg'
             ],
             'outlook'  => [
-                'title' => __('Outlook', 'fluent-booking-pro'),
+                'title' => __('Outlook', 'fluent-booking'),
                 'url'   => add_query_arg([
                     'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
                     'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
@@ -1012,7 +1012,7 @@ class Booking extends Model
                 'icon'  => $assetsUrl . 'images/ol-icon.svg'
             ],
             'msoffice' => [
-                'title' => __('Microsoft Office', 'fluent-booking-pro'),
+                'title' => __('Microsoft Office', 'fluent-booking'),
                 'url'   => add_query_arg([
                     'startdt'  => gmdate('Ymd\THis\Z', strtotime($this->start_time)),
                     'enddt'    => gmdate('Ymd\THis\Z', strtotime($this->end_time)),
@@ -1025,7 +1025,7 @@ class Booking extends Model
                 'icon'  => $assetsUrl . 'images/msoffice.svg'
             ],
             'other'    => [
-                'title' => __('Other Calendar', 'fluent-booking-pro'),
+                'title' => __('Other Calendar', 'fluent-booking'),
                 'url'   => $this->getIcsDownloadUrl(),
                 'icon'  => $assetsUrl . 'images/ics.svg'
             ]
