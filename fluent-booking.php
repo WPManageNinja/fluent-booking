@@ -11,6 +11,8 @@ Text Domain: fluent-booking
 Domain Path: /language
 */
 
+define('FLUENT_BOOKING_LITE', true);
+
 if (defined('FLUENT_BOOKING_VERSION')) {
     return;
 }
@@ -25,4 +27,3 @@ require __DIR__ . '/vendor/autoload.php';
 call_user_func(function ($bootstrap) {
     $bootstrap(__FILE__);
 }, require(__DIR__ . '/boot/app.php'));
-
