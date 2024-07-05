@@ -98,7 +98,7 @@ class CalendarController extends Controller
 
         $rules = [
             'author_timezone'                            => 'required',
-            'slot.duration'                              => 'required|int',
+            'slot.duration'                              => 'required|numeric|min:5',
             'slot.event_type'                            => 'required',
             'slot.availability_type'                     => 'required',
             'slot.schedule_type'                         => 'required',
@@ -444,7 +444,7 @@ class CalendarController extends Controller
 
         $rules = [
             'title'                                 => 'required',
-            'duration'                              => 'required|int',
+            'duration'                              => 'required|numeric|min:5',
             'status'                                => 'required',
             'event_type'                            => 'required',
             'location_settings.*.type'              => 'required',
