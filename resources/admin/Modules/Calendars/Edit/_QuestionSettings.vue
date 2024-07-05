@@ -88,6 +88,18 @@
                 @updateFieldData="updateFieldData"
             />
         </div>
+        <el-dialog
+            v-model="buyModal"
+            :title="$t('Upgrade to Pro')"
+            class="fcal_dialog pro_dialog"
+            :close-on-click-modal="false">
+            <div>
+                <p class="fcal_need_pro">{{ $t('UnlockWithPro') + ' ' + $t('NeedProVersion')}}</p>
+                <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_primary_btn">
+                    {{$t('Upgrade to Pro')}}
+                </a>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -115,6 +127,7 @@ export default {
             field: '',
             fields : [],
             showModal: false,
+            buyModal: false,
             otherFieldNames: ['cancellation_reason', 'rescheduling_reason']
         }
     },
@@ -128,7 +141,11 @@ export default {
     },
     methods: {
         addQuestion() {
-            this.showModal = true;
+            if (this.appVars.has_pro) {
+                this.showModal = true;
+            } else {
+                this.buyModal = true;
+            }
         },
         editField(field) {
             this.field = field;
