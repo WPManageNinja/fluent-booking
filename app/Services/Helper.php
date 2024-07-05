@@ -696,7 +696,7 @@ class Helper
 
     public static function getUpgradeUrl()
     {
-        return 'https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade';
+        return 'https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=fcal_upgrade';
     }
 
     public static function getNextBookingGroup()
