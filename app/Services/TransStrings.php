@@ -794,7 +794,7 @@ class TransStrings
             'Customize booking cancel and reschedule fields'                                   => __('Customize booking cancel and reschedule fields', 'fluent-booking'),
             'Please select the members you want to assign to this team'                        => __('Select the members you want to assign to this team', 'fluent-booking'),
             'NeedProVersion'                                                                   => __('is not available with the free version. Please upgrade to get all the advanced features.', 'fluent-booking'),
-            'UsingFreeVersion'                                                                 => __('You are using the free version of Fluent Booking.', 'fluent-booking'),
+            'UsingFreeVersion'                                                                 => __('This feature is available in FluentBooking Pro', 'fluent-booking'),
             'UpgradeToPro'                                                                     => __('Please upgrade to get all the advanced features.', 'fluent-booking'),
             'Search Events'                                                                    => __('Search Events', 'fluent-booking'),
             'Select Team Members'                                                              => __('Select Team Members', 'fluent-booking'),

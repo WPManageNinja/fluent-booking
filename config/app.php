@@ -8,7 +8,7 @@ return array(
     'name'           => 'Fluent Booking Pro',
     'slug'           => 'fluent-booking',
     'domain_path'    => '/language',
-    'text_domain'    => 'fluent-booking-pro',
+    'text_domain'    => 'fluent-booking',
     'hook_prefix'    => 'fluent-booking/',
     'rest_namespace' => defined('FCAL_API_NAMESPACE') ? FCAL_API_NAMESPACE : 'fluent-booking',
     'rest_version'   => 'v2',
