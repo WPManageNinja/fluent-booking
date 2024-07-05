@@ -1,7 +1,7 @@
 <template>
     <div class="fcal_pro_notice">
         <div>
-            <h3>{{$t('UsingFreeVersion')}}</h3>
+            <h3>{{$t('UnlockWithPro')}}</h3>
             <p>{{$t('UpgradeToPro')}}</p>
         </div>
         <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_danger_btn">
@@ -15,4 +15,3 @@ export default {
     name: 'ProNotice'
 };
 </script>
-  
