@@ -38,7 +38,7 @@
             </div>
         </div>
         <div style="height: 250px;width: 100%;text-align: center;display: flex;align-items: center;justify-content: center;flex-basis: max-content;flex-direction: column;" class="fcal_team_loading">
-        <h3><?php esc_html_e('Loading....', 'fluent-booking-pro'); ?></h3>
+        <h3><?php esc_html_e('Loading....', 'fluent-booking'); ?></h3>
         <i class="fcal-inline-spinner"></i>
         <style>
             @keyframes fcal-inline-spinner-kf {

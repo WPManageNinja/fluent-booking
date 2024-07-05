@@ -352,11 +352,11 @@ class CalendarSlot extends Model
         }
 
         if ($this->isMultiDurationEnabled()) {
-            return __('Choose your duration and book a meeting with me', 'fluent-booking-pro');
+            return __('Choose your duration and book a meeting with me', 'fluent-booking');
         }
 
         // translators: %d is the duration of the meeting in minutes
-        return sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking-pro'), $this->duration);
+        return sprintf(__('Book a meeting with me for %d minutes', 'fluent-booking'), $this->duration);
     }
 
     public function getSlotInterval($duration = null)
@@ -551,44 +551,44 @@ class CalendarSlot extends Model
     {
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
-                'label'   => __('Conferencing', 'fluent-booking-pro'),
+                'label'   => __('Conferencing', 'fluent-booking'),
                 'options' => [],
             ],
             'in_person'    => [
-                'label'   => __('In Person', 'fluent-booking-pro'),
+                'label'   => __('In Person', 'fluent-booking'),
                 'options' => [
                     'in_person_guest'     => [
-                        'title' => __('In Person (Attendee Address)', 'fluent-booking-pro'),
+                        'title' => __('In Person (Attendee Address)', 'fluent-booking'),
                     ],
                     'in_person_organizer' => [
-                        'title' => __('In Person (Organizer Address)', 'fluent-booking-pro'),
+                        'title' => __('In Person (Organizer Address)', 'fluent-booking'),
                     ],
                 ],
             ],
             'phone'        => [
-                'label'   => __('Phone', 'fluent-booking-pro'),
+                'label'   => __('Phone', 'fluent-booking'),
                 'options' => [
                     'phone_guest'     => [
-                        'title' => __('Attendee Phone Number', 'fluent-booking-pro'),
+                        'title' => __('Attendee Phone Number', 'fluent-booking'),
                     ],
                     'phone_organizer' => [
-                        'title' => __('Organizer Phone Number', 'fluent-booking-pro'),
+                        'title' => __('Organizer Phone Number', 'fluent-booking'),
                     ],
                 ],
             ],
             'online'       => [
-                'label'   => __('Online', 'fluent-booking-pro'),
+                'label'   => __('Online', 'fluent-booking'),
                 'options' => [
                     'online_meeting' => [
-                        'title' => __('Online Meeting', 'fluent-booking-pro'),
+                        'title' => __('Online Meeting', 'fluent-booking'),
                     ],
                 ],
             ],
             'other'        => [
-                'label'   => __('Other', 'fluent-booking-pro'),
+                'label'   => __('Other', 'fluent-booking'),
                 'options' => [
                     'custom' => [
-                        'title' => __('Custom', 'fluent-booking-pro'),
+                        'title' => __('Custom', 'fluent-booking'),
                     ],
                 ],
             ],
@@ -870,14 +870,14 @@ class CalendarSlot extends Model
             'driver'                => 'native',
             'items'                 => [
                 [
-                    'title' => __('Booking Fee', 'fluent-booking-pro'),
+                    'title' => __('Booking Fee', 'fluent-booking'),
                     'value' => 100
                 ]
             ],
             'woo_product_id'        => '',
             'multi_payment_items'   => [
                 $duration => [
-                    'title' => __('Booking Fee', 'fluent-booking-pro'),
+                    'title' => __('Booking Fee', 'fluent-booking'),
                     'value' => 0
                 ]
             ],

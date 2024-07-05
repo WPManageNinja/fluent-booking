@@ -35,8 +35,8 @@ class AdminMenuHandler
         }
 
         add_menu_page(
-            __('Fluent Booking', 'fluent-booking-pro'),
-            __('Fluent Booking', 'fluent-booking-pro'),
+            __('Fluent Booking', 'fluent-booking'),
+            __('Fluent Booking', 'fluent-booking'),
             $capability,
             'fluent-booking',
             [$this, 'render'],
@@ -46,8 +46,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Dashboard', 'fluent-booking-pro'),
-            __('Dashboard', 'fluent-booking-pro'),
+            __('Dashboard', 'fluent-booking'),
+            __('Dashboard', 'fluent-booking'),
             $capability,
             'fluent-booking',
             [$this, 'render']
@@ -55,8 +55,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Calendars', 'fluent-booking-pro'),
-            __('Calendars', 'fluent-booking-pro'),
+            __('Calendars', 'fluent-booking'),
+            __('Calendars', 'fluent-booking'),
             $capability,
             'fluent-booking#/calendars',
             [$this, 'render']
@@ -64,8 +64,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Bookings', 'fluent-booking-pro'),
-            __('Bookings', 'fluent-booking-pro'),
+            __('Bookings', 'fluent-booking'),
+            __('Bookings', 'fluent-booking'),
             $capability,
             'fluent-booking#/scheduled-events',
             [$this, 'render']
@@ -73,8 +73,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Availability', 'fluent-booking-pro'),
-            __('Availability', 'fluent-booking-pro'),
+            __('Availability', 'fluent-booking'),
+            __('Availability', 'fluent-booking'),
             $capability,
             'fluent-booking#/availability',
             [$this, 'render']
@@ -82,8 +82,8 @@ class AdminMenuHandler
 
         add_submenu_page(
             'fluent-booking',
-            __('Settings', 'fluent-booking-pro'),
-            __('Settings', 'fluent-booking-pro'),
+            __('Settings', 'fluent-booking'),
+            __('Settings', 'fluent-booking'),
             'manage_options',
             'fluent-booking#/settings/general-settings',
             [$this, 'render']
@@ -113,22 +113,22 @@ class AdminMenuHandler
         $menuItems = [
             [
                 'key'       => 'dashboard',
-                'label'     => $isNew ? __('Getting Started', 'fluent-booking-pro') : __('Dashboard', 'fluent-booking-pro'),
+                'label'     => $isNew ? __('Getting Started', 'fluent-booking') : __('Dashboard', 'fluent-booking'),
                 'permalink' => $baseUrl
             ],
             [
                 'key'       => 'calendars',
-                'label'     => __('Calendars', 'fluent-booking-pro'),
+                'label'     => __('Calendars', 'fluent-booking'),
                 'permalink' => $baseUrl . 'calendars'
             ],
             [
                 'key'       => 'scheduled-events',
-                'label'     => __('Bookings', 'fluent-booking-pro'),
+                'label'     => __('Bookings', 'fluent-booking'),
                 'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
             ],
             [
                 'key'       => 'availability',
-                'label'     => __('Availability', 'fluent-booking-pro'),
+                'label'     => __('Availability', 'fluent-booking'),
                 'permalink' => $baseUrl . 'availability'
             ]
         ];
@@ -136,7 +136,7 @@ class AdminMenuHandler
         if (current_user_can('manage_options')) {
             $menuItems[] = [
                 'key'       => 'settings',
-                'label'     => __('Settings', 'fluent-booking-pro'),
+                'label'     => __('Settings', 'fluent-booking'),
                 'permalink' => $baseUrl . 'settings/general-settings'
             ];
         }
@@ -157,7 +157,7 @@ class AdminMenuHandler
         add_filter('admin_footer_text', function ($content) {
             $url = 'https://fluentbooking.com/';
             /* translators: %s: URL of the FluentBooking website */
-            return sprintf(wp_kses(__('Thank you for using <a href="%s">FluentBooking</a>.', 'fluent-booking-pro'), array('a' => array('href' => array()))), esc_url($url)) . '<span title="based on your WP timezone settings" style="margin-left: 10px;" data-timestamp="' . current_time('timestamp') . '" id="fcal_server_timestamp"></span>';
+            return sprintf(wp_kses(__('Thank you for using <a href="%s">FluentBooking</a>.', 'fluent-booking'), array('a' => array('href' => array()))), esc_url($url)) . '<span title="based on your WP timezone settings" style="margin-left: 10px;" data-timestamp="' . current_time('timestamp') . '" id="fcal_server_timestamp"></span>';
         });
 
         add_filter('update_footer', function ($text) {
@@ -364,7 +364,7 @@ class AdminMenuHandler
 
         return apply_filters('fluent_booking/settings_menu_items', [
             'general_settings' => [
-                'title'          => __('General Settings', 'fluent-booking-pro'),
+                'title'          => __('General Settings', 'fluent-booking'),
                 'disable'        => false,
                 'el_icon'        => 'Operation',
                 'component_type' => 'StandAloneComponent',
@@ -373,7 +373,7 @@ class AdminMenuHandler
                 ]
             ],
             'team_members' => [
-                'title'          => __('Team', 'fluent-booking-pro'),
+                'title'          => __('Team', 'fluent-booking'),
                 'disable'        => true,
                 'el_icon'        => 'TeamIcon',
                 'component_type' => 'StandAloneComponent',
@@ -382,7 +382,7 @@ class AdminMenuHandler
                 ]
             ],
             'google'       => [
-                'title'          => __('Google Calendar / Meet', 'fluent-booking-pro'),
+                'title'          => __('Google Calendar / Meet', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/gg-calendar.svg',
                 'component_type' => 'StandAloneComponent',
@@ -391,7 +391,7 @@ class AdminMenuHandler
                 ]
             ],
             'outlook'      => [
-                'title'          => __('Outlook Calendar / MS Teams', 'fluent-booking-pro'),
+                'title'          => __('Outlook Calendar / MS Teams', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/ol-icon-color.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -403,7 +403,7 @@ class AdminMenuHandler
                 ]
             ],
             'apple_calendar' => [
-                'title'          => __('Apple Calendar', 'fluent-booking-pro'),
+                'title'          => __('Apple Calendar', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/a-cal.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -415,7 +415,7 @@ class AdminMenuHandler
                 ]
             ],
             'next_cloud_calendar' => [
-                'title'          => __('Nextcloud Calendar', 'fluent-booking-pro'),
+                'title'          => __('Nextcloud Calendar', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/Ncloud.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -427,7 +427,7 @@ class AdminMenuHandler
                 ]
             ],
             'zoom_meeting' => [
-                'title'          => __('Zoom', 'fluent-booking-pro'),
+                'title'          => __('Zoom', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/zoom.svg',
                 'component_type' => 'StandAloneComponent',
@@ -436,7 +436,7 @@ class AdminMenuHandler
                 ]
             ],
             'twilio'              => [
-                'title'          => __('SMS by Twilio', 'fluent-booking-pro'),
+                'title'          => __('SMS by Twilio', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/tw.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -448,7 +448,7 @@ class AdminMenuHandler
                 ]
             ],
             'stripe'              => [
-                'title'          => __('Stripe', 'fluent-booking-pro'),
+                'title'          => __('Stripe', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/payment-methods/stripe.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -460,7 +460,7 @@ class AdminMenuHandler
                 ]
             ],
             'paypal'             => [
-                'title'          => __('PayPal', 'fluent-booking-pro'),
+                'title'          => __('PayPal', 'fluent-booking'),
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/payment-methods/paypal.svg',
                 'component_type' => 'GlobalSettingsComponent',
@@ -472,7 +472,7 @@ class AdminMenuHandler
                 ]
             ],
             'license'          => [
-                'title'          => __('License', 'fluent-booking-pro'),
+                'title'          => __('License', 'fluent-booking'),
                 'disable'        => true,
                 'el_icon'        => 'Lock',
                 'component_type' => 'StandAloneComponent',
@@ -497,7 +497,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Event Details', 'fluent-booking-pro'),
+                'label'   => __('Event Details', 'fluent-booking'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V5" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 13H15" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 17H12" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 3.5C19.33 3.68 21 4.95 21 9.65V15.83C21 19.95 20 22.01 15 22.01H9C4 22.01 3 19.95 3 15.83V9.65C3 4.95 4.67 3.69 8 3.5H16Z" stroke="#1B2533" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
             'assignment'            => [
@@ -511,7 +511,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Assignment', 'fluent-booking-pro'),
+                'label'   => __('Assignment', 'fluent-booking'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-[16px] w-[16px] stroke-[2px] ltr:mr-2 rtl:ml-2 md:mt-px" data-testid="icon-component"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>'
             ],
             'availability_settings' => [
@@ -525,7 +525,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Availability', 'fluent-booking-pro'),
+                'label'   => __('Availability', 'fluent-booking'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.66666 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3333 1.66699V4.16699" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.91666 7.5752H17.0833" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 7.08366V14.167C17.5 16.667 16.25 18.3337 13.3333 18.3337H6.66667C3.75 18.3337 2.5 16.667 2.5 14.167V7.08366C2.5 4.58366 3.75 2.91699 6.66667 2.91699H13.3333C16.25 2.91699 17.5 4.58366 17.5 7.08366Z" stroke="#445164" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0789 11.4167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0789 13.9167H13.0864" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.99623 11.4167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.99623 13.9167H10.0037" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.91194 11.4167H6.91942" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.91194 13.9167H6.91942" stroke="#445164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
             'limit_settings'        => [
@@ -539,7 +539,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'  => __('Limits', 'fluent-booking-pro'),
+                'label'  => __('Limits', 'fluent-booking'),
                 'elIcon' => 'Clock'
             ],
             'question_settings'     => [
@@ -553,7 +553,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Question Settings', 'fluent-booking-pro'),
+                'label'   => __('Question Settings', 'fluent-booking'),
                 'svgIcon' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13.8714V13.6441C12 12.908 12.5061 12.5182 13.0121 12.2043C13.5061 11.9012 14 11.5115 14 10.797C14 9.8011 13.1085 9 12 9C10.8915 9 10 9.8011 10 10.797" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.9945 16.4587H12.0053" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 3.5C19.33 3.67504 21 4.91005 21 9.48055V15.4903C21 19.4968 20 21.5 15 21.5H9C4 21.5 3 19.4968 3 15.4903V9.48055C3 4.91005 4.67 3.68476 8 3.5H16Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
             'email_notification'    => [
@@ -567,7 +567,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Email Notification', 'fluent-booking-pro'),
+                'label'   => __('Email Notification', 'fluent-booking'),
                 'elIcon'  => 'Message'
             ],
             'sms_notification' => [
@@ -581,7 +581,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('SMS Notification', 'fluent-booking-pro'),
+                'label'   => __('SMS Notification', 'fluent-booking'),
                 'elIcon'  => 'Notification'
             ],
             'advanced_settings' => [
@@ -595,7 +595,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Advanced Settings', 'fluent-booking-pro'),
+                'label'   => __('Advanced Settings', 'fluent-booking'),
                 'elIcon'  => 'Operation'
             ],
             'payment_settings' => [
@@ -609,7 +609,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Payment Settings', 'fluent-booking-pro'),
+                'label'   => __('Payment Settings', 'fluent-booking'),
                 'elIcon'  => 'Money'
             ],
             'webhook_settings' => [
@@ -623,7 +623,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Webhooks Feeds', 'fluent-booking-pro'),
+                'label'   => __('Webhooks Feeds', 'fluent-booking'),
                 'elIcon'  => 'Link'
             ],
             'integrations' => [
@@ -637,7 +637,7 @@ class AdminMenuHandler
                         'event_id'    => $event->id
                     ]
                 ],
-                'label'   => __('Integrations', 'fluent-booking-pro'),
+                'label'   => __('Integrations', 'fluent-booking'),
                 'elIcon'  => 'Connection'
             ]
         ], $event);
@@ -656,7 +656,7 @@ class AdminMenuHandler
                         'calendar_id' => $calendar->id
                     ]
                 ],
-                'label'   => __('Calendar Settings', 'fluent-booking-pro'),
+                'label'   => __('Calendar Settings', 'fluent-booking'),
                 'svgIcon' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12.8799V11.1199C2 10.0799 2.85 9.21994 3.9 9.21994C5.71 9.21994 6.45 7.93994 5.54 6.36994C5.02 5.46994 5.33 4.29994 6.24 3.77994L7.97 2.78994C8.76 2.31994 9.78 2.59994 10.25 3.38994L10.36 3.57994C11.26 5.14994 12.74 5.14994 13.65 3.57994L13.76 3.38994C14.23 2.59994 15.25 2.31994 16.04 2.78994L17.77 3.77994C18.68 4.29994 18.99 5.46994 18.47 6.36994C17.56 7.93994 18.3 9.21994 20.11 9.21994C21.15 9.21994 22.01 10.0699 22.01 11.1199V12.8799C22.01 13.9199 21.16 14.7799 20.11 14.7799C18.3 14.7799 17.56 16.0599 18.47 17.6299C18.99 18.5399 18.68 19.6999 17.77 20.2199L16.04 21.2099C15.25 21.6799 14.23 21.3999 13.76 20.6099L13.65 20.4199C12.75 18.8499 11.27 18.8499 10.36 20.4199L10.25 20.6099C9.78 21.3999 8.76 21.6799 7.97 21.2099L6.24 20.2199C5.33 19.6999 5.02 18.5299 5.54 17.6299C6.45 16.0599 5.71 14.7799 3.9 14.7799C2.85 14.7799 2 13.9199 2 12.8799Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             ],
             'remote_calendars' => [
@@ -669,7 +669,7 @@ class AdminMenuHandler
                         'calendar_id' => $calendar->id
                     ]
                 ],
-                'label'   => __('Remote Calendars', 'fluent-booking-pro'),
+                'label'   => __('Remote Calendars', 'fluent-booking'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-[16px] w-[16px] stroke-[2px] ltr:mr-2 rtl:ml-2 md:mt-0" data-testid="icon-component"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>'
             ],
             'zoom_meeting' => [
@@ -682,7 +682,7 @@ class AdminMenuHandler
                         'calendar_id' => $calendar->id
                     ]
                 ],
-                'label'   => __('Zoom Integration', 'fluent-booking-pro'),
+                'label'   => __('Zoom Integration', 'fluent-booking'),
                 'svgIcon' => '<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><circle cx="24" cy="24" r="20" fill="#2196f3"/><path fill="#fff" d="M29,31H14c-1.657,0-3-1.343-3-3V17h15c1.657,0,3,1.343,3,3V31z"/><polygon fill="#fff" points="37,31 31,27 31,21 37,17"/></svg>'
             ]
         ], $calendar);

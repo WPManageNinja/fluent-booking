@@ -67,7 +67,7 @@ class CalendarIntegrationController extends Controller
             $integrationService->delete($id);
 
             return $this->sendSuccess([
-                'message' => __('Successfully deleted the Integration.', 'fluent-booking-pro'),
+                'message' => __('Successfully deleted the Integration.', 'fluent-booking'),
             ]);
         } catch (Exception $e) {
             return $this->sendError([

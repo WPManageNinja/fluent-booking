@@ -59,7 +59,7 @@ class FrontEndHandler
 
                 if (Arr::isTrue($rescheduleField, 'required')) {
                     $rules['rescheduling_reason'] = 'required';
-                    $messages['rescheduling_reason.required'] = __('Please provide a rescheduling reason', 'fluent-booking-pro');
+                    $messages['rescheduling_reason.required'] = __('Please provide a rescheduling reason', 'fluent-booking');
                 }
 
                 return [
@@ -74,7 +74,7 @@ class FrontEndHandler
 
                 if (!$existingBooking) {
                     wp_send_json([
-                        'message' => __('Invalid rescheduling request', 'fluent-booking-pro')
+                        'message' => __('Invalid rescheduling request', 'fluent-booking')
                     ], 422);
                 }
 
@@ -93,7 +93,7 @@ class FrontEndHandler
 
                 if ($bookingData['start_time'] == $existingBooking->start_time) {
                     wp_send_json([
-                        'message' => __('Sorry! you can not reschedule to the same time.', 'fluent-booking-pro')
+                        'message' => __('Sorry! you can not reschedule to the same time.', 'fluent-booking')
                     ], 422);
                 }
 
@@ -133,15 +133,15 @@ class FrontEndHandler
                     'booking_id'  => $existingBooking->id,
                     'type'        => 'info',
                     'status'      => 'closed',
-                    'title'       => __('Meeting Rescheduled', 'fluent-booking-pro'),
+                    'title'       => __('Meeting Rescheduled', 'fluent-booking'),
                     /* translators: %1$s is the user who rescheduled the meeting, %2$s is the previous date and time in UTC. */
-                    'description' => sprintf(__('Meeting has been rescheduled by %1$s from Web UI. Previous date time: %2$s (UTC)', 'fluent-booking-pro'), $rescheduleBy, $previousBooking->start_time)
+                    'description' => sprintf(__('Meeting has been rescheduled by %1$s from Web UI. Previous date time: %2$s (UTC)', 'fluent-booking'), $rescheduleBy, $previousBooking->start_time)
                 ]);
 
                 do_action('fluent_booking/after_booking_rescheduled', $existingBooking, $previousBooking, $calendarEvent);
 
                 add_filter('fluent_booking/schedule_receipt_data', function ($data) {
-                    $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking-pro');
+                    $data['title'] = __('Your meeting has been rescheduled', 'fluent-booking');
                     return $data;
                 });
 
@@ -150,7 +150,7 @@ class FrontEndHandler
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
                 wp_send_json([
-                    'message'       => __('Booking has been rescheduled', 'fluent-booking-pro'),
+                    'message'       => __('Booking has been rescheduled', 'fluent-booking'),
                     'redirect_url'  => $redirectUrl,
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
@@ -179,7 +179,7 @@ class FrontEndHandler
 
         $calendar = $calendarEvent->calendar;
         if (!$calendar) {
-            return __('Calendar not found', 'fluent-booking-pro');
+            return __('Calendar not found', 'fluent-booking');
         }
 
         $assetUrl = App::getInstance('url.assets');
@@ -281,7 +281,7 @@ class FrontEndHandler
                 'events'   => $calendar->activeEvents
             ]);
 
-            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>' . __('Back to team', 'fluent-booking-pro') . '</span></div>';
+            $hostHtml .= '<div onclick="fcalBackToTeam(this)" class="fcal_back_btn_team"><svg height="20px" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "></polygon></svg> <span>' . __('Back to team', 'fluent-booking') . '</span></div>';
 
             $eventCount = count($calendar->activeEvents);
 
@@ -424,12 +424,12 @@ class FrontEndHandler
     public function handleBookingListsShortcode($atts, $content)
     {
         $atts = shortcode_atts([
-            'title'        => __('My Bookings', 'fluent-booking-pro'),
+            'title'        => __('My Bookings', 'fluent-booking'),
             'filter'       => 'show',
             'pagination'   => 'show',
             'period'       => 'all',
             'calendar_ids' => 'all',
-            'no_bookings'  => __('No bookings found', 'fluent-booking-pro'),
+            'no_bookings'  => __('No bookings found', 'fluent-booking'),
             'per_page'     => 10
         ], $atts);
         
@@ -443,7 +443,7 @@ class FrontEndHandler
         $userEmail = $userData ? $userData->user_email : null;
         
         if (!$userEmail) {
-            return __('Please login to view your bookings', 'fluent-booking-pro');
+            return __('Please login to view your bookings', 'fluent-booking');
         }
         
         $data = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -510,7 +510,7 @@ class FrontEndHandler
     public function handleReceiptShortcode($atts, $content)
     {
         if (!isset($_REQUEST['hash'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            return __('Booking hash is missing!', 'fluent-booking-pro');
+            return __('Booking hash is missing!', 'fluent-booking');
         }
 
         $hash = sanitize_text_field($_REQUEST['hash']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -587,99 +587,99 @@ class FrontEndHandler
             'current_person' => $currentPerson,
             'start_day'      => $startDay,
             'i18'            => [
-                'Timezone'                      => __('Timezone', 'fluent-booking-pro'),
-                'Minutes'                       => __('Minutes', 'fluent-booking-pro'),
-                'Enter Details'                 => __('Enter Details', 'fluent-booking-pro'),
-                'Summary'                       => __('Summary', 'fluent-booking-pro'),
-                'Payment Details'               => __('Payment Details', 'fluent-booking-pro'),
-                'Total Payment'                 => __('Total Payment', 'fluent-booking-pro'),
-                'Payment Method'                => __('Payment Method', 'fluent-booking-pro'),
-                'Pay Now'                       => __('Pay Now', 'fluent-booking-pro'),
-                'processing'                    => __('Processing', 'fluent-booking-pro'),
+                'Timezone'                      => __('Timezone', 'fluent-booking'),
+                'Minutes'                       => __('Minutes', 'fluent-booking'),
+                'Enter Details'                 => __('Enter Details', 'fluent-booking'),
+                'Summary'                       => __('Summary', 'fluent-booking'),
+                'Payment Details'               => __('Payment Details', 'fluent-booking'),
+                'Total Payment'                 => __('Total Payment', 'fluent-booking'),
+                'Payment Method'                => __('Payment Method', 'fluent-booking'),
+                'Pay Now'                       => __('Pay Now', 'fluent-booking'),
+                'processing'                    => __('Processing', 'fluent-booking'),
                 'date_time_config'              => [
                     'weekdays'      => array(
-                        'sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking-pro'),
-                        'monday'    => _x('Monday', 'calendar day full', 'fluent-booking-pro'),
-                        'tuesday'   => _x('Tuesday', 'calendar day full', 'fluent-booking-pro'),
-                        'wednesday' => _x('Wednesday', 'calendar day full', 'fluent-booking-pro'),
-                        'thursday'  => _x('Thursday', 'calendar day full', 'fluent-booking-pro'),
-                        'friday'    => _x('Friday', 'calendar day full', 'fluent-booking-pro'),
-                        'saturday'  => _x('Saturday', 'calendar day full', 'fluent-booking-pro'),
+                        'sunday'    => _x('Sunday', 'calendar day full', 'fluent-booking'),
+                        'monday'    => _x('Monday', 'calendar day full', 'fluent-booking'),
+                        'tuesday'   => _x('Tuesday', 'calendar day full', 'fluent-booking'),
+                        'wednesday' => _x('Wednesday', 'calendar day full', 'fluent-booking'),
+                        'thursday'  => _x('Thursday', 'calendar day full', 'fluent-booking'),
+                        'friday'    => _x('Friday', 'calendar day full', 'fluent-booking'),
+                        'saturday'  => _x('Saturday', 'calendar day full', 'fluent-booking'),
                     ),
                     'months'        => array(
-                        'January'   => _x('January', 'calendar month name full', 'fluent-booking-pro'),
-                        'February'  => _x('February', 'calendar month name full', 'fluent-booking-pro'),
-                        'March'     => _x('March', 'calendar month name full', 'fluent-booking-pro'),
-                        'April'     => _x('April', 'calendar month name full', 'fluent-booking-pro'),
-                        'May'       => _x('May', 'calendar month name full', 'fluent-booking-pro'),
-                        'June'      => _x('June', 'calendar month name full', 'fluent-booking-pro'),
-                        'July'      => _x('July', 'calendar month name full', 'fluent-booking-pro'),
-                        'August'    => _x('August', 'calendar month name full', 'fluent-booking-pro'),
-                        'September' => _x('September', 'calendar month name full', 'fluent-booking-pro'),
-                        'October'   => _x('October', 'calendar month name full', 'fluent-booking-pro'),
-                        'November'  => _x('November', 'calendar month name full', 'fluent-booking-pro'),
-                        'December'  => _x('December', 'calendar month name full', 'fluent-booking-pro')
+                        'January'   => _x('January', 'calendar month name full', 'fluent-booking'),
+                        'February'  => _x('February', 'calendar month name full', 'fluent-booking'),
+                        'March'     => _x('March', 'calendar month name full', 'fluent-booking'),
+                        'April'     => _x('April', 'calendar month name full', 'fluent-booking'),
+                        'May'       => _x('May', 'calendar month name full', 'fluent-booking'),
+                        'June'      => _x('June', 'calendar month name full', 'fluent-booking'),
+                        'July'      => _x('July', 'calendar month name full', 'fluent-booking'),
+                        'August'    => _x('August', 'calendar month name full', 'fluent-booking'),
+                        'September' => _x('September', 'calendar month name full', 'fluent-booking'),
+                        'October'   => _x('October', 'calendar month name full', 'fluent-booking'),
+                        'November'  => _x('November', 'calendar month name full', 'fluent-booking'),
+                        'December'  => _x('December', 'calendar month name full', 'fluent-booking')
                     ),
                     'weekdaysShort' => array(
-                        'sun' => _x('Sun', 'calendar day short', 'fluent-booking-pro'),
-                        'mon' => _x('Mon', 'calendar day short', 'fluent-booking-pro'),
-                        'tue' => _x('Tue', 'calendar day short', 'fluent-booking-pro'),
-                        'wed' => _x('Wed', 'calendar day short', 'fluent-booking-pro'),
-                        'thu' => _x('Thu', 'calendar day short', 'fluent-booking-pro'),
-                        'fri' => _x('Fri', 'calendar day short', 'fluent-booking-pro'),
-                        'sat' => _x('Sat', 'calendar day short', 'fluent-booking-pro')
+                        'sun' => _x('Sun', 'calendar day short', 'fluent-booking'),
+                        'mon' => _x('Mon', 'calendar day short', 'fluent-booking'),
+                        'tue' => _x('Tue', 'calendar day short', 'fluent-booking'),
+                        'wed' => _x('Wed', 'calendar day short', 'fluent-booking'),
+                        'thu' => _x('Thu', 'calendar day short', 'fluent-booking'),
+                        'fri' => _x('Fri', 'calendar day short', 'fluent-booking'),
+                        'sat' => _x('Sat', 'calendar day short', 'fluent-booking')
                     ),
                     'monthsShort'   => array(
-                        'jan' => _x('Jan', 'calendar month name short', 'fluent-booking-pro'),
-                        'feb' => _x('Feb', 'calendar month name short', 'fluent-booking-pro'),
-                        'mar' => _x('Mar', 'calendar month name short', 'fluent-booking-pro'),
-                        'apr' => _x('Apr', 'calendar month name short', 'fluent-booking-pro'),
-                        'may' => _x('May', 'calendar month name short', 'fluent-booking-pro'),
-                        'jun' => _x('Jun', 'calendar month name short', 'fluent-booking-pro'),
-                        'jul' => _x('Jul', 'calendar month name short', 'fluent-booking-pro'),
-                        'aug' => _x('Aug', 'calendar month name short', 'fluent-booking-pro'),
-                        'sep' => _x('Sep', 'calendar month name short', 'fluent-booking-pro'),
-                        'oct' => _x('Oct', 'calendar month name short', 'fluent-booking-pro'),
-                        'nov' => _x('Nov', 'calendar month name short', 'fluent-booking-pro'),
-                        'dec' => _x('Dec', 'calendar month name short', 'fluent-booking-pro')
+                        'jan' => _x('Jan', 'calendar month name short', 'fluent-booking'),
+                        'feb' => _x('Feb', 'calendar month name short', 'fluent-booking'),
+                        'mar' => _x('Mar', 'calendar month name short', 'fluent-booking'),
+                        'apr' => _x('Apr', 'calendar month name short', 'fluent-booking'),
+                        'may' => _x('May', 'calendar month name short', 'fluent-booking'),
+                        'jun' => _x('Jun', 'calendar month name short', 'fluent-booking'),
+                        'jul' => _x('Jul', 'calendar month name short', 'fluent-booking'),
+                        'aug' => _x('Aug', 'calendar month name short', 'fluent-booking'),
+                        'sep' => _x('Sep', 'calendar month name short', 'fluent-booking'),
+                        'oct' => _x('Oct', 'calendar month name short', 'fluent-booking'),
+                        'nov' => _x('Nov', 'calendar month name short', 'fluent-booking'),
+                        'dec' => _x('Dec', 'calendar month name short', 'fluent-booking')
                     ),
-                    'numericSystem' => _x('0_1_2_3_4_5_6_7_8_9', 'calendar numeric system - Sequence must need to maintained', 'fluent-booking-pro'),
+                    'numericSystem' => _x('0_1_2_3_4_5_6_7_8_9', 'calendar numeric system - Sequence must need to maintained', 'fluent-booking'),
                 ],
-                'Country'                              => __('Country', 'fluent-booking-pro'),
-                '12h'                                  => _x('12h', 'date time format switch', 'fluent-booking-pro'),
-                '24h'                                  => _x('24h', 'date time format switch', 'fluent-booking-pro'),
-                'spots left'                           => _x('spots left', 'for how many spots left for available booking', 'fluent-booking-pro'),
-                'Next'                                 => _x('Next', 'Booking form spot selection', 'fluent-booking-pro'),
-                'Select on the Next Step'              => __('Select on the Next Step', 'fluent-booking-pro'),
-                'location options'                     => __('location options', 'fluent-booking-pro'),
-                'Your address'                         => __('Your address', 'fluent-booking-pro'),
-                'Organizer Phone Number'               => __('Organizer Phone Number', 'fluent-booking-pro'),
-                'In Person (Attendee Address)'         => __('In Person (Attendee Address)', 'fluent-booking-pro'),
-                'In Person (Organizer Address)'        => __('In Person (Organizer Address)', 'fluent-booking-pro'),
-                'Attendee Phone Number'                => __('Attendee Phone Number', 'fluent-booking-pro'),
-                'Google Meet'                          => __('Google Meet', 'fluent-booking-pro'),
-                'Zoom Meeting'                         => __('Zoom Meeting', 'fluent-booking-pro'),
-                'Online Meeting'                       => __('Online Meeting', 'fluent-booking-pro'),
-                'Phone Call'                           => __('Phone Call', 'fluent-booking-pro'),
-                'Processing...'                        => __('Processing...', 'fluent-booking-pro'),
-                'Loading Payment Processor...'         => __('Loading Payment Processor...', 'fluent-booking-pro'),
-                'PM'                                   => __('PM', 'fluent-booking-pro'),
-                'AM'                                   => __('AM', 'fluent-booking-pro'),
-                'Email'                                => __('Email', 'fluent-booking-pro'),
-                'Date'                                 => __('Date', 'fluent-booking-pro'),
-                'Time'                                 => __('Time', 'fluent-booking-pro'),
-                'Add guests'                           => __('Add guests', 'fluent-booking-pro'),
-                'Add another'                          => __('Add another', 'fluent-booking-pro'),
-                'This field is required.'              => __('This field is required.', 'fluent-booking-pro'),
-                'No availability in'                   => __('No availability in', 'fluent-booking-pro'),
-                'View next month'                      => __('View next month', 'fluent-booking-pro'),
-                'View previous month'                  => __('View previous month', 'fluent-booking-pro'),
-                'No_payment_method_description'        => __('No activated payment method found. If you are an admin please check the event payment settings', 'fluent-booking-pro'),
-                'Please fill up the required data'     => __('Please fill up the required data', 'fluent-booking-pro'),
-                'Please select a valid payment method' => __('Please select a valid payment method', 'fluent-booking-pro'),
-                'Please Select'                        => __('Please Select', 'fluent-booking-pro'),
-                'Something is wrong!'                  => __('Something is wrong!', 'fluent-booking-pro'),
-                'Requires Confirmation'                => __('Requires Confirmation', 'fluent-booking-pro'),
+                'Country'                              => __('Country', 'fluent-booking'),
+                '12h'                                  => _x('12h', 'date time format switch', 'fluent-booking'),
+                '24h'                                  => _x('24h', 'date time format switch', 'fluent-booking'),
+                'spots left'                           => _x('spots left', 'for how many spots left for available booking', 'fluent-booking'),
+                'Next'                                 => _x('Next', 'Booking form spot selection', 'fluent-booking'),
+                'Select on the Next Step'              => __('Select on the Next Step', 'fluent-booking'),
+                'location options'                     => __('location options', 'fluent-booking'),
+                'Your address'                         => __('Your address', 'fluent-booking'),
+                'Organizer Phone Number'               => __('Organizer Phone Number', 'fluent-booking'),
+                'In Person (Attendee Address)'         => __('In Person (Attendee Address)', 'fluent-booking'),
+                'In Person (Organizer Address)'        => __('In Person (Organizer Address)', 'fluent-booking'),
+                'Attendee Phone Number'                => __('Attendee Phone Number', 'fluent-booking'),
+                'Google Meet'                          => __('Google Meet', 'fluent-booking'),
+                'Zoom Meeting'                         => __('Zoom Meeting', 'fluent-booking'),
+                'Online Meeting'                       => __('Online Meeting', 'fluent-booking'),
+                'Phone Call'                           => __('Phone Call', 'fluent-booking'),
+                'Processing...'                        => __('Processing...', 'fluent-booking'),
+                'Loading Payment Processor...'         => __('Loading Payment Processor...', 'fluent-booking'),
+                'PM'                                   => __('PM', 'fluent-booking'),
+                'AM'                                   => __('AM', 'fluent-booking'),
+                'Email'                                => __('Email', 'fluent-booking'),
+                'Date'                                 => __('Date', 'fluent-booking'),
+                'Time'                                 => __('Time', 'fluent-booking'),
+                'Add guests'                           => __('Add guests', 'fluent-booking'),
+                'Add another'                          => __('Add another', 'fluent-booking'),
+                'This field is required.'              => __('This field is required.', 'fluent-booking'),
+                'No availability in'                   => __('No availability in', 'fluent-booking'),
+                'View next month'                      => __('View next month', 'fluent-booking'),
+                'View previous month'                  => __('View previous month', 'fluent-booking'),
+                'No_payment_method_description'        => __('No activated payment method found. If you are an admin please check the event payment settings', 'fluent-booking'),
+                'Please fill up the required data'     => __('Please fill up the required data', 'fluent-booking'),
+                'Please select a valid payment method' => __('Please select a valid payment method', 'fluent-booking'),
+                'Please Select'                        => __('Please Select', 'fluent-booking'),
+                'Something is wrong!'                  => __('Something is wrong!', 'fluent-booking'),
+                'Requires Confirmation'                => __('Requires Confirmation', 'fluent-booking'),
             ],
             'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
         ];
@@ -703,7 +703,7 @@ class FrontEndHandler
 
         if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ], 422);
         }
 
@@ -719,22 +719,22 @@ class FrontEndHandler
         ];
 
         $messages = [
-            'name.required'       => __('Please enter your name', 'fluent-booking-pro'),
-            'email.required'      => __('Please enter your email address', 'fluent-booking-pro'),
-            'email.email'         => __('Please enter provide a valid email address', 'fluent-booking-pro'),
-            'timezone.required'   => __('Please select timezone first', 'fluent-booking-pro'),
-            'start_date.required' => __('Please select a date and time', 'fluent-booking-pro')
+            'name.required'       => __('Please enter your name', 'fluent-booking'),
+            'email.required'      => __('Please enter your email address', 'fluent-booking'),
+            'email.email'         => __('Please enter provide a valid email address', 'fluent-booking'),
+            'timezone.required'   => __('Please select timezone first', 'fluent-booking'),
+            'start_date.required' => __('Please select a date and time', 'fluent-booking')
         ];
 
         if ($calendarEvent->isPhoneRequired()) {
             $rules['phone_number'] = 'required';
-            $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking-pro');
+            $messages['phone_number.required'] = __('Please provide your phone number', 'fluent-booking');
         } else if ($calendarEvent->isAddressRequired()) {
             $rules['address'] = 'required';
-            $messages['address.required'] = __('Please provide your Address', 'fluent-booking-pro');
+            $messages['address.required'] = __('Please provide your Address', 'fluent-booking');
         } else if ($calendarEvent->isLocationFieldRequired()) {
             $rules['location_config.driver'] = 'required';
-            $messages['location_config.driver'] = __('Please select location', 'fluent-booking-pro');
+            $messages['location_config.driver'] = __('Please select location', 'fluent-booking');
 
             $selectedLocation = LocationService::getLocationDetails($calendarEvent, Arr::get($postedData, 'location_config', []), $postedData);
             $selectedLocationDriver = Arr::get($selectedLocation, 'type');
@@ -742,9 +742,9 @@ class FrontEndHandler
             if (in_array($selectedLocationDriver, ['in_person_guest', 'phone_guest'])) {
                 $rules['location_config.user_location_input'] = 'required';
                 if ($selectedLocationDriver == 'in_person_guest') {
-                    $messages['location_config.user_location_input.required'] = __('Please provide your address', 'fluent-booking-pro');
+                    $messages['location_config.user_location_input.required'] = __('Please provide your address', 'fluent-booking');
                 } else {
-                    $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking-pro');
+                    $messages['location_config.user_location_input.required'] = __('Please provide your phone number', 'fluent-booking');
                 }
             }
         }
@@ -753,7 +753,7 @@ class FrontEndHandler
 
         if ($calendarEvent->isPaymentEnabled($duration)) {
             $rules['payment_method'] = 'required';
-            $messages['payment_method.required'] = __('Please select a valid payment method', 'fluent-booking-pro');
+            $messages['payment_method.required'] = __('Please select a valid payment method', 'fluent-booking');
         }
 
         if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
@@ -767,7 +767,7 @@ class FrontEndHandler
         foreach ($requiredFields as $field) {
             if (empty($rules[$field['name']])) {
                 $rules[$field['name']] = 'required';
-                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking-pro');
+                $messages[$field['name'] . '.required'] = __('This field is required', 'fluent-booking');
             }
         }
 
@@ -779,7 +779,7 @@ class FrontEndHandler
         $validator = $app->validator->make($postedData, $validationConfig['rules'], $validationConfig['messages']);
         if ($validator->validate()->fails()) {
             wp_send_json([
-                'message' => __('Please fill up the required data', 'fluent-booking-pro'),
+                'message' => __('Please fill up the required data', 'fluent-booking'),
                 'errors'  => $validator->errors()
             ], 422);
             return;
@@ -852,7 +852,7 @@ class FrontEndHandler
 
         if (!$isSpotAvailable) {
             wp_send_json([
-                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking-pro')
+                'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
             ], 422);
         }
 
@@ -881,7 +881,7 @@ class FrontEndHandler
         $html = BookingService::getBookingConfirmationHtml($booking);
 
         wp_send_json(apply_filters('fluent_booking/booking_confirmation_response', [
-            'message'       => __('Booking has been confirmed', 'fluent-booking-pro'),
+            'message'       => __('Booking has been confirmed', 'fluent-booking'),
             'redirect_url'  => $redirectUrl,
             'response_html' => $html,
             'booking_hash'  => $booking->hash
@@ -898,7 +898,7 @@ class FrontEndHandler
 
         if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking-pro')
+                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ], 422);
         }
 
@@ -976,9 +976,9 @@ class FrontEndHandler
             'author_profile'  => $author,
             'form_fields'     => $formFields,
             'i18n'            => [
-                'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking-pro'),
-                'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking-pro'),
-                'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking-pro'),
+                'Schedule_Meeting'     => __('Schedule Meeting', 'fluent-booking'),
+                'Continue_to_Payments' => __('Continue to Payments', 'fluent-booking'),
+                'Confirm_Payment'      => __('Confirm Payment', 'fluent-booking'),
             ],
             'date_formatter'  => DateTimeHelper::getDateFormatter(true),
             'isRtl'           => Helper::fluentbooking_is_rtl(),
@@ -1005,7 +1005,7 @@ class FrontEndHandler
 
         if (!$meeting) {
             wp_send_json([
-                'message' => __('Sorry! meeting could not be found', 'fluent-booking-pro')
+                'message' => __('Sorry! meeting could not be found', 'fluent-booking')
             ], 422);
         }
 
@@ -1021,7 +1021,7 @@ class FrontEndHandler
 
         if (!$message && Arr::isTrue($cancelField, 'required')) {
             wp_send_json([
-                'message' => __('Please provide a reason for cancellation', 'fluent-booking-pro')
+                'message' => __('Please provide a reason for cancellation', 'fluent-booking')
             ], 422);
         }
 
@@ -1040,7 +1040,7 @@ class FrontEndHandler
 
         if (wp_doing_ajax()) {
             wp_send_json([
-                'message' => __('Meeting has been cancelled', 'fluent-booking-pro')
+                'message' => __('Meeting has been cancelled', 'fluent-booking')
             ], 200);
         }
 

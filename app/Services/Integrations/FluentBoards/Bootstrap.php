@@ -23,7 +23,7 @@ class Bootstrap extends IntegrationManagerController
     public function __construct()
     {
         parent::__construct(
-            __('FluentBoards', 'fluent-booking-pro'),
+            __('FluentBoards', 'fluent-booking'),
             'fluentboards',
             'fluent_booking_fluentboards_configurations',
             'fluentboards_feeds',
@@ -32,7 +32,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->logo = App::getInstance('url.assets') . 'images/fluentboards.png';
 
-        $this->description = __('Connect FluentBoards with Fluent Booking and create tasks with booking fields.', 'fluent-booking-pro');
+        $this->description = __('Connect FluentBoards with Fluent Booking and create tasks with booking fields.', 'fluent-booking');
 
         $this->registerAdminHooks();
     }
@@ -40,13 +40,13 @@ class Bootstrap extends IntegrationManagerController
     public function pushIntegration($integrations, $calendarEventId)
     {
         $integrations[$this->integrationKey] = [
-            'title'                 => $this->title . ' ' . __('Integration', 'fluent-booking-pro'),
+            'title'                 => $this->title . ' ' . __('Integration', 'fluent-booking'),
             'logo'                  => $this->logo,
             'is_active'             => $this->isConfigured(),
-            'configure_title'       => __('Configuration required!', 'fluent-booking-pro'),
+            'configure_title'       => __('Configuration required!', 'fluent-booking'),
             'global_configure_url'  => '#',
-            'configure_message'     => __('FluentBoards is not configured yet! Please configure your FluentBoards api first', 'fluent-booking-pro'),
-            'configure_button_text' => __('Set FluentBoards', 'fluent-booking-pro'),
+            'configure_message'     => __('FluentBoards is not configured yet! Please configure your FluentBoards api first', 'fluent-booking'),
+            'configure_button_text' => __('Set FluentBoards', 'fluent-booking'),
         ];
 
         return $integrations;
@@ -88,14 +88,14 @@ class Bootstrap extends IntegrationManagerController
         $fields = [
             [
                 'key'         => 'name',
-                'label'       => __('Feed Name', 'fluent-booking-pro'),
+                'label'       => __('Feed Name', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Your Feed Name', 'fluent-booking-pro'),
+                'placeholder' => __('Your Feed Name', 'fluent-booking'),
                 'component'   => 'text',
             ],
             [
                 'key'            => 'board_config',
-                'label'          => __('Fluent Boards Configuration', 'fluent-booking-pro'),
+                'label'          => __('Fluent Boards Configuration', 'fluent-booking'),
                 'required'       => true,
                 'component'      => 'chained_select',
                 'primary_key'    => 'board_id',
@@ -108,75 +108,75 @@ class Bootstrap extends IntegrationManagerController
                 ],
                 'options_labels' => [
                     'board_id'       => [
-                        'label'       => __('Select Board', 'fluent-booking-pro'),
+                        'label'       => __('Select Board', 'fluent-booking'),
                         'type'        => 'select',
-                        'placeholder' => __('Select Board', 'fluent-booking-pro')
+                        'placeholder' => __('Select Board', 'fluent-booking')
                     ],
                     'stage_id'       => [
-                        'label'       => __('Select Stage', 'fluent-booking-pro'),
+                        'label'       => __('Select Stage', 'fluent-booking'),
                         'type'        => 'select',
-                        'placeholder' => __('Select Stage', 'fluent-booking-pro')
+                        'placeholder' => __('Select Stage', 'fluent-booking')
                     ],
                     'label_ids' => [
-                        'label'       => __('Select Labels', 'fluent-booking-pro'),
+                        'label'       => __('Select Labels', 'fluent-booking'),
                         'type'        => 'multi-select',
-                        'placeholder' => __('Select Labels', 'fluent-booking-pro')
+                        'placeholder' => __('Select Labels', 'fluent-booking')
                     ],
                     'member_ids'     => [
-                        'label'       => __('Select Assignees', 'fluent-booking-pro'),
+                        'label'       => __('Select Assignees', 'fluent-booking'),
                         'type'        => 'multi-select',
-                        'placeholder' => __('Select Assignees', 'fluent-booking-pro')
+                        'placeholder' => __('Select Assignees', 'fluent-booking')
                     ],
                     'priority'       => [
-                        'label'       => __('Select Priority', 'fluent-booking-pro'),
+                        'label'       => __('Select Priority', 'fluent-booking'),
                         'type'        => 'select',
-                        'placeholder' => __('Priority', 'fluent-booking-pro')
+                        'placeholder' => __('Priority', 'fluent-booking')
                     ]
                 ]
             ],
             [
                 'key'         => 'task_title',
-                'label'       => __('Task Title', 'fluent-booking-pro'),
+                'label'       => __('Task Title', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Task Title', 'fluent-booking-pro'),
+                'placeholder' => __('Task Title', 'fluent-booking'),
                 'component'   => 'value_text'
             ],
             [
                 'key'         => 'description',
-                'label'       => __('Description', 'fluent-booking-pro'),
+                'label'       => __('Description', 'fluent-booking'),
                 'required'    => false,
-                'placeholder' => __('Describe your task', 'fluent-booking-pro'),
+                'placeholder' => __('Describe your task', 'fluent-booking'),
                 'component'   => 'wp_editor',
             ],
             [
                 'key'         => 'author_name',
-                'label'       => __('Submitter Name', 'fluent-booking-pro'),
+                'label'       => __('Submitter Name', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Submitter Name', 'fluent-booking-pro'),
+                'placeholder' => __('Submitter Name', 'fluent-booking'),
                 'component'   => 'value_text'
             ],
             [
                 'key'         => 'email',
-                'label'       => __('Submitter Email', 'fluent-booking-pro'),
+                'label'       => __('Submitter Email', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Submitter Email', 'fluent-booking-pro'),
+                'placeholder' => __('Submitter Email', 'fluent-booking'),
                 'component'   => 'value_text'
             ],
             [
                 'key'       => 'due_at_days',
-                'label'     => __('Due Date', 'fluent-booking-pro'),
-                'tips'      => __('Days after booking scheduled, values less than zero will set due date to null.', 'fluent-booking-pro'),
+                'label'     => __('Due Date', 'fluent-booking'),
+                'tips'      => __('Days after booking scheduled, values less than zero will set due date to null.', 'fluent-booking'),
                 'component' => 'number'
             ],
             [
                 'key'         => 'position',
-                'label'       => __('Task Position', 'fluent-booking-pro'),
+                'label'       => __('Task Position', 'fluent-booking'),
                 'required'    => true,
-                'placeholder' => __('Position', 'fluent-booking-pro'),
+                'placeholder' => __('Position', 'fluent-booking'),
                 'component'   => 'radio_choice',
                 'options'     => [
-                    'bottom' => __('Bottom', 'fluent-booking-pro'),
-                    'top'    => __('Top', 'fluent-booking-pro')
+                    'bottom' => __('Bottom', 'fluent-booking'),
+                    'top'    => __('Top', 'fluent-booking')
                 ]
             ],
             [
@@ -184,17 +184,17 @@ class Bootstrap extends IntegrationManagerController
                 'required'       => true,
                 'key'            => 'event_trigger',
                 'options'        => $this->getEventTriggerOptions(),
-                'tips'           => __('Select in which booking stage you want to trigger this feed', 'fluent-booking-pro'),
-                'label'          => __('Event Trigger', 'fluent-booking-pro'),
+                'tips'           => __('Select in which booking stage you want to trigger this feed', 'fluent-booking'),
+                'label'          => __('Event Trigger', 'fluent-booking'),
                 'component'      => 'checkbox-multiple-text',
-                'checkbox_label' => __('Event Trigger For This Feed', 'fluent-booking-pro'),
+                'checkbox_label' => __('Event Trigger For This Feed', 'fluent-booking'),
             ],
             [
                 'require_list'   => false,
                 'key'            => 'enabled',
-                'label'          => __('Status', 'fluent-booking-pro'),
+                'label'          => __('Status', 'fluent-booking'),
                 'component'      => 'checkbox-single',
-                'checkbox_label' => __('Enable This feed', 'fluent-booking-pro'),
+                'checkbox_label' => __('Enable This feed', 'fluent-booking'),
             ]
         ];
 
@@ -213,9 +213,9 @@ class Bootstrap extends IntegrationManagerController
     public function getEventTriggerOptions()
     {
         return [
-            'after_booking_scheduled'    => __('Booking Confirmed', 'fluent-booking-pro'),
-            'booking_schedule_completed' => __('Booking Completed', 'fluent-booking-pro'),
-            'booking_schedule_cancelled' => __('Booking Cancelled', 'fluent-booking-pro'),
+            'after_booking_scheduled'    => __('Booking Confirmed', 'fluent-booking'),
+            'booking_schedule_completed' => __('Booking Completed', 'fluent-booking'),
+            'booking_schedule_cancelled' => __('Booking Cancelled', 'fluent-booking'),
         ];
     }
     
@@ -291,9 +291,9 @@ class Bootstrap extends IntegrationManagerController
     private function getBoardPriorities()
     {
         return [
-            'low'    => __('Low', 'fluent-booking-pro'),
-            'medium' => __('Medium', 'fluent-booking-pro'),
-            'high'   => __('High', 'fluent-booking-pro')
+            'low'    => __('Low', 'fluent-booking'),
+            'medium' => __('Medium', 'fluent-booking'),
+            'high'   => __('High', 'fluent-booking')
         ];
     }
 
@@ -409,7 +409,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->addLog(
             $feed['settings']['name'],
-            sprintf(__('Task has been created in FluentBoards. You can %s to view the task.',  'fluent-booking-pro'), '<a target="_blank" href="' . $taskUrl . '">' . __('click here', 'fluent-booking-pro') . '</a>'),
+            sprintf(__('Task has been created in FluentBoards. You can %s to view the task.',  'fluent-booking'), '<a target="_blank" href="' . $taskUrl . '">' . __('click here', 'fluent-booking') . '</a>'),
             $booking->id,
             'success'
         );

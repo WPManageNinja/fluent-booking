@@ -52,7 +52,7 @@ class BookingElement extends BaseFieldManager
                 'data-type' => 'fcal_booking'
             ),
             'settings'       => array(
-                'label'              => __('Select Appointment Date & Time', 'fluent-booking-pro'),
+                'label'              => __('Select Appointment Date & Time', 'fluent-booking'),
                 'admin_field_label'  => '',
                 'event_id'           => '',
                 'booking_calendar'   => '',
@@ -66,12 +66,12 @@ class BookingElement extends BaseFieldManager
                 'validation_rules'   => array(
                     'required' => [
                         'value'   => false,
-                        'message' => __('Appointment Date & Time is required', 'fluent-booking-pro'),
+                        'message' => __('Appointment Date & Time is required', 'fluent-booking'),
                     ],
                 ),
             ),
             'editor_options' => array(
-                'title'      => __('FluentBooking Field', 'fluent-booking-pro'),
+                'title'      => __('FluentBooking Field', 'fluent-booking'),
                 'icon_class' => 'el-icon-date',
                 'template'   => 'inputCalendar'
             ),
@@ -105,11 +105,11 @@ class BookingElement extends BaseFieldManager
         return [
             'event_id'         => [
                 'template' => 'selectGroup',
-                'label'    => __('Select Calendar', 'fluent-booking-pro'),
+                'label'    => __('Select Calendar', 'fluent-booking'),
             ],
             'cal_guest_fields' => [
                 'template'      => 'CustomSettingsField',
-                'label'         => __('Guest Fields', 'fluent-booking-pro'),
+                'label'         => __('Guest Fields', 'fluent-booking'),
                 'componentName' => 'FluentCalNameEmailChoiceComponent'
             ],
         ];
@@ -141,7 +141,7 @@ class BookingElement extends BaseFieldManager
         $calendarEvent = CalendarSlot::find($slot_id);
         
         if (!$calendarEvent || !$calendarEvent->calendar) {
-            esc_html_e('Selected Calendar could not be found', 'fluent-booking-pro');
+            esc_html_e('Selected Calendar could not be found', 'fluent-booking');
             return;
         }
         
@@ -214,23 +214,23 @@ class BookingElement extends BaseFieldManager
                 $calendar = $booking->calendar;
                 $html = '<div class="ff_entry_table_wrapper"><table class="ff_entry_table_field ff-table">';
                 $html .= '<tr>';
-                $html .= '<th>' . __('Booking ID', 'fluent-booking-pro') . '</th>';
+                $html .= '<th>' . __('Booking ID', 'fluent-booking') . '</th>';
                 $html .= '<td>' . $booking->id . ' <a href="' . Helper::getAppBaseUrl('scheduled-events?period=upcoming&booking_id=' . $booking->id) . '" target="_blank">View Booking</a></td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>' . __('Booking Status', 'fluent-booking-pro') . '</th>';
+                $html .= '<th>' . __('Booking Status', 'fluent-booking') . '</th>';
                 $html .= '<td>' . $booking->status . '</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>' . __('Date & Time', 'fluent-booking-pro') . '</th>';
+                $html .= '<th>' . __('Date & Time', 'fluent-booking') . '</th>';
                 $html .= '<td>' . $booking->getFullBookingDateTimeText($calendar->author_timezone, true) . ' (' . $calendar->author_timezone . ')</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>' . __('Meeting Duration', 'fluent-booking-pro') . '</th>';
+                $html .= '<th>' . __('Meeting Duration', 'fluent-booking') . '</th>';
                 $html .= '<td>' . $booking->slot_minutes . ' Minutes</td>';
                 $html .= '</tr>';
                 $html .= '<tr>';
-                $html .= '<th>' . __('Meeting Host', 'fluent-booking-pro') . '</th>';
+                $html .= '<th>' . __('Meeting Host', 'fluent-booking') . '</th>';
                 $html .= '<td>' . $calendar->title . '</td>';
                 $html .= '</tr>';
                 $html .= '</html></div>';
@@ -243,12 +243,12 @@ class BookingElement extends BaseFieldManager
 
     protected function getResponseHtml($response, $fields, $columns)
     {
-        return __('HTML Response', 'fluent-booking-pro');
+        return __('HTML Response', 'fluent-booking');
     }
 
     protected function getResponseAsText($response, $fields, $columns)
     {
-        return __('Text Response', 'fluent-booking-pro');
+        return __('Text Response', 'fluent-booking');
     }
 
     public function getCalendarOptions()

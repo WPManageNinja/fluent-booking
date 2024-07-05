@@ -83,7 +83,7 @@ class CalendarController extends Controller
 
         if (!Helper::isCalendarSlugAvailable($slug, true)) {
             return $this->sendError([
-                'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking-pro')
+                'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
             ], 422);
         }
 
@@ -109,15 +109,15 @@ class CalendarController extends Controller
         ];
 
         $messages = [
-            'author_timezone.required'                               => __('Author timezone field is required', 'fluent-booking-pro'),
-            'slot.duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
-            'slot.event_type.required'                               => __('Event type field is required', 'fluent-booking-pro'),
-            'slot.availability_type.required'                        => __('Event availability type field is required', 'fluent-booking-pro'),
-            'slot.schedule_type.required'                            => __('Event schedule type field is required', 'fluent-booking-pro'),
-            'slot.title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
-            'slot.weekly_schedules.required_if'                      => __('Event weekly schedules field is required', 'fluent-booking-pro'),
-            'slot.location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
-            'slot.location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
+            'author_timezone.required'                               => __('Author timezone field is required', 'fluent-booking'),
+            'slot.duration.required'                                 => __('Event duration field is required', 'fluent-booking'),
+            'slot.event_type.required'                               => __('Event type field is required', 'fluent-booking'),
+            'slot.availability_type.required'                        => __('Event availability type field is required', 'fluent-booking'),
+            'slot.schedule_type.required'                            => __('Event schedule type field is required', 'fluent-booking'),
+            'slot.title.required'                                    => __('Event title field is required', 'fluent-booking'),
+            'slot.weekly_schedules.required_if'                      => __('Event weekly schedules field is required', 'fluent-booking'),
+            'slot.location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking'),
+            'slot.location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking')
         ];
 
         $validationConfig = apply_filters('fluent_booking/create_calendar_validation_rule', [
@@ -137,7 +137,7 @@ class CalendarController extends Controller
 
         if (!$user) {
             return $this->sendError([
-                'message' => __('User not found', 'fluent-booking-pro')
+                'message' => __('User not found', 'fluent-booking')
             ], 422);
         }
 
@@ -147,7 +147,7 @@ class CalendarController extends Controller
 
         if ($isHostCalendar && Calendar::where('user_id', $user->ID)->where('type', 'simple')->first()) {
             return $this->sendError([
-                'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking-pro')
+                'message' => __('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking')
             ], 422);
         }
 
@@ -170,7 +170,7 @@ class CalendarController extends Controller
                 $user = get_user_by('ID', reset($teamMembers));
                 if (!$user) {
                     return $this->sendError([
-                        'message' => __('Invalid Team Member', 'fluent-booking-pro')
+                        'message' => __('Invalid Team Member', 'fluent-booking')
                     ], 422);
                 }
             }
@@ -184,7 +184,7 @@ class CalendarController extends Controller
             $slug = trim(sanitize_text_field($data['slug']));
             if (!Helper::isCalendarSlugAvailable($slug, true)) {
                 return $this->sendError([
-                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking-pro')
+                    'message' => __('The provided slug is not available. Please choose a different one', 'fluent-booking')
                 ], 422);
             }
 
@@ -207,7 +207,7 @@ class CalendarController extends Controller
 
         if (!$calendar) {
             return $this->sendError([
-                'message' => __('Calendar could not be found. Please try again', 'fluent-booking-pro')
+                'message' => __('Calendar could not be found. Please try again', 'fluent-booking')
             ], 422);
         }
 
@@ -322,7 +322,7 @@ class CalendarController extends Controller
         LandingPageHelper::updateSettings($calendar, $sharingSettings);
 
         return [
-            'message' => __('Landing Page settings has been updated', 'fluent-booking-pro')
+            'message' => __('Landing Page settings has been updated', 'fluent-booking')
         ];
     }
 
@@ -344,7 +344,7 @@ class CalendarController extends Controller
 
         return [
             'calendar' => $calendar,
-            'message'  => __('Calendar has been updated successfully', 'fluent-booking-pro')
+            'message'  => __('Calendar has been updated successfully', 'fluent-booking')
         ];
     }
 
@@ -454,14 +454,14 @@ class CalendarController extends Controller
         ];
 
         $messages = [
-            'title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
-            'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
-            'status.required'                                   => __('Event status field is required', 'fluent-booking-pro'),
-            'event_type.required'                               => __('Event type field is required', 'fluent-booking-pro'),
-            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
-            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
-            'location_settings.*.description.required_if'       => __('Event location description field is required', 'fluent-booking-pro'),
-            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
+            'title.required'                                    => __('Event title field is required', 'fluent-booking'),
+            'duration.required'                                 => __('Event duration field is required', 'fluent-booking'),
+            'status.required'                                   => __('Event status field is required', 'fluent-booking'),
+            'event_type.required'                               => __('Event type field is required', 'fluent-booking'),
+            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking'),
+            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking'),
+            'location_settings.*.description.required_if'       => __('Event location description field is required', 'fluent-booking'),
+            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking')
         ];
 
         $validationConfig = apply_filters('fluent_booking/create_calendar_event_validation_rule', [
@@ -511,7 +511,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/after_create_event', $calendar, $createdSlot);
 
         return [
-            'message' => __('New Event Type has been created successfully', 'fluent-booking-pro'),
+            'message' => __('New Event Type has been created successfully', 'fluent-booking'),
             'slot'    => $createdSlot
         ];
     }
@@ -531,11 +531,11 @@ class CalendarController extends Controller
         ];
 
         $messages = [
-            'title.required'                                    => __('Event title field is required', 'fluent-booking-pro'),
-            'duration.required'                                 => __('Event duration field is required', 'fluent-booking-pro'),
-            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking-pro'),
-            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking-pro'),
-            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking-pro')
+            'title.required'                                    => __('Event title field is required', 'fluent-booking'),
+            'duration.required'                                 => __('Event duration field is required', 'fluent-booking'),
+            'location_settings.*.type.required'                 => __('Event location type field is required', 'fluent-booking'),
+            'location_settings.*.title.required_if'             => __('Event location title field is required', 'fluent-booking'),
+            'location_settings.*.host_phone_number.required_if' => __('Event location host phone number field is required', 'fluent-booking')
         ];
 
         if ('group' === $event->event_type) {
@@ -544,8 +544,8 @@ class CalendarController extends Controller
                 'is_display_spots'  => 'required|min:0|max:1',
             ]);
             $messages = array_merge($messages, [
-                'max_book_per_slot.required' => __('Event max book per slot field is required', 'fluent-booking-pro'),
-                'is_display_spots.required'  => __('Event is display spots field is required', 'fluent-booking-pro')
+                'max_book_per_slot.required' => __('Event max book per slot field is required', 'fluent-booking'),
+                'is_display_spots.required'  => __('Event is display spots field is required', 'fluent-booking')
             ]);
         } else {
             $rules = array_merge($rules, [
@@ -553,8 +553,8 @@ class CalendarController extends Controller
                 'multi_duration.available_durations' => 'required_if:multi_duration.enabled,true'
             ]);
             $messages = array_merge($messages, [
-                'multi_duration.default_duration.required_if'    => __('Event default duration is required', 'fluent-booking-pro'),
-                'multi_duration.available_durations.required_if' => __('Event available durations is required', 'fluent-booking-pro')
+                'multi_duration.default_duration.required_if'    => __('Event default duration is required', 'fluent-booking'),
+                'multi_duration.available_durations.required_if' => __('Event available durations is required', 'fluent-booking')
             ]);
         }
 
@@ -587,7 +587,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/after_update_event_details', $event);
 
         return [
-            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'message' => __('Data has been updated', 'fluent-booking'),
             'event'   => $event
         ];
     }
@@ -614,7 +614,7 @@ class CalendarController extends Controller
         $event->save();
 
         return [
-            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'message' => __('Data has been updated', 'fluent-booking'),
             'event'   => $event
         ];
     }
@@ -647,7 +647,7 @@ class CalendarController extends Controller
         $event->save();
 
         return [
-            'message' => __('Data has been updated', 'fluent-booking-pro'),
+            'message' => __('Data has been updated', 'fluent-booking'),
             'event'   => $event
         ];
     }
@@ -664,7 +664,7 @@ class CalendarController extends Controller
         }
 
         return [
-            'message' => __('Data has been updated', 'fluent-booking-pro')
+            'message' => __('Data has been updated', 'fluent-booking')
         ];
 
     }
@@ -706,7 +706,7 @@ class CalendarController extends Controller
         }
 
         return [
-            'message' => __('The Event Type has been cloned successfully', 'fluent-booking-pro'),
+            'message' => __('The Event Type has been cloned successfully', 'fluent-booking'),
             'slot'    => $clonedEvent
         ];
     }
@@ -756,7 +756,7 @@ class CalendarController extends Controller
         $slot->setNotifications($formattedNotifications);
 
         return [
-            'message' => __('Notifications has been saved', 'fluent-booking-pro')
+            'message' => __('Notifications has been saved', 'fluent-booking')
         ];
     }
 
@@ -811,7 +811,7 @@ class CalendarController extends Controller
         $calendarEvent->setBookingFields($formattedFields);
 
         return [
-            'message' => __('Fields has been updated', 'fluent-booking-pro')
+            'message' => __('Fields has been updated', 'fluent-booking')
         ];
     }
 
@@ -825,7 +825,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/after_delete_calendar_event', $calendarEventId, $calendar);
 
         return [
-            'message' => __('Calendar Event has been deleted', 'fluent-booking-pro')
+            'message' => __('Calendar Event has been deleted', 'fluent-booking')
         ];
     }
 
@@ -853,7 +853,7 @@ class CalendarController extends Controller
         do_action('fluent_booking/after_delete_calendar', $calendarId);
 
         return [
-            'message' => __('Calendar Deleted Successfully!', 'fluent-booking-pro')
+            'message' => __('Calendar Deleted Successfully!', 'fluent-booking')
         ];
     }
 }

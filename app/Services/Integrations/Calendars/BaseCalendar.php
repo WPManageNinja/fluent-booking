@@ -63,9 +63,9 @@ abstract class BaseCalendar
             'icon'                 => $this->logo,
             'title'                => $this->calendarTitle,
             /* translators: %s is the name of the calendar title. */
-            'subtitle'             => sprintf(__('Configure %s to sync your events', 'fluent-booking-pro'), $this->calendarTitle),
+            'subtitle'             => sprintf(__('Configure %s to sync your events', 'fluent-booking'), $this->calendarTitle),
             /* translators: %s is the name of the calendar title. */
-            'btn_text'             => sprintf(__('Connect with %s', 'fluent-booking-pro'), $this->calendarTitle),
+            'btn_text'             => sprintf(__('Connect with %s', 'fluent-booking'), $this->calendarTitle),
             'auth_url'             => $this->getAuthUrl($userId),
             'is_global_configured' => $this->isConfigured(),
             'global_config_url'    => admin_url('admin.php?page=fluent-booking#/settings/configure-integrations/'.$this->calendarKey),
@@ -123,32 +123,32 @@ abstract class BaseCalendar
         return [
             'client_id'     => [
                 'type'        => 'text',
-                'label'       => __('Client ID', 'fluent-booking-pro'),
-                'placeholder' => __('Enter Your Client ID', 'fluent-booking-pro'),
+                'label'       => __('Client ID', 'fluent-booking'),
+                'placeholder' => __('Enter Your Client ID', 'fluent-booking'),
             ],
             'client_secret' => [
                 'type'        => 'text',
-                'label'       => __('Secret Key', 'fluent-booking-pro'),
-                'placeholder' => __('Enter Your Secret Key', 'fluent-booking-pro'),
+                'label'       => __('Secret Key', 'fluent-booking'),
+                'placeholder' => __('Enter Your Secret Key', 'fluent-booking'),
             ],
             'redirect_url'  => [
                 'type'        => 'text',
-                'label'       => __('Redirect URI', 'fluent-booking-pro'),
-                'placeholder' => __('Enter Your Redirect URI', 'fluent-booking-pro'),
+                'label'       => __('Redirect URI', 'fluent-booking'),
+                'placeholder' => __('Enter Your Redirect URI', 'fluent-booking'),
                 'readonly'    => true,
                 'copy_btn'    => true,
             ],
             'caching_time'  => [
                 'type'        => 'select',
                 'options'     => [
-                    '1'  => __('1 minute', 'fluent-booking-pro'),
-                    '5'  => __('5 minutes', 'fluent-booking-pro'),
-                    '10' => __('10 minutes', 'fluent-booking-pro'),
-                    '15' => __('15 minutes', 'fluent-booking-pro'),
+                    '1'  => __('1 minute', 'fluent-booking'),
+                    '5'  => __('5 minutes', 'fluent-booking'),
+                    '10' => __('10 minutes', 'fluent-booking'),
+                    '15' => __('15 minutes', 'fluent-booking'),
                 ],
-                'label'       => __('Caching Time', 'fluent-booking-pro'),
+                'label'       => __('Caching Time', 'fluent-booking'),
                 /* translators: Explanation for the cache duration setting. %1$s is the calendar title, %2$s is the calendar title repeated. */
-                'inline_help' => sprintf(__('Select for how many minutes the %1$s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2$s then you may lower the value',  'fluent-booking-pro'), $this->calendarTitle, $this->calendarTitle)
+                'inline_help' => sprintf(__('Select for how many minutes the %1$s event API call will be cached. Recommended 5/10 minutes. If you add lots of manual events in %2$s then you may lower the value',  'fluent-booking'), $this->calendarTitle, $this->calendarTitle)
             ],
         ];
     }

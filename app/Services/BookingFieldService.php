@@ -20,7 +20,7 @@ class BookingFieldService
             $value = wp_unslash(Arr::get($postedData, $fieldKey));
             if (!$value && Arr::isTrue($customField, 'required')) {
                 // translators: %s is the label of the required field
-                $errors[$fieldKey . '.required'] = sprintf(__('%s is required', 'fluent-booking-pro'), $customField['label']);
+                $errors[$fieldKey . '.required'] = sprintf(__('%s is required', 'fluent-booking'), $customField['label']);
                 continue;
             }
 
@@ -45,7 +45,7 @@ class BookingFieldService
         }
 
         if ($errors) {
-            return new \WP_Error('required_field', __('Please fill up the required data', 'fluent-booking-pro'), $errors);
+            return new \WP_Error('required_field', __('Please fill up the required data', 'fluent-booking'), $errors);
         }
 
         return $formattedValues;
@@ -60,33 +60,33 @@ class BookingFieldService
                 'index'          => 1,
                 'type'           => 'text',
                 'name'           => 'name',
-                'label'          => __('Your Name', 'fluent-booking-pro'),
+                'label'          => __('Your Name', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
                 'is_visible'     => true,
-                'placeholder'    => __('Your Name', 'fluent-booking-pro'),
+                'placeholder'    => __('Your Name', 'fluent-booking'),
                 'help_text'      => ''
             ],
             'email' => [
                 'index'          => 2,
                 'type'           => 'email',
                 'name'           => 'email',
-                'label'          => __('Your Email', 'fluent-booking-pro'),
+                'label'          => __('Your Email', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
                 'is_visible'     => true,
-                'placeholder'    => __('Your Email', 'fluent-booking-pro'),
+                'placeholder'    => __('Your Email', 'fluent-booking'),
                 'help_text'      => ''
             ],
             'message' => [
                 'index'          => 3,
                 'type'           => 'textarea',
                 'name'           => 'message',
-                'label'          => __('What is this meeting about?', 'fluent-booking-pro'),
+                'label'          => __('What is this meeting about?', 'fluent-booking'),
                 'required'       => false,
                 'enabled'        => true,
                 'system_defined' => true,
@@ -97,8 +97,8 @@ class BookingFieldService
                 'index'          => 4,
                 'type'           => 'textarea',
                 'name'           => 'cancellation_reason',
-                'label'          => __('Reason for cancellation', 'fluent-booking-pro'),
-                'placeholder'    => __('Why are you cancelling?', 'fluent-booking-pro'),
+                'label'          => __('Reason for cancellation', 'fluent-booking'),
+                'placeholder'    => __('Why are you cancelling?', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
@@ -109,8 +109,8 @@ class BookingFieldService
                 'index'          => 5,
                 'type'           => 'textarea',
                 'name'           => 'rescheduling_reason',
-                'label'          => __('Reason for reschedule', 'fluent-booking-pro'),
-                'placeholder'    => __('Let others know why you need to reschedule', 'fluent-booking-pro'),
+                'label'          => __('Reason for reschedule', 'fluent-booking'),
+                'placeholder'    => __('Let others know why you need to reschedule', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
@@ -125,7 +125,7 @@ class BookingFieldService
                 'index'          => 6,
                 'type'           => 'multi-guests',
                 'name'           => 'guests',
-                'label'          => __('Additional Guests', 'fluent-booking-pro'),
+                'label'          => __('Additional Guests', 'fluent-booking'),
                 'limit'          => 10,
                 'required'       => false,
                 'enabled'        => false,
@@ -139,13 +139,13 @@ class BookingFieldService
                 'index'          => 7,
                 'type'           => 'radio',
                 'name'           => 'location',
-                'label'          => __('Location', 'fluent-booking-pro'),
+                'label'          => __('Location', 'fluent-booking'),
                 'options'        => LocationService::getLocationOptions($calendarSlot),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
-                'placeholder'    => esc_attr__('Location', 'fluent-booking-pro')
+                'placeholder'    => esc_attr__('Location', 'fluent-booking')
             ];
         } else if ($calendarSlot->isPhoneRequired()) {
             $requiredIndexes[] = 'phone_number';
@@ -153,7 +153,7 @@ class BookingFieldService
                 'index'          => 8,
                 'type'           => 'phone',
                 'name'           => 'phone_number',
-                'label'          => __('Your Phone Number', 'fluent-booking-pro'),
+                'label'          => __('Your Phone Number', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
@@ -167,12 +167,12 @@ class BookingFieldService
                 'index'          => 9,
                 'type'           => 'text',
                 'name'           => 'address',
-                'label'          => __('Your Address', 'fluent-booking-pro'),
+                'label'          => __('Your Address', 'fluent-booking'),
                 'required'       => true,
                 'enabled'        => true,
                 'system_defined' => true,
                 'disable_alter'  => true,
-                'placeholder'    => esc_attr__('Address', 'fluent-booking-pro'),
+                'placeholder'    => esc_attr__('Address', 'fluent-booking'),
                 'help_text'      => ''
             ];
         }

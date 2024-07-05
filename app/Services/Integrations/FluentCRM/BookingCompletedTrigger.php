@@ -30,9 +30,9 @@ class BookingCompletedTrigger extends BaseTrigger
     public function getTrigger()
     {
         return [
-            'category'    => __('Booking', 'fluent-booking-pro'),
-            'label'       => __('Booking Completed', 'fluent-booking-pro'),
-            'description' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro')
+            'category'    => __('Booking', 'fluent-booking'),
+            'label'       => __('Booking Completed', 'fluent-booking'),
+            'description' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking')
         ];
     }
 
@@ -56,8 +56,8 @@ class BookingCompletedTrigger extends BaseTrigger
             'run_only_one' => [
                 'type'        => 'yes_no_check',
                 'label'       => '',
-                'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking-pro'),
-                'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking-pro'),
+                'check_label' => __('Run this automation only once per contact. If unchecked then it will over-write existing flow', 'fluent-booking'),
+                'help'        => __('If you enable this then this will run only once per customer otherwise, It will delete the existing automation flow and start new', 'fluent-booking'),
                 'options'     => FunnelHelper::getUpdateOptions()
             ],
         ];
@@ -66,13 +66,13 @@ class BookingCompletedTrigger extends BaseTrigger
     public function getSettingsFields($funnel)
     {
         return [
-            'title'       => __('Booking Completed Funnel', 'fluent-booking-pro'),
-            'sub_title' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking-pro'),
+            'title'       => __('Booking Completed Funnel', 'fluent-booking'),
+            'sub_title' => __('This Funnel will be initiated when a booking has been marked as completed (manually or automatically)', 'fluent-booking'),
             'fields'      => [
                 'event_id'                 => [
                     'type'        => 'grouped-select',
-                    'label'       => __('Booking Calendar', 'fluent-booking-pro'),
-                    'placeholder' => __('Select Calendar', 'fluent-booking-pro'),
+                    'label'       => __('Booking Calendar', 'fluent-booking'),
+                    'placeholder' => __('Select Calendar', 'fluent-booking'),
                     'is_multiple' => false,
                     'options'     => $this->getCalendarOptions()
                 ],
@@ -80,12 +80,12 @@ class BookingCompletedTrigger extends BaseTrigger
                     'type'        => 'option_selectors',
                     'option_key'  => 'editable_statuses',
                     'is_multiple' => false,
-                    'label'       => __('Subscription Status', 'fluent-booking-pro'),
-                    'placeholder' => __('Select Status', 'fluent-booking-pro')
+                    'label'       => __('Subscription Status', 'fluent-booking'),
+                    'placeholder' => __('Select Status', 'fluent-booking')
                 ],
                 'subscription_status_info' => [
                     'type'       => 'html',
-                    'info'       => '<b>' . __('An Automated double-optin email will be sent for new subscribers', 'fluent-booking-pro') . '</b>',
+                    'info'       => '<b>' . __('An Automated double-optin email will be sent for new subscribers', 'fluent-booking') . '</b>',
                     'dependency' => [
                         'depends_on' => 'subscription_status',
                         'operator'   => '=',

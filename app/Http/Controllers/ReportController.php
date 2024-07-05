@@ -39,7 +39,7 @@ class ReportController extends Controller
 
         $widgets = [
             [
-                'title'   => __('Total Bookings', 'fluent-booking-pro'),
+                'title'   => __('Total Bookings', 'fluent-booking'),
                 'period'  => 'all',
                 'number'  => $bookingWidgetNumbers['totalBooked'],
                 'content' => $bookingWidgetStats['bookedComparison'],
@@ -50,7 +50,7 @@ class ReportController extends Controller
                 'stat'    => $bookingWidgetStats['bookedStat']
             ],
             [
-                'title'   => __('Completed Bookings', 'fluent-booking-pro'),
+                'title'   => __('Completed Bookings', 'fluent-booking'),
                 'period'  => 'completed',
                 'number'  => $bookingWidgetNumbers['bookingCompleted'],
                 'content' => $bookingWidgetStats['completedComparison'],
@@ -66,7 +66,7 @@ class ReportController extends Controller
         $totalPaymentWidget = apply_filters('fluent_booking/total_payment_widget', [], $paymentWidget);
 
         $widgets[] = $totalPaymentWidget ?: [
-            'title'   => __('Cancelled Bookings', 'fluent-booking-pro'),
+            'title'   => __('Cancelled Bookings', 'fluent-booking'),
             'period'  => 'cancelled',
             'number'  => $bookingWidgetNumbers['bookingCancelled'],
             'content' => $bookingWidgetStats['cancelledComparison'],
@@ -79,7 +79,7 @@ class ReportController extends Controller
         ];
 
         $widgets[] = [
-            'title'   => __('Total Guests', 'fluent-booking-pro'),
+            'title'   => __('Total Guests', 'fluent-booking'),
             'number'  => $bookingWidgetNumbers['totalGuests'],
             'content' => $bookingWidgetStats['guestComparison'],
             'icon'    => '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -256,13 +256,13 @@ class ReportController extends Controller
     private function getComparisonMessage($change)
     {
         if ($change > 0) {
-            return __('More than last month', 'fluent-booking-pro');
+            return __('More than last month', 'fluent-booking');
         }
         if ($change < 0) {
-            return __('Less than last month', 'fluent-booking-pro');
+            return __('Less than last month', 'fluent-booking');
         }
 
-        return __('Same as last month', 'fluent-booking-pro');
+        return __('Same as last month', 'fluent-booking');
 
     }
 

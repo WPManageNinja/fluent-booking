@@ -190,7 +190,7 @@ class BlockEditorHandler
             'attributes'      => [
                     'title'       => [
                         'type'    => 'string',
-                        'default' => __('My Bookings', 'fluent-booking-pro')
+                        'default' => __('My Bookings', 'fluent-booking')
                     ],
                     'showFilter' => [
                         'type'    => 'boolean',
@@ -210,7 +210,7 @@ class BlockEditorHandler
                     ],
                     'noBookingsMessage'  => [
                         'type'    => 'string',
-                        'default' => __('No bookings found', 'fluent-booking-pro')
+                        'default' => __('No bookings found', 'fluent-booking')
                     ],
                     'calendarIds'  => [
                         'type'    => 'array',
