@@ -4,7 +4,7 @@
             <h3>{{$t('UsingFreeVersion')}}</h3>
             <p>{{$t('UpgradeToPro')}}</p>
         </div>
-        <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_danger_btn">
+        <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_danger_btn">
             {{$t('Upgrade to Pro')}}
         </a>
     </div>
