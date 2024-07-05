@@ -115,6 +115,14 @@
                     }
                 }
 
+                &.#{$slug}item_buy {
+                    .#{$slug}menu_primary {
+                        color: #fff;
+                        background-color: #306ae0;
+                        margin-left: 12px;
+                    }
+                }
+
                 .#{$slug}submenu_items {
                     display: none;
                 }
