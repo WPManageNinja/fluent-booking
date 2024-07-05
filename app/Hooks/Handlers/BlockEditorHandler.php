@@ -361,7 +361,12 @@ class BlockEditorHandler
         $slotId      = $attributes['slotId'];
         $disableHost = $attributes['hideHostInfo'];
         $theme       = Arr::get($attributes, 'theme', 'light');
+
+        $output .= '<div class="fluent-booking-calendar-block align'.Arr::get($attributes,'align').'">';
+
         $output     .= do_shortcode("[fluent_booking id=$slotId disable_author=$disableHost theme=$theme]");
+
+        $output .= '</div>';
         return $output;
     }
 }
