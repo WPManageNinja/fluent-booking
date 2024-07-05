@@ -1,127 +1,119 @@
 <template>
-    <div>
-        <div style="margin-bottom: 20px;" class="dashboard_notices" v-if="dashboardNotices.length">
-            <div class="fcal_dashboard_notice" v-for="(notice, notice_key) in dashboardNotices"
-                :key="notice_key"
-                v-html="notice">
+    <div class="fcal_dashboard fcal_section fcal_section_narrow">
+        <div class="fcal_dashboard_overview fcal_dashboard_box">
+            <div class="fcal_section_header">
+                <div class="fcal_title">
+                    <h3>{{ $t('Overview') }}</h3>
+                </div>
+                <div class="fcal_actions">
+                    <el-date-picker
+                        v-model="filterDate"
+                        type="daterange"
+                        unlink-panels
+                        clearable
+                        range-separator="-"
+                        :start-placeholder="$t('Start date')"
+                        :end-placeholder="$t('End date')"
+                        :shortcuts="shortcuts"
+                        popper-class="fcal_daterange_popover"
+                        @change="fetchReports"
+                    />
+                </div>
+            </div>
+
+            <el-row v-if="loading" :gutter="15">
+                <el-col :span="6">
+                    <el-skeleton :rows="3" animated />
+                </el-col>
+                <el-col :span="6">
+                    <el-skeleton :rows="3" animated />
+                </el-col>
+                <el-col :span="6">
+                    <el-skeleton :rows="3" animated />
+                </el-col>
+                <el-col :span="6">
+                    <el-skeleton :rows="3" animated />
+                </el-col>
+            </el-row>
+            <div v-else class="overview-widgets">
+                <div
+                    v-for="(widget, i) in widgets"
+                    :key="i"
+                    :class="['overview-widget', { navigation: widget.period }]">
+                    <h1 v-html="widget.number"></h1>
+                    <p @click="goToBookingLists(widget.period)">{{ widget.title }}</p>
+                    <h3><span :class="{'stat': true, 'down': widget.stat < 0}"><el-icon><Top /></el-icon>
+                        {{ widget.stat }}%</span>{{ widget.content }}</h3>
+                    <span class="icon" v-html="widget.icon"></span>
+                </div>
             </div>
         </div>
-        <div class="fcal_dashboard fcal_section fcal_section_narrow">
-            <div class="fcal_dashboard_overview fcal_dashboard_box">
-                <div class="fcal_section_header">
-                    <div class="fcal_title">
-                        <h3>{{ $t('Overview') }}</h3>
+
+        <div class="fcal_dashboard_chat_wrap">
+            <ReportChat/>
+
+            <div class="fcal_dashboard_report_sidebar">
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            {{ $t('Next Meetings') }}
+                        </h1>
                     </div>
-                    <div class="fcal_actions">
-                        <el-date-picker
-                            v-model="filterDate"
-                            type="daterange"
-                            unlink-panels
-                            clearable
-                            range-separator="-"
-                            :start-placeholder="$t('Start date')"
-                            :end-placeholder="$t('End date')"
-                            :shortcuts="shortcuts"
-                            popper-class="fcal_daterange_popover"
-                            @change="fetchReports"
-                        />
-                    </div>
-                </div>
-    
-                <el-row v-if="loading" :gutter="15">
-                    <el-col :span="6">
-                        <el-skeleton :rows="3" animated />
-                    </el-col>
-                    <el-col :span="6">
-                        <el-skeleton :rows="3" animated />
-                    </el-col>
-                    <el-col :span="6">
-                        <el-skeleton :rows="3" animated />
-                    </el-col>
-                    <el-col :span="6">
-                        <el-skeleton :rows="3" animated />
-                    </el-col>
-                </el-row>
-                <div v-else class="overview-widgets">
-                    <div
-                        v-for="(widget, i) in widgets"
-                        :key="i"
-                        :class="['overview-widget', { navigation: widget.period }]">
-                        <h1 v-html="widget.number"></h1>
-                        <p @click="goToBookingLists(widget.period)">{{ widget.title }}</p>
-                        <h3><span :class="{'stat': true, 'down': widget.stat < 0}"><el-icon><Top /></el-icon>
-                            {{ widget.stat }}%</span>{{ widget.content }}</h3>
-                        <span class="icon" v-html="widget.icon"></span>
-                    </div>
-                </div>
-            </div>
-    
-            <div class="fcal_dashboard_chat_wrap">
-                <ReportChat/>
-    
-                <div class="fcal_dashboard_report_sidebar">
-                    <div class="fcal_schedule_event_infos">
-                        <div class="fcal_schedule_details_header">
-                            <h1 class="fcal_header_title">
-                                {{ $t('Next Meetings') }}
-                            </h1>
+
+                    <div v-if="!loading" class="fcal_booking_activities_list">
+                        <div v-if="nextMeetings.length" class="fcal_booking_activity" v-for="(schedule, i) in nextMeetings" :key="i">
+                            <el-icon class="fcal_activity_complete_icon"></el-icon>
+
+                            <span class="timing">
+                                {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
+                            </span>
+                            <div class="description_and_link">
+                                <span class="title" v-html="scheduleTitle(schedule)"></span>
+                                <el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
+                            </div>
                         </div>
-    
+                        <div v-else class="fcal_no_activities">
+                            <p>{{ $t('Next meeting not available') }}</p>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <el-skeleton :row="5" animated/>
+                    </div>
+                </div>
+
+                <div class="fcal_schedule_event_infos">
+                    <div class="fcal_schedule_details_header">
+                        <h1 class="fcal_header_title">
+                            {{ $t('Latest Booked Meetings') }}
+                        </h1>
+                    </div>
+
+                    <div class="fcal_schedule_event_infos_body">
                         <div v-if="!loading" class="fcal_booking_activities_list">
-                            <div v-if="nextMeetings.length" class="fcal_booking_activity" v-for="(schedule, i) in nextMeetings" :key="i">
+                            <div v-if="latestBookedLists.length" class="fcal_booking_activity" v-for="(schedule, i) in latestBookedLists" :key="i">
                                 <el-icon class="fcal_activity_complete_icon"></el-icon>
-    
-                                <span class="timing">
-                                    {{ formattedTimeRange(schedule.start_time, schedule.end_time) }}
-                                </span>
+
                                 <div class="description_and_link">
-                                    <span class="title" v-html="scheduleTitle(schedule)"></span>
-                                    <el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
+                                    <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
                                 </div>
                             </div>
                             <div v-else class="fcal_no_activities">
-                                <p>{{ $t('Next meeting not available') }}</p>
+                                <p>{{ $t('No Latest Booked Event Found') }}</p>
                             </div>
                         </div>
                         <div v-else>
                             <el-skeleton :row="5" animated/>
                         </div>
                     </div>
-    
-                    <div class="fcal_schedule_event_infos">
-                        <div class="fcal_schedule_details_header">
-                            <h1 class="fcal_header_title">
-                                {{ $t('Latest Booked Meetings') }}
-                            </h1>
-                        </div>
-    
-                        <div class="fcal_schedule_event_infos_body">
-                            <div v-if="!loading" class="fcal_booking_activities_list">
-                                <div v-if="latestBookedLists.length" class="fcal_booking_activity" v-for="(schedule, i) in latestBookedLists" :key="i">
-                                    <el-icon class="fcal_activity_complete_icon"></el-icon>
-    
-                                    <div class="description_and_link">
-                                        <span class="description" v-html="bookingTitle(schedule)"></span><el-link type="primary" @click=viewMeetingDetails(schedule.id)>{{ $t('View') }}</el-link>
-                                    </div>
-                                </div>
-                                <div v-else class="fcal_no_activities">
-                                    <p>{{ $t('No Latest Booked Event Found') }}</p>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <el-skeleton :row="5" animated/>
-                            </div>
-                        </div>
-                    </div>
-    
                 </div>
+
             </div>
-    
         </div>
+
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import { Top } from '@element-plus/icons-vue';
 import ReportChat from "../Pieces/_ReportChat";
 import BookingCard from "../Modules/Schedules/parts/BookingCard";
@@ -137,7 +129,6 @@ export default {
         return {
             filterDate: '',
             filterChartsDate: '',
-            dashboardNotices: this.appVars.dashboard_notices,
             shortcuts: [
                 {
                     text: this.$t('Last week'),
