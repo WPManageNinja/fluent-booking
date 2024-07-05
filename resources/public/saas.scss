@@ -47,6 +47,12 @@
   }
 }
 
+.fluent-booking-calendar-block {
+    .fcal_calendar_inner {
+        width: 100%;
+    }
+}
+
 .fcal_normal_booking_footer {
   text-align: center;
   color: var(--fcal_dark);

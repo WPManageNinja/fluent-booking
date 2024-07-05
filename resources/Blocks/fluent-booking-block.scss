@@ -62,7 +62,6 @@ $dark: var(--fcal_block_dark);
 		padding: 0;
 		border: none;
 		background: none;
-		max-width: 800px;
 		margin: auto;
 		.fcal_block_preview_wrap {
 			display: flex;
@@ -71,7 +70,7 @@ $dark: var(--fcal_block_dark);
 			border-radius: 8px;
 			.fcal_block_preview_aside {
 				width: 100%;
-				max-width: 268px;
+                flex: 40%;
 				padding: 24px;
 				border-right: 1px solid var(--fcal_block_border_color);
 				.fcal_author {
@@ -132,6 +131,7 @@ $dark: var(--fcal_block_dark);
 				}
 			}
 			.fcal_block_preview_date_wrapper {
+                flex: 60%;
 				padding: 30px 20px;
 				img {
 					display: block;
