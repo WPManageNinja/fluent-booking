@@ -150,7 +150,7 @@
             </div>
             <div v-else>
                 <p class="fcal_need_pro">{{ $t('Team') + ' ' + $t('NeedProVersion')}}</p>
-                <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_primary_btn">
+                <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_primary_btn">
                     {{$t('Upgrade to Pro')}}
                 </a>
             </div>
@@ -216,7 +216,7 @@
             </div>
             <div v-else>
                 <p class="fcal_need_pro">{{ $t('Single Event') + ' ' + $t('NeedProVersion')}}</p>
-                <a target="_blank" href="https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade" class="el-button fcal_primary_btn">
+                <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_primary_btn">
                     {{$t('Upgrade to Pro')}}
                 </a>
             </div>

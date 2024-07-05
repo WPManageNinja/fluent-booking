@@ -66,7 +66,7 @@ use FluentBooking\App\Models\Booking;
             data-event_id="<?php echo (int)$calendar_event->id; ?>">
             <h3><?php esc_html_e('Loading...', 'fluent-booking-pro'); ?></h3>
         </div>
-    </div>
+        <?php do_action('fluent_booking/after_calendar_event_landing_page', $calendar_event); ?>
     </div>
 
     <script>

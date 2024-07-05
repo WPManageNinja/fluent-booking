@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Services\LandingPage;
 
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class LandingPageHelper
@@ -55,5 +56,21 @@ class LandingPageHelper
         }
 
         return site_url('/?fluent-booking=calendar');
+    }
+
+    public static function getPoweredByHtml()
+    {
+        if (defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            return '';
+        }
+
+        $html = '<div class="fcal_powered_by">';
+        $html .= esc_html__('Powered By', 'fluent-booking-pro');
+        $html .= ' <span><a target="_blank" href="' . esc_url(Helper::getUpgradeUrl()) . '">';
+        $html .= esc_html__('Fluent Booking', 'fluent-booking-pro');
+        $html .= '</a></span>';
+        $html .= '</div>';
+        
+        return $html;
     }
 }
