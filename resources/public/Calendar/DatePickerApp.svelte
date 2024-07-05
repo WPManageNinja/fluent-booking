@@ -153,6 +153,7 @@
                     });
                 } else {
                     selectedDate = '';
+                    dispatch('dayClicked', '');
                 }
             })
             .catch(errors => {
