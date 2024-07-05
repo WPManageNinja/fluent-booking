@@ -141,6 +141,14 @@ class AdminMenuHandler
             ];
         }
 
+        if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            $menuItems[] = [
+                'key'       => 'buy',
+                'label'     => __('Upgrade to Pro', 'fluent-booking'),
+                'permalink' => Helper::getUpgradeUrl()
+            ];
+        }
+
         $assets = $app['url.assets'];
 
         $app->view->render('admin.menu', [
