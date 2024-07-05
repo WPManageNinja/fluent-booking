@@ -152,7 +152,7 @@ const InspectorSettings = props => {
                                                         }
                                                     </div>
                                                 })
-                                            : <span className="select-host">{__('No Hosts Found!')}</span>
+                                            : <span className="select-host">{__('No Calendar Found!')}</span>
                                         }
                                     </div>
                                 ) }

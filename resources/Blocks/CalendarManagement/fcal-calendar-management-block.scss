@@ -134,7 +134,11 @@
 		}
 	}
 }
-
+.components-dropdown-menu__popover {
+    .components-popover__content {
+        width: max-content;
+    }
+}
 .fcal_block_inspector_widget {
 	box-sizing: border-box !important;
 	*, *:before, *:after {
