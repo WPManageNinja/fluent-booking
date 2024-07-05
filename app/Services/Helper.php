@@ -694,6 +694,11 @@ class Helper
         return self::getAppBaseUrl('scheduled-events?booking_id=' . $bookingId);
     }
 
+    public static function getUpgradeUrl()
+    {
+        return 'https://fluentbooking.com/pricing/?utm_source=plugin&utm_medium=wp_install&utm_campaign=ff_upgrade';
+    }
+
     public static function getNextBookingGroup()
     {
         $lastBooking = Booking::orderBy('group_id', 'desc')->first(['group_id']);

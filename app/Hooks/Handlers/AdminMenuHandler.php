@@ -283,6 +283,7 @@ class AdminMenuHandler
             'is_new'             => $isNew,
             'require_slug'       => $requireSlug,
             'site_url'           => site_url('/'),
+            'upgrade_url'        => Helper::getUpgradeUrl(),
             'timezones'          => DateTimeHelper::getTimeZones(true),
             'supported_features' => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true

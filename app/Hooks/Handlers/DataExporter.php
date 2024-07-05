@@ -8,7 +8,6 @@ use FluentBooking\App\Services\PermissionManager;
 
 class DataExporter
 {
-
     public function exportBookingHosts()
     {
         if (!PermissionManager::hasAllCalendarAccess()) {
