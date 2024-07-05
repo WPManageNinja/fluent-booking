@@ -297,6 +297,7 @@ class AdminMenuHandler
                 'multi_users' => true
             ]),
             'has_pro'            => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
+            'dashboard_notices'  => apply_filters('fluent_booking/dashboard_notices', []),
             'trans'              => TransStrings::getStrings(),
             'date_format'        => DateTimeHelper::getDateFormatter(true),
             'time_format'        => DateTimeHelper::getTimeFormatter(true),
