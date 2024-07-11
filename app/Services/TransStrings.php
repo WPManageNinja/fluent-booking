@@ -88,6 +88,7 @@ class TransStrings
             'Timezone:'                                                                        => __('Timezone:', 'fluent-booking'),
             'Weekly Hours'                                                                     => __('Weekly Hours', 'fluent-booking'),
             'Add date overrides'                                                               => __('Add date overrides', 'fluent-booking'),
+            'Add Available Times'                                                              => __('Add Available Times', 'fluent-booking'),
             'Unavailable'                                                                      => __('Unavailable', 'fluent-booking'),
             'Usages List'                                                                      => __('Usages List', 'fluent-booking'),
             'View Event'                                                                       => __('View Event', 'fluent-booking'),
@@ -245,6 +246,7 @@ class TransStrings
             'Meeting Duration *'                                                               => __('Meeting Duration *', 'fluent-booking'),
             'Meeting Duration'                                                                 => __('Meeting Duration', 'fluent-booking'),
             'DateOverRides/description'                                                        => __('Add dates when your availability changes from your weekly hours', 'fluent-booking'),
+            'AvailableTimes/description'                                                       => __('Add your available times for this event. At least one available time should be added.', 'fluent-booking'),
             'Add a date override'                                                              => __('Add a date override', 'fluent-booking'),
             'What hours are you available?'                                                    => __('What hours are you available?', 'fluent-booking'),
             'What is this meeting about?'                                                      => __('What is this meeting about?', 'fluent-booking'),
@@ -337,6 +339,7 @@ class TransStrings
             'Weekly Hours Schedules'                                                           => __('Weekly Hours Schedules', 'fluent-booking'),
             'Availability Range'                                                               => __('Availability Range', 'fluent-booking'),
             'Availability/team_availability_description'                                       => __('Enable this if you want to use a common schedule between hosts. When disabled, each host will be booked based on their default schedule.', 'fluent-booking'),
+            'Availability/event_availability_reserve_time'                                     => __("Enable to reserve selected times for this event only. When disabled, times remain available and may disappear if booked by others.", 'fluent-booking'),
             'Select the available date range'                                                  => __('Select the available date range', 'fluent-booking'),
             'Scheduling conditions'                                                            => __('Scheduling conditions', 'fluent-booking'),
             'Share'                                                                            => __('Share', 'fluent-booking'),
@@ -799,6 +802,12 @@ class TransStrings
             'Search Events'                                                                    => __('Search Events', 'fluent-booking'),
             'Select Team Members'                                                              => __('Select Team Members', 'fluent-booking'),
             'Dashboard'                                                                        => __('Dashboard', 'fluent-booking'),
+            'Availability Timezone'                                                            => __('Availability Timezone', 'fluent-booking'),
+            'Reserve Times'                                                                    => __('Reserve Times', 'fluent-booking'),
+            'Available Times'                                                                  => __('Available Times', 'fluent-booking'),
+            'Which slots are you available?'                                                   => __('Which slots are you available?', 'fluent-booking'),
+            'Select All'                                                                       => __('Select All', 'fluent-booking'),
+            'Reset All'                                                                        => __('Reset All', 'fluent-booking'),
         );
     }
 }

@@ -2122,8 +2122,9 @@ body >.fcal_calendar_wrap {
   }
 }
 
-.fcal_no_availability {
+.fcal_no_availability, .fcal_error_text {
     width: max-content;
+    max-width: 300px;
     background: var(--fcal_cal_bg);
     padding: 2.2rem;
     text-align: center;

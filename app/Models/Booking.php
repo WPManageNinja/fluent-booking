@@ -184,6 +184,11 @@ class Booking extends Model
             ->withTimestamps();
     }
 
+    public function getHostIds()
+    {
+        return $this->hosts()->pluck('user_id');
+    }
+
     public function scopeUpcoming($query)
     {
         return $query->where('end_time', '>=', gmdate('Y-m-d H:i:s')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -200,7 +205,9 @@ class Booking extends Model
             'upcoming',
             'completed',
             'cancelled',
-            'pending'
+            'pending',
+            'no_show',
+            'latest_bookings'
         ];
 
         if (!in_array($status, $validStatuses)) {
@@ -222,6 +229,14 @@ class Booking extends Model
         if ($status == 'cancelled') {
             return $query->where('status', 'cancelled')
                 ->orWhere('status', 'rejected');
+        }
+
+        if ($status == 'pending') {
+            return $query->whereIn('status', ['pending', 'reserved']);
+        }
+
+        if ($status == 'latest_bookings') {
+            return $query->where('status', '!=', 'reserved');
         }
 
         return $query->where('status', $status);
@@ -810,6 +825,31 @@ class Booking extends Model
         return $this->canPerformAction($settings);
     }
 
+    public function isMultiGuestBooking()
+    {
+        return $this->event_type == 'group' || $this->event_type == 'group_event';
+    }
+
+    public function isMultiHostBooking()
+    {
+        return $this->event_type == 'single_event' || $this->event_type == 'group_event';
+    }
+
+    public function getHostProfiles($public = true)
+    {
+        $hostIds = $this->getHostIds();
+
+        $hosts = [];
+        foreach ($hostIds as $hostId) {
+            $calendar = Calendar::where('user_id', $hostId)->where('type', 'simple')->first();
+            if ($calendar) {
+                $hosts[] = $calendar->getAuthorProfile($public);
+            }
+        }
+
+        return $hosts;
+    }
+
     public function getInviteePhoneNumber($calendarEvent)
     {
         $customFormData = $this->getCustomFormData(false);
@@ -852,9 +892,11 @@ class Booking extends Model
         return __('Sorry! you can not reschedule this', 'fluent-booking');
     }
 
-    public function getHostDetails($isPublic = true)
+    public function getHostDetails($isPublic = true, $hostId = null)
     {
-        if ($this->host_user_id && $user = get_user_by('ID', $this->host_user_id)) {
+        $hostId = $hostId ?: $this->host_user_id;
+
+        if ($hostId && $user = get_user_by('ID', $hostId)) {
             $name = trim($user->first_name . ' ' . $user->last_name);
             if (!$name) {
                 $name = $user->display_name;
@@ -876,6 +918,18 @@ class Booking extends Model
         }
 
         return $data;
+    }
+
+    public function getHostsDetails($isPublic = true)
+    {
+        $hostIds = $this->getHostIds();
+
+        $hosts = [];
+        foreach ($hostIds as $hostId) {
+            $hosts[] = $this->getHostDetails($isPublic, $hostId);
+        }
+
+        return $hosts;
     }
 
     public function getHostTimezone()

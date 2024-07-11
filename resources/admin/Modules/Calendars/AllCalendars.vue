@@ -259,7 +259,7 @@ export default {
             user_id: '',
             team_name: '',
             team_members: [],
-            event_name: 'One-off event',
+            event_name: '',
             event_members: [],
             event_lists: [],
             search: ''

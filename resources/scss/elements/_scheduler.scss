@@ -653,8 +653,12 @@
               background: rgb(103 67 153 / 11%) !important;
             }
             &.unconfirmed {
-                background: #FDE8CD;
                 color: #F58E07;
+                background: #FDE8CD;
+            }
+            &.reserved {
+                color: #f12626;
+                background: rgb(255 95 60 / 15%);
             }
           }
           .fcal_spot_payment_status {
@@ -1714,7 +1718,17 @@
                     padding: 0.5rem 1rem;
                 }
             }
-          }
+            &.fcal_availability_switch {
+                .el-form-item__content {
+                    display: block;
+                    p {
+                        margin: 0;
+                        font-size: 14px;
+                        line-height: 32px;
+                    }
+                }
+            }  
+        }
           .el-link--primary {   
             .el-link__inner {
                 color: $primaryColor;
@@ -2197,7 +2211,35 @@
         }
       }
     }
-
+    .fcal_event_availability {
+        .fcal_availability_times {
+            margin-top: 16px;
+            .fcal_table_stripe {
+                tbody tr {
+                    cursor: pointer;
+                    td {
+                        text-align: right;
+                        border-bottom: 1px solid #EAECF0;
+                        span.date {
+                            display: block;
+                            white-space: nowrap;
+                            margin-right: 48px;
+                        }
+                        .fcal_slots_list {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            gap: 4px;
+                            margin: 8px 0;
+                            li {
+                                margin: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
   }
 
 
@@ -3115,6 +3157,40 @@
         background: rgb(38 83 199 / 10%);
         color: $primaryColor;
         font-weight: 500;
+      }
+
+      .fcal_author_avatars {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+        .fcal_author {
+            position: relative;
+            &:hover .fcal_author_tooltip {
+                opacity: 1;
+                visibility: visible;
+            }
+            .fcal_author_avatar {
+                margin-right: -4px;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                border: 1.5px solid white;
+            }
+            .fcal_author_tooltip {
+                position: absolute;
+                bottom: 105%;
+                width: max-content;
+                background: black;
+                border-radius: 8px;
+                color: white;
+                font-size: 14px;
+                padding: 4px 8px;
+                opacity: 0;
+                margin: 0;
+                visibility: hidden;
+                transition: 0.2s;
+            }
+        }
       }
     }
 

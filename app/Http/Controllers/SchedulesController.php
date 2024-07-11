@@ -65,7 +65,7 @@ class SchedulesController extends Controller
         } else if ($period == 'latest_bookings') {
             $query = $query->orderBy('created_at', 'DESC');
         } else if ($period == 'no_show') {
-            $query = $query->where('status', 'no_show')->orderBy('start_time', 'DESC');
+            $query = $query->orderBy('start_time', 'DESC');
         } else if ($period == 'latest_bookings') {
             $query = $query->orderBy('id', 'DESC');
         } else {
@@ -103,10 +103,10 @@ class SchedulesController extends Controller
         if ($request->get('page') == 1) {
             if ($author && $author !== 'all') {
                 $pendingCount = Booking::where('calendar_id', $author)
-                    ->where('status', 'pending')
+                    ->whereIn('status', ['pending', 'reserved'])
                     ->count();
             } else {
-                $pendingCount = Booking::where('status', 'pending')->count();
+                $pendingCount = Booking::whereIn('status', ['pending', 'reserved'])->count();
             }
 
             $data['no_show_count'] = Booking::where('status', 'no_show')->count();
@@ -265,7 +265,7 @@ class SchedulesController extends Controller
 
         do_action('fluent_booking/after_delete_booking', $bookingId);
 
-        if ($booking->event_type == 'group') {
+        if ($booking->isMultiGuestBooking()) {
             Booking::where('event_id', $eventId)->delete();
         }
 
@@ -286,7 +286,7 @@ class SchedulesController extends Controller
 
         $booking = $booking->where('group_id', $groupId)->first();
 
-        if (!$booking || $booking->event_type != 'group') {
+        if (!$booking || !$booking->isMultiGuestBooking()) {
             return $this->sendError(['message' => __('Invalid group id or the event is not a group event', 'fluent-booking')]);
         }
 
@@ -369,7 +369,11 @@ class SchedulesController extends Controller
             do_action('fluent_booking/booking_schedule_' . $bookingStatus, $booking, $booking->calendar_event);
         }
 
-        if ($booking->event_type == 'group') {
+        if ($booking->isMultiHostBooking()) {
+            $booking->host_profiles = $booking->getHostProfiles();
+        }
+
+        if ($booking->isMultiGuestBooking()) {
             $booking->booked_count = Booking::where('group_id', $booking->group_id)
                 ->whereIn('status', ['scheduled', 'completed'])->count();
         } else {
@@ -384,6 +388,8 @@ class SchedulesController extends Controller
         $booking->booking_status_text = $booking->getBookingStatus();
         $booking->payment_status_text = $booking->getPaymentStatus();
         $booking->custom_form_data    = $booking->getCustomFormData();
+
+        do_action_ref_array('fluent_booking/format_booking_schedule', [&$booking]);
 
         return $booking;
     }
