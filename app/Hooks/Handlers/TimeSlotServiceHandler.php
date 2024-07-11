@@ -16,8 +16,8 @@ class TimeSlotServiceHandler
             if ($calendarEvent->isTeamEvent()) {
                 return new \FluentBookingPro\App\Services\TeamTimeSlotService($calendar, $calendarEvent);
             }
-            
-            if ($calendarEvent->isSingleEvent()) {
+
+            if ($calendarEvent->isOneOffEvent()) {
                 return new \FluentBookingPro\App\Modules\SingleEvent\SingleTimeSlotService($calendar, $calendarEvent);
             }
         }
@@ -29,7 +29,7 @@ class TimeSlotServiceHandler
     {
         wp_send_json([
             'error'           => true,
-            'error_message'   => $error->get_error_message(),
+            'message'         => $error->get_error_message(),
             'available_slots' => [],
             'timezone'        => $timeZone,
             'max_lookup_date' => $calendarEvent->getMaxLookUpDate()

@@ -39,7 +39,7 @@
                     </el-form-item>
                     <template v-if="isTeam">
                         <el-divider/>
-                        <el-form-item>
+                        <el-form-item class="fcal_availability_switch">
                             <el-switch v-model="settings.common_schedule" :active-text="$t('Choose a common schedule')"/>
                             <span>{{ $t('Availability/team_availability_description') }}</span>
                         </el-form-item>
