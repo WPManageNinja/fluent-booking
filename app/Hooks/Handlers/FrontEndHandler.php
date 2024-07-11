@@ -988,7 +988,7 @@ class FrontEndHandler
 
         $eventVars['form_fields'] = array_values($eventVars['form_fields']);
 
-        if ($calendar->isTeamCalendar()) {
+        if (!$calendar->isHostCalendar()) {
             $eventVars['team_member_profiles'] = $calendarEvent->getAuthorProfiles(true);
         }
 

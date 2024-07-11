@@ -21,9 +21,6 @@ use FluentBooking\App\Services\DateTimeHelper;
     if ($event->calendar->type != 'simple') {
         $items['assignment']['visible'] = true;
     }
-    if ($event->calendar->type == 'event') {
-        $items['limit_settings']['visible'] = false;
-    }
     return $items;
 }, 10, 2);
 

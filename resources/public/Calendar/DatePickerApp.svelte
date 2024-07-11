@@ -129,6 +129,7 @@
     let firstLoading = true;
 
     let error = false;
+    let errorText = '';
 
     function loadAvailableDates() {
         isLoadingDates = true;
@@ -156,6 +157,8 @@
                 }
             })
             .catch(errors => {
+                error = true;
+                errorText = errors.response.message;
                 console.log(errors);
             })
             .finally(() => {
@@ -341,6 +344,11 @@
                 <TimeZoneSelector bind:timezone={timezone} isDisabled={isTimezoneDisabled}/>
             </div>
             <slot/>
+            {#if error && errorText}
+                <div class="fcal_error_text">
+                    <h3>{errorText}</h3>
+                </div>
+            {/if}
             {#if noAvailability && !isLoadingDates}
                 <div class="fcal_no_availability">
                     <h3>{i18('No availability in')} {getDateTimeStringI18(monthNames[month], 'month')}</h3>

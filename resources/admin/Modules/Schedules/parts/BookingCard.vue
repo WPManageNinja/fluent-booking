@@ -16,7 +16,7 @@
                         </span>
                     </div>
 
-                    <span v-else-if="currentStatus" class="fcal_spot_period_status" :class="booking.status=='no_show' ? 'no_show' : ''">
+                    <span v-else-if="currentStatus" class="fcal_spot_period_status" :class="getStatusClass">
                         {{ $t(currentStatus) }}
                     </span>
                     
@@ -73,8 +73,11 @@ export default {
             return `${formatStartTime} - ${formatEndTime}`;
         },
         spotTitle() {
+            if (this.booking.status == 'reserved') {
+                return this.$t('Reserved slot of') + ' ' + this.booking.calendar_event.title + ' ' + this.$t('event');
+            }
             const guestName = this.booking.first_name + ' ' + this.booking.last_name;
-            if (this.booking.event_type === 'group') {
+            if (['group', 'group_event'].includes(this.booking.event_type)) {
                 const booked = this.booking.booked_count;
                 return booked + ' ' + this.$t('guests with') + ' ' + this.booking.author.name + ' ' + this.$t('as group booking type');
             }
@@ -90,7 +93,8 @@ export default {
                 cancelled: this.$t('Cancelled'),
                 rejected: this.$t('Rejected'),
                 pending: this.$t('Pending'),
-                no_show: this.$t('No Show')
+                no_show: this.$t('No Show'),
+                reserved: this.$t('Reserved')
             };
             if (this.period === 'latest_bookings' || this.period === 'all') {
                 return statusLabels[this.booking.status] || '';
@@ -109,6 +113,12 @@ export default {
         },
         isUnconfirmed() {
             return this.booking.status === 'pending' && this.booking.payment_status != 'pending';
+        },
+        getStatusClass() {
+            if (['no_show', 'reserved'].includes(this.booking.status)) {
+                return this.booking.status;
+            }
+            return '';
         }
     },
     mounted() {

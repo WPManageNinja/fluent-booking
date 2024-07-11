@@ -95,9 +95,7 @@ class SanitizeService
         }
 
         if ($isSkipped && $fromTimeZone == 'UTC' && $event) {
-            $event->settings = [
-                'date_overrides' => $updatedOverRides
-            ];
+            $event->settings = ['date_overrides' => $updatedOverRides];
             $event->save();
         }
 

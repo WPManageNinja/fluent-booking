@@ -86,6 +86,16 @@ class Calendar extends Model
         return $this->type == 'team';
     }
 
+    public function isEventCalendar()
+    {
+        return $this->type == 'event';
+    }
+
+    public function isHostCalendar()
+    {
+        return $this->type == 'simple';
+    }
+
     public function getAuthorPhoto()
     {
         $photo = $this->getMeta('profile_photo_url');
