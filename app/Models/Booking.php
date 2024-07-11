@@ -780,7 +780,9 @@ class Booking extends Model
 
     public function hasBookingAccess()
     {
-        return $this->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings');
+        $hostIds = $this->getHostIds();
+        $hasAccess = PermissionManager::userCan('manage_all_bookings');
+        return in_array(get_current_user_id(), $hostIds) || $hasAccess;
     }
 
     private function canPerformAction($settings)
