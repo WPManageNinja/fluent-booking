@@ -34,7 +34,7 @@
                     </el-dropdown>
                 </div>
             </h3>
-            <div v-if="isTeam">
+            <div v-if="isMultiHostEvent">
                 <div v-if="slot.author_profiles" class="fcal_author_avatars">
                     <div v-for="author in slot.author_profiles" class="fcal_author">
                         <img class="fcal_author_avatar" :src="author.avatar">
@@ -82,6 +82,7 @@
             </p>
         </div>
         <div v-if="isLocationDisabled" class="fcal_slot_error">{{ $t('EachSlot/disabled_location_description')}}</div>
+        <div v-if="slot.generic_error" v-html="slot.generic_error"></div>
         <div class="fcal_slot_footer">
             <div v-if="slot.status == 'active'" class="fcal_shortcode">
                 <el-button class="fcal_plain_btn" @click="viewShareCalendar(slot)">
@@ -176,6 +177,9 @@ export default {
         },
         isEventCalendar() {
             return this.eventType == 'single_event' || this.eventType == 'group_event';
+        },
+        isMultiHostEvent() {
+            return this.isTeam || this.isEventCalendar;
         },
         isLocationDisabled() {
             let isDisabled = false;

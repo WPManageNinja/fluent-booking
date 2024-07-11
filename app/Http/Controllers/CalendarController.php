@@ -14,8 +14,8 @@ use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\CalendarService;
 use FluentBooking\App\Services\BookingFieldService;
-use FluentBooking\App\Hooks\Handlers\AdminMenuHandler; 
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\App\Hooks\Handlers\AdminMenuHandler;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 
 class CalendarController extends Controller
@@ -32,7 +32,11 @@ class CalendarController extends Controller
             }
         };
 
-        $calendarsQuery = Calendar::with(['slots' => $applySearchFilter])
+        $calendarsQuery = Calendar::with(['slots' => function($query) use ($applySearchFilter) {
+            $query->where('status', '!=', 'expired')
+                ->where($applySearchFilter);
+            }])
+            ->where('status', '!=', 'expired')
             ->whereHas('slots', $applySearchFilter)
             ->latest();
 
@@ -51,7 +55,7 @@ class CalendarController extends Controller
                 $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
                 $slot->location_fields = $slot->getLocationFields();
-                $slot->author_profiles = $slot->isTeamEvent() ? $slot->getAuthorProfiles() : [];
+                $slot->author_profiles = $slot->isMultiHostEvent() ? $slot->getAuthorProfiles() : [];
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
 
@@ -248,6 +252,8 @@ class CalendarController extends Controller
         ];
 
         $slotData['settings'] = wp_parse_args($slotData['settings'], (new CalendarSlot())->getSlotSettingsSchema());
+
+        $slotData = apply_filters('fluent_booking/create_calendar_event_data', $slotData, $calendar);
 
         $slot = CalendarSlot::create($slotData);
 
@@ -497,12 +503,14 @@ class CalendarController extends Controller
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($slot, 'event_type')),
             'availability_type' => 'existing_schedule',
-            'availability_id'   => $availability->id,
+            'availability_id'   => $availability ? $availability->id : null,
             'location_type'     => sanitize_text_field(Arr::get($slot, 'location_type')),
             'location_settings' => SanitizeService::locationSettings(Arr::get($slot, 'location_settings', [])),
             'max_book_per_slot' => (int)Arr::get($slot, 'max_book_per_slot', 1),
             'is_display_spots'  => (bool)Arr::get($slot, 'is_display_spots', false),
         ];
+
+        $slotData = apply_filters('fluent_booking/create_calendar_event_data', $slotData, $calendar);
 
         do_action('fluent_booking/before_create_event', $calendar, $slotData);
 

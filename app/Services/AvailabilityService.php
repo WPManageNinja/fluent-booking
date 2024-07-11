@@ -344,6 +344,7 @@ class AvailabilityService
                     $nextDayIndex++;
                     continue;
                 }
+
                 if ($dayDiff > 0) {
                     $nextDayIndex = 1;
                     $nextDay = gmdate('Y-m-d', ($dateTimestamp + 86400 * $dayDiff)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
