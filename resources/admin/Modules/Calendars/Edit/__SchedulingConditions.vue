@@ -13,7 +13,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 export default {
     name: '__SchedulingConditions',
     props: ['settings'],

@@ -109,6 +109,8 @@ export default {
                         }
                     ],
                     settings: {
+                        reserve_time: false,
+                        available_times: {},
                         location_fields: this.appVars.location_fields
                     }
                 }

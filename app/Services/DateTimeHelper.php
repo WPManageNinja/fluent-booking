@@ -265,6 +265,12 @@ class DateTimeHelper
         return $format;
     }
 
+    public static function getTodayDate($timezone = 'UTC', $format = 'Y-m-d')
+    {
+        $dateTime = new \DateTime('now', new \DateTimeZone($timezone));
+        return $dateTime->format($format);
+    }
+
     public static function getDayDifference($dateTime, $fromTimeZone, $toTimeZone, $refDate = 'now')
     {
         if ($refDate != 'now') {

@@ -57,8 +57,8 @@
                         </template>
                     </el-dropdown>
                 </div>
-                <SingleInviteeInfo v-if="showing_booking.event_type != 'group'" :booking="showing_booking"/>
-                <group-booking-guests v-else-if="showing_booking.event_type == 'group'"
+                <SingleInviteeInfo v-if="!isMultiGuestEvent && !isReservedBooking" :booking="showing_booking"/>
+                <group-booking-guests v-else-if="isMultiGuestEvent && !isReservedBooking"
                                       :group_id="showing_booking.group_id" @updateAdditionalInfo="updateAdditionalInfo"/>
                 <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
@@ -67,9 +67,17 @@
                         </h1>
                     </div>
                     <div class="fcal_schedule_details_event">
-                        <div class="fcal_schedule_details_event_item">
+                        <div v-if="!isReservedBooking" class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Meeting Host') }}</h3>
-                            <p>{{ showing_booking.author.name }}</p>
+                            <div v-if="hostProfiles" class="fcal_author_avatars">
+                                <div v-for="author in hostProfiles" class="fcal_author">
+                                    <img class="fcal_author_avatar" :src="author.avatar">
+                                    <div class="fcal_author_tooltip">
+                                        <span>{{ author.name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p v-else>{{ showing_booking.author.name }}</p>
                         </div>
                         <div class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Meeting Title') }}</h3>
@@ -83,11 +91,15 @@
                             <h3>{{ $t('Location') }}</h3>
                             <div v-html="showing_booking.location"></div>
                         </div>
-                        <div
-                            v-if="showing_booking.event_type != 'group'"
+                        <div v-if="showing_booking.event_type != 'group'"
                             class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Status') }}</h3>
                             <p>{{ $t(showing_booking.status) }}</p>
+                        </div>
+                        <div v-if="isReservedBooking"
+                            class="fcal_schedule_details_event_item">
+                            <h3>{{ $t('Expires') }}</h3>
+                            <p>{{ getExpireTime }}</p>
                         </div>
                         <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'"
                              class="fcal_schedule_details_event_item">
@@ -283,43 +295,57 @@ export default {
         isBookingRejected() {
             return this.showing_booking.status == 'rejected';
         },
+        isReservedBooking() {
+            return this.showing_booking.status == 'reserved';
+        },
         canMarkAsCompleted() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid && !this.isBookingRejected;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid && !this.isBookingRejected && !this.isReservedBooking;
         },
         canMarkAsPaid() {
             return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid' && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canReschedule() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
         },
         canMakeNoShow() {
-            return this.showing_booking.status != 'no_show' && this.isBookingCompleted && !this.isBookingRejected;
+            return this.showing_booking.status != 'no_show' && this.isBookingCompleted && !this.isBookingRejected && !this.isBookingCancelled;
         },
         canCancel() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected;
+            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
+        },
+        isGroup() {
+            return this.showing_booking.event_type == 'group';
         },
         isGroupEvent() {
-            return this.showing_booking.event_type == 'group';
+            return this.showing_booking.event_type == 'group_event';
         },
         isRefundable() {
             return this.showing_booking.payment_method == 'stripe' && this.showing_booking.payment_status != 'refunded';
         },
-        generateTitle() {
-            const guestName = `${this.showing_booking.first_name} ${this.showing_booking.last_name}`;
-            return `${this.showing_booking.slot_minutes} ${this.$t('minutes meeting with')} ${guestName}`;
+        isMultiGuestEvent() {
+            return this.isGroup || this.isGroupEvent;
         },
         meetingDetails() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
-            if (this.showing_booking.event_type === 'group') {
+            if (this.booking.status == 'reserved') {
+                return this.$t('Reserved slot of') + ' ' + this.showing_booking.calendar_event.title + ' @ ' + startTime;
+            }
+            if (this.isMultiGuestEvent) {
                 const booked = this.showing_booking.booked_count;
                 return `${booked} ${this.$t('guests with')} ${this.$t('you')} @ ${startTime}`;
             }
-            return this.showing_booking.title;
+            return this.showing_booking.title + ' @ ' + startTime;
         },
         getMeetingDuration() {
             return (duration) => {
                 return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
             }
+        },
+        hostProfiles() {
+            return this.showing_booking.host_profiles;
+        },
+        getExpireTime() {
+            return this.toCurrentTimezone(this.showing_booking.expires, this.appVars.date_time_formatter);
         }
     },
     methods: {

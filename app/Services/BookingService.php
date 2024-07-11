@@ -58,7 +58,7 @@ class BookingService
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
-        if ($calendarSlot->event_type == 'group') {
+        if ($calendarSlot->isMultiGuestEvent()){
             $event = Booking::select('group_id')
                 ->where('event_id', $calendarSlot->id)
                 ->where('calendar_id', $calendarSlot->calendar_id)
@@ -88,9 +88,17 @@ class BookingService
             Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
         }
         
-        $booking->hosts()->attach($booking->host_user_id, [
-            'status' => 'confirmed'
-        ]);
+        $hosts = [$booking->host_user_id];
+        if ($calendarSlot->isOneOffEvent()) {
+            $hosts = $calendarSlot->getHostIds();
+        }
+
+        $hostData = [];
+        foreach ($hosts as $hostId) {
+            $hostData[$hostId] = ['status' => 'confirmed'];
+        }
+
+        $booking->hosts()->attach($hostData);
 
         $booking->load('calendar');
 

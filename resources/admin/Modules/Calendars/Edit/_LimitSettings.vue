@@ -58,7 +58,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item>
+                    <el-form-item v-if="showBookingLimit">
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="fcal_event_card_header">
                                 <div class="card_contents">
@@ -92,7 +92,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item>
+                    <el-form-item v-if="showBookingLimit">
                         <div class="fcal_event_card fcal_event_card_wrap">
                             <div class="fcal_event_card_header">
                                 <div class="card_contents">
@@ -188,6 +188,9 @@ export default {
             return (settings) => {
                 return settings.limits.length < 3;
             }
+        },
+        showBookingLimit() {
+            return !['single_event', 'group_event'].includes(this.calendar_event.event_type);
         }
     },
     methods: {
