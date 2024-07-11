@@ -22,7 +22,7 @@ class BookingService
         $defaults = [
             'event_id'     => $calendarSlot->id,
             'calendar_id'  => $calendarSlot->calendar_id,
-            'host_user_id' => $calendarSlot->user_ids
+            'host_user_id' => $calendarSlot->user_id
         ];
 
         if (empty($data['first_name']) && !empty($data['name'])) {
