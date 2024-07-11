@@ -29,7 +29,7 @@ class MeetingPolicy extends Policy
                     return false;
                 }
 
-                return $booking->host_user_id === get_current_user_id();
+                return in_array(get_current_user_id(), $booking->getHostIds());
             }
 
             return PermissionManager::userCan('manage_own_calendar');
@@ -45,7 +45,7 @@ class MeetingPolicy extends Policy
                 return false;
             }
 
-            return $booking->host_user_id === get_current_user_id();
+            return in_array(get_current_user_id(), $booking->getHostIds());
         }
 
         return PermissionManager::userCan('manage_own_calendar');
@@ -67,7 +67,7 @@ class MeetingPolicy extends Policy
             return false;
         }
 
-        return $booking->host_user_id === get_current_user_id();
+        return in_array(get_current_user_id(), $booking->getHostIds());
 
     }
 }
