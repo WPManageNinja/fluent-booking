@@ -50,8 +50,12 @@ class CalenderCleaner
                     ];
                     $event->save();
 
-                    Booking::query()->where('event_id', $event->id)
-                        ->where('host_user_id', $calendar->user_id)->delete();
+                    $calendarUserId = $calendar->user_id;
+                    Booking::query()
+                        ->where('event_id', $event->id)
+                        ->whereHas('hosts', function ($query) use ($calendarUserId){
+                            $query->where('user_id', $calendarUserId);
+                        })->delete();
                 }
             }
         }
