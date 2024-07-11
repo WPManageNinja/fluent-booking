@@ -966,6 +966,7 @@ class FrontEndHandler
             'pre_selects'        => null,
             'settings'           => $calendarEvent->settings,
             'type'               => $calendarEvent->type,
+            'event_type'         => $calendarEvent->event_type,
             'time_format'        => Arr::get(get_option('_fluent_booking_settings'), 'time_format', '12'),
         ];
 

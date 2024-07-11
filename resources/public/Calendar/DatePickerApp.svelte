@@ -152,10 +152,13 @@
                     dayClick({
                         date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day
                     });
+                } else if (firstLoading && slot.event_type == 'group_event') {
+                    gotoNextStep();
                 } else {
                     selectedDate = '';
                     dispatch('dayClicked', '');
                 }
+
             })
             .catch(errors => {
                 error = true;
@@ -193,6 +196,22 @@
             const date = util.dayjs(d).format('YYYY-MM-DD');
             const enabled = !!availableDates[date];
             days.push({name: '' + (i + 1), enabled: enabled, date: date});
+        }
+    }
+
+    function gotoNextStep() {
+        const firstDate = first(Object.keys(availableDates));
+        const firstTime = firstDate && availableDates[firstDate][0];
+        if (firstDate && firstTime) {
+            selectedDate = firstDate;
+            selectedDateTime = firstTime;
+            daySlots = availableDates[firstDate];
+            dispatch('dayClicked', selectedDate);
+            slotSpotConfirmed();
+        } else {
+            noAvailability = true;
+            selectedDate = '';
+            dispatch('dayClicked', '');
         }
     }
 
