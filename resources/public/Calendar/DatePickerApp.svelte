@@ -11,6 +11,7 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
+    export let isLoadingDates = false;
 
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
@@ -37,7 +38,6 @@
     let now = new Date();
     let year = now.getFullYear();		//	this is the month & year displayed
     let month = now.getMonth();
-    let isLoadingDates = false;
     let availableDates = {};
     let daySlots = [];
     let noAvailability = false;
@@ -147,13 +147,15 @@
                 error = response.error;
                 maybeNoAvailability();
 
+                if (slot.event_type == 'group_event') {
+                    gotoNextStep();
+                }
+
                 if (firstLoading && slot.pre_selects?.day) {
                     selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
                     dayClick({
                         date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day
                     });
-                } else if (firstLoading && slot.event_type == 'group_event') {
-                    gotoNextStep();
                 } else {
                     selectedDate = '';
                     dispatch('dayClicked', '');
@@ -162,7 +164,7 @@
             })
             .catch(errors => {
                 error = true;
-                errorText = errors.response.message;
+                errorText = errors?.response?.message;
                 console.log(errors);
             })
             .finally(() => {
@@ -200,7 +202,7 @@
     }
 
     function gotoNextStep() {
-        const firstDate = first(Object.keys(availableDates));
+        const firstDate = Object.keys(availableDates)[0];
         const firstTime = firstDate && availableDates[firstDate][0];
         if (firstDate && firstTime) {
             selectedDate = firstDate;
@@ -208,10 +210,6 @@
             daySlots = availableDates[firstDate];
             dispatch('dayClicked', selectedDate);
             slotSpotConfirmed();
-        } else {
-            noAvailability = true;
-            selectedDate = '';
-            dispatch('dayClicked', '');
         }
     }
 
@@ -219,11 +217,9 @@
         if (availableDates[day.date]) {
             daySlots = availableDates[day.date];
             selectedDate = day.date;
-
             if (daySlots.length == 1 && !daySlots[0].remaining) {
                 selectedDateTime = daySlots[0];
             }
-
             dispatch('dayClicked', selectedDate);
         } else {
             daySlots = [];
