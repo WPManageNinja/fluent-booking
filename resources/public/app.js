@@ -104,7 +104,6 @@ if (calendarApps.length) {
     });
 }
 
-
 const themeMode = window.fluentCalendarPublicVars.theme;
 const calwrap   = document.querySelector('.calendar_wrap');
 const fcalLanding_page  = document.querySelector('.fcal_calendar_wrap');
