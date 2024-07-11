@@ -1222,6 +1222,39 @@
             @media (max-width: 728px) {
                 max-width: 300px;
             }
+
+            &.fcal_times {
+                padding-bottom: 0;
+                max-width: 1000px;
+                .fcal_left_part {
+                    .fcal_action {
+                        display: flex;
+                        margin-top: 12px;
+                    }
+                }
+                .el-dialog__body {
+                    .fcal_left_part {
+                        .el-calendar {
+                            .el-calendar__header {
+                                padding-top: 24px;
+                            }
+                        }
+                    }
+                }
+                .fcal_override_calendar_available_hour {
+                    border-bottom: none !important;
+                    padding-top: 0 !important;
+                    .fcal_available_time_header {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        h3 {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+
             .el-popper__arrow {
                 display: none;
             }
@@ -1416,6 +1449,43 @@
                                             border-radius: 8px;
                                             font-size: 14px;
                                         }
+                                    }
+                                }
+                            }
+                        }
+
+                        .fcal_available_time_picker {
+                            overflow: auto;
+                            padding: 10px 20px 0 0;
+                            .fcal_available_times {
+                                display: flex;
+                                flex-wrap: wrap;
+                                flex-direction: column;
+                                align-content: flex-start;
+                                height: 400px;
+                                gap: 12px;
+                                .fcal_time {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    border: 1px solid #D6DAE1;
+                                    border-radius: 4px;
+                                    padding: 4px 12px;
+                                    width: 100px;
+                                    cursor: pointer;
+                                    position: relative;
+                                    &.fcal_spot_selected {
+                                        border-color: #306ae0;
+                                    }
+                                    .fcal_selected_time_icon {
+                                        position: absolute;
+                                        right: 10px;
+                                        top: 11px;
+                                        color: #ffffff;
+                                        background: #306ae0;
+                                        border-radius: 50%;
+                                        width: 18px;
+                                        height: 18px;
+                                        font-size: 12px;
                                     }
                                 }
                             }

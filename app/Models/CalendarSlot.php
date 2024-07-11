@@ -136,9 +136,19 @@ class CalendarSlot extends Model
         return $this->isSingleEvent() || $this->isGroupEvent();
     }
 
-    public function isProEvent()
+    public function isMultiHostEvent()
     {
         return $this->isTeamEvent() || $this->isOneOffEvent();
+    }
+
+    public function isMultiGuestEvent()
+    {
+        return $this->isGroup() || $this->isGroupEvent();
+    }
+
+    public function isProEvent()
+    {
+        return $this->isGroup() || $this->isTeamEvent() || $this->isOneOffEvent();
     }
 
     public function getAuthorProfile($public = true, $userID = null)
@@ -370,6 +380,16 @@ class CalendarSlot extends Model
         return $slotInterval;
     }
 
+    public function isReserveTime()
+    {
+        return Arr::isTrue($this->settings, 'reserve_time', false);
+    }
+
+    public function getAvailableTimes()
+    {
+        return Arr::get($this->settings, 'available_times', []);
+    }
+
     public function getTotalBufferTime()
     {
         $bufferTimeBefore = Arr::get($this->settings, 'buffer_time_before', 0);
@@ -406,7 +426,7 @@ class CalendarSlot extends Model
     public function getMinBookableDateTime($startDate = null, $timeZone = null)
     {
         $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        
+
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_date_between') {
@@ -418,8 +438,7 @@ class CalendarSlot extends Model
             }
         }
 
-        $cutOutSeconds = $this->getCutoutSeconds();
-        $totalCutStamp = DateTimeHelper::getTimestamp() + $cutOutSeconds;
+        $totalCutStamp = DateTimeHelper::getTimestamp() + $this->getCutoutSeconds();
 
         if (strtotime($startDate) < $totalCutStamp) {
             $startDate = gmdate('Y-m-d H:i:s', $totalCutStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -448,18 +467,24 @@ class CalendarSlot extends Model
         return gmdate('Y-m-d 23:59:59', time() + $rangeDays * DAY_IN_SECONDS); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
-    public function getMinLookUpDate()
+    public function getMinLookUpDate($timeZone = 'UTC')
     {
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
+
+        $minDate = gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                return gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $minDate =  gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
-        return gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        if ($timeZone != 'UTC') {
+            $minDate = DateTimeHelper::convertToTimeZone($minDate, $timeZone, 'UTC');
+        }
+
+        return $minDate;
     }
 
     public function getCutoutSeconds()
@@ -479,7 +504,7 @@ class CalendarSlot extends Model
             return [$hostId];
         }
 
-        if ($this->isTeamEvent()) {
+        if ($this->isMultiHostEvent()) {
             return Arr::get($this->settings, 'team_members', []);
         }
 
