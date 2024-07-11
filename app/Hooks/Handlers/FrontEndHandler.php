@@ -79,7 +79,8 @@ class FrontEndHandler
                 }
 
                 $rescheduleBy = 'guest';
-                if ($existingBooking->host_user_id == get_current_user_id() || PermissionManager::userCan('manage_all_bookings')) {
+                $hostIds = $existingBooking->getHostIds();
+                if (in_array(get_current_user_id(), $hostIds) || PermissionManager::userCan('manage_all_bookings')) {
                     $rescheduleBy = 'host';
                 }
 
