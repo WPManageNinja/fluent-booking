@@ -21,6 +21,7 @@ $whiteBG: #ffffff;
   --fcal_body_bg: #f3f4f6;
   --fcal_input_disable_bg: #f7f7f7;
   --fcal_gray: #6b7280;
+  --fcal_skeleton_bg: linear-gradient(90deg, #f0f2f5 25%, #e6e8eb 37%, #f0f2f5 63%);
 }
 
 @import "../scss/booking_confirmation";
@@ -48,6 +49,7 @@ $whiteBG: #ffffff;
   --fcal_input_bg: #101010;
   --fcal_body_bg: #101010;
   --fcal_input_disable_bg: #414141;
+  --fcal_skeleton_bg: linear-gradient(90deg, #333333 25%, #404040 37%, #555555 63%);
 
   &.fcal_calendar_wrap {
     .fcal_slots {
@@ -917,7 +919,6 @@ body >.fcal_calendar_wrap {
     align-items: flex-start;
 
     &.is_active {
-      //padding-right: 600px;
       .fcal_day_picker_wrap {
         margin-left: -100%;
         visibility: hidden;
@@ -940,17 +941,21 @@ body >.fcal_calendar_wrap {
       .fcal_fluent_form_selected_time {
         font-size: 14px;
         margin-top: 8px;
-
         b {
           font-weight: 600;
         }
+      }
+
+      &.group_event {
+        margin-left: -100%;
+        visibility: hidden;
+        width: 100%;
+        flex: none;
       }
     }
 
     .fcal_date_event_details {
       padding: 24px 20px;
-      //width: 600px;
-      //max-width: 600px;
       z-index: 10;
       background: var(--fcal_cal_bg);
       flex: none;
@@ -967,8 +972,6 @@ body >.fcal_calendar_wrap {
       top: 0;
       max-height: 100%;
       overflow-x: hidden;
-      //transform: translateX(100%);
-      //max-width: 0;
       &.is_payment {
         position: relative;
       }
@@ -981,8 +984,6 @@ body >.fcal_calendar_wrap {
         opacity: 1;
         visibility: visible;
         right: 0;
-        //transform: translateX(0);
-        //max-width: 700px;
       }
 
       .fcal_form_booking_details {
@@ -990,7 +991,6 @@ body >.fcal_calendar_wrap {
 
         .fcal_author {
           position: relative;
-
           .fcal_back {
             cursor: pointer;
             position: absolute;
@@ -1070,6 +1070,9 @@ body >.fcal_calendar_wrap {
         }
 
         .fcal_back {
+          &.group_event {
+            display: none;
+          }
           button.fcal_svg {
             width: 40px;
             height: 40px;
@@ -1360,6 +1363,21 @@ body >.fcal_calendar_wrap {
         word-wrap: normal;
       }
     }
+
+    .fcal_skeleton {
+        width: 100%;
+        margin: 4rem 2rem;
+        .fcal_skeleton_item {
+            height: 16px;
+            width: 100%;
+            margin-top: 1.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            background: var(--fcal_skeleton_bg);
+            background-size: 400% 100%;
+            animation: skeleton-loading 1.4s ease infinite;
+        }
+    }
   }
 
   .fcal_icon_item {
@@ -1557,7 +1575,6 @@ body >.fcal_calendar_wrap {
       }
 
       .calendar-container {
-        //display: none;
         opacity: 0;
         visibility: hidden;
         margin-left: -100%;
@@ -2490,6 +2507,14 @@ input.fcal_input:disabled {
   }
 }
 
+@keyframes skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
 
 @keyframes shrink-bounce{
   0%{

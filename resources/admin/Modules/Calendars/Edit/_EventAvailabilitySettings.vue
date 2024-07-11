@@ -56,7 +56,6 @@ export default {
     props: ['calendar_event', 'disabled'],
     data() {
         return {
-            loading: false,
             saving: false,
             scheduleOptions: [],
             availableSchedules: [],
