@@ -11,6 +11,7 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
+    export let skipCalendar = false;
     export let isLoadingDates = false;
 
     const isFluentform = appData.is_fluentform;
@@ -147,15 +148,11 @@
                 error = response.error;
                 maybeNoAvailability();
 
-                if (slot.event_type == 'group_event') {
+                if (skipCalendar && !noAvailability) {
                     gotoNextStep();
-                }
-
-                if (firstLoading && slot.pre_selects?.day) {
-                    selectedDate = slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day;
-                    dayClick({
-                        date: slot.pre_selects.year + '-' + slot.pre_selects.month + '-' + slot.pre_selects.day
-                    });
+                } else if (firstLoading && slot.pre_selects?.day) {
+                    selectedDate = generateDate(slot.pre_selects);
+                    dayClick({ date: selectedDate });
                 } else {
                     selectedDate = '';
                     dispatch('dayClicked', '');
@@ -201,15 +198,34 @@
         }
     }
 
+    function generateDate(date) {
+        return date.year + '-' + date.month + '-' + date.day;
+    }
+
+    function generateTime(date) {
+        const parts = date.time.split(':');
+        if (parts.length == 2) {
+            return date.time + ':00';
+        }
+        return date.time;
+    }
+
     function gotoNextStep() {
-        const firstDate = Object.keys(availableDates)[0];
-        const firstTime = firstDate && availableDates[firstDate][0];
-        if (firstDate && firstTime) {
-            selectedDate = firstDate;
-            selectedDateTime = firstTime;
-            daySlots = availableDates[firstDate];
+        const preSelectDate = generateDate(slot.pre_selects);
+        const preSelectTime = generateTime(slot.pre_selects);
+        const preSelectDateTime = preSelectDate + ' ' + preSelectTime;
+        const availableTime = availableDates[preSelectDate]?.find(slot => slot.start == preSelectDateTime) ?? false;
+        if (availableTime) {
+            selectedDate = preSelectDate;
+            selectedDateTime = availableTime;
+            daySlots = availableDates[preSelectDate];
             dispatch('dayClicked', selectedDate);
             slotSpotConfirmed();
+            slotSpotForFluentForm(selectedDateTime);
+        } else {
+            skipCalendar = false;
+            selectedDate = '';
+            dispatch('dayClicked', '');
         }
     }
 

@@ -17,7 +17,7 @@
                                         <el-icon><TimezoneIcon/></el-icon>
                                         <p>{{ calendar_event.calendar.author_timezone }}</p>
                                     </div>
-                                    <div class="fcal_event_availability">
+                                    <div>
                                         <AvailableTimes
                                             :title="$t('Available Times')"
                                             :calendar_event="calendar_event"

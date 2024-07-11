@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div :class="['fcal_event_availability', { 'date_field': !showAddTime }]">
         <h2 v-if="title" class="fcal_availability_title">{{ title }}</h2>
         <div>
-            <p>{{ $t('AvailableTimes/description') }}</p>
+            <p v-if="showAddTime">{{ $t('AvailableTimes/description') }}</p>
             <div class="fcal_override_dropdown_wrap" @click.self="modalVisible = false">
-                <el-button class="fcal_primary_btn2" @click="toggleAvailableTimes">
+                <el-button v-if="showAddTime" class="fcal_primary_btn2" @click="toggleAvailableTimes">
                     {{ $t('Add Available Times') }}
                 </el-button>
 
@@ -101,8 +101,11 @@
                                 </ul>
                             </td>
                             <td class="action">
-                                <el-button 
+                                <el-button v-if="isSingleEvent"
                                     @click="deleteAvailableTime(item)" size="small" :icon="DeleteIcon" text>
+                                </el-button>
+                                <el-button v-else
+                                    @click="showAvailableTime(item.date)" size="small" :icon="EditIcon" text>
                                 </el-button>
                             </td>
                         </tr>
@@ -115,7 +118,7 @@
 
 <script>
 import { ArrowRight, ArrowLeft, Check } from '@element-plus/icons-vue';
-import { Delete } from '@element-plus/icons-vue'
+import { Delete, Edit } from '@element-plus/icons-vue'
 import { markRaw } from "vue";
 
 export default {
@@ -141,6 +144,7 @@ export default {
             eventYear: new Date().getFullYear(),
             eventMonth: new Date().getMonth(),
             calendarId: this.calendar_event?.calendar_id,
+            EditIcon: markRaw(Edit),
             DeleteIcon: markRaw(Delete)
         }
     },
@@ -150,8 +154,14 @@ export default {
         }
     },
     computed: {
+        isSingleEvent() {
+            return this.calendar_event.event_type === 'single_event';
+        },
         isGroupEvent() {
             return this.calendar_event.event_type === 'group_event';
+        },
+        showAddTime() {
+            return this.isSingleEvent || (this.isGroupEvent && !Object.keys(this.settings.available_times).length);
         },
         isLastSlot() {
             return (slots, indx) => {
