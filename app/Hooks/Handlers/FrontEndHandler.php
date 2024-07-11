@@ -650,6 +650,7 @@ class FrontEndHandler
                 '12h'                                  => _x('12h', 'date time format switch', 'fluent-booking'),
                 '24h'                                  => _x('24h', 'date time format switch', 'fluent-booking'),
                 'spots left'                           => _x('spots left', 'for how many spots left for available booking', 'fluent-booking'),
+                'spots remaining'                      => _x('spots remaining', 'for how many spots remaining for available booking', 'fluent-booking'),
                 'Next'                                 => _x('Next', 'Booking form spot selection', 'fluent-booking'),
                 'Select on the Next Step'              => __('Select on the Next Step', 'fluent-booking'),
                 'location options'                     => __('location options', 'fluent-booking'),

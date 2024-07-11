@@ -2239,6 +2239,14 @@
                 }
             }
         }
+        &.date_field {
+            .fcal_availability_title {
+                margin-bottom: 0;
+            }
+            .fcal_availability_times {
+                margin-top: 0;
+            }
+        }
     }
   }
 

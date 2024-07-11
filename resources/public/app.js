@@ -9,8 +9,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const monthYear = urlParams.get('month');
 const fullDate = urlParams.get('date');
 const duration = urlParams.get('duration');
+const time = urlParams.get('time');
 
-function setPreSelects(fullDate, monthYear = null) {
+function setPreSelectDate(fullDate, monthYear = null) {
     if (fullDate && fullDate.length >= 10) {
         return {
             year: fullDate.substr(0, 4),
@@ -26,7 +27,11 @@ function setPreSelects(fullDate, monthYear = null) {
     return {};
 }
 
-preSelects = setPreSelects(fullDate, monthYear);
+preSelects = setPreSelectDate(fullDate, monthYear);
+
+if (time) {
+    preSelects.time = time;
+}
 
 if (duration) {
     preSelects.duration = duration;
@@ -61,8 +66,17 @@ window.fluentCalBootApp = function (elem, handleBack = false) {
         });
     }
 
+    const preDate = appData.slot?.pre_selects?.date;
+    if (preDate) {
+        appData.slot.pre_selects.year = preDate.substr(0, 4),
+        appData.slot.pre_selects.month = preDate.substr(5, 2),
+        appData.slot.pre_selects.day = preDate.substr(8, 2)
+    }
     if (preSelects) {
-        appData.slot.pre_selects = preSelects;
+        appData.slot.pre_selects = {
+            ...appData.slot.pre_selects,
+            ...preSelects
+        };
     }
 
     if(appData.lazy_js_files) {

@@ -20,7 +20,6 @@
     const author = appData.author_profile;
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
-    const eventType = slot.event_type;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
     let form = window.fluentCalendarPublicVars.current_person || {};
 
@@ -29,6 +28,7 @@
     let component = null;
     let isBookingDone = false;
 
+    let skipCalendar = !!slot.pre_selects.time;
     let selectedDate = false;
     let selectedDateTime = {};
     let isLoadingDates = false;
@@ -369,6 +369,15 @@
                                         </svg>
                                         <span>{timezone}</span>
                                     </div>
+                                    {#if skipCalendar && selectedDateTime.remaining}
+                                        <div class="fcal_remaining_spot fcal_icon_item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-6fbb019e="">
+                                                <path fill="currentColor" d="M192 128v768h640V128zm-32-64h704a32 32 0 0 1 32 32v832a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32m160 448h384v64H320zm0-192h192v64H320zm0 384h384v64H320z"></path>
+                                            </svg>
+                                            <span>{selectedDateTime.remaining} {i18('spots remaining')}</span>
+                                               
+                                        </div>
+                                    {/if}
                                 {/if}
                             </div>
                             {#if !selectedDateTime.start && !fluentFormDateTimeSelected.start}
@@ -381,7 +390,7 @@
                 {/if}
                 <div class="fcal_date_wrapper {selectedDateTime.start ? 'is_active' : ''}">
                     {#if appReady}
-                        <div class="fcal_day_picker_wrap {eventType}" id="fcal_day_picker_wrap">
+                        <div class="fcal_day_picker_wrap {skipCalendar ? 'skip_calendar' : ''}" id="fcal_day_picker_wrap">
                             <DayPickerApp
                                 {appData}
                                 {slot}
@@ -389,6 +398,7 @@
                                 {selectedDateTime}
                                 bind:duration={duration}
                                 bind:timezone={timezone}
+                                bind:skipCalendar={skipCalendar}
                                 bind:isLoadingDates={isLoadingDates}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
@@ -398,16 +408,19 @@
                                 on:resetSelection={(e) => {resetSelection()}}
                             />
                         </div>
-                        {#if isLoadingDates}
-                            <FcalSkeleton items={6}/>
+                        {#if skipCalendar && isLoadingDates}
+                            <FcalSkeleton rows={6}/>
                         {/if}
-                        <div class="fcal_date_event_details {eventType} {showingPayments ? 'is_payment' : ''} { selectedDateTime.start ? 'is_active' : ''}">
+                        <div class="fcal_date_event_details"
+                            class:skip_calendar={skipCalendar}
+                            class:is_payment={showingPayments}
+                            class:is_active={selectedDateTime.start}>
                             <div class="fcal_date_event_details_header">
                                 <h3>
                                     {#if showingPayments}
                                         {i18('Payment Details')}
                                     {:else}
-                                        <div aria-label="Back to Date Selection" class="fcal_back {eventType}"
+                                        <div aria-label="Back to Date Selection" class="fcal_back {skipCalendar ? 'skip_calendar' : ''}"
                                             on:click={(e) => {resetSelection()}}
                                             on:keypress={(e) => { resetSelection() }}>
                                             <button type="button" class="fcal_svg">

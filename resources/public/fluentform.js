@@ -18,6 +18,13 @@ if (calendarApps.length) {
             appData.is_fluentform = true;
             appData.id = elemId;
 
+            const preDate = appData.slot?.pre_selects?.date;
+            if (preDate) {
+                appData.slot.pre_selects.year = preDate.substr(0, 4),
+                appData.slot.pre_selects.month = preDate.substr(5, 2),
+                appData.slot.pre_selects.day = preDate.substr(8, 2)
+            }
+
             new BookingApp({
                 target: elem,
                 props: {
