@@ -802,13 +802,19 @@ class TransStrings
             'Select Team Members'                                                              => __('Select Team Members', 'fluent-booking'),
             'Dashboard'                                                                        => __('Dashboard', 'fluent-booking'),
             'Availability Timezone'                                                            => __('Availability Timezone', 'fluent-booking'),
+            'Reserved'                                                                         => __('Reserved', 'fluent-booking'),
+            'reserved'                                                                         => __('reserved', 'fluent-booking'),
+            'Expires'                                                                          => __('Expires', 'fluent-booking'),
             'Reserve Times'                                                                    => __('Reserve Times', 'fluent-booking'),
             'Available Times'                                                                  => __('Available Times', 'fluent-booking'),
             'Which slots are you available?'                                                   => __('Which slots are you available?', 'fluent-booking'),
             'Select All'                                                                       => __('Select All', 'fluent-booking'),
             'Reset All'                                                                        => __('Reset All', 'fluent-booking'),
             'Sort By Calendar Type'                                                            => __('Sort By Calendar Type', 'fluent-booking'),
+            'Sort'                                                                             => __('Sort', 'fluent-booking'),
             'Host'                                                                             => __('Host', 'fluent-booking'),
+            'event'                                                                            => __('event', 'fluent-booking'),
+            'Reserved slot of'                                                                 => __('Reserved slot of', 'fluent-booking'),
         );
     }
 }

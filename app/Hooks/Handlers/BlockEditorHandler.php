@@ -54,7 +54,7 @@ class BlockEditorHandler
 
             $calendars = Calendar::with(['events' => function ($query) {
                 $query->where('status', 'active');
-            }])->get();
+            }])->where('status', 'active')->get();
 
             $formattedCalendars = [];
 

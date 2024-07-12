@@ -212,7 +212,7 @@ class CalendarController extends Controller
             ];
             $calendar = Calendar::create($calendarData);
         } else {
-            $calendar = Calendar::where('user_id', $user->ID)->first();
+            $calendar = Calendar::where('user_id', $user->ID)->where('type', 'simple')->first();
         }
 
         if (!$calendar) {
@@ -276,7 +276,9 @@ class CalendarController extends Controller
 
     public function getCalendar(Request $request, $calendarId)
     {
-        $calendar = Calendar::with(['slots'])->findOrFail($calendarId);
+        $calendar = Calendar::with(['slots' => function ($query) {
+            $query->where('status', '!=', 'expired');
+        }])->findOrFail($calendarId);
 
         $calendar->author_profile = $calendar->getAuthorProfile();
 
