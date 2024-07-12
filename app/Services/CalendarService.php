@@ -12,6 +12,7 @@ class CalendarService
     {
         $calendarSlots = CalendarSlot::select(['id', 'title'])
             ->where('calendar_id', $calendarId)
+            ->where('status', '!=', 'expired')
             ->latest()
             ->get();
 
@@ -31,7 +32,9 @@ class CalendarService
             ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
             })
-            ->with(['slots'])
+            ->with(['slots' => function($query) {
+                $query->where('status', '!=', 'expired');
+            }])
             ->latest()
             ->get();
 
@@ -60,6 +63,7 @@ class CalendarService
     public static function getCalendarOptionsByTitle($condition = '')
     {
         $calendarQuery = Calendar::select(['id', 'title'])
+            ->where('status', '!=', 'expired')
             ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
             });
@@ -76,7 +80,9 @@ class CalendarService
                 break;
         }
 
-        $calendars = $calendarQuery->with(['slots'])->latest()->get();
+        $calendars = $calendarQuery->with(['slots' => function($query) {
+            $query->where('status', '!=', 'expired');
+        }])->latest()->get();
 
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {

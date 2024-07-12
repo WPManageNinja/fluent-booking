@@ -93,11 +93,11 @@
                     >
                         <el-option :value="appVars.me.calendar_id" :label="$t('My Meetings')" />
                         <el-option v-if="hasAllBookingAccess" value="all" :label="$t('All Meetings')" />
-                        <template v-if="calendarEventLists.length">
-                            <el-option 
+                        <template v-if="Object.keys(calendarEventLists).length">
+                            <el-option
                                 v-for="calendar in filteredCalendarEventLists"
                                 :key="calendar.id"
-                                :value="calendar.id" 
+                                :value="calendar.id"
                                 :label="calendar.title">
                             </el-option>
                         </template>
@@ -206,7 +206,7 @@ export default {
             pendingCount: 0,
             cancelledCount: 0,
             noShowCount: 0,
-            calendarEventLists: '',
+            calendarEventLists: {},
             isHideSidebar: false,
             currentEventTitle: '',
             search: '',
@@ -282,7 +282,8 @@ export default {
             return statuses;
         },
         filteredCalendarEventLists() {
-            return this.calendarEventLists.filter(calendar => calendar.id != this.appVars.me.calendar_id);
+            const eventLists = Object.values(this.calendarEventLists);
+            return eventLists.filter(calendar => calendar.id != this.appVars.me.calendar_id);
         }
     },
     methods: {
