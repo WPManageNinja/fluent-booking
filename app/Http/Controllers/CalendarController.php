@@ -24,7 +24,8 @@ class CalendarController extends Controller
     {
         do_action('fluent_booking/before_get_all_calendars', $request);
 
-        $search = sanitize_text_field(Arr::get($request->get(), 'search'));
+        $search = sanitize_text_field(Arr::get($request->get('query'), 'search'));
+        $calendarType = sanitize_text_field(Arr::get($request->get('query'), 'calendarType'));
 
         $applySearchFilter = function($query) use ($search) {
             if (!empty($search)) {
@@ -37,8 +38,13 @@ class CalendarController extends Controller
                 ->where($applySearchFilter);
             }])
             ->where('status', '!=', 'expired')
-            ->whereHas('slots', $applySearchFilter)
-            ->latest();
+            ->whereHas('slots', $applySearchFilter);
+
+        if (!empty($calendarType) && $calendarType != 'all') {
+            $calendarsQuery = Calendar::query()->where('type', $calendarType);
+        }
+
+        $calendarsQuery = $calendarsQuery->latest();
 
         if (!PermissionManager::hasAllCalendarAccess(true)) {
             $calendarsQuery->where('user_id', get_current_user_id());
