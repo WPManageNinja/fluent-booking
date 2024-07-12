@@ -122,7 +122,7 @@ class AvailabilityController extends Controller
         $timezone = $request->get('timezone');
 
         if (!$timezone) {
-            $calendar = Calendar::where('user_id', $userId)->first();
+            $calendar = Calendar::where('user_id', $userId)->where('type', 'simple')->first();
             if ($calendar) {
                 $timezone = $calendar->author_timezone;
             } else {
