@@ -147,7 +147,7 @@
                             <el-icon class="icon-right"><Right /></el-icon>
                         </div>
                     </el-button>
-                    <el-button @click="createSlot('group')">
+                    <el-button @click="maybeCreateGroupSlot">
                         <div class="icons-wrap">
                             <el-icon><User /></el-icon>
                             <el-icon><Right /></el-icon>
@@ -199,6 +199,12 @@
                 <SaveButton :saving="saving" :disabled="!cloneEventId" :label="$t('Clone Event')" @click="cloneEvent"/>
             </div>
         </el-drawer>
+        <ProNoticeDialog 
+            v-if="noticeModal" 
+            :openModal="noticeModal" 
+            :title="noticeTitle"
+            @update:openModal="noticeModal = $event"
+        />
     </div>
 </template>
 
@@ -209,6 +215,7 @@ import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import TeamMemberSelector from "@/Pieces/TeamMemberSelector.vue";
+import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
 
 export default {
     name: 'CalendarEventBlock',
@@ -224,7 +231,8 @@ export default {
         Delete,
         CopyDocument,
         Link,
-        SaveButton
+        SaveButton,
+        ProNoticeDialog
     },
     data() {
         return {
@@ -234,6 +242,8 @@ export default {
             showSettings: false,
             isNewBookingOpen: false,
             isCloneOpen: false,
+            noticeModal: false,
+            noticeTitle: '',
             teamMembers: [],
             eventMembers: []
         }
@@ -263,6 +273,11 @@ export default {
             })
         },
         createRountRobinSlot() {
+            if (!this.appVars.has_pro) {
+                this.noticeModal = true;
+                this.noticeTitle = this.$t('Round Robin');
+                return;
+            }
             this.$router.push({
                 name: 'create_slot_event',
                 params: {calendar_id: this.calendar.id, event_type: 'round_robin'},
@@ -271,6 +286,11 @@ export default {
             })
         },
         createEventCalendar(eventType) {
+            if (!this.appVars.has_pro) {
+                this.noticeModal = true;
+                this.noticeTitle = this.$t('Single Event');
+                return;
+            }
             this.$router.push({
                 name: 'create_slot_event',
                 params: {calendar_id: this.calendar.id, event_type: eventType},
@@ -286,6 +306,14 @@ export default {
         getCalendarId(eventId) {
             const event = this.calendarEvents.find(event => event.options.some(option => option.id == eventId));
             return event.id;
+        },
+        maybeCreateGroupSlot() {
+            if (this.appVars.has_pro) {
+                this.createSlot('group');
+            } else {
+                this.noticeModal = true;
+                this.noticeTitle = this.$t('Group Event');
+            }
         },
         handleCommand(command) {
             if (command == 'clone') {
