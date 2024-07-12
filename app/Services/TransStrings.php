@@ -524,7 +524,6 @@ class TransStrings
             'Reserve spots'                                                                    => __('Reserve spots', 'fluent-booking'),
             'Select Event Hosts'                                                               => __('Select Event Hosts', 'fluent-booking'),
             'Event Calendar Name'                                                              => __('Event Calendar Name', 'fluent-booking'),
-            'Enter Name of this event calendar'                                                => __('Enter Name of this event calendar', 'fluent-booking'),
             'for a scheduled event with'                                                       => __('for a scheduled event with', 'fluent-booking'),
             'to pick a time to meet with'                                                      => __('to pick a time to meet with', 'fluent-booking'),
             'hosts'                                                                            => __('hosts', 'fluent-booking'),
@@ -808,6 +807,8 @@ class TransStrings
             'Which slots are you available?'                                                   => __('Which slots are you available?', 'fluent-booking'),
             'Select All'                                                                       => __('Select All', 'fluent-booking'),
             'Reset All'                                                                        => __('Reset All', 'fluent-booking'),
+            'Sort By Calendar Type'                                                            => __('Sort By Calendar Type', 'fluent-booking'),
+            'Host'                                                                             => __('Host', 'fluent-booking'),
         );
     }
 }

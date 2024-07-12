@@ -45,6 +45,93 @@
         z-index: 9999999999999 !important;
     }
 }
+.el-popover {
+    &.fcal_sort_popover {
+        padding: 20px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1) !important;
+        border: 1px solid #EAECF0 !important;
+
+        * {
+            box-sizing: border-box;
+        }
+        .el-popover__title {
+            margin: 0 0 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1B2533;
+        }
+        .fcal_sorting_action_wrap {
+            .el-radio-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 16px;
+                width: 100%;
+                border-bottom: 1px solid #dddfe6;
+                padding-bottom: 16px;
+                .el-radio {
+                    height: auto;
+                    margin: 0;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                    .el-radio__input {
+                        &.is-checked {
+                            .el-radio__inner {
+                                border-color: #416ddd;
+                                background: #416ddd;
+                            }
+                        }
+                        .el-radio__inner {
+                            width: 16px;
+                            height: 16px;
+                            &:after {
+                                width: 6px;
+                                height: 6px;
+                            }
+                        }
+                    }
+                    .el-radio__label {
+                        font-size: 14px;
+                        color: #1B2533;
+                    }
+                }
+                &:nth-child(2) {
+                    flex-wrap: nowrap;
+                    gap: 0;
+                    border: 1px solid #dddfe6;
+                    border-radius: 6px;
+                    flex-direction: row;
+                    padding-bottom: 0;
+                    .el-radio {
+                        flex: 1;
+                        align-items: center;
+                        justify-content: center;
+                        line-height: 1;
+                        &.is-checked {
+                            .el-radio__label {
+                                background: rgb(98 104 241 / 10%);
+                                color: #6268f1;
+                            }
+                        }
+                        .el-radio__inner {
+                            width: 0;
+                            height: 0;
+                            opacity: 0;
+                            position: absolute;
+                        }
+                        .el-radio__label {
+                            width: 100%;
+                            text-align: center;
+                            padding: 9px 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 .fcal_inline_items {
     display: flex;
     align-items: center;

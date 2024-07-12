@@ -5,17 +5,45 @@
                 <h3>{{ $t('Calendars') }}</h3>
             </div>
             <div class="fcal_actions">
-                <el-input class="fcal_search_input"
-                          v-model="search"
+                <el-popover
+                    :title="$t('Sort By Calendar Type')"
+                    :width="240"
+                    placement="bottom"
+                    popper-class="fcal_sort_popover"
+                    trigger="click"
+                >
+                    <template #reference>
+                        <el-button :title="$t('Sort')" class="fcal_plain_btn">
+                            <el-icon><Sort/></el-icon>
+                        </el-button>
+                    </template>
+
+                    <div class="fcal_sorting_action_wrap">
+                        <el-radio-group v-model="query.calendarType">
+                            <el-radio label="all" size="small">{{ $t('All') }}</el-radio>
+                            <el-radio label="simple" size="small">{{ $t('Host') }}</el-radio>
+                            <el-radio label="team" size="small">{{ $t('Team') }}</el-radio>
+                            <el-radio label="event" size="small">{{ $t('One-off Event') }}</el-radio>
+                        </el-radio-group>
+                        <el-button class="fcal_primary_btn apply-btn" @click="getCalendars()">
+                            {{ $t('Apply') }}
+                        </el-button>
+                    </div>
+                </el-popover>
+                <el-input v-model="query.search"
+                          :placeholder="$t('Search Events')"
+                          class="fcal_search_input"
                           clearable
                           @clear="getCalendars"
-                          @keyup.enter.native="getCalendars"
-                          :placeholder="$t('Search Events')">
+                          @keyup.enter.native="getCalendars">
                     <template #append>
-                        <el-button @click="getCalendars"><el-icon><Search /></el-icon></el-button>
+                        <el-button @click="getCalendars">
+                            <el-icon><Search/></el-icon>
+                        </el-button>
                     </template>
                 </el-input>
-                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" trigger="click" popper-class="fcal_select">
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" popper-class="fcal_select"
+                             trigger="click">
                     <span class="el-dropdown-link">
                         <el-button class="fcal_primary_btn">
                             <span>+</span> {{ $t('New') }}
@@ -27,11 +55,11 @@
                                 @click="isNewBookingOpen = true">
                                 {{ $t('Add Host') }}
                             </el-dropdown-item>
-                            <el-dropdown-item 
+                            <el-dropdown-item
                                 @click="isNewTeamOpen = true">
                                 {{ $t('Add Team') }}
                             </el-dropdown-item>
-                            <el-dropdown-item 
+                            <el-dropdown-item
                                 @click="isSingleEventOpen = true">
                                 {{ $t('One-off Event') }}
                             </el-dropdown-item>
@@ -47,14 +75,15 @@
             <div v-else class="fcal_calendars_wrap">
                 <template v-if="calendars.length">
                     <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                        <calendar-event-block @fetchCalendar="getCalendars" :calendar="calendar" :eventLists="event_lists"/>
+                        <calendar-event-block :calendar="calendar" :eventLists="event_lists"
+                                              @fetchCalendar="getCalendars"/>
                     </div>
                 </template>
-                <el-empty v-else class="fcal_empty" :description="$t('No Calendars found')"/>
+                <el-empty v-else :description="$t('No Calendars found')" class="fcal_empty"/>
             </div>
 
             <div class="fcal_right fcal_tm20">
-                <pagination popper-class="fcal_select" :pagination="pagination" @fetch="getCalendars"/>
+                <pagination :pagination="pagination" popper-class="fcal_select" @fetch="getCalendars"/>
             </div>
         </div>
 
@@ -70,8 +99,8 @@
                     <p>{{ $t('AllCalendars/create_host_desc') }}</p>
                 </el-form-item>
                 <el-button
-                    @click="createCalendarEvent('single')"
-                    :disabled="!user_id">
+                    :disabled="!user_id"
+                    @click="createCalendarEvent('single')">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
                         <el-icon><Right/></el-icon>
@@ -81,7 +110,8 @@
                     </div>
                     <div class="content">
                         <h3>{{ $t('One-to-One') }}</h3>
-                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span>
+                            <strong>{{ $t('One invitee') }}</strong></h4>
                         <p>{{ $t('Good for: coffee chats, 1:1 interviews, etc.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
@@ -89,8 +119,8 @@
                     </div>
                 </el-button>
                 <el-button
-                    @click="maybeCreateGroupSlot"
-                    :disabled="!user_id">
+                    :disabled="!user_id"
+                    @click="maybeCreateGroupSlot">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
                         <el-icon><Right/></el-icon>
@@ -101,7 +131,8 @@
                     </div>
                     <div class="content">
                         <h3>{{ $t('Group') }}</h3>
-                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('Group of invitees') }}</strong></h4>
+                        <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span>
+                            <strong>{{ $t('Group of invitees') }}</strong></h4>
                         <p>{{ $t('Good for: webinars, online classes, etc.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
@@ -121,8 +152,8 @@
                 <el-form-item :label="$t('Team Name') + ' *'">
                     <el-input
                         v-model="team_name"
-                        type="text"
                         :placeholder="$t('Enter Name of this team')"
+                        type="text"
                     />
                 </el-form-item>
                 <el-form-item :label="$t('Select Team Members') + ' *'">
@@ -130,8 +161,8 @@
                     <p>{{ $t('Please select the members you want to assign to this team') }}</p>
                 </el-form-item>
                 <el-button
-                    @click="createTeamEvent('round_robin')"
-                    :disabled="!team_name || !team_members.length">
+                    :disabled="!team_name || !team_members.length"
+                    @click="createTeamEvent('round_robin')">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
                         <el-icon><User/></el-icon>
@@ -140,7 +171,8 @@
                     </div>
                     <div class="content">
                         <h3>{{ $t('Round Robin') }}</h3>
-                        <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                        <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span>
+                            <strong>{{ $t('One invitee') }}</strong></h4>
                         <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
@@ -149,9 +181,9 @@
                 </el-button>
             </div>
             <div v-else>
-                <p class="fcal_need_pro">{{ $t('Team') + ' ' + $t('NeedProVersion')}}</p>
-                <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_primary_btn">
-                    {{$t('Upgrade to Pro')}}
+                <p class="fcal_need_pro">{{ $t('Team') + ' ' + $t('NeedProVersion') }}</p>
+                <a :href="appVars.upgrade_url" class="el-button fcal_primary_btn" target="_blank">
+                    {{ $t('Upgrade to Pro') }}
                 </a>
             </div>
         </el-drawer>
@@ -166,8 +198,8 @@
                 <el-form-item :label="$t('Event Calendar Name') + ' *'">
                     <el-input
                         v-model="event_name"
-                        type="text"
                         :placeholder="$t('Enter Name of this event calendar')"
+                        type="text"
                     />
                 </el-form-item>
                 <el-form-item :label="$t('Select Event Hosts') + ' *'">
@@ -175,17 +207,27 @@
                     <p>{{ $t('Please select the hosts you want to assign to this event') }}</p>
                 </el-form-item>
                 <el-button
-                    @click="createEventCalendar('single_event')"
-                    :disabled="!event_name || !event_members.length">
+                    :disabled="!event_name || !event_members.length"
+                    @click="createEventCalendar('single_event')">
                     <div class="icons-wrap">
-                        <el-icon><User/></el-icon>
-                        <el-icon><User/></el-icon>
-                        <el-icon><Right/></el-icon>
-                        <el-icon><User/></el-icon>
+                        <el-icon>
+                            <User/>
+                        </el-icon>
+                        <el-icon>
+                            <User/>
+                        </el-icon>
+                        <el-icon>
+                            <Right/>
+                        </el-icon>
+                        <el-icon>
+                            <User/>
+                        </el-icon>
                     </div>
                     <div class="content">
                         <h3>{{ $t('Single Event') }}</h3>
-                        <h4><strong>{{ $t('Invite someone') }}</strong> <span>{{ $t('to pick a time to meet with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                        <h4><strong>{{ $t('Invite someone') }}</strong> <span>{{
+                                $t('to pick a time to meet with')
+                            }}</span> <strong>{{ $t('hosts') }}</strong></h4>
                         <p>{{ $t('Good for: higher priority meetings.') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
@@ -193,20 +235,38 @@
                     </div>
                 </el-button>
                 <el-button
-                    @click="createEventCalendar('group_event')"
-                    :disabled="!event_name || !event_members.length">
+                    :disabled="!event_name || !event_members.length"
+                    @click="createEventCalendar('group_event')">
                     <div class="icons-wrap">
                         <div class="icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            <svg class="-mt-px mr-1 inline h-3 w-3" fill="none" height="24" stroke="currentColor"
+                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                 width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
                         </div>
-                        <el-icon><Right/></el-icon>
+                        <el-icon>
+                            <Right/>
+                        </el-icon>
                         <div class="icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            <svg class="-mt-px mr-1 inline h-3 w-3" fill="none" height="24" stroke="currentColor"
+                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                 width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
                         </div>
                     </div>
                     <div class="content">
                         <h3>{{ $t('Group Event') }}</h3>
-                        <h4><strong>{{ $t('Reserve spots') }}</strong> <span>{{ $t('for a scheduled event with') }}</span> <strong>{{ $t('hosts') }}</strong></h4>
+                        <h4><strong>{{ $t('Reserve spots') }}</strong> <span>{{
+                                $t('for a scheduled event with')
+                            }}</span> <strong>{{ $t('hosts') }}</strong></h4>
                         <p>{{ $t('Good for: reservation or ticketing system') }}</p>
                         <el-icon class="icon-right">
                             <Right/>
@@ -215,14 +275,14 @@
                 </el-button>
             </div>
             <div v-else>
-                <p class="fcal_need_pro">{{ $t('Single Event') + ' ' + $t('NeedProVersion')}}</p>
-                <a target="_blank" :href="appVars.upgrade_url" class="el-button fcal_primary_btn">
-                    {{$t('Upgrade to Pro')}}
+                <p class="fcal_need_pro">{{ $t('Single Event') + ' ' + $t('NeedProVersion') }}</p>
+                <a :href="appVars.upgrade_url" class="el-button fcal_primary_btn" target="_blank">
+                    {{ $t('Upgrade to Pro') }}
                 </a>
             </div>
         </el-drawer>
-        <ProNoticeDialog 
-            v-if="noticeModal" 
+        <ProNoticeDialog
+            v-if="noticeModal"
             :openModal="noticeModal"
             :title="noticeTitle"
             @update:openModal="noticeModal = $event"
@@ -233,7 +293,7 @@
 <script>
 import Pagination from "../../Pieces/Pagination";
 import CalendarEventBlock from "./parts/CalendarEventBlock";
-import { User, Right, Search } from '@element-plus/icons-vue';
+import {User, Right, Search, Sort} from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import TeamMemberSelector from "../../Pieces/TeamMemberSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
@@ -242,16 +302,17 @@ import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
 export default {
     name: 'AllCalendars',
     components: {
-    SkeletonLoader,
-    HostSelector,
-    TeamMemberSelector,
-    User,
-    Right,
-    Search,
-    Pagination,
-    CalendarEventBlock,
-    ProNoticeDialog
-},
+        SkeletonLoader,
+        HostSelector,
+        TeamMemberSelector,
+        User,
+        Right,
+        Search,
+        Sort,
+        Pagination,
+        CalendarEventBlock,
+        ProNoticeDialog
+    },
     data() {
         return {
             calendars: [],
@@ -272,7 +333,10 @@ export default {
             event_name: '',
             event_members: [],
             event_lists: [],
-            search: ''
+            query: {
+                search: '',
+                calendarType: 'all'
+            }
         }
     },
     methods: {
@@ -281,7 +345,7 @@ export default {
             this.$get('calendars', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
-                search: this.search,
+                query: this.query,
                 with: ['calendar_event_lists']
             })
                 .then(response => {
