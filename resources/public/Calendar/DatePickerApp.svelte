@@ -14,6 +14,7 @@
     export let skipCalendar = false;
     export let isLoadingDates = false;
 
+    const rescheduling = appData.rescheduling || 'no';
     const isFluentform = appData.is_fluentform;
     const isFFConversational = appData.isFFConversational;
 
@@ -139,6 +140,7 @@
             event_id: slot.id,
             timezone: timezone || '',
             duration: duration || '',
+            rescheduling: rescheduling,
             action: 'fluent_cal_get_available_dates',
             start_date: util.dayjs(year + '-' + (month + 1) + '-', '01').format('YYYY-MM-DD'),
         })

@@ -186,7 +186,7 @@ class Booking extends Model
 
     public function getHostIds()
     {
-        return $this->hosts()->pluck('user_id');
+        return $this->hosts()->pluck('user_id')->toArray();
     }
 
     public function scopeUpcoming($query)
