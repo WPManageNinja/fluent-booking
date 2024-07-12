@@ -699,17 +699,18 @@ class FrontEndHandler
     {
         $app = App::getInstance();
 
-        $eventId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $postedData = $_REQUEST;  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        $eventId = (int)$postedData['event_id'];
+
+        $isRescheduling = Arr::get($postedData, 'rescheduling_hash', '');
 
         $calendarEvent = CalendarSlot::find($eventId);
 
-        if (!$calendarEvent || $calendarEvent->status != 'active') {
+        if (!$calendarEvent || ($calendarEvent->status != 'active' && !$isRescheduling)) {
             wp_send_json([
-                'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ], 422);
         }
-
-        $postedData = $_REQUEST;  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         do_action('fluent_booking/starting_scheduling_ajax', $postedData);
 
@@ -894,17 +895,19 @@ class FrontEndHandler
     {
         $startBenchmark = microtime(true);
 
-        $eventId = (int)$_REQUEST['event_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        $eventId = (int)$request['event_id'];
+
+        $rescheduling = Arr::get($request, 'rescheduling', 'no');
 
         $calendarEvent = CalendarSlot::findOrfail($eventId);
 
-        if (!$calendarEvent || $calendarEvent->status != 'active') {
+        if (!$calendarEvent || ($calendarEvent->status != 'active' && $rescheduling == 'no')) {
             wp_send_json([
                 'message' => __('Sorry, the host is not accepting any new bookings at the moment.', 'fluent-booking')
             ], 422);
         }
-
-        $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $calendar = $calendarEvent->calendar;
         $startDate = sanitize_text_field(Arr::get($request, 'start_date')); // phpcs:ignore WordPress.Security.NonceVerification.Recommended

@@ -379,6 +379,7 @@ class LandingPageHandler
                 'enabled' => true
             ];
 
+            $eventVars['rescheduling'] = 'yes';
             $eventVars['form_fields'] = array_values($formFields);
             unset($eventVars['payment_items']);
             unset($eventVars['payment_methods']);
