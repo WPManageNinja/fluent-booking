@@ -41,7 +41,7 @@ class CalendarController extends Controller
             ->whereHas('slots', $applySearchFilter);
 
         if (!empty($calendarType) && $calendarType != 'all') {
-            $calendarsQuery = Calendar::query()->where('type', $calendarType);
+            $calendarsQuery = $calendarsQuery->where('type', $calendarType);
         }
 
         $calendarsQuery = $calendarsQuery->latest();
