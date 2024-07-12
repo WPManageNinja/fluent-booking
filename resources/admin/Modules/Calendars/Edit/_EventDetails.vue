@@ -188,7 +188,7 @@ export default {
             return !this.is_board && !this.new_event && !this.isGroupMeeting && !this.isEventCalendar;
         },
         showMaxInvitees () {
-            return this.isGroupMeeting || this.isGroupEvent;
+            return this.appVars.has_pro && (this.isGroupMeeting || this.isGroupEvent);
         }
     },
     methods: {
