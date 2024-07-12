@@ -916,6 +916,14 @@
                     }
                 }
             }
+            &.fcal_pro_notice_dialog {
+                .el-dialog__body {
+                    padding-top: 8px;
+                    p.fcal_need_pro {
+                        font-size: 16px;
+                    }
+                }
+            }
         }
         .el-dialog__body {
             .el-form {
