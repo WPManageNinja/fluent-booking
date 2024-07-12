@@ -8,7 +8,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import CreateNew from "../Modules/Calendars/CreateNew.vue";
 export default {
     name: 'CreateNewCalendar',

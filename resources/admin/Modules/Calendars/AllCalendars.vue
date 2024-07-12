@@ -89,7 +89,7 @@
                     </div>
                 </el-button>
                 <el-button
-                    @click="createCalendarEvent('group')"
+                    @click="maybeCreateGroupSlot"
                     :disabled="!user_id">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
@@ -221,6 +221,12 @@
                 </a>
             </div>
         </el-drawer>
+        <ProNoticeDialog 
+            v-if="noticeModal" 
+            :openModal="noticeModal"
+            :title="noticeTitle"
+            @update:openModal="noticeModal = $event"
+        />
     </div>
 </template>
 
@@ -231,19 +237,21 @@ import { User, Right, Search } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import TeamMemberSelector from "../../Pieces/TeamMemberSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
+import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
 
 export default {
     name: 'AllCalendars',
     components: {
-        SkeletonLoader,
-        HostSelector,
-        TeamMemberSelector,
-        User,
-        Right,
-        Search,
-        Pagination,
-        CalendarEventBlock
-    },
+    SkeletonLoader,
+    HostSelector,
+    TeamMemberSelector,
+    User,
+    Right,
+    Search,
+    Pagination,
+    CalendarEventBlock,
+    ProNoticeDialog
+},
     data() {
         return {
             calendars: [],
@@ -253,6 +261,8 @@ export default {
                 per_page: 10,
                 current_page: 1
             },
+            noticeModal: false,
+            noticeTitle: '',
             isNewBookingOpen: false,
             isNewTeamOpen: false,
             isSingleEventOpen: false,
@@ -285,6 +295,14 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        maybeCreateGroupSlot() {
+            if (this.appVars.has_pro) {
+                this.createCalendarEvent('group');
+            } else {
+                this.noticeModal = true;
+                this.noticeTitle = this.$t('Group Event');
+            }
         },
         createCalendarEvent(eventType) {
             this.$router.push({
