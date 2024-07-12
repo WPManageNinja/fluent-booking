@@ -148,7 +148,7 @@
                 error = response.error;
                 maybeNoAvailability();
 
-                if (skipCalendar && !noAvailability) {
+                if (skipCalendar) {
                     gotoNextStep();
                 } else if (firstLoading && slot.pre_selects?.day) {
                     selectedDate = generateDate(slot.pre_selects);
@@ -162,6 +162,7 @@
             .catch(errors => {
                 error = true;
                 errorText = errors?.response?.message;
+                skipCalendar = false;
                 console.log(errors);
             })
             .finally(() => {
@@ -211,6 +212,10 @@
     }
 
     function gotoNextStep() {
+        if (noAvailability) {
+            skipCalendar = false;
+            return;
+        }
         const preSelectDate = generateDate(slot.pre_selects);
         const preSelectTime = generateTime(slot.pre_selects);
         const preSelectDateTime = preSelectDate + ' ' + preSelectTime;
