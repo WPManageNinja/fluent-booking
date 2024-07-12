@@ -170,6 +170,22 @@ class Booking extends Model
         return $additionalGuests;
     }
 
+    public function getHostEmails($excludeHostId = null)
+    {
+        $hostIds = $this->getHostIds();
+
+        $emails = [];
+        foreach ($hostIds as $hostId) {
+            if ($hostId != $excludeHostId) {
+                if ($user = get_user_by('ID', $hostId)) {
+                    $emails[] = $user->user_email;
+                }
+            }
+        }
+
+        return $emails;
+    }
+
     public function hosts()
     {
         $class = __NAMESPACE__ . '\User';
