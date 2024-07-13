@@ -79,9 +79,7 @@ class Booking extends Model
             }
 
             if (is_null($model->group_id) || !isset($model->group_id)) {
-                $lastEvent = static::orderBy('group_id', 'desc')->first(['group_id']);
-                $nextEventId = $lastEvent ? $lastEvent->group_id + 1 : 1;
-                $model->group_id = $nextEventId;
+                $model->group_id = static::assignNextGroupId();
             }
 
             if (defined('FLUENTCRM') && !empty($model->email) && apply_filters('fluent_calender/auto_booking_fluent_crm_sync', true)) {
@@ -136,6 +134,13 @@ class Booking extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'host_user_id');
+    }
+
+    public static function assignNextGroupId()
+    {
+        $lastEvent = static::orderBy('group_id', 'desc')->first(['group_id']);
+
+        return $lastEvent ? $lastEvent->group_id + 1 : 1;
     }
 
     public function getCustomFormData($isFormatted = true)
