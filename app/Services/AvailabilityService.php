@@ -18,8 +18,7 @@ class AvailabilityService
             !PermissionManager::userCan($permissions),
             function ($query) {
                 return $query->where('object_id', get_current_user_id());
-            }
-        )->get()->toArray();
+            })->get()->toArray();
 
         $formattedSchedules = [];
         foreach ($availabilities as $availability) {
@@ -106,8 +105,7 @@ class AvailabilityService
             !PermissionManager::userCan($permissions),
             function ($query) {
                 return $query->where('object_id', get_current_user_id());
-            }
-        )->get();
+            })->get();
 
         $scheduleOptions = [];
         foreach ($availabilities as $availability) {

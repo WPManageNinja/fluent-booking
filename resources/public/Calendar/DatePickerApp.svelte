@@ -218,9 +218,13 @@
             skipCalendar = false;
             return;
         }
-        const preSelectDate = generateDate(slot.pre_selects);
         const preSelectTime = generateTime(slot.pre_selects);
-        const preSelectDateTime = preSelectDate + ' ' + preSelectTime;
+        let preSelectDate = generateDate(slot.pre_selects);
+        let preSelectDateTime = preSelectDate + ' ' + preSelectTime;
+        if (slot.event_type == 'group_event') {
+            preSelectDateTime = util.toTimezone(preSelectDateTime, timezone, 'YYYY-MM-DD HH:mm:ss');
+            preSelectDate = preSelectDateTime.split(' ')[0];
+        }
         const availableTime = availableDates[preSelectDate]?.find(slot => slot.start == preSelectDateTime) ?? false;
         if (availableTime) {
             selectedDate = preSelectDate;
