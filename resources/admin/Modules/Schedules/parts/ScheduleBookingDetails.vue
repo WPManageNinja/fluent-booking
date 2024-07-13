@@ -87,11 +87,11 @@
                             <h3>{{ $t('Meeting Duration') }}</h3>
                             <p>{{ getMeetingDuration(showing_booking.slot_minutes) }}</p>
                         </div>
-                        <div class="fcal_schedule_details_event_item">
+                        <div v-if="!isReservedBooking" class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Location') }}</h3>
                             <div v-html="showing_booking.location"></div>
                         </div>
-                        <div v-if="showing_booking.event_type != 'group'"
+                        <div v-if="!isMultiGuestEvent && !isReservedBooking"
                             class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Status') }}</h3>
                             <p>{{ $t(showing_booking.status) }}</p>
@@ -101,7 +101,7 @@
                             <h3>{{ $t('Expires') }}</h3>
                             <p>{{ getExpireTime }}</p>
                         </div>
-                        <div v-if="showing_booking.source_url && showing_booking.event_type != 'group'"
+                        <div v-if="showing_booking.source_url && isMultiGuestEvent"
                              class="fcal_schedule_details_event_item">
                             <h3>{{ $t('Booking URL') }}</h3>
                             <div class="fcal_spot_details_value">
@@ -119,6 +119,16 @@
                             @dataUpdated="handleDataUpdated"
                             :booking="showing_booking">
                         </editable-booking-data>
+                    </div>
+                    <div v-if="isReservedBooking"
+                        class="fcal_schedule_details_reserve_times">
+                        <h3>{{ $t('Reserve Times') }}</h3>
+                        <div class="fcal_reserve_time" v-for="(times, date) in reserveTimes">
+                            <h4>{{ date }}</h4>
+                            <p v-for="(time, indx) in times">
+                                {{ time }}<span v-if="indx < times.length - 1">,</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -234,6 +244,7 @@ import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
 import PaymentLogs from "./PaymentLogs";
+import { each } from 'lodash';
 
 export default {
     name: "ScheduleSpotDetails",
@@ -346,6 +357,17 @@ export default {
         },
         getExpireTime() {
             return this.toCurrentTimezone(this.showing_booking.expires, this.appVars.date_time_formatter);
+        },
+        reserveTimes() {
+            const reserveTimes = {};
+            each(this.showing_booking.reserved_times, (reserveTime) => {
+                const localTime = this.toCurrentTimezone(reserveTime);
+                const date = this.toDateFormat(localTime, 'D MMM YYYY');
+                const time = this.toDateFormat(localTime, 'hh:mma');
+                reserveTimes[date] = reserveTimes[date] || [];
+                reserveTimes[date].push(time);
+            });
+            return reserveTimes;
         }
     },
     methods: {
