@@ -127,6 +127,7 @@ class CalendarService
                 'weekly_schedules' => $weeklySchedule,
                 'date_overrides'   => $dateOverride
             ];
+
             $event->save();
         }
     }

@@ -101,12 +101,13 @@ class SchedulesController extends Controller
         }
 
         if ($request->get('page') == 1) {
+            $pendingQuery = Booking::query()
+                ->whereIn('status', ['pending', 'reserved'])
+                ->distinct('group_id');
             if ($author && $author !== 'all') {
-                $pendingCount = Booking::where('calendar_id', $author)
-                    ->whereIn('status', ['pending', 'reserved'])
-                    ->count();
+                $pendingCount = $pendingQuery->where('calendar_id', $author)->count('group_id');
             } else {
-                $pendingCount = Booking::whereIn('status', ['pending', 'reserved'])->count();
+                $pendingCount = $pendingQuery->count('group_id');
             }
 
             $data['no_show_count'] = Booking::where('status', 'no_show')->count();

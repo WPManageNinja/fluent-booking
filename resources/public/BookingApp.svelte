@@ -69,10 +69,11 @@
     }
 
     onMount(() => {
+        const guessTimezone = util.dayjs.tz.guess();
         if (slot.settings?.lock_timezone?.enabled) {
-            timezone = slot.settings.lock_timezone.timezone || util.dayjs.tz.guess();
+            timezone = slot.settings.lock_timezone.timezone || guessTimezone;
         } else {
-            timezone = util.dayjs.tz.guess();
+            timezone = guessTimezone;
         }
         appReady = true;
         checkDevice();
