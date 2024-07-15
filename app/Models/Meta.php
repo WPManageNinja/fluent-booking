@@ -29,4 +29,9 @@ class Meta extends Model
         return \maybe_unserialize($value);
     }
 
+    public function calendar_event()
+    {
+        return $this->belongsTo(CalendarSlot::class, 'object_id');
+    }
+
 }

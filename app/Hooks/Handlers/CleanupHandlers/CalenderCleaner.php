@@ -19,6 +19,11 @@ class CalenderCleaner
         if (empty($calendar)) {
             return;
         }
+
+        Meta::query()
+            ->where('object_type', 'Calendar')
+            ->where('object_id', $calendar->id)->delete();
+
         $calendarEvents = CalendarSlot::query()
             ->where('calendar_id', $calendar->id)->get();
 

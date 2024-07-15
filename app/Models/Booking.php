@@ -306,6 +306,27 @@ class Booking extends Model
         return DateTimeHelper::convertFromUtc($this->end_time, $this->person_time_zone, $format);
     }
 
+    public function getHostAndGuestDetailsHtml()
+    {
+        $authors = $this->getHostsDetails();
+
+        $guestName = trim($this->first_name . ' ' . $this->last_name);
+
+        $hostUserId = $this->host_user_id;
+
+        $authorListHtml = '<ul class="fcal_listed">';
+
+        foreach ($authors as $author) {
+            $authorBadge = ($author['id'] == $hostUserId) ? '<span class="fcal_host_badge">' . __('Host', 'fluent-booking') . '</span>' : '';
+            $authorListHtml .= '<li class="fcal_host_name">' . $author['name'] . $authorBadge . '</li>';
+        }
+
+        $authorListHtml .= '<li class="fcal_guest_name">' . $guestName . '</li>';
+        $authorListHtml .= '</ul>';
+    
+        return $authorListHtml;
+    }
+
     public function getLocationDetailsHtml()
     {
         $details = $this->location_details;
@@ -943,13 +964,15 @@ class Booking extends Model
         return $data;
     }
 
-    public function getHostsDetails($isPublic = true)
+    public function getHostsDetails($isPublic = true, $excludeHostId = null)
     {
         $hostIds = $this->getHostIds();
 
         $hosts = [];
         foreach ($hostIds as $hostId) {
-            $hosts[] = $this->getHostDetails($isPublic, $hostId);
+            if ($hostId != $excludeHostId) {
+                $hosts[] = $this->getHostDetails($isPublic, $hostId);
+            }
         }
 
         return $hosts;
