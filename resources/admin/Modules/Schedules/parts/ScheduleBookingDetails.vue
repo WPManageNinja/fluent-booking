@@ -132,7 +132,7 @@
                     </div>
                 </div>
 
-                <div v-loading="loading_sidebar" v-if="showing_booking && showing_booking.event_type == 'single'">
+                <div v-loading="loading_sidebar" v-if="showing_booking && isSingleGuestEvent">
                     <template v-if="main_body_contents && main_body_contents.length">
                         <div v-for="bodyMeta in main_body_contents" :key="bodyMeta.id"
                              class="fcal_schedule_event_infos_body">
@@ -335,6 +335,9 @@ export default {
         },
         isMultiGuestEvent() {
             return this.isGroup || this.isGroupEvent;
+        },
+        isSingleGuestEvent() {
+            return !this.isMultiGuestEvent;
         },
         meetingDetails() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
