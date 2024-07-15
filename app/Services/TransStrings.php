@@ -805,7 +805,8 @@ class TransStrings
             'Reserved'                                                                         => __('Reserved', 'fluent-booking'),
             'reserved'                                                                         => __('reserved', 'fluent-booking'),
             'Expires'                                                                          => __('Expires', 'fluent-booking'),
-            'Reserved Times'                                                                    => __('Reserve Times', 'fluent-booking'),
+            'Reserve Times'                                                                    => __('Reserve Times', 'fluent-booking'),
+            'Reserved Times'                                                                   => __('Reserved Times', 'fluent-booking'),
             'Available Times'                                                                  => __('Available Times', 'fluent-booking'),
             'Which slots are you available?'                                                   => __('Which slots are you available?', 'fluent-booking'),
             'Select All'                                                                       => __('Select All', 'fluent-booking'),
@@ -815,6 +816,8 @@ class TransStrings
             'Host'                                                                             => __('Host', 'fluent-booking'),
             'event'                                                                            => __('event', 'fluent-booking'),
             'Reserved slot of'                                                                 => __('Reserved slot of', 'fluent-booking'),
+            'Organizer'                                                                        => __('Organizer', 'fluent-booking'),
+            'Make organizer'                                                                   => __('Make organizer', 'fluent-booking'),
         );
     }
 }
