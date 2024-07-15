@@ -122,7 +122,7 @@
                     </div>
                     <div v-if="isReservedBooking"
                         class="fcal_schedule_details_reserve_times">
-                        <h3>{{ $t('Reserve Times') }}</h3>
+                        <h3>{{ $t('Reserved Times') }}</h3>
                         <div class="fcal_reserve_time" v-for="(times, date) in reserveTimes">
                             <h4>{{ date }}</h4>
                             <p v-for="(time, indx) in times">

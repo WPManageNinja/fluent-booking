@@ -141,6 +141,11 @@ class CalendarSlot extends Model
         return $this->isTeamEvent() || $this->isOneOffEvent();
     }
 
+    public function isMultiHostsEvent()
+    {
+        return $this->isCollective() || $this->isOneOffEvent();
+    }
+
     public function isMultiGuestEvent()
     {
         return $this->isGroup() || $this->isGroupEvent();
