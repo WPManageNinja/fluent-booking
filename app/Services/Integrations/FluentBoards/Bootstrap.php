@@ -78,6 +78,7 @@ class Bootstrap extends IntegrationManagerController
             'email'        => '',
             'description'  => '',
             'position'     => 'bottom',
+            'due_at_type'  => 'booking',
             'due_at_days'  => 0,
             'enabled'      => true
         ];
@@ -163,15 +164,24 @@ class Bootstrap extends IntegrationManagerController
                 'component'   => 'value_text'
             ],
             [
+                'key'       => 'due_at_type',
+                'label'     => __('Due Type', 'fluent-booking'),
+                'tips'      => __('Choose “Booking Date” to set the due date relative to when the booking was made or “Meeting Date” to set it relative to the scheduled meeting date.', 'fluent-booking'),
+                'component' => 'radio_choice',
+                'options'   => [
+                    'booking' => __('Booking Date', 'fluent-booking'),
+                    'meeting' => __('Meeting Date', 'fluent-booking')
+                ]
+                ],
+            [
                 'key'       => 'due_at_days',
                 'label'     => __('Due Date', 'fluent-booking'),
-                'tips'      => __('Days after booking scheduled, values less than zero will set due date to null.', 'fluent-booking'),
+                'tips'      => __('Set the due date by entering a number relative to the booking or meeting date. Positive for days after and negative for days before the booking or meeting date.', 'fluent-booking'),
                 'component' => 'number'
             ],
             [
                 'key'         => 'position',
                 'label'       => __('Task Position', 'fluent-booking'),
-                'required'    => true,
                 'placeholder' => __('Position', 'fluent-booking'),
                 'component'   => 'radio_choice',
                 'options'     => [
@@ -311,19 +321,22 @@ class Bootstrap extends IntegrationManagerController
         return $lastPosition + 1;
     }
 
-    private function dueDateConvertion($due_time, $unit)
+    private function convertDueDate($dueTime, $dueType, $bookingStartTime)
     {
-        if ($due_time > 0) {
-            $currentTime = current_time('mysql');
-            $readyString = '+' . $due_time . ' ' . $unit;
-            return gmdate('Y-m-d H:i:s', strtotime($readyString, strtotime($currentTime))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $timeStamp = strtotime($bookingStartTime);
+        if ($dueType != 'meeting') {
+            $timeStamp = strtotime(current_time('mysql'));
+            $dueTime = max(0, $dueTime);
         }
-        return null;
+
+        $adjustSign = $dueTime < 0 ? '-' : '+';
+        $dateAdjustment = $adjustSign . abs($dueTime) . ' day';
+        return gmdate('Y-m-d H:i:s', strtotime($dateAdjustment, $timeStamp)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function notify($feed, $booking, $calendarEvent)
     {
-        $validData = ['task_title', 'description', 'board_config', 'author_name', 'email', 'position', 'due_at_days'];
+        $validData = ['task_title', 'description', 'board_config', 'author_name', 'email', 'position', 'due_at_days', 'due_at_type'];
         $data = Arr::only($feed['processedValues'], $validData);
 
         $boardId     = intval(Arr::get($data, 'board_config.board_id'));
@@ -334,7 +347,8 @@ class Bootstrap extends IntegrationManagerController
         $taskTitle   = sanitize_text_field(Arr::get($data, 'task_title'));
         $description = wp_kses_post(Arr::get($data, 'description'));
         $position    = sanitize_text_field(Arr::get($data, 'position'));
-        $dueAtDays   = sanitize_text_field(Arr::get($data, 'due_at_days'));
+        $dueAtDays   = intval(Arr::get($data, 'due_at_days'));
+        $dueAtType   = sanitize_text_field(Arr::get($data, 'due_at_type'));
         $authorName  = sanitize_text_field(Arr::get($data, 'author_name'));
         $authorEmail = sanitize_email(Arr::get($data, 'email'));
 
@@ -354,7 +368,7 @@ class Bootstrap extends IntegrationManagerController
             'priority'       => $priority,
             'description'    => $description,
             'position'       => $this->getLastPositionOfStageTask($boardId, $stageId),
-            'due_at'         => $this->dueDateConvertion($dueAtDays, 'day'),
+            'due_at'         => $this->convertDueDate($dueAtDays, $dueAtType, $booking->start_time),
             'source'         => 'FluentBooking'
         ];
 
