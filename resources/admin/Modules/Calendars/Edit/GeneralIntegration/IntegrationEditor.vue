@@ -14,7 +14,7 @@
                     <template #label>
                         {{ field.label }}
                         <el-tooltip v-if="field.tips" class="item" popper-class="ff_tooltip_wrap"
-                                    placement="bottom-start">
+                                    placement="top-start">
                             <template #content>
                                 <div>
                                     <p v-html="field.tips"></p>
