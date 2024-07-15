@@ -354,10 +354,19 @@ class CalendarSlot extends Model
     public function getAvailableDurations()
     {
         if ($this->isMultiDurationEnabled()) {
-            return Arr::get($this->settings, 'multi_duration.available_durations', []);
+            $durationLookup = Helper::getDurationLookup(true);
+            $availableDurations = Arr::get($this->settings, 'multi_duration.available_durations', []);
+
+            return array_map(function ($duration) use ($durationLookup) {
+                return $durationLookup[$duration];
+            }, $availableDurations);
         }
 
-        return [$this->duration];
+        $durationLookup = Helper::getDurationLookup();
+
+        $duration = $durationLookup[$this->duration] ?? $this->duration;
+
+        return [$duration];
     }
 
     public function getDescription()

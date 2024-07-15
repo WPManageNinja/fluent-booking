@@ -1,5 +1,5 @@
 <template>
-    <div class="ff_field_routing">
+    <div class="fcal_field_routing">
         <el-select
             v-if="field.simple_component == 'select'"
             :disabled="settings[field.routing_key] != 'simple'"
