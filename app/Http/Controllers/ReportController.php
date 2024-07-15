@@ -354,7 +354,7 @@ class ReportController extends Controller
                 $meeting->author = $meeting->slot->getAuthorProfile(false);
             }
 
-            if ($meeting->event_type == 'group') {
+            if ($meeting->isMultiGuestBooking()) {
                 $meeting->booked_count = Booking::where('group_id', $meeting->group_id)
                     ->whereIn('status', ['scheduled', 'completed'])->count();
             }
