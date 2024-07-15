@@ -114,7 +114,15 @@ export default {
             return this.slot.title;
         },
         eventType() {
-            return this.slot.event_type == 'group' ? this.$t('Group') : this.$t('One-to-One');
+            const eventTypes = {
+                'single': this.$t('One-to-One'),
+                'group': this.$t('Group'),
+                'round_robin': this.$t('Round Robin'),
+                'collective': this.$t('Collective'),
+                'single_event': this.$t('Single Event'),
+                'group_event': this.$t('Group Event'),
+            }
+            return eventTypes[this.slot.event_type];
         },
         getDuration() {
             return (duration) => {

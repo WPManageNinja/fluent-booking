@@ -3,6 +3,8 @@
 namespace FluentBooking\App\Hooks\Scheduler;
 
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 
 class FiveMinuteScheduler
@@ -17,6 +19,9 @@ class FiveMinuteScheduler
         $this->maybeAutoCancelBooking();
         $this->maybeAutoCompleteBookings();
         $this->maybeAutoCancelPastBookings();
+        $this->maybeAutoDeleteReservations();
+        $this->maybeAutoExpireCalendarEvents();
+        $this->maybeAutoExpireCalendars();
     }
 
     private function maybeAutoCompleteBookings()
@@ -64,6 +69,50 @@ class FiveMinuteScheduler
                 'status'     => 'cancelled',
                 'updated_at' => gmdate('Y-m-d H:i:s') // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             ]);
+
+        return true;
+    }
+
+    private function maybeAutoExpireCalendars()
+    {
+        Calendar::query()
+            ->where('type', 'event')
+            ->where('status', 'active')
+            ->whereDoesntHave('events', function ($query) {
+                $query->whereIn('status', ['active', 'draft']);
+            })
+            ->update(['status' => 'expired']);
+
+        return true;
+    }
+
+    private function maybeAutoExpireCalendarEvents()
+    {
+        Meta::query()
+            ->where('object_type', 'calendar_event')
+            ->where('key', 'expire_time')
+            ->where('value', '<=', gmdate('Y-m-d H:i:s', time())) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->whereHas('calendar_event', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->with(['calendar_event' => function ($query) {
+                $query->where('status', 'active');
+            }])
+            ->get()
+            ->each(function ($meta) {
+                $meta->calendar_event->update(['status' => 'expired']);
+            });
+
+        return true;
+    }
+
+    private function maybeAutoDeleteReservations()
+    {
+        Booking::query()
+            ->whereIn('event_type', ['single_event', 'group_event'])
+            ->where('status', 'reserved')
+            ->where('start_time', '<=', gmdate('Y-m-d H:i:s', time())) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            ->delete();
 
         return true;
     }

@@ -128,8 +128,6 @@ class BookingService
 
         $author = $booking->getHostDetails(false);
 
-        $guestName = trim($booking->first_name . ' ' . $booking->last_name);
-
         $bookingTitle = $booking->getBookingTitle();
 
         $sections = [
@@ -143,7 +141,7 @@ class BookingService
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking'),
-                'content' => '<ul class="fcal_listed"><li class="fcal_host_name">' . $author['name'] . '<span class="fcal_host_badge">' . __('Host', 'fluent-booking') . '</span></li><li class="fcal_guest_name">' . $guestName . '</li></ul>'
+                'content' => $booking->getHostAndGuestDetailsHtml()
             ],
             'where' => [
                 'title'   => __('Where', 'fluent-booking'),

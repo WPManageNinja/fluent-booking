@@ -1691,6 +1691,7 @@ class Helper
                     'shortcodes' => [
                         '{{event.id}}'                => __('Event ID', 'fluent-booking'),
                         '{{calendar.id}}'             => __('Calendar ID', 'fluent-booking'),
+                        '{{event.title}}'             => __('Event Title', 'fluent-booking'),
                         '{{calendar.title}}'          => __('Calendar Title', 'fluent-booking'),
                         '{{calendar.description}}'    => __('Calendar Description', 'fluent-booking'),
                         '{{add_booking_to_calendar}}' => __('Add Booking to Calendar', 'fluent-booking'),
@@ -1753,6 +1754,7 @@ class Helper
                     'shortcodes' => [
                         '{{event.id}}'                => __('Event ID', 'fluent-booking'),
                         '{{event.calendar_id}}'       => __('Calendar ID', 'fluent-booking'),
+                        '{{event.title}}'             => __('Event Title', 'fluent-booking'),
                         '{{calendar.title}}'          => __('Calendar Title', 'fluent-booking'),
                         '{{calendar.description}}'    => __('Calendar Description', 'fluent-booking'),
                         '{{add_booking_to_calendar}}' => __('Add Booking to Calendar', 'fluent-booking'),
@@ -1788,6 +1790,13 @@ class Helper
                 }
             }
 
+            if ($calendarEvent->isMultiHostsEvent()) {
+                $totalhost = count($calendarEvent->getHostIds());
+                for ($i = 1; $i < $totalhost; $i++) {
+                    $groups['host']['shortcodes']['{{team_member.' . $i . '.name}}'] = __('Team Member ', 'fluent-booking') . $i . __(' Name', 'fluent-booking');
+                    $groups['host']['shortcodes']['{{team_member.' . $i . '.email}}'] = __('Team Member ', 'fluent-booking') . $i . __(' Email', 'fluent-booking');
+                }
+            }
         }
 
         return apply_filters('fluent_booking/editor_shortcodes_groups', $groups, $calendarEvent, $isHtmlSupported);
