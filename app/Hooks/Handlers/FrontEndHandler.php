@@ -102,7 +102,7 @@ class FrontEndHandler
 
                 $previousBooking = clone $existingBooking;
 
-                if ($existingBooking->event_type == 'group') {
+                if ($existingBooking->isMultiGuestBooking()) {
                     // Need to handle group booking type here
                     // check for existing group
                     $parent = Booking::where('status', 'scheduled')
