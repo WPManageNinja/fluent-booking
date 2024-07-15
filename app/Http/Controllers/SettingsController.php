@@ -239,8 +239,8 @@ class SettingsController extends Controller
             $settings['frontend']['slug'] = 'projects';
         }
 
-        if (defined('FLUENT_BOOKING_ADMIN_SLUG') && FLUENT_BOOKING_ADMIN_SLUG) {
-            $settings['frontend']['slug'] = FLUENT_BOOKING_ADMIN_SLUG;
+        if (defined('FLUENT_BOOKING_ADMIN_SLUG') && FLUENT_BOOKING_FRONT_SLUG) {
+            $settings['frontend']['slug'] = FLUENT_BOOKING_FRONT_SLUG;
         }
 
         do_action('fluent_booking/saving_addons', $settings, $prefSettings);
