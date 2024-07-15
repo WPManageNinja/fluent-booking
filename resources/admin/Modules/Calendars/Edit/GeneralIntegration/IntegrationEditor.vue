@@ -5,8 +5,8 @@
         <el-form v-if="!loading_app" label-position="top" class="fcal_webhook_form">
             <template v-for="(field, fieldIndex) in settings_fields?.fields">
                 <el-form-item
-                    :class="'ff_field_' + field.component"
-                    class="ff-form-item"
+                    :class="'fcal_field_' + field.component"
+                    class="fcal-form-item"
                     v-if="(field.require_list && merge_fields) || !field.require_list"
                     :required="field.required"
                     :key="fieldIndex"
@@ -262,9 +262,7 @@
                     </template>
 
                     <template v-else>
-                        <p>{{
-                                $t('No Template found. Please make sure you are using latest version of Fluent Forms')
-                            }}</p>
+                        <p>{{ $t('No Template found. Please make sure you are using latest version of Fluent Forms') }}</p>
                         <pre>{{ field.component }}</pre>
                         <pre>{{ field }}</pre>
                     </template>
