@@ -3638,6 +3638,41 @@
     }
 }
 
+.el-popup-parent--hidden {
+    #wpadminbar {
+        z-index: 1000;
+    }
+}
+
+.fbs_feature_module {
+    align-items: center;
+    background: #fff;
+    border-bottom: 3px solid #f0f0f1;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    padding: 20px;
+    transition: border-bottom .5s;
+    margin: -24px -24px 0;
+    h4 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 10px;
+    }
+    p {
+        color: #666;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+    &:hover {
+        border-bottom: 3px solid #7757e6;
+    }
+    .fbs_module_desc {
+        display: flex;
+        gap: 15px;
+    }
+}
+
 span.fc_space_10 {
     width: 10px !important;
     display: inline-block;

@@ -10,7 +10,7 @@ use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\CalendarService;
 

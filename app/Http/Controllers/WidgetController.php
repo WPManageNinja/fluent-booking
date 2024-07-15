@@ -6,7 +6,7 @@ use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 
 class WidgetController extends Controller
 {

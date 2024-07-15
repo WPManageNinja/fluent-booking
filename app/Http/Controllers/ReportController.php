@@ -5,7 +5,7 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Services\ReportingHelperTrait;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\PermissionManager;

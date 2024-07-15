@@ -4,6 +4,24 @@
             <div class="fcal_configure_integration_card_header">
                 <div class="left">
                     <div class="content">
+                        <h3>{{ $t('Advanced Modules') }}</h3>
+                        <p>{{ $t('Enable/Disable Fluent Board\'s Advanced features or integrations.') }}</p>
+                    </div>
+                </div>
+            </div>
+            <el-skeleton animated v-if="loading"></el-skeleton>
+
+            <div v-else>
+                <fronend-panel-settings @save="saveFeatureModules" :featureModules="featureModules" />
+            </div>
+
+        </div>
+    </div>
+    <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
+        <div class="fcal_configure_integration_card">
+            <div class="fcal_configure_integration_card_header">
+                <div class="left">
+                    <div class="content">
                         <h3>{{ $t('Recommended Plugins and Addons') }}</h3>
                         <p>{{ $t('Plugins that will extend your Fluent Boards Functionalities') }}</p>
                     </div>
@@ -53,6 +71,8 @@
 
 <script type="text/babel">
 
+import FronendPanelSettings from './_FrontendPanelSettings.vue';
+
 export default {
     name: 'GloablModules',
     data() {
@@ -60,8 +80,18 @@ export default {
             loading: false,
             modules: {},
             settings: {},
-            saving: false
+            saving: false,
+            featureModules: {
+                frontend: {
+                    enabled: 'no',
+                    slug: 'all-booking',
+                    panel_url: ''
+                }
+            }
         }
+    },
+    components: {
+        FronendPanelSettings
     },
     methods: {
         fetchModules() {
@@ -90,6 +120,9 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        saveFeatureModules() {
+
         }
     },
     mounted() {

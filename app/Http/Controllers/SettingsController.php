@@ -2,11 +2,12 @@
 
 namespace FluentBooking\App\Http\Controllers;
 
+use FluentBooking\App\App;
 use FluentBooking\App\Services\GlobalModules\GlobalModules;
 use FluentBooking\App\Hooks\Handlers\AdminMenuHandler;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Libs\Countries;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 
 class SettingsController extends Controller
@@ -181,6 +182,30 @@ class SettingsController extends Controller
 
         return [
             'message' => __('Settings updated successfully', 'fluent-booking'),
+        ];
+    }
+
+    public function getPages(Request $request)
+    {
+
+        $db = App::getInstance('db');
+
+        $allPages = $db->table('posts')->where('post_type', 'page')
+            ->where('post_status', 'publish')
+            ->select(['ID', 'post_title'])
+            ->orderBy('post_title', 'ASC')
+            ->get();
+
+        $pages = [];
+        foreach ($allPages as $page) {
+            $pages[] = [
+                'id'    => $page->ID,
+                'title' => $page->post_title ? $page->post_title : __('(no title)', 'fluent-boards')
+            ];
+        }
+
+        return [
+            'pages' => $pages
         ];
     }
 }
