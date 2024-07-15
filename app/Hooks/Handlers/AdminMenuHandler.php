@@ -302,7 +302,8 @@ class AdminMenuHandler
             'date_format'        => DateTimeHelper::getDateFormatter(true),
             'time_format'        => DateTimeHelper::getTimeFormatter(true),
             'date_time_formatter' => DateTimeHelper::getDateFormatter(true).', '.DateTimeHelper::getTimeFormatter(true),
-            'available_date_formats' => DateTimeHelper::getAvailableDateFormats()
+            'available_date_formats' => DateTimeHelper::getAvailableDateFormats(),
+            'admin_url' => admin_url(),
         ]);
     }
 
