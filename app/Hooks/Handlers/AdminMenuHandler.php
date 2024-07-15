@@ -92,7 +92,6 @@ class AdminMenuHandler
 
     public function render()
     {
-
         if(!as_has_scheduled_action('fluent_booking_five_minutes_tasks')) {
             as_schedule_recurring_action(time(), (60 * 5), 'fluent_booking_five_minutes_tasks', [], 'fluent-booking', true);
         }
@@ -107,6 +106,10 @@ class AdminMenuHandler
         $slug = $config->get('app.slug');
 
         $baseUrl = Helper::getAppBaseUrl();
+
+        if(is_admin()) {
+            $baseUrl = admin_url('admin.php?page=fluent-booking#/');
+        }
 
         $isNew = $this->isNew();
 
@@ -188,8 +191,98 @@ class AdminMenuHandler
             $adminAppCss = 'admin/admin-rtl.css';
             wp_enqueue_style('fluentbooking_admin_rtl', $assets . 'admin/fluentbooking_admin_rtl.css', [], FLUENT_BOOKING_ASSETS_VERSION);
         }
-        wp_enqueue_style('fluent_booing_admin_app', $assets . $adminAppCss, [], FLUENT_BOOKING_ASSETS_VERSION, 'all');
 
+        add_action('wp_print_scripts', function () {
+
+            $isSkip = apply_filters('fluent_booking/skip_no_conflict', false, 'scripts');
+
+            if ($isSkip) {
+                return;
+            }
+
+            global $wp_scripts;
+            if (!$wp_scripts) {
+                return;
+            }
+
+            $approvedSlugs = apply_filters('fluent_booking/asset_listed_slugs', [
+                '\/fluent-crm\/'
+            ]);
+
+            $approvedSlugs[] = '\/fluent-booking\/';
+            $approvedSlugs[] = '\/fluent-booking-pro\/';
+
+            $approvedSlugs = array_unique($approvedSlugs);
+
+            $approvedSlugs = implode('|', $approvedSlugs);
+
+            $pluginUrl = plugins_url();
+
+            $pluginUrl = str_replace(['http:', 'https:'], '', $pluginUrl);
+
+            foreach ($wp_scripts->queue as $script) {
+                if (empty($wp_scripts->registered[$script]) || empty($wp_scripts->registered[$script]->src)) {
+                    continue;
+                }
+
+                $src = $wp_scripts->registered[$script]->src;
+                $isMatched = (strpos($src, $pluginUrl) !== false) && !preg_match('/' . $approvedSlugs . '/', $src);
+                if (!$isMatched) {
+                    continue;
+                }
+                wp_dequeue_script($wp_scripts->registered[$script]->handle);
+            }
+        });
+
+        add_action('wp_print_styles', function () {
+            $isSkip = apply_filters('fluent_booking/skip_no_conflict', false, 'styles');
+
+            if ($isSkip) {
+                return;
+            }
+
+            global $wp_styles;
+            if (!$wp_styles) {
+                return;
+            }
+
+            $approvedSlugs = apply_filters('fluent_booking/asset_listed_slugs', [
+                '\/fluent-crm\/'
+            ]);
+
+            $approvedSlugs[] = '\/fluent-booking\/';
+            $approvedSlugs[] = '\/fluent-booking-pro\/';
+
+            $approvedSlugs = array_unique($approvedSlugs);
+
+            $approvedSlugs = implode('|', $approvedSlugs);
+
+            $pluginUrl = plugins_url();
+
+            $themeUrl = get_theme_root_uri();
+
+            $pluginUrl = str_replace(['http:', 'https:'], '', $pluginUrl);
+            $themeUrl = str_replace(['http:', 'https:'], '', $themeUrl);
+
+            foreach ($wp_styles->queue as $script) {
+
+                if (empty($wp_styles->registered[$script]) || empty($wp_styles->registered[$script]->src)) {
+                    continue;
+                }
+
+                $src = $wp_styles->registered[$script]->src;
+                $pluginMatched = (strpos($src, $pluginUrl) !== false) && !preg_match('/' . $approvedSlugs . '/', $src);
+                $themeMatched = (strpos($src, $themeUrl) !== false) && !preg_match('/' . $approvedSlugs . '/', $src);
+
+                if (!$pluginMatched && !$themeMatched) {
+                    continue;
+                }
+
+                wp_dequeue_style($wp_styles->registered[$script]->handle);
+            }
+        }, 999999);
+
+        wp_enqueue_style('fluent_booing_admin_app', $assets . $adminAppCss, [], FLUENT_BOOKING_ASSETS_VERSION, 'all');
 
         do_action($slug . '_loading_app');
 
