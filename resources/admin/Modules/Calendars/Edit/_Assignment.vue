@@ -32,9 +32,13 @@
                                         <div class="fcal_team_member_icon">
                                             <img :src="member.avatar"/>
                                         </div>
-                                        <h3>{{ member.name }}</h3>
+                                        <h3>{{ member.name }} <span v-if="isMultiHosts && isOrganizer(member.id)">({{ $t('Organizer') }})</span></h3>
                                     </div>
                                     <div class="fcal_card_actions">
+                                        <el-button v-if="isMultiHosts && !isOrganizer(member.id)"
+                                            @click="updateOrganizer(member.id)">
+                                            {{ $t('Make organizer') }}
+                                        </el-button>
                                         <el-button
                                             @click="goToCalendarSetting(member.calendar_id)">
                                             <el-icon><Edit/></el-icon>
@@ -88,6 +92,17 @@ export default {
             settings: this.calendar_event.settings
         }
     },
+    computed: {
+        isOrganizer() {
+            return (id) => {
+                return this.calendar_event.user_id == id;
+            }
+        },
+        isMultiHosts() {
+            const eventType = this.calendar_event.event_type;
+            return eventType == 'single_event' || eventType == 'group_event' || eventType == 'collective';
+        }
+    },
     methods: {
         goToCalendarSetting(calendarId) {
             this.$router.push({
@@ -120,6 +135,15 @@ export default {
                     return updatedHost;
                 });
         },
+        updateOrganizer(id) {
+            this.calendar_event.user_id = id;
+            let indx = this.settings.team_members.indexOf(id);
+            if (indx !== -1) {
+                this.settings.team_members.splice(indx, 1);
+                this.settings.team_members.unshift(id);
+            }
+            this.saveSettings();
+        },
         getAllHosts() {
             this.loading = true;
             this.$get('admin/all-hosts')
@@ -139,6 +163,7 @@ export default {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/assignments', {
                 calendar_id: this.calendar_event.calendar_id,
+                organizer_id: this.calendar_event.user_id,
                 team_members: this.settings.team_members
             })
                 .then(response => {
