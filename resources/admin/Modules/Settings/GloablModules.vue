@@ -4,8 +4,8 @@
             <div class="fcal_configure_integration_card_header">
                 <div class="left">
                     <div class="content">
-                        <h3>{{ $t('Global Feature Modules') }}</h3>
-                        <p>{{ $t('global_feature_modules_desc') }}</p>
+                        <h3>{{ $t('Recommended Plugins and Addons') }}</h3>
+                        <p>{{ $t('Plugins that will extend your Fluent Boards Functionalities') }}</p>
                     </div>
                 </div>
             </div>
