@@ -17,7 +17,7 @@ class GlobalModules
     {
         $app = App::getInstance();
         $items['global_modules'] = [
-            'title'          => __('Global Modules', 'fluent-booking'),
+            'title'          => __('Advanced Feaures & Addons', 'fluent-booking'),
             'disable'        => false,
             'icon_url'       => $app['url.assets'] . 'images/checklist.svg',
             'component_type' => 'StandAloneComponent',
