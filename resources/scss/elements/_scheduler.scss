@@ -1707,9 +1707,14 @@
                       padding: 7px 12px !important;
                       height: auto !important;
                       border-radius: 6px !important;
-              
                       i {
                         font-size: 14px !important;
+                      }
+                      &:hover {
+                        background: rgba(38, 83, 199, 0.1);
+                        span {
+                            color: #306ae0;
+                        }
                       }
                     }
                   }
