@@ -28,6 +28,7 @@ class CalendarController extends Controller
         $calendarType = sanitize_text_field(Arr::get($request->get('query'), 'calendarType'));
 
         $applySearchFilter = function($query) use ($search) {
+            $query->where('status', '!=', 'expired');
             if (!empty($search)) {
                 $query->where('title', 'LIKE', '%' . $search . '%');
             }

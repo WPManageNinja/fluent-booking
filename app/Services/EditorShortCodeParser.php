@@ -41,6 +41,7 @@ class EditorShortCodeParser
         static::$store['booking_event'] = $booking->calendar_event;
         static::$store['calendar'] = $booking->calendar;
         static::$store['host'] = $booking->getHostDetails(false);
+        static::$store['team_members'] = $booking->getHostsDetails(false, $booking->host_user_id);
         static::$store['custom_booking_data'] = null;
         static::$store['payment_order'] = null;
         static::$store['meeting_bookmarks'] = null;
@@ -207,6 +208,19 @@ class EditorShortCodeParser
         }
 
         return Arr::get($host, $key, '');
+    }
+
+    protected static function getTeamMembersData($key)
+    {
+        $teamMembers = static::$store['team_members'];
+
+        if (empty($teamMembers)) {
+            return '';
+        }
+
+        list($key, $value) = explode('.', $key);
+
+        return Arr::get($teamMembers, $key - 1 . '.' . $value, '');
     }
 
     protected static function getGuestData($key)
@@ -417,8 +431,11 @@ class EditorShortCodeParser
             } elseif (false !== strpos($match, 'host.')) {
                 $hostProperty = substr($match, strlen('host.'));
                 $value = static::getHostData($hostProperty);
+            } elseif (false !== strpos($match, 'team_member.')) {
+                $teamMemberProperty = substr($match, strlen('team_member.'));
+                $value = static::getTeamMembersData($teamMemberProperty);
             } elseif (false !== strpos($match, 'event.')) {
-                $eventProperty = substr($match, strlen('host.'));
+                $eventProperty = substr($match, strlen('event.'));
                 $value = static::getBookingEventData($eventProperty);
             } elseif (false !== strpos($match, 'calendar.')) {
                 $calendarProperty = substr($match, strlen('calendar.'));
