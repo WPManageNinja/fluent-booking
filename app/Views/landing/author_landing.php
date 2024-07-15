@@ -80,5 +80,6 @@
         <script id="<?php echo esc_attr($fileKey); ?>" src="<?php echo esc_url($file); ?>?version=<?php echo esc_attr(FLUENT_BOOKING_ASSETS_VERSION); ?>" defer="defer"></script>
     <?php endforeach; ?>
 
-    </body>
+    <?php do_action('fluent_booking/main_landing_footer'); ?>
+</body>
 </html>

@@ -324,14 +324,21 @@ class Bootstrap extends IntegrationManagerController
     private function convertDueDate($dueTime, $dueType, $bookingStartTime)
     {
         $timeStamp = strtotime($bookingStartTime);
+        $currentTime = strtotime(current_time('mysql'));
+
         if ($dueType != 'meeting') {
-            $timeStamp = strtotime(current_time('mysql'));
+            $timeStamp = $currentTime;
             $dueTime = max(0, $dueTime);
         }
 
         $adjustSign = $dueTime < 0 ? '-' : '+';
         $dateAdjustment = $adjustSign . abs($dueTime) . ' day';
-        return gmdate('Y-m-d H:i:s', strtotime($dateAdjustment, $timeStamp)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $dueDate = gmdate('Y-m-d H:i:s', strtotime($dateAdjustment, $timeStamp)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+        if (strtotime($dueDate) < $currentTime) {
+            return gmdate('Y-m-d H:i:s', $currentTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
+        return $dueDate;
     }
 
     public function notify($feed, $booking, $calendarEvent)
