@@ -2,7 +2,7 @@
 
 namespace FluentBooking\App\Http\Controllers;
 
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 
 class IntegrationController extends Controller
 {

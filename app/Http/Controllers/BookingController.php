@@ -11,7 +11,7 @@ use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
