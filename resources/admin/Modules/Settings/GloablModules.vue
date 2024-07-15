@@ -100,6 +100,7 @@ export default {
                 .then((response) => {
                     this.settings = response.settings;
                     this.modules = response.modules;
+                    this.featureModules = response.featureModules;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -122,8 +123,32 @@ export default {
                 });
         },
         saveFeatureModules() {
+            this.saving = true;
+            this.$post('settings/addons-settings', {
+                settings: this.featureModules
+            })
+                .then(response => {
+                    this.fetchModules();
+                    this.$notify.success(response.message);
 
-        }
+                    const isAdminUrl = window.location.href.includes('wp-admin/admin.php');
+                    if(response.featureModules.frontend.enabled == 'no' && !isAdminUrl) {
+                        // Redirect to the admin page if the frontend is disabled and the user is not in the admin page
+                        location.href = this.appVars.admin_url + '?page=fluent-booking#' + this.$route.path;
+                    } else {
+                        location.reload(true);
+                    }
+                    if (this.$refs.frontend) {
+                        this.$refs.frontend.hide();
+                    }
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
     },
     mounted() {
         this.fetchModules();

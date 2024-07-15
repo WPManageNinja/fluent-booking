@@ -3665,11 +3665,22 @@
         margin: 5px 0;
     }
     &:hover {
-        border-bottom: 3px solid #7757e6;
+        border-bottom: 3px solid #306ae0;
     }
     .fbs_module_desc {
         display: flex;
         gap: 15px;
+    }
+    span.fbs_addon_installed {
+        background: #306ae0;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 14px;
+        padding: 2px 7px;
+        &.fbs_addon_disabled {
+            background: #6d6a6a;
+            color: #f2ecec;
+        }
     }
 }
 

@@ -24,14 +24,14 @@ class SettingsController extends Controller
         $settings = Helper::getGlobalSettings();
 
         $settings['emailingFields'] = [
-            'from_name'               => [
+            'from_name'                  => [
                 'wrapper_class' => 'fc_item_half',
                 'type'          => 'input-text',
                 'placeholder'   => __('From Name for emails', 'fluent-booking'),
                 'label'         => __('From Name', 'fluent-booking'),
                 'help'          => __('Default Name that will be used to send email)', 'fluent-booking')
             ],
-            'from_email'              => [
+            'from_email'                 => [
                 'wrapper_class' => 'fc_item_half',
                 'type'          => 'input-or-select',
                 'placeholder'   => 'name@domain.com',
@@ -41,14 +41,14 @@ class SettingsController extends Controller
                 'help'          => __('Provide Valid Email Address that will be used to send emails', 'fluent-booking'),
                 'inline_help'   => __('email as per your domain/SMTP settings', 'fluent-booking')
             ],
-            'reply_to_name'           => [
+            'reply_to_name'              => [
                 'wrapper_class' => 'fc_item_half',
                 'type'          => 'input-text',
                 'placeholder'   => __('Reply to Name', 'fluent-booking'),
                 'label'         => __('Reply to Name (Optional)', 'fluent-booking'),
                 'help'          => __('Default Reply to Name (Optional)', 'fluent-booking')
             ],
-            'reply_to_email'          => [
+            'reply_to_email'             => [
                 'wrapper_class' => 'fc_item_half',
                 'type'          => 'input-text',
                 'placeholder'   => 'name@domain.com',
@@ -56,14 +56,14 @@ class SettingsController extends Controller
                 'label'         => __('Reply to Email (Optional)', 'fluent-booking'),
                 'help'          => __('Default Reply to Email (Optional)', 'fluent-booking')
             ],
-            'use_host_name'           => [
+            'use_host_name'              => [
                 'wrapper_class'  => 'fc_full_width fc_mb_0',
                 'type'           => 'inline-checkbox',
                 'checkbox_label' => __('Use host name as From Name for booking emails to guests', 'fluent-booking'),
                 'true_label'     => 'yes',
                 'false_label'    => 'no',
             ],
-            'use_host_email_on_reply' => [
+            'use_host_email_on_reply'    => [
                 'wrapper_class'  => 'fc_full_width fc_mb_0',
                 'type'           => 'inline-checkbox',
                 'checkbox_label' => __('Use host email for reply-to value for booking emails to guests', 'fluent-booking'),
@@ -77,7 +77,7 @@ class SettingsController extends Controller
                 'true_label'     => 'yes',
                 'false_label'    => 'no',
             ],
-            'email_footer'            => [
+            'email_footer'               => [
                 'wrapper_class' => 'fc_full_width fc_mb_0 fc_wp_editor',
                 'type'          => 'wp-editor-field',
                 'label'         => __('Email Footer for Booking related emails (Optional)', 'fluent-booking'),
@@ -129,7 +129,7 @@ class SettingsController extends Controller
         ], 'no');
 
         return [
-            'message'  => __('Settings updated successfully', 'fluent-booking')
+            'message' => __('Settings updated successfully', 'fluent-booking')
         ];
     }
 
@@ -157,9 +157,18 @@ class SettingsController extends Controller
             $settings = (object)[];
         }
 
+        $featuresPrefs = Helper::getPrefSettins(false);
+
+        if (empty($featuresPrefs['frontend']['render_type'])) {
+            $featuresPrefs['frontend']['render_type'] = 'standalone';
+        }
+
+        $featuresPrefs['panel_url'] = Helper::getAppBaseUrl();
+
         return [
             'settings' => $settings,
-            'modules'  => (new GlobalModules())->getAllModules()
+            'modules'  => (new GlobalModules())->getAllModules(),
+            'featureModules' => $featuresPrefs
         ];
     }
 
@@ -207,5 +216,40 @@ class SettingsController extends Controller
         return [
             'pages' => $pages
         ];
+    }
+
+    public function saveAddonsSettings(Request $request)
+    {
+        if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+            return $this->sendError([
+                'message' => __('This feature is only available in FluentBooking Pro', 'fluent-booking')
+            ]);
+        }
+
+        $settings = $request->get('settings', []);
+
+        $prefSettings = Helper::getPrefSettins(false);
+
+        $settings = wp_parse_args($settings, $prefSettings);
+
+        $settings = Arr::only($settings, array_keys($prefSettings));
+        $settings['frontend']['slug'] = sanitize_title($settings['frontend']['slug']);
+
+        if (empty($settings['frontend']['slug'])) {
+            $settings['frontend']['slug'] = 'projects';
+        }
+
+        if (defined('FLUENT_BOOKING_ADMIN_SLUG') && FLUENT_BOOKING_ADMIN_SLUG) {
+            $settings['frontend']['slug'] = FLUENT_BOOKING_ADMIN_SLUG;
+        }
+
+        do_action('fluent_booking/saving_addons', $settings, $prefSettings);
+
+        update_option('fluent_booking_modules', $settings, 'yes');
+
+        return $this->sendSuccess([
+            'message'        => __('Settings are saved', 'fluent-booking'),
+            'featureModules' => $settings
+        ]);
     }
 }

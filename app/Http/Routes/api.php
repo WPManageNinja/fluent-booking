@@ -82,6 +82,7 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
     $router->get('/global-modules', 'SettingsController@getGlobalModules');
     $router->post('/global-modules', 'SettingsController@updateGlobalModules');
     $router->get('/pages', 'SettingsController@getPages');
+    $router->post('/addons-settings', 'SettingsController@saveAddonsSettings');
 });
 
 $router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {
