@@ -79,6 +79,8 @@
 
 </template>
 <script type="text/babel">
+import { copyToClipBoard } from '@/Bits/data_config.js';
+
 export default {
     name: 'FrontPanel',
     props: ['featureModules'],
@@ -107,19 +109,9 @@ export default {
                     this.loading_pages = false;
                 });
         },
-        async handleCopyShortcode(shortcode) {
-            try {
-                await navigator.clipboard.writeText(shortcode);
-                this.$notify({
-                    message: this.$t('Shortcode copied'),
-                    type: "success",
-                });
-            } catch (err) {
-                this.$notify({
-                    message: this.$t('Failed to copy shortcode'),
-                    type: "error",
-                });
-            }
+        handleCopyShortcode(shortcode) {
+            copyToClipBoard(shortcode);
+            this.$handleSuccess(this.$t('Shortcode has been copied to your clipboard'));
         }
     },
     mounted() {
