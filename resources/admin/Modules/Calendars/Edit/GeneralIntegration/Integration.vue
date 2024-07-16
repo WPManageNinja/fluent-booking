@@ -136,6 +136,7 @@
         <CloneDrawer
             v-if="isCloneOpen"
             :isOpen="isCloneOpen"
+            :eventId="event_id"
             :eventLists="event_lists"
             :saving="saving"
             :title="$t('Clone Integration Settings')"

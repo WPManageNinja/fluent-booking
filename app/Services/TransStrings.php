@@ -298,6 +298,7 @@ class TransStrings
             "Invitees can't schedule within..."                                                => __("Invitees can't schedule within...", 'fluent-booking'),
             "CalendarEvent/select_event_description"                                           => __("Select a calendar event from another calendar to clone it into your calendar", 'fluent-booking'),
             'CalendarEvent/select_notification_settings'                                       => __('Select a calendar event to clone the notification settings into this event.', 'fluent-booking'),
+            'CalendarEvent/select_sms_settings'                                                => __('Select a calendar event to clone the sms notification settings into this event.', 'fluent-booking'),
             'CalendarEvent/select_webhook_settings'                                            => __('Select a calendar event to clone all webhook settings into this event.', 'fluent-booking'),
             'CalendarEvent/select_integration_settings'                                        => __('Select a calendar event to clone all integration settings into this event.', 'fluent-booking'),
             'ScheduleSettings/before/after_event_label'                                        => __('Want to add buffer time before or after your events?', 'fluent-booking'),
@@ -666,6 +667,7 @@ class TransStrings
             'minutes meeting with'                                                             => __('minutes meeting with', 'fluent-booking'),
             'Global Feature Modules'                                                           => __('Global Feature Modules', 'fluent-booking'),
             'global_feature_modules_desc'                                                      => __('Enable/Disable FluentBooking Advanced features or integrations.', 'fluent-booking'),
+            'Plugins that will extend your Fluent Booking Functionalities'                     => __('Plugins that will extend your Fluent Booking Functionalities', 'fluent-booking'),
             'Search & Select Product'                                                          => __('Search & Select Product', 'fluent-booking'),
             'Latest Bookings'                                                                  => __('Latest Bookings', 'fluent-booking'),
             'All'                                                                              => __('All', 'fluent-booking'),
@@ -789,6 +791,7 @@ class TransStrings
             'Clone Event'                                                                      => __('Clone Event', 'fluent-booking'),
             'Clone Settings'                                                                   => __('Clone Settings', 'fluent-booking'),
             'Clone Notification Settings'                                                      => __('Clone Notification Settings', 'fluent-booking'),
+            'Clone SMS Settings'                                                               => __('Clone SMS Settings', 'fluent-booking'),
             'Clone Webhook Settings'                                                           => __('Clone Webhook Settings', 'fluent-booking'),
             'Clone Integration Settings'                                                       => __('Clone Integration Settings', 'fluent-booking'),
             'Clone Calendar Event'                                                             => __('Clone Calendar Event', 'fluent-booking'),
@@ -826,6 +829,12 @@ class TransStrings
             'Reserved slot of'                                                                 => __('Reserved slot of', 'fluent-booking'),
             'Organizer'                                                                        => __('Organizer', 'fluent-booking'),
             'Make organizer'                                                                   => __('Make organizer', 'fluent-booking'),
+            'Notification Settings'                                                            => __('Notification Settings', 'fluent-booking'),
+            'Other Notifications'                                                              => __('Other Notifications', 'fluent-booking'),
+            'Customize the email notifications sent to attendees and organizers'               => __('Customize the email notifications sent to attendees and organizers', 'fluent-booking'),
+            'Optimize your email notifications for confirmations and declines'                 => __('Optimize your email notifications for confirmations and declines', 'fluent-booking'),
+            'Optimize your sms notifications for confirmations and declines'                   => __('Optimize your sms notifications for confirmations and declines', 'fluent-booking'),
+            'Customize the sms notifications sent to attendees and organizers'                 => __('Customize the sms notifications sent to attendees and organizers', 'fluent-booking'),
         );
     }
 }
