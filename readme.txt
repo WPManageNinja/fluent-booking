@@ -298,7 +298,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 2. Event Settings
 3. Bookings List
 4. Guest and Meeting Information
-5. Calendar Sharing
+5. General Settings
 
 == Changelog ==
 
