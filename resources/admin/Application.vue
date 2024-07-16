@@ -1,22 +1,22 @@
 <template>
     <div class="fl_app">
-        <NoticeBlock />
+        <UpgradationBlock />
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 import OnBoard from './Components/OnBoard';
-import NoticeBlock from './Components/Notice/NoticeBlock';
+import UpgradationBlock from './Components/Notice/UpgradationBlock.vue';
 
 export default {
     name: 'DashboardApplication',
     components: {
         OnBoard,
-        NoticeBlock
+        UpgradationBlock
     },
     mounted() {
-        jQuery('.notice-warning, .notice-error').remove();
+        jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').not('.booking_notice').remove();
     }
 };
 </script>
