@@ -1,9 +1,9 @@
 === Fluent Booking ===
 Contributors: techjewel
-Author URI: https://jewel.im/
+Author URI: https://fluentbooking.com/
 Tags: booking, appointment booking, appointments, booking system
-Requires at least: 5.0
-Tested up to: 6.3
+Requires at least: 6.0
+Tested up to: 6.5
 Requires PHP: 7.3
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 The Ultimate WordPress Scheduling Solution for Businesses
 
 == Description ==
-[FluentBooking https://fluentbooking.com/] is a top-notch solution for scheduling and delivering appointment-based services. Whether it's an appointment, event, or anything else, FluentBooking has you covered!
+[FluentBooking](https://fluentbooking.com/) is a top-notch solution for scheduling and delivering appointment-based services. Whether it's an appointment, event, or anything else, FluentBooking has you covered!
 
 From scheduling personal services to managing business events, it’s developed to provide the easiest management of your availability and clients.
 
@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=L6uJk1FSbZ4&list=PLXpD0vT4thWHP3gjtexAT3fqP_Pdt7
 
 
 = USEFUL LINKS =
-Official Website || Demo || Documentation || Facebook || Instagram || Twitter || LinkedIn
+**[Official Website](https://fluentbooking.com/) || [Demo](https://demo.fluentbooking.com/) || [Documentation](https://fluentbooking.com/docs/) || [Facebook](https://www.facebook.com/FluentBooking) || [Instagram](https://www.instagram.com/fluentbooking?igsh=MThwY2dybnBibWkwcg==) || [Twitter](https://x.com/FluentBooking) || [LinkedIn](https://www.linkedin.com/company/fluentbooking)**
 
 = 🧐 WHY FLUENTBOOKING IS A GAME-CHANGER? =
 ✅Full GDPR Support: Manage all of your appointments and clients within the dashboard
@@ -251,11 +251,11 @@ They’ve done it again! The Fluent team have yet again delivered what is to be 
 
 
 = Other Plugins by the Same Team = 
-FluentCRM – Email Marketing Automation and CRM Plugin for WordPress
-Fluent Forms - Contact Form Builder Plugin
-Ninja Tables – Best WP DataTables Plugin for WordPress
-FluentSMTP – WordPress Mail SMTP, SES, SendGrid, MailGun Plugin
-Fluent Support – WordPress Helpdesk and Customer Support Ticket Plugin
+* [FluentCRM – Email Marketing Automation and CRM Plugin for WordPress](https://wordpress.org/plugins/fluent-crm/) - The ultimate email marketing automation and CRM plugin for WordPress.
+* [Fluent Forms - Contact Form Builder Plugin](https://wordpress.org/plugins/fluentform/) - The ultimate drag & drop form builder for WordPress.
+* [Ninja Tables – Best WP DataTables Plugin for WordPress](https://wordpress.org/plugins/ninja-tables/) - The most user-friendly and responsive table plugin for WordPress.
+* [FluentSMTP – WordPress Mail SMTP, SES, SendGrid, MailGun Plugin](https://wordpress.org/plugins/fluent-smtp/) - The ultimate SMTP solution for WordPress.
+* [Fluent Support – WordPress Helpdesk and Customer Support Ticket Plugin](https://wordpress.org/plugins/fluent-support/) - The ultimate helpdesk and support ticket plugin for WordPress.
 
 == SCREENSHOT ==
 
@@ -313,5 +313,5 @@ FluentBooking supports all popular conferencing tools such as Zoom, Google Meet,
 Yes, you can customize the content of your email and SMS notifications. 
 
 = Does FluentBooking have any public roadmap? =
-Yes, FluentBooking has a [public roadmap] (https://fluentbooking.com/roadmap/) where you can track the development and share your suggestions. 
+Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) where you can track the development and share your suggestions.
 
