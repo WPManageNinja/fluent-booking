@@ -3,6 +3,7 @@
 namespace FluentBooking\App\Http\Controllers;
 
 use Exception;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\Integrations\CalendarIntegrationService;
@@ -74,6 +75,33 @@ class CalendarIntegrationController extends Controller
                 'message' => $e->getMessage(),
             ], 422);
         }
+    }
+
+    public function cloneIntegrations(CalendarIntegrationService $integrationService, $calendarId, $slotId)
+    {
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+
+        $fromEventId = intval($this->request->get('from_event_id'));
+        
+        $fromEventIntegrations = Meta::where('object_id', $fromEventId)
+            ->where('object_type', 'integration')
+            ->get();
+        
+        if ($fromEventIntegrations->isEmpty()) {
+            return $this->sendError([
+                'message' => __('Integrations not found', 'fluent-booking-pro')
+            ], 422);
+        }
+
+        foreach ($fromEventIntegrations as $feed) {
+            $cloneIntegration = $feed->replicate();
+            $cloneIntegration->object_id = $calendarEvent->id;
+            $cloneIntegration->save();
+        }
+
+        return [
+            'message' => __('Integrations has been successfully cloned.', 'fluent-booking-pro')
+        ];
     }
 
     public function integrationListComponent($calendarId, $slotId, $integrationId)
