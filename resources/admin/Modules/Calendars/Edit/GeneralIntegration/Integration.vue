@@ -13,11 +13,8 @@
                 <div class="fcal_actions">
                     <el-button
                         class="fcal_plain_btn"
-                        @click="showAll()"
-                    >
-                        <el-icon>
-                            <Back/>
-                        </el-icon>
+                        @click="showAll()">
+                        <el-icon><Back/></el-icon>
                         {{ $t('Back') }}
                     </el-button>
                 </div>
@@ -29,21 +26,28 @@
                     <p>{{ $t('integrations_description') }}</p>
                 </div>
                 <div v-if="!isEmpty(available_integrations)" class="fcal_actions">
-                    <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click"
-                                popper-class="fcal_select">
+                    <el-dropdown @command="addNewIntegration" :hide-on-click="false" trigger="click" popper-class="fcal_select">
                         <el-button type="info">
                             {{ $t('Add New Integration') }}
-
-                            <el-icon>
-                                <ArrowDown/>
-                            </el-icon>
+                            <el-icon><ArrowDown/></el-icon>
                         </el-button>
                         <template #dropdown>
-                            <el-dropdown-menu class="ff-dropdown-menu" slot="dropdown"
-                                            style="max-height: 400px; overflow: auto">
-                                <el-dropdown-item v-for="(integration,integration_name) in filteredList"
-                                                :key="integration_name" :command="integration_name">
+                            <el-dropdown-menu class="ff-dropdown-menu" slot="dropdown" style="max-height: 400px; overflow: auto">
+                                <el-dropdown-item v-for="(integration,integration_name) in filteredList" :key="integration_name" :command="integration_name">
                                     {{ integration.title }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                    <el-dropdown trigger="click" popper-class="fcal_select">
+                        <span class="el-dropdown-link">
+                            <el-icon><MoreFilled/></el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    @click="isCloneOpen = true">
+                                    {{ $t('Clone from') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -129,6 +133,19 @@
                 />
             </div>
         </div>
+        <CloneDrawer
+            v-if="isCloneOpen"
+            :isOpen="isCloneOpen"
+            :eventLists="event_lists"
+            :saving="saving"
+            :title="$t('Clone Integration Settings')"
+            :label="$t('Select Calendar Event')"
+            :placeholder="$t('Select Event')"
+            :helpText="$t('CalendarEvent/select_integration_settings')"
+            :buttonLabel="$t('Clone Settings')"
+            @clone="cloneIntegrations"
+            @update:isOpen="isCloneOpen = $event"
+        />
     </div>
 </template>
 
@@ -143,13 +160,14 @@ import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
 import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 import IntegrationEditor from './IntegrationEditor.vue';
 
-import { ArrowDown, Back, Edit, Delete } from '@element-plus/icons-vue';
+import { ArrowDown, Back, Edit, Delete, MoreFilled } from '@element-plus/icons-vue';
 import QuestionIcon from "@/Components/Icons/QuestionIcon.vue";
 import EventIcon from "@/Components/Icons/EventIcon.vue";
+import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
 
 export default {
     name: 'Integrations',
-    props: ['calendar_id', 'event_id', 'calendar_event'],
+    props: ['calendar_id', 'event_id', 'calendar_event', 'event_lists'],
     components: {
         EventIcon,
         QuestionIcon,
@@ -163,18 +181,22 @@ export default {
         ArrowDown,
         Back,
         IntegrationEditor,
+        CloneDrawer,
         Edit,
-        Delete
+        Delete,
+        MoreFilled
     },
     data() {
         return {
             search: '',
             loading: true,
+            saving: false,
             integrations: [],
             errors: new Errors,
             available_integrations: {},
             all_module_config_url: '',
             show_edit: false,
+            isCloneOpen: false,
             integration_id: 0,
             integration_name: null,
             fields: [],
@@ -187,6 +209,17 @@ export default {
                 html: {}
             }
         };
+    },
+    computed: {
+        filteredList() {
+            let filteredList = {};
+            Object.keys(this.available_integrations).map(key => {
+                if (key.toLowerCase().includes(this.search.toLowerCase())) {
+                    filteredList[key] = this.available_integrations[key];
+                }
+            });
+            return filteredList;
+        },
     },
     methods: {
         addNewIntegration(integration_name) {
@@ -208,35 +241,44 @@ export default {
             }
             this.show_edit = true;
         },
+        hideEditor() {
+            this.show_edit = false;
+            this.getFeeds();
+        },
+        getEventName(name) {
+            if (name == 'after_booking_scheduled') {
+                return this.$t('Booking Confirmed');
+            }
+            if (name == 'booking_schedule_completed') {
+                return this.$t('Booking Completed');
+            }
+            if (name == 'booking_schedule_cancelled') {
+                return this.$t('Booking Cancelled');
+            }
+        },
         handleActive(row) {
-            let data = {
-                calendar_id : this.calendar_id,
-                status: row.enabled,
-            };
-
             this.errors.clear();
-
             this.saving = true;
-
-            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + row.id;
-
-            this.$post(url, data)
+            this.$post('calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + row.id, {
+                    calendar_id : this.calendar_id,
+                    status: row.enabled,
+                })
                 .then(response => {
                     this.$handleSuccess(response.message);
                 })
                 .catch(error => {
                     this.$handleError(error);
                 })
-                .finally(() => (this.saving = false));
+                .finally(() => {
+                    this.saving = false
+                });
         },
         removeFeed(feed_id) {
-            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + feed_id;
-            let data = {
-                calendar_id : this.calendar_id,
-                integration_id: feed_id,
-            };
             this.deleting = true;
-            this.$del(url, data)
+            this.$del('calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/' + feed_id, {
+                    calendar_id : this.calendar_id,
+                    integration_id: feed_id,
+                })
                 .then(response => {
                     this.$handleSuccess(response.message);
                     this.getFeeds();
@@ -250,8 +292,7 @@ export default {
         },
         getFeeds() {
             this.loading = true;
-            const url = 'calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations';
-            this.$get(url, {
+            this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations', {
                 calendar_id : this.calendar_id
             })
                 .then(response => {
@@ -283,32 +324,23 @@ export default {
                     this.loading = false;
                 });
         },
-        hideEditor() {
-            this.show_edit = false;
-            this.getFeeds();
-        },
-        getEventName(name) {
-            if (name == 'after_booking_scheduled') {
-                return this.$t('Booking Confirmed');
-            }
-            if (name == 'booking_schedule_completed') {
-                return this.$t('Booking Completed');
-            }
-            if (name == 'booking_schedule_cancelled') {
-                return this.$t('Booking Cancelled');
-            }
+        cloneIntegrations(eventId) {
+            this.saving = true;
+            this.$post('calendars/' + this.calendar_id + '/events/' + this.event_id + '/integrations/clone', {
+                    calendar_id : this.calendar_id,
+                    from_event_id: eventId,
+                })
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.getFeeds();
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
         }
-    },
-    computed: {
-        filteredList() {
-            let filteredList = {};
-            Object.keys(this.available_integrations).map(key => {
-                if (key.toLowerCase().includes(this.search.toLowerCase())) {
-                    filteredList[key] = this.available_integrations[key];
-                }
-            });
-            return filteredList;
-        },
     },
     beforeMount() {
         this.getFeeds();

@@ -6,6 +6,21 @@
                     <el-icon><Message/></el-icon>
                     {{ $t('Email Notification Settings') }}
                 </h2>
+                <div class="fcal_header_action">
+                    <el-dropdown trigger="click" popper-class="fcal_select">
+                        <span class="el-dropdown-link">
+                            <el-icon><MoreFilled/></el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    @click="isCloneOpen = true">
+                                    {{ $t('Clone from') }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </div>
         </div>
 
@@ -55,23 +70,39 @@
             <el-skeleton :rows="1" animated/>
             <el-skeleton :rows="5" animated/>
         </div>
+        <CloneDrawer
+            v-if="isCloneOpen"
+            :isOpen="isCloneOpen"
+            :eventLists="event_lists"
+            :saving="saving"
+            :title="$t('Clone Notification Settings')"
+            :label="$t('Select Calendar Event')"
+            :placeholder="$t('Select Event')"
+            :helpText="$t('CalendarEvent/select_notification_settings')"
+            :buttonLabel="$t('Clone Settings')"
+            @clone="cloneSettings"
+            @update:isOpen="isCloneOpen = $event"
+        />
     </div>
 </template>
 
 <script>
 import EditEmailNotificationSettings from './__EditEmailNotificationSettings.vue';
-import {EditPen, Close, Message} from '@element-plus/icons-vue';
+import { EditPen, Close, Message, MoreFilled } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
+import CloneDrawer from '../../../Components/Common/CloneDrawer.vue';
 
 export default {
     name: 'EmailNotification',
-    props: ['calendar_event'],
+    props: ['calendar_event', 'event_lists'],
     components: {
         EditEmailNotificationSettings,
         SaveButton,
         EditPen,
         Close,
-        Message
+        Message,
+        MoreFilled,
+        CloneDrawer
     },
     data() {
         return {
@@ -81,6 +112,7 @@ export default {
             loading: false,
             saving: false,
             stepIndex: 3,
+            isCloneOpen: false,
             smart_codes: {
                 texts: {},
                 html: {}
@@ -134,6 +166,24 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
+                });
+        },
+        cloneSettings(eventId) {
+            this.saving = true;
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/email-notifications/clone', {
+                calendar_id: this.calendar_event.calendar_id,
+                from_event_id: eventId
+            })
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.notifications = response.notifications;
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                    this.isCloneOpen = false;
                 });
         }
     },

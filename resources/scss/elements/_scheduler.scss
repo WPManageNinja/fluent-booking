@@ -1273,6 +1273,16 @@
                 }
             }
           }
+          .fcal_header_action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            .el-dropdown {
+                cursor: pointer;
+                padding: 6px 0;
+                transform: rotate(90deg);
+            }
+          }
         }
 
         .fcal_switch {
@@ -1676,6 +1686,14 @@
                         margin: 0.5rem 0;
                         font-size: 1rem;
                         font-weight: 500;
+                        .fcal_organizer_badge {
+                            background: rgba(38, 83, 199, 0.1);
+                            color: #306ae0;
+                            padding: 4px 8px;
+                            border-radius: 6px;
+                            font-size: 14px;
+                            margin-left: 8px;
+                        }
                     }
               
                     .fcal_team_member_icon {
@@ -1692,6 +1710,7 @@
                         border-radius: 8px;
                       }
                     }
+
                   }
               
                   .fcal_card_actions {
