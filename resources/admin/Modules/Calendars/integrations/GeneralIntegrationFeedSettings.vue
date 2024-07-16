@@ -46,11 +46,11 @@
 </template>
 
 <script type="text/babel">
-import {Lock} from "@element-plus/icons-vue";
+import { Lock } from "@element-plus/icons-vue";
 
 export default {
     name: 'GeneralIntegrationFeedSettings',
-    components: {Lock},
+    components: { Lock },
     props: ['calendar', 'settings_key'],
     data() {
         return {

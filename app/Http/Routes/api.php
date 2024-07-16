@@ -39,6 +39,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
 
     $router->get('/{id}/events/{event_id}/email-notifications', 'CalendarController@getEventEmailNotifications')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/email-notifications', 'CalendarController@saveEventEmailNotifications')->int('id')->int('event_id');
+    $router->post('/{id}/events/{event_id}/email-notifications/clone', 'CalendarController@cloneEventEmailNotification')->int('id')->int('event_id');
 
     $router->get('/{id}/events/{event_id}/booking-fields', 'CalendarController@getEventBookingFields')->int('id')->int('event_id');
     $router->post('/{id}/events/{event_id}/booking-fields', 'CalendarController@saveEventBookingFields')->int('id')->int('event_id');
@@ -108,6 +109,7 @@ $router->prefix('reports')->withPolicy('UserPolicy')->group(function ($router) {
 $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($router) {
     $router->prefix('{id}/events/{slot_id}/integrations')->group(function ($router) {
         $router->get('/', 'CalendarIntegrationController@index')->int('id')->int('slot_id');
+        $router->post('/clone', 'CalendarIntegrationController@cloneIntegrations')->int('id')->int('slot_id');
 
         $router->prefix('{integration_id}')->group(function ($router) {
             $router->get('/', 'CalendarIntegrationController@find')->int('id')->int('slot_id')->int('integration_id');

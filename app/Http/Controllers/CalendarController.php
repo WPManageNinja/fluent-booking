@@ -404,6 +404,10 @@ class CalendarController extends Controller
             $data['settings_menu'] = AdminMenuHandler::getEventSettingsMenuItems($calendarEvent);
         }
 
+        if (in_array('calendar_event_lists', $this->request->get('with', []))) {
+            $data['calendar_event_lists'] = CalendarService::getCalendarOptionsByTitle();
+        }
+
         return $data;
     }
 
@@ -725,6 +729,26 @@ class CalendarController extends Controller
         return [
             'message' => __('The Event Type has been cloned successfully', 'fluent-booking'),
             'slot'    => $clonedEvent
+        ];
+    }
+
+    public function cloneEventEmailNotification(Request $request, $calendarId, $eventId)
+    {
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+
+        $fromEventId = intval($request->get('from_event_id'));
+
+        $fromCalendarEvent = CalendarSlot::findOrFail($fromEventId);
+
+        $notification = $fromCalendarEvent->getNotifications(true);
+
+        $calendarEvent->setNotifications($notification);
+
+        $calendarEvent->save();
+
+        return [
+            'message'       => __('The Notification has been cloned successfully', 'fluent-booking'),
+            'notifications' => $notification
         ];
     }
 

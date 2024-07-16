@@ -4,13 +4,11 @@
             <div class="fcal_create_calendar_form">
                 <div class="fcal_create_calendar_form_header">
                     <h2>
-                        <el-icon>
-                            <Link/>
-                        </el-icon>
+                        <el-icon><Link/></el-icon>
                         {{ $t('Webhook Feeds') }}
                     </h2>
 
-                    <template v-if="!disabled">
+                    <div v-if="!disabled" class="fcal_header_action">
                         <el-button
                             v-if="editing_feed"
                             @click="backToHome()"
@@ -18,13 +16,26 @@
                             <el-icon><Back/></el-icon>
                             {{ $t('Back') }}
                         </el-button>
-                        <el-button v-else class="fcal_primary_btn2" @click="add">
-                            <el-icon>
-                                <Plus/>
-                            </el-icon>
-                            {{ $t('Add New Webhook') }}
-                        </el-button>
-                    </template>
+                        <template v-else>
+                            <el-button class="fcal_primary_btn2" @click="add">
+                                <el-icon><Plus/></el-icon>
+                                {{ $t('Add New Webhook') }}
+                            </el-button>
+                            <el-dropdown trigger="click" popper-class="fcal_select">
+                                <span class="el-dropdown-link">
+                                    <el-icon><MoreFilled/></el-icon>
+                                </span>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item
+                                            @click="isCloneOpen = true">
+                                            {{ $t('Clone from') }}
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </template>
+                    </div>
                 </div>
             </div>
 
@@ -95,17 +106,32 @@
             </template>
             <ProNotice v-else/>
         </div>
+        <CloneDrawer
+            v-if="isCloneOpen"
+            :isOpen="isCloneOpen"
+            :eventId="calendar_event.id"
+            :eventLists="event_lists"
+            :saving="saving"
+            :title="$t('Clone Webhook Settings')"
+            :label="$t('Select Calendar Event')"
+            :placeholder="$t('Select Event')"
+            :helpText="$t('CalendarEvent/select_webhook_settings')"
+            :buttonLabel="$t('Clone Settings')"
+            @clone="cloneWebhook"
+            @update:isOpen="isCloneOpen = $event"
+        />
     </div>
 </template>
 
 <script>
-import { Plus, Link, Edit, Delete, Back } from '@element-plus/icons-vue';
+import { Plus, Link, Edit, Delete, Back, MoreFilled } from '@element-plus/icons-vue';
 import Editor from "./Editor";
 import ProNotice from '@/Components/Common/ProNotice.vue';
+import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
 
 export default {
     name: "WebhookSettings",
-    props: ['calendar_event', 'disabled'],
+    props: ['calendar_event', 'disabled', 'event_lists'],
     components: {
         Editor,
         Plus,
@@ -113,16 +139,19 @@ export default {
         Edit,
         Delete,
         Back,
-        ProNotice
+        MoreFilled,
+        ProNotice,
+        CloneDrawer
     },
     data() {
         return {
             loading: false,
+            saving: false,
             feeds: [],
             event_triggers: [],
             editing_feed: null,
 
-            isDrawerOpen: false,
+            isCloneOpen: false,
             selected_id: null,
             selectedIndex: null,
             webhook: {
@@ -140,7 +169,35 @@ export default {
             }
         }
     },
+    computed: {
+        tableData() {
+            return this.webhooks;
+        }
+    },
     methods: {
+        backToWebhook() {
+            this.show_edit = false;
+            this.editing_feed = null;
+            this.getFeeds();
+        },
+        getEventName(name) {
+            const eventNames = {
+                'after_booking_scheduled': 'Booking Confirmed',
+                'booking_schedule_completed': 'Booking Completed',
+                'booking_schedule_cancelled': 'Booking Cancelled',
+                'after_booking_rescheduled': 'Booking Rescheduled',
+                'booking_schedule_rejected': 'Booking Rejected'
+            };
+            return this.$t(eventNames[name]);
+        },
+        backToHome() {
+            this.editing_feed = null;
+            this.getFeeds();
+        },
+        edit(feed) {
+            this.editing_feed = feed;
+            this.show_edit = true;
+        },
         getFeeds() {
             this.loading = true;
             this.$get(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, {
@@ -158,10 +215,6 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        backToHome() {
-            this.editing_feed = null;
-            this.getFeeds();
         },
         add() {
             this.editing_feed = {
@@ -190,10 +243,6 @@ export default {
                 }
             }
         },
-        edit(feed) {
-            this.editing_feed = feed;
-            this.show_edit = true;
-        },
         handleActive(row) {
             let data = {
                 webhook: {
@@ -201,7 +250,6 @@ export default {
                     settings: row.settings
                 }
             };
-
             this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, data)
                 .then(response => {
                     this.$handleSuccess(response.message);
@@ -224,27 +272,23 @@ export default {
                     this.loading = false;
                 });
         },
-        backToWebhook() {
-            this.show_edit = false;
-            this.editing_feed = null;
-            this.getFeeds();
+        cloneWebhook(eventId) {
+            this.loading = true;
+            this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks/clone`,{
+                    calendar_id: this.calendar_event.calendar_id,
+                    from_event_id: eventId
+                })
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                    this.getFeeds();
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        getEventName(name) {
-            const eventNames = {
-                'after_booking_scheduled': 'Booking Confirmed',
-                'booking_schedule_completed': 'Booking Completed',
-                'booking_schedule_cancelled': 'Booking Cancelled',
-                'after_booking_rescheduled': 'Booking Rescheduled',
-                'booking_schedule_rejected': 'Booking Rejected'
-            };
-
-            return this.$t(eventNames[name]);
-        }
-    },
-    computed: {
-        tableData() {
-            return this.webhooks;
-        }
     },
     beforeMount() {
         if (!this.disabled) {
