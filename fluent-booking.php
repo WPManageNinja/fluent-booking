@@ -1,7 +1,7 @@
 <?php defined('ABSPATH') or die;
 /*
-Plugin Name: Fluent Booking
-Description: Fluent Booking WordPress Plugin
+Plugin Name: FluentBooking - Appointment Scheduling Solution
+Description: FluentBooking is the ultimate solution for booking appointments, meetings, webinars, events, sales calls, and more.
 Version: 1.4.3
 Author: Meeting scheduling made easy
 Author URI: https://wpmanageninja.com
