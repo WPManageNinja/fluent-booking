@@ -26,26 +26,54 @@
 
         <div v-if="!loading">
             <div class="fcal_notification_container_wrap">
-                <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
-                    v-for="(notification, index) in notifications" :key="index">
-                    <div class="fcal_notification_header">
-                        <span :class="['header_left']">
-                            {{ notification.title }}
-                        </span>
-                        <div class="header_right">
-                            <span v-if="!notification.enabled" class="fcal_plain_btn disable"> {{ $t('Disabled') }} </span>
-                            <span>
-                                <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
-                                    <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
-                                </el-button>
+                <div class="fcal_notification_title">
+                    <h3> {{ $t('Notification Settings') }}</h3>
+                    <p>{{ $t('Customize the email notifications sent to attendees and organizers') }}</p>
+                </div>
+                <div class="fcal_notifications">
+                    <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
+                        v-for="(notification, index) in notificationSettings" :key="index">
+                        <div class="fcal_notification_header">
+                            <span :class="['header_left']">
+                                {{ notification.title }}
                             </span>
-                            <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                            <div class="header_right">
+                                <span v-if="!notification.enabled" class="fcal_plain_btn disable"> {{ $t('Disabled') }} </span>
+                                <span>
+                                    <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
+                                        <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                    </el-button>
+                                </span>
+                                <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="fcal_create_calendar_form_footer">
-                <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+            <div class="fcal_notification_container_wrap">
+                <div class="fcal_notification_title">
+                    <h3>{{ $t('Other Notifications') }}</h3>
+                    <p>{{ $t('Optimize your email notifications for confirmations and declines') }}</p>
+                </div>
+                <div class="fcal_notifications">
+                    <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
+                        v-for="(notification, index) in otherNotifications" :key="index">
+                        <div class="fcal_notification_header">
+                            <span :class="['header_left']">
+                                {{ notification.title }}
+                            </span>
+                            <div class="header_right">
+                                <span v-if="!notification.enabled" class="fcal_plain_btn disable"> {{ $t('Disabled') }} </span>
+                                <span>
+                                    <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
+                                        <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                    </el-button>
+                                </span>
+                                <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <el-dialog
@@ -73,6 +101,7 @@
         <CloneDrawer
             v-if="isCloneOpen"
             :isOpen="isCloneOpen"
+            :eventId="calendar_event.id"
             :eventLists="event_lists"
             :saving="saving"
             :title="$t('Clone Notification Settings')"
@@ -116,7 +145,21 @@ export default {
             smart_codes: {
                 texts: {},
                 html: {}
-            }
+            },
+        }
+    },
+    computed: {
+        notificationSettings() {
+            const otherSettings = ['booking_request_attendee', 'booking_request_host', 'declined_by_host'];
+            let notificationsArray = Object.entries(this.notifications);
+            notificationsArray = notificationsArray.filter(([key, field]) => !otherSettings.includes(key));
+            return Object.fromEntries(notificationsArray);
+        },
+        otherNotifications() {
+            const otherSettings = ['booking_request_attendee', 'booking_request_host', 'declined_by_host'];
+            let notificationsArray = Object.entries(this.notifications);
+            notificationsArray = notificationsArray.filter(([key, field]) => otherSettings.includes(key));
+            return Object.fromEntries(notificationsArray);
         }
     },
     methods: {

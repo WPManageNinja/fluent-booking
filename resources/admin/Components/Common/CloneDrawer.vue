@@ -20,6 +20,7 @@
               :label="cal.title">
               <el-option
                 v-for="event in cal.options"
+                :disabled="event.id == eventId"
                 :key="event.id"
                 :label="event.title"
                 :value="event.id">
@@ -39,6 +40,7 @@ export default {
     name: 'CloneDrawer',
     props: {
         isOpen: Boolean,
+        eventId: Number,
         saving: Boolean,
         title: String,
         label: String,

@@ -5,7 +5,7 @@
                 <div class="left">
                     <div class="content">
                         <h3>{{ $t('Advanced Modules') }}</h3>
-                        <p>{{ $t('Enable/Disable Fluent Board\'s Advanced features or integrations.') }}</p>
+                        <p>{{ $t('global_feature_modules_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div class="left">
                     <div class="content">
                         <h3>{{ $t('Recommended Plugins and Addons') }}</h3>
-                        <p>{{ $t('Plugins that will extend your Fluent Boards Functionalities') }}</p>
+                        <p>{{ $t('Plugins that will extend your Fluent Booking Functionalities') }}</p>
                     </div>
                 </div>
             </div>

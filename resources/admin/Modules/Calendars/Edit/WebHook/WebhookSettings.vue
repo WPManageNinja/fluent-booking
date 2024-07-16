@@ -109,6 +109,7 @@
         <CloneDrawer
             v-if="isCloneOpen"
             :isOpen="isCloneOpen"
+            :eventId="calendar_event.id"
             :eventLists="event_lists"
             :saving="saving"
             :title="$t('Clone Webhook Settings')"
