@@ -3318,6 +3318,41 @@
                     }
                 }
             }
+
+            .fcal_frontend_panel_settings_drawer {
+                .el-form {
+                    .el-form-item {
+                        .el-radio-group {
+                            gap: 8px;
+                            .el-radio {
+                                margin: 0;
+                                width: 100%;
+                                .el-radio__label {
+                                    font-size: 14px;
+                                }
+                                .el-radio__input {
+                                    .el-radio__inner {
+                                        width: 20px;
+                                        height: 20px;
+                                        &:after {
+                                            width: 10px;
+                                            height: 10px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.fcal_frontend_panel_drawer {
+            .el-drawer__header {
+                border-bottom: 1px solid #d6dae1;
+            }
+            .el-drawer__body {
+                padding-top: 10px;
+            }
         }
         .fcal_need_pro {
             font-size: 1.1rem;
@@ -3361,7 +3396,7 @@
                     }
                     .el-select__input {
                         &:focus {
-                            border-color: none;
+                            border-color: transparent;
                             box-shadow: none;
                         }
                     }
