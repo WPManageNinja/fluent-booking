@@ -27,7 +27,7 @@ export default {
                 .then((response) => {
                     this.$notify.success('FluentBooking Core Plugin installed successfully');
                     // Reload the page
-                  //  window.location.reload();
+                    window.location.reload();
                 })
                 .catch((errors) => {
                     this.$notify.error('Failed to install FluentBooking Core Plugin');
