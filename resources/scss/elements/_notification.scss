@@ -1,12 +1,8 @@
 .fcal_notification_container {
     border-bottom: 1px solid #EAECF0;
-    padding: 15px 0;
+    padding: 15px;
     &.disabled {
         opacity: 0.6;
-    }
-    &:last-child {
-        border-bottom: none;
-        padding: 15px 0 0 0;
     }
 
     .fcal_notification_header {
