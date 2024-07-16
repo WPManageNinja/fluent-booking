@@ -1,5 +1,5 @@
 <template>
-    <div class="fb_require_upgrade">
+    <div v-if="requireUpgrade" class="fb_require_upgrade">
         <h3>FluentBooking Core Plugin is required</h3>
         <p>You are using FluentBooking Pro version which is required the base core plugin. Please install FluentBooking
             Core plugin</p>
