@@ -21,60 +21,62 @@
             </div>
         </div>
         <div class="fbs_module_actions">
-            <el-button @click="showSettings = true" v-if="appVars.has_pro">{{ $t('Settings') }}</el-button>
-            <el-button type="primary" v-else disabled>{{ $t('Upgrade to Pro') }}</el-button>
+            <el-button @click="showSettings = true" v-if="appVars.has_pro" class="fcal_plain_btn">{{ $t('Settings') }}</el-button>
+            <el-button type="primary" class="fcal_primary_btn" v-else disabled>{{ $t('Upgrade to Pro') }}</el-button>
         </div>
     </div>
 
     <el-drawer
-        :append-to-body="true"
-        class="fbs_right_sidebar"
+        v-model="showSettings"
         direction="rtl"
-        title="Frontend Portal Settings"
-        v-model="showSettings">
+        :title="$t('Frontend Portal Settings')"
+        :zIndex="999"
+        modal-class="fcal_drawer fcal_frontend_panel_drawer">
 
-        <h3>{{ $t('Frontend Panel Settings') }}</h3>
-        <p>{{ $t('Add your FluentBooking to WordPress frontend / any Page via Shortcode.') }}</p>
-        <hr/>
+        <div class="fcal_frontend_panel_settings_drawer">
+            <h3>{{ $t('Frontend Panel Settings') }}</h3>
+            <p>{{ $t('Add your FluentBooking to WordPress frontend / any Page via Shortcode.') }}</p>
+            <hr/>
 
-        <el-form class="fbs_form" v-model="featureModules.frontend" label-position="top">
-            <el-form-item>
-                <el-checkbox v-model="featureModules.frontend.enabled" true-label="yes"
-                             false-label="no">{{ $t('Enable Frontend Portal') }}
-                </el-checkbox>
-            </el-form-item>
-
-            <template v-if="featureModules.frontend.enabled == 'yes'">
-                <el-form-item :label="$t('Via Shortcode / Dedicated Page?')">
-                    <el-radio-group v-model="featureModules.frontend.render_type">
-                        <el-radio label="standalone">{{ $t('Show in a standalone Frontend URL') }}</el-radio>
-                        <el-radio label="shortcode">{{ $t('Use a pre - defined page via shortcode') }}</el-radio>
-                    </el-radio-group>
+            <el-form class="fbs_form" v-model="featureModules.frontend" label-position="top">
+                <el-form-item>
+                    <el-checkbox v-model="featureModules.frontend.enabled" true-label="yes"
+                                 false-label="no">{{ $t('Enable Frontend Portal') }}
+                    </el-checkbox>
                 </el-form-item>
 
-                <el-form-item v-if="featureModules.frontend.render_type === 'shortcode'"
-                              :label="$t('Please Select the page where you want to show')">
-                    <el-select :placeholder="$t('Select Page')" v-model="featureModules.frontend.page_id">
-                        <el-option v-for="page in pages" :key="page.id" :label="page.title" :value="page.id">
-                            <span style="float: left">{{ page.title }}</span>
-                            <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">
+                <template v-if="featureModules.frontend.enabled == 'yes'">
+                    <el-form-item :label="$t('Via Shortcode / Dedicated Page?')">
+                        <el-radio-group v-model="featureModules.frontend.render_type">
+                            <el-radio label="standalone">{{ $t('Show in a standalone Frontend URL') }}</el-radio>
+                            <el-radio label="shortcode">{{ $t('Use a pre - defined page via shortcode') }}</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+
+                    <el-form-item v-if="featureModules.frontend.render_type === 'shortcode'"
+                                  :label="$t('Please Select the page where you want to show')">
+                        <el-select :placeholder="$t('Select Page')" filterable popper-class="fcal_select" placement="bottom" v-model="featureModules.frontend.page_id">
+                            <el-option v-for="page in pages" :key="page.id" :label="page.title" :value="page.id">
+                                <span style="float: left">{{ page.title }}</span>
+                                <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">
                                 #{{ page.id }}
                             </span>
-                        </el-option>
-                    </el-select>
-                    <p>{{ $t('Please add this shortcode to your selected page:') }} <code style="background: rgb(226 227 227); padding: 3px 10px;border-radius: 3px;cursor:pointer;" @click="handleCopyShortcode('[fluent_booking_panel]')" ref="copyShortcode">[fluent_booking_panel]</code></p>
-                </el-form-item>
+                            </el-option>
+                        </el-select>
+                        <p>{{ $t('Please add this shortcode to your selected page:') }} <code style="background: rgb(226 227 227); padding: 3px 10px;border-radius: 3px;cursor:pointer;" @click="handleCopyShortcode('[fluent_booking_panel]')" ref="copyShortcode">[fluent_booking_panel]</code></p>
+                    </el-form-item>
 
-                <el-form-item v-else :label="$t('URL Slug for the frontend panel (eg: projects)')">
-                    <el-input v-model="featureModules.frontend.slug"
-                              :placeholder="$t('Enter the slug for the frontend portal')"></el-input>
-                </el-form-item>
+                    <el-form-item v-else :label="$t('URL Slug for the frontend panel (eg: projects)')">
+                        <el-input v-model="featureModules.frontend.slug"
+                                  :placeholder="$t('Enter the slug for the frontend portal')"></el-input>
+                    </el-form-item>
 
-            </template>
-            <el-form-item>
-                <el-button type="success" @click="saveSettings">{{ $t('Save Settings') }}</el-button>
-            </el-form-item>
-        </el-form>
+                </template>
+                <el-form-item>
+                    <el-button class="fcal_primary_btn" @click="saveSettings">{{ $t('Save Settings') }}</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
     </el-drawer>
 
 </template>

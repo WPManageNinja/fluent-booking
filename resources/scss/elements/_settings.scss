@@ -72,6 +72,9 @@
             &.router-link-exact-active {
                 background: $primaryColor;
                 color: #ffffff;
+                img {
+                    filter: invert(1);
+                }
                 svg {
                     path {
                         stroke: #ffffff;
