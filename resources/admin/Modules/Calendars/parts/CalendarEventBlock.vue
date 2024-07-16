@@ -177,7 +177,7 @@
                 <el-form-item :label="$t('Select Calendar Event')">
                     <el-select
                         v-model="cloneEventId"
-                        :placeholder="$t('Select Schedule')"
+                        :placeholder="$t('Select Event')"
                         popper-class="fcal_select"
                         placement="bottom"
                         :no-match-text="$t('No Data match')"

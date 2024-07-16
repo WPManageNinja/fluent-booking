@@ -71,6 +71,19 @@
             <el-skeleton :rows="1" animated/>
             <el-skeleton :rows="5" animated/>
         </div>
+        <CloneDrawer
+            v-if="isCloneOpen"
+            :isOpen="isCloneOpen"
+            :eventLists="event_lists"
+            :saving="saving"
+            :title="$t('Clone SMS Settings')"
+            :label="$t('Select Calendar Event')"
+            :placeholder="$t('Select Event')"
+            :helpText="$t('CalendarEvent/select_sms_settings')"
+            :buttonLabel="$t('Clone Settings')"
+            @clone="cloneSettings"
+            @update:isOpen="isCloneOpen = $event"
+        />
     </div>
 </template>
 
@@ -80,10 +93,11 @@ import { EditPen, Close, Notification } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 import ProNotice from '@/Components/Common/ProNotice.vue';
+import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
 
 export default {
     name: 'SmsNotificationSettings',
-    props: ['calendar_event', 'disabled'],
+    props: ['calendar_event', 'disabled', 'event_lists'],
     components: {
         EditSmsNotificationSettings,
         SaveButton,
@@ -91,12 +105,14 @@ export default {
         Notification,
         EditPen,
         Close,
-        ProNotice
+        ProNotice,
+        CloneDrawer
     },
     data() {
         return {
             editingNotification: {},
             showEdit: false,
+            isCloneOpen: false,
             notifications: {},
             loading: false,
             saving: false,
@@ -154,6 +170,23 @@ export default {
                 .then(response => {
                     this.$handleSuccess(response);
                     this.closeEdit();
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
+        cloneSettings() {
+            this.saving = true;
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/sms-notifications/clone', {
+                calendar_id: this.calendar_event.calendar_id,
+                from_event_id: this.event_lists.selectedEvent
+            })
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.notifications = response.notifications;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
