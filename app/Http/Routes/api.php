@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * @var $router FluentBooking\Framework\Http\Router
@@ -11,7 +11,7 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/', 'CalendarController@getAllCalendars')->meta('calendar_type', 'booking');
 
     $router->get('event-lists', 'CalendarController@getCalendarEventLists');
-    
+
     $router->post('/', 'CalendarController@createCalendar');
     $router->post('check-slug', 'CalendarController@checkSlug');
 
@@ -84,6 +84,7 @@ $router->prefix('settings')->withPolicy('SettingsPolicy')->group(function ($rout
     $router->post('/global-modules', 'SettingsController@updateGlobalModules');
     $router->get('/pages', 'SettingsController@getPages');
     $router->post('/addons-settings', 'SettingsController@saveAddonsSettings');
+    $router->post('/install-plugin', 'SettingsController@installPlugin');
 });
 
 $router->prefix('availability')->withPolicy('AvailabilityPolicy')->group(function ($router) {

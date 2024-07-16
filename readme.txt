@@ -1,4 +1,4 @@
-=== FluentBooking - The Ultimate Appointments Scheduling, Events Booking, Events Calendar Solution ===
+=== Fluent Booking - The Ultimate Appointments Scheduling, Events Booking, Events Calendar Solution ===
 Contributors: techjewel, wpmanageninja
 Author URI: https://fluentbooking.com/
 Tags: booking, appointment booking, appointments, booking system

@@ -394,6 +394,7 @@ class AdminMenuHandler
                 'multi_users' => true
             ]),
             'has_pro'                => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
+            'require_upgrade'        => defined('FLUENT_BOOKING_PRO_DIR_FILE') && !defined('FLUENT_BOOKING_LITE'),
             'dashboard_notices'      => apply_filters('fluent_booking/dashboard_notices', []),
             'trans'                  => TransStrings::getStrings(),
             'date_format'            => DateTimeHelper::getDateFormatter(true),
