@@ -7,7 +7,7 @@
             <template v-if="!disabled">
                 <div class="fcal_create_calendar_form_body">
                     <el-form label-position="top">
-                        <el-form-item :label="$t('Assign Member')">
+                        <el-form-item :label="getAddingLabel">
                             <el-select
                                 @change="addTeamMember"
                                 :placeholder="$t('Select')"
@@ -25,14 +25,18 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('Team Members')">
+                        <el-form-item :label="getListLabel">
                             <div class="fcal_team_members">
                                 <div v-if="!loading" v-for="member in teamMembers" :key="member.id" class="fcal_team_member">
                                     <div class="fcal_card_wrap">
                                         <div class="fcal_team_member_icon">
                                             <img :src="member.avatar"/>
                                         </div>
-                                        <h3>{{ member.name }} <span v-if="isMultiHosts && isOrganizer(member.id)">({{ $t('Organizer') }})</span></h3>
+                                        <h3>{{ member.name }} 
+                                            <span v-if="isMultiHosts && isOrganizer(member.id)" class="fcal_organizer_badge">
+                                                {{ $t('Organizer') }}
+                                            </span>
+                                        </h3>
                                     </div>
                                     <div class="fcal_card_actions">
                                         <el-button v-if="isMultiHosts && !isOrganizer(member.id)"
@@ -101,6 +105,12 @@ export default {
         isMultiHosts() {
             const eventType = this.calendar_event.event_type;
             return eventType == 'single_event' || eventType == 'group_event' || eventType == 'collective';
+        },
+        getListLabel() {
+            return this.isMultiHosts ? this.$t('Event Hosts') : this.$t('Team Members');
+        },
+        getAddingLabel() {
+            return this.isMultiHosts ? this.$t('Add Host') : this.$t('Add Team Member');
         }
     },
     methods: {
@@ -130,7 +140,7 @@ export default {
                     const updatedHost = { ...host };
                     if (this.settings.team_members.includes(updatedHost.id)) {
                         updatedHost.disabled = true;
-                        updatedHost.name = updatedHost.name + ' (' + this.$t('Already assigned') + ')';
+                        updatedHost.name = updatedHost.name;
                     }
                     return updatedHost;
                 });
