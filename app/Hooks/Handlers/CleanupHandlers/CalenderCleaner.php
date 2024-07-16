@@ -5,6 +5,7 @@ namespace FluentBooking\App\Hooks\Handlers\CleanupHandlers;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Models\Availability;
+use FluentBooking\App\Models\Meta;
 use FluentBooking\Framework\Support\Arr;
 
 class CalenderCleaner

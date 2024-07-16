@@ -454,7 +454,6 @@ export default {
             };
 
             const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id;
-
             this.$post(url, data)
                 .then(response => {
                     this.$handleSuccess(response);
