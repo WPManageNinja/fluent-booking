@@ -268,7 +268,7 @@ class AvailabilityController extends Controller
 
         if ($usageCount) {
             /* translators: Number of events dependent on the schedule */
-            $message = sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount);
+            $message = sprintf(__('Can\'t delete: %s events depend on this schedule', 'fluent-booking'), $usageCount);
             return $this->sendError([
                 'message' => $message
             ], 422);
