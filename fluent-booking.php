@@ -3,7 +3,7 @@
 Plugin Name: FluentBooking - Appointment Scheduling & Booking Solution
 Description: FluentBooking is the ultimate solution for booking appointments, meetings, webinars, events, sales calls, and more.
 Version: 1.5.0
-Author: Meeting scheduling made easy
+Author: Appointment & Booking Solution Team - WPManageNinja
 Author URI: https://fluentbooking.com
 Plugin URI: https://fluentbooking.com/pricing/
 License: GPLv2 or later

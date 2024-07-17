@@ -79,8 +79,8 @@ class BookingController extends Controller
         ];
 
         $messages = [
-            'name.required'       => __("Please enter attendee's name", 'fluent-booking'),
-            'email.required'      => __("Please enter attendee's email address", 'fluent-booking'),
+            'name.required'       => __('Please enter attendee\'s name', 'fluent-booking'),
+            'email.required'      => __('Please enter attendee\'s email address', 'fluent-booking'),
             'email.email'         => __('Please provide a valid email address', 'fluent-booking'),
             'timezone.required'   => __('Please select the timezone', 'fluent-booking'),
             'event_time.required' => __('Please select a date and time', 'fluent-booking')
@@ -90,10 +90,10 @@ class BookingController extends Controller
 
         if ($calendarEvent->isPhoneRequired()) {
             $rules['location_description'] = 'required';
-            $messages['location_description.required'] = __("Please provide attendee's phone number", 'fluent-booking');
+            $messages['location_description.required'] = __('Please provide attendee\'s phone number', 'fluent-booking');
         } else if ($calendarEvent->isAddressRequired()) {
             $rules['location_description'] = 'required';
-            $messages['location_description.required'] = __("Please provide attendee's address", 'fluent-booking');
+            $messages['location_description.required'] = __('Please provide attendee\'s address', 'fluent-booking');
         }
 
         if ($additionalGuests = array_filter(Arr::get($postedData, 'guests', []))) {
