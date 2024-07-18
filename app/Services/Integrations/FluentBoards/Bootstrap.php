@@ -101,34 +101,34 @@ class Bootstrap extends IntegrationManagerController
                 'component'      => 'chained_select',
                 'primary_key'    => 'board_id',
                 'fields_options' => [
-                    'board_id'    => [],
-                    'stage_id'    => [],
-                    'label_ids'   => [],
-                    'member_ids'  => [],
-                    'priority'    => []
+                    'board_id'   => [],
+                    'stage_id'   => [],
+                    'label_ids'  => [],
+                    'member_ids' => [],
+                    'priority'   => []
                 ],
                 'options_labels' => [
-                    'board_id'       => [
+                    'board_id'   => [
                         'label'       => __('Select Board', 'fluent-booking'),
                         'type'        => 'select',
                         'placeholder' => __('Select Board', 'fluent-booking')
                     ],
-                    'stage_id'       => [
+                    'stage_id'   => [
                         'label'       => __('Select Stage', 'fluent-booking'),
                         'type'        => 'select',
                         'placeholder' => __('Select Stage', 'fluent-booking')
                     ],
-                    'label_ids' => [
+                    'label_ids'  => [
                         'label'       => __('Select Labels', 'fluent-booking'),
                         'type'        => 'multi-select',
                         'placeholder' => __('Select Labels', 'fluent-booking')
                     ],
-                    'member_ids'     => [
+                    'member_ids' => [
                         'label'       => __('Select Assignees', 'fluent-booking'),
                         'type'        => 'multi-select',
                         'placeholder' => __('Select Assignees', 'fluent-booking')
                     ],
-                    'priority'       => [
+                    'priority'   => [
                         'label'       => __('Select Priority', 'fluent-booking'),
                         'type'        => 'select',
                         'placeholder' => __('Priority', 'fluent-booking')
@@ -172,7 +172,7 @@ class Bootstrap extends IntegrationManagerController
                     'booking' => __('Booking Date', 'fluent-booking'),
                     'meeting' => __('Meeting Date', 'fluent-booking')
                 ]
-                ],
+            ],
             [
                 'key'       => 'due_at_days',
                 'label'     => __('Due Date', 'fluent-booking'),
@@ -228,7 +228,7 @@ class Bootstrap extends IntegrationManagerController
             'booking_schedule_cancelled' => __('Booking Cancelled', 'fluent-booking'),
         ];
     }
-    
+
     public function getConfigFieldOptions($settings, $calendarEventId)
     {
         $boardId = Arr::get($settings, 'board_config.board_id');
@@ -324,7 +324,7 @@ class Bootstrap extends IntegrationManagerController
     private function convertDueDate($dueTime, $dueType, $bookingStartTime)
     {
         $timeStamp = strtotime($bookingStartTime);
-        $currentTime = strtotime(current_time('mysql'));
+        $currentTime = current_time('timestamp');
 
         if ($dueType != 'meeting') {
             $timeStamp = $currentTime;
@@ -336,9 +336,19 @@ class Bootstrap extends IntegrationManagerController
         $dueDate = gmdate('Y-m-d H:i:s', strtotime($dateAdjustment, $timeStamp)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         if (strtotime($dueDate) < $currentTime) {
-            return gmdate('Y-m-d H:i:s', $currentTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dueDate = gmdate('Y-m-d H:i:s', $currentTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
-        return $dueDate;
+
+        $wpTimestamp = current_time('timestamp');
+        $utcTimeStamp = time();
+
+        $diff = $utcTimeStamp - $wpTimestamp;
+
+        if (!$diff) {
+            return $dueDate;
+        }
+
+        return gmdate('Y-m-d H:i:s', strtotime($dueDate) + $diff); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
     }
 
     public function notify($feed, $booking, $calendarEvent)
@@ -346,17 +356,17 @@ class Bootstrap extends IntegrationManagerController
         $validData = ['task_title', 'description', 'board_config', 'author_name', 'email', 'position', 'due_at_days', 'due_at_type'];
         $data = Arr::only($feed['processedValues'], $validData);
 
-        $boardId     = intval(Arr::get($data, 'board_config.board_id'));
-        $stageId     = intval(Arr::get($data, 'board_config.stage_id'));
-        $priority    = sanitize_text_field(Arr::get($data, 'board_config.priority'));
-        $assignees   = array_map('intval', Arr::get($data, 'board_config.member_ids', []));
+        $boardId = intval(Arr::get($data, 'board_config.board_id'));
+        $stageId = intval(Arr::get($data, 'board_config.stage_id'));
+        $priority = sanitize_text_field(Arr::get($data, 'board_config.priority'));
+        $assignees = array_map('intval', Arr::get($data, 'board_config.member_ids', []));
         $boardLabels = array_map('intval', Arr::get($data, 'board_config.label_ids', []));
-        $taskTitle   = sanitize_text_field(Arr::get($data, 'task_title'));
+        $taskTitle = sanitize_text_field(Arr::get($data, 'task_title'));
         $description = wp_kses_post(Arr::get($data, 'description'));
-        $position    = sanitize_text_field(Arr::get($data, 'position'));
-        $dueAtDays   = intval(Arr::get($data, 'due_at_days'));
-        $dueAtType   = sanitize_text_field(Arr::get($data, 'due_at_type'));
-        $authorName  = sanitize_text_field(Arr::get($data, 'author_name'));
+        $position = sanitize_text_field(Arr::get($data, 'position'));
+        $dueAtDays = intval(Arr::get($data, 'due_at_days'));
+        $dueAtType = sanitize_text_field(Arr::get($data, 'due_at_type'));
+        $authorName = sanitize_text_field(Arr::get($data, 'author_name'));
         $authorEmail = sanitize_email(Arr::get($data, 'email'));
 
         if (!$booking->id || !$boardId || !$stageId || !$taskTitle) {
@@ -369,14 +379,14 @@ class Bootstrap extends IntegrationManagerController
         }
 
         $data = [
-            'title'          => $taskTitle,
-            'board_id'       => $boardId,
-            'stage_id'       => $stageId,
-            'priority'       => $priority,
-            'description'    => $description,
-            'position'       => $this->getLastPositionOfStageTask($boardId, $stageId),
-            'due_at'         => $this->convertDueDate($dueAtDays, $dueAtType, $booking->start_time),
-            'source'         => 'FluentBooking'
+            'title'       => $taskTitle,
+            'board_id'    => $boardId,
+            'stage_id'    => $stageId,
+            'priority'    => $priority,
+            'description' => $description,
+            'position'    => $this->getLastPositionOfStageTask($boardId, $stageId),
+            'due_at'      => $this->convertDueDate($dueAtDays, $dueAtType, $booking->start_time),
+            'source'      => 'FluentBooking'
         ];
 
         $data['started_at'] = $data['due_at'] ? gmdate('Y-m-d H:i:s', strtotime(current_time('mysql'))) : null; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -418,7 +428,7 @@ class Bootstrap extends IntegrationManagerController
             if ($isEmailEnabled) {
                 (new TaskService())->sendMailAfterTaskModify('add_assignee', $assignee, $task->id);
             }
-            
+
             do_action('fluent_boards/task_assignee_changed', $task, $assignee, 'added');
         }
 
@@ -430,7 +440,7 @@ class Bootstrap extends IntegrationManagerController
 
         $this->addLog(
             $feed['settings']['name'],
-            sprintf(__('Task has been created in FluentBoards. You can %s to view the task.',  'fluent-booking'), '<a target="_blank" href="' . $taskUrl . '">' . __('click here', 'fluent-booking') . '</a>'),
+            sprintf(__('Task has been created in FluentBoards. You can %s to view the task.', 'fluent-booking'), '<a target="_blank" href="' . $taskUrl . '">' . __('click here', 'fluent-booking') . '</a>'),
             $booking->id,
             'success'
         );
