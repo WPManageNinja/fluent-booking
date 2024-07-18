@@ -88,17 +88,16 @@ Having different meeting types like one-on-one, group, team/round robin, and one
 
 And FluentBooking does the exact thing! You can easily schedule and manage various meeting types to suit your needs:
 
-
-One-on-one Meeting: Schedule a one-on-one meeting with your attendee and give personalized attention and service
-
-
-Group Meeting (Pro): Arrange group meetings with multiple participants and work towards common goals
+**One-on-one Meeting:** Schedule a one-on-one meeting with your attendee and give personalized attention and service
 
 
-Round Robin Meeting (Pro): Set your team and start giving services to clients with rotating hosts
+**Group Meeting (Pro):** Arrange group meetings with multiple participants and work towards common goals
 
 
-One-off Event (Pro): Create and manage single-time unique single events or group events that happen only once
+**Round Robin Meeting (Pro):** Set your team and start giving services to clients with rotating hosts
+
+
+**One-off Event (Pro):** Create and manage single-time unique single events or group events that happen only once
 
 = 🌏 MULTIPLE MEETING LOCATION =
 Select the best location for your meeting and enjoy flexibility and convenience. As an organizer, you just need to choose the best format for your meeting, and as an attendee, you can pick the most convenient way to join.
@@ -213,7 +212,7 @@ Enable real-time data synchronization and automated workflows with webhooks. Whe
 - Zapier
 - Pabbly
 - Make
-F= lowMattic
+- FlowMattic
 
 
 = 🖥️DASHBOARD & ANALYTICS =
@@ -301,6 +300,10 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 5. General Settings
 
 == Changelog ==
+
+= 1.5.1 (Date: 18 July 2024) =
+- Fixed Issue with FluentForm
+- Fixed Board Due Date Issue
 
 = 1.5.0 (Date: 16 July 2024) =
 - Initial Launch as a free plugin
