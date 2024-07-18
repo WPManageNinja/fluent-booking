@@ -28,7 +28,7 @@
     let component = null;
     let isBookingDone = false;
 
-    let skipCalendar = !!slot.pre_selects.time;
+    let skipCalendar = !!slot.pre_selects?.time;
     let selectedDate = false;
     let selectedDateTime = {};
     let isLoadingDates = false;

@@ -66,15 +66,19 @@ class CalenderCleaner
             }
         }
 
+        if ($calendar->type != 'simple') {
+            return;
+        }
+
         $availabilitySchedules = Availability::where('object_id', $calendar->user_id)->get();
 
-        if ($availabilitySchedules->count()) {
+        if ($availabilitySchedules->isNotEmpty()) {
             foreach ($availabilitySchedules as $schedule) {
                 $eventAssociated = CalendarSlot::where('availability_id', $schedule->id)
                     ->where('user_id', '!=', $schedule->object_id)
                     ->count();
 
-                if (!$eventAssociated) {
+                if ($eventAssociated == 0) {
                     do_action('fluent_booking/before_delete_availability_schedule', $schedule, $calendar);
                     $schedule->delete();
                     do_action('fluent_booking/after_delete_availability_schedule', $schedule, $calendar);
