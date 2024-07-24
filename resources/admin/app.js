@@ -226,3 +226,7 @@ router.afterEach((to, from) => {
     }
 
 });
+
+if(_.noConflict) {
+    window.lodash = _.noConflict();
+}

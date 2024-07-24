@@ -302,6 +302,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 == Changelog ==
 
 = 1.5.02 (Date: 24 Jul 2024) =
+- Fixed Media Upload Issue
 - Fixed Issue with Group Booking
 - Fixed Conflict Checking Issue with Round Robin
 
