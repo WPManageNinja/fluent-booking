@@ -10,14 +10,18 @@
             <div class="fcal_spot_input">
                 <el-input v-model="booking[data_key]" :type="input_type" />
             </div>
-            <el-button :disabled="updating" v-loading="updating" @click="updateData()">{{ $t('Update') }}</el-button>
-            <el-button text :disabled="updating" @click="editing = false">{{ $t('Cancel') }}</el-button>
+            <el-button :disabled="updating" v-loading="updating" @click="updateData()" class="fcal_update_btn">
+                {{ $t('Update') }}
+            </el-button>
+            <el-button text :disabled="updating" @click="editing = false">
+                {{ $t('Cancel') }}
+            </el-button>
         </div>
     </div>
 </template>
 
-<script type="text/babel">
-import {EditPen} from "@element-plus/icons-vue";
+<script>
+import { EditPen } from "@element-plus/icons-vue";
 
 export default {
     name: 'EditableSpotData',
