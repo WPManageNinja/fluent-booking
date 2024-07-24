@@ -126,8 +126,13 @@
                                         :key="schedule.id"
                                         :class="{ fcal_is_current: schedule.id == booking_id }"
                                         class="fcal_each_spot">
-                                        <booking-card :period="filters.period" :showing_id="booking_id" :multi_host="filters.author != 'me'"
-                                                       @showDetails="showDetails(schedule)" :booking="schedule"/>
+                                        <booking-card 
+                                            :period="filters.period"
+                                            :showing_id="booking_id"
+                                            :multi_host="filters.author != 'me'"
+                                            :booking="schedule"
+                                            @showDetails="showDetails(schedule)">
+                                        </booking-card>
                                     </div>
                                 </div>
                             </div>
