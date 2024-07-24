@@ -1282,6 +1282,16 @@
                 }
             }
           }
+          .fcal_header_action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            .el-dropdown {
+                cursor: pointer;
+                padding: 6px 0;
+                transform: rotate(90deg);
+            }
+          }
         }
 
         .fcal_switch {
@@ -1292,9 +1302,33 @@
             }
           }
         }
-      }
 
-      .fcal_create_calendar_form_body {
+    }
+        .fcal_notification_container_wrap {
+            border: 1px solid #eaecf0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 20px;
+
+            .fcal_notification_title {
+                margin-bottom: 10px;
+                h3 {
+                    margin: 0 0 4px 0;
+                }
+                p {
+                    font-size: 14px;
+                    line-height: 24px;
+                    margin: 0;
+                }
+            }
+
+            .fcal_notifications {
+                border: 1px solid #eaecf0;
+                border-radius: 8px;
+            }
+        }
+
+        .fcal_create_calendar_form_body {
         .el-form {
           .el-form-item {
             margin-bottom: 18px;
@@ -1685,6 +1719,14 @@
                         margin: 0.5rem 0;
                         font-size: 1rem;
                         font-weight: 500;
+                        .fcal_organizer_badge {
+                            background: rgba(38, 83, 199, 0.1);
+                            color: #306ae0;
+                            padding: 4px 8px;
+                            border-radius: 6px;
+                            font-size: 14px;
+                            margin-left: 8px;
+                        }
                     }
               
                     .fcal_team_member_icon {
@@ -1701,6 +1743,7 @@
                         border-radius: 8px;
                       }
                     }
+
                   }
               
                   .fcal_card_actions {
@@ -1716,9 +1759,14 @@
                       padding: 7px 12px !important;
                       height: auto !important;
                       border-radius: 6px !important;
-              
                       i {
                         font-size: 14px !important;
+                      }
+                      &:hover {
+                        background: rgba(38, 83, 199, 0.1);
+                        span {
+                            color: #306ae0;
+                        }
                       }
                     }
                   }
@@ -1814,9 +1862,9 @@
             }
           }
         }
-      }
+        }
 
-      .fcal_create_calendar_schedule_setting {
+        .fcal_create_calendar_schedule_setting {
         .el-form {
           .el-form-item {
             .el-form-item__label {
@@ -1864,9 +1912,9 @@
             }
           }
         }
-      }
+        }
 
-      .fcal_create_calendar_form_footer {
+        .fcal_create_calendar_form_footer {
         border-top: 1px solid #EAECF0;
         padding-top: 24px;
         margin-top: 18px;
@@ -1889,7 +1937,7 @@
             color: #ffffff;
           }
         }
-      }
+        }
 
       .el-form-item {
         &.fcal_global_timezone {

@@ -1,6 +1,6 @@
 <template>
-    <div class="fcal_settings_body_inner fcal_license_settings">
-        <div class="fcal_settings_header">
+    <div class="fcal_settings_body_inner fcal_license_settings fcal_configure_integration_card">
+        <div class="fcal_settings_header fcal_configure_integration_card_header">
             <div class="fcal_settings_head">
                 <h3>{{$t('License Management')}}</h3>
             </div>

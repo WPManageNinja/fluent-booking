@@ -1,12 +1,12 @@
 <template>
-    <div class="fcal_schedule_event_infos" :class="booking.event_type == 'group' ? 'fcal_schedule_group_payment_log' : ''">
+    <div class="fcal_schedule_event_infos" :class="multiGuestEvent ? 'fcal_schedule_group_payment_log' : ''">
         <div class="fcal_schedule_event_infos_body">
-            <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_header">
+            <div v-if="singleGuestEvent" class="fcal_schedule_details_header">
                 <h1 class="fcal_header_title">
                     {{ $t('Payment History') }}
                 </h1>
             </div>
-            <div v-if="booking.event_type == 'single'" class="fcal_schedule_details_event">
+            <div v-if="singleGuestEvent" class="fcal_schedule_details_event">
                 <div class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Name') }}</h3>
                     <p>{{ booking.first_name }} {{ booking.last_name }}</p>
@@ -85,6 +85,14 @@ export default {
     data() {
         return {
             currencySign: window.fluentFrameworkAdmin?.currency_sign
+        }
+    },
+    computed: {
+        multiGuestEvent() {
+            return this.booking.event_type === 'group' || this.booking.event_type === 'group_event';
+        },
+        singleGuestEvent() {
+            return !this.multiGuestEvent;
         }
     }
 }

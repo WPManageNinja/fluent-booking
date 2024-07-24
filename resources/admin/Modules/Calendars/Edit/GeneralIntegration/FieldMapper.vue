@@ -1,5 +1,5 @@
 <template>
-    <div class="ff_field_manager">
+    <div class="fcal_field_manager">
         <el-form-item class="ff-form-item" :required="field.required">
             <template slot="label">
                 {{field.label}}

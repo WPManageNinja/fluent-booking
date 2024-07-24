@@ -1,11 +1,11 @@
 <?php defined('ABSPATH') or die;
-/*
-Plugin Name: Fluent Booking
-Description: Fluent Booking WordPress Plugin
-Version: 1.4.3
-Author: Meeting scheduling made easy
-Author URI: https://wpmanageninja.com
-Plugin URI: https://fluentbooking.com
+/**
+Plugin Name: FluentBooking - Appointment Scheduling & Booking Solution
+Description: FluentBooking is the ultimate solution for booking appointments, meetings, webinars, events, sales calls, and more.
+Version: 1.5.0
+Author: Appointment & Booking Solution Team - WPManageNinja
+Author URI: https://fluentbooking.com
+Plugin URI: https://fluentbooking.com/pricing/
 License: GPLv2 or later
 Text Domain: fluent-booking
 Domain Path: /language
@@ -19,8 +19,8 @@ if (defined('FLUENT_BOOKING_VERSION')) {
 
 define('FLUENT_BOOKING_DIR', plugin_dir_path(__FILE__));
 define('FLUENT_BOOKING_URL', plugin_dir_url(__FILE__));
-define('FLUENT_BOOKING_VERSION', '1.4.3');
-define('FLUENT_BOOKING_ASSETS_VERSION', '1.4.3');
+define('FLUENT_BOOKING_VERSION', '1.5.0');
+define('FLUENT_BOOKING_ASSETS_VERSION', '1.5.0');
 
 require __DIR__ . '/vendor/autoload.php';
 

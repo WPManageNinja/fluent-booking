@@ -3,11 +3,24 @@
         <div class="fcal_create_calendar_form">
             <div class="fcal_create_calendar_form_header">
                 <h2>
-                    <el-icon>
-                        <Notification/>
-                    </el-icon>
+                    <el-icon><Notification/></el-icon>
                     {{ $t('SMS Notification Settings') }}
                 </h2>
+                <div class="fcal_header_action">
+                    <el-dropdown trigger="click" popper-class="fcal_select">
+                        <span class="el-dropdown-link">
+                            <el-icon><MoreFilled/></el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    @click="isCloneOpen = true">
+                                    {{ $t('Clone from') }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </div>
         </div>
 
@@ -15,27 +28,54 @@
             <template v-if="!disabled">
                 <div v-if="notifications">
                     <div class="fcal_notification_container_wrap">
-                        <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
-                            v-for="(notification, index) in notifications" :key="index">
-                            <div class="fcal_notification_header">
-                                <span :class="['header_left']">
-                                    {{ notification.title }}
-                                </span>
-                                <div class="header_right">
-                                    <span>
-                                        <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
-                                            <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
-                                        </el-button>
+                        <div class="fcal_notification_title">
+                            <h3> {{ $t('Notification Settings') }}</h3>
+                            <p>{{ $t('Customize the sms notifications sent to attendees and organizers') }}</p>
+                        </div>
+                        <div class="fcal_notifications">
+                            <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
+                                v-for="(notification, index) in notificationSettings" :key="index">
+                                <div class="fcal_notification_header">
+                                    <span :class="['header_left']">
+                                        {{ notification.title }}
                                     </span>
-                                    <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                                    <div class="header_right">
+                                        <span>
+                                            <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
+                                                <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                            </el-button>
+                                        </span>
+                                        <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="fcal_create_calendar_form_footer">
-                        <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
+
+                    <div class="fcal_notification_container_wrap">
+                        <div class="fcal_notification_title">
+                            <h3> {{ $t('Other Notifications') }}</h3>
+                            <p>{{ $t('Optimize your sms notifications for confirmations and declines') }}</p>
+                        </div>
+                        <div class="fcal_notifications">
+                            <div :class="['fcal_notification_container', {disabled: !notification.enabled}]"
+                                v-for="(notification, index) in otherNotifications" :key="index">
+                                <div class="fcal_notification_header">
+                                    <span :class="['header_left']">
+                                        {{ notification.title }}
+                                    </span>
+                                    <div class="header_right">
+                                        <span>
+                                            <el-button @click="toggleEdit(index)" class="fcal_plain_btn">
+                                                <el-icon><EditPen/></el-icon> {{ $t('Edit') }}
+                                            </el-button>
+                                        </span>
+                                        <el-switch v-model="notification.enabled" @change="saveSettings()"></el-switch>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-    
                     <el-dialog
                         v-model="showEdit"
                         v-if="showEdit"
@@ -71,19 +111,34 @@
             <el-skeleton :rows="1" animated/>
             <el-skeleton :rows="5" animated/>
         </div>
+        <CloneDrawer
+            v-if="isCloneOpen"
+            :isOpen="isCloneOpen"
+            :eventId="calendar_event.id"
+            :eventLists="event_lists"
+            :saving="saving"
+            :title="$t('Clone SMS Settings')"
+            :label="$t('Select Calendar Event')"
+            :placeholder="$t('Select Event')"
+            :helpText="$t('CalendarEvent/select_sms_settings')"
+            :buttonLabel="$t('Clone Settings')"
+            @clone="cloneSettings"
+            @update:isOpen="isCloneOpen = $event"
+        />
     </div>
 </template>
 
 <script>
 import EditSmsNotificationSettings from './__EditSmsNotificationSettings.vue';
-import { EditPen, Close, Notification } from '@element-plus/icons-vue';
+import { EditPen, Close, Notification, MoreFilled } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 import ProNotice from '@/Components/Common/ProNotice.vue';
+import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
 
 export default {
     name: 'SmsNotificationSettings',
-    props: ['calendar_event', 'disabled'],
+    props: ['calendar_event', 'disabled', 'event_lists'],
     components: {
         EditSmsNotificationSettings,
         SaveButton,
@@ -91,12 +146,15 @@ export default {
         Notification,
         EditPen,
         Close,
-        ProNotice
+        ProNotice,
+        MoreFilled,
+        CloneDrawer
     },
     data() {
         return {
             editingNotification: {},
             showEdit: false,
+            isCloneOpen: false,
             notifications: {},
             loading: false,
             saving: false,
@@ -105,6 +163,20 @@ export default {
                 texts: {},
                 html: {}
             }
+        }
+    },
+    computed: {
+        notificationSettings() {
+            const otherSettings = ['booking_request_attendee', 'booking_request_host', 'declined_by_host'];
+            let notificationsArray = Object.entries(this.notifications);
+            notificationsArray = notificationsArray.filter(([key, field]) => !otherSettings.includes(key));
+            return Object.fromEntries(notificationsArray);
+        },
+        otherNotifications() {
+            const otherSettings = ['booking_request_attendee', 'booking_request_host', 'declined_by_host'];
+            let notificationsArray = Object.entries(this.notifications);
+            notificationsArray = notificationsArray.filter(([key, field]) => otherSettings.includes(key));
+            return Object.fromEntries(notificationsArray);
         }
     },
     methods: {
@@ -154,6 +226,23 @@ export default {
                 .then(response => {
                     this.$handleSuccess(response);
                     this.closeEdit();
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
+        cloneSettings(eventId) {
+            this.saving = true;
+            this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/sms-notifications/clone', {
+                calendar_id: this.calendar_event.calendar_id,
+                from_event_id: eventId
+            })
+                .then(response => {
+                    this.$handleSuccess(response);
+                    this.notifications = response.notifications;
                 })
                 .catch(errors => {
                     this.$handleError(errors);

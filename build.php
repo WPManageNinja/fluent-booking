@@ -6,6 +6,7 @@ if (php_sapi_name() !== 'cli') {
 
 // get args from command line
 $nodeBuild = in_array('--node-build', $argv);
+$updateTextDomain = in_array('--change_text_domain', $argv);
 
 if ($nodeBuild) {
     // Build Commands
@@ -92,6 +93,21 @@ function copyFileOrFolder($src, $dest)
     }
 }
 
+function update_text_domain($dir, $old_domain, $new_domain) {
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+
+    foreach ($files as $file) {
+        if ($file->isFile() && $file->getExtension() === 'php') {
+            $contents = file_get_contents($file->getRealPath());
+            // Regular expression to find translation functions and replace text domain
+            $pattern = '/(_\(|_e\(|_x\(|_n\(|_nx\()\s*([\'"])([^\'"]+)\2,\s*([\'"])' . preg_quote($old_domain, '/') . '\4/s';
+            $replacement = '$1$2$3$2, $4' . $new_domain . '$4';
+            $updated_contents = preg_replace($pattern, $replacement, $contents);
+            file_put_contents($file->getRealPath(), $updated_contents);
+        }
+    }
+}
+
 // delete the folder if exists
 if (file_exists($targetFolder)) {
     deleteFileOrFolder($targetFolder);
@@ -115,3 +131,8 @@ foreach ($folderLists as $folder) {
 }
 
 echo "\nFree Version Build Completed";
+
+if($updateTextDomain) {
+    update_text_domain($targetFolder, 'fluent-booking', 'fluent-booking-pro');
+    echo "\nText Domain Updated";
+}

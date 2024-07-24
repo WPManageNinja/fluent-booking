@@ -5,7 +5,7 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Services\ReportingHelperTrait;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\Framework\Support\Arr;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\PermissionManager;
@@ -354,7 +354,7 @@ class ReportController extends Controller
                 $meeting->author = $meeting->slot->getAuthorProfile(false);
             }
 
-            if ($meeting->event_type == 'group') {
+            if ($meeting->isMultiGuestBooking()) {
                 $meeting->booked_count = Booking::where('group_id', $meeting->group_id)
                     ->whereIn('status', ['scheduled', 'completed'])->count();
             }
