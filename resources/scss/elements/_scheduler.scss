@@ -1021,6 +1021,15 @@
         color: black;
         font-weight: 700;
       }
+
+      .fcal_spot_details_editing {
+        .el-button.fcal_update_btn {
+            color: #306ae0;
+            border-color: white;
+            border-radius: 4px;
+            background: rgba(38, 83, 199, 0.1);
+        }
+      }
     }
 
     .fcal_spot_input {
