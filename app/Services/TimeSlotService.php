@@ -173,8 +173,6 @@ class TimeSlotService
         $addedDates = [];
 
         foreach ($this->groupedSlots as $slot) {
-            $slot = $this->maybeDayLightSavingSlot($slot, $dstTime, $scheduleTimezone);
-
             $date = gmdate('Y-m-d', strtotime($slot['start']));
             if ($todayDate == $date && strtotime($slot['start']) < $cutOutTime) {
                 continue;
