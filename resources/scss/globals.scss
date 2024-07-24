@@ -2276,7 +2276,7 @@
 }
 
 #fluent-booking-app {
-    background: #f5f6f7;
+    background: #f0f0f1;
     margin-left: -20px;
     padding-left: 24px;
     padding-bottom: 24px;
@@ -2609,13 +2609,15 @@
             }
         }
         .fcal_configure_integration_card_header {
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #d6dae1;
-            padding-bottom: 20px;
-            margin-bottom: 24px;
+            background: #fafafa;
+            margin: -24px -24px 25px;
+            padding: 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom: 0;
             .left {
                 display: flex;
                 align-items: center;
@@ -2624,6 +2626,7 @@
                 .img-box {
                     border: 1px solid #D6DAE1;
                     border-radius: 8px;
+                    background: white;
                     padding: 12px;
                     width: 56px;
                     height: 56px;
@@ -3316,6 +3319,41 @@
                     }
                 }
             }
+
+            .fcal_frontend_panel_settings_drawer {
+                .el-form {
+                    .el-form-item {
+                        .el-radio-group {
+                            gap: 8px;
+                            .el-radio {
+                                margin: 0;
+                                width: 100%;
+                                .el-radio__label {
+                                    font-size: 14px;
+                                }
+                                .el-radio__input {
+                                    .el-radio__inner {
+                                        width: 20px;
+                                        height: 20px;
+                                        &:after {
+                                            width: 10px;
+                                            height: 10px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.fcal_frontend_panel_drawer {
+            .el-drawer__header {
+                border-bottom: 1px solid #d6dae1;
+            }
+            .el-drawer__body {
+                padding-top: 10px;
+            }
         }
         .fcal_need_pro {
             font-size: 1.1rem;
@@ -3359,7 +3397,7 @@
                     }
                     .el-select__input {
                         &:focus {
-                            border-color: none;
+                            border-color: transparent;
                             box-shadow: none;
                         }
                     }
@@ -3633,6 +3671,52 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 4px;
+    }
+}
+
+.el-popup-parent--hidden {
+    #wpadminbar {
+        z-index: 1000;
+    }
+}
+
+.fbs_feature_module {
+    align-items: center;
+    background: #fff;
+    border-bottom: 3px solid #f0f0f1;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    padding: 20px;
+    transition: border-bottom .5s;
+    margin: -24px -24px 0;
+    h4 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 10px;
+    }
+    p {
+        color: #666;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+    &:hover {
+        border-bottom: 3px solid #306ae0;
+    }
+    .fbs_module_desc {
+        display: flex;
+        gap: 15px;
+    }
+    span.fbs_addon_installed {
+        background: #306ae0;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 14px;
+        padding: 2px 7px;
+        &.fbs_addon_disabled {
+            background: #6d6a6a;
+            color: #f2ecec;
+        }
     }
 }
 

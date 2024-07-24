@@ -7,7 +7,7 @@
             <template v-if="!disabled">
                 <div class="fcal_create_calendar_form_body">
                     <el-form label-position="top">
-                        <el-form-item :label="$t('Assign Member')">
+                        <el-form-item :label="getAddingLabel">
                             <el-select
                                 @change="addTeamMember"
                                 :placeholder="$t('Select')"
@@ -25,16 +25,24 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('Team Members')">
+                        <el-form-item :label="getListLabel">
                             <div class="fcal_team_members">
                                 <div v-if="!loading" v-for="member in teamMembers" :key="member.id" class="fcal_team_member">
                                     <div class="fcal_card_wrap">
                                         <div class="fcal_team_member_icon">
                                             <img :src="member.avatar"/>
                                         </div>
-                                        <h3>{{ member.name }}</h3>
+                                        <h3>{{ member.name }} 
+                                            <span v-if="isMultiHosts && isOrganizer(member.id)" class="fcal_organizer_badge">
+                                                {{ $t('Organizer') }}
+                                            </span>
+                                        </h3>
                                     </div>
                                     <div class="fcal_card_actions">
+                                        <el-button v-if="isMultiHosts && !isOrganizer(member.id)"
+                                            @click="updateOrganizer(member.id)">
+                                            {{ $t('Make organizer') }}
+                                        </el-button>
                                         <el-button
                                             @click="goToCalendarSetting(member.calendar_id)">
                                             <el-icon><Edit/></el-icon>
@@ -88,6 +96,23 @@ export default {
             settings: this.calendar_event.settings
         }
     },
+    computed: {
+        isOrganizer() {
+            return (id) => {
+                return this.calendar_event.user_id == id;
+            }
+        },
+        isMultiHosts() {
+            const eventType = this.calendar_event.event_type;
+            return eventType == 'single_event' || eventType == 'group_event' || eventType == 'collective';
+        },
+        getListLabel() {
+            return this.isMultiHosts ? this.$t('Event Hosts') : this.$t('Team Members');
+        },
+        getAddingLabel() {
+            return this.isMultiHosts ? this.$t('Add Host') : this.$t('Add Team Member');
+        }
+    },
     methods: {
         goToCalendarSetting(calendarId) {
             this.$router.push({
@@ -115,10 +140,19 @@ export default {
                     const updatedHost = { ...host };
                     if (this.settings.team_members.includes(updatedHost.id)) {
                         updatedHost.disabled = true;
-                        updatedHost.name = updatedHost.name + ' (' + this.$t('Already assigned') + ')';
+                        updatedHost.name = updatedHost.name;
                     }
                     return updatedHost;
                 });
+        },
+        updateOrganizer(id) {
+            this.calendar_event.user_id = id;
+            let indx = this.settings.team_members.indexOf(id);
+            if (indx !== -1) {
+                this.settings.team_members.splice(indx, 1);
+                this.settings.team_members.unshift(id);
+            }
+            this.saveSettings();
         },
         getAllHosts() {
             this.loading = true;
@@ -139,6 +173,7 @@ export default {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/assignments', {
                 calendar_id: this.calendar_event.calendar_id,
+                organizer_id: this.calendar_event.user_id,
                 team_members: this.settings.team_members
             })
                 .then(response => {

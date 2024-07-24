@@ -4,8 +4,26 @@
             <div class="fcal_configure_integration_card_header">
                 <div class="left">
                     <div class="content">
-                        <h3>{{ $t('Global Feature Modules') }}</h3>
+                        <h3>{{ $t('Advanced Modules') }}</h3>
                         <p>{{ $t('global_feature_modules_desc') }}</p>
+                    </div>
+                </div>
+            </div>
+            <el-skeleton animated v-if="loading"></el-skeleton>
+
+            <div v-else>
+                <fronend-panel-settings @save="saveFeatureModules" :featureModules="featureModules" />
+            </div>
+
+        </div>
+    </div>
+    <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
+        <div class="fcal_configure_integration_card">
+            <div class="fcal_configure_integration_card_header">
+                <div class="left">
+                    <div class="content">
+                        <h3>{{ $t('Recommended Plugins and Addons') }}</h3>
+                        <p>{{ $t('Plugins that will extend your Fluent Booking Functionalities') }}</p>
                     </div>
                 </div>
             </div>
@@ -53,6 +71,8 @@
 
 <script type="text/babel">
 
+import FronendPanelSettings from './_FrontendPanelSettings.vue';
+
 export default {
     name: 'GloablModules',
     data() {
@@ -60,8 +80,18 @@ export default {
             loading: false,
             modules: {},
             settings: {},
-            saving: false
+            saving: false,
+            featureModules: {
+                frontend: {
+                    enabled: 'no',
+                    slug: 'all-booking',
+                    panel_url: ''
+                }
+            }
         }
+    },
+    components: {
+        FronendPanelSettings
     },
     methods: {
         fetchModules() {
@@ -70,6 +100,7 @@ export default {
                 .then((response) => {
                     this.settings = response.settings;
                     this.modules = response.modules;
+                    this.featureModules = response.featureModules;
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -90,7 +121,34 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
-        }
+        },
+        saveFeatureModules() {
+            this.saving = true;
+            this.$post('settings/addons-settings', {
+                settings: this.featureModules
+            })
+                .then(response => {
+                    this.fetchModules();
+                    this.$notify.success(response.message);
+
+                    const isAdminUrl = window.location.href.includes('wp-admin/admin.php');
+                    if(response.featureModules.frontend.enabled == 'no' && !isAdminUrl) {
+                        // Redirect to the admin page if the frontend is disabled and the user is not in the admin page
+                        location.href = this.appVars.admin_url + '?page=fluent-booking#' + this.$route.path;
+                    } else {
+                        location.reload(true);
+                    }
+                    if (this.$refs.frontend) {
+                        this.$refs.frontend.hide();
+                    }
+                })
+                .catch(error => {
+                    this.$handleError(error);
+                })
+                .finally(() => {
+                    this.saving = false;
+                });
+        },
     },
     mounted() {
         this.fetchModules();

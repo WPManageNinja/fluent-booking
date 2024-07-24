@@ -4,14 +4,14 @@ namespace FluentBooking\App\Http\Policies;
 
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\PermissionManager;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\Framework\Foundation\Policy;
 
 class CalendarPolicy extends Policy
 {
     /**
      * Check user permission for any method
-     * @param \FluentBooking\Framework\Request\Request $request
+     * @param \FluentBooking\Framework\Http\Request\Request $request
      * @return bool
      */
     public function verifyRequest(Request $request)

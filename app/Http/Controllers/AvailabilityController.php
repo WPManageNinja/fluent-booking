@@ -6,7 +6,7 @@ use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\Framework\Request\Request;
+use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\AvailabilityService;
@@ -268,7 +268,7 @@ class AvailabilityController extends Controller
 
         if ($usageCount) {
             /* translators: Number of events dependent on the schedule */
-            $message = sprintf(__("Can't delete: %s events depend on this schedule", 'fluent-booking'), $usageCount);
+            $message = sprintf(__('Can\'t delete: %s events depend on this schedule', 'fluent-booking'), $usageCount);
             return $this->sendError([
                 'message' => $message
             ], 422);

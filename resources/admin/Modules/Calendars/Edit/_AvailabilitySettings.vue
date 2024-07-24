@@ -41,7 +41,7 @@
                         <el-divider/>
                         <el-form-item class="fcal_availability_switch">
                             <el-switch v-model="settings.common_schedule" :active-text="$t('Choose a common schedule')"/>
-                            <span>{{ $t('Availability/team_availability_description') }}</span>
+                            <p>{{ $t('Availability/team_availability_description') }}</p>
                         </el-form-item>
                     </template>
                     <el-form-item v-if="showAvailability" :label="$t('ScheduleSettings/availability_type_label')">

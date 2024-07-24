@@ -1,6 +1,6 @@
 <template>
-    <div class="fcal_settings_body_inner">
-        <div class="fcal_settings_header">
+    <div class="fcal_settings_body_inner fcal_configure_integration_card">
+        <div class="fcal_settings_header fcal_configure_integration_card_header">
             <template v-if="!disabled">
                 <div v-if="!loading" class="fcal_settings_head">
                     <h2>{{ fields?.label }}</h2>

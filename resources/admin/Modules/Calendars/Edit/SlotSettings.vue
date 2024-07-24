@@ -34,7 +34,7 @@
                 </ul>
             </el-aside>
             <div v-if="slot.id" class="fcal_settings_content">
-                <router-view :calendar_event="slot" :disabled="currentMenu.disable"/>
+                <router-view :calendar_event="slot" :disabled="currentMenu.disable" :event_lists="eventLists"/>
             </div>
         </div>
 
@@ -78,6 +78,7 @@ export default {
             calendar: {},
             menuItems: {},
             currentMenu: {},
+            eventLists: [],
             event_id: this.$route.params.event_id,
             calendar_id: this.$route.params.calendar_id,
             slot: null,
@@ -108,12 +109,13 @@ export default {
             this.loading = true;
             this.$get('calendars/' + this.calendar_id + '/events/' + this.event_id, {
                 calendar_id : this.calendar_id,
-                with: ['calendar', 'settings_menu']
+                with: ['calendar', 'settings_menu', 'calendar_event_lists']
             })
                 .then(response => {
                     this.menuItems = response.settings_menu;
                     this.calendar = response.calendar;
                     this.slot = response.calendar_event;
+                    this.eventLists = response.calendar_event_lists;
                     this.updateCurrentMenu();
                 })
                 .catch(errors => {
