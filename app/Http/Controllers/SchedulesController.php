@@ -7,6 +7,7 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Services\EmailNotificationService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
@@ -270,6 +271,30 @@ class SchedulesController extends Controller
 
         return [
             'message' => __('Booking Deleted Successfully!', 'fluent-booking')
+        ];
+    }
+
+    public function sendConfirmationEmail(Request $request, $bookingId)
+    {
+        $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
+
+        $emailTo = $request->get('email_to', 'guest');
+
+        $notifications = $booking->calendar_event->getNotifications();
+
+        $email = Arr::get($notifications, 'booking_conf_attendee.email', []);
+        if ($emailTo == 'host') {
+            $email = Arr::get($notifications, 'booking_conf_host.email', []);
+        }
+
+        $result = EmailNotificationService::emailOnBooked($booking, $email, $emailTo, 'scheduled', true);
+
+        if (!$result) {
+            return $this->sendError(['message' => __('Notification sending failed', 'fluent-booking')]);
+        }
+
+        return [
+            'message' => __('Notification sent successfully', 'fluent-booking')
         ];
     }
 
