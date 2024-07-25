@@ -16,7 +16,7 @@ class EmailNotificationService
      * @param $actionType
      * @return bool|mixed
      */
-    public static function emailOnBooked(Booking $booking, $email, $emailTo, $actionType = 'scheduled')
+    public static function emailOnBooked(Booking $booking, $email, $emailTo, $actionType = 'scheduled', $resending = false)
     {
         $emailSubject = EditorShortCodeParser::parse($email['subject'], $booking);
         $emailBody = EditorShortCodeParser::parse($email['body'], $booking);
@@ -30,10 +30,8 @@ class EmailNotificationService
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
         $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
 
-        $calendarEvent = $booking->calendar_event;
-
         $attachments = [];
-        if ($attachIcsFile == 'yes' && $actionType == 'scheduled') {
+        if ($attachIcsFile == 'yes' && $actionType == 'scheduled' && !$resending) {
             $attachments = self::prepareAttachments($booking);
         }
 
@@ -45,6 +43,7 @@ class EmailNotificationService
             $authors = [$authors[0]];
         }
 
+        $result = false;
         foreach ($authors as $author)
         {
             $hostName = '';
@@ -63,14 +62,14 @@ class EmailNotificationService
                 $to = $guestAddress;
                 $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
                 $fromName = $useHostName == 'no' ? $settingsFromName : $hostName;
-    
+
                 $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
                 $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
     
                 $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
                 $from = sprintf('%1s <%2s>', $fromName, $replyFromEmail);
             }
-    
+
             $headers = self::prepareEmailHeaders($replyTo, $from, $email);
     
             $body = (string)App::make('view')->make('emails.template', [
@@ -82,18 +81,29 @@ class EmailNotificationService
             $emogrifier->disableInvisibleNodeRemoval();
             $body = (string)$emogrifier->emogrify();
     
-            Mailer::send($to, $emailSubject, $body, $headers, $attachments);
+            $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
         }
 
         if ($attachments) {
             wp_delete_file($attachments[0]);
         }
+
+        $status = $result ? 'sent' : 'sending failed';
+
+        $title = sprintf(__('Booking %s email %s to %s', 'fluent-booking'), $actionType, $status, $emailTo);
+
+        if ($result) {
+            self::addLog($title, $title, $booking->id);
+        } else {
+            self::addLog($title, $title, $booking->id, 'error');
+        }
+
+        return $result;
     }
 
     /**
      * @param \FluentBooking\App\Models\Booking $booking
      * @param $email
-     * @param $time
      * @param $emailTo
      * @return bool|mixed
      */
@@ -107,8 +117,6 @@ class EmailNotificationService
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
         $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
 
-        $calendarEvent = $booking->calendar_event;
-
         $guestAddress = self::getGuestAddress($booking);
 
         $authors = $booking->getHostsDetails(false);
@@ -117,6 +125,7 @@ class EmailNotificationService
             $authors = [$authors[0]];
         }
 
+        $result = false;
         foreach ($authors as $author) {
             $hostAddress = $author['email'];
             $hostName = '';
@@ -156,16 +165,18 @@ class EmailNotificationService
             $emogrifier->disableInvisibleNodeRemoval();
             $body = (string)$emogrifier->emogrify();
     
-            Mailer::send($to, $subject, $body, $headers);
-    
-            do_action('fluent_booking/log_booking_note', [
-                'title'       => __('Reminder Email Sent', 'fluent-booking'),
-                'type'        => 'activity',
-                /* translators: Email address where the reminder email was sent */
-                'description' => sprintf(__('Reminder email sent to %s.', 'fluent-booking'), $emailTo),
-                'booking_id'  => $booking->id
-            ]);
+            $result = Mailer::send($to, $subject, $body, $headers);
         }
+
+        if (!$result) {
+            return false;
+        }
+
+        $title = __('Reminder Email Sent', 'fluent-booking');
+        $description = sprintf(__('Reminder email sent to %s.', 'fluent-booking'), $emailTo);
+        self::addLog($title, $description, $booking->id);
+
+        return true;
     }
 
     /**
@@ -184,8 +195,6 @@ class EmailNotificationService
         $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
         $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
-        
-        $calendarEvent = $booking->calendar_event;
 
         $guestAddress = self::getGuestAddress($booking);
 
@@ -195,6 +204,7 @@ class EmailNotificationService
             $authors = [$authors[0]];
         }
 
+        $result = false;
         foreach ($authors as $author) {
             $hostAddress = $author['email'];
             $hostName = '';
@@ -233,17 +243,20 @@ class EmailNotificationService
             $emogrifier->disableInvisibleNodeRemoval();
             $body = (string)$emogrifier->emogrify();
     
-            Mailer::send($to, $subject, $body, $headers);
-    
-            $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking') : __('Cancellation', 'fluent-booking');
-    
-            do_action('fluent_booking/log_booking_note', [
-                'title'       => $actionType . __(' booking email sent to ', 'fluent-booking') . $emailTo,
-                'type'        => 'activity',
-                'description' => $actionType . __(' email sent to ', 'fluent-booking') . $emailTo,
-                'booking_id'  => $booking->id
-            ]);
+            $result = Mailer::send($to, $subject, $body, $headers);
         }
+
+        $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking') : __('Cancellation', 'fluent-booking');
+
+        $title = sprintf(__('%s email %s to %s', 'fluent-booking'), $actionType, $status, $emailTo);
+
+        if ($result) {
+            self::addLog($title, $title, $booking->id);
+        } else {
+            self::addLog($title, $title, $booking->id, 'error');
+        }
+
+        return $result;
     }
 
     /**
@@ -262,8 +275,6 @@ class EmailNotificationService
         $settingsFromEmail = Arr::get($globalSettings, 'emailing.from_email', '');
         $settingsReplyToName = Arr::get($globalSettings, 'emailing.reply_to_name', '');
         $settingsReplyToEmail = Arr::get($globalSettings, 'emailing.reply_to_email', '');
-        
-        $calendarEvent = $booking->calendar_event;
 
         $attachments = [];
         if ($attachIcsFile == 'yes') {
@@ -278,6 +289,7 @@ class EmailNotificationService
             $authors = [$authors[0]];
         }
 
+        $result = false;
         foreach ($authors as $author) {
             $hostAddress = $author['email'];
             $hostName = '';
@@ -315,21 +327,27 @@ class EmailNotificationService
             $emogrifier = new Emogrifier($body);
             $emogrifier->disableInvisibleNodeRemoval();
             $body = (string)$emogrifier->emogrify();
-    
-            Mailer::send($to, $subject, $body, $headers, $attachments);
-    
-            do_action('fluent_booking/log_booking_note', [
-                'title'       => __('Rescheduled booking email sent to', 'fluent-booking') . ' ' . $emailTo,
-                'type'        => 'activity',
-                /* translators: Email address where the rescheduling email was sent */
-                'description' => sprintf(__('Rescheduling email sent to %s', 'fluent-booking'), $emailTo),
-                'booking_id'  => $booking->id
-            ]);
+
+            $result = Mailer::send($to, $subject, $body, $headers, $attachments);
         }
 
         if ($attachments) {
             wp_delete_file($attachments[0]);
         }
+
+        $status = $result ? 'sent' : 'sending failed';
+
+        $title = sprintf(__('Rescheduled booking email %s to $s', 'fluent-booking'), $status, $emailTo);
+
+        $description = sprintf(__('Rescheduling email %s to %s', 'fluent-booking'), $status, $emailTo);
+
+        if ($result) {
+            self::addLog($title, $description, $booking->id);
+        } else {
+            self::addLog($title, $description, $booking->id, 'error');
+        }
+
+        return $result;
     }
 
     private static function getGuestAddress($booking)
@@ -366,18 +384,29 @@ class EmailNotificationService
 
     private static function prepareAttachments($booking)
     {
+        if (!WP_Filesystem()) {
+            return [];
+        }
+
         $icsContent = BookingService::generateBookingICS($booking);
     
         $filePath = wp_tempnam(null, 'event') . '.ics';
         
-        if (WP_Filesystem()) {
-            global $wp_filesystem;
-            $wp_filesystem->put_contents($filePath, $icsContent);
-            return [$filePath];
-        }
-        return [];
+        global $wp_filesystem;
+        $wp_filesystem->put_contents($filePath, $icsContent);
+        return [$filePath];
     }
-    
+
+    protected static function addLog($title, $description, $bookingId, $type = 'activity')
+    {
+        do_action('fluent_booking/log_booking_note', [
+            'title'       => $title,
+            'description' => $description,
+            'booking_id'  => $bookingId,
+            'type'        => $type,
+        ]);
+    }
+
     public static function getGlobalEmailFooter()
     {
         $globalSettings = Helper::getGlobalSettings();

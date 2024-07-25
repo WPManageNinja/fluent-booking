@@ -123,6 +123,13 @@
                             </span>
                             <template #dropdown>
                                 <el-dropdown-menu>
+                                    <el-dropdown-item
+                                        @click="sendConfirmationEmail(scope.row)">
+                                        <el-icon>
+                                            <Notification/>
+                                        </el-icon>
+                                        {{ $t('Send Confirmation Email') }}
+                                    </el-dropdown-item>
                                     <el-dropdown-item 
                                         @click="rescheduleBooking(scope.row.reschedule_url)">
                                         <el-icon>
@@ -186,7 +193,7 @@
 </template>
 
 <script>
-import { MoreFilled, Refresh, Close, Download, Search } from '@element-plus/icons-vue';
+import { MoreFilled, Refresh, Close, Download, Search, Notification } from '@element-plus/icons-vue';
 import Pagination from "../../../Pieces/Pagination.vue";
 import PaymentLogs from './PaymentLogs';
 export default {
@@ -197,6 +204,7 @@ export default {
         PaymentLogs,
         Pagination,
         MoreFilled,
+        Notification,
         Refresh,
         Close,
         Download,
@@ -319,6 +327,23 @@ export default {
         rescheduleBooking(rescheduleUrl) {
             window.open(rescheduleUrl, '_blank');
         },
+        sendConfirmationEmail(booking) {
+            this.updating = true;
+            this.selectedBooking = booking;
+            this.$post(`schedules/${booking.id}/send-confirmation-email`, {
+                    email_to: 'guest'
+                })
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.updating = false;
+                    this.getAdditionalData(booking.id);
+                });
+        }
     },
     mounted() {
         this.fetchGuests();
