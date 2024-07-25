@@ -11,13 +11,20 @@
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item 
+                                    v-if="isSingleGuestEvent" @click="sendConfirmationEmail('guest')">
+                                    <el-icon>
+                                        <Notification/>
+                                    </el-icon>
+                                    {{ $t('Send Confirmation Email') }}
+                                </el-dropdown-item>
+                                <el-dropdown-item 
                                     v-if="canMarkAsPaid" @click="updateScheduleStatus('scheduled')">
                                     <el-icon>
                                         <Check/>
                                     </el-icon>
                                     {{ $t('Mark As Paid') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item 
+                                <el-dropdown-item
                                     v-if="canMarkAsCompleted" @click="updateScheduleStatus('completed')">
                                     <el-icon>
                                         <Check/>
@@ -238,7 +245,7 @@
 </template>
 
 <script>
-import { Back, MoreFilled, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
+import { Back, MoreFilled, Notification, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
@@ -256,6 +263,7 @@ export default {
         SingleInviteeInfo,
         GroupBookingGuests,
         EditableBookingData,
+        Notification,
         Back,
         MoreFilled,
         Refresh,
@@ -475,6 +483,23 @@ export default {
             } else {
                 this.durationLookup = this.appVars.duration_lookup;
             }
+        },
+        sendConfirmationEmail(emailTo) {
+            this.updating = true;
+            this.loading_sidebar = true;
+            this.$post(`schedules/${this.showing_booking.id}/send-confirmation-email`, {
+                    email_to: emailTo
+                })
+                .then(response => {
+                    this.$handleSuccess(response.message);
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.updating = false;
+                    this.getAdditionalData();
+                });
         }
     },
     mounted() {

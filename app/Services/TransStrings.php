@@ -864,6 +864,7 @@ class TransStrings
             'Frontend Portal'                                                                  => __('Frontend Portal', 'fluent-booking'),
             'Advanced Modules'                                                                 => __('Advanced Modules', 'fluent-booking'),
             'Recommended Plugins and Addons'                                                   => __('Recommended Plugins and Addons', 'fluent-booking'),
+            'Send Confirmation Email'                                                          => __('Send Confirmation Email', 'fluent-booking'),
             'Load FluentBooking in the frontend of the website'                                => __('Load FluentBooking in the frontend of the website', 'fluent-booking'),
         );
     }
