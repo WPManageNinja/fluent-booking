@@ -165,7 +165,7 @@ class TimeSlotService
     protected function adjustGroupedSlots($ranges, $rangedSlots, $cutOutTime, $maxBookingTime, $timezoneInfo)
     {
         list($scheduleTimezone, $dstTime) = $timezoneInfo;
-        
+
         $todayDate = gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $lastDate = end($ranges);
