@@ -52,13 +52,15 @@ class EmailNotificationService
                 $hostName = $author['name'];
                 $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
             }
-    
-            // Assign-To & Reply-To
-            if ('host' == $emailTo) {
-                $to = $hostAddress;
-                $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
-                $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
-            } else {
+
+            $settingsFromEmail = $settingsFromEmail ?: $author['email'];
+            $settingsReplyToEmail = $settingsReplyToEmail ?: $author['email'];
+
+            $to = $hostAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
+
+            if ('guest' == $emailTo) {
                 $to = $guestAddress;
                 $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
                 $fromName = $useHostName == 'no' ? $settingsFromName : $hostName;
@@ -133,13 +135,15 @@ class EmailNotificationService
                 $hostName = $author['name'];
                 $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
             }
-    
-            $from = '';
-            if ('host' == $emailTo) {
-                $to = $hostAddress;
-                $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
-                $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
-            } else {
+
+            $settingsFromEmail = $settingsFromEmail ?: $author['email'];
+            $settingsReplyToEmail = $settingsReplyToEmail ?: $author['email'];
+
+            $to = $hostAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
+
+            if ('guest' == $emailTo) {
                 $to = $guestAddress;
                 $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
                 $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
@@ -212,19 +216,22 @@ class EmailNotificationService
                 $hostName = $author['name'];
                 $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
             }
-    
-            if ('host' == $emailTo) {
-                $to = $hostAddress;
-                $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
-                $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
-            } else {
+
+            $settingsFromEmail = $settingsFromEmail ?: $author['email'];
+            $settingsReplyToEmail = $settingsReplyToEmail ?: $author['email'];
+
+            $to = $hostAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
+
+            if ('guest' == $emailTo) {
                 $to = $guestAddress;
                 $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
                 $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
-    
+
                 $replayToEmail = $useHostEmailOnReply == 'no' ? $settingsReplyToEmail : $author['email'];
                 $replyFromEmail = $useHostEmailOnReply == 'no' ? $settingsFromEmail : $replayToEmail;
-    
+
                 $replyTo = sprintf('%1s <%2s>', $replyName, $replayToEmail);
                 $from = sprintf('%1s <%2s>', $formName, $replyFromEmail);
             }
@@ -247,6 +254,8 @@ class EmailNotificationService
         }
 
         $actionType = $actionType == 'reject' ? __('Rejection', 'fluent-booking') : __('Cancellation', 'fluent-booking');
+
+        $status = $result ? 'sent' : 'sending failed';
 
         $title = sprintf(__('%s email %s to %s', 'fluent-booking'), $actionType, $status, $emailTo);
 
@@ -297,12 +306,15 @@ class EmailNotificationService
                 $hostName = $author['name'];
                 $hostAddress = sprintf('%1s <%2s>', $author['name'], $author['email']);
             }
-    
-            if ('host' == $emailTo) {
-                $to = $hostAddress;
-                $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
-                $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
-            } else {
+
+            $settingsFromEmail = $settingsFromEmail ?: $author['email'];
+            $settingsReplyToEmail = $settingsReplyToEmail ?: $author['email'];
+
+            $to = $hostAddress;
+            $replyTo = sprintf('%1s <%2s>', $settingsReplyToName, $settingsReplyToEmail ?: $settingsFromEmail);
+            $from = sprintf('%1s <%2s>', $settingsFromName, $settingsFromEmail);
+
+            if ('guest' == $emailTo) {
                 $to = $guestAddress;
                 $replyName = $useHostName == 'no' ? $settingsReplyToName : $hostName;
                 $formName = $useHostName == 'no' ? $settingsFromName : $hostName;
