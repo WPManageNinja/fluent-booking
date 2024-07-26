@@ -797,6 +797,20 @@ body >.fcal_calendar_wrap {
     }
   }
 
+  .fcal_skeleton {
+    width: 100%;
+    .fcal_skeleton_item {
+        height: 16px;
+        width: 100%;
+        margin-top: 1.5rem;
+        border-radius: 4px;
+        display: inline-block;
+        background: var(--fcal_skeleton_bg);
+        background-size: 400% 100%;
+        animation: skeleton-loading 1.4s ease infinite;
+    }
+  }
+
   .fcal_side {
     max-width: 100%;
     width: 360px;
@@ -1370,18 +1384,7 @@ body >.fcal_calendar_wrap {
     }
 
     .fcal_skeleton {
-        width: 100%;
-        margin: 4rem 2rem;
-        .fcal_skeleton_item {
-            height: 16px;
-            width: 100%;
-            margin-top: 1.5rem;
-            border-radius: 4px;
-            display: inline-block;
-            background: var(--fcal_skeleton_bg);
-            background-size: 400% 100%;
-            animation: skeleton-loading 1.4s ease infinite;
-        }
+      margin: 4rem 2rem;
     }
   }
 
