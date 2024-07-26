@@ -230,7 +230,7 @@ class CalendarSlot extends Model
 
     public function isGuestFieldRequired()
     {
-        return !$this->isGroup();
+        return !$this->isMultiGuestEvent();
     }
 
     public function getSlotSettingsSchema($calendarId = null)
