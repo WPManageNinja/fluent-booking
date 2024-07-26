@@ -418,7 +418,7 @@ class TimeSlotService
         $interval = $this->calendarSlot->getSlotInterval($duration) * 60;
 
         $weeklySlots = $this->calendarSlot->getWeeklySlots($hostId);
-
+        
         $items = $this->getEnabledSlots($weeklySlots);
 
         // create range of each day slots from $items array above with $period minutes interval
@@ -437,7 +437,7 @@ class TimeSlotService
                 }
 
                 if ($slot['end'] == '24:00' && $start < $end) {
-                    $daySlots = $this->handleNextDaySlot($daySlots, $items, $end, $start, $interval, $period, $day, $days);
+                    $daySlots = $this->handleNextDaySlot($daySlots, $items, $start, $end, $interval, $period, $day, $days);
                 }
             }
             if ($daySlots) {
@@ -476,7 +476,7 @@ class TimeSlotService
                     $startTime = gmdate('H:i', $start); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     $nextDayStart = gmdate('H:i', $interval - $reserveTime); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                     $daySlots[] = $startTime;
-                    
+
                     if ($nextDayStart < $startTime) {
                         $items[$days[$nextDayIndex]][0]['start'] = $nextDayStart;
                         break;
