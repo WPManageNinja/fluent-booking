@@ -9,7 +9,13 @@
 
         <div v-if="slot" class="fcal_create_calendar_body">
             <div class="fcal_create_calendar_basic_info">
-                <event-details ref="basicInfo" :calendar_event="slot" :event_type="event_type" :new_event="true" />
+                <event-details
+                    ref="basicInfo"
+                    :calendar_event="slot"
+                    :event_type="event_type"
+                    :new_event="true"
+                    @saveAndGotoSetting="saveAndGotoSetting"
+                />
             </div>
             <div class="fcal_create_calendar_form_footer">
                 <el-button class="fcal_primary_btn" @click="saveSettings">
@@ -42,6 +48,7 @@ export default {
             slot: null,
             loading: true,
             saving: false,
+            redirectRoute: 'event_details',
             teamMembers: []
         }
     },
@@ -85,6 +92,12 @@ export default {
         maybeAddTeamMembers() {
             this.slot.settings.team_members = this.teamMembers.length ? this.teamMembers : [];
         },
+        handleRedirection(res) {
+            this.$router.push({
+                name: this.redirectRoute,
+                params: {calendar_id: res.slot.calendar_id, event_id: res.slot.id},
+            });
+        },
         checkValidation() {
             for (const location of this.slot.location_settings) {
                 if (!location.type) {
@@ -126,10 +139,7 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response);
-                    this.$router.push({ 
-                        name: 'event_details', 
-                        params: {calendar_id: response.slot.calendar_id, event_id: response.slot.id},
-                    })
+                    this.handleRedirection(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -138,6 +148,10 @@ export default {
                     this.saving = false;
                 });
         },
+        saveAndGotoSetting(routeName) {
+            this.redirectRoute = routeName;
+            this.saveSettings();
+        }
     },
     mounted() {
         this.teamMembers = this.$route.query.team_members ?? [];

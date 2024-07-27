@@ -184,7 +184,8 @@ export default {
         isLocationDisabled() {
             let isDisabled = false;
             this.slot.location_settings.forEach((location) => {
-                if (this.slot.location_fields?.conferencing?.options[location.type]?.disabled) {
+                const locationField = this.slot.location_fields?.conferencing?.options[location.type];
+                if (locationField?.disabled || locationField?.error) {
                     return isDisabled = true;
                 }
             })
@@ -285,7 +286,7 @@ export default {
                 return;
             }
             if (command == 'delete') {
-                this.$confirm(this.$t('Are you sure you want to delete this booking type? All the associate bookings and data will be deleted'),
+                this.$confirm(this.$t('EachSlot/delete_confirmation'),
                     this.$t('Delete Booking Type'), {
                         confirmButtonText: this.$t('Delete'),
                         cancelButtonText: this.$t('Cancel'),
