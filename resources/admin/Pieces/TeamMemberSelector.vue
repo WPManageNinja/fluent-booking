@@ -6,7 +6,6 @@
         clearable
         reserve-keyword
         :placeholder="' '+ placeholder"
-        :loading="loading"
         @change="$emit('update:modelValue', selected_members)"
         popper-class="fcal_select"
         placement="bottom"
@@ -32,8 +31,7 @@ export default {
     $emits: ['update:modelValue'],
     data() {
         return {
-            hosts: [],
-            loading: false,
+            hosts: this.appVars.all_hosts,
             selected_members: this.modelValue,
             placeholder: this.modelPlaceholder || this.$t('Select Team Members')
         }
@@ -42,24 +40,6 @@ export default {
         filteredHosts() {
             return this.hosts.filter(host => !host.deleted_user);
         }
-    },
-    methods: {
-        fetchHosts() {
-            this.loading = true;
-            this.$get('admin/all-hosts')
-                .then(response => {
-                    this.hosts = response.hosts;
-                })
-                .catch(error => {
-                    this.$handleError(error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        }
-    },
-    mounted() {
-        this.fetchHosts();
-    },
+    }
 }
 </script>

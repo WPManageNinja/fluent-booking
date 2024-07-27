@@ -92,10 +92,20 @@ export default {
         maybeAddTeamMembers() {
             this.slot.settings.team_members = this.teamMembers.length ? this.teamMembers : [];
         },
+        getRedirectCalId(slot) {
+            if (this.redirectRoute == 'event_details') {
+                return slot.calendar_id;
+            }
+            if (['single_event', 'group_event'].includes(slot.event_type)) {
+                return this.appVars.all_hosts.find(host => host.id == slot.user_id)?.calendar_id;
+            }
+            return slot.calendar_id;
+        },
         handleRedirection(res) {
+            const calendarId = this.getRedirectCalId(res.slot);
             this.$router.push({
                 name: this.redirectRoute,
-                params: {calendar_id: res.slot.calendar_id, event_id: res.slot.id},
+                params: { calendar_id: calendarId, event_id: res.slot.id },
             });
         },
         checkValidation() {
