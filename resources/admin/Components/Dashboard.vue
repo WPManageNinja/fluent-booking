@@ -181,12 +181,10 @@ export default {
         },
         scheduleTitle() {
             return (schedule) => {
-                const guestName = schedule.first_name + ' ' + schedule.last_name;
-                if (schedule.event_type === 'group') {
-                    const booked = schedule.booked_count;
-                    return booked + ' ' + this.$t('guests with') + ' '+ schedule.author.name + this.$t('as group booking type');
+                if (['group', 'group_event'].includes(schedule.event_type)) {
+                    return schedule.booked_count + ' ' + this.$t('guests with') + ' ' + schedule.author.name + ' ' + this.$t('as group booking type');
                 }
-                return '<b>' + schedule?.slot.title +'</b> ' + this.$t('meeting between') + ' ' + guestName + ' & '+ schedule.author.name;
+                return schedule.title;
             }
         }
     },

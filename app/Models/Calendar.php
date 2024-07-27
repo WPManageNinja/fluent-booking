@@ -217,4 +217,25 @@ class Calendar extends Model
 
         return $dirty;
     }
+
+    public static function getAllHosts()
+    {
+        $calendars = self::with(['user'])
+            ->where('type', 'simple')
+            ->get();
+
+        $deletedUser = __('Deleted User', 'fluent-booking');
+
+        return $calendars->map(function ($calendar) use ($deletedUser) {
+            $user = $calendar->user;
+            return [
+                'id'           => $user ? $user->ID : (int)$calendar->user_id,
+                'name'         => $user ? $user->full_name : $deletedUser,
+                'label'        => $user ? $user->display_name . ' (' . $user->user_email . ')' : $deletedUser,
+                'avatar'       => $calendar->getAuthorPhoto(),
+                'calendar_id'  => $calendar->id,
+                'deleted_user' => $user ? false : true
+            ];
+        });
+    }
 }

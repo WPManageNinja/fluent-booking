@@ -76,13 +76,12 @@ export default {
             if (this.booking.status == 'reserved') {
                 return this.$t('Reserved slot of') + ' ' + this.booking.calendar_event.title + ' ' + this.$t('event');
             }
-            const guestName = this.booking.first_name + ' ' + this.booking.last_name;
             if (['group', 'group_event'].includes(this.booking.event_type)) {
                 const booked = this.booking.booked_count;
                 return booked + ' ' + this.$t('guests with') + ' ' + this.booking.author.name + ' ' + this.$t('as group booking type');
             }
             if(this.showing_id) {
-                return guestName;
+                return this.booking.first_name + ' ' + this.booking.last_name;
             }
             return this.booking.title;
         },

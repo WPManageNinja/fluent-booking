@@ -90,7 +90,7 @@ export default {
         return {
             loading: false,
             saving: false,
-            all_hosts: [],
+            all_hosts: this.appVars.all_hosts,
             filteredHosts: [],
             teamMembers: [],
             settings: this.calendar_event.settings
@@ -103,8 +103,7 @@ export default {
             }
         },
         isMultiHosts() {
-            const eventType = this.calendar_event.event_type;
-            return eventType == 'single_event' || eventType == 'group_event' || eventType == 'collective';
+            return ['single_event', 'group_event'].includes(this.calendar_event.event_type);
         },
         getListLabel() {
             return this.isMultiHosts ? this.$t('Event Hosts') : this.$t('Team Members');
@@ -157,21 +156,6 @@ export default {
             }
             this.saveSettings();
         },
-        getAllHosts() {
-            this.loading = true;
-            this.$get('admin/all-hosts')
-                .then(response => {
-                    this.all_hosts = response.hosts;
-                    this.updateTeamMembers();
-                    this.updatefilteredHosts();
-                })
-                .catch(errors => {
-                    this.$handleError(errors);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
         saveSettings() {
             this.saving = true;
             this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/assignments', {
@@ -194,7 +178,8 @@ export default {
     },
     mounted() {
         if (!this.disabled) {
-            this.getAllHosts();
+            this.updateTeamMembers();
+            this.updatefilteredHosts();
         }
     }
 }
