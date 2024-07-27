@@ -233,11 +233,18 @@ export default {
         getMeetingDuration() {
             return this.calendar_event.duration === 'custom' ? this.calendar_event.custom_duration : this.calendar_event.duration;
         },
+        getRedirectCalId(calendarId) {
+            if (['single_event', 'group_event'].includes(this.calendar_event.event_type)) {
+                const userId = this.calendar_event.user_id;
+                return this.appVars.all_hosts.find(host => host.id == userId)?.calendar_id;
+            }
+            return calendarId;
+        },
         handleRedirection(res) {
             if (this.redirectRoute) {
                 this.$router.push({
                     name: this.redirectRoute,
-                    params: { calendar_id: res.calendar_id }
+                    params: { calendar_id: this.getRedirectCalId(res.calendar_id) }
                 });
             }
         },

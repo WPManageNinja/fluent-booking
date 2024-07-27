@@ -41,14 +41,14 @@
                 </div>
                 <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">
                     {{ $t('LocationSelector/error_location_description') }} {{ errorText(slot.location_settings[i].type) }}
-                    <span v-if="errorText(slot.location_settings[i].type)">
+                    <span v-if="slot.event_type != 'round_robin' && errorText(slot.location_settings[i].type)">
                         <a @click="maybeCreateAndGotoSetting(slot.location_settings[i].type)">{{ $t('click here') }}</a>
                     </span>
                 </div>
             </div>
         </div>
 
-        <el-link v-if="slot.event_type != 'group'" :underline="false" @click="addNewLocation">
+        <el-link v-if="['group', 'group_event'].includes(slot.event_type)" :underline="false" @click="addNewLocation">
             + {{ $t('Add another location option') }}
         </el-link>
 
@@ -132,7 +132,8 @@ export default {
             return (selectedType) => {
                 const hasError = this.slot.settings?.location_fields?.conferencing?.options[selectedType]?.error;
                 if (hasError) {
-                    return this.$t('Please') + ' ' + hasError.toLowerCase();
+                    const errorText = hasError.toLowerCase();
+                    return errorText.charAt(0).toUpperCase() + errorText.slice(1);
                 }
                 return '';
             }

@@ -354,6 +354,8 @@ class ReportController extends Controller
                 $meeting->author = $meeting->slot->getAuthorProfile(false);
             }
 
+            $meeting->title = $meeting->getBookingTitle(true);
+
             if ($meeting->isMultiGuestBooking()) {
                 $meeting->booked_count = Booking::where('group_id', $meeting->group_id)
                     ->whereIn('status', ['scheduled', 'completed'])->count();
@@ -364,7 +366,7 @@ class ReportController extends Controller
 
     public function getLatestBooks()
     {
-        $bookingQuery = Booking::query();
+        $bookingQuery = Booking::whereIn('status', ['pending', 'scheduled', 'completed']);
 
         if (!PermissionManager::userCanSeeAllBookings()) {
             $bookingQuery->whereHas('calendar', function ($q) {
