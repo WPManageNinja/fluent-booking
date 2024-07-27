@@ -120,7 +120,7 @@
                     <el-form-item>
                         <div class="fcal_event_card">
                             <el-form-item :label="$t('Location *')">
-                                <location-selector :slot="calendar_event"/>
+                                <location-selector :slot="calendar_event" @saveAndGotoSetting="saveAndGotoSetting"/>
                             </el-form-item>
                         </div>
                     </el-form-item>
@@ -161,6 +161,7 @@ import SaveButton from "@/Components/Buttons/SaveButton";
 export default {
     name: 'EventDetails',
     props: ['calendar_event', 'event_type', 'is_board', 'new_event'],
+    emits: ['saveAndGotoSetting'],
     components: {
         HostSelector,
         LocationSelector,
@@ -180,7 +181,8 @@ export default {
             meetingDurations: this.appVars.meeting_durations,
             multiDurations: this.appVars.multi_durations,
             durationLookup: this.appVars.multi_duration_lookup,
-            defaultDurations: []
+            defaultDurations: [],
+            redirectRoute: ''
         }
     },
     computed: {
@@ -230,6 +232,14 @@ export default {
         },
         getMeetingDuration() {
             return this.calendar_event.duration === 'custom' ? this.calendar_event.custom_duration : this.calendar_event.duration;
+        },
+        handleRedirection(res) {
+            if (this.redirectRoute) {
+                this.$router.push({
+                    name: this.redirectRoute,
+                    params: { calendar_id: res.calendar_id }
+                });
+            }
         },
         checkValidation() {
             if (!this.calendar_event.title) {
@@ -286,6 +296,7 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response);
+                    this.handleRedirection(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -293,6 +304,14 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        saveAndGotoSetting(routeName) {
+            if (this.is_board || this.new_event) {
+                this.$emit('saveAndGotoSetting', routeName)
+            } else {
+                this.redirectRoute = routeName;
+                this.saveSettings();
+            }
         }
     },
     mounted() {
