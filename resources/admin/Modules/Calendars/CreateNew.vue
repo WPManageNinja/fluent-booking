@@ -21,7 +21,14 @@
             <div class="fcal_onboard_steps">
                 <div v-if="step==1" class="fcal_onboard_step step-1">
                     <div class="fcal_create_calendar_basic_info">
-                        <event-details ref="basicInfo" :is_board="is_board" :calendar_event="calendar.slot" :event_type="calendar.slot.event_type" :new_event="true"/>
+                        <event-details
+                            ref="basicInfo"
+                            :is_board="is_board"
+                            :calendar_event="calendar.slot"
+                            :event_type="calendar.slot.event_type"
+                            :new_event="true"
+                            @saveAndGotoSetting="saveAndGotoSetting"
+                        />
                     </div>
                     <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone fcal_event_timezone">
                         <time-zone-selector v-model="calendar.author_timezone"/>
@@ -116,7 +123,8 @@ export default {
                 }
             },
             saving: false,
-            step: 1
+            step: 1,
+            redirectRoute: 'event_details'
         }
     },
     computed: {
@@ -145,7 +153,7 @@ export default {
         },
         redirectToSetting(calendarId, slotId) {
             this.$router.push({
-                name: 'event_details',
+                name: this.redirectRoute,
                 params: { calendar_id: calendarId, event_id: slotId }
             });
         },
@@ -181,6 +189,10 @@ export default {
                 }
             }
             return true;
+        },
+        saveAndGotoSetting(routeName) {
+            this.redirectRoute = routeName;
+            this.createCalendar();
         },
         updateMeetingDuration() {
             const duration = this.calendar.slot.duration;

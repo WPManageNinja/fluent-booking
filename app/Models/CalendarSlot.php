@@ -591,7 +591,23 @@ class CalendarSlot extends Model
         return apply_filters('fluent_booking/get_location_fields', [
             'conferencing' => [
                 'label'   => __('Conferencing', 'fluent-booking'),
-                'options' => [],
+                'options' => [
+                    'google_meet'  => [
+                        'title'         => __('Google Meet (Pro)', 'fluent-booking'),
+                        'disabled'      => true,
+                        'location_type' => 'conferencing'
+                    ],
+                    'ms_teams'     => [
+                        'title'         => __('MS Teams (Pro)', 'fluent-booking'),
+                        'disabled'      => true,
+                        'location_type' => 'conferencing'
+                    ],
+                    'zoom_meeting' => [
+                        'title'         => __('Zoom Video (Pro)', 'fluent-booking'),
+                        'disabled'      => true,
+                        'location_type' => 'conferencing'
+                    ],
+                ],
             ],
             'in_person'    => [
                 'label'   => __('In Person', 'fluent-booking'),

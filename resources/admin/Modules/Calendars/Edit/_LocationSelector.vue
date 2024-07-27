@@ -1,60 +1,56 @@
 <template>
     <div class="fcal_location_selector_wrap">
-
         <div class="fcal_locations_lists">
             <div class="fcal_location_list"
-                 v-for="(location, i) in slot.location_settings"
-                 :key="i"
-            >
+                v-for="(location, i) in slot.location_settings"
+                :key="i">
                 <el-select
                     v-model="slot.location_settings[i].type"
                     popper-class="fcal_select fcal_location_select"
                     :placeholder="$t('Select')"
-                    @change="isLocationInfoRequired(slot.location_settings[i], i)"
-                >
+                    @change="isLocationInfoRequired(slot.location_settings[i], i)">
                     <el-option-group
                         v-for="(location, locationKey) in slot.settings.location_fields"
                         :key="locationKey"
                         :label="location.label"
-                        :value="locationKey"
-                    >
+                        :value="locationKey">
                         <el-option
                             v-for="(option, optionKey) in location.options"
                             :key="optionKey"
                             :label="option.title"
                             :value="optionKey"
-                            :disabled="option.disabled"
-                        >
+                            :disabled="option.disabled">
                             {{ option.title }}
                         </el-option>
                     </el-option-group>
                 </el-select>
 
                 <div class="fcal_location_actions">
-
                     <el-button
                         v-if="isEditable(slot.location_settings[i].type)"
                         class="fcal_plain_btn edit_location_btn"
-                        @click="isLocationInfoRequired(slot.location_settings[i], i)"
-                    >
+                        @click="isLocationInfoRequired(slot.location_settings[i], i)">
                         <el-icon><EditPen /></el-icon>
                     </el-button>
                     <el-button
                         v-if="slot.location_settings.length != 1"
                         class="fcal_plain_btn edit_location_btn"
-                        @click="deleteLocation(i)"
-                    >
+                        @click="deleteLocation(i)">
                         <el-icon><Delete /></el-icon>
                     </el-button>
-
                 </div>
-
-                <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">{{ $t('LocationSelector/disabled_location_description') }}</div>
-
+                <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">
+                    {{ $t('LocationSelector/error_location_description') }} {{ errorText(slot.location_settings[i].type) }}
+                    <span v-if="errorText(slot.location_settings[i].type)">
+                        <a @click="maybeCreateAndGotoSetting(slot.location_settings[i].type)">{{ $t('click here') }}</a>
+                    </span>
+                </div>
             </div>
         </div>
 
-        <el-link v-if="slot.event_type != 'group'" :underline="false" @click="addNewLocation"> + {{ $t('Add another location option') }}</el-link>
+        <el-link v-if="slot.event_type != 'group'" :underline="false" @click="addNewLocation">
+            + {{ $t('Add another location option') }}
+        </el-link>
 
         <el-dialog
             v-if="dialogVisible"
@@ -64,12 +60,10 @@
             :close-on-click-modal="false"
             width="30%"
             :title="modalSettings.type ? $t('Edit Location') : $t('Add Location')"
-            class="fcal_modal fcal_location_modal"
-        >
+            class="fcal_modal fcal_location_modal">
             <el-form
                 label-position="top"
-                class="fcal_location_form"
-            >
+                class="fcal_location_form">
                 <el-form-item v-if="modalSettings.type == 'custom'" :label="$t('Location Title *')">
                     <el-input v-model="modalSettings.title" type="text" :placeholder="$t('Location Title')" />
                 </el-form-item>
@@ -101,14 +95,14 @@
     </div>
 </template>
 
-<script type="text/babel">
-import isEmpty from 'lodash/isEmpty';
+<script>
 import { EditPen, Delete } from '@element-plus/icons-vue';
 
 
 export default {
     name: 'LocationSelector',
     props: ['slot'],
+    emits: ['saveAndGotoSetting'],
     components: {
         EditPen,
         Delete
@@ -129,22 +123,23 @@ export default {
     },
     computed: {
         isDisabledSelected() {
-            return (firstSelectedType) => {
-                if(!firstSelectedType) {
-                    return false;
+            return (selectedType) => {
+                const locationType = this.slot.settings?.location_fields?.conferencing?.options[selectedType];
+                return locationType?.disabled || locationType?.error;
+            }
+        },
+        errorText() {
+            return (selectedType) => {
+                const hasError = this.slot.settings?.location_fields?.conferencing?.options[selectedType]?.error;
+                if (hasError) {
+                    return this.$t('Please') + ' ' + hasError.toLowerCase();
                 }
-                if(this.slot.settings.location_fields && !isEmpty(this.slot.settings.location_fields.conferencing.options)) {
-                    return this.slot.settings.location_fields.conferencing.options[firstSelectedType]?.disabled;
-                }
-                return false;
+                return '';
             }
         },
         isEditable() {
             return (locationType) => {
-                if (locationType == 'in_person_organizer' || locationType == 'phone_organizer' || locationType == 'custom' || locationType == 'online_meeting') {
-                    return true;
-                }
-                return false;
+                return ['in_person_organizer', 'phone_organizer', 'custom', 'online_meeting'].includes(locationType);
             }
         }
     },
@@ -158,6 +153,13 @@ export default {
                 display_on_booking: 'no',
             };
             this.slot.location_settings.push(this.locationSettings);
+        },
+        maybeCreateAndGotoSetting(locationType) {
+            let routeName = 'remote_calendars';
+            if (locationType == 'zoom_meeting') {
+                routeName = 'user_zoom_integration';
+            }
+            this.$emit('saveAndGotoSetting', routeName);
         },
         updateDetails() {
             const location = this.modalSettings;
@@ -219,7 +221,7 @@ export default {
             } else if (location.type != 'custom') {
                 return;
             }
-            
+
             this.dialogVisible = true;
             if (this.dialogVisible) {
                 this.modalSettings = location;
