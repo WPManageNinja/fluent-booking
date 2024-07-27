@@ -132,26 +132,10 @@ class AdminController extends Controller
 
     public function getAllHosts(Request $request)
     {
-        $calendars = Calendar::with(['user'])
-            ->where('type', 'simple')
-            ->get();
-
-        $deletedUser = __('Deleted User', 'fluent-booking');
-        
-        $hosts = $calendars->map(function ($calendar) use ($deletedUser) {
-            $user = $calendar->user;
-            return [
-                'id'           => $user ? $user->ID : (int)$calendar->user_id,
-                'name'         => $user ? $user->full_name : $deletedUser,
-                'label'        => $user ? $user->display_name . ' (' . $user->user_email . ')' : $deletedUser,
-                'avatar'       => $calendar->getAuthorPhoto(),
-                'calendar_id'  => $calendar->id,
-                'deleted_user' => $user ? false : true
-            ];
-        });
+        $allHosts = Calendar::getAllHosts();
 
         return [
-            'hosts' => $hosts
+            'hosts' => $allHosts
         ];
     }
 }

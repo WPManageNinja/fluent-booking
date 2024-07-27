@@ -385,6 +385,7 @@ class AdminMenuHandler
                 'is_admin'    => $hasAllAccess,
                 'permissions' => PermissionManager::getUserPermissions($currentUser, false),
             ],
+            'all_hosts'              => Calendar::getAllHosts(),
             'is_new'                 => $isNew,
             'require_slug'           => $requireSlug,
             'site_url'               => site_url('/'),

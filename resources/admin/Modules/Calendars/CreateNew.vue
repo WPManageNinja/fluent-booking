@@ -142,7 +142,7 @@ export default {
                 calendar: this.calendar,
             })
                 .then(response => {
-                    this.redirectToSetting(response.calendar.id, response.slot.id);
+                    this.redirectToSetting(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -151,10 +151,20 @@ export default {
                     this.saving = false;
                 });
         },
-        redirectToSetting(calendarId, slotId) {
+        getRedirectCalId(slot) {
+            if (this.redirectRoute == 'event_details') {
+                return slot.calendar_id;
+            }
+            if (['single_event', 'group_event'].includes(slot.event_type)) {
+                return this.appVars.all_hosts.find(host => host.id == slot.user_id)?.calendar_id;
+            }
+            return slot.calendar_id;
+        },
+        redirectToSetting(res) {
+            const calendarId = this.getRedirectCalId(res.slot);
             this.$router.push({
                 name: this.redirectRoute,
-                params: { calendar_id: calendarId, event_id: slotId }
+                params: { calendar_id: calendarId, event_id: res.slot.id }
             });
         },
         checkValidation() {

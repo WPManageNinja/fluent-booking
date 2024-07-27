@@ -149,3 +149,10 @@ $app->addFilter('fluent_booking/public_event_vars', function($eventVars) {
     }
     return $eventVars;
 }, 10, 1);
+
+$app->addFilter('fluent_booking/create_calendar_event_data', function ($slotData, $calendar) {
+    if ($calendar->type != 'simple') {
+        $slotData['user_id'] = reset($slotData['settings']['team_members']);
+    }
+    return $slotData;
+}, 10, 2);
