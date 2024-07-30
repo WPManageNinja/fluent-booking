@@ -368,6 +368,11 @@
                 document.getElementById('fcalInputIDname').focus();
             }, 500);
         }
+
+        setTimeout(() => {
+            const allDateFields = document.querySelectorAll('.fcal_date_field .date-time-field > input');
+            allDateFields.forEach(field => field.setAttribute('readonly', true));
+        }, 500);
     });
 
 </script>
