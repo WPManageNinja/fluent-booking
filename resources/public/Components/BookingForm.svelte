@@ -89,14 +89,18 @@
                                             <span class="checkbox_mark"></span>
                                         </label>
                                     {/each}
-                                {:else if field.type === 'date' }
-                                    <span class="fcal_date_field">
-                                        <input class="pick_date" type="date" bind:value={form[field.name]} on:input={((e) => handleDateFormatChange(e, field))}/>
-                                        <input class="set_date" type="text" placeholder={field.date_format || appData.date_formatter} bind:value={form[field.name]} />
+                                    {:else if field.type === 'date' }
+                                        <DateInput
+                                            class="fcal_date_field"
+                                            format={'MM/dd/yyyy'}
+                                            dynamicPositioning={true}
+                                            closeOnSelection={true}
+                                            placeholder={field.placeholder}
+                                            on:select={(e) => handleDateChange(e, field)}
+                                        />
                                         {#if form[field.name]}
-                                            <span class="clear_date_icon" on:keydown={(() => handleDateClear(field.name))} on:click={(() => handleDateClear(field.name))}>+</span>
+                                            <span class="clear_date_icon" on:keydown={(e) => handleDateClear(e, field.name)} on:click={(e) => handleDateClear(e, field.name)}>+</span>
                                         {/if}
-                                    </span>
                                 {:else if field.type === 'payment' && appData?.slot?.type === 'paid' && hasPaymentItem()}
                                     <Payments field={field} bind:form={form} {duration}/>
                                 {:else if field.type === 'hidden'}
@@ -166,6 +170,7 @@
     import { Pulse } from 'svelte-loading-spinners';
     import { util, i18, getErrorText } from '../util.js';
     import { createEventDispatcher, onMount } from 'svelte';
+    import { DateInput } from 'date-picker-svelte';
     import Payments from "./Payments.svelte";
     import LocationField from "./_LocationField.svelte";
     import MultiGuests from "./_MultiGuests.svelte";
@@ -182,17 +187,17 @@
 
     export let form;
 
-    let submitting = false;
-
-    let dispatch = createEventDispatcher();
-
     let errors = '';
 
     let hasError = false;
 
     let validating = false;
 
+    let submitting = false;
+
     const currentUrl = window.location.href;
+
+    let dispatch = createEventDispatcher();
 
     if (!isReschedulingForm(formFields)) {
         let excludeNames = ['cancellation_reason', 'rescheduling_reason'];
@@ -298,10 +303,8 @@
 
         if (submitting) return;
 
-        submitting = true;
-
         errors = '';
-
+        submitting = true;
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
             .then(res => {
                 if (res.data?.redirect_to) {
@@ -330,7 +333,6 @@
                     }
                     return;
                 }
-
                 dispatch('bookingConfirmed', res);
             })
             .catch(err => {
@@ -344,10 +346,11 @@
             });
     }
 
-    function handleDateFormatChange(event, field) {
-        const inputValue = event.target.value;
+    function handleDateChange(e, field) {
+        const selectedDate = e.detail;
         const dateFormat = field.date_format || appData.date_formatter;
-        form[field.name] = util.dayjs(inputValue).format(dateFormat);
+        const formatterDate = util.dayjs(selectedDate).format(dateFormat);
+        form[field.name] = formatterDate;
     }
 
     function handleDateClear(formName) {

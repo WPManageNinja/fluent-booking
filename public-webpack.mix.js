@@ -1,6 +1,15 @@
 let mix = require('laravel-mix');
 require('laravel-mix-svelte');
 
+mix.webpackConfig({
+    resolve: {
+        extensions: ['.js', '.mjs', '.svelte'],
+        alias: {
+            './locale': require.resolve('./node_modules/date-picker-svelte/dist/locale.js'),
+        },
+    },
+});
+
 mix.js('resources/public/app.js', 'assets/public/js')
     .svelte({
         dev: true,
