@@ -22,6 +22,9 @@ $whiteBG: #ffffff;
   --fcal_input_disable_bg: #f7f7f7;
   --fcal_gray: #6b7280;
   --fcal_skeleton_bg: linear-gradient(90deg, #f0f2f5 25%, #e6e8eb 37%, #f0f2f5 63%);
+  --date-picker-selected-background: var(--fcal_primary_color);
+  --date-picker-highlight-border: var(--fcal_primary_color);
+  --date-picker-selected-color: var(--fcal_input_bg);
 }
 
 @import "../scss/booking_confirmation";
@@ -276,6 +279,7 @@ body >.fcal_calendar_wrap {
 
       .fcal_input_content {
         display: block;
+        position: relative;
 
         .fcal_input_label {
           font-size: 0.875rem;
@@ -689,6 +693,19 @@ body >.fcal_calendar_wrap {
               background: transparent;
             }
           }
+          .calendar_date_icon {
+            position: absolute;
+            z-index: 3;
+            right: 10px;
+            top: 9px;
+            display: block;
+            width: 20px;
+            height: 20px;
+            path {
+              stroke: var(--fcal_slot_border);
+              stroke-width: 1.5px;
+            }
+          }
           .clear_date_icon {
             position: absolute;
             z-index: 3;
@@ -714,11 +731,44 @@ body >.fcal_calendar_wrap {
         }
 
         .date-time-field {
-            .date-time-picker {
-                .page-button {
-                    background: var(--fcal_primary_color);
+          .date-time-picker {
+            .page-button {
+              position: relative;
+              background: none;
+              border: none;
+              box-shadow: none;
+              outline: none;
+              cursor: pointer;
+              &:last-child {
+                &:before {
+                  border-left: none;
+                  border-bottom: none;
+                  border-right: 1.5px solid #1B1F35;
+                  border-top: 1.5px solid #1B1F35;
                 }
+              }
+
+              &:before {
+                content: '';
+                width: 8px;
+                height: 8px;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%) rotate(45deg);
+                top: 5px;
+                border-left: 1.5px solid #1B1F35;
+                border-bottom: 1.5px solid #1B1F35;
+              }
             }
+            .dropdown {
+              select {
+                height: auto;
+                line-height: 1;
+                padding: 8px 16px;
+                min-height: inherit;
+              }
+            }
+          }
         }
         .fcal_validation_error {
             display: flex;
