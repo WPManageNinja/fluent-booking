@@ -3,7 +3,7 @@
 </div>
 
 <script>
-    import {onMount, onDestroy} from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     let nodeRef;
     export let field;
     export let form;
