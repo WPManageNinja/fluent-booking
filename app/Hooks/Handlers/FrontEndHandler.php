@@ -252,6 +252,7 @@ class FrontEndHandler
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();
             $event->short_description = Helper::excerpt($event->description);
+            $event->locations = $event->defaultLocationHtml();
             $calendarEvents[$event->calendar_id][] = $event;
         }
 
@@ -363,6 +364,7 @@ class FrontEndHandler
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();
             $event->short_description = Helper::excerpt($event->description);
+            $event->locations = $event->defaultLocationHtml();
         }
         
         $calendar->activeEvents = $calendarEvents;

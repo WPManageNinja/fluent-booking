@@ -17,7 +17,8 @@
         <?php } ?>
         <div class="fcal_slots_wrap">
             <div class="fcal_slots">
-                <?php foreach ($events as $event): ?>
+                <?php
+                foreach ($events as $event): ?>
                     <div class="fcal_slot">
                         <a data-calendar_id="<?php echo (int)$event->calendar_id; ?>"
                            data-event_hash="<?php echo esc_attr($event->hash); ?>"
@@ -32,15 +33,49 @@
                                     <?php echo esc_html($event->title); ?>
                                 </h2>
                                 <p class="fcal_description"><?php echo wp_kses_post($event->short_description); ?></p>
-                                <?php foreach ($event->durations as $duration) { ?>
+
+                                <div class="fcal_slot_durations_wrap">
+
                                     <span class="fcal_slot_duration">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                             <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M9.16418 8.855L7.35585 7.77584C7.04085 7.58917 6.78418 7.14 6.78418 6.7725V4.38084" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
-                                        <?php echo esc_html($duration); ?>
+                                        <?php if (count($event->durations) > 1) { ?>
+                                            <?php echo esc_html__('Durations', 'fluent-booking'); ?>
+
+                                            <div class="fcal_location_tooltip">
+                                                    <?php foreach ($event->durations as $duration) { ?>
+                                                        <span class="fcal_slot_duration">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                                <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M9.16418 8.855L7.35585 7.77584C7.04085 7.58917 6.78418 7.14 6.78418 6.7725V4.38084" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                            <?php echo esc_html($duration); ?>
+                                                        </span>
+                                                    <?php } ?>
+                                                </div>
+                                        <?php } else {
+                                            echo esc_html($event->durations[0]);
+                                        } ?>
                                     </span>
-                                <?php } ?>
+
+                                    <span class="fcal_slot_duration fcal_slot_location">
+                                        <?php
+                                        if (count($event->location_settings) > 1) { ?>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M9.16418 8.855L7.35585 7.77584C7.04085 7.58917 6.78418 7.14 6.78418 6.7725V4.38084" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            <?php echo esc_html__('Locations', 'fluent-booking'); ?>
+                                            <span class="fcal_location_tooltip">
+                                                <?php echo wp_kses_post($event->locations); ?>
+                                            </span>
+                                        <?php } else {
+                                            echo wp_kses_post($event->locations);
+                                        } ?>
+                                    </span>
+                                </div>
                             </div>
                             <button class="book_now">
                                 <?php esc_html_e('Book Now', 'fluent-booking'); ?>
