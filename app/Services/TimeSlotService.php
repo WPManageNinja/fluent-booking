@@ -463,7 +463,7 @@ class TimeSlotService
 
     protected function handleNextDaySlot($daySlots, &$items, $start, $end, $interval, $period, $day, $days)
     {
-        $nextDayIndex = array_search($day, $days) + 1;
+        $nextDayIndex = (array_search($day, $days) + 1) % count($items);
 
         if (isset($days[$nextDayIndex])) {
             $nextDay = $items[$days[$nextDayIndex]];
