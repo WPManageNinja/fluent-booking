@@ -39,8 +39,14 @@ $border-color_1: var(--fcal_primaryColor);
   overflow: hidden;
 
   .fcal_slot {
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
     &:last-child {
       border-bottom: none;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
   }
 }
@@ -56,7 +62,13 @@ $border-color_1: var(--fcal_primaryColor);
     margin: 0 0 32px;
   }
 }
-
+.fluent_booking_wrap {
+  .fcal_slots_wrap {
+    .fcal_slots {
+      overflow: inherit;
+    }
+  }
+}
 .fcal_slot {
   border-bottom: 1px solid var(--fcal_slot_border);
   padding: 16px 24px;
@@ -101,9 +113,65 @@ $border-color_1: var(--fcal_primaryColor);
     gap: 7px;
     color: $color_2;
     padding-left: 19px;
+    position: relative;
     svg {
       path {
         stroke: var(--fcal_dark);
+      }
+    }
+    &:hover {
+      .fcal_location_tooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .fcal_location_tooltip {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      bottom: 100%;
+      background: var(--fcal_dark);
+      border-radius: 0.5rem;
+      color: var(--fcal_whiteColor);
+      font-size: 1rem;
+      padding: 0.625rem 0.9rem;
+      opacity: 0;
+      margin: 0;
+      visibility: hidden;
+      transition: 0.2s;
+      list-style: none;
+      min-width: 120px;
+      width: max-content;
+      .fcal_slot_duration {
+        padding-left: 0;
+        color: var(--fcal_whiteColor);
+        font-weight: 400;
+        svg {
+          path {
+            stroke: var(--fcal_whiteColor);
+          }
+        }
+      }
+      .slot_location {
+        img {
+          &:not(.zoom_icon) {
+            filter: contrast(0);
+          }
+        }
+      }
+    }
+    .slot_location {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 400;
+      font-size: 12px;
+      img {
+        width: 0.9rem;
+        height: 0.9rem;
+        object-fit: contain;
       }
     }
   }
