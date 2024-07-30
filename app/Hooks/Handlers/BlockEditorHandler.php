@@ -72,7 +72,8 @@ class BlockEditorHandler
                         'title' => $event->title,
                         'duration' => (array)$event->duration,
                         'desctiption' => $event->description,
-                        'color_schema' => $event->color_schema
+                        'color_schema' => $event->color_schema,
+                        'locations' => $event->defaultLocationHtml()
                     ];
                 }
 
@@ -264,6 +265,7 @@ class BlockEditorHandler
                 $event->durations = $event->getAvailableDurations();
                 $event->description = $event->getDescription();
                 $event->short_description = Helper::excerpt($event->description);
+                $event->locations = $event->defaultLocationHtml();
             }
 
             $calendar->activeEvents = $events;
@@ -316,6 +318,7 @@ class BlockEditorHandler
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();
             $event->short_description = Helper::excerpt($event->description);
+            $event->locations = $event->defaultLocationHtml();
         }
         
         $calendar->activeEvents = $events;
