@@ -52,6 +52,7 @@
                 <el-select
                     popper-class="fcal_select"
                     v-model="fieldData.date_format"
+                    :clearable="true"
                     :placeholder="$t('Select Format')">
                     <el-option
                         v-for="(type, index) in dateFormats"
@@ -158,7 +159,7 @@ export default {
             return this.fieldData.type == 'date';
         },
         hasPlaceHolder() {
-            return ['text', 'textarea', 'message', 'number', 'email'].includes(this.fieldData.type);
+            return ['text', 'textarea', 'message', 'number', 'email', 'date'].includes(this.fieldData.type);
         },
         hasHelpText() {
             return !['guests', 'payment_method', 'location'].includes(this.fieldData.name);

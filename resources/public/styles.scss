@@ -712,6 +712,14 @@ body >.fcal_calendar_wrap {
             }
           }
         }
+
+        .date-time-field {
+            .date-time-picker {
+                .page-button {
+                    background: var(--fcal_primary_color);
+                }
+            }
+        }
         .fcal_validation_error {
             display: flex;
             gap: 0.5rem;
