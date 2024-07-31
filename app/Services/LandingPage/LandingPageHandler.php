@@ -146,6 +146,7 @@ class LandingPageHandler
                 $vars['lazy_js_files'] = $extraJs;
             }
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
+            $activeEvent->locations = $activeEvent->defaultLocationHtml();
         }
 
         $assetUrl = App::getInstance('url.assets');
