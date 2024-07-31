@@ -143,7 +143,7 @@
                         </div>
                     </div>
                     <div v-if="booking_id" class="fcal_spot_details">
-                        <schedule-booking-details @bookingFetched="updateCurrentSchedule" :booking="current_schedule" :booking_id="booking_id"/>
+                        <schedule-booking-details @bookingFetched="updateCurrentSchedule" :booking="current_schedule" :booking_id="booking_id" :calendarEventLists="calendarEventLists"/>
                     </div>
                 </div>
             </div>

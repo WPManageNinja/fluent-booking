@@ -8,8 +8,9 @@
         <el-form v-if="openModal" label-position="top" >
             <el-form-item :label="$t('Field Type')">
                 <el-select
-                    popper-class="fcal_select"
                     v-model="fieldData.type"
+                    filterable
+                    popper-class="fcal_select"
                     :disabled="fieldData.system_defined"
                     :placeholder="$t('Select Type')">
                     <el-option

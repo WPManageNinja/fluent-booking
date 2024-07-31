@@ -40,6 +40,13 @@
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
+                                    @click="rebookAttendee">
+                                    <el-icon>
+                                        <RefreshRight />
+                                    </el-icon>
+                                    {{ $t('Rebook') }}
+                                </el-dropdown-item>
+                                <el-dropdown-item 
                                     v-if="canReschedule" @click="rescheduleBooking">
                                     <el-icon>
                                         <Refresh/>
@@ -241,21 +248,29 @@
               </span>
             </template>
         </el-dialog>
+        <AddNewBookingModal
+            v-if="isRebookOpen"
+            :showModal="isRebookOpen"
+            :calendarEventLists="calendarEventLists"
+            :bookingData="showing_booking"
+            @closeModal="isRebookOpen = false"
+        />
     </div>
 </template>
 
 <script>
-import { Back, MoreFilled, Message, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
+import { Back, MoreFilled, Message, Refresh, RefreshRight, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
 import EditableBookingData from "./EditableBookingData";
 import PaymentLogs from "./PaymentLogs";
+import AddNewBookingModal from "./_AddNewBookingModal";
 import { each } from 'lodash';
 
 export default {
     name: "ScheduleSpotDetails",
-    props: ['booking', 'booking_id'],
+    props: ['booking', 'booking_id', 'calendarEventLists'],
     $emits: ['bookingFetched'],
     components: {
         PaymentLogs,
@@ -263,10 +278,12 @@ export default {
         SingleInviteeInfo,
         GroupBookingGuests,
         EditableBookingData,
+        AddNewBookingModal,
         Message,
         Back,
         MoreFilled,
         Refresh,
+        RefreshRight,
         Close,
         EditPen,
         Check,
@@ -288,7 +305,8 @@ export default {
             sidebar_contents: [],
             payment_order: null,
             main_body_contents: [],
-            durationLookup: []
+            durationLookup: [],
+            isRebookOpen: false
         }
     },
     watch: {
@@ -346,6 +364,11 @@ export default {
         },
         isSingleGuestEvent() {
             return !this.isMultiGuestEvent;
+        },
+        meetingTime() {
+            const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
+            const endTime = this.toCurrentTimezone(this.showing_booking.end_time, this.appVars.date_time_formatter);
+            return `${startTime} - ${endTime}`;
         },
         meetingDetails() {
             const startTime = this.toCurrentTimezone(this.showing_booking.start_time, this.appVars.date_time_formatter);
@@ -483,6 +506,9 @@ export default {
             } else {
                 this.durationLookup = this.appVars.duration_lookup;
             }
+        },
+        rebookAttendee() {
+            this.isRebookOpen = true;
         },
         sendConfirmationEmail(emailTo) {
             this.updating = true;
