@@ -13,7 +13,7 @@
                                 <el-dropdown-item 
                                     v-if="isSingleGuestEvent" @click="sendConfirmationEmail('guest')">
                                     <el-icon>
-                                        <Notification/>
+                                        <Message/>
                                     </el-icon>
                                     {{ $t('Send Confirmation Email') }}
                                 </el-dropdown-item>
@@ -245,7 +245,7 @@
 </template>
 
 <script>
-import { Back, MoreFilled, Notification, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
+import { Back, MoreFilled, Message, Refresh, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
@@ -263,7 +263,7 @@ export default {
         SingleInviteeInfo,
         GroupBookingGuests,
         EditableBookingData,
-        Notification,
+        Message,
         Back,
         MoreFilled,
         Refresh,
