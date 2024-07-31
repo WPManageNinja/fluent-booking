@@ -17,12 +17,9 @@ class TimeSlotService
 
     protected $hostId = null;
     
-    protected $groupedSlots = [];
-
     public function __construct(Calendar $calendar, CalendarSlot $calendarSlot)
     {
         $this->hostId = null;
-        $this->groupedSlots = [];
         $this->calendar = $calendar;
         $this->calendarSlot = $calendarSlot;
     }
@@ -49,11 +46,7 @@ class TimeSlotService
 
         $rangedSlots = $this->getRangedValidSlots($ranges, $duration, $bookedSlots, $cutOutTime, $maxBookingTime, $timezoneInfo);
 
-        if (!$this->groupedSlots) {
-            return $rangedSlots;
-        }
-
-        return $this->adjustGroupedSlots($ranges, $rangedSlots, $cutOutTime, $maxBookingTime, $timezoneInfo);
+        return $rangedSlots;
     }
 
     protected function getRangedValidSlots($ranges, $duration, $bookedSlots, $cutOutTime, $maxBookingTime, $timezoneInfo, $rangedSlots = [], $hostId = null)
@@ -160,50 +153,6 @@ class TimeSlotService
         }
 
         return true;
-    }
-
-    protected function adjustGroupedSlots($ranges, $rangedSlots, $cutOutTime, $maxBookingTime, $timezoneInfo)
-    {
-        list($scheduleTimezone, $dstTime) = $timezoneInfo;
-
-        $todayDate = gmdate('Y-m-d'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-
-        $lastDate = end($ranges);
-
-        $addedDates = [];
-
-        foreach ($this->groupedSlots as $slot) {
-            $date = gmdate('Y-m-d', strtotime($slot['start']));
-            if ($todayDate == $date && strtotime($slot['start']) < $cutOutTime) {
-                continue;
-            }
-
-            if ($lastDate == $date && strtotime($slot['end']) > $maxBookingTime) {
-                continue;
-            }
-
-            if (!isset($rangedSlots[$date])) {
-                $rangedSlots[$date] = [];
-                $rangedSlots[$date][] = $slot;
-                continue;
-            }
-
-            $addedDates[$date] = $date;
-
-            $rangedSlots[$date][] = $slot;
-        }
-
-        foreach ($addedDates as $date) {
-            $dateSlots = $rangedSlots[$date];
-
-            usort($dateSlots, function ($a, $b) {
-                return strtotime($a['start']) - strtotime($b['start']);
-            });
-
-            $rangedSlots[$date] = $dateSlots;
-        }
-
-        return $rangedSlots;
     }
 
     public function isSpotAvailable($fromTime, $toTime, $duration = null, $hostId = null)
@@ -371,7 +320,6 @@ class TimeSlotService
             $eventIdAdded = false;
             foreach ($rangedItems as $date => $slot) {
                 if ($isGroupBooking && $remaining && $this->calendarSlot->id == $booking->event_id) {
-                    $this->groupedSlots[] = $slot;
                     if ($eventIdAdded) {
                         $slot['event_id'] = null;
                     }
