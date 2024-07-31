@@ -12,23 +12,23 @@
         </div>
     {/if}
 
-    {#if field?.payment_methods?.length > 1}
+    {#if totalMethod > 1}
         <div class="fcal_payment_methods">
             <div class="fcal_input_label">
                 {i18('Payment Method')}
                 <span>*</span>
             </div>
             <div class="fcal_payment_radio">
-                {#each field.payment_methods as method}
-                    <label class="fcal_radio_group" for={field.name+'_'+method} aria-label={method}>
-                        <input type="radio" bind:group={form[field.name]}
-                            id={field.name+'_'+method} value={method}> {method}
+                {#each paymentMethods as method}
+                    <label class="fcal_radio_group fcal_payment_label" for={field.name+'_'+method.name} aria-label={method.name}>
+                        <input type="radio" bind:group={form[field.name]} id={field.name+'_'+method.name} value={method.name}>
+                            <img src={method.icon} alt={method.name} />
                             <span class="fcal_radio_icon"></span>
                     </label>
                 {/each}
             </div>
         </div>
-    {:else if !field?.payment_methods}
+    {:else if totalMethod == 0}
         <div class="fcal_validation_error">
             <p>{i18('No_payment_method_description')}</p>
         </div>
@@ -42,6 +42,8 @@
     export let duration;
 
     const multiPayments = field.multi_payment_items;
+    const paymentMethods = Object.values(field?.payment_methods || {});
+    const totalMethod = Object.keys(field?.payment_methods || {}).length;
 
-    form[field.name] = form[field.name] || (field?.payment_methods && field.payment_methods[0]);
+    form[field.name] = form[field.name] || (totalMethod !=0 && paymentMethods[0].name);
 </script>
