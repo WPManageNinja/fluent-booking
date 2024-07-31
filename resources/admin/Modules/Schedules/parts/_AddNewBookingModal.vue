@@ -7,8 +7,9 @@
         <el-form v-if="openModal" label-position="top">
             <el-form-item :label="$t('Select Event') + ' *'">
                 <el-select
-                    popper-class="fcal_select fcal_select_event"
                     v-model="newBooking.event_id"
+                    filterable
+                    popper-class="fcal_select fcal_select_event"
                     :no-match-text="$t('No Data match')"
                     :no-data-text="$t('No Data')"
                     :placeholder="$t('Select Event')">
@@ -94,6 +95,7 @@
                 <el-form-item :label="$t('Select Time') + ' *'">
                     <el-select
                         v-model="newBooking.event_time"
+                        filterable
                         :placeholder="$t('Select Time')"
                         popper-class="fcal_select"
                         :disabled="!newBooking.event_date">
@@ -215,7 +217,7 @@ import { ArrowRight, ArrowLeft, CloseBold } from '@element-plus/icons-vue';
 import TimeZoneSelector from "@/Modules/Calendars/parts/TimeZoneSelector";
 export default {
     name: 'AddNewBookingModal',
-    props: ['calendarEventLists', 'showModal'],
+    props: ['calendarEventLists', 'showModal', 'bookingData'],
     emits: ['closeModal', 'addNewBooking'],
     components: {
         ArrowLeft,
@@ -490,6 +492,35 @@ export default {
         },
         removeGuest(index) {
             this.newBooking.guests.splice(index, 1);
+        },
+        updateCustomFieldData(booking) {
+            const customFields = booking.custom_form_data || {};
+            const updatedCustomFields = {};
+            Object.entries(customFields).forEach(([key, field]) => {
+                updatedCustomFields[key] = field.value;
+            });
+            return updatedCustomFields;
+        },
+        updateBookingData() {
+            const newBookingData = this.bookingData;
+            const eventId = parseInt(newBookingData.event_id);
+            this.newBooking = {
+                ...this.newBooking,
+                event_id: eventId,
+                name: newBookingData.first_name + ' ' + newBookingData.last_name,
+                email: newBookingData.email,
+                message: newBookingData.message,
+                timezone: newBookingData.person_time_zone,
+                guests: newBookingData.additional_guests.length ? newBookingData.additional_guests : [''],
+            };
+            this.customFields = this.updateCustomFieldData(newBookingData);
+            this.locationType = newBookingData.location_details?.type;
+            this.locationDescription = newBookingData.location_details?.description;
+        }
+    },
+    mounted() {
+        if (this.bookingData) {
+            this.updateBookingData();
         }
     }
 }
