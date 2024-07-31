@@ -22,6 +22,9 @@ $whiteBG: #ffffff;
   --fcal_input_disable_bg: #f7f7f7;
   --fcal_gray: #6b7280;
   --fcal_skeleton_bg: linear-gradient(90deg, #f0f2f5 25%, #e6e8eb 37%, #f0f2f5 63%);
+  --date-picker-selected-background: var(--fcal_dark);
+  --date-picker-highlight-border: var(--fcal_dark);
+  --date-picker-selected-color: var(--fcal_input_bg);
 }
 
 @import "../scss/booking_confirmation";
@@ -2401,9 +2404,31 @@ body >.fcal_calendar_wrap {
         font-weight: 500;
     }
     .fcal_payment_radio {
-        font-weight: 400;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         padding: 10px 17px;
         color: var(--fcal_dark);
+        label {
+            &.fcal_payment_label {
+                display: flex !important;
+                align-items: center !important;
+                max-width: 200px;
+                img {
+                    max-width: 80%;
+                    background: #fafafa;
+                    border-radius: 4px;
+                    margin-left: 4px;
+                }
+                span {
+                    &.fcal_radio_icon {
+                        border: 1.5px solid #90949c !important;
+                        top: unset !important;
+                    }
+                }
+            }
+
+        }
     }
   }
 }
