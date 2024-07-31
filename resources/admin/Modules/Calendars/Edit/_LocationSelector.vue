@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <el-link v-if="['group', 'group_event'].includes(slot.event_type)" :underline="false" @click="addNewLocation">
+        <el-link v-if="!['group', 'group_event'].includes(slot.event_type)" :underline="false" @click="addNewLocation">
             + {{ $t('Add another location option') }}
         </el-link>
 
