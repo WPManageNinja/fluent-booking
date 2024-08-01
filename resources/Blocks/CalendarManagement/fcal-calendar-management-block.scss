@@ -134,11 +134,7 @@
 		}
 	}
 }
-.components-dropdown-menu__popover {
-    .components-popover__content {
-        width: max-content;
-    }
-}
+
 .fcal_block_inspector_widget {
 	box-sizing: border-box !important;
 	*, *:before, *:after {
@@ -411,6 +407,7 @@
 
 .fcal-add-calendar-container {
     width: 100%;
+    min-width: 230px;
 	button.components-button {
         width: 100%;
 		display: flex;
