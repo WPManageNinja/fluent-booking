@@ -301,7 +301,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.5.1 (Date: 31 Jul 2024) =
+= 1.5.1 (Date: 01 Aug 2024) =
 - Added Rebook Appointment Feature
 - Added Date Picker for Date Field
 - Added Manual Email Sending to Guest
