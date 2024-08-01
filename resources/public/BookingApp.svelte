@@ -1,10 +1,9 @@
 <script>
     import { util, i18 } from './util';
-    import { onMount } from "svelte";
+    import { onMount, createEventDispatcher } from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
     import Summary from "./Fluentform/Summary.svelte";
-    import { createEventDispatcher } from 'svelte';
     import FcalSkeleton from './Components/FcalSkeleton.svelte';
 
     window['fcal_translate'] = i18;
@@ -21,7 +20,7 @@
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
-    let form = window.fluentCalendarPublicVars.current_person || {};
+    let form = getPreSelectsFormData();
 
     let appReady = false;
     let bookingConfirmationHtml = '';
@@ -43,6 +42,32 @@
 
     function handleBackClick() {
         dispatch('handleBack');
+    }
+
+    function getPreSelectsFormData() {
+        const currentPerson = window.fluentCalendarPublicVars.current_person || {};
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const formFields = {};
+        appData.form_fields.forEach((field) => {
+            const fieldName = field.name?.replace(/custom_/i, '').replace(/-/g, '_');
+            if (fieldName) {
+                formFields[fieldName] = field;
+            }
+        })
+        for (const [key, value] of urlParams.entries()) {
+            if (!key.startsWith('invitee_')) {
+                continue;
+            }
+            const fieldKey = key.replace(/invitee_/i, '');
+            if (formFields[fieldKey]) {
+                const field = formFields[fieldKey];
+                if (!currentPerson[field.name]) {
+                    currentPerson[field.name] = value;
+                }
+            }
+        }
+        return currentPerson;
     }
 
     function checkDevice() {
