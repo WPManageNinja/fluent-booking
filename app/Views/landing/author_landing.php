@@ -53,6 +53,11 @@
         .fcal_slot {
             background: #fff;
         }
+
+        .fcal_phone_wrapper .flag {
+            background: url(<?php echo esc_url(\FluentBooking\App\App::getInstance()['url.assets'].'images/flags_responsive.png'); ?>) no-repeat;
+            background-size: 100%;
+        }
     </style>
 
     <?php foreach ($header_js_files as $fileKey => $file): ?>

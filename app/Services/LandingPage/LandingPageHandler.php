@@ -172,17 +172,6 @@ class LandingPageHandler
         if ($extraJsFiles) {
             $extraJsFiles = array_unique($extraJsFiles);
             $data['js_files'] = array_merge($data['js_files'], $extraJsFiles);
-            add_action('fluent_booking/main_landing', function () use ($assetUrl) {
-                ?>
-                    <style>
-                        .fcal_phone_wrapper .flag {
-                            background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
-                            background-size: 100%;
-                        }
-                    </style>
-                <?php
-            });
-
         }
 
         $app = App::getInstance();
