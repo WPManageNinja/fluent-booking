@@ -10,8 +10,8 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item 
-                                    v-if="isSingleGuestEvent" @click="sendConfirmationEmail('guest')">
+                                <el-dropdown-item
+                                    v-if="isSingleGuestEvent && isBookingScheduled" @click="sendConfirmationEmail('guest')">
                                     <el-icon>
                                         <Message/>
                                     </el-icon>
@@ -39,7 +39,8 @@
                                     </el-icon>
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item 
+                                <el-dropdown-item
+                                    v-if="isSingleGuestEvent && !isReservedBooking"
                                     @click="rebookAttendee">
                                     <el-icon>
                                         <RefreshRight />
@@ -47,7 +48,8 @@
                                     {{ $t('Rebook') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
-                                    v-if="canReschedule" @click="rescheduleBooking">
+                                    v-if="canReschedule"
+                                    @click="rescheduleBooking">
                                     <el-icon>
                                         <Refresh/>
                                     </el-icon>
@@ -323,6 +325,9 @@ export default {
         }
     },
     computed: {
+        isBookingScheduled() {
+            return this.showing_booking.status == 'scheduled';
+        },
         isBookingCompleted() {
             return this.showing_booking.status == 'completed';
         },
@@ -342,7 +347,7 @@ export default {
             return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid' && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canReschedule() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
+            return this.isSingleGuestEvent && !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
         },
         canMakeNoShow() {
             return this.showing_booking.status != 'no_show' && this.isBookingCompleted && !this.isBookingRejected && !this.isBookingCancelled;
