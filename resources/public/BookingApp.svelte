@@ -19,6 +19,7 @@
     const author = appData.author_profile;
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
+    const dateFormatter = appData.date_formatter;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
     let form = getPreSelectsFormData();
 
@@ -384,7 +385,7 @@
                                                     {util.dateTimeI18(selectedDateTime.start, 'hh:mma')}
                                                     - {util.dateTimeI18(selectedDateTime.end, 'hh:mma')},
                                                 {/if}
-                                                {util.dateTimeI18(selectedDateTime.start, 'dddd, MMM DD, YYYY')}
+                                                {util.dateTimeI18(selectedDateTime.start, dateFormatter)}
                                             </span>
                                         </div>
                                         <div class="slot_time_range slot_timezone fcal_icon_item">
@@ -486,6 +487,7 @@
                                             <Summary
                                                 {slot}
                                                 {timezone}
+                                                {dateFormatter}
                                                 {selectedDateTime}
                                             />
                                         {/if}
