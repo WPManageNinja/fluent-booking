@@ -1,7 +1,7 @@
 <script>
     import { util, i18 } from '../util.js';
 
-    export let timezone, slot, selectedDateTime;
+    export let timezone, slot, dateFormatter, selectedDateTime;
 
 </script>
 
@@ -11,7 +11,7 @@
         <tbody>
             <tr>
                 <th>{i18('Date')}</th>
-                <td>{util.dateTimeI18(selectedDateTime.start, 'dddd, MMM DD, YYYY')}</td>
+                <td>{util.dateTimeI18(selectedDateTime.start, dateFormatter)}</td>
             </tr>
             <tr>
                 <th>{i18('Time')}</th>
