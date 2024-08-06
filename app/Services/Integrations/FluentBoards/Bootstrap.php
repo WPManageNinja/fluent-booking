@@ -407,6 +407,13 @@ class Bootstrap extends IntegrationManagerController
             ];
         }
 
+        if (defined('FLUENTCRM')) {
+            $crmConatct = \FluentCrm\App\Models\Subscriber::where('email', $authorEmail)->first();
+            if ($crmConatct) {
+                $data['crm_contact_id'] = $crmConatct->id;
+            }
+        }
+
         $task = (new Task())->createTask($data);
         if (!$task) {
             return false;
