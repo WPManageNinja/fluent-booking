@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.3
-Stable tag: 1.5.10
+Stable tag: 1.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -301,7 +301,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.5.10 (Date: 01 Aug 2024) =
+= 1.5.11 (Date: 01 Aug 2024) =
 - Added Rebook Appointment Feature
 - Added Date Picker for Date Field
 - Added Manual Email Sending to Guest
