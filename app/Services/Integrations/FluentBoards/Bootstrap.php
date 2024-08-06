@@ -342,7 +342,7 @@ class Bootstrap extends IntegrationManagerController
         $wpTimestamp = current_time('timestamp');
         $utcTimeStamp = time();
 
-        $diff = $utcTimeStamp - $wpTimestamp;
+        $diff = $wpTimestamp - $utcTimeStamp;
 
         if (!$diff) {
             return $dueDate;
