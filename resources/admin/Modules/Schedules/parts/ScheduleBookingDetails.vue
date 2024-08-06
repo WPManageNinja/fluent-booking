@@ -340,20 +340,23 @@ export default {
         isReservedBooking() {
             return this.showing_booking.status == 'reserved';
         },
+        isNotShowBooking() {
+            return this.showing_booking.status == 'no_show';
+        },
+        canMakeNoShow() {
+            return !this.isNotShowBooking && this.isBookingCompleted;
+        },
         canMarkAsCompleted() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.canMarkAsPaid && !this.isBookingRejected && !this.isReservedBooking;
+            return !this.canMarkAsPaid && ['scheduled', 'approved', 'pending'].includes(this.showing_booking.status);
         },
         canMarkAsPaid() {
             return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid' && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canReschedule() {
-            return this.isSingleGuestEvent && !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
-        },
-        canMakeNoShow() {
-            return this.showing_booking.status != 'no_show' && this.isBookingCompleted && !this.isBookingRejected && !this.isBookingCancelled;
+            return this.isSingleGuestEvent && ['scheduled', 'approved', 'pending'].includes(this.showing_booking.status);
         },
         canCancel() {
-            return !this.isBookingCompleted && !this.isBookingCancelled && !this.isBookingRejected && !this.isReservedBooking;
+            return this.isSingleGuestEvent && ['scheduled', 'approved', 'pending'].includes(this.showing_booking.status);
         },
         isGroup() {
             return this.showing_booking.event_type == 'group';
