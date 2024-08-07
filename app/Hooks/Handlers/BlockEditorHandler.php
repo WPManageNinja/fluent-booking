@@ -68,12 +68,13 @@ class BlockEditorHandler
 
                 foreach ($calendar->events as $event) {
                     $formattedEvents[] = [
-                        'id'    => (string)$event->id,
-                        'title' => $event->title,
-                        'duration' => (array)$event->duration,
-                        'desctiption' => $event->description,
+                        'id'           => (string)$event->id,
+                        'title'        => $event->title,
                         'color_schema' => $event->color_schema,
-                        'locations' => $event->defaultLocationHtml()
+                        'durations'    => $event->getAvailableDurations(),
+                        'locations'    => $event->defaultLocationHtml(),
+                        'loc_settings' => $event->location_settings,
+                        'description'  => Helper::excerpt($event->getDescription())
                     ];
                 }
 
