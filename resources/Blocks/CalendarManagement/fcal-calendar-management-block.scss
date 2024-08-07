@@ -103,6 +103,23 @@
                     color: #445164;
                     padding-left: 19px;
                 }
+                .slot_location {
+                    &.fcal_icon_item {
+                        gap: 7px;
+                        margin: 0;
+                        font-size: 12px;
+                        font-weight: 500;
+                        line-height: 18px;
+                        padding-left: 19px;
+                        display: inline-flex;
+                        align-items: center;
+                        color: #445164;
+                        img.fcal_loc_icon {
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
                 .fcal_card {
                     text-decoration: none;
                     display: flex;
