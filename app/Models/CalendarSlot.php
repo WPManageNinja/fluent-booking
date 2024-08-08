@@ -265,6 +265,8 @@ class CalendarSlot extends Model
                     if (isset($statuses[$key])) {
                         $statuses[$key]['title'] = $default['title'];
                     }
+                    $emailBody = str_replace('fluent-booking-pro/core', 'fluent-booking', $statuses[$key]['email']['body']);
+                    $statuses[$key]['email']['body'] = $emailBody;
                 }
             }
 
