@@ -260,11 +260,12 @@ class CalendarSlot extends Model
 
             $defaults = Helper::getDefaultEmailNotificationSettings();
 
-            if ($isEdit) {
-                foreach ($defaults as $key => $default) {
-                    if (isset($statuses[$key])) {
+            foreach ($defaults as $key => $default) {
+                if (isset($statuses[$key])) {
+                    if ($isEdit) {
                         $statuses[$key]['title'] = $default['title'];
                     }
+                    $statuses[$key]['email']['body'] = str_replace('fluent-booking-pro/core', 'fluent-booking', $statuses[$key]['email']['body']);
                 }
             }
 
